@@ -1,0 +1,333 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<!-- <section class="headerBnrSec overlayBnr">
+  <img src="<?php echo $inst_data['inst_banner'];?>" class="headerBnrImg" alt="">
+  <div class="wrapper">
+    <div class="headerBnrPanel">
+      <div class="bnrThumbBox">
+        <div class="bnrThumb shadow bg-white"><img src="<?php echo $inst_data['inst_logo'];?>" alt="<?php echo $inst_data['inst_name'];?>"></div>
+      </div> 
+
+    </div>
+  </div>
+</section> -->
+
+<!-- <section class="tabSliderSec">
+  <div class="swiper-container tabSlider navTabSlider">
+    <div class="swiper-wrapper">
+      <a href="" class="swiper-slide navLink">Step 1 </a>
+    </div>
+    <div class="swiper-button-next swiper-button-white"></div>
+    <div class="swiper-button-prev swiper-button-white"></div>
+  </div>
+</section> -->
+
+<section class="commonSec " id="wrapper_div">
+  <div class="wrapper">
+    <div class="section-title">
+      <h3 id="review_page_title">Write your review for <?php echo $inst_data['inst_name'];?> </h3>
+    </div>
+
+    <div class="row">
+      <div class="progress" style="height: 2px;">
+        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+      <div id="review_div">
+        <div class="row" id="div_step1">  
+            <div class="col-lg-1">
+            </div>
+          <div class="col-lg-10">
+            <form id="review_form_step_start" class="review_form" autocomplete="off" novalidate>
+              <input type="hidden" name="review_step_data" id="review_step_data" value="step_1">
+              <input type="hidden" name="review_step" id="review_step" value="step_2">
+              <input type="hidden" name="review_college_id" id="review_college_id" value="<?php echo (!empty($inst_data['inst_type_id']))?encode_data($inst_data['inst_type_id']):'';?>">
+              <input type="hidden" name="review_course" value="<?php echo (!empty($inst_data['inst_course_id']))?encode_data($inst_data['inst_course_id']):'';?>">
+              <input type="hidden" name="review_q_type" value="">              
+              <input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+              <div class="card userCard mb-4">
+                <div class="card-header bg-white">
+                  <h4 class="m-0 d-inline">Step 1 - Academic Details - 10th & 12th Marks, Exam Scores & Class Size</h4>
+                  <small id="user_type" class="form-text text-muted">Include maximum details, more details more rewards</small>
+                </div>
+                <div class="card-body">                  
+                    <div class="row">
+                      <div class="form-group col-sm-6">
+                          <label>Select Course</label>
+                          <select class="form-control" name="review_enrollment_course" id="review_enrollment_course">
+                            <option value="0">Choose...</option>
+                            <?php
+                            foreach ($inst_courses as $key => $value) {
+                              ?>
+                              <option value="<?php echo $value['course_id'];?>" <?php echo $value['selected'];?>><?php echo $value['course_name'];?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                      </div>
+                      <div class="form-group col-sm-3">
+                          <label>Enrollment Year</label>
+                          <select class="form-control" name="review_enrollment_year" id="review_enrollment_year">
+                            <option value="0">Choose...</option>
+                            <?php
+                            foreach ($enrollment_years as $key => $value) {
+                              ?>
+                              <option value="<?php echo $value;?>" <?php echo ($value==$review_data['review_enroll_year'])?'selected':'';?>><?php echo $value;?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                      </div>
+                      <div class="form-group col-sm-3">
+                          <label>Program Fees (Yr)</label>
+                          <input class="form-control" type="text" name="review_program_fees" id="review_program_fees" value="<?php echo (!empty($review_data))?$review_data['review_program_fees']:'';?>">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-sm-3">
+                          <label>Board/University [ 12th ]</label>
+                          <select class="form-control" name="review_board_12th" id="review_board_12th">
+                            <option value="0">Choose...</option>
+                            <?php
+                            foreach ($statutory_bodies_12th as $key => $value) {
+                              ?>
+                              <option value="<?php echo $value->statutory_body_id;?>" <?php echo ($value->statutory_body_id==$review_data['review_12th_board_id'])?'selected':'';?>><?php echo $value->statutory_body_abbr;?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                      </div>
+                      <div class="form-group col-sm-3">
+                          <label>Percentage Marks</label>
+                          <input class="form-control" type="text" name="review_percentage_12th_marks" id="review_percentage_12th_marks" value="<?php echo (!empty($review_data))?$review_data['review_12th_board_percentage']:'';?>">
+                      </div>
+                    
+                      <div class="form-group col-sm-3">
+                          <label>Board/University [ 10th ]</label>
+                          <select class="form-control" name="review_board_10th" id="review_board_10th">
+                            <option selected="">Choose...</option>
+                            <?php
+                            foreach ($statutory_bodies_10th as $key => $value) {
+                              ?>
+                              <option value="<?php echo $value->statutory_body_id;?>" <?php echo ($value->statutory_body_id==$review_data['review_10th_board_id'])?'selected':'';?>><?php echo $value->statutory_body_abbr;?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                      </div>
+                      <div class="form-group col-sm-3">
+                          <label>Percentage Marks</label>
+                          <input class="form-control" type="text" name="review_percentage_10th_marks" id="review_percentage_10th_marks"  value="<?php echo (!empty($review_data))?$review_data['review_10th_board_percentage']:'';?>">
+                      </div>
+                    </div>
+
+                      <!-- <div class="form-group col-sm-6">
+                          <label>Provide JEE MAIN Scores if you had taken any exams</label>
+                          <input class="form-control" value=" ">
+                      </div>
+
+                      <div class="form-group col-sm-6">
+                          <label>Provide WBJEE Scores if you had taken any exams</label>
+                          <input class="form-control" value=" ">
+                      </div> -->
+
+                      <div class="row">
+                        <div class="form-group col-sm-3">
+                          <label>Have you Availed any Quota?</label>
+                          <select class="form-control" name="review_quota_available" id="review_quota_available">
+                            <option value="no" <?php echo (!empty($review_data) && $review_data['review_caste_quota_applicable']=='no')?'selected':'';?>>No</option>
+                            <option value="yes" <?php echo (!empty($review_data) && $review_data['review_caste_quota_applicable']=='yes')?'selected':'';?>>Yes</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-sm-3">
+                          <label>Quota Type</label>
+                          <select class="form-control" name="review_quota_type" id="review_quota_type">
+                            <?php
+                            foreach ($caste_quota as $key => $value) {
+                              ?>
+                              <option value="<?php echo $value->quota_id;?>" <?php echo ($value->quota_id==$review_data['review_caste_quota_id'])?'selected':'';?>><?php echo $value->quota_name;?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-sm-3">
+                          <label>Was there any GD/PI for the admission</label>
+                          <select class="form-control" name="review_gd_pi_available" id="review_gd_pi_available">
+                            <option value="no" <?php echo (!empty($review_data) && $review_data['review_gd_pi_applicable']=='no')?'selected':'';?>>No</option>
+                            <option value="yes" <?php echo (!empty($review_data) && $review_data['review_gd_pi_applicable']=='yes')?'selected':'';?>>Yes</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-sm-3">
+                          <label>What was your class size?</label>
+                          <input type="text" class="form-control" name="review_class_size" value="<?php echo (!empty($review_data))?$review_data['review_class_size']:'';?>">
+                        </div>
+                      </div>                     
+                      
+                      <div class="row">
+                        <div class="form-group col-sm-3">
+                          <label class="d-block">Did you opt for hostels?</label>
+                          <select class="form-control" name="review_opt_for_hostels" id="review_opt_for_hostels">
+                            <option value="no" <?php echo (!empty($review_data) && $review_data['review_opt_hostel']=='no')?'selected':'';?>>No</option>
+                            <option value="yes" <?php echo (!empty($review_data) && $review_data['review_opt_hostel']=='yes')?'selected':'';?>>Yes</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                          <label>Hostel Fees(Yr)</label>
+                          <input class="form-control" type="text" <?php echo ($review_data['review_opt_hostel']=='no')?'disabled="true"':''?> name="review_hostel_fees" id="review_hostel_fees" value="<?php echo (!empty($review_data))?$review_data['review_opt_hostel_fees']:'';?>" disabled="disabled">
+                        </div>
+                      
+                        <div class="form-group col-sm-3">
+                          <label class="d-block">Does your college provide placements?</label>
+                          <select class="form-control" name="review_placement_provided" id="review_placement_provided">
+                            <option value="no" <?php echo (!empty($review_data) && $review_data['review_inst_placement_applicable']=='no')?'selected':'';?>>No</option>
+                            <option value="yes" <?php echo (!empty($review_data) && $review_data['review_inst_placement_applicable']=='yes')?'selected':'';?>>Yes</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-sm-4">
+                          <label class="d-block">Does your college provide internship opportunities?</label>
+                          <select class="form-control" name="review_internship_provided" id="review_internship_provided">
+                            <option value="no" <?php echo (!empty($review_data) && $review_data['review_inst_internship_applicable']=='no')?'selected':'';?>>No</option>
+                            <option value="yes" <?php echo (!empty($review_data) && $review_data['review_inst_internship_applicable']=='yes')?'selected':'';?>>Yes</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-sm-4">
+                          <label>Referrel Code</label>
+                          <input class="form-control" type="text" name="review_referrel_code" id="review_referrel_code" value="" placeholder="Enter The Referrel Code">
+                        </div>
+                      </div>
+
+
+                    <div class="row">                    
+                      <div class="form-group col-sm-12">
+                        <label class="d-block"><h5>Have you applied for any other institute or program?</h5></label><hr>
+                      </div>
+                    </div>
+
+                    <div id="div_row">
+
+                      <?php
+
+                      //print_obj($review_data['review_other_program_data']);
+                      if(!empty($review_data['review_other_program_data'])){
+                        $i=0;
+                        foreach ($review_data['review_other_program_data'] as $key => $value) {
+                          ?>
+                           <div id="row_<?php echo $i;?>">
+                              <div class="row">
+                                <div class="form-group col-sm-6">
+                                  <input type="text" class="form-control" name="review_inst[<?php echo $i;?>][name]" id="review_inst_name_<?php echo $i;?>" placeholder="College Name" value="<?php echo $value['name'];?>">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                  <input type="text" class="form-control" name="review_inst[<?php echo $i;?>][course]" id="review_inst_course_<?php echo $i;?>" placeholder="Course" value="<?php echo $value['course'];?>">
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="form-group col-sm-12">
+                                  <textarea class="form-control" name="review_inst[<?php echo $i;?>][reason]" id="review_inst_reason_<?php echo $i;?>" placeholder="Why didn't you opt for this college?" rows="3"><?php echo $value['reason'];?></textarea>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="form-group col-sm-12">
+                                  <div class="row mx-0">
+                                    <span class="add-btn text-primary pt-2 col-12 px-0 text-right">
+                                      <span class="pointer" id="span_add_more" onclick="$('#row_<?php echo $i;?>').remove()">Remove</span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          <?php
+                          $i++;
+                        }
+                      }else{
+                        ?>
+                        <div class="row">
+                          <div class="form-group col-sm-6">
+                            <input type="text" class="form-control" name="review_inst[0][name]" id="review_inst_name_0" placeholder="College Name">
+                          </div>
+                          <div class="form-group col-sm-6">
+                            <input type="text" class="form-control" name="review_inst[0][course]" id="review_inst_course_0" placeholder="Course">
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="form-group col-sm-12">
+                            <textarea class="form-control" name="review_inst[0][reason]" id="review_inst_reason_0" placeholder="Why didn't you opt for this college?" rows="3"></textarea>
+                          </div>
+                        </div>
+                        <?php
+                      }
+                      ?>                
+
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-sm-12">
+                        <div class="row mx-0">
+                          <span class="add-btn text-primary border-top pt-2 col-12 px-0 text-right">
+                            <span class="pointer" id="span_add_more">Add More</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+
+                  <div class="card-footer pull-right">
+                    <div class="col-sm-12">
+                      <button class="btn btn-primary " type="submit" id="save_next" style="float:right;"> Save & Next</button>
+                    </div>
+                  </div>
+                </div>
+            </form>
+          </div>        
+        </div>
+      </div>
+  </div>
+</section>
+
+<style type="text/css">
+  .check
+{
+    opacity:0;
+  color:#996;
+  
+}
+
+/*.br-theme-bars-pill .br-widget a.br-active, .br-theme-bars-pill .br-widget a.br-selected {
+    background-color: #fe613e;
+    color: white;
+}*/
+</style>
+
+<?php $this->widget->run('front_subscription_section',TRUE);?>
+
+<script type="text/javascript">let review_course_populate=false;let review_inst='<?php echo $inst_data['inst_type_id'];?>';let review_inst_course='<?php echo $inst_data['inst_course_id'];?>';let review_inst_type='<?php echo $inst_data['inst_type'];?>';var _c='';var wbpage='review';var page='review';var _vtype='';var _st='';var _ct='';var _strm='';var _cu='';
+
+function review_rating(){
+    $('.review_rating').barrating('show', {
+      theme: 'bars-pill',
+      showValues: true,
+      showSelectedRating: false,
+      allowEmpty: true,
+      emptyValue: '-- no rating selected --',
+      onSelect: function(value, text) {
+          //alert('Selected rating: ' + value);
+      }
+    });
+  }
+
+
+</script>

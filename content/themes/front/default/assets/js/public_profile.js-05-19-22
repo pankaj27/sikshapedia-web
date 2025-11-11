@@ -1,0 +1,334 @@
+jQuery(function($) {
+  "use strict";
+
+  setTimeout(function(){ $('#reg2ApplyModal').modal({ show: true }); }, 3000);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 10000
+  });
+
+
+  $('body').on('click','#claim_this_college',function(){
+  	$('#claiminstituteModal').find('#claim_institute').val($(this).attr('data-inst'));
+  	$('#claiminstituteModal').find('#claim_institute_type').val($(this).attr('data-inst_type'));
+  });
+
+
+  $('#form_claim_for_college').validate({
+  	rules:{
+  		claimer_full_name:{
+  			required:true
+  		},
+  		claimer_email:{
+  			required:true,
+  			email:true
+  		},
+  		claimer_ph:{
+  			required:true,
+  			digits:true
+  		}
+  	},
+  	messages:{
+  		claimer_full_name:{
+  			required:'Please enter your name'
+  		},
+  		claimer_email:{
+  			required:'Please enter your email',
+  			email:'Email id is not valid'
+  		},
+  		claimer_ph:{
+  			required:'Please enter your mobile number',
+  			digits:'Only digits are allowed'
+  		}
+  	},
+  	submitHandler:function(){
+  		var f_data = FormDataJson.formToJson(document.getElementById("form_claim_for_college"));
+      	var ctext= CryptoJS.AES.encrypt(JSON.stringify(f_data), _xtYu, { format: CryptoJSAesJson }).toString();
+  		$.ajax({
+  			type:"POST",
+  			url:base_url+'claiminstitute',
+  			data: {ctext:ctext,csrf_test_name:csrf_hash},
+	        cache:false,
+  			beforeSend:function(){
+	          $('#btn_submit_claim').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+	        },
+	        success:function(d,status,xhr){
+	          if(d.success){
+	          	$('#h4_verify_text').html('Verify email address');
+	          	$('#span_verify_text').html(d.success);
+	          	$('#form_claim_for_college_verify').css('display','block');
+	          	$('#form_claim_for_college').css('display','none');
+	          	$('#btn_submit_claim').html('Submit').prop('disabled',false);
+	          }else{
+	          	Toast.fire({
+                  icon: 'error',
+                  title: d.error
+              });
+	            $('#btn_submit_claim').html('Submit').prop('disabled',false);
+	          }
+	        },
+	        error: function( jqXhr ) {
+	            $('#btn_submit_claim').html('Submit').prop('disabled',false);
+	        },
+	        complete:function(status,xhr){
+	         $('#btn_submit_claim').html('Submit').prop('disabled',false);
+           //$('#claiminstituteModal').modal('hide');
+	        }
+  		});
+  	}
+  });
+
+  $('#form_claim_for_college_verify').validate({
+  	rules: {
+        "claim_otp_value[]": "required"
+    },
+    messages: {
+        "claim_otp_value[]": "Wrong OTP"
+    },
+    submitHandler:function(){
+  		var f_data = FormDataJson.formToJson(document.getElementById("form_claim_for_college_verify"));
+      	var ctext= CryptoJS.AES.encrypt(JSON.stringify(f_data), _xtYu, { format: CryptoJSAesJson }).toString();
+  		$.ajax({
+  			type:"POST",
+  			url:base_url+'claiminstitute',
+  			data: {ctext:ctext,csrf_test_name:csrf_hash},
+	        cache:false,
+  			beforeSend:function(){
+	          $('#btn_submit_claim_verify').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+	        },
+	        success:function(d,status,xhr){
+	          if(d.success){
+	          	$('#h4_verify_text').html('Claim this college');
+	          	$('#span_verify_text').html('You\'ll receive a 4 digit code in your email address and mobile no. to verify next');
+	          	$('#form_claim_for_college_verify').css('display','none');
+	          	$('#form_claim_for_college').css('display','block');
+	          	$('#btn_submit_claim_verify').html('Submit').prop('disabled',false);
+
+	          	$('#form_claim_for_college_verify')[0].reset();
+	          	$('#form_claim_for_college')[0].reset();
+
+	          	$('#claiminstituteModal').modal('hide');
+	          }else{
+	          	$('#otp_error').html(d.error);
+	            $('#btn_submit_claim_verify').html('Submit').prop('disabled',false);
+	          }
+	        },
+	        error: function( jqXhr ) {
+	            //$('#btn_submit_claim').html('Submit').prop('disabled',false);
+	        },
+	        complete:function(status,xhr){
+	         //$('#btn_submit_claim').html('Submit').prop('disabled',false);
+	        }
+  		});
+  	}
+  });
+
+
+ //  	$('.claim_otp_value:first').keydown(function (event) {
+	//     // check for hyphen
+	//     if (event.which === 189) {
+	//         event.preventDefault();
+	//         $(this).next('.claim_otp_value').focus();
+	//     }
+	// });
+
+		// $('input').keyup(function(){
+  //       if($(this).val().length==$(this).attr("maxlength")){
+  //           $(this).next().focus();
+  //       }
+  //   });
+
+
+
+    //Apply college
+
+
+	//Nearby Colleges
+
+	var html='';
+
+	$.ajax({
+		type:'GET',
+		url:'https://api.waytoadmissions.com/v1/instapi/nearbycolleges/'+_cot+'/'+_st+'/'+_cit,
+		data:{},
+		success:function(d){
+			if(d!=null){
+				html+='<div class="card infoCard mb-4">';
+            html+='<div class="card-header bg-white">';
+              html+='<h5 class="m-0 color2">NEARBY COLLEGES</h5>';
+            html+='</div>';
+            html+='<div class="card-body">';
+              html+='<div class="form-row">';
+              $.each(d,function(k,v){
+              	html+='<div class="col-md-4">';
+              
+              
+               html+='<div class="proBox">';
+                  html+='<div class="imgBox">';
+                    html+='<a href="'+v['access_url']+'"> <img class="" src="'+v['college_banner']+'" alt="'+v['college_name']+'"></a>';
+        
+                   // html+='<div class="pro-label pro-featured">';
+                   //    html+='<span class="pro-label-bg">Featured <span class="pro-arrow"></span></span>';
+                   //  html+='</div>';
+                    //  html+='<div class="pro-label pro-status">';
+                    //   html+='<span class="pro-label-bg"><span class="pro-arrow"></span> On Offer </span>';
+                    // html+='</div>';
+                    // html+='<div class="proReview">';
+                    //   html+='<i class="far fa-envelope"></i> <b>20</b> ';
+                    // html+='</div>';
+                    html+='<div class="proRating">';
+                      html+='<small class="d-block">RATING</small>';
+                      html+='<i class="fas fa-star-half-alt"></i> <b>6.7/10</b> ';
+                    html+='</div>';
+                    html+='<div class="pro-action">';
+                      html+='<div class="pro-action-inner">';
+                       html+='<div class="social-share" data-toggle="tooltip" title="Share">';
+                          html+='<div class="social-share-hover">';
+                            html+='<i class="fa fa-share-alt"></i>';
+                            html+='<div class="social-share-list">';
+                              html+='<div class="list-social-icon clearfix">';
+                                html+='<a href="javascript:;"><i class="fab fa-facebook"></i></a>';
+                                html+='<a href="javascript:;"><i class="fab fa-twitter"></i></a>';
+                                html+='<a href="javascript:;"><i class="fab fa-google-plus"></i></a>';
+                                html+='<a href="javascript:;"><i class="fab fa-linkedin"></i></a>';
+                              html+='</div>';
+                            html+='</div>';
+                          html+='</div>';
+                        html+='</div>';
+                        html+='<a href="javascript:;" class="property-favorite" data-toggle="tooltip" title="Add to Favorite"><i class="far fa-heart"></i></a>';
+                        html+='<a class="compare-property" href="javascript:;" data-toggle="tooltip" title="Rating"><i class="far fa-star"></i></a>';
+                      html+='</div>';
+                      html+='<a class="pro-link" href="#"></a>';
+                    html+='</div>';
+                  html+='</div>';
+                  html+='<div class="proBoxBody">';
+                    html+='<div class="proInfo">';
+                      html+='<div class="infoImg"><a href="'+v['access_url']+'"><img src="'+v['college_logo']+'" alt="'+v['college_name']+'"></a></div>';
+                      html+='<p class="infoTitle"><a href="'+v['access_url']+'">'+v['college_name']+'</a></p>';
+                      html+='<p class="infoLocation"><i class="fas fa-map-marker-alt"></i> '+v['college_city']+', '+v['college_state']+'</p>';
+                    html+='</div>';
+
+                    //  html+='<div class="p-3">';
+                    //   html+='<h4 class="pro-title"><a href="#" > MBA/PGDM10 </a>  <span class="badge badge-warning">10</span></h4>';
+                    //   html+='<div class="pro-price">TOTAL FEES  <span> ₹23.15 L </span> </div>';
+                    //   html+='<div class="viewlink"><a href="#"> <i class="fas fa-long-arrow-alt-right"></i> <span> VIEW ALL COURSES & FEES </span></a> </div>';
+                    // html+='</div>';
+                    
+                    html+='<div class="btnGroup">';
+                      html+='<a href="#" class="apply"><i class="far fa-file-alt"></i> Apply Now</a>';
+                      html+='<a href="#" class="download"><i class="fas fa-download"></i> Explore</a>';
+                    html+='</div>';
+                  html+='</div>';
+              html+='</div>';
+              
+   
+          html+='</div>';
+              });
+              html+='</div>';
+            html+='</div>';
+            html+='</div>';
+			}
+
+			$('#nearby_colleges').html(html);
+		}
+	});
+
+
+	var html2='';
+
+	$.ajax({
+		type:'GET',
+		url:'https://api.waytoadmissions.com/v1/instapi/nearbycolleges/'+_cot+'/'+_st+'/'+_cit,
+		data:{},
+		beforeSend:function(){
+
+		},
+		success:function(d){
+			if(d!=null){
+            $.each(d,function(k,v){
+							html2+='<li class="list-group-item">';
+		                html2+='<a href="'+v['access_url']+'" class="media">';
+		                  html2+='<img src="'+v['college_logo']+'" width="40" class="mr-2" alt="..."> ';
+		                  html2+='<div class="media-body">';
+		                    html2+='<h6 class="mb-0 color2">'+v['college_name']+'</h6>';
+		                    html2+='<small>'+v['college_state']+','+v['college_city']+'</small> ';
+		                  html2+='</div>';
+		                html2+='</a>';
+		              html2+='</li>';
+
+		            
+            });
+              
+			}
+
+			$('#colleges_in_group').html(html2);
+		}
+	});
+
+	var html3='';
+
+	$.ajax({
+		type:'GET',
+		url:'https://api.waytoadmissions.com/v1/newsapi/news/'+_cot,
+		data:{},
+		beforeSend:function(){
+
+		},
+		success:function(d){
+			if(d!=null){
+				console.log(d)
+            $.each(d,function(k,v){
+							html3+='<li class="list-group-item">';
+		                html3+='<a href="'+v['news_link']+'" target="_blank" class="media">';
+		                  html3+='<img src="'+v['news_banner']+'" width="40" class="mr-2" alt="..."> ';
+		                  html3+='<div class="media-body">';
+		                    html3+='<h6 class="mb-0 color2">'+v['news_heading']+'</h6>';
+		                    html3+='<small>'+v['news_published_date']+'</small> ';
+		                  html3+='</div>';
+		                html3+='</a>';
+		              html3+='</li>';
+
+		            
+            });
+              
+			}
+
+			$('#news_list').html(html3);
+		}
+	});
+
+
+	var html4='';
+
+	$.ajax({
+		type:'GET',
+		url:'https://api.waytoadmissions.com/v1/instapi/courseslist/'+_cid+'/3',
+		data:{},
+		beforeSend:function(){
+
+		},
+		success:function(d){
+			if(d!=null){
+            $.each(d,function(k,v){
+							html4+='<li class="list-group-item">';
+		                html4+='<a href="#" class="media">';
+		                  html4+='<div class="media-body">';
+		                    html4+='<h6 class="mb-0 color2">'+v['course_name']+'</h6>';
+		                    html4+='<small>'+v['course_duration']+'</small> ';
+		                  html4+='</div>';
+		                html4+='</a>';
+		              html4+='</li>';
+
+		            
+            });
+              
+			}
+
+			$('#college_courses_list').html(html4);
+		}
+	});
+
+});

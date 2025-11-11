@@ -1,0 +1,506 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+
+
+<?php
+if(!empty($filtered_data)){
+
+	$data_count=1;
+	$ads_painted=false;
+
+	?>
+	
+  		
+	<?php
+
+
+		foreach ($filtered_data as $k => $v) {
+			if(!empty($v['college_courses_cost'])){
+			
+
+			?>
+			<link rel="preload" href="<?php echo $v['college_banner'];?>" as="image">
+
+			
+			<div class="col-sm-6 col-md-4 col-lg-4 grid_list">
+	          <div class="loader-ripple" style="display:none;"></div>
+	       
+	          <div class="proBox">
+	              <div class="imgBox">
+	                <a href="<?php echo $v['access_url'];?>"> <img class="lazy" src="<?php echo $v['college_banner'];?>" alt="<?php echo $v['college_name'];?>"></a>
+
+	                <?php
+	                if($v['is_featured']=='1'){
+	                  ?>
+	                  <div class="pro-label pro-featured">
+	                    <span class="pro-label-bg">Featured <span class="pro-arrow"></span></span>
+	                  </div>
+	                  <?php
+	                }
+	                ?>
+	                
+	                <!-- <div class="pro-label pro-status">
+	                  <span class="pro-label-bg"><span class="pro-arrow"></span> On Offer </span>
+	                </div> -->
+	                <div class="proReview">
+	                  <i class="far fa-image"></i> <b><a href="<?php echo $v['college_gallery_link'];?>"><span style="color:#ffffff;"> <?php echo $v['college_total_gallery_img'];?></span></a></b> 
+	                </div>
+	                <!-- <div class="proRating">
+	                  <small class="d-block">RATING</small>
+	                  <i class="fas fa-star-half-alt"></i> <b>6.7/10</b> 
+	                </div> -->
+	                <div class="pro-action">
+	                  <div class="pro-action-inner">
+	                    <!-- <div class="social-share" data-toggle="tooltip" title="Share">
+	                      <div class="social-share-hover">
+	                        <i class="fa fa-share-alt"></i>
+	                        <div class="social-share-list">
+	                          <div class="list-social-icon clearfix">
+	                            <a href="javascript:;"><i class="fab fa-facebook"></i></a>
+	                            <a href="javascript:;"><i class="fab fa-twitter"></i></a>
+	                            <a href="javascript:;"><i class="fab fa-google-plus"></i></a>
+	                            <a href="javascript:;"><i class="fab fa-linkedin"></i></a>
+	                          </div>
+	                        </div>
+	                      </div>
+	                    </div> -->
+
+	                    <?php
+	                    if(!empty($v['college_intro_video'])){
+	                    ?>
+	                     <a href="<?php echo $v['college_intro_video'];?>" data-fancybox class="property-video" data-toggle="tooltip" title="Show Video"><i class="fab fa-youtube"></i></a>
+	                    <?php
+	                    }
+	                    ?>
+
+
+	                    <!-- <a href="javascript:;" class="property-favorite" data-toggle="tooltip" title="Add to Favorite"><i class="far fa-heart"></i></a>
+	                    <a class="compare-property" href="javascript:;" data-toggle="tooltip" title="Rating"><i class="far fa-star"></i></a> -->
+	                  </div>
+	                  <a class="pro-link" href="#"></a>
+	                </div>
+	              </div>
+	              <div class="proBoxBody">
+	                <div class="proInfo">
+	                  <div class="infoImg"><a href="<?php echo $v['access_url'];?>"><img class="lazy" src="<?php echo $v['college_logo'];?>" loading="lazy" width="50px" height="50px"></a></div>
+	                  <p class="infoTitle"><a href="<?php echo $v['access_url'];?>"><?php echo $v['college_name'];?></a></p>
+	                  <p class="infoLocation" style="font-size: 10px;"><i class="fas fa-map-marker-alt"></i> <?php echo (!empty($v['college_city']))?$v['college_city'].',':'';?> <?php echo $v['college_state'];?>
+	                  <?php
+	                  if(!empty($v['college_affiliations'])){
+	                    ?>
+	                      <span style="margin-left: 10px;font-size: 10px;"><i class="fas fa-bookmark"></i> <?php echo $v['college_affiliations'];?></span>
+	                    <?php
+	                  }
+	                  ?>
+	                  </p>
+	                </div>
+
+	                <?php
+	                $course_cost_counter=count($v['college_courses_cost']);
+
+	                //echo $course_cost_counter;
+	               
+	                if(!empty($v['college_courses_cost'])){
+	                    ?>
+	                    <div class="infoItems" style="height:60px !important;min-height: 60px !important;">
+	                      <?php
+	                      	
+	                      	foreach ($v['college_courses_cost'] as $_k => $_v) {
+
+		                        if($_v['cost_value']!=null || !empty($_v['cost_value'])){
+
+		                          if($course_cost_counter>=3){
+		                            ?>
+		                            <a href="javascript::void(0);" class="infoItem">
+		                              <h4> <strong><?php echo $_v['cost_value'];?></strong></h4>
+		                              <p style="font-size:10px;"><?php echo $_v['course_name'];?> </p>
+		                            </a>
+		                           <?php
+		                          }else if($course_cost_counter==2){
+		                            ?>
+		                            <a href="javascript::void(0);" class="infoItem">
+		                              <h4> <strong><?php echo $_v['cost_value'];?></strong></h4>
+		                              <p style="font-size:10px;"><?php echo $_v['course_name'];?></p>
+		                            </a>
+		                            <?php
+		                            if(isset($exam_id)){
+		                              if(!empty($v['college_exams_accepted'])){
+		                                foreach ($v['college_exams_accepted'] as $ek => $ev) {
+		                                  if($ev['exam_id']==$exam_id){
+		                                    
+		                                    ?>
+		                                    <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+		                                      <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+		                                      <p style="font-size:10px;">Exam Accepted </p>
+		                                    </a>
+		                                    <?php
+		                                    
+		                                  }
+		                                }
+		                              }
+		                                
+		                            }else{
+		                              if(!empty($v['college_exams_accepted'][$_k])){
+		                                ?>
+		                                <a href="javascript::void(0);" class="infoItem">
+		                                  <h4> <strong><?php echo $v['college_exams_accepted'][$_k]['exam_name'];?></strong></h4>
+		                                  <p>Exam Accepted </p>
+		                                </a>
+		                                <?php
+		                              }
+		                            }
+		                              
+		                          }
+		                          else if($course_cost_counter==1){
+		                          	//echo $course_cost_counter;
+		                            ?>
+		                            <a href="javascript::void(0);" class="infoItem">
+		                              <h4> <strong><?php echo $_v['cost_value'];?></strong></h4>
+		                              <p><?php echo $_v['course_name'];?></p>
+		                            </a>
+		                            <?php
+		                            if(isset($exam_id)){
+		                              if(!empty($v['college_exams_accepted'])){
+		                                foreach ($v['college_exams_accepted'] as $ek => $ev) {
+		                                   if($ev['exam_id']==$exam_id){
+		                                      
+		                                      ?>
+		                                      <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+		                                        <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+		                                        <p>Exam Accepted </p>
+		                                      </a>
+		                                      <?php
+		                                    }
+		                                }
+		                              }
+		                                
+		                            }else{
+		                              if(!empty($v['college_exams_accepted'][$_k])){
+		                              	if(!empty($v['college_exams_accepted'])){
+			                                foreach ($v['college_exams_accepted'] as $ek => $ev) {			                                      
+		                                      ?>
+		                                      <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+		                                        <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+		                                        <p>Exam Accepted </p>
+		                                      </a>
+		                                      <?php			                                    
+			                                }
+			                              }
+		                                
+		                              }
+		                            }
+		                          }
+		                            
+		                        }else{
+		                            if(isset($exam_id)){
+		                              if(!empty($v['college_exams_accepted'])){
+		                                foreach ($v['college_exams_accepted'] as $ek => $ev) {
+		                                    if($ev['exam_id']==$exam_id){
+		                                      
+		                                      ?>
+		                                      <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+		                                        <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+		                                        <p style="font-size:10px;">Exam Accepted </p>
+		                                      </a>
+		                                      <?php
+		                                    }
+		                                }
+		                              }
+		                              
+		                            }else{
+		                              ?>
+			                            <a href="javascript::void(0);" class="infoItem">
+			                              <h4> <strong>--</strong></h4>
+			                              <p style="font-size:10px;"><?php echo $_v['course_name'];?> </p>
+			                            </a>
+			                            <?php
+			                            if(!empty($v['college_exams_accepted'][0])){
+		                                ?>
+			                                <a href="<?php echo $v['college_exams_accepted'][$_k]['exam_link'];?>" class="infoItem">
+			                                  <h4> <strong><?php echo $v['college_exams_accepted'][$_k]['exam_name'];?></strong></h4>
+			                                  <p style="font-size:10px;">Exam Accepted </p>
+			                                </a>
+		                                <?php
+		                              	}
+		                            }
+		                        }
+
+		                        //$course_cost_counter++;
+	                      	}
+	                      ?>
+	                    </div>
+	                    <?php
+	                }else{                
+	                  ?>
+	                    <div class="infoItems">
+	                      <?php
+	                      if(!empty($v['college_exams_accepted'])){
+	                        foreach ($v['college_exams_accepted'] as $_kk => $_vv) {
+	                          ?>
+	                          <a href="<?php echo $_vv['exam_link'];?>" class="infoItem">
+	                            <h4> <strong><?php echo $_vv['exam_name'];?></strong></h4>
+	                            <p style="font-size:10px;">Exam Accepted </p>
+	                          </a>
+	                          <?php
+	                        }
+	                      
+	                      }else{
+	                        for($i=1;$i<=3;$i++) {
+	                         ?>
+	                          <a href="" class="infoItem">
+	                            <h4> <strong>--</strong></h4>
+	                            <p style="font-size:10px;">-</p>
+	                          </a>
+	                         <?php
+	                        }
+	                      }
+	                        
+	                      ?>
+	                    </div>
+	                    <?php
+	                }
+	                ?>
+	                <?php
+	                if(!empty($v['college_ranks'])){                
+	                    ?>
+	                    <div class="swiper-container tabSlider navTabSlider rankSwiper">
+	                      <div class="swiper-wrapper" style="margin-left: 20px;margin-right: 20px;">
+	                        <?php
+	                        foreach ($v['college_ranks'] as $_k => $_v) {
+	                          if($_v['ranking_value']>0){
+	                            ?>
+	                            <a href="javascript::void(0);" class="swiper-slide navLink" style="align:center;"> 
+	                              <div class="rankPanel">
+	                                <div class="rankSpan">Ranked <?php echo $_v['ranking_value'];?> in <?php echo $_v['rank_year'];?> out of <?php echo $_v['rank_value'];?></div>
+	                                <div class="rankName"> <?php echo $_v['rank_body'];?> </div>
+	                              </div>
+	                            </a>
+	                            <?php
+	                          }else{
+				                	?>
+				                	<div class="swiper-container tabSlider navTabSlider">
+				                      	<div class="swiper-wrapper">	                        
+					                        <a href="#" class="swiper-slide navLink"> 
+					                          	<div class="rankPanel">
+					                            	<div class="rankSpan">Ranked in <?php echo $_v['rank_year'];?> by</div>
+					                            	<div class="rankName"><?php echo $_v['rank_body'];?> </div>
+					                        	</div>
+					                        </a>
+				                      	</div>
+				                      	<!-- <div class="swiper-button-next swiper-button-white"></div>
+				                      	<div class="swiper-button-prev swiper-button-white"></div> -->
+				                    </div>
+				                	<?php
+				                }                           
+	                        }
+	                        ?>
+	                      </div>
+	                      <div class="swiper-scrollbar"></div>
+	                      <!-- <div class="swiper-button-next swiper-button-white"></div>
+	                      <div class="swiper-button-prev swiper-button-white"></div> -->
+	                    </div>
+	                    <?php
+	                }else{
+	                	?>
+	                	<div class="swiper-container tabSlider navTabSlider">
+	                      	<div class="swiper-wrapper">	                        
+		                        <a href="#" class="swiper-slide navLink"> 
+		                          <div class="rankPanel">
+		                            <div class="rankSpan">--  </div>
+		                            <div class="rankName"> -- </div>
+		                          </div>
+		                        </a>
+	                      	</div>
+	                      	<!-- <div class="swiper-button-next swiper-button-white"></div>
+	                      	<div class="swiper-button-prev swiper-button-white"></div> -->
+	                    </div>
+	                	<?php
+	                }
+	                ?>
+	                  
+	                <?php
+	                if(!empty($v['college_facilities'])){
+	                  ?>
+
+	                  <div class="swiper-container tabSlider navTabSlider mySwiper">
+	                    <div class="swiper-wrapper" style="padding-left: 10px;padding-right: 10px;">
+	                      <?php
+	                       foreach ($v['college_facilities'] as $_k => $_v) {
+	                      	?>
+	                      	<a href="javascript::void(0);" class="swiper-slide navLink"><img src="<?php echo $_v['facility_icon_3'];?>" width="25px" height="25px;"></a>
+	                      	<?php
+	                      	}
+	                      ?>
+	                    </div>
+	                    
+	                    <div class="swiper-button-next swiper-button-white"></div>
+	                    <div class="swiper-button-prev swiper-button-white"></div>
+	                  </div>
+
+	                  <?php
+	                }else{
+	                    ?>
+
+	                   <!--  <div class="swiper-container tabSlider navTabSlider">
+	                      <div class="swiper-wrapper">
+	                        
+	                        <a href="#" class="swiper-slide navLink"> 
+	                          <div class="rankPanel">
+	                            <div class="rankSpan">Ranked 43 out of 300   </div>
+	                            <div class="rankName"> NIRF 21 </div>
+	                          </div>
+	                        </a>
+	                        <a href="#" class="swiper-slide navLink"> 
+	                          <div class="rankPanel">
+	                            <div class="rankSpan">Ranked 43 out of 300   </div>
+	                            <div class="rankName"> NIRF </div>
+	                          </div>
+	                        </a>
+	                        <a href="#" class="swiper-slide navLink"> 
+	                          <div class="rankPanel">
+	                            <div class="rankSpan">Ranked 43 out of 300   </div>
+	                            <div class="rankName"> NIRF </div>
+	                          </div>
+	                        </a>
+	                      </div>
+	                      <div class="swiper-button-next swiper-button-white"></div>
+	                      <div class="swiper-button-prev swiper-button-white"></div>
+	                    </div> -->
+	                    <?php
+	                  }
+
+	                ?>
+	                  
+	                <div class="linkItems">
+	                  <a href="<?php echo $v['college_admissions_link'];?>" target="_blank">ADMISSION <?php echo date('Y');?> </a>
+	                  <a href="<?php echo $v['college_reviews_link'];?>" target="_blank">REVIEWS</a>
+	                  <a href="<?php echo $v['college_course_fees_link'];?>" target="_blank">COURSES & FEES</a>
+	                </div>
+	                <div class="btnGroup">
+	                  <a href="javascript:void(0);" class="apply" data-cname="<?php echo $v['college_name'];?>,<?php echo $v['college_city'];?>" data-inst="<?php echo $v['college_id'];?>" data-inst_type="<?php echo $v['institute_type'];?>" data-clogo="<?php echo $v['college_logo'];?>" data-cphcode="<?php echo $v['college_country_phone_code'];?>" data-cou="<?php echo $v['college_country_id'];?>"><i class="far fa-file-alt"></i> <span style="margin-left:5px;">Apply Now</span></a>
+	                  <a href="<?php echo $v['access_url'];?>" class="download"> Explore</a>
+	                </div>
+	              </div>
+	          </div>
+	        </div>
+			<?php
+
+				$data_count++;
+			}
+
+			$ads_painted=true;
+		}
+	?>
+	
+
+
+
+	<?php
+
+	if($data_count==7){
+
+		if($data_start==0){
+			?>
+			<div class="col-sm-12 adBlock" style="padding:2px;">
+		        <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+		          <?php $this->widget->run('front_wayto_rating_section',TRUE);?>
+		        </div>
+		    </div>
+
+			<?php
+
+			
+		}else{
+			?>
+			<div class="col-sm-12 grid_list" style="padding:2px;">
+				<div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+					<ins class="adsbygoogle"
+					     style="display:inline-block;width:728px;height:90px"
+					     data-ad-client="ca-pub-9545373166119354"
+					     data-ad-slot="1976315786"></ins>
+					<script>
+					     (adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
+		<?php
+		}
+		
+	}else if($data_count==10){
+		?>
+		<div class="col-sm-12 grid_list" style="padding:2px;">
+	        <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;"><iframe title="3rd party ad content" width="728" height="90" x-frame-width="720" x-frame-height="90" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" src="<?php echo API_URL;?>ads_college_top" style="border: 0px; vertical-align: bottom;"></iframe>
+	        </div>
+	    </div>
+		<?php
+	}
+	else{
+		?>
+		<div class="col-sm-12 grid_list" style="padding:2px;">
+				<div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+					<ins class="adsbygoogle"
+					     style="display:inline-block;width:728px;height:90px"
+					     data-ad-client="ca-pub-9545373166119354"
+					     data-ad-slot="1976315786"></ins>
+					<script>
+					     (adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
+		<?php
+	}
+
+	?>
+
+    
+  		
+			
+       	
+    
+       	
+
+	<?php
+
+}
+
+?>
+
+
+
+ <script type="text/javascript">
+  $(document).ready(function(){
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 'auto',
+        spaceBetween: 0,
+        freeMode: true,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },       
+      });
+
+    var rswiper = new Swiper(".rankSwiper", {
+        slidesPerView: 'auto',
+        spaceBetween: 0,
+        freeMode: true,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        scrollbar: {
+          el: ".swiper-scrollbar",
+          hide: true,
+        }       
+      });
+  });
+</script>

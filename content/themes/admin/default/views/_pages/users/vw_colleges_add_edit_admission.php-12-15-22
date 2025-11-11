@@ -1,0 +1,318 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?php echo $admin_base_url;?>/institutions/colleges/add/<?php echo $college_id;?>"><?php echo (!empty($college_data))?'Back to '.$college_data['college_name']:'';?></a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College Admission Data</li>
+		</ol>
+	</nav>
+
+	<?php
+	if(isset($college_data) && (!empty($college_data))){
+		?>
+		<div class="profile-page tx-13">
+
+			<div class="profile-page tx-13">
+				<div class="row">
+		            <div class="col-12 grid-margin">
+						<div class="profile-header">
+							<div class="cover">
+								<div class="gray-shade"></div>
+								<figure>
+									<img src="<?php echo (!empty($college_data))?$college_data['college_banner']:'';?>" class="img-fluid" alt="profile cover" style="height: 300px;">
+								</figure>
+								<div class="cover-body d-flex justify-content-between align-items-center">
+									<div>
+										<img class="profile-pic" src="<?php echo (!empty($college_data))?$college_data['college_logo']:'';?>" alt="profile">
+										<a href="<?php echo (!empty($college_data))?$college_data['college_access_url']:'';?>" target="_blank"><span class="profile-name"><?php echo (!empty($college_data))?$college_data['college_name']:'';?></span></a>
+									</div>
+								</div>
+							</div>
+							<div class="header-links">
+								<ul class="links d-flex align-items-center mt-3 mt-md-0">
+									<li class="header-link-item d-flex align-items-center active">
+										<button class="btn btn-primary btn-icon-text btn-edit-profile" data-toggle="modal" data-target="#collegeInnerMenuesModal"> Create inner Menues</button>
+									</li>
+								</ul>
+							</div>
+		            	</div>
+		            </div>
+				</div>
+			</div>
+			<?php
+			if(isset($inner_menues_assigned) && !empty($inner_menues_assigned)){
+			?>
+			<div class="profile-page tx-13">
+				<div class="row">
+					<div class="col-12 grid-margin">
+						<div class="profile-header table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Inner Menu</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+									<?php
+									foreach ($inner_menues_assigned as $key => $value) {
+										?>
+										<td>
+											<div class="btn-group" role="group" aria-label="Basic example">
+												<a class="btn btn-primary btn-icon-text btn-edit-profile" href="<?php echo $value['menu_link'];?>"> <?php echo (!empty($value['menu_name']))?$value['menu_name']:$value['menu_type'];?></a>
+												<button class="btn btn-xs btn-danger btn_del_college_inner_menu" type="button" data-cid="<?php echo $college_id;?>" data-aid="<?php echo encode_data($value['menu_id']);?>">Remove Menu</button>
+											</div>
+										</td>
+										<?php
+									}
+									?>
+									</tr>
+								</tbody>
+							</table>						
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
+			}
+			?>
+
+			<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title">Admission Section Introduction</h6>
+							<form id="form_college_admission_intro">
+								<div class="row">
+									<div class="col-sm-12">
+										<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+										<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+										<input type="hidden" name="college_type" value="2">
+										<input type="hidden" name="college_info_type" value="4">
+										<input type="hidden" name="college_details_type" value="admission_info">
+										<div class="form-group">
+											<textarea class="form-control " name="college_general_info" id="college_general_info" rows="10" >
+												<?php
+												if(!empty($college_data['college_admission_info'])){
+													echo $college_data['college_admission_info'];
+												}
+												?>
+											</textarea>
+										</div>										
+									</div>
+								</div>
+
+
+								<div class="row">
+									<div class="row table-responsive" id="heading_rows">
+										<table class="table">
+											<?php $table_row='0';?>
+
+											<?php
+											if(!empty($other_infos)){
+												foreach ($other_infos as $key => $value) {
+													if($value->info_value_type=='general'){
+														?>
+														<tr id="trNews<?php echo $table_row;?>">
+															<td>
+																<div class="form-group row">
+																	<div class="col-md-12">
+														            	<h6>ADMISSION DETAILS</h6>
+														            	<input type="hidden" name="admission_details[<?php echo $table_row;?>][data_type]" value="general">
+														            	<textarea class="form-control admission_details" rows="40" name="admission_details[<?php echo $table_row;?>][admission_content]"><?php echo $value->info_value;?></textarea>
+														          	</div>
+														        </div>
+														        <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trNews<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+															</td>
+														</tr>
+														<?php
+													}else if($value->info_value_type=='image'){
+														?>
+														<tr id="trNews<?php echo $table_row;?>">
+													        <td>
+														        <div class="form-group row">
+															        <div class="col-md-12">
+															        	<h6>Image Data</h6>
+															        	<input type="hidden" name="admission_details[<?php echo $table_row;?>][data_type]" value="image">
+															        	<input type="hidden" name="admission_details[<?php echo $table_row;?>][data_type_value]" value="<?php echo encode_data($value->info_value_id);?>">
+															        	<input type="hidden" name="admission_details[<?php echo $table_row;?>][admission_content]" value="<?php echo $value->info_value;?>">
+															        	<div class="row"><img src="<?php echo $value->info_value;?>" class="img-thumbnail" alt="Cinque Terre"></div>
+															        <div>
+														        </div>
+														        <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trNews<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+													        </td>
+												        <tr>												
+														<?php
+													}else if($value->info_value_type=='ads'){
+														?>
+														<tr id="trStreamDetails<?php echo $table_row;?>">
+															<td>
+																<div class="form-group row">
+																	<div class="col-md-12">
+																		<h6>Admission Detail</h6>
+																		<input type="hidden" name="admission_details[<?php echo $table_row;?>][data_type]" value="ads">
+																		<input type="hidden" name="admission_details[<?php echo $table_row;?>][data_type_value]" value="<?php echo encode_data($value->info_value_id);?>">
+																		<textarea class="form-control" rows="40" name="admission_details[<?php echo $table_row;?>][admission_content]" style="display:none;"><?php echo $value->info_value;?></textarea>
+													                <div class="col-md-12"><?php echo $value->info_value;?></div>
+																	</div>
+																</div>
+															</td>
+														</tr>
+														<?php
+													}
+
+													$table_row++;
+												}
+											}else{
+												?>
+												<tr id="trNews<?php echo $table_row;?>">
+													<td>
+														<div class="form-group row">
+															<div class="col-md-12">
+												            	<h6>ADMISSION DETAILS</h6>
+												            	<input type="hidden" name="admission_details[<?php echo $table_row;?>][data_type]" value="general">
+												            	<textarea class="form-control admission_details" rows="40" name="admission_details[<?php echo $table_row;?>][admission_content]"></textarea>
+												          	</div>
+												        </div>
+													</td>
+												</tr>
+												<?php
+											}
+											?>
+												
+										</table>
+
+										<script type="text/javascript">var hdr='<?php echo ($table_row==0)?($table_row+1):$table_row;?>';</script>
+									</div>
+								</div>
+
+
+								<div class="row">
+									<div class="col-sm-12">
+										<h6>Admission FAQs</h6>
+										<hr>
+										<table class="table" id="form_college_admission_faqus_table">
+					    					<thead>
+					    						<tr>
+					    							<th>Question/Answer</th>
+					    							<th></th>
+					    						</tr>
+					    					</thead>
+					    					<tbody>
+					    						<?php
+					    						if(!empty($admission_faqs)){
+					    							$i=0;
+					    							foreach ($admission_faqs as $key => $value) {
+					    								?>
+					    								<tr id="tr<?php echo $i;?>">
+						        							<td>
+							        							<textarea class="form-control" name="admission_faqus[<?php echo $i;?>][ques]" aria-describedby="admission_faqus" placeholder="Question" rows="5"><?php echo $value->faq_question;?></textarea>
+							        						
+							        							<textarea class="form-control admission_details" name="admission_faqus[<?php echo $i;?>][ans]" aria-describedby="admission_faqus" placeholder="Answer" rows="5"><?php echo $value->faq_ans;?></textarea>
+							        						</td>
+
+							        						<?php 
+							        						if($i==0){
+							        							?>
+							        							<td><button type="button" class="btn btn-xs btn-primary" id="btn_add_admission_faqus_row"><i class="fa fa-plus"></i></button></td>
+							        							<?php
+							        						}else{
+							        							?>
+							        							<td><button type="button" class="btn btn-xs btn-danger" onclick="$('#tr<?php echo $i;?>').remove()"><i class="fa fa-minus"></i></button></td>
+							        							<?php
+							        						}
+							        						?>
+							        					</tr>
+					    								<?php
+					    								$i++;
+					    							}
+					    						}else{
+					    							?>		        							
+					    							<tr>
+					        							<td>
+						        							<textarea class="form-control" name="admission_faqus[0][ques]" aria-describedby="admission_faqus" placeholder="Question" rows="5"></textarea>
+						        						
+						        							<textarea class="form-control admission_details" name="admission_faqus[0][ans]" aria-describedby="admission_faqus" placeholder="Answer" rows="5"></textarea>
+						        						</td>
+
+						        						<td><button type="button" class="btn btn-xs btn-primary" id="btn_add_admission_faqus_row"><i class="fa fa-plus"></i></button></td>
+						        					</tr>
+					    							<?php
+					    						}
+					    						?>
+					        									
+					    					</tbody>
+					    				</table>
+
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="buy-now-wrapper" id="buttons_wrapper">
+										<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Heading</button>
+										<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#tinyFileBrowserModal">Add Image</button>
+										<button type="button" class="btn btn-dark btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#adsModal">Import Ads</button>
+										<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_save_admission_info">Save Data</button>
+									</div>
+								</div>
+							</form>
+					</div>
+				</div>
+			</div>
+
+			
+
+		</div>
+		<?php
+	}
+	?>
+</div>
+
+<style type="text/css">
+	.select2-container{
+		width: 100% !important;
+	}
+
+	#news_category_type_value_chosen{
+		width: 100% !important;
+	}
+
+	.table td img {
+	    width: 30% !important;
+	    height: 346px !important;
+	    border-radius: 0% !important; 
+	}
+</style>
+
+<script type="text/javascript">
+	var _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>';
+	var college_name='<?php echo $college_data['college_name'];?>';
+	var college_slug='<?php echo $college_slug->url_value;?>';
+	var parent_folder='<?php echo $parent_folder_data->media_disk_name;?>';
+	var _ur='';
+	var p_row='';
+	var colleg_ranking_row ='';
+	var colleg_faq_row='';
+	var colleg_placement_faq_row='';
+	var colleg_scholarship_faq_row='';
+
+	<?php
+	if(!empty($admission_faqs)){
+		?>
+		 var admission_faq_row=<?php echo count($admission_faqs);?>;
+		<?php
+	}else{
+		?>
+		var admission_faq_row=1;
+		<?php
+	}
+
+
+	?>
+
+	var link_menu=<?php echo $exam_slug;?>;
+	var ulink_menu=<?php echo $university_slug;?>;
+	var college_type=<?php echo $college_data['college_type'];?>;
+
+</script>

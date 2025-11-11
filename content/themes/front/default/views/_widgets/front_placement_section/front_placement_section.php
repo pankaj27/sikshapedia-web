@@ -1,0 +1,139 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+
+if(!empty($college_placement_intro)){
+  ?>
+  <div class="card infoCard mb-4">
+    <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+      <div class="media">
+      <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+      <div class="media-body">
+        <h5 class="mt-0 text-dark"><a href="#" class="text-dark"> About Placement  </a> </h5>
+        
+      </div>
+    </div>
+    <div class="updateDate color2"></div>
+    </div>
+    <div class="card-body readall">
+      <?php echo $college_placement_intro;?>
+    </div>
+  </div>
+  <?php
+}
+
+if(!empty($college_placement_infos) && !empty($college_placement_infos[0]->info_value)){
+
+  ?>
+  <div class="card infoCard mb-4">
+    <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+      <div class="media">
+      <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+      <div class="media-body">
+        <h5 class="mt-0 text-dark"><a href="#" class="text-dark"> More About Placement  </a> </h5>
+        
+      </div>
+    </div>
+    <div class="updateDate color2"></div>
+    </div>
+    <div class="card-body">
+      <?php
+      foreach ($college_placement_infos as $key => $value) {
+        if($value->info_value_type=='image'){
+          ?>
+          <div class="text-center">
+            <img src="<?php echo $value->info_value;?>" alt="<?php echo $value->info_value_about;?>" title="<?php echo $value->info_value_about;?>" draggable="false" loading="lazy" class="img-fluid mx-auto d-block">
+          </div>
+          <?php
+        }else if($value->info_value_type=='general'){
+          echo $value->info_value;
+        }
+        
+      }
+
+      ?>
+    </div>
+  </div>
+  <?php
+}
+
+//$this->widget->run('front_alumni_distribution_section',TRUE);
+
+
+if(!empty($college_placements)){
+	?>
+
+<div class="card infoCard mb-4">
+    <div class="card-header bg-white">
+      <h5 class="m-0 color2">FREQUENTLY VISITED COMPANIES</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+
+        <?php
+          foreach ($college_placements as $key => $value){
+       ?>
+
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 mt-2">
+          <div class="text-center">
+            <div class="img-thumbnail rounded d-block" style="display: flex;height:130px;justify-content: center;align-items: center;position: relative;">
+              <img class="mx-auto" src="<?php echo $value['company_image'];?>" alt="<?php echo $value['company_name'];?>" style="display: flex;justify-content: center;margin-left: auto;margin-right: auto; width: 60%;vertical-align: middle;">
+              <span class="text-sm font-weight-semi mt-2 pt-5" style="position: absolute;width:100%;bottom:2px;left: 0%;text-align:center;"> <?php echo $value['company_name'];?></span>
+            </div>
+          </div>
+        </div>
+
+        <?php
+        }
+        ?>
+
+      </div>
+    </div>
+</div>
+
+
+	<?php
+}
+
+
+if(!empty($college_placement_data)){
+  ?>
+  <div class="card infoCard mb-4">
+    <div class="card-header bg-white">
+      <h5 class="m-0 color2"><?php echo strtoupper($college_data->college_name);?> PLACEMENTS</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table table-bordered">
+            <thead>
+              <th>YEAR</th>
+              <th>COMPANY LOGO</th>
+              <th>COMPANY NAME</th>
+              <th>STUDENTS PLACED</th>
+            </thead>
+            <tbody>
+              <?php
+
+              foreach ($college_placement_data as $key => $value) {
+                ?>
+                <tr>
+                  <td><?php echo $value['plaement_year'];?></td>
+                  <td><img src="<?php echo $value['company_image'];?>" draggable="false" width="50px" height="50px"></td>
+                  <td><?php echo $value['company_name'];?></td>
+                  <td><?php echo $value['placement_students'];?></td>
+                </tr>
+                <?php
+              }
+
+              ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php
+}
+
+?>

@@ -1,0 +1,152 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Colleges List</li>
+		</ol>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Colleges <a href="<?php echo $admin_base_url;?>/institutions/colleges/add" class="btn btn-sm btn-primary pull-right">Add</a>  <button class="btn btn-primary" data-toggle="modal" data-target="#collegeImportModal">Import</button></h6>
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<!-- <div>
+						        Toggle column: <a class="toggle-vis" data-column="3">State</a> - <a class="toggle-vis" data-column="4">City</a> - <a class="toggle-vis" data-column="5">Estd. Year</a> - <a class="toggle-vis" data-column="7">Slug</a>
+						    </div> -->
+							<table id="college_list_table" class="table">
+								<thead>
+			                      <tr>
+			                        <th>#</th>
+			                        <th>Name</th>
+			                       <!--  <th>Country</th>
+			                        <th>State</th>
+			                        <th>City</th> -->
+			                        <!-- <th>Estd. Year</th> -->
+			                        <th>Status</th>
+			                        <!-- <th>Slug</th> -->
+			                        <th>Action</th>
+			                      </tr>
+			                    </thead>
+			                    <tbody>		                    	
+			                    </tbody>
+							</table>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade bd-example-modal-xl" id="collegeImportModal" tabindex="-1" role="dialog" aria-labelledby="collegeImportModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeImportModal">Import Colleges</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_excel">
+	            <div class="modal-body">	            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<div class="form-group">
+							<label>Select File</label>
+							<input type="file" name="college_excel" class="file-upload-default">
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Excel File">
+								<span class="input-group-append">
+									<button class="file-upload-browse btn btn-primary" type="button">Browse</button>
+								</span>
+							</div>
+						</div>
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-primary" id="btn_import_college">Upload</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="courseModal">Courses Offered</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_courses">
+            	<input type="hidden" name="college" id="college" value="">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+            		<div class="row">
+						
+					</div>	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-primary" id="btn_add_courses_to_college" disabled="">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Categories</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_categories">
+            	<input type="hidden" name="college" id="college" value="">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+            		<div class="row">
+						
+					</div>	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-primary" id="btn_add_categories_to_college" disabled="">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="featuredCollegeModal" tabindex="-1" role="dialog" aria-labelledby="featuredCollegeModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_courses">
+            	<input type="hidden" name="college" id="college" value="">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<div class="form-group">
+							
+						</div>
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-primary" id="btn_add_courses_to_college" disabled="">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">let _college='';</script>

@@ -1,0 +1,66 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<h4 class="text-center text-uppercase mt-5">Don't know how to choose? <br> Choose by category</h4>
+<p class="text-center mb-4">Waytoadmissions.com is an extensive search engine for the students, parents and education industry players who are seeking information</p>
+
+<div class="row">
+
+  <?php
+  if(!empty($course_categories)){
+    foreach ($course_categories as $key => $value) {
+      if(isset($value['ads_link'])){
+        ?>
+        <div class="col-md-12 adBlock">
+           <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" wfd-id="7973">
+            <div data-ads-id="55107" data-ads-type="banner" data-page-type="global" class="ads_body_banner_container clearfix" wfd-id="7974">
+              <a href="https://paruluniversity.ac.in/landingpage/2021/pu-admissions/?utm_source=collegedunia&amp;utm_type=bann&amp;utm_campaign=Parul2021" target="_blank" rel="nofollow" id="ads_viewport_55107" data-id="55107">
+                <img src="https://images.static-collegedunia.com//public/image/client_images_new/B_ParulUniversityGenericDS_S_27_120210128144856.png">
+              </a>
+            </div>
+           </div>
+        </div>
+        <?php
+      }else{
+        foreach ($value as $k => $v) {
+          ?>
+          <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="card suggestCard  mb-3">
+                <a class="imgBox h-180p" href="<?php echo $v['category_access_url'];?>">
+                    <img src="<?php echo $v['category_image'];?>" class="card-img-top" alt="<?php echo $v['category_show_name'];?>">
+                    <div class="card-img-overlay text-center d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="card-title text-white mb-2"><?php echo $v['category_show_name'];?></h5>
+                        <p class="card-text text-white"><?php echo $v['category_desc'];?></p>
+                     </div>
+                </a>
+                <?php
+                if(!empty($category_streams)){
+                  ?>
+                  <div class="card-body p-2">
+                    <?php
+                    foreach ($category_streams as $_key => $_value) {
+                      if($_key==$v['category_id']){
+                        foreach ($_value as $_k => $_v) {
+                         ?>
+                          <a href="<?php echo $_v['stream_access_url'];?>" class="btn btn-primary btn-sm mb-1">
+                          <?php echo $_v['stream_name'];?> <span class="badge badge-light"><?php echo $_v['stream_course_count'];?></span>
+                          </a>
+                          <?php
+                        }
+                      }
+                       
+                    }
+                    ?>
+                  </div>
+                  <?php
+                }
+
+                ?>
+              </div>
+          </div>
+          <?php
+        }
+      }
+    }
+  }
+  ?>
+</div>

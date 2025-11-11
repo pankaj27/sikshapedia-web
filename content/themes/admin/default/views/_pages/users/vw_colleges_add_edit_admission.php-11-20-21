@@ -1,0 +1,102 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?php echo $admin_base_url;?>/institutions/colleges/add/<?php echo $college_id;?>"><?php echo (!empty($college_data))?'Back to '.$college_data['college_name']:'';?></a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College Admission Data</li>
+		</ol>
+	</nav>
+
+	<?php
+	if(isset($college_data) && (!empty($college_data))){
+		?>
+		<div class="profile-page tx-13">
+
+			<div class="profile-page tx-13">
+				<div class="row">
+		            <div class="col-12 grid-margin">
+						<div class="profile-header">
+							<div class="cover">
+								<div class="gray-shade"></div>
+								<figure>
+									<img src="<?php echo (!empty($college_data))?$college_data['college_banner']:'';?>" class="img-fluid" alt="profile cover" style="height: 300px;">
+								</figure>
+								<div class="cover-body d-flex justify-content-between align-items-center">
+									<div>
+										<img class="profile-pic" src="<?php echo (!empty($college_data))?$college_data['college_logo']:'';?>" alt="profile">
+										<a href="<?php echo (!empty($college_data))?$college_data['college_access_url']:'';?>" target="_blank"><span class="profile-name"><?php echo (!empty($college_data))?$college_data['college_name']:'';?></span></a>
+									</div>
+								</div>
+							</div>
+							<div class="header-links">
+								<ul class="links d-flex align-items-center mt-3 mt-md-0">
+									<li class="header-link-item d-flex align-items-center active">
+										<button class="btn btn-primary btn-icon-text btn-edit-profile" data-toggle="modal" data-target="#collegeInnerMenuesModal"> Create inner Menues</button>
+									</li>
+								</ul>
+							</div>
+		            	</div>
+		            </div>
+				</div>
+			</div>
+			<?php
+			if(isset($inner_menues_assigned) && !empty($inner_menues_assigned)){
+				?>
+				<div class="profile-page tx-13">
+					<div class="row">
+						<div class="col-12 grid-margin">
+							<div class="profile-header">
+							<?php
+							foreach ($inner_menues_assigned as $key => $value) {
+								?>
+								<a class="btn btn-primary btn-icon-text btn-edit-profile" href="<?php echo $value['menu_link'];?>"> <?php echo $value['menu_name'];?></a>
+								<?php
+							}
+							?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php
+			}
+			?>
+
+			<div class="row">
+				<div class="col-12 grid-margin stretch-card">
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title">Admission Section Introduction</h6>
+							
+							<div class="row">
+								<form id="form_college_admission_intro">
+									
+									<div class="col-sm-12">
+										<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+										<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+										<input type="hidden" name="college_info_type" value="4">
+										<div class="form-group">
+											<textarea class="form-control college_info" name="college_general_info" id="college_general_info" rows="10" >
+												<?php
+												if(!empty($college_data['college_admission_info'])){
+													echo $college_data['college_admission_info'];
+												}
+												?>
+											</textarea>
+										</div>										
+									</div>
+									<div class="col-sm-12">
+								        <button type="submit" class="btn btn-primary" id="btn_save_admission_info">Save</button>
+								    </div>
+							    </form>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+	?>
+</div>
+
+<script type="text/javascript">var _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>';</script>

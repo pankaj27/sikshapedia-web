@@ -1,0 +1,286 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<!-- <div class="card infoCard mb-4">
+  <div class="card-header ">
+    <form>
+      <div class="input-group input-group-lg mb-3">
+        <input type="text" class="form-control" placeholder="Search">
+        <button class="btn btn-outline-secondary" type="submit" ><i class="fas fa-search"></i></button>
+      </div>
+    </form>
+    <p class="d-flex flex-wrap align-items-center badgeRow">
+      <span class="mr-2">Select Degree : </span>  
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+    </p>
+    <p class="d-flex flex-wrap align-items-center badgeRow">
+      <span class="mr-2">Select Stream : </span>  
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+      <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+    </p>
+
+    <h5 class=" color2"> INDIAN INSTITUTE OF MANAGEMENT - [IIMB] TOP COURSES, FEES & ELIGIBILITY  </h5>
+    <ul class="nav nav-tabs card-header-tabs tempTab">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#tab1_1">All</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tab1_2">Part Time</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tab1_3">Full Time</a>
+      </li>
+    </ul>
+
+  </div>
+  <div class="card-body">
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="tab1_1">
+        <div class="row">
+          <div class="col-md-9">
+            <h5 class="mb-2"><a href="#" class="text-dark">Post Graduate Programme in Business Analytics</a></h5>
+            <div class="d-flex flex-wrap">
+             <span class="mr-2 badge color-blue"><i class="far fa-bookmark"></i> 2 Years </span>
+             <span class="mr-2 badge color-purple"><i class="far fa-bookmark"></i> Degree </span>
+             <span class="mr-2  badge color-green"><i class="far fa-bookmark"></i> Full Time </span>
+             <span class="mr-2 badge color-indigo"><i class="far fa-bookmark"></i> On Campus </span>
+             <span class="mr-2 badge color-teal"><i class="far fa-bookmark"></i> Post Graduation </span>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex justify-content-end">
+            <div class=" text-md-right">
+              <h4 class="color2 mb-2 "> ₹ 2,115,000 <small class="text-muted">Fees</small> </h4>
+              <a href="#" class="color-indigo">Check details</a>
+            </div>
+          </div>
+        </div>
+        <div class="color2 mb-2">
+          9.4/10 <span class="stars color-orange"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span> Based on 11 Reviews 
+        </div>
+        <ul class="pl-3">
+          <li>Dates : Application Starts 05 Aug 2020 | Application Ends 10 Jan 2021 Check All Dates</li>
+            <li>Ranking: #2 Management - NIRF</li>
+            <li>Exams Accepted: <span class="color2"> CAT | GMAT | GRE </span></li>
+        </ul>
+        <p>Admission Guide 2020 <a class="color-teal" href=""><i class="fas fa-download"></i> Download Brochure </a></p>
+      </div>
+    </div>
+    
+  </div>
+</div> -->
+
+<?php
+if(!empty($course_fees_data)){
+  ?>
+  <div class="card infoCard mb-4 course_brief_with_ads">
+    <div class="card-header bg-white">
+      <h5 class="m-0 color2"> <?php echo $college_data['college_name'];?> TOP COURSES, FEES & ELIGIBILITY </h5>
+    </div>
+    <!-- <div class="card-body">
+      <blockquote class="blockquote shadow-sm">
+        <div class="media">
+          <a href="#"> <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."></a> 
+          <div class="media-body">
+            <h6 class="m-0">NIIT University - The University of the Future</h6>
+            <small class="f10">Applications Open for 2020-21</small> 
+            <button type="button" data-toggle="modal" data-target="#reg3ApplyModal" class="btn btn-primary float-right">APPLY NOW</button>
+          </div>
+        </div>
+        <p class="mb-0 f12"><i class="far fa-check-circle color2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+      </blockquote>
+      <blockquote class="blockquote shadow-sm">
+        <div class="media">
+          <a href="#"> <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."></a> 
+          <div class="media-body">
+            <h6 class="m-0">NIIT University - The University of the Future</h6>
+            <small class="f10">Applications Open for 2020-21</small> 
+            <button type="button" data-toggle="modal" data-target="#reg3ApplyModal" class="btn btn-primary float-right">APPLY NOW</button>
+          </div>
+        </div>
+        <p class="mb-0 f12"><i class="far fa-check-circle color2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+      </blockquote>
+    </div> -->
+
+  <?php
+
+  foreach ($course_fees_data as $key => $value) {
+    ?>
+    <div class="card-body border-top">
+
+      <?php
+      if ($key === array_key_last($course_fees_data)) {
+       ?>
+        <div class="adBlock desktopx">
+          <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+            <div class="col-md-12 text-center">                      
+              <img src="<?php echo base_url('public/data/ads/register-ads.jpeg');?>" style="max-width: 100%; height: auto; display: inline-block;">
+            </div>
+          </div>
+        </div>
+
+          <div class="adBlock mobilex" style="margin-bottom: 10px;">
+            <div class="col-md-12 text-center">                      
+              <img src="<?php echo base_url('public/data/ads/register-refer-ads.jpeg');?>" style="max-width: 100%; height: auto; display: inline-block;">
+            </div>
+          </div>
+       <?php
+      }
+
+      ?>
+
+      <div class="row">
+        <div class="col-md-9">
+          <h5 class="mb-2"><a href="<?php echo $value['course_link'];?>" class="text-dark"><?php echo $value['course_formatted_name'];?></a></h5>
+          <div class="d-flex flex-wrap">
+            <?php 
+            if(!empty($value['course_duration'])){
+              ?>
+              <span class="mr-2 badge color-blue">
+                <svg width="14" height="13" viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg"><path d="M7.418 2.64h-.856v4.278h0l2.58.69.428-.74-2.152-.577V2.64h0zM6.99.5a5.99 5.99 0 100 11.98A5.99 5.99 0 006.99.5h0zm0 11.124a5.134 5.134 0 11-.001-10.268 5.134 5.134 0 010 10.268h0z" stroke-width="0.563" stroke="#3EAE8D" fill="#3EAE8D" fill-rule="evenodd"></path></svg>
+               <?php echo $value['course_duration'];?>
+             </span>
+              <?php
+            }
+
+            if(!empty($value['course_pass_type'])){
+              ?>
+              <span class="mr-2 badge color-purple">
+                <svg width="13" height="11" viewBox="0 0 13 11" xmlns="http://www.w3.org/2000/svg"><path d="M12.667 2.751c-.018-.027-.294-.501-.848-.988-.55-.485-1.404-.989-2.528-.989-1.125 0-1.97.506-2.512.993-.166.15-.306.299-.422.435a4.848 4.848 0 00-.435-.44C5.37 1.279 4.517.775 3.392.775c-1.125 0-1.97.506-2.51.993-.544.489-.808.965-.824.992L0 2.98v7.152l.87.219.002.002a3.36 3.36 0 01.676-.792c.432-.374 1.035-.718 1.843-.72.833 0 1.467.37 1.912.76.22.193.392.388.502.533.056.073.096.133.123.171l.028.046.004.008h.003l.808-.007v-.003c.019-.033.253-.423.675-.79.434-.373 1.038-.717 1.845-.719.832 0 1.464.37 1.912.76.221.193.389.388.5.533.057.073.097.133.124.171.014.02.022.036.028.046l.005.009.869-.228V2.978l-.062-.227zM3.39 7.926c-1.093 0-1.92.478-2.461.95V3.108c.095-.143.304-.427.618-.701.432-.373 1.035-.717 1.843-.717.833 0 1.467.37 1.912.758a3.755 3.755 0 01.595.665v5.786c-.548-.479-1.396-.972-2.507-.972zm8.408.972c-.552-.48-1.397-.972-2.508-.972-1.092-.001-1.92.478-2.463.95V3.108c.096-.142.305-.427.618-.701.434-.373 1.038-.717 1.845-.717.832 0 1.464.37 1.912.758.221.193.389.39.5.535.04.05.07.095.095.13v5.786z" fill="#FFA100" fill-rule="evenodd"></path></svg>
+               <?php echo $value['course_pass_type'];?> </span>
+              <?php
+            }
+
+            if(!empty($value['course_type'])){
+              ?>
+              <span class="mr-2  badge color-green">
+                <i class="far fa-bookmark"></i>
+                <?php echo $value['course_type'];?> </span>
+              <?php
+            }
+
+            if(!empty($value['course_placement'])){
+              ?>
+              <span class="mr-2 badge color-indigo">
+                <i class="far fa-bookmark"></i>
+
+               <?php echo $value['course_placement'];?> </span>
+              <?php
+            }
+
+            if(!empty($value['course_duration_type'])){
+              ?>
+              <span class="mr-2 badge color-indigo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="11.794" height="11.803" viewBox="0 0 11.794 11.803"><g data-name="Group 773"><g data-name="Group 772"><g data-name="Group 771"><path data-name="Path 2292" d="M9.713 9.723h0a5.4 5.4 0 01-7.632 0h0a5.4 5.4 0 010-7.632h0A5.506 5.506 0 017.962.919 5.01 5.01 0 019.713 2.09h0a5.4 5.4 0 010 7.633z" fill="none" stroke="#4fb8dd"></path><g data-name="Group 770" fill="#4fb8dd" fill-rule="evenodd"><path data-name="Path 2293" d="M8.382 4.331H3.538a.484.484 0 00-.484.484.484.484 0 00.484.484h4.843a.484.484 0 00.484-.484.484.484 0 00-.483-.484z"></path><path data-name="Path 2294" d="M8.382 6.545H3.538a.484.484 0 00-.484.484.484.484 0 00.484.484h4.843a.484.484 0 00.484-.484.484.484 0 00-.483-.484z"></path></g></g></g></g></svg>
+               <?php echo $value['course_duration_type'];?> </span>
+              <?php
+            }
+
+            ?>
+           
+          </div>
+        </div>
+        <div class="col-md-3 d-flex justify-content-end course_fees_slot">
+          <?php
+          if($value['course_fees_1st_tear']!='--'){
+            ?>
+            <div class=" text-md-right">
+              <?php
+              if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+                ?>
+                <h4 class="color2 mb-2"> <?php echo $value['course_fees_1st_tear'];?> <small class="text-muted" style="font-size: 55% !important;"><?php echo $value['course_cost_for'];?></small> </h4>
+                <?php
+              }else{
+                ?>
+                <h4 class="color2 mb-2 blur-text"> You need to register first </h4>
+                <?php
+              }
+              ?>
+              
+              
+              <a href="<?php echo $value['course_link'];?>" class="color-indigo">Check details</a>
+            </div>
+            <?php
+          }
+          ?>
+          
+        </div>
+      </div>
+
+      <?php
+
+      if(isset($value['course_reviews_data'])){
+        ?>
+        <div class="color2 mb-2">
+          9.4/10 <span class="stars color-orange"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span> Based on 11 Reviews 
+        </div>
+        <?php
+      }
+
+      ?>
+
+      
+      <?php
+      if(isset($value['course_application_dates']) || isset($value['course_ranking']) || (isset($value['course_total_streams']) && !empty($value['course_total_streams']) && $value['course_total_streams']>0) || (isset($value['course_exams_accepted']) && !empty($value['course_exams_accepted']))){
+        ?>
+        <ul class="pl-3 course_exams_others_slot">
+          <?php
+          if(isset($value['course_application_dates'])){
+            ?>
+            <li>Dates : Application Starts 05 Aug 2020 | Application Ends 10 Jan 2021 Check All Dates</li>
+            <?php
+          }
+
+          if(isset($value['course_ranking'])){
+            ?>
+            <li>Ranking: #2 Management - NIRF</li>
+            <?php
+          }
+
+          if(isset($value['course_exams_accepted']) && !empty($value['course_exams_accepted'])){
+            ?>
+            <li>Exams Accepted: <span class="color2"> <?php echo $value['course_exams_accepted'];?> </span></li>
+            <?php
+          }
+
+          if(isset($value['course_total_streams']) && !empty($value['course_total_streams']) && $value['course_total_streams']>0){
+            ?>
+            <li><?php echo $value['course_total_streams'];?> Streams: <span class="color2"> <?php echo $value['course_streams'];?> </span></li>
+            <?php
+          }
+          ?>            
+        </ul>
+        <?php
+      }
+
+      ?>
+
+        
+
+      <?php
+      if(isset($value['course_admission_data'])){
+        ?>
+        <p>Admission Guide 2020 <a class="color-teal" href=""><i class="fas fa-download"></i> Download Brochure </a></p>
+        <?php
+      }
+      ?>
+      
+    </div>
+    <?php
+  }
+  ?>
+
+</div>
+  <?php
+}
+
+?>

@@ -1,0 +1,28 @@
+staging/
+public/
+public_html/
+admission/
+registerinstitute/
+uploads/
+application/cache/
+application/logs/
+writable/
+web-api/v1/api_cache/
+
+# Ignore environment files
+*.env
+**/.env
+
+# Ignore vendor directories in nested projects
+mstaging/apis/vendor/
+mstaging/veriff_api/vendor/
+mstaging/veriff_api/old-vendor/
+staging/vendor/
+
+# Node dependencies (if present)
+node_modules/
+application/logs/
+mstaging/
+rangamaticollegeofpharmacy/
+robots_backups/
+staging/

@@ -1,0 +1,83 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+
+/**
+ * 
+ */
+class Front_hostel_section extends Widget
+{
+
+    function run($visible = FALSE,$ids=null){
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$hostel_data=array();
+
+
+    	//print_obj($ids);
+
+    	$country_id=$ids['country_id'];
+    	$college_id=$ids['college_id'];
+
+    	//echo $country_id;
+
+
+    	$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+    	//print_obj($country_data);
+
+    	if(!empty($country_data)){
+
+    		$_college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+
+			$currency_data=$this->com->get_currency(array('currency_id'=>$_college_data->college_currency_id));
+
+			if(!empty($_college_data)){
+
+				$cid=$_college_data->college_user_id;
+
+				$men_total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$cid,'fess_data_id_type'=>'2','fees_type'=>'2'));
+
+
+				$women_total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$cid,'fess_data_id_type'=>'2','fees_type'=>'1'));
+
+				$men_hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>'2','hostel_data_type_id'=>$cid,'hostel_type'=>'2'));
+
+				$women_hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>'2','hostel_data_type_id'=>$cid,'hostel_type'=>'1'));
+
+				$men_hostel_fees_start=($men_total_fees_data->fees_start>100000)?number_to_currency($men_total_fees_data->fees_start):number_format($men_total_fees_data->fees_start);
+				$men_hostel_fees_end=($men_total_fees_data->fees_end>100000)?number_to_currency($men_total_fees_data->fees_end):number_format($men_total_fees_data->fees_end);
+
+				$women_hostel_fees_start=($women_total_fees_data->fees_start>100000)?number_to_currency($women_total_fees_data->fees_start):number_format($men_total_fees_data->fees_start);
+				$women_hostel_fees_end=($women_total_fees_data->fees_end>100000)?number_to_currency($women_total_fees_data->fees_end):number_format($men_total_fees_data->fees_end);
+
+
+
+				$men_hostel_fees=($men_total_fees_data->fees_start>0)?$men_hostel_fees_start.'-'.$men_hostel_fees_end:$men_hostel_fees_end;
+
+				$women_hostel_fees=($women_total_fees_data->fees_start>0)?$women_hostel_fees_start.'-'.$women_hostel_fees_end:$women_hostel_fees_end;
+
+
+				$hostel_data=array(
+					'men_hostel_detail_type'=>$college_data->college_menhostel_details_type,
+					'men_hostel_note'=>$men_hostel_notes->hostel_notes,
+					'men_hostel_total_fees_start'=>$currency_data->currency_symbol_left.number_to_currency($men_total_fees_data->fees_start),
+					'men_hostel_total_fees_end'=>$currency_data->currency_symbol_left.$men_hostel_fees_end,
+					'men_hostel_fees'=>$currency_data->currency_symbol_left.$men_hostel_fees,
+					'women_hostel_detail_type'=>$college_data->college_womenhostel_details_type,
+					'women_hostel_note'=>$women_hostel_notes->hostel_notes,
+					'women_hostel_total_fees_start'=>$currency_data->currency_symbol_left.number_to_currency($women_total_fees_data->fees_start),
+					'women_hostel_total_fees_end'=>$currency_data->currency_symbol_left.$women_hostel_fees_end,
+					'women_hostel_fees'=>$currency_data->currency_symbol_left.$women_hostel_fees
+				);
+			}
+
+    	}
+
+    
+
+    	$data['college_hostel_data']=$hostel_data;
+
+    	if ($visible) $this->render('front_hostel_section',$data);
+    }
+}

@@ -1,0 +1,18 @@
+/.<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+
+<?php
+if(is_controller('Accounts') && is_method('index')){
+	
+}else{
+	echo @$partial_superadmin_sidebar;
+    echo @$partial_header;
+    echo @$partial_change_pass_modal;
+}
+?>
+
+<div class="<?php echo Events::trigger('body_class', '', 'string'); ?>">
+	<?php echo @$content;?>
+</div>
+
+

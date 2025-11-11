@@ -1,0 +1,67 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+	
+if(!empty($exam_details_data)){
+	?>
+	<div class="card infoCard mb-4">
+	  <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+	    <div class="media">
+	      <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+	      <div class="media-body">
+	        <h5 class="mt-0 text-dark"><a href="#"> <?php echo $uploaded_by;?> </a> </h5>
+	        <p class="m-0">Content Curator 
+	          <a href="#" class="text-info"><i class="fab fa-facebook"></i></a>
+	          <a href="#"  class="text-info"><i class="fab fa-twitter"></i></a>
+	          <a href="#" class="text-info"><i class="fab fa-linkedin-in"></i></a>
+	        </p>
+	      </div>
+	    </div>
+	    <!-- <div class="updateDate">Updated On - December 7th, 2020</div> -->
+	  </div>
+	  <div class="card-body">
+	  	<?php
+	  	$i=0;
+	  	foreach ($exam_details_data as $key => $value) {
+
+	  		if($value->exam_data_type=='image'){
+	  			?>
+	  			<div class="row">
+	  				<div class="col-lg-12" style="text-align:center;">
+			  			<img src="<?php echo $value->exam_content;?>" alt="<?php echo $slug_data->url_page_heading;?>">
+			  		</div>
+		  		</div>
+	  			<?php
+	  		}else{
+	  			if($i==4){
+	  				?>
+	  				<div class="adBlock">
+					    <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+					      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9545373166119354"
+					          crossorigin="anonymous"></script>
+					      <!-- wayto_hz_1_ads -->
+					      <ins class="adsbygoogle"
+					          style="display:inline-block;width:728px;height:90px"
+					          data-ad-client="ca-pub-9545373166119354"
+					          data-ad-slot="7117741101" style="clear: both; display: flex;justify-content: center;margin-left:50px;margin-right:50px;"></ins>
+					      <script>
+					          (adsbygoogle = window.adsbygoogle || []).push({});
+					      </script>
+					    </div>
+					</div>
+	  				<?php
+	  			}else{
+					echo $value->exam_content;
+	  			}
+	  			
+	  		}
+
+	  		$i++;
+			
+		}
+	  	?>
+	  </div>
+	</div>
+	<?php		
+}
+?>	

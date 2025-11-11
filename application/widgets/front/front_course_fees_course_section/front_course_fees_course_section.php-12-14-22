@@ -1,0 +1,309 @@
+<?php
+
+
+/**
+ * 
+ */
+class Front_course_fees_course_section extends Widget
+{
+
+	function run($visible = FALSE,$ids=null){
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$segment_2=$this->uri->segment(2,0);
+    	$segment_4=$this->uri->segment(4,0);//course
+
+    	
+        $country_id=$ids['country_id'];
+        $college_id=$ids['college_id'];
+
+
+    	//print_obj($ids);
+ 
+
+  //   	$slug_found=$this->sm->get_slug(array('slug_value'=>$segment_2));
+
+  //   	$slug_type=$slug_found->slug_type;
+		// $slug_type_id=$slug_found->slug_type_id;
+		// $slug_value=$slug_found->slug_value;
+
+		//$college_id=$ids['college_id'];
+
+		//echo $college_id;die;
+
+
+    	$slug_data=$this->sm->get_slug(array('slug_value'=>$segment_4));
+
+    	//print_obj($slug_data);die;
+
+    	$_course_data=$this->im->_get_user_course_data(array('user_id'=>$college_id,'course_id'=>$slug_data->slug_type_id,'user_type'=>'4'),TRUE);
+
+    	//print_obj($_course_data);die;
+
+
+
+    	$cost_group=$this->im->get_user_courses_cost_group(array('user_id'=>$college_id,'user_course_id'=>$slug_data->slug_type_id),'user_course_cost_category');
+
+    	//print_obj($cost_group);
+
+    	$fees_duration_text='FIRST YEAR FEES';
+
+    	if(!empty($cost_group)){
+    		foreach ($cost_group as $key => $value) {
+
+
+    			if($value->user_course_cost_type==1 && $value->user_course_cost_breakup_type==1){
+    				$fees_data=$this->im->get_course_fees_data(array('user_id'=>$college_id,'user_course_cost_category'=>$value->user_course_cost_category,'user_course_id'=>$slug_data->slug_type_id),FALSE);
+
+    				$total=0;
+
+    				foreach ($fees_data as $k => $v) {
+    					if($v->user_course_admisssion_fee_total!=NULL || $v->user_course_admisssion_fee_total>0){
+    						$total+=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_total+$v->user_course_reg_fee_sem_1+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    					}else{
+    						$total+=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_sem_1+$v->user_course_reg_fee_sem_1+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    					}
+
+    					if($v->user_course_admisssion_fee_total!=NULL || $v->user_course_admisssion_fee_total>0){
+    						if($v->user_course_reg_fee_total>0){
+    							$year_total=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_total+$v->user_course_reg_fee_total+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}else{
+    							$year_total=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_total+$v->user_course_reg_fee_sem_1+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}    						
+    					}else{
+    						if($v->user_course_reg_fee_total>0){
+    							$year_total=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_sem_1+$v->user_course_reg_fee_total+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}else{
+    							$year_total=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_sem_1+$v->user_course_reg_fee_sem_1+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}
+    						
+    					}
+
+    					
+
+    					if($v->user_course_admisssion_fee_total!=NULL || $v->user_course_admisssion_fee_total>0){
+
+
+    						if($v->user_course_reg_fee_total>0){
+    							$ft=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_total+$v->user_course_reg_fee_total+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}else{
+    							$ft=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_total+$v->user_course_reg_fee_sem_1+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}
+
+
+    						$firstyear_total[]=$ft;
+    					}else{
+
+    						if($v->user_course_reg_fee_total>0){
+    							$ft=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_sem_1+$v->user_course_reg_fee_total+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}else{
+    							$ft=$v->user_course_tution_fee_total+$v->user_course_admisssion_fee_sem_1+$v->user_course_reg_fee_sem_1+$v->user_course_exam_fee_sem_1+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_total;
+    						}
+
+    						$firstyear_total[]=$ft;
+    					}
+    					
+
+    					$_fees_data[$value->user_course_cost_category][]=array(
+    						'fees_year'=>$v->user_course_year,
+    						'fees_value'=>number_format($v->user_course_tution_fee_total),
+    						'fees_tution_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_tution_fee_sem_1),
+    						'fees_tution_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_tution_fee_sem_2),
+    						'fees_admission_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_admisssion_fee_sem_1),
+    						'fees_admission_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_admisssion_fee_sem_2),
+    						'fees_admission_total['.$v->user_course_year.']'=>number_format($v->user_course_admisssion_fee_total),
+    						'fees_registration_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_reg_fee_sem_1),
+    						'fees_registration_fees_total['.$v->user_course_year.']'=>number_format($v->user_course_reg_fee_total),
+    						'fees_registration_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_reg_fee_sem_2),
+    						'fees_exam_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_exam_fee_sem_1),
+    						'fees_exam_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_exam_fee_sem_2),
+    						'fees_other_sem_1['.$v->user_course_year.']'=>($v->user_course_other_fee_sem_1>0)?number_format($v->user_course_other_fee_sem_1):number_format($v->user_course_other_fee_total),
+    						'fees_other_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_other_fee_sem_2),
+    						'fees_tution_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_tution_fee_sem_2),
+    						'fees_value_formatted'=>($year_total>100000)?number_to_currency($year_total):number_format($year_total)
+    					);
+    				}
+
+    				//print_obj($_fees_data);die;
+
+    				$_total=($total>100000)?number_to_currency($total):number_format($total);
+
+
+
+    				//$total_1st_year_wise=$fees_data[0]->user_course_tution_fee_total+$fees_data[0]->user_course_admisssion_fee_sem_1+$fees_data[0]->user_course_reg_fee_sem_1+$fees_data[0]->user_course_exam_fee_sem_1+$fees_data[0]->user_course_other_fee_sem_1;
+
+    				$total_1st_year_wise=$firstyear_total[0];
+
+
+    				$first_year_fees=($total_1st_year_wise>100000)?number_to_currency($total_1st_year_wise):number_format($total_1st_year_wise);
+
+    				//print_obj($first_year_fees);die;
+
+
+    				$total_cost[$value->user_course_cost_category]=$_total;
+
+    			}else if($value->user_course_cost_type==2 && $value->user_course_cost_breakup_type==1){
+    				$fees_data=$this->im->get_course_fees_data(array('user_id'=>$college_id,'user_course_cost_category'=>$value->user_course_cost_category,'user_course_id'=>$slug_data->slug_type_id),FALSE);
+
+    				//print_obj($fees_data);die;
+
+
+    				$total=0;
+
+    				foreach ($fees_data as $k => $v){
+    					$total_year_wise=$v->user_course_tution_fee_sem_1+$v->user_course_tution_fee_sem_2+$v->user_course_admisssion_fee_sem_1+$v->user_course_admisssion_fee_sem_2+$v->user_course_reg_fee_sem_1+$v->user_course_reg_fee_sem_2+$v->user_course_exam_fee_sem_1+$v->user_course_exam_fee_sem_2+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_sem_2;
+    					$total+=$v->user_course_total_fee;
+
+    					if($v->user_course_admisssion_fee_sem_1>0 || $v->user_course_admisssion_fee_sem_2>0){
+    						$admission_fee_available[]='yes';
+    					}else{
+    						$admission_fee_available[]='no';
+    					}
+
+    					if($v->user_course_reg_fee_sem_1>0 || $v->user_course_reg_fee_sem_2>0){
+    						$reg_fee_available[]='yes';
+    					}else{
+    						$reg_fee_available[]='no';
+    					}
+
+
+    					if($v->user_course_exam_fee_sem_1>0 || $v->user_course_exam_fee_sem_2>0){
+    						$exam_fee_available[]='yes';
+    					}else{
+    						$exam_fee_available[]='no';
+    					}
+
+    					if($v->user_course_other_fee_sem_1>0 || $v->user_course_other_fee_sem_2>0){
+    						$other_fee_available[]='yes';
+    					}else{
+    						$other_fee_available[]='no';
+    					}
+
+    					$firstyear_total[]=$v->user_course_tution_fee_sem_1+$v->user_course_tution_fee_sem_2+$v->user_course_admisssion_fee_sem_1+$v->user_course_admisssion_fee_sem_2+$v->user_course_reg_fee_sem_1+$v->user_course_reg_fee_sem_2+$v->user_course_exam_fee_sem_1+$v->user_course_exam_fee_sem_2+$v->user_course_other_fee_sem_1+$v->user_course_other_fee_sem_2;
+
+
+    					$_fees_data[$value->user_course_cost_category][]=array(
+    						'fees_year'=>$v->user_course_year,    						
+    						'fees_tution_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_tution_fee_sem_1),
+    						'fees_tution_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_tution_fee_sem_2),
+    						'fees_admission_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_admisssion_fee_sem_1),
+    						'fees_admission_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_admisssion_fee_sem_2),
+    						'fees_registration_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_reg_fee_sem_1),
+    						'fees_registration_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_reg_fee_sem_2),
+    						'fees_exam_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_exam_fee_sem_1),
+    						'fees_exam_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_exam_fee_sem_2),
+    						'fees_other_sem_1['.$v->user_course_year.']'=>number_format($v->user_course_other_fee_sem_1),
+    						'fees_other_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_other_fee_sem_2),
+    						'fees_tution_sem_2['.$v->user_course_year.']'=>number_format($v->user_course_tution_fee_sem_2),
+    						'fees_tution_sem_total['.$v->user_course_year.']'=>($total_year_wise>100000)?number_to_currency($total_year_wise):number_format($total_year_wise)
+    					);
+    				}
+
+    				//print_obj($_fees_data);die;
+
+    				
+
+    				//$total_1st_year_wise=$fees_data[0]->user_course_tution_fee_sem_1+$fees_data[0]->user_course_tution_fee_sem_2+$fees_data[0]->user_course_admisssion_fee_sem_1+$fees_data[0]->user_course_admisssion_fee_sem_2+$fees_data[0]->user_course_reg_fee_sem_1+$fees_data[0]->user_course_reg_fee_sem_2+$fees_data[0]->user_course_exam_fee_sem_1+$fees_data[0]->user_course_exam_fee_sem_2+$fees_data[0]->user_course_other_fee_sem_1+$fees_data[0]->user_course_other_fee_sem_2;
+
+    				$total_1st_year_wise=$firstyear_total[0];
+
+    				$first_year_fees=($total_1st_year_wise>1000000)?number_to_currency($total_1st_year_wise):number_format($total_1st_year_wise);
+
+    				$_total=($total>100000)?number_to_currency($total):number_format($total);
+
+    				$total_cost[$value->user_course_cost_category]=$_total;
+    			}else if($value->user_course_cost_type==1 && $value->user_course_cost_breakup_type==2){
+    				$fees_data=$this->im->get_user_course_grand_total(array('user_id'=>$college_id,'user_course_cost_category'=>$value->user_course_cost_category,'user_course_id'=>$slug_data->slug_type_id));
+
+
+    				$total=$fees_data[0]->total_cost;
+
+    				$_total=($total>100000)?number_to_currency($total):number_format($total);
+
+    				$total_cost[$value->user_course_cost_category]=$_total;
+
+    				$first_year_fees=$_total;
+
+    				$fees_duration_text='TOTAL FEES';
+    			}
+    			else{
+    				$_fees_data=array();
+    				$first_year_fees=0;
+    				$total_cost=0;
+    				$admission_fee_available='no';
+    				$reg_fee_available='no';
+    				$exam_fee_available='no';
+    				$other_fee_available='no';
+    			}
+
+    			// $cost_data['admission_fee_available']=$admission_fee_available;
+    			// $cost_data['reg_fee_available']=$reg_fee_available;
+    			// $cost_data['exam_fee_available']=$exam_fee_available;
+    			// $cost_data['other_fee_available']=$other_fee_available;
+
+    			$cost_data['fees_data']=$_fees_data;
+    			$cost_data['total_fees_data']=$total_cost;
+    			$cost_data['fees_duration_text']=$fees_duration_text;
+    		}
+    	}
+
+    	$user_courses_exams=$this->strm->get_user_courses_exam(array('user_id'=>$college_id,'course_id'=>$_course_data->course_id,'user_type'=>'4'),FALSE,'exam_id','ASC',NULL,'exam_name',FALSE);
+
+
+    	//print_obj($cost_data);die;
+
+		if(!empty($user_courses_exams)){
+			foreach ($user_courses_exams as $key => $value) {
+				$exam=$this->strm->get_exam(array('exam_status'=>'1','exam_id'=>$value->exam_id),TRUE);
+
+				//if(!empty($exams)){
+					$exam_slug=$this->sm->get_slug(array('slug_type'=>'10','slug_type_id'=>$value->exam_id));
+					$_exams[]=array(
+						'exam_id'=>encode_data($value->exam_id),
+						'exam_name'=>$exam->exam_full_name,
+						'exam_short_name'=>$exam->exam_short_name.' '.date(Y),
+						'exam_slug'=>base_url('exams/'.$exam_slug->slug_value)
+					);
+				//}
+			}
+		}else{
+			$_exams=array();
+		}
+
+
+    	$course_data=array(
+			'course_full_name'=>strtoupper($_course_data->course_name),
+			'course_short_name'=>strtoupper($_course_data->course_short_name),
+			'course_type'=>strtoupper($_course_data->user_course_type),
+			'course_pass_type'=>strtoupper($_course_data->user_course_pass_type),
+			'course_placement'=>strtoupper($_course_data->user_course_placement_type),
+			'course_duration'=>($_course_data->user_course_dur>1)?$_course_data->user_course_duration_year.' YEARS':$_course_data->user_course_duration_year.' YEAR',
+			'course_duration_type'=>strtoupper($_course_data->user_course_duration_type),
+			'course_eligibility_desc'=>$_course_data->user_course_eligibility_broad,
+			'course_cost_first_year'=>$first_year_fees,
+			'course_cost_total'=>'',
+			'course_eligibility'=>'',
+			'copurse_streams'=>'',
+			'course_total_sems'=>'',
+			'course_seats_available'=>(!empty($_course_data->user_course_total_seats))?$_course_data->user_course_total_seats:'',
+			'cost_group'=>$cost_group,
+			'course_details_costs'=>$cost_data,
+			'exams_accepted'=>$_exams,
+			'admission_data'=>null
+		);
+
+		//print_obj($course_data);die;
+
+
+    	$data['course_data']=$course_data;
+    	//$data['college_data']=$_college_data;
+
+    	//print_obj($data);die;
+
+
+
+      if ($visible) $this->render('front_course_fees_course_section',$data);
+
+   }
+}

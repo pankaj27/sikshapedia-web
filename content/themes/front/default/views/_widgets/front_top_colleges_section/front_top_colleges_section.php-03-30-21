@@ -1,0 +1,180 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($top_colleges) || !empty($top_universities)){
+  ?>
+  <section class="commonSec topCollegesSec ">
+     <div class="wrapper">
+      <div class="section-title">
+        <h2>TOP COLLEGES</h2>
+        <!-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem.</p> -->
+      </div>
+      <div class="row">
+        <?php
+        foreach ($top_colleges as $key => $value) {
+          ?>
+          <div class="col-md-6 col-lg-4 col-xl-4">
+            <div class="proBox">
+              <div class="imgBox">
+                <a href="#"> <img class="" src="<?php echo $value['college_banner'];?>" alt=""></a>
+
+                <?php
+                if($value['is_featured']=='1'){
+                  ?>
+                  <div class="pro-label pro-featured">
+                    <span class="pro-label-bg">Featured <span class="pro-arrow"></span></span>
+                  </div>
+                  <?php
+                }
+                ?>
+                
+                <!-- <div class="pro-label pro-status">
+                  <span class="pro-label-bg"><span class="pro-arrow"></span> On Offer </span>
+                </div> -->
+                
+                <div class="proReview">
+                  <i class="far fa-envelope"></i> <b>20</b> 
+                </div>
+                <div class="proRating">
+                  <small class="d-block">RATING</small>
+                  <i class="fas fa-star-half-alt"></i> <b>6.7/10</b> 
+                </div>
+                <div class="pro-action">
+                  <div class="pro-action-inner">
+                    <div class="social-share" data-toggle="tooltip" title="Share">
+                      <div class="social-share-hover">
+                        <i class="fa fa-share-alt"></i>
+                        <div class="social-share-list">
+                          <div class="list-social-icon clearfix">
+                            <a href="javascript:;"><i class="fab fa-facebook"></i></a>
+                            <a href="javascript:;"><i class="fab fa-twitter"></i></a>
+                            <a href="javascript:;"><i class="fab fa-google-plus"></i></a>
+                            <a href="javascript:;"><i class="fab fa-linkedin"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a href="javascript:;" class="property-favorite" data-toggle="tooltip" title="Add to Favorite"><i class="far fa-heart"></i></a>
+                    <a class="compare-property" href="javascript:;" data-toggle="tooltip" title="Rating"><i class="far fa-star"></i></a>
+                  </div>
+                  <a class="pro-link" href="#"></a>
+                </div>
+              </div>
+              <div class="proBoxBody" style="min-height: 290px">
+                <div class="proInfo">
+                  <div class="infoImg"><a href="#"><img src="<?php echo $value['college_logo'];?>"></a></div>
+                  <p class="infoTitle"><a href="<?php echo $value['access_url'];?>"><?php echo $value['college_name'];?></a></p>
+                  <p class="infoLocation"><i class="fas fa-map-marker-alt"></i> <?php echo $value['college_city'];?>, <?php echo $value['college_state'];?>
+
+                  <?php
+                  if(!empty($value['college_affiliations'])){
+                    ?>
+                      <i class="fas fa-bookmark"></i> <?php echo $value['college_affiliations'];?>
+                    <?php
+                  }
+                  ?>
+                </p>
+                </div>
+
+
+                <?php
+                if(!empty($value['college_courses_cost'])){
+                  ?>
+                  <div class="infoItems">
+                    <?php
+                    foreach ($value['college_courses_cost'] as $k => $v) {
+                     ?>
+                      <a href="" class="infoItem">
+                        <h4> <?php echo $v['cost_value'];?></h4>
+                        <p><?php echo $v['course_name'];?></p>
+                      </a>
+                     <?php
+                    }
+                    ?>
+                  </div>
+                  <?php
+                }
+                ?>
+
+                <?php
+                if(!empty($value['college_ranks'])){
+                  ?>
+                  <div class="swiper-container tabSlider navTabSlider">
+                      <div class="swiper-wrapper">
+                        <a href="#" class="swiper-slide navLink"> 
+                          <div class="rankPanel">
+                            <div class="rankSpan">Ranked 43 out of 300   </div>
+                            <div class="rankName"> NIRF </div>
+                          </div>
+                        </a>
+                        <a href="#" class="swiper-slide navLink"> 
+                          <div class="rankPanel">
+                            <div class="rankSpan">Ranked 43 out of 300   </div>
+                            <div class="rankName"> NIRF </div>
+                          </div>
+                        </a>
+                        <a href="#" class="swiper-slide navLink"> 
+                          <div class="rankPanel">
+                            <div class="rankSpan">Ranked 43 out of 300   </div>
+                            <div class="rankName"> NIRF </div>
+                          </div>
+                        </a>
+                        <a href="#" class="swiper-slide navLink"> 
+                          <div class="rankPanel">
+                            <div class="rankSpan">Ranked 43 out of 300   </div>
+                            <div class="rankName"> NIRF </div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="swiper-button-next swiper-button-white"></div>
+                      <div class="swiper-button-prev swiper-button-white"></div>
+                    </div>
+                  <?php
+                }
+                ?>
+                    
+                <?php
+                if(!empty($value['college_facilities'])){
+                  ?>
+                 <div class="linkItemsWithIcon">
+                  <?php
+                  foreach ($value['college_facilities'] as $k => $v) {
+                    ?>
+                   <a href="javascript:void(0)" class="linkItem">
+                    <div class="ico"><?php echo $v['facility_icon'];?></div>
+                    <div class="linlTitle"> <?php echo $v['facility_name'];?></div>
+                   </a>
+                    <?php
+                  }
+                  ?>
+                  </div>
+                  <?php
+                }
+
+                ?>
+                <!-- <div class="linkItems">
+                  <a href="">ADMISSION 2021 </a>
+                  <a href="">REVIEWS</a>
+                  <a href="">COURSES & FEES</a>
+                </div> -->
+                <div class="btnGroup">
+                  <a href="javascript:void(0);" class="apply" data-cname="<?php echo $value['college_name'];?>,<?php echo $value['college_city'];?>" data-inst="<?php echo $value['college_id'];?>" data-inst_type="<?php echo $value['institute_type'];?>" data-clogo="<?php echo $value['college_logo'];?>" data-cphcode="<?php echo $value['college_country_phone_code'];?>" data-cou="<?php echo $value['college_country_id'];?>"><i class="far fa-file-alt"></i> Apply Now</a>
+                  <a href="#" class="download"><i class="fas fa-download"></i> Brochure</a>
+                </div>
+              </div>
+          </div>  
+              
+          </div>
+          <?php
+        }
+        ?>
+
+
+      </div>
+
+      <div class="text-center"><a href="<?php echo $explore_all_access_url;?>" class="btn-temp ">Explore All</a></div>
+     </div>
+  </section>
+  <?php
+}
+?>

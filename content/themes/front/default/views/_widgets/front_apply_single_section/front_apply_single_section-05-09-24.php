@@ -1,0 +1,152 @@
+
+<?php
+
+if(!empty($college_data)){
+	?>
+	<button type="button" class="btn btn-lg btn-primary mb-3 btn-block  d-flex justify-content-between align-items-center apply" data-aut_source="apply_button" data-clogo="<?php echo $college_data['college_logo'];?>" data-cname="<?php echo $college_data['college_name'];?>,<?php echo $college_data['college_city'];?>" data-inst="<?php echo $college_data['college_id'];?>" data-inst_type="<?php echo $college_data['college_type'];?>" data-cphcode="<?php echo $college_data['college_country_phone_code'];?>" data-cou="<?php echo $college_data['college_country_id'];?>"><span>APPLY NOW </span> <i class="fa-brands fa-telegram"></i></button>
+
+	<?php
+	if($college_data['college_has_verified_badge']=='yes'){
+
+		if(!empty($college_data['college_phone_link'])){
+			?>
+			<a href="<?php echo $college_data['college_phone_link'];?>" class="btn btn-lg btn-call mb-3 btn-block  d-flex justify-content-between align-items-center" data-aut_source="callnow_button" data-clogo="<?php echo $college_data['college_logo'];?>" data-cname="<?php echo $college_data['college_name'];?>,<?php echo $college_data['college_city'];?>" data-inst="<?php echo $college_data['college_id'];?>" data-inst_type="<?php echo $college_data['college_type'];?>" data-cphcode="<?php echo $college_data['college_country_phone_code'];?>" data-cou="<?php echo $college_data['college_country_id'];?>"><span>CALL NOW </span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:22px;fill: #fff;"><path d="M280 0C408.1 0 512 103.9 512 232c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-101.6-82.4-184-184-184c-13.3 0-24-10.7-24-24s10.7-24 24-24zm8 192a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm-32-72c0-13.3 10.7-24 24-24c75.1 0 136 60.9 136 136c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-48.6-39.4-88-88-88c-13.3 0-24-10.7-24-24zM117.5 1.4c19.4-5.3 39.7 4.6 47.4 23.2l40 96c6.8 16.3 2.1 35.2-11.6 46.3L144 207.3c33.3 70.4 90.3 127.4 160.7 160.7L345 318.7c11.2-13.7 30-18.4 46.3-11.6l96 40c18.6 7.7 28.5 28 23.2 47.4l-24 88C481.8 499.9 466 512 448 512C200.6 512 0 311.4 0 64C0 46 12.1 30.2 29.5 25.4l88-24z"/></svg></a>
+			<?php
+		}else{
+			?>
+			<button type="button" class="btn btn-lg btn-call mb-3 btn-block  d-flex justify-content-between align-items-center apply" data-clogo="<?php echo $college_data['college_logo'];?>" data-cname="<?php echo $college_data['college_name'];?>,<?php echo $college_data['college_city'];?>" data-inst="<?php echo $college_data['college_id'];?>" data-inst_type="<?php echo $college_data['college_type'];?>" data-cphcode="<?php echo $college_data['college_country_phone_code'];?>" data-cou="<?php echo $college_data['college_country_id'];?>">
+				<span>CALL NOW </span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:22px;fill: #fff;"><path d="M280 0C408.1 0 512 103.9 512 232c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-101.6-82.4-184-184-184c-13.3 0-24-10.7-24-24s10.7-24 24-24zm8 192a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm-32-72c0-13.3 10.7-24 24-24c75.1 0 136 60.9 136 136c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-48.6-39.4-88-88-88c-13.3 0-24-10.7-24-24zM117.5 1.4c19.4-5.3 39.7 4.6 47.4 23.2l40 96c6.8 16.3 2.1 35.2-11.6 46.3L144 207.3c33.3 70.4 90.3 127.4 160.7 160.7L345 318.7c11.2-13.7 30-18.4 46.3-11.6l96 40c18.6 7.7 28.5 28 23.2 47.4l-24 88C481.8 499.9 466 512 448 512C200.6 512 0 311.4 0 64C0 46 12.1 30.2 29.5 25.4l88-24z"/></svg>
+			</button>
+			<?php
+		}
+
+		?>
+		
+
+		<?php
+		if($college_data['college_whatsapp_link']!=""){
+			?>
+			<a href="<?php echo $college_data['college_whatsapp_link'];?>" class="btn btn-lg btn-primary btn-wati mb-3 btn-block  d-flex justify-content-between align-items-center" data-aut_source="whatsapp_button" data-clogo="<?php echo $college_data['college_logo'];?>" data-cname="<?php echo $college_data['college_name'];?>,<?php echo $college_data['college_city'];?>" data-inst="<?php echo $college_data['college_id'];?>" data-inst_type="<?php echo $college_data['college_type'];?>" data-cphcode="<?php echo $college_data['college_country_phone_code'];?>" data-cou="<?php echo $college_data['college_country_id'];?>"><span>WHATSAPP NOW </span> <i class="far fa-envelope"></i></a>
+			<?php
+		}else{
+			?>
+			<button type="button" class="btn btn-lg btn-primary btn-wati mb-3 btn-block  d-flex justify-content-between align-items-center" disabled="true">
+				<span>WHATSAPP NOW </span> <i class="fab fa-whatsapp"></i>
+			</button>
+			<?php
+		}
+		?>
+
+		
+		<?php
+	}else{
+		?>
+		<button type="button" class="btn btn-lg btn-call mb-3 btn-block  d-flex justify-content-between align-items-center" disabled="true">
+			<span>CALL NOW </span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:22px;fill: #fff;"><path d="M280 0C408.1 0 512 103.9 512 232c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-101.6-82.4-184-184-184c-13.3 0-24-10.7-24-24s10.7-24 24-24zm8 192a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm-32-72c0-13.3 10.7-24 24-24c75.1 0 136 60.9 136 136c0 13.3-10.7 24-24 24s-24-10.7-24-24c0-48.6-39.4-88-88-88c-13.3 0-24-10.7-24-24zM117.5 1.4c19.4-5.3 39.7 4.6 47.4 23.2l40 96c6.8 16.3 2.1 35.2-11.6 46.3L144 207.3c33.3 70.4 90.3 127.4 160.7 160.7L345 318.7c11.2-13.7 30-18.4 46.3-11.6l96 40c18.6 7.7 28.5 28 23.2 47.4l-24 88C481.8 499.9 466 512 448 512C200.6 512 0 311.4 0 64C0 46 12.1 30.2 29.5 25.4l88-24z"/></svg>
+		</button>
+
+
+		<button type="button" class="btn btn-lg btn-primary btn-wati mb-3 btn-block  d-flex justify-content-between align-items-center" disabled="true">
+			<span>WHATSAPP NOW </span> <i class="fab fa-whatsapp"></i>
+		</button>
+		<?php
+	}
+
+	?>
+
+
+		
+	<?php
+}
+
+?>
+
+<style type="text/css">
+
+	.btn-primary:hover {
+	  background: transparent;
+	  border: 1px solid transparent;
+	  background-image: linear-gradient(90deg,  #000 0%, #000 51%, #000 100%);
+	  border-image-slice: 1;
+	  color: #fff !important;
+	}
+
+	.btn-wati{
+	    background-image: linear-gradient(90deg,  #0d5705 0%, #29a71a 51%, #29a71a 100%);
+	    color: #fff;
+	}
+
+	.btn-wati:hover {
+	  background: transparent;
+	  border: 1px solid transparent;
+	  background-image: linear-gradient(90deg,  #0d5705 0%, #29a71a 51%, #29a71a 100%);
+	  border-image-slice: 1;
+	  color: #fff !important;
+	}
+
+
+	.btn-wati:focus {
+	  background: transparent;
+	  border: 1px solid transparent;
+	  background-image: linear-gradient(90deg,  #0d5705 0%, #29a71a 51%, #29a71a 100%);
+	  border-image-slice: 1;
+	  color: #fff !important;
+	}
+
+	.btn-call{
+		background-image: linear-gradient(90deg,  #dc3a12 0%, #fd572e 51%, #fd572e 100%);
+		color:#fff;
+	}
+
+	.btn-call:hover {
+	  background: transparent;
+	  border: 1px solid transparent;
+	  background-image: linear-gradient(90deg,  #dc3a12 0%, #fd572e 51%, #fd572e 100%);
+	  border-image-slice: 1;
+	  color: #fff !important;
+	}
+
+
+	.btn-call:focus {
+	  background: transparent;
+	  border: 1px solid transparent;
+	  background-image: linear-gradient(90deg,  #dc3a12 0%, #fd572e 51%, #fd572e 100%);
+	  border-image-slice: 1;
+	  color: #fff !important;
+	}
+
+	.image-button-wati:hover {
+	    background-image: url('<?php echo base_url('public/data/app/app_data/whatsappicon.png');?>');
+	    background-size: cover; /* Ensures the image covers the entire button */
+	    background-repeat: no-repeat;
+	    background-position: center; /* Centers the image */
+	    width: 100%; /* Button width */
+	    height: 50px; /* Button height */
+	    border: none; /* Removes default button border */
+	    cursor: pointer; /* Changes cursor to pointer on hover */
+	}
+
+
+	.image-button-call{
+	    background-image: url('<?php echo base_url('public/data/app/app_data/callnow.png');?>');
+	    background-size: cover; /* Ensures the image covers the entire button */
+	    background-repeat: no-repeat;
+	    background-position: center; /* Centers the image */
+	    width: 100%; /* Button width */
+	    height: 50px; /* Button height */
+	    border: none; /* Removes default button border */
+	    cursor: pointer; /* Changes cursor to pointer on hover */
+	}
+
+	.image-button-call:hover {
+	    background-image: url('<?php echo base_url('public/data/app/app_data/callnow.png');?>');
+	    background-size: cover; /* Ensures the image covers the entire button */
+	    background-repeat: no-repeat;
+	    background-position: center; /* Centers the image */
+	    width: 100%; /* Button width */
+	    height: 50px; /* Button height */
+	    border: none; /* Removes default button border */
+	    cursor: pointer; /* Changes cursor to pointer on hover */
+	}
+
+</style>

@@ -1,0 +1,173 @@
+<section class="bradcumSec bg-white py-2">
+       <div class="wrapper">
+            <div class="row">
+                <div class="col-md-10">
+                    <nav aria-label="breadcrumb" >
+                        <ol class="breadcrumb bg-white m-0 pl-0">
+                          <?php
+                          foreach ($exams_data['breadcumb'] as $key => $value) {
+                            ?>
+                            <li class="breadcrumb-item <?php echo (empty($value))?'active':'';?>">
+                              <?php
+                              if(!empty($value)){
+                                ?>
+                                <a href="<?php echo $value;?>"><?php echo $key;?></a>
+                                <?php
+                              }else{
+                                echo $key;
+                              }
+                              ?>
+                            </li>
+                            <?php
+                          }
+                          ?>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-12">
+                    <h4 class=" mb-3"><?php echo $exams_data['exam_heading'];?></h4>
+                </div>
+            </div>
+        </div>
+  </section>
+
+  <main class="isa-main-content">
+    
+      <!-- <div class="isa-tab-filter-wrapper">
+          <div class="row no-gutters">
+            <div class="col-md-12">
+              <div class="filterBlock  d-flex flex-wrap align-items-center py-2">
+                <a href="#" class="btn btn-outline-primary">BE/B.TECH  <span class="badge badge-light">10</span>  </a> 
+                <a href="#" class="btn btn-outline-primary">ME/M.TECH  <span class="badge badge-light">10</span> </a>
+                <a href="#" class="btn btn-outline-primary">M.PHIL/PH.D IN ENGINEERING <span class="badge badge-light">10</span> </a> 
+              </div>
+            </div>
+          </div>
+      </div> --> 
+
+    
+      
+
+
+      <?php $this->widget->run('front_exam_list_details_section',true);?>
+
+      <!-- <section class="isa-filter-result filter-is-visible">
+
+          <div class="card examListCard mb-3">
+            <div class="card-header bg-white">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <img src="https://waytoadmissions.com/dev/uploads/data/colleges/chaitanya-bharathi-institute-of-technology-hydrabad-telengana/KDmHzjCe_n.png" class="mr-3 shadow-sm w-60p" alt="...">
+                            <div class="media-body">
+                              <div class="d-flex mb-1 examLabels">
+                                <div  class="bg-indigo text-white px-1 mr-2 f10 examLabel">ONLINE TEST</div> 
+                                <div class="bg-indigo text-white px-1 mr-2 f10 examLabel">WRITTEN TEST</div>
+                              </div>
+                              <h6 class="mt-0 mb-1"> NEET PG 2021</h6>
+                              <small>NATIONAL ELIGIBILITY CUM ENTRANCE EXAMINATION POST GRADUATE</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row form-row">
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <div  class="examLabel">Application is in process</div> 
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                "National Eligibility Cum Entrance Test for Post Graduate, known as NEET PG is a national level exam, organized by National Board of Examinations (NBE)"
+            </div>
+            <div class="card-footer bg-white">
+                <a href="" class="btn btn-light btn-sm">APPLICATION</a>
+                <a href="" class="btn btn-light btn-sm">PROCESSCUTOFFEXAM</a>
+                <a href="" class="btn btn-light btn-sm">PATTERNPRACTICE</a>
+                <a href="" class="btn btn-light btn-sm">PAPERSPREPARATION</a>
+                <a href="" class="btn btn-light btn-sm">TIPSRESULTS</a>
+                <a href="" class="btn btn-primary btn-sm"> APPLY NOW</a>
+            </div>
+          </div>
+
+          <div class="card examListCard mb-3">
+            <div class="card-header bg-white">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <img src="https://waytoadmissions.com/dev/uploads/data/colleges/chaitanya-bharathi-institute-of-technology-hydrabad-telengana/KDmHzjCe_n.png" class="mr-3 shadow-sm w-60p" alt="...">
+                            <div class="media-body">
+                              <div class="d-flex mb-1 examLabels">
+                                <div  class="bg-indigo text-white px-1 mr-2 f10 examLabel">ONLINE TEST</div> 
+                                <div class="bg-indigo text-white px-1 mr-2 f10 examLabel">WRITTEN TEST</div>
+                              </div>
+                              <h6 class="mt-0 mb-1"> NEET PG 2021</h6>
+                              <small>NATIONAL ELIGIBILITY CUM ENTRANCE EXAMINATION POST GRADUATE</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row form-row">
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <div  class="examLabel">Application is in process</div> 
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                "National Eligibility Cum Entrance Test for Post Graduate, known as NEET PG is a national level exam, organized by National Board of Examinations (NBE)"
+            </div>
+            <div class="card-footer bg-white">
+                <a href="" class="btn btn-light btn-sm">APPLICATION</a>
+                <a href="" class="btn btn-light btn-sm">PROCESSCUTOFFEXAM</a>
+                <a href="" class="btn btn-light btn-sm">PATTERNPRACTICE</a>
+                <a href="" class="btn btn-light btn-sm">PAPERSPREPARATION</a>
+                <a href="" class="btn btn-light btn-sm">TIPSRESULTS</a>
+                <a href="" class="btn btn-primary btn-sm"> APPLY NOW</a>
+            </div>
+          </div>
+
+              
+         
+
+          
+          <div class="text-center"><a href="" class="btn-temp ">Explore All</a></div>
+      </section> -->
+
+  </main>
+
+  <script type="text/javascript">var _filter_country='<?php echo $country_id;?>';var _filter_stream='<?php echo $stream_id;?>';var page='exam_list_page';var _c='';var wbpage='examlistpage';var _vtype='';</script>

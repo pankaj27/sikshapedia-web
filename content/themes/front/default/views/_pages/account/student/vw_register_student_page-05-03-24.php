@@ -1,0 +1,354 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<section class="profile-content py-4 bg-white" style="padding-bottom:20px;">
+
+  <div class="wrapper wrapper-background">
+    <div class="row">
+    	<div class="col-lg-6 mb-4 mb-lg-0" style="padding-top: 150px;padding-right: 280px;padding-bottom: 150px;padding-left: 50px;top:-80px">
+            <div class="card userCard">
+              <div class="card-body">
+                <div class="row" style="padding-bottom:20px;font-weight: bold;">
+                    <div class="col-lg-12">
+                        <h5 class="m-0 d-inline color2">Why Sign Up? </h5>
+                      </div>
+                  </div>
+                    <div class="card featureReviewCard">
+                    <div class="card-body d-flex">
+                        <div class="cardContent">
+                            <i class="fas fa-check-circle color-sks"></i> View college brochures
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card featureReviewCard">
+                    <div class="card-body d-flex">
+                        <div class="cardContent">
+                             <i class="fas fa-check-circle color-sks"></i> View Detailed Fees
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card featureReviewCard">
+                    <div class="card-body d-flex">
+                        <div class="cardContent">
+                            <i class="fas fa-check-circle color-sks"></i> Identify Potential Colleges and Submit Applications
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card featureReviewCard">
+                    <div class="card-body d-flex">
+                        <div class="cardContent">
+                            <i class="fas fa-check-circle color-sks"></i> Ask Questions to senior Counselors
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card featureReviewCard" style="margin-bottom:20px">
+                    <div class="card-body d-flex">
+                        <div class="cardContent">
+                            <i class="fas fa-check-circle color-sks"></i> Never miss Important deadlines
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+	    <div class="col-lg-6 mb-4 mb-lg-0" style="padding-top: 150px;padding-right: 50px;padding-bottom: 150px;padding-left: 280px;top:-80px">
+	        <div class="card userCard">
+	        	<div class="card-body">
+                    <div class="row" style="padding-bottom:20px;">
+                        <div class="col-lg-12" style="text-align: center;font-weight: bold;">
+                            <h5 class="m-0 d-inline color2">REGISTER NOW </h5>
+                          </div>
+                      </div>
+
+	        		<div class="row">
+	        			<div class="col-lg-12" id="register_msg" style="display:none;">
+	        				
+	        			</div>
+	        		</div>
+
+	        		<form id="form_student_verify_otp2" novalidate="novalidate" style="display:none;">
+	        			<!-- <div class="row">
+	        				<div class="form-group col-sm-6">
+                    <label>Phone no</label>
+                    <input type="text" class="form-control" id="register_student_phone_no2" name="register_student_phone_no2" aria-describedby="register_student_phone_no2" placeholder="Enter Official Phone No." value="" disabled="true">
+                	</div>
+                	<div class="form-group col-sm-6">
+                    <label>Email</label>
+                    <input type="text" class="form-control" id="register_student_email2" name="register_student_email2" aria-describedby="register_student_email2" placeholder="Enter Official Email." value="" disabled="true">
+                	</div>
+	        			</div> -->
+	        			<div class="row">
+	        				<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>" id="_token">
+	        				<div class="form-group col-sm-6">
+	        					<label>Verify phone number.:<span class="span_star">(*)</span></label>                    
+                    <div class="input-group mb-3">
+	                    <input type="text" class="form-control" id="register_ph_otp" name="register_ph_otp" aria-describedby="register_ph_otp" placeholder="4 digit OTP" value="">
+	                    <div class="input-group-append">
+	                      <button class="btn btn-primary"  type="button" id="btn_otp_resend" style="display:none;">Resend OTP</button>
+	                    </div>
+	                  </div>
+	                  <label id="register_ph_otp-error" class="error" for="register_ph_otp" style="display:none;"></label>
+	        				</div>
+	        				<!-- <div class="form-group col-sm-6">
+	        					<label>Verify email:<span class="span_star">(*)</span></label>
+                    <div class="input-group mb-3">
+	                    <input type="text" class="form-control" id="register_email_otp" name="register_email_otp" aria-describedby="register_email_otp" placeholder="6 digit OTP" value="">
+	                  </div>
+	                  <label id="register_email_otp-error" class="error" for="register_email_otp" style="display:none;"></label>
+	        				</div> -->
+
+	        				<div class="form-group col-sm-6">
+	        					<label id="timer" style="display:none;"></label>
+	        					<span id="attempts_left"></span>
+	        				</div>
+	        			</div>
+	        			<div class="row">	        				
+        					<div class="form-group col-sm-6">
+                    <button type="submit" class="btn btn-primary pull-right" id="btn_verify_otp">Verify</button>
+                  </div>
+                  
+                </div>
+	        		</form>
+
+	            <form id="form_student_register" novalidate="novalidate">
+	            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>" id="_token">
+
+	              <div class="row">
+                	<div class="form-group col-sm-12">
+                    <label>Name <span class="span_star">(*)</span></label>
+                    <input type="text" class="form-control" id="register_student_name" name="register_student_name" aria-describedby="register_student_name" placeholder="Enter Name" value="">
+                	</div>
+                </div>
+
+                <div class="row">
+              		<div class="form-group col-sm-6">
+                    <label for="inputState">Country <span class="span_star">(*)</span></label>
+                    <select class="form-control chosen-select" name="register_student_country" id="_register_student_country">
+                      <option value="0">Select Country</option>
+                      <?php
+                        if(!empty($countries)){
+                          foreach ($countries as $key => $value) {
+                            ?>
+                            <option value="<?php echo $value['country_id'];?>"><?php echo $value['country_name'];?></option>
+                            <?php
+                          }
+                        }
+                      ?>
+                    </select>
+                	</div>
+                	<div class="form-group col-sm-6">
+                    <label>Phone no <span class="span_star">(*)</span></label>
+                    <input type="text" class="form-control" id="register_student_phone_no" name="register_student_phone_no" aria-describedby="register_college_phone_no" placeholder="Enter Phone No." value="">
+                	</div>
+                </div>
+                  	
+                <div class="row">
+                	<div class="form-group col-sm-12">
+                    <label for="inputState">Course Interestd In</label>
+                    <select class="form-control chosen-select" name="register_student_course" id="register_student_course">
+                      <option value="0">Select Course</option>
+                      <?php
+                        if(!empty($courses)){
+                          foreach ($courses as $key => $value) {
+                            ?>
+                            <option value="<?php echo $value['course_id'];?>"><?php echo $value['course_name'];?></option>
+                            <?php
+                          }
+                        }
+                      ?>
+                    </select>
+	                </div>
+                </div>
+
+                    <div class="row">
+                    	<div class="form-group col-lg-12">
+                    		<input type="checkbox" id="agree_to_tc" name="agree_to_tc" value="1">
+                        <label>I agree to <a href="<?php echo base_url();?>terms-conditions" target="_blank">Terms & Conditions.</a></label>
+                    	</div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 pull-right">
+                         <button type="submit" class="btn btn-primary" id="btn_update_account" disabled="true" style="float:right;">Register</button>
+                      </div>
+                    </div>
+	            </form>
+
+                <div class="register-section">
+                    <h2>Already a member <a href="<?php echo base_url('signin');?>">LOGIN HERE</a></h2>
+                </div>
+
+	        	</div>
+	        </div>
+	    </div>
+			
+    </div>
+
+  </div>
+</section>
+
+<?php $this->widget->run('front_top_colleges_section',TRUE);?>
+
+<?php $this->widget->run('front_top_study_places',TRUE);?>
+
+<?php $this->widget->run('front_mobile_app_section',TRUE);?>
+
+<?php $this->widget->run('front_subscription_section',TRUE);?>
+<script type="text/javascript">var wbpage='';</script>
+
+<style type="text/css">
+    .color-sks{
+        color: #fd572e;
+    }
+    .hr-lines {
+      position: relative;
+      max-width: 500px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .hr-lines:before {
+      content: " ";
+      height: 2px;
+      width: 175px;
+      background: #fd572e;
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+    }
+    .hr-lines:after {
+      content: " ";
+      height: 2px;
+      width: 175px;
+      background: #fd572e;
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+    }
+
+    .register-section {
+        text-align: center;
+        margin-top: 1px;
+    }
+
+    .register-section h2 {
+        color: #FF0000; /* Red color */
+        font-size: 24px;
+        margin-bottom: 5px; /* Adjust as per the exact spacing */
+    }
+
+    .register-section span {
+        display: block;
+        color: #000000; /* Black color */
+        margin-bottom: 20px; /* Adjust as per the exact spacing */
+    }
+
+    .register-section a {
+        text-decoration: none;
+        color: #FF0000; /* Red color */
+        font-weight: bold;
+        border-bottom: 2px solid #FF0000; /* Red underline */
+        padding-bottom: 3px; /* Adjust for proper underline spacing */
+    }
+
+    input[type=text]{
+        height: 50px;
+        border: 2px solid #fd572e;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #000;
+    }
+
+
+    #btn_update_account,#submit_otp{
+        background-color: #fd572e;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 20px;
+    }
+
+    
+
+    .wrapper-background {
+     width: 100%;
+     height: 100vh;
+     background-image: url('<?php echo base_url('public/data/app/app_data/appbg-new-2.png');?>');
+     background-size: cover;
+     background-position: center;
+     background-repeat: no-repeat;
+     top:-23px;
+    }
+
+    .userCard{
+        border-radius: 0.60rem;
+    }
+
+    .featureReviewCard{
+        margin-bottom:-13px;
+        background-color: #e1e1e1;
+    }
+
+    .featureReviewCard .card-body{
+        padding:5px;
+    }
+
+
+  .chosen-container{
+    z-index: 1800000;
+  }
+ 
+    .chosen-container-single{
+        height: 50px !important;
+        border: 2px solid #fd572e !important;
+        border-radius: 5px !important;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
+
+    .chosen-container-single .chosen-single{
+        height: 45px !important;
+    }
+
+    .chosen-container-single .chosen-single span{
+       background-color: #fff !important;
+       margin-top: 6px;
+      font-size: 17px;
+    }
+  .chosen-drop{
+    max-height: 150px !important;
+  }
+
+ .chosen-container .chosen-results {
+    max-height: 100px !important;
+  }
+
+  .chosen-container .chosen-with-drop .chosen-results {
+    max-height: 100px !important;
+  }
+
+  .chosen-container-active.chosen-with-drop.chosen-single{
+    background-color: #fff !important;
+    background-image: #fff !important;
+  }
+
+  #_register_student_country_chosen{
+    background-color: #fff !important;
+  }
+
+  .active-result .group-option .highlighted{
+    background-color: #fd572e !important;
+  }
+  .span_star{
+  	color: red;
+  }
+  .error{
+  	color: red;
+  }
+</style>
+
+<script type="text/javascript">var page='';</script>

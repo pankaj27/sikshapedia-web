@@ -1,0 +1,152 @@
+jQuery(function($) {
+  "use strict";
+
+//Filter
+	var start = 13;
+    var limit = 12;
+   	var doneScrollingInterval = 500;
+   	var scrollTimer=-1; 
+   	var processing=false;               //timer identifier
+
+    var position = $(window).scrollTop();
+
+    $(window).scroll(function(){
+
+    	//    var scroll = $(window).scrollTop();
+	   // if(scroll > position) {
+	   //      console.log('scrollDown');
+	   //     	if (scrollTimer != -1){
+	   //     		clearTimeout(scrollTimer);
+	   //     	}
+
+	   	if (processing)
+    		return false;
+	        
+	       if ($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2){
+					//scrollTimer = setTimeout(doScroll, doneScrollingInterval);
+					if(_c!=''){
+						//doScroll();
+						$(window).scrollTop($(window).scrollTop()-1);
+					}
+					
+					
+	      }
+	    	
+	  		  
+	   // }
+
+	   //  position = scroll;
+    });
+
+    function doScroll(){
+    	$.ajax({
+        	type:'POST',
+        	url:base_url+'filterdata',
+        	data:{csrf_test_name:csrf_hash,_l:limit,_s:start,_c:_c,_st:_st,_ct:_ct,_strm:_strm,_cu:_cu,_exam:_exam},
+        	cache:false,
+        	beforeSend:function(){
+        		processing = true;
+        	},
+        	success:function(d){
+        		if(d.html!=''){
+					start += limit;
+        			$("#udata_lists").append(d.html);
+        			processing = false;
+        		}
+        	}
+        });
+    }
+
+    //doScroll();
+
+    // setTimeout(function(){
+    // 	var filter_html='';
+
+    // 	var listing_html='';
+
+
+    // 	$.ajax({
+    // 		type:'GET',
+    // 		url:'https://api.waytoadmissions.com/v1/instapi/listing_filters?data_param='+country,
+    // 		data:{},
+    // 		cache:false,
+    // 		beforeSend:function(){
+
+    // 		},
+    // 		success:function(d){
+
+    			
+
+    // 			if(d.filters){
+
+    // 				$.each(d.filters,function(i,v){
+
+    // 					//console.log(v);
+    // 					//$.each(i.);
+
+    // 					if(v.values && v.values!=''){
+    // 						filter_html+='<div class="isa-filter-block">';
+	   //  					filter_html+='<h4>'+v.text+'</h4>';
+	   //  					filter_html+='<ul class="isa-filter-content list nicescroll">';
+	   //  					if(v.values!=''){
+	   //  						$.each(v.values,function(_i,_v){
+	   //  							filter_html+='<li>';
+	   //  								filter_html+='<input class="filter coursefilter" type="radio" name="'+i+'" id="radio'+_v.value+'" value="'+_v.value+'">';
+
+				// 							filter_html+='<label class="checkbox-label" for="radio'+_v.value+'" data-ty="'+i+'" data-ctrl="radio">'+_v.text+' - ['+_v.count+']</label>';
+	    							
+	   //  							filter_html+='</li>';
+	   //  						});
+	   //  					}
+	   //  					filter_html+='</ul>';
+	   //  					filter_html+='</div>';
+    // 					}
+    					
+	    					
+    // 				});
+    // 			}
+		    	
+
+		  //   	//console.log(filter_html);
+
+				// 	$('#filter_list2').html(filter_html);
+    			
+    // 		}
+    // 	});
+
+
+    // 	var s_url='https://api.waytoadmissions.com/v1/instapi/listing?_c='+country;
+
+    // 	$.ajax({
+    // 		type:'GET',
+    // 		url:'https://api.waytoadmissions.com/v1/instapi/listing?_c='+country+'&_len=11&_strt=0',
+    // 		data:{},
+    // 		beforeSend:function(){
+
+    // 		},
+    // 		success:function(d){
+    // 			console.log(d);
+    // 			$('#udata_lists').html(d);
+    // 		}
+    // 	});
+
+    	
+
+    // 	// fetch(s_url)
+	   //  // .then((response) => {
+	   //  //   return response.json();
+	   //  // })
+	   //  // .then((data) => {
+	   //  //   console.log(data);
+
+	   //  //   $('#udata_lists').html(data);
+
+	   //  // }).catch(function(error) {
+	   //  //   console.log(error);
+	   //  // });
+
+    	
+    // },100);
+
+
+});

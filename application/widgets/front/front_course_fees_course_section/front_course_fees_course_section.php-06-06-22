@@ -1,0 +1,272 @@
+<?php
+
+
+/**
+ * 
+ */
+class Front_course_fees_course_section extends Widget
+{
+	function run($visible = FALSE,$college_id){
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$segment_1=$this->uri->segment(1,0); //country
+        $segment_2=$this->uri->segment(2,0); //college,university url
+        $segment_3=$this->uri->segment(3,0); //inner menues
+        $segment_4=$this->uri->segment(4,0);//course
+        $segment_5=$this->uri->segment(5,0);//stream
+
+        
+        $course_data=array();
+        $college_data=array();
+        $course_stream_details=array();
+        $course_streams=array();
+        $total_sems=0;
+
+
+        if(!empty($college_id)){
+        	$_college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+
+        	//print_obj($_college_data);die;
+
+        	if(!empty($_college_data)){
+        		$college_data=array(
+					'college_name'=>strtoupper($_college_data->college_name)
+				);
+
+        		$slug4_found=$this->sm->get_slug(array('slug_value'=>$segment_4));
+
+        		//print_obj($slug4_found);die;
+
+					$slug4_type=$slug4_found->slug_type;
+					$slug4_type_id=$slug4_found->slug_type_id;
+					$slug4_value=$slug4_found->slug_value;
+        		if($segment_5!='0'){
+					$slug5_found=$this->sm->get_slug(array('slug_value'=>$segment_5));
+
+					$slug5_type=$slug5_found->slug_type;
+					$slug5_type_id=$slug5_found->slug_type_id;
+					$slug5_value=$slug5_found->slug_value;
+
+					$course_stream_details=array('hi');
+
+					$data['course_stream_details']=$course_stream_details;
+					
+				}
+
+
+				$_course_data = $this->im->get_user_course(array('user_type'=>'4','user_id'=>$college_id,'user_course'=>$slug4_type_id),FALSE);
+        	
+
+				if(!empty($_course_data)){
+
+					$first_year_cost_data=$this->im->get_user_course_grand_total(array('user_id'=>$slug_type_id,'user_course_id'=>$_course_data->user_course_id,'user_course_year'=>'1'),FALSE);
+
+					$total_cost_data=$this->im->get_user_course_grand_total(array('user_id'=>$slug_type_id,'user_course_id'=>$_course_data->user_course_id),FALSE);
+
+					$first_year_total_cost=number_format($first_year_cost_data[0]->total_cost, 2,'.', ',');
+					$total_cost=number_to_currency($total_cost_data[0]->total_cost);
+
+					$first_year_course_cost=($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$first_year_total_cost:$first_year_total_cost.$college_user_data->currency_symbol_right;
+					$course_cost=($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$total_cost:$total_cost.$college_user_data->currency_symbol_right;
+
+
+					$course_cost_detailed=$this->im->get_course_fees_data(array('user_id'=>$slug_type_id,'user_course_id'=>$_course_data->user_course_id),FALSE);
+
+					if(!empty($course_cost_detailed)){
+						$i=1;
+						$total_sems=count($course_cost_detailed)*2;
+						foreach ($course_cost_detailed as $key => $value) {
+							$detialed_cost[]=array(
+								'years'=>'YEAR '.$i,
+								'sem_1'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_1:$value->user_course_tution_fee_sem_1.$college_user_data->currency_symbol_left,
+								'sem_2'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_2:$value->user_course_tution_fee_sem_2.$college_user_data->currency_symbol_left,
+								'sem_3'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_3:$value->user_course_tution_fee_sem_3.$college_user_data->currency_symbol_left,
+								'sem_4'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_4:$value->user_course_tution_fee_sem_4.$college_user_data->currency_symbol_left,
+								'sem_5'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_5:$value->user_course_tution_fee_sem_5.$college_user_data->currency_symbol_left,
+								'sem_6'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_6:$value->user_course_tution_fee_sem_6.$college_user_data->currency_symbol_left,
+								'sem_7'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_7:$value->user_course_tution_fee_sem_7.$college_user_data->currency_symbol_left,
+								'sem_8'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_8:$value->user_course_tution_fee_sem_8.$college_user_data->currency_symbol_left,																				
+							);
+
+							$i++;
+						}
+					}
+
+
+					$_course_streams=$this->strm->get_user_course_stream(array('user_id'=>$slug_type_id,'course_id'=>$_course_data->user_course_id),FALSE,'user_course_stream_id','ASC');
+
+					if(!empty($_course_streams)){
+						foreach ($_course_streams as $key => $value) {
+							$stream_slug=$this->sm->get_slug(array('slug_type'=>'4','slug_type_id'=>$value->stream_id));
+							$course_streams[]=array(
+								'stream_name'=>$value->stream_name,
+								'stream_link'=>base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value.'/course-fees/'.$slug4_value.'/'.$stream_slug->slug_value
+							);
+						}
+					}
+
+
+
+					$course_data=array(
+						'course_full_name'=>strtoupper($_course_data->course_name),
+						'course_short_name'=>strtoupper($_course_data->course_short_name),
+						'course_type'=>strtoupper($_course_data->user_course_type),
+						'course_pass_type'=>strtoupper($_course_data->user_course_pass_type),
+						'course_placement'=>strtoupper($_course_data->user_course_placement_type),
+						'course_duration'=>$_course_data->user_course_duration_year.' YEARS',
+						'course_duration_type'=>strtoupper($_course_data->user_course_duration_type),
+						'course_fees_1st_tear'=>$first_year_course_cost,
+						'course_cost_total'=>$course_cost,
+						'course_eligibility'=>'',
+						'copurse_streams'=>$course_streams,
+						'course_total_sems'=>$total_sems,
+						'course_details_costs'=>$detialed_cost
+					);
+
+
+					//print_obj($course_data);die;
+
+				}
+
+			}
+
+        }
+        
+        //echo $segment_5;die;
+
+
+     //    if((is_string($segment_1) && $segment_1!='0') && (is_string($segment_2) && $segment_2!='0') && (is_string($segment_3) && $segment_3!='0' && $segment_3=='course-fees') && $segment_4!='0'){
+     //    	$country_data=$this->com->get_country(array('country_iso_code_2'=>$segment_1));
+
+     //    	if(!empty($country_data)){
+
+     //    		$slug_found=$this->sm->get_slug(array('slug_value'=>$segment_2));
+
+     //    		if(!empty($slug_found)){
+     //    			$slug_type=$slug_found->slug_type;
+					// $slug_type_id=$slug_found->slug_type_id;
+					// $slug_value=$slug_found->slug_value;
+
+					// $slug4_found=$this->sm->get_slug(array('slug_value'=>$segment_4));
+
+					// $slug4_type=$slug4_found->slug_type;
+					// $slug4_type_id=$slug4_found->slug_type_id;
+					// $slug4_value=$slug4_found->slug_value;
+
+					// if($slug_type=='6'){//University
+
+					// }else if($slug_type=='7'){//College
+
+					// 	$_college_data=$this->im->get_college_profile_data(array('college_user_id'=>$slug_type_id));
+
+					// 	if(!empty($_college_data)){
+					// 		$college_user_data=$this->um->get_user_data(array('user_id'=>$_college_data->college_user_id),null,'4');
+					// 		$college_data=array(
+					// 			'college_name'=>strtoupper($_college_data->college_name)
+					// 		);
+
+					// 		if($segment_5!='0'){
+					// 			$slug5_found=$this->sm->get_slug(array('slug_value'=>$segment_5));
+
+					// 			$slug5_type=$slug5_found->slug_type;
+					// 			$slug5_type_id=$slug5_found->slug_type_id;
+					// 			$slug5_value=$slug5_found->slug_value;
+
+					// 			$course_stream_details=array('hi');
+
+					// 			$data['course_stream_details']=$course_stream_details;
+								
+					// 		}
+
+
+					// 		$_course_data = $this->im->get_user_course(array('user_type'=>'4','user_id'=>$slug_type_id,'user_course'=>$slug4_type_id),FALSE);
+
+
+					// 		if(!empty($_course_data)){
+
+					// 			$first_year_cost_data=$this->im->get_user_course_grand_total(array('user_id'=>$slug_type_id,'user_course_id'=>$_course_data->user_course_id,'user_course_year'=>'1'),FALSE);
+
+					// 			$total_cost_data=$this->im->get_user_course_grand_total(array('user_id'=>$slug_type_id,'user_course_id'=>$_course_data->user_course_id),FALSE);
+
+					// 			$first_year_total_cost=number_format($first_year_cost_data[0]->total_cost, 2,'.', ',');
+					// 			$total_cost=number_to_currency($total_cost_data[0]->total_cost);
+
+					// 			$first_year_course_cost=($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$first_year_total_cost:$first_year_total_cost.$college_user_data->currency_symbol_right;
+					// 			$course_cost=($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$total_cost:$total_cost.$college_user_data->currency_symbol_right;
+
+
+					// 			$course_cost_detailed=$this->im->get_course_fees_data(array('user_id'=>$slug_type_id,'user_course_id'=>$_course_data->user_course_id),FALSE);
+
+					// 			if(!empty($course_cost_detailed)){
+					// 				$i=1;
+					// 				$total_sems=count($course_cost_detailed)*2;
+					// 				foreach ($course_cost_detailed as $key => $value) {
+					// 					$detialed_cost[]=array(
+					// 						'years'=>'YEAR '.$i,
+					// 						'sem_1'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_1:$value->user_course_tution_fee_sem_1.$college_user_data->currency_symbol_left,
+					// 						'sem_2'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_2:$value->user_course_tution_fee_sem_2.$college_user_data->currency_symbol_left,
+					// 						'sem_3'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_3:$value->user_course_tution_fee_sem_3.$college_user_data->currency_symbol_left,
+					// 						'sem_4'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_4:$value->user_course_tution_fee_sem_4.$college_user_data->currency_symbol_left,
+					// 						'sem_5'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_5:$value->user_course_tution_fee_sem_5.$college_user_data->currency_symbol_left,
+					// 						'sem_6'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_6:$value->user_course_tution_fee_sem_6.$college_user_data->currency_symbol_left,
+					// 						'sem_7'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_7:$value->user_course_tution_fee_sem_7.$college_user_data->currency_symbol_left,
+					// 						'sem_8'=>($college_user_data->currency_symbol_left!='')?$college_user_data->currency_symbol_left.$value->user_course_tution_fee_sem_8:$value->user_course_tution_fee_sem_8.$college_user_data->currency_symbol_left,																				
+					// 					);
+
+					// 					$i++;
+					// 				}
+					// 			}
+
+
+					// 			$_course_streams=$this->strm->get_user_course_stream(array('user_id'=>$slug_type_id,'course_id'=>$_course_data->user_course_id),FALSE,'user_course_stream_id','ASC');
+
+					// 			if(!empty($_course_streams)){
+					// 				foreach ($_course_streams as $key => $value) {
+					// 					$stream_slug=$this->sm->get_slug(array('slug_type'=>'4','slug_type_id'=>$value->stream_id));
+					// 					$course_streams[]=array(
+					// 						'stream_name'=>$value->stream_name,
+					// 						'stream_link'=>base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value.'/course-fees/'.$slug4_value.'/'.$stream_slug->slug_value
+					// 					);
+					// 				}
+					// 			}
+
+
+
+					// 			$course_data=array(
+					// 				'course_full_name'=>strtoupper($_course_data->course_name),
+					// 				'course_short_name'=>strtoupper($_course_data->course_short_name),
+					// 				'course_type'=>strtoupper($_course_data->user_course_type),
+					// 				'course_pass_type'=>strtoupper($_course_data->user_course_pass_type),
+					// 				'course_placement'=>strtoupper($_course_data->user_course_placement_type),
+					// 				'course_duration'=>$_course_data->user_course_duration_year.' YEARS',
+					// 				'course_duration_type'=>strtoupper($_course_data->user_course_duration_type),
+					// 				'course_fees_1st_tear'=>$first_year_course_cost,
+					// 				'course_cost_total'=>$course_cost,
+					// 				'course_eligibility'=>'',
+					// 				'copurse_streams'=>$course_streams,
+					// 				'course_total_sems'=>$total_sems,
+					// 				'course_details_costs'=>$detialed_cost
+					// 			);
+
+					// 		}
+
+					// 	}
+
+
+							
+					// }
+     //    		}		        		
+     //    	}
+     //    }
+
+
+
+    	$data['course_data']=$course_data;
+    	$data['college_data']=$_college_data;
+
+    	//print_obj($data);die;
+
+        if ($visible) $this->render('front_course_fees_course_section',$data);
+	}
+}

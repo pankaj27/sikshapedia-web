@@ -1,0 +1,107 @@
+<?php
+if(!empty($college_facilities)){
+	?>
+
+  <div class="card infoCard mb-4">
+      <div class="card-header bg-white">
+         <h5 class="m-0 color2">FACILITIES</h5>
+      </div>
+      <div class="card-body">
+
+        <div class="d-flex flex-wrap">
+
+          <?php
+          foreach ($college_facilities as $key => $value){
+          ?>
+          <div class="serviceIcoBox text-center">
+            <!--<div class="ico">
+              <?php //echo $value['facility_icon'];?>
+            </div>-->
+            
+          <?php if($value['facility_name'] =="AUDITORIUM"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/AUDITORIUM.svg" style="width:60px;"/>
+            
+          <?php }else if($value['facility_name'] =="BANK"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/BANK.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="MEDICAL"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/MEDICAL.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="CAFETERIA"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/CAFETERIA.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="LIBRARY"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/LIBRARY.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="CLASSROOM"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/CLASSROOM.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="THEATER"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/AUDITORIUM.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="HOSTEL"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/HOSTEL.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="SPORTS"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/SPORTS.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="LABS"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/LAB.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="POOL"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/POOL.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="COMPUTER LAB"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/COMPUTER_LAB.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="TRANSPORT"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/TRANSPORT.svg" style="width:60px;"/>
+          
+          <?php }else if($value['facility_name'] =="GYM"){  ?>
+          
+                <img src="https://www.waytoadmissions.com/content/themes/front/default/assets/icon/background/GYM.svg" style="width:60px;"/>
+          
+          <?php } ?>
+          
+            <br>
+         
+            <span class="text-sm font-weight-semi mt-2 pt-5"><?php echo $value['facility_name'];?></span>
+          </div>
+
+          <?php
+          }
+          ?>
+
+        </div>
+
+
+        <?php
+        if(!empty($college_facilities_intro)){
+            ?>
+            <div class="d-flex flex-wrap" style="margin-top:15px;"><?php echo $college_facilities_intro;?></div>
+            <?php
+        }
+        ?>
+      </div>
+    </div>
+
+
+
+
+	<?php
+}
+
+?>

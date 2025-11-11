@@ -1,0 +1,189 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<style type="text/css">
+  .d-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 20px;
+    margin-top:5px;
+}
+
+.info-wrap.jsx-1779620961 .info-box.jsx-1779620961 {
+    width: 25%;
+    position: relative;
+}
+
+svg {
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+
+
+.icon svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+</style>
+<div class="card infoCard mb-4">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-9">
+          <h5 class="color2"> BACHELOR OF TECHNOLOGY [B.TECH] - FEES & ELIGIBILITY  </h5>
+          <div class="row">
+            <div class="color2 mb-2" style="padding-left: 12px;">
+              <span class="stars color-orange"><i class="fas fa-user"></i></span> 9.4/10 <span class="stars color-orange"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span> Based on 11 Reviews 
+            </div>
+            <div class="d-flex flex-wrap text-uppercase text-big text-badge">
+             <span class="mr-2 badge color-blue"><i class="far fa-bookmark"></i> Duration: 4 YEARS </span>
+             <span class="mr-2 badge color-purple"><i class="far fa-bookmark"></i> Course Type: DEGREE </span>
+             <span class="mr-2 badge color-green"><i class="far fa-bookmark"></i> Seats Available: 60 </span>
+             <span class="mr-2 badge color-indigo"><i class="far fa-bookmark"></i> Place: ON CAMPUS </span>
+             <span class="mr-2 badge color-teal"><i class="far fa-bookmark"></i> Type of Course: GRADUATION </span>
+            </div>
+            
+
+            <!-- <div class="jsx-1779620961 jsx-1988553729 info-wrap d-flex" wfd-id="4117">
+              <div class="jsx-1779620961 jsx-1988553729 info-box d-flex" wfd-id="4138">
+                <span class="jsx-1779620961 jsx-1988553729 icon" wfd-id="4142">
+                  <svg width="38" height="36" viewBox="0 0 38 36" xmlns="http://www.w3.org/2000/svg"><g fill="#3EAE8D" fill-rule="evenodd"><path d="M36.64 4.071a2.63 2.63 0 00-1.947-.812h-8.057V1.722c0-.7-.544-1.242-1.245-1.242-.702 0-1.245.542-1.245 1.242V3.26H13.53V1.722c0-.7-.566-1.242-1.267-1.242-.703 0-1.246.542-1.246 1.242V3.26H2.961c-.747 0-1.409.265-1.946.812a2.647 2.647 0 00-.793 1.92v27.24c0 .746.266 1.384.793 1.92.537.548 1.199.813 1.946.813h31.732c.77 0 1.431-.265 1.946-.79a2.697 2.697 0 00.793-1.943V5.991c0-.745-.278-1.394-.793-1.92zm-1.698 29.16c0 .09-.136.226-.25.226H2.962c-.113 0-.249-.135-.249-.226V14.868h32.23v18.363zm0-20.847H2.712V5.992c0-.158.09-.226.249-.226h8.057v.542c0 .7.543 1.265 1.245 1.265.702 0 1.268-.565 1.268-1.265v-.542h10.615v.542a1.245 1.245 0 102.49 0v-.542h8.057c.158 0 .249.068.249.226v6.392z"></path><path d="M13.576 22.277h15.006c.701 0 1.245-.565 1.245-1.265s-.544-1.243-1.245-1.243H13.576c-.702 0-1.268.543-1.268 1.243 0 .7.566 1.265 1.268 1.265zM13.576 28.285h15.006c.701 0 1.245-.542 1.245-1.242s-.544-1.265-1.245-1.265H13.576c-.702 0-1.268.565-1.268 1.265s.566 1.242 1.268 1.242zM7.827 19.77h2.49v2.506h-2.49zM7.827 25.777h2.49v2.507h-2.49z"></path></g></svg> 
+                </span>
+                <div class="jsx-1779620961 jsx-1988553729 ml-2" wfd-id="4139">
+                  <span class="jsx-1779620961 jsx-1988553729 d-block text-sm" wfd-id="4141">Duration</span>
+                  <span class="jsx-1779620961 jsx-1988553729 value d-block text-success mr-2 badge color-blue" wfd-id="4140">4 Years</span>
+                </div>
+              </div>
+
+              <div class="jsx-1779620961 jsx-1988553729 info-box d-flex" wfd-id="4133">
+                <span class="jsx-1779620961 jsx-1988553729 icon" wfd-id="4137"><svg width="39" height="37" viewBox="0 0 39 37" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0.889" stroke="#FF7D7D" fill="#FF7D7D" fill-rule="evenodd"><path d="M12.287 11.306h4.953a.663.663 0 00.664-.664V5.69a.663.663 0 00-.664-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .367.297.664.663.664h0zm.664-4.953h3.626v3.626h-3.626V6.353h0zM20.955 11.306h4.953a.663.663 0 00.663-.664V5.69a.663.663 0 00-.663-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .367.297.664.663.664h0zm.663-4.953h3.627v3.626h-3.627V6.353h0zM17.24 20.15a.663.663 0 00.664-.663v-4.953a.663.663 0 00-.664-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .366.297.663.663.663h4.953zm-4.29-4.953h3.627v3.627h-3.626v-3.627h0zM20.955 20.15h4.953a.663.663 0 00.663-.663v-4.953a.663.663 0 00-.663-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .366.297.663.663.663h0zm.663-4.953h3.627v3.627h-3.627v-3.627h0z"></path><path d="M37.088 8.21h-7.245V1.145A.663.663 0 0029.18.48H9.015a.663.663 0 00-.663.664V8.21H1.108a.663.663 0 00-.664.663V35.282c0 .366.297.663.664.663h35.98a.663.663 0 00.663-.663V8.873a.663.663 0 00-.663-.663h0zM1.77 14.139h3.626v3.626H1.771V14.14h0zm0 8.845h3.626v3.626H1.771v-3.626h0zm6.581 11.635h-6.58v-6.682H6.06a.663.663 0 00.663-.664V22.32a.663.663 0 00-.663-.663H1.77v-2.565h4.29a.663.663 0 00.663-.663v-4.953a.663.663 0 00-.663-.664H1.77V9.537h6.581v25.082h0zm13.514 0H16.33v-9.647h5.537v9.647h0zm6.65-25.746V34.62h-5.323v-10.31a.663.663 0 00-.663-.664h-6.864a.663.663 0 00-.663.663v10.31H9.679V1.808h18.838v7.065h0zm7.908 17.737h-3.626v-3.626h3.626v3.626h0zm0-8.845h-3.626V14.14h3.626v3.626h0zm0-4.953h-4.29a.663.663 0 00-.663.664v4.953c0 .366.297.663.664.663h4.29v2.565h-4.29a.663.663 0 00-.664.663v4.953c0 .367.297.664.664.664h4.29v6.682h-6.582V9.537h6.581v3.275h0z"></path></g></svg> </span><div class="jsx-1779620961 jsx-1988553729 ml-2" wfd-id="4134"><span class="jsx-1779620961 jsx-1988553729 d-block text-sm" wfd-id="4136">Seats Available</span><span class="jsx-1779620961 jsx-1988553729 d-block value text-red" wfd-id="4135">60</span></div>
+              </div>
+
+              <div class="jsx-1779620961 jsx-1988553729 info-box d-flex" wfd-id="4128">
+                <span class="jsx-1779620961 jsx-1988553729 icon" wfd-id="4132"><svg width="35" height="38" viewBox="0 0 35 38" xmlns="http://www.w3.org/2000/svg"><path d="M29.02 9.584a.514.514 0 10-.727.729 14.842 14.842 0 014.374 10.56c0 8.236-6.7 14.935-14.935 14.935-8.234 0-14.934-6.7-14.934-14.934 0-8.193 6.632-14.86 14.808-14.929L14.61 8.941a.514.514 0 10.727.729l4.038-4.038-4.038-4.037a.514.514 0 10-.727.728l2.61 2.61C8.655 5.207 1.77 12.24 1.77 20.87c0 8.803 7.16 15.965 15.964 15.965s15.965-7.162 15.965-15.963c0-4.266-1.663-8.273-4.678-11.289h0z" stroke-width="1.778" stroke="#FFA100" fill="#FFA100" fill-rule="evenodd"></path></svg> </span><div class="jsx-1779620961 jsx-1988553729 ml-2" wfd-id="4129"><span class="jsx-1779620961 jsx-1988553729 d-block text-sm" wfd-id="4131">Course type</span><span class="jsx-1779620961 jsx-1988553729 value d-block text-yellow mr-2 badge color-purple" wfd-id="4130">Degree</span></div>
+              </div>
+
+              <div class="jsx-1779620961 jsx-1988553729 info-box d-flex" wfd-id="4123">
+                <span class="jsx-1779620961 jsx-1988553729 icon" wfd-id="4127"><svg width="39" height="37" viewBox="0 0 39 37" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0.889" stroke="#FF7D7D" fill="#FF7D7D" fill-rule="evenodd"><path d="M12.287 11.306h4.953a.663.663 0 00.664-.664V5.69a.663.663 0 00-.664-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .367.297.664.663.664h0zm.664-4.953h3.626v3.626h-3.626V6.353h0zM20.955 11.306h4.953a.663.663 0 00.663-.664V5.69a.663.663 0 00-.663-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .367.297.664.663.664h0zm.663-4.953h3.627v3.626h-3.627V6.353h0zM17.24 20.15a.663.663 0 00.664-.663v-4.953a.663.663 0 00-.664-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .366.297.663.663.663h4.953zm-4.29-4.953h3.627v3.627h-3.626v-3.627h0zM20.955 20.15h4.953a.663.663 0 00.663-.663v-4.953a.663.663 0 00-.663-.663h-4.953a.663.663 0 00-.663.663v4.953c0 .366.297.663.663.663h0zm.663-4.953h3.627v3.627h-3.627v-3.627h0z"></path><path d="M37.088 8.21h-7.245V1.145A.663.663 0 0029.18.48H9.015a.663.663 0 00-.663.664V8.21H1.108a.663.663 0 00-.664.663V35.282c0 .366.297.663.664.663h35.98a.663.663 0 00.663-.663V8.873a.663.663 0 00-.663-.663h0zM1.77 14.139h3.626v3.626H1.771V14.14h0zm0 8.845h3.626v3.626H1.771v-3.626h0zm6.581 11.635h-6.58v-6.682H6.06a.663.663 0 00.663-.664V22.32a.663.663 0 00-.663-.663H1.77v-2.565h4.29a.663.663 0 00.663-.663v-4.953a.663.663 0 00-.663-.664H1.77V9.537h6.581v25.082h0zm13.514 0H16.33v-9.647h5.537v9.647h0zm6.65-25.746V34.62h-5.323v-10.31a.663.663 0 00-.663-.664h-6.864a.663.663 0 00-.663.663v10.31H9.679V1.808h18.838v7.065h0zm7.908 17.737h-3.626v-3.626h3.626v3.626h0zm0-8.845h-3.626V14.14h3.626v3.626h0zm0-4.953h-4.29a.663.663 0 00-.663.664v4.953c0 .366.297.663.664.663h4.29v2.565h-4.29a.663.663 0 00-.664.663v4.953c0 .367.297.664.664.664h4.29v6.682h-6.582V9.537h6.581v3.275h0z"></path></g></svg> </span><div class="jsx-1779620961 jsx-1988553729 ml-2" wfd-id="4124"><span class="jsx-1779620961 jsx-1988553729 d-block text-sm mr-2 badge color-green" wfd-id="4126">Place</span><span class="jsx-1779620961 jsx-1988553729 d-block value text-red" wfd-id="4125">On Campus</span></div>
+              </div>
+
+              <div class="jsx-1779620961 jsx-1988553729 info-box d-flex" wfd-id="4118">
+                <span class="jsx-1779620961 jsx-1988553729 icon" wfd-id="4122"><svg width="30" height="38" viewBox="0 0 30 38" xmlns="http://www.w3.org/2000/svg"><path d="M21.146 36.822H1.491a.577.577 0 01-.576-.576V1.91c0-.319.258-.577.576-.577h26.597c.318 0 .576.258.576.577v27.205a.572.572 0 01-.004.07h0v.002h0v.002h0a.605.605 0 01-.013.07v.001s0 0 0 0v.002h0a.576.576 0 01-.14.253h0s0 0 0 0h0l-.002.002h-.001v.001l-.001.001h0l-.002.002-6.941 7.126-.003.003h0v.002h0-.002s0 0 0 0l-.001.002s0 0 0 0l-.001.001h-.001v.001h-.001s0 0 0 0a.575.575 0 01-.267.149h-.001-.002l-.001.001h-.002-.002l-.001.001a.378.378 0 01-.016.003h-.002-.002l-.001.001h-.002-.001-.002l-.002.001a.48.48 0 01-.1.01h0zM2.068 35.67H20.57v-6.55c0-.319.258-.577.576-.577h6.365V2.486H2.068V35.67h0zm19.655-5.974v5.132l4.998-5.132h-4.998 0zm.897-3.148H4.867a.577.577 0 110-1.153H22.62a.577.577 0 110 1.153h0zm1.997-2.603H4.867a.577.577 0 110-1.153h19.75a.577.577 0 110 1.153h0zm-9.632-3.624a.57.57 0 01-.079-.005l-4.402-.606a.577.577 0 01-.485-.69l1.371-6.484a4.82 4.82 0 01-1.412-3.814A4.832 4.832 0 0115.179 4.3 4.833 4.833 0 0119.601 9.5a4.808 4.808 0 01-1.446 3.069l1.321 5.16a.577.577 0 01-.47.712l-3.427.535-.018.78a.577.577 0 01-.576.564h0zm-3.71-1.669l3.148.433.118-5.152a4.8 4.8 0 01-2.135-.624l-1.13 5.343h0zm4.336-1.067l.049.212 2.541-.396-1.045-4.083a4.813 4.813 0 01-1.46.536l-.085 3.731h0zm-.828-12.148c-.87 0-1.703.305-2.374.875a3.65 3.65 0 00-1.282 2.503 3.679 3.679 0 003.366 3.96 3.678 3.678 0 003.959-3.367 3.679 3.679 0 00-3.669-3.97h0z" stroke-width="0.889" stroke="#9B9B9B" fill="#9B9B9B" fill-rule="evenodd"></path></svg> </span><div class="jsx-1779620961 jsx-1988553729 ml-2" wfd-id="4119"><span class="jsx-1779620961 jsx-1988553729 d-block text-sm" wfd-id="4121">Type of course</span><span class="jsx-1779620961 jsx-1988553729 d-block value text-silver mr-2 badge color-indigo" wfd-id="4120">Graduation</span></div>
+              </div>
+            </div> -->
+
+          </div>
+        </div>
+        <div class="col-md-3 d-flex justify-content-end">
+          <div class="text-md-right">
+            <h4 class="color2 mb-2"> ₹142,500 <small class="text-muted">FIRST YEAR FEES</small> </h4>
+            <a href="#" class="color-indigo">Check details</a>
+          </div>
+        </div>
+      </div>
+      <ul class="nav nav-tabs card-header-tabs tempTab">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#tab1_1">General</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#tab1_2">Part Time</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#tab1_3">Full Time</a>
+        </li>
+      </ul>
+
+    </div>
+    <div class="card-body">
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab1_1">
+          <div class="row">
+            <div class="col-md-9">
+              <h5 class="mb-2"><a href="#" class="text-dark">BACHELOR OF TECHNOLOGY [B.TECH]</a></h5>
+              <div class="d-flex flex-wrap">
+               <span class="mr-2 badge color-blue"><i class="far fa-bookmark"></i> 4 YEARS </span>
+               <span class="mr-2 badge color-purple"><i class="far fa-bookmark"></i> DEGREE </span>
+               <span class="mr-2  badge color-green"><i class="far fa-bookmark"></i> FULL TIME </span>
+               <span class="mr-2 badge color-indigo"><i class="far fa-bookmark"></i>ON CAMPUS </span>
+               <span class="mr-2 badge color-teal"><i class="far fa-bookmark"></i> GRADUATION </span>
+              </div>
+            </div>
+            <div class="col-md-3 d-flex justify-content-end">
+              <div class="text-md-right">
+                <h4 class="color2 mb-2"> ₹142,500 <small class="text-muted">FIRST YEAR FEES</small> </h4>
+                <a href="#" class="color-indigo">Check details</a>
+              </div>
+            </div>
+          </div>
+          <div class="color2 mb-2">
+            9.4/10 <span class="stars color-orange"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span> Based on 11 Reviews 
+          </div>
+          <ul class="pl-3">
+            
+              <li>
+                Browse Streams :
+                <span class="color2">
+                <a href="">CHEMICAL ENGINEERING | BIOTECHNOLOGY</a>
+                </span>
+              </li>
+            
+            <li>Dates : Application Starts 05 Aug 2020 | Application Ends 10 Jan 2021 Check All Dates</li>
+            <li>Ranking: #2 Management - NIRF</li>
+            <li>Exams Accepted: <span class="color2"> CAT | GMAT | GRE </span></li>
+          </ul>
+          <hr>
+          <div class="table-responsive">
+           
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Years</th>
+                    <th colspan="2">1</th>
+                    <th colspan="2">2</th>
+                    <th colspan="2">3</th>
+                    <th colspan="2">4</th>
+                  </tr>
+                  <tr>
+                    <th>Semester</th>
+                    <th> 1 Semester</th>
+                    <th> 2 Semester</th>
+                    <th> 3 Semester</th>
+                    <th> 4 Semester</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tuition fee</td>
+                    <td>₹50000</td>
+                    <td>₹30000</td>
+                    <td>₹30000</td>
+                    <td>₹30000</td>
+                    <td>₹30000</td>
+                    <td>₹30000</td>
+                    <td>₹30000</td>
+                    <td>₹30000</td>
+                  </tr>
+                  <tr>
+                    <td>Total year wise</td>
+                    <td class="text-center" colspan="2">₹80,000 </td>
+                    <td class="text-center" colspan="2">₹60,000 </td>
+                    <td class="text-center" colspan="2">₹60,000 </td>
+                    <td class="text-center" colspan="2">₹60,000 </td>
+                  </tr>
+                  <tr class="grand_total_value">
+                    <td>grand total</td>
+                    <td colspan="8" rowspan="2" style="padding-left:35px">₹2.6 Lakhs  <a rel="nofollow" href="javascript:void(0)" data-href="https://collegedunia.com/auth/capture-lead?lead_type=fees&amp;source=Desktop&amp;college_id=13418&amp;college_acronym=DIATM&amp;college_state=35&amp;college_city=Durgapur&amp;major_stream_rating=4.49302&amp;leadImage=https%3A%2F%2Fimages.static-collegedunia.com%2Fpublic%2Fcollege_data%2Fimages%2Flogos%2F1488532219d.jpg%3Ftr%3Dw-70%2Ch-70%2Cc-force&amp;leadSubtitle=Durgapur%20Institute%20of%20Advanced%20Technology%20%26%20Management%20-%20%5BDIATM%5D%2C%20Durgapur&amp;slug_id=18&amp;course_id=1937&amp;course_acronym=Bachelor%20of%20Technology%20%5BB.Tech%5D" class="chk-eligibility open-popup-inline" title="Get detailed fees on your mail" data-lead-image="https://images.static-collegedunia.com/public/college_data/images/logos/1488532219d.jpg?tr=w-70,h-70,c-force" data-lead-subtitle="Durgapur Institute of Advanced Technology &amp; Management - [DIATM] ,Durgapur">get Detailed fees on your mail</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            
+          </div>
+          <hr>
+          <p>Admission Guide 2020 <a class="color-teal" href=""><i class="fas fa-download"></i> Download Brochure </a></p>
+        </div>
+      </div>
+      
+    </div>
+  </div>

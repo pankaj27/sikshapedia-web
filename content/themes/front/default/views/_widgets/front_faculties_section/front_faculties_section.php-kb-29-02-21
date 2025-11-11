@@ -1,0 +1,78 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($faculties_data)){
+	?>
+	<div class="card infoCard mb-4">
+      <div class="card-header bg-white">
+        <h5 class="m-0 color2">FACULTY DETAILS</h5>
+      </div>
+      <div class="card-body">
+      	<div class="row">
+      		<?php
+      		foreach ($faculties_data as $key => $value){
+      			if($value['faculty_designation']=='PRINCIPAL'){
+              ?>
+              <div class="row">
+                <div class="col-4">
+                  <span class="name text-capitalize font-weight-bold text-lg text-primary d-block mb-1"><?php echo $value['faculty_name'];?></span>
+                  <span class="text-silver text-md font-weight-bold text-uppercase"><?php echo $value['faculty_designation'];?></span>
+                </div>
+                <div class="col-4 p-0"></div>
+                <div class="col-4 p-0"></div>                
+              </div>
+              <div class="sub-heading mt-8 mb-4"><h4 class="text-secondary text-uppercase font-weight-bold text-md">Other faculty details </h4></div>
+              <?php
+            }else{
+              ?>
+              <div class="faculties">
+                <div class="faculty-card d-flex align-items-start p-2">
+                  <div class="info col-7 p-0 pr-5">
+                    <h5 class="name text-success font-weight-bold text-capitalize mb-1"> <?php echo $value['faculty_name'];?> </h5>
+                    <p class="deprt text-primary font-weight-bold text-uppercase text-md mb-1"> <?php echo $value['faculty_designation'];?>, <?php echo $value['faculty_departments'];?></p>
+                    <p class="exprt text-secondary font-weight-bold text-uppercase text-md mb-1">Qualification - <span class="jsx-277079723 text-silver" wfd-id="745">PhD.</span> </p>
+                    <p class="exprt text-secondary font-weight-bold text-uppercase text-md mb-1">Academic Experience - <span class="jsx-277079723 text-silver" wfd-id="744"><?php echo $value['faculty_experiment'];?></span> </p>
+                  </div>
+                </div>
+              </div>
+              <?php
+            }
+      		}
+      		?>
+      	</div>
+      </div>
+    </div>
+	<?php
+}
+
+?>
+<!-- 
+<style type="text/css">
+  .faculty.jsx-277079723 .name.jsx-277079723, .faculty.jsx-277079723 .total.jsx-277079723, .faculty.jsx-277079723 .ratio.jsx-277079723 {
+    font-size: 20px;
+}
+.text-primary {
+    color: #ff7900;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.font-weight-bold, h1.font-weight-bold, h2.font-weight-bold, h3.font-weight-bold, h4.font-weight-bold, h5.font-weight-bold, h6.font-weight-bold, .h1.font-weight-bold, .h2.font-weight-bold, .h3.font-weight-bold, .h4.font-weight-bold, .h5.font-weight-bold, .h6.font-weight-bold {
+    font-weight: 700;
+}
+.text-md {
+    font-size: .75rem;
+}
+
+.mb-1, .my-1 {
+    margin-bottom: .25rem;
+}
+.d-block {
+    display: block;
+}
+.text-lg {
+    font-size: 1rem;
+}
+</style> -->

@@ -1,0 +1,212 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Add Scholarship</li>
+		</ol>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Scholarship</h6>
+					<div class="col-md-12">
+						<form id="form_scholarship_add_edit" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+							<input type="hidden" name="_scholarship_type_id" id="_scholarship_type_id" class="form-control" value="<?php echo $scholarship_type_id;?>">
+							<input type="hidden" name="scholarship_type" id="scholarship_type" class="form-control" value="2">
+
+							<div class="row">
+								<div  class="row table-responsive" id="heading_rows">
+									<table class="table">
+										<?php $table_row='0';?>
+
+										<?php
+										if(!empty($college_scholarship_data)){
+											foreach ($college_scholarship_data as $key => $value) {
+												
+												if($value->scholarship_data_type=='general'){
+													?>
+													<tr id="trNews<?php echo $table_row;?>">
+														<td>
+															<div class="form-group row">
+																<div class="col-md-12">
+													            	<label for="scholarship_details<?php echo $table_row;?>">Scholarship Detail</label>
+													            	<input type="hidden" name="scholarship_details[<?php echo $table_row;?>][data_type]" value="general">
+													            	<textarea class="form-control scholarship_details" rows="40" name="scholarship_details[<?php echo $table_row;?>][scholarship_content]"><?php echo $value->scholarship_content;?></textarea>
+													          	</div>
+													        </div>
+													        <?php
+													        if($table_row>0){
+													        	?>
+													        	<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull0right" onclick="$('#trNews<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+													        	<?php
+													        }
+													        ?>
+														</td>
+													</tr>
+													<?php
+												}else if($value->scholarship_data_type=='image'){
+													?>
+													<tr id="trNews<?php echo $table_row;?>">
+												        <td>
+													        <div class="form-group row">
+														        <div class="col-md-12">
+														        	<label for="scholarship_details<?php echo $table_row;?>">Image Data</label>
+														        	<input type="hidden" name="scholarship_details[<?php echo $table_row;?>][data_type]" value="image">
+														        	<input type="hidden" name="scholarship_details[<?php echo $table_row;?>][data_type_value]" value="<?php echo encode_data($value->scholarship_data_image_id);?>">
+														        	<input type="hidden" name="scholarship_details[<?php echo $table_row;?>][scholarship_content]" value="<?php echo $value->scholarship_content;?>">
+														        	<div class="row"><img src="<?php echo $value->scholarship_content;?>" class="img-thumbnail" alt="Cinque Terre"></div>
+														        <div>
+													        </div>
+													        <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trNews<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+												        </td>
+											        <tr>												
+													<?php
+												}
+													
+												$table_row++;
+											}
+										}
+										?>
+									</table>
+
+									<script type="text/javascript">var hdr='<?php echo ($table_row==0)?($table_row+1):$table_row;?>';</script>
+								</div>
+							</div>
+
+							<!-- <div class="row">
+								<div class="buy-now-wrapper" id="buttons_wrapper">
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Heading</button>
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#tinyFileBrowserModal">Add Image</button>
+									<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_scholarship_news">Save Data</button>
+								</div>
+							</div> -->
+
+							<div class="row">
+								<div class="buy-now-wrapper" id="buttons_wrapper">
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Content</button>
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#specificFileBrowserModal" id="btn_add_media">Add Media</button>
+									<button type="button" class="btn btn-dark btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#adsModal">Import Ads</button>
+									<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_scholarship_news">Save Data</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.select2-container{
+		width: 100% !important;
+	}
+
+	#news_category_type_value_chosen{
+		width: 100% !important;
+	}
+
+	.table td img {
+	    width: 30% !important;
+	    height: 346px !important;
+	    border-radius: 0% !important; 
+	}
+</style>
+
+<script type="text/javascript">var parent_folder='<?php echo $parent_folder_data->media_disk_name;?>';</script>
+
+<script type="text/javascript">
+	jQuery(function($) {
+  		'use strict';
+
+  		$(document).on('click','#btn_add_media',function(){
+		    localStorage.setItem('media_operation', 'add_college_scholarship_media');
+		});
+
+		$(document).on('click','.btn_update_media',function(){
+		    localStorage.setItem('media_operation', 'update_college_scholarship_media');
+		    localStorage.setItem('media_row',$(this).data('media_row'));
+		});
+
+
+		$('#adsModal').on('shown.bs.modal', function (e) {
+		    $('#buttons_wrapper').css('display','none');
+		    load_ads();
+		});
+
+		$('#adsModal').on('hidden.bs.modal', function (e) {
+		    $('#buttons_wrapper').css('display','block');
+		});
+
+
+		$(document).on('click','.div_block',function(){
+	      var d=$(this).html();
+	      var datafile_id=$(this).attr('data-aid');
+	      var heading_rows='';
+
+	      heading_rows+='<tr id="trNews' + hdr + '">';
+	      heading_rows+='<td>';
+	      heading_rows+='<div class="form-group row">';
+	        heading_rows+='<div class="col-md-12">';
+	                heading_rows+='<h6>Content Detail</h6>';
+	                heading_rows+='<input type="hidden" name="scholarship_details['+ hdr +'][data_type]" value="ads">';
+	                heading_rows+='<input type="hidden" name="scholarship_details['+hdr+'][data_type_value]" value="'+datafile_id+'">';
+	                heading_rows+='<input type="number" class="form-control" name="scholarship_details['+ hdr +'][data_serial]" value="'+ hdr +'">';
+	                heading_rows+='<textarea class="form-control" rows="40" name="scholarship_details['+ hdr +'][data_content]" style="display:none;">'+d+'</textarea>';
+	                heading_rows+='<div class="col-md-12">'+d+'</div>';
+	              heading_rows+='</div>';
+	          heading_rows+='</div>';
+	      heading_rows+='<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trNews' + hdr + '\').remove()">Delete Row</button></div></div>';
+	      heading_rows+='</td>';
+	      heading_rows+='</tr>';
+
+	      $('#heading_rows tbody').append(heading_rows);
+
+
+	      $('#adsModal').modal('hide');
+
+	      hdr++;
+	  	});
+
+		function load_ads(){
+		    $('#ads_list_table').DataTable({ 
+		      'bJQueryUI': false,
+		      'stateSave': true,
+		      'iDisplayLength':50,
+		      'responsive': true,
+		      "pagingType": "full_numbers",
+		      'language': {
+		        'paginate': {
+		          'first': "<<", // This is the link to the first page
+		          'previous': "<", // This is the link to the previous page
+		          'next': ">", // This is the link to the next page
+		          'last': ">>" // This is the link to the last page
+		        }
+		      },
+		      "lengthMenu": [[10,25,50,100,250,500,1000,1500], [10,25,50,100,250,500,1000,1500]],
+		      "processing": true, //Feature control the processing indicator.
+		      "serverSide": true, //Feature control DataTables' server-side processing mode.
+		      "order": [], //Initial no order.
+		      // Load data for the table's content from an Ajax source
+		      "ajax": {
+		          "url": base_url+'/ads/search_import',
+		          "type": "POST",
+		          "data":{csrf_test_name:csrf_hash}
+		      },
+		      //Set column definition initialisation properties.
+		      "columnDefs": [
+		      { 
+		          "targets": [ 0 ], //first column / numbering column
+		          "orderable": false, //set not orderable
+		      },
+		      ],
+		    });
+		}
+
+  	});
+</script>

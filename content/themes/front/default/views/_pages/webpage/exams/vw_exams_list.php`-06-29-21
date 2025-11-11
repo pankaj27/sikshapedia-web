@@ -1,0 +1,322 @@
+<section class="bradcumSec bg-white py-2">
+       <div class="wrapper">
+            <div class="row">
+                <div class="col-md-10">
+                    <nav aria-label="breadcrumb" >
+                        <ol class="breadcrumb bg-white m-0 pl-0">
+                          <?php
+                          foreach ($exams_data['breadcumb'] as $key => $value) {
+                            ?>
+                            <li class="breadcrumb-item <?php echo (empty($value))?'active':'';?>">
+                              <?php
+                              if(!empty($value)){
+                                ?>
+                                <a href="<?php echo $value;?>"><?php echo $key;?></a>
+                                <?php
+                              }else{
+                                echo $key;
+                              }
+                              ?>
+                            </li>
+                            <?php
+                          }
+                          ?>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-12">
+                    <h4 class=" mb-3"><?php echo $exams_data['exam_heading'];?></h4>
+                </div>
+            </div>
+        </div>
+  </section>
+
+  <main class="isa-main-content">
+    
+      <div class="isa-tab-filter-wrapper">
+          <div class="row no-gutters">
+            <div class="col-md-12">
+              <div class="filterBlock  d-flex flex-wrap align-items-center py-2">
+                <a href="#" class="btn btn-outline-primary">BE/B.TECH  <span class="badge badge-light">10</span>  </a> 
+                <a href="#" class="btn btn-outline-primary">ME/M.TECH  <span class="badge badge-light">10</span> </a>
+                <a href="#" class="btn btn-outline-primary">M.PHIL/PH.D IN ENGINEERING <span class="badge badge-light">10</span> </a> 
+              </div>
+            </div>
+          </div>
+      </div> 
+
+    
+      <div class="isa-filter  filter-is-visible">
+        <div class="forlerForm">
+          <form>
+              <div class="isa-filter-block">
+                  <h4>Search</h4>
+                  <div class="isa-filter-content">
+                      <input type="search" placeholder="Search">
+                  </div>
+              </div> 
+              <div class="isa-filter-block">
+                <h4>Selected Filter</h4>
+                <div class="isa-filter-content nicescroll">
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                </div> 
+              </div>
+              <div class="isa-filter-block">
+                  <h4>Check boxes</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                      <li>
+                          <input class="filter" type="checkbox" id="checkbox1">
+                          <label class="checkbox-label" for="checkbox1">Option 1</label>
+                      </li>
+                      <li>
+                          <input class="filter"  type="checkbox" id="checkbox2">
+                          <label class="checkbox-label" for="checkbox2">Option 2</label>
+                      </li>
+                      <li>
+                          <input class="filter" type="checkbox" id="checkbox3">
+                          <label class="checkbox-label" for="checkbox3">Option 3</label>
+                      </li>
+                  </ul> 
+              </div>
+              <div class="isa-filter-block">
+                  <h4>Select</h4>
+                  <div class="isa-filter-content">
+                      <div class="isa-select ">
+                          <select class="filter " name="selectThis" id="">
+                              <option value="">Choose an option</option>
+                              <option value=".option1">Option 1</option>
+                              <option value=".option2">Option 2</option>
+                              <option value=".option3">Option 3</option>
+                              <option value=".option4">Option 4</option>
+                          </select>
+                      </div> 
+                  </div>
+              </div> 
+              <div class="isa-filter-block">
+                  <h4>Radio buttons</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio1" checked>
+                          <label class="radio-label" for="radio1">All</label>
+                      </li>
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio2">
+                          <label class="radio-label" for="radio2">Choice 2</label>
+                      </li>
+                      <li>
+                          <input class="filter" type="radio" name="radioButton" id="radio3">
+                          <label class="radio-label" for="radio3">Choice 3</label>
+                      </li>
+                      <li>
+                        <input class="filter"  type="radio" name="radioButton" id="radio4" checked>
+                        <label class="radio-label" for="radio4">Choice 4</label>
+                    </li>
+                    <li>
+                        <input class="filter"  type="radio" name="radioButton" id="radio5">
+                        <label class="radio-label" for="radio5">Choice 5</label>
+                    </li>
+                    <li>
+                        <input class="filter" type="radio" name="radioButton" id="radio6">
+                        <label class="radio-label" for="radio6">Choice 6</label>
+                    </li>
+                    <li>
+                      <input class="filter"  type="radio" name="radioButton" id="radio7" checked>
+                      <label class="radio-label" for="radio7">Choice 7</label>
+                  </li>
+                  <li>
+                      <input class="filter"  type="radio" name="radioButton" id="radio2">
+                      <label class="radio-label" for="radio2">Choice 2</label>
+                  </li>
+                  <li>
+                      <input class="filter" type="radio" name="radioButton" id="radio8">
+                      <label class="radio-label" for="radio8">Choice 8</label>
+                  </li>
+                  <li>
+                    <input class="filter"  type="radio" name="radioButton" id="radio1" checked>
+                    <label class="radio-label" for="radio1">All</label>
+                  </li>
+                  <li>
+                      <input class="filter"  type="radio" name="radioButton" id="radio2">
+                      <label class="radio-label" for="radio2">Choice 2</label>
+                  </li>
+                  <li>
+                      <input class="filter" type="radio" name="radioButton" id="radio3">
+                      <label class="radio-label" for="radio3">Choice 3</label>
+                  </li>
+                  <li>
+                    <input class="filter"  type="radio" name="radioButton" id="radio4" checked>
+                    <label class="radio-label" for="radio4">Choice 4</label>
+                </li>
+                <li>
+                    <input class="filter"  type="radio" name="radioButton" id="radio5">
+                    <label class="radio-label" for="radio5">Choice 5</label>
+                </li>
+                <li>
+                    <input class="filter" type="radio" name="radioButton" id="radio6">
+                    <label class="radio-label" for="radio6">Choice 6</label>
+                </li>
+                <li>
+                  <input class="filter"  type="radio" name="radioButton" id="radio7" checked>
+                  <label class="radio-label" for="radio7">Choice 7</label>
+              </li>
+              <li>
+                  <input class="filter"  type="radio" name="radioButton" id="radio2">
+                  <label class="radio-label" for="radio2">Choice 2</label>
+              </li>
+              <li>
+                  <input class="filter" type="radio" name="radioButton" id="radio8">
+                  <label class="radio-label" for="radio8">Choice 8</label>
+              </li>
+                  </ul>
+              </div> 
+              <div class="isa-filter-block">
+                <h4>Lists</h4>
+                <ul class="isa-filter-content  list nicescroll">
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                </ul> 
+            </div>
+          </form>
+        </div>  
+        <a href="#0" class="isa-close"><i class="fas fa-times"></i></a>
+      </div> 
+      <a href="#0" class="isa-filter-trigger"><i class="fas fa-filter"></i> Filters</a>
+
+
+      <?php $this->widget->run('front_exam_list_details_section',TRUE);?>
+
+      <!-- <section class="isa-filter-result filter-is-visible">
+
+          <div class="card examListCard mb-3">
+            <div class="card-header bg-white">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <img src="https://waytoadmissions.com/dev/uploads/data/colleges/chaitanya-bharathi-institute-of-technology-hydrabad-telengana/KDmHzjCe_n.png" class="mr-3 shadow-sm w-60p" alt="...">
+                            <div class="media-body">
+                              <div class="d-flex mb-1 examLabels">
+                                <div  class="bg-indigo text-white px-1 mr-2 f10 examLabel">ONLINE TEST</div> 
+                                <div class="bg-indigo text-white px-1 mr-2 f10 examLabel">WRITTEN TEST</div>
+                              </div>
+                              <h6 class="mt-0 mb-1"> NEET PG 2021</h6>
+                              <small>NATIONAL ELIGIBILITY CUM ENTRANCE EXAMINATION POST GRADUATE</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row form-row">
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <div  class="examLabel">Application is in process</div> 
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                "National Eligibility Cum Entrance Test for Post Graduate, known as NEET PG is a national level exam, organized by National Board of Examinations (NBE)"
+            </div>
+            <div class="card-footer bg-white">
+                <a href="" class="btn btn-light btn-sm">APPLICATION</a>
+                <a href="" class="btn btn-light btn-sm">PROCESSCUTOFFEXAM</a>
+                <a href="" class="btn btn-light btn-sm">PATTERNPRACTICE</a>
+                <a href="" class="btn btn-light btn-sm">PAPERSPREPARATION</a>
+                <a href="" class="btn btn-light btn-sm">TIPSRESULTS</a>
+                <a href="" class="btn btn-primary btn-sm"> APPLY NOW</a>
+            </div>
+          </div>
+
+          <div class="card examListCard mb-3">
+            <div class="card-header bg-white">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="media">
+                            <img src="https://waytoadmissions.com/dev/uploads/data/colleges/chaitanya-bharathi-institute-of-technology-hydrabad-telengana/KDmHzjCe_n.png" class="mr-3 shadow-sm w-60p" alt="...">
+                            <div class="media-body">
+                              <div class="d-flex mb-1 examLabels">
+                                <div  class="bg-indigo text-white px-1 mr-2 f10 examLabel">ONLINE TEST</div> 
+                                <div class="bg-indigo text-white px-1 mr-2 f10 examLabel">WRITTEN TEST</div>
+                              </div>
+                              <h6 class="mt-0 mb-1"> NEET PG 2021</h6>
+                              <small>NATIONAL ELIGIBILITY CUM ENTRANCE EXAMINATION POST GRADUATE</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row form-row">
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <div  class="examLabel">Application is in process</div> 
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="examDatesInfo">
+                                    <p class="m-0"><small>23 FEB 21 - 15 MAR 21</small> </p>
+                                    <b class="color-teal"> application form</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                "National Eligibility Cum Entrance Test for Post Graduate, known as NEET PG is a national level exam, organized by National Board of Examinations (NBE)"
+            </div>
+            <div class="card-footer bg-white">
+                <a href="" class="btn btn-light btn-sm">APPLICATION</a>
+                <a href="" class="btn btn-light btn-sm">PROCESSCUTOFFEXAM</a>
+                <a href="" class="btn btn-light btn-sm">PATTERNPRACTICE</a>
+                <a href="" class="btn btn-light btn-sm">PAPERSPREPARATION</a>
+                <a href="" class="btn btn-light btn-sm">TIPSRESULTS</a>
+                <a href="" class="btn btn-primary btn-sm"> APPLY NOW</a>
+            </div>
+          </div>
+
+              
+         
+
+          
+          <div class="text-center"><a href="" class="btn-temp ">Explore All</a></div>
+      </section> -->
+
+  </main>

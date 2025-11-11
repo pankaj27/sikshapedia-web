@@ -1,0 +1,136 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($banners)){
+  ?>
+  
+  <section class="bg-white pb-0 about-banner" id="home">
+  <div id="rev_slider_19_1_wrapper" class="rev_slider_wrapper fullscreen-container" data-alias="wexim_slider_01" data-source="gallery" style="background:#1b1f4c;padding:0px;">
+      <div id="rev_slider_19_1" class="rev_slider fullscreenbanner" data-version="5.4.8.1">
+          <ul>
+                <?php
+                  $i=0;
+                  foreach ($banners as $key => $value) {
+                ?>
+                
+                
+                <!-- SLIDE  -->
+                <li data-index="rs-<?php echo ($i + 1)?>" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off"  data-easein="default" data-easeout="default" data-masterspeed="300"  data-thumb="<?php echo $value['banner_image'];?>"  data-rotate="0"  data-saveperformance="off"  data-title="<?php echo $value['banner_name'];?>" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
+                    <!-- MAIN IMAGE -->
+                    <img src="<?php echo $value['banner_image'];?>"  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="off" class="rev-slidebg" alt="slider-image" data-no-retina>
+                    <!-- LAYERS -->
+                    
+                      <!-- Overlay -->
+                  <div class="bg-overlay opacity-6 z-index-1"></div>
+
+                    <!-- LAYER NR. 11 -->
+                    <div class="tp-caption   tp-resizeme rs-parallaxlevel-2"
+                         id="slide-3-layer-1"
+                         data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                         data-y="['middle','middle','middle','middle']" data-voffset="['-120','-115','-114','-114']"
+                         data-fontsize="['16','14','14','14']"
+                         data-width="none"
+                         data-height="none"
+                         data-whitespace="nowrap"
+
+                         data-type="text"
+                         data-responsive_offset="on"
+
+                         data-frames='[{"delay":10,"speed":2000,"frame":"0","from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":280,"frame":"999","to":"opacity:0;","ease":"Power3.easeInOut"}]'
+                         data-textAlign="['inherit','inherit','inherit','inherit']"
+                         data-paddingtop="[0,0,0,0]"
+                         data-paddingright="[0,0,0,0]"
+                         data-paddingbottom="[0,0,0,0]"
+                         data-paddingleft="[0,0,0,0]"
+
+                         style="z-index: 5; white-space: nowrap; font-size: 16px; line-height: 22px; font-weight: 500; color: #eaeaef;">
+                        Welcome to <span><?php echo $value['banner_name'];?></span>
+                        </div>
+
+                    <!-- LAYER NR. 12 -->
+                    <div class="tp-caption   tp-resizeme rs-parallaxlevel-3"
+                         id="slide-3-layer-2"
+                         data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                         data-y="['middle','middle','middle','middle']" data-voffset="['-52','-52','-52','-52']"
+                         data-fontsize="['30','28','24','22']"
+                         data-width="none"
+                         data-height="none"
+                         data-whitespace="nowrap"
+
+                         data-type="text"
+                         data-responsive_offset="on"
+
+                         data-frames='[{"delay":10,"speed":2000,"frame":"0","from":"z:0;rX:0;rY:0;rZ:0;sX:0.9;sY:0.9;skX:0;skY:0;opacity:0;","to":"o:1;","ease":"Power2.easeOut"},{"delay":"wait","speed":280,"frame":"999","to":"opacity:0;","ease":"Power3.easeInOut"}]'
+                         data-textAlign="['inherit','inherit','inherit','inherit']"
+                         data-paddingtop="[0,0,0,0]"
+                         data-paddingright="[0,0,0,0]"
+                         data-paddingbottom="[0,0,0,0]"
+                         data-paddingleft="[0,0,0,0]"
+
+                         style="z-index: 6; white-space: nowrap; font-size: 30px; line-height: 42px; font-weight: 500; color: #ffffff; letter-spacing: 0px;">FIND OVER 25000 COLLEGES IN INDIA </div>
+
+                    <!-- LAYER NR. 13 -->
+                    <div class="tp-caption   tp-resizeme rs-parallaxlevel-2"
+                         id="slide-3-layer-3"
+                         data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                         data-y="['middle','middle','middle','middle']" data-voffset="['5','5','5','5']"
+                         data-fontsize="['18','18','16','16']"
+                         data-width="none"
+                         data-height="none"
+                         data-whitespace="nowrap"
+
+                         data-type="text"
+                         data-responsive_offset="on"
+
+                         data-frames='[{"delay":10,"speed":2000,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":280,"frame":"999","to":"opacity:0;","ease":"Power3.easeInOut"}]'
+                         data-textAlign="['inherit','inherit','inherit','inherit']"
+                         data-paddingtop="[0,0,0,0]"
+                         data-paddingright="[0,0,0,0]"
+                         data-paddingbottom="[0,0,0,0]"
+                         data-paddingleft="[0,0,0,0]"
+
+                         style="z-index: 7; white-space: nowrap; font-size: 18px; line-height: 22px; font-weight: 400; color: #eaeaef;">
+                       
+                        </div>
+
+                    <div class="tp-caption rev-btn  rs-parallaxlevel-2"
+                         id="slide-3-layer-4"
+                         data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                         data-y="['middle','middle','middle','middle']" data-voffset="['82','82','73','70']"
+                         data-width="none"
+                         data-height="none"
+                         data-whitespace="nowrap"
+                         data-type="text"
+                         data-responsive_offset="on"
+                         data-responsive="off"
+                         data-frames='[{"delay":10,"speed":2000,"frame":"0","from":"x:-50px;opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":280,"frame":"999","to":"opacity:0;","ease":"Power3.easeInOut"}]'
+                         data-textAlign="['inherit','inherit','inherit','inherit']"
+                         data-paddingtop="[0,0,0,0]"
+                         data-paddingright="[0,0,0,0]"
+                         data-paddingbottom="[0,0,0,0]"
+                         data-paddingleft="[0,0,0,0]"
+
+                         style="z-index: 11; max-width:960px; white-space: nowrap; font-size: 12px; line-height: 22px;"><a href="<?php echo $value['access_url'];?>" class="btn-temp btn-orange btn-lgr"> EXPLORE ALL</a>
+                    </div>
+
+
+                </li>
+                
+                
+                
+                
+
+               <?php
+                $i++;
+                }
+              ?>
+          </ul>
+      </div>
+  </div>
+</section>
+  
+  
+  
+  <?php
+}
+?>

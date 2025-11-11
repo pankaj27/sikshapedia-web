@@ -1,0 +1,325 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($college_placement_data)){
+	?>
+	<div class="card infoCard mb-4">
+	  <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+	    <div class="media">
+	      <a href="#" class="mr-3 "><img class="img-circle" src="<?php echo $college_curator_image;?>" width="60" alt="<?php echo $college_info_curator;?>" loading="lazy" draggable="false"></a>
+	      <div class="media-body">
+	        <h5 class="mt-0 text-dark"><a href="#" class="text-dark"> By <?php echo $college_info_curator;?>  </a> </h5>
+	        <p class="m-0">Content Curator 
+	          <a href="#" class="text-info"><i class="fab fa-facebook"></i></a>
+	          <a href="#"  class="text-info"><i class="fab fa-twitter"></i></a>
+	          <a href="#" class="text-info"><i class="fab fa-linkedin-in"></i></a>
+	        </p>
+	      </div>
+	    </div>
+	    <div class="updateDate color2"><?php echo $college_info_updated;?></div>
+	  </div>
+	  <div class="card-body">
+	  	<?php
+
+	  	//print_obj($college_placement_data);
+
+	  	if(!empty($college_placement_data)){
+	  		foreach ($college_placement_data as $key => $value) {
+
+	  			if($value->info_value_type=='image'){
+	  				?>
+	  				<div class="text-center">
+	  					<img src="<?php echo $value->info_value;?>" alt="<?php echo $value->info_value_about;?>" title="<?php echo $value->info_value_about;?>" draggable="false" loading="lazy" class="img-fluid mx-auto d-block">
+	  				</div>
+	  				<?php
+	  			}else if($value->info_value_type=='ads'){
+	  				?>
+
+	  				<div class="adBlock desktopx">
+	  					<div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+	  						<?php echo $value->info_value;?>
+	  					</div>
+	  				</div>
+	  				<?php
+	  			}
+	  			else{
+	  				?>
+	  				<div><?php echo $value->info_value;?></div>
+	  				<?php
+	  			}
+	  			
+	  		}
+	  		
+	  	}
+	  	?>
+
+	  
+	  </div>
+
+	</div>
+	<?php
+}
+?>
+
+<?php
+
+if(!empty($placement_highest_package_data)){
+	?>
+	<div class="card infoCard mb-4" style="box-shadow: rgb(207 207 207 / 50%) 0px 0px 4px 0px;">
+			<div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+		      	<div class="media">
+			      <div class="media-body">
+			        <h5 class="mt-0 text-dark"><span class="text-dark"> Highest and Average Packages  </span> </h5> 
+			      </div>
+			    </div>
+		    	<div class="updateDate color2"></div>
+		    </div>
+		    <div class="card-body">
+		    	<div class="jsx-2183306252 p-4">
+		    		<div class="jsx-2183306252 content pb-5 position-relative h-100">
+		    			<div class="jsx-2183306252 title_block d-inline-block">
+		    				<span class="jsx-2183306252 title_graph d-block mb-8 font-weight-semi">
+		    					<span class="jsx-2183306252 icon icon-package">
+		    						<svg viewBox="0 0 13 21" xmlns="http://www.w3.org/2000/svg"><path d="M2.242 7.184c-.307.308-.782.308-1.059 0-.308-.278-.308-.753 0-1.059L6.358.95a.73.73 0 01.549-.196.727.727 0 01.549.196l5.174 5.175c.309.306.309.782 0 1.059-.277.308-.752.308-1.058 0l-3.92-3.92v16.19a.742.742 0 01-.745.745.741.741 0 01-.745-.745V3.264l-3.92 3.92h0z" stroke="transparent"></path></svg>
+		    					</span>Highest Package
+		    				</span> 
+		    				<span class="jsx-2183306252 title_graph d-block mb-8 font-weight-semi">
+		    					<span class="jsx-2183306252 icon icon-package">
+		    						<svg viewBox="0 0 13 21" xmlns="http://www.w3.org/2000/svg"><path d="M7.43 10.477v7.213l3.92-3.92c.306-.309.78-.309 1.058 0 .309.277.309.752 0 1.058l-5.175 5.175a.727.727 0 01-.548.196.73.73 0 01-.55-.196L.962 14.828c-.308-.306-.308-.78 0-1.058.277-.309.751-.309 1.058 0l3.92 3.92V3.263l-3.92 3.92c-.306.309-.78.309-1.058 0-.308-.276-.308-.752 0-1.058L6.136.95a.727.727 0 01.549-.196.73.73 0 01.548.196l5.175 5.175c.309.306.309.78 0 1.059-.277.308-.751.308-1.058 0l-3.92-3.92v7.213z" stroke="transparent"></path></svg>
+		    					</span>Average Package
+		    				</span>
+		    			</div>
+		    			<div class="jsx-2183306252 graph d-inline-block position-relative">
+		    				<div class="jsx-2183306252 scale">
+		    					<span class="jsx-2183306252 bar d-inline-block position-relative">
+		    						<span class="jsx-2183306252 val text-capitalize position-absolute text-lg font-weight-semi" style="left: -3px;">0</span>
+		    					</span>
+		    					<?php
+
+		    					foreach ($placement_highest_package_data as $key => $value) {
+		    						?>
+		    						<span class="jsx-2183306252 bar d-inline-block position-relative">
+			    						<span class="jsx-2183306252 val text-capitalize position-absolute text-lg font-weight-semi" style="left: -26px;"><?php echo $value;?></span>
+			    					</span>
+		    						<?php
+		    					}
+
+		    					?>
+		    				</div>
+		    				<div class="jsx-2183306252 range position-absolute w-100">
+		    					<?php
+		    					if(!empty($placement_average_package_data)){
+		    						?>
+		    						<span class="jsx-2183306252 bar-range-1 position-absolute" style="width: 62.3543%;">
+			    						<span class="jsx-2183306252 range-span position-absolute">12.40 L</span>
+			    					</span>
+		    						<?php
+		    					}else{
+		    						?>
+		    						<span class="jsx-2183306252 bar-range-1 position-absolute" style="width: 1%;">
+			    						<span class="jsx-2183306252 range-span position-absolute">0</span>
+			    					</span>
+		    						<?php
+		    					}
+		    					?>
+		    					
+		    					<span class="jsx-2183306252 bar-range-2 position-absolute" style="width: 88%;">
+		    						<span class="jsx-2183306252 range-span position-absolute"><?php echo end($placement_highest_package_data);?></span>
+		    					</span>
+		    				</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    </div>
+		</div>
+	<?php
+}
+
+if(!empty($placement_package_data)){
+	?>
+	<div class="card infoCard mb-4" style="box-shadow: rgb(207 207 207 / 50%) 0px 0px 4px 0px;">
+	    <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+	      <div class="media">
+	      <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+	      <div class="media-body">
+	        <h5 class="mt-0 text-dark"><a href="#" class="text-dark"> <?php echo $college_heading;?>  </a> </h5> 
+	      </div>
+	    </div>
+	    <div class="updateDate color2"></div>
+	    </div>
+	    <div class="card-body">
+	    	<?php 
+
+	    	if(!empty($placement_package_data)){
+	    		?>
+	    		<table class="table" id="placement-table">
+	    			<thead class="table_heade">
+							<th>Year</th>
+		    				<th>Company Logo</th>
+		    				<th>Company Name</th>
+		    				<th>Highest Package</th>		    				
+	    			</thead>
+	    			<tbody>
+	    				<?php
+	    				foreach ($placement_package_data as $key => $value) {
+	    					?>
+	    					<tr class="">
+	    						<td><?php echo $value['placement_year'];?></td>
+	    						<td><img src="<?php echo $value['placement_company_logo'];?>" alt="<?php echo $value['placement_company_name'];?>" class="">
+	    						</td>
+	    						<td><?php echo $value['placement_company_name'];?></td>		    						
+	    						<td><?php echo $value['placement_highest_package'];?></td>
+	    					</tr>
+	    					<?php	
+	    				}
+	    				?>
+	    			</tbody>
+	    		</table>
+	    		<?php
+	    	}		    	
+
+	    	?>
+	    </div>
+	</div>
+	<?php
+}
+
+
+?>
+
+<style type="text/css">
+	#placement-table img{
+		height: 50px;
+	}
+	.company-wrapper.jsx-2183306252 {
+	    border-radius: 4px;
+	    box-shadow: rgb(207 207 207 / 50%) 0px 0px 4px 0px;
+	}
+	.mt-4, .my-4 {
+	    margin-top: 1rem;
+	}
+	.bg-white {
+	    background-color: #fff;
+	}
+	.pb-4, .py-4 {
+	    padding-bottom: 1rem;
+	}
+	.pt-4, .py-4 {
+	    padding-top: 1rem;
+	}
+	.text-title {
+	    color: #1c1c1c;
+	}
+	.pl-4, .px-4 {
+	    padding-left: 1rem;
+	}
+	.pb-4, .py-4 {
+	    padding-bottom: 1rem;
+	}
+	.pr-4, .px-4 {
+	    padding-right: 1rem;
+	}
+	.border-bottom {
+	    border-bottom: 1px solid #dedede;
+	}
+
+	h1, .h1 {
+	    font-size: 1.25rem;
+	}
+	.p-4 {
+	    padding: 1rem;
+	}
+	.pb-5, .py-5 {
+	    padding-bottom: 1.25rem;
+	}
+	.h-100 {
+	    height: 100%;
+	}
+	.position-relative {
+	    position: relative;
+	}
+	.title_block.jsx-2183306252 {
+	    width: 22%;
+	}
+	.d-inline-block {
+	    display: inline-block;
+	}
+	.graph.jsx-2183306252 {
+	    width: 78%;
+	    top: 30px;
+	    margin-top: -30px;
+	}
+
+	.d-inline-block {
+	    display: inline-block;
+	}
+	.scale.jsx-2183306252 {
+	    width: 105%;
+	    position: relative;
+	}
+	.bar.jsx-2183306252 {
+	    height: 95px;
+	    width: 16.66%;
+	    float: left;
+	}
+
+	.d-inline-block {
+	    display: inline-block;
+	}
+	.range.jsx-2183306252 {
+	    height: 20px;
+	    top: 3px;
+	}
+	.w-100 {
+	    width: 100%;
+	}
+	.position-absolute {
+	    position: absolute;
+	}
+	.val.jsx-2183306252 {
+	    bottom: -20px;
+	}
+	.font-weight-semi {
+	    font-weight: 600;
+	}
+	.text-capitalize {
+	    text-transform: capitalize;
+	}
+	.position-absolute {
+	    position: absolute;
+	}
+	.text-lg {
+	    font-size: 1rem;
+	}
+	.range.jsx-2183306252 .bar-range-1.jsx-2183306252 {
+	    top: 54px;
+	    height: 8px;
+	    width: 10.06%;
+	    background-color: rgb(77, 208, 164);
+	    z-index: 1;
+	    cursor: pointer;
+	}
+	.range.jsx-2183306252 .bar-range-2.jsx-2183306252 {
+	    background-color: rgb(255, 208, 127);
+	    cursor: pointer;
+	    top: 5px;
+	    height: 8px;
+	    width: 88%;
+	    z-index: 1;
+	}
+	.position-absolute {
+	    position: absolute;
+	}
+	.range.jsx-2183306252 .range-span.jsx-2183306252 {
+	    color: rgb(32, 171, 124);
+	    width: 80px;
+	    right: -100px;
+	    z-index: 1;
+	    top: -6px;
+	    font-weight: 800;
+	    text-align: left;
+	}
+	.position-absolute {
+	    position: absolute;
+	}
+</style>

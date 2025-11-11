@@ -1,0 +1,192 @@
+<?php
+
+
+/**
+ * 
+ */
+class Front_top_colleges_section extends Widget
+{
+	
+	function run($visible = FALSE) {
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+        $country_data=$this->com->get_country(array('country_status'=>'1','country_id'=>'99'));
+
+        $post=array('length'=>'6','start'=>'0');
+
+    	$param=array('college_status'=>'1','college_is_top'=>'1','college_is_top_visible_home'=>'1','is_verified_by_admin'=>'1');
+
+    	$top_colleges=$this->im->_get_colleges($post,$param);
+
+        //print_obj($top_colleges);die;
+
+    	if(!empty($top_colleges)){
+    		foreach ($top_colleges as $key => $value) {
+                $college_user_data=$this->um->get_user_data(array('user_id'=>$value->user_id),NULL,$value->user_role);                
+    			$college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$value->user_id,'user_storage_type'=>'user_banner'));
+    			$college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$value->user_id,'user_storage_type'=>'user_logo'));
+                $college_intro_video=$this->sm->get_user_file(array('user_file_type_id'=>$value->user_id,'user_storage_type'=>'user_intro_video'));
+                $currency=$this->com->get_currency(array('currency_id'=>$college_user_data->user_currency));
+
+                $total_cost=$this->im->get_user_course_grand_total(array('user_id'=>$value->user_id),FALSE)[0]->total_cost;
+
+                $course_cost=($currency->currency_symbol_left!='')?$currency->currency_symbol_left.number_to_currency($total_cost):number_to_currency($total_cost).$currency->currency_symbol_right;
+
+
+                if(!empty($college_logo) && !empty($college_logo->media_disk_path_relative)){
+                    $college_logo=$college_logo->media_disk_path_relative;
+                    $college_logo_name=$college_logo->media_org_name;
+                }else{
+                    $college_logo=base_url().'uploads/app/default/no.jpg';
+                    $college_logo_name='';
+                }
+
+
+                if(!empty($college_banner) && !empty($college_banner->media_disk_path_relative)){
+                    $college_banner=$college_banner->media_disk_path_relative;
+                    $college_banner_name=$college_banner->media_org_name;
+                }else{
+                    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+                    $college_banner_name='';
+                }
+
+
+                if(!empty($college_intro_video) && !empty($college_intro_video->media_disk_path_relative)){
+                    $college_intro_video=$college_intro_video->media_disk_path_relative;
+                }else{
+                    $college_intro_video='';
+                }
+
+                $is_featured=$value->college_is_featured;
+
+
+                if(!empty($value->college_facilities)){
+                    $cfacilities=$this->sm->get_system_facilities_in('facility_id',$value->college_facilities);
+
+                    foreach ($cfacilities as $k => $v) {
+                        $college_facilities[]=array(
+                            'facility_name'=>$v->facility_name,
+                            'facility_icon'=>$v->facility_icon_2,
+                            'facility_icon_3'=>base_url('public/data/app/app_data/icon/withoutbackground/'.$v->facility_icon_3)
+                        );
+                    }
+                }else{
+                    $college_facilities=array();
+                }
+
+                //print_obj($college_facilities);die;
+
+
+                if(!empty($value->college_affiliation_type)){
+                    $caffiliations=$this->im->get_group_concat_affiliation_types('statutory_body_abbr','statutory_body_id',$value->college_affiliation_type);
+
+                    $college_affiliations=$caffiliations->concated_value;
+                }else{
+                    $college_affiliations='';
+                }
+
+
+                //$college_courses=$this->im->get_user_course_data(array('is_visible_in_grid_list'=>'1','user_id'=>$value->user_id),FALSE);
+
+                $college_courses=$this->im->get_user_course_data(array('user_id'=>$value->user_id,'user_type'=>'4'),FALSE,6);
+
+                if(!empty($college_courses)){
+                    foreach ($college_courses as $k => $v) {
+                        $course=$this->strm->get_course(array('course_id'=>$v->user_course));
+                        $cost=$this->im->get_course_fees_data(array('user_id'=>$value->user_id,'user_course_id'=>$v->user_course,'user_course_year'=>'1'));
+
+                        //$_course_cost=($currency->currency_symbol_left!='')?$currency->currency_symbol_left.number_format($cost->user_course_total_fee):number_format($cost->user_course_total_fee).$currency->currency_symbol_right;
+
+                        if($v->user_course_cost_type==1 && $v->user_course_cost_breakup_type==2){
+                            $_course_cost=$v->user_course_duration_year*$cost->user_course_total_fee;
+                            $_course_cost='₹'.number_format($_course_cost);
+                            $duration_type=' - Total FEES';
+                        }else{
+                            $_course_cost='₹'.number_format($cost->user_course_total_fee);
+                            $duration_type=' - 1st YEAR FEES';
+                        }
+                        
+
+                        if($course->course_is_lateral=='1'){
+                            $course_short_name=strtoupper($course->course_short_name).'{Lateral}';
+                        }else{
+                            $course_short_name=strtoupper($course->course_short_name);
+                        }
+
+
+
+                        $_course_cost_data[$value->user_id][]=array(
+                            'cost_value'=>$_course_cost,
+                            'course_name'=>$course_short_name.$duration_type,
+                            'course_link'=>$value->access_url.'/course-fees/'.url_slug($course->course_name)
+                        );
+                    }
+                }else{
+                    $_course_cost_data=array();
+                }
+
+                $exams_accepted=$this->strm->get_user_courses_exam(array('user_type'=>'4','user_id'=>$value->user_id),FALSE,'exam_id','ASC','3','exam_id,exam_name');
+
+                if(!empty($exams_accepted)){
+                    foreach ($exams_accepted as $k => $v) {
+                        $exam_slug=$this->sm->get_slug(array('slug_type'=>'10','slug_type_id'=>$v->exam_id));
+                        $_exams_accepted[$value->user_id][]=array(
+                            'exam_id'=>$v->exam_id,
+                            'exam_name'=>$v->exam_name,
+                            'exam_link'=>(!empty($exam_slug))?base_url('exams/'.$exam_slug->slug_value):'javascript::void(0);'
+                        );
+                    }
+                }else{
+                    $_exams_accepted=array();
+                }
+
+                $total_gallery_img=$this->sm->get_total_user_files(array('user_file_type_id'=>$value->user_id,'user_file_type'=>'4'));
+
+
+            
+
+    			$college_data[]=array(
+                    'college_id'=>encode_data($value->college_id),
+    				'college_name'=>$value->college_name,
+    				'college_city'=>$value->city_name,
+    				'college_state'=>$value->state_name,
+                    'college_country_id'=>encode_data($value->college_country_id),
+    				'college_country'=>$value->country_name,
+                    'college_total_course_amount'=>number_to_currency($total_cost),
+                    'college_total_course_amount_with_currency'=>$course_cost,
+    				'college_logo'=>$college_logo,
+    				'college_banner'=>$college_banner,
+                    'college_intro_video'=>$college_intro_video,
+                    'college_affiliations'=>$college_affiliations,
+                    'is_featured'=>$is_featured,
+                    'access_url'=>$value->access_url,
+                    'college_country_phone_code'=>$country_data->country_phone_code,
+                    'college_facilities'=>$college_facilities,
+                    'college_courses_cost'=>(!empty($_course_cost_data[$value->user_id]))?$_course_cost_data[$value->user_id]:'N/A',
+                    'college_exams_accepted'=>(!empty($exams_accepted))?$_exams_accepted[$value->user_id]:'',
+                    'college_total_gallery_img'=>$total_gallery_img,
+                    'college_gallery_link'=>$value->access_url.'/gallery',
+                    'college_course_fees_link'=>$value->access_url.'/courses-fees',
+                    'college_reviews_link'=>$value->access_url.'/reviews',
+                    'college_admissions_link'=>$value->access_url.'/admission-'.date('Y'),
+                    'college_ranks'=>array(),
+                    'institute_type'=>encode_data(7)
+    			);
+    		}
+    	}else{
+    		$college_data=array();
+    	}
+
+        //print_obj($college_data);die;
+
+
+        $data=array(
+            'top_colleges'=>$college_data,
+            'explore_all_access_url'=>base_url().strtolower($country_data->country_iso_code_2).'/colleges'
+        );
+
+
+        if ($visible) $this->render('front_top_colleges_section',$data);
+    }
+}

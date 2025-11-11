@@ -1,0 +1,5242 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+require_once APPPATH.'third_party/vendor/autoload.php';
+/**
+ * 
+ */
+class User extends BaseFrontController
+{
+	function __construct()
+	{
+
+		parent::__construct();
+
+	    // $this->load->model(array('settings_model'=>'sm','user_model'=>'um','stream_model'=>'strm','institution_model'=>'im','country_model'=>'com'));
+
+	    $this->load->model(array('user_model'=>'um','stream_model'=>'strm'));
+	}
+
+	public function indexOld(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+
+			if(!empty($this->data['userdata'])){
+				$userdata=$this->data['userdata'];
+
+
+				//print_obj($userdata);die;
+
+				$countries=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+				//print_obj($userdata);die;			
+
+				$this->data['page_title']=(!isset($userdata->user_meta_title))?$userdata->user_fullname:$userdata->user_meta_title;
+
+				if($userdata->user_role=='0'){
+					//echo 'hi';
+					$redirect=base_url().'account/'.encode_data($userdata->user_id);
+					//echo $redirect;die;
+					redirect($redirect);
+				}else{
+					if(!empty($countries)){
+			          foreach ($countries as $key => $value) {
+			            $this->data['countries'][]=array(
+			              'country_id'=>encode_data($value->country_id),
+			              'country_name'=>$value->country_name,
+			              'selected'=>($value->country_id==$userdata->user_country)?'selected':''
+			            );
+			          }
+			        }
+
+					$states=$this->com->get_states(array('state_country_id'=>$userdata->user_country,'state_status'=>'1'),'state_serial','ASC');
+
+					if(!empty($states)){
+						foreach ($states as $key => $value) {
+							$_states[]=array(
+								'state_id'=>encode_data($value->state_id),
+								'state_name'=>$value->state_name,
+								'selected'=>($value->state_id==$userdata->user_state)?'selected':''
+							);
+						}
+					}else{
+						$_states=array();
+					}
+
+					$this->data['states']=$_states;
+
+
+					$cities=$this->com->get_city(array('city_country_id'=>$userdata->user_country,'city_state_id'=>$userdata->user_state),FALSE,'city_serial','ASC');
+
+					if(!empty($cities)){
+						foreach ($cities as $key => $value) {
+							$_cities[]=array(
+								'city_id'=>encode_data($value->city_id),
+								'city_name'=>$value->city_name,
+								'selected'=>($value->city_id==$userdata->user_city)?'selected':''
+							);
+						}
+					}else{
+						$_cities=array();
+					}
+
+					$this->data['cities']=$_cities;
+
+					if($userdata->user_role=='8'){
+
+						$qualifications=$this->im->get_qualifications(array('qualification_status'=>'1'),FALSE);
+
+						foreach ($qualifications as $key => $value) {
+							$_qualifications[]=array(
+								'qualification_id'=>encode_data($value->qualification_id),
+								'qualification_name'=>$value->qualification_name,
+								'selected'=>($userdata->user_last_qualification==$value->qualification_id)?'selected':''
+							);
+						}
+
+						$this->data['qualifications']=$_qualifications;
+
+
+						$grades=$this->sm->get_grades(array('grading_status'=>'1'),FALSE);
+
+						foreach ($grades as $key => $value) {
+							$_grades[]=array(
+								'grading_id'=>encode_data($value->grading_id),
+								'grading_name'=>$value->grading_name,
+								'selected'=>''
+							);
+						}
+
+						$this->data['grades']=$_grades;
+
+						$view='account/students/vw_account_profile_basic_info_settings';
+					}else{
+						$view='account/vw_account_profile_basic_info_settings';
+					}
+
+					$this->theme->title($this->data['page_title'])->add_partial('partial_account_header',$this->data)->load($view, $this->data);
+				}
+
+				
+			}else{
+				redirect(base_url());
+			}
+			
+		}else{
+			redirect(base_url());
+		}
+	}	
+
+
+	public function index(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+
+			
+			if(!empty($this->data['userdata'])){
+				$userdata=$this->data['userdata'];
+
+				$show_user_menu_widget=TRUE;
+
+				if($userdata->user_role=='4'){
+					$view='account/college/vw_account_profile_settings';
+				}else if($userdata->user_role=='7'){
+
+				}
+				else{
+					$view='account/university/vw_account_profile_settings';
+				}
+
+				$this->data['show_user_menu_widget']=$show_user_menu_widget;
+
+				$this->theme->title($this->data['page_title'])->load($view, $this->data);
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function indexSignin(){
+
+		$segment=$this->uri->segment(1,0);
+
+		if($segment=='signin'){
+			$view='account/vw_account_signin';
+
+			$this->theme->title($this->data['page_title'])->load($view, $this->data);
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function indexSigninInstitutions(){
+
+		$segment=$this->uri->segment(1,0);
+
+		if($segment=='signin'){
+			$view='account/vw_account_signin_institutions';
+
+			$this->data['page_title']='College Login';
+			$this->theme->title($this->data['page_title'])->load($view, $this->data);
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function indexResetCredentials(){
+		$segment=$this->uri->segment(1,0);
+
+		if($segment=='accountreset'){
+			if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+				redirect(base_url('account'));
+			}else{
+				$view='account/vw_account_reset';
+
+				$this->data['page_title']='Reset Account';
+
+				$this->theme->title($this->data['page_title'])->load($view, $this->data);
+			}
+			
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function indexRemoveAccountRequest(){
+		$segment=$this->uri->segment(1,0);
+
+		//echo $segment;die;
+
+		if($segment==='account-close'){
+			if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+				$view='account/vw_account_remove_request';
+
+				$this->data['page_title']='Remove Account';
+
+				$this->theme->title($this->data['page_title'])->load($view, $this->data);
+			}
+			
+		}else{
+			redirect(base_url('signin'));
+		}
+	}
+
+	public function indexEdit($user_id=NULL,$reg_from=NULL){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+			if($user_id!=NULL){
+				$user_id_decoded=decode_data($user_id);
+
+				$countries=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+				//echo $user_id_decoded;die;
+				if($user_id_decoded==decode_data(session_userdata('user_id'))){
+					if(!empty($this->data['userdata'])){
+
+						$userdata=$this->um->get_user_data(array('user_id'=>$user_id_decoded),null,$this->data['userdata']->user_role);
+
+						//print_obj($userdata);die;
+
+						$this->data['userdata']=$userdata;
+
+						//print_obj($this->data['userdata']);die;
+
+						$this->data['page_title']=$userdata->user_fullname;
+
+						if($userdata->user_country>0){
+							$country=$userdata->user_country;
+						}else{
+							$country=$this->data['default_country_data']->country_id;
+						}
+
+
+						if(!empty($countries)){
+				          foreach ($countries as $key => $value) {
+				            $this->data['countries'][]=array(
+				              'country_id'=>encode_data($value->country_id),
+				              'country_name'=>$value->country_name,
+				              'selected'=>($value->country_id==$country)?'selected':''
+				            );
+				          }
+				        }
+
+						$states=$this->com->get_states(array('state_country_id'=>$country,'state_status'=>'1'),'state_serial','ASC');
+
+						if(!empty($states)){
+							foreach ($states as $key => $value) {
+								$_states[]=array(
+									'state_id'=>encode_data($value->state_id),
+									'state_name'=>$value->state_name,
+									'selected'=>($value->state_id==$userdata->user_state)?'selected':''
+								);
+							}
+						}else{
+							$_states=array();
+						}
+
+
+						$cities=$this->com->_get_cities(array('city_country_id'=>$country,'city_state_id'=>$userdata->user_state));
+
+						if(!empty($cities)){
+							foreach ($cities as $key => $value) {
+								$_cities[]=array(
+									'city_id'=>encode_data($value->city_id),
+									'city_name'=>$value->city_name,
+									'selected'=>($value->city_id==$userdata->user_city)?'selected':''
+								);
+							}
+						}else{
+							$_cities=array();
+						}
+
+						//print_obj($userdata);die;
+
+						$this->data['user_fullname']=strlen($userdata->user_fullname) > 6 ? substr($userdata->user_fullname,0,6)."..." : $userdata->user_fullname;
+
+						$this->data['states']=$_states;
+
+						$this->data['cities']=$_cities;
+
+						//print_obj($this->data['states']);die;
+
+
+						if(isset($reg_from) && $reg_from!=NULL){
+							$this->data['reg_from']=decode_data($reg_from);
+							$this->data['scholarship_msg']='You need to verify your Phone No. & Account type must be Student for Scholarship';
+
+						}else{
+							$this->data['reg_from']='normal';
+						}
+						
+
+						if($userdata->user_phone_no_verified=='1'){
+							$this->theme->title($this->data['page_title'])->add_partial('partial_account_header',$this->data)->load('account/vw_account_profile_basic_info_settings', $this->data);
+						}else{
+							$this->theme->title($this->data['page_title'])->add_partial('partial_account_header',$this->data)->add_partial('partial_phone_no_verification_modal',$this->data)->load('account/vw_account_profile_basic_info_settings', $this->data);
+						}
+
+						
+						
+					}else{
+						redirect(base_url());
+					}
+				}else{
+					redirect(base_url().'account');
+				}
+			}else{
+				redirect(base_url().'account');
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function indexVerify(){
+		$this->data['page_heading']='verify Account';
+		$this->data['page_heading_title']='verify Account';
+		$this->data['page_title']='verify Account';
+
+		$_user_id=$this->uri->segment(2);
+
+		$user_id=decode_data($_user_id);
+
+		$user_data=$this->um->get_user_data(array('user_id'=>$user_id));
+
+		if(!empty($user_data)){
+			
+			$updated=$this->um->update_user_data(array('user_email_verified'=>'1','user_blocked'=>'1'),array('user_id'=>$user_id));
+
+			if($updated){
+				$session_data=array(
+					'isUserLoggedin'=>true,
+					'user_id'=>encode_data($user_data->user_id),
+					'user_role'=>$user_data->user_role,
+					'loggedin_time'=>time()
+				);
+
+				session_set_userdata($session_data);
+				$this->data['userdata']=$user_data;
+				redirect($user_data->user_public_profile_url,'refresh');
+			}else{
+				$this->data['userdata']=array();
+				redirect(base_url(),'refresh');
+			}
+
+			$this->theme->title($this->data['page_title'])->load('account/vw_account_verification', $this->data);
+		}else{
+			show_404();
+		}
+	}
+
+	public function indexAppliedColleges(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+			if(!empty($this->data['userdata'])){
+				$userdata=$this->data['userdata'];
+
+				if($userdata->user_role=='8'){
+					$this->data['page_title']=(!isset($userdata->user_meta_title))?$userdata->user_fullname:$userdata->user_meta_title;
+
+					//$applicatipons=$this->um->get_applicant(array(''),FALSE);
+
+					$view='account/student/vw_account_applied_colleges';
+
+					$this->theme->title($this->data['page_title'])->add_partial('partial_account_header',$this->data)->load($view, $this->data);
+				}else{
+					redirect(base_url().'account');
+				}
+			}else{
+				redirect(base_url());
+			}
+				
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function indexMyReviews(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+			if(!empty($this->data['userdata'])){
+				$userdata=$this->data['userdata'];
+
+				if($userdata->user_role=='5'){
+					$this->data['page_title']=(!isset($userdata->user_meta_title))?$userdata->user_fullname:$userdata->user_meta_title;
+
+					//$applicatipons=$this->um->get_applicant(array(''),FALSE);
+
+					$view='account/students/vw_account_applied_colleges';
+
+					$this->theme->title($this->data['page_title'])->add_partial('partial_account_header',$this->data)->load($view, $this->data);
+				}else{
+					redirect(base_url().'account');
+				}
+			}else{
+				redirect(base_url());
+			}
+				
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	//Sign In User with OTP
+	public function onSigninwithOTP(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$action_type=post_data('action_type');
+
+			$country_id='99';
+
+			if($action_type=='send_login_otp'){
+				$otp_send_mobile_no=post_data('otp_send_mobile_no');
+				if(!empty($otp_send_mobile_no)){
+					$otp= gen_otp_code(4);
+					$token=token();
+					$date=date('Y-m-d');
+
+					$profile_data=$this->um->get_user_data(array('user_phone_no'=>$otp_send_mobile_no),null,'8');
+
+					//print_obj($profile_data);die;
+
+					$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+					if(!empty($profile_data)){
+						
+						$profile_user_data=$this->um->get_user(array('user_id'=>$profile_data->user_id));
+
+						if(!empty($profile_user_data)){
+
+							$user_otp_sent_count=$profile_user_data->user_otp_sent_count+1;
+
+							$updated=$this->um->update_user_data(array('user_otp'=>$otp,'user_mail_otp'=>$otp,'user_top_sent_date'=>date('Y-m-d H:i:s'),'user_login_token'=>$token,'user_otp_sent_count'=>$user_otp_sent_count),array('user_id'=>$profile_data->user_id));
+
+							if($updated){
+								$phone_no=$country_data->country_phone_code.$otp_send_mobile_no;
+
+								$response=sendSMS($phone_no,$otp);
+
+								$return['success']='A 4-digit OTP has been sent to '.$otp_send_mobile_no;
+								$return['otp_token']=$token;
+							}else{
+								$return['error']='Try again later';
+							}
+
+						}else{
+							$return['error']='Data not found 0';
+						}
+					}else{
+						$return['error']='<div class="alert alert-danger">Mobile number not registered.</div>';
+					}
+
+				}else{
+					$return['error']='<div class="alert alert-danger">Enter mobile no.</div>';
+				}
+			}else if($action_type=='verify_login_otp'){
+				$otp_no=post_data('otp_no');
+				$otp_token=post_data('otp_token');
+
+				if($this->input->post('review_link')){
+					$review_link=post_data('review_link');
+				}
+				
+				if(!empty($otp_no) && is_numeric($otp_no) && !empty($otp_token)){
+
+					$user_data=$this->um->get_user(array('user_otp'=>$otp_no,'user_login_token'=>$otp_token));
+
+					if($user_data){
+						$token=token();
+						$this->um->update_user_data(array('user_login_token'=>$token,'user_otp_sent_count'=>'0','user_otp'=>null),array('user_id'=>$user_data->user_id));
+						$session_data=array(
+							'isUserLoggedin'=>true,
+							'user_id'=>encode_data($user_data->user_id),
+							'user_role'=>encode_data($user_data->user_role),
+							'user_token'=>encode_data($token),
+							'loggedin_time'=>time()
+						);
+
+						session_set_userdata($session_data);
+
+						if(isset($review_link) && !empty($review_link)){
+							$redirect=$review_link;
+						}
+						else{
+							$redirect=base_url('account');
+						}
+
+						$return['redirect'] = $redirect;
+					}else{
+						$return['error']='<div class="alert alert-danger">Invalid OTP</div>';
+					}
+
+				}else{
+					$return['error']='<div class="alert alert-danger">Invalid OTP</div>';
+				}
+			}
+
+				
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	//Regisster All types of User
+	public function onRegisterUser(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			// $ctext=post_data('ctext');
+
+			// //print_obj($ctext);
+
+			// $security_token = $this->data['security_token'];
+			// //print_obj($security_token);
+
+			// $decrypted = CryptoJsAes::decrypt($ctext, $security_token);
+
+			// //print_obj($decrypted);die;
+
+			// $user_name=clean_data($decrypted['registration_name']);
+			// $user_email=clean_data($decrypted['registration_email']);
+			// $user_phone=clean_data($decrypted['registration_phone_no']);
+			// $user_country=decode_data($decrypted['register_country']);
+			// $user_state=decode_data($decrypted['register_state']);
+			// $user_city=decode_data($decrypted['register_city']);
+			// $user_password=clean_data($decrypted['registration_password']);
+
+			// $user_reg_from=clean_data($decrypted['registration_from']);
+
+			// $user_country_exp=explode('#', $user_country);
+			// $country=$user_country_exp[0];
+
+			$user_name=post_data('registration_name');
+			$user_email=post_data('registration_email');
+			$user_phone=post_data('registration_phone_no');
+			$user_country=post_data('register_country');
+			$user_state=post_data('register_state');
+			$user_city=post_data('register_city');
+			$user_password=post_data('registration_password');
+
+			$user_country_exp=explode('#', $user_country);
+			$ucountry=$user_country_exp[0];
+			$country=decode_data($ucountry);
+
+			$country_data=$this->com->get_country(array('country_id'=>$country));
+
+			$user_reg_from=post_data('registration_from');
+
+			//echo decode_data($user_state);die;
+
+			//echo $user_country;die;
+
+			//$get_user_duplicate=$this->um->get_user_duplicate(array('user_name'=>$user_email),null,FALSE);
+
+			$get_temp_user_duplicate=$this->um->get_user_temp_duplicate(NULL,array('temp_user_email'=>$user_email,'temp_user_phone'=>$user_phone),NULL,FALSE);
+
+			$otp= gen_otp_code();
+
+			//print_obj($get_temp_user_duplicate);die;
+
+			$sms_data=array(
+				'flow_id'=>"61246d38163f8d707f23807f",
+				'sender'=>"NCRIPT",
+				'mobiles'=>$country_data->country_phone_code.$user_phone,
+				'user_name'=>ucwords($user_name),
+				'otp_code'=>$otp,
+				'web_link'=>base_url()
+			);
+
+			$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+			$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+			$sms_param['data']=$sms_data;
+
+			$v_link=base_url().'verify/'.encode_data($inserted);
+			$mail_data['protocol']='smtp';
+			$mail_data['smtp_host']='host.waytoadmissions.com';
+            $mail_data['password']='InfoWaytoadmin@123%';
+
+			$mail_data['from']=$this->data['system_info_email'];
+			$mail_data['from_name']=$this->data['system_name'];
+			$mail_data['to']=$user_email;
+			$mail_data['subject']='Account registration Verfication';
+			$mail_data['data']=array(
+				'user_name'=>$user_email,
+				'user_full_name'=>ucwords($user_name),
+				'user_password'=>$user_password,
+				'system_logo'=>$this->data['system_logo'],
+				'system_name'=>$this->data['system_name'],
+				'system_title'=>$this->data['system_title'],
+				'send_email_activation_link'=>($country_data->country_iso_code_2!='IN')?'yes':'no',
+				'v_link'=>$v_link,
+				'otp_code'=>$otp,
+				'system_fb_link'=>$this->data['system_facebook_link'],
+				'system_twitter_link'=>$this->data['system_twitter_link'],
+				'system_google_link'=>$this->data['system_google_link'],
+				'system_insta_link'=>$this->data['system_instagram_link'],
+				'system_linkedin_link'=>$this->data['system_linkedin_link'],
+				'system_email'=>$this->data['system_info_email']
+			);
+
+			$mail_data['view']='_email/vw_account_verification_mail';
+
+			if($get_temp_user_duplicate[0]->counted=='0'){
+
+				$password	=	password_hash($user_password, PASSWORD_BCRYPT, array('cost'=>12));			
+
+				$data=array(
+					'user_name'=>$user_email,
+					'user_password'=>$password,
+					'user_password_visible'=>encode_data($user_password),
+					'user_blocked'=>'0',
+					'user_email_verified'=>'0',
+					'user_otp'=>$otp,
+					'user_phone_no_verified'=>'2',
+					'user_sent_from'=>$user_reg_from
+				);
+
+				$inserted=$this->um->add_user_data($data);
+
+				if($inserted){
+					$state=decode_data($user_state);
+					$city=decode_data($user_city);
+					$temp_data=array(
+						'temp_user_pk_id'=>$inserted,
+						'temp_user_name'=>ucwords($user_name),
+						'temp_user_email'=>$user_email,
+						'temp_user_phone'=>$user_phone,
+						'temp_user_password'=>$password,
+						'temp_user_country'=>$country,
+						'temp_user_state'=>$state,
+						'temp_user_city'=>$city,
+						'temp_user_system_ip'=>$this->input->ip_address()
+					);
+					$temp_data_added=$this->um->add_user_temp_data($temp_data);
+
+					if($temp_data_added){
+						send_system_mail($mail_data,'html');
+						curl_post($sms_param);						
+					}
+
+					$return['success']='You have registered successfully.An verification mail & OTP sent to your mail address and phone no.';
+					$return['success_msg_otp']='OTP (6 digit otp has been sent to '.$user_phone.')';
+					$return['otp_user']=encode_data($inserted);
+						
+				}else{
+					$return['error']='Registration failed for this moment.Please try again later.';
+				}
+
+			}else{
+
+				$get_userdata=$this->um->get_user_data(array('temp_user_email'=>$user_email),null,'0');
+
+				//print_obj($this->data['system_info_email']);die;
+
+				if(!empty($get_userdata) && ($get_userdata->user_phone_no==$user_phone)){
+
+					$data=array(
+						'user_otp'=>$otp,
+						'user_sent_from'=>$user_reg_from
+					);
+
+					$inserted=$this->um->update_user_data($data,array('user_id'=>$get_userdata->user_id));
+
+					if($inserted){
+
+						send_system_mail($mail_data,'html',FALSE);
+
+						curl_post($sms_param);
+	                    $return['success']='You have registered successfully.An verification mail & OTP sent to your mail address and phone no.';
+						$return['success_msg_otp']='OTP (6 digit otp has been sent to '.$user_phone.')';
+						$return['otp_user']=encode_data($get_userdata->user_id);	
+					}else{
+						$return['error']='There was an system error.';
+					}
+
+				}else{
+					$return['error']='Email/Phone No. is already taken.';
+				}
+				
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);		
+		}else{
+			redirect(base_url());
+		}		
+	}
+
+	public function onVerifyUser(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			// $ctext=post_data('ctext');
+
+			// $security_token = $this->data['security_token'];
+			// //print_obj($security_token);die;
+
+			// $decrypted = CryptoJsAes::decrypt($ctext, $security_token);
+
+
+			// $_user_id=clean_data($decrypted['registration_user']);
+
+			// $otp=clean_data($decrypted['registration_otp']);
+
+			$_user_id=post_data('registration_user');
+
+			$otp=post_data('registration_otp');
+
+			$user_id=decode_data($_user_id);
+
+			$user_found=$this->um->get_user(array('user_id'=>$user_id));
+
+			//print_obj($user_found);die;
+
+			if(!empty($user_found)){
+				if($user_found->user_otp==$otp){
+					$data_to_update=array(
+						'user_phone_no_verified'=>'1',
+						'user_approved'=>'1',
+						'user_blocked'=>'1'
+					);
+
+					$updated=$this->um->update_user_data($data_to_update,array('user_id'=>$user_id));
+
+					if($updated){
+
+						if($user_found->user_sent_from=='normal'){
+
+							// $user_temp_profile=$this->db->get_user_temp(array('temp_user_pk_id'=>$user_id));
+
+							// if(!empty($user_profile)){
+							// 	$user_profile_data=array(
+									
+							// 	);
+							// }else{
+
+							// }
+
+
+							$session_data=array(
+								'isUserLoggedin'=>true,
+								'user_id'=>encode_data($user_found->user_id),
+								'user_role'=>encode_data($user_found->user_role),
+								'loggedin_time'=>time()
+							);
+
+							session_set_userdata($session_data);
+							$this->data['userdata']=$user_found;
+							$redirect=base_url().'account/'.encode_data($user_id);
+							$return['success']='Phone no verified successfully';
+							$return['redirect']=$redirect;
+						}else if($user_found->user_sent_from=='scholarship'){
+
+							$temp_user_data=$this->um->get_user_temp(array('temp_user_pk_id'=>$user_id));
+
+							$data_profile=array(
+								'user_m_id'=>$user_id,
+								'user_fullname'=>$temp_user_data->temp_user_name,
+								'user_email'=>$temp_user_data->temp_user_email,
+								'user_phone_no'=>$temp_user_data->temp_user_phone,
+								'user_country'=>$temp_user_data->temp_user_country
+							);
+
+							$profile_added=$this->um->add_user_profile_data($data_profile);
+
+							if($profile_added){
+								$country_data=$this->com->get_country(array('country_id'=>$temp_user_data->temp_user_country));
+								$session_data=array(
+									'isUserLoggedin'=>true,
+									'user_id'=>encode_data($user_found->user_id),
+									'user_role'=>encode_data($user_found->user_role),
+									'loggedin_time'=>time()
+								);
+
+								$country_code=strtolower($country_data->country_iso_code_2);
+
+								session_set_userdata($session_data);
+								$this->data['userdata']=$user_found;
+								$redirect=base_url().$country_code.'/scholarship';
+								$return['success']='Phone no verified successfully';
+								$return['redirect']=$redirect;
+							}else{
+								$return['error']='There was an system error.Please try later.';
+							}
+						}
+							
+					}else{
+						$return['error']='There was an system error.Please try later.';
+					}
+				}else{
+					$return['error']='OTP is not valid';
+				}
+			}else{
+				$return['error']='Data not found in the system';
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onSendOTP(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+				$ph_no=post_data('ph_no');
+				$user_id=decode_data(session_userdata('user_id'));
+
+				$user_by_phone=$this->um->get_user_data(array('user_phone_no'=>$ph_no));
+
+				if(empty($user_by_phone)){
+					if($ph_no!=''){
+						$limit = 6;
+						$otp= random_int(10 ** ($limit - 1), (10 ** $limit) - 1);
+
+						$curl = curl_init();
+
+	                      curl_setopt_array($curl, array(
+	                      CURLOPT_URL => "https://api.msg91.com/api/v5/otp?authkey=197850AFrGnNLUa5a816402&template_id=5f741be17b17cc67a74ff47c&mobile=$ph_no&invisible=1&otp=$otp",
+	                      CURLOPT_RETURNTRANSFER => true,
+	                      CURLOPT_ENCODING => "",
+	                      CURLOPT_MAXREDIRS => 10,
+	                      CURLOPT_TIMEOUT => 30,
+	                      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	                      CURLOPT_CUSTOMREQUEST => "GET",
+	                      CURLOPT_SSL_VERIFYHOST => 0,
+	                      CURLOPT_SSL_VERIFYPEER => 0,
+	                      CURLOPT_HTTPHEADER => array(
+	                        "content-type: application/json"
+	                      ),
+	                    ));
+	                    
+	                    $response = curl_exec($curl);
+	                    $err = curl_error($curl);
+	                    
+	                    curl_close($curl);
+	                    
+	                    if ($err) {
+	                        $msg="$err";
+		                    $return['error']=$msg;
+	                    }else {
+
+	                    	$data_to_update=array(
+	                    		'user_top_sent_date'=>date('Y-m-d H:i:s'),
+								'user_otp'=>$otp
+							);
+							$updated=$this->um->update_user_data($data_to_update,array('user_id'=>$user_id));
+
+							if($updated){
+								$return['success']='OTP sent to '.$ph_no;
+							}else{
+								$return['error']='There was a problem for the momment.Try again later.';
+							}	
+	                    }
+					}else{
+						$return['error']='Phone no is invalid';
+					}
+				}else{
+					$return['error']='Phone No. already taken';
+				}
+					
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+			
+	}
+
+	public function indexVerifyAccount($uid){
+		$this->data['page_heading']='verify Account';
+		$this->data['page_heading_title']='verify Account';
+		$this->data['page_title']='verify Account';
+
+	
+		if($uid!=null){
+			$user_id=decode_data($uid);			
+
+			if(is_numeric($user_id)){
+				$user_found=$this->um->get_user_data(array('user_id'=>$user_id),null,'0');
+
+				//print_obj($user_found);die;
+
+				if(!empty($user_found) && $user_found->user_blocked!='1' && $user_found->user_email_verified!='1'){
+					$data=array(
+						'user_blocked'=>'1',
+						'user_email_verified'=>'1',
+						'user_approved'=>'1'
+					);
+
+					$updated=$this->um->update_user_data($data,array('user_id'=>$user_id));
+
+					if($updated){
+						$session_data=array(
+							'isUserLoggedin'=>true,
+							'user_id'=>encode_data($user_found->user_id),
+							'user_role'=>encode_data($user_found->user_role),
+							'loggedin_time'=>time()
+						);
+
+						session_set_userdata($session_data);
+						$this->data['userdata']=$user_found;
+						$redirect=base_url().'account/'.encode_data($user_id);
+					}else{
+						$redirect=base_url();
+					}
+				}else if(!empty($user_found) && $user_found->user_blocked=='1' && $user_found->user_email_verified=='1'){
+					if($user_found->user_role=='0'){
+						$redirect=base_url().'account/'.encode_data($user_id);
+					}else{
+						$redirect=base_url().'account';
+					}
+				}
+				else{
+					$redirect=base_url();
+				}
+			}else{
+				$redirect=base_url();
+			}
+
+		}else{
+			$redirect=base_url();
+		}
+
+		redirect($redirect);
+	}
+
+	//Updatte all types of ddata off all types of users
+	public function onUpdateUserData(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				//897468fabb7741f5d21150b7bc44f1f481eaec67
+
+				// echo sha1('H1WbkK@S0kpJ');die;
+
+				$ucode='WA'.mt_rand();
+
+				$user_id=decode_data(session_userdata('user_id'));
+
+				$_user_type=post_data('user_type');
+
+				if(isset($_user_type) && $_user_type!=''){
+					$user_type=decode_data($_user_type);
+				}else{
+					$user_type=decode_data(session_userdata('user_role'));
+				}
+
+				//echo $user_type;die;
+
+				$data_type=post_data('data_type');
+
+				$data_found=$this->um->get_user_data(array('user_id'=>$user_id));
+
+				//print_obj($data_found);die;
+
+				if(!empty($data_found) && $data_found->user_profile_pk_id!='0'){
+					$data_to_update=array(
+						'user_profile_pk_id'=>'0',
+						'user_role'=>$user_type,
+						'created_by'=>$user_id,
+						'created_by_type'=>$user_type,
+						'updated_by'=>$user_id,
+						'user_phone_no_verified'=>'1'
+					);
+
+					$updated=$this->um->update_user_data($data_to_update,array('user_id'=>$user_id));
+				}
+
+					//echo $user_type;die;
+
+				//if ($updated) {
+					$registration_name 					=	post_data('registration_name');
+					$registration_email 				=	post_data('registration_email');
+					$registration_phone_no 				=	post_data('registration_phone_no');
+					$_register_country 					=	post_data('register_country');
+					$registration_state 				=	decode_data(post_data('registration_state'));
+					$registration_district 				=	post_data('registration_district');
+					$registration_city 					=	post_data('registration_city');
+					$registration_pincode 				=	post_data('registration_pincode');
+					$registration_address 				=	post_data('registration_address');
+
+					$registration_from 					=	post_data('registration_from');
+
+					$city 								=	(!empty($registration_city))?decode_data($registration_city):0;
+
+					if(!empty($_register_country)){
+						$couexp=char_separated_to_array($_register_country,'#');
+						$register_country=decode_data($couexp[0]);
+
+						if($user_type=='3'){
+							//echo 'hi';
+							//print_obj($userdata);die;
+							$university_found=$this->im->get_university_data(array('university_email'=>$registration_email));
+
+							if(empty($university_found)){
+								$general_data=array(
+									'university_user_id'=>$user_id,
+									'university_country_id'=>$register_country,
+									'university_state_id'=>$registration_state,
+									'university_city_id'=>$city,
+									'university_name'=>$registration_name,
+									'university_address'=>$registration_address,
+									'university_zipcode'=>$registration_pincode,
+									'university_email'=>$registration_email,
+									'university_phone_no'=>$registration_phone_no,
+									'university_status'=>'1',
+									'created_by'=>$user_id
+								);
+								$user_pk_id=$this->im->add_universities_data($general_data);
+							}else{
+								$university_found=$this->im->get_university_data(array('university_user_id'=>$user_id));
+								//print_obj($university_found);die;
+								$user_pk_id=$university_found->university_id;
+								$general_data=array(
+									'university_user_id'=>$user_id,
+									'university_country_id'=>$register_country,
+									'university_state_id'=>$registration_state,
+									'university_city_id'=>$city,
+									'university_name'=>$registration_name,
+									'university_address'=>$registration_address,
+									'university_zipcode'=>$registration_pincode,
+									'university_email'=>$registration_email,
+									'university_phone_no'=>$registration_phone_no,
+									'university_status'=>'1',
+									'updated_by'=>$user_id
+								);
+
+								//print_obj($general_data);die;
+
+								$updated=$this->im->update_universities_data($general_data,array('university_id'=>$user_pk_id));
+
+								if($updated){
+									if($user_pk_id){
+										$updated=$this->um->update_user_data(array('user_profile_pk_id'=>$user_pk_id),array('user_id'=>$user_id));			
+									}
+
+									$session_data=array(
+										'isUserLoggedin'=>true,
+										'user_id'=>encode_data($university_found->university_user_id),
+										'user_role'=>encode_data(3),
+										'loggedin_time'=>time()
+									);
+
+									session_set_userdata($session_data);
+
+									$return['redirect']=base_url().'account';
+									$return['success']='Information has been updated';
+								}else{
+									$return['error']='Information has not been updated';
+								}							
+							}
+						}else if($user_type=='4'){
+							//$data_found=$this->im->get_college_data(array('college_name'=>$registration_name));
+
+							//print_obj($data_found);die;
+							
+							if(!empty($data_found)){
+								$college_found=$this->im->get_college_data(array('college_user_id'=>$user_id));
+
+								//print_obj($college_found);die;
+
+								$general_data=array(
+									'college_user_id'=>$user_id,
+									'college_country_id'=>$register_country,
+									'college_state_id'=>$registration_state,
+									'college_city_id'=>$city,
+									'college_name'=>$registration_name,
+									'college_address'=>$registration_address,
+									'college_zipcode'=>$registration_pincode,
+									'college_email'=>$registration_email,
+									'college_phone_no'=>$registration_phone_no,
+									'college_status'=>'1',
+									'created_by'=>$user_id
+								);
+
+								//print_obj($general_data);die;
+
+								if(empty($college_found)){
+									$user_pk_id=$this->im->add_college_data($general_data);
+
+									if($user_pk_id){
+										$this->um->update_user_data(array('user_profile_pk_id'=>$user_pk_id),array('user_id'=>$user_id));
+									}
+
+									$return['success']='Information has been updated';
+									$return['redirect']=base_url().'account';
+								}else{
+									$updated=$this->im->update_college_data($general_data,array('college_user_id'=>$user_id));
+									if($updated){
+										$return['success']='Information has been updated';
+										$return['redirect']=base_url().'account';
+									}else{
+										$return['redirect']=base_url().'account';
+										$return['error']='Information has not been updated';
+									}
+								}
+							}
+
+						}else if($user_type=='8'){
+							$userdata=$this->data['userdata'];
+
+							//print_obj($userdata);die;
+
+							$registration_dob=post_data('registration_dob');
+							$registration_passing_year=post_data('registration_passing_year');
+							$registration_last_qualification=post_data('registration_last_qualification');
+							$registration_gender=post_data('registration_gender');
+
+							$registration_brief=post_data('registrtion_brief');
+
+							$data_found=$this->um->_get_user_data(array('user_id'=>$userdata->user_id,'user_role'=>$userdata->user_role),NULL,FALSE);
+
+							//print_obj($data_found);die;
+
+							$dob=(!empty($registration_dob))?date('Y-m-d',strtotime($registration_dob)):null;
+							$passing_year=(!empty($registration_passing_year))?$registration_passing_year:null;
+
+							//print_obj($dob);die;
+
+							if($data_found->user_profile_id==null){
+
+								$public_url=base_url();
+
+								$profile_data=array(
+									'user_m_id'=>$userdata->user_id,
+									'user_code'=>$ucode,
+									'user_fullname'=>$userdata->user_fullname,
+									'user_email'=>$userdata->user_email,
+									'user_phone_no'=>$userdata->user_phone_no,
+									'user_country'=>$register_country,
+									'user_state'=>$registration_state,
+									'user_city'=>$city,
+									'user_pincode'=>$registration_pincode,
+									'user_address'=>$registration_address,
+									'user_dob'=>$dob,
+									'user_gender'=>$registration_gender,
+									'user_last_qualification_year'=>$passing_year,
+									'user_last_qualification'=>$registration_last_qualification,
+									'user_public_profile_url'=>$public_url,
+									'updated_at'=>date('Y-m-d'),
+									'updated_by'=>$userdata->user_id
+								);
+
+
+
+								$profile_inserted=$this->um->add_user_profile_data($profile_data);
+
+								if($profile_inserted){
+									$data_to_update=array(
+										'user_profile_pk_id'=>$profile_inserted,
+										'updated_by'=>$userdata->user_id
+									);
+
+									$this->um->update_user_data($data_to_update,array('user_id'=>$userdata->user_id));
+
+									$session_data=array(
+										'isUserLoggedin'=>true,
+										'user_id'=>encode_data($userdata->user_id),
+										'user_role'=>encode_data($userdata->user_role),
+										'loggedin_time'=>time()
+									);
+
+									session_set_userdata($session_data);
+
+									if($registration_from=='normal'){
+										$return['redirect']=base_url().'account';
+									}else if($registration_from=='scholarship'){
+										$return['redirect']=base_url().'in/scholarship';
+									}
+									$return['success']='Information has been updated';
+								}else{
+									$return['error']='Information has not been updated';
+								}
+
+							}else{
+								if($data_found->user_code!=NULL){
+									$profile_data=array(
+										'user_fullname'=>$data_found->user_fullname,
+										'user_email'=>$data_found->user_email,
+										'user_phone_no'=>$data_found->user_phone_no,
+										'user_country'=>$register_country,
+										'user_state'=>$registration_state,
+										'user_city'=>$city,
+										'user_pincode'=>$registration_pincode,
+										'user_address'=>$registration_address,
+										'user_dob'=>$dob,
+										'user_gender'=>$registration_gender,
+										'user_last_qualification_year'=>$passing_year,
+										'user_last_qualification'=>decode_data($registration_last_qualification),
+										'user_brief'=>$registration_brief,
+										'updated_at'=>date('Y-m-d'),
+										'updated_by'=>$data_found->user_id
+									);
+								}else{
+									$profile_data=array(
+										'user_code'=>$ucode,
+										'user_fullname'=>$data_found->user_fullname,
+										'user_email'=>$data_found->user_email,
+										'user_phone_no'=>$data_found->user_phone_no,
+										'user_country'=>$register_country,
+										'user_state'=>$registration_state,
+										'user_city'=>$city,
+										'user_pincode'=>$registration_pincode,
+										'user_address'=>$registration_address,
+										'user_dob'=>$dob,
+										'user_gender'=>$registration_gender,
+										'user_last_qualification_year'=>$passing_year,
+										'user_last_qualification'=>decode_data($registration_last_qualification),
+										'user_brief'=>$registration_brief,
+										'updated_at'=>date('Y-m-d'),
+										'updated_by'=>$data_found->user_id
+									);
+								}
+									
+
+								//print_obj($profile_data);die;
+
+								$profile_updated=$this->um->update_user_profile_data($profile_data,array('user_profile_id'=>$data_found->user_profile_id));
+
+								//print_obj($profile_updated);die;
+
+								
+
+								//print_obj($data_found);die;
+
+								if($profile_updated){
+									$data_to_update=array(
+										'user_profile_pk_id'=>$data_found->user_profile_id,
+										'updated_by'=>$data_found->user_id
+									);
+
+									$this->um->update_user_data($data_to_update,array('user_id'=>$data_found->user_id));
+
+									//$_userdata=$this->um->get_user(array('user_id'=>$data_found->user_id));
+
+									//print_obj($_userdata);die;
+
+									//echo $registration_from;die;
+									if($registration_from=='normal'){
+										$return['redirect']=base_url().'account';
+									}else if($registration_from=='scholarship'){
+										$return['redirect']=base_url().'in/scholarship';
+									}
+									$return['success']='Information has been updated';
+								}else{
+									$return['error']='Information has not been updated';
+								}
+							}
+						}
+					}else{
+						$return['error']='Select country';
+					}
+
+						
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			rerdirect(base_url());
+		}
+	}	
+
+
+	public function onUpdateSingleData_old(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+
+			$ctext=post_data('ctext');
+
+			$security_token = $this->data['security_token'];
+
+			$decrypted = CryptoJsAes::decrypt($ctext, $security_token);
+
+			$change_type=decode_data(clean_data($decrypted['change_type']));
+
+			if($change_type=='password_change'){
+				$current_password=clean_data($decrypted['user_current_password']);
+				$new_password=clean_data($decrypted['user_new_password']);
+				$user_id=decode_data(session_userdata('user_id'));
+
+				$userdata=$this->um->get_user(array('user_id'=>$user_id));
+
+				if(!empty($userdata)){
+					if(password_verify($current_password,$userdata->user_password)){
+						if($current_password!=$new_password){
+							$password	=	password_hash($new_password, PASSWORD_BCRYPT, array('cost'=>12));
+
+							$data=array('user_password'=>$password);
+							$updated=$this->um->update_user_data($data,array('user_id'=>$user_id));
+							if($updated){
+								$return['success']='Password updated successfully';
+							}else{
+								$return['error']='Password can not be updated at this momment';
+							}
+						}else{
+							$return['error']='New password can not be same as the old password';
+						}
+							
+					}else{
+						$return['error']='Current password not matched';
+					}
+				}else{
+					$return['error']='No data found';
+				}
+			}else{
+				$return['error']='Data error';
+			}				
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onLoginUser(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			//$ctext=post_data('ctext');
+			//$security_token = $this->data['security_token'];
+			//echo $security_token;die;
+
+			//print_obj($ctext);die;
+
+			//echo $security_token;die;
+			//$decrypted = CryptoJsAes::decrypt($ctext, $security_token);
+
+			//print_obj($decrypted);die;
+
+			// $user_name=clean_data($decrypted['user_name']);
+			// $user_password=clean_data($decrypted['user_password']);
+			// $curl=clean_data($decrypted['user_curl']);
+
+			$user_name=post_data('user_name');
+			$user_password=post_data('user_password');
+			$curl=post_data('user_curl');
+
+			$this->form_validation->set_rules('user_name', 'username', 'trim|required|min_length[8]|max_length[32]',array('required' => 'Enter %s.'));
+			$this->form_validation->set_rules('user_password', 'password', 'trim|required|min_length[8]|max_length[16]',array('required' => 'Enter %s'));
+
+			if ($this->form_validation->run() == TRUE){
+				//echo $user_name;die;
+
+				$userdata=$this->um->get_user(array('user_name'=>$user_name));
+
+				//print_obj($userdata);die;
+
+				if(!empty($userdata)){
+					if($userdata!='' && !in_array($userdata->user_role, array(1,2))){
+						if($userdata!='' && ($userdata->user_blocked==1)){
+							if(password_verify($user_password,$userdata->user_password)){
+								$token=token();
+								$this->um->update_user_data(array('user_login_token'=>$token),array('user_id'=>$userdata->user_id));
+								$session_data=array(
+									'isUserLoggedin'=>true,
+									'user_id'=>encode_data($userdata->user_id),
+									'user_role'=>encode_data($userdata->user_role),
+									'user_token'=>encode_data($token),
+									'loggedin_time'=>time()
+								);
+
+								session_set_userdata($session_data);
+
+								if($userdata->user_role=='0'){
+									$return['redirect'] = base_url().'account/'.encode_data($userdata->user_id);
+								}else{
+									// if($curl!=''){
+									// 	$return['redirect'] = $curl;
+									// }else{
+									// 	$return['redirect'] = base_url().'account';
+									// }
+
+									if(session_userdata('custom_redirect')){
+										$return['redirect'] = session_userdata('custom_redirect');
+									}else{
+										if($userdata->user_role=='3'){
+											$return['redirect'] = base_url().'account/settings';
+										}else if($userdata->user_role=='4'){
+											$return['redirect'] = base_url().'account/settings';
+										}else if($userdata->user_role=='8'){
+											$return['redirect'] = base_url().'account';
+										}										
+									}		
+								}
+				            	
+								$return['success']='Loggedin successfully';
+							}else{
+								$return['redirect'] = base_url().'account';
+								$return['error']='Credentials are invalid';
+							}
+						}else if($userdata!='' && ($userdata->user_blocked==2)){
+							$return['redirect'] = base_url();
+							$return['error']='Your id is deactivated.';
+						}else{
+							$return['redirect'] = base_url();;
+							$return['error']='Credentials are invalid';	
+						}
+					}else{
+						$return['redirect'] = base_url();
+						$return['error']='Credentials are invalid';	
+					}
+						
+				}else{
+					$return['error']='User not found in the system';
+				}
+			}else{
+				$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function onLogoutUser(){
+		if(session_userdata('user_id') && session_userdata('isUserLoggedin')==TRUE){
+			$user_id=decode_data(session_userdata('user_id'));
+			$user_role=decode_data(session_userdata('user_role'));
+			$user_data=$this->um->get_user_data(array('user_id'=>$user_id,'user_role'=>$user_role));
+			$last_visited_url=($user_data->user_last_visited_page!=NULL || !empty($user_data->user_last_visited_page))?$user_data->user_last_visited_page:base_url();
+			$this->session->sess_destroy();
+			redirect($last_visited_url);	
+		}else{
+			show_404();
+		}
+	}
+
+
+	public function onLoginInstUser(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$user_name=post_data('inst_username');
+			$user_password=post_data('inst_password');
+
+			//$password	=	password_hash($user_password, PASSWORD_BCRYPT, array('cost'=>12));
+
+			//echo $password;die;
+
+			$this->form_validation->set_rules('inst_username', 'username', 'trim|required|min_length[2]|max_length[64]',array('required' => 'Enter %s.'));
+			$this->form_validation->set_rules('inst_password', 'password', 'trim|required|min_length[2]|max_length[16]',array('required' => 'Enter %s'));
+
+			if ($this->form_validation->run() == TRUE){
+
+				$userdata=$this->um->get_user(array('user_name'=>$user_name));
+
+				if(!empty($userdata)){
+					if($userdata!='' && in_array($userdata->user_role, array(4))){
+						if($userdata->user_blocked==1){
+							if(password_verify($user_password,$userdata->user_password)){
+								$token=token();
+								$this->um->update_user_data(array('user_login_token'=>$token),array('user_id'=>$userdata->user_id));
+								$session_data=array(
+									'isUserLoggedin'=>true,
+									'user_id'=>encode_data($userdata->user_id),
+									'user_role'=>encode_data($userdata->user_role),
+									'user_token'=>encode_data($token),
+									'loggedin_time'=>time()
+								);
+
+								session_set_userdata($session_data);
+
+								$return['redirect'] = base_url().'account/settings';
+				            	
+								$return['success']='Loggedin successfully';
+							}else{
+								$return['redirect'] = base_url().'account';
+								$return['error']='Credentials are invalid';
+							}
+						}else if($userdata!='' && ($userdata->user_blocked==2)){
+							$return['redirect'] = base_url();
+							$return['error']='Your id is deactivated.';
+						}
+					}else{
+						$return['redirect'] = base_url();
+						$return['error']='Credentials are invalid';	
+					}
+						
+				}else{
+					$return['error']='User not found in the system';
+				}
+			}else{
+				$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onGAuthURL(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='GET'){
+			$social_auth_type=$this->input->get('_social_auth');
+
+			if($social_auth_type=='gauth'){
+				$this->social->clientID=$this->data['gclientID'];
+				$this->social->clientSecret=$this->data['gclientSecret'];
+				$this->social->redirectUri=$this->data['redirectUri'];
+				$return['auth_url']=$this->social->get_google_authurl();
+			}else if($social_auth_type=='fbauth'){
+				$this->social->clientID=$this->data['fbclientID'];
+				$this->social->clientSecret=$this->data['fbclientSecret'];
+				$this->social->redirectUri=$this->data['redirectUri'];
+
+				echo password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));die;
+
+				//echo $this->social->clientID.'<br>'.$this->social->clientSecret;die;
+
+				//print_obj($this->social->get_fb_authurl());die;
+				$return['auth_url']=$this->social->get_fb_authurl();
+			}
+			else{
+				$return['error']='Social authentication is not supported';
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onGAuthSocial(){
+		$g_code=$this->input->get('code', TRUE);
+
+		//echo $g_code;die;
+
+		if($g_code!=null){
+			$this->social->clientID=$this->data['gclientID'];
+			$this->social->clientSecret=$this->data['gclientSecret'];
+			$this->social->redirectUri=$this->data['redirectUri'];
+
+			$auth_data=$this->social->google_login($g_code);
+
+			//print_obj($auth_data);die;
+
+			
+			if(!empty($auth_data) && $auth_data!=FALSE && !empty($auth_data->email) && $auth_data->verifiedEmail=='1'){
+				$user_name=$auth_data->email;
+				$name =  $auth_data->name;
+				$user_image_url=$auth_data->picture;
+
+				//echo $user_name;die;
+				$userdata=$this->um->get_user(array('user_name'=>$user_name));
+
+				//print_obj($userdata);die;
+
+				if(empty($userdata)){
+
+					//echo $user_name;die;
+
+					$get_temp_user_duplicate=$this->um->get_user_temp_duplicate(array('temp_user_email'=>$user_name));
+
+					if($get_temp_user_duplicate[0]->counted=='0'){
+						$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+
+						$data=array(
+							'user_name'=>$user_name,
+							'user_password'=>$password,
+							'user_blocked'=>'1',
+							'user_email_verified'=>'1',
+							'user_created_through'=>'2'
+						);
+
+						$inserted=$this->um->add_user_data($data);
+
+						if($inserted){
+							$temp_data=array(
+								'temp_user_pk_id'=>$inserted,
+								'temp_user_name'=>$name,
+								'temp_user_email'=>$user_name,
+								'temp_user_phone'=>'',
+								'temp_user_password'=>$password,
+								'temp_user_country'=>'0',								
+								'temp_user_system_ip'=>$this->input->ip_address(),
+								'temp_user_image_url'=>$user_image_url
+							);
+							$temp_data_added=$this->um->add_user_temp_data($temp_data);
+
+							$inserted_userdata=$this->um->get_user(array('user_id'=>$inserted));
+
+							$token=token();
+							$this->um->update_user_data(array('user_login_token'=>$token,'user_profile_pk_id'=>$temp_data_added),array('user_id'=>$inserted));
+							$session_data=array(
+								'isUserLoggedin'=>true,
+								'user_id'=>encode_data($inserted),
+								'user_role'=>encode_data('0'),
+								'user_token'=>encode_data($token),
+								'loggedin_time'=>time()
+							);
+
+							session_set_userdata($session_data);
+
+							if($userdata->user_role=='0'){
+								$redirect = base_url().'account/'.encode_data($userdata->user_id);
+							}else{
+								$redirect = base_url().'account';	
+							}
+
+							redirect($redirect);
+						}else{
+							redirect(base_url());
+						}
+
+					}else{
+						$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+
+						$data=array(
+							'user_name'=>$user_name,
+							'user_password'=>$password,
+							'user_blocked'=>'1',
+							'user_email_verified'=>'1',
+							'user_created_through'=>'2'
+						);
+
+						$inserted=$this->um->add_user_data($data);
+
+						if($inserted){
+							$temp_data=array(
+								'temp_user_pk_id'=>$inserted,
+								'temp_user_name'=>$name,
+								'temp_user_email'=>$user_name,
+								'temp_user_phone'=>'',
+								'temp_user_password'=>$password,
+								'temp_user_country'=>'0',								
+								'temp_user_system_ip'=>$this->input->ip_address(),
+								'temp_user_image_url'=>$user_image_url
+							);
+
+							$temp_data_added=$this->um->update_user_temp_data($temp_data,array('temp_user_email'=>$user_name));
+							$inserted_userdata=$this->um->get_user(array('user_id'=>$inserted));
+
+							$token=token();
+							$this->um->update_user_data(array('user_login_token'=>$token,'user_profile_pk_id'=>$temp_data_added),array('user_id'=>$inserted));
+							$session_data=array(
+								'isUserLoggedin'=>true,
+								'user_id'=>encode_data($inserted),
+								'user_role'=>encode_data('0'),
+								'user_token'=>encode_data($token),
+								'loggedin_time'=>time()
+							);
+
+							session_set_userdata($session_data);
+
+							if($userdata->user_role=='0'){
+								$redirect = base_url().'account/'.encode_data($userdata->user_id);
+							}else{
+								$redirect = base_url().'account';	
+							}
+
+							redirect($redirect);
+						}else{
+							redirect(base_url());
+						}	
+					}
+
+				}else if(!empty($userdata)){
+					$token=token();
+					$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+					$temp_data=$this->um->get_user_temp(array('temp_user_email'=>$user_name));
+					if(!empty($temp_data)){
+						$temp_data=array(
+							'temp_user_pk_id'=>$userdata->user_id,
+							'temp_user_name'=>$name,
+							'temp_user_email'=>$user_name,
+							'temp_user_phone'=>'',
+							'temp_user_password'=>$password,
+							'temp_user_country'=>'0',								
+							'temp_user_system_ip'=>$this->input->ip_address(),
+							'temp_user_image_url'=>$user_image_url
+						);
+
+						$temp_data_added=$this->um->update_user_temp_data($temp_data,array('temp_user_email'=>$user_name));
+						$this->um->update_user_data(array('user_login_token'=>$token),array('user_id'=>$userdata->user_id));
+					}else{
+						$temp_data=array(
+							'temp_user_pk_id'=>$userdata->user_id,
+							'temp_user_name'=>$name,
+							'temp_user_email'=>$user_name,
+							'temp_user_phone'=>'',
+							'temp_user_password'=>$password,
+							'temp_user_country'=>'0',								
+							'temp_user_system_ip'=>$this->input->ip_address(),
+							'temp_user_image_url'=>$user_image_url
+						);
+
+						$temp_data_added=$this->um->add_user_temp_data($temp_data);
+						$this->um->update_user_data(array('user_login_token'=>$token,'user_profile_pk_id'=>$temp_data_added),array('user_id'=>$userdata->user_id));
+					}
+						
+			
+					$session_data=array(
+						'isUserLoggedin'=>true,
+						'user_id'=>encode_data($userdata->user_id),
+						'user_role'=>encode_data($userdata->user_role),
+						'user_token'=>encode_data($token),
+						'loggedin_time'=>time()
+					);
+
+					session_set_userdata($session_data);
+
+					if($userdata->user_role=='0'){
+						$redirect = base_url().'account/'.encode_data($userdata->user_id);
+					}else{
+						$redirect = base_url().'account';	
+					}
+
+					redirect($redirect);
+				}
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onGetForgetPass(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$user_email=post_data('registered_email');
+
+			
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function onRegisterApplicant_old(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			$ctext=post_data('ctext');
+
+			$security_token = $this->data['security_token'];
+			$decrypted = CryptoJsAes::decrypt($ctext, $security_token);
+			
+			$applicant_institute=clean_data($decrypted['applicant_institute']);
+			$applicant_institute_type=clean_data($decrypted['applicant_institute_type']);
+
+			$applicant_full_name=clean_data($decrypted['applicant_full_name']);
+			$applicant_email=clean_data($decrypted['applicant_email']);
+			$applicant_ph=clean_data($decrypted['applicant_ph']);
+			$applicant_city=clean_data($decrypted['applicant_city']);
+			//$applicant_country=clean_data($decrypted['applicant_country']);
+			//$applicant_state=clean_data($decrypted['applicant_state']);
+			$applicant_course=clean_data($decrypted['applicant_course']);
+
+
+			$inst_id=decode_data($applicant_institute);
+			$inst_type=decode_data($applicant_institute_type);
+			$city_id=decode_data($applicant_city);
+			$course_id=decode_data($applicant_course);
+
+			$city_data=$this->com->get_city(array('city_id'=>$city_id));
+
+			$country_data=$this->com->get_country(array('country_id'=>$city_data->city_country_id));
+
+			$otp=gen_otp_code();
+
+			if($course_id!=''){
+
+				if(!empty($applicant_full_name) && !empty($applicant_email) && valid_email($applicant_email) && !empty($applicant_ph) && ($city_id!='0' || !is_null($city_id))){
+					$applicant_found=$this->um->get_applicant(array('applicant_email'=>$applicant_email,'applicant_ph'=>$applicant_ph,'applicant_course_id'=>$course_id,'application_inst_id'=>$inst_id));
+
+					if(!empty($applicant_found)){
+						$data_to_insert=array(
+							'applicant_country_id'=>$city_data->city_country_id,
+							'applicant_state_id'=>$city_data->city_state_id,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>$course_id,
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'application_re_date'=>date('Y-m-d'),
+							'applicantion_otp'=>$otp
+						);
+
+						$this->um->update_applicant_data($data_to_insert,array('application_id'=>$applicant_found->application_id));
+
+						$inserted=$applicant_found->application_id;
+
+					}else{
+						$data_to_insert=array(
+							'applicant_country_id'=>$city_data->city_country_id,
+							'applicant_state_id'=>$city_data->city_state_id,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>$course_id,
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'applicantion_otp'=>$otp
+						);
+
+						$inserted=$this->um->add_applicant_data($data_to_insert);
+					}
+
+					if($inserted){
+
+						$user_name=random_username($applicant_full_name);
+						$applicant_name=split_name($applicant_full_name);
+
+						$sms_data=array(
+							'flow_id'=>"61246d38163f8d707f23807f",
+							'sender'=>"NCRIPT",
+							'mobiles'=>$country_data->country_phone_code.$applicant_ph,
+							'user_name'=>'Applicant',
+							'otp_code'=>$otp,
+							'web_link'=>base_url()
+						);
+
+						$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+						$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+						$sms_param['data']=$sms_data;
+
+						$sent=curl_post($sms_param);
+
+						//print_obj($sent);
+
+						$return['_inst']=encode_data($inst_id);
+						$return['_applicant']=encode_data($inserted);
+						$return['_ph']=$applicant_ph;
+						$return['_email']=$applicant_email;
+						$return['_course']=encode_data($course_id);
+						$return['success']='Thank you for your interest.An 6-digit OTP has been sent to your given phone no.Verify the OTP.Our representative will get back to you soon.';
+					}else{
+						$return['error']='Apllication can not be sent now.Try again later';
+					}
+				}else{
+					$return['error']='All (*) marked fields are required.';
+				}
+				
+									
+			}else{
+				if(!empty($applicant_full_name) && !empty($applicant_email) && valid_email($applicant_email) && !empty($applicant_ph) && ($city_id!='0' || !is_null($city_id))){
+					
+					$applicant_found=$this->um->get_applicant(array('applicant_email'=>$applicant_email,'applicant_ph'=>$applicant_ph,'application_inst_id'=>$inst_id));
+					if(!empty($applicant_found)){
+						$data_to_insert=array(
+							'applicant_country_id'=>$city_data->city_country_id,
+							'applicant_state_id'=>$city_data->city_state_id,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>'0',
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'applicantion_otp'=>$otp
+						);
+
+					}else{
+						$data_to_insert=array(
+							'applicant_country_id'=>$city_data->city_country_id,
+							'applicant_state_id'=>$city_data->city_state_id,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>$course_id,
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'application_re_date'=>date('Y-m-d'),
+							'applicantion_otp'=>$otp
+						);
+
+						$this->um->update_applicant_data($data_to_insert,array('application_id'=>$applicant_found->application_id));
+
+						$inserted=$applicant_found->application_id;
+					}
+
+					if($inserted){
+						$user_name=random_username($applicant_full_name);
+
+						$sms_data=array(
+							'flow_id'=>"61246d38163f8d707f23807f",
+							'sender'=>"NCRIPT",
+							'mobiles'=>$country_data->country_phone_code.$applicant_ph,
+							'user_name'=>'Applicant',
+							'otp_code'=>$otp,
+							'web_link'=>base_url()
+						);
+
+						$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+						$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+						$sms_param['data']=$sms_data;
+
+						$sent=curl_post($sms_param);
+
+						$return['_inst']=encode_data($inst_id);
+						$return['_applicant']=encode_data($inserted);
+						$return['_ph']=$applicant_ph;
+						$return['_email']=$applicant_email;
+						$return['_course']=encode_data($course_id);
+						$return['success']='Thank you for your interest.An 6-digit OTP has been sent to your given phone no.Verify the OTP.Our representative will get back to you soon.';
+						$return['success']='Thank you for your interest.You will be contacted soon from our end.';
+					}else{
+						$return['error']='Apllication can not be sent now.Try again later';
+					}
+
+						
+				}else{
+					$return['error']='All (*) marked fields are required.';
+				}
+					
+			}
+			
+			header('Content-Type: application/json');
+
+			echo json_encode($return);		
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onRegisterApplicant(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$form_type=post_data('form_type');
+
+			if($form_type=='with_login'){
+				$applicant_course=post_data('applicant_course');
+				$applicant_institute=post_data('applicant_institute');
+				$applicant_institute_type=post_data('applicant_institute_type');
+
+				$inst_id=(is_numeric($applicant_institute))?$applicant_institute:decode_data($applicant_institute);
+				$inst_type=$applicant_institute_type;
+				$course_id=decode_data($applicant_course);
+
+				$user_data=$this->data['userdata'];
+
+				//print_obj($user_data);die;
+
+				if($course_id!=''){
+					$applicant_full_name=$user_data->user_fullname;
+					$applicant_email=$user_data->user_email;
+					$applicant_ph=$user_data->user_phone_no;
+					$city_id=$user_data->user_city;
+
+					$city_data=$this->com->get_city(array('city_id'=>$city_id));
+
+					$country_data=$this->com->get_country(array('country_id'=>$user_data->user_country));
+
+					$applicant_found=$this->um->get_applicant(array('applicant_email'=>$applicant_email,'applicant_ph'=>$applicant_ph,'applicant_course_id'=>$course_id,'application_inst_id'=>$inst_id));
+
+					if(!empty($applicant_found)){
+						$data_to_insert=array(
+							'applicant_id'=>$user_data->user_id,
+							'applicant_country_id'=>$user_data->user_country,
+							'applicant_state_id'=>$user_data->user_state,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>$course_id,
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'applicant_ph_verified'=>'yes',
+							'application_re_date'=>date('Y-m-d')
+						);
+
+						$this->um->update_applicant_data($data_to_insert,array('application_id'=>$applicant_found->application_id));
+
+						$inserted=$applicant_found->application_id;
+
+					}else{
+						$data_to_insert=array(
+							'applicant_id'=>$user_data->user_id,
+							'applicant_country_id'=>$user_data->user_country,
+							'applicant_state_id'=>$user_data->user_state,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>$course_id,
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'applicant_ph_verified'=>'yes'
+						);
+
+						//print_obj($data_to_insert);die;
+
+						$inserted=$this->um->add_applicant_data($data_to_insert);
+					}
+
+
+					if($inserted){
+
+						$return['_inst']=encode_data($inst_id);
+						$return['_applicant']=encode_data($inserted);
+						$return['_ph']=$applicant_ph;
+						$return['_email']=$applicant_email;
+						$return['_course']=encode_data($course_id);
+						$return['success']='Thank you for your interest.Our representative will get back to you soon.';
+					}else{
+						$return['error']='Apllication can not be sent now.Try again later';
+					}
+				}else{
+					$return['error']='Select your course of interest.';
+				}
+
+				
+			}else if($form_type=='without_login'){
+
+				$applicant_course=$this->input->post('applicant_course');
+				$applicant_institute=post_data('applicant_institute');
+				$applicant_institute_type=post_data('applicant_institute_type');
+
+				$applicant_full_name=post_data('applicant_full_name');
+				$applicant_email=post_data('applicant_email');
+				$applicant_ph=post_data('applicant_ph');
+				$applicant_city=post_data('applicant_city');
+				$applicant_country=post_data('applicant_country');
+				$applicant_state=post_data('applicant_state');
+
+				$applicant_aut_source=post_data('applicant_aut_source');
+
+
+				$exp=explode('#', $applicant_country);
+				$country=$exp[0];
+
+				//echo $applicant_course.'<br>';
+
+				$inst_id=(is_numeric($applicant_institute))?$applicant_institute:decode_data($applicant_institute);
+				$inst_type=decode_data($applicant_institute_type);
+				$course_id=decode_data($applicant_course);
+				$city_id=$applicant_city;//decode_data($applicant_city);
+				$sata_id=decode_data($applicant_state);
+				$country_id=decode_data($country);
+				//echo $city_id;die;
+
+				//echo $course_id;die;
+
+				if(!empty($applicant_full_name) && !empty($applicant_email) && valid_email($applicant_email) && !empty($applicant_ph) && ($city_id!='0' || !is_null($city_id))){
+					$applicant_found=$this->um->get_applicant(array('applicant_ph'=>$applicant_ph,'applicant_course_id'=>$course_id,'application_inst_id'=>$inst_id));
+
+					//print_obj($applicant_found);die;
+
+					$city_data=$this->com->get_city(array('city_id'=>$city_id));
+
+					$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+					$otp=gen_otp_code(4);
+
+					if(!empty($applicant_found)){
+						$data_to_insert=array(
+							'applicant_country_id'=>$country_id,
+							'applicant_state_id'=>$city_data->city_state_id,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>'0',
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'applicantion_otp'=>$otp
+						);
+
+						$this->um->update_applicant_data($data_to_insert,array('application_id'=>$applicant_found->application_id));
+
+						$inserted=$applicant_found->application_id;
+
+					}else{
+						$data_to_insert=array(
+							'applicant_country_id'=>$country_id,
+							'applicant_state_id'=>$city_data->city_state_id,
+							'applicant_city_id'=>$city_id,
+							'applicant_course_id'=>$course_id,
+							'application_inst_id'=>$inst_id,
+							'application_inst_type'=>$inst_type,
+							'applicant_name'=>$applicant_full_name,
+							'applicant_email'=>$applicant_email,
+							'applicant_ph'=>$applicant_ph,
+							'application_mail_sent'=>'2',
+							'applicant_aggreed_tc'=>'1',
+							'application_re_date'=>date('Y-m-d'),
+							'applicantion_otp'=>$otp
+						);
+
+						$inserted=$this->um->add_applicant_data($data_to_insert);
+					}
+
+					if($inserted){
+						$user_name=random_username($applicant_full_name);
+
+						$ph=$country_data->country_phone_code.$applicant_ph;
+
+						sendSMS($ph,$otp);
+
+						if($applicant_aut_source==='whatsapp_button'){
+							$return['whatsapp_link']=$college_data['college_whatsapp_link'];
+						}
+
+						$return['_inst']=encode_data($inst_id);
+						$return['_applicant']=encode_data($inserted);
+						$return['_ph']=$applicant_ph;
+						$return['_email']=$applicant_email;
+						$return['_course']=encode_data($course_id);
+						$return['success']='Thank you for your interest.An 4-digit OTP has been sent to your given phone no.Verify the OTP.Our representative will get back to you soon.';
+						
+					}else{
+						$return['error']='Apllication can not be sent now.Try again later';
+					}
+				}else{
+					$return['error']='All (*) marked fields are required.';
+				}
+			}			
+			
+			json_headers($return);		
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onVerifyApplicantAccount(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$applicant_php=post_data('applicant_php');
+			$phone_otp=post_data('applicant_ph_otp');
+			$aut_source=post_data('aut_source');
+			//$_applicant_course=post_data('_applicant_course');
+
+			$college_data=array();
+
+
+			if(!empty($applicant_php) || !is_null($applicant_php)){
+
+				$application_id=decode_data($applicant_php);
+
+				//echo $application_id;die;
+
+				$applicant_found=$this->um->get_applicant(array('application_id'=>$application_id));
+
+				if(!empty($applicant_found)){
+
+					$this->form_validation->set_rules('applicant_ph_otp', 'OTP', 'trim|required|numeric',array('required' => 'Enter OTP %s.','numeric'=>'Only numeric value allowed.'));
+
+					if ($this->form_validation->run() == TRUE){
+						if($applicant_found->applicantion_otp==$phone_otp){
+							$data_to_insert=array(
+								'applicantion_otp'=>null,
+								'applicant_ph_verified'=>'yes'
+							);
+
+							$updated=$this->um->update_applicant_data($data_to_insert,array('application_id'=>$applicant_found->application_id));
+
+							if($updated){
+
+								$param['user_course']=$applicant_found->applicant_course_id;
+								$post['length']='3';
+								$institutes=$this->im->_get_colleges_by_courses($post,$param,FALSE,TRUE);
+
+								// print_obj($institutes);die;
+
+								$user_found=$this->um->_get_user_profile_duplicate(array('user_phone_no'=>$applicant_found->applicant_ph),array('user_email'=>$applicant_found->applicant_email));
+
+								if($user_found[0]->counted==0){
+									$ucode=ge_rand_code();
+									$student_data=array(
+										'user_code'=>$ucode,
+										'user_country'=>$applicant_found->applicant_country_id,
+										'user_state'=>$applicant_found->applicant_state_id,
+										'user_city'=>$applicant_found->applicant_city_id,
+										'user_m_id'=>'0',
+										'user_fullname'=>$applicant_found->applicant_name,
+										'user_email'=>$applicant_found->applicant_email,
+										'user_phone_no'=>$applicant_found->applicant_ph,
+										'user_course_interested'=>$applicant_found->applicant_course_id,
+										'is_agreed_to_tc'=>'1'
+									);
+
+									$user_profile_pk_id=$this->um->add_user_profile_data($student_data);
+
+									if($user_profile_pk_id){
+										$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+
+										$country_data=$this->com->get_country(array('country_id'=>$applicant_found->applicant_country_id));
+
+										$ustudent_user_data=array(
+											'user_role'=>'8',
+											'user_profile_pk_id'=>$user_profile_pk_id,
+											'user_name'=>$applicant_found->applicant_ph,
+											'user_password'=>$password,
+											'user_password_visible'=>encode_data('Password@123'),
+											'user_blocked'=>'1',
+											'user_approved'=>'2',
+											'user_email_verified'=>'1',
+											'user_phone_no_verified'=>'1',
+											'user_top_sent_date'=>date('Y-m-d H:i:s'),
+											'created_by'=>'0',
+											'created_by_type'=>'3',
+											'user_created_through'=>'1',
+											'user_sent_from'=>'normal',
+											'user_otp_sent_count'=>'1',						
+											'user_currency'=>($country_data->country_currency!='')?$country_data->country_currency:'4'
+										);
+
+										$user_pk_id=$this->um->add_user_data($ustudent_user_data,FALSE,FALSE);
+
+										if($user_pk_id){
+											$this->um->update_user_profile_data(array('user_m_id'=>$user_pk_id),array('user_profile_id'=>$user_profile_pk_id));
+
+											$this->um->update_applicant_data(array('applicant_id'=>$user_pk_id),array('application_id'=>$applicant_found->application_id));
+										}
+									}
+								}else{
+									$udata=$this->um->_get_user_data(array('user_phone_no'=>$applicant_found->applicant_ph));
+									$this->um->update_applicant_data(array('applicant_id'=>$udata->user_m_id),array('application_id'=>$applicant_found->application_id));
+								}
+
+								if(!empty($institutes)){
+									foreach ($institutes as $key => $value) {
+
+										if(!is_null($value->college_user_id) && $applicant_found->application_inst_id!=$value->college_user_id){
+											//$college_profile=$this->sm->__get_system_search_data(array('search_data_type_id'=>$value->user_id,'search_data_type'=>'COLLEGE_NAME'));
+
+											//if((!empty($college_profile) || !is_null($college_profile)) && !empty($college_profile->search_data_name)){
+												$college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$value->college_user_id,'user_storage_type'=>'user_banner'));
+							    				$college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$value->college_user_id,'user_storage_type'=>'user_logo'));
+
+							    				if(!empty($college_logo) && !empty($college_logo->media_disk_path_relative)){
+								                    $college_logo=$college_logo->media_disk_path_relative;
+								                    $college_logo_name=$college_logo->media_org_name;
+								                }else{
+								                    $college_logo=base_url().'uploads/app/default/no.jpeg';
+								                    $college_logo_name='';
+								                }
+
+
+								                if(!empty($college_banner) && !empty($college_banner->media_disk_path_relative)){
+								                    $college_banner=$college_banner->media_disk_path_relative;
+								                    $college_banner_name=$college_banner->media_org_name;
+								                }else{
+								                    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+								                    $college_banner_name='';
+								                }
+
+								                $college_data[]=array(
+							                        'college_name'=>$value->college_name,
+							                        'college_city'=>$value->city_name,
+							                        'college_state'=>$value->state_name,
+							                        'college_logo'=>$college_logo,
+							                        'college_banner'=>$college_banner,
+							                        'college_course_full_name'=>$value->course_name,
+							                        'college_course_short_name'=>$value->course_short_name,
+							                        'college_course_placement'=>$value->user_course_placement_type,
+							                        'college_course_duration'=>$value->user_course_duration_year.' yrs.',
+							                        'college_course_duration_type'=>$value->user_course_duration_type,
+							                        'access_url'=>$value->access_url
+							                    );
+											//}												
+										}
+									    	
+									}
+								}
+
+								$thanks_modal_data=array(
+									'thanks_heading'=>'Thank you',
+									'thanks_msg'=>'Thanks for your interest.We will contact you shortly with one of our consultants to guide you through the process.',
+									'thanks_msg_second'=>'Please check for mails in your SPAM folder of your inbox.',
+									'colleges_of_interest'=>$college_data
+								);
+
+								$return['success']=$thanks_modal_data;
+
+								if($aut_source=='whatsapp_button'){
+									$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$inst_id));
+
+									$college_whatsapp_link="https://wa.me/{$college_data->college_whatsapp_no}?text=Hello Sir.I am contacting through https://www.sikshapedia.com&utm_source=website&utm_medium=whatsapp";
+
+									$return['whatsapp_link']=$college_whatsapp_link;
+								}else if($aut_source=='callnow_button'){
+									$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$inst_id));
+
+									$college_callnow_link="tel:{$college_data->college_phone_no}";
+
+									$return['callnow_link']=$college_callnow_link;
+								}
+
+
+								
+							}else{
+								$return['error']='OTP is not valid.Hence it can not be verified.';
+							}
+
+						}else{
+							$return['error']='OTP is not valid.Hence it can not be verified.';
+						}
+					}else{
+						$return['error']=validation_errors();
+					}
+						
+
+				}else{
+					$return['error']='Apllication data not found';
+				}
+					
+
+			}else{
+				$return['error']='data manipulation not allowed';
+			}
+
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onRegisterUserQuery(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			$ctext=post_data('ctext');
+
+			$security_token = $this->data['security_token'];
+			$decrypted = CryptoJsAes::decrypt($ctext, $security_token);
+			
+			$query_user_full_name=clean_data($decrypted['query_user_full_name']);
+			$query_user_email=clean_data($decrypted['query_user_email']);
+			$query_user_ph=clean_data($decrypted['query_user_ph']);
+			$query_city=clean_data($decrypted['query_city']);
+			$query_course=clean_data($decrypted['query_course']);
+			$query_message=clean_data($decrypted['query_message']);
+			//$query_country=clean_data($decrypted['query_country']);
+
+			$current_date=date('Y-m-d');
+
+			$data_to_insert=array(
+				'enquiry_type'=>'course',
+				'enquiry_type_id'=>decode_data($query_course),
+				'enquiry_type_value'=>'',
+				'enquiry_user_fullname'=>$query_user_full_name,
+				'enquiry_user_email'=>$query_user_email,
+				'enquiry_city_id'=>decode_data($query_city),
+				'enquiry_city_name'=>'',
+				'enquiry_country_id'=>'99',
+				'enquiry_message'=>$query_message
+			);
+
+			$inserted=$this->sm->store_query($data_to_insert);
+
+			if($inserted){
+				$return['success']='Query submitted successfully.Our representative will get back to you soon.';
+			}else{
+				$return['error']='There is a system error.Try after some time';
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onRegisterJobApplicant(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$fullename=post_data('applicant_full_name');
+			$email=post_data('applicant_email');
+			$ph=post_data('applicant_ph');
+			$state=post_data('applicant_state');
+			$pincode=post_data('applicant_pincode');
+			$address=post_data('applicant_address');
+
+			$type=post_data('applicant_type');
+			$role=decode_data($type);
+
+			$temp_user=$this->um->get_user_temp_duplicate(array('temp_user_email'=>$email),array('temp_user_phone'=>$ph));
+
+			if($temp_user[0]->counted=='0'){
+
+				if($role=='5'){
+					$role_name='Data Entry Operator';
+				}else if($type=='6'){
+					$role_name='Content Writer';
+				}
+
+				$password='Password@123';
+
+				
+
+				$temp_data=array(
+					'temp_user_role'=>$role,
+					'temp_user_role_name'=>$role_name,
+					'temp_user_name'=>$fullename,
+					'temp_user_email'=>$email,
+					'temp_user_phone'=>$ph,
+					'temp_user_password'=>''
+				);
+
+			}else{
+				$return['error']='Email or Phone no already taken.';
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onAddApllicationQuestion(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			$application_id=post_data('_application');
+
+			$_applicant_question=post_data('_applicant_question');
+
+			if(!empty($application_id) && !is_null($application_id)){
+				$app_id=decode_data($application_id);
+
+				//echo $app_id;
+
+				$applicant_found=$this->um->get_applicant(array('application_id'=>$app_id));
+
+				//print_obj($applicant_found);die;
+				$current_date=date('Y-m-d');
+
+				$city_data=$this->com->get_city(array('city_id'=>$applicant_found->applicant_city_id));
+
+				$data_to_insert=array(
+					'enquiry_type'=>'institute_application',
+					'enquiry_type_id'=>$app_id,
+					'enquiry_type_value'=>null,
+					'enquiry_user_fullname'=>$applicant_found->applicant_name,
+					'enquiry_user_email'=>$applicant_found->applicant_email,
+					'enquiry_city_id'=>$applicant_found->applicant_city_id,
+					'enquiry_city_name'=>$city_data->city_name,
+					'enquiry_country_id'=>$applicant_found->applicant_country_id,
+					'enquiry_message'=>$_applicant_question
+				);
+
+				$inserted=$this->sm->store_query($data_to_insert);
+
+				if($inserted){
+					$return['success']='Your question has been submitted successfully. One of our consultants will reach out to you shortly.';
+				}else{
+					$return['error']='Question not submitted.';
+				}
+			}else{
+				$return['error']='Question not submitted';
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);	
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+
+
+	public function onClaimInstitutes(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){	
+			
+			$claimer_country=post_data('claimer_country');
+			$claim_institute=post_data('claim_institute');
+			$claim_institute_type=post_data('claim_institute_type');
+			$claimer_full_name=post_data('claimer_full_name');
+			$claimer_email=post_data('claimer_email');
+			$claimer_ph=post_data('claimer_mobile_no');
+			$claimer_designation=post_data('claimer_designation');
+			$claimer_referer=post_data('claimer_referer');
+			$claimer_referer_ph_no=post_data('claimer_referer_ph_no');
+			$claimer_linkedin_profile_link=post_data('claimer_linkedin_profile_link');
+			$institute_phone_no=post_data('claimer_inst_landline_no');
+			$institute_phone_no_ext=post_data('claimer_inst_landline_ext');
+
+
+			$this->form_validation->set_rules('claimer_full_name', 'Full Name', 'trim|required',array('required' => 'Enter %s.'));
+			$this->form_validation->set_rules('claimer_email', 'Email address', 'trim|required',array('required' => 'Enter email %s.'));
+			$this->form_validation->set_rules('claimer_mobile_no', 'Mobile No', 'trim|required',array('required' => 'Enter %s.'));
+
+			if ($this->form_validation->run() == TRUE){
+
+				if(!empty($claim_institute_type) && !empty($claimer_country) && !empty($claimer_designation)){
+					$institute_type=decode_data($claim_institute_type);
+					$institute_id=decode_data($claim_institute);
+					$country_id=decode_data($claimer_country);
+					$designation_id=decode_data($claimer_designation);
+
+					if(is_numeric($institute_type) && is_numeric($institute_id) && is_numeric($country_id) && is_numeric($designation_id)){
+						$otp =gen_otp_code();
+						$ph_otp=gen_otp_code();
+
+						$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+						if($institute_type=='7'){
+							$institute_data=$this->im->get_college_profile_data(array('college_id'=>$institute_id));
+							$institute_name=$institute_data->college_name;
+							$institute_access_url=$institute_data->access_url;
+						}
+
+						if(isset($this->data['system_general_settings']->system_logo) && $this->data['system_general_settings']->system_logo!=''){
+							$logo=$this->data['system_general_settings']->system_logo;
+						}else{
+							$logo='';
+						}
+						
+						$mail_data['from']='noreply@waytoadmissions.com';
+						$mail_data['from_name']='WayToAdmissions';
+						$mail_data['to']=$claimer_email;
+						$mail_data['subject']='WayToAdmissions:Claim '.$institute_name.' college';
+						$mail_data['data']=array(
+							'system_logo'=>$logo,
+							'system_name'=>'WayToAdmissions',
+							'system_hr_email'=>'noreply@waytoadmissions.com',
+							'system_facebook_link'=>$this->data['system_social_settings']->system_facebook_link,
+							'system_instagram_link'=>$this->data['system_social_settings']->system_instagram_link,
+							'system_linkedin_link'=>$this->data['system_social_settings']->system_linkedin_link,
+							'system_youtube_link'=>$this->data['system_social_settings']->system_youtube_link,
+							'system_twitter_link'=>$this->data['system_social_settings']->system_twitter_link,
+							'system_twitter_image'=>base_url().'uploads/app/default/image-2.png',
+							'system_facebook_image'=>base_url().'uploads/app/default/image-4.png',
+							'system_linkedin_image'=>base_url().'uploads/app/default/image-5.png',
+							'system_youtube_image'=>base_url().'uploads/app/default/image-6.png',
+							'system_instagram_image'=>base_url().'uploads/app/default/image-7.png',
+							'welcome_image'=>base_url().'uploads/app/default/image-10.gif',
+							'user_full_name'=>$claimer_full_name,
+							'verification_code'=>$otp,
+							'today_date'=>date('F d,Y')
+						);
+
+
+						$sms_data=array(
+							'flow_id'=>"61246d38163f8d707f23807f",
+							'sender'=>"NCRIPT",
+							'mobiles'=>$country_data->country_phone_code.$applicant_ph,
+							'user_name'=>'Applicant',
+							'otp_code'=>$otp,
+							'web_link'=>base_url()
+						);
+
+						$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+						$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+						$sms_param['data']=$sms_data;
+
+						//print_obj($mail_data);die;
+
+						$mail_data['view']='_email/vw_claim_institute_verification_mail';
+
+
+						$claimer_data=$this->um->get_claimer(array('institute_id'=>$institute_id,'institute_type'=>$institute_type,'claimer_email'=>$claimer_email,'claimer_mobile_no'=>$claimer_ph));
+
+						if(empty($claimer_data)){
+
+							$data_to_insert=array(
+								'institute_id'=>$institute_id,
+								'institute_type'=>$institute_type,
+								'institute_name'=>$institute_name,
+								'institute_phone_no'=>$institute_phone_no,
+								'institute_phone_no_ext'=>$institute_phone_no_ext,
+								'claimer_email'=>$claimer_email,
+								'claimer_mobile_no'=>$claimer_ph,
+								'claimer_name'=>$claimer_full_name,
+								'claimer_country'=>$country_data->country_id,
+								'claimer_linkedin_profile'=>$claimer_linkedin_profile_link,
+								'claimer_designation'=>$designation_id,
+								'claimer_referer'=>$claimer_referer,
+								'claimer_referer_ph_no'=>$claimer_referer_ph_no,
+								'created_at'=>date('Y-m-d'),
+								'claimer_verified'=>'no',
+								'claimer_code'=>$otp,
+								'claimer_ph_code'=>$ph_otp
+							);
+
+							//print_obj($data_to_insert);die;
+
+							$added=$this->um->add_claimer_data($data_to_insert);
+
+							if($added){
+								//send_system_mail($mail_data,'html');
+
+								//$sent=curl_post($sms_param);
+
+								$return['success']='Your request for claiming this college has been sent to the admin for approval. You will receive a mail after approval.';//'A 6 digit One-Time Password has been sent to '.$claimer_email;
+								$return['redirect']=$institute_access_url;
+							}else{
+								$return['error']='Request can not be served at this momment.Try later';
+							}
+
+						}else{
+							if($claimer_data->claimer_verified=='yes'){
+								$return['error']='You have already claimed this college.Our representative will get back to you soon.';
+							}else{
+								send_system_mail($mail_data,'html');
+								$return['success']='You have already claimed for this college.A 6 digit One-Time Password has been sent to '.$claimer_email;
+							}
+						}
+					}else{
+						$return['error']='Data manipulation is not allowed';
+					}
+
+						
+				}else{
+					$return['error']='Data manipulation is not allowed';
+				}
+					
+			}else{
+				$return['error']='All (*) marked fields are required.';
+			}
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	//College Page
+	public function indexCollegeRegisterPage(){
+		if(!session_userdata('isUserLoggedin') && !session_userdata('user_id')){
+			$segment_1=$this->uri->segment(1,0);//signup
+			$segment_2=$this->uri->segment(2,0);//"colleges"
+
+			if((is_string($segment_1) && ($segment_1!='0' && $segment_1=='signup')) && (is_string($segment_2) && ($segment_2!='0' && $segment_2=='college'))){
+
+				$institue_types=$this->im->get_institute_types(array('inst_data_type'=>'4'),FALSE);
+
+				if(!empty($institue_types)){
+					foreach ($institue_types as $key => $value) {					
+						$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_type==$value->inst_type))?'selected':'';
+						$_institue_types[]=array(
+							'inst_type'=>encode_data($value->inst_type),
+							'inst_type_name'=>$value->inst_type_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_institue_types=array();
+				}
+
+				$this->data['institue_types']=$_institue_types;
+
+
+				$page_title=$this->data['page_title'];
+				$view_page='account/college/vw_register_colleges_page';
+
+				$this->theme->title($page_title)->load($view_page, $this->data);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url().'account/settings');
+		}
+			
+	}
+
+	public function onCheckDuplicatedata(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			$check_type=post_data('check_type');
+			$check_value=post_data('check_value');
+			$check_value_of=post_data('check_value_of');
+
+			if($check_type=='username'){
+				$found=$this->um->get_user_duplicate(array('user_name'=>$check_value));
+				if($found[0]->counted>0){
+					echo false;
+				}else{
+					echo 'true';
+				}
+			}else if($check_type=='phone'){
+
+				if($check_value_of=='clg'){
+					$found=$this->im->get_college_profile_duplicate(array('college_phone_no'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}else if($check_value_of=='uni'){
+					$found=$this->im->get_university_profile_duplicate(array('university_phone_no'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}else if($check_value_of=='stu'){
+					$found=$this->um->_get_user_profile_duplicate(array('user_phone_no'=>$check_value));
+					if($found[0]->counted>0){
+						echo 'false';
+					}else{
+						echo 'true';
+					}
+				}
+					
+			}else if($check_type=='email'){
+				if($check_value_of=='clg'){
+					$found=$this->im->get_college_profile_duplicate(array('college_email'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}else if($check_value_of=='uni'){
+					$found=$this->im->get_university_profile_duplicate(array('university_email'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}else if($check_value_of=='stu'){
+					$found=$this->um->_get_user_profile_duplicate(array('user_email'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}
+				
+			}else if($check_type=='_name'){
+				if($check_value_of=='clg'){
+					$found=$this->im->get_college_profile_duplicate(array('college_name'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}else if($check_value_of=='uni'){
+					$found=$this->im->get_college_profile_duplicate(array('college_name'=>$check_value));
+					if($found[0]->counted>0){
+						echo false;
+					}else{
+						echo 'true';
+					}
+				}
+				
+			}else if($check_type=='_ref_code'){
+				if($check_value_of=='stu'){
+					$found=$this->um->_get_user_profile_duplicate(array('referrel_code'=>$check_value));
+					if($found[0]->counted>0){
+						echo 'true';
+					}else{
+						echo false;
+					}
+				}
+					
+			}
+			else{
+				$return['error']='Type not defined';
+			}
+
+			//json_headers($return);
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function onSendOTPData(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			$temp_user_id=post_data('temp');
+
+			if(is_string($temp_user_id) && !empty($temp_user_id)){
+				$user_id=decode_data($temp_user_id);
+			}else{
+				$user_id=decode_data(session_userdata('temp_user'));
+			}
+
+			//echo $user_id;die;
+
+			$user_data=$this->um->get_user(array('user_id'=>$user_id));
+
+			$current_date=date('Y-m-d');
+
+			if(!empty($user_data)){
+				$otp_date=date('Y-m-d',strtotime($user_data->user_top_sent_date));
+
+				if($current_date==$otp_date){
+
+					$otp_limit=$user_data->user_otp_resend_limit;
+
+
+					if($user_data->user_otp_sent_count<=$otp_limit){
+						if($user_data->user_role=='3'){
+							$user_profile_data=$this->im->get_university_data(array('university_user_id'=>$user_id));
+							$country_id=$user_profile_data->university_country_id;
+							$user_fullname=$user_profile_data->university_name;
+							$contact_person_no=$user_profile_data->university_contact_person_phone;
+						}else if($user_data->user_role=='4'){
+							$user_profile_data=$this->um->get_college_profile_data(array('college_user_id'=>$user_id));
+							$country_id=$user_profile_data->college_country_id;
+							$user_fullname=$user_profile_data->college_name;
+							$contact_person_no=$user_profile_data->college_contact_person_phone;
+						}else if($user_data->user_role=='8'){
+							$user_profile_data=$this->um->_get_user_data(array('user_m_id'=>$user_id));
+
+							//print_obj($user_profile_data);die;
+							$country_id=$user_profile_data->user_country;
+							$user_fullname=$user_profile_data->user_fullname;
+							$contact_person_no=$user_profile_data->user_phone_no;
+						}
+
+						$otp=gen_otp_code(4);
+						$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+						$this->um->update_user_data(array('user_otp'=>$otp),array('user_id'=>$user_id));
+
+						$ph=$country_data->country_phone_code.$contact_person_no;
+
+						sendSMS($ph,$otp);
+
+						$_otp_limit=$user_data->user_otp_sent_count+1;
+						$this->um->update_user_data(array('user_otp_sent_count'=>$_otp_limit),array('user_id'=>$user_id));
+						$limt=($otp_limit-$_otp_limit);
+
+						if($limt>0){
+							$return['attempts_left']=$limt;
+							$return['start_timer']=true;
+						}else{
+							$return['start_timer']=false;
+							$return['error']='Maximum Retry attempts reached. Please try after some time.';
+						}						
+					}else{
+						$return['start_timer']=false;
+						$return['error']='Maximum Retry attempts reached. Please try after some time.';
+					}
+				}
+
+			}else{
+				$return['error']='User not found';
+			}
+
+			$return['_token'] = $this->security->get_csrf_hash();
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function onVerifyUserAccount(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$phone_otp=post_data('register_ph_otp');
+			//$email_otp=post_data('register_email_otp');
+
+			//echo $phone_otp;die;
+
+			$user=post_data('temp');
+			if(!empty($user) && is_string($user)){
+				$user_id=decode_data($user);
+
+				$user_data=$this->um->get_user(array('user_id'=>$user_id));
+
+				if(!empty($user_data)){
+
+					$this->form_validation->set_rules('register_ph_otp', 'OTP', 'trim|required|numeric',array('required' => 'Enter phone %s.','numeric'=>'Only numeric value allowed.'));
+					//$this->form_validation->set_rules('register_email_otp', 'OTP', 'trim|required|numeric',array('required' => 'Enter email %s.','numeric'=>'Only numeric value allowed.'));
+
+					//$result=$this->form_validation->run();
+					//print_r($result);die;
+
+					if ($this->form_validation->run() == TRUE){
+						// if($user_data->user_otp==$phone_otp && $user_data->user_mail_otp==$email_otp){
+
+						if($user_data->user_otp==$phone_otp){
+
+
+							// $updated=$this->um->update_user_data(array('user_email_verified'=>'1','user_phone_no_verified'=>'1'),array('user_id'=>$user_id));
+
+							$updated=$this->um->update_user_data(array('user_phone_no_verified'=>'1'),array('user_id'=>$user_id));
+
+							if($updated){
+								// if(session_userdata('temp_user')){
+								// 	$this->session->sess_destroy();
+								// }
+
+								if($this->input->post('review_link')){
+									$review_link=$this->input->post('review_link');
+								}else{
+									$review_link='';
+								}
+
+								$session_data=array(
+									'isUserLoggedin'=>true,
+									'user_id'=>encode_data($user_data->user_id),
+									'user_role'=>encode_data($user_data->user_role),
+									'loggedin_time'=>time()
+								);
+
+								session_set_userdata($session_data);
+
+								$user_profile_data=$this->um->_get_user_data(array('user_m_id'=>$user_data->user_id));
+
+								// $application_data=$this->um->get_applicant(array('applicant_course_id'=>$user_profile_data->user_course_interested));
+
+								$application_data=$this->um->get_applicant(array('applicant_ph'=>$user_profile_data->user_phone_no));								
+
+								if(empty($application_data)){
+
+									$applicant_state_id=(!empty($user_profile_data) && !empty($user_profile_data->user_state))?$user_profile_data->user_state:'0';
+									$applicant_city_id=(!empty($user_profile_data) && !empty($user_profile_data->user_city))?$user_profile_data->user_city:'0';
+									$applicant_email=(!empty($user_profile_data) && !empty($user_profile_data->user_email))?$user_profile_data->user_email:'0';
+
+									$data_to_insert=array(
+										'applicant_id'=>$user_data->user_id,
+										'applicant_country_id'=>$user_profile_data->user_country,
+										'applicant_state_id'=>$applicant_state_id,
+										'applicant_city_id'=>$applicant_city_id,
+										'applicant_course_id'=>$user_profile_data->user_course_interested,
+										'application_inst_id'=>null,
+										'application_inst_type'=>null,
+										'applicant_name'=>$user_profile_data->user_fullname,
+										'applicant_email'=>$applicant_email,
+										'applicant_ph'=>$user_profile_data->user_phone_no,
+										'application_mail_sent'=>'2',
+										'applicant_aggreed_tc'=>'1',
+										'applicantion_otp'=>$phone_otp,
+										'applicant_ph_verified'=>'yes'
+									);
+
+									$inserted=$this->um->add_applicant_data($data_to_insert);
+								}
+
+								if(isset($review_link) && !empty($review_link)){
+									$return['redirect']=$review_link;
+								}else{
+									$return['redirect']=base_url('account');
+								}				
+
+
+								
+								$return['success']='Your account has been verified successfully';
+							}else{
+								$return['error']='OTP(s) are not valid.';
+							}
+
+						}else{
+							$return['error']='OTP needs to be verified.';
+						}
+					}else{
+						$return['error']=validation_errors();
+					}
+
+						
+				}else{
+					$return['error']='Data not found in the system.';
+				}
+			}else{
+				$return['error']='Data manipulation is not allowed.Your Account will be locked.';
+			}
+
+			//rint_r($return);die;
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+
+
+	public function onRegisterCollege(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$register_college_name=post_data('register_college_name');
+			$register_college_email=post_data('register_college_email');
+			$register_college_phone_no=post_data('register_college_phone_no');
+			$register_college_country=post_data('register_college_country');
+			$register_college_state=post_data('register_college_state');
+			$register_college_district=post_data('register_college_district');
+			$register_college_city=post_data('register_college_city');
+			$register_college_university=post_data('register_college_university');
+			$register_college_type=post_data('register_college_type');
+			$register_college_pincode=post_data('register_college_pincode');
+			$register_college_address=post_data('register_college_address');
+			$register_college_contact_name=post_data('register_college_contact_name');
+			$register_college_contact_email=post_data('register_college_contact_email');
+			$register_college_contact_phone_no=post_data('register_college_contact_phone_no');
+			$register_college_username=post_data('register_college_username');
+			$register_college_password=post_data('register_college_password');
+
+			$register_college_type=post_data('register_college_type');
+
+			$agree_to_tc=post_data('agree_to_tc');
+			
+
+			$this->form_validation->set_rules('register_college_name', 'name', 'required',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_college_email', 'valid email address', 'trim|required|valid_email',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_college_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_college_country', 'country you live in', 'trim|required',array('required' => 'Select %s.'));
+			$this->form_validation->set_rules('register_college_state', 'state you live in', 'trim|required',array('required' => 'Select %s.'));
+			$this->form_validation->set_rules('register_college_city', 'city you live in', 'trim|required',array('required' => 'Select %s.'));
+
+			$this->form_validation->set_rules('register_college_username', 'username', 'trim|required|min_length[8]|max_length[32]',array('required' => 'Choose an %s for your account.'));
+			$this->form_validation->set_rules('register_college_password', 'password', 'trim|required|min_length[8]|max_length[16]',array('required' => 'Enter your %s of choice.'));
+
+			$this->form_validation->set_rules('register_college_contact_name', 'name', 'required',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_college_contact_email', 'valid email address', 'trim|required|valid_email',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_college_contact_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+
+
+			$this->form_validation->set_rules('register_college_type', 'country you live in', 'trim|required',array('required' => 'Select %s.'));
+			$this->form_validation->set_rules('register_college_pincode', 'pincode/zipcode', 'trim|required',array('required' => 'Enter %s.'));
+			$this->form_validation->set_rules('register_college_address', 'address', 'trim|required',array('required' => 'Enter %s.'));
+
+
+			if ($this->form_validation->run() == TRUE){
+				if($check_type=='username'){
+					$found=$this->um->get_user_duplicate(array('user_name'=>$register_college_username));
+					if($found[0]->counted>0){
+						$duplicate=true;
+					}else{
+						$duplicate=false;
+					}
+				}else if($check_type=='phone'){
+					$found=$this->im->get_college_profile_duplicate(array('college_phone_no'=>$register_college_phone_no));
+					if($found[0]->counted>0){
+						$duplicate=true;
+					}else{
+						$duplicate=false;
+					}
+				}else if($check_type=='email'){
+					$found=$this->im->get_college_profile_duplicate(array('college_email'=>$register_college_email));
+					if($found[0]->counted>0){
+						$duplicate=true;
+					}else{
+						$duplicate=false;
+					}
+				}
+
+				if($duplicate==false){
+
+					if(is_string($register_college_country) && is_string($register_college_state) && is_string($register_college_city) && is_string($register_college_university) && is_string($register_college_type)){
+
+						if($agree_to_tc=='1'){
+							$country_exp=char_separated_to_array($register_college_country,'#');
+							$country_id=decode_data($country_exp[0]);
+							$state_id=decode_data($register_college_state);
+							$city_id=decode_data($register_college_city);
+							$university_id=decode_data($register_college_university);
+							$college_type=decode_data($register_college_type);
+
+							$otp=gen_otp_code();
+							$mail_otp=gen_otp_code();
+
+							$college_short_name=create_initiala($register_college_name);
+
+							$college_data=array(
+								'college_country_id'=>$country_id,
+								'college_state_id'=>$state_id,
+								'college_city_id'=>$city_id,
+								'college_user_id'=>'0',
+								'college_university_id'=>$university_id,
+								'college_name'=>$register_college_name,
+								'college_short_name'=>$college_short_name,
+								'college_estd_year'=>'0',
+								'college_address'=>$register_college_address,
+								'college_zipcode'=>$register_college_pincode,
+								'college_email'=>$register_college_email,
+								'college_phone_no'=>$register_college_phone_no,
+								'college_type'=>$college_type,
+								'college_status'=>'1',
+								'college_affiliation_type'=>null,
+								'college_grade_ids'=>null,
+								'college_facilities'=>null,
+								'is_verified_by_admin'=>'2',
+								'college_is_top_ranked'=>'2',
+								'college_is_top_visible_home'=>'2',
+								'college_is_top'=>'2',
+								'is_agreed_to_tc'=>'1',
+								'college_contact_person'=>$register_college_contact_name,
+								'college_contact_person_email'=>$register_college_contact_email,
+								'college_contact_person_phone'=>$register_college_contact_phone_no
+							);
+
+							$user_profile_pk_id=$this->im->add_college_data($college_data);
+
+							if($user_profile_pk_id>0){
+								$password	=	password_hash($register_college_password, PASSWORD_BCRYPT, array('cost'=>12));
+
+								$country_data=$this->com->get_country(array('country_id'=>$country_id));
+								$state_data=$this->com->get_state(array('state_id'=>$state_id));
+								$city_data=$this->com->get_city(array('city_id'=>$city_id));
+
+								$college_user_data=array(
+									'user_role'=>'4',
+									'user_profile_pk_id'=>$user_profile_pk_id,
+									'user_name'=>$register_college_username,
+									'user_password'=>$password,
+									'user_password_visible'=>encode_data($register_college_password),
+									'user_blocked'=>'1',
+									'user_approved'=>'2',
+									'user_email_verified'=>'2',
+									'user_phone_no_verified'=>'2',
+									'user_otp'=>$otp,
+									'user_mail_otp'=>$mail_otp,
+									'user_top_sent_date'=>date('Y-m-d H:i:s'),
+									'created_by'=>'0',
+									'created_by_type'=>'4',
+									'user_created_through'=>'1',
+									'user_sent_from'=>'normal',
+									'user_otp_sent_count'=>'1',
+									'user_registration_type'=>'self',					
+									'user_currency'=>($country_data->country_currency!='')?$country_data->country_currency:'4'
+								);
+
+								$user_pk_id=$this->um->add_user_data($college_user_data,FALSE,FALSE);
+
+								if($user_pk_id){
+									$this->im->update_college_data(array('college_user_id'=>$user_pk_id),array('college_id'=>$user_profile_pk_id));
+									$_slug_value=$register_college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+									$slug_value=url_slug($_slug_value);
+									$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+									$folder_name=$slug_value;
+
+									$slug_found=$this->sm->get_slug(array('slug_type_id'=>$user_pk_id,'slug_type'=>'7'));
+
+									if(empty($slug_found)){
+										$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$user_pk_id,'slug_type'=>'7'));
+										if($inserted){
+											$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$user_pk_id));
+										}
+									}
+
+
+
+									$sms_data=array(
+										'flow_id'=>"61246d38163f8d707f23807f",
+										'sender'=>"NCRIPT",
+										'mobiles'=>$country_data->country_phone_code.$register_college_contact_phone_no,
+										'user_name'=>$college_short_name,
+										'otp_code'=>$otp,
+										'web_link'=>'signin'
+									);
+
+									$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+									$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+									$sms_param['data']=$sms_data;
+
+
+									//print_obj($sms_param);
+									
+
+									$v_link=base_url().'verify/'.encode_data($inserted);
+									$mail_data['protocol']='smtp';
+									$mail_data['smtp_host']='host.waytoadmissions.com';
+						            $mail_data['password']='InfoWaytoadmin@123%';
+
+									$mail_data['from']=$this->data['system_info_email'];
+									$mail_data['from_name']=$this->data['system_name_title'];
+									$mail_data['to']=$register_college_contact_email;
+									$mail_data['subject']='Account registration Verfication';
+									$mail_data['data']=array(
+										'user_name'=>$register_college_username,
+										'user_full_name'=>ucwords($register_college_name),
+										'user_password'=>$register_college_password,
+										'system_logo'=>$this->data['system_logo'],
+										'system_name'=>$this->data['system_name_title'],
+										'system_title'=>$this->data['system_name_title'],
+										'send_email_activation_link'=>($country_data->country_iso_code_2!='IN')?'yes':'no',
+										'v_link'=>$v_link,
+										'otp_code'=>$mail_otp,
+										'system_fb_link'=>$this->data['system_facebook_link'],
+										'system_twitter_link'=>$this->data['system_twitter_link'],
+										'system_google_link'=>$this->data['system_google_link'],
+										'system_insta_link'=>$this->data['system_instagram_link'],
+										'system_linkedin_link'=>$this->data['system_linkedin_link'],
+										'system_email'=>$this->data['system_info_email']
+									);
+
+									$mail_data['view']='_email/vw_account_verification_mail';
+
+									$mail_data2['protocol']='smtp';
+									$mail_data2['smtp_host']='host.waytoadmissions.com';
+						            $mail_data2['password']='InfoWaytoadmin@123%';
+
+									$mail_data2['from']=$this->data['system_info_email'];
+									$mail_data2['from_name']=$this->data['system_name_title'];
+									$mail_data2['to']=$register_college_email;
+									$mail_data2['subject']='Account registration Verfication';
+									$mail_data2['data']=array(
+										'user_name'=>$register_college_username,
+										'user_full_name'=>ucwords($register_college_name),
+										'user_password'=>$register_college_password,
+										'system_logo'=>$this->data['system_logo'],
+										'system_name'=>$this->data['system_name_title'],
+										'system_title'=>$this->data['system_name_title'],
+										'send_email_activation_link'=>($country_data->country_iso_code_2!='IN')?'yes':'no',
+										'v_link'=>$v_link,
+										'otp_code'=>$mail_otp,
+										'system_fb_link'=>$this->data['system_facebook_link'],
+										'system_twitter_link'=>$this->data['system_twitter_link'],
+										'system_google_link'=>$this->data['system_google_link'],
+										'system_insta_link'=>$this->data['system_instagram_link'],
+										'system_linkedin_link'=>$this->data['system_linkedin_link'],
+										'system_email'=>$this->data['system_info_email']
+									);
+
+									$mail_data2['view']='_email/vw_account_verification_mail';
+
+									send_system_mail($mail_data);
+									send_system_mail($mail_data2);
+									$p=curl_post($sms_param);
+
+									//print_obj($p);
+
+									$temp_session=array(
+										'temp_user'=>encode_data($user_pk_id)
+									);
+									session_set_userdata($temp_session);
+
+									$return['temp']=encode_data($user_pk_id);
+									$return['contact_email']=$register_college_contact_email;
+									$return['contact_ph_no']=$register_college_contact_phone_no;
+									$return['college_email']=$register_college_email;
+									$return['attempts_left']='2';
+
+									$return['success']='<strong>Registration successfull.</strong><br><strong>'.$this->data['system_name_title'].' has sent a 6 digit One-Time Password to '.$register_college_contact_phone_no.' to verify phone no. and to registered College email address and Contact person email address.You need to verify your contact number and email address inorder to get approved your account and further access to build your mini website.Do not reload this page';
+								}
+							}else{
+								$return['error']='Try again later.';
+							}
+						}else{
+							$return['error']='You have to accept Terms & Conditions.';
+						}
+							
+					}else{
+						$return['error']='Data manipulation not allowed.You will be blocked for further access to the site.';
+					}
+				}else{
+					$return['error']='Email,Phone no,Username must be unique.';
+				}
+			}else{
+				$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+			}
+
+
+				
+
+			$return['_token'] = $this->security->get_csrf_hash();
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	//College Editing Pages
+
+	public function indexBrandingPage(){
+		if(session_userdata('isUserLoggedin')){
+
+			$segment_1=$this->uri->segment(1,0);//account
+			$segment_2=$this->uri->segment(2,0);//branding
+
+			$userdata=$this->data['userdata'];
+
+			//print_obj($userdata);die;
+
+			if($userdata->user_role=='7'){
+
+			}else if($userdata->user_role=='4'){
+
+				//echo 'hi';
+				$show_user_menu_widget=TRUE;
+				$show_college_header_widget=TRUE;
+				$show_college_branding_edit_widget=TRUE;
+				$show_college_settings_edit_widget=TRUE;
+				$show_college_basic_settings_edit_widget=TRUE;
+
+				$_inner_menu=$this->sm->get_menues(array('menu_is_active'=>'1','menu_is_inner'=>'1','menu_link_type'=>'10','menu_link_id'=>$userdata->user_id),FALSE,'menu_serial','ASC');
+
+				//print_obj($_inner_menu);die;
+
+		        if(!empty($_inner_menu)){
+		            foreach ($_inner_menu as $k => $v) {                    
+	                    $__inner_menu[]=$v->menu_slug;                    
+	                }
+
+	                array_push( $__inner_menu,'branding','settings','enquiries','reviews');
+		        }else{
+		        	$__inner_menu=array('branding','settings','enquiries','reviews');
+		        }
+
+
+
+		        //echo $segment_2;die;
+
+		        //print_obj($__inner_menu);die;
+
+				if($segment_1!='0' && $segment_2!='0' && $segment_1=='account' && (in_array($segment_2, $__inner_menu))){
+
+
+
+					//$view_page='account/college/vw_college_branding_page';
+
+					$segment_name=str_replace("-", "_", $segment_2);
+
+					$view_page='account/college/vw_college_'.$segment_name.'_page';
+
+					$this->data['page_title']=ucwords(str_replace("_", " & ",$segment_name));
+					$this->data['college_id']=$userdata->user_id;
+					$this->data['show_user_menu_widget']=$show_user_menu_widget;
+					$this->data['show_college_header_widget']=$show_college_header_widget;
+					$this->data['show_college_branding_edit_widget']=$show_college_branding_edit_widget;
+					$this->data['show_college_settings_edit_widget']=$show_college_settings_edit_widget;
+					$this->data['show_college_basic_settings_edit_widget']=$show_college_basic_settings_edit_widget;
+					$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+					
+				}else{
+					redirect(base_url());
+				}
+			}else if($userdata->user_role=='8'){
+
+
+				$view_page='account/student/vw_profile_student_page';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			}
+
+
+			
+
+				
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function indexEnquiresPage(){
+		if(session_userdata('isUserLoggedin')){
+			$segment_1=$this->uri->segment(1,0);//account
+			$segment_2=$this->uri->segment(2,0);//branding
+
+			$userdata=$this->data['userdata'];
+
+
+		}else{
+			redirect(base_url(''));
+		}
+	}
+
+
+
+	public function onLoadEnquireies(){
+		if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=decode_data(session_userdata('user_id'));
+
+				$param['column_order'] = array(
+					null,
+					'applicant_name',
+					'country_name',
+					'course_name'
+				);
+
+				$param['column_search'] = array('applicant_name','country_name','country_name','city_name','course_name','course_short_name');
+				$param['order'] = array('application_id' => 'DESC');
+				$param['college_id']=$college_id;
+				$posts=$this->input->post();
+
+
+				$list = $this->um->_get_applicants($posts,$param,FALSE,FALSE);
+				
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $applicant){
+					$no++;
+
+					$row = array();
+					
+					$row[]	=	$no;
+					$row[]	=	ucwords($applicant->applicant_name).'<br>'.$applicant->applicant_email.'<br>'.$applicant->country_phone_code.$applicant->applicant_ph;
+					$row[]	=	$applicant->course_short_name;
+					$row[]	=	$applicant->country_name;
+					$row[]	=	$applicant->state_name;
+					$row[]	=	$applicant->city_name;
+					$row[]	=	date('d-m-Y',strtotime($applicant->application_date));
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->um->_get_applicants($posts,$param,TRUE),
+					"recordsFiltered" => $this->um->_get_applicants($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function onLoadUserWebPage(){
+		
+	}
+
+	//College Page
+
+	//student Page
+	public function indexStudentPage(){
+		if(session_userdata('isUserLoggedin')){
+
+			$segment_1=$this->uri->segment(1,0);//account
+			$segment_2=$this->uri->segment(2,0);//account
+
+			$userdata=$this->data['userdata'];
+
+			$_cities=array();
+
+			//print_obj($userdata);die;
+
+			//'city_country_id'=>$userdata->user_country,
+
+			$cities=$this->com->get_city(array('city_state_id'=>$userdata->user_state),FALSE);
+
+			//print_obj($cities);die;
+
+			if($userdata->user_role=='8'){
+
+				$this->data['page_title']=$userdata->user_fullname;
+
+				$show_profile_widget=TRUE;
+				$show_applied_colleges_widget=FALSE;
+				$show_reviews_widget=FALSE;
+
+
+				$profile_menu_active=TRUE;
+				$colege_application_menu_active=FALSE;
+				$review_menu_active=FALSE;
+
+				if(!empty($cities)){
+					foreach ($cities as $key => $value) {
+						$_cities[]=array(
+							'city_id'=>encode_data($value->city_id),
+							'city_name'=>$value->city_name,
+							'selected'=>($value->city_id==$userdata->user_city)?'selected':''
+						);
+					}
+				}
+
+				//print_obj($_cities);die;
+
+
+				if($segment_2!='0'){
+
+					if($segment_2=='applied-colleges'){
+						$show_profile_widget=FALSE;
+						$show_applied_colleges_widget=TRUE;
+						$show_reviews_widget=FALSE;
+						$profile_menu_active=FALSE;
+						$colege_application_menu_active=TRUE;
+						$review_menu_active=FALSE;
+					}else if($segment_2=='my-reviews'){
+						$show_profile_widget=FALSE;
+						$show_applied_colleges_widget=FALSE;
+						$show_reviews_widget=TRUE;
+
+						$profile_menu_active=FALSE;
+						$colege_application_menu_active=FALSE;
+						$review_menu_active=TRUE;
+					}
+
+					
+				}
+
+				$this->data['show_profile_widget']=$show_profile_widget;
+				$this->data['show_applied_colleges_widget']=$show_applied_colleges_widget;
+				$this->data['show_reviews_widget']=$show_reviews_widget;
+
+				$this->data['profile_menu_active']=$profile_menu_active;
+				$this->data['colege_application_menu_active']=$colege_application_menu_active;
+				$this->data['review_menu_active']=$review_menu_active;
+
+				$this->data['cities']=$_cities;
+
+				//print_obj($this->data['cities']);die;
+
+				$view_page='account/student/vw_profile_student_page';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			}else{
+				redirect(base_url());
+			}
+
+				
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	//Student page
+
+
+
+
+	//University Page
+
+	public function indexUniversityRegisterPage(){
+		if(!session_userdata('isUserLoggedin') && !session_userdata('user_id')){
+			$segment_1=$this->uri->segment(1,0);//signup
+			$segment_2=$this->uri->segment(2,0);//"colleges"
+
+			if((is_string($segment_1) && ($segment_1!='0' && $segment_1=='signup')) && (is_string($segment_2) && ($segment_2!='0' && $segment_2=='university'))){
+
+				$institue_types=$this->im->get_institute_types(array('inst_data_type'=>'3'),FALSE);
+
+				if(!empty($institue_types)){
+					foreach ($institue_types as $key => $value) {					
+						$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_type==$value->inst_type))?'selected':'';
+						$_institue_types[]=array(
+							'inst_type'=>encode_data($value->inst_type),
+							'inst_type_name'=>$value->inst_type_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_institue_types=array();
+				}
+
+				$this->data['institue_types']=$_institue_types;
+
+				$page_title=$this->data['page_title'];
+				$view_page='account/university/vw_register_university_page';
+
+				$this->theme->title($page_title)->load($view_page, $this->data);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url().'account/settings');
+		}
+			
+	}
+
+	public function onRegisterUniversity(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$register_university_name=post_data('register_university_name');
+			$register_university_email=post_data('register_university_email');
+			$register_university_phone_no=post_data('register_university_phone_no');
+			$register_university_country=post_data('register_university_country');
+			$register_university_state=post_data('register_university_state');
+			$register_university_district=post_data('register_university_district');
+			$register_university_city=post_data('register_university_city');			
+
+			$register_university_type=post_data('register_university_type');
+			$register_university_pincode=post_data('register_university_pincode');
+			$register_university_address=post_data('register_university_address');
+			$register_university_contact_name=post_data('register_university_contact_name');
+			$register_university_contact_email=post_data('register_university_contact_email');
+			$register_university_contact_phone_no=post_data('register_university_contact_phone_no');
+			$register_university_username=post_data('register_university_username');
+			$register_university_password=post_data('register_university_password');
+
+			$register_university_type=post_data('register_university_type');
+
+			$agree_to_tc=post_data('agree_to_tc');
+
+			$this->form_validation->set_rules('register_university_name', 'name', 'required',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_university_email', 'valid email address', 'trim|required|valid_email',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_university_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_university_country', 'country you live in', 'trim|required',array('required' => 'Select %s.'));
+			$this->form_validation->set_rules('register_university_state', 'state you live in', 'trim|required',array('required' => 'Select %s.'));
+			$this->form_validation->set_rules('register_university_city', 'city you live in', 'trim|required',array('required' => 'Select %s.'));
+
+			$this->form_validation->set_rules('register_university_username', 'username', 'trim|required|min_length[8]|max_length[32]',array('required' => 'Choose an %s for your account.'));
+			$this->form_validation->set_rules('register_university_password', 'password', 'trim|required|min_length[8]|max_length[16]',array('required' => 'Enter your %s of choice.'));
+
+			$this->form_validation->set_rules('register_university_contact_name', 'name', 'required',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_university_contact_email', 'valid email address', 'trim|required|valid_email',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_university_contact_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+
+			if ($this->form_validation->run() == TRUE){
+				if($check_type=='username'){
+					$found=$this->um->get_user_duplicate(array('user_name'=>$register_university_username));
+					if($found[0]->counted>0){
+						$duplicate=true;
+					}else{
+						$duplicate=false;
+					}
+				}else if($check_type=='phone'){
+					$found=$this->im->get_university_profile_duplicate(array('university_phone_no'=>$register_university_phone_no));
+					if($found[0]->counted>0){
+						$duplicate=true;
+					}else{
+						$duplicate=false;
+					}
+				}else if($check_type=='email'){
+					$found=$this->im->get_university_profile_duplicate(array('university_email'=>$register_university_email));
+					if($found[0]->counted>0){
+						$duplicate=true;
+					}else{
+						$duplicate=false;
+					}
+				}
+
+				if($duplicate==false){
+
+					if(is_string($register_university_country) && is_string($register_university_state) && is_string($register_university_city)){
+
+						if($agree_to_tc=='1'){
+							$country_exp=char_separated_to_array($register_university_country,'#');
+							$country_id=decode_data($country_exp[0]);
+							$state_id=decode_data($register_university_state);
+							$city_id=decode_data($register_university_city);
+							$university_type=decode_data($register_university_type);
+
+							$otp=gen_otp_code();
+							$mail_otp=gen_otp_code();
+
+							$university_short_name=create_initiala($register_university_name);
+
+							$university_data=array(
+								'university_country_id'=>$country_id,
+								'university_state_id'=>$state_id,
+								'university_city_id'=>$city_id,
+								'university_user_id'=>'0',
+								'university_name'=>$register_university_name,
+								'university_short_name'=>$university_short_name,
+								'university_estd_year'=>NULL,
+								'university_address'=>$register_university_address,
+								'university_zipcode'=>$register_university_pincode,
+								'university_email'=>$register_university_email,
+								'university_phone_no'=>$register_university_phone_no,
+								'university_type'=>$university_type,
+								'university_status'=>'1',
+								'university_affiliation_type'=>null,
+								'university_grade_ids'=>null,
+								'university_facilities'=>null,
+								'is_verified_by_admin'=>'2',
+								'university_is_top_ranked'=>'2',
+								'university_is_top_visible_home'=>'2',
+								'university_is_top'=>'2',
+								'is_agreed_to_tc'=>'1',
+								'university_contact_person'=>$register_university_contact_name,
+								'university_contact_person_email'=>$register_university_contact_email,
+								'university_contact_person_phone'=>$register_university_contact_phone_no
+							);
+
+							$user_profile_pk_id=$this->im->add_universities_data($university_data);
+
+							if($user_profile_pk_id>0){
+								$password	=	password_hash($register_university_password, PASSWORD_BCRYPT, array('cost'=>12));
+
+								$country_data=$this->com->get_country(array('country_id'=>$country_id));
+								$state_data=$this->com->get_state(array('state_id'=>$state_id));
+								$city_data=$this->com->get_city(array('city_id'=>$city_id));
+
+								$university_user_data=array(
+									'user_role'=>'3',
+									'user_profile_pk_id'=>$user_profile_pk_id,
+									'user_name'=>$register_university_username,
+									'user_password'=>$password,
+									'user_password_visible'=>encode_data($register_university_password),
+									'user_blocked'=>'1',
+									'user_approved'=>'2',
+									'user_email_verified'=>'2',
+									'user_phone_no_verified'=>'2',
+									'user_otp'=>$otp,
+									'user_mail_otp'=>$mail_otp,
+									'user_top_sent_date'=>date('Y-m-d H:i:s'),
+									'created_by'=>'0',
+									'created_by_type'=>'3',
+									'user_created_through'=>'1',
+									'user_sent_from'=>'normal',
+									'user_otp_sent_count'=>'1',
+									'user_registration_type'=>'self',					
+									'user_currency'=>($country_data->country_currency!='')?$country_data->country_currency:'4'
+								);
+
+								$user_pk_id=$this->um->add_user_data($university_user_data,FALSE,FALSE);
+
+								if($user_pk_id){
+									$this->im->update_universities_data(array('university_user_id'=>$user_pk_id),array('university_id'=>$user_profile_pk_id));
+									$_slug_value=$register_university_name.' '.$city_data->city_name.' '.$state_data->state_name;
+									$slug_value=url_slug($_slug_value);
+									$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+									$folder_name=$slug_value;
+
+									$slug_found=$this->sm->get_slug(array('slug_type_id'=>$user_pk_id,'slug_type'=>'7'));
+
+									if(empty($slug_found)){
+										$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$user_pk_id,'slug_type'=>'6'));
+										if($inserted){
+											$this->im->update_universities_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('university_user_id'=>$user_pk_id));
+										}
+									}
+
+
+
+									$sms_data=array(
+										'flow_id'=>"61246d38163f8d707f23807f",
+										'sender'=>"NCRIPT",
+										'mobiles'=>$country_data->country_phone_code.$register_university_contact_phone_no,
+										'user_name'=>$university_short_name,
+										'otp_code'=>$otp,
+										'web_link'=>'signin'
+									);
+
+									$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+									$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+									$sms_param['data']=$sms_data;
+
+
+									//print_obj($sms_param);
+									
+
+									$v_link=base_url().'verify/'.encode_data($inserted);
+									$mail_data['protocol']='smtp';
+									$mail_data['smtp_host']='host.waytoadmissions.com';
+						            $mail_data['password']='InfoWaytoadmin@123%';
+
+									$mail_data['from']=$this->data['system_info_email'];
+									$mail_data['from_name']=$this->data['system_name_title'];
+									$mail_data['to']=$register_university_contact_email;
+									$mail_data['subject']='Account registration Verfication';
+									$mail_data['data']=array(
+										'user_name'=>$register_university_username,
+										'user_full_name'=>ucwords($register_university_name),
+										'user_password'=>$register_university_password,
+										'system_logo'=>$this->data['system_logo'],
+										'system_name'=>$this->data['system_name_title'],
+										'system_title'=>$this->data['system_name_title'],
+										'send_email_activation_link'=>($country_data->country_iso_code_2!='IN')?'yes':'no',
+										'v_link'=>$v_link,
+										'otp_code'=>$mail_otp,
+										'system_fb_link'=>$this->data['system_facebook_link'],
+										'system_twitter_link'=>$this->data['system_twitter_link'],
+										'system_google_link'=>$this->data['system_google_link'],
+										'system_insta_link'=>$this->data['system_instagram_link'],
+										'system_linkedin_link'=>$this->data['system_linkedin_link'],
+										'system_email'=>$this->data['system_info_email']
+									);
+
+									$mail_data['view']='_email/vw_account_verification_mail';
+
+
+									$mail_data2['protocol']='smtp';
+									$mail_data2['smtp_host']='host.waytoadmissions.com';
+						            $mail_data2['password']='InfoWaytoadmin@123%';
+
+									$mail_data2['from']=$this->data['system_info_email'];
+									$mail_data2['from_name']=$this->data['system_name_title'];
+									$mail_data2['to']=$register_university_contact_email;
+									$mail_data2['subject']='Account registration Verfication';
+									$mail_data2['data']=array(
+										'user_name'=>$register_university_username,
+										'user_full_name'=>ucwords($register_university_name),
+										'user_password'=>$register_university_password,
+										'system_logo'=>$this->data['system_logo'],
+										'system_name'=>$this->data['system_name_title'],
+										'system_title'=>$this->data['system_name_title'],
+										'send_email_activation_link'=>($country_data->country_iso_code_2!='IN')?'yes':'no',
+										'v_link'=>$v_link,
+										'otp_code'=>$mail_otp,
+										'system_fb_link'=>$this->data['system_facebook_link'],
+										'system_twitter_link'=>$this->data['system_twitter_link'],
+										'system_google_link'=>$this->data['system_google_link'],
+										'system_insta_link'=>$this->data['system_instagram_link'],
+										'system_linkedin_link'=>$this->data['system_linkedin_link'],
+										'system_email'=>$this->data['system_info_email']
+									);
+
+									$mail_data2['view']='_email/vw_account_verification_mail';
+
+									send_system_mail($mail_data);
+									send_system_mail($mail_data2);
+									$p=curl_post($sms_param);
+
+									//print_obj($p);
+
+									$temp_session=array(
+										'temp_user'=>encode_data($user_pk_id)
+									);
+									session_set_userdata($temp_session);
+
+									$return['temp']=encode_data($user_pk_id);
+									$return['contact_email']=$register_university_contact_email;
+									$return['contact_ph_no']=$register_university_contact_phone_no;
+									$return['college_email']=$register_university_email;
+									$return['attempts_left']='2';
+
+									$return['success']='<strong>Registration successfull.</strong><br><strong>'.$this->data['system_name_title'].' has sent a 6 digit One-Time Password to '.$register_cuniversity_contact_phone_no.' to verify phone no. and to registered university email address and Contact person email address.You need to verify your contact number and email address inorder to get approved your account and further access to build your mini website.Do not reload this page';
+								}
+							}else{
+								$return['error']='Try again later.';
+							}
+						}else{
+							$return['error']='You have to accept Terms & Conditions.';
+						}
+							
+					}else{
+						$return['error']='Data manipulation not allowed.You will be blocked for further access to the site.';
+					}
+				}else{
+					$return['error']='Email,Phone no,Username must be unique.';
+				}
+
+				$return['_token'] = $this->security->get_csrf_hash();
+			}else{
+				$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+			}
+			
+
+				
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	//University Page
+
+
+	//Student page
+
+	public function indexStudentRegisterPage(){
+		if(!session_userdata('isUserLoggedin') && !session_userdata('user_id')){
+			$segment_1=$this->uri->segment(1,0);//signup
+			$segment_2=$this->uri->segment(2,0);//"colleges"
+
+			//print_obj($this->data);die;
+
+			$page_title='';
+
+			if((is_string($segment_1) && ($segment_1!='0' && $segment_1=='signup')) && (is_string($segment_2) && ($segment_2!='0' && $segment_2=='student'))){
+
+				$courses=$this->strm->get_course(array('course_is_top'=>'1'),FALSE);
+
+				if(!empty($courses)){
+					foreach ($courses as $key => $value) {
+						$_courses[]=array(
+							'course_id'=>encode_data($value->course_id),
+							'course_name'=>ucwords($value->course_short_name).'-'.ucwords($value->course_name),
+						);
+					}
+				}else{
+					$_courses=array();
+				}
+
+				$this->data['courses']=$_courses;
+
+				$page_title=$this->data['page_title'];
+				$view_page='account/student/vw_register_student_page';
+
+				$this->theme->title($page_title)->load($view_page, $this->data);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url().'account/settings');
+		}			
+	}
+
+
+	
+
+
+	public function onRegisterStudent(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$register_student_phone_no=post_data('register_student_phone_no');
+			$name=post_data('register_student_name');
+
+			$register_student_country=post_data('register_student_country');
+			$register_student_course=post_data('register_student_course');
+
+			$agree_to_tc=post_data('agree_to_tc');
+
+			$ucode=ge_rand_code();
+
+			$this->form_validation->set_rules('register_student_name', 'name', 'required',array('required' => 'Enter your %s.'));
+			$this->form_validation->set_rules('register_student_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+
+			if ($this->form_validation->run() == TRUE){
+
+				$profile_dup=$this->um->_get_user_profile_duplicate(array('user_phone_no'=>$register_student_phone_no));
+				$user_dup=$this->um->_get_user_duplicate(array('user_name'=>$register_student_phone_no));
+
+				//print_obj($user_dup);die;
+
+				if($profile_dup[0]->counted>0 || $user_dup[0]->counted>0){
+					$duplicate=true;
+				}else{
+					$duplicate=false;
+				}
+
+				if($duplicate==false){
+
+					$phone_length=strlen((string)$register_student_phone_no);
+
+					if(is_numeric($register_student_phone_no)){
+
+						if($agree_to_tc=='1'){
+							$country_id=decode_data($register_student_country);
+							$country_data=$this->com->get_country(array('country_id'=>$country_id));
+							
+							$otp=gen_otp_code(4);
+
+							if(!empty($register_student_course) && is_string($register_student_course)){
+								$course_id=decode_data($register_student_course);
+							}else{
+								$course_id='0';
+							}
+
+							$phone_no=$country_data->country_phone_code.''.$register_student_phone_no;
+
+							$r=sendSMS($phone_no,$otp);
+
+							if(isset($r['success'])){
+								$res=json_decode($r['success']);
+
+								if($res->type=='success'){
+									$otp_sent='1';
+								}else{
+									$otp_sent='2';
+								}
+							}else{
+								$otp_sent='2';
+							}
+
+							//print_obj($otp_sent);die;
+
+							$student_data=array(
+								'user_country'=>$country_id,
+								'user_state'=>'0',
+								'user_city'=>'0',
+								'user_m_id'=>'0',
+								'user_fullname'=>$name,
+								'user_email'=>null,
+								'user_phone_no'=>$register_student_phone_no,
+								'user_course_interested'=>$course_id,
+								'user_code'=>$ucode,
+								'is_agreed_to_tc'=>$agree_to_tc
+							);
+
+							$user_profile_pk_id=$this->um->add_user_profile_data($student_data);
+
+							if($user_profile_pk_id>0){
+								$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+
+								$ustudent_user_data=array(
+									'user_role'=>'8',
+									'user_profile_pk_id'=>$user_profile_pk_id,
+									'user_name'=>$register_student_phone_no,
+									'user_password'=>$password,
+									'user_password_visible'=>encode_data($register_student_password),
+									'user_blocked'=>'1',
+									'user_approved'=>'2',
+									'user_email_verified'=>'2',
+									'user_phone_no_verified'=>'2',
+									'user_otp'=>$otp,
+									'user_mail_otp'=>$otp,
+									'user_top_sent_date'=>date('Y-m-d H:i:s'),
+									'created_by'=>'0',
+									'created_by_type'=>'3',
+									'user_created_through'=>'1',
+									'user_sent_from'=>'normal',
+									'user_otp_sent_count'=>$otp_sent,
+									'user_registration_type'=>'self',					
+									'user_currency'=>($country_data->country_currency!='')?$country_data->country_currency:'4'
+								);
+
+								$user_pk_id=$this->um->add_user_data($ustudent_user_data,FALSE,FALSE);
+
+								if($user_pk_id){
+									$this->um->update_user_profile_data(array('user_m_id'=>$user_pk_id),array('user_profile_id'=>$user_profile_pk_id));
+
+									$temp_session=array(
+										'temp_user'=>encode_data($user_pk_id)
+									);
+
+									session_set_userdata($temp_session);
+
+									$return['temp']=encode_data($user_pk_id);
+									$return['contact_ph_no']=$register_student_phone_no;
+									$return['attempts_left']='2';
+
+									$return['success']='<strong>Registration successfull.</strong><br><strong>'.$this->data['system_name_title'].' has sent a 4 digit One-Time Password to '.$register_student_phone_no.' to verify phone no.';
+								}else{
+									$return['error']='Try again later.';
+								}
+							}else{
+								$return['error']='Try again later.';
+							}
+
+						}else{
+							$return['error']='You have to accept Terms & Conditions.';
+						}	
+
+					}else{
+						$return['error']='Data manipulation not allowed.You will be blocked for further access to the site.';
+					}
+				}else{
+					$return['error']='Phone no already in use.';
+				}
+
+			}else{
+				$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+			}
+
+			$return['_token'] = $this->security->get_csrf_hash();
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+
+
+	//Student Page
+
+	public function onResetCredentials(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			//$register_account_type=post_data('register_account_type');
+			$register_phone_no=post_data('register_phone_no');
+			//$register_email=post_data('register_email');
+
+			$send_type=post_data('send_type');
+
+			//if(!empty($register_account_type) && is_string($register_account_type)){
+
+				$account_type=decode_data($register_account_type);
+	
+				$this->form_validation->set_rules('register_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+
+				if ($this->form_validation->run() == TRUE){
+
+					if($account_type=='3'){
+						$found=$this->im->get_university_profile_data(array('university_contact_person_phone'=>$register_phone_no));
+						if(!empty($found)){
+							$user_id=$found->university_user_id;
+							$country_id=$found->university_country_id;
+							$user_name=$found->university_name;
+							$user_phone=$found->university_contact_person_phone;
+							$contact_email=$found->university_contact_person_email;
+						}
+					}else if($account_type=='4'){
+						$found=$this->im->get_college_profile_data(array('college_contact_person_phone'=>$register_phone_no));
+						if(!empty($found)){
+							$user_id=$found->college_user_id;
+							$user_name=$found->college_name;
+							$country_id=$found->college_country_id;
+							$user_phone=$found->college_contact_person_phone;
+							$contact_email=$found->college_contact_person_email;
+						}
+					}else if($account_type=='8'){
+						$found=$this->um->get_user_profile_data(array('user_phone_no'=>$register_phone_no));
+						if(!empty($found)){
+							$user_id=$found->user_m_id;
+							$user_name=$found->user_fullname;
+							$country_id=$found->user_country;
+							$user_phone=$found->user_phone_no;
+							$contact_email=$found->user_email;
+						}
+					}
+
+					if(isset($contact_email) && !empty($contact_email)){
+
+						$otp=gen_otp_code();
+						$user_data=$this->um->get_user(array('user_id'=>$user_id));						
+						$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+						if($send_type=='resetotp'){
+							$sms_data=array(
+								'flow_id'=>"61246e55c8ef5d2f7c43fedd",
+								'sender'=>"NCRIPT",
+								'mobiles'=>$country_data->country_phone_code.$user_phone,
+								'user_name'=>ucwords($user_name),
+								'otp_code'=>$otp,
+								'web_link'=>base_url().'signin'
+							);
+
+							$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+							$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+							$sms_param['data']=$sms_data;
+
+							//print_obj($sms_param);
+
+							$sent=curl_post($sms_param);
+
+							if($sent['success']){
+								$return['success']='A 6 digit One-Time-Password has been sent to your registered mobile no.';
+							}else{
+								$return['error']='There was an error occurred.Try after sometime.';
+							}
+						}else if($send_type=='getreset'){
+							$user_password=decode_data($user_data->user_password_visible);
+							$sms_data=array(
+								'flow_id'=>"61246deafe718968e82adab3",
+								'sender'=>"NCRIPT",
+								'mobiles'=>$country_data->country_phone_code.$user_phone,
+								'user_email'=>ucwords($user_name),
+								'user_password'=>$user_password,
+								'web_link'=>base_url().'signin'
+							);
+
+							$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+							$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+							$sms_param['data']=$sms_data;
+
+							$sent=curl_post($sms_param);
+
+							if($sent['success']){
+								$return['success']='Your password has ben sent to your registered phone no & email address';
+							}else{
+								$return['error']='There was an error occurred.Try after sometime.';
+							}
+						}
+
+							
+					}else{
+						$return['error']=$register_phone_no.' is not registered.Check again.';
+					}
+
+				}else{
+					$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+				}
+
+			// }else{
+			// 	$return['error']='data manupulation is not allowed.Your account may blocked.';
+			// }
+
+			$return['_token'] = $this->security->get_csrf_hash();
+
+			header('Content-Type: application/json');
+
+			echo json_encode($return);
+		}
+	}
+
+	public function onGetResetData(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$register_phone_no=post_data('register_phone_no');
+			
+			$this->form_validation->set_rules('register_phone_no', 'valid phone no.', 'trim|required|numeric|min_length[10]|max_length[10]',array('required' => 'Enter your %s.'));
+
+			if ($this->form_validation->run() == TRUE){
+
+				$found=$this->um->get_user_profile_data(array('user_phone_no'=>$register_phone_no));
+
+				if(!empty($found)){
+					$otp=gen_otp_code();
+					$user_id=$found->user_m_id;
+					$user_name=$found->user_fullname;
+					$country_id=$found->user_country;
+					$user_phone=$found->user_phone_no;
+					$contact_email=$found->user_email;
+
+					$country_data=$this->com->get_country(array('country_id'=>$country_id));
+
+					$sms_data=array(
+						'flow_id'=>"61246d38163f8d707f23807f",
+						'sender'=>"NCRIPT",
+						'mobiles'=>$country_data->country_phone_code.$user_phone,
+						'user_name'=>ucwords($user_name),
+						'otp_code'=>$otp,
+						'web_link'=>base_url().'signin'
+					);
+
+					$sms_param['url']='https://api.msg91.com/api/v5/flow/';
+					$sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+					$sms_param['data']=$sms_data;
+
+					//print_obj($sms_param);die;
+
+
+					// $sms_data=array(
+					// 	'flow_id'=>"61246d38163f8d707f23807f",
+					// 	'sender'=>"NCRIPT",
+					// 	'mobiles'=>$country_data->country_phone_code.$register_student_phone_no,
+					// 	'user_name'=>ucwords($first_name['first_name']),
+					// 	'otp_code'=>$otp,
+					// 	'web_link'=>'signin'
+					// );
+
+					// $sms_param['url']='https://api.msg91.com/api/v5/flow/';
+					// $sms_param['headers']=array("authkey: 197850AFrGnNLUa5a816402","content-type: application/JSON");
+					// $sms_param['data']=$sms_data;
+
+					//print_obj($sms_param);
+
+					$sent=curl_post($sms_param);
+
+					if($sent['success']){
+						$this->um->update_user_data(array('user_reset_otp'=>$otp),array('user_id'=>$user_id));
+
+						$return['success']='A 6 digit One-Time-Password has been sent to your registered mobile no.';
+					}else{
+						$return['error']='There was an error occurred.Try after sometime.';
+					}
+
+				}else{
+					$return['error']='Phone No not found in the system.';
+				}
+
+			}else{
+				$return['error']='All marked (*) are required field to complete your registration.'.validation_errors();
+			}
+
+			$return['_token'] = $this->security->get_csrf_hash();
+
+		}else{
+			$return['error']='Action not allowed';
+		}
+
+
+		header('Content-Type: application/json');
+
+		echo json_encode($return);
+	}
+
+
+	public function onResetAccount(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+			$register_ph_otp=post_data('register_ph_otp');
+
+			$register_conf_new_pass=post_data('register_conf_new_pass');
+
+			$userdata=$this->um->get_user_data(array('user_reset_otp'=>$register_ph_otp));
+
+			if($userdata){
+
+				$password	=	password_hash($register_conf_new_pass, PASSWORD_BCRYPT, array('cost'=>12));
+				$token=token();
+
+				$updated=$this->um->update_user_data(array('user_login_token'=>$token,'user_reset_otp'=>'','user_password'=>$password,'user_password_visible'=>encode_data($register_conf_new_pass)),array('user_id'=>$userdata->user_m_id));
+
+				if($updated){
+
+					$session_data=array(
+						'isUserLoggedin'=>true,
+						'user_id'=>encode_data($userdata->user_id),
+						'user_role'=>encode_data($userdata->user_role),
+						'user_token'=>encode_data($token),
+						'loggedin_time'=>time()
+					);
+
+					session_set_userdata($session_data);
+
+					$return['redirect'] = base_url().'account';
+					$return['success']='Account reset successfully';
+
+				}else{
+					$return['error']='Account data not found in the system. ';
+				}
+
+			}else{
+				$return['error']='OTP is not valid';
+			}
+
+
+		}else{
+			$return['error']='Action not allowed';
+		}
+
+		header('Content-Type: application/json');
+
+		echo json_encode($return);
+	}
+
+	//Update Branding Ifo
+
+	public function onUpdateSingleData(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+
+				$user_id=decode_data(session_userdata('user_id'));
+
+				$user_data=$this->data['userdata'];
+
+				//print_obj($user_data);die;
+
+				//echo $user_id;die;
+				
+				$change_type=post_data('change_type');
+
+				if($change_type=='password_change'){
+					$current_password=clean_data($decrypted['user_current_password']);
+					$new_password=clean_data($decrypted['user_new_password']);
+					$user_id=decode_data(session_userdata('user_id'));
+
+					$userdata=$this->um->get_user(array('user_id'=>$user_id));
+
+					if(!empty($userdata)){
+						if(password_verify($current_password,$userdata->user_password)){
+							if($current_password!=$new_password){
+								$password	=	password_hash($new_password, PASSWORD_BCRYPT, array('cost'=>12));
+
+								$data=array('user_password'=>$password);
+								$updated=$this->um->update_user_data($data,array('user_id'=>$user_id));
+								if($updated){
+									$return['success']='Password updated successfully';
+								}else{
+									$return['error']='Password can not be updated at this momment';
+								}
+							}else{
+								$return['error']='New password can not be same as the old password';
+							}
+								
+						}else{
+							$return['error']='Current password not matched';
+						}
+					}else{
+						$return['error']='No data found';
+					}
+				}else if($change_type=='branding_change'){
+					$slug_type=($user_data->user_role=='4')?'7':'6';
+					$slug_found=$this->sm->get_slug(array('slug_type_id'=>$user_id,'slug_type'=>$slug_type));
+
+					//print_obj($slug_found);die;
+
+
+					$folder_name=$slug_found->slug_value;
+					$response_error='';
+					$response_success='';
+					if(isset($_FILES['file_logo_image']) && $_FILES['file_logo_image']['name']!=''){
+
+						//echo 'hio';die;
+
+						list($width, $height, $type, $attr) = getimagesize($_FILES['file_logo_image']['tmp_name']);
+
+						if($width>=500 && $height>=500){
+							$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$user_id));
+
+							//print_obj($file_logo_found);die;
+
+							if(!empty($file_logo_found)){
+								if(is_file($file_logo_found->media_disk_path)){
+									@unlink($file_logo_found->media_disk_path);
+									$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+								}
+							}
+
+							$logo_data=array(
+								'file_size'=>'4',
+								'file_name'=>'file_logo_image',
+								'file_types'=>'png,jpg,jpeg',
+								'file_folder'=>'colleges',
+								'file_child_folder'=>$folder_name,
+								'file_uploaded_by'=>$user_id,
+								'file_compress'=>true,
+								'file_compress_protocol'=>'webp'
+							);
+
+							//print_obj($logo_data);die;
+
+							$file_id=$this->onUploadFiles($logo_data);
+
+							if(!empty($file_id) && is_numeric($file_id) && $file_id>0){
+
+								$this->sm->delete_user_file(array('user_file_type_id'=>$user_id,'user_storage_type'=>'user_logo'));
+
+					            $user_logo_storage_data=array(
+					            	'user_file_storage_id'=>$file_id,
+					            	'user_file_type_id'=>$user_id,
+					            	'user_file_type'=>$user_data->user_role,
+					            	'user_storage_type'=>'user_logo'
+					            );
+
+					            $this->sm->store_user_file($user_logo_storage_data);
+
+					            $response_success.='Logo updated successfully.';
+					        }else{
+					        	$response_error.=$file_id;
+					        }
+						}else{
+							$response_error.='For the best results on all devices, use an image that’s at least 500 x 500 pixels and 6MB or less.Selected file is '.$width.'x'.$height+' pixels';
+						}							
+					}
+
+					if(isset($_FILES['file_cover_image']) && $_FILES['file_cover_image']['name']!=''){
+
+						//echo 'hi2';die;
+
+						list($width, $height, $type, $attr) = getimagesize($_FILES['file_cover_image']["tmp_name"]);
+
+							//print_obj($width);die;
+
+						if($width>=1920 && $height>=480){
+							$file_cover_image_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$user_id));
+
+							//echo 'hi2';die;
+
+							//print_obj($file_logo_found);die;
+
+							if(!empty($file_cover_image_found)){
+								if(is_file($file_cover_image_found->media_disk_path)){
+									@unlink($file_cover_image_found->media_disk_path);
+									$this->sm->delete_file(array('storage_id'=>$file_cover_image_found->storage_id));
+								}
+							}
+
+							$cover_image_data=array(
+								'file_size'=>'4',
+								'file_name'=>'file_cover_image',
+								'file_types'=>'png,jpg,jpeg',
+								'file_folder'=>'colleges',
+								'file_child_folder'=>$folder_name,
+								'file_uploaded_by'=>$user_id,
+								'file_compress'=>true,
+								'file_compress_protocol'=>'webp'
+							);
+
+							//print_obj($logo_data);die;
+
+							$file_id=$this->onUploadFiles($cover_image_data);
+
+							//print($file_id);die;
+
+							if(!empty($file_id) && is_numeric($file_id) && $file_id>0){
+
+								$this->sm->delete_user_file(array('user_file_type_id'=>$user_id,'user_storage_type'=>'user_banner'));
+
+					            $user_cover_image_storage_data=array(
+					            	'user_file_storage_id'=>$file_id,
+					            	'user_file_type_id'=>$user_id,
+					            	'user_file_type'=>$user_data->user_role,
+					            	'user_storage_type'=>'user_banner'
+					            );
+
+					            $this->sm->store_user_file($user_cover_image_storage_data);
+
+					            $response_success.='Cover image updated successfully.';
+					        }else{
+					        	$response_error.=$file_id;
+					        }
+						}else{
+							$response_error.='For the best results on all devices, use an image that’s at least 500 x 500 pixels and 6MB or less.Selected file is '.$width.'x'.$height+' pixels';
+						}							
+					}
+				}else if($change_type=='account_settings'){
+					if($user_data->user_role=='4'){
+						$college_data=$this->im->get_college_data(array('college_user_id'=>$user_id));
+
+						if(!empty($college_data)){
+							$recvovery_mail=post_data('registration_user_recovery_mail');
+							$recovery_phone=post_data('registration_user_recovery_phone');
+							$contact_person=post_data('registration_user_contact_person');
+
+							$current_pass=post_data('registration_user_current_pass');
+							$new_pass=post_data('registration_user_new_pass');
+
+							if(!empty($new_pass) && !empty($current_pass)){
+
+								if(password_verify($current_pass,$user_data->user_password)){
+
+									$old_password=decode_data($user_data->user_password_visible);
+
+									if($old_password!=$new_pass){
+										$password	=	password_hash($new_pass, PASSWORD_BCRYPT, array('cost'=>12));
+
+										$user_details_to_update=array(
+											'user_password'=>$password,
+											'user_password_visible'=>encode_data($new_pass),
+											'updated_by'=>$user_id,
+											'updated_by_type'=>'4'
+										);
+
+										$this->um->update_user_data($user_details_to_update,array('user_id'=>$user_id));
+									}else{
+										$response='but new password can is not be same as old password';
+									}									
+								}else{
+									$response=' but current password not matched in the system so password not changed';
+								}
+							}
+
+							$college_data_to_update=array(
+								'college_contact_person'=>$contact_person,
+								'college_contact_person_email'=>$recvovery_mail,
+								'college_contact_person_phone'=>$recovery_phone,
+								'updated_at'=>date('Y-m-d H:i:s'),
+								'updated_by'=>$user_id
+							);
+
+							$updated=$this->im->update_college_data($college_data_to_update,array('college_user_id'=>$user_id,'college_id'=>$college_data->college_id));
+
+							if($updated){
+								if(isset($response)){
+									$response_success='Account updated successfully '.$response;
+								}else{
+									$response_success='Account updated successfully';
+								}
+								
+							}else{
+								$response_error='There was an error.Try after sometime.';
+							}
+						}else{
+							$response_error='Account details not found in the system.';
+						}	
+					}else if($user_data->user_role=='8'){
+						$user_profile_data=$this->um->_get_user_data(array('user_id'=>$user_id,'user_role'=>'8'));
+
+						//print_obj($user_profile_data);die;
+
+						if(!empty($user_profile_data)){
+							$user_name=post_data('registration_user_name');
+							$recovery_email=post_data('registration_user_recovery_mail');
+							$contact_person=post_data('registration_user_contact_person');
+
+							$email_active=post_data('registration_email_active');
+
+							$sms_active=post_data('registration_sms_active');
+
+							$current_pass=post_data('registration_user_current_pass');
+							$new_pass=post_data('registration_user_new_pass');
+
+							if(!empty($new_pass) && !empty($current_pass)){
+
+								if(password_verify($current_pass,$user_data->user_password)){
+
+									$old_password=decode_data($user_data->user_password_visible);
+
+									if($old_password!=$new_pass){
+										$password	=	password_hash($new_pass, PASSWORD_BCRYPT, array('cost'=>12));
+
+										$user_details_to_update=array(
+											'user_password'=>$password,
+											'user_password_visible'=>encode_data($new_pass),
+											'updated_by'=>$user_id,
+											'updated_by_type'=>'8'
+										);
+
+										$this->um->update_user_data($user_details_to_update,array('user_id'=>$user_id));
+									}else{
+										$response='but new password can not be same as old password';
+									}									
+								}else{
+									$response=' but current password not matched in the system so password not changed';
+								}	
+							}
+
+							$profile_data_to_update=array(
+								'user_alter_email'=>$recovery_email,
+								'is_email_com_active'=>$email_active,
+								'is_sms_com_active'=>$sms_active,
+								'updated_at'=>date('Y-m-d H:i:s'),
+								'updated_by'=>$user_id
+							);
+
+							//print_obj($profile_data_to_update);
+
+							$updated=$this->um->update_user_profile_data($profile_data_to_update,array('user_m_id'=>$user_id));
+
+							//echo $updated;
+
+							if($updated){
+								if(isset($response)){
+									$response_success.='Account updated successfully '.$response;
+								}else{
+									$response_success.='Account updated successfully';
+								}
+								
+							}else{
+								$response_error.='There was an error.Try after sometime.';
+							}
+						}else{
+							$response_error.='No data found';
+						}
+					}
+				}else if($change_type=='basic_info_change'){
+					if($user_data->user_role=='4'){
+						$inst_name=post_data('register_institute_name');
+						$inst_email=post_data('register_institute_email');
+						$inst_ph_no=post_data('register_institute_phone_no');
+						$inst_alter_ph_no=post_data('register_institute_alter_phone_no');
+						$inst_webaddress=post_data('register_institute_web_address');
+						$inst_estd=post_data('register_institute_estd');
+						$inst_type=post_data('register_institute_type');
+						$inst_university=post_data('register_institute_university');
+						$inst_grdaes=$this->input->post('register_institute_grades');
+						$inst_country=post_data('register_institute_country');
+						$inst_state=post_data('register_institute_state');
+						$inst_district=post_data('register_institute_district');
+						$inst_city=post_data('register_institute_city');
+						$inst_zipcode=post_data('register_institute_zip_code');
+						$inst_address=post_data('register_institute_address');
+						$inst_affiliations=$this->input->post('register_institute_affiliations');
+						$inst_short_desc=post_data('regiter_institute_short_description');
+						$inst_broad_desc=post_data('regiter_institute_broad_description');
+						$inst_facilities=$this->input->post('register_institute_facilities');
+						$inst_facilities_info=post_data('regiter_institute_facilities_info');
+
+						//print_obj($_POST);die;
+
+						$college_data=$this->im->get_college_data(array('college_user_id'=>$user_id));
+
+						if(!empty($inst_facilities)){
+							foreach ($inst_facilities as $key => $value) {
+								$facilities[]=decode_data($value);
+							}
+						}
+
+						if(!empty($inst_affiliations)){
+							foreach ($inst_affiliations as $key => $value) {
+								$affiliations[]=decode_data($value);
+							}
+						}
+
+						if(!empty($inst_grdaes)){
+							foreach ($inst_grdaes as $key => $value) {
+								$grades[]=decode_data($value);
+							}
+						}
+
+						$basic_info_to_insert=array(
+							'college_name'=>$inst_name,
+							'college_email'=>$inst_email,
+							'college_phone_no'=>$inst_ph_no,
+							'college_alter_phone_no'=>$inst_alter_ph_no,
+							'college_web_address'=>$inst_webaddress,
+							'college_type'=>decode_data($inst_type),
+							'college_affiliation_type'=>(isset($affiliations) && !empty($affiliations))?char_separated($affiliations):null,
+							'college_facilities'=>(isset($facilities) && !empty($facilities))?char_separated($facilities):null,
+							'college_zipcode'=>$inst_zipcode,
+							'college_address'=>$inst_address,
+							'college_estd_year'=>$inst_estd,
+							'college_university_id'=>($inst_university!='0')?decode_data($inst_university):null,
+							'college_city_id'=>decode_data($inst_city),
+							'college_district_id'=>decode_data($inst_district),
+							'college_state_id'=>decode_data($inst_state),
+							'college_grade_ids'=>(isset($grades) && !empty($grades))?char_separated($grades):null,
+							'college_currency_id'=>'4',
+							'college_country_id'=>decode_data($inst_country)
+						);
+
+						//print_obj($basic_info_to_insert);die;
+
+						$updated=$this->im->update_college_data($basic_info_to_insert,array('college_id'=>$college_data->college_id,'college_user_id'=>$user_id));
+
+						if($updated){
+							$infos=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$user_id));
+							$info_data=array(
+								'info_type'=>'2',
+								'info_type_id'=>$user_id,
+								'info_value'=>$inst_short_desc,
+								'info_value_about'=>$inst_broad_desc,
+								'info_value_facilities_intro'=>$inst_facilities_info,
+								'info_creator_id'=>$user_id
+							);
+
+							if(!empty($infos)){
+								$this->im->update_inst_info_data($info_data,array('info_type'=>'2','info_type_id'=>$user_id));
+							}else{
+								$this->im->add_inst_info_data($info_data);
+							}
+							$response_success='Basic data updated';
+						}else{
+							$response_error='Error occurred.Please try again.';
+						}
+					}else if($user_data->user_role=='3'){
+						$inst_name=post_data('register_institute_name');
+						$inst_email=post_data('register_institute_email');
+						$inst_ph_no=post_data('register_institute_phone_no');
+						$inst_alter_ph_no=post_data('register_institute_alter_phone_no');
+						$inst_webaddress=post_data('register_institute_web_address');
+						$inst_estd=post_data('register_institute_estd');
+						$inst_type=post_data('register_institute_type');
+						$inst_grdaes=$this->input->post('register_institute_grades');
+						$inst_country=post_data('register_institute_country');
+						$inst_state=post_data('register_institute_state');
+						$inst_district=post_data('register_institute_district');
+						$inst_city=post_data('register_institute_city');
+						$inst_zipcode=post_data('register_institute_zip_code');
+						$inst_address=post_data('register_institute_address');
+						$inst_affiliations=$this->input->post('register_institute_affiliations');
+						$inst_short_desc=post_data('regiter_institute_short_description');
+						$inst_broad_desc=post_data('regiter_institute_broad_description');
+						$inst_facilities=$this->input->post('register_institute_facilities');
+						$inst_facilities_info=post_data('regiter_institute_facilities_info');
+
+						if(!empty($inst_district) && $inst_district!='0'){
+							$_inst_id=decode_data($inst_district);
+						}else{
+							$_inst_id=null;
+						}
+
+
+						$university_data=$this->im->get_university_data(array('university_user_id'=>$user_id));
+
+						if(!empty($inst_facilities)){
+							foreach ($inst_facilities as $key => $value) {
+								$facilities[]=decode_data($value);
+							}
+						}
+
+						if(!empty($inst_affiliations)){
+							foreach ($inst_affiliations as $key => $value) {
+								$affiliations[]=decode_data($value);
+							}
+						}
+
+						if(!empty($inst_grdaes)){
+							foreach ($inst_grdaes as $key => $value) {
+								$grades[]=decode_data($value);
+							}
+						}
+
+
+						$basic_info_to_insert=array(
+							'university_name'=>$inst_name,
+							'university_email'=>$inst_email,
+							'university_phone_no'=>$inst_ph_no,
+							'university_phone_no_alter'=>$inst_alter_ph_no,
+							'university_web_address'=>$inst_webaddress,
+							'university_type'=>decode_data($inst_type),
+							'university_affiliation_type'=>(isset($affiliations) && !empty($affiliations))?char_separated($affiliations):null,
+							'university_facilities'=>(isset($facilities) && !empty($facilities))?char_separated($facilities):null,
+							'university_zipcode'=>$inst_zipcode,
+							'university_address'=>$inst_address,
+							'university_estd_year'=>$inst_estd,
+							'university_city_id'=>decode_data($inst_city),
+							'university_district_id'=>$_inst_id,
+							'university_state_id'=>decode_data($inst_state),
+							'university_grade_ids'=>(isset($grades) && !empty($grades))?char_separated($grades):null,
+							'university_currency_id'=>'4',
+							'university_country_id'=>decode_data($inst_country)
+						);
+
+						//print_obj($basic_info_to_insert);die;
+
+						$updated=$this->im->update_universities_data($basic_info_to_insert,array('university_id'=>$college_data->college_id,'university_user_id'=>$user_id));
+
+						if($updated){
+							$infos=$this->im->get_inst_info_data(array('info_type'=>'1','info_type_id'=>$user_id));
+							$info_data=array(
+								'info_type'=>'1',
+								'info_type_id'=>$user_id,
+								'info_value'=>$inst_short_desc,
+								'info_value_about'=>$inst_broad_desc,
+								'info_value_facilities_intro'=>$inst_facilities_info,
+								'info_creator_id'=>$user_id
+							);
+
+							if(!empty($infos)){
+								$this->im->update_inst_info_data($info_data,array('info_type'=>'1','info_type_id'=>$user_id));
+							}else{
+								$this->im->add_inst_info_data($info_data);
+							}
+							$response_success='Basic data updated';
+						}else{
+							$response_error='Error occurred.Please try again.';
+						}
+					}else if($user_data->user_role=='8'){
+
+						$user_profile_data=$this->um->_get_user_data(array('user_id'=>$user_id,'user_role'=>'8'));
+
+						if(!empty($user_profile_data)){
+							$data_update_type=post_data('dutyp');
+
+							if($data_update_type=='basic_details'){
+								//echo 'hi';die;
+								$full_name=post_data('registration_full_name');
+								$email=post_data('registration_email');
+								$phone_no=post_data('registration_phone_no');
+								$alter_ph_no=post_data('registration_alternate_phone_no');
+								$gender=post_data('registration_gender');
+								$dob=post_data('registration_dob');
+								$yop=post_data('registration_yop');
+								$country=post_data('registration_country');
+								$state=post_data('registration_state');
+								$district=post_data('registration_district');
+								$city=post_data('registration_city');
+								$pincode=post_data('registration_zipcode');
+								$address=post_data('registration_address');
+								$brief_about=post_data('registration_about_yourself');
+
+								if($district!='0'){
+									$_district=decode_data($district);
+								}else{
+									$_district=null;
+								}
+
+
+								if($city!='0'){
+									$_city=decode_data($city);
+								}else{
+									$_city=null;
+								}
+
+								if($dob!=null){
+									$_dob=date('Y-m-d',strtotime($dob));
+								}else{
+									$_dob=NULL;
+								}
+
+								$userdata_to_update=array(
+									'user_fullname'=>$full_name,
+									'user_email'=>$email,
+									'user_phone_no'=>$phone_no,
+									'user_alter_contact'=>$alter_ph_no,
+									'user_dob'=>$_dob,
+									'user_year_of_passing'=>$yop,
+									'user_gender'=>$gender,
+									'user_country'=>decode_data($country),
+									'user_state'=>decode_data($state),
+									'user_city'=>$_city,
+									'user_district'=>$_district,
+									'user_pincode'=>$pincode,
+									'user_address'=>$address,
+									'user_brief'=>$brief_about
+								);
+
+								//print_obj($userdata_to_update);die;
+
+								$updated=$this->um->update_user_profile_data($userdata_to_update,array('user_m_id'=>$user_id));
+
+								if($updated){
+									$response_success.='Basic Details updated successfully';
+								}else{
+									$response_error.='An error occurred.Try after sometime';
+								}
+
+							}else if($data_update_type=='high_school_details'){
+
+								$registration_10_pass_year=post_data('registration_10_pass_year');
+								$registration_10th_grade=post_data('registration_10th_grade');
+								$registration_10_pass_marks=post_data('registration_10_pass_marks');
+								$registration_12_pass_year=post_data('registration_12_pass_year');
+								$registration_12th_grade=post_data('registration_12th_grade');
+								$registration_12_pass_marks=post_data('registration_12_pass_marks');
+								$registration_grad_pass_year=post_data('registration_grad_pass_year');
+								$registration_grad_grade=post_data('registration_grad_grade');
+								$registration_grad_pass_marks=post_data('registration_grad_pass_marks');
+								$registration_about_edu=post_data('registration_about_edu');
+
+								$edu_details=$this->sm->get_edu_details(array('edu_user_id'=>$user_id,'edu_user_profile_id'=>$user_profile_data->user_profile_id));
+
+								$edu_data=array(
+									'edu_user_id'=>$user_id,
+									'edu_user_profile_id'=>$user_profile_data->user_profile_id,
+									'edu_10th_pass_year'=>$registration_10_pass_year,
+									'edu_12th_pass_year'=>$registration_12_pass_year,
+									'edu_grad_pass_year'=>$registration_grad_pass_year,
+									'edu_10th_grade_system'=>$registration_10th_grade,
+									'edu_12th_grade_system'=>$registration_12th_grade,
+									'edu_grad_grade_system'=>$registration_grad_grade,
+									'edu_10th_pass_marks'=>$registration_10_pass_marks,
+									'edu_12th_pass_marks'=>$registration_12_pass_marks,
+									'edu_grad_pass_marks'=>$registration_grad_pass_marks
+								);
+
+								//print_obj($edu_data);die;
+
+								//echo $user_id;
+
+								if(!empty($registration_about_edu)){
+									$this->um->update_user_profile_data(array('user_edu_brief'=>$registration_about_edu),array('user_m_id'=>$user_id));
+								}
+
+								if(empty($edu_details)){
+									$added=$this->sm->store_edu_details($edu_data);
+									if($added){
+										$response_success.='High school data added';
+									}else{
+										$response_error.='There was an error occurred.Try after sometime.';
+									}
+								}else{
+									$added=$this->sm->update_edu_details($edu_data,array('edu_user_id'=>$user_id,'edu_user_profile_id'=>$user_profile_data->user_profile_id));
+									if($added){
+										$response_success.='High school data updated';
+									}else{
+										$response_error.='There was an error occurred.Try after sometime.';
+									}
+								}
+								
+							}else if($data_update_type=='higher_edu_details'){
+								$higher_edu=$this->input->post('higher_edu');
+								$course_details=array();
+
+								//print_obj($higher_edu);die;
+
+								if(!empty($higher_edu)){
+									foreach ($higher_edu as $key => $value) {
+										$course=decode_data($value['course']);
+										$year=$value['year'];
+										$mode=$value['mode'];
+
+										if($course>0 && $year!='' && $mode>0){
+											$course_details[]=array(
+												'edu_user_id'=>$user_id,
+												'edu_course_id'=>$course,
+												'edu_mode'=>$mode,
+												'edu_year'=>$year,
+												'created_by'=>$user_id
+											);
+										}	
+									}
+
+									//print_obj($course_details);die;
+
+									if(!empty($course_details)){
+
+										$edu_details=$this->sm->get_higher_edu_interests_details(array('edu_user_id'=>$user_id));
+
+										if(!empty($edu_details)){
+											$this->sm->delete_higher_edu_interests_details(array('edu_user_id'=>$user_id));
+										}
+
+
+										$added=$this->sm->store_higher_edu_interests_details($course_details,TRUE);
+
+										if($added){
+											$response_success.='Details updated successfully.';
+										}else{
+											$response_error.='There was an error occurred.Try after sometime.';
+										}
+									}else{
+										$response_error.='Nothing to update';
+									}
+								}else{
+									$response_error.='Nothing to update';
+								}
+
+								//print_obj($return);die;
+								
+							}else if($data_update_type=='prof_exp_details'){
+
+								$prof_exp=$this->input->post('prof_exp');
+
+								if(!empty($prof_exp)){
+
+									$prof_details_found=$this->sm->get_professional_exp_details(array('exp_user_id'=>$user_id));
+
+									foreach ($prof_exp as $key => $value) {
+										$company=$value['company'];
+										$other_company=$value['other_company'];
+										$exp_year=$value['exp_year'];
+										$exp_specializations=$value['specialization'];
+
+										$company_id=decode_data($company);
+
+										$data_to_add[]=array(
+											'exp_user_id'=>$user_id,
+											'exp_company'=>$company_id,
+											'exp_year'=>$exp_year,
+											'exp_specializations'=>$exp_specializations
+										);
+									}
+
+									if(!empty($data_to_add)){
+
+										if(!empty($prof_details_found)){
+											$this->sm->delete_professional_exp_details(array('exp_user_id'=>$user_id));
+										}
+
+										$added=$this->sm->store_professional_exp_details($data_to_add,TRUE);
+
+										if($added){
+											$response_success.='Professional Experience Updated.';
+										}else{
+											$response_error.='Professional Experience not Updated.';
+										}
+									}else{
+										$response_error.='Professional Experience not updated.';
+									}
+
+								}else{
+									$response_error.='No data provided to update';
+								}
+								
+							}else if($data_update_type=='profile_image'){
+								
+								if(isset($_FILES['profile_pic']) && $_FILES['profile_pic']['name']!=''){
+									$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_image','user_file_type_id'=>$user_id));
+
+									if(!empty($file_logo_found)){
+										if(is_file($file_logo_found->media_disk_path)){
+											@unlink($file_logo_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+										}
+									}
+
+									$user_image_data=array(
+										'file_size'=>'5',
+										'file_name'=>'profile_pic',
+										'file_types'=>'png,jpg,jpeg',
+										'file_folder'=>'users',
+										'file_child_folder'=>date('Y'),
+										'file_uploaded_by'=>$user_id,
+										'file_compress'=>true,
+										'file_compress_protocol'=>'webp'
+									);
+
+									//print_obj($user_image_data);
+
+									$file_id=$this->onUploadFiles($user_image_data);
+
+									//print_obj($file_id);die;
+
+									if(!empty($file_id) && is_numeric($file_id) && $file_id>0){
+
+										$this->sm->delete_user_file(array('user_file_type_id'=>$user_id,'user_storage_type'=>'user_image'));
+
+							            $user_image_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$user_id,
+							            	'user_file_type'=>$user_data->user_role,
+							            	'user_storage_type'=>'user_image'
+							            );
+
+							            $this->sm->store_user_file($user_image_storage_data);
+
+							            $response_success.='Profile image updated successfully';
+							        }else{
+							        	$response_error.='Profile Image not updated.'.$file_id;
+							        }
+
+								}else{
+									$response_error.='Image not found.';
+								}
+							}
+						}else{
+							$response_error.='Data not found in the system.';
+						}
+					}
+				}
+				else{
+					$response_error.='Data error';
+				}				
+
+
+				if($response_success!=''){
+					$return['success']=$response_success;
+				}else{
+					$return['error']=$response_error;
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}			
+	}
+
+
+
+	public function onShortlistInstitutes(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+
+				$inst=post_data('inst');
+				$user_id=decode_data(session_userdata('user_id'));
+				$insttype=post_data('inst_type');
+
+				$inst_id=decode_data($inst);
+				$inst_type=decode_data($insttype);
+
+
+				$data_fond=$this->im->get_inst_shortlist_data(array('shortlist_inst_type'=>$inst_type,'shortlist_inst_type_id'=>$inst_id,'shortlist_user_id'=>$user_id));
+
+				if(empty($data_found)){
+					$inserted=$this->im->add_inst_shortlist_data(array('shortlist_inst_type'=>$inst_type,'shortlist_inst_type_id'=>$inst_id,'shortlist_user_id'=>$user_id));
+				}else{
+					$inserted=$this->im->update_inst_shortlist_data(array('shortlist_inst_type'=>$inst_type,'shortlist_inst_type_id'=>$inst_id,'shortlist_user_id'=>$user_id),array('shortlist_id'=>$data_found->shortlist_id));
+				}
+
+				if($inserted){
+					$return['success']='You have shortlisted successfully';
+				}else{
+					$return['error']='There is an error occurred';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+
+	//Get Applied Colleges
+	public function onGetAppliedColleges(){
+		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+			if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+
+				$user_id=decode_data(session_userdata('user_id'));
+
+				$colleges=array();
+
+				$get_applicat_colleges=$this->um->_get_applicant(array('applicant_id'=>$user_id),FALSE);
+
+				if(!empty($get_applicat_colleges)){
+					foreach ($get_applicat_colleges as $key => $value) {
+						$state=$this->cm->get_state_specific('state_id,state_name',array('state_id'=>$value->college_state_id));
+						$city=$this->cm->__get_city('city_id,city_name',array('city_id'=>$value->college_city_id));
+						$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$value->college_user_id,'user_storage_type'=>'user_logo','user_file_type'=>'4'));
+						if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+		                    $college_logo=$_college_logo->media_disk_path_relative;
+		                    $college_logo_name=$_college_logo->media_org_name;
+		                }else{
+		                    $college_logo=base_url().'uploads/app/default/no.jpg';
+		                    $college_logo_name='';
+		                }
+
+						$colleges[]=array(
+							'college_name'=>$value->college_name,
+							'college_logo'=>$college_logo,
+							'college_url'=>$value->access_url,
+							'college_country_state_city'=>$city->city_name.','.$state->state_name,
+							'application_date'=>date('j M, Y',strtotime($value->application_date))
+						);
+					}
+				}
+
+				$this->data['colleges']=$colleges;
+
+				$return['html']=$this->theme->view('_pages/account/student/vw_profile_student_applied_colleges',$this->data,true);
+
+				header('Content-Type: application/json; charset=utf-8');
+				echo json_encode($return);
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+}
+

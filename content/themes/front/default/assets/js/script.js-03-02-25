@@ -1,0 +1,741 @@
+!(function($) {
+  "use strict";
+
+  $("#register_university").chosen({no_results_text: "Select University"});
+  $("#register_type").chosen({no_results_text: "Select Type"});
+//$("#register_country").chosen({no_results_text: "Select Country"});
+  setTimeout(function(){
+
+    var html='<option value="0">Select Country</option>';  
+
+    $('body').on('click','#closeadsYouModal',function(){
+      if(typeof(Storage) !== "undefined"){
+        sessionStorage.popupclosed=1;
+        $('#logModal').find('#sign_up_btns').attr('data-login_from','scholarship');
+        $('#logModal').modal('show');
+
+        //alert(sessionStorage.popupclosed)
+      }
+    });
+
+
+    if(typeof(Storage) !== "undefined"){
+      if(sessionStorage.popupclosed){
+        sessionStorage.popupclosed=1;
+      }else{
+        sessionStorage.popupclosed=2;
+      }
+    }
+
+      
+
+    if(sessionStorage.popupclosed==2){
+      var adsimg='';
+    }
+ 
+      
+  },1000);
+
+    $('body').on('change','#register_country',function(){
+      var ccode=$('#register_country :selected').val();
+      const myArr = ccode.split("#");
+      var country=myArr[0];
+      $('#label_ph').html('Phone No ('+myArr[1]+')');
+      
+      console.log(myArr[1]);
+      loadstates(country);
+      loaduniversities(country);
+
+      if(ccode!=''){
+        $('#register_country-error').html('').css('display','none');
+      }
+    });
+
+    $('body').on('change','#register_state',function(){
+
+      var ccode=$('#register_country :selected').val();
+      const myArr = ccode.split("#");
+      var country=myArr[0];
+      var state=$('#register_state :selected').val();
+      console.log(state);
+      loadcities(country,state);
+      $("#register_city").trigger("chosen:updated");
+      if(state!=''){
+        $('#register_state-error').html('').css('display','none');
+      }
+    });
+
+      $('body').on('change','#register_city',function(){
+        var ses=$('#register_city :selected').val();
+
+        if(ses!=''){
+          $('#register_city-error').html('').css('display','none');
+        }
+      });
+
+
+    function loadstates(c){
+      var shtml='<option value="">Select State/Province</option>';
+    }
+
+    function loadcities(c,s){
+      var chtml='<option value="0">Select City</option>';
+    }
+
+
+    function loaduniversities(c){
+     
+      var chtml='<option value="0">Select University</option>';
+    }
+
+  
+  
+  //$('[data-toggle="tooltip"]').tooltip();
+  
+  // Toggle .headerFixed class to #header when page is scrolled
+  $(window).scroll(function() {
+    if ($(this).scrollTop() > 100) {
+      $('body').addClass('headerFixed');
+    } else {
+      $('body').removeClass('headerFixed');
+    }
+  });
+
+  // if ($(window).scrollTop() > 100) {
+  //   $('body').addClass('headerFixed');
+  // }
+
+if($('.readall').length>0){
+  $('.readall').readall({
+    showheight: 250,
+    //showrows: 3,
+    animationspeed: 300,
+    btnTextShowmore: 'Read more',
+    btnTextShowless: 'Read less',
+    btnClassShowmore: 'show-more-btn btn btn-light btn-block',
+    btnClassShowless: 'show-less-btn btn btn-light btn-block'
+  });
+}
+  
+
+
+  // Intro carousel
+  var heroCarousel = $("#heroCarousel");
+  var heroCarouselIndicators = $("#hero-carousel-indicators");
+  heroCarousel.find(".carousel-inner").children(".carousel-item").each(function(index) {
+    (index === 0) ?
+    heroCarouselIndicators.append("<li data-target='#heroCarousel' data-slide-to='" + index + "' class='active'></li>"):
+      heroCarouselIndicators.append("<li data-target='#heroCarousel' data-slide-to='" + index + "'></li>");
+  });
+  heroCarousel.on('slid.bs.carousel', function(e) {
+    $(this).find('h2').addClass('animate__animated animate__fadeInDown');
+    $(this).find('p, .btn-get-started').addClass('animate__animated animate__fadeInUp');
+  });
+
+
+if($('#featyredSlider').length>0){
+  var featyredSlider = new Swiper('#featyredSlider', {
+    spaceBetween: 1,
+    loop: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 2,
+      },
+      640: {
+        slidesPerView: 3,
+      },
+      768: {
+        slidesPerView: 3,
+      },
+      1024: {
+        slidesPerView: 5,
+      },
+      1200: {
+        slidesPerView: 6,
+      },
+    }
+  });
+}
+
+  
+if($('#collegeExmSlider').length>0){
+  var collegeExmSlider = new Swiper('#collegeExmSlider', {
+    spaceBetween: 22,
+    loop: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      '@0.75': {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      '@1.00': {
+        slidesPerView: 3,
+        spaceBetween: 40,
+      },
+      '@1.50': {
+        slidesPerView: 6,
+        spaceBetween: 50,
+      },
+    }
+  });
+}
+  
+
+if($('#quickLookThumb').length>0){
+  var quickLookThumb = new Swiper('#quickLookThumb', {
+    slidesPerView: 'auto',
+    spaceBetween: 10,
+    freeMode: false,
+    loop: true,
+    watchSlidesVisibility: true,
+    watchSlidesProgress: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+}
+  
+if($('#quickLookGal').length>0){
+  var quickLookGal = new Swiper('#quickLookGal', {
+    slidesPerView: 1,
+    spaceBetween: 10,
+    thumbs: {
+      swiper: quickLookThumb
+    }
+  });
+}
+  
+if($('.navTabSlider').length>0){
+  var quickLookThumb = new Swiper('.navTabSlider', {
+      slidesPerView: 'auto',
+      spaceBetween: 0,
+      freeMode: true,
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+} 
+  
+ if($('#howDoWorkSlider').length>0){
+  var howDoWorkSlider = new Swiper('#howDoWorkSlider', {
+      spaceBetween: 0,
+      loop: false,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        500: {
+          slidesPerView: 1,
+        },
+        640: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        }
+      }
+    });
+ } 
+  
+    
+if($('#teamSlider').length>0){
+  var teamSlider = new Swiper('#teamSlider', {
+    spaceBetween:30,
+    loop: false,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 1,
+      },
+      640: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+      1200: {
+        slidesPerView: 4,
+      }
+    }
+  });
+}
+  
+
+if($('#upcommingExamsSlider').length>0){
+  var teamSlider = new Swiper('#upcommingExamsSlider', {
+    spaceBetween:30,
+    loop: false,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 1,
+      },
+      640: {
+        slidesPerView: 2,
+      },
+      1200: {
+        slidesPerView: 3,
+      }
+    }
+  });
+}
+
+
+
+ // ISA SLIDER JS
+ var slideDuration = 5000,
+      progressPath = $('.isppBtn .progressPath'), 
+      len = 2 * Math.PI * progressPath.attr('r');
+
+
+if($('.isaSlider').length>0){
+  var isaSlider = new Swiper(".isaSlider", {
+      watchOverflow: true,
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+      preventInteractionOnTransition: true,
+      grabCursor: true,
+      loop: true,
+      autoplay: { delay: slideDuration},
+      navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+      },
+      effect: 'slide',
+      pagination: {
+          el: '.swiper-pagination',
+          type: 'progressbar',
+      },
+      on: {
+          beforeInit: function () {
+              progressPath.stop().animate({'stroke-dashoffset': 0}, slideDuration);
+              
+          },
+          activeIndexChange : function () {
+              progressPath.css({ "stroke-dashoffset": len });
+              progressPath.stop().animate({'stroke-dashoffset': 0}, slideDuration);
+          }
+      }
+
+  });
+}
+  
+  $('.isppBtn').click(function(){
+      if ($(this).hasClass("playing")) {
+          $(this).removeClass('playing');
+          isaSlider.autoplay.stop();
+          progressPath.animate().stop();
+          progressPath.css({ "stroke-dashoffset": len });
+      }else{
+          $(this).addClass('playing');
+          isaSlider.autoplay.start();
+          progressPath.stop().animate({'stroke-dashoffset': 0}, slideDuration);
+      }
+  });
+  // $('.swiper-button-next,.swiper-button-prev').on("click", function(){
+  //     isaSlider.autoplay.start();
+  // }); 
+
+
+
+  // Hide the extra content initially, using JS so that if JS is disabled, no problemo:
+    $('.read-more-content').addClass('hide')
+    $('.read-more-show, .read-more-hide').removeClass('hide')
+
+    // Set up the toggle effect:
+    $('.read-more-show').on('click', function(e) {
+      $(this).next('.read-more-content').removeClass('hide');
+      $(this).addClass('hide');
+      e.preventDefault();
+    });
+
+    // Changes contributed by @diego-rzg
+    $('.read-more-hide').on('click', function(e) {
+      var p = $(this).parent('.read-more-content');
+      p.addClass('hide');
+      p.prev('.read-more-show').removeClass('hide'); // Hide only the preceding "Read More"
+      e.preventDefault();
+    });
+
+
+})(jQuery);
+
+
+
+jQuery(document).ready(function($){
+
+  jQuery(window).on('load', function() {
+      jQuery("#preloader .loaderIcon").fadeOut();
+      jQuery("#preloader").delay(350).fadeOut("slow");
+  });
+    
+  // $('.select2').select2({
+  //     theme: 'bootstrap4',
+  // });
+
+  var ww = $(window).width();
+
+  if (ww <= 1140 && ww > 960) {
+    $('body').addClass('screen_lg');
+    $('body').removeClass('screen_md screen_sm screen_xs screen_xl');
+  }else if(ww <= 960 && ww > 720) {
+    $('body').addClass('screen_md');
+    $('body').removeClass('screen_lg screen_sm screen_xs screen_xl');
+  }else if(ww <= 720 && ww > 540) {
+    $('body').addClass('screen_sm');
+    $('body').removeClass('screen_lg screen_md screen_xs screen_xl');
+  }else if(ww < 540) {
+    $('body').addClass('screen_xs');
+    $('body').removeClass('screen_lg screen_md screen_sm screen_xl');
+  }else {
+    $('body').addClass('screen_xl');
+    $('body').removeClass('screen_lg screen_md screen_sm screen_xs');
+  }
+
+if($('.servicesSection').length>0 && $('.screen_xs').length>0 && $('.row').length>0){
+  $('.screen_xs .servicesSection .row').slick({
+      infinite: true,
+      speed: 300,
+      slidesToShow: 2,
+      slidesToScroll: 2,
+      responsive: [
+        {
+          breakpoint: 360,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]  
+    });
+}
+   
+
+  // $('.numberingListCard').scrollToFixed( {
+  //     marginTop: $('.header').outerHeight(true) + 10,
+  //     limit: $("#footer").offset().top - $('.numberingListCard').outerHeight(true) - 330,
+  //     zIndex: 99
+  // });
+  
+ //$(".nicescroll,.select2-results__options").niceScroll();
+
+  $('#examSearch').on('click', function(){
+    $("body").addClass('examSearchActive');
+  });
+  $('#examSearchClose').on('click', function(){
+    $("body").removeClass('examSearchActive');
+    $('input#search_exams').val('');
+    $('ul#ul_exam_list').html('');
+  });
+
+  //open/close lateral filter
+  $('.isa-filter-trigger').on('click', function(){
+      triggerFilter(true);
+  });
+  $('.isa-filter .isa-close').on('click', function(){
+      triggerFilter(false);
+  });
+
+  function triggerFilter($bool) {
+      var elementsToTrigger = $([$('.isa-filter-trigger'), $('.isa-filter'), $('.isa-tab-filter'), $('.isa-filter-result')]);
+      elementsToTrigger.each(function(){
+          $(this).toggleClass('filter-is-visible', $bool);
+          $("body").toggleClass('filter-is-visible', $bool);
+      });
+  }
+
+  //mobile version - detect click event on filters tab
+  var filter_tab_placeholder = $('.isa-tab-filter .placeholder a'),
+      filter_tab_placeholder_default_value = 'Select',
+      filter_tab_placeholder_text = filter_tab_placeholder.text();
+  
+    $('.isa-tab-filter li').on('click', function(event){
+      //detect which tab filter item was selected
+      var selected_filter = $(event.target).data('type');
+          
+      //check if user has clicked the placeholder item
+      if( $(event.target).is(filter_tab_placeholder) ) {
+          (filter_tab_placeholder_default_value == filter_tab_placeholder.text()) ? filter_tab_placeholder.text(filter_tab_placeholder_text) : filter_tab_placeholder.text(filter_tab_placeholder_default_value) ;
+          $('.isa-tab-filter').toggleClass('is-open');
+
+      //check if user has clicked a filter already selected 
+      } else if( filter_tab_placeholder.data('type') == selected_filter ) {
+          filter_tab_placeholder.text($(event.target).text());
+          $('.isa-tab-filter').removeClass('is-open');  
+
+      } else {
+          //close the dropdown and change placeholder text/data-type value
+          $('.isa-tab-filter').removeClass('is-open');
+          filter_tab_placeholder.text($(event.target).text()).data('type', selected_filter);
+          filter_tab_placeholder_text = $(event.target).text();
+          
+          //add class selected to the selected filter item
+          $('.isa-tab-filter .selected').removeClass('selected');
+          $(event.target).addClass('selected');
+      }
+    });
+  
+  //close filter dropdown inside lateral .isa-filter 
+
+    $('.isa-filter-block h4').on('click', function(){
+      $(this).toggleClass('closed').siblings('.isa-filter-content').slideToggle(300);
+      $(this).parent('.isa-filter-block').siblings().find('.isa-filter-content').slideUp(300);
+      $(this).parent('.isa-filter-block').siblings().find('h4').addClass('closed');
+    })
+
+
+  var window_width = jQuery(window).width();
+  if(window_width >1170){
+    $('.isa-filter-trigger,.isa-filter-result,.isa-filter, body').addClass('filter-is-visible');
+  }else{
+    $('.isa-filter-trigger,.isa-filter-result,.isa-filter, body').removeClass('filter-is-visible'); 
+  }
+
+  var clickEvent = false;
+  if(wbpage!='college_search_page'){
+    $('#newsCarousel').carousel({
+      interval:   4000  
+    }).on('click', '.list-group li', function() {
+        clickEvent = true;
+        $('.list-group li').removeClass('active');
+        $(this).addClass('active');   
+    }).on('slid.bs.carousel', function(e) {
+      if(!clickEvent) {
+        var count = $('.list-group').children().length -1;
+        var current = $('.list-group li.active');
+        current.removeClass('active').next().addClass('active');
+        var id = parseInt(current.data('slide-to'));
+        if(count == id) {
+          $('.list-group li').first().addClass('active'); 
+        }
+      }
+      clickEvent = false;
+    });
+  }
+    
+  
+  $(".subscriber_course").chosen({no_results_text: "Select Course .....",include_group_label_in_selected:true});
+
+  $.getJSON(base_url+'get_courses',function(data){
+    json_data=data.searched_data;
+    var course_html='';
+    $.each(json_data,function(k,v){
+      course_html+='<optgroup label="'+k+'">';
+      $.each(v,function(_k,_v){
+        course_html+='<option value="'+_v.course_id+'">'+_v.course_name+' [ '+_v.course_short_name+' ]</option>';
+      });
+        
+        course_html+='</optgroup>';
+       });
+
+       $('.subscriber_course').html(course_html);
+       $(".subscriber_course").trigger("chosen:updated");
+  });
+
+  $('#reg3ApplyModal').on('shown.bs.modal',function(){
+    $.ajax({
+      type:'POST',
+      url:base_url+'get_college_courses',
+      data:{[csrf_name]:csrf_hash,_c_c:$('#reg3ApplyModal').find('#applicant_institute').val()},
+      beforeSend:function(){
+        $('#reg3ApplyModal').find('#applicant_course').html('<option value="0">Please wait fetching college courses</option>');
+        $('#reg3ApplyModal').find("#applicant_course").trigger("chosen:updated");
+        $('#reg3ApplyModal').find('#btn_submit_application').prop('disabled',true);
+      },
+      success:function(d){
+        var course_html='';
+        if(d!=''){
+          $.each(d.course_data,function(k,v){
+            course_html+='<option value="'+v.course_id+'">'+v.course_formatted_name+'</option>';            
+          });
+        }
+
+        $('#reg3ApplyModal').find('#applicant_course').html(course_html);
+        $('#reg3ApplyModal').find("#applicant_course").trigger("chosen:updated");
+        $('#reg3ApplyModal').find('#btn_submit_application').prop('disabled',false);
+      }
+    });
+  });
+
+  $('#reg3ApplyModal').on('hidden.bs.modal',function(){
+    $('#reg3ApplyModal').find('#applicant_course').html('<option value="0">Course interested in</option>');
+    $('#reg3ApplyModal').find("#applicant_course").trigger("chosen:updated");
+    $('#reg3ApplyModal').find('#msg_ver').html('');
+  });
+
+  $.validator.addMethod("valueNotEquals", function(value, element, arg){
+    return arg !== value;
+  }, "Value must not equal arg.");
+
+  $('#form_subscription').validate({
+    rules:{
+      subscriber_email:{
+        required:true,
+        email:true
+      },
+      subscriber_phone:{
+        required:true,
+        digits:true
+      },
+      subscriber_course:{
+        required:true,
+        valueNotEquals:'0'
+      }
+    },
+    messages:{
+      subscriber_email:{
+        required:'Enter email address',
+        email:'Email is not valid'
+      },
+      subscriber_phone:{
+        required:'Enter phone no'
+      },
+      subscriber_course:{
+        required:'Please select in course you are interested in',
+        valueNotEquals:'Please select course'
+      }
+    },
+    errorPlacement: function (error, element) {
+        error.insertAfter($(element).parents('div').prev($('.input-group'))); 
+    },
+    submitHandler:function(){
+      
+      var _msg='';
+
+      $.ajax({
+        type:'POST',
+        url:base_url+'subscribe',
+        data: {subscriber_email:$('#subscriber_email').val(),subscriber_phone:$('#subscriber_phone').val(),country_id:_co,subscriber_course:$('#subscriber_course :selected').val(),csrf_test_name:csrf_hash,page:page},
+        cache:false,
+        beforeSend:function(){
+          $('#subscriber_email').prop('disabled',true);
+          $('#subscriber_phone').prop('disabled',true);
+          $('#btn_subscribe_newsletter').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+        },
+        success:function(d,status,xhr){
+          if(d.success){
+
+            _msg+='<h6 class="text-center mb-3">'+d.success+'</h6>';
+
+            if(d.colleges!=''){
+
+              _msg+='<h6 class="text-center mb-3">Colleges offering same course you might be interested</h6>';
+
+              _msg+='<hr>';
+              _msg+='<div class="row form-row">';
+
+              $.each(d.colleges,function(k,v){
+                _msg+='<div class="col-lg-4">';
+                        _msg+='<div class="card shadow-sm">';
+                          _msg+='<div class="position-relative">';
+                            _msg+='<img src="'+v['college_banner']+'" class="card-img" alt="'+v['college_name']+'" style="height: 150px !important;">';
+                            _msg+='<div class="card-img-overlay d-flex  p-2">';
+                              _msg+='<div class="align-self-end">';
+                                _msg+='<a href="'+v['access_url']+'"> <img src="'+v['college_logo']+'" class="w-40" alt="" style="height:30px !important;"></a>';
+                                _msg+='<h6 class="m-0 f12"><a href="'+v['access_url']+'" class="text-white">'+v['college_name']+'</a></h6>';
+                                _msg+='<p class="m-0 f10 text-white"><i class="fa fa-map-marker"></i> '+v['college_city']+','+v['college_state']+' </p>';
+                              _msg+='</div>';
+                            _msg+='</div>';
+                          _msg+='</div>';
+                          _msg+='<div class="card-body p-2">';
+                            _msg+='<div class="d-flex justify-content-between align-items-center">';
+                              _msg+='<div class="">';
+                                _msg+='<h6 class="m-0 f12">'+v['college_course_full_name']+' </h6>';
+                                _msg+='<p class="m-0 f10"><span class="color2">[ '+v['college_course_short_name']+' ]</span></p>';
+                              _msg+='</div>';
+                              _msg+='<div class="">';
+                                _msg+='<a href="'+v['access_url']+'" class="btn btn-primary btn-sm">Explore</a>';
+                              _msg+='</div>';
+                            _msg+='</div>';
+                          _msg+='</div>';
+                        _msg+='</div>';
+                      _msg+='</div>';
+              });
+
+              
+              _msg+='</div>'
+            }
+              
+
+            $('#subscriptionthankYouModal .modal-body').html(_msg);
+
+            
+          }else{
+            $('#subscriptionthankYouModal .modal-body').html('<h6 class="text-center mb-3">'+d.error+'</h6>');
+          }
+
+          $('#subscriptionthankYouModal').modal('show');
+        },
+        complete:function(xhr,status){
+          $('#subscriber_email').prop('disabled',false).val('');
+          $('#subscriber_phone').prop('disabled',false).val('');
+          $('#btn_subscribe_newsletter').html('Submit').prop('disabled',false);
+        }
+      });
+    }
+  });
+
+  $('.navbar-xbootstrap').click(function(){
+    $('.nav-xbootstrap').toggleClass('visible');
+    $('body').toggleClass('cover-bg');
+  });
+
+
+  if($('#reviews_div').length>0){
+    setTimeout(function(){
+
+      load_reviews();
+
+
+    },5000);
+  }
+
+
+  function load_reviews(){
+
+    $.ajax({
+      type:'GET',
+      url:base_url+'load_reviews?_p='+_cid,
+      data:{},
+      beforeSend:function(){
+
+      },
+      success:function(d){
+        $('#reviews_div').html(d.html);
+      }
+    });
+
+  }
+
+
+});
+
+// $(window).load(function() {
+//   var boxheight = $('#newsCarousel .carousel-inner').innerHeight();
+//   var itemlength = $('#newsCarousel .carousel-item').length;
+//   var triggerheight = Math.round(boxheight/itemlength+1);
+//   $('#newsCarousel .list-group-item').outerHeight(triggerheight);
+// });
+
+
+
+
+

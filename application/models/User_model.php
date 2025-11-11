@@ -1,0 +1,1814 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+
+/**
+ * 
+ */
+class User_model extends BaseModel
+{
+	
+
+	public function get_user_data($param=null,$or_param=null,$search_in=null,$return_query=FALSE){
+
+		if($search_in==null){
+			$this->db->select(
+				'system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_phone_no_verified,
+				system_users.user_permissions,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users_profile.user_code,
+				system_users_profile.user_fullname,
+				system_users_profile.user_email,
+				system_users_profile.user_phone_no,
+				system_users_profile.user_gender,
+				system_users_profile.user_address,
+				system_users_profile.user_public_profile_url,
+				system_users_profile.user_upi_id,
+				system_users_profile.created_at as user_created_at'
+			);
+			$this->db->join('system_users_profile','system_users_profile.user_profile_id=system_users.user_profile_pk_id','LEFT');
+		}else if($search_in=='3'){
+			//echo 'hi2';die;
+			$this->db->select('
+				system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_phone_no_verified,
+				system_users.user_permissions,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users.user_currency as user_currency,
+				system_currency.currency_symbol_left as currency_symbol_left,
+				system_currency.currency_symbol_right as currency_symbol_right,
+				system_users_universities.university_name as user_fullname,
+				system_users_universities.university_email as user_email,
+				system_users_universities.university_phone_no as user_phone_no,
+				system_users_universities.university_country_id as user_country,
+				system_users_universities.university_state_id as user_state,
+				system_users_universities.university_city_id as user_city,
+				system_users_universities.university_zipcode as user_pincode,
+				system_users_universities.university_address as user_address,
+				system_users_universities.university_estd_year as user_estd_year, 
+				system_users_universities.university_type as user_type,
+				system_users_universities.is_verified_by_admin,
+				system_users_universities.university_affiliation_type as user_affiliation_type, 
+				system_users_universities.university_meta_title as user_meta_title,
+				system_users_universities.university_meta_keywords as user_meta_keywords,
+				system_users_universities.university_meta_description as user_meta_description');
+			$this->db->join('system_users_universities','system_users_universities.university_user_id=system_users.user_id','LEFT');
+			$this->db->join('system_currency','system_users.user_currency=system_currency.currency_id','LEFT');
+		}else if($search_in=='4'){
+
+			//echo 'hi';die;
+			$this->db->select('
+				system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_phone_no_verified,
+				system_users.user_permissions,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users.user_currency as user_currency,
+				system_currency.currency_symbol_left as currency_symbol_left,
+				system_currency.currency_symbol_right as currency_symbol_right,
+				system_users_colleges.college_id,
+				system_users_colleges.college_utype,
+				system_users_colleges.college_name as user_fullname,
+				system_users_colleges.college_short_name as college_short_name,
+				system_users_colleges.college_email as user_email,
+				system_users_colleges.college_phone_no as college_phone_no,
+				system_users_colleges.college_alter_phone_no as college_alter_phone_no,
+				system_users_colleges.college_whatsapp_no as college_whatsapp_no,
+				system_users_colleges.college_web_address as college_web_address,
+				system_users_colleges.college_address as user_address,
+				system_users_colleges.college_zipcode as user_zipcode,
+				system_users_colleges.college_country_id as user_country,
+				system_users_colleges.college_state_id as user_state,
+				system_users_colleges.college_city_id as user_city,
+				system_users_colleges.college_district_id as user_district,
+				system_users_colleges.college_is_top,
+				system_users_colleges.college_is_top_visible_home,
+				system_users_colleges.college_is_top_ranked,
+				system_users_colleges.college_has_verified_badge,
+				system_users_colleges.college_university_id,
+				system_users_colleges.college_estd_year as user_estd_year,
+				system_users_colleges.college_type as user_type,
+				system_users_colleges.college_affiliation_type as user_affiliation_type,
+				system_users_colleges.college_contact_person,
+				system_users_colleges.college_contact_person_email,
+				system_users_colleges.college_contact_person_phone,
+				system_users_colleges.college_grade_ids,
+				system_users_colleges.college_facilities as college_facilities,
+				system_users_colleges.college_has_leads_access,
+				system_users_colleges.college_leads_type,
+				system_users_colleges.college_leads_type_course,
+				system_users_colleges.college_perday_leads,
+				system_users_colleges.college_max_leads,
+				system_users_colleges.college_leads_start,
+				system_users_colleges.college_leads_end,
+				system_users_colleges.ignore_leads_start_date,
+				system_users_colleges.college_leads_district,
+				system_users_colleges.college_leads_gender,
+				system_users_colleges.access_url as access_url,
+				system_users_colleges.access_url_slug as access_url_slug,
+				system_users_colleges.college_status as user_status,
+				system_users_colleges.college_menhostel_details_type,
+				system_users_colleges.college_womenhostel_details_type,
+				system_users_colleges.colllege_banner_alt_text,
+				system_users_colleges.colllege_logo_alt_text,
+				system_users_colleges.is_verified_by_admin');
+			$this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_users.user_id','LEFT');
+			$this->db->join('system_currency','system_users.user_currency=system_currency.currency_id','LEFT');
+		}else if($search_in=='8'){
+			$this->db->select(
+				'system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_phone_no_verified,
+				system_users.user_permissions,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users.user_sent_from,
+				system_users_profile.user_profile_id,
+				system_users_profile.user_code,
+				system_users_profile.user_fullname,
+				system_users_profile.user_email,
+				system_users_profile.user_alter_email,
+				system_users_profile.user_phone_no,
+				system_users_profile.user_alter_contact,
+				system_users_profile.user_gender,
+				system_users_profile.user_address,
+				system_users_profile.user_country as user_country,
+				system_users_profile.user_state as user_state,
+				system_users_profile.user_city as user_city,
+				system_users_profile.user_district as user_district,
+				system_users_profile.user_pincode as user_pincode,
+				system_users_profile.user_last_qualification_year,
+				system_users_profile.user_last_qualification,
+				system_users_profile.user_dob,
+				system_users_profile.user_doj,
+				system_users_profile.user_year_of_passing,
+				system_users_profile.user_brief,
+				system_users_profile.is_email_com_active,
+				system_users_profile.is_sms_com_active,
+				system_users_profile.user_public_profile_url,
+				system_users_profile.referrel_code,
+				system_users_profile.referrel_link,
+				system_users_profile.user_upi_id,
+				system_users_profile.created_at as user_created_at'
+			);
+			$this->db->join('system_users_profile','system_users_profile.user_profile_id=system_users.user_profile_pk_id','LEFT');
+		}else if($search_in=='6'){
+			$this->db->select(
+				'system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_phone_no_verified,
+				system_users.user_permissions,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users.user_otp,
+				system_users_consultancies.consultant_name as user_fullname,
+				system_users_consultancies.consultant_email as user_email,
+				system_users_consultancies.consultant_phone as user_phone_no,
+				system_users_consultancies.consultant_contact_person_phone as user_contact_phone_no,
+				system_users_consultancies.consultant_address as user_address,
+				system_users_consultancies.consultant_country_id as user_country,
+				system_users_consultancies.consultant_state_id as user_state,
+				system_users_consultancies.consultant_city_id as user_city,
+				system_users_consultancies.consultant_pincode as user_pincode,
+				system_users_consultancies.created_at as user_created_at'
+			);
+			$this->db->join('system_users_consultancies','system_users_consultancies.consultant_user_id=system_users.user_id','LEFT');
+		}
+		else if($search_in=='0'){
+			//echo 'hi3';die;
+			$this->db->select(
+				'system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_phone_no_verified,
+				system_users.user_permissions,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users_temp.temp_user_name as user_fullname,
+				system_users_temp.temp_user_email as user_email,
+				system_users_temp.temp_user_phone as user_phone_no,
+				system_users_temp.temp_user_country as user_country,
+				system_users_temp.temp_user_state as user_state,
+				system_users_temp.temp_user_city as user_city,
+				system_users_temp.temp_user_image_url as user_image,
+				system_users_temp.temp_user_created_at as user_created_at'
+			);
+			$this->db->join('system_users_temp','system_users_temp.temp_user_pk_id=system_users.user_id','LEFT');
+		}
+			
+
+		if($param!=null){
+			$this->db->where($param);
+		}
+
+		if($or_param!=null){
+			$this->db->group_start();
+			$this->db->or_where($or_param);
+			$this->db->group_end();
+		}
+
+
+		$result=$this->db->get('system_users');
+		if($return_query==TRUE){
+			return $this->db->last_query();
+		}else{
+			return $result->first_row();
+		}
+	}
+
+
+	public function _get_user_data($param=NULL,$param_or=NULL,$return_query=FALSE){
+		$this->table='system_users';
+		$this->table_joined='system_users_profile';
+		$fields='system_users.user_id as user_id,
+			system_users.user_role as user_role,
+			system_users.user_name as user_name,
+			system_users.user_password as user_password,
+			system_users.user_password as user_password_visible,
+			system_users.user_blocked as user_blocked,
+			system_users.user_permissions,
+			system_users.user_last_login_ip as user_last_login_ip,
+			system_users.user_last_login_time as user_last_login_time,
+			system_users_profile.user_profile_id,
+			system_users_profile.user_code,
+			system_users_profile.user_fullname,
+			system_users_profile.user_email,
+			system_users_profile.user_phone_no,
+			system_users_profile.user_gender,
+			system_users_profile.user_fullname,
+			system_users_profile.user_last_qualification_year,
+			system_users_profile.user_last_qualification,
+			system_users_profile.user_dob,
+			system_users_profile.user_doj,
+			system_users_profile.user_country,
+			system_users_profile.user_state,
+			system_users_profile.user_city,
+			system_users_profile.user_course_interested,
+			system_users_profile.created_at as created_date';
+			$joined_fields='system_users_profile.user_m_id=system_users.user_id';
+
+		return $this->get_joined($fields,$joined_fields,$param,$param_or,'LEFT','object',FALSE,$return_query);
+	}
+
+	public function get_user($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+	public function get_college_profile_data($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_colleges';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+	public function get_university_profile_data($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_universities';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+
+	public function _get_user_profile_duplicate($param=array(),$param_or=null,$field=null,$return_query=FALSE){
+		$this->table='system_users_profile';
+		return $this->get_duplicates($param,$param_or,$field,$return_query);
+	}
+
+	public function add_user_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users';
+		return $this->store($data,$batch,$return_query);
+	}
+
+	public function add_user_profile_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_profile';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function update_user_data($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+	public function update_user_profile_data($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_profile';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+	public function delete_user_data($param,$soft_delete=FALSE,$deleted_by=0,$return_query=FALSE){
+		$this->table='system_users';
+		if($soft_delete==FALSE){
+			return $this->remove($param);
+		}else if($soft_delete==TRUE){
+			return $this->remove_soft($param,$deleted_by);
+		}		
+	}
+
+	public function delete_internal_user_profile_data($param,$soft_delete=FALSE,$deleted_by=0,$return_query=FALSE){
+		$this->table='system_users_profile_internal';
+		if($soft_delete==FALSE){
+			return $this->remove($param);
+		}else if($soft_delete==TRUE){
+			return $this->remove_soft($param,$deleted_by);
+		}		
+	}
+
+	public function delete_user_profile_data($param,$soft_delete=FALSE,$deleted_by=0,$return_query=FALSE){
+		$this->table='system_users_profile';
+		if($soft_delete==FALSE){
+			return $this->remove($param);
+		}else if($soft_delete==TRUE){
+			return $this->remove_soft($param,$deleted_by);
+		}		
+	}
+
+
+	public function _get_users($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+
+		if($param['users_type']=='4'){
+			$this->db->select('
+				system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_approved,
+				system_users.user_permissions,
+				system_users.user_login_token,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users.user_last_visited_page,
+				system_users.user_currency as user_currency,
+				system_currency.currency_symbol_left as currency_symbol_left,
+				system_currency.currency_symbol_right as currency_symbol_right,
+				system_users_colleges.college_name as user_fullname,
+				system_users_colleges.college_email as user_email,
+				system_users_colleges.college_phone_no as user_phone_no,
+				system_users_colleges.college_address as user_address,
+				system_users_colleges.college_zipcode as user_zipcode,
+				system_users_colleges.college_country_id as user_country,
+				system_users_colleges.college_state_id as user_state,
+				system_users_colleges.college_city_id as user_city,
+				system_users_colleges.college_district_id as user_district,
+				system_users_colleges.college_university_id,
+				system_users_colleges.college_estd_year as user_estd_year,
+				system_users_colleges.college_type as user_type,
+				system_users_colleges.college_affiliation_type as user_affiliation_type,
+				system_users_colleges.college_facilities as int_facilities,
+				system_users_colleges.access_url as access_url,
+				system_users_colleges.access_url_slug as access_url_slug,
+				system_users_colleges.college_status as user_status,
+				system_users_colleges.college_menhostel_details_type,
+				system_users_colleges.college_womenhostel_details_type,
+				system_users_colleges.is_verified_by_admin');
+			$this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_users.user_id','LEFT');
+			$this->db->join('system_currency','system_users.user_currency=system_currency.currency_id','LEFT');
+		}else{
+			$this->db->select(
+				'system_users.user_id as user_id,
+				system_users.user_role as user_role,
+				system_users.user_name as user_name,
+				system_users.user_password as user_password,
+				system_users.user_blocked as user_blocked,
+				system_users.user_login_token,
+				system_users.user_last_login_ip as user_last_login_ip,
+				system_users.user_last_login_time as user_last_login_time,
+				system_users_profile.user_code,
+				system_users_profile.user_fullname,
+				system_users_profile.user_email,
+				system_users_profile.user_phone_no,
+				system_users_profile.created_at as created_date'
+			);
+
+			$this->db->join('system_users_profile','system_users_profile.user_profile_id=system_users.user_profile_pk_id','LEFT');
+		}
+			
+
+		
+
+		//$this->db->where('system_users.user_role!=','1');
+
+
+		if(isset($param['created_by']) && $param['created_by']!=''){
+			$this->db->where($this->db->dbprefix.'system_users_profile.created_by',$param['created_by']);
+		}
+
+		if(isset($param['users_type']) && $param['users_type']!=''){
+			$this->db->where_in($this->db->dbprefix.'system_users.user_role',$param['users_type'],FALSE);
+		}
+		
+		$i = 0;
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{
+					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_users');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_users');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+
+	public function __get_users($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+		$this->db->select('system_users.*');
+
+		if(isset($param['user_role'])){
+			$this->db->where('user_role',$param['user_role']);
+		}
+			
+		$i = 0;
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{
+					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_users');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_users');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+
+
+
+
+	public function _get_internal_users($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+		$this->db->select(
+			'system_users_internal.user_id as user_id,
+			system_users_internal.user_role as user_role,
+			system_users_internal.user_role_name as user_role_name,
+			system_users_internal.user_show_real_name,
+			system_users_internal.user_name as user_name,
+			system_users_internal.user_password as user_password,
+			system_users_internal.user_blocked as user_blocked,
+			system_users_internal.user_login_token,
+			system_users_internal.user_last_login_ip as user_last_login_ip,
+			system_users_internal.user_last_login_time as user_last_login_time,
+			system_users_internal.user_permissions,
+			system_users_profile_internal.user_code,
+			system_users_profile_internal.user_fullname,
+			system_users_profile_internal.user_email,
+			system_users_profile_internal.user_phone_no,
+			system_users_profile_internal.user_per_month_data_upload_quota,
+			system_users_profile_internal.user_per_day_data_upload_quota,
+			system_users_profile_internal.user_per_upload_amount,
+			system_users_profile_internal.user_bank_acc,
+			system_users_profile_internal.user_bank_ifsc,
+			system_users_profile_internal.user_bank_name,
+			system_users_profile_internal.user_bank_acc_name,
+			system_users_profile_internal.user_bank_account_added,
+			system_users_profile_internal.user_quota_applicable,
+			system_users_profile_internal.created_at as created_date'
+		);
+
+		$this->db->join('system_users_profile_internal','system_users_profile_internal.user_profile_id=system_users_internal.user_profile_pk_id','LEFT');
+
+		//$this->db->where('system_users.user_role!=','1');
+
+
+		if(isset($param['created_by']) && $param['created_by']!=''){
+			$this->db->where($this->db->dbprefix.'system_users_profile_internal.created_by',$param['created_by']);
+		}
+
+		if(isset($param['users_type']) && $param['users_type']!=''){
+			$this->db->where_in($this->db->dbprefix.'system_users_internal.user_role',$param['users_type'],FALSE);
+		}
+
+		if(isset($param['users_type_not']) && $param['users_type_not']!=''){
+			$this->db->where($this->db->dbprefix.'system_users_internal.user_role!=',$param['users_type_not']);
+		}
+		
+		$i = 0;
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{
+					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_users_internal');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_users_internal');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+	public function _get_internal_user($param=array(),$return_query=FALSE){
+		$this->db->select(
+			'system_users_internal.user_id as user_id,
+			system_users_internal.user_role as user_role,
+			system_users_internal.user_role_name as user_role_name,
+			system_users_internal.user_show_real_name,
+			system_users_internal.user_name as user_name,
+			system_users_internal.user_password as user_password,
+			system_users_internal.user_blocked as user_blocked,
+			system_users_internal.user_last_login_ip as user_last_login_ip,
+			system_users_internal.user_last_login_time as user_last_login_time,
+			system_users_internal.user_permissions,
+			system_users_profile_internal.user_code,
+			system_users_profile_internal.user_fullname,
+			system_users_profile_internal.user_email,
+			system_users_profile_internal.user_phone_no,
+			system_users_profile_internal.user_per_month_data_upload_quota,
+			system_users_profile_internal.user_per_day_data_upload_quota,
+			system_users_profile_internal.user_per_upload_amount,
+			system_users_profile_internal.user_bank_acc,
+			system_users_profile_internal.user_bank_ifsc,
+			system_users_profile_internal.user_bank_name,
+			system_users_profile_internal.user_bank_acc_name,
+			system_users_profile_internal.user_bank_account_added,
+			system_users_profile_internal.user_quota_applicable,
+			system_users_profile_internal.created_at as created_date'
+		);
+
+		$this->db->join('system_users_profile_internal','system_users_profile_internal.user_profile_id=system_users_internal.user_profile_pk_id','LEFT');
+
+		$this->db->where($param);
+		
+		$query = $this->db->get('system_users_internal');
+
+		if($return_query==FALSE){
+			return $query->first_row();
+		}else if($return_query==TRUE){
+			return $this->db->last_query();
+		}	
+	}
+
+	public function get_internal_user_duplicate($param=null,$param_or=null,$field=null,$return_query=FALSE){
+		$this->table='system_users_internal';
+		return $this->get_duplicates($param,$param_or,$field,$return_query);
+	}
+
+	public function get_internal_users($param=array(),$return_query=FALSE){
+		$this->db->select(
+			'system_users_internal.user_id as user_id,
+			system_users_internal.user_role as user_role,
+			system_users_internal.user_role_name as user_role_name,
+			system_users_internal.user_name as user_name,
+			system_users_internal.user_password as user_password,
+			system_users_internal.user_blocked as user_blocked,
+			system_users_internal.user_status as user_status,
+			system_users_internal.user_login_token,
+			system_users_internal.user_last_login_ip as user_last_login_ip,
+			system_users_internal.user_last_login_time as user_last_login_time,
+			system_users_internal.user_permissions,
+			system_users_profile_internal.user_code,
+			system_users_profile_internal.user_fullname,
+			system_users_profile_internal.user_email,
+			system_users_profile_internal.user_phone_no,
+			system_users_profile_internal.user_per_month_data_upload_quota,
+			system_users_profile_internal.user_per_day_data_upload_quota,
+			system_users_profile_internal.user_per_upload_amount,
+			system_users_profile_internal.user_bank_acc,
+			system_users_profile_internal.user_bank_ifsc,
+			system_users_profile_internal.user_bank_name,
+			system_users_profile_internal.user_bank_acc_name,
+			system_users_profile_internal.user_bank_account_added,
+			system_users_profile_internal.user_quota_applicable,
+			system_users_profile_internal.created_at as created_date'
+		);
+
+		$this->db->join('system_users_profile_internal','system_users_profile_internal.user_profile_id=system_users_internal.user_profile_pk_id','LEFT');
+
+		$this->db->where($param);
+
+		$query = $this->db->get('system_users_internal');
+		if($return_query==FALSE){
+			return $query->result();
+		}else if($return_query==TRUE){
+			return $this->db->last_query();
+		}
+	}
+
+	public function get_internal_user($param=null,$return_query=FALSE){
+		$this->table='system_users_internal';
+		return $this->get_one($param,$return_query);
+	}
+
+	public function add_internal_user_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_internal';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function delete_internal_user($param,$return_query=FALSE){
+        $this->table='system_users_internal';
+        return $this->remove($param,0,$return_query);
+    }
+
+
+
+    public function update_internal_user($data,$param,$return_query=FALSE){
+		$this->table='system_users_internal';
+		return $this->modify($data,$param,FALSE,$return_query);
+	}
+
+
+	public function get_internal_user_data_quota($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_data_quota';
+		if($single_row==TRUE){
+			return $this->get_one($param,$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}		
+	}
+
+
+	public function add_internal_user_data_quota($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_data_quota';
+		return $this->store($data,$batch,$return_query);
+	}
+
+	public function update_internal_user_data_quota($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_data_quota';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+	public function delete_internal_user_data_quota($param,$soft_delete=FALSE,$deleted_by=0,$return_query=FALSE){
+		$this->table='system_users_data_quota';
+		if($soft_delete==FALSE){
+			return $this->remove($param);
+		}else if($soft_delete==TRUE){
+			return $this->remove_soft($param,$deleted_by);
+		}		
+	}
+
+
+	public function get_user_duplicate($param=null,$param_or=null,$field=null,$return_query=FALSE){
+		$this->table='system_users';
+		return $this->get_duplicates($param,$param_or,$field,$return_query);
+	}
+
+	public function _get_user_duplicate($param=null,$param_or=null,$group_field=null,$field=null,$return_query=FALSE){
+		$this->table='system_users';
+		return $this->get_duplicates($param,$param_or,$group_field,$field,$return_query);
+	}
+
+
+	public function add_user_consultant_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_consultancies';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function add_user_temp_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_temp';
+		return $this->store($data,$batch,$return_query);
+	}
+
+	public function update_user_temp_data($data,$param,$return_query=FALSE){
+		$this->table='system_users_temp';
+		return $this->modify($data,$param,FALSE,$return_query);
+	}
+
+	public function get_user_temp_duplicate($param=null,$param_or=null,$field=null,$return_query=FALSE){
+		$this->table='system_users_temp';
+		return $this->get_duplicates($param,$param_or,$field,$return_query);
+	}
+
+	public function get_user_profile_duplicate($param=array(),$param_or=null,$field=null,$return_query=FALSE){
+		$this->table='system_users_profile_internal';
+		return $this->get_duplicates($param,$param_or,$field,$return_query);
+	}
+
+	public function get_internal_user_profile_data($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_profile_internal';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}		
+	}
+
+	public function get_user_profile_data($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_profile';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}		
+	}
+
+	public function get_user_consultant_duplicate($param=null,$param_or=null,$field=null,$return_query=FALSE){
+		$this->table='system_users_consultancies';
+		return $this->get_duplicates($param,$param_or,$field,$return_query);
+	}
+
+	public function get_user_temp($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_temp';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}		
+	}
+
+	public function add_internal_user_profile_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_users_profile_internal';
+		return $this->store($data,$batch,$return_query);
+	}
+
+	public function update_internal_user_profile_data($data,$param,$return_query=FALSE){
+		$this->table='system_users_profile_internal';
+		return $this->modify($data,$param,FALSE,$return_query);
+	}
+
+	public function get_total_user_profiles($param=null,$return_query=FALSE){
+		$this->table='system_users_profile';
+		return $this->get_total_count($param,$return_query);
+	}
+
+
+	public function get_total_users($param=null,$return_query=FALSE){
+		$this->table='system_users';
+		return $this->get_total_count($param,$return_query);
+	}
+
+	public function get_total_user_courses($param=null,$return_query=FALSE){
+		$this->table='system_users_courses';
+		return $this->get_total_count($param,$return_query);
+	}
+
+
+	public function get_user_course($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_users_courses';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}		
+	}
+
+	public function get_user_courses_college($param,$single_row=TRUE,$order_by='user_id',$order='ASC',$limit=8,$start=0,$return_query=FALSE){
+
+		//SELECT DISTINCT way2_system_users_courses.user_id FROM `way2_system_users_courses` INNER JOIN `way2_system_users_colleges` ON `way2_system_users_colleges`.`college_user_id`=`way2_system_users_courses`.`user_id` WHERE `user_type` = '4' AND `user_course_stream` = '4' ORDER BY `user_id` ASC LIMIT 8
+
+		$this->db->select('system_users_courses.*,system_users_colleges.*');
+		$this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_users_courses.user_id','INNER');
+
+		$this->db->where('user_type','4');
+
+		$this->db->where($param);
+
+
+		if($single_row==FALSE){
+			$this->db->order_by($order_by,$order);
+			$this->db->limit($limit,$start);
+
+			$query=$this->db->get('system_users_courses');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}
+		}else if($single_row==TRUE){
+			$query=$this->db->get('system_users_courses');
+
+			if($return_query==FALSE){
+				return $query->first_row();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}
+		}
+	}
+
+	public function _get_user_courses_college($param,$single_row=TRUE,$order_by='user_id',$order='ASC',$limit=20,$start=0,$return_query=FALSE){
+
+		//SELECT DISTINCT way2_system_users_courses.user_id FROM `way2_system_users_courses` INNER JOIN `way2_system_users_colleges` ON `way2_system_users_colleges`.`college_user_id`=`way2_system_users_courses`.`user_id` WHERE `user_type` = '4' AND `user_course_stream` = '4' ORDER BY `user_id` ASC LIMIT 8
+		$this->db->distinct();
+		$this->db->select(
+			'system_users_courses.user_id'
+		);
+		$this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_users_courses.user_id','INNER');
+
+		$this->db->where('user_type','4');
+
+		$this->db->where($param);
+
+
+		if($single_row==FALSE){
+			$this->db->order_by($order_by,$order);
+			$this->db->limit($limit,$start);
+
+			$query=$this->db->get('system_users_courses');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}
+		}else if($single_row==TRUE){
+			$query=$this->db->get('system_users_courses');
+
+			if($return_query==FALSE){
+				return $query->first_row();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}
+		}
+	}
+
+	public function store_user_courses($data,$return_query=FALSE){
+        $this->table='system_users_courses';
+        return $this->store($data,FALSE,$return_query);
+    }
+
+    public function delete_user_courses($param,$return_query=FALSE){
+        $this->table='system_users_courses';
+        return $this->remove($param,0,$return_query);
+    }
+
+    public function update_user_courses($data,$param,$return_query=FALSE){
+		$this->table='system_users_courses';
+		return $this->modify($data,$param,FALSE,$return_query);
+	}
+
+
+	public function store_user_payment_data($data,$return_query=FALSE){
+        $this->table='system_payments';
+        return $this->store($data,FALSE,$return_query);
+    }
+
+
+    public function _get_students($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+		$this->db->select(
+			'system_users.user_id as user_id,
+			system_users.user_role as user_role,
+			system_users.user_name as user_name,
+			system_users.user_password as user_password,
+			system_users.user_blocked as user_blocked,
+			system_users.user_phone_no_verified,
+			system_users.user_last_login_ip as user_last_login_ip,
+			system_users.user_last_login_time as user_last_login_time,
+			system_users_profile.user_code,
+			system_users_profile.user_fullname,
+			system_users_profile.user_email,
+			system_users_profile.user_phone_no,
+			system_users_profile.user_country,
+			system_users_profile.user_state,
+			system_users_profile.user_city,
+			system_users_profile.created_at as created_date'
+		);
+
+		$this->db->join('system_users_profile','system_users_profile.user_profile_id=system_users.user_profile_pk_id','LEFT');
+
+		$this->db->where('system_users.user_role','8');
+
+		$this->db->where('system_users.user_profile_pk_id!=','0');
+
+
+		if(isset($param['created_by']) && $param['created_by']!=''){
+			$this->db->where('system_users_profile.created_by',$param['created_by']);
+		}
+
+
+		
+
+		$i = 0;
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_users');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_users');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+
+	public function _get_students_courses($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+		$this->db->select(
+			'system_users.user_id as user_id,
+			system_users.user_role as user_role,
+			system_users.user_name as user_name,
+			system_users.user_password as user_password,
+			system_users.user_blocked as user_blocked,
+			system_users.user_last_login_ip as user_last_login_ip,
+			system_users.user_last_login_time as user_last_login_time,
+			system_users_profile.user_code,
+			system_users_profile.user_fullname,
+			system_users_profile.user_email,
+			system_users_profile.user_phone_no,
+			system_users_profile.created_at as created_date,system_courses.course_name,system_user_courses.created_at as enrollment_date'
+		);
+
+		$this->db->join('system_users_profile','system_users_profile.user_profile_id=system_user_courses.enroll_user_id','LEFT');
+		$this->db->join('system_users','system_users.user_id=system_user_courses.enroll_user_id','LEFT');
+		$this->db->join('system_courses','system_courses.course_id=system_user_courses.enroll_course_id','LEFT');
+
+		$this->db->where('system_users.user_role','4');
+
+
+		$i = 0;
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_user_courses');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_user_courses');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+
+	//Listing Package Users
+
+	public function get_listing_package_user($param,$order_by=null,$order='DESC',$return_query=FALSE){
+		$this->db->select('system_listing_package_users.*,system_users_colleges.*,system_listing_package_type.*,system_listing_package_category.package_category_name');
+        $this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_listing_package_users.listing_user_id','LEFT');
+        $this->db->join('system_listing_package_type','system_listing_package_type.package_type_id=system_listing_package_users.listing_package_type_id','LEFT');
+        $this->db->join('system_listing_package_category','system_listing_package_category.package_category_id=system_listing_package_users.listing_user_package_id','LEFT');
+
+        if(isset($param['country']) && $param['country']!=''){
+			$this->db->where('FIND_IN_SET("'.$param['country'].'",'.$this->db->dbprefix.'system_listing_package_users.listing_countries)<>0');
+		}
+
+		if(isset($param['state']) && $param['state']!=''){
+			$this->db->where('FIND_IN_SET("'.$param['state'].'",'.$this->db->dbprefix.'system_listing_package_users.listing_states)<>0');
+		}
+
+		if(isset($param['end_date']) && $param['end_date']!=''){
+			$this->db->group_start();
+		}
+
+		if(isset($param['start_date']) && $param['start_date']!=''){
+			$this->db->where('DATE('.$this->db->dbprefix.'system_listing_package_users.listing_package_start_date)>=',$param['start_date']);
+		}
+
+		if(isset($param['end_date']) && $param['end_date']!=''){
+			$this->db->or_where('DATE('.$this->db->dbprefix.'system_listing_package_users.listing_package_end_date)<=',$param['end_date']);
+		}
+
+		if(isset($param['end_date']) && $param['end_date']!=''){
+			$this->db->group_end();
+		}
+
+		if(isset($param['listing_page_link']) && $param['listing_page_link']!=''){
+			$this->db->where('system_listing_package_type.listing_page_link',$param['listing_page_link']);
+		}
+
+		if(isset($param['package_position']) && $param['package_position']!=''){
+			$this->db->where('system_listing_package_type.package_type_code',$param['package_position']);
+		}
+
+		if(isset($param['listing_status']) && $param['listing_status']!=''){
+			$this->db->where('system_listing_package_users.listing_status',$param['listing_status']);
+		}
+
+		if(!empty($order_by)){
+			$this->db->order_by($order_by,$order);
+		}
+
+		$query = $this->db->get('system_listing_package_users');
+        if($return_query==FALSE){
+			return $query->first_row();
+		}else if($return_query==TRUE){
+			return $this->db->last_query();
+		}
+	}
+
+	public function _get_listing_package_users($param,$single_row=TRUE,$order_by=null,$order='DESC',$return_query=FALSE){
+        $this->db->select('system_listing_package_users.*,system_users_colleges.*,system_listing_package_type.*,system_listing_package_category.package_category_name');
+        $this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_listing_package_users.listing_user_id','LEFT');
+        $this->db->join('system_listing_package_type','system_listing_package_type.package_type_id=system_listing_package_users.listing_package_type_id','LEFT');
+        $this->db->join('system_listing_package_category','system_listing_package_category.package_category_id=system_listing_package_users.listing_user_package_id','LEFT');
+
+        if($param!=null){        	
+        	if(isset($param['country']) && $param['country']!=''){
+				$this->db->where('FIND_IN_SET("'.$param['country'].'",'.$this->db->dbprefix.'system_listing_package_users.listing_countries)<>0');
+			}else{
+				$this->db->where($param);
+			}
+        }
+
+
+
+        $query = $this->db->get('system_listing_package_users');
+        if($single_row==TRUE){
+            if($return_query==FALSE){
+				return $query->first_row();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}
+        }else if($single_row==FALSE){
+            if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}
+        }       
+    }
+
+
+    public function _get_listing_ads_package_users($post=array(),$param=array(),$join_type='INNER',$count=FALSE,$return_query=FALSE){
+		$this->db->select(
+			'system_listing_package_users.*,system_listing_package_type.*,system_listing_package_category.package_category_name'
+		);
+
+		$this->db->join('system_listing_package_type','system_listing_package_type.package_type_id=system_listing_package_users.listing_package_type_id',$join_type);
+        $this->db->join('system_listing_package_category','system_listing_package_category.package_category_id=system_listing_package_users.listing_user_package_id',$join_type);
+
+
+        if(isset($param['listing_category']) && $param['listing_category']!=''){
+        	$this->db->where('listing_category',$param['listing_category']);
+        }
+
+        if(isset($param['listing_type']) && $param['listing_type']!=''){
+        	$this->db->where('listing_type',$param['listing_type']);
+        }
+
+        if(isset($param['listing_user_type']) && $param['listing_user_type']!=''){
+        	$this->db->where('listing_user_type',$param['listing_user_type']);
+        }
+
+
+        if(isset($param['listing_category_type']) && $param['listing_category_type']!=''){
+        	$this->db->where('listing_category_type',$param['listing_category_type']);
+        }
+
+        if(isset($param['listing_status']) && $param['listing_status']!=''){
+        	$this->db->where('listing_status',$param['listing_status']);
+        }
+
+
+		$i = 0;
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_listing_package_users');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_listing_package_users');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+
+	public function get_listing_package_users_joined($param=null,$return_query=FALSE){
+		$this->db->select(
+			'system_listing_package_users.*,system_listing_package_type.package_type_code'
+		);
+
+		$this->db->join('system_listing_package_type','system_listing_package_type.package_type_id=system_listing_package_users.listing_package_type_id','LEFT');
+
+		if($param!=null){        	
+        	if(isset($param['country']) && $param['country']!=''){
+				$this->db->where('FIND_IN_SET("'.$param['country'].'",'.$this->db->dbprefix.'system_listing_package_users.listing_countries)<>0');
+			}else{
+				$this->db->where($param);
+			}
+        }
+
+        if(isset($param['state']) && $param['state']!=''){
+			$this->db->where('FIND_IN_SET("'.$param['state'].'",'.$this->db->dbprefix.'system_listing_package_users.listing_states)<>0');
+		}
+
+		if(isset($param['package_position']) && $param['package_position']!=''){
+			$this->db->where('system_listing_package_type.package_type_code',$param['package_position']);
+		}
+
+		if(isset($param['listing_status']) && $param['listing_status']!=''){
+			$this->db->where('system_listing_package_users.listing_status',$param['listing_status']);
+		}
+
+		$query = $this->db->get('system_listing_package_users');
+
+		if($return_query==FALSE){
+			return $query->result();
+		}else if($return_query==TRUE){
+			return $this->db->last_query();
+		}	
+
+	}
+
+
+    public function store_listing_package_users($data,$batch=FALSE,$return_query=FALSE){
+        $this->table='system_listing_package_users';
+        return $this->store($data,$batch,$return_query);
+    }
+
+	public function update_listing_package_users($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_listing_package_users';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+    public function delete_listing_package_users($param,$return_query=FALSE){
+        $this->table='system_listing_package_users';
+        return $this->remove($param,0,$return_query);
+    }
+
+    public function get_listing_package_users($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_listing_package_users';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,null,null,$return_query);
+		}		
+	}
+
+	public function __get_listing_package_users($college_id,$single=TRUE,$return_query=FALSE) {
+        // Building the query using Active Record methods
+        $this->db->select('*');
+        $this->db->from('system_listing_package_users');
+        $this->db->where('listing_category','CUSTOM_IMG_ADS');
+        $this->db->where('listing_package_type_ids_values','COLLEGE_PAGE_AT_TOP');
+        $this->db->where('listing_status','1');
+        $this->db->where("FIND_IN_SET('$college_id', listing_page_link)");
+        
+        // Executing the query
+        $query = $this->db->get();
+        
+        if($return_query==FALSE){
+        	if($single==TRUE){
+        		return $query->first_row();
+        	}else{
+        		return $query->result();
+        	}
+			// Returning the result as an array
+        	
+        }else if($return_query==TRUE){
+        	return $this->db->last_query();
+        }        
+    }
+
+
+	public function get_applicant($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_applicant';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+
+	public function _get_applicant($param,$single_row=TRUE,$return_query=FALSE){
+		$this->db->select('system_applicant.*,system_users_colleges.college_name,system_users_colleges.college_short_name,system_users_colleges.college_city_id,system_users_colleges.college_state_id,system_users_colleges.access_url');
+		$this->db->join('system_users_colleges','system_users_colleges.college_user_id=system_applicant.application_inst_id','INNER');
+
+		$this->db->where($param);
+		$query=$this->db->get('system_applicant');
+
+		if($return_query==FALSE){
+			if($single_row==TRUE){
+				return $query->first_row();
+			}else if($single_row==FALSE){
+				return $query->result();
+			}
+		}else if($return_query==TRUE){
+			return $this->db->last_query();
+		}
+	}
+
+
+	public function add_applicant_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_applicant';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function update_applicant_data($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_applicant';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+
+	public function _get_applicants($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+		$this->db->select(
+			'system_applicant.*,system_country.country_name,system_country.country_phone_code,system_country_cities.city_name,system_country_states.state_name,system_courses.course_name,system_courses.course_short_name'
+		);
+
+		$this->db->join('system_country','system_country.country_id=system_applicant.applicant_country_id');
+		$this->db->join('system_country_states','system_country_states.state_id=system_applicant.applicant_state_id');
+		$this->db->join('system_country_cities','system_country_cities.city_id=system_applicant.applicant_city_id');
+		$this->db->join('system_courses','system_courses.course_id=system_applicant.applicant_course_id');
+		
+		$i = 0;
+
+		if(isset($param['college_id']) && !empty($param['college_id'])){
+			$this->db->where('application_inst_id',$param['college_id']);
+		}
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{
+					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_applicant');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_applicant');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+
+
+
+
+	public function get_claimer($param,$param_or=null,$return_query=FALSE){
+		$this->db->select('system_institute_claimer.*');
+		if($param!=null){
+			$this->db->where($param);
+		}
+
+		if($param_or!=null){
+			$this->db->or_where($param_or);
+		}
+
+		$result=$this->db->get('system_institute_claimer');
+
+		if($return_query==TRUE){
+			return$this->db->last_query();
+		}else{
+			return $result->first_row();
+		}
+	}
+
+
+	public function add_claimer_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_institute_claimer';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function update_claimer_data($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_institute_claimer';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+
+	public function get_review_data($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_institute_reviews';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+	public function get_total_review_data($param=null,$return_query=FALSE){
+		$this->table='system_institute_reviews';
+		return $this->get_total_count($param,$return_query);
+	}
+
+
+	public function add_review_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_institute_reviews';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function update_review_data($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_institute_reviews';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+	public function get_review_datas($post=array(),$param=array(),$return_query=FALSE){
+		$this->db->select('system_institute_reviews.*');
+
+		if($param!=NULL){
+			$this->db->where($param);			
+		}
+
+		if(isset($post['length']) && $post['length'] != -1){
+			$this->db->limit($post['length'],$post['start']);	
+		}
+		
+		$query = $this->db->get('system_institute_reviews');
+
+		if($return_query==FALSE){
+			return $query->result();
+		}else if($return_query==TRUE){
+			return $this->db->last_query();
+		}
+	}
+
+
+	public function _get_review_data($post=array(),$param=array(),$count=FALSE,$return_query=FALSE){
+		$this->db->select('system_institute_reviews.*');
+		
+		$i = 0;
+
+
+		if(isset($param['review_approved']) && $param['review_approved']!=null){
+			$this->db->where('review_approved',$param['review_approved']);
+		}
+
+		if(isset($param['review_inst_id']) && $param['review_inst_id']!=null){
+			$this->db->where('review_inst_id',$param['review_inst_id']);
+		}
+
+		if(isset($param['column_search'])){
+			foreach ($param['column_search'] as $item)
+			{
+				if(isset($post['search']['value']) && $post['search']['value'])
+				{
+					
+					if($i===0)
+					{
+						$this->db->group_start();
+						$this->db->like($item, $post['search']['value']);
+					}
+					else
+					{
+						$this->db->or_like($item, $post['search']['value']);
+					}
+
+					if(count($param['column_search']) - 1 == $i)
+						$this->db->group_end();
+				}
+				
+				$i++;
+			}
+		}
+
+			
+		if(isset($post['order']))
+		{
+			$column_order=$param['column_order'];
+			$this->db->order_by($column_order[$post['order']['0']['column']], $post['order']['0']['dir']);
+		} 
+		else if(isset($param['order']))
+		{
+			$order = $param['order'];
+			$this->db->order_by(key($order), $order[key($order)]);
+		}
+
+		if($count==FALSE){
+			if(isset($post['length']) && $post['length'] != -1){
+				$this->db->limit($post['length'],$post['start']);	
+			}
+			
+			$query = $this->db->get('system_institute_reviews');
+
+			if($return_query==FALSE){
+				return $query->result();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}		
+			
+		}else if($count==TRUE){
+			$query = $this->db->get('system_institute_reviews');
+			if($return_query==FALSE){
+				return $query->num_rows();
+			}else if($return_query==TRUE){
+				return $this->db->last_query();
+			}			
+		}
+	}
+
+	public function get_external_user($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_listing_package_external_users';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+	public function add_external_user_data($data,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_listing_package_external_users';
+		return $this->store($data,$batch,$return_query);
+	}
+
+
+	public function update_external_user_data($data,$param,$batch=FALSE,$return_query=FALSE){
+		$this->table='system_listing_package_external_users';
+		return $this->modify($data,$param,$batch,$return_query);
+	}
+
+
+	public function get_user_api_key($param,$single_row=TRUE,$return_query=FALSE){
+		$this->table='system_keys';
+		if($single_row==TRUE){
+			return $this->get_one($param,'',$return_query);
+		}else if($single_row==FALSE){
+			return $this->get_many($param,$return_query);
+		}
+	}
+
+
+
+	  // Function to get colleges with specific stream and course IDs
+    public function get_colleges_by_stream_and_course($stream_id, $course_id,$return_query=FALSE) {
+        // Building the query using Active Record methods
+        $this->db->select('college_id, college_user_id, college_name,college_course_ids,college_streams_ids,college_sub_streams_ids');
+        $this->db->from('system_users_colleges');
+        $this->db->where("FIND_IN_SET('$stream_id', college_streams_ids)");
+        $this->db->where("FIND_IN_SET('$course_id', college_course_ids)");
+        
+        // Executing the query
+        $query = $this->db->get();
+        
+        if($return_query==FALSE){
+			// Returning the result as an array
+        	return $query->result();
+        }else if($return_query==TRUE){
+        	return $this->db->last_query();
+        }        
+    }
+
+	public function get_colleges_by_stream($stream_id,$return_count=FALSE,$return_query=FALSE) {
+        // Building the query using Active Record methods
+        $this->db->select('college_id, college_user_id, college_name,college_course_ids,college_streams_ids,college_sub_streams_ids');
+        $this->db->from('system_users_colleges');
+        $this->db->where("FIND_IN_SET('$stream_id', college_streams_ids)");
+        
+        // Executing the query
+        $query = $this->db->get();
+        
+        if($return_query==FALSE){
+			// Returning the result as an array
+			if($return_count==FALSE){
+				return $query->result();
+			}else if($return_count==TRUE){
+				return $query->num_rows();
+			}
+        	
+        }else if($return_query==TRUE){
+        	return $this->db->last_query();
+        }        
+    }
+}

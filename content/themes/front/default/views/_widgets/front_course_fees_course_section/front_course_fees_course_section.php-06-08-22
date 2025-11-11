@@ -1,0 +1,594 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<?php
+// print_obj($course_data);
+if(!empty($course_data)){
+  ?>
+  <div class="card infoCard mb-4">
+      <div class="card-header bg-white">
+
+        <h5 class="text-dark"> <?php echo $course_data['course_full_name'];?> <?php echo (!empty($course_data['course_short_name']))?'['.$course_data['course_short_name'].']':'';?> - FEES & ELIGIBILITY  </h5>
+        <div class="d-flex justify-content-between">
+          <h4 class="color2 mb-2"> ₹<?php echo $course_data['course_cost_first_year'];?> <small class="text-muted">FIRST YEAR FEES</small> </h4>
+          <!-- <a href="#" class="color-indigo">Check details</a> -->
+        </div>
+
+        <div class="color2 mb-2">
+          <!-- <span class="stars color-orange"><i class="fas fa-user"></i></span> 9.4/10 <span class="stars color-orange"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span> Based on 11 Reviews  -->
+        </div>
+        <div class="d-flex flex-wrap text-uppercase text-big text-badge">
+          <?php
+
+          if(!empty($course_data['course_duration_type'])){
+            ?>
+             <span class="mr-2 badge color-orange"><i class="far fa-bookmark"></i> <?php echo $course_data['course_duration_type'];?> </span>
+            <?php
+          }
+
+
+
+          if(!empty($course_data['course_duration'])){
+            ?>
+            <span class="mr-2 badge color-blue"><i class="far fa-bookmark"></i> Duration: <?php echo $course_data['course_duration'];?> </span>
+            <?php
+          }
+          ?>
+         
+         <?php
+         if(!empty($course_data['course_type'])){
+          ?>
+          <span class="mr-2 badge color-purple"><i class="far fa-bookmark"></i> Course Type: <?php echo $course_data['course_type'];?> </span>
+          <?php
+         }
+         ?>
+         
+         <?php
+         if(!empty($course_data['course_seats_available'])){
+          ?>
+          <span class="mr-2 badge color-green"><i class="far fa-bookmark"></i> Seats Available: <?php echo $course_data['course_seats_available'];?> </span>
+          <?php
+         }
+         ?>
+         
+         <?php
+         if(!empty($course_data['course_placement_type'])){
+          ?>
+          <span class="mr-2 badge color-indigo"><i class="far fa-bookmark"></i> Place: <?php echo $course_data['course_placement_type'];?> </span>
+          <?php
+         }
+         ?>
+
+         <?php
+         if(!empty($course_data['course_pass_type'])){
+          ?>
+          <span class="mr-2 badge color-teal"><i class="far fa-bookmark"></i> Type of Course: <?php echo $course_data['course_pass_type'];?> </span>
+          <?php
+         }
+
+         ?>
+         
+         
+        </div>
+
+        <ul class="pl-3" >
+            <?php
+            if(!empty($course_data['copurse_streams'])){
+              ?>
+              <li>
+                Browse Streams :
+                <span class="color2 text-uppercase">
+                <?php
+                $i=0;
+                $total_streams=count($course_data['copurse_streams']);
+                foreach ($course_data['copurse_streams'] as $key => $value) {
+                  ?>
+                  <a href="<?php echo $value['stream_link'];?>"><?php echo $value['stream_name'];?><?php echo ($key!=($total_streams-1))?' | ':'';?></a>
+                  <?php
+                  $i++;
+                }
+                ?>
+                </span>
+              </li>
+              <?php
+            }
+            ?>
+              
+              <!-- <li>Dates : Application Starts 05 Aug 2020 | Application Ends 10 Jan 2021 Check All Dates</li>
+              <li>Ranking: #2 Management - NIRF</li> -->
+            </ul>
+
+
+        <?php
+        if(!empty($course_data['course_cost_categories'])){
+          ?>
+          <ul class="nav nav-tabs card-header-tabs tempTab">
+            <?php
+            foreach ($course_data['course_cost_categories'] as $key => $value) {
+              ?>
+              <li class="nav-item">
+                <a class="nav-link <?php echo ($key==0)?'active':'';?>" data-toggle="tab" href="#tab1_<?php echo $key;?>"><?php echo $value['category_name'];?></a>
+              </li>
+              <?php
+            }
+            ?>
+          </ul>
+          <?php
+        }
+        ?>
+
+      </div>
+      <div class="card-body">
+
+          <?php
+          if(!empty($course_data['course_details_costs'])){
+            ?>
+             <div class="jsx-1779620961 jsx-1988553729 addmission-info" wfd-id="4146">
+                <span class="jsx-1779620961 jsx-1988553729 font-weight-bold text-uppercase text-md py-1 px-2 bg-yellow d-inline-block mb-4" wfd-id="4159">Browse Fee by category</span>
+                <div class="container text-uppercase font-weight-bold justify-content-between align-items-center">
+                    <section class=" ">
+                      <div class="container">
+                          <div class="row">
+                              <div class="col-md-12 text-center ">
+                                  <nav class="nav-justified ">
+                                    <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                                      <?php
+                                      $i=0;
+                                      foreach ($course_data['cost_group'] as $key => $value) {
+                                        ?>
+                                        <a class="nav-item nav-link <?php echo ($i==0)?'active':'';?>" id="pop<?php echo $i;?>-tab" data-toggle="tab" href="#pop<?php echo $i;?>" role="tab" aria-controls="pop1" aria-selected="true"><?php echo $value->user_course_cost_category;?></a>
+                                        <?php
+                                        $i++;
+                                      }
+                                      ?>                                      
+                                    </div>
+                                  </nav>
+                                  <div class="tab-content" id="nav-tabContent">
+                                    <?php
+                                    $x=0;
+                                    foreach ($course_data['cost_group'] as $key => $value) {
+                                      ?>
+                                      <div class="tab-pane fade show <?php echo ($x==0)?'active':'';?>" id="pop<?php echo $x;?>" role="tabpanel" aria-labelledby="pop<?php echo $x;?>-tab">
+                                       
+                                        <div class="jsx-3937324609 table-responsive text-capitalize">
+                                          <?php
+
+                                          if($value->user_course_cost_type==1 && $value->user_course_cost_breakup_type==1){
+                                            ?>
+                                            <table class="jsx-3937324609 table table-bordered font-weight-bold text-secondary text-center mb-5 general">
+                                              <thead class="jsx-3937324609">
+                                                <tr class="jsx-3937324609">
+                                                  <th class="jsx-3937324609" style="text-align: left;">Year</th>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                    foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                      ?>
+                                                       <th class="fee-year" colspan="0" style="background: #9e9e9e73;"><?php echo $v['fees_year'];?></th>
+                                                      <?php
+                                                    }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                              </thead>
+                                              <tbody class="jsx-3937324609">
+                                                
+                                                <?php
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_admission_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Admission fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_admission_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_admission_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <?php echo ($v['fees_admission_sem_2['.$v['fees_year'].']']>0)?'<td class="jsx-3937324609">₹'.$v['fees_admission_sem_2['.$v['fees_year'].']'].'</td>':'';?>
+                                                         
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_registration_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Registration fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_registration_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_registration_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <?php echo ($v['fees_registration_sem_2['.$v['fees_year'].']']>0)?'<td class="jsx-3937324609">₹'.$v['fees_registration_sem_2['.$v['fees_year'].']'].'</td>':'';?>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+                                                ?>
+                                                <tr class="jsx-3937324609">
+                                                  <td class="jsx-3937324609" style="text-align: left;">Tution fees</td>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                    foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                      ?>
+                                                       <td class="jsx-3937324609">₹<?php echo $v['fees_value'];?></td>
+                                                      <?php
+                                                    }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                                <?php
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_exam_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Exam fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_exam_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_exam_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <?php echo ($v['fees_exam_sem_2['.$v['fees_year'].']']>0)?'<td class="jsx-3937324609">₹'.$v['fees_exam_sem_2['.$v['fees_year'].']'].'</td>':'';?>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_other_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Other fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_other_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_other_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <?php echo ($v['fees_other_sem_2['.$v['fees_year'].']']>0)?'<td class="jsx-3937324609">₹'.$v['fees_other_sem_2['.$v['fees_year'].']'].'</td>':'';?>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+                                                ?>
+                                                <tr class="jsx-3937324609">
+                                                  <td class="jsx-3937324609" style="text-align: left;">Total Year Wise fees</td>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                    foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                      ?>
+                                                       <td class="jsx-3937324609">₹<?php echo $v['fees_value_formatted'];?></td>
+                                                      <?php
+                                                    }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                                <tr class="jsx-3937324609 grand_total_value">
+                                                  <td class="jsx-3937324609" style="text-align: left;font-size: 20px;font-style: bold;"><strong>total fees</strong></td>
+                                                  <td colspan="8" rowspan="2" class="jsx-3937324609">
+                                                    <span class="jsx-3937324609 float-left" style="font-size: 20px;"><strong>₹<?php echo $course_data['course_details_costs']['total_fees_data'][$value->user_course_cost_category];?></strong></span>
+                                                    <!-- <span data-course-tag="17" class="jsx-3937324609 get-fees text-uppercase false hover-underline float-right pointer text-base text-primary ">Get Detail fee on your mail</span> -->
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                            <?php
+                                          }else if($value->user_course_cost_type==2 && $value->user_course_cost_breakup_type==1){
+                                            ?>
+                                            <table class="jsx-3937324609 table table-bordered font-weight-bold text-secondary text-center mb-5 general">
+                                              <thead class="jsx-3937324609">
+                                                <tr class="jsx-3937324609">
+                                                  <th class="jsx-3937324609" style="text-align: left;">Years</th>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                    foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                      ?>
+                                                       <th class="fee-year" colspan="2" style="background: #9e9e9e73;">Year <?php echo $v['fees_year'];?></th>
+                                                      <?php
+                                                    }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                                <tr class="jsx-3937324609">
+                                                  <th class="jsx-3937324609" style="text-align: left;">Semester</th>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      for ($i=1; $i <=(count($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])*2) ; $i++) { 
+                                                        ?>
+                                                        <th class="fee-year" colspan="0" style="background: #9e9e9e73;"><?php echo $i;?></th>
+                                                        <?php
+                                                      }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                              </thead>
+                                              <tbody class="jsx-3937324609">
+                                                
+                                                <?php
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_admission_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Admission fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_admission_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_admission_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_admission_sem_2['.$v['fees_year'].']']>0)?'₹'.$v['fees_admission_sem_2['.$v['fees_year'].']']:'---';?></td>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_registration_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Registration fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_registration_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_registration_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_registration_sem_2['.$v['fees_year'].']']>0)?'₹'.$v['fees_registration_sem_2['.$v['fees_year'].']']:'---';?></td>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+                                                ?>
+                                                <tr class="jsx-3937324609">
+                                                  <td class="jsx-3937324609" style="text-align: left;">Tution fees</td>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                    foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                      ?>
+                                                       <td class="jsx-3937324609">₹<?php echo $v['fees_tution_sem_1['.$v['fees_year'].']'];?></td>
+                                                       <td class="jsx-3937324609">₹<?php echo $v['fees_tution_sem_2['.$v['fees_year'].']'];?></td>
+                                                      <?php
+                                                    }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                                <?php
+
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_exam_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Exam fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_exam_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_exam_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_exam_sem_2['.$v['fees_year'].']']>0)?'₹'.$v['fees_exam_sem_2['.$v['fees_year'].']']:'---';?></td>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+                                                if($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category][0]['fees_other_sem_1[1]']>0){
+                                                  ?>
+                                                  <tr class="jsx-3937324609">
+                                                    <td class="jsx-3937324609" style="text-align: left;">Other fees</td>
+                                                    <?php
+                                                    if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                      foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                        ?>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_other_sem_1['.$v['fees_year'].']']>0)?'₹'.$v['fees_other_sem_1['.$v['fees_year'].']']:'---';?></td>
+                                                         <td class="jsx-3937324609"><?php echo ($v['fees_other_sem_2['.$v['fees_year'].']']>0)?'₹'.$v['fees_other_sem_2['.$v['fees_year'].']']:'---';?></td>
+                                                        <?php
+                                                      }
+                                                    }
+                                                    ?>
+                                                  </tr>
+                                                  <?php
+                                                }
+
+                                                ?>
+                                                
+                                                
+                                                <tr class="jsx-3937324609">
+                                                  <td class="jsx-3937324609" style="text-align: left;">Total Year Wise fees</td>
+                                                  <?php
+                                                  if(!empty($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category])){
+                                                    foreach ($course_data['course_details_costs']['fees_data'][$value->user_course_cost_category] as $k => $v) {
+                                                      ?>
+                                                       <td class="jsx-3937324609" colspan="2">₹<?php echo $v['fees_tution_sem_total['.$v['fees_year'].']'];?></td>
+                                                      <?php
+                                                    }
+                                                  }
+                                                  ?>
+                                                </tr>
+                                                <tr class="jsx-3937324609 grand_total_value">
+                                                  <td class="jsx-3937324609" style="text-align: left;font-size: 20px;font-style: bold;"><strong>total fees</strong></td>
+                                                  <td colspan="8" rowspan="2" class="jsx-3937324609">
+                                                    <span class="jsx-3937324609 float-left" style="font-size: 20px;"><strong>₹<?php echo $course_data['course_details_costs']['total_fees_data'][$value->user_course_cost_category];?></strong></span>
+                                                    <!-- <span data-course-tag="17" class="jsx-3937324609 get-fees text-uppercase false hover-underline float-right pointer text-base text-primary ">Get Detail fee on your mail</span> -->
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                            <?php
+                                          }
+
+                                          ?>
+                                            
+                                        </div>
+                                      </div>
+                                      <?php
+
+                                      $x++;
+                                    }
+                                    ?>
+                                    
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </section>
+                </div>
+                <!-- <hr class="jsx-1779620961 jsx-1988553729 mt-5 mb-5"> -->
+              </div>
+            <?php
+          }
+
+
+          ?>
+             
+      </div>
+
+
+      <div class="card-footer">
+
+        <?php
+        if(!empty($course_data['exams_accepted'])){
+          ?>
+          <div class="jsx-4268241664 jsx-2646933417 exams">
+            <span class="jsx-4268241664 jsx-2646933417 font-weight-bold text-capitalize text-md py-1 px-2 bg-yellow d-inline-block mb-4">Exam Accepted</span>
+            
+
+
+              <?php
+              $z=count($course_data['exams_accepted']);
+              foreach ($course_data['exams_accepted'] as $key => $value) {
+                ?>
+                <div class="jsx-4268241664 jsx-2646933417 exam text-uppercase font-weight-bold d-flex justify-content-between align-items-center">
+                  <a class="jsx-4268241664 jsx-2646933417 text-secondary hover-underline text-lg " href="<?php echo $value['exam_slug'];?>"><?php echo $value['exam_short_name'];?> </a>
+                 <!--  <div class="jsx-4268241664 jsx-2646933417 info d-flex justify-content-between align-items-center">
+                    <div class="jsx-4268241664 jsx-2646933417 dates d-flex text-md">
+                      <div class="jsx-4268241664 jsx-2646933417 exam-date px-6">
+                        <span class="jsx-4268241664 jsx-2646933417 text-silver"> 01 Jun 22 - 30 Jun 22 </span>
+                        <a class="jsx-4268241664 jsx-2646933417 text-capitalize text-dark-blue text-underlined d-block text-center" href="/exams/jee-main/application-process">Application process</a>
+                      </div>
+                      <div class="jsx-4268241664 jsx-2646933417 addmission-date px-6">
+                        <span class="jsx-4268241664 jsx-2646933417 text-silver"> 20 Jun 22 </span>
+                        <a class="jsx-4268241664 jsx-2646933417 text-capitalize text-dark-blue text-underlined d-block text-center" href="/exams/jee-main">Exam Date</a>
+                      </div>
+                      <div class="jsx-4268241664 jsx-2646933417 addmission-date px-6">
+                        <span class="jsx-4268241664 jsx-2646933417 text-silver"> 15 Jul 22 </span>
+                        <a class="jsx-4268241664 jsx-2646933417 text-capitalize text-dark-blue text-underlined d-block text-center" href="/exams/jee-main">Results</a>
+                      </div>
+                    </div>
+                    <span class="jsx-4268241664 jsx-2646933417 check false text-white bg-primary text-md py-2 px-3 "> Check Eligibility</span>
+                  </div> -->
+                </div>
+                <?php
+
+                if($z>1){
+                  ?>
+                  <hr class="jsx-4268241664 jsx-2646933417 mt-5 mb-5">
+                  <?php
+                }
+
+                ?>
+                
+                <?php
+
+                $z--;
+              }
+              ?>
+          </div>
+          <?php
+        }
+
+        ?>
+
+         
+
+         <?php
+         if(!empty($course_data['course_eligibility_desc'])){
+          ?>
+          <div class="jsx-1779620961 jsx-1988553729 addmission-info" wfd-id="4146">
+            <span class="jsx-1779620961 jsx-1988553729 font-weight-bold text-uppercase text-md py-1 px-2 bg-yellow d-inline-block mb-4" wfd-id="4159">Course Information</span>
+            <?php echo $course_data['course_eligibility_desc'];?>
+            <hr class="jsx-1779620961 jsx-1988553729 mt-5 mb-5">
+          </div>
+          <?php
+         }
+
+         ?>
+
+
+
+         <?php
+         if(!empty($course_data['admission_data'])){
+          ?>
+          <div class="jsx-1779620961 jsx-1988553729 addmission-info" wfd-id="4146">
+            <span class="jsx-1779620961 jsx-1988553729 font-weight-bold text-uppercase text-md py-1 px-2 bg-yellow d-inline-block mb-4" wfd-id="4159">Admission Information</span>
+            <div class="jsx-1779620961 jsx-1988553729 addmission text-uppercase font-weight-bold d-flex justify-content-between align-items-center" wfd-id="4149">
+               <a class="jsx-1779620961 jsx-1988553729 text-secondary hover-underline text-lg " href="/college/13190-chaitanya-bharathi-institute-of-technology-cbit-hyderabad/admission">ADMISSION 2021</a>
+               <div class="jsx-1779620961 jsx-1988553729 info d-flex justify-content-between align-items-center" wfd-id="4150">
+                  <div class="jsx-1779620961 jsx-1988553729 dates d-flex text-md" wfd-id="4152">
+                     <div class="jsx-1779620961 jsx-1988553729 start-date px-6" wfd-id="4156"><span class="jsx-1779620961 jsx-1988553729 text-silver" wfd-id="4158"> 21 Feb 21 </span><span class="jsx-1779620961 jsx-1988553729 text-capitalize text-dark-blue d-block text-center" wfd-id="4157">Start Date</span></div>
+                     <div class="jsx-1779620961 jsx-1988553729 end-date px-6" wfd-id="4153"><span class="jsx-1779620961 jsx-1988553729 text-silver" wfd-id="4155"> 09 Jul 21 </span><span class="jsx-1779620961 jsx-1988553729 text-capitalize text-success d-block text-center" wfd-id="4154">End Date</span></div>
+                  </div>
+                  <span class="jsx-1779620961 jsx-1988553729 check false text-white bg-primary text-md py-2 px-3" wfd-id="4151"> Apply Now </span>
+               </div>
+            </div>
+            <div class="jsx-1779620961 jsx-1988553729 flash-news mt-6" wfd-id="4147">
+               <p class="jsx-1779620961 jsx-1988553729 text-uppercase d-flex font-weight-bold text-md text-silver">
+                  <span class="jsx-1779620961 jsx-1988553729 icon mr-2" wfd-id="4148">
+                     <svg width="9" height="19" viewBox="0 0 9 19" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.159.848L.184 9.086c-.303.5-.073.907.512.907h3.27c.585 0 .902.448.708 1l-2.37 6.764c-.195.553-.09.604.231.115L8.69 8.515c.321-.49.108-.886-.478-.886H4.265c-.586 0-.913-.45-.733-1.007L5.38.949c.181-.557.083-.602-.22-.1z" fill="#FFC100" fill-rule="evenodd"></path>
+                     </svg>
+                  </span>
+                  Latest update<a class="jsx-1779620961 jsx-1988553729 text-silver hover-underline ml-4" href="/college/13190-chaitanya-bharathi-institute-of-technology-cbit-hyderabad/admission">CBIT Hyderabad Admission 2021: B.Tech, M.Tech, MBA, Cutoff, Fees, Eligibility</a>
+               </p>
+            </div>
+            <hr class="jsx-1779620961 jsx-1988553729 mt-5 mb-5">
+          </div>
+          <?php
+         }
+         ?>
+
+
+         
+
+
+
+      </div>
+
+  </div>
+  <?php
+}
+?>
+
+
+<style type="text/css">
+  .nav-tabs .nav-link.active {
+    font-weight:bold;
+    background-color: transparent;
+    border-bottom:3px solid #dd0000;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+}
+
+.nav-tabs .nav-link {
+     border-top-left-radius: 0; 
+     border-top-right-radius: 0;
+}
+</style>

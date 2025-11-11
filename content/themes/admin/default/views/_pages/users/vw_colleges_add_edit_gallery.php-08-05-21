@@ -1,0 +1,122 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?php echo $admin_base_url;?>/institutions/colleges/add/<?php echo $college_data['college_id'];?>"><?php echo (!empty($college_data))?'Back to '.$college_data['college_name']:'';?></a></li>
+			<li class="breadcrumb-item active" aria-current="page">College Gallery Data</li>
+		</ol>
+	</nav>
+
+	<?php
+	if(isset($college_data) && (!empty($college_data))){
+		?>
+		<div class="profile-page tx-13">
+			<div class="row">
+				<div class="col-12 grid-margin">
+					<div class="profile-header">
+						<div class="cover">
+							<div class="gray-shade"></div>
+							<figure>
+								<img src="<?php echo (!empty($college_data))?$college_data['college_banner']:'';?>" class="img-fluid" alt="profile cover" style="height: 250px;">
+							</figure>
+							<div class="cover-body d-flex justify-content-between align-items-center">
+								<div>
+									<img class="profile-pic" src="<?php echo (!empty($college_data))?$college_data['college_logo']:'';?>" alt="profile">
+									<a href="<?php echo (!empty($college_data))?$college_data['college_access_url']:'';?>" target="_blank"><span class="profile-name"><?php echo (!empty($college_data))?$college_data['college_name']:'';?></span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 grid-margin">
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College - [ <?php echo (!empty($college_data))?$college_data['college_name']:'';?> ]-[ Gallery Data ]</h6>
+							<form id="form_gallery">
+			            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+			            		<input type="hidden" class="form-control" name="_gallery" value="">
+		            			<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+		            			
+		            			<div class="row">
+		            				<div class="col-sm-6">
+										<div class="form-group">
+											<label class="control-label">Category</label>
+											<select class="form-control" name="college_gallery_category" id="college_gallery_category">
+												<option value="0">Select Category</option>
+												<?php
+												if(!empty($college_data) && !empty($college_data['college_gallery_types'])){
+													foreach ($college_data['college_gallery_types'] as $k => $v) {
+														?>
+														<option value="<?php echo $v->gallery_type_alias;?>"><?php echo $v->gallery_type;?></option>
+														<?php
+													}
+												}
+												?>
+											</select>
+										</div>
+									</div>
+								
+									<div class="col-sm-6" id="college_gallery_image_div">
+										<div class="form-group">
+											<label>Image</label>
+											<input type="file" name="college_gallery_image" id="college_gallery_image" class="file-upload-default">
+											<div class="input-group col-xs-12">
+												<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Image" value="">
+												<span class="input-group-append">
+													<button class="file-upload-browse btn btn-primary" type="button">Browse Image</button>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6" id="college_gallery_video_div" style="display: none;">
+										<div class="form-group">
+											<label>Youtube Video Link</label>
+											<input type="text" class="form-control" placeholder="Youtube Video Link" name="college_gallery_video_link" id="college_gallery_video_link" value="">
+										</div>
+									</div>
+								</div>
+		            			
+								<div class="row">
+									<div class="col-sm-12">
+										<button class="btn btn-primary" type="submit" id="btn_save_form_gallery">Save</button>
+									</div>
+								</div>
+			            	</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 grid-margin">
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title">Galleries</h6>
+							<div class="table-responsive">
+								<table id="college_gallery_list_table" class="table">
+									<thead>
+				                      <tr>
+			                      		<th>#</th>
+				                        <th>File</th>
+				                        <th>Type</th>
+				                        <th>Action</th>		                         
+				                      </tr>
+				                    </thead>
+				                    <tbody>		                    	
+				                    </tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+	?>
+</div>
+
+<script type="text/javascript">let _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>';</script>

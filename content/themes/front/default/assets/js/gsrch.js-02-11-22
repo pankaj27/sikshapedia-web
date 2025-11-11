@@ -1,0 +1,61 @@
+jQuery(function($) {
+  "use strict";
+
+//Filter
+	var start = 13;
+    var limit = 12;
+   	var doneScrollingInterval = 500;
+   	var scrollTimer=-1; 
+   	var processing=false;               //timer identifier
+
+    var position = $(window).scrollTop();
+
+    $(window).scroll(function(){
+
+    //    var scroll = $(window).scrollTop();
+	   // if(scroll > position) {
+	   //      console.log('scrollDown');
+	   //     	if (scrollTimer != -1){
+	   //     		clearTimeout(scrollTimer);
+	   //     	}
+
+	   	if (processing)
+    		return false;
+	        
+	       if ($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2){
+					//scrollTimer = setTimeout(doScroll, doneScrollingInterval);
+					if(_c!=''){
+						doScroll();
+						$(window).scrollTop($(window).scrollTop()-1);
+					}
+					
+					
+	      }
+	    	
+	  		  
+	   // }
+
+	   //  position = scroll;
+    });
+
+    function doScroll(){
+    	$.ajax({
+        	type:'POST',
+        	url:base_url+'filterdata',
+        	data:{csrf_test_name:csrf_hash,_l:limit,_s:start,_c:_c,_st:_st,_ct:_ct,_strm:_strm,_cu:_cu},
+        	cache:false,
+        	beforeSend:function(){
+        		processing = true;
+        	},
+        	success:function(d){
+        		if(d.html!=''){
+					start += limit;
+        			$("#udata_lists").append(d.html);
+        			processing = false;
+        		}
+        	}
+        });
+    }
+
+
+});

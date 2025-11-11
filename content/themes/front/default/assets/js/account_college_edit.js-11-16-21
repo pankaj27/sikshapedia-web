@@ -1,0 +1,274 @@
+var units = ["B", "KB", "MB", "GB", "TB"];
+
+    function file_size(size, unit) {
+
+      var index_of_unit = units.indexOf(unit),
+          coverted_size;
+
+      if (index_of_unit === -1) {
+
+          coverted_size = false;
+
+      } else {
+
+          while (index_of_unit > 0) {
+              size *= 1024;
+              index_of_unit -= 1;
+          }
+
+          coverted_size = size;
+      }
+
+      return coverted_size;
+    };
+
+jQuery(function($) {
+  "use strict";
+
+  var _URL = window.URL || window.webkitURL;
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'middle',
+    showConfirmButton: false,
+    timer: 10000
+  });
+
+   
+
+  $("#file-selector").change(function(e) {
+      var file, img;
+
+
+      if ((file = this.files[0])) {
+          img = new Image();
+          img.onload = function() {
+              alert(this.width + " " + this.height);
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+          img.src = _URL.createObjectURL(file);
+
+
+      }
+
+  });
+
+//   var f='https://static.waytoadmissions.com/data/colleges/sri-jayadev-college-of-pharmaceutical-sciences-sjcps-bhubaneswar-orissa/ZF0jM3Akqu.jpg';
+
+
+//  function convertImgToBase64URL(url, callback, outputFormat){
+//     var img = new Image();
+//     img.crossOrigin = 'Anonymous';
+//     img.onload = function(){
+//         var canvas = document.createElement('CANVAS'),
+//         ctx = canvas.getContext('2d'), dataURL;
+//         canvas.height = img.height;
+//         canvas.width = img.width;
+//         ctx.drawImage(img, 0, 0);
+//         dataURL = canvas.toDataURL(outputFormat);
+//         callback(dataURL);
+//         canvas = null; 
+//     };
+//     img.src = url;
+// }
+// convertImgToBase64URL(f, function(base64Img){
+
+//   console.log(base64Img);
+
+//       //$('.output').find('img').attr('src', base64Img);  
+   
+// });
+
+
+  $("#file_cover_image").change(function(e) {
+      var file, img,img_height,img_width,allowed_file_size;
+
+      if ((file = this.files[0])) {
+          img = new Image();
+          img.src = _URL.createObjectURL(file);
+          img.onload = function() {            
+
+              img_height=this.height;
+              img_width=this.width;
+              allowed_file_size=999500*7;
+             
+              if(img_height==480 && img_width==1920 && file.size<=allowed_file_size){
+
+                $('#cover_img_small').attr('src', img.src);
+                $('#cover_img_large').attr('src',img.src);
+
+              }else{
+                Toast.fire({
+                  icon: 'error',
+                  title: 'For the best results on all devices, use an image that’s at least 1920 x 480 pixels and 6MB or less.Selected file is '+img_width+'x'+img_height+' pixels and file size is '+file_size(file.size)
+                });
+
+              }
+
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+
+      }
+
+  });
+
+
+  $("#file_logo_image").change(function(e) {
+      var file, img,img_height,img_width,allowed_file_size;
+
+      if ((file = this.files[0])) {
+          img = new Image();
+          img.src = _URL.createObjectURL(file);
+          img.onload = function() {            
+
+              img_height=this.height;
+              img_width=this.width;
+              allowed_file_size=999500*5;
+             
+              if(img_height>=500 && img_width>=500 && file.size<=allowed_file_size){
+
+                $('.logo_image').attr('src', img.src);
+
+              }else{
+                Toast.fire({
+                  icon: 'error',
+                  title: 'For the best results on all devices, use an image that’s at least 500 x 500 pixels and 6MB or less.Selected file is '+img_width+'x'+img_height+' pixels and file size is '+file_size(file.size)
+                });
+
+              }
+
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+
+      }
+
+  });
+
+  $('body').on('click','#btn_change_logo',function(){
+    $('#file_logo_image').trigger('click');
+  });
+
+
+  $('body').on('click','#btn_change_cover_image',function(){
+    $('#file_cover_image').trigger('click');
+  });
+
+
+  $('#form_user_branding').validate({
+    rules:{
+      file_logo_image:{
+        required:true
+      },
+      file_cover_image:{
+        required:true
+      }
+    },
+    messages:{
+      file_logo_image:{
+        required:'Select logo'
+      },
+      file_cover_image:{
+        valueNotEquals:'Select cover image'
+      }
+    },
+    submitHandler:function(){
+      var formData=new FormData($('#form_user_branding')[0]);
+      //var change_type='';
+      //formData.append(change_type, 'branding_change');
+      $.ajax({
+          type:'POST',
+          url:base_url+'update_single',
+          data:formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          timeout: 60000000,
+          target: '.preview',
+          beforeSend:function(){
+            $('#btn_publish').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Saving...</span>').prop('disabled',true);
+          },
+          success:function(f){
+            if(f.success){
+             $('#btn_publish').prop('disabled',true);
+             Toast.fire({
+                icon: 'success',
+                title: f.success
+              });            
+            }else if(f.error){
+              $('#btn_save_ads').prop('disabled',true);
+              Toast.fire({
+                icon: 'error',
+                title: f.error,
+              });
+            }else if(f.redirect){
+              $('#btn_publish').prop('disabled',true);
+              Toast.fire({
+                icon: 'info',
+                title: 'Your session expired'
+              });
+            }
+          },
+          xhr: function(){
+              //Get XmlHttpRequest object
+               var xhr = $.ajaxSettings.xhr() ;
+              //Set onprogress event handler
+               xhr.upload.onprogress = function(data){
+                  var perc =(data.loaded / data.total) * 100;// Math.round((data.loaded / data.total) * 100);
+                  $('.progress-bar').css('width',perc.toFixed(2) + '%').text(perc.toFixed(2) + '%');
+               };
+               return xhr ;
+          },
+          error: function (e) {
+          },
+          complete:function(status,xhr){
+            $('.progress-bar').css('width', '0%').text('0%');
+            $('#btn_publish').html('Publish').attr('disabled',false);
+          },
+          resetForm: true 
+      });
+    }
+  });
+
+
+  /**
+ * Format bytes as human-readable text.
+ * 
+ * @param bytes Number of bytes.
+ * @param si True to use metric (SI) units, aka powers of 1000. False to use 
+ *           binary (IEC), aka powers of 1024.
+ * @param dp Number of decimal places to display.
+ * 
+ * @return Formatted string.
+ */
+
+   function file_size(bytes, si=false, dp=1) {
+    const thresh = si ? 1000 : 1024;
+
+    if (Math.abs(bytes) < thresh) {
+      return bytes + ' B';
+    }
+
+    const units = si 
+      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    const r = 10**dp;
+
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+    return bytes.toFixed(dp) + ' ' + units[u];
+  }
+
+
+
+});

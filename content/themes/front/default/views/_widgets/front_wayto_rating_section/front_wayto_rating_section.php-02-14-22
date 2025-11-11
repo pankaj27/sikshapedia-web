@@ -1,0 +1,231 @@
+
+<!-- <script type="text/javascript" src="https://static.waytoadmissions.com/content/themes/front/default/assets/plagins/jquery-rate-picker.js"></script> -->
+<div class="jsx-2085888330 nps-banner bg-white my-4 p-4 card">
+    <p class="jsx-198376327 text-center mt-4 mb-10 h2 font-weight-bold">How likely are you to recommend waytoadmissions.com to a friend or a colleague?</p>
+
+    <div class="rating d-flex justify-content-around mx-1">
+
+        <input type="radio" class="stars_radio-input" id="star1" name="rating" value="1" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star1" title="Bad" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">1</div>
+            <p class="jsx-198376327 text-center mt-1 bubble_bottom_text">Not so likely</p>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star2" name="rating" value="2" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star2" title="Good" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">2</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star3" name="rating" value="3" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star3" title="Very good" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">3</div>
+        </label> 
+
+        <input type="radio" class="stars_radio-input" id="star4" name="rating" value="4" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star4" title="Great" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">4</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star5" name="rating" value="5" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star5" title="Great" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">5</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star6" name="rating" value="6" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star6" title="Great" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">6</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star7" name="rating" value="7" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star7" title="Great" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">7</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star8" name="rating" value="8" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star8" title="Great" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">8</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star9" name="rating" value="9" />
+        <label class="star jsx-198376327 bubble_label d-flex flex-column position-relative align-items-center" for="star9" title="Great" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">9</div>
+        </label>
+
+        <input type="radio" class="stars_radio-input" id="star10" name="rating" value="10" />
+        <label class="star bubble_label d-flex flex-column position-relative align-items-center" for="star10" title="Awesome" aria-hidden="true">
+            <div class="bubble d-flex justify-content-center pointer align-items-center text-lg">10</div>
+            <p class="jsx-198376327 text-center mt-1 bubble_bottom_text">Highly Likely</p>
+        </label>
+
+    </div>
+
+
+  
+
+</div>
+
+
+
+<style type="text/css">
+    .rating {
+      margin-top: 40px;
+      border: none;
+      float: left;
+    }
+
+.bubble {
+    width: 48px;
+    height: 48px;
+    font-size: 11px;
+    
+}
+
+.text-lg {
+    font-size: 1rem;
+}
+
+.stars_radio-input {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1px;
+    height: 1px;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.rating > label {
+  color: #90A0A3;
+  float: right;
+}
+
+.rating > label > div {
+  color: #90A0A3;
+  float: right;
+  border-radius: 50%;
+    border: 1px solid #ccc;
+}
+
+.rating > label:before {
+  margin: 5px;
+  font-size: 2em;
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+.rating > input {
+  display: none;
+}
+
+
+.rating > input:checked ~ label > div,
+.rating:not(:checked) > label > div:hover,
+.rating:not(:checked) > label + div:hover ~ label + div {
+    background-color: rgb(255, 121, 0);
+    color: rgb(255, 255, 255);
+}
+
+.rating > input:checked + label > div:hover,
+.rating > input:checked ~ label > div:hover,
+.rating > label > div:hover ~ input:checked ~ label > div,
+.rating > input:checked ~ label + div:hover ~ label + div {
+   background-color: rgb(255, 121, 0);
+   color: rgb(255, 255, 255);
+}
+</style>
+
+
+
+<!-- <style type="text/css">
+   .ml-1, .mx-1 {
+    margin-left: 0.25rem;
+}
+.mr-1, .mx-1 {
+    margin-right: 0.25rem;
+}
+.pointer {
+    cursor: pointer;
+}
+.justify-content-around {
+    -webkit-box-pack: space-around;
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: space-around;
+    justify-content: space-around;
+}
+.d-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.position-relative {
+    position: relative;
+}
+.align-items-center {
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.flex-column {
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+.npm-form.jsx-198376327 .stars_radio-input.jsx-198376327 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1px;
+    height: 1px;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+input[type="radio"], input[type="checkbox"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+
+button, input {
+    overflow: visible;
+}
+
+.npm-form.jsx-198376327 .stars_radio-input.jsx-198376327 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1px;
+    height: 1px;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.npm-form.jsx-198376327 .bubble.jsx-198376327 {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+}
+.npm-form.jsx-198376327 .bubble.active.jsx-198376327 {
+    background-color: rgb(255, 121, 0);
+    color: rgb(255, 255, 255);
+}
+.align-items-center {
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+#rating_div > input:checked ~ div,
+#rating_div:not(:checked) > div:hover,
+#rating_div:not(:checked) > div:hover ~ div {
+  background-color: rgb(255, 121, 0);
+    color: rgb(255, 255, 255);
+}
+
+#rating_div > input:checked + div:hover,
+#rating_div > input:checked ~ div:hover,
+#rating_div > div:hover ~ input:checked ~ div,
+#rating_div > input:checked ~ div:hover ~ div {
+  color: #FECE31;
+}
+
+</style> -->

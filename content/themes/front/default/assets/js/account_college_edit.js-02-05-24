@@ -1,0 +1,1018 @@
+var units = ["B", "KB", "MB", "GB", "TB"];
+
+    function file_size(size, unit) {
+
+      var index_of_unit = units.indexOf(unit),
+          coverted_size;
+
+      if (index_of_unit === -1) {
+
+          coverted_size = false;
+
+      } else {
+
+          while (index_of_unit > 0) {
+              size *= 1024;
+              index_of_unit -= 1;
+          }
+
+          coverted_size = size;
+      }
+
+      return coverted_size;
+    };
+
+jQuery(function($) {
+  "use strict";
+
+  var _URL = window.URL || window.webkitURL;
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'middle',
+    showConfirmButton: false,
+    timer: 10000
+  });
+
+  jQuery.validator.addMethod("pwcheck", function (value, element) {
+    return this.optional(element) || /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(value);
+  }, "Password must contain atleast one digit , one lowercase letter , one uppercase letter and one special character(!@#$%^&) and should not start with digit");
+
+  jQuery.validator.addMethod("valueNotEquals", function(value, element, arg){
+    return arg !== value;
+  }, "Value must not equal arg.");
+
+
+  $("#file-selector").change(function(e) {
+      var file, img;
+
+
+      if ((file = this.files[0])) {
+          img = new Image();
+          img.onload = function() {
+              alert(this.width + " " + this.height);
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+          img.src = _URL.createObjectURL(file);
+
+
+      }
+
+  });
+
+//   var f='https://static.waytoadmissions.com/data/colleges/sri-jayadev-college-of-pharmaceutical-sciences-sjcps-bhubaneswar-orissa/ZF0jM3Akqu.jpg';
+
+
+//  function convertImgToBase64URL(url, callback, outputFormat){
+//     var img = new Image();
+//     img.crossOrigin = 'Anonymous';
+//     img.onload = function(){
+//         var canvas = document.createElement('CANVAS'),
+//         ctx = canvas.getContext('2d'), dataURL;
+//         canvas.height = img.height;
+//         canvas.width = img.width;
+//         ctx.drawImage(img, 0, 0);
+//         dataURL = canvas.toDataURL(outputFormat);
+//         callback(dataURL);
+//         canvas = null; 
+//     };
+//     img.src = url;
+// }
+// convertImgToBase64URL(f, function(base64Img){
+
+//   console.log(base64Img);
+
+//       //$('.output').find('img').attr('src', base64Img);  
+   
+// });
+
+
+  $("#file_cover_image").change(function(e) {
+      var file, img,img_height,img_width,allowed_file_size;
+
+      if ((file = this.files[0])) {
+          img = new Image();
+          img.src = _URL.createObjectURL(file);
+          img.onload = function() {            
+
+              img_height=this.height;
+              img_width=this.width;
+              allowed_file_size=999500*7;
+             
+              if(img_height==480 && img_width==1920 && file.size<=allowed_file_size){
+
+                $('#cover_img_small').attr('src', img.src);
+                $('#cover_img_large').attr('src',img.src);
+
+              }else{
+                Toast.fire({
+                  icon: 'error',
+                  title: 'For the best results on all devices, use an image that’s at least 1920 x 480 pixels and 6MB or less.Selected file is '+img_width+'x'+img_height+' pixels and file size is '+file_size(file.size)
+                });
+
+              }
+
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+
+      }
+
+  });
+
+
+  $("#file_logo_image").change(function(e) {
+      var file, img,img_height,img_width,allowed_file_size;
+
+      if ((file = this.files[0])) {
+          img = new Image();
+          img.src = _URL.createObjectURL(file);
+          img.onload = function() {            
+
+              img_height=this.height;
+              img_width=this.width;
+              allowed_file_size=999500*5;
+             
+              if(img_height>=500 && img_width>=500 && file.size<=allowed_file_size){
+
+                $('.logo_image').attr('src', img.src);
+
+              }else{
+                Toast.fire({
+                  icon: 'error',
+                  title: 'For the best results on all devices, use an image that’s at least 500 x 500 pixels and 6MB or less.Selected file is '+img_width+'x'+img_height+' pixels and file size is '+file_size(file.size)
+                });
+
+              }
+
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+
+      }
+
+  });
+
+  $('body').on('click','#btn_change_logo',function(){
+    $('#file_logo_image').trigger('click');
+  });
+
+
+  $('body').on('click','#btn_change_cover_image',function(){
+    $('#file_cover_image').trigger('click');
+  });
+
+  $('body').on('change','#register_institute_country',function(){
+    var ccode=$('#register_institute_country :selected').val();
+    const myArr = ccode.split("#");
+    var country=myArr[0];
+    $('#label_ph').html('Phone No ('+myArr[1]+')');
+    
+    console.log(myArr[1]);
+    loadstates(country);
+    loaduniversities(country);
+
+    if(ccode!=''){
+      $('#register_institute_country-error').html('').css('display','none');
+    }
+  });
+
+  $('body').on('change','#register_institute_state',function(){
+
+      var ccode=$('#register_institute_country :selected').val();
+      const myArr = ccode.split("#");
+      var country=myArr[0];
+      var state=$('#register_institute_state :selected').val();
+      console.log(state);
+      loadcities(country,state);
+      $("#register_institute_city").trigger("chosen:updated");
+      if(state!=''){
+        $('#register_state-error').html('').css('display','none');
+      }
+    });
+
+    $('body').on('change','#register_city',function(){
+      var ses=$('#register_institute_city :selected').val();
+
+      if(ses!=''){
+        $('#register_college_city-error').html('').css('display','none');
+      }
+    });
+
+
+     function loadstates(c){
+      var shtml='';
+
+      $.getJSON(base_url+'get_states/'+c,function(data){
+        if(data.status==false){
+          shtml+='<option value="0">No State/Province Found</option>';
+        }else{
+          json_data=data.states;
+          shtml='<option value="0">Select State/Province</option>';
+
+          $.each(json_data,function(k,v){
+            shtml+='<option value="'+v.state_id+'">'+v.state_name+'</option>';
+          });
+        }
+          
+
+          $('#register_institute_state').html(shtml);
+
+         $("#register_institute_state").trigger("chosen:updated");
+      });
+
+      // $.ajax({
+      //   type:'GET',
+      //   url:wb_api+'coapi/country_states/'+c,
+      //   data:{},
+      //   beforeSend: function(){ 
+      //     $("#register_college_state").empty(); 
+      //   },
+      //   success:function(d){
+      //     $.each(d,function(k,v){
+      //       shtml+='<option value="'+v['state_id']+'">'+v['state_name']+'</option>';
+      //     });
+          
+      //     $('#register_college_state').html(shtml);
+
+      //     console.log('state:'+d[0]['state_id']);
+
+      //    $("#register_college_state").trigger("chosen:updated");
+      //    //loadcities(c,d[0]['state_id']);
+      //   }
+      // });
+    }
+
+    function loadcities(c,s){
+      var chtml='';
+
+      $.getJSON(base_url+'get_cities/'+c+'/'+s,function(data){
+        if(data.status==false){
+          chtml+='<option value="0">No City Found</option>';
+        }else{
+          json_data=data.cities;
+          chtml='<option value="0">Select City</option>';
+
+          $.each(json_data,function(k,v){
+            chtml+='<option value="'+v.city_id+'">'+v.city_name+'</option>';
+          });
+        }
+          
+
+        $('#register_institute_city').html(chtml);
+
+        $("#register_institute_city").trigger("chosen:updated");
+      });
+
+      // $.ajax({
+      //   type:'GET',
+      //   url:wb_api+'coapi/state_cities/'+c+'/'+s,
+      //   data:{},
+      //   beforeSend: function(){ 
+      //     $("#register_college_city").empty(); 
+      //   },
+      //   success:function(d){
+      //     $.each(d.searched_data,function(k,v){
+      //       chtml+='<option value="'+v['city_id']+'">'+v['city_name']+'</option>';
+      //     });
+          
+      //     $('#register_college_city').html(chtml);
+
+      //    $("#register_college_city").trigger("chosen:updated");
+      //   }
+      // });
+    }
+
+
+    function loaduniversities(c){
+     
+      var chtml='<option value="0">Select University</option>';
+
+      $.ajax({
+        type:'GET',
+        url:wb_api+'instapi/universities/'+c,
+        data:{},
+        beforeSend: function(){ 
+          $("#register_institute_university").empty(); 
+        },
+        success:function(d){
+          $.each(d,function(k,v){
+            chtml+='<option value="'+v['university_id']+'">'+v['university_name']+'</option>';
+          });
+          
+          $('#register_institute_university').html(chtml);
+
+         $("#register_institute_university").trigger("chosen:updated");
+        }
+      });
+    }
+
+
+  $('#form_user_branding').validate({
+    rules:{
+      file_logo_image:{
+        required:true
+      },
+      file_cover_image:{
+        required:true
+      }
+    },
+    messages:{
+      file_logo_image:{
+        required:'Select logo'
+      },
+      file_cover_image:{
+        valueNotEquals:'Select cover image'
+      }
+    },
+    submitHandler:function(){
+      var formData=new FormData($('#form_user_branding')[0]);
+      //var change_type='';
+      formData.append([csrf_name], csrf_hash);
+      $.ajax({
+          type:'POST',
+          url:base_url+'update_single',
+          data:formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          timeout: 60000000,
+          target: '.preview',
+          beforeSend:function(){
+            $('#btn_publish').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Saving...</span>').prop('disabled',true);
+          },
+          success:function(f){
+            if(f.success){
+             $('#btn_publish').prop('disabled',true);
+             Toast.fire({
+                icon: 'success',
+                title: f.success
+              });            
+            }else if(f.error){
+              $('#btn_save_ads').prop('disabled',true);
+              Toast.fire({
+                icon: 'error',
+                title: f.error,
+              });
+            }else if(f.redirect){
+              $('#btn_publish').prop('disabled',true);
+              Toast.fire({
+                icon: 'info',
+                title: 'Your session expired'
+              });
+            }
+          },
+          xhr: function(){
+              //Get XmlHttpRequest object
+               var xhr = $.ajaxSettings.xhr() ;
+              //Set onprogress event handler
+               xhr.upload.onprogress = function(data){
+                  var perc =(data.loaded / data.total) * 100;// Math.round((data.loaded / data.total) * 100);
+                  $('.progress-bar').css('width',perc.toFixed(2) + '%').text(perc.toFixed(2) + '%');
+               };
+               return xhr ;
+          },
+          error: function (e) {
+          },
+          complete:function(status,xhr){
+            $('.progress-bar').css('width', '0%').text('0%');
+            $('#btn_publish').html('Publish').attr('disabled',false);
+          },
+          resetForm: true 
+      });
+    }
+  });
+
+
+  //Info Settings
+
+  $('#form_info_settings').validate({
+    rules:{
+      registration_user_recovery_mail:{
+        required:true,
+        email:true
+      },
+      registration_user_recovery_phone:{
+        required:true
+      },
+      registration_user_contact_person:{
+        required:true
+      },
+      registration_user_current_pass:{
+        required:false,
+        minlength:8,
+        maxlength:16,
+        pwcheck:true
+      },
+      registration_user_new_pass:{
+        required:false,
+        minlength:8,
+        maxlength:16,
+        pwcheck:true
+      }
+    },
+    messages:{
+      registration_user_recovery_mail:{
+        required:'Enter email address',
+        email:'Email is not valid'
+      },
+      registration_user_recovery_phone:{
+        required:'Enter phone no'
+      },
+      registration_user_contact_person:{
+        required:'Enter contact person name'
+      },
+      registration_user_current_pass:{
+        minlength:'Minimum 8 characters required',
+        maxlength:'Maximum 16 characters allowed'
+      },
+      registration_user_new_pass:{
+        minlength:'Minimum 8 characters required',
+        maxlength:'Maximum 16 characters allowed'
+      }
+    },
+    submitHandler:function(){
+      var formData=new FormData($('#form_info_settings')[0]);
+      formData.append([csrf_name], csrf_hash);
+      //formData.append('change_type', 'account_settings');
+      $.ajax({
+          type:'POST',
+          url:base_url+'update_single',
+          data:formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          timeout: 60000000,
+          target: '.preview',
+          beforeSend:function(){
+            $('#btn_update_account_info').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Saving...</span>').prop('disabled',true);
+          },
+          success:function(f){
+            if(f.success){
+             $('#btn_update_account_info').prop('disabled',true);
+             Toast.fire({
+                icon: 'success',
+                title: f.success
+              });            
+            }else if(f.error){
+              $('#btn_update_account_info').prop('disabled',true);
+              Toast.fire({
+                icon: 'error',
+                title: f.error,
+              });
+            }else if(f.redirect){
+              $('#btn_update_account_info').prop('disabled',true);
+              Toast.fire({
+                icon: 'info',
+                title: 'Your session expired'
+              });
+            }
+          },
+          xhr: function(){
+              //Get XmlHttpRequest object
+               var xhr = $.ajaxSettings.xhr() ;
+              //Set onprogress event handler
+               xhr.upload.onprogress = function(data){
+                  var perc =(data.loaded / data.total) * 100;// Math.round((data.loaded / data.total) * 100);
+                  $('.progress-bar').css('width',perc.toFixed(2) + '%').text(perc.toFixed(2) + '%');
+               };
+               return xhr ;
+          },
+          error: function (e) {
+          },
+          complete:function(status,xhr){
+            $('.progress-bar').css('width', '0%').text('0%');
+            $('#registration_user_current_pass').val('');
+            $('#registration_user_new_pass').val('');
+            $('#btn_update_account_info').html('Update').attr('disabled',false);
+          },
+          resetForm: true 
+      });
+    }
+  });
+
+
+  $('#form_basic_info_settings').validate({
+    rules:{
+      register_institute_name:{
+        required:true,
+        minlength:20
+      },
+      register_institute_email:{
+        required:true,
+        email:true
+      },
+      register_institute_phone_no:{
+        required:true,
+        minlength:10,
+        maxlength:12,
+        digits:true
+      },
+      register_institute_alter_phone_no:{
+        minlength:10,
+        maxlength:12,
+        digits:true
+      },
+      register_college_web_address:{
+        required:true
+      },
+      register_institute_estd:{
+        required:true,
+        minlength:4,
+        maxlength:4,
+        digits:true
+      },
+      register_institute_type:{
+        valueNotEquals:'0'
+      },
+      register_institute_country:{
+        valueNotEquals:'0'
+      },
+      register_institute_state:{
+        valueNotEquals:'0'
+      },
+      register_institute_city:{
+        valueNotEquals:'0'
+      },
+      register_institute_zip_code:{
+        required:true,
+        digits:true
+      },
+      register_institute_address:{
+        required:true
+      }
+    },
+    messages:{
+      register_institute_name:{
+        required:'Enter Name',
+        minlength:'Minimum 20 charachter required'
+      },
+      register_institute_email:{
+        required:'Enter email address',
+        email:'Email is not valid'
+      },
+      register_institute_phone_no:{
+        required:'Enter phone no',
+        minlength:'Minimum 10 digits allowed',
+        maxlength:'Maximum 12 digits allowed',
+        digits:'Only digits are allowed'
+      },
+      register_institute_alter_phone_no:{
+        minlength:'Minimum 10 digits allowed',
+        maxlength:'Maximum 12 digits allowed',
+        digits:'Only digits are allowed'
+      },
+      register_college_web_address:{
+        required:'Enter wesite address'
+      },
+      register_institute_estd:{
+        required:'Enter year of establishment',
+        minlength:'Minimum 4 digits allowed',
+        maxlength:'Maximum 4 digits allowed',
+        digits:'Only digits are allowed'
+      },
+      register_institute_type:{
+        valueNotEquals:'Select type'
+      },
+      register_institute_country:{
+        valueNotEquals:'Select country'
+      },
+      register_institute_state:{
+        valueNotEquals:'Select state'
+      },
+      register_institute_city:{
+        valueNotEquals:'Select city'
+      },
+      register_institute_zip_code:{
+        required:'Enter zipcode',
+        digits:'Only digits are allowed'
+      },
+      register_institute_address:{
+        required:'Enter address'
+      }
+    },
+    submitHandler:function(){
+      var regiter_institute_facilities_info = tinymce.get("regiter_institute_facilities_info").getContent();
+      var regiter_institute_broad_description = tinymce.get("regiter_institute_broad_description").getContent();
+      var regiter_institute_short_description = tinymce.get("regiter_institute_short_description").getContent();
+      var formData=new FormData($('#form_basic_info_settings')[0]);
+      formData.append([csrf_name], csrf_hash);
+      formData.append('regiter_institute_facilities_info', regiter_institute_facilities_info);
+      formData.append('regiter_institute_broad_description', regiter_institute_broad_description);
+      formData.append('regiter_institute_short_description', regiter_institute_short_description);
+
+      $.ajax({
+          type:'POST',
+          url:base_url+'update_single',
+          data:formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          timeout: 60000000,
+          target: '.preview',
+          beforeSend:function(){
+            $('#btn_update_basic_info').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Saving...</span>').prop('disabled',true);
+          },
+          success:function(f){
+            if(f.success){
+             $('#btn_update_basic_info').prop('disabled',true);
+             Toast.fire({
+                icon: 'success',
+                title: f.success
+              });            
+            }else if(f.error){
+              $('#btn_update_basic_info').prop('disabled',true);
+              Toast.fire({
+                icon: 'error',
+                title: f.error,
+              });
+            }else if(f.redirect){
+              $('#btn_update_basic_info').prop('disabled',true);
+              Toast.fire({
+                icon: 'info',
+                title: 'Your session expired'
+              });
+            }
+          },
+          xhr: function(){
+              //Get XmlHttpRequest object
+               var xhr = $.ajaxSettings.xhr() ;
+              //Set onprogress event handler
+               xhr.upload.onprogress = function(data){
+                  var perc =(data.loaded / data.total) * 100;// Math.round((data.loaded / data.total) * 100);
+                  $('.progress-bar').css('width',perc.toFixed(2) + '%').text(perc.toFixed(2) + '%');
+               };
+               return xhr ;
+          },
+          error: function (e) {
+          },
+          complete:function(status,xhr){
+            $('.progress-bar').css('width', '0%').text('0%');
+            $('#btn_update_basic_info').html('Update').attr('disabled',false);
+          },
+          resetForm: true 
+      });
+    }
+  });
+
+
+  if ($(".college_info").length) {
+    tinymce.init({
+      selector: '.college_info',
+      entity_encoding : "raw",
+      height: 400,
+      theme: 'silver',
+      menubar: 'insert format table',
+      statusbar: false,
+      plugins: [
+        'advlist autolink lists link charmap hr anchor pagebreak',
+        'searchreplace wordcount visualblocks visualchars code fullscreen table',
+      ],
+      toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+      toolbar2: 'forecolor backcolor emoticons | codesample',
+      table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+      table_appearance_options: true,
+      table_use_colgroups: true,
+      link_quicklink: true,
+      default_link_target: '_blank',
+      link_context_toolbar: true,
+      link_default_protocol: 'https',
+      link_class_list: [
+        {title: 'None', value: ''},
+        {title: 'External Link', value: 'ext_link'},
+        {title: 'Internal Links',
+          menu: [
+            {title: 'Internal Support Link', value: 'int_sup_link'},
+            {title: 'Internal Marketing Link', value: 'int_mark_link'},
+            {title: 'Other Internal Link', value: 'int_other_link'}
+          ]
+        }
+      ],
+      link_list: [
+        {title: 'Tiny Home Page', value: 'https://www.tiny.cloud'},
+        {title: 'Tiny Blog', value: 'https://www.tiny.cloud/blog'},
+        {title: 'TinyMCE Support resources',
+          menu: [
+            {title: 'TinyMCE Documentation', value: 'https://www.tiny.cloud/docs/'},
+            {title: 'TinyMCE on Stack Overflow', value: 'https://stackoverflow.com/questions/tagged/tinymce'},
+            {title: 'TinyMCE GitHub', value: 'https://github.com/tinymce/'}
+          ]
+        }
+      ],
+      target_list: [
+        {title: 'None', value: ''},
+        {title: 'Same page', value: '_self'},
+        {title: 'New page', value: '_blank'},
+        {title: 'Parent frame', value: '_parent'}
+      ],
+      image_advtab: true,
+      templates: [{
+          title: 'Test template 1',
+          content: 'Test 1'
+        },
+        {
+          title: 'Test template 2',
+          content: 'Test 2'
+        }
+      ],
+      content_css: []
+    });
+  }
+
+  if ($(".college_broad_info").length) {
+    tinymce.init({
+      selector: '.college_broad_info',
+      entity_encoding : "raw",
+      height: 600,
+      theme: 'silver',
+      menubar: 'insert format table',
+      statusbar: false,
+      plugins: [
+        'advlist autolink lists link charmap hr anchor pagebreak',
+        'searchreplace wordcount visualblocks visualchars code fullscreen table',
+      ],
+      toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+      toolbar2: 'forecolor backcolor emoticons | codesample',
+      table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+      table_appearance_options: true,
+      table_use_colgroups: true,
+      link_quicklink: true,
+      default_link_target: '_blank',
+      link_context_toolbar: true,
+      link_default_protocol: 'https',
+      link_class_list: [
+        {title: 'None', value: ''},
+        {title: 'External Link', value: 'ext_link'},
+        {title: 'Internal Links',
+          menu: [
+            {title: 'Internal Support Link', value: 'int_sup_link'},
+            {title: 'Internal Marketing Link', value: 'int_mark_link'},
+            {title: 'Other Internal Link', value: 'int_other_link'}
+          ]
+        }
+      ],
+      link_list: [
+        {title: 'Tiny Home Page', value: 'https://www.tiny.cloud'},
+        {title: 'Tiny Blog', value: 'https://www.tiny.cloud/blog'},
+        {title: 'TinyMCE Support resources',
+          menu: [
+            {title: 'TinyMCE Documentation', value: 'https://www.tiny.cloud/docs/'},
+            {title: 'TinyMCE on Stack Overflow', value: 'https://stackoverflow.com/questions/tagged/tinymce'},
+            {title: 'TinyMCE GitHub', value: 'https://github.com/tinymce/'}
+          ]
+        }
+      ],
+      target_list: [
+        {title: 'None', value: ''},
+        {title: 'Same page', value: '_self'},
+        {title: 'New page', value: '_blank'},
+        {title: 'Parent frame', value: '_parent'}
+      ],
+      image_advtab: true,
+      templates: [{
+          title: 'Test template 1',
+          content: 'Test 1'
+        },
+        {
+          title: 'Test template 2',
+          content: 'Test 2'
+        }
+      ],
+      content_css: []
+    });
+  }
+
+  if ($(".college_facilities_info").length) {
+    tinymce.init({
+      selector: '.college_facilities_info',
+      entity_encoding : "raw",
+      height: 300,
+      theme: 'silver',
+      menubar: 'insert format table',
+      statusbar: false,
+      plugins: [
+        'advlist autolink lists link charmap hr anchor pagebreak',
+        'searchreplace wordcount visualblocks visualchars code fullscreen table',
+      ],
+      toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+      toolbar2: 'forecolor backcolor emoticons | codesample',
+      table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+      table_appearance_options: true,
+      table_use_colgroups: true,
+      link_quicklink: true,
+      default_link_target: '_blank',
+      link_context_toolbar: true,
+      link_default_protocol: 'https',
+      link_class_list: [
+        {title: 'None', value: ''},
+        {title: 'External Link', value: 'ext_link'},
+        {title: 'Internal Links',
+          menu: [
+            {title: 'Internal Support Link', value: 'int_sup_link'},
+            {title: 'Internal Marketing Link', value: 'int_mark_link'},
+            {title: 'Other Internal Link', value: 'int_other_link'}
+          ]
+        }
+      ],
+      link_list: [
+        {title: 'Tiny Home Page', value: 'https://www.tiny.cloud'},
+        {title: 'Tiny Blog', value: 'https://www.tiny.cloud/blog'},
+        {title: 'TinyMCE Support resources',
+          menu: [
+            {title: 'TinyMCE Documentation', value: 'https://www.tiny.cloud/docs/'},
+            {title: 'TinyMCE on Stack Overflow', value: 'https://stackoverflow.com/questions/tagged/tinymce'},
+            {title: 'TinyMCE GitHub', value: 'https://github.com/tinymce/'}
+          ]
+        }
+      ],
+      target_list: [
+        {title: 'None', value: ''},
+        {title: 'Same page', value: '_self'},
+        {title: 'New page', value: '_blank'},
+        {title: 'Parent frame', value: '_parent'}
+      ],
+      image_advtab: true,
+      templates: [{
+          title: 'Test template 1',
+          content: 'Test 1'
+        },
+        {
+          title: 'Test template 2',
+          content: 'Test 2'
+        }
+      ],
+      content_css: []
+    });
+  }
+  /**
+ * Format bytes as human-readable text.
+ * 
+ * @param bytes Number of bytes.
+ * @param si True to use metric (SI) units, aka powers of 1000. False to use 
+ *           binary (IEC), aka powers of 1024.
+ * @param dp Number of decimal places to display.
+ * 
+ * @return Formatted string.
+ */
+
+   function file_size(bytes, si=false, dp=1) {
+    const thresh = si ? 1000 : 1024;
+
+    if (Math.abs(bytes) < thresh) {
+      return bytes + ' B';
+    }
+
+    const units = si 
+      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    const r = 10**dp;
+
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+    return bytes.toFixed(dp) + ' ' + units[u];
+  }
+
+
+
+  // Check if the element with ID 'application_list_table' exists
+  const tableExists = document.getElementById('application_list_table') !== null;
+  const reviewsdivExists = document.getElementById('reviews_div') !== null;
+ 
+
+  if(tableExists===true){
+     // Log the result
+    console.log('Does the table exist in the DOM? Yes');
+
+    //Countries
+    $('#application_list_table').DataTable({ 
+        'bJQueryUI': false,
+        'stateSave': true,
+        'iDisplayLength':50,
+        'responsive': true,
+        "pagingType": "full_numbers",
+        'language': {
+          'paginate': {
+            'first': "<<", // This is the link to the first page
+            'previous': "<", // This is the link to the previous page
+            'next': ">", // This is the link to the next page
+            'last': ">>" // This is the link to the last page
+          }
+        },
+        "lengthMenu": [[10,25,50,100,250,500,1000,1500], [10,25,50,100,250,500,1000,1500]],
+        "processing": true, //Feature control the processing indicator.
+        "serverSide": true, //Feature control DataTables' server-side processing mode.
+        "order": [], //Initial no order.
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": base_url+'account/applicant_listing',
+            "type": "POST",
+            "data":{[csrf_name]:csrf_hash}
+        },
+        //Set column definition initialisation properties.
+        "columnDefs": [
+        { 
+            "targets": [ 0 ], //first column / numbering column
+            "orderable": false, //set not orderable
+        },
+        ],
+    });
+  }else{
+     // Log the result
+    console.log('Does the table exist in the DOM? No');
+  }
+
+
+  if(reviewsdivExists===true){
+    if($('#reviews_div').length>0){
+      setTimeout(function(){
+
+        load_reviews();
+
+
+      },5000);
+    }
+
+
+    function load_reviews(){
+
+      $.ajax({
+        type:'GET',
+        url:base_url+'load_reviews?_p='+_cid,
+        data:{},
+        beforeSend:function(){
+
+        },
+        success:function(d){
+          $('#reviews_div').html(d.html);
+        }
+      });
+
+    }
+  }
+
+
+
+
+  // Check if the element with ID 'application_list_table' exists
+  const leadstableExists = document.getElementById('college_leads_list_table') !== null;
+ 
+
+  if(leadstableExists===true){
+
+    //Countries
+    if(leads_access=='yes'){
+      $('#college_leads_list_table').DataTable({ 
+        'bJQueryUI': false,
+        'stateSave': true,
+        'iDisplayLength':50,
+        'responsive': true,
+        "pagingType": "full_numbers",
+        'language': {
+          'paginate': {
+            'first': "<<", // This is the link to the first page
+            'previous': "<", // This is the link to the previous page
+            'next': ">", // This is the link to the next page
+            'last': ">>" // This is the link to the last page
+          }
+        },
+        "lengthMenu": [[10,25,50,100,250,500,1000,1500], [10,25,50,100,250,500,1000,1500]],
+        "processing": true, //Feature control the processing indicator.
+        "serverSide": true, //Feature control DataTables' server-side processing mode.
+        "order": [], //Initial no order.
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": base_url+'account/leads_listing',
+            "type": "POST",
+            "data":{[csrf_name]:csrf_hash}
+        },
+        //Set column definition initialisation properties.
+        "columnDefs": [
+        { 
+            "targets": [ 0 ], //first column / numbering column
+            "orderable": false, //set not orderable
+        },
+        ],
+      });
+    }
+      
+  }else{
+     // Log the result
+    console.log('Does the table exist in the DOM? No');
+  }
+
+
+    
+
+
+
+
+});

@@ -1,0 +1,1568 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?php echo $admin_base_url;?>/institutions/colleges/add/<?php echo $college_id;?>"><?php echo (!empty($college_data))?'Back to '.$college_data['college_name']:'';?></a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College Placement Data</li>
+		</ol>
+	</nav>
+
+	<?php
+	if(isset($college_data) && (!empty($college_data))){
+		?>
+		<div class="profile-page tx-13">
+			<div class="profile-page tx-13">
+				<div class="row">
+		            <div class="col-12 grid-margin">
+						<div class="profile-header">
+							<div class="cover">
+								<div class="gray-shade"></div>
+								<figure>
+									<img src="<?php echo (!empty($college_data))?$college_data['college_banner']:'';?>" class="img-fluid" alt="profile cover" style="height: 300px;">
+								</figure>
+								<div class="cover-body d-flex justify-content-between align-items-center">
+									<div>
+										<img class="profile-pic" src="<?php echo (!empty($college_data))?$college_data['college_logo']:'';?>" alt="profile">
+										<a href="<?php echo (!empty($college_data))?$college_data['college_access_url']:'';?>" target="_blank"><span class="profile-name"><?php echo (!empty($college_data))?$college_data['college_name']:'';?></span></a>
+									</div>
+								</div>
+							</div>
+							<div class="header-links">
+								<ul class="links d-flex align-items-center mt-3 mt-md-0">
+									<li class="header-link-item d-flex align-items-center active">
+										<button class="btn btn-primary btn-icon-text btn-edit-profile" data-toggle="modal" data-target="#collegeInnerMenuesModal"> Create inner Menues</button>
+									</li>
+								</ul>
+							</div>
+		            	</div>
+		            </div>
+				</div>
+			</div>
+		</div>
+		<?php
+			if(isset($inner_menues_assigned) && !empty($inner_menues_assigned)){
+			?>
+			<div class="profile-page tx-13">
+				<div class="row">
+					<div class="col-12 grid-margin">
+						<div class="profile-header table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Inner Menu</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+									<?php
+									foreach ($inner_menues_assigned as $key => $value) {
+										?>
+										<td>
+											<div class="btn-group" role="group" aria-label="Basic example">
+												<a class="btn btn-primary btn-icon-text btn-edit-profile" href="<?php echo $value['menu_link'];?>"> <?php echo (!empty($value['menu_name']))?$value['menu_name']:$value['menu_type'];?></a>
+												<button class="btn btn-xs btn-danger btn_del_college_inner_menu" type="button" data-cid="<?php echo $college_id;?>" data-aid="<?php echo encode_data($value['menu_id']);?>">Remove Menu</button>
+											</div>
+										</td>
+										<?php
+									}
+									?>
+									</tr>
+								</tbody>
+							</table>						
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
+		}
+		?>
+		
+
+
+		<div class="row">
+			<div class="col-md-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h6 class="card-title">Placement Section Details</h6>
+						<form id="form_college_placement_intro">
+							<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+							<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+							<input type="hidden" name="college_details_type" value="placement_info">
+							<input type="hidden" name="college_info_type" value="6">
+							<input type="hidden" name="college_type" value="2">
+
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea class="form-control college_general_info" name="college_general_info" id="college_general_info" rows="10" >
+											<?php
+
+											//print_obj($college_data['college_admission_info']);
+
+											if(!empty($college_data['college_placement_intro'])){
+												echo $college_data['college_placement_intro'];
+											}
+											?>
+										</textarea>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row table-responsive" id="data_heading_rows">
+										<?php $table_row='0';?>
+										<table class="table" style="width:100% !important;">
+
+											<?php
+
+											if(!empty($college_data['college_placement_intfos'])){
+												foreach ($college_data['college_placement_intfos'] as $key => $value) {
+													if($value->info_value_type=='general'){
+														?>
+														<tr id="trPlacementData<?php echo $table_row;?>">
+														    <td>
+														    <div class="form-group row">
+														      	<div class="col-md-12">
+													              <h6>Content Detail</h6>
+													              <input type="hidden" name="college_general_info[<?php echo $table_row;?>][data_type]" value="general">
+													              <input type="number" class="form-control" name="college_general_info[<?php echo $value->info_serial;?>][data_serial]" value="<?php echo $table_row;?>">
+													              <textarea class="form-control college_general_info" rows="40" name="college_general_info[<?php echo $table_row;?>][data_content]"><?php echo $value->info_value;?></textarea>		              
+													            </div>
+													        </div>
+														    <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trPlacementData<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+														    </td>
+													    </tr>
+														<?php
+													}else if($value->info_value_type=='image'){
+														?>
+														<tr id="trPlacementData<?php echo $table_row;?>">
+													    <td>
+														    <div class="form-group row">
+														    <div class="col-md-12">
+															    <h6>Image Data</h6>
+															    <input type="hidden" id="college_general_info<?php echo $table_row;?>" name="college_general_info[<?php echo $table_row;?>][data_type]" value="image">
+															    <input type="text" id="college_general_info<?php echo $table_row;?>" name="college_general_info[<?php echo $table_row;?>][data_serial]" value="<?php echo $value->info_serial;?>">
+															    <input type="hidden" id="college_general_info<?php echo $table_row;?>" name="college_general_info[<?php echo $table_row;?>][data_type_value]" value="<?php echo $value->info_value_id;?>">
+															    <input type="hidden" id="college_general_info<?php echo $table_row;?>" name="college_general_info[<?php echo $table_row;?>][data_content]" value="<?php echo $value->info_value;?>">
+															    <div class="row"><img id="data_img_src<?php echo $table_row;?>" src="<?php echo $value->info_value;?>" class="img-thumbnail" alt="Cinque Terre" style="width:50% !important;height: auto;border-radius: 0;"></div>
+															    <div class="row">
+															    	<input type="text" class="form-control" name="college_general_info[<?php echo $table_row;?>][data_type_value_alt]" placeholder="Enter SEO alternative text for the image" value="<?php echo $value->info_value_about;?>">
+															    </div>
+														    <div>
+														    </div>
+														    <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0 btn_update_media" data-media_row="<?php echo $table_row;?>" data-toggle="modal" data-target="#specificFileBrowserModal">Update Media</button><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trPlacementData<?php echo $table_row;?>').remove()">Delete Row</button></div></div>';
+													    </td>
+													    <tr>
+														<?php															
+													}else if($value->info_value_type=='ads'){
+														?>
+														<tr id="trPlacementData<?php echo $table_row;?>">
+													      	<td>
+															    <div class="form-group row">
+															        <div class="col-md-12">
+															            <h6>Content Detail</h6>
+															            <input type="hidden" name="college_general_info[<?php echo $table_row;?>][data_type]" value="ads">
+															            <input type="hidden" name="college_general_info[<?php echo $table_row;?>][data_type_value]" value="<?php echo $table_row;?>">
+															            <input type="number" class="form-control" name="college_general_info[<?php echo $table_row;?>][data_serial]" value="<?php echo $value->info_serial;?>">
+															            <textarea class="form-control" rows="40" name="college_general_info[<?php echo $table_row;?>][data_content]" style="display:none;"><?php echo $value->info_value;?></textarea>
+															            <div class="col-md-12"><?php echo $value->info_value;?></div>
+															        </div>
+															    </div>
+															    <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trPlacementData<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+														   	</td>
+													    </tr>
+														<?php
+													}else if($value->info_value_type=='youtube'){
+														
+													}
+
+													$table_row++;
+												}
+											}else{
+												?>
+												<tr id="trPlacementData<?php echo $table_row;?>">
+													<td>
+														<div class="form-group row">
+															<div class="col-md-12">
+												            	<label for="college_general_info" class="label_title"><strong>Content Detail</strong></label>
+												            	<input type="hidden" name="college_general_info[<?php echo $table_row;?>][data_type]" value="general">
+												            	<input type="number" class="form-control" name="college_general_info[<?php echo $table_row;?>][data_serial]" value="0">
+												            	<textarea class="form-control college_general_info" rows="40" name="college_general_info[<?php echo $table_row;?>][data_content]"></textarea>
+												          	</div>
+												        </div>
+													</td>
+												</tr>
+												<?php
+											}
+
+											?>
+
+
+
+											
+										</table>
+										<script type="text/javascript">var bposthdr='<?php echo ($table_row==0)?($table_row+1):$table_row;?>';</script>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h6 class="card-title">Placement Highest and Average Package <button type="button" class="btn btn-sm btn-primary" style="float: right;" data-target="#companiesModal" data-toggle="modal">Add Company</button></h6>
+												<div class="row">
+													<div class="col-sm-12">
+														<div class="table-responsive">
+															<?php $abc=0;?>
+																<table class="table">
+																	<thead>
+																		<tr>
+																			<th>Highest Salary Range (in Lakh)</th>
+																			<th>Average Salary Range (in Lakh)</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td align="center">
+																				<select class="form-control" name="college_general_info_highest_pacakge">
+																					<?php
+																					if(!empty($college_data['college_highest_package'])){
+																						foreach ($college_data['college_highest_package'] as $key => $value) {
+																							?>
+																							<option value="<?php echo $value['pacakge_highest_data'];?>" <?php echo $value['selected'];?>><?php echo $value['pacakge_highest_data'];?></option>
+																							<?php
+																						}
+																					}
+																					?>
+																				</select>
+																					
+																			</td>
+																			<td align="center">
+																				<select class="form-control" name="college_general_info_avg_package">
+																					<?php
+																					if(!empty($college_data['college_average_package'])){
+																						foreach ($college_data['college_average_package'] as $key => $value) {
+																							?>
+																							<option value="<?php echo $value['pacakge_avg_data'];?>" <?php echo $value['selected'];?>><?php echo $value['pacakge_avg_data'];?></option>
+																							<?php
+																						}
+																					}
+																					?>
+																				</select>
+																					
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+														</div>								
+													</div>
+												</div>
+										</div>
+									</div>
+								</div>	
+							</div>
+
+
+							<div class="row">
+								<div class="col-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h6 class="card-title">Frequently Visited Companies <button type="button" class="btn btn-sm btn-primary" style="float: right;" data-target="#companiesModal" data-toggle="modal">Add Company</button></h6>
+											<?php $frqc=0;?>
+											<div class="row">
+												<div class="col-sm-12">
+														<div class="table-responsive">
+															<table class="table table-bordered" id="form_college_placement_visited_companies_data" width="100%">
+																<thead>
+																	<tr>
+																		<th>Company</th>
+																		<th>Image</th>
+																		<th><button type="button" class="btn btn-xs btn-primary pull-right" id="btn_add_frequent_companies"><i class="fa fa-plus"></i></button></th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<?php
+																	if(!empty($companies_visited_frequently)){
+																		foreach ($companies_visited_frequently as $key => $value) {
+																			?>
+																			<tr id="trFrequentCompany<?php echo $frqc;?>">
+																				<td>
+																					<select class="form-control college_placement_frequent_companies" name="college_placement_frequent_companies[<?php echo $frqc;?>][company_id]">
+																						<option value="<?php echo $value->placement_company_id;?>"><?php echo $value->placement_company_name;?></option>
+																					</select>
+																				</td>
+
+																				<td>
+
+																				</td>
+
+																				<td><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trFrequentCompany<?php echo $frqc;?>').remove()">Delete Row</button></td>
+																			</tr>
+																			<?php
+
+																			$frqc++;
+																		}
+																	}else{
+																		?>
+																		<tr>
+																			<td colspan="3" style="text-align:center;">No Data Available</td>
+																		</tr>
+																		<?php
+																	}
+																	?>
+																	
+																</tbody>
+																<tfoot>
+																	<tr>
+																		<th></th>
+																		<th></th>
+																		<th></th>
+																	</tr>
+																</tfoot>
+															</table>
+														</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row">
+							
+								<div class="col-md-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h6 class="card-title">Placement Details (Company) <button type="button" class="btn btn-sm btn-primary" style="float: right;" data-target="#companiesModal" data-toggle="modal">Add Company</button></h6>
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="table-responsive">
+															<table class="table" id="form_college_placement_data">
+																<thead>
+																	<tr>
+																		<th>Year</th>
+																		<th>Company</th>
+																		<th>Highest Package</th>
+																		<th>No. of Students</th>
+																		<th><button type="button" class="btn btn-sm btn-primary pull-right" id="btn_placement_data"><i class="fa fa-plus"></i></button></th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<?php
+																	$plc=0;
+																	$i=0;
+																	if(!empty($college_data['college_placement_data'])){
+
+																		foreach ($college_data['college_placement_data'] as $key => $value) {
+																			?>
+																			<tr id="tr_pl<?php echo $value->placement_id;?>">
+																			    <td>
+																			    	<input type="number" class="form-control border border-dark" min="2010" name="college_placement_data[<?php echo $i;?>][year]" value="<?php echo $value->placement_year;?>">
+																			    </td>
+																			    <td>
+																			    	<select class="form-control select_placement" name="college_placement_data[<?php echo $i;?>][company]">
+																			    		<?php
+																			    		foreach ($college_data['college_placement_companies'] as $ke => $v) {
+																			    			?>
+																			    			<option value="<?php echo $v['placement_company_id'];?>" <?php echo ($v['placement_company_id']==$value->placement_company)?'selected':'';?>><?php echo $v['placement_company_name'];?></option>
+																			    			<?php
+																			    		}
+																			    		?>
+																			    	</select>
+																			    </td>
+																			    <td>
+																			    	<input type="text" class="form-control border border-dark" name="college_placement_data[<?php echo $i;?>][package]" value="<?php echo $value->placement_highest_package;?>">';
+																			    </td>
+																			    <td>
+																			    	<input type="number" class="form-control border border-dark" name="college_placement_data[<?php echo $i;?>][no_of_students]" value="<?php echo $value->placement_students_no;?>">
+																			    </td>
+																			    <td>
+																			    	<button type="button" class="btn btn-sm btn-danger btn_del_placement_data" onclick="delete_placement_data(<?php echo $value->placement_id;?>);"><i class="fa fa-minus"></i></button>';
+																			    </td>
+																		    </tr>
+																			<?php
+																			$i++;
+																		}
+																	}
+																	?>
+																</tbody>
+																<tfoot>
+																	<tr>
+																		<th></th>
+																		<th></th>
+																		<th></th>
+																		<th></th>
+																	</tr>
+																</tfoot>
+															</table>
+
+															<script type="text/javascript">var plc='<?php echo ($i==0)?($i+1):$i;?>';</script>
+													</div>								
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h6 class="card-title">Placement Alumni Distribution By Companies <button type="button" class="btn btn-sm btn-primary" style="float: right;" data-target="#companiesModal" data-toggle="modal">Add Company</button></h6>
+											<div class="row">
+													<div class="col-sm-12">
+														<div class="table-responsive">
+															<?php $abc=0;?>
+																<table class="table" id="form_college_placement_data_alumni_distribution_by_companies">
+																	<thead>
+																		<tr>
+																			<th>Company</th>
+																			<th>Salary Range (in Lakh)</th>
+																			<th><button type="button" class="btn btn-xs btn-primary pull-right" id="btn_placement_data_alumni_distribution_by_companies"><i class="fa fa-plus"></i></button></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<?php
+																		if(!empty($companywise_alumni)){
+																			foreach ($companywise_alumni as $key => $value) {
+																				?>
+																				<tr id="trAlumnibyCompany<?php echo $abc;?>">
+																					<td>
+																						<select class="form-control college_placement_alumni_distribution_by_companies" name="college_placement_alumni_distribution_by_companies[<?php echo $abc;?>][company_id]">
+																							<option value="<?php echo $value->alumni_type_id;?>"><?php echo $value->placement_company_name;?></option>
+																						</select>
+																					</td>
+
+																					<td>
+																					<select class="form-control" name="college_placement_alumni_distribution_by_companies[<?php echo $abc;?>][alumni_percentage_scale]">
+																					<?php
+																					for ($i=0; $i <=100 ; $i=$i+5) { 
+																						?>
+																						<option value="<?php echo $i;?>" <?php echo ($i==$value->alumni_value)?'selected':'';?>><?php echo $i;?></option>
+																						<?php
+																					}
+																					?>
+																					</select>
+																					</td>
+
+																					<td><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trAlumnibyCompany<?php echo $abc;?>').remove()">Delete Row</button></td>
+																				</tr>
+
+																				<?php
+
+																				$abc++;
+																			}
+																		}else{
+																			?>
+																			<tr>
+																				<td colspan="3" align="center">No data available</td>
+																			</tr>
+																			<?php
+																		}
+																		?>																			
+																	</tbody>
+																	<tfoot>
+																		<tr>
+																			<th>Company</th>
+																			<th>Salary Range (in Lakh)</th>
+																			<th></th>
+																			<th></th>
+																		</tr>
+																	</tfoot>
+																</table>
+														</div>								
+													</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-md-12 grid-margin stretch-card">
+									<div class="card">
+										<div class="card-body">
+											<h6 class="card-title">Placement Alumni Distribution By Sectors <button type="button" class="btn btn-sm btn-primary" style="float: right;" data-target="#companiesModal" data-toggle="modal">Add Company</button></h6>
+											<div class="row">
+													<div class="col-sm-12">
+														<div class="table-responsive">
+															<?php $abs=0;?>
+																<table class="table" id="form_college_placement_data_alumni_distribution_by_sectors">
+																	<thead>
+																		<tr>
+																			<th>Company</th>
+																			<th>Salary Range (in Lakh)</th>
+																			<th><button type="button" class="btn btn-xs btn-primary pull-right" id="btn_placement_data_alumni_distribution_by_sectors"><i class="fa fa-plus"></i></button></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<?php
+																		if(!empty($sectorwise_alumni)){
+																			foreach ($sectorwise_alumni as $key => $value) {
+																				?>
+																				<tr id="trAlumnibySectors<?php echo $abs;?>">
+																					<td>
+																						<select class="form-control" name="college_placement_alumni_distribution_by_sectors[<?php echo $abs;?>][company_id]">
+																							<option value="<?php echo $value->alumni_type_id;?>"><?php echo $value->sector_name;?></option>
+																						</select>
+																					</td>
+
+																					<td>
+																					<select class="form-control" name="college_placement_alumni_distribution_by_sectors[<?php echo $abs;?>][alumni_percentage_scale]">
+																					<?php
+																					for ($i=0; $i <=100 ; $i=$i+5) { 
+																						?>
+																						<option value="<?php echo $i;?>" <?php echo ($i==$value->alumni_value)?'selected':'';?>><?php echo $i;?></option>
+																						<?php
+																					}
+																					?>
+																					</select>
+																					</td>
+
+																					<td><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trAlumnibySectors<?php echo $abs;?>').remove()">Delete Row</button></td>
+																				</tr>
+
+																				<?php
+
+																				$abc++;
+																			}
+																		}else{
+																			?>
+																			<tr>
+																				<td colspan="3" align="center">No data available</td>
+																			</tr>
+																			<?php
+																		}
+																		?>
+																	</tbody>
+																	<tfoot>
+																		<tr>
+																			<th>Company</th>
+																			<th>Salary Range (in Lakh)</th>
+																			<th></th>
+																			<th></th>
+																		</tr>
+																	</tfoot>
+																</table>
+														</div>								
+													</div>
+											</div>							
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="buy-now-wrapper" id="buttons_wrapper">
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Content</button>
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#specificFileBrowserModal" id="btn_add_media">Add Media</button>
+									<button type="button" class="btn btn-dark btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#adsModal">Import Ads</button>
+									<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_save_placement_info">Save Data</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-- <div class="col-md-12 grid-margin stretch-card">
+				<table class="table" id="form_college_placement_faqus_table">
+					<thead>
+						<tr>
+							<th>Question</th>
+							<th>Answer</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="col-md-12">
+	    							<input type="text" class="form-control" name="college_placement_faqus[0][ques]" aria-describedby="college_placement_faqus" placeholder="Question" value="">
+	    						</div>
+
+	    						<div class="col-md-12">
+    								<textarea class="form-control college_info" name="college_placement_faqus[0][ans]" aria-describedby="college_placement_faqus" placeholder="Answer" rows="5"></textarea>
+    							</div>
+    						</td>
+
+    						<td><button type="button" class="btn btn-xs btn-primary" id="btn_add_college_placement_faqus_row"><i class="fa fa-plus"></i></button></td>
+    					</tr>
+					</tbody>
+				</table>
+			</div> -->
+
+
+		</div>
+
+			
+		
+		<?php
+	}
+	?>
+</div>
+
+<?php
+if(isset($college_data) && (!empty($college_data))){
+	?>
+
+	<div class="modal fade bd-example-modal-xl" id="collegeInnerMenuesModal" tabindex="-1" role="dialog" aria-labelledby="collegeInnerMenuesModal" aria-hidden="true">
+	    <div class="modal-dialog modal-xl" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="collegeInnerMenuesModal">Inner Menues</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	            </div>
+	            <form id="form_college_inner_menues">
+		            <div class="modal-body">	            	
+		            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+		            		<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+		            		<input type="hidden" class="form-control" name="college_inner_menu_id" id="college_inner_menu_id" value="">
+		            		<div class="row">
+		            			<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Select Menu Type</label>
+										<select class="form-control" name="college_inner_menu_type" id="college_inner_menu_type">
+											<option value="0">Select menu type</option>
+											<?php
+											if(!empty($inner_menues)){
+												foreach ($inner_menues as $key => $value) {
+													?>
+													<option value="<?php echo $value->menu_type_id;?>" data-menu="<?php echo $value->menu_type_name;?>"><?php echo $value->menu_type_name;?></option>
+													<?php
+												}
+											}
+
+											?>
+										</select>
+									</div>
+								</div>
+		            			<div class="col-sm-3">
+				            		<div class="form-group">
+										<label class="control-label">Menu Name</label>
+										<input type="text" class="form-control" placeholder="Enter name" name="college_inner_menu_name" id="college_inner_menu_name" value="">
+									</div>
+								</div>
+								<div class="col-sm-3">
+				            		<div class="form-group">
+										<label class="control-label">Menu Serial</label>
+										<input type="text" class="form-control" placeholder="Enter Serial" name="college_inner_menu_serial" id="college_inner_menu_serial" value="">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Menu Status</label>
+										<select class="form-control" name="college_inner_menu_status" id="college_inner_menu_status">
+											<option value="0">Select menu status</option>
+											<option value="1">Active</option>
+											<option value="2">Inactive</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3">
+									<button type="submit" class="btn btn-primary" id="btn_college_inner_menues">Save</button>
+								</div>
+							</div>
+
+							<!-- <div class="col-md-12">
+								<div class="alert alert-info">
+									<strong>Note:</strong>If Custom link given then auto generated will be replaced with it.
+								</div>
+							</div>
+
+							<div class="col-md-12">
+								<label class="control-label">Custom Link</label>
+								<selct class="form-control" name="custom_link">
+									
+								</selct>
+
+							</div> -->
+		            	
+		            </div>
+		            <div class="modal-footer">
+		                <div class="table-responsive">
+							<table id="college_menu_type_list_table" class="table">
+								<thead>
+			                      <tr>
+			                        <th>#</th>
+			                        <th>Menu Type</th>
+			                        <th>Menu Name</th>
+			                        <th>Action</th>
+			                        <th>Menu URL</th>			                        
+			                      </tr>
+			                    </thead>
+			                    <tbody>		                    	
+			                    </tbody>
+							</table>
+						</div>
+		            </div>
+	            </form>
+	        </div>
+	    </div>
+	</div>
+	<?php
+
+	if(isset($inner_menues_assigned) && !empty($inner_menues_assigned)){
+
+		//print_obj($inner_menues_assigned);
+		foreach ($inner_menues_assigned as $key => $value) {
+
+			?>
+			<div class="modal fade bd-example-modal-xl" id="<?php echo $value['menu_target_modal'];?>" tabindex="-1" role="dialog" aria-labelledby="<?php echo $value['menu_target_modal'];?>" aria-hidden="true">
+				<div class="modal-dialog modal-xl" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+			                <h5 class="modal-title" id="<?php echo $value['menu_target_modal'];?>"><?php echo $value['menu_name'];?>-<?php echo $value['menu_form'];?></h5>
+			                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			            </div>
+			            <div class="modal-body">
+			            	<?php
+			            	//print_obj($value);
+			            	?>
+			            	<form id="<?php echo $value['menu_form'];?>">
+			            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+		            			<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+		            			
+		            			<?php
+		            			if($value['menu_type_alias_name']=='gallery'){
+		            				?>
+		            				<div class="row">
+			            				<div class="col-sm-6">
+											<div class="form-group">
+												<label class="control-label">Category</label>
+												<select class="form-control" name="college_gallery_category" id="college_gallery_category">
+													<option value="0">Select Category</option>
+													<?php
+													if(!empty($college_data) && !empty($college_data['college_gallery_types'])){
+														foreach ($college_data['college_gallery_types'] as $k => $v) {
+															?>
+															<option value="<?php echo $v->gallery_type_alias;?>"><?php echo $v->gallery_type;?></option>
+															<?php
+														}
+													}
+													?>
+												</select>
+											</div>
+										</div>
+									
+										<div class="col-sm-6" id="college_gallery_image_div">
+											<div class="form-group">
+												<label>Image</label>
+												<input type="file" name="college_gallery_image" id="college_gallery_image" class="file-upload-default">
+												<div class="input-group col-xs-12">
+													<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Image" value="">
+													<span class="input-group-append">
+														<button class="file-upload-browse btn btn-primary" type="button">Browse Image</button>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6" id="college_gallery_video_div" style="display: none;">
+											<div class="form-group">
+												<label>Youtube Video Link</label>
+												<input type="text" class="form-control" placeholder="Youtube Video Link" name="college_gallery_video_link" id="college_gallery_video_link" value="">
+											</div>
+										</div>
+									</div>
+		            				<?php
+		            			}else if($value['menu_type_alias_name']=='faculty'){
+		            				?>
+		            				<div class="row">
+		            					<div class="col-sm-4">
+		            						<div class="form-group">
+		            							<label>Faculty Name</label>
+												<input type="text" class="form-control" placeholder="Faculty Name" name="college_faculty_name" id="college_faculty_name" value="">
+		            						</div>
+		            					</div>
+		            					<div class="col-sm-4">
+		            						<div class="form-group">
+		            							<label>Faculty Email</label>
+												<input type="text" class="form-control" placeholder="Faculty Email" name="college_faculty_email" id="college_faculty_email" value="">
+		            						</div>
+		            					</div>
+		            				
+		            					<div class="col-sm-4">
+		            						<div class="form-group">
+		            							<label>Faculty Phone No.</label>
+												<input type="text" class="form-control" placeholder="Faculty Phone No" name="college_faculty_phone_no" id="college_faculty_phone_no" value="">
+		            						</div>
+		            					</div>
+		            				</div>
+		            				<div class="row">
+		            					<div class="col-sm-4">
+		            						<div class="form-group">
+		            							<label>Faculty Experience</label>
+												<input type="text" class="form-control" placeholder="Faculty Experience" name="college_faculty_experience" id="college_faculty_experience" value="">
+		            						</div>
+		            					</div>
+		            					<div class="col-sm-4">
+		            						<div class="form-group">
+		            							<label>Faculty Designation</label>
+		            							<select class="form-control" name="college_faculty_designation">
+		            								<option value="0">Select Designation</option>
+		            								<?php
+		            								if (!empty($college_data['college_designations'])) {
+		            									foreach ($college_data['college_designations'] as $key => $value) {
+		            										?>
+		            										<option value="<?php echo $value['designation_id'];?>"><?php echo $value['designation_name'];?></option>
+		            										<?php
+		            									}
+		            								}
+		            								?>
+		            							</select>
+		            						</div>
+		            					</div>
+		            					<div class="col-sm-4">
+		            						<div class="form-group">
+		            							<label>Faculty Department</label>
+		            							<select class="form-control" name="college_faculty_department">
+		            								<option value="0">Select Designation</option>
+		            								<?php
+		            								if (!empty($college_data['college_departments'])) {
+		            									foreach ($college_data['college_departments'] as $key => $value) {
+		            										?>
+		            										<option value="<?php echo $value['department_id'];?>"><?php echo $value['department_name'];?></option>
+		            										<?php
+		            									}
+		            								}
+		            								?>
+		            							</select>
+		            						</div>
+		            					</div>
+		            				</div>
+		            				
+		            				<?php
+		            			}else if($value['menu_type_alias_name']=='hostel'){
+		            				?>
+		            				<div class="row">
+		            					<div class="col-sm-12">
+		            						<div class="form-group">
+		            							<label>Hostels [For Men]</label>
+												<input type="text" class="form-control" placeholder="Total Cost" name="college_faculty_name" id="college_faculty_name" value="">
+		            						</div>
+		            					</div>
+		            					<div class="col-sm-12">
+		            						<table class="table" id="form_hostel_settings_men">
+					        					<thead>
+					        						<tr><th>Rooms</th>
+					        						<th>Non AC Rooms Charges(Per Annum)</th>
+					        						<th>AC Rooms Charges(Per Annum)</th>
+					        						<th></th>
+					        					</tr></thead>
+					        					<tbody>
+					        						<tr>
+						        						<td>
+						        							<input type="number" min="0" class="form-control" name="hostel[0][rooms]" aria-describedby="hostel_rooms" placeholder="Rooms" value="" wfd-id="141">
+						        						</td>
+						        						<td>
+						        							<input type="number" min="0" class="form-control" name="hostel[0][rooms_non_ac_charges]" aria-describedby="hostel_rooms_non_ac_charges" placeholder="0" value="" wfd-id="140">
+						        						</td>
+						        						<td>
+						        							<input type="number" min="0" class="form-control" name="hostel[0][rooms_ac_charges]" aria-describedby="hostel_rooms_ac_charges" placeholder="0" value="" wfd-id="139">
+						        						</td>
+
+						        						<td><button type="button" class="btn btn-sm btn-primary" id="btn_add_hostel_row" wfd-id="151"><i class="fa fa-plus"></i></button></td>
+						        					</tr>			
+					        					</tbody>
+					        				</table>
+		            					</div>
+		            				</div>
+		            				<div class="row">
+		            					<div class="col-sm-12">
+		            						<div class="form-group">
+		            							<label>Hostels [For Women]</label>
+												<input type="text" class="form-control" placeholder="Total Cost" name="college_faculty_name" id="college_faculty_name" value="">
+		            						</div>
+		            					</div>
+		            					<div class="col-sm-12">
+		            						<table class="table" id="form_hostel_settings_men">
+					        					<thead>
+					        						<tr><th>Rooms</th>
+					        						<th>Non AC Rooms Charges(Per Annum)</th>
+					        						<th>AC Rooms Charges(Per Annum)</th>
+					        						<th></th>
+					        					</tr></thead>
+					        					<tbody>
+					        						<tr>
+						        						<td>
+						        							<input type="number" min="0" class="form-control" name="hostel[0][rooms]" aria-describedby="hostel_rooms" placeholder="Rooms" value="" wfd-id="141">
+						        						</td>
+						        						<td>
+						        							<input type="number" min="0" class="form-control" name="hostel[0][rooms_non_ac_charges]" aria-describedby="hostel_rooms_non_ac_charges" placeholder="0" value="" wfd-id="140">
+						        						</td>
+						        						<td>
+						        							<input type="number" min="0" class="form-control" name="hostel[0][rooms_ac_charges]" aria-describedby="hostel_rooms_ac_charges" placeholder="0" value="" wfd-id="139">
+						        						</td>
+
+						        						<td><button type="button" class="btn btn-sm btn-primary" id="btn_add_hostel_row" wfd-id="151"><i class="fa fa-plus"></i></button></td>
+						        					</tr>			
+					        					</tbody>
+					        				</table>
+		            					</div>
+		            				</div>
+		            				<?php
+		            			}
+		            			?>
+		            			
+								<div class="row">
+									<div class="col-sm-12">
+										<button class="btn btn-primary" type="submit" id="btn_save_<?php echo $value['menu_form'];?>">Save</button>
+									</div>
+								</div>
+			            	</form>
+			            </div>
+			            <div class="modal-footer">
+			            	<div class="table-responsive">
+								<table id="<?php echo $value['menu_form'];?>_list_table" class="table">
+									<thead>
+				                      <tr>
+				                      	<?php
+				                      	if($value['menu_type_alias_name']=='gallery'){
+				                      		?>
+				                      		<th>#</th>
+					                        <th>File</th>
+					                        <th>Type</th>
+					                        <th>Action</th>
+				                      		<?php
+				                      	}else if($value['menu_type_alias_name']=='faculty'){
+				                      		?>
+				                      		<th>#</th>
+					                        <th>Name</th>
+					                        <th>Email</th>
+					                        <th>Phone No.</th>
+					                        <th>Status</th>
+					                        <th>Action</th>
+				                      		<?php
+				                      	}
+				                      	?>
+				                        
+				                      </tr>
+				                    </thead>
+				                    <tbody>		                    	
+				                    </tbody>
+								</table>
+							</div>
+			            </div>
+					</div>
+				</div>
+			</div>
+			<?php
+		}
+	}
+}
+?>
+
+
+<div class="modal fade bd-example-modal-xl" id="companiesModal" tabindex="-1" role="dialog" aria-labelledby="companiesModalModal" aria-hidden="true">
+	    <div class="modal-dialog modal-xl" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="companiesModalModal">Companies List</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	            </div>
+	            <form id="form_company">
+		            <div class="modal-body">	            	
+		            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+		            		<input type="hidden" name="_company" id="_company" value="">
+		            		<div class="row">
+		            			<div class="col-sm-6">
+				            		<div class="form-group">
+										<label class="control-label">Company Name</label>
+										<input type="text" class="form-control" placeholder="Enter name" name="company_name" id="company_name" value="">
+									</div>
+								</div>
+								<div class="col-sm-6">
+				            		<div class="form-group">
+										<label class="control-label">Company Logo</label>
+										<div class="input-group col-xs-12">
+											<input type="file" name="company_logo" class="file-upload-default" style="visibility: hidden;">
+											<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Image" value="">
+											<span class="input-group-append">
+												<button class="file-upload-browse btn btn-primary" type="button">Browse Image</button>
+												<button class="btn btn-primary" type="submit" id="btn_upload_files">Upload</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="control-label">About Company</label>
+										<textarea class="form-control" name="company_about" id="company_about" rows="5"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3">
+									<button type="submit" class="btn btn-primary" id="btn_add_company">Save</button>
+								</div>
+							</div>
+		            	
+		            </div>
+		            <div class="modal-footer">
+		                <div class="table-responsive">
+							<table id="company_list_table" class="table">
+								<thead>
+			                      <tr>
+			                        <th>#</th>
+			                        <th>Image</th>
+			                        <th>Company Name</th>
+			                        <th>Action</th>			                        
+			                      </tr>
+			                    </thead>
+			                    <tbody>		                    	
+			                    </tbody>
+							</table>
+						</div>
+		            </div>
+	            </form>
+	        </div>
+	    </div>
+	</div>
+
+<script type="text/javascript">var _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>'; var p_row='<?php echo isset($i)?$i:0;?>';var colleg_ranking_row='';var colleg_faq_row='';var _ur='';var colleg_placement_faq_row='';var colleg_scholarship_faq_row='';var college_type='<?php echo $college_data['college_type'];?>';</script>
+
+
+<script type="text/javascript">
+	jQuery(function($) {
+  		'use strict';
+
+  		$('.college_placement_frequent_companies').chosen();
+
+  		$(".select_placement").chosen();
+
+
+
+  		tiny_mce('.college_general_info');
+
+  		 $(document).on('click','#btn_add_media',function(){
+		    localStorage.setItem('media_operation', 'add_placement_media');
+		 });
+
+		 $(document).on('click','.btn_update_media',function(){
+		    localStorage.setItem('media_operation', 'update_placement_media');
+		    localStorage.setItem('media_row',$(this).data('media_row'));
+		 });
+
+
+		$('#adsModal').on('shown.bs.modal', function (e) {
+		    $('#buttons_wrapper').css('display','none');
+		    load_ads();
+		});
+
+		$('#adsModal').on('hidden.bs.modal', function (e) {
+		    $('#buttons_wrapper').css('display','block');
+		});
+
+		$(document).on('click','.div_block',function(){
+	      var d=$(this).html();
+	      var datafile_id=$(this).attr('data-aid');
+	      var heading_rows='';
+
+	        heading_rows+='<tr id="trPlacementData' + bposthdr + '">';
+	      heading_rows+='<td>';
+	      heading_rows+='<div class="form-group row">';
+	        heading_rows+='<div class="col-md-12">';
+	                heading_rows+='<h6>Content Detail</h6>';
+	                heading_rows+='<input type="hidden" name="college_general_info['+ bposthdr +'][data_type]" value="ads">';
+	                heading_rows+='<input type="hidden" name="college_general_info['+bposthdr+'][data_type_value]" value="'+datafile_id+'">';
+	                heading_rows+='<input type="number" class="form-control" name="college_general_info['+ bposthdr +'][data_serial]" value="'+ bposthdr +'">';
+	                heading_rows+='<textarea class="form-control" rows="40" name="college_general_info['+ bposthdr +'][data_content]" style="display:none;">'+d+'</textarea>';
+	                heading_rows+='<div class="col-md-12">'+d+'</div>';
+	              heading_rows+='</div>';
+	          heading_rows+='</div>';
+	      heading_rows+='<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trPlacementData' + bposthdr + '\').remove()">Delete Row</button></div></div>';
+	      heading_rows+='</td>';
+	      heading_rows+='</tr>';
+
+	      $('#data_heading_rows tbody').append(heading_rows);
+
+	      tiny_mce('.college_general_info');
+
+	      $('#adsModal').modal('hide');
+
+	      bposthdr++;
+	  	});
+
+
+	  	$(document).on('click','#btn_add_heading',function(){
+		    var heading_rows='';
+
+		    heading_rows+='<tr id="trPlacementData' + bposthdr + '">';
+		    heading_rows+='<td>';
+		    heading_rows+='<div class="form-group row">';
+		      heading_rows+='<div class="col-md-12">';
+		              heading_rows+='<h6>Content Detail</h6>';
+		              heading_rows+='<input type="hidden" name="college_general_info['+ bposthdr +'][data_type]" value="general">';
+		              heading_rows+='<input type="number" class="form-control" name="college_general_info['+bposthdr+'][data_serial]" value="'+bposthdr+'">';
+		              heading_rows+='<textarea class="form-control college_general_info" rows="40" name="college_general_info['+ bposthdr +'][data_content]"></textarea>';		              
+		            heading_rows+='</div>';
+		        heading_rows+='</div>';
+		    heading_rows+='<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trPlacementData' + bposthdr + '\').remove()">Delete Row</button></div></div>';
+		    heading_rows+='</td>';
+		    heading_rows+='</tr>';
+
+		    $('#data_heading_rows tbody').append(heading_rows);
+
+		    tiny_mce('.college_general_info');
+
+		    bposthdr++;
+		});
+
+
+		var abc=<?php echo ($abc==0)?($abc+1):$abc;?>;
+
+	    $(document).on('click','#btn_placement_data_alumni_distribution_by_companies',function(){
+	      var html='';
+
+	      	html+='<tr id="trAlumnibyCompany'+abc+'">';
+				html+='<td>';
+					html+='<select class="form-control" name="college_placement_alumni_distribution_by_companies['+abc+'][company_id]">';
+						html+='<option value="0">Select Company</option>';
+						<?php
+						if(!empty($college_data['college_placement_companies'])){
+							foreach ($college_data['college_placement_companies'] as $key => $value) {
+								?>
+								html+='<option value="<?php echo $value['placement_company_id'];?>"><?php echo str_replace("'","\'",$value['placement_company_name']);?></option>';
+								<?php
+							}
+						}
+						?>
+					html+='</select>';
+				html+='</td>';
+
+				html+='<td>';
+				html+='<select class="form-control" name="college_placement_alumni_distribution_by_companies['+abc+'][alumni_percentage_scale]">';
+				<?php
+				for ($i=0; $i <=100 ; $i=$i+5) { 
+					?>
+					html+='<option value="<?php echo $i;?>"><?php echo $i;?></option>';
+					<?php
+				}
+				?>
+				html+='</select>';
+				html+='</td>';
+
+				html+='<td><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trAlumnibyCompany' + abc + '\').remove()">Delete Row</button></td>';
+			html+='</tr>';
+
+
+
+	      $('#form_college_placement_data_alumni_distribution_by_companies tbody').append(html);
+
+	      $('.college_placement_alumni_distribution_by_companies').chosen('destroy');
+	      $('.college_placement_alumni_distribution_by_companies').chosen();
+
+	      abc++;
+	    });
+
+
+
+	    var abs=<?php echo ($abs==0)?($abs+1):$abs;?>;
+
+	    $(document).on('click','#btn_placement_data_alumni_distribution_by_sectors',function(){
+	      var html='';
+
+	      	html+='<tr id="trAlumnibySectors'+abs+'">';
+				html+='<td>';
+					html+='<select class="form-control" name="college_placement_alumni_distribution_by_sectors['+abs+'][company_id]">';
+						html+='<option value="0">Select Sector</option>';
+						<?php
+						if(!empty($college_data['college_placement_company_sectors'])){
+							foreach ($college_data['college_placement_company_sectors'] as $key => $value) {
+								?>
+								html+='<option value="<?php echo $value['placement_company_sector_id'];?>"><?php echo $value['placement_company_sector_name'];?></option>';
+								<?php
+							}
+						}
+						?>
+					html+='</select>';
+				html+='</td>';
+
+				html+='<td>';
+				html+='<select class="form-control" name="college_placement_alumni_distribution_by_sectors['+abs+'][alumni_percentage_scale]">';
+				<?php
+				for ($i=0; $i <=100 ; $i=$i+5) { 
+					?>
+					html+='<option value="<?php echo $i;?>"><?php echo $i;?></option>';
+					<?php
+				}
+				?>
+				html+='</select>';
+				html+='</td>';
+
+				html+='<td><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trAlumnibySectors' + abs + '\').remove()">Delete Row</button></td>';
+			html+='</tr>';
+
+		
+
+	      $('#form_college_placement_data_alumni_distribution_by_sectors tbody').append(html);
+
+	      abs++;
+	    });
+
+
+	    var frqc='<?php echo ($frqc==0)?($frqc+1):$frqc;?>';
+
+	    $('body').on('click','#btn_add_frequent_companies',function(){
+
+	    	var html='';
+
+	      	html+='<tr id="trFrequentCompany'+frqc+'">';
+				html+='<td>';
+					html+='<select class="form-control college_placement_frequent_companies" name="college_placement_frequent_companies['+frqc+'][company_id]">';
+						html+='<option value="0">Select Company</option>';
+						<?php
+						if(!empty($college_data['college_placement_companies'])){
+							foreach ($college_data['college_placement_companies'] as $key => $value) {
+								?>
+								html+='<option value="<?php echo $value['placement_company_id'];?>"><?php echo str_replace("'", "\'", $value['placement_company_name']);?></option>';
+								<?php
+							}
+						}
+						?>
+					html+='</select>';
+				html+='</td>';
+
+				html+='<td>';
+
+				html+='</td>';
+
+				html+='<td><button type="button" class="btn btn-xs btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$(\'#trFrequentCompany' + frqc + '\').remove()">Delete Row</button></td>';
+			html+='</tr>';
+
+	      $('#form_college_placement_visited_companies_data tbody').append(html);
+
+	      $('.college_placement_frequent_companies').chosen('destroy');
+
+	      $('select.college_placement_frequent_companies').chosen();
+
+	      frqc++;
+	    });
+
+
+	    $('body').on('click','#btn_placement_data',function(){
+	    	var html='';
+
+		    html+='<tr id="tr_pl'+plc+'">';
+			    html+='<td>';
+			    	html+='<input type="number" class="form-control border border-dark" min="2010" name="college_placement_data['+plc+'][year]" value="">';
+			    html+='</td>';
+			    html+='<td>';
+			    	html+='<select class="form-control select_placement" name="college_placement_data['+plc+'][company]">';
+			    		<?php
+			    		foreach ($college_data['college_placement_companies'] as $ke => $v) {
+			    			?>
+			    			html+='<option value="<?php echo $v['placement_company_id'];?>" <?php echo ($v['placement_company_id']==$value->placement_company)?'selected':'';?>><?php echo str_replace("'","\'",$v['placement_company_name']);?></option>';
+			    			<?php
+			    		}
+			    		?>
+			    	html+='</select>';
+			    html+='</td>';
+			    html+='<td>';
+			    	html+='<input type="text" class="form-control border border-dark" min="2010" name="college_placement_data['+plc+'][package]" placeholder="Highest package" value="<?php echo $value->placement_highest_package;?>">';
+			    html+='</td>';
+			    html+='<td>';
+			    	html+='<input type="text" class="form-control border border-dark" name="college_placement_data['+plc+'][no_of_students]" placeholder="No. of students" value="<?php echo $value->placement_students_no;?>">';
+			    html+='</td>';
+			    html+='<td>';
+			    	html+='<button type="button" class="btn btn-sm btn-danger" onclick="$(\'#tr_pl' + plc + '\').remove()"><i class="fa fa-minus"></i></button>';
+			    html+='</td>';
+			    html+='</tr>';
+
+			    $('#form_college_placement_data tbody').append(html);
+
+			    $(".select_placement").chosen("destroy");
+
+			    $(".select_placement").chosen();
+
+	      		plc++;
+	    });
+
+
+		function load_ads(){
+		    $('#ads_list_table').DataTable({ 
+		      'bJQueryUI': false,
+		      'stateSave': true,
+		      'iDisplayLength':50,
+		      'responsive': true,
+		      "pagingType": "full_numbers",
+		      'language': {
+		        'paginate': {
+		          'first': "<<", // This is the link to the first page
+		          'previous': "<", // This is the link to the previous page
+		          'next': ">", // This is the link to the next page
+		          'last': ">>" // This is the link to the last page
+		        }
+		      },
+		      "lengthMenu": [[10,25,50,100,250,500,1000,1500], [10,25,50,100,250,500,1000,1500]],
+		      "processing": true, //Feature control the processing indicator.
+		      "serverSide": true, //Feature control DataTables' server-side processing mode.
+		      "order": [], //Initial no order.
+		      // Load data for the table's content from an Ajax source
+		      "ajax": {
+		          "url": base_url+'/ads/search_import',
+		          "type": "POST",
+		          "data":{csrf_test_name:csrf_hash}
+		      },
+		      //Set column definition initialisation properties.
+		      "columnDefs": [
+		      { 
+		          "targets": [ 0 ], //first column / numbering column
+		          "orderable": false, //set not orderable
+		      },
+		      ],
+		    });
+		}
+
+		function tiny_mce(ctrl_area){
+		    tinymce.init({
+		      selector: ctrl_area,
+		      entity_encoding : "raw",
+		      height: 400,
+		      theme: 'silver',
+		      font_formats:"UbuntuCondensed-Regular;Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
+		      plugins: [
+		        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+		        'searchreplace wordcount visualblocks visualchars code fullscreen table',
+		      ],
+		      toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+		      toolbar2: 'forecolor backcolor emoticons | codesample',
+		      table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+		      setup: function(editor) {
+		        // Register our custom button callback function
+		        editor.on('init',function(e) {
+		            //tinyMceEditLink(editor);
+		            tinyMceEditLinkSearch(editor);
+		        });
+
+		      },
+		      table_appearance_options: true,
+		      table_use_colgroups: true
+		    });
+		  }
+
+		function tinyMceEditLinkSearch(editor){
+			  editor.windowManager.oldOpen = editor.windowManager.open;  // save for later
+			    editor.windowManager.open = function (t, r) {    // replace with our own function
+			        var modal = this.oldOpen.apply(this, [t, r]);  // call original
+			        var h='';
+			        h+='<select class="form-control" id="search_form">';
+			        h+='<optgroup label="Exams">';
+			        h+='<option value="exam">Search from exams</option>';
+			        h+='</optgroup>';
+			        h+='<optgroup label="Colleges & Universities">';
+			        h+='<option value="college">Search from college</option>';
+			        h+='<option value="universities">Search from universities</option>';
+			        h+='</optgroup>';
+			        h+='<optgroup label="Streams & Courses">';
+			        h+='<option value="streams">Search from streams</option>';
+			        h+='<option value="courses">Search from course</option>';
+			        h+='</optgroup>';
+			        h+='</select>'
+
+			        if (t.title === "Insert/Edit Link") {
+			            $('.tox-form').prepend('<div class="tox-form__group" aria-disabled="false"><label class="tox-label" for="form-field_9522091895521669618487996">Search URL</label><div class="tox-form__controls-h-stack"><div class="tox-control-wrap" aria-disabled="false">'+h+'<div class="tox-control-wrap__status-icon-wrap"><div title="invalid" aria-live="polite" id="aria-invalid_427930829591669618476687" class="tox-icon tox-control-wrap__status-icon-invalid"><svg width="24" height="24" focusable="false"><path d="M19.8 18.3c.2.5.3.9 0 1.2-.1.3-.5.5-1 .5H5.2c-.5 0-.9-.2-1-.5-.3-.3-.2-.7 0-1.2L11 4.7l.5-.5.5-.2c.2 0 .3 0 .5.2.2 0 .3.3.5.5l6.8 13.6zM12 18c.3 0 .5-.1.7-.3.2-.2.3-.4.3-.7a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7c0 .3.1.5.3.7.2.2.4.3.7.3zm.7-3l.3-4a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7l.3 4h1.4z" fill-rule="evenodd"></path></svg></div></div></div></div></div><div class="tox-form__group" aria-disabled="false"><label class="tox-label" for="form-field_9522091895521669618487996">Search URL</label><div class="tox-form__controls-h-stack"><div class="tox-control-wrap" aria-disabled="false"><input type="text" role="combobox" aria-autocomplete="list" aria-haspopup="true" tabindex="-1" class="tox-textfield jAuto" aria-expanded="false" id="search-box"><div id="suggesstion-box"><ul id="search_tag-list"></ul></div><div class="tox-control-wrap__status-icon-wrap"><div title="invalid" aria-live="polite" id="aria-invalid_427930829591669618476687" class="tox-icon tox-control-wrap__status-icon-invalid"><svg width="24" height="24" focusable="false"><path d="M19.8 18.3c.2.5.3.9 0 1.2-.1.3-.5.5-1 .5H5.2c-.5 0-.9-.2-1-.5-.3-.3-.2-.7 0-1.2L11 4.7l.5-.5.5-.2c.2 0 .3 0 .5.2.2 0 .3.3.5.5l6.8 13.6zM12 18c.3 0 .5-.1.7-.3.2-.2.3-.4.3-.7a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7c0 .3.1.5.3.7.2.2.4.3.7.3zm.7-3l.3-4a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7l.3 4h1.4z" fill-rule="evenodd"></path></svg></div></div></div></div></div>'
+			            );
+
+			            $('.tox-dialog__footer-end').prepend(
+			                '<button title="Custom button" type="button" data-alloy-tabstop="true" tabindex="-1" class="tox-button" id="custom_button">Search</button>'
+			            );
+
+			        }
+
+			        return modal; // Template plugin is dependent on this return value
+			    };
+			}
+
+
+
+		$('#company_list_table').DataTable({ 
+	        'bJQueryUI': false,
+	        'stateSave': true,
+	        'iDisplayLength':50,
+	        'responsive': true,
+	        "pagingType": "full_numbers",
+	        'language': {
+	          'paginate': {
+	            'first': "<<", // This is the link to the first page
+	            'previous': "<", // This is the link to the previous page
+	            'next': ">", // This is the link to the next page
+	            'last': ">>" // This is the link to the last page
+	          }
+	        },
+	        "lengthMenu": [[10,25,50,100,250,500,1000,1500], [10,25,50,100,250,500,1000,1500]],
+	        "processing": true, //Feature control the processing indicator.
+	        "serverSide": true, //Feature control DataTables' server-side processing mode.
+	        "order": [], //Initial no order.
+	        // Load data for the table's content from an Ajax source
+	        "ajax": {
+	            "url": base_url+'/settings/companies/search',
+	            "type": "POST",
+	            "data":{csrf_test_name:csrf_hash}
+	        },
+	        //Set column definition initialisation properties.
+	        "columnDefs": [
+	        { 
+	            "targets": [ 0 ], //first column / numbering column
+	            "orderable": false, //set not orderable
+	        },
+	        ],
+	    });
+
+
+	    $('#companiesModal').on('hidden.bs.modal', function () {
+		  $('#buttons_wrapper').show();
+		  window.location.reload();
+		});
+
+		$('#companiesModal').on('shown.bs.modal', function () {
+		  $('#buttons_wrapper').hide();
+		});
+
+
+		$('body').on('click','.btn_edit_company',function(){
+	    	$('#companiesModal').find('#_company').val($(this).attr('data-company_id'));
+	    	$('#companiesModal').find('#company_name').val($(this).attr('data-company_name'));
+	    	$('#companiesModal').find('#company_about').val($(this).attr('data-company_about'));
+	    	$('#companiesModal').find('#companiesModalTitle').html('Update '+$(this).attr('data-company_name'));
+	    });
+
+
+	    $('#form_company').validate({
+		    rules:{
+		      company_name:{
+		        required:true
+		      },
+		      company_logo:{
+		        required:false,
+		        extension: "jpeg|jpg|png",
+		        maxFileSize: {
+		            "unit": "KB",
+		            "size": "100"
+		        },
+		        minFileSize: {
+		            "unit": "KB",
+		            "size": "0.50"
+		        }
+		      }
+		    },
+		    messages:{
+		      agency_name:{
+		        required:"Please enter company name."
+		      },
+		      company_logo:{
+		        extension: "Allowed file types are jpeg,jpg,png"
+		      }
+		    },
+		    submitHandler:function(){
+		      $.ajax({
+		          type:'POST',
+		          url:base_url+'/settings/companies/add',
+		          data:new FormData($('#form_company')[0]),
+		          cache: false,
+		          contentType: false,
+		          processData: false,
+		          timeout: 60000000,
+		          target: '.preview',
+		          beforeSend:function(){
+		            $('#btn_add_company').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+		          },
+		          success:function(f){
+		            if(f.success){
+		             $('#btn_add_company').prop('disabled',true);
+		             Swal.fire({
+		                icon: 'success',
+		                title: f.success,
+		                confirmButtonText:'Close',
+		                confirmButtonColor:'#69da68',
+		                allowOutsideClick: false,
+		              });
+
+		            var table=$('#company_list_table').DataTable();
+	              	table.ajax.reload( null, false );
+
+		              // $('#form_company').find('#_company').val(''); 
+		              // $('#form_company').find('#company_name').val('');
+		              // $('#form_company').find('#company_logo_name').val('');
+		              //$('#form_company')[0].reset();
+		              //$('#companiesModal').modal('hide');
+	         
+		            }else if(f.error){
+		              $('#btn_add_company').prop('disabled',true);
+		              Swal.fire({
+		                icon: 'error',
+		                title: f.error,
+		                confirmButtonText:'Close',
+		                confirmButtonColor:'#69da68',
+		                allowOutsideClick: false,
+		              });
+		            }else if(f.redirect){
+		              $('#btn_add_company').prop('disabled',true);
+		              Swal.fire({
+		                icon: 'info',
+		                title: 'Your session expired',
+		                confirmButtonText:'Close',
+		                confirmButtonColor:'#69da68',
+		                allowOutsideClick: false,
+		              });
+		            }
+		          },
+		          xhr: function(){
+		              //Get XmlHttpRequest object
+		               var xhr = $.ajaxSettings.xhr() ;
+		              //Set onprogress event handler
+		               xhr.upload.onprogress = function(data){
+		                  var perc =(data.loaded / data.total) * 100;// Math.round((data.loaded / data.total) * 100);
+		                  $('.progress-bar').css('width',perc.toFixed(2) + '%').text(perc.toFixed(2) + '%');
+		               };
+		               return xhr ;
+		          },
+		          error: function (e) {
+		          },
+		          complete:function(status,xhr){
+		            $('.progress-bar').css('width', '0%').text('0%');
+		            $('#btn_add_company').html('Save').attr('disabled',false);
+		          },
+		          resetForm: true 
+		      });
+		    }
+		});
+
+		
+		$('.file-upload-browse').on('click', function(e) {
+		  var file = $(this).parent().parent().parent().find('.file-upload-default');
+		  file.trigger('click');
+		});
+		$('.file-upload-default').on('change', function() {
+			$(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+		});
+
+
+		
+
+  	});
+
+function delete_placement_data(placement_id){
+			$.ajax({
+				type:'POST',
+				url:base_url+'/institutions/colleges/placement_info_delete',
+				data:{[csrf_name]:csrf_hash,placement_id:placement_id},
+				success:function(d){
+					if(d.success){
+						$('#tr_pl'+placement_id).remove();
+					}
+				}
+			});
+		}
+</script>

@@ -1,0 +1,38 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($college_facilities)){
+	?>
+
+  <div class="card infoCard mb-4">
+      <div class="card-header bg-white">
+         <h5 class="m-0 color2">FACILITIES</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap">
+
+          <?php
+          foreach ($college_facilities as $key => $value){
+          ?>
+          <div class="serviceIcoBox text-center">
+            <div class="ico">
+              <?php echo $value['facility_icon'];?>
+            </div>
+            <span class="text-sm font-weight-semi mt-2 pt-5"><?php echo $value['facility_name'];?></span>
+          </div>
+
+          <?php
+          }
+          ?>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+	<?php
+}
+
+?>

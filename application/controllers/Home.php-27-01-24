@@ -1,0 +1,177 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH."third_party/vendor/autoload.php";
+
+/**
+ * 
+ */
+class Home  extends BaseFrontController
+{
+	public function __construct() {
+        parent::__construct();
+    }
+
+    public function index(){
+		$this->data['page_heading']='Home';
+		$this->data['page_heading_title']='Home';
+
+		//$this->output->enable_profiler(TRUE);	
+		
+
+		$segment_1=$this->uri->segment(1,0);
+		$segment_2=$this->uri->segment(2,0);
+
+		if((is_string($segment_1) && $segment_1!='0')){
+
+			if($segment_1=='study-abroad'){
+				$page_title='Home';
+				$this->data['page_title']=$page_title;
+				$this->theme->title($this->data['page_title'])->load('home/vw_study_abroad', $this->data);
+			}
+			/*
+			else if($segment_1=='account'){
+				$userdata=$this->data['userdata'];
+
+				$_cities=array();
+
+
+				$cities=$this->com->get_city(array('city_state_id'=>$userdata->user_state),FALSE);
+
+				//print_obj($cities);die;
+
+				if($userdata->user_role=='8'){
+
+					$this->data['page_title']=$userdata->user_fullname;
+
+					$show_profile_widget=TRUE;
+					$show_applied_colleges_widget=FALSE;
+					$show_reviews_widget=FALSE;
+
+
+					$profile_menu_active=TRUE;
+					$colege_application_menu_active=FALSE;
+					$review_menu_active=FALSE;
+
+					if(!empty($cities)){
+						foreach ($cities as $key => $value) {
+							$_cities[]=array(
+								'city_id'=>encode_data($value->city_id),
+								'city_name'=>$value->city_name,
+								'selected'=>($value->city_id==$userdata->user_city)?'selected':''
+							);
+						}
+					}
+
+
+					if($segment_2!='0'){
+
+						if($segment_2=='applied-colleges'){
+							$show_profile_widget=FALSE;
+							$show_applied_colleges_widget=TRUE;
+							$show_reviews_widget=FALSE;
+							$profile_menu_active=FALSE;
+							$colege_application_menu_active=TRUE;
+							$review_menu_active=FALSE;
+						}else if($segment_2=='my-reviews'){
+							$show_profile_widget=FALSE;
+							$show_applied_colleges_widget=FALSE;
+							$show_reviews_widget=TRUE;
+							$profile_menu_active=FALSE;
+							$colege_application_menu_active=FALSE;
+							$review_menu_active=TRUE;
+						}						
+					}
+
+					$this->data['show_profile_widget']=$show_profile_widget;
+					$this->data['show_applied_colleges_widget']=$show_applied_colleges_widget;
+					$this->data['show_reviews_widget']=$show_reviews_widget;
+
+					$this->data['profile_menu_active']=$profile_menu_active;
+					$this->data['colege_application_menu_active']=$colege_application_menu_active;
+					$this->data['review_menu_active']=$review_menu_active;
+
+					$this->data['cities']=$_cities;
+
+					$view_page='account/student/vw_profile_student_page';
+					$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+				}else{
+					redirect(base_url());
+				}
+			}
+			*/
+
+			else{
+				$country_data=$this->com->get_country(array('country_iso_code_2'=>$segment_1));
+				$page_title='Home,'.$country_data->country_name;
+
+				$this->data['home_courses']=$this->strm->__get_course('course_id,course_name,course_short_name',array('course_status'=>'1'),FALSE,'course_id','DESC');
+
+
+				if(!empty($country_data)){
+					$this->data['country_id']=encode_data($country_data->country_id);
+
+					$param['column_order'] = array(
+			            null,
+			            'banner_main_title'
+			        );
+
+			        $param['banner_status']='active';
+			        $param['column_search'] = array('banner_main_title');
+			        $param['order'] = array('banner_serial' => 'ASC');
+			        $posts=null;
+
+			        $banners = $this->sm->_get_banner_files($posts,$param,FALSE,FALSE);
+
+			        //print_obj($banners);die;
+
+			        if(!empty($banners)){
+			    		foreach ($banners as $key => $value) {
+
+			                $banner_title=$value->banner_main_title;
+			                $banner_sub_title=$value->banner_sub_title;
+			                $access_url=$value->banner_link ;
+
+			    			$_banners[]=array(
+			    				'banner_image'=>$value->media_disk_path_relative,
+			    				'banner_title'=>ucwords($banner_title),
+			                    'banner_sub_title'=>ucwords($banner_sub_title),
+			                    'access_url'=>$access_url
+			    			);
+			    		}
+			    	}else{
+			    		$_banners=array();
+			    	}
+
+			    	
+
+			    	$this->data['banners']=$_banners;
+
+					$this->theme->title($this->data['page_title'])->add_partial('partial_apply_through_home_modal',$this->data)->load('home/vw_home', $this->data);
+				}else{
+					$this->data['page_title']='Page not found';
+					$this->theme->title($this->data['page_title'])->load('webpage/others/vw_notfound', $this->data);
+				}
+
+					
+			}			
+				
+		}else{
+
+
+			$page_title=$this->data['system_name'];
+			$this->data['page_title']=$page_title;
+			//$this->data['home_colleges']=$this->im->___get_college_profile_data('college_id,college_user_id,college_name',NULL,FALSE);
+			$this->data['home_courses']=$this->strm->__get_course('course_id,course_name,course_short_name',array('course_status'=>'1','course_show_in_dropdown'=>'1'),FALSE,'course_name','ASC');
+
+			$this->data['country_id']=encode_data($this->data['default_country_data']->country_id);
+
+			$name=array('og:locale','og:type','og:title','og:description','og:url','og:site_name');
+
+			$this->theme->title($this->data['page_title'])->add_partial('partial_apply_through_home_modal',$this->data)->load('home/vw_home', $this->data);
+		}
+
+		
+
+				
+	}
+
+}

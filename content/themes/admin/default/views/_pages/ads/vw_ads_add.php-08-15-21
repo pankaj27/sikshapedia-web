@@ -1,0 +1,325 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Ads List</li>
+		</ol>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Ads</h6>
+					<div class="col-md-12">
+						<form id="form_ads_add_edit" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+							<input type="hidden" name="_ads" id="_ads" class="form-control" value="<?php echo (!empty($listing_data))?$listing_data['listing_id']:'';?>">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Ads Category</label>
+										<select class="form-control" name="ads_package_category" id="ads_package_category">
+											<option value="0">Select category</option>
+											<?php
+											if(!empty($ads_categories)){
+												foreach ($ads_categories as $key => $value) {
+													?>
+													<option value="<?php echo $value->package_category_id;?>"><?php echo $value->package_category_name;?></option>
+													<?php
+												}
+											}
+
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Ads Positions/Types</label>
+										<select class="form-control" name="ads_package_type" id="ads_package_type">
+											<option value="0">Select Position/Type</option>
+											<?php
+											if(!empty($ads_positions)){
+												foreach ($ads_positions as $key => $value) {
+													?>
+													<option value="<?php echo $value['pacakge_type_id'];?>"><?php echo $value['package_name'];?></option>
+													<?php
+												}
+											}
+
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3" style="display: none;" id="ads_menu_type_div">
+									<div class="form-group">
+										<label class="control-label">Menu(Ads under menu)</label>
+										<select class="form-control" name="ads_menu_type" id="ads_menu_type">
+											<option value="0">Select Ads under menu</option>
+											<?php
+											if(!empty($listing_top_menues)){
+												foreach ($listing_top_menues as $key => $value) {
+													?>
+													<option value="<?php echo $value->menu_id;?>"><?php echo $value->menu_name;?></option>
+													<?php
+												}
+											}
+											?>	
+										</select>
+
+									</div>
+								</div>
+								<div class="col-sm-3" id="ads_name_div">
+									<div class="form-group">
+										<label class="control-label">Ads Name</label>
+										<input type="text" name="ads_name" id="ads_name" class="form-control" value="<?php echo (!empty($listing_data))?$listing_data['listing_name']:'';?>">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Ads Cost</label>
+										<input type="text" name="ads_cost" id="ads_cost" class="form-control" value="0" value="<?php echo (!empty($listing_data))?$listing_data['listing_name']:'';?>">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Client Type</label>
+										<select class="form-control" name="ads_package_client_type" id="ads_package_client_type">
+											<option value="0">Select Type</option>
+											<option value="1" selected>Existing College</option>
+											<option value="2">New College</option>
+											<!-- <option value="3">Existing University</option>
+											<option value="4">New University</option> -->
+											<option value="5">External</option>
+											<option value="6">Wayto</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Start Date</label>
+										<input class="form-control mb-4 mb-md-0" name="ads_start_date" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="dd-mm-yyyy" placeholder="dd-mm-yyyy" inputmode="numeric">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">End Date</label>
+										<input class="form-control mb-4 mb-md-0" name="ads_end_date" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="dd-mm-yyyy" placeholder="dd-mm-yyyy" inputmode="numeric">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Ads Paid</label>
+										<select class="form-control" name="ads_paid" id="ads_paid">
+											<option value="3">Not Applicable</option>
+											<option value="2">Not Paid</option>
+											<option value="1">Paid</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<h5>Ads Client</h5><hr>
+							<div class="row" style="display: block;">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="control-label">College Country</label>
+										<select class="form-control" name="ads_package_client_country" id="ads_package_client_country">
+											<option value="0">Select Country</option>
+											<?php
+											if(!empty($ads_countries)){
+												foreach ($ads_countries as $key => $v) {
+													?>
+													<option value="<?php echo $v['country_id'];?>" <?php echo $v['selected'];?>><?php echo $v['country_name'];?></option>
+													<?php
+												}
+											}
+											?>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row" style="display: block;">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="control-label">College State</label>
+										<select class="form-control" name="ads_package_client_states" id="ads_package_client_states">
+											<option value="0">Select State</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row" style="display: block;">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="control-label">College City</label>
+										<select class="form-control" name="ads_package_client_cities" id="ads_package_client_cities">
+											<option value="0">Select City</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row" id="ads_colleges_div_1" style="display: block;">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="control-label">College Name</label>
+										<select class="form-control" name="ads_package_client" id="ads_package_client">
+											<option value="0">Select Client</option>
+											
+										</select>
+									</div>
+								</div>
+							</div>
+							<div id="ads_colleges_div_2" style="display: none;">
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">College Name</label>
+											<input type="text" class="form-control" placeholder="Enter name" name="ads_college_name" id="ads_college_name" value="<?php echo (!empty($college_data))?$college_data['college_name']:'';?>">
+										</div>
+									</div>							
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">College Email</label>
+											<input type="text" class="form-control" placeholder="Enter official email" name="ads_college_email" id="ads_college_email" value="<?php echo (!empty($college_data))?$college_data['college_email']:'';?>">
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">College Phone No.</label>
+											<input type="text" class="form-control" placeholder="Enter official phone no." name="ads_college_phone" id="ads_college_phone" value="<?php echo (!empty($college_data))?$college_data['college_phone_no']:'';?>">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">College Contact Person Name</label>
+											<input type="text" class="form-control" placeholder="Enter contact person name" name="ads_college_contact_person_name" id="ads_college_contact_person_name" value="<?php echo (!empty($college_data))?$college_data['college_name']:'';?>">
+										</div>
+									</div>							
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">College Contact Person Email</label>
+											<input type="text" class="form-control" placeholder="Enter contact person official email" name="ads_college_contact_person_email" id="ads_college_contact_person_email" value="<?php echo (!empty($college_data))?$college_data['college_email']:'';?>">
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">College Contact Person Phone No.</label>
+											<input type="text" class="form-control" placeholder="Enter contact person official phone no." name="ads_college_contact_person_phone" id="ads_college_contact_person_phone" value="<?php echo (!empty($college_data))?$college_data['college_phone_no']:'';?>">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label class="control-label">User Type</label>
+											<select class="form-control" name="ads_ext_user_type" id="ads_ext_user_type">
+												<option value="university">University</option>
+												<option value="college">College</option>
+												<option value="school">School</option>
+												<option value="institute">Institute</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div id="ads_colleges_div_3" style="display: none;">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label class="control-label">Ads External Link</label>
+											<input type="text" class="form-control" placeholder="Enter Link" name="ads_external_link" id="ads_external_link" value="">
+										</div>
+									</div>
+								</div>
+							</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label>Ads Image</label>
+											<input type="file" name="ads_image" class="file-upload-default">
+											<div class="input-group col-xs-12">
+												<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Image" value="">
+												<span class="input-group-append">
+													<button class="file-upload-browse btn btn-primary" type="button">Browse Image</button>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<?php
+									if(!empty($listing_data)){
+										?>
+										<div class="col-sm-12">
+											<div class="form-group">
+												<img src="<?php echo $listing_data['listing_imgae'];?>">
+											</div>
+										</div>
+										<?php
+									}
+									?>
+										
+								</div>
+							
+
+
+							<h5>Ads Visibility</h5><hr>
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Ads Visibility (Type)</label>
+										<select class="form-control" name="ads_visibility" id="ads_visibility">
+											<option value="0">Select Ads Visibility</option>
+											<option value="1">Global (By Country)</option>
+											<option value="2">Country & States Specific (By Country)</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-3" id="ads_country_div" style="display: none;">
+									<div class="form-group">
+										<label class="control-label">Ads Visibility (Country)</label>
+										<select class="form-control" name="ads_country" id="ads_country">
+											<option value="0">Select Country</option>
+											<?php
+											if(!empty($ads_countries)){
+												foreach ($ads_countries as $key => $v) {
+													?>
+													<option value="<?php echo $v['country_id'];?>" <?php echo $v['selected'];?>><?php echo $v['country_name'];?></option>
+													<?php
+												}
+											}
+
+											?>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div id="ads_state"></div>
+							
+							<div class="row">
+								<div class="col-sm-3">
+									<button class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0" type="submit" id="btn_save_ads">Save</button>
+								</div>
+							</div>
+						</form>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.select2-container{
+		width: 100% !important;
+	}
+</style>

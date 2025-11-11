@@ -1,0 +1,44 @@
+<?php
+if($ads_type=='horizontal'){
+?>
+<div class="adBlock">
+    <div class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+          <div class="mb-4" style="text-align:center;">
+            <!-- wayto_horizontal_ads_17-02-22-03 -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:728px;height:90px !important;"
+                 data-ad-client="ca-pub-<?php echo $ca_pub;?>"
+                 data-ad-slot="<?php echo $ad_slot;?>"
+                 <?php echo (!empty($ad_format))?'data-ad-format="'.$ad_format.'"':'';?>
+                 <?php echo (!empty($ad_format))?'data-full-width-responsive="'.$ad_responsive.'"':'';?>
+                 ></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
+          </div>
+     </div>
+</div>
+<?php
+}else if($ads_type=='square'){
+?>
+<div class="adBlock">
+    <div class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+          <div class="mb-4" style="padding-bottom:10px;">
+               <!-- wayto_square_ads_17-02-22 -->
+               <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-<?php echo $ca_pub;?>"
+                    data-ad-slot="<?php echo $ad_slot;?>"
+                    <?php echo (!empty($ad_format))?'data-ad-format="'.$ad_format.'"':'';?>
+                    <?php echo (!empty($ad_format))?'data-full-width-responsive="'.$ad_responsive.'"':'';?>></ins>
+               <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+               </script>
+          </div>
+     </div>
+</div>
+<?php
+}
+
+?>

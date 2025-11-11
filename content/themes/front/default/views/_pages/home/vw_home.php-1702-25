@@ -1,0 +1,81 @@
+<?php $this->widget->run('front_banner',TRUE);?>
+<?php $this->widget->run('front_feature',TRUE);?>
+<?php $this->widget->run('front_explore_all',TRUE);?>
+<?php $this->widget->run('front_top_study_places',TRUE);?>
+<?php $this->widget->run('front_top_colleges_section',TRUE);?>
+<?php $this->widget->run('front_top_courses_section',TRUE);?>
+<?php $this->widget->run('front_top_exam_section',TRUE);?>
+<?php $this->widget->run('front_skill_courses_section',TRUE);?>
+<?php $this->widget->run('front_quick_look_course_section',FALSE);?>
+<?php $this->widget->run('front_mobile_app_section',TRUE);?>
+<?php $this->widget->run('front_subscription_section',TRUE);?>
+
+<section class="commonSec futureSec bg-white ">
+  <div class="wrapper">
+
+    <div class="col-lg-12">
+      <p>
+        Sikshapedia.com is the only solution that helps students come across the names of some of the <strong>top educational institutions in India</strong> for undergraduate and postgraduate courses. Having a strong brand base, it offers the users a unique privilege to lessen the hassle of shortlisting the best colleges in India. 
+      </p>
+      <p>
+        Our web page is a repository of some of the highly reliable and up-to-date information of more than 10,000+ <strong>top universities & colleges in India</strong> along with the best courses and a genuinely registered database of more than millions of students. We have been offering some specific information to students having an interest in UG or PG courses in India. 
+      </p>
+      <p>
+        <h2>Come Across the Latest Updates</h2>
+      </p>
+      <p>
+        Logging in to our website, you will come across the latest updates in some of the highly popular streams of education that range from Management to Engineering. As an education seeker, you will be able to come across a personalized experience by visiting our website. Based on your field of interest and educational background, you will be able to shortlist the names of some of the <strong>top universities in India</strong>. 
+      </p>
+      <p>
+        Our team comprises a team of career counseling experts that are always ready to address all your queries. Students may freely put up their queries regarding coming across some of the <strong>best universities in India</strong> through a detailed discussion. It will help them to clarify all their doubts in a single go. 
+      </p>
+      <p>
+        <h2>Get to Know about the Latest Changes in the Industry</h2>
+        <p>
+          The counselors keep themselves up to date with the latest changes taking place in the industry. Thus, if there is confusion regarding the selection of courses and <strong>best colleges in India</strong>; then you may talk to our experts anytime without any hesitation. It will be our pleasure to assist you. 
+        </p>
+
+        <p>
+          Way to Admissions has been recognized to be among the smartest gateways that have been successful in blending domain knowledge about higher education along with the latest technology and innovation. It will provide students a highly personalized insight in making an informed decision regarding the right career along with course as well as college.
+        </p>
+
+        <p>
+          We are here to provide the students with a non-conventional platform that will simply focus on the delivery of high-quality leads. It will help the students to gather information about some of the <strong>top educational institutions in India</strong>. The algorithm on our website permits us in segregating the data to multiple levels, thus providing an edge to the students that are looking for a specific and active database. 
+        </p>
+
+        <p>
+          We are here to provide a multi-purpose filter page that will help in sorting the data related to <strong>top universities in India</strong> based on the cut-off, fee, and rank. With a highly skilled team of data miners, we ensure that students will be able to make highly informed decisions regarding their bright careers.
+        </p>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<style type="text/css">
+ @media (max-width: 767.98px) {
+   
+    .fullscreen-modal .modal-dialog {
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .fullscreen-modal .modal-content {
+        height: 100vh;
+        border: 0;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fullscreen-modal .modal-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+}
+</style>
+
+<script type="text/javascript">let curl='<?php echo current_url();?>';let _co='<?php echo $country_id;?>';var wbpage='home_page';var page='home';var _vtype='';var _c='';var _st='';var _ct='';var _strm='';var _cu='';var _appr='';var _ctype='';var _c_cate='';var _agn='';var _exam='';var _aff='';</script>

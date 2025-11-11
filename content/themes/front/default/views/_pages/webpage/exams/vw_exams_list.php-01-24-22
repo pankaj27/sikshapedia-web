@@ -1,0 +1,272 @@
+<section class="bradcumSec bg-white py-2 bg-white">
+       <div class="wrapper">
+            <div class="row">
+                <div class="col-md-10">
+                    <nav aria-label="breadcrumb" >
+                        <ol class="breadcrumb bg-white m-0 pl-0">
+                          <?php
+                          foreach ($exams_data['breadcumb'] as $key => $value) {
+                            ?>
+                            <li class="breadcrumb-item <?php echo (empty($value))?'active':'';?>">
+                              <?php
+                              if(!empty($value)){
+                                ?>
+                                <a href="<?php echo $value;?>"><?php echo $key;?></a>
+                                <?php
+                              }else{
+                                echo $key;
+                              }
+                              ?>
+                            </li>
+                            <?php
+                          }
+                          ?>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-12">
+                    <h4 class=" mb-3" style="color: #ff7900;"><?php echo $exams_data['exam_heading'];?></h4>
+                </div>
+            </div>
+        </div>
+  </section>
+
+  <main class="isa-main-content">
+    
+      <!-- <div class="isa-tab-filter-wrapper">
+          <div class="row no-gutters">
+            <div class="col-md-12">
+              <div class="filterBlock  d-flex flex-wrap align-items-center py-2">
+                <a href="#" class="btn btn-outline-primary">BE/B.TECH  <span class="badge badge-light">10</span>  </a> 
+                <a href="#" class="btn btn-outline-primary">ME/M.TECH  <span class="badge badge-light">10</span> </a>
+                <a href="#" class="btn btn-outline-primary">M.PHIL/PH.D IN ENGINEERING <span class="badge badge-light">10</span> </a> 
+              </div>
+            </div>
+          </div>
+      </div> --> 
+
+    
+      <div class="isa-filter  filter-is-visible">
+        <div class="forlerForm">
+          <form>
+              <!-- <div class="isa-filter-block">
+                  <h4>Search</h4>
+                  <div class="isa-filter-content">
+                      <input type="search" placeholder="Search">
+                  </div>
+              </div> 
+              <div class="isa-filter-block">
+                <h4>Selected Filter</h4>
+                <div class="isa-filter-content nicescroll">
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                  <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+                </div> 
+              </div> -->
+              <div class="isa-filter-block">
+                  <h4>Exam Type (National wise)</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                   <li>
+                      <input class="filter states_filter" type="checkbox" name="country_filter" id="country" value="<?php echo encode_data(99);?>">
+                      <label class="checkbox-label" for="country">National Wise</label>
+                    </li>
+                  </ul> 
+              </div>
+              <div class="isa-filter-block">
+                  <h4>Exam Type (State wise)</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                    <?php
+                    if(!empty($states)){
+                      foreach ($states as $key => $value) {
+                        ?>
+                        <li>
+                          <input class="filter states_filter" type="checkbox" name="states_filter" id="states<?php echo $value['state_id'];?>" value="<?php echo $value['state_id'];?>">
+                          <label class="checkbox-label" for="states<?php echo $value['state_id'];?>"><?php echo $value['state_name'];?></label>
+                        </li>
+                        <?php
+                      }
+                    }
+                    ?>
+                  </ul> 
+              </div>
+              <div class="isa-filter-block">
+                  <h4>Apllication Mode</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                      <li>
+                          <input class="filter exam_application_filter" data-type="application_mode" type="radio" name="exam_application_mode" id="exam_application_mode_online" value="ONLINE TEST">
+                          <label class="checkbox-label" for="exam_application_mode_online">Online</label>
+                      </li>
+                      <li>
+                          <input class="filter exam_application_filter" data-type="application_mode"  type="radio" name="exam_application_mode" id="exam_application_mode_offline" value="OFFLINE TEST">
+                          <label class="checkbox-label" for="exam_application_mode_offline">Offline</label>
+                      </li>
+                      <li>
+                          <input class="filter exam_application_filter" data-type="application_mode" type="radio" name="exam_application_mode" id="exam_application_mode_both" value="ONLINE TEST,WRITTEN TEST">
+                          <label class="checkbox-label" for="exam_application_mode_both">Online & Offline Both</label>
+                      </li>
+                  </ul> 
+              </div>
+              <div class="isa-filter-block">
+                  <h4>Examination Mode</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                      <li>
+                          <input class="filter exam_filter" data-type="examination_mode" type="radio" name="exam_mode" id="exam_mode_online" value="ONLINE TEST">
+                          <label class="checkbox-label" for="exam_mode_online">Online</label>
+                      </li>
+                      <li>
+                          <input class="filter exam_filter"  type="radio" data-type="examination_mode" name="exam_mode" id="exam_mode_offline" value="WRITTEN TEST">
+                          <label class="checkbox-label" for="exam_mode_offline">Offline</label>
+                      </li>
+                      <li>
+                          <input class="filter exam_filter" type="radio" data-type="examination_mode" name="exam_mode" id="exam_mode_both" value="ONLINE TEST,WRITTEN TEST">
+                          <label class="checkbox-label" for="exam_mode_both">Online & Offline Both</label>
+                      </li>
+                  </ul> 
+              </div>
+              <div class="isa-filter-block">
+                  <h4>Others</h4>
+                  <ul class="isa-filter-content  list nicescroll">
+                      <li>
+                          <input class="filter exam_filter" data-type="examination_others" type="radio" name="exam_practice_paper" id="exam_practice_paper" value="yes">
+                          <label class="checkbox-label" for="exam_mode_online">With Practice Papers</label>
+                      </li>
+                  </ul> 
+              </div>
+             <!--  <div class="isa-filter-block">
+                  <h4>Radio buttons</h4>
+                    <ul class="isa-filter-content  list nicescroll">
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio1" checked>
+                          <label class="radio-label" for="radio1">All</label>
+                      </li>
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio2">
+                          <label class="radio-label" for="radio2">Choice 2</label>
+                      </li>
+                      <li>
+                          <input class="filter" type="radio" name="radioButton" id="radio3">
+                          <label class="radio-label" for="radio3">Choice 3</label>
+                      </li>
+                      <li>
+                        <input class="filter"  type="radio" name="radioButton" id="radio4" checked>
+                        <label class="radio-label" for="radio4">Choice 4</label>
+                      </li>
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio5">
+                          <label class="radio-label" for="radio5">Choice 5</label>
+                      </li>
+                      <li>
+                          <input class="filter" type="radio" name="radioButton" id="radio6">
+                          <label class="radio-label" for="radio6">Choice 6</label>
+                      </li>
+                      <li>
+                        <input class="filter"  type="radio" name="radioButton" id="radio7" checked>
+                        <label class="radio-label" for="radio7">Choice 7</label>
+                      </li>
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio2">
+                          <label class="radio-label" for="radio2">Choice 2</label>
+                      </li>
+                      <li>
+                          <input class="filter" type="radio" name="radioButton" id="radio8">
+                          <label class="radio-label" for="radio8">Choice 8</label>
+                      </li>
+                      <li>
+                        <input class="filter"  type="radio" name="radioButton" id="radio1" checked>
+                        <label class="radio-label" for="radio1">All</label>
+                      </li>
+                      <li>
+                          <input class="filter"  type="radio" name="radioButton" id="radio2">
+                          <label class="radio-label" for="radio2">Choice 2</label>
+                      </li>
+                  <li>
+                      <input class="filter" type="radio" name="radioButton" id="radio3">
+                      <label class="radio-label" for="radio3">Choice 3</label>
+                  </li>
+                  <li>
+                    <input class="filter"  type="radio" name="radioButton" id="radio4" checked>
+                    <label class="radio-label" for="radio4">Choice 4</label>
+                </li>
+                <li>
+                    <input class="filter"  type="radio" name="radioButton" id="radio5">
+                    <label class="radio-label" for="radio5">Choice 5</label>
+                </li>
+                <li>
+                    <input class="filter" type="radio" name="radioButton" id="radio6">
+                    <label class="radio-label" for="radio6">Choice 6</label>
+                </li>
+                <li>
+                  <input class="filter"  type="radio" name="radioButton" id="radio7" checked>
+                  <label class="radio-label" for="radio7">Choice 7</label>
+              </li>
+              <li>
+                  <input class="filter"  type="radio" name="radioButton" id="radio2">
+                  <label class="radio-label" for="radio2">Choice 2</label>
+              </li>
+              <li>
+                  <input class="filter" type="radio" name="radioButton" id="radio8">
+                  <label class="radio-label" for="radio8">Choice 8</label>
+              </li>
+                  </ul>
+              </div>  -->
+              <!-- <div class="isa-filter-block">
+                <h4>Lists</h4>
+                <ul class="isa-filter-content  list nicescroll">
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                    <li><a href="#">Top Economics Colleges In Canada</a> </li>
+                </ul> 
+              </div> -->
+          </form>
+        </div>  
+        <a href="javascript:void(0);" class="isa-close"><i class="fas fa-times"></i></a>
+      </div> 
+      <a href="javascript:void(0);" class="isa-filter-trigger text-uppercase"><i class="fas fa-filter"></i> found <?php echo $total_exams;?> exams</a>
+
+      <section class="isa-filter-result filter-is-visible" style="padding:0px;">
+
+        <div class="adBlock" style="margin-top: 20px; margin-bottom:0px;">      
+          <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9545373166119354"
+                crossorigin="anonymous"></script>
+            <!-- wayto_hz_1_ads -->
+            <ins class="adsbygoogle"
+                style="display:inline-block;width:728px;height:90px"
+                data-ad-client="ca-pub-9545373166119354"
+                data-ad-slot="7117741101" style="clear: both; display: flex;justify-content: center;margin-left:50px;margin-right:50px;"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+
+      </section>
+
+
+      <?php $this->widget->run('front_exam_list_details_section',true);?>
+
+</main>
+
+   <?php $this->widget->run('front_subscription_section',TRUE);?>
+
+  <script type="text/javascript">var _filter_country='<?php echo $country_id;?>';var _filter_stream='<?php echo $stream_id;?>';var page='exam_list_page';var _c='';var wbpage='examlistpage';var _vtype='';</script>
+
+  <style type="text/css">
+    .text-primary {
+    color: #ff7900;
+}
+  </style>

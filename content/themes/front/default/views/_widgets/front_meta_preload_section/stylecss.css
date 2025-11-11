@@ -1,0 +1,975 @@
+<style type="text/css">
+
+	li.li_mobile_signin_menu{
+		display: none !important;
+	}
+	div.mobile_signin_menu{
+		display: none !important;
+	}
+
+
+
+	/* For Desktop View */
+
+	@media screen and (min-width: 1025px) and (max-width: 1400px){
+		li.li_mobile_signin_menu{
+			display: none !important;
+		}
+		div.mobile_signin_menu{
+			display: none !important;
+		}
+
+	  	.footer_left .copyright{
+	  		display: none !important;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: none !important;
+	   	}
+	}
+
+
+	/* For Tablet View */
+	@media screen and (min-device-width: 768px)
+	and (max-device-width: 1024px) {
+		li.li_mobile_signin_menu{
+			display: none !important;
+		}
+		div.mobile_signin_menu{
+			display: none !important;
+		}
+
+		.footer_right{
+	  		display: block;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: none !important;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: none !important;
+	   	}
+	}
+
+
+	/* For Mobile Portrait View */
+	@media screen and (min-device-width: 480px)
+	and (orientation: portrait) {
+
+		/**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 350px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 366px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 15px;
+	   }
+	}
+
+	/* For Mobile Landscape View */
+	@media screen and (max-device-width: 640px)
+	and (orientation: landscape) {
+
+	}
+
+
+	
+
+
+	/* For iPhone 5 Portrait or Landscape View */
+	@media (device-height: 568px) and (device-width: 320px)
+	and (-webkit-min-device-pixel-ratio: 2) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 10px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   	 padding-top: 2px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 253px !important;
+	   }
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 256px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 14px;
+	   }
+	}
+
+
+	/* For iPhone 6 and 6 plus Portrait or Landscape View */
+	@media (min-device-height: 667px) and (min-device-width: 375px)
+	and (-webkit-min-device-pixel-ratio: 3) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 0px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   		padding-top: 15px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 311px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 320px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 15px;
+	   }
+	}
+
+
+
+	/* For iPhone 6 and 6 plus Portrait or Landscape View */
+	@media (min-device-height: 640px) and (min-device-width: 384px) and (max-device-width: 384px)
+	and (-webkit-min-device-pixel-ratio: 3) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 0px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   		padding-top: 15px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 311px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 320px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 14px;
+	   }
+	}
+
+
+	/* For iPhone 6 and 7 and 8 plus Portrait or Landscape View */
+	@media (min-device-height: 736px) and (min-device-width: 414px)
+	and (-webkit-min-device-pixel-ratio: 3) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 0px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   		padding-top: 15px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 345px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 366px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 15px;
+	   }
+	}
+
+
+	/* For iPhone XR and 11 and 8 plus Portrait or Landscape View */
+	@media (min-device-height: 736px) and (min-device-width: 414px)
+	and (-webkit-min-device-pixel-ratio: 3) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 0px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   		padding-top: 15px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 345px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 394px !important;
+	   }
+
+	   div.table-responsive table{
+	   	width: 394px !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 341px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 15px;
+	   }
+	}
+
+
+	/* For iPhone 12 and 13 plus Portrait or Landscape View */
+	@media (min-device-height: 812px) and (min-device-width: 375px)
+	and (-webkit-min-device-pixel-ratio: 3) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 0px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   		padding-top: 15px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 310px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 314px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 15px;
+	   }
+	}
+
+
+
+	/* For iPhone 12 and 13 pro Max Portrait or Landscape View */
+	@media (min-device-height: 926px) and (min-device-width: 428px)
+	and (-webkit-min-device-pixel-ratio: 3) {
+		#signinnnnn{
+	  		display: none;
+	  	}
+
+		li.li_mobile_signin_menu{
+			display: block !important;
+			padding-bottom: 81px !important;
+		}
+		div.mobile_signin_menu{
+			display: block !important;
+			width: 260px;
+			position: fixed;
+			z-index: 90;
+		}
+
+		div.mobile_signin_menu div{
+			background-color: #1b1f4c;
+			color: #fff;
+			width: 100%;
+		    margin-left: 0px;
+		    height: 80px;
+	    }
+
+		.footer_right{
+	  		display: none;
+	  	}
+
+	  	.footer_left .copyright{
+	  		display: block;
+	  	}
+
+	  	.footer_mobile_menu{
+			display: block;
+	   	}
+
+	   	.footer_left .copyright{
+	   		display: block;
+	   		margin-top: 23px;
+	   		padding: 10px 0;
+	   	}
+
+	   	.footer_menu_mobile a.btn-outline-primary{
+	   		background: #263238;
+    		color: #fff;
+    		border-color: #263238;
+	   	}
+
+	   .footer_mobile_menu .section-title h4{
+	   		font-size: 1.5rem;
+	   }
+
+	   .footer_mobile_menu .section-title{
+	   	padding-bottom: 0px;
+	   }
+
+	   .footer_left .system_logo{
+	   		width: 220px !important;
+	   }
+
+	   .footer_left p.pb-3{
+	   		display: none;
+	   }
+
+	   .studyAbroadSection{
+	   	display: none;
+	   }
+
+	   div.section-title{
+		padding-bottom: 0px !important;
+	   }
+
+	   div.section-title p{
+		font-size: 15px;
+	   }
+
+	   div.serviceBox{
+	   		padding-top: 15px !important;
+	   }
+
+	   h6.card-title{
+	   	font-size: 1.5rem;
+	   }
+
+	   div.navMedia {
+	   		padding-bottom: 6px;
+	   }
+
+
+	   /**College Page**/
+
+	   div.serviceIcoBox {
+	   	width: 33%;
+	   }
+
+	   div.serviceIcoBox span{
+	   	font-size: .90rem;
+	   }
+
+	   /**Exam Page**/
+	   iframe.embed-responsive-item{
+	   	width: 365px !important;
+	   }
+
+
+	   div.table-responsive{
+	   	width: 100% !important;
+	   }
+
+	   div.card-body table.table-striped{
+	   	width: 370px !important;
+	   	display: flex;
+	   	overflow-x: scroll;
+	   	overflow-y: scroll;
+	   }
+
+	   div.media-body h1{
+	   	font-size: 15px;
+	   }
+	}
+
+
+/*	
+
+	@media only screen and (max-width: 767px){
+		h1 {
+		  font-size: 15px;
+		}
+	}*/
+	
+	
+	
+	
+</style>

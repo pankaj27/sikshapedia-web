@@ -1,0 +1,53 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<section class="subscribe1">
+  <div class="container">
+    <!--    <div class="row justify-content-center"> -->
+    <div class="subscribe_area">
+      <h2 class="text-center text-white">SUBSCRIBE TO OUR NEWS LETTER</h2>
+    <p class="text-center text-info">COLLEGE NOTIFICATION  <i class="fas fa-circle fa-sm"></i>  EXAM  NOTIFICATION  <i class="fas fa-circle fa-sm"></i>  NEWS UPDATE</p>
+      <form class="form-group form-group-light d-block" id="form_subscription">
+        <div class="row g-0 ms-lg-n2">
+          <div class="col-lg-3 col-md-3">
+            <div class="input-group border-end-lg border-light">
+              <input class="form-control" type="text" placeholder="Enter your email" name="subscriber_email" id="subscriber_email">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3">
+            <div class="input-group border-end-lg border-light">
+              <input class="form-control" type="text" placeholder="Enter your phone no" name="subscriber_phone" id="subscriber_phone">
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-3">
+            <div class="input-group border-light">
+              <select class="form-control subscriber_course" name="subscriber_course" id="subscriber_course">
+                <i class="fas fa-search"></i>
+                <option class="selected">Select Course</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-3">
+            <button class="btn btn-primary w-100" type="submit" id="btn_subscribe_newsletter">Subscribe</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--   </div> -->
+  </div>
+</section>
+
+<style type="text/css">
+  #subscriber_course_chosen {
+      font-size: 14px;
+      z-index: inherit !important;
+      width: 100% !important;
+  }
+
+  #subscriber_course_chosen a span{
+      width: 100% !important;
+  }
+</style>
+
+
+<script type="text/javascript">
+  var _contry='<?php echo $country_data->country_id;?>';
+</script>

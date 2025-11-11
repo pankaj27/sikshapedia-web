@@ -1,0 +1,47 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($banners)){
+  ?>
+
+<section class="swiper-container isaSlider">
+    <div class="swiper-wrapper">
+
+        <?php
+          $i=0;
+          foreach ($banners as $key => $value) {
+        ?>
+
+        <div class="swiper-slide">
+            <img src="<?php echo $value['banner_image'];?>" alt="<?php echo $value['banner_name'];?>">
+            <div class="slideContent">
+                <div class="contrntInner">
+                    <h5>Welcome to</h5>
+                    <h2 class=""> <?php echo $value['banner_name'];?> </h2>
+                    <p class="">FIND OVER 25000 COLLEGES IN INDIA</p>
+                    <a href="<?php echo $value['access_url'];?>" class="btn-temp btn-orange">Explore All</a> 
+                </div>
+            </div>
+        </div>
+
+        <?php
+            $i++;
+            }
+        ?>
+
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
+    <button class="isppBtn playing">
+        <svg viewBox="0 0 200 200">
+            <circle class="" stroke="#fff" fill="none" stroke-width="10" cx="100" cy="100" r="100" />
+            <circle class="progressPath" stroke="#f57b32" fill="none" stroke-width="15" cx="100" cy="100" r="98" />
+        </svg>
+    </button>
+</section>
+
+
+<?php
+}
+?>

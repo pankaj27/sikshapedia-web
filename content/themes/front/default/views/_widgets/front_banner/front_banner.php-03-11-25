@@ -1,0 +1,62 @@
+<section class="swiper-container isaSlider">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <img src="https://www.sikshapedia.com/public/data/banners/2022/iim-kolkata-1.jpg?mode=stretch" alt="INDIAN INSTITUTE OF MANAGEMENT KOLKATA" title="Top Universities In India" loading="lazy">
+            <div class="slideContent">
+                <div class="contrntInner">
+                    <!-- <h5>Welcome to Sikshapedia</h5> -->
+                    <h2 class=""> INDIAN INSTITUTE OF MANAGEMENT KOLKATA </h2>
+                    <!-- <p class="">FIND OVER 25000 COLLEGES IN INDIA</p> -->
+                    <a href="https://www.sikshapedia.com/in/indian-institute-of-management-calcutta-kolkata-west-bengal" class="btn-temp btn-orange">Explore Now</a> 
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <img src="https://www.sikshapedia.com/public/data/banners/2022/aiims-delhi.jpg?mode=stretch" alt="INDIAN INSTITUTE OF TECHNOLOGY MUMBAI" title="AIIMS DELHI" loading="lazy">
+            <div class="slideContent">
+                <div class="contrntInner">
+                    <!-- <h5>Welcome to Sikshapedia</h5> -->
+                    <h2 class=""> INDIAN INSTITUTE OF TECHNOLOGY MUMBAI </h2>
+                    <!-- <p class="">FIND OVER 25000 COLLEGES IN INDIA</p> -->
+                    <a href="https://www.sikshapedia.com/in/aiims-delhi-new-delhi-delhi-ncr" class="btn-temp btn-orange">Explore Now</a> 
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <img src="https://www.sikshapedia.com/public/data/colleges/iit-bombay-mumbai-maharashtra/56PdqAaxWD.webp?mode=stretch" alt="INDIAN INSTITUTE OF TECHNOLOGY MUMBAI" title="INDIAN INSTITUTE OF TECHNOLOGY MUMBAI" loading="lazy">
+            <div class="slideContent">
+                <div class="contrntInner">
+                    <!-- <h5>Welcome to</h5> -->
+                    <h2 class=""> INDIAN INSTITUTE OF TECHNOLOGY MUMBAI </h2>
+                    <!-- <p class="">FIND OVER 25000 COLLEGES IN INDIA</p> -->
+                    <a href="https://www.sikshapedia.com/in/iit-bombay-mumbai-maharashtra" class="btn-temp btn-orange">Explore Now</a> 
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <img src="https://www.sikshapedia.com/public/data/colleges/institute-of-aeronautical-engineering-hydrabad-telengana/RgXqSu9Cjl.jpg?mode=stretch" alt="Top Universities In India" title="Top Universities In India" loading="lazy">
+            <div class="slideContent">
+                <div class="contrntInner">
+                    <!-- <h5>Welcome to</h5> -->
+                    <h2 class=""> INSTITUTE OF AERONAUTICAL ENGINEERING </h2>
+                    <!-- <p class="">FIND OVER 25000 COLLEGES IN INDIA</p> -->
+                    <a href="https://www.sikshapedia.com/in/institute-of-aeronautical-engineering-hyderabad-telangana" class="btn-temp btn-orange">Explore Now</a> 
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
+    <button class="isppBtn playing">
+        <svg viewBox="0 0 200 200">
+            <circle class="" stroke="#fff" fill="none" stroke-width="10" cx="100" cy="100" r="100" />
+            <circle class="progressPath" stroke="#f57b32" fill="none" stroke-width="15" cx="100" cy="100" r="98" />
+        </svg>
+    </button>
+</section>

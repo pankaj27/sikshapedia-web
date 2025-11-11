@@ -1,0 +1,159 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Add news</li>
+		</ol>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Exam Details</h6>
+					<div class="col-md-12">
+						<form id="form_exams_details_data_add_edit" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+							<input type="hidden" name="_exam" id="_exam" value="<?php echo $exam_id;?>">
+							<input type="hidden" name="_exam_menu" id="_exam_menu" value="<?php echo $menu_id;?>">
+							<input type="hidden" name="_exam_menu_data_id" id="_exam_menu_data_id" value="">
+
+							<div class="row">
+								<div  class="row table-responsive" id="heading_rows">
+									<table class="table">
+										<?php $table_row='0';?>
+										<tbody>
+											<?php
+											if(!empty($exam_details)){
+
+												foreach ($exam_details as $key => $value) {
+													if($value->exam_data_type=='general'){
+														?>
+														<tr id="trExamDetails<?php echo $table_row;?>">
+															<td>
+																<div class="form-group row">
+																	<div class="col-md-12">
+														            	<label for="system_meta_title">Exam Detail</label>
+														            	<input type="hidden" name="exam_details[<?php echo $table_row;?>][data_type]" value="general">
+														            	<textarea class="form-control exam_details" rows="40" name="exam_details[<?php echo $table_row;?>][exam_content]"><?php echo $value->exam_content;?></textarea>
+														          	</div>
+														        </div>
+
+														        <?php
+														        if($table_row>0){
+														        	?>
+														        	<div class="form-group row"><div class="col-md-12">
+															        	<button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trExamDetails<?php echo $table_row;?>').remove()">Delete Row</button>
+															        </div>
+														        	<?php
+														        }
+														        ?>
+														        
+														        
+															</td>
+														</tr>
+														<?php
+													}else if($value->exam_data_type=='image'){
+														?>
+														<tr id="trExamDetails<?php echo $table_row;?>">
+															<td>
+																<div class="form-group row">
+																	<div class="col-md-12">
+																		<label>Image Data</label>
+																		<input type="hidden" name="exam_details[<?php echo $table_row;?>][data_type]" value="image">
+																		<input type="hidden" name="exam_details[<?php echo $table_row;?>][data_type_value]" value="<?php echo encode_data($value->exam_data_type_id);?>">
+																		<input type="hidden" name="exam_details[<?php echo $table_row;?>][exam_content]" value="<?php echo $value->exam_content;?>">
+																		<div class="row">
+																			<img src="<?php echo $value->exam_content;?>" class="img-thumbnail" alt="Cinque Terre">
+																		</div>
+																		
+																		<?php
+																		if($table_row>0){
+																			?>
+																			<div class="form-group row">
+																				<div class="col-md-12">
+																					<button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trExamDetails<?php echo $table_row;?>').remove()">Delete Row</button>
+																				</div>
+																			</div>
+																			<?php
+																		}
+																		?>
+																		
+																	</div>
+																</div>
+															</td>
+														</tr>
+														<?php
+													}else if($value->exam_data_type=='ads'){
+
+													}
+
+													$table_row++;
+												}
+											}else{
+												?>
+												<tr id="trExamDetails<?php echo $table_row;?>">
+													<td>
+														<div class="form-group row">
+															<div class="col-md-12">
+												            	<label for="system_meta_title">Exam Detail</label>
+												            	<input type="hidden" name="exam_details[<?php echo $table_row;?>][data_type]" value="general">
+												            	<textarea class="form-control exam_details" rows="40" name="exam_details[<?php echo $table_row;?>][exam_content]"></textarea>
+												          	</div>
+												        </div>
+													</td>
+												</tr>
+												<?php
+											}
+											?>											
+										</tbody>
+										
+									</table>
+									<script type="text/javascript">var hdr='<?php echo ($table_row==0)?($table_row+1):$table_row;?>';</script>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="buy-now-wrapper" id="buttons_wrapper">
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Heading</button>
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#tinyFileBrowserModal">Add Image</button>
+									<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_save_exam_details">Save Data</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<style type="text/css">
+	.select2-container{
+		width: 100% !important;
+	}
+
+	#news_category_type_value_chosen{
+		width: 100% !important;
+	}
+
+	.table td img {
+	    width: 30% !important;
+	    height: 346px !important;
+	    border-radius: 0% !important; 
+	}
+</style>
+
+<script type="text/javascript">var hdr='<?php echo ($table_row==0)?($table_row+1):$table_row;?>';</script>
+
+<script type="text/javascript">
+	var _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>';
+	var college_name='<?php echo $college_data['college_name'];?>';
+	var college_slug='<?php echo $college_slug->url_value;?>';
+	var parent_folder='<?php echo $parent_folder_data->media_disk_name;?>';
+	var exam_menues=<?php echo $exam_page_menues;?>;
+	var exam_news=<?php echo $exam_page_news;?>
+</script>

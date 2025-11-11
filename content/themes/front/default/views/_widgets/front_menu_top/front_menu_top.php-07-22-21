@@ -1,0 +1,29 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($top_menues)){
+    ?>
+    <div class="headertopleft clearfix">
+        <div class="topNav clearfix">
+        <?php
+        foreach ($top_menues as $key => $value) {
+            ?>
+            <a href="<?php echo $value['menu_link'];?>"><?php echo $value['menu_name'];?></a>
+            <?php
+        }
+
+        if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+            ?>
+
+            <?php
+        }else{
+            ?>
+            <a href="#regModal" data-toggle="modal">SIGN UP</a>
+            <?php
+        }
+        ?>        
+        </div>
+    </div>
+    <?php
+}
+?>          

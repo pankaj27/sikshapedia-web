@@ -1,0 +1,281 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<section class="swiper-container isaSlider">
+	<div class="swiper-wrapper">
+
+		<div class="swiper-slide">
+			<img src="https://www.sikshapedia.com/public/data/banners/2022/iim-kolkata-1.jpg?mode=stretch" alt="INDIAN INSTITUTE OF TECHNOLOGY MUMBAI" title="AIIMS DELHI" loading="lazy">
+			 <div class="slideContent">
+
+			    <div class="contrntInner">
+			      <div class="layout">
+			        <div class="profile">
+			          <div class="profile__picture">
+			            <img src="https://www.sikshapedia.com/public/data/colleges/aiims-delhi-new-delhi-delhi-ncr/aiims-delhi-new-delhi-delhi-ncr-logo.webp" alt="IIM KOLKATAI" />
+			          </div>
+			          <div class="profile__header">
+			            <div class="profile__account">
+			              <a href="#">
+			                <h4 class="profile__username">INDIAN INSTITUTE OF MANAGEMENT KOLKATA</h4>
+			              </a>
+			            </div>
+			          </div>
+			          <div class="profile__header1">
+			            <div class="mobile_span_address">
+			              <i class="fas fa-map-marker-alt"></i>
+			              <span class="mobile_span_c_name">KOLKATA,WEST BENGAL</span>
+			            </div>
+			            <div class="mobile_span">
+			              <i class="fas fa-bookmark"></i>
+			              <span>UGC</span>
+			            </div>
+			          </div>
+			          <div class="profile__stats">
+			            <p>Delve into the world of IIM Calcutta, a premier institute shaping business leaders. Find details on executive MBA, selection criteria, and hostel facilities. </p>
+			            <div class="profile__edit">
+		                  <a class="profile__button" href="https://www.sikshapedia.com/in/indian-institute-of-management-calcutta-kolkata-west-bengal">Explore</a>
+		                </div>
+		               
+		              
+		                <div class="profile__stat">
+		                	  <div class="profile__value1">8.1 <div class="profile_value2">Rating</div><div class="profile__key"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div></div>
+		                  </div>
+		         
+		               
+		               
+		               </div> 
+			          </div>
+			        </div>
+			      </div>
+			      <div class="profile1">
+			        <div class="profile__stat">			            
+			          <div class="ranking-image">
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/nirf.svg');?>" alt="Image 1" loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/outlook.svg');?>" alt="Image 2"  loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/iirf.webp');?>" alt="Image 3"  loading="lazy">
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			 </div>
+	  		<!---ending of inner banner content----->
+	  	</div>
+
+
+	  	<div class="swiper-slide">
+			<img src="https://www.sikshapedia.com/public/data/banners/2022/aiims-delhi.jpg?mode=stretch" alt="AIIMS DELHI" title="AIIMS DELHI" loading="lazy">
+			 <div class="slideContent">
+
+			    <div class="contrntInner">
+			      <div class="layout">
+			        <div class="profile">
+			          <div class="profile__picture">
+			            <img src="https://www.sikshapedia.com/public/data/colleges/aiims-delhi-new-delhi-delhi-ncr/aiims-delhi-new-delhi-delhi-ncr-logo.webp" alt="AIIMS DELHI" />
+			          </div>
+			          <div class="profile__header">
+			            <div class="profile__account">
+			              <a href="#">
+			                <h4 class="profile__username">ALL INDIA INSTITUTE OF MEDICAL SCIENCES</h4>
+			              </a>
+			            </div>
+			          </div>
+			          <div class="profile__header1">
+			            <div class="mobile_span_address">
+			              <i class="fas fa-map-marker-alt"></i>
+			              <span class="mobile_span_c_name">KOLKATA,WEST BENGAL</span>
+			            </div>
+			            <div class="mobile_span">
+			              <i class="fas fa-bookmark"></i>
+			              <span>MCI,UGC</span>
+			            </div>
+			          </div>
+			          <div class="profile__stats">
+			            <p>AIIMS New Delhi is famous for MBBS Course. Collect, All India Institute of Medical Sciences Fees, Cut off, Hostel, Course Admissions 2024, Campus, Photos.</p>
+			            <div class="profile__edit">
+		                  <a class="profile__button" href="https://www.sikshapedia.com/in/aiims-delhi-new-delhi-delhi-ncr">Explore</a>
+		                </div>
+		               
+		              
+		                <div class="profile__stat">
+		                	  <div class="profile__value1">8.0 <div class="profile_value2">Rating</div><div class="profile__key"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div></div>
+		                  </div>
+		         
+		               
+		               
+		               </div> 
+			          </div>
+			        </div>
+			      </div>
+			      <div class="profile1">
+			        <div class="profile__stat">			            
+			          <div class="ranking-image">
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/nirf.svg');?>" alt="Image 1"  loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/outlook.svg');?>" alt="Image 2"  loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/iirf.webp');?>" alt="Image 3"  loading="lazy">
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			 </div>
+	  		<!---ending of inner banner content----->
+	  	</div>
+
+
+	  	<div class="swiper-slide">
+			<img src="https://www.sikshapedia.com/public/data/colleges/iit-bombay-mumbai-maharashtra/56PdqAaxWD.webp?mode=stretch" alt="INDIAN INSTITUTE OF TECHNOLOGY MUMBAI" title="INDIAN INSTITUTE OF TECHNOLOGY MUMBAI" loading="lazy">
+			 <div class="slideContent">
+
+			    <div class="contrntInner">
+			      <div class="layout">
+			        <div class="profile">
+			          <div class="profile__picture">
+			            <img src="https://www.sikshapedia.com/public/data/colleges/iit-bombay-mumbai-maharashtra/iit-bombay-mumbai-maharashtra-logo.webp" alt="IIT MUMBAI" />
+			          </div>
+			          <div class="profile__header">
+			            <div class="profile__account">
+			              <a href="#">
+			                <h4 class="profile__username">INDIAN INSTITUTE OF TECHNOLOGY MUMBAI</h4>
+			              </a>
+			            </div>
+			          </div>
+			          <div class="profile__header1">
+			            <div class="mobile_span_address">
+			              <i class="fas fa-map-marker-alt"></i>
+			              <span class="mobile_span_c_name">MUMBAI,MAHARASHTRA</span>
+			            </div>
+			            <div class="mobile_span">
+			              <i class="fas fa-bookmark"></i>
+			              <span>UGC</span>
+			            </div>
+			          </div>
+			          <div class="profile__stats">
+			            <p>IIT Bombay is located in Mumbai, Students Get details of Indian Institute of Technology like Cutoff, Fees Structure, Course Admissions 2024, Alumni, Placements.</p>
+			            <div class="profile__edit">
+		                  <a class="profile__button" href="https://www.sikshapedia.com/in/iit-bombay-mumbai-maharashtra">Explore</a>
+		                </div>
+		               
+		              
+		                <div class="profile__stat">
+		                	  <div class="profile__value1">8.6 <div class="profile_value2">Rating</div><div class="profile__key"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div></div>
+		                  </div>
+		         
+		               
+		               
+		               </div> 
+			          </div>
+			        </div>
+			      </div>
+			      <div class="profile1">
+			        <div class="profile__stat">			            
+			          <div class="ranking-image">
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/nirf.svg');?>" alt="Image 1" loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/outlook.svg');?>" alt="Image 2" loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/iirf.webp');?>" alt="Image 3" loading="lazy">
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			 </div>
+	  		<!---ending of inner banner content----->
+	  	</div>
+
+
+	  	<div class="swiper-slide">
+			<img src="https://www.sikshapedia.com/public/data/colleges/institute-of-aeronautical-engineering-hydrabad-telengana/RgXqSu9Cjl.jpg?mode=stretch" alt="Top Universities In India" title="Top Universities In India" loading="lazy">
+			 <div class="slideContent">
+
+			    <div class="contrntInner">
+			      <div class="layout">
+			        <div class="profile">
+			          <div class="profile__picture">
+			            <img src="https://www.sikshapedia.com/public/data/colleges/institute-of-aeronautical-engineering-hydrabad-telengana/BGeApR5aWc.jpg" alt="INSTITUTE OF AERONAUTICAL ENGINEERING" />
+			          </div>
+			          <div class="profile__header">
+			            <div class="profile__account">
+			              <a href="#">
+			                <h4 class="profile__username">INSTITUTE OF AERONAUTICAL ENGINEERING</h4>
+			              </a>
+			            </div>
+			          </div>
+			          <div class="profile__header1">
+			            <div class="mobile_span_address">
+			              <i class="fas fa-map-marker-alt"></i>
+			              <span class="mobile_span_c_name">HYDERABAD,TELANGANA</span>
+			            </div>
+			            <div class="mobile_span">
+			              <i class="fas fa-bookmark"></i>
+			              <span>AICTE,NAAC,UGC</span>
+			            </div>
+			          </div>
+			          <div class="profile__stats">
+			            <p>Institute of Aeronautical Engineering (IARE), Hyderabad was established in the year 2000 and is run by Maruthi Educational Society. It is the first institute to start a B.Tech program in Aeronautical Engineering in the state of Telangana and has gradually transformed itself into an integrated multi-disciplinary technological institute.</p>
+			            <div class="profile__edit">
+		                  <a class="profile__button" href="https://www.sikshapedia.com/in/institute-of-aeronautical-engineering-hyderabad-telangana">Explore</a>
+		                </div>
+		               
+		              
+		                <div class="profile__stat">
+		                	  <div class="profile__value1">8.1 <div class="profile_value2">Rating</div><div class="profile__key"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div></div>
+		                  </div>
+		         
+		               
+		               
+		               </div> 
+			          </div>
+			        </div>
+			      </div>
+			      <div class="profile1">
+			        <div class="profile__stat">			            
+			          <div class="ranking-image">
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/nirf.svg');?>" alt="Image 1" loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/outlook.svg');?>" alt="Image 2" loading="lazy">
+			            </div>
+			            <div class="ranking-image12">
+			              <img src="<?php echo base_url('public/data/app/app_data/ranking/iirf.webp');?>" alt="Image 3" loading="lazy">
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			 </div>
+	  		<!---ending of inner banner content----->
+	  	</div>
+
+	</div>
+
+	<div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
+    <button class="isppBtn playing">
+        <svg viewBox="0 0 200 200">
+            <circle class="" stroke="#fff" fill="none" stroke-width="10" cx="100" cy="100" r="100" />
+            <circle class="progressPath" stroke="#f57b32" fill="none" stroke-width="15" cx="100" cy="100" r="98" />
+        </svg>
+    </button>
+</section>
+
+
+<style type="text/css">
+  .profile,.profile1{background:#ed6d30c7;right:100px;position:absolute;width:350px;box-shadow:0 0 40px 0 rgba(0,0,0,.17)}.profile,.profile1,.profile__picture:before{box-shadow:0 0 40px 0 rgba(0,0,0,.17)}.profile__account a,.profile__button{text-decoration:none}.layout{align-items:center;display:flex;justify-content:center;height:100vh}@-webkit-keyframes popUp{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}@keyframes popUp{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}@-webkit-keyframes slideUp{from{transform:translateY(5px);opacity:0}to{transform:translateY(0);opacity:1}}@keyframes slideUp{from{transform:translateY(5px);opacity:0}to{transform:translateY(0);opacity:1}}.profile{-webkit-animation:350ms ease-in-out popUp;animation:350ms ease-in-out popUp;top:-4%;padding:28px 16px 0 35px}#btn21{margin-left:-234px;padding:3px 20px;margin-top:3.5px;background-color:#f57b32;border:none;font-size:15px;border-radius:.25rem}.profile1{-webkit-animation:350ms ease-in-out popUp;animation:350ms ease-in-out popUp;bottom:0;padding:10px 10px 10px 35px}.profile__account{align-self:center;flex:1;justify-content:flex-end;padding-left:80px;padding-top:10px}#sitesearch{width:50%;position:relative;margin-left:-480px;margin-bottom:-140px}#typer,.para12,.profile__picture{position:absolute}.profile__value1{font-family:"Ubuntu Condensed"!important;font-size:38px!important;font-weight:400!important;text-align:center!important;color:#fff!important;margin-right:10px!important;margin-top:-60px;margin-left:50px}.profile__button,.profile__key{font-family:"Ubuntu Condensed";text-align:center}.mobile_span_address,.profile__icon{margin-right:10px}.profile_value2{font-size:16px;margin-left:129px;margin-top:-48px}.stars i{font-size:12px}.stars{margin-left:142px;font-size:11px;margin-top:-3px}.profile__button{border-radius:50px;background-color:#000;border:1px solid #000;color:#fff;display:block;font-size:13px;padding:10px;transition:background 250ms ease-in-out,color 250ms ease-in-out}.mobile_span span,.mobile_span_address span,.profile__button:hover{color:#fff}.profile__edit{flex:none;width:90px;margin-top:30px}.profile__header{display:flex;margin-bottom:6px}.profile__header1{display:flex;margin-bottom:10px;margin-left:6px;margin-top:30px}.mobile_span i,.mobile_span_address i{color:#000}.profile__icon{flex:none;font-size:1.5em;padding-top:3px}.profile__icon--gold{color:#eab100}.profile__icon--blue{color:#8faae8}.profile__icon--pink{color:#ff86af}.profile__key{font-size:13px;font-weight:400}#typer,.profile__username{font-weight:600;color:#fff;font-family:"Ubuntu Condensed"}.profile__picture{background:#fff;border-radius:20px;border:10px solid #fff;height:60px;width:65px;top:60px}.profile__picture:before{border-radius:100px;content:"";height:calc(100% + 20px);left:-10px;position:absolute;top:-10px;width:calc(100% + 20px);z-index:-1}.profile__picture img{height:100%;width:100%}.profile__stat{-webkit-animation:350ms ease-in-out forwards slideUp;animation:350ms ease-in-out forwards slideUp;border-right:1px solid #e9e9e9;display:flex;flex:1;justify-content:center;opacity:0;padding:10px 4px;transform:translateY(5px)}.profile__stat:last-of-type{border-right:none}.profile__stat:first-child{-webkit-animation-delay:.4s;animation-delay:.4s}.profile__stat:nth-child(2){-webkit-animation-delay:.5s;animation-delay:.5s}.profile__stat:nth-child(3){-webkit-animation-delay:.6s;animation-delay:.6s}.profile__stats{margin-left:5px;margin-right:16px}.profile__stats p{text-align:justify;font-size:14px}.profile__username{margin:0;font-size:19px;text-align:left;padding-right:10px;padding-top:30px}.profile__value{font-family:"Ubuntu Condensed"!important;font-size:22px!important;font-weight:400!important;text-align:center!important;color:#fff!important;margin-right:10px!important}#typer{letter-spacing:-1.5px;text-transform:capitalize;font-size:32px!important;bottom:180px;left:105px;z-index:999}.para12{top:130px;left:72px;width:700px;background-color:#09090933;padding:20px}.para12 p{font-size:18px;color:#fff;font-family:"Ubuntu Condensed";text-align:justify}.ranking-image{display:inline-flex}.ranking-image12{background-color:#fff;padding:10px;border-radius:10px;height:60px;width:100%;box-shadow:2px 2px 2px 2px #b7b0b0cc;margin-right:10px}#typer span{color:#fd390e}@media screen and (min-width:360px) and (max-width:374px){#sitesearch,#typer,.profile__button,.profile__header1,.profile__stats p{display:none}.profile{width:260px;top:75%;right:42px;padding-bottom:25px}.profile__username{font-size:16px;font-weight:400}.profile__picture{top:31px}.profile1{background:0 0!important;width:260px}.profile__value{font-family:"Ubuntu Condensed";font-size:20px;font-weight:400;text-align:center;color:#fff;margin-bottom:0;margin-right:-150px!important}.ranking-image{display:none!important}#btn21{margin-left:-234px;padding:3px 20px;margin-top:3.5px;background-color:#f57b32;border:none;font-size:15px;border-radius:.25rem}.profile__account{padding-top:0}}
+</style>

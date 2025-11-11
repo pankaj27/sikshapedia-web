@@ -1,0 +1,453 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<section class="headerBnrSec overlayBnr">
+    <img src="<?php echo $university_data['university_banner'];?>" class="headerBnrImg" alt="">
+    <div class="wrapper">
+      <div class="headerBnrPanel">
+        <div class="bnrThumbBox">
+          <div class="bnrThumb shadow bg-white"><img src="<?php echo $university_data['university_logo'];?>"></div>
+          <div class="bnrThumbCon pt-2">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb p-0 bg-none mb-1">
+                <?php
+                foreach ($university_data['university_breadcrumb'] as $key => $value) {
+                  ?>
+                  <li class="breadcrumb-item">
+                    <?php
+
+                    if($value!=''){
+                      ?>
+                      <a href="<?php echo $value;?>"><?php echo $key;?></a>
+                      <?php
+                    }else{
+                       echo $key;
+                    }
+                    ?>
+                    </li>
+                  <?php
+                }
+                ?>
+                <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Library</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Data</li> -->
+              </ol>
+            </nav>
+            <h5 class="m-0 bnrTitle text-truncate text-uppercase w-75"><?php echo $university_data['university_name_formatted'];?></h5>
+            <div class="m-0  d-lg-flex  justify-content-between tagLists w-75">
+              <div class="text-truncate tags">
+                <span><i class="fas fa-map-marker-alt"></i> <?php echo $university_data['university_city'];?>,<?php echo $university_data['university_state'];?> </span> 
+                <span><i class="fas fa-tags"> </i> KARNATAKA  AICTE </span> 
+                <span><i class="fas fa-thumbtack"></i> ESTD <?php echo $university_data['university_estd'];?> </span> 
+                <span><i class="fas fa-star"> </i> <?php echo $university_data['university_type'];?> </span> 
+                <span><i class="fas fa-tags"> </i>  10 QUESTIONS </span> 
+                <span><i class="fas fa-tags"> </i>  ANSWERED </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+              </div>
+              <div class="pl-2"><a href="">  MORE </a></div> 
+            </div>
+          </div>
+
+        </div>
+        <div class="headerBnrCon d-none d-md-block">
+          <div class="ratingBox ">
+              <div class="points">9.2</div>
+              <div class="reviewStars">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
+                <div class="reviewCounts">17 REVIEWS</div>
+              </div>
+          </div>
+          <a href="#" class="btn btn-outline-light btnContact">GET CONTACT DETAILS</a>
+          <a href="#" class="btn btn-link text-white btnclaim"> <i class="fas fa-dot-circle text-warning pals" ></i>  Claim This College</a>
+
+          <button type="button" class="btnFavorite active"></button>
+
+        </div>
+       
+      </div>
+    </div>
+  </section>
+
+  <?php
+  if(!empty($university_data['university_inner_menues'])){
+    ?>
+    <section class="tabSliderSec">
+          <div class="swiper-container tabSlider navTabSlider">
+            <div class="swiper-wrapper">
+              <?php
+              foreach ($university_data['university_inner_menues'] as $key => $value) {
+               ?>
+               <a href="<?php echo $value['menu_link'];?>" class="swiper-slide navLink <?php echo ($value['menu_default_active']!='')?$value['menu_default_active']:$value['menu_active'];?>"> <?php echo $value['menu_name'];?> </a>
+               <?php
+              }
+              ?>
+            </div>
+            <div class="swiper-button-next swiper-button-white"></div>
+            <div class="swiper-button-prev swiper-button-white"></div>
+          </div>
+    </section>
+    <?php
+  }
+
+  ?>
+
+      
+
+
+<section class="pageDetailsSec py-4">
+    <div class="wrapper">
+      <div class="row">
+        <div class="col-lg-9 mb-4 mb-lg-0">
+          <div class="card infoCard mb-4">
+            <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+              <div class="media">
+                <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+                <div class="media-body">
+                  <h5 class="mt-0 text-dark"><a href="#"> By Swati Mishra  </a> </h5>
+                  <p class="m-0">Content Curator 
+                    <a href="#" class="text-info"><i class="fab fa-facebook"></i></a>
+                    <a href="#"  class="text-info"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-info"><i class="fab fa-linkedin-in"></i></a>
+                  </p>
+                </div>
+              </div>
+              <div class="updateDate">Updated On - December 7th, 2020</div>
+            </div>
+            <div class="card-body readall">
+              <p>IIM Bangalore has come up as one of the best B-School in Central Asia by Eduniversal Ranking 2020. The B-School award was announced in the annual Eduniversal 3D World Convention 2020.</p>
+
+              <p>Indian Institute of Management - [IIMB] Recent Admission Alerts and Updates</p>
+              <ul>
+                <li>6 November, 2020: IIM Bangalore commences PhD Admission 2021.  Apply till January 18, 2021 Know more</li>
+                <li>25 August, 2020: IIMB PGPEM Admission deadline is January 18 Know more</li>
+              </ul>
+              <p>IIM Bangalore has announced the admission criteria for MBA 2021-2023 Batch. The Admission Criteria for MBA will be the same as the previous year. </p>
+              IIM Bangalore has come up as one of the best B-School in Central Asia by Eduniversal Ranking 2020. The B-School award was announced in the annual Eduniversal 3D World Convention 2020.</p>
+
+              <p>Indian Institute of Management - [IIMB] Recent Admission Alerts and Updates</p>
+              <ul>
+                <li>6 November, 2020: IIM Bangalore commences PhD Admission 2021.  Apply till January 18, 2021 Know more</li>
+                <li>25 August, 2020: IIMB PGPEM Admission deadline is January 18 Know more</li>
+              </ul>
+              <p>IIM Bangalore has announced the admission criteria for MBA 2021-2023 Batch. The 
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                   <thead>
+                      <tr>
+                         <th>EVENT</th>
+                         <th>DATE</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td>CAT Registration</td>
+                         <td>05 Aug - 23 Sep, 2020</td>
+                      </tr>
+                      <tr>
+                         <td>Shortlist Announcement for PI-WAT (Tentatives)</td>
+                         <td>10 Jan, 2021</td>
+                      </tr>
+                   </tbody>
+                </table>
+             </div>
+             <p>Indian Institute of Management Bangalore (IIMB), established in 1973, is a top-ranked institute among all the IIMs in India. It offers management courses at PG and Doctoral level. NIRF 2020 ranked the institute at the number 2 position after IIM Ahmedabad. PGP is it's most sought after program globally. The Average placement package of the 2019 batch went as high as INR 25 Lacs per annum.</p> 
+
+            <p>Some of the notable alumni of IIM Bangalore are – K. Radhakrishnan (Ex-ISRO Chairman), Ravi Subramanium (Popular Author), Shehla Rashid (Indian Politician), Vega Tamotia (Indian Actress) and many more.</p>
+
+            <div id="accordionExample1" class="accordion">
+              <div class="card br-0">
+                <a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="card-header d-block position-relative text-dark text-uppercase collapsible-link ">Collapsible Group Item #1</a>
+                <div id="collapseOne" data-parent="#accordionExample1" class="collapse show">
+                  <div class="card-body">
+                    <p class="font-weight-light m-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card br-0">
+                <a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="card-header d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Collapsible Group Item #2</a>
+                <div id="collapseTwo" data-parent="#accordionExample1" class="collapse">
+                  <div class="card-body">
+                    <p class="font-weight-light m-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card br-0">
+                <a href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="card-header d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Collapsible Group Item #3</a>
+                <div id="collapseThree"  data-parent="#accordionExample1" class="collapse">
+                  <div class="card-body">
+                    <p class="font-weight-light m-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            </div>
+          </div>
+
+          <div class="card infoCard mb-4">
+            <div class="card-header bg-white">
+              <h5 class="m-0 color2"> INDIAN INSTITUTE OF MANAGEMENT - [IIMB], BANGALORE FEES & ELIGIBILITY</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm">
+                   <thead>
+                      <tr>
+                         <th class="bg-indigo text-wite">Course</th>
+                         <th class="bg-blue text-wite">Fees</th>
+                         <th class="bg-teal text-wite">Eligibility</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td><a href="https://collegedunia.com/university/25602-indian-institute-of-management-iimb-bangalore/courses-fees?slug=post-graduate-program-in-management-pgpm&amp;course_type=Full-Time">PGPM</a></td>
+                         <td>₹23.15 Lakhs (Total Fees)</td>
+                         <td>Graduation + CAT/GMAT</td>
+                      </tr>
+                      <tr>
+                         <td><a href="https://collegedunia.com/university/25602-indian-institute-of-management-iimb-bangalore/courses-fees?course_id=6648">PGP-PPM</a></td>
+                         <td>₹19 Lakhs (Total Fees)</td>
+                         <td>Pass in Graduation + CAT</td>
+                      </tr>
+                      <tr>
+                         <td><a href="https://collegedunia.com/university/25602-indian-institute-of-management-iimb-bangalore/courses-fees?course_id=9750">PGPBA</a></td>
+                         <td>₹21.15 Lakhs (Total Fees)</td>
+                         <td>Pass in Graduation + CAT</td>
+                      </tr>
+                      <tr>
+                         <td><a href="https://collegedunia.com/university/25602-indian-institute-of-management-iimb-bangalore/courses-fees?slug=executive-post-graduate-program&amp;course_type=Full-Time">Executive</a></td>
+                         <td>₹27.5 Lakhs (Total Fees)</td>
+                         <td>Graduation</td>
+                      </tr>
+                   </tbody>
+                </table>
+             </div>
+            </div>
+          </div>
+
+          <div class="card infoCard mb-4">
+            <div class="card-header ">
+              <form>
+                <div class="input-group input-group-lg mb-3">
+                  <input type="text" class="form-control" placeholder="Search">
+                  <button class="btn btn-outline-secondary" type="submit" ><i class="fas fa-search"></i></button>
+                </div>
+              </form>
+              <p class="d-flex flex-wrap align-items-center badgeRow">
+                <span class="mr-2">Select Degree : </span>  
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+              </p>
+              <p class="d-flex flex-wrap align-items-center badgeRow">
+                <span class="mr-2">Select Stream : </span>  
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+                <a href="#" class="py-1 px-2 mr-2 badge bg-light text-dark">Light</a>
+              </p>
+
+              <h5 class=" color2"> INDIAN INSTITUTE OF MANAGEMENT - [IIMB] TOP COURSES, FEES & ELIGIBILITY  </h5>
+              <ul class="nav nav-tabs card-header-tabs tempTab">
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="#tab1_1">All</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#tab1_2">Part Time</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#tab1_3">Full Time</a>
+                </li>
+              </ul>
+
+            </div>
+            <div class="card-body">
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab1_1">
+                  <div class="row">
+                    <div class="col-md-9">
+                      <h5 class="mb-2"><a href="#" class="text-dark">Post Graduate Programme in Business Analytics</a></h5>
+                      <div class="d-flex flex-wrap">
+                       <span class="mr-2 badge color-blue"><i class="far fa-bookmark"></i> 2 Years </span>
+                       <span class="mr-2 badge color-purple"><i class="far fa-bookmark"></i> Degree </span>
+                       <span class="mr-2  badge color-green"><i class="far fa-bookmark"></i> Full Time </span>
+                       <span class="mr-2 badge color-indigo"><i class="far fa-bookmark"></i> On Campus </span>
+                       <span class="mr-2 badge color-teal"><i class="far fa-bookmark"></i> Post Graduation </span>
+                      </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-end">
+                      <div class=" text-md-right">
+                        <h4 class="color2 mb-2 "> ₹ 2,115,000 <small class="text-muted">Fees</small> </h4>
+                        <a href="#" class="color-indigo">Check details</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="color2 mb-2">
+                    9.4/10 <span class="stars color-orange"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span> Based on 11 Reviews 
+                  </div>
+                  <ul class="pl-3">
+                    <li>Dates : Application Starts 05 Aug 2020 | Application Ends 10 Jan 2021 Check All Dates</li>
+                      <li>Ranking: #2 Management - NIRF</li>
+                      <li>Exams Accepted: <span class="color2"> CAT | GMAT | GRE </span></li>
+                  </ul>
+                  <p>Admission Guide 2020 <a class="color-teal" href=""><i class="fas fa-download"></i> Download Brochure </a></p>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="card imageCard mb-4">
+            <div class="card-header bg-white">
+              <h5 class="m-0 color2"> IMAGES</h5>
+            </div>
+            <div class="card-body">
+              <h6>EVENTS</h6>
+              <div class="row form-row">
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="events" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="events" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="events" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="events" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+              </div>
+              <h6>CAMPUS</h6>
+              <div class="row form-row">
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="campus" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="campus" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="campus" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png" data-fancybox="campus" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="card imageCard mb-3">
+            <div class="card-header bg-white border-top">
+              <h5 class="m-0 color2"> VIDEOS</h5>
+            </div>
+            <div class="card-body">
+              <div class="row form-row">
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="https://www.youtube.com/watch?v=_sI_Ps7JSEk" data-fancybox="video" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="https://www.youtube.com/watch?v=_sI_Ps7JSEk" data-fancybox="video" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="https://www.youtube.com/watch?v=_sI_Ps7JSEk" data-fancybox="video" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                  <a href="https://www.youtube.com/watch?v=_sI_Ps7JSEk" data-fancybox="video" class="imgBox h-150"><img class="img-thumbnail" src="http://waytoadmissions.com/dev/uploads/data/universities/41-jadavpur-university/xWF3V_wKGd.png"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-3 ">
+          <a href="" class="btn btn-primary mb-3 btn-block  d-flex justify-content-between mb-3"><span>APPLY NOW </span> <i class="far fa-envelope"></i></a>
+          <a href="" class="btn btn-warning  mb-3 btn-block d-flex justify-content-between mb-3"> <span>DOWNLOAD BROCHURE </span> <i class="fas fa-download"></i></a>
+          <div class="card mb-4">
+            <div class="card-header bg-white">
+              <h5 class="m-0">Featured News</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <div class="card-header bg-white text-center">
+              <a class="#">View All News</a>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-header bg-white">
+              <h5 class="m-0">Featured News</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <div class="card-header bg-white text-center">
+              <a class="#">View All News</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </section>
+
+  <script type="text/javascript">let curl='<?php echo current_url();?>';</script>

@@ -1,0 +1,120 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<section class="pageDetailsSec py-4">
+    <section id="tabs" class="project-tab">
+        <div class="col-md-12" style="padding-left:5px;padding-right:5px;">
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-profile_details-tab" data-toggle="tab" href="#nav-profile_details" role="tab" aria-controls="nav-basic_details" aria-selected="true">Profile</a>
+                    <a class="nav-item nav-link" id="nav-review-tab" data-toggle="tab" href="#nav-review" role="tab" aria-controls="nav-review" aria-selected="false">Reviews</a>
+                    <a class="nav-item nav-link" id="nav-higher_education-tab" data-toggle="tab" href="#nav-higher_education" role="tab" aria-controls="nav-higher_education" aria-selected="false">Applied CAF</a>
+                    <a class="nav-item nav-link" id="nav-pendingapplication-tab" data-toggle="tab" href="#nav-pendingapplication" role="tab" aria-controls="nav-pendingapplication" aria-selected="false">Pending Application</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-profile_details" role="tabpanel" aria-labelledby="nav-profile_details-tab">
+                    <div class="wrapper">
+                        <div class="row">
+                          
+                            <div class="col-lg-9 mb-4 mb-lg-0">
+                                <div class="card userCard">
+                                  <div class="card-header bg-white">
+                                    <h5 class="m-0 d-inline"><?php echo $userdata->user_fullname;?></h5> <small id="user_type" class="form-text text-muted"><?php echo $userdata->user_email;?></small>
+                                  </div>
+
+                                  <div class="card-body">
+                                    <section id="tabs" class="project-tab">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12" style="padding-left:5px;padding-right:5px;">
+                                                    <nav>
+                                                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                            <a class="nav-item nav-link active" id="nav-basic_details-tab" data-toggle="tab" href="#nav-basic_details" role="tab" aria-controls="nav-basic_details" aria-selected="true">Basic Details</a>
+                                                            <a class="nav-item nav-link" id="nav-high_school-tab" data-toggle="tab" href="#nav-high_school" role="tab" aria-controls="nav-high_school" aria-selected="false">High School</a>
+                                                            <a class="nav-item nav-link" id="nav-higher_education-tab" data-toggle="tab" href="#nav-higher_education" role="tab" aria-controls="nav-higher_education" aria-selected="false">Higher Education</a>
+                                                            <a class="nav-item nav-link" id="nav-prof_exp-tab" data-toggle="tab" href="#nav-prof_exp" role="tab" aria-controls="nav-prof_exp" aria-selected="false">Professional Experience</a>
+                                                        </div>
+                                                    </nav>
+                                                    <div class="tab-content" id="nav-tabContent">
+                                                        <div class="tab-pane fade show active" id="nav-basic_details" role="tabpanel" aria-labelledby="nav-basic_details-tab">
+                                                           <?php $this->widget->run('front_student_basic_details_section',TRUE);?>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="nav-high_school" role="tabpanel" aria-labelledby="nav-high_school-tab">
+                                                            <?php $this->widget->run('front_student_high_school_details_section',TRUE);?>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="nav-higher_education" role="tabpanel" aria-labelledby="nav-higher_education-tab">
+                                                            <?php $this->widget->run('front_student_higher_education_details_section',TRUE);?>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="nav-prof_exp" role="tabpanel" aria-labelledby="nav-prof_exp-tab">
+                                                            <?php $this->widget->run('front_student_prof_exp_details_section',TRUE);?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 mb-3 mb-lg-0">
+                                <?php $this->widget->run('front_student_settings_edit_section',TRUE);?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
+                    Reviews
+                </div>
+                <div class="tab-pane fade show" id="nav-pendingapplication" role="tabpanel" aria-labelledby="nav-pendingapplication-tab">
+                    Pending Application
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+   <?php $this->widget->run('front_subscription_section',true);?>
+
+<style type="text/css">
+  .project-tab {
+    padding: 0%;
+    margin-top: 1%;
+    border: none;
+}
+.project-tab #tabs{
+    background: #007b5e;
+    color: #eee;
+}
+.project-tab #tabs h6.section-title{
+    color: #eee;
+}
+.project-tab #tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #0062cc;
+    background-color: transparent;
+    border-color: transparent transparent #f3f3f3;
+    border-bottom: 3px solid !important;
+    font-size: 16px;
+    font-weight: bold;
+}
+.project-tab .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    color: #0062cc;
+    font-size: 16px;
+    font-weight: 600;
+}
+.project-tab .nav-link:hover {
+    border: none;
+}
+.project-tab thead{
+    background: #f3f3f3;
+    color: #333;
+}
+.project-tab a{
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+</style>
+   <script type="text/javascript">var wbpage='';</script>

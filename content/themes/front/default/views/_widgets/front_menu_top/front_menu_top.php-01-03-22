@@ -1,0 +1,49 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($top_menues)){
+    ?>
+    <div class="headertopleft clearfix">
+        <div class="topNav clearfix">
+        <?php
+        foreach ($top_menues as $key => $value) {
+            ?>
+            <a href="<?php echo $value['menu_link'];?>"><?php echo $value['menu_name'];?></a>
+            
+            <?php
+        }
+        ?>
+
+        
+        
+        <!-- <a <?php echo $scholarshiplink;?> id="apply_schoarship">APPLY FOR SCHOLARSHIP</a> -->
+        <?php
+        if(session_userdata('isUserLoggedin')==TRUE && session_userdata('user_id')){
+            ?>
+            <!--<li aria-haspopup="true" class="wsshopmyaccount">
+              <a href="#"><i class="fas fa-user"></i>mm <?php echo $user_fullname;?></a>
+              <ul class="sub-menu">
+                <li><a href="#logModal" data-toggle="modal"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="#regModal" data-toggle="modal"><i class="fas fa-user-plus"></i> Register</a></li> 
+                <li><a href="<?php echo base_url();?>account"><i class="fas fa-user-tie"></i> My Account</a></li>
+                <li><a href="#passModal" data-toggle="modal"><i class="fas fa-lock"></i>Change Password</a></li>
+                 <li><a href="#"><i class="fas fa-heart"></i>My Wishlist</a></li>
+                <li><a href="#"><i class="fas fa-bell"></i> Notification</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Help Center</a></li> 
+                <li><a href="<?php echo base_url();?>logout"><i class="fas fa-sign-out-alt"></i> Logout22</a></li>
+              </ul>
+            </li>-->
+            <?php
+        }else{
+            ?>
+            <a href="<?php echo base_url('signup/student');?>" class="btn-temp btn-orange" style="font-size: 11px;padding: 5px 5px;">STUDENT SIGN UP</a>
+
+            <a href="<?php echo base_url('signin');?>" class="btn-temp btn-orange" style="font-size: 11px;padding: 5px 5px;">SIGN IN</a>
+            <?php
+        }
+        ?>        
+        </div>
+    </div>
+    <?php
+}
+?>          

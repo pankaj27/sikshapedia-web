@@ -1,0 +1,106 @@
+jQuery(function($) {
+  "use strict";
+  var refresh = window.location.protocol + "//" + window.location.host + window.location.pathname + '/';
+
+  //alert(window.location.pathname);
+
+  $('body').on('click','.filter23',function(){
+    //var stream=$(this).val();
+
+    // $.ajax({
+    //   type:'POST',
+    //   url:base_url+'load_filter',
+    //   data:{csrf_test_name:csrf_hash,current_url:"https://waytoadmissions.com/in/colleges/maharashtra/engineering/bachelor-of-technology"},
+    //   success:function(d){
+    //     $('#filter_list').html(d.html);
+    //   }
+    // });
+    
+    var data_ty=$(this).attr('data-ty');
+    var data_url=$(this).attr('data-url');
+    var streams=$('.streamfilter:checked').map(function() {return this.value;}).get().join(',');
+    var courses=$('.coursefilter:checked').map(function() {return this.value;}).get().join(',');
+    var states=$('.statefilter:checked').map(function() {return this.value;}).get().join(',');
+    var cities=$('.cityfilter:checked').val();
+    var search_college_type=$('.typefilter:checked').map(function() {return this.value;}).get().join(',');
+    var search_affiliations=$('.affiliationsfilter:checked').val();
+    var search_approval=$('.approvalfilter:checked').val();
+    var search_category=$('.categoryfilter:checked').val();
+    var search_agencies=$('.agencyfilter:checked').val();
+
+    //window.location.replace(data_url);
+
+    //alert(data_url);
+
+   window.history.pushState("","", data_url);
+
+
+    
+
+    var states_names=$('.statefilter:checked').map(function() {return $(this).attr('data-sname');}).get().join('-');   
+    //window.history.pushState({ path: refresh+states_names }, '', refresh+states_names);
+
+    // if(streams!=''){
+    //   var data_ty=$(this).attr('data-ty');
+    //   var data_ctrl=$(this).attr('data-ctrl');
+
+
+    // }
+
+      //console.log(selected);
+
+      search_data(streams,courses,states,cities,search_college_type,search_affiliations,search_approval,search_category,search_agencies);
+
+      if(data_ty=='states'){
+        var f_data  =   new Array(country,states);
+        var ctext   =   CryptoJS.AES.encrypt(JSON.stringify(f_data), _xtYu, { format: CryptoJSAesJson }).toString();
+        $.ajax({
+          type:'POST',
+          url:base_url+'get_cities',
+          data:{ctext:ctext,listing_type:'radio_button',csrf_test_name:csrf_hash},
+          success:function(d){
+            $('#city_list').html(d.html);
+          }
+        });
+      }
+    
+  });
+
+
+
+  // function search_data(search_streams,search_course,search_states,search_cities){
+  //   $.ajax({
+  //     type:'POST',
+  //     url:base_url+'search_collegedata',
+  //     data:{csrf_test_name:csrf_hash,_country:country,search_streams:search_streams,search_course:search_course,search_states:search_states,search_cities:search_cities,_search_type:_search_type},
+  //     cache:false,
+  //     success:function(d){
+  //       if(d.html){
+  //         $('#udata_lists').html(d.html);
+  //       }
+  //     }
+  //   });
+  // }
+
+
+  function search_data(search_streams,search_course,search_states,search_cities,search_college_type,search_affiliations,search_approval,search_category,search_agencies){
+    $.ajax({
+      type:'GET',
+      url:base_url+'search_collegedata?_country='+country+'&search_states='+search_states+'&search_cities='+search_cities+'&search_college_type='+search_college_type+'&search_affiliations='+search_affiliations+'&search_approval='+search_approval+'&search_category='+search_category+'&search_agencies='+search_agencies+'&search_course='+search_course,
+      data:{},
+      cache:true,
+      beforeSend:function(){
+       $('div.loader-ripple').css('display','block');
+      },
+      success:function(d){
+        if(d.html){
+          $('div.loader-ripple').css('display','none');
+          $('#udata_lists').html(d.html);
+        }
+      }
+    });
+  }
+
+
+
+});

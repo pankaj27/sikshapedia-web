@@ -1,0 +1,184 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Menues List</li>
+		</ol>
+	</nav>
+
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        	<?php
+                        	if(!empty($menu_categories)){
+                        		foreach ($menu_categories as $key => $value) {
+                        			?>
+                        			<a class="nav-item nav-link menu_type <?php echo ($key=='0')?'active':'';?>" data-menu_type="<?php echo $value->menu_category_name_alias;?>" id="nav-<?php echo $value->menu_category_name_alias;?>" data-toggle="tab" href="#nav-<?php echo $value->menu_category_name_alias;?>-tab" role="tab" aria-controls="nav-<?php echo $value->menu_category_name_alias;?>-tab" aria-selected="true"><?php echo $value->menu_category_name;?></a>
+                        			<?php
+                        		}
+                        	}
+                        	?>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                    	<?php
+                    	if(!empty($menu_categories)){
+                    		foreach ($menu_categories as $key => $value){
+                    			?>
+                    			<div class="tab-pane fade show <?php echo ($key=='0')?'active':'';?>" id="nav-<?php echo $value->menu_category_name_alias;?>-tab" role="tabpanel" aria-labelledby="nav-<?php echo $value->menu_category_name_alias;?>-tab">
+
+                    					<div class="row">
+											<div class="col-md-12 grid-margin stretch-card">
+												<div class="card">
+													<div class="card-body">
+														<h6 class="card-title">Menues <a href="<?php echo $admin_base_url;?>/ads/add" class="btn btn-sm btn-primary pull-right">Add</a></h6>
+														<div class="col-md-12">
+															<div class="table-responsive">
+																<!-- <div>
+															        Toggle column: <a class="toggle-vis" data-column="3">State</a> - <a class="toggle-vis" data-column="4">City</a> - <a class="toggle-vis" data-column="5">Estd. Year</a> - <a class="toggle-vis" data-column="7">Slug</a>
+															    </div> -->
+																<table id="<?php echo $value->menu_category_name_alias;?>_list_table" class="table">
+																	<thead>
+												                      <tr>
+												                        <th>#</th>
+												                        <th>Menu</th>
+												                        <th>Child Menu</th>
+												                       <!--  <th>Menu URL</th> -->
+												                        <th>Action</th>
+												                      </tr>
+												                    </thead>
+												                    <tbody>		                    	
+												                    </tbody>
+																</table>
+															</div>
+														</div>	
+													</div>
+												</div>
+											</div>
+										</div>
+                    			</div>
+                    			<?php
+                    		}
+                    	}
+                    	?>
+                    </div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="childMenuModal" tabindex="-1" role="dialog" aria-labelledby="childMenuModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="childMenuModal_title">Import Colleges</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            
+	            <div class="modal-body">	
+	            	<form id="form_menues">            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<input type="text" name="parent_menu_id" id="parent_menu_id" value="">
+	            		<div class="form-group">
+							<label>Select File</label>
+							<input type="file" name="college_excel" class="file-upload-default">
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Excel File">
+								<span class="input-group-append">
+									<button class="file-upload-browse btn btn-primary" type="button">Browse</button>
+								</span>
+							</div>
+						</div>
+	            	</form>
+	            </div>
+	            <div class="modal-footer">
+	                <div class="row">
+	                	<div class="col-md-12">
+							<div class="table-responsive">
+								<table id="child_menu_list_table" class="table">
+									<thead>
+				                      <tr>
+				                        <th>#</th>
+				                        <th>Menu</th>
+				                        <th>Parent Menu</th>
+				                        <th>Child Menu</th>
+				                       <!--  <th>Menu URL</th> -->
+				                        <th>Action</th>
+				                      </tr>
+				                    </thead>
+				                    <tbody>		                    	
+				                    </tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+	            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="nextchildMenuModal" tabindex="-1" role="dialog" aria-labelledby="nextchildMenuModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="nextchildMenuModal_title">Import Colleges</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            
+	            <div class="modal-body">	
+	            	<form id="form_menues_next">            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<input type="text" name="parent_menu_id_next" id="parent_menu_id_next" value="">
+	            		<div class="form-group">
+							<label>Select File</label>
+							<input type="file" name="college_excel" class="file-upload-default">
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Excel File">
+								<span class="input-group-append">
+									<button class="file-upload-browse btn btn-primary" type="button">Browse</button>
+								</span>
+							</div>
+						</div>
+	            	</form>
+	            </div>
+	            <div class="modal-footer">
+	                <div class="row">
+	                	<div class="col-md-12">
+							<div class="table-responsive">
+								<table id="next_child_menu_list_table" class="table">
+									<thead>
+				                      <tr>
+				                        <th>#</th>
+				                        <th>Menu</th>
+				                        <th>Parent Menu</th>
+				                        <th>Child Menu</th>
+				                       <!--  <th>Menu URL</th> -->
+				                        <th>Action</th>
+				                      </tr>
+				                    </thead>
+				                    <tbody>		                    	
+				                    </tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+	            </div>
+            
+        </div>
+    </div>
+</div>

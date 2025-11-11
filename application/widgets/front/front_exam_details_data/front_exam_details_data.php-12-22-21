@@ -1,0 +1,46 @@
+<?php
+
+
+/**
+ * 
+ */
+class Front_exam_details_data extends Widget
+{
+    function run($visible = FALSE) {
+        $this->front_theme='default';
+        $this->get_type(2);
+
+        $segment_1=$this->uri->segment(1,0);//static segment "exams"
+        $segment_2=$this->uri->segment(2,0);//stream name
+        $segment_3=$this->uri->segment(3,0);//exam name
+        $segment_4=$this->uri->segment(4,0);//exam sub name
+
+
+        if(is_string($segment_1) && $segment_1=='exams'){
+
+            //echo $segment_1;die;
+
+            if(is_string($segment_2) && $segment_2!='0'){
+                if(is_string($segment_3) && $segment_3!='0'){
+                    $slug_data=$this->sm->get_slug(array('slug_value'=>$segment_3));
+
+                    //print_obj($slug_data);die;
+
+                    if(!empty($slug_data)){
+                        $slug_type=$slug_data->slug_type;
+                        $slug_type_id=$slug_data->slug_type_id;
+
+                        if($slug_type=='10'){
+                            $data['exam_details_data']=$this->strm->get_exam_details_data(array('exam_id'=>$slug_type_id),FALSE,'exam_serial','ASC');
+                        }
+                    }
+                }
+                
+            }
+
+        }
+
+        if ($visible) $this->render('front_exam_details_data',$data);
+
+    }
+}

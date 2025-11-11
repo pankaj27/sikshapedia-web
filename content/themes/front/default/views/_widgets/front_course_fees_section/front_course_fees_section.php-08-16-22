@@ -1,0 +1,41 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php 
+if(!empty($course_fees_data)){
+  ?>
+  <div class="card infoCard mb-4">
+        <div class="card-header bg-white">
+          <h5 class="m-0 color2"> <?php echo $college_data['college_name'];?> - FEES & ELIGIBILITY</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm">
+               <thead>
+                  <tr>
+                     <th class="bg-indigo text-wite">Course</th>
+                     <th class="bg-blue text-wite">Fees</th>
+                     <th class="bg-teal text-wite">Eligibility</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <?php
+                  if(!empty($course_fees_data)){
+                    foreach ($course_fees_data as $key => $value) {
+                      ?>
+                      <tr>
+                         <td><a href="<?php echo $value['course_link'];?>"><?php echo $value['course_short_name'];?></a></td>
+                         <td><?php echo $value['course_fees_1st_year'];?></td>
+                         <td><?php echo $value['course_eligibility'];?></td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                  ?>
+               </tbody>
+            </table>
+         </div>
+        </div>
+  </div>
+  <?php
+}
+?>   

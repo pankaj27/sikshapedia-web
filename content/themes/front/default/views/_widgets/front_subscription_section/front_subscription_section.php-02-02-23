@@ -1,0 +1,46 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<div class="commonSec subscribeSec">
+  <div class="wrapper">
+    <h2 class="text-center text-white">SUBSCRIBE TO OUR NEWS LETTER</h2>
+    <p class="text-center text-info">COLLEGE NOTIFICATION  <i class="fas fa-circle fa-sm"></i>  EXAM  NOTIFICATION  <i class="fas fa-circle fa-sm"></i>  NEWS UPDATE</p>
+
+    <form id="form_subscription">
+      <div class="row form-row">
+         <div class="col-6 col-md-3">
+          <input type="text" class="form-control" placeholder="Enter your email" name="subscriber_email" id="subscriber_email" style="height:35px !important;">
+         </div>
+         <div class="col-6 col-md-3">
+          <input type="text" class="form-control" placeholder="Enter your phone no" name="subscriber_phone" id="subscriber_phone" style="height:35px !important;">
+         </div>
+         <div class="col-8 col-md-4">
+          <select class="form-control subscriber_course" name="subscriber_course" id="subscriber_course">
+          </select>
+         </div>
+         <div class="col-4 col-md-2">
+          <button class="btn btn-secondary btn-block" type="submit" id="btn_subscribe_newsletter">Submit</button>
+         </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style type="text/css">
+ .chosen-container{
+    z-index: 1800000;
+  }
+ .chosen-container-single{
+    width: 100% !important;
+    border-radius: 0px !important;
+  }
+.chosen-drop{
+    max-height: 150px;
+  }
+
+.chosen-container ul.chosen-results {
+    max-height: 108px !important;
+  }
+
+  .active-result .group-option .highlighted{
+    background-color: #1b1f4c !important;
+  }
+</style>

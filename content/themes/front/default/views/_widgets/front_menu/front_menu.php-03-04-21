@@ -1,0 +1,153 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+    <?php
+    if(!empty($top_menues['menues'])){
+      foreach ($top_menues['menues'] as $key => $value) {
+        ?>
+        <li aria-haspopup="true">
+          <a href="<?php echo $value['menu_link'];?>" class="navtext"><span>Filter By</span> <span><?php echo $value['menu_name'];?></span></a>
+          <?php
+          if(isset($value['sub_menues']) && !empty($value['sub_menues'])){
+            ?>
+            <div class="isaShopTabing isaDepartmentMenu clearfix">
+              <div class="isaShopwp clearfix">
+                <ul class="isaTabItem clearfix">
+                  <?php
+
+                  $i=0;
+
+                  foreach ($value['sub_menues'] as $k => $v) {
+                    ?>
+                    <li <?php echo ($i==0)?'class="isaShopLink-active"':'';?> id="menu<?php echo $i;?>">
+                      <a href="#"> <?php echo $v['menu_name'];?></a>
+                      <?php
+                      if(!empty($v['sub_menues'])){
+                        ?>
+                        <div class="isaTitemRight clearfix">
+                          <div class="container-fluid">
+                            <div class="row">
+                              <?php
+                              foreach ($v['sub_menues'] as $_k => $_v){
+                                ?>
+
+                                <div class="col-lg-<?php echo $_v['menu_column_width'];?> col-md-12 clearfix">
+                                  <ul class="isaTliststy02 clearfix">
+                                    <li class="isaHeading clearfix"><?php echo $_v['menu_column'];?></li>
+                                    <?php
+
+                                    foreach ($_v['sub_menues'] as $_k => $_v) {
+                                      ?>
+                                      <li><a href="<?php echo $_v['menu_link'];?>"><?php echo $_v['menu_name'];?></a></li>
+                                      <?php
+                                    }
+                                    ?>
+                                  </ul>
+                                </div>
+                                <?php
+                              }
+                              ?> 
+                            </div>
+                          </div>
+                        </div>
+                        <?php
+                      }
+                      ?>
+                    </li>
+                    <?php
+
+                    $i++;
+                  }
+                  ?>
+                </ul>
+              </div>
+
+
+              <?php
+
+              if(!empty($top_menu_featured_colleges_data)){
+                ?>
+                <div class="navFooter">
+                  <h4 class="title"><?php echo $top_menu_featured_colleges_heading;?></h4>
+                  <div class="row form-row">
+                    <?php
+                    foreach ($top_menu_featured_colleges_data as $key => $value) {
+                        ?>
+                        <div class="col-sm-4">
+                          <div class="media navMedia">
+                            <img src="<?php echo $value['college_logo'];?>" class="mr-3" alt="<?php echo $value['college_name'];?>">
+                            <div class="media-body">
+                              <h5 ><a href="<?php echo $value['college_link'];?>"><?php echo $value['college_name'];?></a></h5>
+                              <p><?php echo $value['college_address'];?></p>
+                            </div>
+                          </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                  </div>
+                </div>
+                <?php
+              }
+
+              ?>
+
+
+                <div class="navFooter">
+                    <h4 class="title">Top Featured <?php echo $value['menu_name'];?> College</h4>
+                    <div class="row form-row">
+                      <div class="col-sm-4">
+                        <div class="media navMedia">
+                          <img src="" class="mr-3" alt="">
+                          <div class="media-body">
+                            <h5 ><a href="">Demo College 0</a></h5>
+                            <p>Demo</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="media navMedia">
+                          <img src="" class="mr-3" alt="">
+                          <div class="media-body">
+                            <h5 ><a href="">Demo College 1</a></h5>
+                            <p>Demo</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="media navMedia">
+                          <img src="" class="mr-3" alt="">
+                          <div class="media-body">
+                            <h5 ><a href="">Demo College 2</a></h5>
+                            <p>Demo</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <?php            
+
+          }
+
+          ?>
+
+        </li>
+
+        <?php
+
+      }
+
+    }
+
+    ?>
+
+   <!--  <style type="text/css">
+       .deactive_menu{
+        display: none;
+       }
+       .active_menu{
+        display: block;
+       }
+    </style> -->

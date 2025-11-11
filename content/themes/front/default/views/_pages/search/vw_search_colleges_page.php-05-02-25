@@ -1,0 +1,1188 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+if(!empty($facilities)){
+   foreach ($facilities as $_k => $_v) {
+    ?>
+    <link rel="preload" href="<?php echo $_v['facility_icon_3'];?>" as="image">
+    <?php
+    }
+}
+?>
+
+
+
+  <section class="bradcumSec bg-white py-2">
+    <div class="wrapper">
+      <div class="row">
+        <div class="col-md-12 ">
+          <nav aria-label="breadcrumb">
+              <ol class="breadcrumb bg-white m-0 pl-0" id="breadcrumb_li">
+              <?php
+              if(!empty($breadcumb)){
+                foreach ($breadcumb as $key => $value) {
+                  ?>
+                  <li class="breadcrumb-item <?php echo ($value=='')?'active':'';?>" <?php echo ($value=='')?'aria-current="page"':'';?>>
+                    <?php echo ($value!='')?'<a href="'.$value.'">'.$key.'</a>':$key;?>
+                    </li>
+                  <?php
+                }
+              }
+              ?>
+              </ol>
+          </nav>
+        </div>
+        <div class="col-md-12 mb-2">
+            <h1 class="m-0 text-center text-md-left" id="breadcrumb_title" style="font-size: 26.7px;font-weight: 900;"><?php echo $page_inner_title;?> </h1>
+        </div>    
+      </div>
+
+   
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-md-12 text-center">
+          
+          <img src="<?php echo base_url('public/data/ads/refer-earn-2.jpg');?>" style="max-width: 100%; height: auto; display: inline-block;">
+        </div>
+      </div>
+
+      <?php $this->widget->run('front_image_ads_section',TRUE,['page_link'=>current_url(),'ads_position'=>'COLLEGE_SEARCH_PAGE_AT_TOP']);?>   
+    </div>
+  </section>
+
+
+
+   <?php $this->widget->run('front_college_search_page_details_section',TRUE,['url_id'=>$page_id]);?>
+
+   <!--  <section class="bradcumSec bg-white py-2">
+      <div class="wrapper">
+        <div class="row" style="margin-bottom:20px;">
+          <div class="col-md-12">
+            <img src="<?php echo base_url('uploads/app/default/Rampratap-Institute-Of-Higher-Education,-Gaya-(TD)20230701133856.webp');?>" style="width:100%;">
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+  <main class="pageDetailsSec isa-main-content" id="main_content">
+    <div class="isa-tab-filter-wrapper">
+        <div class="row no-gutters">
+          <div class="col-md-8">
+            <div class="filterBlock d-none d-md-flex flex-wrap align-items-center">                
+              <?php
+              if(!empty($top_states)){
+                ?>
+                <span class="blockTitle">SELECT STATE </span>
+                <?php
+                foreach ($top_states as $key => $value) {
+                  ?>
+                  <a href="<?php echo $value['access_url'];?>" class="<?php echo $value['selected'];?>"><?php echo $value['state_name'];?> <span>(<?php echo $value['total_colleges'];?>)</span></a>
+                  <?php
+                }
+              }
+
+              if(!empty($top_cities)){
+                ?>
+                <span class="blockTitle">SELECT CITY </span>
+                <?php
+                foreach ($top_cities as $key => $value) {
+                  ?>
+                  <a href="<?php echo $value['access_url'];?>" class="<?php echo $value['selected'];?>"><?php echo $value['city_name'];?></a>
+                  <?php
+                }
+              }
+              ?>
+            </div>
+
+          </div>
+          <!-- <div class="col-md-4">
+            <div class="isa-tab-filter">
+              <ul class="">
+                  <li class="placeholder"> <a href="#0">Sort By</a></li> 
+                  <li class="filter"><a class="selected" data-type="popularity" href="#0" >Popularity</a></li>
+                  <li class="filter"><a href="#0" data-type="reviews_rating">Reviews Rating </a></li>
+                  <li class="filter"><a href="#0"data-type="fees">Fees</a></li>
+              </ul>
+            </div>
+          </div> -->
+        </div>
+        
+        <div id="_filter_list_2">
+          <!-- <div class="border-top py-2">
+              <div class="filterBlock d-flex flex-wrap align-items-center">
+                <span class="blockTitle">SELECT COLLEGE CATEGORY </span>  
+                <a href="#" class="btn btn-outline-primary"> IIT (23) </a> 
+                <a href="#" class="btn btn-outline-primary">  NIT (31)</a>
+                <a href="#" class="btn btn-outline-primary"> IIM (20) </a> 
+                <a href="#" class="btn btn-outline-primary"> AIIMS (12) </a> 
+                <a href="#" class="btn btn-outline-primary"> IIIT (28) </a> 
+              </div>
+          </div>
+          <div class="border-top py-2">
+              <div class="filterBlock d-flex flex-wrap align-items-center">
+                <span class="blockTitle">SELECT COLLEGE CATEGORY </span>  
+                <a href="#" class="btn btn-outline-primary"> IIT (23) </a> 
+                <a href="#" class="btn btn-outline-primary">  NIT (31)</a>
+                <a href="#" class="btn btn-outline-primary"> IIM (20) </a> 
+                <a href="#" class="btn btn-outline-primary"> AIIMS (12) </a> 
+                <a href="#" class="btn btn-outline-primary"> IIIT (28) </a> 
+              </div>
+          </div> -->
+        </div>
+        
+    </div> 
+      
+    <div id="filter_list">
+      <?php $this->widget->run('front_search_colleges_filter',TRUE);?>
+      
+    </div>
+
+    <section class="isa-filter-result">
+        <!-- <div class="row" style="margin-bottom:20px;">
+          <div class="col-md-12">
+            <img src="<?php echo base_url('uploads/app/default/SR_Uni_TD](2)(3)20230704162555.webp');?>" style="width:100%;">
+          </div>
+        </div> -->     
+      <div class="form-row" id="udata_lists">
+
+          
+
+
+
+<?php
+if(!empty($filtered_data)){
+
+  $data_count=1;
+  $ads_painted=false;
+
+  ?>
+  
+      
+  <?php
+
+    //print_obj($filtered_data);
+
+
+    foreach ($filtered_data as $k => $v) {
+      if(!empty($v['college_courses_cost'])){
+      
+
+        ?>
+        <link rel="preload" href="<?php echo $v['college_banner'];?>" as="image">
+
+        
+        <div class="col-sm-6 col-md-4 col-lg-4 grid_list mb-1">
+              <div class="loader-ripple" style="display:none;"></div>
+           
+              <div class="proBox">
+                  <div class="imgBox">
+                    <a href="<?php echo $v['access_url'];?>"> <img class="lazy" src="<?php echo $v['college_banner'];?>" alt="<?php echo $v['college_name'];?>"></a>
+
+                    <?php
+                    if($v['is_featured']==='1'){
+                      ?>
+                      <div class="pro-label pro-featured">
+                        <span class="pro-label-bg">Featured <span class="pro-arrow"></span></span>
+                      </div>
+                      <?php
+                    }
+                    ?>
+                    
+                    <!-- <div class="pro-label pro-status">
+                      <span class="pro-label-bg"><span class="pro-arrow"></span> On Offer </span>
+                    </div> -->
+                    <div class="proReview">
+                      <i class="far fa-image"></i> <b><a href="<?php echo $v['college_gallery_link'];?>"><span style="color:#ffffff;"> <?php echo $v['college_total_gallery_img'];?></span></a></b> 
+                    </div>
+                    <?php
+                    if($v['college_total_avg_rating']>0){
+                      ?>
+                      <div class="proRating">
+                          <small class="d-block">REVIEW</small>
+                          <i class="fas fa-star-half-alt"></i> <b><?php echo $v['college_total_avg_rating'];?>/10</b> 
+                        </div>
+                      <?php
+                    }
+
+                    ?>
+                    
+                    <div class="pro-action">
+                      <div class="pro-action-inner">
+                        <!-- <div class="social-share" data-toggle="tooltip" title="Share">
+                          <div class="social-share-hover">
+                            <i class="fa fa-share-alt"></i>
+                            <div class="social-share-list">
+                              <div class="list-social-icon clearfix">
+                                <a href="javascript:;"><i class="fab fa-facebook"></i></a>
+                                <a href="javascript:;"><i class="fab fa-twitter"></i></a>
+                                <a href="javascript:;"><i class="fab fa-google-plus"></i></a>
+                                <a href="javascript:;"><i class="fab fa-linkedin"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div> -->
+
+                        <?php
+                        if(!empty($v['college_intro_video'])){
+                        ?>
+                         <a href="<?php echo $v['college_intro_video'];?>" data-fancybox class="property-video" data-toggle="tooltip" title="Show Video"><i class="fab fa-youtube"></i></a>
+                        <?php
+                        }
+                        ?>
+
+
+                        <!-- <a href="javascript:;" class="property-favorite" data-toggle="tooltip" title="Add to Favorite"><i class="far fa-heart"></i></a>
+                        <a class="compare-property" href="javascript:;" data-toggle="tooltip" title="Rating"><i class="far fa-star"></i></a> -->
+                      </div>
+                      <a class="pro-link" href="#"></a>
+                    </div>
+                  </div>
+                  <div class="proBoxBody">
+                    <div class="proInfo">
+                      <div class="infoImg"><a href="<?php echo $v['access_url'];?>"><img class="lazy" src="<?php echo $v['college_logo'];?>" loading="lazy" width="50px" height="50px"></a></div>
+                      <p class="infoTitle"><a href="<?php echo $v['access_url'];?>"><?php echo $v['college_name'];?></a></p>
+                      <p class="infoLocation" style="font-size: 10px;"><i class="fas fa-map-marker-alt"></i> <?php echo (!empty($v['college_city']))?$v['college_city'].',':'';?> <?php echo $v['college_state'];?>
+                      <?php
+                      if(!empty($v['college_affiliations'])){
+                        ?>
+                          <span style="margin-left: 10px;font-size: 10px;"><i class="fas fa-bookmark"></i> <?php echo $v['college_affiliations'];?></span>
+                        <?php
+                      }
+                      ?>
+                      </p>
+                    </div>
+
+                    <?php
+                    $course_cost_counter=(is_array($v['college_courses_cost']) && $v['college_courses_cost']!='N/A')?count($v['college_courses_cost']):0;
+
+                   
+                   
+                    if(!empty($v['college_courses_cost'])){
+                        ?>
+                        <div class="infoItems" style="height:60px !important;min-height: 60px !important;">
+                          <?php
+
+                            
+                            foreach ($v['college_courses_cost'] as $_k => $_v) {
+
+                              if($_v['cost_value']!=null || !empty($_v['cost_value'])){
+
+                                if($course_cost_counter>=3){
+                                  ?>
+                                  <a href="javascript::void(0);" class="infoItem">
+                                    <h4> <strong><?php echo $_v['cost_value'];?></strong></h4>
+                                    <p style="font-size:10px;"><?php echo $_v['course_name'];?> </p>
+                                  </a>
+                                 <?php
+                                }else if($course_cost_counter==2){
+                                  ?>
+                                  <a href="javascript::void(0);" class="infoItem">
+                                    <h4> <strong><?php echo $_v['cost_value'];?></strong></h4>
+                                    <p style="font-size:10px;"><?php echo $_v['course_name'];?></p>
+                                  </a>
+                                  <?php
+                                  if(isset($exam_id)){
+                                    if(!empty($v['college_exams_accepted'])){
+                                      foreach ($v['college_exams_accepted'] as $ek => $ev) {
+                                        if($ev['exam_id']==$exam_id){
+                                          
+                                          ?>
+                                          <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+                                            <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+                                            <p style="font-size:10px;">Exam Accepted </p>
+                                          </a>
+                                          <?php
+                                          
+                                        }
+                                      }
+                                    }
+                                      
+                                  }else{
+                                    if(!empty($v['college_exams_accepted'][$_k])){
+                                      ?>
+                                      <a href="javascript::void(0);" class="infoItem">
+                                        <h4> <strong><?php echo $v['college_exams_accepted'][$_k]['exam_name'];?></strong></h4>
+                                        <p>Exam Accepted </p>
+                                      </a>
+                                      <?php
+                                    }
+                                  }
+                                    
+                                }
+                                else if($course_cost_counter==1){
+                                  //echo $course_cost_counter;
+                                  ?>
+                                  <a href="javascript::void(0);" class="infoItem">
+                                    <h4> <strong><?php echo $_v['cost_value'];?></strong></h4>
+                                    <p><?php echo $_v['course_name'];?></p>
+                                  </a>
+                                  <?php
+                                  if(isset($exam_id)){
+                                    if(!empty($v['college_exams_accepted'])){
+                                      foreach ($v['college_exams_accepted'] as $ek => $ev) {
+                                         if($ev['exam_id']==$exam_id){
+                                            
+                                            ?>
+                                            <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+                                              <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+                                              <p>Exam Accepted 2</p>
+                                            </a>
+                                            <?php
+                                          }
+                                      }
+                                    }
+                                      
+                                  }else{
+                                    if(!empty($v['college_exams_accepted'][$_k])){
+                                      if(!empty($v['college_exams_accepted'])){
+                                        foreach ($v['college_exams_accepted'] as $ek => $ev) {                                            
+                                            ?>
+                                            <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+                                              <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+                                              <p>Exam Accepted </p>
+                                            </a>
+                                            <?php                                         
+                                        }
+                                      }
+                                      
+                                    }
+                                  }
+                                }
+                                  
+                              }else{
+                                  if(isset($exam_id)){
+                                    if(!empty($v['college_exams_accepted'])){
+                                      foreach ($v['college_exams_accepted'] as $ek => $ev) {
+                                          if($ev['exam_id']==$exam_id){
+                                            
+                                            ?>
+                                            <a href="<?php echo $ev['exam_link'];?>" class="infoItem">
+                                              <h4> <strong><?php echo $ev['exam_name'];?></strong></h4>
+                                              <p style="font-size:10px;">Exam Accepted </p>
+                                            </a>
+                                            <?php
+                                          }
+                                      }
+                                    }
+                                    
+                                  }else{
+                                    ?>
+                                    <a href="javascript::void(0);" class="infoItem">
+                                      <h4> <strong>--</strong></h4>
+                                      <p style="font-size:10px;"><?php echo $_v['course_name'];?> </p>
+                                    </a>
+                                    <?php
+                                    if(!empty($v['college_exams_accepted'][0])){
+                                      ?>
+                                        <a href="<?php echo $v['college_exams_accepted'][$_k]['exam_link'];?>" class="infoItem">
+                                          <h4> <strong><?php echo $v['college_exams_accepted'][$_k]['exam_name'];?></strong></h4>
+                                          <p style="font-size:10px;">Exam Accepted </p>
+                                        </a>
+                                      <?php
+                                      }
+                                  }
+                              }
+
+                              //$course_cost_counter++;
+                            }
+                          ?>
+                        </div>
+                        <?php
+                    }else{                
+                      ?>
+                        <div class="infoItems" style="height:60px !important;min-height: 60px !important;">
+                          <?php
+                          if(!empty($v['college_exams_accepted'])){
+                            foreach ($v['college_exams_accepted'] as $_kk => $_vv) {
+                              ?>
+                              <a href="<?php echo $_vv['exam_link'];?>" class="infoItem">
+                                <h4> <strong><?php echo $_vv['exam_name'];?></strong></h4>
+                                <p style="font-size:10px;">Exam Accepted </p>
+                              </a>
+                              <?php
+                            }
+                          
+                          }else{
+                            for($i=1;$i<=3;$i++) {
+                             ?>
+                              <a href="" class="infoItem">
+                                <h4> <strong>--</strong></h4>
+                                <p style="font-size:10px;">-</p>
+                              </a>
+                             <?php
+                            }
+                          }
+                            
+                          ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <?php
+                    if(!empty($v['college_ranks'])){                
+                        ?>
+                        <div class="swiper-container tabSlider navTabSlider rankSwiper">
+                          <div class="swiper-wrapper" style="margin-left: 20px;margin-right: 20px;">
+                            <?php
+                            foreach ($v['college_ranks'] as $_k => $_v) {
+                              if($_v['ranking_value']>0){
+                                ?>
+                                <a href="javascript::void(0);" class="swiper-slide navLink" style="align:center;"> 
+                                  <div class="rankPanel">
+                                    <div class="rankSpan">Ranked <?php echo $_v['ranking_value'];?> in <?php echo $_v['rank_year'];?> out of <?php echo $_v['rank_value'];?></div>
+                                    <div class="rankName"> <?php echo $_v['rank_body'];?> </div>
+                                  </div>
+                                </a>
+                                <?php
+                              }else{
+                            ?>
+                            <div class="swiper-container tabSlider navTabSlider">
+                                  <div class="swiper-wrapper">                          
+                                    <a href="#" class="swiper-slide navLink"> 
+                                        <div class="rankPanel">
+                                          <div class="rankSpan">Ranked in <?php echo $_v['rank_year'];?> by</div>
+                                          <div class="rankName"><?php echo $_v['rank_body'];?> </div>
+                                      </div>
+                                    </a>
+                                  </div>
+                                  <!-- <div class="swiper-button-next swiper-button-white"></div>
+                                  <div class="swiper-button-prev swiper-button-white"></div> -->
+                              </div>
+                            <?php
+                          }                           
+                            }
+                            ?>
+                          </div>
+                          <div class="swiper-scrollbar"></div>
+                          <!-- <div class="swiper-button-next swiper-button-white"></div>
+                          <div class="swiper-button-prev swiper-button-white"></div> -->
+                        </div>
+                        <?php
+                    }else{
+                      ?>
+                      <div class="swiper-container tabSlider navTabSlider">
+                            <div class="swiper-wrapper">                          
+                              <a href="#" class="swiper-slide navLink"> 
+                                <div class="rankPanel">
+                                  <div class="rankSpan">--  </div>
+                                  <div class="rankName"> -- </div>
+                                </div>
+                              </a>
+                            </div>
+                            <!-- <div class="swiper-button-next swiper-button-white"></div>
+                            <div class="swiper-button-prev swiper-button-white"></div> -->
+                        </div>
+                      <?php
+                    }
+                    ?>
+                      
+                    <?php
+                    if(!empty($v['college_facilities'])){
+                      ?>
+
+                      <div class="swiper-container tabSlider navTabSlider mySwiper">
+                        <div class="swiper-wrapper" style="padding-left: 10px;padding-right: 10px;">
+                          <?php
+                           foreach ($v['college_facilities'] as $_k => $_v) {
+                            ?>
+                            <a href="javascript::void(0);" class="swiper-slide navLink"><img src="<?php echo $_v['facility_icon_3'];?>" width="25px" height="25px;"></a>
+                            <?php
+                            }
+                          ?>
+                        </div>
+                        
+                        <div class="swiper-button-next swiper-button-white"></div>
+                        <div class="swiper-button-prev swiper-button-white"></div>
+                      </div>
+
+                      <?php
+                    }else{
+                        ?>
+
+                       <!--  <div class="swiper-container tabSlider navTabSlider">
+                          <div class="swiper-wrapper">
+                            
+                            <a href="#" class="swiper-slide navLink"> 
+                              <div class="rankPanel">
+                                <div class="rankSpan">Ranked 43 out of 300   </div>
+                                <div class="rankName"> NIRF 21 </div>
+                              </div>
+                            </a>
+                            <a href="#" class="swiper-slide navLink"> 
+                              <div class="rankPanel">
+                                <div class="rankSpan">Ranked 43 out of 300   </div>
+                                <div class="rankName"> NIRF </div>
+                              </div>
+                            </a>
+                            <a href="#" class="swiper-slide navLink"> 
+                              <div class="rankPanel">
+                                <div class="rankSpan">Ranked 43 out of 300   </div>
+                                <div class="rankName"> NIRF </div>
+                              </div>
+                            </a>
+                          </div>
+                          <div class="swiper-button-next swiper-button-white"></div>
+                          <div class="swiper-button-prev swiper-button-white"></div>
+                        </div> -->
+                        <?php
+                      }
+
+                    ?>
+                      
+                    <div class="linkItems">
+                      <a href="<?php echo $v['college_admissions_link'];?>" target="_blank">ADMISSION <?php echo date('Y');?> </a>
+                      <a href="<?php echo $v['college_reviews_link'];?>" target="_blank">REVIEWS</a>
+                      <a href="<?php echo $v['college_course_fees_link'];?>" target="_blank">COURSES & FEES</a>
+                    </div>
+                    <div class="btnGroup">
+                      <a href="javascript:void(0);" class="apply" data-cname="<?php echo $v['college_name'];?>,<?php echo $v['college_city'];?>" data-inst="<?php echo $v['college_id'];?>" data-inst_type="<?php echo $v['institute_type'];?>" data-clogo="<?php echo $v['college_logo'];?>" data-cphcode="<?php echo $v['college_country_phone_code'];?>" data-cou="<?php echo $v['college_country_id'];?>"><i class="far fa-file-alt"></i> <span style="margin-left:5px;">Apply Now</span></a>
+                      <a href="<?php echo $v['access_url'];?>" class="download"> Explore</a>
+                    </div>
+                  </div>
+              </div>
+            </div>
+        <?php
+
+        $data_count++;
+      }
+
+      $ads_painted=true;
+    }
+  ?>
+  
+
+
+
+  <?php
+
+  if($data_count==7){
+
+    if($data_start==0){
+      ?>
+      <div class="col-sm-12 adBlock" style="padding:2px;">
+            <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+              <?php $this->widget->run('front_wayto_rating_section',TRUE);?>
+            </div>
+        </div>
+
+      <?php
+
+      
+    }else{
+      ?>
+      <div class="col-sm-12 grid_list" style="padding:2px;">
+        <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+          <div class="col-md-12 text-center">                      
+                  <img src="<?php echo base_url('public/data/ads/register-refer-ads.jpeg');?>" style="max-width: 100%; height: auto; display: inline-block;">
+                </div>
+        </div>
+      </div>
+    <?php
+    }
+    
+  }else if($data_count==10){
+    ?>
+    <div class="col-sm-12 grid_list" style="padding:2px;">
+          <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;"><iframe title="3rd party ad content" width="728" height="90" x-frame-width="720" x-frame-height="90" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" src="<?php echo API_URL;?>ads_college_top" style="border: 0px; vertical-align: bottom;"></iframe>
+          </div>
+      </div>
+    <?php
+  }
+  else{
+    ?>
+    <div class="col-sm-12 grid_list" style="padding:2px;">
+        <div class="col-sm-12 grid_list" style="padding:2px;">
+          <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+            <div class="col-md-12 text-center">                      
+                    <img src="<?php echo base_url('public/data/ads/register-ads.jpeg');?>" style="max-width: 100%; height: auto; display: inline-block;">
+                  </div>
+          </div>
+        </div>
+      </div>
+    <?php
+  }
+
+  ?>
+
+    
+      
+      
+        
+    
+        
+
+  <?php
+
+}
+
+?>
+
+
+
+ <script type="text/javascript">
+  $(document).ready(function(){
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 'auto',
+        spaceBetween: 0,
+        freeMode: true,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },       
+      });
+
+    var rswiper = new Swiper(".rankSwiper", {
+        slidesPerView: 'auto',
+        spaceBetween: 0,
+        freeMode: true,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        scrollbar: {
+          el: ".swiper-scrollbar",
+          hide: true,
+        }       
+      });
+  });
+</script>
+      </div>
+
+      <div class="form-row text-center" id="data_loader"></div>
+    </section>
+
+    </div>
+
+
+  </main>
+
+
+  <div style="margin-top: 1px;">
+
+
+
+
+</div>
+
+<style type="text/css">
+  .isa-filter-block ul li{
+    position: relative !important;
+  }
+
+</style>
+
+  <script type="text/javascript">
+    let curl='<?php echo current_url();?>';
+    let country='<?php echo $country_id;?>';
+    let _c='<?php echo $country_id;?>';
+    let _co='<?php echo $country_id;?>';
+    let _st='<?php echo $state_id;?>';
+    let _ct='<?php echo $city_id;?>';
+    let _strm='<?php echo $stream_id;?>';
+    let _cu='<?php echo $course_id;?>';
+    let _exam='<?php echo $exam_id;?>';
+    let _rank='<?php echo $rank_id;?>';
+    let _ctype='<?php echo $ctype_id;?>';
+    let _appr='<?php echo $appr_id;?>';
+    let _aff='<?php echo $aff_id;?>';
+    let _c_cate='<?php echo $c_cate_id;?>';
+    let _agn='<?php echo $agn_id;?>';
+    let _search_type='7';
+    var _vtype='';
+    var _cid='';
+    var _cit='';
+    var _cot='';
+    var _vip='';
+    var _base_url='<?php echo $_base_url;?>';
+    var _pgid='<?php echo $page_id;?>';
+    var _cntry='<?php echo $_country_id;?>';
+    var _stat='<?php echo $_state_id;?>';
+    var _cit='<?php echo $_city_id;?>';
+    var __strm='<?php echo $_stream_id;?>';
+    var wbpage='college_search_page';
+    var page='';
+    var dpr_url='<?php echo ($this->input->get('dpr') && $this->input->get('dpr')==='reviews')?'filterdata?dpr='.$this->input->get('dpr'):'filterdata';?>';
+    var loader_gif='<?php echo base_url('public/data/app/app_data/waytoloader.gif');?>';
+  </script>
+
+ 
+
+
+  <style type="text/css">
+   /* #main_content {
+      min-height: calc(350vh - 0px) !important;
+  }*/
+  .chosen-container{
+    z-index: 1800000;
+  }
+ .chosen-container-single{
+    width: 100% !important;
+    border-radius: 0px !important;
+  }
+  .chosen-drop{
+    max-height: 150px;
+  }
+
+ .chosen-container .chosen-results {
+    max-height: 100px;
+  }
+
+ #applicant_state_chosen .chosen-results{
+    height: 90px;
+  }
+
+ #applicant_city_chosen .chosen-results{
+    height: 90px;
+  }
+
+#applicant_course_chosen .chosen-results{
+    height: 50px;
+  }
+
+  .active-result .group-option .highlighted{
+    background-color: #1b1f4c !important;
+  }
+
+  .boxIcon {
+    height: 52px;
+    width: 52px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: .8rem;
+    
+}
+.boxContent{
+    font-weight: bold;
+    font-size: 9px;
+}
+
+h6 .mt-0 .mb-0{
+  color: #ff9800;
+}
+
+
+.background-skeleton-loader {
+      width: 100%;
+      height: 158px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      lightgray;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+
+    .logo-skeleton-loader {
+      display: block;
+      background: linear-gradient( to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ), #8a8686 !important;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 1s infinite;
+    }
+
+    .background-skeleton-loader:empty {      
+      width: 100%;
+      height: 158px;
+      display: block;
+      background: linear-gradient( to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ), #d3d3d370;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      animation: shine 1s infinite;
+    }
+
+
+    .logo-skeleton-loader:empty {      
+      display: block;
+      background: linear-gradient( to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ), #8a8686 !important;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0; 
+      animation: shine 1s infinite;
+    }
+
+    .infotitle-skeleton-loader {
+      width: 250px;
+      height: 20px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+    .proReview-skeleton-loader{
+      width: 21px;
+      height: 21px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+
+    .proRating-skeleton-loader{
+      width: 80px;
+      height: 50px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+
+
+    .infoaddress-skeleton-loader {
+      width: 150px;
+      height: 20px;
+      display: block;
+      margin-top: 15px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+     .btngroup-skeleton-loader{
+      display: block;
+      background: linear-gradient( to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ), #d3d3d370;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      animation: shine 1s infinite;
+    }
+
+    .infoitem-skeleton-loader {
+      width: 12.50%;
+        height: 50px;
+        display: block;
+        margin-bottom: 5px !important;
+        background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+        ),
+        #d3d3d37d;
+        background-repeat: repeat-y;
+        background-size: 50px 500px;
+        background-position: 0 0;
+        /*animation: shine 1s infinite; */ 
+        animation: shine 2s infinite;
+    }
+
+
+.skeleton-loader {
+      width: 100%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      lightgray;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+
+    .skeleton-loader-infoImg {
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      lightgray;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+    .skeleton-loader-h5 {
+      width: 100px;
+      height: 25px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+
+    .skeleton-loader-h6-1{
+      width: 12.50%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+    .skeleton-loader-h6-2{
+      width: 25%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+    .skeleton-loader-h6-3{
+      width: 37.50%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+    .skeleton-loader-h6-4{
+      width: 50%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+    .skeleton-loader-h6-5{
+      width: 62.50%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+    .skeleton-loader-h6-6{
+      width: 75%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+
+    .skeleton-loader-h6-7{
+      width: 87.50%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+    .skeleton-loader-h6-8{
+      width: 100%;
+      height: 15px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite;
+    }
+
+    .skeleton-loader-updateDate{
+      width: 100px;
+      height: 25px;
+      display: block;
+      margin-bottom: 5px !important;
+      background: linear-gradient(    
+          to right,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0.5) 50%,
+          rgba(255, 255, 255, 0) 80%
+      ),
+      #d3d3d37d;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      /*animation: shine 1s infinite; */ 
+      animation: shine 2s infinite; 
+    }
+
+
+    @keyframes shine {  
+      to {
+        background-position: 100% 0, /* move highlight to right */ 0 0;
+      }
+    }
+
+    .skeleton-loader:empty {      
+      width: 100%;
+      height: 15px;
+      display: block;
+      background: linear-gradient( to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80% ), #d3d3d370;
+      background-repeat: repeat-y;
+      background-size: 50px 500px;
+      background-position: 0 0;
+      animation: shine 1s infinite;
+    }
+
+
+    .btn-orange{
+      background-color: #fd572e;
+      border-color: #fd572e;
+      color: :#fff;
+    }
+
+    .btn-cust:hover{
+       background-color: #fd572e;
+      border-color: #fd572e;
+      color: :#fff;
+    }
+
+    .grid_list{
+      margin-bottom: 10px !important;
+    }
+    
+
+</style>

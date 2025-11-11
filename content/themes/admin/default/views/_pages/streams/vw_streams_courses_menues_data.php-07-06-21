@@ -1,0 +1,131 @@
+ac<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?php echo $course_data->course_name;?> Menues List-<?php echo $course_data->course_id;?></li>
+		</ol>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Course Menu Data</h6>
+					<form class="forms-sample" id="form_course_data_edit" autocomplete="off" method="post">
+						<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+						<input type="hidden" name="course_id" value="<?php echo encode_data($course_data->course_id);?>">
+						<input type="hidden" name="menu_id" value="<?php echo $course_menues['menu_id'];?>">
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label for="system_meta_title">Course Menu Name</label>
+								<input type="text" class="form-control" id="course_menu_name" name="course_menu_name" autocomplete="off" placeholder="Menu Name Name" value="<?php echo $course_menues['menu_name'];?>">
+							</div>
+						</div><?php $table_row=0;?>
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label for="system_meta_title">Overview General</label>
+								<input type="hidden" name="course_overview_general_heading_details[<?php echo $table_row;?>][data_type]" value="general">
+								<textarea class="form-control course_overview_general" name="course_overview_general_heading_details[<?php echo $table_row;?>][heading_detail]" rows="40"><?php echo (!empty($course_general_details_data))?$course_general_details_data[0]->course_data_value:'';?></textarea>
+							</div>
+						</div>
+
+						<div id="heading_rows" class="row table-responsive">
+							<table class="table">
+								<tbody>
+									<?php
+
+									$table_row=$table_row+1;
+									
+									if(!empty($course_general_details_data)){
+
+										unset($course_general_details_data[0]);
+										
+										foreach ($course_general_details_data as $key => $value) {
+
+											if($value->course_data_type!='faqs'){
+												?>
+												<tr id="tr4<?php echo $faq_row;?>">
+													<td>
+														<div class="form-group row">
+															<div class="col-md-12">
+																<label for="system_meta_title">FAQ Question</label>
+																<input type="hidden" name="course_overview_general_heading_details[<?php echo $faq_row;?>][data_type]" value="<?php echo $value->course_data_type;?>">
+																<input type="text" class="form-control" name="course_overview_general_heading_details[<?php echo $faq_row;?>][heading]" autocomplete="off" placeholder="FAQ Question" value="<?php echo $value->course_data_heading;?>">
+															</div>
+														</div>
+														<div class="form-group row">
+															<div class="col-md-12">
+																<label for="system_meta_title">FAQ Question Answer</label>
+																<textarea class="form-control" rows="10" name="course_overview_general_heading_details[<?php echo $faq_row;?>][heading_detail]"><?php echo $value->course_data_value;?></textarea>
+															</div>
+														</div>
+													</td>
+												</tr>
+												<?php
+											}else{
+												?>
+												<tr id="tr3<?php echo $table_row;?>">
+													<td>
+													<div class="form-group row">
+														<div class="col-md-12">
+															<label for="system_meta_title">Heading</label>
+															<input type="hidden" name="course_overview_general_heading_details[<?php echo $table_row;?>][data_type]" value="<?php echo $value->course_data_type;?>">
+															<input type="text" class="form-control" id="course_overview_table_heading" name="course_overview_general_heading_details[<?php echo $table_row;?>][heading]" autocomplete="off" placeholder="Menu Name Name" value="<?php echo $value->course_data_heading;?>">
+														</div>
+													</div>
+													<div class="form-group row">
+														<div class="col-md-12">
+															<label for="system_meta_title"><?php echo ucwords($value->course_data_type);?> Detail</label>
+															<textarea class="form-control course_overview_table" rows="40" name="course_overview_general_heading_details[<?php echo $table_row;?>][heading_detail]"><?php echo $value->course_data_value;?></textarea>
+														</div>
+													</div>
+													<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull0right" onclick="$('#tr3<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+													</td>
+												</tr>
+												<?php	
+											}
+											
+											$table_row++;
+										}
+									}
+
+									?>
+
+									<script type="text/javascript">var hdr='<?php echo $table_row;?>';</script> 
+								</tbody>
+							</table>								
+						</div>
+
+						<!-- <div id="heading_image_rows" class="row table-responsive">
+							<table class="table">
+								<tbody>
+									
+								</tbody>
+							</table>								
+						</div> -->
+
+
+						
+
+
+
+						<div class="buy-now-wrapper" id="buttons_wrapper">
+							<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Heading</button>
+							<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_table_heading">Add Table</button>
+							<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#tinyFileBrowserModal">Add Image</button>
+							<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_faqs">Add Faqs</button>
+							<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_save_course_details_data">Save Data</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+<script type="text/javascript">var course_parent='';var course_id='<?php echo $cours_data->course_id;?>';var _parent_stream='';var stream='';var degree='';var parent_folder='<?php echo $parent_folder_data[0]->media_disk_name;?>';</script>

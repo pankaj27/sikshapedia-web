@@ -1,0 +1,16541 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH."third_party/PHPExcel.php";
+require_once APPPATH."third_party/PHPExcel/IOFactory.php";
+
+use WebPConvert\WebPConvert;
+
+/**
+ *
+ */
+class Institutions  extends BaseAdminController
+{
+	function __construct()
+	{
+		parent::__construct();
+
+		$this->load->model(array('institution_model'=>'im','news_model'=>'nm','country_model'=>'com','stream_model'=>'strm','user_model'=>'um'));
+	}
+
+	//Universities
+
+	function indexUniversities(){
+		if(session_userdata('isAdminLoggedin')){
+			$user_id=decode_data(session_userdata('admin_id'));
+			$userdata=$this->data['userdata'];
+			$quota=array();
+			$countries=array();
+
+			$this->data['parent_folder_data']=$this->sm->get_file(array('storage_type'=>'1','media_org_name'=>'colleges'));
+			
+			if($userdata->user_role=='5'){
+				if($userdata->user_bank_account_added=='2'){
+					redirect($this->data['admin_base_url'].'/profile');
+				}else{
+
+					$month=date('m');
+					$year=date('Y');
+
+					$param['month']=$month;
+					$param['year']=$year;
+					$param['created_by']=$user_id;
+					//$param['is_verified_by_admin']='1';
+
+					$total_university_uploaded = $this->im->_get_universities(null,$param,TRUE,FALSE);
+
+					$param['is_verified_by_admin']='1';
+
+					$total_university_uploaded_approved = $this->im->_get_universities(null,$param,TRUE,FALSE);
+
+					$not_approved=($total_university_uploaded-$total_university_uploaded_approved);
+
+
+					$total_earning=($total_university_uploaded_approved*$userdata->user_per_upload_amount);
+
+
+					$quota=array(
+						'month'=>date('F'),
+						'year'=>date('Y'),
+						'completed'=>number_format($total_university_uploaded),
+						'approved'=>number_format($total_university_uploaded_approved),
+						'not_approved'=>number_format($not_approved),
+						'total_earned'=>number_format($total_earning)
+					);
+
+					$this->data['quota']=$quota;
+
+					
+
+					$this->data['page_title']='Universities';
+					$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->load('users/vw_universities', $this->data);
+				}
+				
+			}else{
+				$_countries=$this->com->get_country(array('country_status'=>'1'),FALSE);
+
+				foreach ($_countries as $key => $value) {
+					$countries[]=array(
+						'country_id'=>encode_data($value->country_id),
+						'country_name'=>$value->country_name
+					);
+				}
+
+
+				$this->data['inst_types']=$this->im->get_institute_types(array('inst_data_type'=>'3'),FALSE);
+
+				$this->data['countries']=$countries;
+
+				$this->data['page_title']='Universities';
+				$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->load('users/vw_universities', $this->data);
+			}
+
+				
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	function indexUniversitiesAddEdit($university_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			$this->data['page_title']='Universities';
+
+			$university_data=array();
+			$states=array();
+			$cities=array();
+			$districts=array();
+			$user_logo='';
+			$user_logo_name='';
+			$user_banner='';
+			$user_banner_name='';
+
+			if($university_id!=null){
+				$uid=decode_data($university_id);
+
+				$university_data=$this->im->get_college_profile_data(array('college_user_id'=>$uid));
+
+		        $user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$uid,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+		        $info_menu_slug_data=$this->sm->get_slug_urls(array('url_type_id'=>$uid,'url_value'=>$university_data->access_url));
+
+		        //print_obj($user_logo);die;
+
+				if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+				    $college_logo=$user_logo->media_disk_path_relative;
+				    $user_logo_name=$user_logo->media_org_name;
+				}else{
+				    $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';
+				    $user_logo_name='';
+				}
+
+
+				$user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$uid,'user_storage_type'=>'user_banner'));
+
+				if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+				    $college_banner=$user_banner->media_disk_path_relative;
+				    $user_banner_name=$user_banner->media_org_name;
+				}else{
+				    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+				    $user_banner_name='';
+				}
+
+				$_states=$this->com->get_states(array('state_country_id'=>$university_data->college_country_id),'state_serial','ASC');
+
+				if(!empty($_states)){
+					foreach ($_states as $key => $value) {
+						$states[]=array(
+							'state_id'=>encode_data($value->state_id),
+							'state_name'=>$value->state_name,
+							'selected'=>($value->state_id==$university_data->college_state_id)?'selected':''
+						);
+					}
+				}
+
+				// $_cities=$this->com->get_city(array('city_country_id'=>$university_data->university_country_id,'city_state_id'=>$university_data->university_state_id,'city_district_id'=>),FALSE,$order_by=null,$order='ASC');
+
+				$_cities=$this->com->get_city(array('city_country_id'=>$university_data->college_country_id,'city_state_id'=>$university_data->college_state_id),FALSE,$order_by=null,$order='ASC');
+
+				if(!empty($_cities)){
+					foreach ($_cities as $key => $value) {
+						$cities[]=array(
+							'city_id'=>encode_data($value->city_id),
+							'city_name'=>$value->city_name,
+							'selected'=>($value->city_id==$university_data->college_city_id)?'selected':''
+						);
+					}
+				}
+
+
+				$_districts=$this->com->get_district(array('district_country_id'=>$university_data->college_country_id,'district_state_id'=>$university_data->college_state_id),FALSE);
+
+				if(!empty($_districts)){
+					foreach ($_districts as $key => $value) {
+						$districts[]=array(
+							'district_id'=>encode_data($value->district_id),
+							'district_name'=>$value->district_name,
+							'selected'=>($value->district_id==$university_data->college_district_id)?'selected':''
+						);
+					}
+				}
+			}else{
+
+				$default_country=99;
+				$_states=$this->com->get_states(array('state_country_id'=>$default_country),'state_serial','ASC');
+
+				if(!empty($_states)){
+					foreach ($_states as $key => $value) {
+						$states[]=array(
+							'state_id'=>encode_data($value->state_id),
+							'state_name'=>$value->state_name,
+							'selected'=>($value->state_id==$university_data->college_state_id)?'selected':''
+						);
+					}
+				}
+			}
+
+		
+            //print_obj($university_data);die;
+
+			$institue_types=$this->im->get_institute_types(array('inst_data_type'=>'3'),FALSE);
+			if(!empty($institue_types)){
+				foreach ($institue_types as $key => $value) {
+					$selcted=(!empty($university_data) && ($university_data->college_type==$value->inst_type))?'selected':'';
+					$_institue_types[]=array(
+						'inst_type'=>encode_data($value->inst_type),
+						'inst_type_name'=>$value->inst_type_name,
+						'selected'=>$selcted
+					);
+				}
+			}else{
+				$_institue_types=array();
+			}
+
+			$countries=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+
+			if(!empty($countries)){
+				foreach ($countries as $key => $value) {
+					$selcted=(!empty($university_data) && ($university_data->college_country_id==$value->country_id))?'selected':'';
+					$_countries[]=array(
+						'country_id'=>encode_data($value->country_id),
+						'country_name'=>$value->country_name,
+						'selected'=>$selcted
+					);
+				}
+			}else{
+				$_countries=array();
+			}
+
+
+			if(isset($university_data) && !empty($university_data)){
+				$affiliation_types=$this->im->get_affiliation_types(array('statutory_body_status'=>'1','statutory_body_country_id'=>$university_data->college_country_id),FALSE);
+
+
+				$college_affiliations=($university_data->user_affiliation_type!=null || !empty($university_data->college_affiliation_type))?char_separated_to_array($university_data->college_affiliation_type):array();
+				if(!empty($affiliation_types)){
+					foreach ($affiliation_types as $key => $value) {
+						$selected=(!empty($college_affiliations) && in_array($value->statutory_body_id, $college_affiliations))?'checked':'';
+						$_affiliation_types[]=array(
+							'statutory_body_id'=>encode_data($value->statutory_body_id),
+							'statutory_body_abbr'=>$value->statutory_body_abbr,
+							'statutory_body_name'=>$value->statutory_body_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_affiliation_types=array();
+				}
+			}else{
+				$affiliation_types=$this->im->get_affiliation_types(array('statutory_body_status'=>'1','statutory_body_country_id'=>'99'),FALSE);
+
+
+				if(!empty($affiliation_types)){
+					foreach ($affiliation_types as $key => $value) {
+						$_affiliation_types[]=array(
+							'statutory_body_id'=>encode_data($value->statutory_body_id),
+							'statutory_body_abbr'=>$value->statutory_body_abbr,
+							'statutory_body_name'=>$value->statutory_body_name,
+							'selected'=>''
+						);
+					}
+				}else{
+					$_affiliation_types=array();
+				}
+			}
+
+			$university_grades=$this->im->get_grade_types(array('grade_status'=>'1'),FALSE);
+
+			if(!empty($university_grades)){
+				if(isset($university_grades)){
+					foreach ($university_grades as $key => $value) {
+						$selected=($university_grades->college_grade_ids==$value->grade_id)?'selected':'';
+						$grade_types[]=array(
+							'grade_id'=>encode_data($value->grade_id),
+							'grade_name'=>$value->grade_name,
+							'selected'=>$selected
+						);
+					}
+				}
+					
+			}else{
+				$grade_types=array();
+			}
+
+			$institue_facilities=$this->sm->get_system_facilities(array('facility_status'=>'1'),FALSE);
+
+			if(!empty($institue_facilities)){
+				foreach ($institue_facilities as $key => $value) {
+					if(isset($university_data) && !empty($university_data) && $university_data->college_facilities!=null){
+						$college_facilities=char_separated_to_array($university_data->college_facilities);
+						if(in_array($value->facility_id, $college_facilities)){
+							$selected='checked';
+						}else{
+							$selected='';
+						}
+					}else{
+						$selected='';
+					}
+					
+					$_institue_facilities[]=array(
+						'facility_id'=>encode_data($value->facility_id),
+						'facility_name'=>$value->facility_name,
+						'facility_icon'=>$value->facility_icon,
+						'selected'=>$selected
+					);
+				}
+			}else{
+				$_institue_facilities=array();
+			}
+
+
+
+			$ranking_bodies=$this->im->get_ranking_types(array('rank_body_status'=>'active'),FALSE);
+			$ranking_categories=$this->im->get_ranking_categories(array('rank_category_status'=>'active'),FALSE);
+			$c_year=date('Y');
+
+
+			$college_ranking_data=$this->im->get_inst_ranking_data(array('ranking_inst_type'=>'university','ranking_inst_id'=>$uid),FALSE);
+
+			//print_obj($college_ranking_data);die;
+
+			$this->data['university_ranking_data']=$college_ranking_data;
+
+			if(!empty($college_ranking_data)){
+				foreach ($college_ranking_data as $key => $value) {
+					$crbodies[]=$value->ranking_body_id;
+					$crcats[]=$value->ranking_category_id;
+					$cryears[]=$value->ranking_year;
+					$cranking_values[]=$value->ranking_value;
+					$crstates[]=$value->ranking_state_id;
+					$cranking_state_values[]=$value->ranking_state_value;
+				}
+
+				$this->data['cranking_values']=$cranking_values;
+			}else{
+				$this->data['cranking_values']=array();
+			}
+
+
+			foreach ($ranking_bodies as $key => $value) {
+				$_rank_bodies[]=array(
+					'id'=>$value->rank_id,
+					'rank_body_id'=>encode_data($value->rank_id),
+					'rank_body'=>$value->rank_body,
+					'rank_value'=>$value->rank_value,
+					'selected'=>(isset($crbodies) && in_array($value->rank_id, $crbodies))?'selected':''
+				);
+			}
+
+			//print_obj($_rank_bodies);die;
+
+			foreach ($ranking_categories as $key => $value) {
+				$_ranking_categories[]=array(
+					'id'=>$value->rank_category_id,
+					'rank_category_id'=>encode_data($value->rank_category_id),
+					'rank_category'=>$value->rank_category,
+					'selected'=>(isset($crcats) && in_array($value->rank_category_id, $crcats))?'selected':''
+				);
+			}
+
+
+			for ($i=$c_year; $i >($c_year-10); $i--) {
+				$ranking_years[]=array(
+					'ranking_year'=>$i,
+					'selected'=>(isset($cryears) && in_array($i, $cryears))?'selected':''
+				);
+			}
+
+
+			$inner_menu_types=$this->sm->get_menue_types(array('menu_type_status'=>'1'),FALSE);
+
+
+
+            if(!empty($university_data)){
+
+				$_inner_menus = $this->sm->get_inner_menues(NULL,array('menu_link_id'=>$uid,'menu_link_type'=>'101'),FALSE,FALSE);
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						$menu_link=$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$university_id;
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+            }else{
+				$inner_menues=array();
+				$inner_menu_alias=array();
+			}
+
+
+			$college_genere=array('none'=>'None','coed'=>'Coed','girls'=>'Girls');
+
+
+			foreach ($college_genere as $key => $value) {
+				$_college_genere[]=array(
+					'college_genere_value'=>$key,
+					'college_genere_name'=>$value,
+					'selected'=>($university_data->college_genere==$key)?'selected':''
+				);
+			}
+
+
+			$colleges=$this->im->__get_college_profile_data('college_user_id,college_name,college_short_name,college_utype,college_status,access_url',array('college_status'=>'1','college_utype'=>'4'),FALSE);
+
+			if(!empty($colleges)){
+				foreach ($colleges as $key => $value) {
+
+					if(!empty($value->access_url)){
+						$college_name= str_replace("and#039;", "", str_replace("amp;", "", str_replace("'", "", str_replace("&"," and ",$value->college_name))));
+
+						$_college_data_links[]=array(
+							'title'=> $college_name,
+							'value'=>$value->access_url
+						);
+					}							
+				}
+			}
+
+			//print_obj($_college_data_links);die;
+
+
+			$universities=$this->im->__get_college_profile_data('college_user_id,college_name,college_short_name,college_utype,college_status,access_url',array('college_status'=>'1','college_utype'=>'3'),FALSE);
+
+			if(!empty($universities)){
+				foreach ($universities as $key => $value) {
+
+					if(!empty($value->access_url)){
+						$college_name= str_replace("and#039;", "", str_replace("amp;", "", str_replace("'", "", str_replace("&"," and ",$value->college_name))));
+
+						$_university_data_links[]=array(
+							'title'=> $college_name,
+							'value'=>$value->access_url
+						);
+					}						
+				}
+			}
+
+
+
+			$system_widgets=array(
+				"front_info_university_section"=>'University Info Section',
+				"front_course_fees_section"=>'University Course Fees Section',
+				"front_course_fees_course_section"=>'University Course Fees Details Section',
+				"front_course_fees_brief_with_ads_section"=>'University Course fees with Ads section',
+				"front_facilities_section"=>"University Facilities Section",
+				"front_admission_section"=>'University Admission Details Section',
+				"front_cutoff_section"=>'University Cutoff Details Section',
+				"front_gallery_section"=>'University Gallery Details Section',
+				"front_placement_section"=>'University Placement Brief Details Section',
+				"front_placement_details_section"=>'University Placement Details Section',
+				"front_scholarship_section"=>"University Scholarships Section",
+				"front_results_section"=>"University Results Section",
+				"front_news_brief_section"=>'University News Brief Section',
+				"front_google_maps_section"=>'University Google Map Section',
+				"front_wayto_rating_section"=>'Waytoadmissions Rating Section',
+				"front_nearby_colleges_universities_section"=>'Nearby Colleges Section',
+				"front_college_comment_section"=>'University comment Section'
+			);
+
+
+
+			//echo $uid;die;
+
+
+			if(isset($uid)){
+				$info=$this->im->get_inst_info_data(array('info_type'=>'1','info_type_id'=>$uid));
+				$college_general_info=$info->info_value;
+				$college_about_info=$info->info_value_about;
+				$college_facilities_info=$info->info_value_facilities_intro;
+				$college_placement_info=$info->info_value_placement_intro;
+				$college_ranking_info=$info->info_value_ranking_intro;
+			}else{
+				$college_general_info='';
+				$college_about_info='';
+				$college_facilities_info='';
+				$college_placement_info='';
+				$college_ranking_info='';
+			}
+
+
+			//print_obj($info);die;
+
+			$inst_categories=$this->im->get_institute_categories(NULL,FALSE);
+
+			if(!empty($inst_categories)){
+				foreach ($inst_categories as $key => $value) {
+					$_inst_categories[]=array(
+						'category_id'=>$value->inst_category_id,
+						'category_name'=>$value->inst_category_short_name,
+						'selected'=>(!empty($university_data) && ($university_data->college_category_ids==$value->inst_category_id))?'selected':''
+					);
+				}
+			}
+
+			$this->data['inst_categories']=$_inst_categories;
+
+
+
+			$exams=$this->strm->get_exam(array('exam_status'=>'1'),FALSE);
+
+			//print_obj($exmas);die;
+
+			if(!empty($exams)){
+				foreach ($exams as $key => $value) {
+					$slug_data=$this->sm->get_slug(array('slug_type'=>'10','slug_type_id'=>$value->exam_id));
+					$_exams_links[]=array(
+						'exam_name'=>$value->exam_short_name,
+						'exam_link'=>base_url('exams/'.$slug_data->slug_value)
+					);
+				}
+			}
+
+
+
+			$this->data['exams_links']=$_exams_links;
+
+			
+
+			$other_colleges=$this->im->__get_college_profile_data('college_user_id,college_name,access_url,college_city_id',array('is_verified_by_admin'=>'1'),FALSE);
+
+			if(!empty($other_colleges)){
+				foreach ($other_colleges as $key => $value) {
+					$city_data=$this->com->get_city(array('city_id'=>$value->college_city_id));
+					$college_links[]=array(
+						'college_name'=>$value->college_name.' - ['.$city_data->city_name.']',
+						'college_link'=>$value->access_url
+					);
+				}
+			}
+
+			$this->data['college_links']=$college_links;
+
+
+			$url_slug=$this->sm->get_slug(array('slug_type_id'=>$college_id,'slug_type'=>'6'));
+
+			$_college_data=array(
+				'college_id'=>$college_id,
+            	'college_name'=>$university_data->college_name,
+            	'college_short_name'=>$university_data->college_short_name,
+            	'college_email'=>$university_data->college_email,
+            	'college_phone_no'=>$university_data->college_phone_no,
+            	'college_estd_year'=>$university_data->college_estd_year,
+            	'college_web_address'=>$university_data->college_web_address,
+            	'college_status'=>$university_data->college_status,
+            	'college_address'=>$university_data->college_address,
+            	'college_pincode'=>$university_data->college_zipcode,
+            	'college_logo'=>$college_logo,
+            	'college_logo_name'=>$college_logo_name,
+            	'college_banner'=>$college_banner,
+            	'college_banner_name'=>$college_banner_name,
+            	'college_intro_video'=>$college_intro_video,
+            	'college_is_verified'=>$university_data->is_verified_by_admin,
+            	'college_is_top'=>$university_data->college_is_top,
+            	'college_show_in_home_page'=>$university_data->college_is_top_visible_home,
+            	'college_is_top_ranked'=>$university_data->college_is_top_ranked,
+            	'college_access_url'=>base_url('university/in/'.$url_slug),//$university_data->access_url,
+            	'college_slug'=>$university_data->access_url_slug,
+            	'college_general_info'=>$college_general_info,
+            	'college_about_info'=>$college_about_info,
+            	'college_placement_info'=>$college_placement_info,
+            	'college_facilities_info'=>$college_facilities_info,
+            	'college_ranking_info'=>$college_ranking_info,
+            	'college_faqs'=>$faqs,
+            	'college_placement_faqs'=>$college_placement_faqs,
+            	'college_scholarship_faqs'=>$college_scholarship_faqs,
+            	'college_widget_section'=>$system_widgets,
+            	'college_info_page_heading'=>$info_menu_slug_data->url_page_heading
+			);
+
+			//print_obj($_college_data);die;
+
+			$inner_menu_types=$this->sm->get_menue_types(array('menu_type_status'=>'1'),FALSE);
+
+
+			$this->data['parent_folder_data']=$this->sm->get_file(array('storage_type'=>'1','media_org_name'=>'colleges'));
+
+			$this->data['college_data_links']=(!empty($_college_data_links))?json_encode($_college_data_links):'';
+			$this->data['university_data_links']=(!empty($_university_data_links))?json_encode($_university_data_links):'';
+
+
+
+			$this->data['college_genere']=$_college_genere;
+
+
+			$this->data['college_widgets']=$system_widgets;
+				
+
+
+			$this->data['institute_ranking_bodies']=$_rank_bodies;
+			$this->data['institute_ranking_categories']=$_ranking_categories;
+			$this->data['institue_ranking_years']=$ranking_years;
+
+			$this->data['institute_grades']=$grade_types;
+
+			$this->data['institute_affiliations']=$_affiliation_types;
+
+			//print_obj($this->data['institute_affiliations']);die;
+
+			$this->data['institue_types']=$_institue_types;
+
+			$this->data['institue_facilities']=$_institue_facilities;
+
+			$this->data['inner_menues']=$inner_menu_types;
+
+			$this->data['inner_menues_assigned']=$inner_menues;
+
+			$this->data['countries']=$_countries;
+			$this->data['states']=$states;
+			$this->data['cities']=$cities;
+			$this->data['districts']=$districts;
+			$this->data['university_id']=$university_id;
+			$this->data['university_data']=$_college_data;
+			$this->data['user_logo']=$user_logo;
+		    $this->data['user_logo_name']=$user_logo_name;
+		    $this->data['user_banner']=$user_banner;
+		    $this->data['user_banner_name']=$user_banner_name;
+			$this->theme->title($this->data['page_title'])->add_partial('partial_college_inner_menues_modal',$this->data)->add_partial('partial_college_inner_menues_modal',$this->data)->add_partial('partial_file_upload_big_modal')->load('users/vw_universities_add_edit', $this->data);
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	//Temporary Function
+	public function onTransferUniversities(){
+		$universities=$this->im->get_university_profile_data(null,FALSE);
+
+		foreach ($universities as $key => $value) {
+			$university_data_to_add=array(
+				'college_user_id'=>$value->university_user_id,
+				'college_utype'=>'3',
+				'college_country_id'=>$value->university_country_id,
+				'college_currency_id'=>'4',
+				'college_grade_ids'=>$value->university_grade_ids,
+				'college_state_id'=>$value->university_state_id,
+				'college_district_id'=>'0',
+				'college_city_id'=>$value->university_city_id,
+				'college_university_id'=>0,
+				'college_course_ids'=>'0',
+				'college_category_ids'=>'0',
+				'college_exam_ids'=>'0',
+				'college_streams_ids'=>'0',
+				'college_sub_streams_ids'=>'0',
+				'college_ranking_ids'=>'0',
+				'college_govt_reg_code'=>'0',
+				'college_name'=>$value->university_name,
+				'college_short_name'=>$value->university_short_name,
+				'college_estd_date'=>null,
+				'college_estd_year'=>$value->university_estd_year,
+				'college_address'=>$value->university_address,
+				'college_zipcode'=>$value->university_zipcode,
+				'college_email'=>$value->university_email,
+				'college_phone_no'=>$value->university_phone_no,
+				'college_alter_phone_no'=>$value->university_phone_no_alter,
+				'college_web_address'=>$value->university_address,
+				'college_type'=>$value->university_type,
+				'college_affiliation_type'=>$value->university_affiliation_type,
+				'college_facilities'=>$value->university_facilities,
+				'college_frequent_visited_companies'=>'0',
+				'college_genere'=>'0',
+				'college_menhostel_details_type'=>'0',
+				'college_womenhostel_details_type'=>'0',
+				'college_status'=>$value->university_status,
+				'college_is_top'=>$value->university_is_top,
+				'college_is_top_visible_home'=>$value->university_is_top_visible_home,
+				'college_is_top_ranked'=>$value->university_is_top_ranked,
+				'college_is_featured'=>'2',
+				'college_is_featured_visible_in_menu'=>'2',
+				'college_is_visible_in_search'=>'2',
+				'is_verified_by_admin'=>$value->is_verified_by_admin,
+				'access_url'=>base_url('university/in/'.$value->access_url_slug),
+				'access_url_slug'=>$value->access_url_slug,
+				'created_by'=>$value->created_by,
+				'created_at'=>$value->created_at,
+				'updated_at'=>$value->created_at,
+				'updated_by'=>$value->updated_by
+			);
+
+
+			$college_id=$this->im->add_college_data($university_data_to_add);
+
+			$this->um->update_user_data(array('user_profile_pk_id'=>$college_id),array('user_id'=>$value->university_user_id,'user_role'=>'3'));
+
+			$slug_id[]=$this->generate_slug_data($value->university_user_id,$value->university_name,'6','101','UNIVERSITY_NAME');
+		}
+
+		print_obj($university_data_to_add);exit;
+	}
+	//Temporary Function
+
+
+	public function onSearchUniversities_old(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+				$user_id=decode_data(session_userdata('admin_id'));
+				$param['column_order'] = array(
+					null,
+					'university_name',
+					'country_name',
+					'state_name',
+					'university_estd_year'
+				);
+
+				$param['column_search'] = array('university_name','university_email','university_phone_no','university_govt_reg_code','university_estd_year','country_name','state_name','city_name');
+				$param['order'] = array('university_id' => 'DESC');
+				$posts=$this->input->post();
+
+				// if($this->data['userdata']->user_role!='5' && $this->data['userdata']->user_role=='1'){
+				// 	$param['created_by']=$user_id;
+				// }
+
+				$list = $this->im->_get_universities($posts,$param,FALSE,FALSE);
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $user){
+					$no++;
+
+					$row = array();
+
+					$slug=$this->sm->get_slug(array('slug_type_id'=>$user->user_id,'slug_type'=>'6'));
+
+
+
+					$action='<div class="btn-group btn-group-sm">
+					<a href="'.$this->data['admin_base_url'].'/institutions/universities/add/'.encode_data($user->user_id).'" class="btn btn-xs btn-primary">Edit</a>
+					<button class="btn btn-xs btn-dark btn_del_university" data-aid="'.encode_data($user->user_id).'">Delete</button>
+					</div>';
+					
+					$row[]	=	$no;
+					$row[]	=	ucwords($user->university_name);
+					$row[]	=	$user->country_name;
+					// if(!empty($user_image)){
+					// 	$row[]	=	'<img src="'.$user_image->media_disk_path_relative.'" class="table-user-thumb" alt="">';
+					// }else{
+					// 	$row[]	=	'<img src="'.base_url().'uploads/users/no.jpg" class="table-user-thumb" alt="">';
+					// }
+
+					$row[]	=	$user->state_name;
+					$row[]	=	$user->university_estd_year;
+					//$row[]	=	date('F jS, Y',strtotime($user->created_date));
+					if($user->user_blocked==1){
+						$row[]  =	'<button class="btn btn-sm btn-success">Active</button>';
+					}else if($user->user_blocked==2){
+						$row[]  =	'<button class="btn btn-sm btn-danger">Deactive</button>';
+					}
+
+					if($this->data['userdata']->user_role=='1'){
+						if(!empty($slug)){
+							$row[]  =	'<button type="button" class="btn btn-dark btn_create_slug" data-type="university_slug" data-value_id="'.encode_data($user->user_id).'">'.$slug->slug_value.'</button>';
+						}else{
+							$row[]  =	'<button type="button" class="btn btn-dark btn_create_slug" data-type="university_slug" data-value_id="'.encode_data($user->user_id).'">Create</button>';
+						}
+					}
+						
+					if($this->data['userdata']->user_role_id!=5){
+						$row[]  =	$action;
+					}
+						
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->im->_get_universities($posts,$param,TRUE),
+					"recordsFiltered" => $this->im->_get_universities($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchUniversities(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+      		if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+      			$user_id=decode_data(session_userdata('admin_id'));
+
+		        //echo $user_id;die;
+		        $param['column_order'] = array(
+		          null,
+		          'college_name',
+		          'country_name',
+		          'state_name',
+		          'college_estd_year'
+		        );
+
+		        $param['column_search'] = array('college_name','college_email','college_phone_no','college_govt_reg_code','college_estd_year','country_name','state_name','city_name','college_alter_phone_no');
+		        $param['order'] = array('college_id' => 'DESC');
+		        $param['college_utype']='3';
+		        $posts=$this->input->post();
+
+		        $list = $this->im->_get_colleges($posts,$param,FALSE,FALSE);
+
+		        $data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $user){
+					$no++;
+
+					$row = array();
+
+					$user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$user->user_id,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+					if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative) && file_exists($user_logo->media_disk_path)){
+			            $college_logo=$user_logo->media_disk_path_relative;
+			            $user_logo_name=$user_logo->media_org_name;
+			        }else{
+			            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';
+			            $user_logo_name='';
+			        }
+
+
+			        $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$user->user_id,'user_storage_type'=>'user_banner'));
+
+			        if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+			            $college_banner=$user_banner->media_disk_path_relative;
+			            $user_banner_name=$user_banner->media_org_name;
+			        }else{
+			            $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+			            $user_banner_name='';
+			        }
+
+					$slug=$this->sm->get_slug(array('slug_type_id'=>$user->user_id,'slug_type'=>'6'));
+
+
+
+					$action='<div class="btn-group btn-group-sm">
+					<a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user->user_id).'" class="btn btn-xs btn-primary">Edit</a>
+					<button class="btn btn-xs btn-dark btn_del_university" data-aid="'.encode_data($user->user_id).'">Delete</button>
+					</div>';
+
+					$action_btns='<button class="btn btn-xs btn-success btn_inst_quick_update" data-college_id="'.$user->college_user_id.'" data-college_name="'.$user->college_name.'" data-college_short_name="'.$user->college_short_name.'" data-college_estd="'.$user->college_estd_year.'" data-college_email="'.$user->college_email.'" data-college_phone_no="'.$user->college_phone_no.'">Quick Update</button>';
+					
+					$row[]	=	$no.'-'.$user->college_id;
+					$row[]	=	'<img src="'.$college_logo.'" class="table-user-thumb" alt=""><span><a href="'.$user->access_url.'" target="_blank">'.ucwords($user->college_name).'</a></span><br>  <label>'.$user->country_name.','.$user->state_name.','.$user->college_estd_year.'</label><br>'.$action_btns;
+
+					
+					//$row[]	=	date('F jS, Y',strtotime($user->created_date));
+					if($user->user_blocked==1){
+						$row[]  =	'<button class="btn btn-sm btn-success">Active</button>';
+					}else if($user->user_blocked==2){
+						$row[]  =	'<button class="btn btn-sm btn-danger">Deactive</button>';
+					}else {
+						$row[]  =	'<button class="btn btn-sm btn-primary">Not Set</button>';
+					}
+
+					// if($this->data['userdata']->user_role=='1'){
+					// 	if(!empty($slug)){
+					// 		$row[]  =	'<button type="button" class="btn btn-dark btn_create_slug" data-type="university_slug" data-value_id="'.encode_data($user->user_id).'">'.$slug->slug_value.'</button>';
+					// 	}else{
+					// 		$row[]  =	'<button type="button" class="btn btn-dark btn_create_slug" data-type="university_slug" data-value_id="'.encode_data($user->user_id).'">Create</button>';
+					// 	}
+					// }
+						
+					if($this->data['userdata']->user_role_id!=5){
+						$row[]  =	$action;
+					}
+						
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->im->_get_colleges($posts,$param,TRUE),
+					"recordsFiltered" => $this->im->_get_colleges($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+
+				session_write_close();
+
+      		}else{
+
+      		}
+      	}else{
+
+      	}
+	}
+
+
+	public function onGetInstituteQuickData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+
+				$_countries=array();
+				$_states=array();
+				$_cities=array();
+
+				if(!empty($college_id)){
+
+					$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+
+
+					$countries=$this->com->get_country(array('country_status'=>'1'),FALSE);
+
+					foreach ($countries as $key => $value) {
+						$_countries[]=array(
+							'country_id'=>$value->country_id,
+							'country_name'=>$value->country_name,
+							'selected'=>($value->country_id==$college_data->college_country_id)?'selected':''
+						);
+					}
+
+					$states=$this->com->get_states(array('state_country_id'=>$college_data->college_country_id),FALSE);
+
+					foreach ($states as $key => $value) {
+						$_states[]=array(
+							'state_id'=>$value->state_id,
+							'state_name'=>$value->state_name,
+							'selected'=>($value->state_id==$college_data->college_state_id)?'selected':''
+						);
+					}
+
+
+					$cities=$this->com->get_city(array('city_state_id'=>$college_data->college_state_id),FALSE);
+
+					foreach ($cities as $key => $value) {
+						$_cities[]=array(
+							'city_id'=>$value->city_id,
+							'city_name'=>$value->city_name,
+							'selected'=>($value->city_id==$college_data->college_city_id)?'selected':''
+						);
+					}
+
+
+					$this->data['countries']=$_countries;
+					$this->data['states']=$_states;
+					$this->data['cities']=$_cities;
+					$this->data['college_data']=$college_data;
+
+					$return['html']=$this->theme->view('_pages/users/vw_college_quick_data_dyna',$this->data,true);
+
+				}else{
+					$return['error']='';
+				}
+
+				json_headers($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAddUniversity(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_university=post_data('_university');
+
+				$university_name 		=	post_data('university_name');
+				$university_short_name 	=	post_data('university_short_name');
+				$university_estd 		= 	post_data('university_estd');
+				$university_status 		= 	post_data('university_status');
+				$university_country 	= 	decode_data(post_data('university_country'));
+				$university_state 		= 	decode_data(post_data('university_state'));
+				$university_city 		= 	decode_data(post_data('university_city'));
+				$university_district 	= 	decode_data(post_data('university_district'));
+				$university_address 	= 	post_data('university_address');
+				$university_pincode 	= 	post_data('university_pincode');
+
+				$university_email 		= 	post_data('university_email');
+				$university_phone 		= 	post_data('university_phone');
+
+				$university_type 		=	post_data('university_type');
+
+				$university_grades 		=	post_data('university_grades');
+
+				$university_ranking 	=	$this->input->post('university_ranking');
+
+				$university_webaddress 	=	post_data('university_webaddress');
+
+				$university_is_top		=	post_data('university_is_top');
+
+				$university_genere		=	post_data('university_genere');
+
+				$university_category	=	post_data('university_category');
+
+				$university_is_visible_in_home_page 		=	post_data('university_is_visible_in_home_page');
+
+				$university_is_top_ranked 					=	post_data('university_is_top_ranked');
+
+				$university_is_featured 					=	post_data('university_is_featured');
+
+				$university_is_featured_visible_in_menu 	=	post_data('university_is_featured_visible_in_menu');
+
+				$university_verified 	=	post_data('university_verified');
+
+
+				$university_info_menu_page_heading=post_data('university_info_menu_page_heading');
+
+				$university_same_group_colleges=$this->input->post('university_same_group_colleges');
+
+
+				$_university_ranking	=	array();
+				$ufacilities=array();
+				$uaffiliations=array();
+				$rankings  				=	'';
+
+
+				$university_faciliies=$this->input->post('university_faciliies');
+
+				$university_affiliation_type=$this->input->post('university_affiliations');
+
+				$university_type=post_data('university_type');
+
+				if(!empty($university_type)){
+					$university_type=decode_data($university_type);
+				}else{
+					$university_type='0';
+				}
+
+				$country_data=$this->com->get_country(array('country_id'=>$university_country));
+
+				if(!empty($university_faciliies)){
+					foreach ($university_faciliies as $key => $value) {
+						$_university_faciliies[]=decode_data($value);
+					}
+
+					if(!empty($_university_faciliies) && is_array($_university_faciliies)){
+						$ufacilities=char_separated($_university_faciliies);
+					}
+				}else{
+					$ufacilities=null;
+				}
+
+
+				if(!empty($university_affiliation_type)){
+					foreach ($university_affiliation_type as $key => $value) {
+						$_university_affiliation_type[]=decode_data($value);
+					}
+
+					if(!empty($_university_affiliation_type) && is_array($_university_affiliation_type)){
+						$uaffiliations=char_separated($_university_affiliation_type);
+					}
+				}else{
+					$uaffiliations=null;
+				}
+
+				//print_obj($uaffiliations);die;
+
+				//echo 'hi';die;
+
+				$city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_type_id'=>$university_city));
+				$state_slug=$this->sm->get_slug(array('slug_type'=>'1','slug_type_id'=>$university_state));
+				$_slug_value=$university_name.' '.$city_slug->slug_value.' '.$state_slug->slug_value;
+				$slug_value=url_slug($_slug_value);
+
+
+				$city_data=$this->com->get_city(array('city_id'=>$university_city));
+				$state_data=$this->com->get_state(array('state_id'=>$university_state));
+
+				$colllege_logo_alt_text=$university_name.' ['.$university_short_name.'],'.strtoupper($city_data->city_name).' Logo';
+				$colllege_banner_alt_text=$university_name.' ['.$university_short_name.'],'.strtoupper($city_data->city_name).' Banner';
+
+				if(empty($_university)){
+
+					$university_found=$this->im->get_college_profile_data(array('college_name'=>$university_name,'college_utype'=>'3','college_city_id'=>$university_city));
+
+					//print_obj($university_found);die;
+
+					if(empty($university_found)){
+
+						if(!empty($university_ranking)){
+							foreach ($university_ranking as $key => $value) {
+								$_university_ranking[]=$key;
+							}
+						}
+
+						if(isset($_university_ranking) && !empty($_university_ranking)){
+							$rankings=char_separated($_university_ranking);
+						}
+
+						$city_data=$this->com->get_city(array('city_id'=>$university_city));
+						$state_data=$this->com->get_state(array('state_id'=>$university_state));
+						$_slug_value=$university_name.' '.$city_data->city_name.' '.$state_data->state_name;
+
+						$url_slug=url_slug($_slug_value);
+
+						// $access_url=base_url('university/'.$country_data->country_iso_code_4.'/'.$url_slug);
+
+						$access_url=base_url($country_data->country_iso_code_4.'/'.$url_slug);
+
+						if(empty($university_short_name)){
+							$university_short_name=abbreviate($university_name);
+						}else{
+							$university_short_name=$university_short_name;
+						}
+
+
+						$university_data_to_add=array(
+							'college_utype'=>'3',
+							'college_country_id'=>$university_country,
+							'college_currency_id'=>'4',
+							'college_grade_ids'=>decode_data($university_grades),
+							'college_state_id'=>$university_state,
+							'college_district_id'=>$university_district,
+							'college_city_id'=>$university_city,
+							'college_university_id'=>null,
+							'college_course_ids'=>'',
+							'college_category_ids'=>$university_category,
+							'college_exam_ids'=>'',
+							'college_streams_ids'=>'',
+							'college_sub_streams_ids'=>'',
+							'college_ranking_ids'=>$rankings,
+							'college_govt_reg_code'=>null,
+							'college_name'=>$university_name,
+							'college_short_name'=>$university_short_name,
+							'college_estd_date'=>null,
+							'college_estd_year'=>$university_estd,
+							'college_address'=>$university_address,
+							'college_zipcode'=>$university_pincode,
+							'college_email'=>$university_email,
+							'college_phone_no'=>$university_phone,
+							'college_alter_phone_no'=>null,
+							'college_web_address'=>$university_webaddress,
+							'college_type'=>$university_type,
+							'college_affiliation_type'=>$uaffiliations,
+							'college_facilities'=>$ufacilities,
+							'college_frequent_visited_companies'=>null,
+							'college_genere'=>$university_genere,
+							'college_menhostel_details_type'=>null,
+							'college_womenhostel_details_type'=>null,
+							'college_status'=>$university_status,
+							'college_is_top'=>$university_is_top,
+							'college_is_top_visible_home'=>$university_is_visible_in_home_page,
+							'college_is_top_ranked'=>$university_is_top_ranked,
+							'college_is_featured'=>$university_is_featured,
+							'college_is_featured_visible_in_menu'=>$university_is_featured_visible_in_menu,
+							'college_is_visible_in_search'=>$university_is_featured_visible_in_menu,
+							'is_verified_by_admin'=>$university_verified,
+							'access_url'=>$access_url,
+							'access_url_slug'=>$url_slug,
+							'colllege_logo_alt_text'=>$colllege_logo_alt_text,
+							'colllege_banner_alt_text'=>$colllege_banner_alt_text,
+							'created_by'=>$this->data['userdata']->user_id
+						);
+
+						//print_obj($university_data_to_add);die;
+
+						$user_profile_pk_id=$this->im->add_college_data($university_data_to_add);
+
+						if($user_profile_pk_id){
+
+							$user_name=strtoupper(str_replace('@', '', $university_email));
+
+							$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+
+							$college_user_data=array(
+								'user_role'=>'3',
+								'user_profile_pk_id'=>$user_profile_pk_id,
+								'user_name'=>$user_name,
+								'user_password'=>$password,
+								'user_password_visible'=>encode_data('Password@123'),
+								'user_blocked'=>$university_status,
+								'user_email_verified'=>'1',
+								'created_by'=>$this->data['userdata']->user_id,
+								'created_by_type'=>$this->data['userdata']->user_role,
+								'user_currency'=>'4'
+							);
+
+							$user_pk_id=$this->um->add_user_data($college_user_data,FALSE,FALSE);
+
+							if($user_pk_id){
+								$this->im->update_college_data(array('college_user_id'=>$user_pk_id),array('college_id'=>$user_profile_pk_id));
+							}
+
+
+							if(!empty($university_same_group_colleges)){
+
+								$this->im->delete_college_group_data(array('group_inst_parent_id'=>$user_pk_id));
+								foreach ($university_same_group_colleges as $key => $value) {
+									$college_data=$this->im->get_college_specific_data(array('college_user_id'=>$value));
+									$group_data[]=array(
+										'group_inst_id'=>$value,
+										'group_inst_parent_id'=>$user_pk_id,
+										'group_inst_type'=>($college_data->college_utype=='3')?'university':'college',
+										'group_inst_name'=>strtoupper($college_data->college_name),
+										'group_inst_city'=>strtoupper($city_data->city_name),
+										'group_inst_state'=>strtoupper($state_data->state_name),
+										'group_inst_link'=>$college_data->access_url
+									);
+								}
+
+								$this->im->add_college_group_data($group_data);
+							}
+
+
+
+							$creator_id=decode_data(session_userdata('admin_id'));
+							$folder_name=$user_pk_id.'-'.url_slug($university_name);
+
+							$allowedTags='<p><strong><em><u><h1><h2><h3><h4><h5><h6><img>';
+ 							$allowedTags.='<li><ol><ul><span><div><br><ins><del>';
+
+							$university_general_info 		=	post_data('university_general_info');
+							$university_about_info 			= htmlspecialchars($_POST['university_about_info']);	//strip_tags(stripslashes($_POST['university_about_info']),$allowedTags);//post_data('university_about_info');
+							$university_facilities_info 	=	post_data('university_facilities_info');
+
+							$university_ranking_info 		=	post_data('university_ranking_info');
+
+							$university_placement_info 		= 	post_data('university_placement_info');
+
+							$infos=$this->im->get_inst_info_data(array('info_type'=>'1','info_type_id'=>$user_pk_id));
+
+							if(!empty($university_general_info) || !empty($university_about_info)){								
+
+								$info_data=array('info_type'=>'1','info_type_id'=>$user_pk_id,'info_value'=>$university_general_info,'info_value_about'=>$university_about_info,'info_value_facilities_intro'=>$university_facilities_info,'info_value_placement_intro'=>$university_placement_info,'info_creator_id'=>$creator_id);
+
+								if(!empty($infos)){
+									$this->im->update_inst_info_data($info_data,array('info_type'=>'1','info_type_id'=>$user_pk_id));
+								}else{
+									$this->im->add_inst_info_data($info_data);
+								}
+							}
+
+
+							if(!empty($university_ranking_info) || !empty($university_ranking_info)){	
+								$ranking_info_data=array('info_type'=>'2','info_type_id'=>$user_pk_id,'info_value_ranking_intro'=>$university_ranking_info,'info_creator_id'=>$creator_id);
+
+								if(!empty($infos)){
+									$this->im->update_inst_info_data($ranking_info_data,array('info_type'=>'2','info_type_id'=>$user_pk_id));
+								}else{
+									$this->im->add_inst_info_data($ranking_info_data);
+								}
+							}
+
+							if(!empty($university_ranking)){
+								foreach ($university_ranking as $key => $value) {
+
+									$university_ranking_datap[]=array(
+										'ranking_body_id'=>decode_data($value['body']),
+										'ranking_category_id'=>decode_data($value['category']),
+										'ranking_inst_id'=>$user_pk_id,
+										'ranking_inst_type'=>'university',
+										'ranking_year'=>$value['years'],
+										'ranking_value'=>$value['value'],
+										'ranking_value_outof'=>$value['category_value']
+									);
+								}
+
+								$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$user_pk_id));
+
+								$this->im->add_inst_ranking_data($university_ranking_datap,TRUE);
+							}else{
+
+								$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$user_pk_id));
+
+							}
+
+
+							if(!empty($college_faqus)){
+								foreach ($college_faqus as $key => $value) {
+
+									if(!empty($value['ques']) && !empty($value['ans'])){
+										$college_faq_datap[]=array(
+											'faq_data_id'=>$user_pk_id,
+											'faq_data_id_type'=>'1',
+											'faq_type'=>'1',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}	
+								}
+
+								$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$user_pk_id,'faq_data_id_type'=>'2','faq_type'=>'1'));
+
+								$this->sm->store_system_users_faqs_data($college_faq_datap,TRUE);
+							}
+
+
+							if(!empty($college_placement_faqs)){
+								foreach ($college_placement_faqs as $key => $value) {
+
+									if(!empty($value['ques']) && !empty($value['ans'])){
+										$college_placement_faqs_datap[]=array(
+											'faq_data_id'=>$user_pk_id,
+											'faq_data_id_type'=>'1',
+											'faq_type'=>'2',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}										
+								}
+
+								$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$user_pk_id,'faq_data_id_type'=>'1','faq_type'=>'2'));
+
+								$this->sm->store_system_users_faqs_data($college_placement_faqs_datap,TRUE);
+							}
+
+							if(!empty($college_scholarships_faqs)){
+								foreach ($college_scholarships_faqs as $key => $value) {
+
+									if(!empty($value['ques']) && !empty($value['ans'])){
+										$college_scholarships_faqs_datap[]=array(
+											'faq_data_id'=>$user_pk_id,
+											'faq_data_id_type'=>'1',
+											'faq_type'=>'3',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}										
+								}
+
+								$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$user_pk_id,'faq_data_id_type'=>'1','faq_type'=>'3'));
+
+								$this->sm->store_system_users_faqs_data($college_scholarships_faqs_datap,TRUE);
+							}
+
+
+							if(isset($_FILES['university_logo']) && $_FILES['university_logo']['name']!=''){
+
+								$log_file_custom_logo_title=$slug_value.'-logo';
+
+								$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'university_logo','user_file_type_id'=>$user_pk_id));
+
+								//print_obj($file_logo_found);die;
+
+								if(!empty($file_logo_found)){
+									if(is_file($file_logo_found->media_disk_path)){
+										@unlink($file_logo_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+									}
+								}
+
+								$ext = pathinfo($_FILES['university_logo']['name'][0], PATHINFO_EXTENSION);
+
+								$logo_data=array(
+									'file_size'=>'1',
+									'file_name'=>'university_logo',
+									'file_types'=>'png,jpg,jpeg,webp',
+									'file_folder'=>'colleges',
+									'file_custom_title'=>$log_file_custom_logo_title,
+									'file_compress'=>($ext==='webp')?false:true,
+									'file_compress_protocol'=>'webp',
+									'file_child_folder'=>$folder_name,
+									'file_uploaded_by'=>$this->data['userdata']->user_id
+								);
+
+								$file_id=$this->onUploadFiles($logo_data);
+
+								if(!empty($file_id) && $file_id>0){
+
+									$this->sm->delete_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_logo'));
+
+						            $user_logo_storage_data=array(
+						            	'user_file_storage_id'=>$file_id,
+						            	'user_file_type_id'=>$user_pk_id,
+						            	'user_file_type'=>'4',
+						            	'user_storage_type'=>'user_logo'
+						            );
+
+						            $this->sm->store_user_file($user_logo_storage_data);
+						        } 
+							}
+
+							if(isset($_FILES['university_banner']) && $_FILES['university_banner']['name']!=''){
+								$log_file_custom_banner_title=$slug_value.'-banner';
+
+								$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$user_pk_id));
+
+								if(!empty($file_banner_found)){
+									if(is_file($file_banner_found->media_disk_path)){
+										@unlink($file_banner_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+									}
+								}
+
+
+								$ext = pathinfo($_FILES['university_banner']['name'][0], PATHINFO_EXTENSION);
+
+								$banner_data=array(
+									'file_size'=>'25',
+									'file_name'=>'university_banner',
+									'file_types'=>'png,jpg,jpeg,webp',
+									'file_folder'=>'colleges',
+									'file_custom_title'=>$log_file_custom_banner_title,
+									'file_compress'=>($ext==='webp')?false:true,
+									'file_compress_protocol'=>'webp',
+									'file_child_folder'=>$folder_name,
+									'file_uploaded_by'=>$this->data['userdata']->user_id
+								);
+
+								$file_id=$this->onUploadFiles($banner_data);
+
+								if(!empty($file_id) && $file_id>0){
+									$this->sm->delete_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_banner'));
+						            $user_banner_storage_data=array(
+						            	'user_file_storage_id'=>$file_id,
+						            	'user_file_type_id'=>$user_pk_id,
+						            	'user_file_type'=>'3',
+						            	'user_storage_type'=>'user_banner'
+						            );
+
+						            $this->sm->store_user_file($user_banner_storage_data);
+						        }
+							}
+
+
+							if(!empty($college_intro_youtube_link)){
+								$param['youtube_link']=$college_intro_youtube_link;
+								$param['youtube_video_name']=$college_name;
+								$param['youtube_video_parent_id']=$user_pk_id;
+
+								$file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$user_pk_id));
+
+								if(!empty($file_intro_video_found)){
+									if(is_file($file_intro_video_found->media_disk_path)){
+										@unlink($file_intro_video_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+									}
+								}
+
+								$video_id=$this->onUploadFiles($param,'youtube');
+
+								if(!empty($video_id) && $video_id>0){
+									$this->sm->delete_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_intro_video'));
+						            $user_intro_video_storage_data=array(
+						            	'user_file_storage_id'=>$video_id,
+						            	'user_file_type_id'=>$user_pk_id,
+						            	'user_file_type'=>'3',
+						            	'user_storage_type'=>'user_intro_video'
+						            );
+
+						            $this->sm->store_user_file($user_intro_video_storage_data);
+						        }
+							}
+
+
+							//$this->generate_slug_data($user_pk_id,$university_info_menu_page_heading,'6','101','UNIVERSITY_NAME');
+
+							$return['success']='University has been added.';
+
+
+						}else{
+							$return['error']='University not added.';
+						}
+
+					}else{
+						$return['error']='University already exists in the system';
+					}
+				}else{
+					$university_id=decode_data($_university);
+
+					//echo $university_id;die;
+
+					$university_found=$this->im->get_college_profile_data(array('college_user_id'=>$university_id));
+
+					//print_obj($university_found);die;
+
+					if(!empty($university_found)){
+
+						$rankings='';
+
+						// $city_data=$this->com->get_city(array('city_id'=>$university_city));
+						// $state_data=$this->com->get_state(array('state_id'=>$university_state));
+						$_slug_value=$university_found->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+
+						$url_slug=url_slug($_slug_value);
+
+						//echo $url_slug;die;
+
+						$access_url=base_url($country_data->country_iso_code_4.'/'.$url_slug);
+
+						//print_obj($access_url);die;
+
+						if(empty($university_short_name)){
+							$university_short_name=abbreviate($university_name);
+						}else{
+							$university_short_name=$university_short_name;
+						}
+
+
+						$university_data_to_add=array(
+							'college_utype'=>'3',
+							'college_country_id'=>$university_country,
+							'college_currency_id'=>'4',
+							'college_grade_ids'=>decode_data($university_grades),
+							'college_state_id'=>$university_state,
+							'college_category_ids'=>$university_category,
+							'college_city_id'=>$university_city,
+							'college_university_id'=>null,
+							'college_course_ids'=>'',
+							'college_exam_ids'=>'',
+							'college_streams_ids'=>'',
+							'college_sub_streams_ids'=>'',
+							'college_ranking_ids'=>$rankings,
+							'college_govt_reg_code'=>null,
+							'college_name'=>$university_name,
+							'college_short_name'=>$university_short_name,
+							'college_estd_date'=>null,
+							'college_estd_year'=>$university_estd,
+							'college_address'=>$university_address,
+							'college_zipcode'=>$university_pincode,
+							'college_email'=>$university_email,
+							'college_phone_no'=>$university_phone,
+							'college_alter_phone_no'=>null,
+							'college_web_address'=>$university_webaddress,
+							'college_type'=>$university_type,
+							'college_affiliation_type'=>$uaffiliations,
+							'college_facilities'=>$ufacilities,
+							'college_frequent_visited_companies'=>null,
+							'college_genere'=>$university_genere,
+							'college_menhostel_details_type'=>null,
+							'college_womenhostel_details_type'=>null,
+							'college_status'=>$university_status,
+							'college_is_top'=>$university_is_top,
+							'college_is_top_visible_home'=>$university_is_visible_in_home_page,
+							'college_is_top_ranked'=>$university_is_top_ranked,
+							'college_is_featured'=>$university_is_featured,
+							'college_is_featured_visible_in_menu'=>$university_is_featured_visible_in_menu,
+							'college_is_visible_in_search'=>$university_is_featured_visible_in_menu,
+							'is_verified_by_admin'=>$university_verified,
+							'access_url'=>$access_url,
+							'access_url_slug'=>$url_slug,
+							'colllege_logo_alt_text'=>$colllege_logo_alt_text,
+							'colllege_banner_alt_text'=>$colllege_banner_alt_text,
+							'created_by'=>$this->data['userdata']->user_id
+						);
+
+						//print_obj($university_data_to_add);die;
+
+						$user_profile_pk_id=$this->im->update_college_data($university_data_to_add,array('college_user_id'=>$university_id));
+
+						//print_obj($user_profile_pk_id);die;
+
+						if($user_profile_pk_id){
+
+							if(!empty($university_same_group_colleges)){
+
+								$this->im->delete_college_group_data(array('group_inst_parent_id'=>$university_id));
+								foreach ($university_same_group_colleges as $key => $value) {
+									$college_data=$this->im->get_college_specific_data(array('college_user_id'=>$value));
+									$group_data[]=array(
+										'group_inst_id'=>$value,
+										'group_inst_parent_id'=>$university_id,
+										'group_inst_type'=>($college_data->college_utype=='3')?'university':'college',
+										'group_inst_name'=>strtoupper($college_data->college_name),
+										'group_inst_city'=>strtoupper($city_data->city_name),
+										'group_inst_state'=>strtoupper($state_data->state_name),
+										'group_inst_link'=>$college_data->access_url
+									);
+								}
+
+								$this->im->add_college_group_data($group_data);
+							}
+
+							$user_name=strtoupper(str_replace('@', '', $university_email));
+
+							$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+
+							$college_user_data=array(
+								'user_role'=>'3',
+								'user_name'=>$user_name,
+								'user_blocked'=>$university_status,
+								'user_email_verified'=>'1',
+								'updated_by'=>$this->data['userdata']->user_id,
+								'updated_by_type'=>$this->data['userdata']->user_role,
+								'user_currency'=>'4'
+							);
+
+							$user_pk_id=$this->um->update_user_data($college_user_data,array('user_id'=>$university_id));
+
+							$creator_id 					=	decode_data(session_userdata('admin_id'));
+							$folder_name 					=	$university_id.'-'.url_slug($university_name);
+
+							$university_general_info 		=	post_data('university_general_info');
+							$university_about_info 			=	post_data('university_about_info');
+							$university_facilities_info 	=	post_data('university_facilities_info');
+
+							$university_ranking_info 		=	post_data('university_ranking_info');
+
+							$university_placement_info 		= 	post_data('university_placement_info');
+
+							$infos=$this->im->get_inst_info_data(array('info_type'=>'1','info_type_id'=>$university_id));
+
+							if(!empty($university_general_info) || !empty($university_about_info)){								
+
+								$info_data=array('info_type'=>'1','info_type_id'=>$university_id,'info_value'=>$university_general_info,'info_value_about'=>$university_about_info,'info_value_facilities_intro'=>$university_facilities_info,'info_value_placement_intro'=>$university_placement_info,'info_creator_id'=>$creator_id,'info_updated_at'=>date('Y-m-d'));
+
+								if(!empty($infos)){
+									$this->im->update_inst_info_data($info_data,array('info_type'=>'1','info_type_id'=>$university_id));
+								}else{
+									$this->im->add_inst_info_data($info_data);
+								}
+							}
+
+
+							if(!empty($university_ranking_info) || !empty($university_ranking_info)){	
+								$ranking_info_data=array('info_type'=>'2','info_type_id'=>$university_id,'info_value_ranking_intro'=>$university_ranking_info,'info_creator_id'=>$creator_id);
+
+								if(!empty($infos)){
+									$this->im->update_inst_info_data($ranking_info_data,array('info_type'=>'2','info_type_id'=>$university_id));
+								}else{
+									$this->im->add_inst_info_data($ranking_info_data);
+								}
+							}
+
+							if(!empty($university_ranking)){
+								foreach ($university_ranking as $key => $value) {
+
+									$university_ranking_datap[]=array(
+										'ranking_body_id'=>decode_data($value['body']),
+										'ranking_category_id'=>decode_data($value['category']),
+										'ranking_inst_id'=>$university_id,
+										'ranking_inst_type'=>'university',
+										'ranking_year'=>$value['years'],
+										'ranking_value'=>$value['value'],
+										'ranking_value_outof'=>$value['category_value']
+									);
+								}
+
+								$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$university_id));
+
+								$this->im->add_inst_ranking_data($university_ranking_datap,TRUE);
+							}else{
+
+								$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$university_id));
+
+							}
+
+
+							if(!empty($college_faqus)){
+								foreach ($college_faqus as $key => $value) {
+
+									if(!empty($value['ques']) && !empty($value['ans'])){
+										$college_faq_datap[]=array(
+											'faq_data_id'=>$university_id,
+											'faq_data_id_type'=>'1',
+											'faq_type'=>'1',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}	
+								}
+
+								$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$university_id,'faq_data_id_type'=>'2','faq_type'=>'1'));
+
+								$this->sm->store_system_users_faqs_data($college_faq_datap,TRUE);
+							}
+
+
+							if(!empty($college_placement_faqs)){
+								foreach ($college_placement_faqs as $key => $value) {
+
+									if(!empty($value['ques']) && !empty($value['ans'])){
+										$college_placement_faqs_datap[]=array(
+											'faq_data_id'=>$university_id,
+											'faq_data_id_type'=>'1',
+											'faq_type'=>'2',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}										
+								}
+
+								$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$university_id,'faq_data_id_type'=>'1','faq_type'=>'2'));
+
+								$this->sm->store_system_users_faqs_data($college_placement_faqs_datap,TRUE);
+							}
+
+							if(!empty($college_scholarships_faqs)){
+								foreach ($college_scholarships_faqs as $key => $value) {
+
+									if(!empty($value['ques']) && !empty($value['ans'])){
+										$college_scholarships_faqs_datap[]=array(
+											'faq_data_id'=>$university_id,
+											'faq_data_id_type'=>'1',
+											'faq_type'=>'3',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}										
+								}
+
+								$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$university_id,'faq_data_id_type'=>'1','faq_type'=>'3'));
+
+								$this->sm->store_system_users_faqs_data($college_scholarships_faqs_datap,TRUE);
+							}
+
+							//print_obj($_FILES['university_logo']);die;
+
+
+							if(isset($_FILES['university_logo']) && $_FILES['university_logo']['name']!=''){
+
+								$log_file_custom_logo_title=$slug_value.'-logo';
+
+								$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'university_logo','user_file_type_id'=>$university_id));
+
+								//print_obj($file_logo_found);die;
+
+								if(!empty($file_logo_found)){
+									if(is_file($file_logo_found->media_disk_path)){
+										@unlink($file_logo_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+									}
+								}
+
+								$ext = pathinfo($_FILES['university_logo']['name'][0], PATHINFO_EXTENSION);
+
+								$logo_data=array(
+									'file_size'=>'1',
+									'file_name'=>'university_logo',
+									'file_types'=>'png,jpg,jpeg,webp',
+									'file_folder'=>'colleges',
+									'file_custom_title'=>$log_file_custom_logo_title,
+									'file_compress'=>($ext==='webp')?false:true,
+									'file_compress_protocol'=>($ext==='webp')?'':'webp',
+									'file_child_folder'=>$folder_name,
+									'file_uploaded_by'=>$this->data['userdata']->user_id
+								);
+
+								//print_obj($logo_data);die;
+
+								$file_id=$this->onUploadFiles($logo_data);
+
+								//print_obj($file_id);die;
+
+								if(!empty($file_id) && $file_id>0){
+
+									$this->sm->delete_user_file(array('user_file_type_id'=>$university_id,'user_storage_type'=>'user_logo'));
+
+						            $user_logo_storage_data=array(
+						            	'user_file_storage_id'=>$file_id,
+						            	'user_file_type_id'=>$university_id,
+						            	'user_file_type'=>'4',
+						            	'user_storage_type'=>'user_logo'
+						            );
+
+						            $this->sm->store_user_file($user_logo_storage_data);
+						        } 
+							}
+
+
+							//print_obj($_FILES['university_banner']);die;
+
+							if(isset($_FILES['university_banner']) && $_FILES['university_banner']['name']!=''){
+								$log_file_custom_banner_title=$slug_value.'-banner';
+
+								//echo $log_file_custom_banner_title;die;
+
+								$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$university_id));
+
+								if(!empty($file_banner_found)){
+									if(is_file($file_banner_found->media_disk_path)){
+										@unlink($file_banner_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+									}
+								}
+
+
+								$ext = pathinfo($_FILES['university_banner']['name'][0], PATHINFO_EXTENSION);
+
+								$banner_data=array(
+									'file_size'=>'25',
+									'file_name'=>'university_banner',
+									'file_types'=>'png,jpg,jpeg,webp',
+									'file_folder'=>'colleges',
+									'file_custom_title'=>$log_file_custom_banner_title,
+									'file_compress'=>($ext==='webp')?false:true,
+									'file_compress_protocol'=>'webp',
+									'file_child_folder'=>$folder_name,
+									'file_uploaded_by'=>$this->data['userdata']->user_id
+								);
+
+								$file_id=$this->onUploadFiles($banner_data);
+
+								//print_obj($file_id);die;
+
+								if(!empty($file_id) && $file_id>0){
+									$this->sm->delete_user_file(array('user_file_type_id'=>$university_id,'user_storage_type'=>'user_banner'));
+						            $user_banner_storage_data=array(
+						            	'user_file_storage_id'=>$file_id,
+						            	'user_file_type_id'=>$university_id,
+						            	'user_file_type'=>'3',
+						            	'user_storage_type'=>'user_banner'
+						            );
+
+						            $this->sm->store_user_file($user_banner_storage_data);
+						        }
+							}
+
+
+							if(!empty($college_intro_youtube_link)){
+								$param['youtube_link']=$college_intro_youtube_link;
+								$param['youtube_video_name']=$college_name;
+								$param['youtube_video_parent_id']=$university_id;
+
+								$file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$university_id));
+
+								if(!empty($file_intro_video_found)){
+									if(is_file($file_intro_video_found->media_disk_path)){
+										@unlink($file_intro_video_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+									}
+								}
+
+								$video_id=$this->onUploadFiles($param,'youtube');
+
+								if(!empty($video_id) && $video_id>0){
+									$this->sm->delete_user_file(array('user_file_type_id'=>$university_id,'user_storage_type'=>'user_intro_video'));
+						            $user_intro_video_storage_data=array(
+						            	'user_file_storage_id'=>$video_id,
+						            	'user_file_type_id'=>$university_id,
+						            	'user_file_type'=>'3',
+						            	'user_storage_type'=>'user_intro_video'
+						            );
+
+						            $this->sm->store_user_file($user_intro_video_storage_data);
+						        }
+							}
+
+
+							//$this->generate_slug_data($university_id,$university_info_menu_page_heading,'6','101','UNIVERSITY_NAME');
+
+							$return['success']='University has been updted.';
+
+
+						}else{
+							$return['error']='University not updted.';
+						}
+
+					}else{
+						$return['error']='University not found in the system.';
+					}
+
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	private function generate_slug_data($user_pk_id,$page_heading='',$slug_type='7',$menu_link_type='10',$search_data_type='COLLEGE_NAME'){
+
+		$college_data=$this->im->get_college_data(array('college_user_id'=>$user_pk_id));
+		$slug_found=$this->sm->get_slug(array('slug_type_id'=>$user_pk_id,'slug_type'=>$slug_type));
+		$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$user_pk_id));
+
+		$country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+		$city_data=$this->com->get_city(array('city_id'=>$college_data->college_city_id));
+		$state_data=$this->com->get_state(array('state_id'=>$college_data->college_state_id));
+		$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+
+
+		$city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_type_id'=>$city_data->city_id));
+		$state_slug=$this->sm->get_slug(array('slug_type'=>'1','slug_type_id'=>$state_data->state_id));
+		$slug_value=url_slug($_slug_value);
+
+		$listitem_2_slug=base_url($country_data->country_iso_code_4.'/colleges/'.$state_slug->slug_value.'/'.$city_slug->slug_value);
+
+		// $menu_main_widget=serialize(
+		// 	array("front_info_section","front_course_fees_section","front_course_fees_course_section","front_course_fees_brief_with_ads_section","front_placement_section","front_placement_details_section","front_facilities_section","front_news_brief_section","front_google_maps_section","front_wayto_rating_section","front_nearby_colleges_universities_section","front_college_comment_section")
+		// );
+
+		$menu_main_widget=serialize(
+			array('front_info_university_section','front_course_fees_brief_with_ads_section','front_placement_section','front_placement_details_section','front_facilities_section','front_news_brief_section','front_google_maps_section','front_nearby_colleges_universities_section','front_college_comment_section')
+		);
+
+
+		$menu_data=array(
+			'menu_category_id'=>'2',
+			'menu_parent_id'=>'0',
+			'menu_country_id'=>$country_data->country_id,
+			'menu_country_code'=>$country_data->country_iso_code_2,
+			'menu_country'=>$country_data->country_name,
+			'menu_type'=>'1',
+			'menu_link_type'=>'10',
+			'menu_link_id'=>$user_pk_id,
+			'menu_link'=>$college_data->access_url,
+			'menu_name'=>'Info',
+			'menu_name_alias'=>'info',
+			'menu_slug'=>'info',
+			'menu_serial'=>'1',
+			'menu_column_id'=>'0',
+			'menu_column'=>'0',
+			'menu_is_upper_top'=>'2',
+			'menu_is_top'=>'2',
+			'menu_is_footer'=>'2',
+			'menu_is_inner'=>'1',
+			'menu_is_connected'=>'0',
+			'menu_open_new_tab'=>'2',
+			'menu_show_in_exam_list'=>'2',
+			'menu_is_active'=>'1'
+		);
+
+
+		$menu_found=$this->sm->get_menues(array('menu_name_alias'=>'info','menu_slug'=>'info','menu_link_type'=>$menu_link_type,'menu_link_id'=>$user_pk_id));
+
+		if(empty($menu_found)){
+			$menu_id=$this->sm->store_menu($menu_data);
+		}else if(!empty($menu_found)){
+			$menu_id=$menu_found->menu_id;
+		}
+		
+
+		$breadcrumb=array(
+			'HOME'=>base_url(),
+			strtoupper($city_data->city_name)=>$listitem_2_slug,
+			strtoupper($college_data->college_short_name)=>null
+		);
+
+		$date_modified=date('Y-m-d H:i:s');
+		$date_published=date('Y-m-d H:i:s');
+
+
+		//SLUG DATA
+
+		$slug_found=$this->sm->get_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$user_pk_id,'slug_type'=>$slug_type));
+
+		if(empty($slug_found)){
+			$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$user_pk_id,'slug_type'=>$slug_type));
+			if($inserted){
+				//$this->im->update_college_data(array('access_url'=>$college_data->access_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$user_pk_id));
+
+				if(!empty($page_heading)){
+					$page_heading=$page_heading;
+				}else{
+					$page_heading=strtoupper($college_data->college_short_name).': Courses, Fees, Admission, Placements, Rankings, Scholarship';
+				}
+
+				$meta_desc=ucwords($college_data->college_name).' - ['.strtoupper($college_data->college_short_name).'], '.ucwords($city_data->city_name).', '.ucwords($state_data->state_name).' Application Form, Admissions, Contact, Website, Map.';
+
+				$keywords=generateKeywordsFromText($page_heading.','.$meta_desc);
+
+
+				$slug_url_data_to_store=array(
+					'url_type'=>'college_static_url',
+					'url_glob_type'=>'college_inner_menu',
+					'url_type_id'=>$college_data->college_user_id,
+					'url_sub_type'=>'info',
+					'url_sub_type_id'=>$menu_id,
+					'url_state'=>$state_data->state_id,
+					'url_country'=>$college_data->college_country_id,
+					'url_city'=>$city_data->city_id,
+					'url_meta_heading'=>$page_heading,
+					'url_meta_title'=>$page_heading,
+					'url_meta_key_words'=>$keywords,
+					'url_meta_desc'=>$meta_desc,
+					'url_og_title'=>$page_heading,
+					'url_og_desc'=>$meta_desc,
+					'url_page_heading'=>$page_heading,
+					'url_breadcrumb'=>json_encode($breadcrumb),
+					'url_value'=>$college_data->access_url,
+					'url_type_in_notification'=>'no',
+					'url_priority'=>'0.8',
+					'url_data_change_freq'=>'monthly',
+					'url_last_update'=>$date_published,
+					'url_active'=>'1',
+					'updated_by'=>$this->data['userdata']->user_id,
+					'updated_at'=>$date_published
+				);
+
+				//print_obj($slug_url_data);die;
+
+
+				$slug_url_data=$this->sm->get_slug_urls(array('url_value'=>$college_data->access_url));
+
+				if(empty($slug_url_data)){
+					$slug_url_id=$this->sm->store_slug_urls($slug_url_data_to_store);
+				}else if(!empty($slug_url_data)){
+					$slug_data_updated=$this->sm->update_slug_urls($slug_url_data_to_store,array('url_value'=>$college_data->access_url));
+					$slug_url_id=$slug_url_data->url_id;
+				}
+			}
+		}else{
+			$inserted=$this->sm->update_slug(array('slug_value'=>$slug_value),array('slug_type_id'=>$user_pk_id,'slug_type'=>$slug_type));
+
+			if($inserted){
+				if(!empty($page_heading)){
+					$page_heading=$page_heading;
+				}else{
+					$page_heading=strtoupper($college_data->college_short_name).': Courses, Fees, Admission, Placements, Rankings, Scholarship';
+				}
+
+				$meta_desc=ucwords($college_data->college_name).' - ['.strtoupper($college_data->college_short_name).'], '.ucwords($city_data->city_name).', '.ucwords($state_data->state_name).' Application Form, Admissions, Contact, Website, Map.';
+
+				$keywords=generateKeywordsFromText($page_heading.','.$meta_desc);
+
+
+				$slug_url_data_to_store=array(
+					'url_type'=>'college_static_url',
+					'url_glob_type'=>'college_inner_menu',
+					'url_type_id'=>$college_data->college_user_id,
+					'url_sub_type'=>'info',
+					'url_sub_type_id'=>$menu_id,
+					'url_state'=>$state_data->state_id,
+					'url_country'=>$college_data->college_country_id,
+					'url_city'=>$city_data->city_id,
+					'url_meta_heading'=>$page_heading,
+					'url_meta_title'=>$page_heading,
+					'url_meta_key_words'=>$keywords,
+					'url_meta_desc'=>$meta_desc,
+					'url_og_title'=>$page_heading,
+					'url_og_desc'=>$meta_desc,
+					'url_page_heading'=>$page_heading,
+					'url_breadcrumb'=>json_encode($breadcrumb),
+					'url_value'=>$college_data->access_url,
+					'url_type_in_notification'=>'no',
+					'url_priority'=>'0.8',
+					'url_data_change_freq'=>'monthly',
+					'url_last_update'=>$date_published,
+					'url_active'=>'1',
+					'updated_by'=>$this->data['userdata']->user_id,
+					'updated_at'=>$date_published
+				);
+
+				//print_obj($slug_url_data);die;
+
+
+				$slug_url_data=$this->sm->get_slug_urls(array('url_value'=>$college_data->access_url));
+
+				if(empty($slug_url_data)){
+					$slug_url_id=$this->sm->store_slug_urls($slug_url_data_to_store);
+				}else if(!empty($slug_url_data)){
+					$slug_data_updated=$this->sm->update_slug_urls($slug_url_data_to_store,array('url_value'=>$college_data->access_url));
+					$slug_url_id=$slug_url_data->url_id;
+				}
+			}
+		}
+
+		$college_address=$college_data->college_address.','.ucwords($city_data->city_name).','.ucwords($state_data->state_name).','.ucwords($country_data->country_name).','.$college_data->college_pincode;
+
+		$college_formatted_name=ucwords($college_data->college_name).' - ['.$college_data->college_short_name.'], '.ucwords($city_data->city_name).', '.ucwords($state_data->state_name);
+
+		$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_logo','user_file_type'=>$college_data->college_utype));
+
+		if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+            $college_logo=$_college_logo->media_disk_path_relative;
+        }else{
+            $college_logo=base_url().'uploads/app/default/no.jpg';
+        }
+
+
+		//SEARCH DATA
+
+		$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id,'search_data_access_url'=>$college_data->access_url));
+
+		$system_data_search_inserted=array(
+			'search_data_type'=>$search_data_type,
+			'search_data_name'=>strtoupper($college_data->college_name),
+			'search_data_short_name'=>$college_data->college_short_name,
+			'search_data_type_id'=>$user_pk_id,
+			'search_data_country_id'=>$country_data->country_id,
+			'search_data_country'=>$country_data->country_name,
+			'search_data_state_id'=>$college_data->college_state_id,
+			'search_data_state_name'=>$state_data->state_name,
+			'search_data_city_name'=>$city_data->city_name,
+			'search_data_city_id'=>$college_data->college_city_id,
+			'search_data_address'=>$college_address,
+			'search_data_meta_title'=>$page_heading,
+			'search_data_meta_desc'=>$meta_desc,
+			'search_data_meta_keywords'=>$keywords,
+			'search_data_og_title'=>$page_heading,
+			'search_data_og_desc'=>$meta_desc,
+			'search_storage_access_url'=>$college_logo,
+			'search_data_access_url'=>$college_data->access_url
+		);
+
+		if(empty($system_data_search)){									
+			$this->sm->store_system_search_data($system_data_search_inserted);
+		}else{
+			$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id));
+		}
+
+
+
+		//APPLICATION JSON LD
+
+		
+
+       
+
+		$system_general_settings=$this->sm->get_settings('settings_value',array('settings_key'=>'config_system_general_settings'));
+
+				// $settings_general_value=(!empty($system_general_settings->settings_value))?json_decode($system_general_settings->settings_value):'';
+
+				// if(isset($settings_general_value->system_logo) && $settings_general_value->system_logo!=''){
+		  //         $system_logo=$settings_general_value->system_logo;
+		  //       }else{
+		  //         $system_logo='https://www.waytoadmissions.com/public/data/app/2021/RToXI5Hjmg.webp';
+		  //       }
+
+        $system_logo='https://www.waytoadmissions.com/public/data/app/2021/RToXI5Hjmg.webp';
+
+
+        //CollegeOrUniversity
+
+        
+
+		$college_or_university='{
+		  "@context": "http://schema.org/",
+		  "@type": "CollegeOrUniversity",
+		  "name": "'.$college_formatted_name.'",
+		  "url": "'.$college_data->college_web_address.'",
+		  "email": "'.$college_data->college_email.'",
+		  "telephone": "'.$college_data->college_phone_no.'",
+		  "logo": "'.$college_logo.'",
+		  "address": {
+		    "@type": "PostalAddress",
+		    "streetAddress": "'.$college_address.'"
+		  }
+		}';
+
+		$CollegeOrUniversity_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$college_data->access_url,'slug_type_json_ld'=>'CollegeOrUniversity'));
+
+		if(empty($CollegeOrUniversity_struct_data)){
+
+			$CollegeOrUniversity_data_to_store=array(
+				'strcut_slug_url_id'=>$slug_url_id,
+				'slug_type_json_ld'=>'CollegeOrUniversity',
+				'slug_type_json_ld_data'=>$college_or_university,
+				'slug_url'=>$college_data->access_url,
+				'date_modified'=>$date_modified,
+				'date_published'=>$date_published
+			);
+
+			$this->sm->store_slug_struct_data($CollegeOrUniversity_data_to_store);
+		}else{
+			$this->sm->update_slug_struct_data($CollegeOrUniversity_data_to_store,array('slug_url'=>$college_data->access_url,'slug_type_json_ld'=>'CollegeOrUniversity'));
+		}
+
+
+		//Breacdcrumb
+
+		$breadcrumb_data='
+		{
+		  "@context": "https://schema.org",
+		  "@type": "WebPage",
+		  "breadcrumb": {
+		    "@type": "BreadcrumbList",
+		    "itemListElement": [
+		      {
+		        "@type": "ListItem",
+		        "position": 1,
+		        "name": "Home",
+		        "item": "'.base_url().'"
+		      },
+		      {
+		        "@type": "ListItem",
+		        "position": 2,
+		        "name": "'.ucwords($city_data->city_name).'",
+		        "item": "'.$listitem_2_slug.'"
+		      },
+		      {
+		        "@type": "ListItem",
+		        "position": 3,
+		        "name": "'.strtoupper($college_data->college_short_name).'",
+		        "item": "'.$college_data->access_url.'"
+		      }
+		    ]
+		  }
+		}';
+
+
+		$breadcrumb_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$college_data->access_url,'slug_type_json_ld'=>'BreadcrumbList'));
+
+		if(empty($breadcrumb_struct_data)){
+
+			$breadcrumb_data_to_store=array(
+				'strcut_slug_url_id'=>$slug_url_id,
+				'slug_type_json_ld'=>'BreadcrumbList',
+				'slug_type_json_ld_data'=>$breadcrumb_data,
+				'slug_url'=>$college_data->access_url,
+				'date_modified'=>$date_modified,
+				'date_published'=>$date_published
+			);
+
+			$this->sm->store_slug_struct_data($breadcrumb_data_to_store);
+		}else{
+			$this->sm->update_slug_struct_data($breadcrumb_data_to_store,array('slug_url'=>$college_data->access_url,'slug_type_json_ld'=>'BreadcrumbList'));
+		}
+
+
+
+		//ARTICLE DATA
+
+		$article_data='{
+		  "@context": "http://schema.org/",
+		  "@type": "Article",
+		  "mainEntityOfPage": {
+		    "@type": "WebPage",
+		    "@id": "'.base_url().'"
+		  },
+		  "headline": "About College",
+		  "dateModified": "'.date('c',strtotime($date_modified)).'",
+		  "datePublished": "'.date('c',strtotime($date_published)).'",
+		  "author": {
+		    "@type": "Person",
+		    "name": "Waytoadmissions Team"
+		  },
+		  "publisher": {
+		    "@type": "Organization",
+		    "name": "Waytoadmissions",
+		    "logo": {
+		      "@type": "ImageObject",
+		      "name": "Waytoadmissions",
+		      "url": "'.$system_logo.'",
+		      "height": "600",
+		      "width": "88"
+		    }
+		  },
+		  "image": {
+		    "@type": "ImageObject",
+		    "url": "'.$system_logo.'",
+		    "height": "600",
+		    "width": "88"
+		  }
+		}';
+
+
+		$article_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$college_data->access_url,'slug_type_json_ld'=>'Article'));
+
+		if(empty($article_struct_data)){
+
+			$article_data_to_store=array(
+				'strcut_slug_url_id'=>$slug_url_id,
+				'slug_type_json_ld'=>'Article',
+				'slug_type_json_ld_data'=>$article_data,
+				'slug_url'=>$college_data->access_url,
+				'date_modified'=>$date_modified,
+				'date_published'=>$date_published
+			);
+
+			$this->sm->store_slug_struct_data($article_data_to_store);
+		}else{
+			$this->sm->update_slug_struct_data($article_data_to_store,array('slug_url'=>$college_data->access_url,'slug_type_json_ld'=>'Article'));
+		}
+
+
+	}
+
+
+	public function onCreateInstInnermenues(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_inst_id=post_data('_inst_id');
+
+				$inner_menu_id=post_data('college_inner_menu_id');
+				$inner_menu_type=post_data('college_inner_menu_type');
+				$inner_menu_name=post_data('college_inner_menu_name');
+				$inner_menu_status=post_data('college_inner_menu_status');
+
+				$inner_menu_serial=post_data('college_inner_menu_serial');
+
+				$inner_menu_page_heading=post_data('college_inner_menu_page_heading');
+
+				$inner_menu_page_description=post_data('college_inner_menu_meta_description');
+
+				$inner_menu_type_name=post_data('college_inner_menu_name');
+
+				$search_data_type='COLLEGE_NAME';//post_data('search_data_type');
+
+				$menu_main_widget=$this->input->post('menu_widgets');
+
+				$date_modified=date('Y-m-d H:i:s');
+				$date_published=date('Y-m-d H:i:s');
+
+				if(!empty($_inst_id)){
+					$inst_id=decode_data($_inst_id);
+
+					if(is_numeric($inst_id)){
+
+						$college_data=$this->im->get_college_data(array('college_user_id'=>$inst_id));
+						$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$inst_id));
+						$country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+						$city_data=$this->com->get_city(array('city_id'=>$college_data->college_city_id));
+						$state_data=$this->com->get_state(array('state_id'=>$college_data->college_state_id));
+
+						$city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_type_id'=>$city_data->city_id));
+						$state_slug=$this->sm->get_slug(array('slug_type'=>'1','slug_type_id'=>$state_data->state_id));
+						$slug_value=url_slug($_slug_value);
+
+						$listitem_2_slug=base_url($country_data->country_iso_code_4.'/colleges/'.$state_slug->slug_value.'/'.$city_slug->slug_value);
+
+						$menu_slug=url_slug($inner_menu_name);
+
+						//echo $inner_menu_type;die;
+
+						if($inner_menu_type==16){
+
+							$college_inner_menu_other_link=post_data('college_inner_menu_other_link');
+
+							$inner_menu_other_link=explode('#', $college_inner_menu_other_link);
+
+							$link_type=$inner_menu_other_link[0];
+							$link_type_value=$inner_menu_other_link[1];
+
+							$menu_url=$link_type_value;
+
+						}else{
+							$menu_url=$college_data->access_url.'/'.$menu_slug;
+						}
+
+						
+
+						$slug_data=$this->sm->get_slug_urls(array('url_value'=>$menu_url));
+
+						if(empty($inner_menu_id)){
+							if(!empty($menu_main_widget)){
+								$__menu_main_widget=serialize($menu_main_widget);
+							}else{
+								$__menu_main_widget='';
+							}
+
+							$menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_parent_id'=>'0',
+								'menu_country_id'=>$country_data->country_id,
+								'menu_country_code'=>$country_data->country_iso_code_2,
+								'menu_country'=>$country_data->country_name,
+								'menu_type'=>$inner_menu_type,
+								'menu_link_type'=>'10',
+								'menu_link_id'=>$inst_id,
+								'menu_link'=>$menu_url,
+								'menu_name'=>$inner_menu_name,
+								'menu_name_alias'=>$inner_menu_type_name,
+								'menu_slug'=>$menu_slug,
+								'menu_serial'=>$inner_menu_serial,
+								'menu_column_id'=>'0',
+								'menu_column'=>'0',
+								'menu_is_upper_top'=>'2',
+								'menu_is_top'=>'2',
+								'menu_is_footer'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_is_connected'=>'0',
+								'menu_open_new_tab'=>'2',
+								'menu_show_in_exam_list'=>'2',
+								'menu_is_active'=>'1',
+								'menu_main_widget'=>$__menu_main_widget
+							);
+
+
+							$menu_id=$this->sm->store_menu($menu_data);
+
+							if(empty($slug_data)){
+
+								if($menu_id){
+
+									$keywords=generateKeywordsFromText($inner_menu_page_heading.','.$inner_menu_page_description);
+
+									$breadcrumb=array(
+										'HOME'=>base_url(),
+										strtoupper($city_data->city_name)=>$listitem_2_slug,
+										strtoupper($college_data->college_short_name)=>$college_data->access_url,
+										strtoupper($inner_menu_name)=>null
+									);
+
+									$url_sub_type='college_inner_menu_'.strtolower(str_replace('&amp;', '_', $inner_menu_type_name)).'_url';
+
+									$slug_url_data_to_store=array(
+										'url_type'=>'college_static_url',
+										'url_glob_type'=>'college_inner_menu',
+										'url_type_id'=>$college_data->college_user_id,
+										'url_sub_type'=>$url_sub_type,
+										'url_sub_type_id'=>$menu_id,
+										'url_state'=>$state_data->state_id,
+										'url_country'=>$college_data->college_country_id,
+										'url_city'=>$city_data->city_id,
+										'url_meta_heading'=>$inner_menu_page_heading,
+										'url_meta_title'=>$inner_menu_page_heading,
+										'url_meta_key_words'=>$keywords,
+										'url_meta_desc'=>$inner_menu_page_description,
+										'url_og_title'=>$inner_menu_page_heading,
+										'url_og_desc'=>$inner_menu_page_description,
+										'url_page_heading'=>$inner_menu_page_heading,
+										'url_breadcrumb'=>json_encode($breadcrumb),
+										'url_value'=>$menu_url,
+										'url_type_in_notification'=>'no',
+										'url_priority'=>'0.6',
+										'url_data_change_freq'=>'monthly',
+										'url_last_update'=>$date_published,
+										'url_active'=>'1',
+										'updated_by'=>$this->data['userdata']->user_id,
+										'updated_at'=>$date_published
+									);
+
+									$slug_url_id=$this->sm->store_slug_urls($slug_url_data_to_store);
+
+
+									$college_address=$college_data->college_address.','.ucwords($city_data->city_name).','.ucwords($state_data->state_name).','.ucwords($country_data->country_name).','.$college_data->college_pincode;
+
+									$college_formatted_name=ucwords($college_data->college_name).' - ['.$college_data->college_short_name.'], '.ucwords($city_data->city_name).', '.ucwords($state_data->state_name);
+
+									$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_logo','user_file_type'=>$college_data->college_utype));
+
+									if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+							            $college_logo=$_college_logo->media_disk_path_relative;
+							        }else{
+							            $college_logo=base_url().'uploads/app/default/no.jpg';
+							        }
+
+
+									//SEARCH DATA
+
+									if($inner_menu_type=='1'){
+										//$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id,'search_data_access_url'=>$menu_url));
+
+										$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id));
+
+										$system_data_search_inserted=array(
+											'search_data_type'=>$search_data_type,
+											'search_data_name'=>strtoupper($inner_menu_page_heading),
+											'search_data_short_name'=>$college_data->college_short_name,
+											'search_data_type_id'=>$inst_id,
+											'search_data_country_id'=>$country_data->country_id,
+											'search_data_country'=>$country_data->country_name,
+											'search_data_state_id'=>$college_data->college_state_id,
+											'search_data_state_name'=>$state_data->state_name,
+											'search_data_city_name'=>$city_data->city_name,
+											'search_data_city_id'=>$college_data->college_city_id,
+											'search_data_address'=>$college_address,
+											'search_data_meta_title'=>$inner_menu_page_heading,
+											'search_data_meta_desc'=>$inner_menu_page_description,
+											'search_data_meta_keywords'=>$keywords,
+											'search_data_og_title'=>$inner_menu_page_heading,
+											'search_data_og_desc'=>$inner_menu_page_description,
+											'search_storage_access_url'=>$college_logo,
+											'search_data_access_url'=>$menu_url,
+											'search_data_tags'=>''
+										);
+
+										if(empty($system_data_search)){									
+											$this->sm->store_system_search_data($system_data_search_inserted);
+										}else{
+											$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id));
+										}
+									}
+
+										
+
+									//Breacdcrumb
+
+									$breadcrumb_data='
+									{
+									  "@context": "https://schema.org",
+									  "@type": "WebPage",
+									  "breadcrumb": {
+									    "@type": "BreadcrumbList",
+									    "itemListElement": [
+									      {
+									        "@type": "ListItem",
+									        "position": 1,
+									        "name": "Home",
+									        "item": "'.base_url().'"
+									      },
+									      {
+									        "@type": "ListItem",
+									        "position": 2,
+									        "name": "'.ucwords($city_data->city_name).'",
+									        "item": "'.$listitem_2_slug.'"
+									      },
+									      {
+									        "@type": "ListItem",
+									        "position": 3,
+									        "name": "'.strtoupper($college_data->college_short_name).'",
+									        "item": "'.$college_data->access_url.'"
+									      },
+									      {
+									        "@type": "ListItem",
+									        "position": 4,
+									        "name": "'.strtoupper($inner_menu_name).'",
+									        "item": "'.$menu_url.'"
+									      }
+									    ]
+									  }
+									}';
+
+
+									$breadcrumb_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$menu_url,'slug_type_json_ld'=>'BreadcrumbList'));
+
+									if(empty($breadcrumb_struct_data)){
+
+										$breadcrumb_data_to_store=array(
+											'strcut_slug_url_id'=>$slug_url_id,
+											'slug_type_json_ld'=>'BreadcrumbList',
+											'slug_type_json_ld_data'=>$breadcrumb_data,
+											'slug_url'=>$menu_url,
+											'date_modified'=>$date_modified,
+											'date_published'=>$date_published
+										);
+
+										$this->sm->store_slug_struct_data($breadcrumb_data_to_store);
+									}else{
+										$this->sm->update_slug_struct_data($breadcrumb_data_to_store,array('slug_url'=>$menu_url,'slug_type_json_ld'=>'BreadcrumbList'));
+									}
+
+
+									//CollegeOrUniversity
+
+									$college_or_university='{
+									  "@context": "http://schema.org/",
+									  "@type": "CollegeOrUniversity",
+									  "name": "'.$college_formatted_name.'",
+									  "url": "'.$college_data->college_web_address.'",
+									  "email": "'.$college_data->college_email.'",
+									  "telephone": "'.$college_data->college_phone_no.'",
+									  "logo": "'.$college_logo.'",
+									  "address": {
+									    "@type": "PostalAddress",
+									    "streetAddress": "'.$college_address.'"
+									  }
+									}';
+
+									$CollegeOrUniversity_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$menu_url,'slug_type_json_ld'=>'CollegeOrUniversity'));
+
+									if(empty($CollegeOrUniversity_struct_data)){
+
+										$CollegeOrUniversity_data_to_store=array(
+											'strcut_slug_url_id'=>$slug_url_id,
+											'slug_type_json_ld'=>'CollegeOrUniversity',
+											'slug_type_json_ld_data'=>$college_or_university,
+											'slug_url'=>$college_data->access_url,
+											'date_modified'=>$date_modified,
+											'date_published'=>$date_published
+										);
+
+										$this->sm->store_slug_struct_data($CollegeOrUniversity_data_to_store);
+									}else{
+										$this->sm->update_slug_struct_data($CollegeOrUniversity_data_to_store,array('slug_url'=>$menu_url,'slug_type_json_ld'=>'CollegeOrUniversity'));
+									}
+
+									$return['success']='Menu has been created successfully.';
+
+								}else{
+									$return['error']='Menu has not been created';
+								}
+							}else{
+								$return['success']='Menu has been created but URL already exists';
+							}
+						}else if(!empty($inner_menu_id)){
+							$menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_parent_id'=>'0',
+								'menu_country_id'=>$country_data->country_id,
+								'menu_country_code'=>$country_data->country_iso_code_2,
+								'menu_country'=>$country_data->country_name,
+								'menu_type'=>$inner_menu_type,
+								'menu_link_type'=>'10',
+								'menu_link_id'=>$inst_id,
+								'menu_link'=>$menu_url,
+								'menu_name'=>ucwords($inner_menu_name),
+								'menu_name_alias'=>$inner_menu_type_name,
+								'menu_slug'=>$menu_slug,
+								'menu_serial'=>$inner_menu_serial,
+								'menu_column_id'=>'0',
+								'menu_column'=>'0',
+								'menu_is_upper_top'=>'2',
+								'menu_is_top'=>'2',
+								'menu_is_footer'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_is_connected'=>'0',
+								'menu_open_new_tab'=>'2',
+								'menu_show_in_exam_list'=>'2',
+								'menu_is_active'=>'1',
+								'menu_main_widget'=>$menu_main_widget
+							);
+
+							$updated=$this->sm->update_menu($menu_data,array('menu_id'=>$inner_menu_id,'menu_link_type'=>'10',
+								'menu_link_id'=>$inst_id));
+
+							if($updated){
+								$bredcrumb=array(
+									'HOME'=>base_url(),
+									strtoupper($city_data->city_name)=>$listitem_2_slug,
+									strtoupper($college_data->college_short_name)=>$college_data->access_url,
+									strtoupper($inner_menu_name)=>null
+								);
+
+								$slug_url_data_to_store=array(
+									'url_type'=>'college_static_url',
+									'url_glob_type'=>'college_inner_menu',
+									'url_type_id'=>$college_data->college_user_id,
+									'url_sub_type'=>strtolower($inner_menu_type_name),
+									'url_sub_type_id'=>$menu_id,
+									'url_state'=>$state_data->state_id,
+									'url_country'=>$college_data->college_country_id,
+									'url_city'=>$city_data->city_id,
+									'url_meta_heading'=>$inner_menu_page_heading,
+									'url_meta_title'=>$inner_menu_page_heading,
+									'url_meta_key_words'=>$keywords,
+									'url_meta_desc'=>$inner_menu_page_description,
+									'url_og_title'=>$inner_menu_page_heading,
+									'url_og_desc'=>$inner_menu_page_description,
+									'url_page_heading'=>$inner_menu_page_heading,
+									'url_breadcrumb'=>json_encode($breadcrumb),
+									'url_type_in_notification'=>'no',
+									'url_priority'=>'0.6',
+									'url_data_change_freq'=>'monthly',
+									'url_last_update'=>$date_published,
+									'url_active'=>'1',
+									'updated_by'=>$this->data['userdata']->user_id,
+									'updated_at'=>$date_published
+								);
+
+								$slug_url_id=$this->sm->update_slug_urls($slug_url_data_to_store,array('url_type'=>'college_static_url',
+									'url_glob_type'=>'college_inner_menu',
+									'url_type_id'=>$college_data->college_user_id,
+									'url_sub_type'=>strtolower($inner_menu_type_name),
+									'url_sub_type_id'=>$inner_menu_id));
+
+
+								$breadcrumb_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$menu_url,'slug_type_json_ld'=>'BreadcrumbList'));
+
+								if(empty($breadcrumb_struct_data)){
+
+									$breadcrumb_data_to_store=array(
+										'slug_type_json_ld'=>'BreadcrumbList',
+										'slug_type_json_ld_data'=>$breadcrumb_data,
+										'slug_url'=>$menu_url,
+										'date_modified'=>$date_modified,
+										'date_published'=>$date_published
+									);
+
+									$this->sm->update_slug_struct_data($breadcrumb_data_to_store,array('slug_url'=>$menu_url,'slug_type_json_ld'=>'BreadcrumbList'));
+								}
+
+
+								//CollegeOrUniversity
+
+								$college_or_university='{
+								  "@context": "http://schema.org/",
+								  "@type": "CollegeOrUniversity",
+								  "name": "'.$college_formatted_name.'",
+								  "url": "'.$college_data->college_web_address.'",
+								  "email": "'.$college_data->college_email.'",
+								  "telephone": "'.$college_data->college_phone_no.'",
+								  "logo": "'.$college_logo.'",
+								  "address": {
+								    "@type": "PostalAddress",
+								    "streetAddress": "'.$college_address.'"
+								  }
+								}';
+
+								$CollegeOrUniversity_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$menu_url,'slug_type_json_ld'=>'CollegeOrUniversity'));
+
+								if(empty($CollegeOrUniversity_struct_data)){
+
+									$CollegeOrUniversity_data_to_store=array(
+										'strcut_slug_url_id'=>$slug_url_id,
+										'slug_type_json_ld'=>'CollegeOrUniversity',
+										'slug_type_json_ld_data'=>$college_or_university,
+										'slug_url'=>$college_data->access_url,
+										'date_modified'=>$date_modified,
+										'date_published'=>$date_published
+									);
+
+									$this->sm->update_slug_struct_data($CollegeOrUniversity_data_to_store,array('slug_url'=>$menu_url,'slug_type_json_ld'=>'CollegeOrUniversity'));
+								}
+
+
+								$return['success']='Data has been updated';
+							}else{
+								$return['error']='Data not updated';
+							}
+						}
+
+					}else{
+						$return['error']='Data manipulation is not allowed 1.';
+					}
+				}else{
+					$return['error']='Data manipulation is not allowed 2.';
+				}
+
+				json_headers($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onQuickAddUniversity(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$country=post_data('college_country');
+				$state=post_data('college_state');
+				$city=post_data('college_city');
+
+				$college_type=post_data('college_type');
+
+				$university_type=post_data('college_type');
+				$name=post_data('college_name');
+				$short_name=post_data('college_short_name');
+				$address=post_data('collegeaddress');
+				$pincode=post_data('college_pincode');
+				$estd=post_data('college_estd');
+
+				// $country_id=decode_data($country);
+				// $state_id=decode_data($state);
+				// $city_id=decode_data($city);
+				
+
+				$college_found=$this->im->get_college_data(array('college_user_id'=>$college_id));
+
+				if(empty($college_found)){
+
+					$url_slug=url_slug($name);
+
+					$country_data=$this->com->get_country(array('country_id'=>$country));
+
+					$college_slug=base_url($country_data->country_iso_code_4.'/'.$url_slug);
+
+					$unidata=array(
+						'university_name'=>$name,
+						'university_short_name'=>$short_name,
+						'university_address'=>$address,
+						'university_zipcode'=>$pincode,
+						'university_estd_year'=>$estd,
+						'university_country_id'=>$country_id,
+						'university_state_id'=>$state_id,
+						'university_city_id'=>$city_id,
+						'access_url'=>$college_slug,
+						'access_url_slug'=>$url_slug,
+						'updated_by'=>$this->data['userdata']->user_id
+					);
+
+					$added=$this->im->update_college_data($unidata,array('college_user_id'=>$college_id));
+
+					if($added){
+
+						if($college_type=='3'){
+							$folder_name=$college_id.'-'.$url_slug;
+						}else if($college_type=='4'){
+							$folder_name=$url_slug;
+						}
+
+						if(isset($_FILES['college_logo']) && $_FILES['college_logo']['name']!=''){
+
+							$log_file_custom_logo_title=$url_slug.'-logo';
+
+							$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$college_id));
+
+							//print_obj($file_logo_found);die;
+
+							if(!empty($file_logo_found)){
+								if(is_file($file_logo_found->media_disk_path)){
+									@unlink($file_logo_found->media_disk_path);
+									$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+								}
+							}
+
+							$ext = pathinfo($_FILES['college_logo']['name'][0], PATHINFO_EXTENSION);
+
+							$logo_data=array(
+								'file_size'=>'1',
+								'file_name'=>'college_logo',
+								'file_types'=>'png,jpg,jpeg,webp',
+								'file_folder'=>'colleges',
+								'file_custom_title'=>$log_file_custom_logo_title,
+								'file_compress'=>($ext==='webp')?false:true,
+								'file_compress_protocol'=>($ext==='webp')?'':'webp',
+								'file_child_folder'=>$folder_name,
+								'file_uploaded_by'=>$this->data['userdata']->user_id
+							);
+
+							//print_obj($logo_data);die;
+
+							$file_id=$this->onUploadFiles($logo_data);
+
+							//print_obj($file_id);die;
+
+							if(!empty($file_id) && $file_id>0){
+
+								$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo'));
+
+					            $user_logo_storage_data=array(
+					            	'user_file_storage_id'=>$file_id,
+					            	'user_file_type_id'=>$college_id,
+					            	'user_file_type'=>'4',
+					            	'user_storage_type'=>'user_logo'
+					            );
+
+					            $this->sm->store_user_file($user_logo_storage_data);
+					        } 
+						}
+
+
+						//print_obj($_FILES['university_banner']);die;
+
+						if(isset($_FILES['college_banner']) && $_FILES['college_banner']['name']!=''){
+							$log_file_custom_banner_title=$url_slug.'-banner';
+
+							//echo $log_file_custom_banner_title;die;
+
+							$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$college_id));
+
+							if(!empty($file_banner_found)){
+								if(is_file($file_banner_found->media_disk_path)){
+									@unlink($file_banner_found->media_disk_path);
+									$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+								}
+							}
+
+
+							$ext = pathinfo($_FILES['university_banner']['name'][0], PATHINFO_EXTENSION);
+
+							$banner_data=array(
+								'file_size'=>'25',
+								'file_name'=>'university_banner',
+								'file_types'=>'png,jpg,jpeg,webp',
+								'file_folder'=>'colleges',
+								'file_custom_title'=>$log_file_custom_banner_title,
+								'file_compress'=>($ext==='webp')?false:true,
+								'file_compress_protocol'=>'webp',
+								'file_child_folder'=>$folder_name,
+								'file_uploaded_by'=>$this->data['userdata']->user_id
+							);
+
+							$file_id=$this->onUploadFiles($banner_data);
+
+							//print_obj($file_id);die;
+
+							if(!empty($file_id) && $file_id>0){
+								$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner'));
+					            $user_banner_storage_data=array(
+					            	'user_file_storage_id'=>$file_id,
+					            	'user_file_type_id'=>$college_id,
+					            	'user_file_type'=>'3',
+					            	'user_storage_type'=>'user_banner'
+					            );
+
+					            $this->sm->store_user_file($user_banner_storage_data);
+					        }
+						}
+
+						$return['success']='Data added successfully';
+					}else{
+						$return['error']='Data not added';
+					}
+
+
+				}else{
+					$return['error']='University_already found in the system';
+				}
+
+
+				
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onDeleteUniversity(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_university=post_data('_university');
+				$university_id=decode_data($_university);
+
+				$user_found=$this->um->get_user(array('user_id'=>$university_id));
+
+				if(!empty($user_found)){
+
+					$colleges_found=$this->im->get_college_profile_data(array('college_university_id'=>$university_id));
+
+					if(empty($colleges_found)){
+						$deleted=$this->im->delete_university_data(array('university_id'=>$user_found->user_profile_pk_id));
+						if($deleted){
+							$this->um->delete_user_data(array('user_id'=>$university_id));
+							$return['success']='University deleted from the system';
+						}else{
+							$return['error']='University not found in the system';
+						}
+					}else{
+						$return['error']='Colleges are tagged under this University.Therefor it can not be deleted at this time from the system';
+					}					
+
+				}else{
+					$return['error']='University not found in the system';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+
+	public function onGetColleges(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				//$college_name=post_data('term');
+
+				//$colleges=$this->im->___get_colleges_data(array('college_name'=>mysql_real_escape_string($college_name)),'college_user_id,college_name,college_short_name',array('college_short_name'=>mysql_real_escape_string($college_name)));
+
+				$college_id=post_data('college_id');
+
+				$college_id=decode_data($college_id);
+
+				$_colleges=array();
+
+				$colleges=$this->im->__get_college_profile_data('college_user_id,college_name,college_short_name',array('college_status'=>'1','college_user_id!='=>$college_id),FALSE);
+
+				$group_colleges=$this->im->get_college_group_data(array('group_inst_parent_id'=>$college_id),FALSE);
+
+				if(!empty($group_colleges)){
+					foreach ($group_colleges as $key => $value) {
+						$_group_colleges[]=$value->group_inst_id;
+					}
+				}
+
+				foreach ($colleges as $key => $value) {
+					$_colleges[]=array(
+						'college_user_id'=>$value->college_user_id,
+						'college_name'=>$value->college_name,
+						'college_short_name'=>$value->college_short_name,
+						'selected'=>(isset($_group_colleges) && !empty($_group_colleges) && in_array($value->college_user_id, $_group_colleges))?'selected':''
+					);
+				}
+
+				$return['colleges']=$_colleges;
+
+				json_headers($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	//Universities
+
+
+	//Colleges
+
+	public function indexColleges(){
+		if(session_userdata('isAdminLoggedin')){
+
+			$user_id=decode_data(session_userdata('admin_id'));
+
+			$this->data['page_title']='Colleges';
+			$userdata=$this->data['userdata'];
+			$quota=array();
+
+			$total_reviews=0;
+
+			//print_obj($userdata);die;
+
+			// if($this->data['userdata']->user_role!='1'){
+			// 	$duplicate_data=$this->im->_get_college_profile_duplicate(array('created_by'=>$user_id),null,'college_country_id,college_state_id,college_city_id','college_id');
+
+			// 	//print_obj($duplicate_data);die;
+			// 	$dup_count=$duplicate_data[0]->counted;
+			// }else{
+			// 	$dup_count='0';
+			// }
+
+			// $this->data['dup_count']=$dup_count;
+
+			$this->data['insternal_users']=$this->um->get_internal_users(array('user_status'=>'active'));
+
+			$this->data['countries']=$this->com->get_country(array('country_status'=>'1'),FALSE);
+
+			//$this->data['states']=$this->com->get_states(array('state_country_id'=>'99'),FALSE);
+
+			$institue_types=$this->im->get_institute_types(array('inst_data_type'=>'4'),FALSE);
+
+			if(!empty($institue_types)){
+				foreach ($institue_types as $key => $value) {					
+					$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_type==$value->inst_type))?'selected':'';
+					$_institue_types[]=array(
+						'inst_type'=>encode_data($value->inst_type),
+						'inst_type_name'=>$value->inst_type_name,
+						'selected'=>$selected
+					);
+				}
+			}else{
+				$_institue_types=array();
+			}
+
+			$this->data['institue_types']=$_institue_types;
+
+
+			$inst_streams=$this->strm->get_stream(array('stream_status'=>'1'),FALSE);
+
+			if(!empty($inst_streams)){
+				foreach ($inst_streams as $key => $value) {
+					$_inst_streams[]=array(
+						'stream_id'=>encode_data($value->stream_id),
+						'stream_name'=>$value->stream_name
+					);
+				}
+			}else{
+				$_inst_streams=array();
+			}
+
+			$this->data['inst_streams']=$_inst_streams;
+
+
+			$this->data['broucher_start_year']=date('Y')-5;
+			$this->data['broucher_end_year']=date('Y');
+
+			$this->data['gallery_types']=$this->sm->get_gallery_types(array('gallery_type_status'=>'1'),FALSE,'gallery_type_serial','ASC',FALSE);
+
+			if($userdata->user_quota_applicable=='1'){
+				if($userdata->user_bank_account_added=='2'){
+					redirect($this->data['admin_base_url'].'/profile');
+				}else{
+					$this->data['countries']=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+					$month=date('m');
+					$year=date('Y');
+					$date=date('Y-m-d');
+
+					$param['month']=$month;
+					$param['year']=$year;
+					$param['created_at']=$date;
+					$param['created_by']=$user_id;
+					//$param['is_verified_by_admin']='1';
+
+					$upload_quota=$userdata->user_per_month_data_upload_quota;
+					$upload_quota_per_day=$userdata->user_per_day_data_upload_quota;
+
+					$total_college_uploaded = $this->im->_get_colleges(null,$param,TRUE,FALSE);
+
+					$param['is_verified_by_admin']='1';
+
+					$total_college_uploaded_approved = $this->im->_get_colleges(null,$param,TRUE,FALSE);
+
+					$not_approved=($total_college_uploaded-$total_college_uploaded_approved);
+
+
+					$total_earning=($total_college_uploaded_approved*$userdata->user_per_upload_amount);
+
+
+					//$data_quota=$this->um->get_internal_user_data_quota(array('quota_user_id'=>$user_id,'quota_user_type'=>'5','quota_month'=>$month,'quota_year'=>$year));
+
+
+					$quota=array(
+						'month'=>date('F'),
+						'year'=>date('Y'),
+						'today'=>date('d F,Y',strtotime($date)),
+						'quota_to_upload_permonth'=>$upload_quota,
+						'quota_to_upload_perday'=>$upload_quota_per_day,
+						'completed'=>number_format($total_college_uploaded),
+						'approved'=>number_format($total_college_uploaded_approved),
+						'not_approved'=>number_format($not_approved),
+						'total_earned'=>number_format($total_earning)
+					);
+
+					$this->data['quota']=$quota;
+
+					$states=$this->com->get_states(array('state_country_id'=>'99'));
+
+					$this->data['country_states']=$states;
+
+
+					
+					$param2['order'] = array('college_id' => 'DESC');
+					
+					$param2['college_in_set']='226';
+					
+
+					$sample_colleges = $this->im->_get_colleges(null,$param2,FALSE,FALSE);
+
+					//print_obj($sample_colleges);die;
+
+					foreach ($sample_colleges as $key => $value) {
+						$colleges[]=array(
+							'college_id'=>encode_data($value->college_user_id),
+							'college_edit_link'=>$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($value->college_user_id),
+							'college_name'=>$value->college_name
+						);
+					}
+
+					$this->data['sample_colleges']=$colleges;
+
+			        $_top_colleges=array();
+
+			        $param=array('college_status'=>'1','college_is_top'=>'1','college_is_top_visible_home'=>'1','is_verified_by_admin'=>'1');
+
+        			$top_colleges=$this->im->_get__colleges($param,'college_is_top_short_order','ASC');
+
+			        $all_colleges=$this->im->get_college_profile_data(array('college_status'=>'1'),FALSE);
+
+			        $_all_colleges=array();
+
+			        if(!empty($all_colleges)){
+			        	foreach ($all_colleges as $key => $value) {
+			        		$city_data=$this->com->get_city(array('city_id'=>$value->college_city_id));
+			        		$state_data=$this->com->get_state(array('state_id'=>$value->college_state_id));
+			        		$total_average_ratings=$this->sm->get_total_average_rating($value->college_user_id);
+
+			                if($total_reviews>0 && $total_average_ratings->total_average_rating!=''){
+			                    $college_total_avg_rating=$total_average_ratings->total_average_rating;
+			                }else{
+			                    $college_total_avg_rating='0';
+			                }
+			        		$_all_colleges[]=array(
+			        			'college_user_id'=>$value->college_user_id,
+			        			'college_name'=>$value->college_name.'[ '.$state_data->state_name.','.$city_data->city_name.' ] | Review Rating:'.$college_total_avg_rating
+			        		);
+			        	}
+			        }
+
+
+			        $this->data['all_colleges']=$_all_colleges;
+
+			        if(!empty($top_colleges)){
+			        	foreach ($top_colleges as $key => $value) {
+			        		$_college_banner=$this->sm->___get_user_file('user_file_type_id,user_storage_type,media_disk_path_relative,media_disk_path',array('user_file_type_id'=>$value->user_id,'user_storage_type'=>'user_banner'));
+			                $_college_logo=$this->sm->___get_user_file('user_file_type_id,user_storage_type,media_disk_path_relative,media_disk_path',array('user_file_type_id'=>$value->user_id,'user_storage_type'=>'user_logo'));
+
+			                if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative) && file_exists($_college_logo->media_disk_path)){
+			                    $college_logo=$_college_logo->media_disk_path_relative;
+			                }else{
+			                    $college_logo=base_url().'uploads/app/default/no.jpeg';
+			                }
+
+			                if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative) && file_exists($_college_banner->media_disk_path)){
+			                    $college_banner=$_college_banner->media_disk_path_relative;
+			                }else{
+			                    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+			                }
+
+			        		$_top_colleges[]=array(
+			        			'college_user_id'=>$value->user_id,
+			        			'college_name'=>$value->college_name,
+			        			'college_address'=>$value->college_address,
+			        			'college_logo'=>$college_logo,
+			        			'college_banner'=>$college_banner
+			        		);
+			        	}
+			        }
+
+			        $this->data['top_college']=$_top_colleges;
+
+
+					$this->theme->title($this->data['page_title'])->load('users/vw_colleges', $this->data);
+				}
+				
+			}else{
+
+				$this->data['countries']=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+
+				//$this->data['listing_pacakeges']=$this->sm->get_listing_packages(array());
+
+				$this->theme->title($this->data['page_title'])->load('users/vw_colleges', $this->data);
+			}
+
+			
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexCollegesData(){
+		if(session_userdata('isAdminLoggedin')){
+
+			$this->theme->title($this->data['page_title'])->load('users/vw_colleges_data', $this->data);
+
+
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function indexCollegesAddEdit_old($college_id=null,$inner_menu=null,$inner_menu_id=null){
+		if(session_userdata('isAdminLoggedin')){
+
+			$this->data['page_title']='Colleges';
+
+			// echo $inner_menu_id.'<br>';
+			// echo $this->uri->segment(7);die;
+
+			$college_data=array();
+			$get_faculty_data=array();
+			$courses=array();
+			$streams=array();
+			$_course_types=array();
+			$_duration_types=array();
+			$_course_duration_years=array();
+			$_placement_types=array();
+			$_course_pass_types=array();
+
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->um->get_user_data(array('user_id'=>$cid),null,'4');
+			}
+
+			$institue_types=$this->im->get_institute_types(array('inst_data_type'=>'4'),FALSE);
+
+			if(!empty($institue_types)){
+				foreach ($institue_types as $key => $value) {					
+					$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_type==$value->inst_type))?'selected':'';
+					$_institue_types[]=array(
+						'inst_type'=>encode_data($value->inst_type),
+						'inst_type_name'=>$value->inst_type_name,
+						'selected'=>$selected
+					);
+				}
+			}else{
+				$_institue_types=array();
+			}
+
+
+			$institue_facilities=$this->sm->get_system_facilities(array('facility_status'=>'1'),FALSE);
+
+			if(!empty($institue_facilities)){
+				foreach ($institue_facilities as $key => $value) {
+					if(isset($college_data) && !empty($college_data) && $college_data->int_facilities!=null){
+						$college_facilities=char_separated_to_array($college_data->int_facilities);
+						if(in_array($value->facility_id, $college_facilities)){
+							$selected='checked';
+						}else{
+							$selected='';
+						}
+					}else{
+						$selected='';
+					}
+					
+					$_institue_facilities[]=array(
+						'facility_id'=>encode_data($value->facility_id),
+						'facility_name'=>$value->facility_name,
+						'facility_icon'=>$value->facility_icon,
+						'selected'=>$selected
+					);
+				}
+			}else{
+				$_institue_facilities=array();
+			}
+
+			
+
+			// $affiliation_types=$this->im->get_affiliation_types(array('statutory_body_status'=>'1','statutory_body_country_id'=>$this->data['userdata']->user_country),FALSE);
+			$affiliation_types=$this->im->get_affiliation_types(array('statutory_body_status'=>'1'),FALSE);
+			if(!empty($affiliation_types)){
+				foreach ($affiliation_types as $key => $value) {
+					$selected=(!empty($this->data['userdata']->user_affiliation_type) && in_array($value->statutory_body_id, char_separated_to_array($this->data['userdata']->user_affiliation_type)))?'checked':'';
+					$_affiliation_types[]=array(
+						'statutory_body_id'=>encode_data($value->statutory_body_id),
+						'statutory_body_abbr'=>$value->statutory_body_abbr,
+						'statutory_body_name'=>$value->statutory_body_name,
+						'selected'=>$selected
+					);
+				}
+			}else{
+				$_affiliation_types=array();
+			}
+
+			$countries=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+
+			if(!empty($countries)){
+				foreach ($countries as $key => $value) {
+					$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_country==$value->country_id))?'selected':'';
+					$_countries[]=array(
+						'country_id'=>encode_data($value->country_id),
+						'country_name'=>$value->country_name,
+						'selected'=>$selected
+					);
+				}
+			}else{
+				$_countries=array();
+			}
+
+			if(!empty($college_data)){
+				$_states=$this->com->get_states(array('state_country_id'=>$college_data->user_country),'state_serial','ASC');
+			}else{
+				$_states=$this->com->get_states(array('state_country_id'=>'99'),'state_serial','ASC');
+			}
+
+			
+
+			if(!empty($_states)){
+				foreach ($_states as $key => $value) {
+					$states[]=array(
+						'state_id'=>encode_data($value->state_id),
+						'state_name'=>$value->state_name,
+						'selected'=>(isset($college_data) && !empty($college_data) && ($value->state_id==$college_data->user_state))?'selected':''
+					);
+				}
+			}else{
+				$states=array();
+			}
+
+
+			$_cities=$this->com->get_city(array('city_country_id'=>$college_data->user_country,'city_state_id'=>$college_data->user_state),FALSE,$order_by=null,$order='ASC');
+
+			if(!empty($_cities)){
+				foreach ($_cities as $key => $value) {
+					$cities[]=array(
+						'city_id'=>encode_data($value->city_id),
+						'city_name'=>$value->city_name,
+						'selected'=>(isset($college_data) && !empty($college_data) && ($value->city_id==$college_data->user_city))?'selected':''
+					);
+				}
+			}else{
+				$cities=array();
+			}
+
+
+			$_districts=$this->com->get_district(array('district_country_id'=>$college_data->user_country,'district_state_id'=>$college_data->user_district),FALSE);
+
+			if(!empty($_districts)){
+				foreach ($_districts as $key => $value) {
+					$districts[]=array(
+						'district_id'=>encode_data($value->district_id),
+						'district_name'=>$value->district_name,
+						'selected'=>(isset($college_data) && !empty($college_data) && ($value->district_id==$college_data->user_district))?'selected':''
+					);
+				}
+			}else{
+				$districts=array();
+			}
+
+			if(!empty($college_data)){
+				$universities=$this->im->get_university_profile_data(array('university_country_id'=>$college_data->user_country,'university_state_id'=>$college_data->user_state),FALSE);
+			}else{
+				$universities=$this->im->get_university_profile_data(array('university_country_id'=>'99'),FALSE);
+			}
+
+
+			
+
+			if(!empty($universities)){
+				foreach ($universities as $key => $value) {
+					$selcted=(isset($college_data) && !empty($college_data) && ($college_data->college_university_id==$value->university_user_id))?'selected':'';
+					$_universities[]=array(
+						'university_id'=>encode_data($value->university_user_id),
+						'university_name'=>$value->university_name,
+						'selected'=>$selcted
+					);
+				}
+			}else{
+				$_universities=array();
+			}
+
+			if(isset($cid)){
+				$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+				$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+			}else{
+				$_college_banner='';
+				$_college_logo='';
+			}				
+
+			if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+                $college_logo=$_college_logo->media_disk_path_relative;
+                $college_logo_name=$_college_logo->media_org_name;
+            }else{
+                $college_logo=base_url().'uploads/app/default/no.jpg';
+                $college_logo_name='';
+            }
+
+            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+                $college_banner=$_college_banner->media_disk_path_relative;
+                $college_banner_name=$_college_banner->media_org_name;
+            }else{
+                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+                $college_banner_name='';
+            }
+
+            $inner_menu_types=$this->sm->get_menue_types(array('menu_type_status'=>'1'),FALSE);
+
+            // $_inner_menu=$this->sm->get_menues(array('menu_is_active'=>'1','menu_is_inner'=>'1','menu_link_type'=>'10','menu_link_id'=>$cid),FALSE,'menu_serial','ASC',FALSE);
+
+			$param=array('order'=> array('menu_serial' => 'ASC'),'menu_link_id'=>$cid,'menu_is_active'=>'1','menu_is_inner'=>'1','menu_link_type'=>'10');
+
+			$_inner_menus = $this->sm->_get_menues(NULL,$param,FALSE,FALSE);
+
+			if(!empty($_inner_menus)){
+				foreach ($_inner_menus as $key => $value) {
+					if($value->menu_type_alias_name=='gallery'){
+						$menu_target_modal='collegeInnerMenuesGalleryModal';						
+					}else if($value->menu_type_alias_name=='course_fees'){
+						$menu_target_modal='collegeInnerMenuesCoursesFeesModal';					
+					}else if($value->menu_type_alias_name=='faculty'){
+						$menu_target_modal='collegeInnerMenuesFacultiesModal';					
+					}else if($value->menu_type_alias_name=='hostel'){
+						$menu_target_modal='collegeInnerMenuesHostelModal';					
+					}else if($value->menu_type_alias_name=='placement'){
+						$menu_target_modal='collegeInnerMenuesPlacementModal';					
+					}else if($value->menu_type_alias_name=='cutoff'){
+						$menu_target_modal='collegeInnerMenuesCutoffModal';					
+					}else if($value->menu_type_alias_name=='scholarships'){
+						$menu_target_modal='collegeInnerScholarshipsModal';
+					}else if($value->menu_type_alias_name=='department'){
+						$menu_target_modal='collegeInnerDepartmentModal';
+					}
+
+					$menu_form='form_'.$value->menu_type_alias_name;
+					$inner_menues[]=array(
+						'menu_name'=>$value->menu_name,
+						'menu_type'=>$value->menu_type_name,
+						'menu_type_alias_name'=>$value->menu_type_alias_name,
+						'menu_form'=>$menu_form,
+						'menu_target_modal'=>$menu_target_modal,
+						'menu_link'=>$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id.'/'.$value->menu_type_alias_name
+					);
+
+					$inner_menu_alias[]=$value->menu_type_alias_name;
+				}					
+			}else{
+				$inner_menues=array();
+				$inner_menu_alias=array();
+			}
+
+			if(!empty($inner_menues)){
+
+				if($inner_menu!=null){
+					if(in_array($inner_menu, $inner_menu_alias)){
+						if($inner_menu_id!=null){
+							$menu_id=decode_data($inner_menu_id);
+
+							if($inner_menu=='faculty'){
+								$get_faculty_data=$this->im->get_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$cid,'faculty_id'=>$menu_id));
+								
+							}else if($inner_menu=='course_fees'){
+								$courses=$this->strm->get_course(array('course_status'=>'1'),FALSE);
+							}
+						}else{
+							if($inner_menu=='course_fees'){
+								$courses=$this->strm->get_course(array('course_status'=>'1'),FALSE);
+								$streams=$this->strm->get_course_sub_stream(array('sub_stream_status'=>'1'),FALSE,'sub_stream_serial','ASC');
+								$exams='';
+							}
+						}
+						
+
+						if(!empty($courses)){
+							foreach ($courses as $key => $value) {
+								$course_name=($value->course_short_name!='')?$value->course_name.'('.$value->course_short_name.')':$value->course_name;
+								$_courses[]=array(
+									'course_id'=>encode_data($value->course_id),
+									'course_name'=>$course_name,
+									'course_short_name'=>$value->course_short_name,
+									'course_type'=>$value->course_type,
+									'course_passed_type'=>$value->course_passed_type,
+									'selected'=>''
+								);
+							}
+						}else{
+							$_courses=array();
+						}
+
+						if(!empty($streams)){
+							foreach ($streams as $key => $value){
+								$_streams[]=array(
+									'stream_id'=>encode_data($value->sub_stream_id),
+									'stream_name'=>$value->sub_stream_name,
+									'selected'=>''
+								);
+							}
+						}else{
+							$_streams=array();
+						}
+
+
+						$qualifications=$this->im->get_qualifications(array('qualification_status'=>'1'),FALSE);
+
+						if(!empty($qualifications)){
+							foreach ($qualifications as $key => $value) {
+								$selected=(isset($get_faculty_data) && !empty($get_faculty_data) && in_array($value->qualification_id, char_separated_to_array($get_faculty_data->faculty_qualifications)))?'checked':'';
+								$_qualifications[]=array(
+									'qualification_id'=>encode_url($value->qualification_id),
+									'qualification_name'=>$value->qualification_name,
+									'selected'=>$selected
+								);
+							}
+						}else{
+							$_qualifications=array();
+						}
+
+						$subjects=$this->im->get_subjects(array('subject_status'=>'1'),FALSE);
+
+						if(!empty($subjects)){
+							foreach ($subjects as $key => $value) {
+								$selected=(isset($get_faculty_data) && !empty($get_faculty_data) && in_array($value->subject_id, char_separated_to_array($get_faculty_data->faculty_subjects)))?'checked':'';
+								$_subjects[]=array(
+									'subject_id'=>encode_url($value->subject_id),
+									'subject_name'=>$value->subject_name,
+									'selected'=>$selected
+								);
+							}
+						}else{
+							$_subjects=array();
+						}
+
+
+						$designations=$this->im->get_designations(array('designation_status'=>'1'),FALSE);
+
+						if(!empty($designations)){
+							foreach ($designations as $key => $value) {
+								$selected=(isset($get_faculty_data) && !empty($get_faculty_data) && in_array($value->designation_id,char_separated_to_array($get_faculty_data->faculty_designation)))?'selected':'';
+								$_designations[]=array(
+									'designation_id'=>encode_url($value->designation_id),
+									'designation_name'=>$value->designation_name,
+									'selected'=>$selected
+								);
+							}
+						}else{
+							$_designations=array();
+						}
+
+
+						$departments=$this->im->get_departments(array('department_type_id'=>$cid),FALSE);
+
+						if(!empty($departments)){
+							foreach ($departments as $key => $value) {
+								$selected=(isset($get_faculty_data) && !empty($get_faculty_data) && in_array($value->department_id,char_separated_to_array($get_faculty_data->faculty_departments)))?'selected':'';
+								$_departments[]=array(
+									'department_id'=>encode_url($value->department_id),
+									'department_name'=>$value->department_name,
+									'selected'=>$selected
+								);
+							}
+						}else{
+							$_departments=array();
+						}
+
+
+						$course_duration_years=array('1','2','3','4','5','6');
+
+						foreach ($course_duration_years as $key => $value) {
+							$_course_duration_years[]=array(
+								'course_duration_year'=>$value,
+								'selected'=>''
+							);
+						}
+
+						$course_types=array('Doctorate','Degree','Diploma','Certificate');
+
+						foreach ($course_types as $key => $value) {
+							$_course_types[]=array(
+								'course_type'=>$value,
+								'selected'=>''
+							);
+						}
+
+						$course_pass_types=array('Phd','Post Graduation','Graduation','Diploma','Certificate');
+
+						foreach ($course_pass_types as $key => $value) {
+							$_course_pass_types[]=array(
+								'course_pass_type'=>$value,
+								'selected'=>''
+							);
+						}
+
+						$placement_types=array('On Campus','Off Campus');
+
+						foreach ($placement_types as $key => $value) {
+							$_placement_types[]=array(
+								'placement_type'=>$value,
+								'selected'=>''
+							);
+						}
+
+						$duration_types=array('Full Time','Part Time','Lateral');
+
+						foreach ($duration_types as $key => $value) {
+							$_duration_types[]=array(
+								'duration_type'=>$value,
+								'selected'=>''
+							);
+						}
+
+
+						$currencies=$this->com->get_currency(array('currency_status'=>'1'),FALSE);
+						if(!empty($currencies)){
+							foreach ($currencies as $key => $value) {
+								$currency_code=($value->currency_symbol_left!='')?$value->currency_symbol_left.'-'.$value->currency_code:$value->currency_code.'-'.$value->currency_symbol_right;
+								$_currencies[]=array(
+									'currency_id'=>encode_data($value->currency_id),
+									'currency_code'=>$currency_code
+								);
+							}
+						}else{
+							$_currencies=array();
+						}
+
+
+						//Hostel data
+
+						if(isset($cid)){
+							$men_total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$cid,'fess_data_id_type'=>'2','fees_type'=>'2'));
+							$women_total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$cid,'fess_data_id_type'=>'2','fees_type'=>'1'));
+
+							$men_hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>'2','hostel_data_type_id'=>$cid,'hostel_type'=>'2'));
+
+							$women_hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>'2','hostel_data_type_id'=>$cid,'hostel_type'=>'1'));
+
+							$hostel_data=array(
+								'men_hostel_detail_type'=>$college_data->college_menhostel_details_type,
+								'men_hostel_note'=>$men_hostel_notes->hostel_notes,
+								'men_hostel_total_fees_start'=>$men_total_fees_data->fees_start,
+								'men_hostel_total_fees_end'=>$men_total_fees_data->fees_end,
+								'women_hostel_detail_type'=>$college_data->college_womenhostel_details_type,
+								'women_hostel_note'=>$women_hostel_notes->hostel_notes,
+								'women_hostel_total_fees_start'=>$women_total_fees_data->fees_start,
+								'women_hostel_total_fees_end'=>$women_total_fees_data->fees_end,
+							);
+						}else{
+							$hostel_data=array();
+						}
+					}
+				}else{
+					$_qualifications=array();
+					$_subjects=array();
+					$_designations=array();
+					$_departments=array();
+					$hostel_data=array();
+				}
+
+				$gallery_types=$this->sm->get_gallery_types(array('gallery_type_status'=>'1'),FALSE,'gallery_type_serial','ASC',FALSE);
+			}else{
+				$_qualifications=array();
+				$_subjects=array();
+				$_designations=array();
+				$_departments=array();
+				$gallery_types=array();
+				$hostel_data=array();
+			}
+
+			if(isset($cid)){
+				$info=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid));
+				$college_general_info=$info->info_value;
+				$college_course_info=$info->info_value_course_intro;
+				$college_admission_info=$info->info_value_admission_intro;
+				$college_cutoff_info=$info->info_value_cutoff_intro;
+				$college_placement_info=$info->info_value_placement_intro;
+				$college_scholarship_info=$info->info_value_scholarship_intro;
+				$college_faculty_info=$info->info_value_faculty_intro;
+			}else{
+				$college_general_info='';
+				$college_course_info='';
+				$college_admission_info='';
+				$college_cutoff_info='';
+				$college_placement_info='';
+				$college_scholarship_info='';
+				$college_faculty_info='';
+			}
+
+			//print_obj($collge_general_info);die;		
+
+			//print_obj($college_data);die;
+            
+            $_college_data=array(
+            	'college_id'=>$college_id,
+            	'college_name'=>$college_data->user_fullname,
+            	'college_email'=>$college_data->user_email,
+            	'college_phone_no'=>$college_data->user_phone_no,
+            	'college_estd_year'=>$college_data->user_estd_year,
+            	'college_status'=>$college_data->user_status,
+            	'college_address'=>$college_data->user_address,
+            	'college_pincode'=>$college_data->user_zipcode,
+            	'college_logo'=>$college_logo,
+            	'college_logo_name'=>$college_logo_name,
+            	'college_banner'=>$college_banner,
+            	'college_banner_name'=>$college_banner_name,
+            	'college_is_verified'=>$college_data->is_verified_by_admin,
+            	'college_is_top'=>$college_data->college_is_top,
+            	'college_show_in_home_page'=>$college_data->college_is_top_visible_home,
+            	'college_is_top_ranked'=>$college_data->college_is_top_ranked,
+            	'college_access_url'=>$college_data->access_url,
+            	'college_slug'=>$college_data->access_url_slug,
+            	'college_general_info'=>$college_general_info,
+            	'college_course_info'=>$college_course_info,
+            	'college_admission_info'=>$college_admission_info,
+            	'college_cutoff_info'=>$college_cutoff_info,
+            	'college_placement_info'=>$college_placement_info,
+            	'college_scholarship_info'=>$college_scholarship_info,
+            	'college_faculty_info'=>$college_faculty_info,
+            	'college_departments'=>$_departments,
+            	'college_designations'=>$_designations,
+            	'college_subjects'=>$_subjects,
+            	'college_qualifications'=>$_qualifications,
+            	'college_gallery_types'=>$gallery_types,
+            	'college_faculties'=>$get_faculty_data,
+            	'college_courses'=>$_courses,
+            	'college_course_types'=>$_course_types,
+            	'college_course_pass_types'=>$_course_pass_types,
+            	'college_course_duration'=>$course_duration_years,
+            	'course_duration_types'=>$_duration_types,
+            	'college_streams'=>$_streams,
+            	'college_placement_types'=>$_placement_types,
+            	'college_hostel_data'=>$hostel_data
+            );
+
+            //print_obj($_college_data);die;
+
+        	$this->data['universities']=$_universities;
+			$this->data['affiliation_types']=$_affiliation_types;
+			$this->data['institue_types']=$_institue_types;
+			$this->data['institue_facilities']=$_institue_facilities;
+
+			$this->data['countries']=$_countries;
+			$this->data['states']=$states;
+			$this->data['districts']=$districts;
+			$this->data['cities']=$cities;
+			$this->data['currencies']=$_currencies;
+
+			$this->data['universities']=$_universities;
+			$this->data['college_id']=$college_id;
+			$this->data['college_data']=$_college_data;
+			$this->data['inner_menues']=$inner_menu_types;
+			$this->data['inner_menues_assigned']=$inner_menues;
+
+
+			if($inner_menu!=null){
+				if(in_array($inner_menu, $inner_menu_alias)){
+					$view_page='users/vw_colleges_add_edit_'.$inner_menu;
+
+					if($inner_menu=='info'){
+
+						//$this->data['collegedunia_url']='https://collegedunia.com/university/25602-indian-institute-of-management-iimb-bangalore';//'https://collegedunia.com/global-search?term='.$college_data->user_fullname;
+
+						// $html = file_get_contents($this->data['collegedunia_url']);
+
+						// libxml_use_internal_errors( true);
+						// $doc = new DOMDocument;
+						// $doc->loadHTML( $html);
+						// $xpath = new DOMXpath( $doc);
+
+						// // A name attribute on a <div>???
+						// $node = $xpath->query( '//div[@class="cdcms_college_highlights"]')->item( 0);
+
+						// $this->data['node_data']= $node->textContent;
+
+						//print_obj(file_get_contents($this->data['collegedunia_url']));die;
+
+						// echo $url;
+
+						// $curl_array=array(
+						// 	'url'=>$url
+						// );
+
+						// $cdata=curl_get($curl_array);
+
+						// print_obj($cdata);
+
+						// die;
+					}
+
+
+
+					$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+				}else{
+					redirect($this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id);
+				}
+				
+			}else{
+				$view_page='users/vw_colleges_add_edit';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			}
+			
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onGetContexts(){
+		$context_urls=$this->sm->get_slug_urls(NULL,FALSE);
+
+		foreach ($context_urls as $key => $value) {
+			$key_val=ucwords(str_replace('_', ' ', $value->url_type));
+			$_context_urls[$key_val][]=array(
+				'title'=>$value->url_meta_title,
+				'value'=>$value->url_value
+			);
+		}
+
+		header('Content-Type: application/json; charset=utf-8');
+
+		echo json_encode($_context_urls);
+	}
+
+
+	public function indexCollegesAddEdit($college_id=null,$inner_menu=null,$inner_menu_id=null){
+		if(session_userdata('isAdminLoggedin')){
+
+			$user_id=decode_data(session_userdata('admin_id'));
+
+			//echo $college_id;
+
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->um->get_user_data(array('user_id'=>$cid),null,'4');
+
+				//print_obj($college_data);die;
+				//$college_data=$this->im->___get_college_profile_data('*',array('college_user_id'=>$cid));
+			}
+
+			//print_obj($college_data);die;
+
+			
+			// if($college_id!=null){
+			// 	$cid=decode_data($college_id);
+			// 	$college_data=$this->um->get_user_data(array('user_id'=>$cid),null,'4');
+			// 	$dup_count='0';
+			// }else{
+			// 	if($this->data['userdata']->user_role!='1'){
+			// 		$duplicate_data=$this->im->_get_college_profile_duplicate(array('created_by'=>$user_id),null,'college_country_id,college_state_id,college_city_id');
+			// 		$dup_count=$duplicate_data[0]->counted;
+			// 	}else{
+			// 		$dup_count='0';
+			// 	}
+			// }
+
+			// if($dup_count>0){
+			// 	redirect($this->data['admin_base_url'].'institutions/colleges');
+			// }else{
+
+				$countries=$this->com->get_country(array('country_status'=>'1'),FALSE,'country_serial','ASC');
+
+				if(!empty($countries)){
+					foreach ($countries as $key => $value) {
+						$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_country==$value->country_id))?'selected':'';
+						$_countries[]=array(
+							'country_id'=>encode_data($value->country_id),
+							'country_name'=>$value->country_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_countries=array();
+				}
+
+				
+				$currencies=$this->com->get_currency(array('currency_status'=>'1'),FALSE);
+				if(!empty($currencies)){
+					foreach ($currencies as $key => $value) {
+						$currency_code=($value->currency_symbol_left!='')?$value->currency_symbol_left.'-'.$value->currency_code:$value->currency_code.'-'.$value->currency_symbol_right;
+						$_currencies[]=array(
+							'currency_id'=>encode_data($value->currency_id),
+							'currency_code'=>$currency_code
+						);
+					}
+				}else{
+					$_currencies=array();
+				}
+
+
+				//print_obj($college_data);die;
+
+
+
+				if(isset($college_data)){
+					$affiliation_types=$this->im->get_affiliation_types(array('statutory_body_status'=>'1','statutory_body_country_id'=>$college_data->user_country),FALSE);
+
+					$college_affiliations=($college_data->user_affiliation_type!=null || !empty($college_data->user_affiliation_type))?char_separated_to_array($college_data->user_affiliation_type):array();
+					if(!empty($affiliation_types)){
+						foreach ($affiliation_types as $key => $value) {
+							$selected=(!empty($college_affiliations) && in_array($value->statutory_body_id, $college_affiliations))?'checked':'';
+							$_affiliation_types[]=array(
+								'statutory_body_id'=>encode_data($value->statutory_body_id),
+								'statutory_body_abbr'=>$value->statutory_body_abbr,
+								'statutory_body_name'=>$value->statutory_body_name,
+								'selected'=>$selected
+							);
+						}
+					}else{
+						$_affiliation_types=array();
+					}
+				}else{
+					$affiliation_types=$this->im->get_affiliation_types(array('statutory_body_status'=>'1','statutory_body_country_id'=>'99'),FALSE);
+
+					if(!empty($affiliation_types)){
+						foreach ($affiliation_types as $key => $value) {
+							$_affiliation_types[]=array(
+								'statutory_body_id'=>encode_data($value->statutory_body_id),
+								'statutory_body_abbr'=>$value->statutory_body_abbr,
+								'statutory_body_name'=>$value->statutory_body_name,
+								'selected'=>''
+							);
+						}
+					}else{
+						$_affiliation_types=array();
+					}
+				}
+
+
+				$college_grades=$this->im->get_grade_types(array('grade_status'=>'1'),FALSE);
+
+				if(!empty($college_grades)){
+					if(isset($college_data)){
+						foreach ($college_grades as $key => $value) {
+							$selected=($college_data->college_grade_ids==$value->grade_id)?'selected':'';
+							$grade_types[]=array(
+								'grade_id'=>encode_data($value->grade_id),
+								'grade_name'=>$value->grade_name,
+								'selected'=>$selected
+							);
+						}
+					}else{
+						foreach ($college_grades as $key => $value) {
+							$grade_types[]=array(
+								'grade_id'=>encode_data($value->grade_id),
+								'grade_name'=>$value->grade_name,
+								'selected'=>''
+							);
+						}
+					}
+						
+				}else{
+					$grade_types=array();
+				}
+					
+
+
+				if(!empty($college_data)){
+					$_states=$this->com->get_states(array('state_country_id'=>$college_data->user_country),'state_serial','ASC');
+				}else{
+					$_states=$this->com->get_states(array('state_country_id'=>'99'),'state_serial','ASC');
+				}
+
+
+				if(!empty($_states)){
+					foreach ($_states as $key => $value) {
+						$states[]=array(
+							'state_id'=>encode_data($value->state_id),
+							'state_name'=>$value->state_name,
+							'selected'=>(isset($college_data) && !empty($college_data) && ($value->state_id==$college_data->user_state))?'selected':''
+						);
+					}
+				}else{
+					$states=array();
+				}
+
+
+				$_cities=$this->com->get_city(array('city_country_id'=>$college_data->user_country,'city_state_id'=>$college_data->user_state),FALSE,$order_by=null,$order='ASC');
+
+				if(!empty($_cities)){
+					foreach ($_cities as $key => $value) {
+						$cities[]=array(
+							'city_id'=>encode_data($value->city_id),
+							'city_name'=>$value->city_name,
+							'selected'=>(isset($college_data) && !empty($college_data) && ($value->city_id==$college_data->user_city))?'selected':''
+						);
+					}
+				}else{
+					$cities=array();
+				}
+
+
+				$_districts=$this->com->get_district(array('district_country_id'=>$college_data->user_country,'district_state_id'=>$college_data->user_state),FALSE);
+
+				if(!empty($_districts)){
+					foreach ($_districts as $key => $value) {
+						$districts[]=array(
+							'district_id'=>encode_data($value->district_id),
+							'district_name'=>$value->district_name,
+							'selected'=>(isset($college_data) && !empty($college_data) && ($value->district_id==$college_data->user_district))?'selected':''
+						);
+					}
+				}else{
+					$districts=array();
+				}
+
+
+				$institue_types=$this->im->get_institute_types(array('inst_data_type'=>'4'),FALSE);
+
+				//print_obj($college_data);die;
+
+				if(!empty($institue_types)){
+					foreach ($institue_types as $key => $value) {					
+						$selected=(isset($college_data) && !empty($college_data) && ($college_data->user_type==$value->inst_type))?'selected':'';
+						$_institue_types[]=array(
+							'inst_type'=>encode_data($value->inst_type),
+							'inst_type_name'=>$value->inst_type_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_institue_types=array();
+				}
+
+
+				$institue_facilities=$this->sm->get_system_facilities(array('facility_status'=>'1'),FALSE);
+
+				//echo $college_data->college_facilities;
+
+				if(!empty($institue_facilities)){
+					foreach ($institue_facilities as $key => $value) {
+						if(isset($college_data) && !empty($college_data) && $college_data->college_facilities!=null){
+							$college_facilities=char_separated_to_array($college_data->college_facilities);
+							if(in_array($value->facility_id, $college_facilities)){
+								$selected='checked';
+							}else{
+								$selected='';
+							}
+						}else{
+							$selected='';
+						}
+						
+						$_institue_facilities[]=array(
+							'facility_id'=>encode_data($value->facility_id),
+							'facility_name'=>$value->facility_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_institue_facilities=array();
+				}
+
+				//print_obj($_institue_facilities);die;
+
+
+				if(!empty($college_data)){
+					$universities=$this->im->get_university_profile_data(array('university_country_id'=>$college_data->user_country,'university_state_id'=>$college_data->user_state),FALSE);
+				}else{
+					$universities=$this->im->get_university_profile_data(array('university_country_id'=>'99'),FALSE);
+				}
+				
+
+				if(!empty($universities)){
+					foreach ($universities as $key => $value) {
+						$selcted=(isset($college_data) && !empty($college_data) && ($college_data->college_university_id==$value->university_user_id))?'selected':'';
+						$_universities[]=array(
+							'university_id'=>encode_data($value->university_user_id),
+							'university_name'=>$value->university_name,
+							'selected'=>$selcted
+						);
+					}
+				}else{
+					$_universities=array();
+				}
+
+
+				if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+					$_college_intro_video=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_intro_video'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+					$_college_intro_video='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+	                $college_logo=$_college_logo->media_disk_path_relative;
+	                $college_logo_name=$_college_logo->media_disk_name;
+
+	                // Using basename to get the file name
+					$logo_file_name = basename($_college_logo->media_disk_path);
+					
+					$path_info = pathinfo($logo_file_name);
+
+					$logo_file_seo_name=$path_info['filename'];
+					$logo_file_extension = $path_info['extension'];
+
+	                $college_intro_video=(!empty($_college_intro_video))?$_college_intro_video->media_disk_path_relative:'';
+	            }else{
+	                $college_logo=base_url().'uploads/app/default/no.jpg';
+	                $college_logo_name='';
+	                $logo_file_seo_name='';
+	                $college_intro_video='';
+	            }
+
+	            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+	                $college_banner=$_college_banner->media_disk_path_relative;
+	                $college_banner_name=$_college_banner->media_disk_name;
+
+	                $banner_file_name = basename($_college_banner->media_disk_path);
+
+	                $bpath_info = pathinfo($banner_file_name);
+
+					$banner_file_seo_name=$bpath_info['filename'];
+					$banner_file_extension = $bpath_info['extension'];
+	            }else{
+	                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+	                $college_banner_name='';
+	                $banner_file_seo_name='';
+	            }
+
+	            
+
+	            // $_inner_menu=$this->sm->get_menues(array('menu_is_active'=>'1','menu_is_inner'=>'1','menu_link_type'=>'10','menu_link_id'=>$cid),FALSE,'menu_serial','ASC',FALSE);
+
+				$param=array('menu_link_id'=>$cid);
+
+				$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+						// if($value->menu_type_alias_name=='gallery'){
+						// 	$menu_target_modal='collegeInnerMenuesGalleryModal';						
+						// }else if($value->menu_type_alias_name=='course_fees'){
+						// 	$menu_target_modal='collegeInnerMenuesCoursesFeesModal';
+						// 	$menu_link=$this->data['admin_base_url'].'/institutions/colleges/courses/'.$college_id;			
+						// }else if($value->menu_type_alias_name=='faculty'){
+						// 	$menu_target_modal='collegeInnerMenuesFacultiesModal';					
+						// }else if($value->menu_type_alias_name=='hostel'){
+						// 	$menu_target_modal='collegeInnerMenuesHostelModal';
+						// 	$menu_link=$this->data['admin_base_url'].'/institutions/colleges/hostels/'.$college_id;					
+						// }else if($value->menu_type_alias_name=='admission'){
+						// 	$menu_target_modal='collegeInnerMenuesHostelModal';
+						// 	$menu_link=$this->data['admin_base_url'].'/institutions/colleges/admission/'.$college_id;					
+						// }
+						// else if($value->menu_type_alias_name=='placement'){
+						// 	$menu_target_modal='collegeInnerMenuesPlacementModal';					
+						// }else if($value->menu_type_alias_name=='cutoff'){
+						// 	$menu_target_modal='collegeInnerMenuesCutoffModal';					
+						// }else if($value->menu_type_alias_name=='scholarships'){
+						// 	$menu_target_modal='collegeInnerScholarshipsModal';
+						// }else if($value->menu_type_alias_name=='department'){
+						// 	$menu_target_modal='collegeInnerDepartmentModal';
+						// }
+
+						$menu_link=$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id;
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$menu_target_modal='';
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+
+
+				if(isset($cid)){
+					$info=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+					$college_general_info=$info->info_value;
+					$college_about_info=$info->info_value_about;
+					$college_facilities_info=$info->info_value_facilities_intro;
+					$college_placement_info=$info->info_value_placement_intro;
+					$college_ranking_info=$info->info_value_ranking_intro;
+				}else{
+					$college_general_info='';
+					$college_about_info='';
+					$college_facilities_info='';
+					$college_placement_info='';
+					$college_ranking_info='';
+				}
+
+				$college_faqs=$this->sm->get_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'1'),FALSE);
+
+				//print_obj($college_faqs);
+
+				if(!empty($college_faqs)){
+					foreach ($college_faqs as $key => $value) {
+						$faqs[$value->faq_question]=$value->faq_ans;					
+					}
+				}else{
+					$faqs=array();
+				}
+
+
+				$college_pfaqs=$this->sm->get_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'2'),FALSE);
+
+				if(!empty($college_pfaqs)){
+					foreach ($college_pfaqs as $key => $value) {
+						$college_placement_faqs[$value->faq_question]=$value->faq_ans;					
+					}
+				}else{
+					$college_placement_faqs=array();
+				}
+
+
+				$college_sfaqs=$this->sm->get_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'3'),FALSE);
+
+				if(!empty($college_sfaqs)){
+					foreach ($college_sfaqs as $key => $value) {
+						$college_scholarship_faqs[$value->faq_question]=$value->faq_ans;
+											
+					}
+				}else{
+					$college_scholarship_faqs=array();
+				}
+
+
+				$ranking_bodies=$this->im->get_ranking_types(array('rank_body_status'=>'active'),FALSE);
+				$ranking_categories=$this->im->get_ranking_categories(array('rank_category_status'=>'active'),FALSE);
+				$c_year=date('Y');
+
+
+				$college_ranking_data=$this->im->get_inst_ranking_data(array('ranking_inst_type'=>'college','ranking_inst_id'=>$cid),FALSE);
+
+				//print_obj($college_ranking_data);die;
+
+				$this->data['college_ranking_data']=$college_ranking_data;
+
+				if(!empty($college_ranking_data)){
+					foreach ($college_ranking_data as $key => $value) {
+						$crbodies[]=$value->ranking_body_id;
+						$crcats[]=$value->ranking_category_id;
+						$cryears[$key][]=$value->ranking_year;
+						$cranking_values[]=$value->ranking_value;
+
+						for ($i=$c_year; $i >($c_year-10); $i--) {
+							$ranking_years[$key][]=array(
+								'ranking_year'=>$i,
+								'selected'=>(isset($cryears) && in_array($i, $cryears))?'selected':''
+							);
+						}
+					}
+
+					$this->data['cranking_values']=$cranking_values;
+
+					
+				}else{
+					$this->data['cranking_values']=array();
+
+					for ($i=$c_year; $i >($c_year-10); $i--) {
+						$ranking_years[]=array(
+							'ranking_year'=>$i
+						);
+					}
+				}
+
+				//print_obj($cryears);
+
+				
+
+				//print_obj($ranking_years);die;
+
+				foreach ($ranking_bodies as $key => $value) {
+					$_rank_bodies[]=array(
+						'id'=>$value->rank_id,
+						'rank_body_id'=>encode_data($value->rank_id),
+						'rank_body'=>$value->rank_body,
+						'rank_value'=>$value->rank_value,
+						'selected'=>(isset($crbodies) && in_array($value->rank_id, $crbodies))?'selected':''
+					);
+				}
+
+				//print_obj($_rank_bodies);die;
+
+				foreach ($ranking_categories as $key => $value) {
+					$_ranking_categories[]=array(
+						'id'=>$value->rank_category_id,
+						'rank_category_id'=>encode_data($value->rank_category_id),
+						'rank_category'=>$value->rank_category,
+						'selected'=>(isset($crcats) && in_array($value->rank_category_id, $crcats))?'selected':''
+					);
+				}
+
+
+				
+				
+
+
+				// $context_urls=$this->sm->get_slug_urls(NULL,FALSE);
+
+				// foreach ($context_urls as $key => $value) {
+				// 	$key_val=ucwords(str_replace('_', ' ', $value->url_type));
+				// 	$_context_urls[$key_val][]=array(
+				// 		'title'=>$value->url_meta_title,
+				// 		'value'=>$value->url_value
+				// 	);
+				// }
+
+				// //print_obj(json_encode($_context_urls));die;
+				
+				// $this->data['context_urls']=$_context_urls;
+
+
+				$other_colleges=$this->im->__get_college_profile_data('college_user_id,college_name,access_url,college_city_id',array('is_verified_by_admin'=>'1'),FALSE);
+
+				
+
+				if(!empty($other_colleges)){
+					foreach ($other_colleges as $key => $value) {
+						$city_data=$this->com->get_city(array('city_id'=>$value->college_city_id));
+						$college_links[]=array(
+							'college_name'=>$value->college_name.' - ['.$city_data->city_name.']',
+							'college_link'=>$value->access_url
+						);
+					}
+				}
+
+				$this->data['college_links']=$college_links;
+
+
+				$file_intro_video_found=$this->sm->get_user_files(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$cid));
+
+				//print_obj($file_intro_video_found);die;
+
+				if(!empty($college_data)){
+					$college_data2=$this->im->___get_college_profile_data('college_user_id,college_city_id,city_name,college_email,college_state_id,state_name,college_name,college_phone_no,country_name,college_country_id,city_id,city_state_id,college_zipcode,college_web_address,college_address,college_paid',array('college_user_id'=>$cid));
+
+					$google_map_address=$college_data->user_address.','.strtoupper($college_data2->city_name).','.strtoupper($college_data2->state_name).','.strtoupper($college_data2->country_name).','.$college_data2->college_zipcode;
+				}else{
+					$google_map_address='';
+				}
+
+				$college_leads_courses=$this->sm->get_college_leads_courses($college_data->college_leads_type);
+
+				$_college_leads_courses=[];
+
+				if(!empty($college_leads_courses)){
+					foreach ($college_leads_courses as $key => $value) {
+						$_college_leads_courses[]=array(
+							'course_id'=>$value->course_id,
+							'course_name'=>$value->course_name,
+							'selected'=>in_array($value->course_id, char_separated_to_array($college_data->college_leads_type_course))?'selected':''
+						);
+					}
+				}
+
+				//echo $google_map_address;die;
+					
+
+				//print_obj($college_data);die;
+
+				//Leads
+				$leads_districts=$this->sm->get_college_leads_districts(array('district_state_id'=>'1'));
+
+				$_college_data=array(
+					'college_id'=>$college_id,
+					'college_utype'=>$college_data->college_utype,
+	            	'college_name'=>$college_data->user_fullname,
+	            	'college_short_name'=>$college_data->college_short_name,
+	            	'college_email'=>$college_data->user_email,
+	            	'college_phone_no'=>$college_data->college_phone_no,
+	            	'college_alter_phone_no'=>$college_data->college_alter_phone_no,
+	            	'college_whatsapp_no'=>$college_data->college_whatsapp_no,
+	            	'college_web_address'=>$college_data->college_web_address,
+	            	'college_google_map'=>(!empty($google_map_address))?'https://www.google.com/maps/embed/v1/place?key=AIzaSyCZm1_Yt_mBz93LOSnI640QAn6eeP891MU&q='.$google_map_address:'',
+	            	'college_estd_year'=>$college_data->user_estd_year,
+	            	'college_status'=>$college_data->user_status,
+	            	'college_address'=>$college_data->user_address,
+	            	'college_pincode'=>$college_data->user_zipcode,
+	            	'college_state'=>$college_data->user_state,
+	            	'college_logo'=>$college_logo,
+	            	'college_logo_name'=>$college_logo_name,
+	            	'college_logo_alt_text'=>(!empty($college_data))?$college_data->colllege_logo_alt_text:'',
+	            	'college_banner'=>$college_banner,
+	            	'college_banner_name'=>$college_banner_name,
+	            	'college_banner_alt_text'=>(!empty($college_data))?$college_data->colllege_banner_alt_text:'',
+	            	'college_logo_file_seo_name'=>str_replace('-',' ',$logo_file_seo_name),
+	            	'college_banner_file_seo_name'=>str_replace('-',' ',$banner_file_seo_name),
+	            	'college_intro_video'=>$file_intro_video_found,
+	            	'college_is_verified'=>$college_data->is_verified_by_admin,
+	            	'college_is_top'=>$college_data->college_is_top,
+	            	'college_has_verified_badge'=>$college_data->college_has_verified_badge,
+	            	'college_show_in_home_page'=>$college_data->college_is_top_visible_home,
+	            	'college_is_top_ranked'=>$college_data->college_is_top_ranked,
+	            	'college_has_leads_access'=>$college_data->college_has_leads_access,
+	            	'college_perday_leads'=>$college_data->college_perday_leads,
+	            	'college_leads_start'=>$college_data->college_leads_start,
+	            	'college_leads_end'=>$college_data->college_leads_end,
+	            	'college_max_leads'=>$college_data->college_max_leads,
+	            	'college_access_url'=>$college_data->access_url,
+	            	'college_leads_type'=>char_separated_to_array($college_data->college_leads_type),
+	            	'college_leads_district'=>char_separated_to_array($college_data->college_leads_district),
+	            	'college_leads_courses'=>$_college_leads_courses,
+	            	'college_leads_gender'=>(!empty($college_data))?$college_data->college_leads_gender:'',
+	            	'college_slug'=>(!empty($college_data))?$college_data->access_url_slug:'',
+	            	'college_general_info'=>$college_general_info,
+	            	'college_about_info'=>$college_about_info,
+	            	'college_placement_info'=>$college_placement_info,
+	            	'college_facilities_info'=>$college_facilities_info,
+	            	'college_ranking_info'=>$college_ranking_info,
+	            	'college_faqs'=>$faqs,
+	            	'college_placement_faqs'=>$college_placement_faqs,
+	            	'college_scholarship_faqs'=>$college_scholarship_faqs
+				);
+
+				$inner_menu_types=$this->sm->get_menue_types(array('menu_type_status'=>'1'),FALSE);
+
+				$this->data['countries']=$_countries;
+				$this->data['states']=$states;
+				$this->data['districts']=$districts;
+				$this->data['cities']=$cities;
+				$this->data['currencies']=$_currencies;
+				$this->data['institue_types']=$_institue_types;
+				$this->data['institue_facilities']=$_institue_facilities;
+
+				$this->data['institute_affiliations']=$_affiliation_types;
+				$this->data['institute_grades']=$grade_types;
+				$this->data['institute_ranking_bodies']=$_rank_bodies;
+				$this->data['institute_ranking_categories']=$_ranking_categories;
+				$this->data['institue_ranking_years']=$ranking_years;
+
+				$this->data['leads_districts']=$leads_districts;
+
+				//print_obj($this->data['institue_ranking_years']);die;
+
+				$this->data['universities']=$_universities;
+				$this->data['college_id']=$college_id;
+				$this->data['college_data']=$_college_data;
+				$this->data['inner_menues']=$inner_menu_types;
+				$this->data['inner_menues_assigned']=$inner_menues;
+				$this->data['c_year']=$c_year;
+				$this->data['page_title']='';
+
+				//print_obj($this->data['college_data']);die;
+
+				$view_page='users/vw_colleges_add_edit';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			//}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function indexCollegesCourses($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+
+
+
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+
+				//print_obj($college_data);die;
+
+				if($college_data->college_utype=='3'){
+					$menu_link_type='101';
+				}else if($college_data->college_utype=='4'){
+					$menu_link_type='10';
+				}
+
+				if(isset($cid)){
+					$info=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info'));
+
+					//print_obj($info);die;
+
+					$college_general_info=$info->info_value;
+					$college_course_info=$info->info_value_course_intro;
+					$college_admission_info=$info->info_value_admission_intro;
+					$college_cutoff_info=$info->info_value_cutoff_intro;
+					$college_placement_info=$info->info_value_placement_intro;
+					$college_scholarship_info=$info->info_value_scholarship_intro;
+					$college_faculty_info=$info->info_value_faculty_intro;
+				}else{
+					$college_general_info='';
+					$college_course_info='';
+					$college_admission_info='';
+					$college_cutoff_info='';
+					$college_placement_info='';
+					$college_scholarship_info='';
+					$college_faculty_info='';
+				}
+
+
+				if($college_data->college_utype=='3'){
+					$college_type='101';
+				}else if($college_data->college_utype=='4'){
+					$college_type='10';
+				}
+
+
+				$_college_data=array(
+	            	'college_id'=>$college_id,
+	            	'college_type'=>$college_type,
+	            	'college_name'=>$college_data->college_name,
+	            	'college_course_info'=>$college_course_info,
+	            	'college_access_url'=>$college_data->access_url
+            	);
+
+
+            	$param=array('menu_link_id'=>$cid,'menu_link_type'=>$menu_link_type);
+
+				//$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				$_inner_menus = $this->sm->get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				//print_obj($_inner_menus);die;
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						//$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						if($college_data->college_utype==3){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+						}else if($college_data->college_utype==4){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+						}
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$menu_target_modal='';
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+            	//print_obj($_college_data);die;
+
+            	if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+				    $college_logo=$_college_logo->media_disk_path_relative;
+				    $college_logo_name=$_college_logo->media_org_name;
+				}else{
+				    $college_logo=base_url().'uploads/app/default/no.jpg';
+				    $college_logo_name='';
+				}
+
+				if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+				    $college_banner=$_college_banner->media_disk_path_relative;
+				    $college_banner_name=$_college_banner->media_org_name;
+				}else{
+				    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+				    $college_banner_name='';
+				}
+
+				//echo $cid;
+
+				$college_course_info=$this->im->_get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'course_info'));
+
+				$this->data['college_course_info']=$college_course_info;
+
+				//print_obj($college_course_info);die;
+
+				$this->data['college_logo']=$college_logo;
+				$this->data['college_banner']=$college_banner;
+
+            	$this->data['college_data']=$_college_data;
+            	$this->data['inner_menues_assigned']=$inner_menues;
+            	$this->data['page_title']='';
+            	$this->data['college_id']=$college_id;
+
+				$view_page='users/vw_colleges_courses';
+				$this->theme->title($this->data['page_title'])->add_partial('partial_college_course_page_meta_modal')->add_partial('partial_file_upload_big_modal')->add_partial('partial_ads_modal')->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexCollegesCoursesAddEdit($college_id=null,$user_course_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+
+				$cid=decode_data($college_id);
+				$ucid=decode_data($user_course_id);
+
+				//echo $ucid;die;
+
+				//echo $cid;die;
+
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+
+				if($college_data->college_utype=='3'){
+					$college_type='101';
+				}else{
+					$college_type='10';
+				}
+
+				$this->data['college_type']=$college_type;
+
+				$user_course_data=$this->im->get_user_course_data(array('user_course_id'=>$ucid),TRUE);
+
+				//print_obj($user_course_data);die;
+
+				$courses=$this->strm->get_course(array('course_status'=>'1'),FALSE);
+				$sub_streams=$this->strm->get_course_sub_stream(array('sub_stream_status'=>'1'),FALSE,'sub_stream_serial','ASC');
+
+				$streams=$this->strm->get_stream(array('stream_status'=>'1'),FALSE,'stream_serial','ASC');
+
+				//print_obj($courses);die;
+
+
+				if(!empty($courses)){
+					foreach ($courses as $key => $value) {
+						$course_name=($value->course_short_name!='')?$value->course_name.'('.$value->course_short_name.')':$value->course_name;
+						// $sub_stream_data=$this->strm->get_course_sub_stream(array('sub_stream_id'=>$value->course_sub_stream,'sub_stream_parent_id'=>$value->course_stream));
+
+						$sub_stream_data=$this->strm->get_course_sub_stream(array('sub_stream_id'=>$value->course_sub_stream));
+
+						$_courses[]=array(
+							'course_id'=>encode_data($value->course_id),
+							'course_name'=>$course_name,
+							'course_short_name'=>$value->course_short_name,
+							'course_sub_stream'=>(!empty($sub_stream_data))?' ( '.$sub_stream_data->sub_stream_name.' )':'',
+							'course_lateral'=>($value->course_is_lateral=='1')?'{ Lateral }':'',
+							'course_type'=>$value->course_type,
+							'course_passed_type'=>$value->course_passed_type,
+							'selected'=>(!empty($user_course_data) && $user_course_data->user_course==$value->course_id)?'selected':''
+						);
+					}
+				}else{
+					$_courses=array();
+				}
+
+				//echo $cid;
+
+				//echo $user_course_data->user_course;
+
+				$user_course_streams=array();
+
+				if(!empty($user_course_data)){
+					$user_course_streams=$this->strm->get_user_course_stream_data(array('course_id'=>$user_course_data->user_course,'user_id'=>$cid,'stream_parent_id'=>null),FALSE,'stream_id','ASC',FALSE);
+				}
+
+				
+
+				//print_obj($user_course_streams);die;
+
+				if(!empty($user_course_streams)){
+					foreach ($user_course_streams as $key => $value) {
+						$ustreams[]=$value->stream_id;
+					}
+				}else{
+					$ustreams=array();
+				}
+
+				//print_obj($ustreams);die;
+
+				if(!empty($streams)){
+					foreach ($streams as $key => $value){
+						$_streams[]=array(
+							'stream_id'=>encode_data($value->stream_id),
+							'stream_name'=>$value->stream_name,
+							'selected'=>(($ustreams!=null || !empty($ustreams)) && in_array($value->stream_id, $ustreams))?'selected':''
+						);
+					}
+				}else{
+					$_streams=array();
+				}
+
+				//print_obj($_streams);die;
+
+				$user_course_sub_streams=array();
+
+				if(!empty($user_course_data)){
+					$user_course_sub_streams=$this->strm->get_user_course_stream_data(array('course_id'=>$user_course_data->user_course,'user_id'=>$cid,'stream_parent_id!='=>null),FALSE,'stream_id','ASC',FALSE);
+				}
+
+				
+
+				//print_obj($sub_streams);die;
+
+				if(!empty($user_course_sub_streams)){
+					foreach ($user_course_sub_streams as $key => $value) {
+						$usubstreams[]=$value->stream_id;
+					}
+				}else{
+					$usubstreams=array();
+				}
+
+				if(!empty($sub_streams)){
+					foreach ($sub_streams as $key => $value){
+						$_sub_streams[]=array(
+							'stream_id'=>encode_data($value->sub_stream_id),
+							'stream_name'=>$value->sub_stream_name,
+							'selected'=>(($usubstreams!=null || !empty($usubstreams)) && in_array($value->sub_stream_id, $usubstreams))?'selected':''
+						);
+					}
+				}else{
+					$_sub_streams=array();
+				}
+
+				//print_obj($_sub_streams);die;
+				$user_courses_exams=array();
+
+				if(!empty($user_course_data)){
+					$user_courses_exams=$this->strm->get_user_courses_exam(array('user_id'=>$cid,'user_course_pk_id'=>$user_course_data->user_course_id,'user_type'=>'4'),FALSE);
+				}
+				
+
+				if(!empty($user_courses_exams)){
+					foreach ($user_courses_exams as $key => $value) {
+						$ucexs[]=$value->exam_id;
+					}
+				}else{
+					$ucexs=array();
+				}
+
+				$exams=$this->strm->get_exam(array('exam_status'=>'1'),FALSE);
+
+				if(!empty($exams)){
+					foreach ($exams as $key => $value){
+						$_exams[]=array(
+							'exam_id'=>encode_data($value->exam_id),
+							'exam_name'=>$value->exam_full_name,
+							'exam_short_name'=>$value->exam_short_name,
+							'selected'=>(($ucexs!=null || !empty($ucexs)) && in_array($value->exam_id, $ucexs))?'selected':''
+						);
+					}
+				}else{
+					$_exams=array();
+				}
+
+
+				$course_cost_type=array('1'=>'General','2'=>'Specific');
+
+				foreach ($course_cost_type as $key => $value) {
+					$_course_cost_type[]=array(
+						'cost_key'=>$key,
+						'cost_value'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_cost_type==$key)?'selected':''
+					);
+				}
+
+				$course_cost_breakup_type=array('1'=>'Breakup','2'=>'In Total');
+
+				foreach ($course_cost_breakup_type as $key => $value) {
+					$_course_cost_breakup_type[]=array(
+						'cost_breakup_key'=>$key,
+						'cost_breakup_value'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_cost_breakup_type==$key)?'selected':''
+					);
+				}
+
+
+				$course_duration_years=array('1','2','3','4','5','6');
+
+				// print_obj($user_course_data);die;
+
+				foreach ($course_duration_years as $key => $value) {
+					$_course_duration_years[]=array(
+						'course_duration_year'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_duration_year==$value)?'selected':''
+					);
+				}
+
+				// print_obj($_course_duration_years);die;
+
+				//print_obj($user_course_data);die;
+
+				$course_types=array('Doctorate','Degree(Bachelors)','Degree(Masters)','Diploma','Certification');
+
+				foreach ($course_types as $key => $value) {
+					$_course_types[]=array(
+						'course_type'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_type==$value)?'selected':''
+					);
+				}
+
+				$course_pass_types=array('Phd','Post Graduation','Graduation','Diploma','Certificate');
+
+				foreach ($course_pass_types as $key => $value) {
+					$_course_pass_types[]=array(
+						'course_pass_type'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_pass_type==$value)?'selected':''
+					);
+				}
+
+				$placement_types=array('On Campus','Off Campus');
+
+				foreach ($placement_types as $key => $value) {
+					$_placement_types[]=array(
+						'placement_type'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_placement_type==$value)?'selected':''
+					);
+				}
+
+				$duration_types=array('Full Time','Part Time','Lateral');
+
+				foreach ($duration_types as $key => $value) {
+					$_duration_types[]=array(
+						'duration_type'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_duration_type==$value)?'selected':''
+					);
+				}
+
+
+				$duration_sub_types=array('Full Time','Part Time','Lateral');
+
+				foreach ($duration_sub_types as $key => $value) {
+					$_duration_sub_types[]=array(
+						'duration_sub_type'=>$value,
+						'selected'=>(!empty($user_course_data) && $user_course_data->user_course_duration_sub_type==$value)?'selected':''
+					);
+				}
+
+				//print_obj($user_course_data);die;
+
+				
+					$course_cost_categories=$this->im->get_course_fees_categories_data(array('category_status'=>'1'),FALSE);
+
+					foreach ($course_cost_categories as $key => $value) {
+						if(!empty($user_course_data)){
+							$course_cost_data=$this->im->get_course_fees_data(array('user_course_cost_pk'=>$ucid,'user_id'=>$cid,'user_course_id'=>$user_course_data->user_course,'user_course_cost_category'=>$value->category_name),FALSE,'user_course_cost_id','ASC',FALSE);
+						}else{
+							$course_cost_data=array();
+						}
+						
+
+						//print_obj($course_cost_data);die;
+
+						// if(!empty($course_cost_data)){
+
+						// 	foreach ($course_cost_data as $k => $v) {
+						// 		$user_course_cost_data[$value->category_name][]=array(
+						// 			'user_course_year'=>$v->user_course_year,
+						// 			'user_course_year_ordinal'=>ordinal($v->user_course_year),
+						// 			'user_course_tution_fee_sem_1'=>$v->user_course_tution_fee_sem_1,
+						// 			'user_course_tution_fee_sem_2'=>$v->user_course_tution_fee_sem_2,
+						// 			'user_course_admisssion_fee_sem_1'=>$v->user_course_admisssion_fee_sem_1,
+						// 			'user_course_admisssion_fee_sem_2'=>$v->user_course_admisssion_fee_sem_2,
+						// 			'user_course_reg_fee_sem_1'=>$v->user_course_reg_fee_sem_1,
+						// 			'user_course_reg_fee_sem_2'=>$v->user_course_reg_fee_sem_2,
+						// 			'user_course_exam_fee_sem_1'=>$v->user_course_exam_fee_sem_1,
+						// 			'user_course_exam_fee_sem_2'=>$v->user_course_exam_fee_sem_2,
+						// 			'user_course_other_fee_sem_1'=>$v->user_course_other_fee_sem_1,
+						// 			'user_course_other_fee_sem_2'=>$v->user_course_other_fee_sem_2,
+						// 			'user_course_total_fee'=>$v->user_course_total_fee
+						// 		);								
+						// 	}
+							
+						// }else{
+						// 	$user_course_cost_data=array();
+						// }
+
+						// print_obj($user_course_data);die;
+
+						$selected=(!empty($user_course_data) && in_array($value->category_id, char_separated_to_array($user_course_data->user_course_cost_category)))?'checked':'';
+						$_c_categories[]=array(
+							'category_id'=>encode_data($value->category_id),
+							'category_name'=>$value->category_name,
+							'default_selected'=>($value->category_id=='1')?'checked':'',
+							'selected'=>$selected,
+							'course_cost'=>$course_cost_data
+						);
+					}
+				
+
+				
+
+				//die;
+
+				//print_obj($_c_categories);die;
+
+				
+
+				//print_obj($user_course_data);die;
+
+
+				
+					
+				$course_cost_type=(!empty($user_course_data))?$user_course_data->user_course_cost_type:'';
+				$course_cost_breakup_type=(!empty($user_course_data))?$user_course_data->user_course_cost_breakup_type:'';
+				$course_eligibility=(!empty($user_course_data))?$user_course_data->user_course_eligibility:'';
+				$course_eligibility_desc=(!empty($user_course_data))?$user_course_data->user_course_eligibility_broad:'';
+				$couese_seats=(!empty($user_course_data))?$user_course_data->user_course_total_seats:'';
+				$user_course_id=(!empty($user_course_data))?encode_data($user_course_data->user_course_id):'';
+
+				$_college_data=array(
+	            	'college_id'=>$college_id,
+	            	'collge_course_pk_id'=>$user_course_id,
+	            	'college_name'=>$college_data->college_name,
+	            	'college_course_eligibility'=>$course_eligibility,
+	            	'college_courses'=>$_courses,
+	            	'college_streams'=>$_streams,
+	            	'college_sub_streams'=>$_sub_streams,
+	            	'college_exams'=>$_exams,
+	            	'college_course_types'=>$_course_types,
+	            	'college_course_pass_types'=>$_course_pass_types,
+	            	'college_course_duration'=>$_course_duration_years,
+	            	'course_duration_types'=>$_duration_types,
+	            	'course_duration_sub_type'=>$_duration_sub_types,
+	            	'college_placement_types'=>$_placement_types,
+	            	'course_seats'=>$couese_seats,
+	            	'course_eligibility'=>$course_eligibility,
+	            	'course_eligibility_desc'=>$course_eligibility_desc,
+	            	'course_cost_type'=>$course_cost_type,
+	            	'course_cost_types'=>$_course_cost_type,
+	            	'course_cost_breakup_type'=>$course_cost_breakup_type,
+	            	'course_cost_breakup_types'=>$_course_cost_breakup_type,
+	            	'course_cost_categories'=>$_c_categories	            	
+            	);
+
+            	//print_obj($_college_data);die;
+
+            	$this->data['college_data']=$_college_data;
+            	$this->data['college_id']=$college_id;
+            	$this->data['user_currency']='₹';
+
+				$view_page='users/vw_colleges_course_fees_add_edit';
+				$this->data['page_title']='Add/Edit Course Fees';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexCollegesHostels($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+
+				if($college_data->college_utype=='3'){
+					$college_type='101';
+				}else if($college_data->college_utype=='4'){
+					$college_type='10';
+				}
+
+				$this->data['college_type']=$college_type;
+				
+				$men_total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$cid,'fess_data_id_type'=>'2','fees_type'=>'2'));
+				$women_total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$cid,'fess_data_id_type'=>'2','fees_type'=>'1'));
+
+				$men_hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>'2','hostel_data_type_id'=>$cid,'hostel_type'=>'2'));
+
+				$women_hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>'2','hostel_data_type_id'=>$cid,'hostel_type'=>'1'));
+
+				$hostel_data=array(
+					'men_hostel_detail_type'=>$college_data->college_menhostel_details_type,
+					'men_hostel_note'=>(!empty($men_hostel_notes))?$men_hostel_notes->hostel_notes:null,
+					'men_hostel_total_fees_start'=>(!empty($men_total_fees_data))?$men_total_fees_data->fees_start:0,
+					'men_hostel_total_fees_end'=>(!empty($men_total_fees_data))?$men_total_fees_data->fees_end:0,
+					'women_hostel_detail_type'=>$college_data->college_womenhostel_details_type,
+					'women_hostel_note'=>(!empty($women_hostel_notes))?$women_hostel_notes->hostel_notes:null,
+					'women_hostel_total_fees_start'=>(!empty($women_total_fees_data))?$women_total_fees_data->fees_start:0,
+					'women_hostel_total_fees_end'=>(!empty($women_total_fees_data))?$women_total_fees_data->fees_end:0,
+				);
+				$_college_data=array(
+	            	'college_id'=>$college_id,
+	            	'college_name'=>$college_data->college_name,
+	            	'college_hostel_data'=>$hostel_data
+            	);
+
+            	// $param=array('menu_link_id'=>$cid,'menu_link_type'=>$menu_link_type);
+
+            	$param=array('menu_link_id'=>$cid);
+
+				//$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				$_inner_menus = $this->sm->get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				//print_obj($_inner_menus);die;
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						//$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						if($college_data->college_utype==3){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+						}else if($college_data->college_utype==4){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+						}
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$menu_target_modal='';
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+
+				if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+				    $college_logo=$_college_logo->media_disk_path_relative;
+				    $college_logo_name=$_college_logo->media_org_name;
+				}else{
+				    $college_logo=base_url().'uploads/app/default/no.jpg';
+				    $college_logo_name='';
+				}
+
+				if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+				    $college_banner=$_college_banner->media_disk_path_relative;
+				    $college_banner_name=$_college_banner->media_org_name;
+				}else{
+				    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+				    $college_banner_name='';
+				}
+
+            	//print_obj($_college_data);die;
+
+            	$this->data['college_data']=$_college_data;
+            	$this->data['college_id']=$college_id;
+            	$this->data['college_logo']=$college_logo;
+				$this->data['college_banner']=$college_banner;
+            	$this->data['inner_menues_assigned']=$inner_menues;
+
+				$view_page='users/vw_colleges_add_edit_hostel';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexCollegesCutoffs($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+				if(isset($cid)){
+					$info=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid));
+					$college_cutoff_info=$info->info_value_cutoff_intro;
+				}else{
+					$college_cutoff_info='';
+				}
+
+				if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+	                $college_logo=$_college_logo->media_disk_path_relative;
+	                $college_logo_name=$_college_logo->media_org_name;
+	            }else{
+	                $college_logo=base_url().'uploads/app/default/no.jpg';
+	            }
+
+	            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+	                $college_banner=$_college_banner->media_disk_path_relative;
+	            }else{
+	                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+	            }
+
+	            $current_year=date('Y');
+	            $past_5_year=$current_year-5;
+
+	            //print_obj($college_data);die;
+
+
+	            $exams=$this->strm->get_indset_exam('exam_id',$college_data->college_exam_ids);
+
+	            if(!empty($exams)){
+	            	foreach ($exams as $key => $value) {
+	            		$courses=$this->strm->get_inset_courses('course_stream',$value->exam_stream_id);
+	            		$_exams[]=array(
+	            			'exam_id'=>encode_data($value->exam_id),
+	            			'exam_name'=>$value->exam_short_name,
+	            			'exam_courses'=>$courses
+	            		);
+	            	}
+	            }else{
+	            	$_exams=array();
+	            }
+
+	            $rounds=$this->strm->get_exam_rounds(array('cutoff_round_status'=>'1'),FALSE);
+
+
+	            $cutoff_categories=$this->strm->get_cutoff_categories(null,FALSE);
+
+	            $courses=$this->strm->get_course(array('course_status'=>1),FALSE);
+
+	            //echo $college_user_id;die;
+
+	            $cutoff_data=$this->strm->get_cutoffs(array('cutoff_type_id'=>$cid,'cutoff_type'=>'college'),FALSE);
+
+	            $cutoff_intro=$this->im->_get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'cutoff_info'));
+
+
+				$_college_data=array(
+	            	'college_id'=>$college_id,
+	            	'college_user_id'=>encode_data($college_user_id),
+	            	'college_name'=>$college_data->college_name,
+	            	'college_banner'=>$college_banner,
+	            	'college_logo'=>$college_logo,
+	            	'college_cutoff_info'=>$college_cutoff_info,
+	            	'college_exams'=>$_exams,
+	            	'current_year'=>$current_year,
+	            	'5_past_year'=>$past_5_year,
+	            	'college_cutoff_rounds'=>$rounds,
+	            	'college_cutoff_categories'=>$cutoff_categories,
+	            	'college_courses'=>$courses,
+	            	'college_cutoff_data'=>$cutoff_data,
+	            	'college_cutoff_intro'=>$cutoff_intro
+            	);
+
+            	//print_obj($_college_data);die;
+
+            	$this->data['college_data']=$_college_data;
+
+            	$param=array('menu_link_id'=>$cid);
+
+				$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+				$this->data['inner_menues_assigned']=$inner_menues;
+
+				$view_page='users/vw_colleges_add_edit_cutoff';
+				$this->theme->title($this->data['page_title'])->add_partial('partial_college_exams_modal')->add_partial('partial_file_upload_big_modal')->add_partial('partial_ads_modal')->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexCollegesAdmissions($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+				if(isset($cid)){
+					$info=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_2'=>'admission_info','info_type_id'=>$cid));
+					$info_intro=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_2'=>'general_info','info_value_type'=>'2','info_type_id'=>$cid));
+					$college_admission_info=$info_intro->info_value_admission_intro;
+				}else{
+					$college_admission_info='';
+				}
+
+				if($college_data->college_utype==3){
+					$menu_link_type='101';
+				}else if($college_data->college_utype==4){
+					$menu_link_type='10';
+				}
+
+				$user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+		        //print_obj($user_logo);die;
+
+				if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+				    $college_logo=$user_logo->media_disk_path_relative;
+				    $user_logo_name=$user_logo->media_org_name;
+				}else{
+				    $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';
+				    $user_logo_name='';
+				}
+
+
+				$user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+
+				if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+				    $college_banner=$user_banner->media_disk_path_relative;
+				    $user_banner_name=$user_banner->media_org_name;
+				}else{
+				    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+				    $user_banner_name='';
+				}
+
+			
+
+				if($college_data->college_utype=='3'){
+					$college_type='101';
+				}else if($college_data->college_utype=='4'){
+					$college_type='10';
+				}
+
+				$_college_data=array(
+	            	'college_id'=>encode_data($college_data->college_user_id),
+	            	'college_type'=>$college_type,
+					'college_name'=>$college_data->college_name,
+					'college_logo'=>$college_logo,
+					'college_banner'=>$college_banner,
+	            	'college_admission_info'=>$college_admission_info
+            	);
+
+            	//($info);die;
+
+            	//echo $cid;die;
+
+            	$admission_faqs=$this->sm->get_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'4'),FALSE);
+
+				//print_obj($college_faqs);die;
+
+				if(!empty($admission_faqs)){
+					foreach ($admission_faqs as $key => $value) {
+						$faqs[$value->faq_question]=$value->faq_ans;					
+					}
+				}else{
+					$faqs=array();
+				}
+
+            	//print_obj($_college_data);die;
+
+            	$this->data['other_infos']=$this->im->_get_inst_info_data(array('info_type'=>'2','info_type_2'=>'admission_info','info_type_id'=>$cid,'info_serial!='=>NULL));
+
+            	$this->data['college_data']=$_college_data;
+            	$this->data['admission_faqs']=$admission_faqs;
+
+            	$this->data['parent_folder_data']=$this->sm->get_file(array('storage_type'=>'1','media_org_name'=>'newsarticles'));
+
+            	$this->data['college_slug']=$this->sm->get_slug_urls(array('url_type'=>'college_static_url','url_type_id'=>$cid));
+
+            	// $exam_slugs=$this->sm->get_slug_urls(array('url_type'=>'exam','url_sub_type'=>NULL),FALSE);
+
+            	// print_obj($exam_slugs);die;
+
+            	// foreach ($exam_slugs as $key => $value) {
+            	// 	$exam=$this->strm->get_exam(array('exam_id'=>$value->url_type_id));
+            	// 	$exam_slug_data[]=array(
+            	// 		'title'=>$exam->exam_short_name,
+            	// 		'value'=>$value->url_value
+            	// 	);
+            	// }
+
+            	$exams=$this->strm->get_exam(array('exam_status'=>1),FALSE);
+
+            	foreach ($exams as $key => $value) {
+            		$exam_slugs=$this->sm->get_slug_urls(array('url_type'=>'exam','url_sub_type'=>NULL,'url_type_id'=>$value->exam_id));
+            		if($exam_slugs->url_value!=null){
+            			$_exam_slug_data[]=array(
+	            			'title'=>$value->exam_short_name,
+	            			'value'=>$exam_slugs->url_value
+	            		);
+            		}
+	            		
+            	}
+
+            	//print_obj($_exam_slug_data);die;
+
+            	$this->data['exam_slug']=json_encode($_exam_slug_data);
+
+
+
+            	//print_obj($this->data['exam_slug']);die;
+
+            	$uslugs=$this->sm->get_slug_urls(array('url_type'=>'university_static_urls'),FALSE);
+
+            	foreach ($uslugs as $key => $value) {
+            		
+					$university=$this->im->_get_university_profile_data(array('university_user_id'=>$value->url_type_id));
+
+					if($value->url_value!=null && $university->university_name!=null){
+						$university_slug_data[]=array(
+	            			'title'=>$university->university_name,
+	            			'value'=>$value->url_value
+	            		);
+					}
+
+            		
+            	}
+
+            	//die;
+
+            	//print_obj($university_slug_data);die;
+
+            	$param=array('menu_link_id'=>$cid,'menu_link_type'=>$menu_link_type);
+
+				$_inner_menus = $this->sm->get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						if($college_data->college_utype==3){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+						}else if($college_data->college_utype==4){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+						}
+
+						
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+
+				$this->data['inner_menues_assigned']=$inner_menues;
+
+            	$this->data['university_slug']=json_encode($university_slug_data);
+
+				$view_page='users/vw_colleges_add_edit_admission';
+				$this->theme->title($this->data['page_title'])->add_partial('partial_tiny_file_browser')->add_partial('partial_ads_modal')->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexCollegesResults($college_id){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+				$college_type=($college_data->college_type==7)?2:1;
+
+				$user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+		        //print_obj($user_logo);die;
+
+				if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+				    $college_logo=$user_logo->media_disk_path_relative;
+				    $user_logo_name=$user_logo->media_org_name;
+				}else{
+				    $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';
+				    $user_logo_name='';
+				}
+
+
+				$user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+
+				if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+				    $college_banner=$user_banner->media_disk_path_relative;
+				    $user_banner_name=$user_banner->media_org_name;
+				}else{
+				    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+				    $user_banner_name='';
+				}
+
+				$_college_data=array(
+					'college_id'=>encode_data($college_data->college_user_id),
+					'college_type'=>$college_type,
+					'college_name'=>$college_data->college_name,
+					'college_logo'=>$college_logo,
+					'college_banner'=>$college_banner
+				);
+
+            	$result_faqs=$this->sm->get_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'1','faq_type'=>'5'),FALSE);
+
+				//print_obj($result_faqs);die;
+
+				if(!empty($result_faqs)){
+					foreach ($result_faqs as $key => $value) {
+						$faqs[$value->faq_question]=$value->faq_ans;					
+					}
+				}else{
+					$faqs=array();
+				}
+
+            	//print_obj($_college_data);die;
+
+            	//echo $cid;die;
+
+            	$this->data['other_infos']=$this->im->_get_inst_info_data(array('info_type'=>$college_type,'info_type_2'=>'result_info','info_type_id'=>$cid,'info_serial!='=>NULL));
+
+            	$this->data['college_data']=$_college_data;
+            	$this->data['result_faqs']=$result_faqs;
+
+            	$this->data['parent_folder_data']=$this->sm->get_file(array('storage_type'=>'1','media_org_name'=>'newsarticles'));
+
+            	$this->data['college_slug']=$this->sm->get_slug_urls(array('url_type'=>'college_static_url','url_type_id'=>$cid));
+
+            	// $exam_slugs=$this->sm->get_slug_urls(array('url_type'=>'exam','url_sub_type'=>NULL),FALSE);
+
+            	// print_obj($exam_slugs);die;
+
+            	// foreach ($exam_slugs as $key => $value) {
+            	// 	$exam=$this->strm->get_exam(array('exam_id'=>$value->url_type_id));
+            	// 	$exam_slug_data[]=array(
+            	// 		'title'=>$exam->exam_short_name,
+            	// 		'value'=>$value->url_value
+            	// 	);
+            	// }
+
+            	$exams=$this->strm->get_exam(array('exam_status'=>1),FALSE);
+
+            	foreach ($exams as $key => $value) {
+            		$exam_slugs=$this->sm->get_slug_urls(array('url_type'=>'exam','url_sub_type'=>NULL,'url_type_id'=>$value->exam_id));
+            		if($exam_slugs->url_value!=null){
+            			$_exam_slug_data[]=array(
+	            			'title'=>$value->exam_short_name,
+	            			'value'=>$exam_slugs->url_value
+	            		);
+            		}
+	            		
+            	}
+
+            	//print_obj($_exam_slug_data);die;
+
+            	$this->data['exam_slug']=json_encode($_exam_slug_data);
+
+
+
+            	//print_obj($this->data['exam_slug']);die;
+
+            	$uslugs=$this->sm->get_slug_urls(array('url_type'=>'university_static_urls'),FALSE);
+
+            	foreach ($uslugs as $key => $value) {
+            		
+					$university=$this->im->_get_university_profile_data(array('university_user_id'=>$value->url_type_id));
+
+					if($value->url_value!=null && $university->university_name!=null){
+						$university_slug_data[]=array(
+	            			'title'=>$university->university_name,
+	            			'value'=>$value->url_value
+	            		);
+					}
+
+            		
+            	}
+
+            	//die;
+
+            	//print_obj($university_slug_data);die;
+
+            	$param=array('menu_link_id'=>$cid);
+
+				$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+
+				// print_obj($_inner_menus);die;
+
+
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+
+            	$this->data['inner_menues_assigned']=$inner_menues;
+
+            	// print_obj($this->data['inner_menues_assigned']);die;
+
+            	$this->data['university_slug']=json_encode($university_slug_data);
+
+				$view_page='users/vw_colleges_add_edit_results';
+				$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->add_partial('partial_tiny_file_browser')->add_partial('partial_ads_modal')->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onGetSlugs(){
+		$exam_slugs=$this->sm->get_slug_urls(array('url_type'=>'exam','url_sub_type'=>NULL),FALSE);
+
+    	foreach ($exam_slugs as $key => $value) {
+    		$exam=$this->strm->get_exam(array('exam_id'=>$value->url_type_id));
+    		$exam_slug_data[]=array(
+    			'id'=>$value->exam_id,
+    			'title'=>$exam->exam_short_name,
+    			'value'=>$value->url_value
+    		);
+    	}
+
+
+    	json_headers($exam_slug_data);
+	}
+
+
+	public function indexCollegesGallery($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+
+				if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+	                $college_logo=$_college_logo->media_disk_path_relative;
+	                $college_logo_name=$_college_logo->media_org_name;
+	            }else{
+	                $college_logo=base_url().'uploads/app/default/no.jpg';
+	            }
+
+	            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+	                $college_banner=$_college_banner->media_disk_path_relative;
+	            }else{
+	                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+	            }
+
+				$gallery_types=$this->sm->get_gallery_types(array('gallery_type_status'=>'1'),FALSE,'gallery_type_serial','ASC',FALSE);
+
+				$_college_data=array(
+	            	'college_id'=>$college_id,
+	            	'college_name'=>$college_data->college_name,
+	            	'college_banner'=>$college_banner,
+	            	'college_logo'=>$college_logo,
+	            	'college_gallery_types'=>$gallery_types
+            	);
+
+				$this->data['college_data']=$_college_data;
+
+				$param=array('menu_link_id'=>$cid);
+
+				$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						//$menu_link=$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id;
+
+
+						if($college_data->college_utype==3){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+						}else if($college_data->college_utype==4){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+						}
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$menu_target_modal='';
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+
+				$this->data['inner_menues_assigned']=$inner_menues;
+
+				$this->data['page_title']='College Inner Menues';
+
+				$this->data['college_id']=$college_id;
+
+				$view_page='users/vw_colleges_add_edit_gallery';
+				$this->theme->title($this->data['page_title'])->load($view_page, $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAddColleges(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+				
+				$college_id 		= 	clean_data(post_data('_college'));
+				$college_name 		= 	clean_data(post_data('college_name'));
+				$college_short_name =	post_data('college_short_name');
+
+				$college_utype 		=	post_data('college_utype');
+
+				$college_estd 		= 	post_data('college_estd');
+				$college_university = 	decode_data(clean_data(post_data('college_university')));
+				$college_status 	= 	post_data('college_status');
+				$college_country 	= 	decode_data(clean_data(post_data('college_country')));
+				$college_state 		= 	decode_data(clean_data(post_data('college_state')));
+				$college_city 		= 	decode_data(clean_data(post_data('college_city')));
+				$college_district 	= 	decode_data(clean_data(post_data('college_district')));
+				$college_address 	= 	clean_data(post_data('college_address'));
+				$college_pincode 	= 	clean_data(post_data('college_pincode'));
+
+				$college_email 		= 	clean_data(post_data('college_email'));
+				$college_phone 		= 	clean_data(post_data('college_phone'));
+				$college_other_phone	=	clean_data(post_data('college_other_phone'));
+				$college_whatsapp_no	=	clean_data(post_data('college_whatsapp_no'));
+				$college_web_address	=	clean_data(post_data('college_web_address'));
+
+				$college_grades 	=	clean_data(post_data('college_grades'));
+
+				$college_faqus 		=	$this->input->post('college_faqus');
+				$college_placement_faqs 		=	$this->input->post('college_placement_faqs');
+				$college_scholarships_faqs 		=	$this->input->post('college_scholarship_faqs');
+
+				$college_ranking_data	=	$this->input->post('college_ranking');
+
+				$college_has_verified_badge	=	post_data('college_has_verified_badge');
+
+				$college_logo_seo_file_name	=	post_data('college_logo_seo_file_name');
+				$college_banner_seo_file_name = post_data('college_banner_seo_file_name');
+				$college_logo_seo_alt_name = post_data('college_logo_seo_alt_name');
+				$college_banner_seo_alt_name = post_data('college_banner_seo_alt_name');
+
+				$college_has_leads_access=post_data('college_has_leads_access');
+
+				$college_leads_per_day=post_data('college_leads_per_day');
+				$college_leads_start_date=post_data('college_leads_start_date');
+				$college_leads_end_date=post_data('college_leads_end_date');
+				$college_max_leads=post_data('college_max_leads');
+				$college_leads_type=post_data('college_leads_type');
+				$college_has_leads_area_dist=post_data('college_has_leads_area_dist');
+				$college_leads_gender=post_data('college_leads_gender');
+				$college_leads_coursee=$this->input->post('college_leads_coursee');
+
+				// print_obj(char_separated($college_leads_type));die;
+
+				//echo 'hi';
+
+				//print_obj($college_ranking_data);die;
+
+				// $college_intro_youtube_link 	=	post_data('college_youtube_video_link');
+
+				$college_intro_youtube_link 	=	$this->input->post('ytvideo');
+
+				//echo $college_university;die;
+
+				//print_obj($college_faqus);die;
+
+				if($this->input->post('college_verified')){
+					$college_verified 		= 	clean_data(post_data('college_verified'));
+				}else{
+					$college_verified 	=	'2';
+				}
+
+				if($this->input->post('college_is_top')){
+					$college_is_top 		= 	clean_data(post_data('college_is_top'));
+				}else{
+					$college_is_top 	=	'2';
+				}
+
+				if($this->input->post('college_is_top_ranked')){
+					$college_is_top_ranked 		= 	clean_data(post_data('college_is_top_ranked'));
+				}else{
+					$college_is_top_ranked 	=	'2';
+				}
+
+				if($this->input->post('college_is_featured')){
+					$college_is_featured 		= 	clean_data(post_data('college_is_featured'));
+				}else{
+					$college_is_featured 	=	'2';
+				}
+
+
+				if($this->input->post('college_is_visible_in_home_page')){
+					$college_is_visible_in_home_page 		= 	clean_data(post_data('college_is_visible_in_home_page'));
+				}else{
+					$college_is_visible_in_home_page 	=	'2';
+				}
+				
+
+				$college_faciliies=$this->input->post('college_faciliies');
+
+				$college_affiliation_type=$this->input->post('college_affiliations');
+
+				$college_type=post_data('college_type');
+
+				$colleges_same_group_colleges=$this->input->post('colleges_same_group_colleges');
+
+				if(!empty($college_faciliies)){
+					foreach ($college_faciliies as $key => $value) {
+						$_college_faciliies[]=decode_data($value);
+					}
+
+					if(!empty($_college_faciliies) && is_array($_college_faciliies)){
+						$cfacilities=char_separated($_college_faciliies);
+					}
+				}else{
+					$cfacilities=null;
+				}
+
+
+				if(!empty($college_affiliation_type)){
+					foreach ($college_affiliation_type as $key => $value) {
+						$_college_affiliation_type[]=decode_data($value);
+					}
+
+					if(!empty($_college_affiliation_type) && is_array($_college_affiliation_type)){
+						$caffiliations=char_separated($_college_affiliation_type);
+					}
+				}else{
+					$caffiliations=null;
+				}
+
+				$city_data=$this->com->get_city(array('city_id'=>$college_city));
+				$colllege_logo_alt_text=(!empty($college_logo_seo_alt_name))?$college_logo_seo_alt_name:strtoupper($college_name).' ['.strtoupper($college_short_name).'],'.strtoupper($city_data->city_name).' SIKSHAPEDIA LOGO';
+				$colllege_banner_alt_text=(!empty($college_banner_seo_alt_name))?$college_banner_seo_alt_name:strtoupper($college_name).' ['.strtoupper($college_short_name).'],'.strtoupper($city_data->city_name).' SIKSHAPEDIA BANNER';
+
+
+				if($college_id==''){
+
+					$college_profile_found=$this->im->get_college_profile_data(array(
+						'college_country_id'=>$college_country,
+						'college_name'=>$college_name,
+						'college_state_id'=>$college_state,
+						'college_city_id'=>$college_city,
+						'college_university_id'=>$college_university
+					));
+
+					//print_obj($college_profile_found);die;
+					
+
+					//$college_user_found=$this->um->get_user_data(array('college_name'=>$college_name),array('college_email'=>$college_email,'college_phone_no'=>$college_phone,'college_city_id'=>$college_city),'4');
+
+
+					// $college_user_found=$this->um->get_user_data(array('college_user_id!='=>$cid,'college_name'=>$college_name,'college_country_id'=>$college_country,'college_state_id'=>$college_state,'college_city_id'=>$college_city,'college_university_id'=>$college_university),array('college_email'=>$college_email,'college_phone_no'=>$college_phone),'4',FALSE);
+
+
+					if($college_utype =='3'){
+						$college_user_found=$this->um->get_user_data(array('college_user_id!='=>$cid,'college_name'=>$college_name,'college_country_id'=>$college_country,'college_state_id'=>$college_state,'college_city_id'=>$college_city),array('college_email'=>$college_email,'college_phone_no'=>$college_phone),'4',FALSE);
+					}else if($college_utype =='4'){
+						$college_user_found=$this->um->get_user_data(array('college_user_id!='=>$cid,'college_name'=>$college_name,'college_country_id'=>$college_country,'college_state_id'=>$college_state,'college_city_id'=>$college_city,'college_university_id'=>$college_university),array('college_email'=>$college_email,'college_phone_no'=>$college_phone),'4',FALSE);
+					}
+
+					///print_obj($college_user_found);die;
+
+					if(empty($college_profile_found)){
+
+						$college_data=array(
+							'college_utype'=>$college_utype,
+							'college_country_id'=>$college_country,
+							'college_state_id'=>$college_state,
+							'college_city_id'=>$college_city,
+							'college_user_id'=>'0',
+							'college_university_id'=>($college_university!='')?$college_university:null,
+							'college_name'=>$college_name,
+							'college_short_name'=>$college_short_name,
+							'college_estd_year'=>$college_estd,
+							'college_address'=>$college_address,
+							'college_zipcode'=>$college_pincode,
+							'college_email'=>$college_email,
+							'college_phone_no'=>$college_phone,
+							'college_alter_phone_no'=>$college_other_phone,
+							'college_whatsapp_no'=>$college_whatsapp_no,
+							'college_web_address'=>$college_web_address,
+							'college_type'=>decode_data($college_type),
+							'college_status'=>$college_status,
+							'college_affiliation_type'=>$caffiliations,
+							'college_grade_ids'=>decode_data($college_grades),
+							'college_facilities'=>$cfacilities,
+							'college_is_featured'=>$college_is_featured,
+							'is_verified_by_admin'=>$college_verified,
+							'college_is_top_ranked'=>$college_is_top_ranked,
+							'college_is_top_visible_home'=>$college_is_visible_in_home_page,
+							'college_is_top'=>$college_is_top,
+							'college_has_verified_badge'=>$college_has_verified_badge,
+							'colllege_logo_alt_text'=>$college_logo_seo_alt_name,
+							'colllege_banner_alt_text'=>$college_banner_seo_alt_name,
+							'college_has_leads_access'=>$college_has_leads_access,
+							'college_perday_leads'=>$college_leads_per_day,
+							'college_max_leads'=>($college_has_leads_access=='yes')?$college_max_leads:0,
+							'college_leads_start'=>($college_has_leads_access=='yes')?date('Y-m-d',strtotime($college_leads_start_date)):null,
+							'college_leads_end'=>($college_has_leads_access=='yes')?date('Y-m-d',strtotime($college_leads_end_date)):null,
+							'college_leads_type'=>($college_has_leads_access=='yes')?char_separated($college_leads_type):0,
+							'college_leads_district'=>($college_has_leads_access=='yes')?char_separated($college_has_leads_area_dist):0,
+							'college_leads_state'=>($college_has_leads_access=='yes')?'1':0,
+							'college_leads_gender'=>$college_leads_gender,
+							'college_leads_type_course'=>(!empty($college_leads_coursee))?implode(',',$college_leads_coursee):''
+						);
+
+						$user_profile_pk_id=$this->im->add_college_data($college_data);
+
+						if($user_profile_pk_id>0){
+							$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+							$user_name=$college_email;    
+      						$user_name = substr($user_name, 0, strpos($user_name, "@"));
+
+      						$user_name=strtoupper($user_name).'_'.generate_string(8);
+
+							$college_user_data=array(
+								'user_role'=>'4',
+								'user_profile_pk_id'=>$user_profile_pk_id,
+								'user_name'=>$user_name,
+								'user_password'=>$password,
+								'user_password_visible'=>encode_data('Password@123'),
+								'user_blocked'=>$college_status,
+								'user_email_verified'=>'1',
+								'created_by'=>$this->data['userdata']->user_id,
+								'created_by_type'=>$this->data['userdata']->user_role,
+								'user_currency'=>'4'
+							);
+
+							$user_pk_id=$this->um->add_user_data($college_user_data,FALSE,FALSE);
+
+							//echo $user_pk_id;die;
+
+							if($user_pk_id>0){
+								$creator_id=decode_data(session_userdata('admin_id'));
+								$folder_name=$user_id.'-'.url_slug($college_name);
+								$this->im->update_college_data(array('college_user_id'=>$user_pk_id),array('college_id'=>$user_profile_pk_id));
+
+								$college_info=$this->input->post('college_general_info');
+								$college_about_info=$this->input->post('college_about_info');
+								$college_facilities_info=$this->input->post('info_value_facilities_intro');
+
+								$college_ranking_info=$this->input->post('college_ranking_info');
+
+								$college_plaement_info 		= 	$this->input->post('college_placement_info');
+
+								$infos=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$user_pk_id));
+
+								
+
+								if(!empty($college_info) || !empty($college_about_info)){								
+
+									$info_data=array('info_type'=>'2','info_type_id'=>$user_pk_id,'info_value'=>$college_info,'info_value_about'=>$college_about_info,'info_value_facilities_intro'=>$college_facilities_info,'info_value_placement_intro'=>$college_plaement_info,'info_creator_id'=>$creator_id);
+
+									if(!empty($infos)){
+										$this->im->update_inst_info_data($info_data,array('info_type'=>'2','info_type_id'=>$user_pk_id));
+									}else{
+										$this->im->add_inst_info_data($info_data);
+									}
+								}
+
+
+								if(!empty($college_plaement_info)){
+									$this->im->delete_inst_info_data(array('info_type'=>'2','info_value_type'=>'general','info_type_id'=>$user_pk_id,'info_serial'=>'0','info_type_2'=>'placement_info'));
+
+									$placemen_data_to_store=array(
+										'info_creator_id'=>$this->data['userdata']->user_id,
+										'info_serial'=>'0',
+										'info_type'=>'2',
+										'info_type_2'=>'placement_info',
+										'info_type_id'=>$user_pk_id,
+										'info_value_type'=>'general',
+										'info_value_id'=>null,
+										'info_value'=>$college_plaement_info,
+										'info_updated_at'=>date('Y-m-d H:i:s')
+									);
+
+									$this->im->add_inst_info_data($placemen_data_to_store);
+								}
+
+
+
+								if(!empty($college_ranking_info) || !empty($college_ranking_info)){	
+									$ranking_info_data=array('info_type'=>'2','info_type_id'=>$user_pk_id,'info_value_ranking_intro'=>$college_ranking_info,'info_creator_id'=>$creator_id);
+
+									if(!empty($infos)){
+										$this->im->update_inst_info_data($ranking_info_data,array('info_type'=>'2','info_type_id'=>$user_pk_id));
+									}else{
+										$this->im->add_inst_info_data($ranking_info_data);
+									}
+								}
+
+								if(!empty($college_ranking_data)){
+									foreach ($college_ranking_data as $key => $value) {
+
+										$college_ranking_datap[]=array(
+											'ranking_body_id'=>decode_data($value['body']),
+											'ranking_category_id'=>decode_data($value['category']),
+											'ranking_inst_id'=>$user_pk_id,
+											'ranking_inst_type'=>'college',
+											'ranking_year'=>$value['years'],
+											'ranking_value'=>$value['value'],
+											'ranking_state_id'=>decode_data($value['state']),
+											'ranking_state_value'=>$value['state_value'],
+											'ranking_value_outof'=>$value['category_value']
+										);
+									}
+
+									$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$user_pk_id));
+
+									$this->im->add_inst_ranking_data($college_ranking_datap,TRUE);
+
+									$concated_value=$this->im->get_group_concat_inst_ranking_data(array('ranking_inst_id'=>$user_pk_id));
+									if(!empty($concated_value)){
+										$this->im->update_college_data(array('college_ranking_ids'=>$concated_value->concated_value),array('college_user_id'=>$user_pk_id));
+									}
+								}else{
+
+									$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$user_pk_id));
+									$this->im->update_college_data(array('college_ranking_ids'=>null),array('college_user_id'=>$user_pk_id));
+								}
+
+
+
+								/*
+								if(!empty($college_faqus)){
+									foreach ($college_faqus as $key => $value) {
+
+										if(!empty($value['ques'])){
+											$college_faq_datap[]=array(
+												'faq_data_id'=>$user_pk_id,
+												'faq_data_id_type'=>'2',
+												'faq_type'=>'1',
+												'faq_question'=>clean_data($value['ques']),
+												'faq_ans'=>clean_data($value['ans'])
+											);
+										}	
+									}
+
+									$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$user_pk_id,'faq_data_id_type'=>'2','faq_type'=>'1'));
+
+									$this->sm->store_system_users_faqs_data($college_faq_datap,TRUE);
+								}
+
+
+								if(!empty($college_placement_faqs)){
+									foreach ($college_placement_faqs as $key => $value) {
+
+										$college_placement_faqs_datap[]=array(
+											'faq_data_id'=>$user_pk_id,
+											'faq_data_id_type'=>'2',
+											'faq_type'=>'2',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}
+
+									$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$user_pk_id,'faq_data_id_type'=>'2','faq_type'=>'2'));
+
+									$this->sm->store_system_users_faqs_data($college_placement_faqs_datap,TRUE);
+								}
+
+								if(!empty($college_scholarships_faqs)){
+									foreach ($college_scholarships_faqs as $key => $value) {
+
+										$college_scholarships_faqs_datap[]=array(
+											'faq_data_id'=>$user_pk_id,
+											'faq_data_id_type'=>'2',
+											'faq_type'=>'3',
+											'faq_question'=>clean_data($value['ques']),
+											'faq_ans'=>clean_data($value['ans'])
+										);
+									}
+
+									$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$user_pk_id,'faq_data_id_type'=>'2','faq_type'=>'3'));
+
+									$this->sm->store_system_users_faqs_data($college_scholarships_faqs_datap,TRUE);
+								}*/
+								
+									
+
+								$slug_found=$this->sm->get_slug(array('slug_type_id'=>$user_pk_id,'slug_type'=>'7'));
+								$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$user_pk_id));
+								$country_data=$this->com->get_country(array('country_id'=>$college_country));
+								
+								$state_data=$this->com->get_state(array('state_id'=>$college_state));
+								$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+								$slug_value=url_slug($_slug_value);
+								$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+								$slug_type='7';
+
+								$folder_name=$slug_value;
+
+								$log_file_custom_logo_title=$slug_value.'-logo';
+								$log_file_custom_banner_title=$slug_value.'-banner';
+
+								if(empty($slug_found)){
+									$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$user_pk_id,'slug_type'=>$slug_type));
+									if($inserted){
+										$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$user_pk_id));
+									}
+								}
+
+
+								$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>'COLLEGE_NAME','search_data_name'=>$college_name,'search_data_type_id'=>$user_pk_id));
+
+								$country_data=$this->com->get_country(array('country_id'=>$college_country));
+								$state_data=$this->com->get_state(array('state_id'=>$college_state));
+								$city_data=$this->com->get_city(array('city_id'=>$college_city));
+
+
+								$system_data_search_inserted=array(
+									'search_data_type'=>'COLLEGE_NAME',
+									'search_data_name'=>$college_name,
+									'search_data_type_id'=>$user_pk_id,
+									'search_data_country_id'=>$college_country,
+									'search_data_country'=>$country_data->country_name,
+									'search_data_state_id'=>$college_state,
+									'search_data_state_name'=>$state_data->state_name,
+									'search_data_city_name'=>$city_data->city_name,
+									'search_data_city_id'=>$college_city,
+									'search_data_access_url'=>$slug_url
+								);
+
+								// if(empty($system_data_search)){									
+								// 	$this->sm->store_system_search_data($system_data_search_inserted);
+								// }else{
+								// 	$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$user_id));
+								// }
+
+
+								$inner_menu_types=$this->sm->get_menue_types(array('menu_type_status'=>'1','menu_auto_create'=>'1'),FALSE);
+
+								$menu_serial=1;
+
+								foreach ($inner_menu_types as $k => $v) {
+									if($v->menu_has_link=='2'){
+										$menu_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+									}else{
+
+										if($v->menu_type_alias=='admission'){
+											$menu_slug=$v->menu_type_slug.' '.date('Y');
+										}else{
+											$menu_slug=$v->menu_type_slug;
+										}
+
+										$menu_url=base_url(strtolower($country_data->country_iso_code_2).'/'.$slug_value.'/'.$menu_slug);
+									}
+
+									if($v->menu_type_alias=='admission'){
+										$menu_name=$v->menu_type_name.' '.date('Y');
+									}else{
+										$menu_name=$v->menu_type_name;
+									}
+									
+									$menu_data=array(
+										'menu_parent_id'=>'0',
+										'menu_country_id'=>$country_data->country_id,
+										'menu_country_code'=>$country_data->country_iso_code_2,
+										'menu_country'=>$country_data->country_name,
+										'menu_type'=>$v->menu_type_id,
+										'menu_link_type'=>'10',
+										'menu_link_id'=>$user_pk_id,
+										'menu_link'=>$menu_url,
+										'menu_name'=>$menu_name,
+										'menu_slug'=>url_slug($v->menu_name),
+										'menu_serial'=>$menu_serial,
+										'menu_is_inner'=>'1'
+									);
+
+									$this->sm->store_menu($menu_data);
+
+									$menu_serial++;
+								}
+
+
+								
+
+								if(isset($_FILES['college_logo']) && $_FILES['college_logo']['name']!=''){
+
+									$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$user_pk_id));
+
+									//print_obj($file_logo_found);die;
+
+									if(!empty($file_logo_found)){
+										if(is_file($file_logo_found->media_disk_path)){
+											@unlink($file_logo_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+										}
+									}
+
+									$ext = pathinfo($_FILES['college_logo']['name'][0], PATHINFO_EXTENSION);
+
+									$logo_data=array(
+										'file_size'=>'1',
+										'file_name'=>'college_logo',
+										'file_types'=>'png,jpg,jpeg',
+										'file_folder'=>'colleges',
+										'file_custom_title'=>$log_file_custom_logo_title,
+										'file_compress'=>($ext==='webp')?false:true,
+										'file_compress_protocol'=>'webp',
+										'file_child_folder'=>$folder_name,
+										'file_uploaded_by'=>$this->data['userdata']->user_id
+									);
+
+									$file_id=$this->onUploadFiles($logo_data);
+
+									if(!empty($file_id) && $file_id>0){
+
+										$logo_alternate_name=(!empty($college_logo_seo_alt_name))?$college_logo_seo_alt_name.' Sikshapedia Logo':$college_name.' Sikshapedia Logo';
+
+										$this->sm->delete_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_logo'));
+
+							            $user_logo_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$user_pk_id,
+							            	'user_file_type'=>'4',
+							            	'user_storage_type'=>'user_logo'
+							            );
+
+							            $this->sm->store_user_file($user_logo_storage_data);
+
+							            $user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+								        if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+
+								        	$college_logo=$user_logo->media_disk_path_relative;
+								           /* $logo_file_name = basename($user_logo->media_disk_path);
+											// Use dirname to get the directory part of the path (excluding the file name)
+
+											$parsedUrl = parse_url($user_logo->media_disk_path_relative, PHP_URL_PATH);
+
+											// Get the base name of the path
+											$baseName = basename($parsedUrl);
+
+											// Remove the base name from the parsed URL
+											$directoryPath = str_replace("/".$baseName, "", $parsedUrl);
+
+											$directory_path = pathinfo($user_logo->media_disk_path,PATHINFO_DIRNAME);	
+
+											//print_obj($directory_path);										
+
+											$path_info = pathinfo($logo_file_name);
+											
+											$extension = $path_info['extension'];
+
+											$new_file_name=url_slug($logo_alternate_name).'.'.$extension;
+
+											$new_file_path = $directory_path. '/' .$new_file_name;
+											$college_logo=base_url($directoryPath.'/'.$new_file_name);
+
+											//echo $college_logo;die;
+
+											chmod($file_logo_found->media_disk_path, 0755);
+
+								            if (rename($user_logo->media_disk_path, $new_file_path)) {
+								            	 // Restore original file permissions
+												chmod($new_file_path, 0644);
+
+												$this->sm->update_files(array('media_disk_path'=>$new_file_path,'media_disk_path_relative'=>$college_logo,'media_disk_name'=>$new_file_name),array('storage_id'=>$user_logo->storage_id));
+								            }*/
+								        }else{
+								            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+								        }
+
+
+										$this->im->update_college_data(array('college_logo'=>$college_logo,'colllege_logo_alt_text'=>$logo_alternate_name),array('college_user_id'=>$user_pk_id));
+							        } 
+								}
+
+								if(isset($_FILES['college_banner']) && $_FILES['college_banner']['name']!=''){
+									$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$user_pk_id));
+
+									if(!empty($file_banner_found)){
+										if(is_file($file_banner_found->media_disk_path)){
+											@unlink($file_banner_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+										}
+									}
+
+									$ext = pathinfo($_FILES['college_banner']['name'][0], PATHINFO_EXTENSION);
+
+									$banner_data=array(
+										'file_size'=>'25',
+										'file_name'=>'college_banner',
+										'file_types'=>'png,jpg,jpeg',
+										'file_folder'=>'colleges',
+										'file_custom_title'=>$log_file_custom_banner_title,
+										'file_compress'=>($ext==='webp')?false:true,
+										'file_compress_protocol'=>'webp',
+										'file_child_folder'=>$folder_name,
+										'file_uploaded_by'=>$this->data['userdata']->user_id
+									);
+
+									$file_id=$this->onUploadFiles($banner_data);
+
+									if(!empty($file_id) && $file_id>0){
+										$this->sm->delete_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_banner'));
+							            $user_banner_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$user_pk_id,
+							            	'user_file_type'=>'4',
+							            	'user_storage_type'=>'user_banner'
+							            );
+
+							            $this->sm->store_user_file($user_banner_storage_data);
+
+							            $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_banner'));							        
+										$banner_alternate_name=(!empty($college_banner_seo_alt_name))?$college_banner_seo_alt_name.' Sikshapedia Banner':$college_name.' Sikshapedia Banner';
+
+										if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+											$college_banner=$user_banner->media_disk_path_relative;
+								            /*$banner_file_name = basename($user_banner->media_disk_path);
+											// Use dirname to get the directory part of the path (excluding the file name)
+											$directory_path = pathinfo($user_banner->media_disk_path,PATHINFO_DIRNAME);											
+
+											$path_info = pathinfo($banner_file_name);
+											
+											$extension = $path_info['extension'];
+
+											$new_file_name=url_slug($banner_alternate_name).'.'.$extension;
+
+											$new_file_path = $directory_path. '/' .$new_file_name;
+											$college_banner=base_url($directoryPath.'/'.$new_file_name);
+
+											//echo $college_logo;
+
+											chmod($user_banner->media_disk_path, 0755);
+
+								            if (rename($user_banner->media_disk_path, $new_file_path)) {
+								            	 // Restore original file permissions
+												chmod($new_file_path, 0644);
+
+												$this->sm->update_files(array('media_disk_path'=>$new_file_path,'media_disk_path_relative'=>$college_banner,'media_disk_name'=>$new_file_name),array('storage_id'=>$user_banner->storage_id));
+								            }*/
+								        }else{
+								            $college_banner=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+								        }
+
+								        $this->im->update_college_data(array('college_logo'=>$college_banner,'colllege_banner_alt_text'=>$banner_alternate_name),array('college_user_id'=>$user_pk_id));
+							        }
+								}
+
+
+								if(!empty($college_intro_youtube_link)){
+
+									$this->sm->delete_user_file(array('user_file_type_id'=>$user_pk_id,'user_storage_type'=>'user_intro_video'));
+
+									foreach ($college_intro_youtube_link as $key => $value) {
+										$param['youtube_link']=$value['link'];
+										$param['youtube_video_name']=$college_name;
+										$param['youtube_video_parent_id']=$user_pk_id;
+
+										$file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$user_pk_id));
+
+										if(!empty($file_intro_video_found)){
+											$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+										}
+
+										$video_id=$this->onUploadFiles($param,'youtube');
+
+										if(!empty($video_id) && $video_id>0){
+											
+								            $user_intro_video_storage_data=array(
+								            	'user_file_storage_id'=>$video_id,
+								            	'user_file_type_id'=>$user_pk_id,
+								            	'user_file_type'=>'4',
+								            	'user_storage_type'=>'user_intro_video'
+								            );
+
+								            $this->sm->store_user_file($user_intro_video_storage_data);
+								        }
+									}
+
+										
+								}
+							}
+
+							$return['success']='College added in the system successfully';
+							$return['redirect']=$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user_pk_id);
+						}else{
+							$return['error']='College data not added in the system';
+						}
+					}else{
+						$return['error']='College already exists system';
+					}	
+				}else{
+					$cid=decode_data($college_id);
+					
+					$college_profile_found=$this->im->get_college_profile_data(array(
+						'college_country_id'=>$college_country,
+						'college_user_id'=>$cid
+					));
+
+					//print_obj($college_profile_found);die;
+
+					if(!empty($college_profile_found)){
+						$college_user_found=$this->um->get_user_data(array('college_user_id!='=>$cid,'college_name'=>$college_name,'college_country_id'=>$college_country,'college_state_id'=>$college_state,'college_city_id'=>$college_city,'college_university_id'=>$college_university),array('college_email'=>$college_email,'college_phone_no'=>$college_phone),'4',FALSE);
+
+						//print_obj($college_user_found);die;
+
+						if(empty($college_user_found)){
+
+							$college_data=array(
+								'college_utype'=>$college_utype,
+								'college_country_id'=>$college_country,
+								'college_state_id'=>$college_state,
+								'college_city_id'=>$college_city,
+								'college_university_id'=>$college_university,
+								'college_name'=>$college_name,
+								'college_short_name'=>$college_short_name,
+								'college_estd_year'=>$college_estd,
+								'college_address'=>$college_address,
+								'college_zipcode'=>$college_pincode,
+								'college_email'=>$college_email,
+								'college_phone_no'=>$college_phone,
+								'college_alter_phone_no'=>$college_other_phone,
+								'college_whatsapp_no'=>$college_whatsapp_no,
+								'college_web_address'=>$college_web_address,
+								'college_type'=>decode_data($college_type),
+								'college_affiliation_type'=>$caffiliations,
+								'college_grade_ids'=>decode_data($college_grades),
+								'college_facilities'=>$cfacilities,
+								'is_verified_by_admin'=>$college_verified,
+								'college_is_featured'=>$college_is_featured,
+								'college_is_top_ranked'=>$college_is_top_ranked,
+								'college_is_top_visible_home'=>$college_is_visible_in_home_page,
+								'college_is_top'=>$college_is_top,
+								'college_has_verified_badge'=>$college_has_verified_badge,
+								'colllege_logo_alt_text'=>$college_logo_seo_alt_name,
+								'colllege_banner_alt_text'=>$college_banner_seo_alt_name,
+								'college_has_leads_access'=>$college_has_leads_access,
+								'college_perday_leads'=>$college_leads_per_day,
+								'college_max_leads'=>($college_has_leads_access=='yes')?$college_max_leads:0,
+								'college_leads_start'=>($college_has_leads_access=='yes')?date('Y-m-d',strtotime($college_leads_start_date)):null,
+								'college_leads_end'=>($college_has_leads_access=='yes')?date('Y-m-d',strtotime($college_leads_end_date)):null,
+								'college_leads_type'=>($college_has_leads_access=='yes')?char_separated($college_leads_type):0,
+								'college_leads_district'=>($college_has_leads_access=='yes')?char_separated($college_has_leads_area_dist):0,
+								'college_leads_state'=>($college_has_leads_access=='yes')?'1':0,
+								'college_leads_gender'=>$college_leads_gender,
+								'college_leads_type_course'=>(!empty($college_leads_coursee))?implode(',',$college_leads_coursee):'',
+								'updated_by'=>decode_data(session_userdata('admin_id')),
+								'updated_at'=>date('Y-m-d h:i:s')
+							);
+
+							// print_obj($college_data);die;
+
+							$updated=$this->im->update_college_data($college_data,array('college_user_id'=>$cid));
+
+							//print_obj($updated);die;
+							if($updated){
+
+								//$user_name_exp=explode('@', $college_email);
+
+								//$user_name=strtoupper($user_name_exp[0]).decode_data($college_id);
+
+								//echo $user_name;die;
+
+								$college_user_data=array(
+									'user_name'=>$college_email,
+									'user_blocked'=>$college_status,
+									'updated_by'=>$this->data['userdata']->user_id,
+									'updated_by_type'=>$this->data['userdata']->user_role
+								);
+
+								$user_updated=$this->um->update_user_data($college_user_data,array('user_id'=>$cid));
+
+								// print_obj($user_updated);die;
+								if($user_updated){
+									
+									$this->im->update_college_data(array('college_user_id'=>$cid),array('college_id'=>$college_profile_found->college_id));
+
+									$college_info=$this->input->post('college_general_info');
+									$college_about_info=$this->input->post('college_about_info');
+									$college_facilities_info=$this->input->post('college_facilities_info');
+									$college_ranking_info=$this->input->post('college_ranking_info');
+									$creator_id=decode_data(session_userdata('admin_id'));
+
+									$college_plaement_info 	= $this->input->post('college_placement_info');									
+
+									$info=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info','info_value_type'=>'2'));
+
+							        if(!empty($info)){
+							        	//$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value'=>$college_info,'info_value_about'=>$college_about_info,'info_value_facilities_intro'=>$college_facilities_info,'info_value_placement_intro'=>$college_plaement_info,'info_creator_id'=>$creator_id,'info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>NULL));
+
+							        	$college_info_data=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info','info_value_type'=>'2'));
+
+							        	//print_obj($college_info_data);die;
+
+							        	if(!empty($college_info)){
+
+							        		if(!empty($college_info_data)){
+												$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value'=>$college_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+							        		}else{
+							        			$this->im->add_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value'=>$college_info,'info_creator_id'=>$creator_id,'info_value_type'=>'2','info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')));
+							        		}
+							        		
+							        	}else{
+							        		$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value'=>$college_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+							        	}
+
+							        	if(!empty($college_about_info)){
+							        		if(!empty($college_info_data)){
+							        			$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_about'=>$college_about_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+							        		}else{
+							        			$this->im->add_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_about'=>$college_about_info,'info_creator_id'=>$creator_id,'info_value_type'=>'2','info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')));
+							        		}							        		
+							        	}else{
+							        		$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_about'=>$college_about_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+							        	}
+
+							        	if(!empty($college_facilities_info)){
+
+							        		if(!empty($college_info_data)){
+												$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_facilities_intro'=>$college_facilities_info,'info_type_2'=>'general_info','info_creator_id'=>$creator_id,'info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_value_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info'));
+							        		}else{
+							        			$this->im->add_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_facilities_intro'=>$college_facilities_info,'info_type_2'=>'general_info','info_creator_id'=>$creator_id,'info_value_type'=>'2','info_updated_at'=>date('Y-m-d')));
+							        		}							        		
+							        	}else{
+							        		$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_facilities_intro'=>$college_facilities_info,'info_type_2'=>'general_info','info_creator_id'=>$creator_id,'info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_value_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info'));
+							        	}
+
+							        	if(!empty($college_plaement_info)){
+
+							        		if(!empty($college_info_data)){
+												$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_placement_intro'=>$college_plaement_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_value_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info'));
+							        		}else{
+							        			$this->im->add_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_placement_intro'=>$college_plaement_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_value_type'=>'2','info_updated_at'=>date('Y-m-d')));
+							        		}							        		
+							        	}else{
+							        		$this->im->update_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_placement_intro'=>$college_plaement_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_updated_at'=>date('Y-m-d')),array('info_type'=>'2','info_value_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info'));
+							        	}
+							        }else{
+							        	if(!empty($college_info) || !empty($college_about_info)){
+
+											$info_data=array('info_type'=>'2','info_type_id'=>$cid,'info_value'=>$college_info,'info_value_about'=>$college_about_info,'info_value_facilities_intro'=>$college_facilities_info,'info_value_placement_intro'=>$college_plaement_info,'info_creator_id'=>$creator_id,'info_type_2'=>'general_info','info_value_type'=>'2');
+
+											$this->im->add_inst_info_data($info_data);
+										}
+							        }
+
+							        //echo '<pre>';print_r($college_plaement_info);die;
+
+							        if($college_plaement_info!=null){
+										$this->im->delete_inst_info_data(array('info_type'=>'2','info_value_type'=>'general','info_type_id'=>$cid,'info_serial'=>'0','info_type_2'=>'general_info'));
+
+										$placemen_data_to_store=array(
+											'info_creator_id'=>$this->data['userdata']->user_id,
+											'info_serial'=>'0',
+											'info_type'=>'2',
+											'info_type_2'=>'general_info',
+											'info_type_id'=>$cid,
+											'info_value_type'=>'2',
+											'info_value_id'=>null,
+											'info_value'=>$college_plaement_info,
+											'info_updated_at'=>date('Y-m-d H:i:s')
+										);
+
+										//print_obj($placemen_data_to_store);die;
+
+										$this->im->add_inst_info_data($placemen_data_to_store);
+									}
+
+							       //print_obj($college_ranking_info);die;
+
+									//echo $cid;
+
+							        if(!empty($college_ranking_info) || !empty($college_ranking_info)){	
+										$ranking_info_data=array('info_type_id'=>$cid,'info_value_ranking_intro'=>$college_ranking_info,'info_creator_id'=>$creator_id,'info_type'=>'2','info_type_2'=>'general_info','info_value_type'=>'2');
+
+										if(!empty($info)){
+											$this->im->update_inst_info_data($ranking_info_data,array('info_type_2'=>'general_info','info_type'=>'2','info_value_type'=>'2','info_type_id'=>$cid));
+										}else{
+											$this->im->add_inst_info_data($ranking_info_data);
+										}
+									}
+
+							        //print_obj($college_faqus);die;
+
+							        if(!empty($college_ranking_data)){
+										foreach ($college_ranking_data as $key => $value) {
+
+											$college_ranking_datap[]=array(
+												'ranking_body_id'=>decode_data($value['body']),
+												'ranking_category_id'=>decode_data($value['category']),
+												'ranking_inst_id'=>$cid,
+												'ranking_inst_type'=>'college',
+												'ranking_year'=>$value['years'],
+												'ranking_value'=>$value['value'],
+												'ranking_state_id'=>decode_data($value['state']),
+												'ranking_state_value'=>$value['state_value'],
+												'ranking_value_outof'=>$value['category_value']
+											);
+										}
+
+										$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$cid));
+
+										$this->im->add_inst_ranking_data($college_ranking_datap,TRUE);
+
+										$concated_value=$this->im->get_group_concat_inst_ranking_data(array('ranking_inst_id'=>$cid));
+										if(!empty($concated_value)){
+											$this->im->update_college_data(array('college_ranking_ids'=>$concated_value->concated_value),array('college_user_id'=>$cid));
+										}
+									}else{
+										$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$cid));
+										$this->im->update_college_data(array('college_ranking_ids'=>null),array('college_user_id'=>$cid));
+									}
+
+							        if(!empty($college_faqus) && $college_faqus[0]['ques']!=''){
+										foreach ($college_faqus as $key => $value) {
+
+											if($value['ques']!=''){
+												$college_faq_datap[]=array(
+													'faq_data_id'=>$cid,
+													'faq_data_id_type'=>'2',
+													'faq_type'=>'1',
+													'faq_question'=>clean_data($value['ques']),
+													'faq_ans'=>clean_data($value['ans'])
+												);
+											}	
+										}
+
+										//print_obj($college_faq_datap);die;
+
+										$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'1'));
+
+										$this->sm->store_system_users_faqs_data($college_faq_datap,TRUE);
+									}
+
+
+									if(!empty($college_placement_faqs) && $college_placement_faqs[0]['ques']!=''){
+										foreach ($college_placement_faqs as $key => $value) {
+											if($value['ques']!=''){
+												$college_placement_faqs_datap[]=array(
+													'faq_data_id'=>$cid,
+													'faq_data_id_type'=>'2',
+													'faq_type'=>'2',
+													'faq_question'=>clean_data($value['ques']),
+													'faq_ans'=>clean_data($value['ans'])
+												);
+											}		
+										}
+
+										// print_obj($college_placement_faqs_datap);die;
+
+										$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'2'));
+
+										$this->sm->store_system_users_faqs_data($college_placement_faqs_datap,TRUE);
+									}
+
+									if(!empty($college_scholarships_faqs) && $college_scholarships_faqs[0]['ques']!=''){
+										foreach ($college_scholarships_faqs as $key => $value) {
+
+											if($value['ques']!=''){
+												$college_scholarships_faqs_datap[]=array(
+													'faq_data_id'=>$cid,
+													'faq_data_id_type'=>'2',
+													'faq_type'=>'3',
+													'faq_question'=>clean_data($value['ques']),
+													'faq_ans'=>clean_data($value['ans'])
+												);
+											}	
+										}
+
+										$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$cid,'faq_data_id_type'=>'2','faq_type'=>'3'));
+
+										$this->sm->store_system_users_faqs_data($college_scholarships_faqs_datap,TRUE);
+									}
+
+									$slug_found=$this->sm->get_slug(array('slug_type_id'=>$cid,'slug_type'=>'7'));
+									$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+									$country_data=$this->com->get_country(array('country_id'=>$college_country));
+									$city_data=$this->com->get_city(array('city_id'=>$college_city));
+									$state_data=$this->com->get_state(array('state_id'=>$college_state));
+									$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+									$slug_value=url_slug($_slug_value);
+									$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+									$slug_type='7';
+
+									if(!empty($colleges_same_group_colleges)){
+
+										$this->im->delete_college_group_data(array('group_inst_parent_id'=>$cid));
+										foreach ($colleges_same_group_colleges as $key => $value) {
+											$__college_data=$this->im->get_college_specific_data('college_user_id,college_name,access_url',array('college_user_id'=>$value),TRUE);
+											
+											$group_data[]=array(
+												'group_inst_id'=>$value,
+												'group_inst_parent_id'=>$cid,
+												'group_inst_type'=>'college',
+												'group_inst_name'=>strtoupper($__college_data->college_name),
+												'group_inst_city'=>strtoupper($city_data->city_name),
+												'group_inst_state'=>strtoupper($state_data->state_name),
+												'group_inst_link'=>$__college_data->access_url
+											);
+										}
+
+										$this->im->add_college_group_data($group_data,TRUE);
+									}
+
+									//print_obj($slug_value);die;
+
+									$folder_name=$slug_value;
+
+									$log_file_custom_logo_title=$slug_value.'-logo';
+									$log_file_custom_banner_title=$slug_value.'-banner';
+
+									$logo_alternate_name=(!empty($college_logo_seo_file_name))?$college_logo_seo_file_name.' Sikshapedia Logo':$college_name.' Sikshapedia Logo';
+
+									//$logo_alternate_name=(!empty($college_logo_seo_file_name))?$$college_logo_seo_file_name.' Sikshapedia Logo':$college_name.' Sikshapedia Logo';
+
+									if(empty($slug_found)){
+										$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$cid,'slug_type'=>$slug_type));
+										if($inserted){
+											$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$cid));
+										}
+									}else{
+										$inserted=$this->sm->update_slug(array('slug_value'=>$slug_value),array('slug_type_id'=>$cid,'slug_type'=>$slug_type));
+										if($inserted){
+											$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$cid));
+										}
+									}
+
+									$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$cid));
+
+									if(!empty($system_data_search)){
+										$country_data=$this->com->get_country(array('country_id'=>$college_country));
+										$state_data=$this->com->get_state(array('state_id'=>$college_state));
+										$city_data=$this->com->get_city(array('city_id'=>$college_city));
+
+										$system_data_search_inserted=array('search_data_type'=>'COLLEGE_NAME','search_data_name'=>$college_name,'search_data_type_id'=>$cid,'search_data_country_id'=>$college_country,'search_data_country'=>$country_data->country_name,'search_data_state_id'=>$college_state,'search_data_state_name'=>$state_data->state_name,'search_data_city_name'=>$city_data->city_name,'search_data_city_id'=>$college_city,'search_data_access_url'=>$slug_url);
+										//$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$cid));
+									}
+
+									//echo $folder_name;die;
+
+
+									if(isset($_FILES['college_logo']) && $_FILES['college_logo']['name']!=''){
+
+										$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$cid));
+
+										//print_obj($file_logo_found);die;
+
+										if(!empty($file_logo_found)){
+											if(is_file($file_logo_found->media_disk_path)){
+												@unlink($file_logo_found->media_disk_path);
+												$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+											}
+										}
+
+										$ext = pathinfo($_FILES['college_logo']['name'][0], PATHINFO_EXTENSION);
+
+										$logo_data=array(
+											'file_size'=>'1',
+											'file_name'=>'college_logo',
+											'file_types'=>'png,jpg,jpeg,webp',
+											'file_folder'=>'colleges',
+											'file_custom_title'=>$log_file_custom_logo_title,
+											'file_compress'=>($ext==='webp')?false:true,
+											'file_compress_protocol'=>'webp',
+											'file_child_folder'=>$folder_name,
+											'file_uploaded_by'=>$this->data['userdata']->user_id
+										);
+
+										//print_obj($logo_data);die;
+
+										$file_id=$this->onUploadFiles($logo_data);
+
+										if(!empty($file_id) && $file_id>0){
+
+											$this->sm->delete_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+
+								            $user_logo_storage_data=array(
+								            	'user_file_storage_id'=>$file_id,
+								            	'user_file_type_id'=>$cid,
+								            	'user_file_type'=>'4',
+								            	'user_storage_type'=>'user_logo'
+								            );
+
+								            $this->sm->store_user_file($user_logo_storage_data);
+
+								            $user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+								            //print_obj($user_logo);
+
+											
+									        if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+									        	$college_logo=$user_logo->media_disk_path_relative;
+
+									            /*$logo_file_name = basename($user_logo->media_disk_path);
+												// Use dirname to get the directory part of the path (excluding the file name)
+
+												$parsedUrl = parse_url($user_logo->media_disk_path_relative, PHP_URL_PATH);
+
+												// Get the base name of the path
+												$baseName = basename($parsedUrl);
+
+												// Remove the base name from the parsed URL
+												$directoryPath = str_replace("/".$baseName, "", $parsedUrl);
+
+												$directory_path = pathinfo($user_logo->media_disk_path,PATHINFO_DIRNAME);	
+
+												//print_obj($directory_path);										
+
+												$path_info = pathinfo($logo_file_name);
+												
+												$extension = $path_info['extension'];
+
+												$new_file_name=url_slug($logo_alternate_name).'.'.$extension;
+
+												$new_file_path = $directory_path. '/' .$new_file_name;
+												$college_logo=base_url($directoryPath.'/'.$new_file_name);
+
+												//echo $college_logo;die;
+
+												chmod($user_logo->media_disk_path, 0755);
+
+									            if (rename($user_logo->media_disk_path, $new_file_path)) {
+									            	 // Restore original file permissions
+													chmod($new_file_path, 0644);
+
+													$this->sm->update_files(array('media_disk_path'=>$new_file_path,'media_disk_path_relative'=>$college_logo,'media_disk_name'=>$new_file_name),array('storage_id'=>$user_logo->storage_id));
+									            }*/
+									        }else{
+									            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+									        }
+
+											$this->im->update_college_data(array('college_logo'=>$college_logo,'colllege_logo_alt_text'=>$logo_alternate_name),array('college_user_id'=>$cid));
+								        } 
+									}
+
+
+									/*else{
+										$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$cid));
+										$logo_alternate_name=(!empty($college_logo_seo_alt_name))?$college_logo_seo_alt_name.' Sikshapedia Logo':$college_name.' Sikshapedia Logo';
+
+										if(!empty($file_logo_found) && !empty($file_logo_found->media_disk_path_relative)){
+								            $logo_file_name = basename($file_logo_found->media_disk_path);
+											// Use dirname to get the directory part of the path (excluding the file name)
+											$directory_path = pathinfo($file_logo_found->media_disk_path,PATHINFO_DIRNAME);											
+
+											$path_info = pathinfo($logo_file_name);
+											
+											$extension = $path_info['extension'];
+
+											$new_file_name=url_slug($logo_alternate_name).'.'.$extension;
+
+											$new_file_path = $directory_path. '/' .$new_file_name;
+											$college_logo=base_url($directoryPath.'/'.$new_file_name);
+
+											//echo $college_logo;
+
+											chmod($file_logo_found->media_disk_path, 0755);
+
+								            if (rename($file_logo_found->media_disk_path, $new_file_path)) {
+								            	 // Restore original file permissions
+												chmod($new_file_path, 0644);
+
+												$this->sm->update_files(array('media_disk_path'=>$new_file_path,'media_disk_path_relative'=>$college_logo,'media_disk_name'=>$new_file_name),array('storage_id'=>$file_logo_found->storage_id));
+								            }
+								        }else{
+								            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+								        }
+
+										$this->im->update_college_data(array('college_logo'=>$college_logo,'colllege_logo_alt_text'=>$logo_alternate_name),array('college_user_id'=>$cid));
+									}*/
+
+									
+
+									if(isset($_FILES['college_banner']) && $_FILES['college_banner']['name']!=''){
+										$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$cid));
+
+										if(!empty($file_banner_found)){
+											if(is_file($file_banner_found->media_disk_path)){
+												@unlink($file_banner_found->media_disk_path);
+												$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+											}
+										}
+
+										$ext = pathinfo($_FILES['college_banner']['name'][0], PATHINFO_EXTENSION);
+
+										$banner_data=array(
+											'file_size'=>'25',
+											'file_name'=>'college_banner',
+											'file_types'=>'png,jpg,jpeg,webp',
+											'file_folder'=>'colleges',
+											'file_custom_title'=>$log_file_custom_banner_title,
+											'file_compress'=>($ext==='webp')?false:true,
+											'file_compress_protocol'=>'webp',
+											'file_child_folder'=>$folder_name,
+											'file_uploaded_by'=>$this->data['userdata']->user_id
+										);
+
+										$file_id=$this->onUploadFiles($banner_data);
+
+										if(!empty($file_id) && $file_id>0){
+											$this->sm->delete_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+								            $user_banner_storage_data=array(
+								            	'user_file_storage_id'=>$file_id,
+								            	'user_file_type_id'=>$cid,
+								            	'user_file_type'=>'4',
+								            	'user_storage_type'=>'user_banner'
+								            );
+
+								            $this->sm->store_user_file($user_banner_storage_data);
+
+
+								            $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+
+											if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+											    $college_banner=$user_banner->media_disk_path_relative;
+											    $user_banner_name=$user_banner->media_org_name;
+											}else{
+											    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';		            
+											}
+
+											$this->im->update_college_data(array('college_logo'=>$college_banner),array('college_user_id'=>$cid));
+								        }
+									}
+
+
+									/*else{
+										$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$cid));
+										$banner_alternate_name=(!empty($college_banner_seo_file_name))?$college_banner_seo_file_name.' Sikshapedia Banner':$college_name.' Sikshapedia Banner';
+
+										if(!empty($file_logo_found) && !empty($file_banner_found->media_disk_path_relative)){
+								            $banner_file_name = basename($file_banner_found->media_disk_path);
+											// Use dirname to get the directory part of the path (excluding the file name)
+											$directory_path = pathinfo($file_banner_found->media_disk_path,PATHINFO_DIRNAME);											
+
+											$path_info = pathinfo($banner_file_name);
+											
+											$extension = $path_info['extension'];
+
+											$new_file_name=url_slug($banner_alternate_name).'.'.$extension;
+
+											$new_file_path = $directory_path. '/' .$new_file_name;
+											$college_banner=base_url($directoryPath.'/'.$new_file_name);
+
+											//echo $college_logo;
+
+											chmod($file_banner_found->media_disk_path, 0755);
+
+								            if (rename($file_banner_found->media_disk_path, $new_file_path)) {
+								            	 // Restore original file permissions
+												chmod($new_file_path, 0644);
+
+												$this->sm->update_files(array('media_disk_path'=>$new_file_path,'media_disk_path_relative'=>$college_banner,'media_disk_name'=>$new_file_name),array('storage_id'=>$file_banner_found->storage_id));
+								            }
+								        }else{
+								            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+								        }
+
+										$this->im->update_college_data(array('college_logo'=>$college_banner,'colllege_banner_alt_text'=>$banner_alternate_name),array('college_user_id'=>$cid));
+									}*/
+
+									
+
+									
+									if(!empty($college_intro_youtube_link)){
+										$this->sm->delete_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_intro_video'));
+										foreach ($college_intro_youtube_link as $key => $value) {
+											if(!empty($value['link'])){
+												$param['youtube_link']=$value['link'];
+												$param['youtube_video_name']=$college_name;
+												$param['youtube_video_parent_id']=$cid;
+
+												$file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$cid));
+
+												if(!empty($file_intro_video_found)){
+													if(is_file($file_intro_video_found->media_disk_path)){
+														$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+													}
+												}
+
+												$video_id=$this->onUploadFiles($param,'youtube');
+
+												if(!empty($video_id) && $video_id>0){
+													
+										            $user_intro_video_storage_data=array(
+										            	'user_file_storage_id'=>$video_id,
+										            	'user_file_type_id'=>$cid,
+										            	'user_file_type'=>'4',
+										            	'user_storage_type'=>'user_intro_video'
+										            );
+
+										            $this->sm->store_user_file($user_intro_video_storage_data);
+										        }
+											}
+												
+										}
+										// $param['youtube_link']=$college_intro_youtube_link;
+										// $param['youtube_video_name']=$college_name;
+										// $param['youtube_video_parent_id']=$cid;
+
+										// $file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$cid));
+
+										// if(!empty($file_intro_video_found)){
+										// 	if(is_file($file_intro_video_found->media_disk_path)){
+										// 		@unlink($file_intro_video_found->media_disk_path);
+										// 		$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+										// 	}
+										// }
+
+										// $video_id=$this->onUploadFiles($param,'youtube');
+
+										// if(!empty($video_id) && $video_id>0){
+										// 	$this->sm->delete_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_intro_video'));
+								        //     $user_intro_video_storage_data=array(
+								        //     	'user_file_storage_id'=>$video_id,
+								        //     	'user_file_type_id'=>$cid,
+								        //     	'user_file_type'=>'4',
+								        //     	'user_storage_type'=>'user_intro_video'
+								        //     );
+
+								        //     $this->sm->store_user_file($user_intro_video_storage_data);
+								        // }
+									}
+								}
+
+								$return['success']='College data updated';
+							}else{
+								$return['error']='College data not updated';
+							}
+
+						}else{
+							$return['error']='College data already found in the system with the same data.';
+						}
+					}else{
+						$return['error']='College data not found in the system';
+					}		
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onCheckDuplicatedata(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_name 			=	clean_data(post_data('college_name'));
+				$college_country 		=	decode_data(clean_data(post_data('college_country')));
+				$college_state 			=	decode_data(clean_data(post_data('college_state')));
+				$college_city 			=	decode_data(clean_data(post_data('college_city')));
+				$college_university 	=	decode_data(clean_data(post_data('college_university')));
+
+				$college_email 			=	decode_data(clean_data(post_data('college_email')));
+				$college_phone 			=	decode_data(clean_data(post_data('college_phone')));
+
+				$college_profile_found 	=	$this->im->get_college_profile_data(array(
+					'college_country_id'=>$college_country,
+					'college_name'=>$college_name,
+					'college_state_id'=>$college_state,
+					'college_city_id'=>$college_city,
+					'college_university_id'=>$college_university,
+					'college_email'=>$college_email,
+					'college_phone_no'=>$college_phone
+				));
+
+
+				if(!empty($college_profile_found)){
+					$return['error']=$college_name.' is taken already.';
+				}else{
+					$return['success']='';
+				}
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onQuickUpdateCollege(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college_id 		= 	clean_data(post_data('_college_id'));
+
+				$college_id 		=	decode_data($_college_id);
+				$college_name 		= 	clean_data(post_data('college_name'));
+				$college_estd 		= 	clean_data(post_data('college_estd'));
+				$college_address 	= 	clean_data(post_data('college_address'));
+				$college_pincode 	= 	clean_data(post_data('college_pincode'));
+				$college_email 		= 	clean_data(post_data('college_email'));
+				$college_phone 		= 	clean_data(post_data('college_phone'));
+
+				$college_is_featured 			= 	clean_data(post_data('college_is_featured'));
+				$college_top_in_home 			= 	clean_data(post_data('college_is_top_college'));
+				$college_is_admin_verified 		= 	clean_data(post_data('college_admin_verified'));
+
+				$college_is_visible_in_search	=	clean_data(post_data('college_is_visible_in_search'));
+
+				$college_has_leads_access	=	clean_data(post_data('college_has_leads_access'));
+				$college_leads_max			=	clean_data(post_data('college_leads_max'));
+				$college_leads_per_day		=	clean_data(post_data('college_leads_per_day'));
+				$college_start_date			=	clean_data(post_data('college_start_date'));
+				$college_end_date			=	clean_data(post_data('college_end_date'));
+				$college_end_date			=	clean_data(post_data('college_end_date'));
+
+				$data_matched=FALSE;
+
+				//echo $college_id;die;
+
+
+				if($college_id!='' && is_numeric($college_id)){
+					$college_user_found=$this->um->get_user_data(array('college_user_id'=>$college_id),null,'4',FALSE);
+					
+					if(!empty($college_user_found)){
+
+						$college_duplicate_found=$this->um->get_user_data(array('college_user_id!='=>$college_id,'college_phone_no'=>$college_phone),NULL,'4',FALSE);
+
+						//print_obj($college_duplicate_found);die;
+						if(!empty($college_duplicate_found)){
+							$data_matched=FALSE;
+							//echo '2';
+						}else{
+							$data_matched=TRUE;
+							//echo '3';
+						}
+
+						//echo $data_matched;die;
+
+						if($data_matched==TRUE){
+							$college_data=array(
+								'college_name'=>$college_name,
+								'college_estd_year'=>$college_estd,
+								'college_address'=>$college_address,
+								'college_zipcode'=>$college_pincode,
+								'college_email'=>$college_email,
+								'college_phone_no'=>$college_phone,
+								'college_is_top'=>$college_top_in_home,
+								'college_is_featured'=>$college_is_featured,
+								'college_is_top_visible_home'=>$college_top_in_home,
+								'college_is_visible_in_search'=>$college_is_visible_in_search,
+								'is_verified_by_admin'=>$college_is_admin_verified,
+								'updated_by'=>decode_data(session_userdata('admin_id')),
+								'updated_at'=>date('Y-m-d h:i:s')
+							);
+
+							if($college_has_leads_access=='yes'){
+								if(!empty($college_start_date) && !empty($college_end_date) && !empty($college_leads_max) && !empty($college_leads_per_day)){
+									$college_data['college_has_leads_access']=$college_has_leads_access;
+									$college_data['college_max_leads']=$college_leads_max;
+									$college_data['college_perday_leads']=$college_leads_per_day;
+									$college_data['college_leads_start']=date('Y-m-d',strtotime($college_start_date));
+									$college_data['college_leads_end']=date('Y-m-d',strtotime($college_end_date));
+								}								
+							}
+
+
+							$updated=$this->im->update_college_data($college_data,array('college_user_id'=>$college_id));
+
+							if($updated){
+
+
+								$college_country=$college_user_found->user_country;
+								$college_city=$college_user_found->user_city;
+								$college_state=$college_user_found->user_state;
+
+								$slug_found=$this->sm->get_slug(array('slug_type_id'=>$college_id,'slug_type'=>'7'));
+								$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+								$country_data=$this->com->get_country(array('country_id'=>$college_country));
+								$city_data=$this->com->get_city(array('city_id'=>$college_city));
+								$state_data=$this->com->get_state(array('state_id'=>$college_state));
+								$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+								$slug_value=url_slug($_slug_value);
+								$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+								$slug_type='7';
+
+								$folder_name=$slug_value;
+
+								if(empty($slug_found)){
+									$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$college_id,'slug_type'=>$slug_type));
+									if($inserted){
+										$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$college_id));
+									}
+								}else{
+									$inserted=$this->sm->update_slug(array('slug_value'=>$slug_value),array('slug_type_id'=>$college_id,'slug_type'=>$slug_type));
+									if($inserted){
+										$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$college_id));
+									}
+								}
+
+								$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$college_id));
+
+
+								if(isset($_FILES['college_logo']) && $_FILES['college_logo']['name']!=''){
+
+									$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$college_id));
+
+	
+									if(!empty($file_logo_found)){
+										if(is_file($file_logo_found->media_disk_path)){
+											@unlink($file_logo_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+										}
+									}
+
+									$logo_data=array(
+										'file_size'=>'1',
+										'file_name'=>'college_logo',
+										'file_types'=>'jpg,jpeg,png,webp',
+										'file_folder'=>'colleges',
+										'file_compress'=>true,
+										'file_compress_protocol'=>'webp',
+										'file_child_folder'=>$folder_name,
+										'file_uploaded_by'=>$this->data['userdata']->user_id
+									);
+
+									//print_obj($logo_data);die;
+
+									$file_id=$this->onUploadFiles($logo_data);
+
+									if(!empty($file_id) && $file_id>0){
+
+										$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo'));
+
+							            $user_logo_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$college_id,
+							            	'user_file_type'=>'4',
+							            	'user_storage_type'=>'user_logo'
+							            );
+
+							            $this->sm->store_user_file($user_logo_storage_data);
+
+
+							            $user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+								        if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+								            $college_logo=$user_logo->media_disk_path_relative;
+								        }else{
+								            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+								        }
+
+										$this->im->update_college_data(array('college_logo'=>$college_logo),array('college_user_id'=>$college_id));
+							        } 
+								}
+
+								if(isset($_FILES['college_banner']) && $_FILES['college_banner']['name']!=''){
+									$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$college_id));
+
+									if(!empty($file_banner_found)){
+										if(is_file($file_banner_found->media_disk_path)){
+											@unlink($file_banner_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+										}
+									}
+
+									$banner_data=array(
+										'file_size'=>'25',
+										'file_name'=>'college_banner',
+										'file_types'=>'png,jpg,jpeg',
+										'file_folder'=>'colleges',
+										'file_compress'=>true,
+										'file_compress_protocol'=>'webp',
+										'file_child_folder'=>$folder_name,
+										'file_uploaded_by'=>$this->data['userdata']->user_id
+									);
+
+									$file_id=$this->onUploadFiles($banner_data);
+
+
+									if(!empty($file_id) && $file_id>0){
+										$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner'));
+							            $user_banner_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$college_id,
+							            	'user_file_type'=>'4',
+							            	'user_storage_type'=>'user_banner'
+							            );
+
+							            $this->sm->store_user_file($user_banner_storage_data);
+
+							            $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner'));
+
+								        if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+								            $college_banner=$user_banner->media_disk_path_relative;
+								            $user_banner_name=$user_banner->media_org_name;
+								        }else{
+								            $college_banner=base_url().'uploads/app/default/pageBnr.jpg';		            
+								        }
+
+								        $this->im->update_college_data(array('college_logo'=>$college_banner),array('college_user_id'=>$college_id));
+							        }
+								}
+
+
+								$user_logo_file=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$college_id));
+
+								if(!empty($user_logo_file)){
+									$this->sm->update_system_search_data(array('search_storage_access_url'=>$user_logo_file->media_disk_path_relative),array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$college_id));
+								}
+
+								$return['success']='College data updated successfully';
+							}else{
+								$return['error']='College data not updated';
+							}
+						}else{
+							$return['error']='College data already found in the system with the same data.';
+						}
+
+							
+					}else{
+						$return['error']='College data not found in the system.';
+					}
+				}else{
+					$return['error']='Data can not be updated now.';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onQuickUpdateCollege_v1(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college_id 		= 	clean_data(post_data('_college_id'));
+
+				$college_id 		=	decode_data($_college_id);
+				$college_name 		= 	clean_data(post_data('college_name'));
+				$college_estd 		= 	clean_data(post_data('college_estd'));
+				$college_address 	= 	clean_data(post_data('college_address'));
+				$college_pincode 	= 	clean_data(post_data('college_pincode'));
+				$college_email 		= 	clean_data(post_data('college_email'));
+				$college_phone 		= 	clean_data(post_data('college_phone'));
+
+				$college_is_featured 			= 	clean_data(post_data('college_is_featured'));
+				$college_top_in_home 			= 	clean_data(post_data('college_is_top_college'));
+				$college_is_admin_verified 		= 	clean_data(post_data('college_admin_verified'));
+
+				$college_is_visible_in_search	=	clean_data(post_data('college_is_visible_in_search'));
+
+				$college_has_leads_access	=	clean_data(post_data('college_has_leads_access'));
+				$college_leads_max			=	clean_data(post_data('college_leads_max'));
+				$college_leads_per_day		=	clean_data(post_data('college_leads_per_day'));
+				$college_start_date			=	clean_data(post_data('college_start_date'));
+				$college_end_date			=	clean_data(post_data('college_end_date'));
+				$college_end_date			=	clean_data(post_data('college_end_date'));
+
+				$data_matched=FALSE;
+
+				//echo $college_id;die;
+
+
+				if($college_id!='' && is_numeric($college_id)){
+					$college_user_found=$this->um->get_user_data(array('college_user_id'=>$college_id),null,'4',FALSE);
+
+					//print_obj($college_user_found);die;
+					
+					if(!empty($college_user_found)){
+
+						// if($college_user_found->college_email==$college_email && $college_user_found->college_phone_no==$college_phone){
+						// 	$data_matched=TRUE;
+						// 	//echo '1';
+						// }else{
+						// 	$college_duplicate_found=$this->um->get_user_data(array('college_user_id!='=>$college_id,'college_email'=>$college_email),NULL,'4',FALSE);
+
+						// 	//print_obj($college_duplicate_found);
+						// 	if(!empty($college_duplicate_found)){
+						// 		$data_matched=FALSE;
+						// 		//echo '2';
+						// 	}else{
+						// 		$data_matched=TRUE;
+						// 		//echo '3';
+						// 	}
+						// }
+
+						$college_duplicate_found=$this->um->get_user_data(array('college_user_id!='=>$college_id,'college_phone_no'=>$college_phone),NULL,'4',FALSE);
+
+						//print_obj($college_duplicate_found);die;
+						if(!empty($college_duplicate_found)){
+							$data_matched=FALSE;
+							//echo '2';
+						}else{
+							$data_matched=TRUE;
+							//echo '3';
+						}
+
+						//echo $data_matched;die;
+
+						if($data_matched==TRUE){
+							$college_data=array(
+								'college_name'=>$college_name,
+								'college_estd_year'=>$college_estd,
+								'college_address'=>$college_address,
+								'college_zipcode'=>$college_pincode,
+								'college_email'=>$college_email,
+								'college_phone_no'=>$college_phone,
+								'college_is_top'=>$college_top_in_home,
+								'college_is_featured'=>$college_is_featured,
+								'college_is_top_visible_home'=>$college_top_in_home,
+								'college_is_visible_in_search'=>$college_is_visible_in_search,
+								'is_verified_by_admin'=>$college_is_admin_verified,
+								'updated_by'=>decode_data(session_userdata('admin_id')),
+								'updated_at'=>date('Y-m-d h:i:s')
+							);
+
+							if($college_has_leads_access=='yes'){
+								if(!empty($college_start_date) && !empty($college_end_date) && !empty($college_leads_max) && !empty($college_leads_per_day)){
+									$college_data['college_has_leads_access']=$college_has_leads_access;
+									$college_data['college_max_leads']=$college_leads_max;
+									$college_data['college_perday_leads']=$college_leads_per_day;
+									$college_data['college_leads_start']=date('Y-m-d',strtotime($college_start_date));
+									$college_data['college_leads_end']=date('Y-m-d',strtotime($college_end_date));
+								}								
+							}
+
+
+							$updated=$this->im->update_college_data($college_data,array('college_user_id'=>$college_id));
+
+							if($updated){
+
+								//Leads update
+
+								/*if($college_has_leads_access=='yes' && $college_leads_max>0){
+									$college_leads_sent_data=$this->im->get_system_college_leads(array('leads_college_id'=>$college_id));
+
+									if(!empty($college_leads_sent_data)){
+
+										$college_user_found->
+										$data_to_add=array(
+											'leads_college_id'=>$college_id,
+											'leads_type_id'=>$college_user_found->college_leads_type,
+											'leads_total'=>$college_leads_max,
+											'leads_total_sent'=>'',
+											'leads_last_sent'=>''
+										);
+
+										$this->im->update_system_college_leads($data_to_add,array('leads_college_id'=>$college_id));
+									}else{
+
+									}
+								}*/
+
+								$college_country=$college_user_found->user_country;
+								$college_city=$college_user_found->user_city;
+								$college_state=$college_user_found->user_state;
+
+								//echo $college_country;die;
+
+								$slug_found=$this->sm->get_slug(array('slug_type_id'=>$college_id,'slug_type'=>'7'));
+								$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+								$country_data=$this->com->get_country(array('country_id'=>$college_country));
+								$city_data=$this->com->get_city(array('city_id'=>$college_city));
+								$state_data=$this->com->get_state(array('state_id'=>$college_state));
+								$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+								$slug_value=url_slug($_slug_value);
+								$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+								$slug_type='7';
+
+								$folder_name=$slug_value;
+
+								if(empty($slug_found)){
+									$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$college_id,'slug_type'=>$slug_type));
+									if($inserted){
+										$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$college_id));
+									}
+								}else{
+									$inserted=$this->sm->update_slug(array('slug_value'=>$slug_value),array('slug_type_id'=>$college_id,'slug_type'=>$slug_type));
+									if($inserted){
+										$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$college_id));
+									}
+								}
+
+								$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$college_id));
+								/*
+								if(!empty($system_data_search)){
+									$country_data=$this->com->get_country(array('country_id'=>$college_country));
+									$state_data=$this->com->get_state(array('state_id'=>$college_state));
+									$city_data=$this->com->get_city(array('city_id'=>$college_city));
+
+									$system_data_search_inserted=array('search_data_type'=>'COLLEGE_NAME','search_data_name'=>$college_name,'search_data_type_id'=>$college_id,'search_data_country_id'=>$college_country,'search_data_country'=>$country_data->country_name,'search_data_state_id'=>$college_state,'search_data_state_name'=>$state_data->state_name,'search_data_city_name'=>$city_data->city_name,'search_data_city_id'=>$college_city,'search_data_access_url'=>$slug_url);
+									$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$college_id));
+								}else{
+									$country_data=$this->com->get_country(array('country_id'=>$college_country));
+									$state_data=$this->com->get_state(array('state_id'=>$college_state));
+									$city_data=$this->com->get_city(array('city_id'=>$college_city));
+
+									$system_data_search_inserted=array('search_data_type'=>'COLLEGE_NAME','search_data_name'=>$college_name,'search_data_type_id'=>$college_id,'search_data_country_id'=>$college_country,'search_data_country'=>$country_data->country_name,'search_data_state_id'=>$college_state,'search_data_state_name'=>$state_data->state_name,'search_data_city_name'=>$city_data->city_name,'search_data_city_id'=>$college_city,'search_data_access_url'=>$slug_url);
+									$this->sm->store_system_search_data($system_data_search_inserted);
+
+									//print_obj($system_data_search_inserted);
+
+									//echo 'hi';
+								}
+
+								*/
+
+
+								if(isset($_FILES['college_logo']) && $_FILES['college_logo']['name']!=''){
+
+									$file_logo_found=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$college_id));
+
+									//echo $folder_name;
+									//print_obj($file_logo_found);die;
+
+									if(!empty($file_logo_found)){
+										if(is_file($file_logo_found->media_disk_path)){
+											@unlink($file_logo_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_logo_found->storage_id));
+										}
+									}
+
+									$logo_data=array(
+										'file_size'=>'1',
+										'file_name'=>'college_logo',
+										'file_types'=>'jpg,jpeg,png,webp',
+										'file_folder'=>'colleges',
+										'file_compress'=>true,
+										'file_compress_protocol'=>'webp',
+										'file_child_folder'=>$folder_name,
+										'file_uploaded_by'=>$this->data['userdata']->user_id
+									);
+
+									//print_obj($logo_data);die;
+
+									$file_id=$this->onUploadFiles($logo_data);
+
+									if(!empty($file_id) && $file_id>0){
+
+										$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo'));
+
+							            $user_logo_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$college_id,
+							            	'user_file_type'=>'4',
+							            	'user_storage_type'=>'user_logo'
+							            );
+
+							            $this->sm->store_user_file($user_logo_storage_data);
+
+
+							            $user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+								        if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+								            $college_logo=$user_logo->media_disk_path_relative;
+								        }else{
+								            $college_logo=DIR_CDN.'data/app/app_data/w2a.png?tr=h-50,w-50,c-force';								            
+								        }
+
+										$this->im->update_college_data(array('college_logo'=>$college_logo),array('college_user_id'=>$college_id));
+							        } 
+								}
+
+								if(isset($_FILES['college_banner']) && $_FILES['college_banner']['name']!=''){
+									$file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>'user_banner','user_file_type_id'=>$college_id));
+
+									if(!empty($file_banner_found)){
+										if(is_file($file_banner_found->media_disk_path)){
+											@unlink($file_banner_found->media_disk_path);
+											$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+										}
+									}
+
+									$banner_data=array(
+										'file_size'=>'25',
+										'file_name'=>'college_banner',
+										'file_types'=>'png,jpg,jpeg',
+										'file_folder'=>'colleges',
+										'file_compress'=>true,
+										'file_compress_protocol'=>'webp',
+										'file_child_folder'=>$folder_name,
+										'file_uploaded_by'=>$this->data['userdata']->user_id
+									);
+
+									$file_id=$this->onUploadFiles($banner_data);
+
+									//print_obj($file_id);die;
+
+									if(!empty($file_id) && $file_id>0){
+										$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner'));
+							            $user_banner_storage_data=array(
+							            	'user_file_storage_id'=>$file_id,
+							            	'user_file_type_id'=>$college_id,
+							            	'user_file_type'=>'4',
+							            	'user_storage_type'=>'user_banner'
+							            );
+
+							            $this->sm->store_user_file($user_banner_storage_data);
+
+							            $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner'));
+
+								        if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+								            $college_banner=$user_banner->media_disk_path_relative;
+								            $user_banner_name=$user_banner->media_org_name;
+								        }else{
+								            $college_banner=base_url().'uploads/app/default/pageBnr.jpg';		            
+								        }
+
+								        $this->im->update_college_data(array('college_logo'=>$college_banner),array('college_user_id'=>$college_id));
+							        }
+								}
+
+
+								$user_logo_file=$this->sm->get_user_file(array('user_storage_type'=>'user_logo','user_file_type_id'=>$college_id));
+
+								if(!empty($user_logo_file)){
+									$this->sm->update_system_search_data(array('search_storage_access_url'=>$user_logo_file->media_disk_path_relative),array('search_data_type'=>'COLLEGE_NAME','search_data_type_id'=>$college_id));
+								}
+
+								$return['success']='College data updated successfully';
+							}else{
+								$return['error']='College data not updated';
+							}
+						}else{
+							$return['error']='College data already found in the system with the same data.';
+						}
+
+							
+					}else{
+						$return['error']='College data not found in the system.';
+					}
+				}else{
+					$return['error']='Data can not be updated now.';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onUploadCollegeFiles(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college_id=post_data('_college_id');
+
+				$file_type=post_data('_upload_file_type');  //aka user_broucher
+
+				$collge_broucher_type=post_data('collge_broucher_type');
+
+				$collge_broucher_year=post_data('collge_broucher_year');
+
+				$college_id=decode_data($_college_id);
+
+				$broucher_type=$collge_broucher_type;
+
+				//echo $file_type;die;
+
+				if(!empty($_college_id) && !empty($file_type)){
+					if(isset($_FILES['college_file']) && $_FILES['college_file']['name']!=''){
+
+						$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+						$country_data=$this->com->get_country(array('country_id'=>$college_country));
+						$city_data=$this->com->get_city(array('city_id'=>$college_city));
+						$state_data=$this->com->get_state(array('state_id'=>$college_state));
+						$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+						$slug_value=url_slug($_slug_value);
+						$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+						$slug_type='7';
+
+						//print_obj($slug_value);die;
+
+						$folder_name=$slug_value;
+
+						//$file_found=$this->sm->get_user_file(array('user_storage_type'=>$file_type,'user_file_type_id'=>$college_id));
+
+						//echo $folder_name;
+						//print_obj($file_logo_found);die;
+
+						// if(!empty($file_found)){
+						// 	if(is_file($file_found->media_disk_path)){
+						// 		@unlink($file_found->media_disk_path);
+						// 		$this->sm->delete_file(array('storage_id'=>$file_found->storage_id));
+						// 	}
+						// }
+
+						$logo_data=array(
+							'file_size'=>'10',
+							'file_name'=>'college_file',
+							'file_types'=>'jpg,jpeg,png',
+							'file_folder'=>'colleges',
+							'file_compress'=>true,
+							'file_compress_protocol'=>'webp',
+							'file_child_folder'=>$folder_name,
+							'file_uploaded_by'=>$this->data['userdata']->user_id
+						);
+
+						//print_obj($logo_data);die;
+
+						$file_id=$this->onUploadFiles($logo_data);
+
+						if(!empty($file_id) && $file_id>0){
+
+							//$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>$file_type));
+
+				            $user_logo_storage_data=array(
+				            	'user_file_storage_id'=>$file_id,
+				            	'user_file_type_id'=>$college_id,
+				            	'user_file_type'=>'6',
+				            	'user_storage_type'=>$file_type,
+				            	'user_storage_type_2'=>$broucher_type,
+				            	'user_file_published_year'=>$collge_broucher_year
+				            );
+
+				            $this->sm->store_user_file($user_logo_storage_data);
+
+
+
+				            if(isset($_FILES['college_broucher_file']) && $_FILES['college_broucher_file']['name']!=''){
+
+				            	$file_found=$this->sm->get_user_file(array('user_storage_type'=>'user_broucher_actual','user_file_type_id'=>$college_id,'user_file_published_year'=>$collge_broucher_year,'user_file_type'=>'6'));
+
+								if(!empty($file_found)){
+									if(is_file($file_found->media_disk_path)){
+										@unlink($file_found->media_disk_path);
+										$this->sm->delete_file(array('storage_id'=>$file_found->storage_id));
+									}
+								}
+				            	$broucher_data=array(
+									'file_size'=>'10',
+									'file_name'=>'college_broucher_file',
+									'file_types'=>'pdf',
+									'file_folder'=>'colleges',
+									'file_compress'=>false,
+									'file_child_folder'=>$folder_name,
+									'file_uploaded_by'=>$this->data['userdata']->user_id
+								);
+
+
+								$broucher_file_id=$this->onUploadFiles($broucher_data);
+
+								if(!empty($broucher_file_id) && $broucher_file_id>0){
+									$user_broucher_storage_data=array(
+						            	'user_file_storage_id'=>$broucher_file_id,
+						            	'user_file_type_id'=>$college_id,
+						            	'user_file_type'=>'6',
+						            	'user_storage_type'=>'user_broucher_actual',
+						            	'user_storage_type_2'=>$broucher_type,
+						            	'user_file_published_year'=>$collge_broucher_year
+						            );
+
+						            $this->sm->store_user_file($user_broucher_storage_data);
+								}
+				            }
+
+				            $return['success']='File updated successfully';
+				        }else{
+				         	$return['error']='File not uploaded';
+				        } 
+					}else{
+						$return['error']='No file selected';
+					}
+				}else{
+					$return['error']='File can not be uploaded';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onDeleteCollegeFiles(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$cid=post_data('cid');
+				$aid=post_data('aid');
+				$file_type=post_data('file_type');
+
+				$college_id=decode_data($cid);
+				$storage_id=decode_data($aid);
+
+				//echo $storage_id;
+
+				$file_found=$this->sm->get_user_file(array('user_storage_type'=>$file_type,'user_file_type_id'=>$college_id,'storage_id'=>$storage_id));
+
+				//print_obj($file_found);die;
+
+				if(!empty($file_found)){
+					if(is_file($file_found->media_disk_path)){
+						@unlink($file_found->media_disk_path);
+						$this->sm->delete_file(array('storage_id'=>$file_found->storage_id));
+					}
+
+					$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>$file_type,'user_file_storage_id'=>$storage_id));
+
+					$return['success']='File deleted successfully';
+				}else{
+					$return['error']='File not deleted from the system';
+				}
+
+
+				header('Content-Type: application/json');
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onDeleteCollege(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$_college_id=post_data('_college_id');
+				$college_user_id=decode_data($_college);
+
+				$college_id=decode_data($_college_id);
+
+				//echo $college_id;
+
+				// if(!empty($college_user_id)){
+				// 	$user_found=$this->um->get_user_data(array('user_id'=>$college_user_id),null,'4');
+				// }else{
+				// 	$user_found=$this->im->get_college_profile_data(array('college_id'=>$college_id));
+				// }
+
+				$user_found=$this->im->get_college_profile_data(array('college_id'=>$college_id));
+
+
+				//print_obj($user_found);die;				
+
+				if(!empty($user_found)){
+
+					$deleted=$this->im->delete_college_data(array('college_id'=>$college_id));
+					if($deleted){
+
+						$college_id=$user_found->college_user_id;
+
+						$this->um->delete_user_data(array('user_id'=>$college_id));
+
+						$this->sm->delete_menu(array('menu_link_id'=>$college_id,'menu_link_type'=>'10'));
+
+						$this->sm->delete_slug(array('slug_type'=>'7','slug_type_id'=>$college_id));
+
+						$slug_urls=$this->sm->get_slug_urls(array('url_type'=>'college_static_url','url_type_id'=>$college_id));
+
+						if(!empty($slug_urls)){
+
+							foreach ($slug_urls as $key => $value) {
+								$d[]=array('Disallow: '.$value->url_value);
+							}
+
+
+							if (!empty($d)) {
+							    // File name with current date in YYmmdd format
+							    $filename = "robots" . date('ymd') . ".txt";
+
+							    // Content to be written to the file with line breaks
+							    $content = implode("\n", array_map(function ($value) {
+							        return $value[0];
+							    }, $d));
+
+							    // Open the file in write mode ('w')
+							    $file = fopen($filename, 'w');
+
+							    // Check if the file was opened successfully
+							    if ($file) {
+							        // Write content to the file
+							        fwrite($file, $content);
+
+							        // Close the file
+							        fclose($file);
+							    }
+							}
+
+							$this->sm->delete_slug_urls(array('url_type'=>'college_static_url','url_type_id'=>$college_id));
+						}
+
+						
+
+						$this->um->delete_listing_package_users(array('listing_user_type'=>'2','listing_user_id'=>$college_id));
+
+						$this->sm->delete_system_search_data(array('search_data_type_id'=>$college_id,'search_data_type'=>'COLLEGE_NAME'));
+
+						$this->sm->delete_system_search_filters(array('filter_college_user_id'=>$college_id));
+
+						$this->im->delete_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>'2'));
+
+						$user_courses=-$this->im->get_user_course_data(array('user_id'=>$college_id,'user_type'=>'4'));
+
+						if(!empty($user_courses)){
+							$this->im->delete_course_fees_data(array('user_id'=>$college_id));
+							// foreach ($user_courses as $key => $value) {
+							// 	$this->im->delete_course_fees_data(array('user_id'=>$value->user_id));
+							// }
+						}
+
+						$this->im->delete_course_fees_data(array('user_id'=>$college_id));	
+						$this->strm->delete_user_course_stream_data(array('user_id'=>$college_id));
+						$this->strm->delete_user_courses_exam_data(array('user_id'=>$college_id));
+						$this->im->delete_faculty_data(array('faculty_type_id'=>$college_id));	
+						$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$college_id));		
+						$this->im->delete_inst_info_data(array('info_type_id'=>$college_id));
+						$this->sm->delete_review_data(array('review_inst_id'=>$college_id));
+						$this->sm->delete_review_question_data(array('review_inst_id'=>$college_id));
+						$this->sm->delete_review_status_data(array('review_inst_id'=>$college_id));	
+
+						$user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo'));
+						$user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner'));
+
+						$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_logo','user_file_type_id'=>$college_id));
+						$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_banner','user_file_type_id'=>$college_id));
+						$folder_found=$this->sm->get_file(array('media_org_name'=>$user_found->access_url_slug,'storage_type'=>'1'));
+						if(!empty($folder_found)){
+							if(is_dir($folder_found->media_disk_path)){
+								rrmdir($folder_found->media_disk_path);
+							}
+
+							$this->sm->delete_file(array('storage_id'=>$folder_found->storage_id));
+							$this->sm->delete_file(array('storage_id'=>$user_logo->user_file_storage_id));
+							$this->sm->delete_file(array('storage_id'=>$user_banner->user_file_storage_id));
+						}
+						$return['success']='College deleted from the system';
+					}else{
+						$return['error']='College not found in the system';
+					}
+
+				}else{
+					$return['error']='College not found in the system';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchCollegeBroucherFiles(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=decode_data(post_data('_college'));
+				$param['column_order'] = array(
+					null,
+					'broucher_type_name',
+					'broucher_data_year'
+				);
+
+				$param['column_search'] = array('broucher_type_name');
+				$param['order'] = array('broucher_data_year' => 'ASC');
+							
+				$posts=$this->input->post();
+				$param['broucher_data_type_id']=$college_id;
+				$param['broucher_data_type']='college';
+				$list = $this->sm->_get_broucher_data($posts,$param,FALSE,FALSE);
+
+				//print_obj($list);die;
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $file){
+					$no++;
+
+					$row = array();
+
+					$files=$this->sm->get_user_files(array('user_file_type_id'=>$college_id,'user_file_type'=>'6','user_storage_type'=>'user_broucher','user_storage_type_2'=>$file->broucher_type_id));
+
+					// $action='<div class="btn-group btn-group-sm">
+					// 	<button type="button" class="btn btn-xs btn-dark btn_del_college_file" data-file_type="'.$file->user_storage_type.'" data-aid="'.encode_data($file->storage_id).'" data-cid="'.encode_data($college_id).'">Delete</button>
+					// 	</div>';
+
+
+					$action='<table>';
+
+					foreach ($files as $k => $v) {
+
+						$action.='<tr>';
+						$action.='<td><img src="'.$v->media_disk_path_relative.'"></td>';
+						$action.='<td><div class="btn-group btn-group-sm">
+					 	<button type="button" class="btn btn-xs btn-dark btn_del_college_file" data-file_type="'.$v->user_storage_type.'" data-aid="'.encode_data($v->storage_id).'" data-cid="'.encode_data($college_id).'">Delete</button>
+					 	</div></td>';
+						$action.='</tr>';
+
+
+					}
+
+					$action.='</table>';
+					
+					
+					$row[]	=	$no;
+					$row[]  =	$file->broucher_type_name;
+					$row[]  =	$file->broucher_data_year;					
+					$row[]  =	$action;
+
+					$row[]	=	'';	
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->sm->_get_broucher_data($posts,$param,TRUE),
+					"recordsFiltered" => $this->sm->_get_broucher_data($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onAddCollegeInnerMenues_old(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college_id=post_data('_college');
+				$college_id=decode_data($_college_id);
+
+				$menu_id=post_data('college_inner_menu_id');
+
+
+				$menu_type=post_data('college_inner_menu_type');
+				$menu_name=post_data('college_inner_menu_name');
+				$menu_serial=post_data('college_inner_menu_serial');
+
+				$menu_status=post_data('college_inner_menu_status');
+
+				$menu_type_data=$this->sm->get_menue_types(array('menu_type_id'=>$menu_type));
+
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+
+				
+				$country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+
+				$state_data=$this->com->get_states(array('state_country_id'=>$college_data->college_state_id));
+
+				$city_data=$this->com->get_city(array('city_country_id'=>$college_data->college_country_id,'city_state_id'=>$college_data->college_state_id));
+
+				$country_name=$country_data->country_name;
+				$country_code=$country_data->country_iso_code_2;
+
+				if(!is_null($college_data->college_short_name)){
+					$college_formatted_name=ucwords(strtolower($college_data->college_name)).'-['.strtoupper($college_data->college_short_name).'],'.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).','.ucwords(strtolower($country_data->country_name));
+				}else{
+					$college_formatted_name=ucwords(strtolower($college_data->college_name)).','.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).','.ucwords(strtolower($country_data->country_name));
+				}
+
+				$college_name=ucwords(strtolower($college_data->college_name));
+
+
+				$total_user_courses=$this->im->get_total_user_courses(array('user_id'=>$college_data->college_user_id));
+				$total_avg_cost=$this->im->get_user_course_avg(array('user_id'=>$college_data->college_user_id,'user_course_year'=>'1'));
+				$c_courses=$this->im->_get_group_concat_user_course_data(array('user_id'=>$college_data->college_user_id));
+				$college_courses=$c_courses->concated_value;				
+
+
+				if($menu_type=='1'){//INFO
+					$arr=['front_info_section','front_course_fees_section','front_course_fees_course_section','front_course_fees_brief_with_ads_section','front_placement_section','front_placement_details_section','front_facilities_section','front_news_brief_section','front_google_maps_section','front_wayto_rating_section','front_nearby_colleges_universities_section','front_college_comment_section'];
+					$_menu_name='Info';
+		
+
+					if($total_avg_cost[0]->total_cost!=null){
+						$url_meta_desc=$college_formatted_name.', Application Form, Admissions, '.ucwords(strtolower($college_courses)).' . '.$total_user_courses.' Courses.  Average Fees is '.round(_money_format($total_avg_cost[0]->total_cost)).' per year';
+					}else{
+						if($college_courses!=NULL){
+							$url_meta_desc=$college_formatted_name.', Application Form, Admissions, '.ucwords(strtolower($college_courses)).' . '.$total_user_courses.' Courses.';
+						}else{
+							$url_meta_desc=$college_formatted_name;
+						}
+					}
+					
+
+					$url_meta_title=$college_formatted_name;
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='2'){//COURSE & FEES
+					$arr=['front_course_fees_section','front_course_fees_brief_with_ads_section','front_wayto_rating_section','front_college_comment_section','front_nearby_colleges_universities_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='Courses & Fees';
+
+					$concated_name=(!empty($menu_name))?$menu_name:$_menu_name;
+					if($total_avg_cost[0]->total_cost!=null){
+						$url_meta_title=$college_formatted_name.' '.ucwords(strtolower($concated_name));
+						if($college_courses!=null){
+							$url_meta_desc=$college_formatted_name.' '.$concated_name.' has '.$total_user_courses.' Courses with Average Fees '.round(_money_format($total_avg_cost[0]->total_cost)).' per year. Top Courses at '.ucwords($college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name))).'  are '.ucwords(strtolower($college_courses));
+						}else{
+							$url_meta_desc=$college_formatted_name.' '.ucwords(strtolower($concated_name));
+						}						
+					}else{
+						$url_meta_title=$college_formatted_name.' '.ucwords(strtolower($concated_name));
+
+						if($college_courses!=null){
+							$url_meta_desc=$college_formatted_name.' '.$concated_name.' has '.$total_user_courses.'. Top Courses at '.$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).'  are '.ucwords(strtolower($college_courses));
+						}else{
+							$url_meta_desc=$college_formatted_name.' '.ucwords(strtolower($concated_name));
+						}
+					}
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='3'){//ADMISSION
+					$arr=['front_admission_section','front_wayto_rating_section','front_college_comment_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='Admission '.date('Y');
+
+					$url_meta_title=$college_formatted_name.' Admission News for '.date('Y');
+					$url_meta_desc=$college_formatted_name.' Admission '.date('Y').': '.ucwords(strtolower($college_courses)).' Fees Structure, Cutoff, Registration, Eligibility, Form';
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='5'){//CUTOFF
+					
+					$arr=['front_exam_cutoff_section','front_cutoff_section','front_wayto_rating_section','front_college_comment_section','front_nearby_colleges_universities_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='Cutoff';
+
+					$url_meta_title=$college_formatted_name.' - Cutoff for the Year '.date('Y');
+					$url_meta_desc=$college_formatted_name.' - Cutoff for the Year '.date('Y').'. Check Course Wise Cutoff for all categories.';
+
+							//'BMS College of Engineering - [BMSCE] Cutoff for the Year 2021 for . Check Course Wise Cutoff for all categories.'
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='6'){//PLACEMENT
+					$arr=['front_placement_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='Placement';
+
+					$url_meta_title=$college_formatted_name.' Placement Details And Companies Visiting';
+					$url_meta_desc=$college_formatted_name.' Placement Details And Companies Visiting';
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='7'){//GALLERY
+					$arr=['front_gallery_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='Gallery';
+
+					$url_meta_title=$college_formatted_name.' - Images, Photos, Videos, Gallery '.date('Y');
+					$url_meta_desc=$college_formatted_name.' -  Images And Videos.';
+
+							//'BMS College of Engineering - [BMSCE], Bangalore - Images, Photos, Videos, Gallery 2021-2022'
+
+							//BMS College of Engineering - [BMSCE],Bangalore, Karnataka. Images And Videos  total images found 46 under Facilities
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='8'){//SCHOLARSHIPS
+					$arr=['front_scholarship_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					$_menu_name=='Scholarships';
+
+					$url_meta_title=$college_formatted_name.' - Scholarships Opportunities '.date('Y');
+					$url_meta_desc=$college_formatted_name.' - Scholarships Opportunity Details '.date('Y');
+
+							//'BMS College of Engineering - [BMSCE], Bangalore, Karnataka Scholarships Opportunities. Fees is according to CET which is 50,000 + college..'
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='9'){//FACULTY
+					$arr=['front_faculties_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='Faculty';
+
+					$url_meta_title=$college_formatted_name;
+					$url_meta_desc=$college_formatted_name.' - Faculty Details '.date('Y');
+
+							//'BBMS College of Engineering - [BMSCE], Bangalore - Faculty Details 2021-2022'
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='10'){//NEWS & ARTICLES
+					$arr=['front_news_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					$_menu_name='News & Articles';
+
+					$url_meta_title=$college_formatted_name.'. 0 News Articles found. ';
+					$url_meta_desc=$college_formatted_name.' '.date('Y').': Latest News, Announcements, Notifications, Exams, Notices';
+
+							//'BBMS College of Engineering - [BMSCE], Bangalore - Faculty Details 2021-2022'
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='11'){//HOSTEL
+					$arr=['front_hostel_section','front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					$_menu_name='Hostel';
+
+					$url_meta_title=$college_formatted_name.' Hostel & Fees details '.date('Y');
+					$url_meta_desc=$college_formatted_name.' Hostel & Fees details '.date('Y');
+							// $url_meta_desc=ucwords($college_name.' - '.$city_data->city_name.','.$state_data->state_name).'. Girls and Boys Hostel with average fees 65,000 per year. Hostel Review by Kalpan Punamiya: The hostel is highly expensive and most cannot aff..';
+
+							//'BBMS College of Engineering - [BMSCE], Bangalore - Faculty Details 2021-2022'
+
+					$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+				}else if($menu_type=='12'){//Q & A
+					$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					$_menu_name='Q & A';
+
+				}else if($menu_type=='13'){//Department
+					$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+
+					$_menu_name='Department';
+
+				}else if($menu_type=='14'){//Results
+					$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+
+					$_menu_name='Results';
+
+					$url_meta_title=$college_formatted_name.' Results'.date('Y');
+					$url_meta_desc=$college_formatted_name.' Admission '.date('Y').': Check '.ucwords(strtolower($college_courses)).' Results';
+
+				}else if($menu_type=='15'){//Distance Education
+					$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+
+					$_menu_name='Distance Education';
+				}
+
+
+				if($menu_type_data->menu_has_link=='2'){
+					$menu_url=base_url().strtolower($country_code).'/'.$college_data->access_url_slug;
+				}else{
+					if($menu_type=='1'){
+						$menu_url=base_url().strtolower($country_code).'/'.$college_data->access_url_slug.'/info';
+						$menu_slug='info';
+					}else if($menu_type=='3'){
+						$menu_slug=(!empty($menu_name))?str_replace('-'.date('Y'), '', $menu_name):str_replace('-'.date('Y'), '', $_menu_name);
+						$menu_slug=url_slug($menu_slug);
+						$menu_url=base_url().strtolower($country_code).'/'.$college_data->access_url_slug.'/'.url_slug($menu_slug);
+					}else{
+						$menu_slug=(!empty($menu_name))?url_slug($menu_name):url_slug($_menu_name);
+						$menu_url=base_url().strtolower($country_code).'/'.$college_data->access_url_slug.'/'.$menu_slug;
+					}
+				}
+
+
+
+				$menu_data=array(
+					'menu_parent_id'=>'0',
+					'menu_country_id'=>$college_country,
+					'menu_country_code'=>$country_code,
+					'menu_country'=>$country_name,
+					'menu_type'=>$menu_type,
+					'menu_link_type'=>'10',
+					'menu_link_id'=>$college_id,
+					'menu_link'=>$menu_url,
+					'menu_name'=>$menu_name,
+					'menu_name'=>(!empty($menu_name))?$menu_name:$_menu_name,
+					'menu_main_widget'=>serialize($arr),
+					'menu_slug'=>(isset($menu_slug))?$menu_slug:null,
+					'menu_serial'=>$menu_serial,
+					'menu_is_inner'=>'1',
+					'menu_is_active'=>$menu_status
+				);
+
+				
+
+				if(empty($menu_id)){
+					$menu=$this->sm->get_menues(array('menu_type'=>$menu_type,'menu_link_id'=>$college_id));
+
+					if(empty($menu)){
+						
+
+						$inserted=$this->sm->store_menu($menu_data);
+
+						if($inserted){
+
+							$get_type_base_url=$this->sm->get_slug_urls(array('url_value'=>$menu_url));
+
+							if(empty($get_type_base_url)){
+
+								$year=date('Y');
+
+								// $url_page_heading=$college_formatted_name.' - '.ucwords($menu_name);
+								// $url_meta_title=$college_formatted_name.' Placement , Companies Visiting '.$year.'-'.($year+1);
+								// $url_meta_desc='Check out '.$college_formatted_name.' campus placements report, highest &amp; average salary packages, total campus placement offers, numbers of students placed and list of companies visiting.';
+
+								// $url_meta_key_words=generateKeywordsFromText($url_page_heading.' '.$url_meta_title.' '.$url_meta_desc);
+
+								// $breadcumb=array(
+								// 	'Home'=>base_url(),
+								// 	ucwords($country_data->country_name).' Colleges'=>''
+								// );
+
+								$slug_data=array(
+									'url_type'=>'college_static_url',
+									'url_sub_type'=>$menu_slug,
+									'url_type_id'=>$college_id,
+									'url_country'=>$college_data->college_country_id,
+									'url_state'=>$college_data->college_state_id,
+									'url_city'=>$college_data->college_city_id,
+									'url_meta_heading'=>$url_meta_title,
+									'url_meta_title'=>$url_meta_title,
+									'url_meta_key_words'=>$url_meta_key_words,
+									'url_meta_desc'=>$url_meta_desc,
+									'url_og_title'=>$url_meta_title,
+									'url_og_desc'=>$url_meta_desc,
+									'url_page_heading'=>$url_page_heading,
+									'url_value'=>$menu_url,
+									'url_priority'=>'0.6',
+									'url_data_change_freq'=>'yearly',
+									'url_active'=>$menu_status						
+								);
+
+								$this->sm->store_slug_urls($slug_data);
+
+							}
+
+								
+							$return['success']='Menu created';
+						}else{
+							$return['error']='Menu not created';
+						}
+					}else{
+						$return['error']='Menu already exists';
+					}
+				}else{
+
+					$m_id=decode_data($menu_id);
+
+					$updated=$this->sm->update_menu($menu_data,array('menu_id'=>$m_id));
+
+					if($updated){
+						$return['success']='Menu updated';
+					}else{
+						$return['error']='Menu not updated';
+					}
+				}
+
+
+					
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAddCollegeInnerMenues(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$menu_id=post_data('menu_id');
+
+				$menu_data_type=post_data('menu_data_type');
+				$menu_data_type_id=post_data('menu_data_type_id');
+
+				$inner_menu_type=post_data('college_inner_menu_type');
+				$inner_menu_name=post_data('college_inner_menu_name');
+				$inner_menu_serial=post_data('college_inner_menu_serial');
+				$inner_menu_status=post_data('college_inner_menu_status');
+
+				$page_heading=post_data('college_inner_menu_page_heading');
+				$page_description=post_data('college_inner_menu_meta_description');
+				$page_keywords=(empty($menu_id))?post_data('college_inner_menu_meta_keywords'):post_data('college_inner_menu_meta_keywords_edit');
+
+
+				$page_title=post_data('college_inner_menu_meta_title');
+				$page_og_title=post_data('college_inner_menu_og_title');
+				$page_og_desc=post_data('college_inner_menu_og_description');
+
+				$inner_menu_type_name='';
+
+				$widgets=(empty($menu_id))?$this->input->post('college_menu_widgets'):$this->input->post('college_menu_widgets_edit');
+
+				$_widgets=array();
+				$_page_keywords=array();
+
+				if(!empty($widgets)){
+					$wd=json_decode($widgets);
+					foreach ($wd as $key => $value) {
+						$v=explode('#', $value->value);
+						$_widgets[]=$v[1];						
+					}
+				}
+
+				if(!empty($page_keywords)){
+					$pkd=json_decode($page_keywords);
+					foreach ($pkd as $key => $value) {
+						$_page_keywords[]=$value->value;						
+					}
+				}
+
+				$webpage_keywords=(isset($_page_keywords) && !empty($_page_keywords))?char_separated($_page_keywords):'';
+
+				$data_search_title=$this->input->post('college_data_search_title');
+
+				$search_data_type=($menu_data_type=='college')?'COLLEGE_NAME':'UNIVERSITY_NAME';
+
+				if($inner_menu_type==2){
+					$url_sub_type='college_inner_menu_course_fees_url';
+				}else{
+					$url_sub_type='college_inner_menu_'.strtolower(str_replace('&amp;', '_', $inner_menu_name)).'_url';
+					$url_sub_type=str_replace(' ', '', $url_sub_type);
+				}
+
+				
+
+				//echo $url_sub_type;die;
+
+				if(isset($_widgets) && !empty($_widgets)){
+					$__menu_main_widget=serialize($_widgets);
+				}else{
+					$__menu_main_widget=null;
+				}
+
+				//print_obj($__menu_main_widget);die;
+
+				$menu_link_type=($menu_data_type=='college')?'10':'101';
+				$college_type=($menu_data_type=='college')?'2':'1';
+
+				$date_modified=date('Y-m-d H:i:s');
+				$date_published=date('Y-m-d H:i:s');
+
+				//print_obj($menu_data_type_id);die;
+
+				//$menu_data_type_id='';
+
+				if(!empty($menu_data_type_id)){
+
+					$inst_id=$menu_data_type_id;
+
+					//$menu_data_type='university';
+
+					//$college_data=$this->im->get_college_data(array('college_user_id'=>$inst_id));
+					$college_slug=$this->sm->get_slug(array('slug_type'=>'7','slug_type_id'=>$inst_id));
+					$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$inst_id));
+					$country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+					$city_data=$this->com->get_city(array('city_id'=>$college_data->college_city_id));
+					$state_data=$this->com->get_state(array('state_id'=>$college_data->college_state_id));
+
+					$city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_type_id'=>$city_data->city_id));
+					$state_slug=$this->sm->get_slug(array('slug_type'=>'1','slug_type_id'=>$state_data->state_id));
+					// $slug_value=url_slug($_slug_value);
+
+					$listitem_2_slug=base_url($country_data->country_iso_code_4.'/colleges/'.$state_slug->slug_value.'/'.$city_slug->slug_value);
+
+					if(!empty($college_data->college_short_name)){
+						$college_short_name=$college_data->college_short_name;
+					}else{
+						$college_short_name=abbreviate($college_data->college_name);
+						$this->im->update_college_data(array('college_short_name'=>$college_short_name),array('college_user_id'=>$inst_id));
+					}
+
+					if(!empty($college_zipcode)){
+						$college_address=$college_data->college_address.','.$state_data->state_name.','.$country_data->country_name.','.$college_zipcode;
+					}else{
+						$college_address=$college_data->college_address.','.$state_data->state_name.','.$country_data->country_name;
+					}
+
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_logo'));
+
+					$college_logo=(!empty($_college_logo))?$_college_logo->media_disk_path_relative:'';
+
+ 
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_banner'));
+
+					if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+					    $college_banner=$_college_banner->media_disk_path_relative;
+					    $college_banner_type=$_college_banner->media_mime;
+					    list($img_width, $img_height) = getimagesize($_college_banner->media_disk_path);
+					}else{
+					    $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+					    $college_banner_type='image/jpg';
+					    $img_width='700';
+					    $img_height='600';
+					}
+
+					$menu_slug=url_slug($inner_menu_name);
+
+					if($inner_menu_type==16){
+
+						$college_inner_menu_other_link=post_data('college_inner_menu_other_link');
+
+						$inner_menu_other_link=explode('#', $college_inner_menu_other_link);
+
+						$link_type=$inner_menu_other_link[0];
+						$link_type_value=$inner_menu_other_link[1];
+
+						$menu_url=$link_type_value;
+
+					}else if($inner_menu_type==1){
+						$menu_url=$college_data->access_url;
+					}else if($inner_menu_type==3){
+						$menu_url=$college_data->access_url.'/admission';
+					}else{
+						$menu_url=$college_data->access_url.'/'.$menu_slug;
+					}
+
+					if($inner_menu_type=='1'){
+						$college_faq_type='1';
+					}else if($inner_menu_type=='6'){
+						$college_faq_type='2';
+					}else if($inner_menu_type=='8'){
+						$college_faq_type='3';
+					}else if($inner_menu_type=='3'){
+						$college_faq_type='4';
+					}else if($inner_menu_type=='14'){
+						$college_faq_type='5';
+					}else{
+						$college_faq_type='';
+					}
+
+					$slug_data=$this->sm->get_slug_urls(array('url_value'=>$menu_url));
+
+					//print_obj($slug_data);die;
+
+					if(empty($menu_id)){
+
+						if(empty($slug_data)){
+							$menu_data=array(
+								'menu_category_id'=>$inner_menu_type,
+								'menu_parent_id'=>'0',
+								'menu_country_id'=>$country_data->country_id,
+								'menu_country_code'=>$country_data->country_iso_code_2,
+								'menu_country'=>$country_data->country_name,
+								'menu_type'=>$inner_menu_type,
+								'menu_link_type'=>$menu_link_type,
+								'menu_link_id'=>$inst_id,
+								'menu_link'=>$menu_url,
+								'menu_name'=>str_replace('&amp;','&',strtoupper($inner_menu_name)),
+								'menu_name_alias'=>$inner_menu_name,
+								'menu_slug'=>$menu_slug,
+								'menu_serial'=>$inner_menu_serial,
+								'menu_column_id'=>'0',
+								'menu_column'=>'0',
+								'menu_is_upper_top'=>'2',
+								'menu_is_top'=>'2',
+								'menu_is_footer'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_is_connected'=>'0',
+								'menu_open_new_tab'=>'2',
+								'menu_show_in_exam_list'=>'2',
+								'menu_is_active'=>$inner_menu_status,
+								'menu_main_widget'=>$__menu_main_widget
+							);
+
+							$inserted_menu_id=$this->sm->store_menu($menu_data);
+
+							if($inserted_menu_id){
+								$breadcrumb=array(
+									'HOME'=>base_url(),
+									strtoupper($city_data->city_name)=>$listitem_2_slug,
+									strtoupper($college_short_name)=>$college_data->access_url,
+									strtoupper($inner_menu_name)=>null
+								);
+
+								$slug_url_data_to_store=array(
+									'url_type'=>'college_static_url',
+									'url_glob_type'=>'college_inner_menu',
+									'url_value'=>$menu_url,
+									'url_canonical_value'=>$menu_url,
+									'url_type_id'=>$college_data->college_user_id,
+									'url_sub_type'=>$url_sub_type,
+									'url_sub_type_id'=>$menu_id,
+									'url_state'=>$state_data->state_id,
+									'url_country'=>$college_data->college_country_id,
+									'url_city'=>$city_data->city_id,
+									'url_meta_heading'=>str_replace('&amp;','&',$page_title),
+									'url_meta_title'=>str_replace('&amp;','&',$page_title),
+									'url_meta_key_words'=>$webpage_keywords,
+									'url_meta_desc'=>str_replace('&amp;','&',$page_description),
+									'url_og_title'=>str_replace('&amp;','&',$page_og_title),
+									'url_og_desc'=>str_replace('&amp;','&',$page_og_desc),
+									'url_og_image'=>$college_banner,
+									'url_og_image_width'=>$img_width,
+									'url_og_image_height'=>$img_height,
+									'url_og_image_type'=>$college_banner_type,
+									'url_twitter_title'=>str_replace('&amp;','&',$page_og_title),
+									'url_twitter_desc'=>str_replace('&amp;','&',$page_og_desc),
+									'url_page_heading'=>str_replace('&amp;','&',$page_heading),
+									'url_breadcrumb'=>json_encode($breadcrumb),
+									'url_type_in_notification'=>'no',
+									'url_priority'=>'0.6',
+									'url_data_change_freq'=>'monthly',
+									'url_last_update'=>$date_published,
+									'url_active'=>'1',
+									'updated_by'=>$this->data['userdata']->user_id,
+									'updated_at'=>$date_published
+								);
+
+								$slug_url_id=$this->sm->store_slug_urls($slug_url_data_to_store);
+
+								if(isset($college_data->college_pincode)){
+									$college_address=$college_data->college_address.','.ucwords($city_data->city_name).','.ucwords($state_data->state_name).','.ucwords($country_data->country_name).','.$college_data->college_pincode;
+								}else{
+									$college_address=$college_data->college_address.','.ucwords($city_data->city_name).','.ucwords($state_data->state_name).','.ucwords($country_data->country_name);
+								}
+
+								
+
+								$college_formatted_name=$page_heading;
+
+								
+
+						        //SEARCH DATA
+
+								$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id,'search_data_access_url'=>$menu_url));
+
+								$system_data_search_inserted=array(
+									'search_data_type'=>$search_data_type,
+									'search_data_name'=>strtoupper($data_search_title),
+									'search_data_short_name'=>$college_data->college_short_name,
+									'search_data_type_id'=>$college_data->college_user_id,
+									'search_data_country_id'=>$country_data->country_id,
+									'search_data_country'=>$country_data->country_name,
+									'search_data_state_id'=>$college_data->college_state_id,
+									'search_data_state_name'=>$state_data->state_name,
+									'search_data_city_name'=>$city_data->city_name,
+									'search_data_city_id'=>$college_data->college_city_id,
+									'search_data_address'=>$college_address,
+									'search_data_meta_title'=>str_replace('&amp;','&',$page_heading),
+									'search_data_meta_desc'=>str_replace('&amp;','&',$page_description),
+									'search_data_meta_keywords'=>$webpage_keywords,
+									'search_data_og_title'=>str_replace('&amp;','&',$page_og_title),
+									'search_data_og_desc'=>str_replace('&amp;','&',$page_og_desc),
+									'search_storage_access_url'=>$college_logo,
+									'search_data_access_url'=>$menu_url,
+									'search_data_tags'=>''
+								);
+
+
+								if(empty($system_data_search)){									
+									$this->sm->store_system_search_data($system_data_search_inserted);
+								}else{
+									$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id));
+								}
+
+
+								$data_param=array(
+									'menu_url'=>$menu_url,
+									'access_url'=>$college_data->access_url,
+									'slug_url_id'=>$slug_url_id,
+									'college_type'=>$college_type,
+									'college_faq_type'=>$college_faq_type,
+									'college_short_name'=>$college_data->college_short_name,
+									'college_formatted_name'=>$college_formatted_name,
+									'college_web_address'=>$college_data->college_web_address,
+									'college_email'=>$college_data->college_email,
+									'college_phone_no'=>$college_data->college_phone_no,
+									'college_logo'=>$college_logo,
+									'college_address'=>$college_address,
+									'city_name'=>$city_data->city_name,
+									'listitem_2_slug'=>$listitem_2_slug,
+									'inner_menu_name'=>$inner_menu_name,
+									'date_modified'=>$date_modified,
+									'date_published'=>$date_published			
+								);
+
+								$this->update_inner_menu_structred_data($data_param);
+
+								$return['success']='Menu has been created successfully.';
+
+							}else{
+								$return['error']='Menu not created.';
+							}
+
+						}else{
+							$menu_data=array(
+								'menu_category_id'=>$inner_menu_type,
+								'menu_parent_id'=>'0',
+								'menu_country_id'=>$country_data->country_id,
+								'menu_country_code'=>$country_data->country_iso_code_2,
+								'menu_country'=>$country_data->country_name,
+								'menu_type'=>$inner_menu_type,
+								'menu_link_type'=>$menu_link_type,
+								'menu_link_id'=>$inst_id,
+								'menu_link'=>$menu_url,
+								'menu_name'=>str_replace('&amp;','&',strtoupper($inner_menu_name)),
+								'menu_name_alias'=>$inner_menu_type_name,
+								'menu_slug'=>$menu_slug,
+								'menu_serial'=>$inner_menu_serial,
+								'menu_column_id'=>'0',
+								'menu_column'=>'0',
+								'menu_is_upper_top'=>'2',
+								'menu_is_top'=>'2',
+								'menu_is_footer'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_is_connected'=>'0',
+								'menu_open_new_tab'=>'2',
+								'menu_show_in_exam_list'=>'2',
+								'menu_is_active'=>$inner_menu_status,
+								'menu_main_widget'=>$__menu_main_widget
+							);
+
+							$inserted_menu_id=$this->sm->store_menu($menu_data);
+
+							if($inserted_menu_id){
+								$breadcrumb=array(
+									'HOME'=>base_url(),
+									strtoupper($city_data->city_name)=>$listitem_2_slug,
+									strtoupper($college_short_name)=>$college_data->access_url,
+									strtoupper($inner_menu_name)=>null
+								);
+
+								$slug_url_data_to_store=array(
+									'url_type'=>'college_static_url',
+									'url_glob_type'=>'college_inner_menu',
+									'url_value'=>$menu_url,
+									'url_canonical_value'=>$menu_url,
+									'url_type_id'=>$college_data->college_user_id,
+									'url_sub_type'=>$url_sub_type,
+									'url_sub_type_id'=>$menu_id,
+									'url_state'=>$state_data->state_id,
+									'url_country'=>$college_data->college_country_id,
+									'url_city'=>$city_data->city_id,
+									'url_meta_heading'=>str_replace('&amp;','&',$page_title),
+									'url_meta_title'=>str_replace('&amp;','&',$page_title),
+									'url_meta_key_words'=>$webpage_keywords,
+									'url_meta_desc'=>str_replace('&amp;','&',$page_description),
+									'url_og_title'=>str_replace('&amp;','&',$page_og_title),
+									'url_og_desc'=>str_replace('&amp;','&',$page_og_desc),
+									'url_og_image'=>$college_banner,
+									'url_og_image_width'=>$img_width,
+									'url_og_image_height'=>$img_height,
+									'url_og_image_type'=>$college_banner_type,
+									'url_twitter_title'=>str_replace('&amp;','&',$page_og_title),
+									'url_twitter_desc'=>str_replace('&amp;','&',$page_og_desc),
+									'url_page_heading'=>str_replace('&amp;','&',$page_heading),
+									'url_breadcrumb'=>json_encode($breadcrumb),
+									'url_type_in_notification'=>'no',
+									'url_priority'=>'0.6',
+									'url_data_change_freq'=>'monthly',
+									'url_last_update'=>$date_published,
+									'url_active'=>'1',
+									'updated_by'=>$this->data['userdata']->user_id,
+									'updated_at'=>$date_published
+								);
+
+								$slug_url_id=$this->sm->update_slug_urls($slug_url_data_to_store,array('url_value'=>$slug_data->url_value));
+
+								$college_address=$college_data->college_address.','.ucwords($city_data->city_name).','.ucwords($state_data->state_name).','.ucwords($country_data->country_name).','.$college_data->college_pincode;
+
+								$college_formatted_name=$page_heading;
+
+								
+
+						        //SEARCH DATA
+
+								$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id,'search_data_access_url'=>$menu_url));
+
+								$system_data_search_inserted=array(
+									'search_data_type'=>$search_data_type,
+									'search_data_name'=>strtoupper($data_search_title),
+									'search_data_short_name'=>$college_data->college_short_name,
+									'search_data_type_id'=>$college_data->college_user_id,
+									'search_data_type_menu_id'=>$inserted_menu_id,
+									'search_data_country_id'=>$country_data->country_id,
+									'search_data_country'=>$country_data->country_name,
+									'search_data_state_id'=>$college_data->college_state_id,
+									'search_data_state_name'=>$state_data->state_name,
+									'search_data_city_name'=>$city_data->city_name,
+									'search_data_city_id'=>$college_data->college_city_id,
+									'search_data_address'=>$college_address,
+									'search_data_meta_title'=>str_replace('&amp;','&',$page_heading),
+									'search_data_meta_desc'=>str_replace('&amp;','&',$page_description),
+									'search_data_meta_keywords'=>$webpage_keywords,
+									'search_data_og_title'=>str_replace('&amp;','&',$page_og_title),
+									'search_data_og_desc'=>str_replace('&amp;','&',$page_og_desc),
+									'search_storage_access_url'=>$college_logo,
+									'search_data_access_url'=>$menu_url,
+									'search_data_tags'=>''
+								);
+
+
+								if(empty($system_data_search)){									
+									$this->sm->store_system_search_data($system_data_search_inserted);
+								}else{
+									$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id));
+								}
+
+
+								$data_param=array(
+									'menu_url'=>$menu_url,
+									'access_url'=>$college_data->access_url,
+									'slug_url_id'=>$slug_url_id,
+									'college_type'=>$college_type,
+									'college_faq_type'=>$college_faq_type,
+									'college_id'=>$college_data->college_user_id,
+									'college_short_name'=>$college_data->college_short_name,
+									'college_formatted_name'=>$college_formatted_name,
+									'college_web_address'=>$college_data->college_web_address,
+									'college_email'=>$college_data->college_email,
+									'college_phone_no'=>$college_data->college_phone_no,
+									'college_logo'=>$college_logo,
+									'college_address'=>$college_address,
+									'city_name'=>$city_data->city_name,
+									'listitem_2_slug'=>$listitem_2_slug,
+									'inner_menu_name'=>$inner_menu_name,
+									'date_modified'=>$date_modified,
+									'date_published'=>$date_published			
+								);
+
+								$this->update_inner_menu_structred_data($data_param);
+
+								$return['success']='Menu has been created successfully.';
+							}else{
+								$return['error']='Menu not created.';
+							}
+
+							//$return['success']='Menu has been created but URL already exists';
+						}
+
+					}else if(!empty($menu_id)){
+
+						//echo $menu_id;die;
+
+						if(!empty($__menu_main_widget)){
+
+							$menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_parent_id'=>'0',
+								'menu_country_id'=>$country_data->country_id,
+								'menu_country_code'=>$country_data->country_iso_code_2,
+								'menu_country'=>$country_data->country_name,
+								'menu_type'=>$inner_menu_type,
+								'menu_link_type'=>$menu_link_type,
+								'menu_link_id'=>$inst_id,
+								'menu_link'=>$menu_url,
+								'menu_name'=>str_replace('&amp;','&',strtoupper($inner_menu_name)),
+								'menu_name_alias'=>$inner_menu_type_name,
+								'menu_slug'=>$menu_slug,
+								'menu_serial'=>$inner_menu_serial,
+								'menu_column_id'=>'0',
+								'menu_column'=>'0',
+								'menu_is_upper_top'=>'2',
+								'menu_is_top'=>'2',
+								'menu_is_footer'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_is_connected'=>'0',
+								'menu_open_new_tab'=>'2',
+								'menu_show_in_exam_list'=>'2',
+								'menu_is_active'=>$inner_menu_status,
+								'menu_main_widget'=>$__menu_main_widget						
+							);
+						}else{
+							$menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_parent_id'=>'0',
+								'menu_country_id'=>$country_data->country_id,
+								'menu_country_code'=>$country_data->country_iso_code_2,
+								'menu_country'=>$country_data->country_name,
+								'menu_type'=>$inner_menu_type,
+								'menu_link_type'=>$menu_link_type,
+								'menu_link_id'=>$inst_id,
+								'menu_link'=>$menu_url,
+								'menu_name'=>str_replace('&amp;','&',strtoupper($inner_menu_name)),
+								'menu_name_alias'=>$inner_menu_type_name,
+								'menu_slug'=>$menu_slug,
+								'menu_serial'=>$inner_menu_serial,
+								'menu_column_id'=>'0',
+								'menu_column'=>'0',
+								'menu_is_upper_top'=>'2',
+								'menu_is_top'=>'2',
+								'menu_is_footer'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_is_connected'=>'0',
+								'menu_open_new_tab'=>'2',
+								'menu_show_in_exam_list'=>'2',
+								'menu_is_active'=>$inner_menu_status							
+							);
+						}
+
+						//print_obj($menu_data);die;
+
+						$updated=$this->sm->update_menu($menu_data,array('menu_id'=>$menu_id,'menu_link_type'=>$menu_link_type,'menu_link_id'=>$college_data->college_user_id));
+
+						//print_obj($updated);die;
+
+						//print_obj($webpage_keywords);die;
+
+						if($updated){
+							$bredcrumb=array(
+								'HOME'=>base_url(),
+								strtoupper($city_data->city_name)=>$listitem_2_slug,
+								strtoupper($college_short_name)=>$college_data->access_url,
+								strtoupper($inner_menu_name)=>null
+							);
+
+							$slug_url_data_to_store=array(
+								'url_type'=>'college_static_url',
+								'url_glob_type'=>'college_inner_menu',
+								'url_value'=>$menu_url,
+								'url_canonical_value'=>$menu_url,
+								'url_type_id'=>$college_data->college_user_id,
+								'url_sub_type'=>$url_sub_type,
+								'url_sub_type_id'=>$menu_id,
+								'url_state'=>$state_data->state_id,
+								'url_country'=>$college_data->college_country_id,
+								'url_city'=>$city_data->city_id,
+								'url_meta_heading'=>str_replace('&amp;','&',$page_title),
+								'url_meta_title'=>str_replace('&amp;','&',$page_title),
+								'url_meta_key_words'=>$webpage_keywords,
+								'url_meta_desc'=>str_replace('&amp;','&',$page_description),
+								'url_og_title'=>str_replace('&amp;','&',$page_og_title),
+								'url_og_desc'=>str_replace('&amp;','&',$page_og_desc),
+								'url_og_image'=>$college_banner,
+								'url_og_image_width'=>$img_width,
+								'url_og_image_height'=>$img_height,
+								'url_og_image_type'=>$college_banner_type,
+								'url_twitter_title'=>str_replace('&amp;','&',$page_og_title),
+								'url_twitter_desc'=>str_replace('&amp;','&',$page_og_desc),
+								'url_page_heading'=>str_replace('&amp;','&',$page_heading),
+								'url_breadcrumb'=>json_encode($bredcrumb),
+								'url_type_in_notification'=>'no',
+								'url_priority'=>'0.6',
+								'url_data_change_freq'=>'monthly',
+								'url_last_update'=>$date_published,
+								'url_active'=>'1',
+								'updated_by'=>$this->data['userdata']->user_id,
+								'updated_at'=>$date_published
+							);
+
+							//print_obj($slug_url_data_to_store);die;
+
+							if(!empty($slug_data)){
+								//$this->sm->delete_slug_urls(array('url_sub_type_id'=>$menu_id,'url_type_id'=>$college_data->college_user_id,'url_type'=>'college_static_url'));
+								$this->sm->update_slug_urls($slug_url_data_to_store,array('url_id'=>$slug_data->url_id));
+
+								$slug_url_id=$slug_data->url_id;
+
+								//$slug_url_id=$this->sm->store_slug_urls($slug_url_data_to_store);
+							}else{
+								$slug_url_id=$this->sm->store_slug_urls($slug_url_data_to_store);
+							}
+
+							//echo $slug_url_id;die;
+
+								
+
+							$data_param=array(
+								'menu_url'=>$menu_url,
+								'access_url'=>$college_data->access_url,
+								'slug_url_id'=>$slug_url_id,
+								'college_id'=>$college_data->college_user_id,
+								'college_type'=>$college_type,
+								'college_faq_type'=>$college_faq_type,
+								'college_short_name'=>$college_data->college_short_name,
+								'college_formatted_name'=>str_replace('&amp;','&',$page_heading),
+								'college_web_address'=>$menu_url,
+								'college_email'=>$college_data->college_email,
+								'college_phone_no'=>$college_data->college_phone_no,
+								'college_logo'=>$college_logo,
+								'college_address'=>$college_address,
+								'city_name'=>$city_data->city_name,
+								'listitem_2_slug'=>$listitem_2_slug,
+								'inner_menu_name'=>$inner_menu_name,
+								'date_modified'=>$date_modified,
+								'date_published'=>$date_published			
+							);
+
+							//print_obj($data_param);die;
+
+							$this->update_inner_menu_structred_data($data_param);
+
+							//SEARCH DATA
+
+							$system_data_search=$this->sm->get_system_search_data(array('search_data_type'=>$search_data_type,'search_data_type_id'=>$college_data->college_user_id,'search_data_access_url'=>$menu_url));
+
+							$system_data_search_inserted=array(
+								'search_data_type'=>$search_data_type,
+								'search_data_name'=>strtoupper($data_search_title),
+								'search_data_short_name'=>$college_data->college_short_name,
+								'search_data_type_id'=>$college_data->college_user_id,
+								'search_data_type_menu_id'=>$menu_id,
+								'search_data_country_id'=>$country_data->country_id,
+								'search_data_country'=>$country_data->country_name,
+								'search_data_state_id'=>$college_data->college_state_id,
+								'search_data_state_name'=>$state_data->state_name,
+								'search_data_city_name'=>$city_data->city_name,
+								'search_data_city_id'=>$college_data->college_city_id,
+								'search_data_address'=>$college_address,
+								'search_data_meta_title'=>str_replace('&amp;','&',$page_heading),
+								'search_data_meta_desc'=>str_replace('&amp;','&',$page_description),
+								'search_data_meta_keywords'=>$webpage_keywords,
+								'search_data_og_title'=>str_replace('&amp;','&',$page_og_title),
+								'search_data_og_desc'=>str_replace('&amp;','&',$page_og_desc),
+								'search_storage_access_url'=>$college_logo,
+								'search_data_access_url'=>$menu_url,
+								'search_data_tags'=>''
+							);
+
+							if(empty($system_data_search)){									
+								$this->sm->store_system_search_data($system_data_search_inserted);
+							}else{
+								$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_type'=>$search_data_type,'search_data_access_url'=>$menu_url));
+							}
+
+							$return['success']='Menu has been updated successfully.';
+						}else{
+							$return['error']='Menu data not updated';
+						}
+					}
+
+				}else{
+					$return['error']='Data manipulation not allowed';
+				}
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	private function update_inner_menu_structred_data($data){
+
+		//Info Page || Course Page || Admission page || Reviews Page || Cutoff Page || Placement Page || Gallery Page || Scholarship Page || Faculty Page || Hostel Page || 
+
+		/*{"@context":"http://schema.org/","@type":"CollegeOrUniversity","name":"The National Institute of Engineering - [NIE], Mysore","url":"http://www.nie.ac.in","email":"principal@nie.ac.in","telephone":"0821-2481220","logo":"https://images.collegedunia.com/public/college_data/images/logos/col27917.jpg","aggregateRating":{"@type":"AggregateRating","ratingValue":8.2,"reviewCount":"170","worstRating":1,"bestRating":10},"address":{"@type":"PostalAddress","streetAddress":"Mananthavady Road   India"}}*/
+
+
+		//News & Article Page (for all articles)
+
+		/*{"@context":"https://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://collegedunia.com/news/karnataka-kcet-2020-final-round-seat-allotment-result-released-read-details-here-alertid-32370"},"headline":"Karnataka KCET 2020: Final Round Seat Allotment Result Released; Read Details Here","dateModified":"2021-01-14 19:35:33","datePublished":"2021-01-14 19:35:33","author":{"@type":"Person","name":"Collegedunia Team"},"image":["https://images.collegedunia.com/public/asset/img/exam/news/news2.jpg"],"publisher":{"@type":"Organization","name":"Collegedunia","logo":{"@type":"ImageObject","name":"Collegedunia","url":"https://images.collegedunia.com/public/asset/img/cd_logo.png","height":600,"width":60}}}*/
+
+
+
+		//Breacdcrumb
+
+		//echo $data['menu_url'];die;
+
+		$breadcrumb_data_array=array(
+			"@context"=>"https://schema.org",
+		  	"@type"=>"WebPage",
+		  	"breadcrumb"=>array(
+		  		"@type"=>"BreadcrumbList",
+		  		"itemListElement"=>array(
+		  			array(
+		  				"@type"=>"ListItem",
+				        "position"=>1,
+				        "name"=>"Home",
+				        "item"=>base_url()
+		  			),
+		  			array(
+		  				"@type"=>"ListItem",
+				        "position"=>2,
+				        "name"=>ucwords($data['city_name']),
+				        "item"=>$data['listitem_2_slug']
+		  			),
+		  			array(
+		  				"@type"=>"ListItem",
+				        "position"=>3,
+				        "name"=>strtoupper($data['college_short_name']),
+				        "item"=>$data['access_url']
+		  			),
+		  			array(
+		  				"@type"=>"ListItem",
+				        "position"=>4,
+				        "name"=>strtoupper($data['inner_menu_name']),
+				        "item"=>$data['menu_url']
+		  			)
+		  		)
+		  	)
+		);
+
+		$breadcrumb_data=json_encode($breadcrumb_data_array);
+
+		//print_obj($breadcrumb_data);die;
+
+		$breadcrumb_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$data['menu_url'],'slug_type_json_ld'=>'BreadcrumbList'));
+
+		$breadcrumb_data_to_store=array(
+			'strcut_slug_url_id'=>$data['slug_url_id'],
+			'slug_type_json_ld'=>'BreadcrumbList',
+			'slug_type_json_ld_data'=>$breadcrumb_data,
+			'slug_url'=>$data['menu_url'],
+			'date_modified'=>$data['date_modified'],
+			'date_published'=>$data['date_published']
+		);
+
+		if(empty($breadcrumb_struct_data)){
+			$this->sm->store_slug_struct_data($breadcrumb_data_to_store);
+		}else{
+			$this->sm->update_slug_struct_data($breadcrumb_data_to_store,array('slug_url'=>$data['menu_url'],'slug_type_json_ld'=>'BreadcrumbList'));
+		}
+
+		//CollegeOrUniversity
+
+		$college_web_address=($data['college_web_address']!='')?$data['college_web_address']:null;
+
+		// $college_or_university_array=array(
+		// 	"@context"=>"http://schema.org/",
+		// 	"@type"=>"CollegeOrUniversity",
+		// 	"name"=>'"'.$data['college_formatted_name'].'"',
+		// 	"url"=>'"'.$college_web_address.'"',
+		// 	"email"=>'"'.$data['college_email'].'"',
+		// 	"telephone"=>'"'.$data['college_phone_no'].'"',
+		// 	"logo"=>'"'.$data['college_logo'].'"',
+		// 	"address"=>array(
+		// 		"@type"=> "PostalAddress",
+		//     	"streetAddress"=>'"'.$data['college_address'].'"'
+		// 	)
+		// );
+
+
+
+		//$college_or_university=json_encode($college_or_university_array);
+
+
+		$college_or_university='{
+		  "@context": "http://schema.org/",
+		  "@type": "CollegeOrUniversity",
+		  "name": "'.$data['college_formatted_name'].'",
+		  "url": "'.$college_web_address.'",
+		  "email": "'.$data['college_email'].'",
+		  "telephone": "'.$data['college_phone_no'].'",
+		  "logo": "'.$data['college_logo'].'",
+		  "address": {
+		    "@type": "PostalAddress",
+		    "streetAddress": "'.$data['college_address'].'"
+		  }
+		}';
+
+		//print_obj($college_or_university);die;
+
+		$CollegeOrUniversity_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$data['menu_url'],'slug_type_json_ld'=>'CollegeOrUniversity'));
+
+		$CollegeOrUniversity_data_to_store=array(
+			'strcut_slug_url_id'=>$data['slug_url_id'],
+			'slug_type_json_ld'=>'CollegeOrUniversity',
+			'slug_type_json_ld_data'=>$college_or_university,
+			'slug_url'=>$data['menu_url'],
+			'date_modified'=>$data['date_modified'],
+			'date_published'=>$data['date_published']
+		);
+
+		if(empty($CollegeOrUniversity_struct_data)){
+			$this->sm->store_slug_struct_data($CollegeOrUniversity_data_to_store);
+		}else{
+			$this->sm->update_slug_struct_data($CollegeOrUniversity_data_to_store,array('slug_url'=>$data['menu_url'],'slug_type_json_ld'=>'CollegeOrUniversity'));
+		}
+
+
+		//Faqs Data
+		//1>>college faqs,2>>placement faqs,3>>,4>>admission faqs,5>>results faqs,6>>faculty faqs	
+
+
+		/*
+		$faqs_type_array=array(1,2,3,4,5,6);
+		$faqs=$this->sm->get_system_users_faqs_data(array('faq_data_id_type'=>$data['college_type'],'faq_data_id'=>$data['college_id'],'faq_type'=>$data['college_faq_type']));
+
+		if(!empty($faqs)){
+			foreach ($faqs as $key => $value) {
+				$q_a[]=array(
+					"@type"=> "Question",
+			    	"name"=> '"'.$value->faq_question.'"',
+			    	"acceptedAnswer"=>array(
+			    		"@type"=>"Answer",
+			      		"text"=>'"'.$value->faq_ans.'"'
+			    	)
+				);
+			}
+
+			if(isset($q_a) && !empty($q_a)){
+				$fs=array(
+					"@context"=>"https://schema.org",
+				  	"@type"=>"FAQPage",
+				  	"mainEntity"=>$q_a
+				);
+
+				$faq_struct_data=json_encode($fs);
+
+				$faq_struct_data=array(
+					'strcut_slug_url_id'=>$data['slug_url_id'],
+					'slug_type_json_ld'=>'FAQPage',
+					'slug_type_json_ld_data'=>$faq_struct_data,
+					'slug_url'=>$data['menu_url'],
+					'date_modified'=>$data['date_modified'],
+					'date_published'=>$data['date_published']
+				);
+
+				$FAQPage_struct_data=$this->sm->get_slug_struct_data(array('slug_url'=>$data['menu_url'],'slug_type_json_ld'=>'FAQPage'));
+
+				if(empty($FAQPage_struct_data)){
+					$this->sm->store_slug_struct_data($faq_struct_data);
+				}else{
+					$this->sm->update_slug_struct_data($faq_struct_data,array('slug_url'=>$data['menu_url'],'slug_type_json_ld'=>'FAQPage'));
+				}
+			}
+				
+
+		}
+
+		*/
+	}
+
+	public function onDeleteCollegeInnerMenues(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$c_id=post_data('c_id');
+				$menu_id=post_data('m_id');
+
+				$m_id=decode_data($menu_id);
+				$college_id=decode_data($c_id);
+
+				//echo $college_id;
+				//echo $m_id;die;
+
+				$menu=$this->sm->get_menues(array('menu_link_type'=>'10','menu_link_id'=>$college_id,'menu_id'=>$m_id));
+
+				//print_obj($menu);die;
+
+				if(!empty($menu)){
+					$deleted=$this->sm->delete_menu(array('menu_id'=>$m_id));
+
+					if($deleted){
+
+						$slug_url=$menu->menu_link;
+
+						$this->sm->delete_slug_urls(array('url_value'=>$slug_url,'url_type'=>'college_static_url','url_type_id'=>$college_id));
+
+						$return['success']='Menu deleted successfully';
+					}else{
+						$return['error']='Menu not deleted at this time.Try later.';
+					}
+				}else{
+					$return['error']='Menu data not found';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchCollegeInnerMenues(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=decode_data(post_data('_college'));
+				$college_type=post_data('college_type');
+				$param['column_order'] = array(
+					null,
+					'menu_type_name'
+				);
+
+				$param['column_search'] = array('menu_type_name');
+				$param['order'] = array('menu_serial' => 'ASC');
+				$param['menu_link_type']=$college_type;
+				$param['menu_link_id']=$college_id;
+				$posts=$this->input->post();
+
+				$list = $this->sm->_get_menues($posts,$param,FALSE,FALSE);
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $menu){
+					$no++;
+
+					$row = array();
+
+
+					if($menu->menu_is_active=='1'){
+						$menu_active='<span class="btn btn-xs btn-success">Active</span>';
+					}else{
+						$menu_active='<span class="btn btn-xs btn-danger">Deactive</span>';
+					}
+
+					if(empty($menu->menu_name)){
+						$action='<div class="btn-group btn-group-sm">'.$menu_active.'
+						<button type="button" class="btn btn-xs btn-dark btn_edit_college_inner_menu" data-menu_type="'.$menu->menu_type.'" data-aid="'.encode_data($menu->menu_id).'" data-menu_name="'.strtoupper($menu->menu_name).'" data-serial="'.$menu->menu_serial.'" data-cid="'.encode_data($college_id).'" data-active="'.$menu->menu_is_active.'" data-menu_url="'.$menu->menu_link.'">Edit</button>
+						<button type="button" class="btn btn-xs btn-danger btn_del_college_inner_menu" data-aid="'.encode_data($menu->menu_id).'" data-cid="'.encode_data($college_id).'">Delete</button>
+						</div>';
+					}else if(empty($menu->menu_slug)){
+						$action='<div class="btn-group btn-group-sm">'.$menu_active.'						
+						<button type="button" class="btn btn-xs btn-dark btn_edit_college_inner_menu" data-menu_type="'.$menu->menu_type.'" data-aid="'.encode_data($menu->menu_id).'" data-menu_name="'.strtoupper($menu->menu_name).'" data-serial="'.$menu->menu_serial.'" data-cid="'.encode_data($college_id).'" data-active="'.$menu->menu_is_active.'" data-menu_url="'.$menu->menu_link.'">Edit</button>
+						<button type="button" class="btn btn-xs btn-danger btn_del_college_inner_menu" data-aid="'.encode_data($menu->menu_id).'" data-cid="'.encode_data($college_id).'">Delete</button>
+						</div>';
+					}
+					else{
+						$action='<div class="btn-group btn-group-sm">'.$menu_active.'						
+						<button type="button" class="btn btn-xs btn-dark btn_edit_college_inner_menu" data-menu_type="'.$menu->menu_type.'" data-aid="'.encode_data($menu->menu_id).'" data-menu_name="'.strtoupper($menu->menu_name).'" data-serial="'.$menu->menu_serial.'" data-cid="'.encode_data($college_id).'" data-active="'.$menu->menu_is_active.'" data-menu_url="'.$menu->menu_link.'">Edit</button>
+						<button type="button" class="btn btn-xs btn-danger btn_del_college_inner_menu" data-aid="'.encode_data($menu->menu_id).'" data-cid="'.encode_data($college_id).'">Delete</button>
+						</div>';
+					}
+
+					/*
+					<button type="button" class="btn btn-xs btn-primary btn_update_college_inner_menu" data-aid="'.encode_data($menu->menu_id).'" data-menu_name="'.strtoupper($menu->menu_type_name).'" data-cid="'.encode_data($college_id).'">Update Slug</button>
+					*/
+
+
+					/*
+					<button type="button" class="btn btn-xs btn-primary btn_update_college_inner_menu" data-aid="'.encode_data($menu->menu_id).'" data-menu_name="'.strtoupper($menu->menu_type_name).'" data-cid="'.encode_data($college_id).'">Update</button>
+					*/
+
+
+					
+					
+					$row[]	=	$no;
+					$row[]	=	strtoupper($menu->menu_type_name);
+					$row[]	=	$menu->menu_name;
+
+
+					
+					$row[]  =	$action;
+
+					$row[]	=	'<a href="'.$menu->menu_link.'" target="_blank">'.$menu->menu_link.'</a>';	
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->sm->_get_menues($posts,$param,TRUE),
+					"recordsFiltered" => $this->sm->_get_menues($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onUpdateInnerMenues(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college_id=post_data('cid');
+				$_menu_id=post_data('menu_id');
+				$menu_type_name=post_data('menu_type_name');
+
+				$menu_serial=post_data('menu_serial');
+
+
+				$college_id=decode_data($_college_id);
+				$menu_id=decode_data($_menu_id);
+
+				$return='';
+
+
+				//$college_slug_data=$this->sm->get_slug_urls(array(''));
+
+				$menu_data=$this->sm->get_menues(array('menu_id'=>$menu_id));
+
+				if(!empty($menu_data)){
+					$menu_slug=url_slug($menu_type_name);
+					if($menu_slug=='course-and-fees'){
+						$menu_slug=str_replace('-and', '', $menu_slug);
+					}
+					//$menu_found=$this->sm->_get_inner_menu(array('menu_slug'=>$menu_slug,'menu_id'=>$menu_id));
+
+					$college_data=$this->im->get_college_data(array('college_user_id'=>$college_id));
+
+					$college_name=(!empty($college_data->college_short_name))?ucwords(strtolower($college_data->college_name)).'-['.$college_data->college_short_name.']':ucwords(strtolower($college_data->college_name));
+
+					$college_country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+					$college_state_slug=$this->sm->get_slug(array('slug_type'=>'1','slug_type_id'=>$college_data->college_state_id));
+					$college_city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_type_id'=>$college_data->college_city_id));
+
+					$type_base_url=base_url(strtolower($college_country_data->country_iso_code_2).'/'.url_slug(strtolower($college_data->college_name)).'-'.$college_city_slug->slug_value.'-'.$college_state_slug->slug_value);
+
+					if($menu_type_name=='INFO'){
+						$menu_link=$type_base_url;//$menu_data->menu_link;
+					}else if($menu_type_name=='ADMISSION'){
+						$menu_slug=str_replace('-'.date('Y'), '', $menu_slug);
+						$menu_link=$type_base_url.'/'.$menu_slug;//(empty($menu_data->menu_slug) && empty($menu_data->menu_link))?$type_base_url.'/'.$menu_slug:$type_base_url;
+					}else{
+						$menu_link=$type_base_url.'/'.$menu_slug;//(empty($menu_data->menu_slug) && empty($menu_data->menu_link))?$type_base_url.'/'.$menu_slug:$type_base_url.'/'.$menu_slug;
+					}
+
+					//echo $menu_slug;die;
+
+					$url_value=$menu_link;
+
+
+					if($menu_type_name=='INFO'){
+						$arr=['front_info_section','front_course_fees_section','front_course_fees_course_section','front_course_fees_brief_with_ads_section','front_placement_section','front_placement_details_section','front_facilities_section','front_news_brief_section','front_google_maps_section','front_wayto_rating_section','front_nearby_colleges_universities_section','front_college_comment_section'];
+					}else if($menu_type_name=='ADMISSION'){
+						$arr=['front_admission_section','front_wayto_rating_section','front_college_comment_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='COURSE & FEES'){
+						$arr=['front_course_fees_section','front_course_fees_brief_with_ads_section','front_wayto_rating_section','front_college_comment_section','front_nearby_colleges_universities_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='CUTOFF'){
+						
+						$arr=['front_exam_cutoff_section','front_cutoff_section','front_wayto_rating_section','front_college_comment_section','front_nearby_colleges_universities_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='PLACEMENT'){
+						$arr=['front_placement_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='GALLERY'){
+						$arr=['front_gallery_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='SCHOLARSHIPS'){
+						$arr=['front_scholarship_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='FACULTY'){
+						$arr=['front_faculties_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='NEWS & ARTICLES'){
+						$arr=['front_news_section','front_wayto_rating_section','front_google_ads_section','front_similar_colleges_universities_section','front_google_ads_section','front_nearby_colleges_universities_section','front_google_ads_section'];
+					}else if($menu_type_name=='HOSTEL'){
+						$arr=['front_hostel_section','front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					}else if($menu_type_name=='Q & A'){
+						$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					}else if($menu_type_name=='DEPARTMENT'){
+						$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					}else if($menu_type_name=='RESULTS'){
+						$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					}else if($menu_type_name=='DISTANCE EDUCATION'){
+						$arr=['front_wayto_rating_section','front_google_ads_section','front_college_comment_section','front_nearby_colleges_universities_section'];
+					}
+					
+					
+
+					$data_to_update=array(
+						'menu_link'=>$menu_link,
+						'menu_slug'=>$menu_slug,
+						'menu_name'=>(!empty($menu_data->menu_name))?$menu_data->menu_name:$menu_type_name,
+						'menu_main_widget'=>serialize($arr)
+					);
+
+					//print_obj($data_to_update);die;
+
+					$updated=$this->sm->update_menu($data_to_update,array('menu_id'=>$menu_id));
+
+					if($updated){
+
+						$total_user_courses=$this->im->get_total_user_courses(array('user_id'=>$college_id));
+						$total_avg_cost=$this->im->get_user_course_avg(array('user_id'=>$college_id,'user_course_year'=>'1'));
+						$c_courses=$this->im->_get_group_concat_user_course_data(array('user_id'=>$college_id));
+						$college_courses=$c_courses->concated_value;
+
+
+
+						if($menu_type_name=='INFO'){
+							$param['menu_link_id']=$college_id;
+							$college_inner_menues=$this->sm->_get_inner_menues(null,$param);
+
+							if(!empty($college_inner_menues)){
+								foreach ($college_inner_menues as $key => $value) {
+									if($value->menu_slug!='info'){
+										$menu_name[]=$value->menu_name;
+									}
+								}
+							}
+								
+
+							if(isset($menu_name) && !empty($menu_name)){
+								$concated_name=char_separated($menu_name).', Contact, Website, Facilities '.$date.', Faculties, Hostels';
+							}else{
+								$concated_name=' Contact, Website, Facilities '.$date.', Faculties, Hostels';
+							}
+
+
+							$concated_name=ucwords(strtolower($concated_name));
+
+							if($total_avg_cost[0]->total_cost!=null){
+								$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name)).', Application Form, Admissions, '.ucwords(strtolower($college_courses)).' . '.$total_user_courses.' Courses.  Average Fees is '.round(_money_format($total_avg_cost[0]->total_cost)).' per year';
+							}else{
+								if($college_courses!=NULL){
+									$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name)).', Application Form, Admissions, '.ucwords(strtolower($college_courses)).' . '.$total_user_courses.' Courses.';
+								}else{
+									$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+								}
+							}
+							
+
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+
+						}else if($menu_type_name=='COURSE & FEES'){
+							$concated_name=$inner_menu_data->menu_name.' '.$date;
+							if($total_avg_cost[0]->total_cost!=null){
+								$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+								if($college_courses!=null){
+									$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.$concated_name.' has '.$total_user_courses.' Courses with Average Fees '.round(_money_format($total_avg_cost[0]->total_cost)).' per year. Top Courses at '.ucwords($college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name))).'  are '.ucwords(strtolower($college_courses));
+								}else{
+									$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+								}						
+							}else{
+								$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+
+								if($college_courses!=null){
+									$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.$concated_name.' has '.$total_user_courses.'. Top Courses at '.$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).'  are '.ucwords(strtolower($college_courses));
+								}else{
+									$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+								}
+							}
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+							
+						}else if($menu_type_name=='ADMISSION'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Admission News for '.date('Y');
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Admission '.date('Y').': '.ucwords(strtolower($college_courses)).' Fees Structure, Cutoff, Registration, Eligibility, Form';
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}else if($menu_type_name=='RESULTS'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Results'.date('Y');
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Admission '.date('Y').': Check '.ucwords(strtolower($college_courses)).' Results';
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}else if($menu_type_name=='REVIEWS'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Reviews '.$date;
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Reviews '.$date;
+
+							//'BMS College of Engineering - [BMSCE], Bangalore, Karnataka. 163 Review . Gooch Review: RV College - Too far, BIT - the campus is very bad..'
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}else if($menu_type_name=='CUTOFF'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Cutoff for the Year '.$date;
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Cutoff for the Year '.$date.'. Check Course Wise Cutoff for all categories.';
+
+							//'BMS College of Engineering - [BMSCE] Cutoff for the Year 2021 for . Check Course Wise Cutoff for all categories.'
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}else if($menu_type_name=='GALLERY'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Images, Photos, Videos, Gallery '.$date;
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' -  Images And Videos.';
+
+							//'BMS College of Engineering - [BMSCE], Bangalore - Images, Photos, Videos, Gallery 2021-2022'
+
+							//BMS College of Engineering - [BMSCE],Bangalore, Karnataka. Images And Videos  total images found 46 under Facilities
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}else if($menu_type_name=='SCHOLARSHIPS'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Scholarships Opportunities '.$date;
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Scholarships Opportunity Details '.$date;
+
+							//'BMS College of Engineering - [BMSCE], Bangalore, Karnataka Scholarships Opportunities. Fees is according to CET which is 50,000 + college..'
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}else if($menu_type_name=='FACULTY'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name));
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' - Faculty Details '.$date;
+
+							//'BBMS College of Engineering - [BMSCE], Bangalore - Faculty Details 2021-2022'
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+							$bredcrumb=array(
+								'Home'=>base_url(),
+								ucwords(strtolower($city_data->city_name))=>$type_base_search_url,
+								$college_name=>$type_base_url.'/'.$college_slug->slug_value,
+								ucwords($inner_menu_data->menu_name)=>''
+							);
+						}else if($menu_type_name=='NEWS & ARTICLES'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).'. 0 News Articles found. ';
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.date('Y').': Latest News, Announcements, Notifications, Exams, Notices';
+
+							//'BBMS College of Engineering - [BMSCE], Bangalore - Faculty Details 2021-2022'
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+							$bredcrumb=array(
+								'Home'=>base_url(),
+								ucwords(strtolower($city_data->city_name))=>$type_base_search_url,
+								ucwords(strtolower($college_name))=>$type_base_url.'/'.$college_slug->slug_value,
+								ucwords(strtolower($inner_menu_data->menu_name))=>''
+							);
+						}else if($menu_type_name=='HOSTEL'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Hostel & Fees details '.$date;
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Hostel & Fees details '.$date;
+							// $url_meta_desc=ucwords($college_name.' - '.$city_data->city_name.','.$state_data->state_name).'. Girls and Boys Hostel with average fees 65,000 per year. Hostel Review by Kalpan Punamiya: The hostel is highly expensive and most cannot aff..';
+
+							//'BBMS College of Engineering - [BMSCE], Bangalore - Faculty Details 2021-2022'
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+
+							$bredcrumb=array(
+								'Home'=>base_url(),
+								ucwords(strtolower($city_data->city_name))=>$type_base_search_url,
+								ucwords(strtolower($college_name))=>$type_base_url.'/'.$college_slug->slug_value,
+								ucwords(strtolower($menu_name))=>''
+							);
+						}else if($menu_type_name=='PLACEMENT'){
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Placement Details And Companies Visiting';
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' Placement Details And Companies Visiting';
+
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+
+							$bredcrumb=array(
+								'Home'=>base_url(),
+								ucwords(strtolower($city_data->city_name))=>$type_base_search_url,
+								ucwords(strtolower($college_name))=>$type_base_url.'/'.$college_slug->slug_value,
+								ucwords(strtolower($menu_name))=>''
+							);
+
+							$url_page_heading=ucwords(strtolower($college_name)).','.ucwords(strtolower($city_data->city_name)).' - placemment details & companies visiting';
+						}
+						else{
+							$concated_name=$inner_menu_data->menu_name;
+							$url_meta_title=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+							$url_meta_desc=$college_name.' - '.ucwords(strtolower($city_data->city_name)).','.ucwords(strtolower($state_data->state_name)).' '.ucwords(strtolower($concated_name));
+							$url_meta_keywords=generateKeywordsFromText($url_meta_desc);
+						}
+
+
+						$url_meta_heading=$url_meta_title;				
+						$url_og_title=$url_meta_title;
+						$url_og_desc=$url_meta_desc;
+						$url_page_heading='';
+
+						$slug_data=array(
+							'url_type'=>'college_static_url',
+							'url_glob_type'=>'college_inner_menu',
+							'url_type_id'=>$college_id,
+							'url_sub_type'=>$menu_type,
+							'url_country'=>$college_data->college_country_id,
+							'url_state'=>$college_data->college_state_id,
+							'url_city'=>$college_data->college_city_id,
+							'url_meta_heading'=>str_replace('&amp;','&',ucwords(strtolower($url_meta_heading))),
+							'url_meta_title'=>str_replace('&amp;','&',ucwords(strtolower($url_meta_title))),
+							'url_meta_key_words'=>str_replace(' ', '', str_replace(', 0','', $url_meta_keywords)),
+							'url_meta_desc'=>str_replace('&amp;','&',ucwords(strtolower($url_meta_desc))),
+							'url_og_title'=>str_replace('&amp;','&',ucwords(strtolower($url_og_title))),
+							'url_og_desc'=>str_replace('&amp;','&',ucwords(strtolower($url_og_desc))),
+							'url_page_heading'=>$url_page_heading,
+							'url_value'=>$url_value,
+							'url_active'=>($menu_data->menu_is_active=='1')?'1':'2',
+							'url_priority'=>'0.6',
+							'url_data_change_freq'=>'monthly',
+							'url_last_update'=>date('Y-m-d H:i:s'),
+							'updated_by'=>$this->data['userdata']->user_id,
+							'updated_at'=>date('Y-m-d H:i:s')
+						);
+
+						$data_found=$this->sm->get_slug_urls(array('url_value'=>$url_value));
+
+						$college_found=$this->im->get_college_data(array('college_user_id'=>$college_id));
+
+						if(empty($data_found)){
+
+							if(empty($college_found)){
+								$this->sm->delete_slug_urls(array('url_value'=>$url_value));
+							}
+
+							$this->sm->store_slug_urls($slug_data);
+						}else{
+							// $this->sm->update_slug_urls($slug_data,array('url_type_id'=>$college_id,'url_value'=>$url_value));
+							$this->sm->update_slug_urls($slug_data,array('url_value'=>$url_value));
+						}
+
+						$return['success']='Menu updated successfully';
+					}else{
+						$return['error']='menu not updated';
+					}
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onLoadInnerMenuFormData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+				$college_menu_id=post_data('college_menu_id');
+
+				$college_id=decode_data($college_id);
+				$college_menu_id=decode_data($college_menu_id);
+
+				//echo $college_menu_id;
+
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+
+				$college_menu_data=$this->sm->get_menue(array('menu_id'=>$college_menu_id));
+
+				//print_obj($college_menu_data);die;
+
+				if(!empty($college_menu_data)){
+
+					$exams=$this->strm->get_exam(array('exam_status'=>'1'),FALSE);
+
+					//print_obj($exmas);die;
+
+					if(!empty($exams)){
+						foreach ($exams as $key => $value) {
+							$slug_data=$this->sm->get_slug(array('slug_type'=>'10','slug_type_id'=>$value->exam_id));
+							$_exams_links[]=array(
+								'exam_name'=>$value->exam_short_name,
+								'exam_link'=>(!empty($slug_data))?base_url('exams/'.$slug_data->slug_value):'',
+								'selected'=>''
+							);
+						}
+					}
+
+
+					$this->data['exams_links']=$_exams_links;
+
+					$other_colleges=$this->im->__get_college_profile_data('college_user_id,college_name,access_url,college_city_id',array('is_verified_by_admin'=>'1'),FALSE);
+
+					if(!empty($other_colleges)){
+						foreach ($other_colleges as $key => $value) {
+							$city_data=$this->com->get_city(array('city_id'=>$value->college_city_id));
+							$college_links[]=array(
+								'college_name'=>$value->college_name.' - ['.$city_data->city_name.']',
+								'college_link'=>$value->access_url,
+								'selected'=>''
+							);
+						}
+					}
+
+					$this->data['college_links']=$college_links;
+
+
+					/*if($college_data->college_utype=='3'){
+						$system_widgets=array(
+							"front_info_section"=>'University Info Section',
+							"front_course_fees_section"=>'University Course Fees Section',
+							"front_course_fees_course_section"=>'University Course Fees Details Section',
+							"front_course_fees_brief_with_ads_section"=>'University Course fees with Ads section',
+							"front_facilities_section"=>"University Facilities Section",
+							"front_faculties_section"=>"University Faculties Section",
+							"front_admission_section"=>'University Admission Details Section',
+							"front_cutoff_section"=>'University Cutoff Details Section',
+							"front_gallery_section"=>'University Gallery Details Section',
+							"front_gallery_brief_section"=>'University Gallery Brief Section',
+							"front_hostel_section"=>'College Hostel Section',
+							"front_placement_section"=>'University Placement Brief Details Section',
+							"front_placement_details_section"=>'University Placement Details Section',
+							"front_scholarship_section"=>"University Scholarships Section",
+							"front_results_section"=>"University Results Section",
+							"front_news_brief_section"=>'University News Brief Section',
+							"front_google_maps_section"=>'University Google Map Section',
+							"front_wayto_rating_section"=>'Sikshapedia Rating Section',
+							"front_college_comment_section"=>'University comment Section',
+							"front_nearby_colleges_universities_section"=>'Nearby Colleges Section',
+							"front_review_list_section"=>'College Review Section'							
+						);
+					}else if($college_data->college_utype=='4'){
+						$system_widgets=array(
+							"front_info_section"=>'College Info Section',
+							"front_course_fees_section"=>'College Course Fees Section',
+							"front_course_fees_brief_with_ads_section"=>'College Course fees with Ads section',
+							"front_facilities_section"=>"College Facilities Section",
+							"front_placement_section"=>'College Placement Brief Details Section',
+							"front_gallery_brief_section"=>'College Gallery Brief Section',
+							"front_gallery_section"=>'College Gallery Details Section',
+							"front_google_maps_section"=>'College Google Map Section',
+							"front_google_ads_section"=>'Google Ads Section',
+							"front_news_brief_section"=>'College News Brief Section',
+							"front_college_comment_section"=>'College comment Section',
+							"front_wayto_rating_section"=>'Sikshapedia Rating Section',
+							"front_nearby_colleges_universities_section"=>'Nearby Colleges Section',
+							"front_hostel_section"=>'College Hostel Section',
+							"front_review_list_section"=>'College Review Section'
+						);
+					}*/
+
+					$system_widgets=array(
+							"front_info_section"=>'College Info Section',
+							"front_course_fees_section"=>'College Course Fees Section',
+							"front_course_fees_brief_with_ads_section"=>'College Course fees with Ads section',
+							"front_facilities_section"=>"College Facilities Section",
+							"front_faculties_section"=>"College Faculties Section",
+							"front_placement_section"=>'College Placement Brief Details Section',
+							"front_gallery_brief_section"=>'College Gallery Brief Section',
+							"front_gallery_section"=>'College Gallery Details Section',
+							"front_google_maps_section"=>'College Google Map Section',
+							"front_google_ads_section"=>'Google Ads Section',
+							"front_news_brief_section"=>'College News Brief Section',
+							"front_college_comment_section"=>'College comment Section',
+							"front_wayto_rating_section"=>'Sikshapedia Rating Section',
+							"front_nearby_colleges_universities_section"=>'Nearby Colleges Section',
+							"front_hostel_section"=>'College Hostel Section',
+							"front_review_list_section"=>'College Review Section',
+							"front_cutoff_section"=>'College Cutoff Details Section',
+							"front_scholarship_section"=>"College Scholarships Section",
+							"front_faculties_section"=>"College Faculties Section",
+							"front_admission_section"=>"College Admission Section",
+							"front_ranking_section"=>"College Ranking Section"
+
+						);
+
+
+
+					/*"front_info_section"=>'College Info Section',
+					"front_course_fees_section"=>'College Course Fees Section',
+					"front_course_fees_course_section"=>'College Course Fees Details Section',
+					"front_course_fees_brief_with_ads_section"=>'College Course fees with Ads section',
+					"front_facilities_section"=>"College Facilities Section",
+					"front_faculties_section"=>"College Faculties Section",
+					"front_admission_section"=>'College Admission Details Section',
+					"front_cutoff_section"=>'College Cutoff Details Section',
+					"front_gallery_section"=>'College Gallery Details Section',
+					"front_gallery_brief_section"=>'College Gallery Brief Section',
+					"front_hostel_section"=>'College Hostel Section',
+					"front_placement_section"=>'College Placement Brief Details Section',
+					"front_placement_details_section"=>'College Placement Details Section',
+					"front_scholarship_section"=>"College Scholarships Section",
+					"front_results_section"=>"College Results Section",
+					"front_news_brief_section"=>'College News Brief Section',
+					"front_google_maps_section"=>'College Google Map Section',
+					"front_google_ads_section"=>'Google Ads Section',							
+					"front_college_comment_section"=>'College comment Section',
+					"front_wayto_rating_section"=>'Sikshapedia Rating Section',
+					"front_nearby_colleges_universities_section"=>'Nearby Colleges Section',
+					"front_review_list_section"=>'College Review Section'*/
+
+					$this->data['menu_searched_data']=$this->sm->__get_system_search_data(array('search_data_type_id'=>$college_id,'search_data_access_url'=>$college_menu_data->menu_link));
+
+					//echo $college_menu_data->menu_link;die;
+
+
+					$menu_slug_data=$this->sm->get_slug_urls(array('url_type_id'=>$college_id,'url_value'=>$college_menu_data->menu_link));
+
+					//print_obj($menu_slug_data);die;
+
+					$this->data['menu_slug_data']=$menu_slug_data;
+
+					$this->data['menu_breadcrumb_struct_data']=(isset($this->data['menu_slug_data']->url_id))?$this->sm->get_slug_struct_data(array('strcut_slug_url_id'=>$this->data['menu_slug_data']->url_id,'slug_type_json_ld'=>'BreadcrumbList')):'';
+
+					if(isset($this->data['menu_slug_data']->url_id) && !empty($this->data['menu_slug_data']->url_id)){
+						$this->data['menu_collegeuniversity_struct_data_data']=$this->sm->get_slug_struct_data(array('strcut_slug_url_id'=>$this->data['menu_slug_data']->url_id,'slug_type_json_ld'=>'CollegeOrUniversity'));
+					}else{
+						$this->data['menu_collegeuniversity_struct_data_data']='';
+					}
+
+					
+
+
+
+
+					$this->data['college_menu_data']=$college_menu_data;
+					$this->data['college_id']=$college_id;
+					$this->data['menu_type']=($college_menu_data->menu_link_type=='10')?'college':'university';
+
+					$this->data['college_widgets']=$system_widgets;
+
+
+					//print_obj($this->data['college_menu_data']);die;
+
+
+					$return['html']=$this->theme->view('_pages/users/vw_college_inner_menues',$this->data,true);
+
+
+				}else{
+					$return['error']='Menu data not available.';
+				}
+
+				json_headers($return);
+
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAssignCollegeExamsList(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_exams=array();
+				$college_id=post_data('college_id');
+				$college_exams_list=$this->input->post('college_exams_list');
+
+				if(!empty($college_id)){
+					$college_id=decode_data($college_id);
+					if(!empty($college_exams_list)){
+						foreach ($college_exams_list as $key => $value) {
+							$college_exams[]=decode_data($value);
+						}
+
+						if(!empty($college_exams)){
+							$college_exam_ids=char_separated($college_exams);
+
+							$updated=$this->im->update_college_data(array('college_exam_ids'=>$college_exam_ids),array('college_user_id'=>$college_id));
+
+							if($updated){
+								$return['success']='Exams list has been updated.';
+							}else{
+								$return['error']='Exams list has not been updated.';
+							}
+						}else{
+							$return['error']='No exams found to add';
+						}
+					}else{
+						$return['error']='No exams selected';
+					}
+				}else{
+					$return['error']='Data manipulation is not allowed';
+				}
+					
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchColleges(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+				$user_id=decode_data(session_userdata('admin_id'));
+
+				//echo $user_id;die;
+				$param['column_order'] = array(
+					null,
+					'college_name',
+					'country_name',
+					'state_name',
+					'college_estd_year'
+				);
+
+				$param['column_search'] = array('college_name','college_email','college_phone_no','college_govt_reg_code','college_estd_year','country_name','state_name','city_name','college_alter_phone_no');
+				$param['order'] = array('college_id' => 'DESC');
+				//$param['college_utype']='4';
+				$posts=$this->input->post();
+
+				//if($this->data['userdata']->user_role!='1'){
+					//$param['created_by']=$user_id;
+
+
+					if(isset($posts['state_id']) && $posts['state_id']>0){
+						$param['state_id']=$posts['state_id'];
+					}
+
+					if(isset($posts['city_id']) && $posts['city_id']>0){
+						$param['city_id']=$posts['city_id'];
+					}
+
+					if(isset($posts['country_id']) && $posts['country_id']>0){
+						$param['country_id']=$posts['country_id'];
+					}
+				//}
+
+				if(isset($posts['inst_type']) && $posts['inst_type']!='0'){
+					$param['inst_type']=decode_data($posts['inst_type']);
+				}
+
+
+				if(isset($posts['inst_courses']) && $posts['inst_courses']>0){
+					$param['inst_course_streams']=decode_data($posts['inst_courses']);
+				}
+
+
+				if(isset($posts['inst_course_streams']) && $posts['inst_course_streams']!=''){
+					$param['inst_course_streams']=decode_data($posts['inst_course_streams']);
+				}
+
+				if(isset($posts['created_by'])){
+					if($this->data['userdata']->user_role=='1' && $posts['created_by']>0){
+						$param['created_by']=$posts['created_by'];
+					}
+				}
+
+				
+
+				//print_obj($param);die;
+
+				
+
+				$list = $this->im->_get_colleges($posts,$param,FALSE,FALSE);
+
+				//print_obj($list);die;
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+				$leads=[];
+
+				$count_potential_duplicates=0;
+
+				foreach ($list as $user){
+					$no++;
+
+					$row = array();
+					
+
+					$get_college_user_data=$this->um->get_user_data(array('user_id'=>$user->user_id),null,'4');
+
+					if(empty($get_college_user_data)){
+						$college_user_exists='<button type="button" class="btn btn-sm btn-warning btn_create_college_user" data-user_id="'.$user->user_id.'" data-college_id="'.$user->college_id.'">User Not Found. Create Now</button>';
+					}else{
+						$college_user_exists='';
+					}
+
+					//$creator_data=$this->um->_get_internal_user(array('user_id'=>$user->));
+
+					$view_college='<br><a href="'.$user->access_url.'" target="_blank" class="btn btn-xs btn-dark">View College Page</a> <button class="btn btn-xs btn-danger btn_update_url_cache" data-college_url="'.$user->access_url.'">Update Cache</button>';
+
+
+					$count_duplicates=$this->im->_get_college_profile_data(array('college_name'=>$user->college_name,'college_state_id'=>$user->college_state_id,'college_city_id'=>$user->college_city_id),null,'college_id',false);
+
+					if(!empty($count_duplicates) && count($count_duplicates)>1){
+						$count_potential_duplicates+=count($count_duplicates);
+						$duplicate='<span class="btn btn-sm btn-warning">Duplicate or likely duplicate Found:'.count($count_duplicates).' #ID:'.$user->college_id.'</span>';
+					}else{
+						$duplicate='';
+					}
+
+					//$duplicate=$count_duplicates;
+
+					$slug=$this->sm->get_slug(array('slug_type_id'=>$user->user_id,'slug_type'=>'7'));
+
+					
+
+					if(in_array('can_delete_colleges', $this->data['permissions'])){
+
+
+						$action='<div class="btn-group btn-group-xs">
+						<a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user->user_id).'" class="btn btn-xs btn-primary">Edit</a>
+						<button class="btn btn-xs btn-dark btn_del_college" data-aid="'.encode_data($user->user_id).'" data-aidp="'.encode_data($user->college_id).'">Delete</button>
+						</div>';
+					}else{
+						$action='<div class="btn-group btn-group-sm">
+						<a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user->user_id).'" class="btn btn-xs btn-primary"><i class="fa fa-pen fa-xs"></i></a>
+						</div>';
+					}
+
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$user->user_id,'user_storage_type'=>'user_logo','user_file_type'=>'4'));
+
+	    			if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+	                    $college_logo=$_college_logo->media_disk_path_relative;
+	                    $college_logo_name=$_college_logo->media_org_name;
+	                }else{
+	                    $college_logo=base_url().'uploads/app/default/no.jpg';
+	                    $college_logo_name='';
+	                }
+
+	                $_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$user->user_id,'user_storage_type'=>'user_banner','user_file_type'=>'4'));
+
+	    			if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+	                    $college_banner=$_college_banner->media_disk_path_relative;
+	                    $college_banner_name=$_college_banner->media_org_name;
+	                }else{
+	                    $college_banner=base_url().'uploads/app/default/no.jpg';
+	                    $college_banner_name='';
+	                }
+
+	                $logo='<img src="'.$college_logo.'" class="table-user-thumb" alt="">';
+
+	                if($user->college_course_ids!=NULL){
+						//$courses=$this->im->get_group_concat_user_course_data('CONCAT(course_short_name,IF(course_is_lateral=1,"{Lateral}",""))','course_id',$user->college_course_ids);
+
+						$courses=$this->im->_get_group_concat_user_course_data(array('user_id'=>$user->college_user_id));
+
+						//$_coure_ids=char_separated_to_array($user->college_course_ids);
+						$_courses=(!empty($courses))?$courses->concated_value:'';
+
+						// if(!empty($_courses)){
+						// 	foreach ($_coure_ids as $k => $v) {
+						// 		$user_course_data=$this->im->get_user_course_data(array('user_course'=>$v,'user_id'=>$user->user_id));
+						// 		if(isset($user_course_data->user_course_id) && !empty($user_course_data->user_course_id)){
+						// 			$_college_courses[]='<a href="'.$this->data['admin_base_url'].'/institutions/colleges/courses/add/'.encode_data($user->user_id).'/'.encode_data($user_course_data->user_course_id).'" target="_blank">'.$_courses[$k].'</a>';
+						// 		}
+								
+						// 	}
+						// }else{
+						// 	$_college_courses=array();
+						// }
+							
+						
+						// $college_courses=char_separated($_college_courses);
+
+						if(!empty($_courses)){
+							$college_courses=$_courses;
+						}else{
+							$college_courses='Not Added';
+						}
+
+	                }else{
+	                	$college_courses='Not Added';
+	                }
+
+	                if($user->college_category_ids!=NULL){
+						$categories=$this->im->get_group_concat_institute_categories('inst_category_short_name','inst_category_id',$user->college_category_ids);
+						$college_categories=$categories->concated_value.' | <button class="btn btn-xs btn-dark">Update</button>';
+	                }else{
+	                	$college_categories='Not Added';
+	                }
+
+	                if($user->is_verified_by_admin=='1'){
+	                	$college_name=ucwords($user->college_name).' <strong>[ Admin Approved ]</strong>';
+	                }else{
+	                	$college_name=ucwords($user->college_name);
+	                }
+	                
+					
+					$row[]	=	$no .'<input type="checkbox" class="otherCheckbox" value="'.$user->user_id.'"> '.$user->college_user_id;
+
+					$p=array('user_id'=>$user->college_user_id,'stream_parent_id'=>NULL);
+
+					$stream_ids_data=$this->strm->_get_user_course_stream_groupconcat($p);
+
+					if(!empty($stream_ids_data)){
+						$stream_names=(!empty($stream_ids_data->stream_names) || $stream_ids_data->stream_names!='')?'Streams:'.$stream_ids_data->stream_names:'Need to update';
+					}else{
+						$stream_names='Need to update';
+					}
+
+					$total_news_count=$this->nm->get_news_count(array('news_types_id'=>$user->user_id,'news_types'=>'1'));	
+					
+					if($user->college_has_leads_access=='yes' && $user->college_max_leads>0){
+						$leads[$user->user_id]='<button class="btn btn-xs btn-dark btn_quick_data_update"  data-toggle="modal" data-target="#collegeQuickUpdateModal" data-college="'.encode_data($user->user_id).'" data-college_name="'.ucwords($user->college_name).'" data-college_ph="'.$user->college_phone_no.'" data-college_email="'.$user->college_email.'" data-college_pincode="'.$user->college_zipcode.'" data-college_address="'.$user->college_address.'" data-college_estd="'.$user->college_estd_year.'" data-logo_name="'.$college_logo_name.'" data-banner_name="'.$college_banner_name.'" data-college_is_featured="'.$user->college_is_featured.'"  data-college_is_top="'.$user->college_is_top.'"  data-college_is_top_homepage="'.$user->college_is_top_visible_home.'" data-college_verified="'.$user->is_verified_by_admin.'" data-has_leads_access="'.$user->college_has_leads_access.'" data-max_leads="'.$user->college_max_leads.'" data-leads_start="'.$user->college_leads_start.'" data-leads_end="'.$user->college_leads_end.'" data-leads_per_day="'.$user->college_perday_leads.'">Total Leads:'.$user->college_max_leads.' / Timeline:['.date('d-m-Y',strtotime($user->college_leads_start)).'] - ['.date('d-m-Y',strtotime($user->college_leads_end)).']</button> ';
+					}
+
+					if(isset($leads[$user->user_id])){
+						$college_data_row=$logo.'<span> <a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user->user_id).'" target="_blank" data-toggle="tooltip" data-placement="top" title="Tooltip on top">'.$college_name.'</a></span> '.$college_user_exists.$duplicate.'<br><label style="padding-left:40px;">'.$user->country_name.','.$user->state_name.','.$user->city_name.','.$user->college_estd_year.'</label><br><label style="padding-left:40px;">'.$leads[$user->user_id].'<button type="" class="btn btn-xs btn-success btn_quick_data_update" data-toggle="modal" data-target="#collegeQuickUpdateModal" data-college="'.encode_data($user->user_id).'" data-college_name="'.ucwords($user->college_name).'" data-college_ph="'.$user->college_phone_no.'" data-college_email="'.$user->college_email.'" data-college_pincode="'.$user->college_zipcode.'" data-college_address="'.$user->college_address.'" data-college_estd="'.$user->college_estd_year.'" data-logo_name="'.$college_logo_name.'" data-banner_name="'.$college_banner_name.'" data-college_is_featured="'.$user->college_is_featured.'"  data-college_is_top="'.$user->college_is_top.'"  data-college_is_top_homepage="'.$user->college_is_top_visible_home.'" data-college_verified="'.$user->is_verified_by_admin.'">Quick Basic Data Update</button> <button type="button" class="btn btn-xs btn-primary btn_broucher_upload" data-college_name="'.ucwords($user->college_name).'" data-college="'.encode_data($user->user_id).'" data-toggle="modal" data-target="#collegeBroucherUpdateModal">Upload Broucher</button> <button type="button" class="btn btn-xs btn-warning btn_update_gallery" data-college_name="'.ucwords($user->college_name).'" data-college="'.encode_data($user->user_id).'" data-toggle="modal" data-target="#collegeGallerUpdateModal">Upload Gallery Files</button>
+							<a class="btn btn-xs btn-dark btn_review_writing" target="_blank" href="'.$this->data['admin_base_url'].'/institutions/colleges/reviews/'.encode_data($user->user_id).'">Write a Review</a>	
+
+							<button class="btn btn-xs btn-warning btn_update_college_logo_banner_data" data-college_id="'.encode_data($user->college_user_id).'">Update Logo Banner if not updated yet after uploading the images</button>					
+							<br><br>
+							<button class="btn btn-xs btn-warning btn_news_add" data-toggle="modal" data-target="#collegeNewswModal" data-college="'.encode_data($user->user_id).'" data-country="'.$user->college_country_id.'" data-news_type="1">Tag News ('.$total_news_count.' news tagged)</button><br><br> 
+						<button class="btn btn-xs btn-warning btn_courses_offered" data-toggle="modal" data-target="#courseModal" data-college="'.encode_data($user->college_id).'">Courses Offered</button> <span>:'.$college_courses.'</span><br></br>
+						<span class="btn btn-xs btn-warning">'.$stream_names.'</span> <button class="btn btn-xs btn-danger btn_update_college_course_data" data-college_id="'.encode_data($user->college_user_id).'">Update Course,Streams,Substreams,Exams if not updated yet</button>
+
+						</label>';
+					}else{
+						$college_data_row=$logo.'<span> <a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user->user_id).'" target="_blank" data-toggle="tooltip" data-placement="top" title="Tooltip on top">'.$college_name.'</a></span> '.$college_user_exists.$duplicate.'<br><label style="padding-left:40px;">'.$user->country_name.','.$user->state_name.','.$user->city_name.','.$user->college_estd_year.'</label><br>
+
+						<label style="padding-left:40px;"><button type="" class="btn btn-xs btn-success btn_quick_data_update" data-toggle="modal" data-target="#collegeQuickUpdateModal" data-college="'.encode_data($user->user_id).'" data-college_name="'.ucwords($user->college_name).'" data-college_ph="'.$user->college_phone_no.'" data-college_email="'.$user->college_email.'" data-college_pincode="'.$user->college_zipcode.'" data-college_address="'.$user->college_address.'" data-college_estd="'.$user->college_estd_year.'" data-logo_name="'.$college_logo_name.'" data-banner_name="'.$college_banner_name.'" data-college_is_featured="'.$user->college_is_featured.'"  data-college_is_top="'.$user->college_is_top.'"  data-college_is_top_homepage="'.$user->college_is_top_visible_home.'" data-college_verified="'.$user->is_verified_by_admin.'">Quick Basic Data Update</button> <button type="button" class="btn btn-xs btn-primary btn_broucher_upload" data-college_name="'.ucwords($user->college_name).'" data-college="'.encode_data($user->user_id).'" data-toggle="modal" data-target="#collegeBroucherUpdateModal">Upload Broucher</button> <button type="button" class="btn btn-xs btn-warning btn_update_gallery" data-college_name="'.ucwords($user->college_name).'" data-college="'.encode_data($user->user_id).'" data-toggle="modal" data-target="#collegeGallerUpdateModal">Upload Gallery Files</button>
+							<a class="btn btn-xs btn-dark btn_review_writing" target="_blank" href="'.$this->data['admin_base_url'].'/institutions/colleges/reviews/'.encode_data($user->user_id).'">Write a Review</a>	
+
+							<button class="btn btn-xs btn-warning btn_update_college_logo_banner_data" data-college_id="'.encode_data($user->college_user_id).'">Update Logo Banner if not updated yet after uploading the images</button>					
+							<br><br>
+							<button class="btn btn-xs btn-warning btn_news_add" data-toggle="modal" data-target="#collegeNewswModal" data-college="'.encode_data($user->user_id).'" data-country="'.$user->college_country_id.'" data-news_type="1">Tag News ('.$total_news_count.' news tagged)</button><br><br> 
+						<button class="btn btn-xs btn-warning btn_courses_offered" data-toggle="modal" data-target="#courseModal" data-college="'.encode_data($user->college_id).'">Courses Offered</button> <span>:'.$college_courses.'</span><br></br>
+						<span class="btn btn-xs btn-warning">'.$stream_names.'</span> <button class="btn btn-xs btn-danger btn_update_college_course_data" data-college_id="'.encode_data($user->college_user_id).'">Update Course,Streams,Substreams,Exams if not updated yet</button>
+
+						</label>';
+					}
+
+						
+
+					$college_data_row.='<br><label style="padding-left:40px;"><button class="btn btn-xs btn-warning btn_categories" data-toggle="modal" data-target="#categoriesModal" data-college="'.encode_data($user->college_id).'" data-college_country="'.encode_data($user->college_country_id).'">Categories</button> <span>:'.$college_categories.'</span><br><br><a target="_blank" href="'.$this->data['admin_base_url'].'/institutions/colleges/courses/'.encode_data($user->college_user_id).'" class="btn btn-xs btn-info">Go to Course Update Page</a></label>';
+
+
+					if($user->college_is_featured=='1'){
+						$college_data_row  .=	'<br><label style="padding-left:40px;"><button type="button" data-college="'.encode_data($user->college_id).'" data-field_value="2" data-field="'.encode_data('college_is_featured').'" class="btn btn-xs btn-warning btn_change_single_data">Featured College</button></label> <button type="button" class="btn btn-xs btn-warning btn_menu_quick_update" data-college_id="'.$user->college_user_id.'" data-toggle="modal" data-target="#collegeMenuWidgetsModal">Update Menu Widgets</button>';
+					}else if($user->college_is_featured=='2'){
+						$college_data_row  .=	'<br><label style="padding-left:40px;"><button type="button" data-college="'.encode_data($user->college_id).'" data-field_value="1" data-field="'.encode_data('college_is_featured').'" class="btn btn-xs btn-dark btn_change_single_data">Not Featured College</button></label>';
+					}
+
+
+					if($user->college_is_featured_visible_in_menu=='1'){
+						$college_data_row  .=	'<label style="padding-left:40px;"><button type="button" data-college="'.encode_data($user->college_id).'" data-field_value="2" data-field="'.encode_data('college_is_featured_visible_in_menu').'" class="btn btn-xs btn-warning btn_change_featured_college_menu_data" data-college_name="'.$college_name.'" data-toggle="modal" data-target="#featuredCollegeModal">Visible as Featured College in Menu</button></label>';
+					}else if($user->college_is_featured_visible_in_menu=='2'){
+						$college_data_row  .=	'<label style="padding-left:40px;"><button type="button" data-college="'.encode_data($user->college_id).'" data-field_value="1" data-field="'.encode_data('college_is_featured_visible_in_menu').'" class="btn btn-xs btn-dark btn_change_featured_college_menu_data" data-college_name="'.$college_name.'" data-toggle="modal" data-target="#featuredCollegeModal">Not Visible as Featured College in Menu</button></label>';
+					}
+
+					if($this->data['userdata']->user_role=='1'){
+						if(!empty($slug)){
+							 $college_data_row  .=	'<br><button type="button" class="btn btn-dark btn_create_slug" data-type="college_slug" data-value_id="'.encode_data($user->user_id).'">'.$slug->slug_value.'</button>';
+							//$college_data_row  .=	'<br>'.$slug->slug_value;
+						}else{
+							$college_data_row  .=	'<br><button type="button" class="btn btn-dark btn_create_slug" data-type="college_slug" data-value_id="'.encode_data($user->user_id).'">Create</button>';
+						}
+
+						$college_data_row  .=	'<br>'.$user->access_url.'<br><button type="button" class="btn btn-dark btn_send_email" data-email="'.$user->college_email.'">Send Mail</button>';
+					}
+
+					/*$college_data_row=$logo.'<span> <a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($user->user_id).'" target="_blank" data-toggle="tooltip" data-placement="top" title="Tooltip on top">'.$college_name.'</a></span> '.$college_user_exists.$duplicate.'<br><label style="padding-left:40px;">'.$user->country_name.','.$user->state_name.','.$user->city_name.','.$user->college_estd_year.'</label>';
+
+					/*$actions_drop_down='<div class="btn-group">
+						  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    Edit Options
+						  </button>
+						  <div class="dropdown-menu">
+						  <div class="dropdown-item">
+						    <button type="" class="btn btn-xs btn-success btn_quick_data_update" data-toggle="modal" data-target="#collegeQuickUpdateModal" data-college="'.encode_data($user->user_id).'" data-college_name="'.ucwords($user->college_name).'" data-college_ph="'.$user->college_phone_no.'" data-college_email="'.$user->college_email.'" data-college_pincode="'.$user->college_zipcode.'" data-college_address="'.$user->college_address.'" data-college_estd="'.$user->college_estd_year.'" data-logo_name="'.$college_logo_name.'" data-banner_name="'.$college_banner_name.'" data-college_is_featured="'.$user->college_is_featured.'"  data-college_is_top="'.$user->college_is_top.'"  data-college_is_top_homepage="'.$user->college_is_top_visible_home.'" data-college_verified="'.$user->is_verified_by_admin.'">Quick Basic Data Update</button>
+						    <button type="button" class="btn btn-xs btn-primary btn_broucher_upload" data-college_name="'.ucwords($user->college_name).'" data-college="'.encode_data($user->user_id).'" data-toggle="modal" data-target="#collegeBroucherUpdateModal">Upload Broucher</button>
+						    <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#collegeFilesUpdateModal">Upload Gallery Files</button>
+						    <button class="btn btn-xs btn-dark btn_review_writing" data-toggle="modal" data-target="#collegeReviewModal" data-college="'.encode_data($user->user_id).'" data-college_name="'.ucwords($user->college_name).'">Write a Review</button>
+						    <button class="btn btn-xs btn-warning btn_news_add" data-toggle="modal" data-target="#collegeNewswModal" data-college="'.encode_data($user->user_id).'" data-country="'.$user->college_country_id.'" data-news_type="1">Tag News ('.$total_news_count.' news tagged)</button>';
+
+
+						    if($this->data['userdata']->user_role=='1'){
+
+								//$actions_drop_down  .=	'<button type="button" class="btn btn-xs btn-dark btn_send_email" data-email="'.$user->college_email.'">Send Mail</button>';
+							}
+
+						    if($user->college_is_featured_visible_in_menu=='1'){
+								$actions_drop_down  .=	' <button type="button" data-college="'.encode_data($user->college_id).'" data-field_value="2" data-field="'.encode_data('college_is_featured_visible_in_menu').'" class="btn btn-xs btn-warning btn_change_featured_college_menu_data" data-college_name="'.$college_name.'" data-toggle="modal" data-target="#featuredCollegeModal">Visible as Featured College in Menu</button>';
+							}else if($user->college_is_featured_visible_in_menu=='2'){
+								$actions_drop_down  .=	' <button type="button" data-college="'.encode_data($user->college_id).'" data-field_value="1" data-field="'.encode_data('college_is_featured_visible_in_menu').'" class="btn btn-xs btn-dark btn_change_featured_college_menu_data" data-college_name="'.$college_name.'" data-toggle="modal" data-target="#featuredCollegeModal">Not Visible as Featured College in Menu</button>';
+							}
+
+							$actioin_drop_down.='</div>';
+							$actioin_drop_down.='<div class="dropdown-divider"></div>';
+							$actioin_drop_down.='<div class="dropdown-item">
+							<button class="btn btn-xs btn-warning btn_categories" data-toggle="modal" data-target="#categoriesModal" data-college="'.encode_data($user->college_id).'" data-college_country="'.encode_data($user->college_country_id).'">Categories</button> <span>:'.$college_categories.'</span>
+							<button class="btn btn-xs btn-warning btn_courses_offered" data-toggle="modal" data-target="#courseModal" data-college="'.encode_data($user->college_id).'">Courses Offered</button> <span>:'.$college_courses.'</span></div>';
+						  $actions_drop_down.='</div>
+						</div>';*/
+
+						
+
+					$row[]	= $college_data_row.'<span> '.$action.'</span><br>'.$view_college;
+
+					//.'<br>'.$menu_update_btn;
+					// $row[]	=	$user->country_name;
+					
+
+					// $row[]	=	$user->state_name;
+					// $row[]	=	$user->city_name;
+					//$row[]	=	$user->college_estd_year;
+					//$row[]	=	date('F jS, Y',strtotime($user->created_date));
+					if($user->user_blocked==1){
+						$row[]  =	'<span class="btn btn-xs btn-success">Active</span>';
+					}else if($user->user_blocked==2){
+						$row[]  =	'<span class="btn btn-xs btn-danger">Deactive</span>';
+					}else{
+						$row[]  =	'<span class="btn btn-xs btn-danger">Not Active Yet</span>';
+					}
+
+					
+
+					$row[]  =	'';//$action;	
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->im->_get_colleges($posts,$param,TRUE),
+					"recordsFiltered" => $this->im->_get_colleges($posts,$param,TRUE),
+					"recordsPotentialDuplicates"=>$count_potential_duplicates,
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onSearchCollegesMenuWidgets(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+
+				$_menues=array();
+
+				$_inner_menu=$this->sm->get_menues(array('menu_is_inner'=>'1','menu_link_type'=>'10','menu_link_id'=>$college_id),FALSE,'menu_serial','ASC');
+
+				$this->data['system_widgets']=$this->sm->get_widgets(array('widget_status'=>'1'),FALSE);
+
+				if(!empty($_inner_menu)){
+					foreach ($_inner_menu as $key => $value) {
+						$menu_widgets=$value->menu_main_widget;
+
+						if(!empty($menu_widgets)){
+							$widgets=unserialize($menu_widgets);
+						}else{
+							$widgets=array();
+						}
+
+						$_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_serial'=>$value->menu_serial,
+							'menu_widgets'=>$widgets
+						);
+					}					
+				}
+
+
+				$this->data['menues']=$_menues;
+
+				$return['html']=$this->theme->view('_pages/users/vw_college_inner_menues_widgets',$this->data,true);
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onUpdateMenudata(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$menu_data_type_to_update=post_data('data_type_to_update');
+				$menu_id=post_data('menu_id');
+				$menu_serial=post_data('menu_order');
+				$widgets=$this->input->post('menu_widgets');
+
+				if(!empty($widgets)){
+					$data_to_update=array('menu_main_widget'=>serialize($widgets),'menu_serial'=>$menu_serial);
+				}else{
+					$data_to_update=array('menu_serial'=>$menu_serial);
+				}
+
+				$updated=$this->sm->update_menu($data_to_update,array('menu_id'=>$menu_id));
+
+				if($updated){
+					$return['success']='Menu widgets updated';
+				}else{
+					$return['error']='menu widgets not updated';
+				}
+				
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onSearchCollegesData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				// $param['column_order'] = array(
+				// 	null,
+				// 	'college_name'
+				// );
+
+				// $param['column_search'] = array('college_name');
+				// $param['order'] = array('college_id' => 'ASC');
+
+
+
+				// $param['column_order'] = array(
+				// 	null,
+				// 	'user_name'
+				// );
+
+				// $param['column_search'] = array('user_name');
+				// $param['order'] = array('user_id' => 'ASC');
+
+				// $param['user_role']='4';
+
+				$param['column_order'] = array(
+					null,
+					'slug_value'
+				);
+
+				$param['column_search'] = array('slug_value');
+				$param['order'] = array('slug_id' => 'ASC');
+
+				$param['slug_type']='7';
+				
+				$posts=$this->input->post();
+
+				//$list = $this->im->__get_college_data($posts,$param,FALSE,FALSE);
+
+				//$list=$this->um->__get_users($posts,$param,FALSE,FALSE);
+
+				$list=$this->sm->_get_slug($posts,$param,FALSE,FALSE);
+
+				//print_obj($list);die;
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $college){
+					$no++;
+
+					$row = array();
+
+					//$college_user=$this->um->get_user(array('user_id'=>$college->college_user_id,'user_role'=>'4'));
+
+					$college_data=$this->im->get_college_data(array('college_user_id'=>$college->slug_type_id));
+
+					$college_url=base_url('in/'.$college->slug_value);
+
+					// $college_slug_url=$this->sm->get_slug_urls(array('url_type'=>'college_static_url','url_type_id'=>$college->slug_type_id));
+
+					$college_slug_url=$this->sm->get_slug_urls(array('url_value'=>$college_url));
+
+					if(!empty($college_slug_url)){
+						$slug_generated='Slug already generated';
+					}else{
+						$slug_generated='<span class="btn btn-xs btn-danger">Slug not generated yet</span>';
+					}
+
+					$row[]	=	$no;
+
+					if(empty($college_data)){
+						$row[]	=	'<b>College Not Found</b>';
+					}else{
+						$row[]	=	$college_data->college_name.'<br>User ID:'.$college->slug_value.'<br>College ID:'.$college_data->college_id.'<br>'.$slug_generated.'<br>'.$college_url;
+					}
+
+					
+
+
+					// if(empty($college_user)){
+					// 	$row[]	=	'<button type="button" class="btn btn-xs btn-danger del_college" data-college_id="'.$college->college_id.'">College user not found - Delete</button>';
+					// }else{
+					// 	$row[]	=	'College User Exists';
+					// }
+
+
+					if(empty($college_data)){
+						$row[]	=	'<button type="button" class="btn btn-xs btn-danger del_college_slug" data-college_id="'.$college->slug_type_id.'">Delete</button>';
+					}else{
+						$row[]	=	'College & College Slug  Exists';
+					}
+
+
+
+					$data[] = $row;	
+				}
+
+				// $output = array(
+				// 	"draw" => isset($posts['draw'])?$posts['draw']:'',
+				// 	"recordsTotal" => $this->um->__get_users($posts,$param,TRUE),
+				// 	"recordsFiltered" => $this->um->__get_users($posts,$param,TRUE),
+				// 	"data" => $data,
+				// );
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->sm->_get_slug($posts,$param,TRUE),
+					"recordsFiltered" => $this->sm->_get_slug($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+				session_write_close();
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+
+	public function onDeleteCollegeData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+
+				$delete_type=post_data('delete_type');
+
+				if($delete_type=='college'){
+					$college_data=$this->im->get_college_data(array('college_id'=>$college_id));
+
+					if(!empty($college_data)){
+
+						$deleteed=$this->im->delete_college_data(array('college_id'=>$college_id));
+
+						if($deleted){
+
+							$this->sm->delete_system_search_data(array('search_data_type_id'=>$college_data->college_user_id,'search_data_type'=>'COLLEGE_NAME'));
+							$return['success']='College deleted';
+						}else{
+							$return['error']='College data not deleted';
+						}
+
+					}else{
+						$return['error']='College not found';
+					}
+				}else if($delete_type=='college_user'){
+
+					$college_user_data=$this->um->get_user(array('user_profile_pk_id'=>$college_id,'user_role'=>'4'));
+
+					if(!empty($college_user_data)){
+
+						$deleteed=$this->um->delete_user_data(array('user_id'=>$college_user_data->user_id,'user_role'=>'4'));
+
+						if($deleted){
+							$return['success']='College user deleted';
+						}else{
+							$return['error']='College user data not deleted';
+						}
+
+					}else{
+						$return['error']='College user not found';
+					}
+				}else if($delete_type=='college_slug'){
+
+					$college_slug=$this->sm->get_slug(array('slug_type_id'=>$college_id,'slug_type'=>'7'));
+
+					if(!empty($college_slug)){
+
+						$deleteed=$this->sm->delete_slug(array('slug_type_id'=>$college_slug->slug_type_id,'slug_type'=>'7'));
+
+						if($deleted){
+							$return['success']='College slug deleted';
+						}else{
+							$return['error']='College slug data not deleted';
+						}
+
+					}else{
+						$return['error']='College user not found';
+					}
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	public function onImportColleges(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$user_id=decode_data(session_userdata('admin_id'));
+				$data_imported=FALSE;
+
+				$table_rows='';
+
+				if(isset($_FILES['college_excel']) && $_FILES['college_excel']['name']!=''){
+
+					$excel_data=array(
+						'file_size'=>'10',
+						'file_name'=>'college_excel',
+						'file_types'=>'xls,xlsx',
+					);
+
+					$file_path=$this->onUploadFiles($excel_data,'excel_import');
+
+					// print_obj($file_path);
+					// print_obj(is_dir($file_path));die;
+
+					// is_file(filename)
+
+					if(is_file($file_path)){
+						$validated=$this->onValidateCollegeExcel($file_path);
+
+						if($validated['validated']==200){
+							$exceldata=$validated['exceldata'];
+
+							//print_obj($exceldata);die;
+
+							foreach ($exceldata as $_key => $_value) {
+					    		$_exceldata[]=array_filter($_value[0]);
+					    	}
+
+							foreach ($_exceldata as $key => $value){
+								$row=$key+1;
+
+								$name		=	isset($value[1])?strip_javascript(xss_clean(trim($value[1]))):'';
+			    				$email		=	isset($value[2])?strip_javascript(xss_clean(trim($value[2]))):'';
+			    				$phno		=	isset($value[3])?strip_javascript(xss_clean(trim($value[3]))):'';
+			    				$estd		=	isset($value[4])?strip_javascript(xss_clean(trim($value[4]))):'';
+			    				$country	=	isset($value[5])?strip_javascript(xss_clean(trim($value[5]))):'';
+			    				$state		=	isset($value[6])?strip_javascript(xss_clean(trim($value[6]))):'';
+			    				$district	=	isset($value[7])?strip_javascript(xss_clean(trim($value[7]))):'';
+			    				$city		=	isset($value[8])?strip_javascript(xss_clean(trim($value[8]))):'';
+			    				$address	=	isset($value[9])?strip_javascript(xss_clean(trim($value[9]))):'';
+			    				$pincode	=	isset($value[10])?strip_javascript(xss_clean(trim($value[10]))):'';
+			    				$university	=	isset($value[11])?strip_javascript(xss_clean(trim($value[11]))):'';
+
+			    				$college_data=$this->um->get_user_data(null,array('college_email'=>$email,'college_phone_no'=>$phno),'4');
+
+			    				
+
+			    				if(empty($college_data)){
+			    					$country_data=$this->com->get_country(array('country_name'=>$country));
+
+			    					//print_obj($country_data);die;
+
+
+			    					$country_id=$country_data->country_id;
+			    					$country_code=strtolower($country_data->country_iso_code_2);
+
+			    					$state_data=$this->com->get_state(array('state_name'=>$state,'state_country_id'=>$country_id));
+			    					if(!empty($state_data)){
+			    						$state_id=$state_data->state_id;
+			    					}else{
+			    						$state_name_slug=url_slug($state);
+			    						$state_id=$this->com->add_state_data(array('state_name'=>$state,'state_country_id'=>$country_id,'state_name_slug'=>$state_name_slug,'state_status'=>'1','is_top'=>'2','created_by'=>$user_id,'created_at'=>date('Y-m-d H:i:s')));
+
+			    						$state_slug=$this->sm->get_slug(array('slug_type'=>'1','slug_value'=>$state_name_slug));
+				    					if(empty($state_slug)){
+				    						$this->sm->store_slug(array('slug_type'=>'1','slug_value'=>$state_name_slug,'slug_type_id'=>$state_id));
+				    					}
+			    					}
+
+			    					$district_data=$this->com->get_district(array('district_country_id'=>$country_id,'district_name'=>$district,'district_state_id'=>$state_id,'district_status'=>'1'));
+
+
+			    					if(!empty($district_data)){
+			    						$district_id=$district_data->district_id;
+			    					}else{
+			    						$district_id=$this->com->add_district_data(array('district_country_id'=>$country_id,'district_name'=>$district,'district_state_id'=>$state_id,'district_status'=>'1','created_by'=>$user_id));
+			    					}
+
+			    					$city_data=$this->com->get_city(array('city_country_id'=>$country_id,'city_state_id'=>$state_id,'city_name'=>$city));
+			    					if(!empty($city_data)){
+			    						$city_id=$city_data->city_id;
+			    					}else{
+										$formatted_name=url_slug($city);
+			    						$city_id=$this->com->add_city_data(array('city_country_id'=>$country_id,'city_state_id'=>$state_id,'city_district_id'=>$district_id,'city_name'=>$city,'city_name_slug'=>$formatted_name,'city_status'=>'1','created_by'=>$user_id,'created_at'=>date('Y-m-d H:i:s')));
+
+			    						$city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_value'=>$formatted_name));
+				    					if(empty($city_slug)){
+				    						$this->sm->store_slug(array('slug_type'=>'2','slug_value'=>$formatted_name,'slug_type_id'=>$city_id));
+				    					}
+			    					}
+
+			    					$university_data=$this->im->get_university_profile_data(array('university_country_id'=>$country_id,'university_name'=>$university));
+			    					if(!empty($university_data)){
+			    						$university_id=$university_data->university_user_id;
+			    					}else{			    						
+			    						$formated_name=$university.' '.$city_data->city_name.' '.$state_data->state_name;
+			    						$access_url_slug=url_slug($formated_name);
+			    						$access_url=base_url().$country_code.'/'.$access_url_slug;
+			    						$university_pk_id=$this->im->add_universities_data(array('university_country_id'=>$country_id,'university_name'=>$university,'access_url_slug'=>$access_url_slug));
+
+			    						if($university_pk_id){
+			    							$university_id=$this->um->add_user_data(array('user_role'=>'3','user_profile_pk_id'=>$university_pk_id));
+			    							if($university_id){
+			    								$this->im->update_universities_data(array('university_user_id'=>$university_id),array('university_id'=>$university_pk_id));
+			    							}
+
+			    							$university_slug=$this->sm->get_slug(array('slug_type'=>'6','slug_value'=>$access_url_slug));
+					    					if(empty($college_slug)){
+					    						$this->sm->store_slug(array('slug_type'=>'6','slug_value'=>$access_url_slug,'slug_type_id'=>$university_id));
+					    					}
+			    						}
+			    					}
+
+			    					$college_formated_name=url_slug($name.' '.$city_data->city_name.' '.$state_data->state_name);
+			    					$college_access_url_slug=base_url().$country_code.'/'.$college_formated_name;
+
+			    					$college_data_to_insert=array(
+			    						'college_country_id'=>$country_id,
+			    						'college_state_id'=>$state_id,
+			    						'college_city_id'=>$city_id,
+			    						'college_district_id'=>$district_id,
+			    						'college_university_id'=>$university_id,
+			    						'college_name'=>$name,
+			    						'college_estd_year'=>$estd,
+			    						'college_address'=>$address,
+			    						'college_zipcode'=>$pincode,
+			    						'college_email'=>strtolower($email),
+			    						'college_phone_no'=>$phno,
+			    						'college_status'=>'1',
+			    						'college_is_top'=>'2',
+			    						'college_is_top_visible_home'=>'2',
+			    						'college_is_top_ranked'=>'2',
+			    						'is_verified_by_admin'=>'2',
+			    						'access_url'=>$college_formated_name,
+			    						'access_url_slug'=>$college_access_url_slug,
+			    						'created_by'=>$user_id,
+			    						'created_at'=>date('Y-m-d H:i:s')
+			    					);
+
+									$college_profile_id=$this->im->add_college_data($college_data_to_insert);
+
+									if($college_profile_id){
+										$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+										$user_name  =	strtolower($email);    
+			      						$user_name 	= 	substr($user_name, 0, strpos($user_name, "@"));
+			      						$user_name 	= 	strtoupper($user_name).'_'.generate_string(8);
+
+										$college_id=$this->um->add_user_data(array('user_role'=>'4','user_profile_pk_id'=>$college_profile_id,'user_name'=>$user_name,'user_password'=>$password,'user_password_visible'=>encode_data('Password@123'),'created_by'=>$user_id));
+
+										if($college_id){
+											$this->im->update_college_data(array('college_user_id'=>$college_id),array('college_id'=>$college_profile_id));
+										}
+
+										$college_slug=$this->sm->get_slug(array('slug_type'=>'7','slug_value'=>$college_formated_name));
+				    					if(empty($college_slug)){
+				    						$this->sm->store_slug(array('slug_type'=>'7','slug_value'=>$college_formated_name,'slug_type_id'=>$college_id));
+				    					}
+									}
+
+									$data_imported=TRUE;			    					
+			    				}
+							}
+
+							//die;
+							
+
+							if($data_imported==TRUE){
+								@unlink($file_path);
+								$return['success']='Data imported successfully';
+							}else{
+								$return['error']='Data not imported into the system';
+							}
+						}else{
+							$return['error']=$validated['error'];
+						}
+					}else{
+						$return['error']='File upload error';
+					}
+
+				}else{
+					$return['error']='Excel file is missing';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onImportCollegeExternal(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				//echo 'hi';die;
+
+				$user_id=decode_data(session_userdata('admin_id'));
+				$data_imported=FALSE;
+
+				$table_rows='';
+
+				$state=post_data('country_states');
+				$university=post_data('country_universities');
+
+				$state_id=decode_data($state);
+				$university_id=decode_data($university);
+
+				if(isset($_FILES['college_excel']) && $_FILES['college_excel']['name']!=''){
+
+					$excel_data=array(
+						'file_size'=>'10',
+						'file_name'=>'college_excel',
+						'file_types'=>'xls,xlsx',
+					);
+
+					$file_path=$this->onUploadFiles($excel_data,'excel_import');
+
+
+					//echo $file_path;die;
+
+					// print_obj($file_path);
+					// print_obj(is_dir($file_path));die;
+
+					// is_file(filename)
+
+					if(is_file($file_path)){
+						$validated=$this->onValidateCollegeExcel2($file_path);
+
+						//print_obj($validated);die;
+
+						if($validated['validated']==200){
+							$exceldata=$validated['exceldata'];
+
+							//print_obj($exceldata);die;
+
+							foreach ($exceldata as $_key => $_value) {
+					    		$_exceldata[]=array_filter($_value[0]);
+					    	}
+
+					    	//print_obj($_exceldata);
+
+							foreach ($_exceldata as $key => $value){
+								$row=$key+1;
+
+								
+
+								$name		=	isset($value[1])?strip_javascript(xss_clean(trim($value[1]))):'';
+			    				$email		=	isset($value[2])?strip_javascript(xss_clean(trim($value[2]))):'';
+			    				$phno		=	isset($value[3])?strip_javascript(xss_clean(trim($value[3]))):'';
+			    				$estd		=	isset($value[4])?strip_javascript(xss_clean(trim($value[4]))):'';			    				
+			    				$district	=	isset($value[5])?strip_javascript(xss_clean(trim($value[5]))):'';
+			    				$city		=	isset($value[6])?strip_javascript(xss_clean(trim($value[6]))):'';
+			    				$address	=	isset($value[7])?strip_javascript(xss_clean(trim($value[7]))):'';
+			    				$pincode	=	isset($value[8])?strip_javascript(xss_clean(trim($value[8]))):'';
+
+			    				$college_data=$this->um->get_user_data(null,array('college_email'=>$email,'college_phone_no'=>$phno),'4');
+
+			    				//print_obj($college_data);die;
+
+			    				if(empty($college_data)){
+			    					$country_data=$this->com->get_country(array('country_name'=>'india'));
+
+			    					//print_obj($country_data);die;
+
+
+			    					$country_id=$country_data->country_id;
+			    					$country_code=strtolower($country_data->country_iso_code_2);
+
+			    					
+			    					$district_data=$this->com->get_district(array('district_country_id'=>$country_id,'district_name'=>$district,'district_state_id'=>$state_id,'district_status'=>'1'));
+
+
+			    					if(!empty($district_data)){
+			    						$district_id=$district_data->district_id;
+			    					}else{
+			    						$district_id=$this->com->add_district_data(array('district_country_id'=>$country_id,'district_name'=>$district,'district_state_id'=>$state_id,'district_status'=>'1','created_by'=>$user_id));
+			    					}
+
+			    					$city_data=$this->com->get_city(array('city_country_id'=>$country_id,'city_state_id'=>$state_id,'city_name'=>$city));
+			    					if(!empty($city_data)){
+			    						$city_id=$city_data->city_id;
+			    					}else{
+										$formatted_name=url_slug($city);
+			    						$city_id=$this->com->add_city_data(array('city_country_id'=>$country_id,'city_state_id'=>$state_id,'city_district_id'=>$district_id,'city_name'=>$city,'city_name_slug'=>$formatted_name,'city_status'=>'1','created_by'=>$user_id,'created_at'=>date('Y-m-d H:i:s')));
+
+			    						$city_slug=$this->sm->get_slug(array('slug_type'=>'2','slug_value'=>$formatted_name));
+				    					if(empty($city_slug)){
+				    						$this->sm->store_slug(array('slug_type'=>'2','slug_value'=>$formatted_name,'slug_type_id'=>$city_id));
+				    					}
+			    					}
+			    					
+
+			    					$college_formated_name=url_slug($name.' '.$city_data->city_name.' '.$state_data->state_name);
+			    					$college_access_url_slug=base_url().$country_code.'/'.$college_formated_name;
+
+			    					$college_data_to_insert=array(
+			    						'college_country_id'=>'99',
+			    						'college_state_id'=>$state_id,
+			    						'college_city_id'=>$city_id,
+			    						'college_district_id'=>$district_id,
+			    						'college_university_id'=>$university_id,
+			    						'college_name'=>$name,
+			    						'college_estd_year'=>$estd,
+			    						'college_address'=>$address,
+			    						'college_zipcode'=>$pincode,
+			    						'college_email'=>strtolower($email),
+			    						'college_phone_no'=>$phno,
+			    						'college_status'=>'1',
+			    						'college_is_top'=>'2',
+			    						'college_is_top_visible_home'=>'2',
+			    						'college_is_top_ranked'=>'2',
+			    						'is_verified_by_admin'=>'2',
+			    						'access_url'=>$college_formated_name,
+			    						'access_url_slug'=>$college_access_url_slug,
+			    						'created_by'=>$user_id,
+			    						'created_at'=>date('Y-m-d H:i:s')
+			    					);
+
+			    					//print_obj($college_data_to_insert);die;
+
+									$college_profile_id=$this->im->add_college_data($college_data_to_insert);
+
+									if($college_profile_id){
+										$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+										$user_name  =	strtolower($email);    
+			      						$user_name 	= 	substr($user_name, 0, strpos($user_name, "@"));
+			      						$user_name 	= 	strtoupper($user_name).'_'.generate_string(8);
+
+										$college_id=$this->um->add_user_data(array('user_role'=>'4','user_profile_pk_id'=>$college_profile_id,'user_name'=>$user_name,'user_password'=>$password,'user_password_visible'=>encode_data('Password@123'),'created_by'=>$user_id));
+
+										if($college_id){
+											$this->im->update_college_data(array('college_user_id'=>$college_id),array('college_id'=>$college_profile_id));
+										}
+
+										$college_slug=$this->sm->get_slug(array('slug_type'=>'7','slug_value'=>$college_formated_name));
+				    					if(empty($college_slug)){
+				    						$this->sm->store_slug(array('slug_type'=>'7','slug_value'=>$college_formated_name,'slug_type_id'=>$college_id));
+				    					}
+									}
+
+									$data_imported=TRUE;			    					
+			    				}
+							}
+
+							//die;
+							
+
+							if($data_imported==TRUE){
+								@unlink($file_path);
+								$return['success']='Data imported successfully';
+							}else{
+								$return['error']='Data not imported into the system';
+							}
+						}else{
+							$return['error']=$validated['error'];
+						}
+					}else{
+						$return['error']='File upload error';
+					}
+
+				}else{
+					$return['error']='Excel file is missing';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onValidateCollegeExcel($uploaded_file){
+		if($uploaded_file!=''){
+			$row_arrays=array(
+				'S.No',
+				'Name',
+				'Email',
+				'Phone No',
+				'Estd. Date',
+				'Country',
+				'State',
+				'District',
+				'City',
+				'Address',
+				'Pincode',
+				'University'
+			);
+
+			$heading=$this->excel->getRangedColumnData($uploaded_file,'A','L',true,false);
+
+			$diff = array_diff($heading[0][0], $row_arrays);
+
+			if(empty($diff) && (count($heading[0][0])===12)){
+				$count=1;
+
+			    $exceldata=$this->excel->getRangedColumnData($uploaded_file,'A','L',true,false);
+
+			    //print_obj($exceldata);die;
+
+			    $table_rows='';
+			    if($exceldata!='' || !empty($exceldata)){
+			    	// foreach ($exceldata as $key => $value){
+			    	// 	$count++;
+	    			// 	$row=$key+2;
+
+	    			// 	$name	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][1]))):'';
+	    			// 	$email	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][2]))):'';
+	    			// 	$phno	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][3]))):'';
+	    			// 	$estd	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][4]))):'';
+	    			// 	$country	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][5]))):'';
+	    			// 	$state	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][6]))):'';
+	    			// 	$district	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][7]))):'';
+	    			// 	$city	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][8]))):'';
+	    			// 	$address	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][9]))):'';
+	    			// 	$pincode	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][10]))):'';
+	    			// 	$university	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][11]))):'';
+
+	    				
+			    	// }
+
+			    	unset($exceldata[0]);
+
+			    	return ['validated'=>200,'exceldata'=>$exceldata];
+			    }else{
+			    	//return 'Excel data format is wrong.Please download the sample excel for your reference 1';
+			    	$table_rows='';
+			    	return ['validated'=>400,'table_rows'=>$table_rows,'error'=>'Excel data format headings are wrong.Please download the sample excel for your reference'];
+			    }
+			}else{
+				$table_rows='';
+				//return 'Excel data format is wrong.Please download the sample excel for your reference 2';
+				return ['validated'=>400,'table_rows'=>$table_rows,'error'=>'Excel data format headings are wrong.Please download the sample excel for your reference'];
+			}
+		}else{
+			return ['error'=>'Excel file not selected'];
+		}
+	}
+
+	public function onValidateCollegeExcel2($uploaded_file){
+		if($uploaded_file!=''){
+			$row_arrays=array(
+				'S.No',
+				'Name',
+				'Email',
+				'Phone No',
+				'Estd. Date',
+				'District',
+				'City',
+				'Address',
+				'Pincode'
+			);
+
+			$heading=$this->excel->getRangedColumnData($uploaded_file,'A','I',true,false);
+
+			$diff = array_diff($heading[0][0], $row_arrays);
+
+			if(empty($diff) && (count($heading[0][0])===9)){
+				$count=1;
+
+			    $exceldata=$this->excel->getRangedColumnData($uploaded_file,'A','I',true,false);
+
+			    //print_obj($exceldata);die;
+
+			    $table_rows='';
+			    if($exceldata!='' || !empty($exceldata)){
+			    	// foreach ($exceldata as $key => $value){
+			    	// 	$count++;
+	    			// 	$row=$key+2;
+
+	    			// 	$name	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][1]))):'';
+	    			// 	$email	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][2]))):'';
+	    			// 	$phno	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][3]))):'';
+	    			// 	$estd	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][4]))):'';
+	    			// 	$country	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][5]))):'';
+	    			// 	$state	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][6]))):'';
+	    			// 	$district	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][7]))):'';
+	    			// 	$city	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][8]))):'';
+	    			// 	$address	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][9]))):'';
+	    			// 	$pincode	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][10]))):'';
+	    			// 	$university	=	isset($value[0][1])?strip_javascript(xss_clean(trim($value[0][11]))):'';
+
+	    				
+			    	// }
+
+			    	unset($exceldata[0]);
+
+			    	return ['validated'=>200,'exceldata'=>$exceldata];
+			    }else{
+			    	//return 'Excel data format is wrong.Please download the sample excel for your reference 1';
+			    	$table_rows='';
+			    	return ['validated'=>400,'table_rows'=>$table_rows,'error'=>'Excel data format headings are wrong.Please download the sample excel for your reference'];
+			    }
+			}else{
+				$table_rows='';
+				//return 'Excel data format is wrong.Please download the sample excel for your reference 2';
+				return ['validated'=>400,'table_rows'=>$table_rows,'error'=>'Excel data format headings are wrong.Please download the sample excel for your reference'];
+			}
+		}else{
+			return ['error'=>'Excel file not selected'];
+		}
+	}
+
+
+	public function onPreviewExcel(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+
+				$user_id=decode_data(session_userdata('admin_id'));
+				$data_imported=FALSE;
+
+				$table_rows='';
+
+				$state=post_data('country_states');
+				$university=post_data('country_universities');
+
+				$state_id=decode_data($state);
+				$university_id=decode_data($university);
+
+				if(isset($_FILES['college_excel']) && $_FILES['college_excel']['name']!=''){
+
+					$excel_data=array(
+						'file_size'=>'10',
+						'file_name'=>'college_excel',
+						'file_types'=>'xls,xlsx',
+					);
+
+					$file_path=$this->onUploadFiles($excel_data,'excel_import');
+
+					if(is_file($file_path)){
+						$validated=$this->onValidateCollegeExcel2($file_path);
+
+						//print_obj($validated);die;
+
+						if($validated['validated']==200){
+							$exceldata=$validated['exceldata'];
+
+							$i=1;
+
+							$email_duplicate='2';
+							$phone_duplicate='2';
+							$college_name_duplicate='2';
+
+							foreach ($exceldata as $_key => $_value) {
+					    		$_exceldata[]=array_filter($_value[0]);
+					    	}
+
+							foreach ($_exceldata as $key => $value){
+
+								$row=$key+1;								
+
+			    				$name		=	isset($value[1])?strip_javascript(xss_clean(trim($value[1]))):'';
+			    				$email		=	isset($value[2])?strip_javascript(xss_clean(trim($value[2]))):'';
+			    				$phno		=	isset($value[3])?strip_javascript(xss_clean(trim($value[3]))):'';
+			    				$estd		=	isset($value[4])?strip_javascript(xss_clean(trim($value[4]))):'';			    				
+			    				$district	=	isset($value[5])?strip_javascript(xss_clean(trim($value[5]))):'';
+			    				$city		=	isset($value[6])?strip_javascript(xss_clean(trim($value[6]))):'';
+			    				$address	=	isset($value[7])?strip_javascript(xss_clean(trim($value[7]))):'';
+			    				$pincode	=	isset($value[8])?strip_javascript(xss_clean(trim($value[8]))):'';
+
+			    				$city_data=$this->com->get_city(array('city_country_id'=>'99','city_state_id'=>$state,'city_name'=>$city));
+		    					if(!empty($city_data)){
+		    						$city_id=$city_data->city_id;
+		    					}
+
+		    					if(isset($city_id)){
+		    						$college_data=$this->um->get_user_data(null,array('college_email'=>$email,'college_phone_no'=>$phno,'college_city_id'=>$city_id),'4',FALSE);
+		    					}else{
+		    						$college_data=$this->um->get_user_data(null,array('college_email'=>$email,'college_phone_no'=>$phno),'4',FALSE);
+		    					}
+
+		    					//print_obj($college_data);die;
+			    				
+
+			    				if(empty($college_data)){
+			    					if($college_data->college_email==$email){
+			    						$email_duplicate='1';
+			    					}
+
+			    					if($college_data->college_phone_no==$phno){
+			    						$phone_duplicate='1';
+			    					}
+
+			    					if($college_data->college_name==$name){
+			    						$college_name_duplicate='1';
+			    					}
+			    				}
+
+
+			    				$data_preview[]=array(
+			    					'college_name'=>$college_name_duplicate.'#'.$name,
+			    					'college_email'=>$email_duplicate.'#'.$email,
+			    					'college_phone'=>$phone_duplicate.'#'.$phno,
+			    					'college_estd'=>$estd,
+			    					'college_district'=>$district,
+			    					'college_city'=>$city,
+			    					'college_address'=>$address,
+			    					'college_pincode'=>$pincode
+			    				);
+							}
+
+							//print_obj($data_preview);die;
+
+							$this->data['data_preview']=$data_preview;
+
+							$return['html']=$this->theme->view('_pages/users/vw_import_excel_data_preview',$this->data,true);
+
+				
+						}else{
+							$return['error']=$validated['error'];
+						}
+					}else{
+						$return['error']='File upload error';
+					}
+				}else{
+					$return['error']='Excel file is missing';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onChangeSingleCollegData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$college_id=decode_data($_college);
+
+				$_field=post_data('_field');
+				$field=decode_data($_field);
+
+				//echo $college_id;
+
+				$field_data=post_data('_field_data');
+
+				$data=array($field=>$field_data);
+
+				//print_obj($data);die;
+
+				$updated=$this->im->update_college_data($data,array('college_id'=>$college_id));
+
+				if($updated){
+					$return['success']='Data updated';
+				}else{
+					$return['error']='Data not updated';
+				}
+
+
+			}else{
+				$return['redirect']=$this->data['admin_base_url'];
+			}
+		}else{
+			$return['redirect']=$this->data['admin_base_url'];
+		}
+
+		header('Content-Type: application/json');
+
+		echo json_encode($return);
+		session_write_close();
+	}
+
+
+	public function onExportCollegesToSearch(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$data_to_store=array();
+
+				$system_temp=$this->sm->get_system_temp(array('temp_type'=>'COLLEGE_NAME'));
+
+				//print_obj($system_temp);
+
+				if(!empty($system_temp)){
+					$length=$system_temp->temp_length;
+					if($system_temp->temp_offset>0){
+			            $offset=$system_temp->temp_offset+1;
+			        }else{
+			            $offset=$system_temp->temp_offset;
+			        }
+				}else{
+					$length='1000';
+					$offset='0';
+				}
+
+				//echo $offset;
+
+				$param['order'] = array('college_id' => 'ASC');
+
+		        $posts=$this->input->post();
+
+		        $posts['length']=$length;	        
+
+
+				$total_count=$this->im->_get_college_data($posts,$param,TRUE,FALSE);				
+
+				if($offset<=$total_count){
+					$posts['start']=$offset;
+					$list=$this->im->_get_college_data($posts,$param,FALSE,FALSE);
+
+					//print_obj($list);die;
+
+					if(!empty($list)){
+						foreach ($list as $key => $value) {					
+
+							$country_data=$this->com->get_country(array('country_id'=>$value->college_country_id));
+							$state_data=$this->com->get_state(array('state_id'=>$value->college_state_id,'state_country_id'=>$value->college_country_id));
+							$city_data=$this->com->get_city(array('city_country_id'=>$value->college_country_id,'city_state_id'=>$value->college_state_id));
+
+							$search_data_found=$this->sm->__get_system_search_data(array('search_data_type_id'=>$value->college_user_id,'search_data_type'=>'COLLEGE_NAME'));
+
+							$keywords=$country_data->country_name.','.$state_data->state_name.','.$city_data->city_name.','.$value->college_name;
+
+							$meta_keywords=generateKeywordsFromText($keywords);
+
+							$storage=$this->sm->get_user_file(array('user_file_type_id'=>$value->college_user_id,'user_storage_type'=>'user_logo'));
+
+							if(!empty($storage)){
+								$storage_url=$storage->media_disk_path_relative.'?tr=h-50,w-50,c-force';
+							}else{
+								$storage_url=null;
+							}
+
+							if(!empty($search_data_found)){
+								$data_to_store['updated_array'][]=array(
+									'search_data_type_id'=>$value->college_user_id,
+									'search_data_type'=>'COLLEGE_NAME',
+									'search_data_name'=>$value->college_name,
+									'search_data_country_id'=>$value->college_country_id,
+									'search_data_country'=>$country_data->country_name,
+									'search_data_state_id'=>$value->college_state_id,
+									'search_data_state_name'=>$state_data->state_name,
+									'search_data_city_id'=>$value->college_city_id,
+									'search_data_city_name'=>$city_data->city_name,
+									'search_data_address'=>$value->college_address,
+									'search_data_meta_title'=>NULL,
+									'search_data_meta_desc'=>NULL,
+									'search_data_meta_keywords'=>$meta_keywords,
+									'search_data_access_url'=>base_url().strtolower($country_data->country_iso_code_2).'/'.$value->access_url_slug,
+									'search_storage_access_url'=>$storage_url
+								);
+							}else{
+								$data_to_store['insert_array'][]=array(
+									'search_data_type_id'=>$value->college_user_id,
+									'search_data_type'=>'COLLEGE_NAME',
+									'search_data_name'=>$value->college_name,
+									'search_data_country_id'=>$value->college_country_id,
+									'search_data_country'=>$country_data->country_name,
+									'search_data_state_id'=>$value->college_state_id,
+									'search_data_state_name'=>$state_data->state_name,
+									'search_data_city_id'=>$value->college_city_id,
+									'search_data_city_name'=>$city_data->city_name,
+									'search_data_address'=>$value->college_address,
+									'search_data_meta_title'=>NULL,
+									'search_data_meta_desc'=>NULL,
+									'search_data_meta_keywords'=>$meta_keywords,
+									'search_data_access_url'=>base_url().strtolower($country_data->country_iso_code_2).'/'.$value->access_url_slug,
+									'search_storage_access_url'=>$storage_url
+								);
+							}
+
+							$offset++;
+						}
+
+
+						//print_obj($data_to_store);die;
+
+						if(!empty($data_to_store) && is_array($data_to_store)){
+							if(isset($data_to_store['update_array'])){
+		                        $updated=$this->sm->update_system_search_data($data_to_store['update_array'],'search_data_type_id',TRUE);
+		                    }else if(isset($data_to_store['insert_array'])){
+		                        $updated=$this->sm->store_system_search_data($data_to_store['insert_array'],TRUE);
+		                    }                    
+
+		                    if($updated){
+		                        $this->sm->update_temp(array('temp_offset'=>$offset),array('temp_id'=>'1','temp_type'=>'COLLEGE_NAME'));
+		                        $return['success']='Data updated';
+		                        //pre(count($dump_data));
+		                    }else{
+		                        $return['error']='Data not updated';
+		                    }
+						}else{
+							$return['error']='Data error';
+						}
+					}else{
+						$return['error']='No data found';
+					}
+				}else{
+					// $posts['start']='0';
+					// $list2=$this->im->_get_college_data($posts,$param,FALSE,FALSE);
+
+					// foreach ($list2 as $key => $value) {
+					// 	$country_data=$this->com->get_country(array('country_id'=>$value->college_country_id));
+					// 	$access_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$value->access_url_slug;
+					// 	$this->im->update_college_data(array('access_url'=>$access_url),array('college_user_id'=>$value->college_user_id));
+
+					// }
+
+
+
+					$return['error']='No data needs to be updated';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);	
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onSendToSearch(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$datas=post_data('search_type_ids');
+				$data_type=post_data('data_type');
+
+				//echo $data_type;die;
+
+				if($data_type=='college'){
+
+					if(!empty($datas)){
+
+						$_datas=char_separated_to_array($datas);
+
+						foreach ($_datas as $key => $value) {
+							$param['user_id']=$value;
+							$college_data=$this->im->_get_college($param);
+
+							if(!empty($college_data)){
+
+								$slug_data=$this->sm->get_slug_urls(array('url_type_id'=>$college_data->college_user_id,'url_type'=>'college_static_url'));
+								$country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+								$state_data=$this->com->get_state(array('state_id'=>$college_data->college_state_id,'state_country_id'=>$college_data->college_country_id));
+								$city_data=$this->com->get_city(array('city_country_id'=>$college_data->college_country_id,'city_id'=>$college_data->college_city_id));
+
+								$search_data_found=$this->sm->__get_system_search_data(array('search_data_type_id'=>$college_data->college_user_id,'search_data_type'=>'COLLEGE_NAME'));
+
+								$storage=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_logo'));
+
+								if(!empty($storage)){
+									$storage_url=$storage->media_disk_path_relative.'?tr=h-50,w-50,c-force';
+								}else{
+									$storage_url=null;
+								}
+
+								$college_name=str_replace('&amp;', 'and', $college_data->college_name);
+								$college_short_name=acronym($college_name);
+
+								if(empty($college_data->college_short_name)){
+									$this->im->update_college_data(array('college_short_name'=>$college_short_name),array('college_id'=>$college_data->college_id));
+								}
+
+								if(!empty($college_data->college_course_ids)){
+									//$ccourse_ids=char_separated_to_array($college_data->college_course_ids);
+
+									$search_data_course_ids=$college_data->college_course_ids;
+									$user_courses=$this->im->get_group_concat_user_course_data('course_name','course_id',$college_data->college_course_ids);
+
+									$user_courses_short_name=$this->im->get_group_concat_user_course_data('course_short_name','course_id',$college_data->college_course_ids);
+									
+								}else{
+									$search_data_course_ids=null;
+									$user_courses=null;
+									$user_courses_short_name=null;
+								}
+
+
+
+								$data_to_store['insert_array'][]=array(
+									'search_data_type_id'=>$college_data->college_user_id,
+									'search_data_type'=>'COLLEGE_NAME',
+									'search_data_name'=>$college_name,
+									'search_data_short_name'=>$college_short_name,
+									'search_data_country_id'=>$college_data->college_country_id,
+									'search_data_country'=>$country_data->country_name,
+									'search_data_state_id'=>$college_data->college_state_id,
+									'search_data_state_name'=>$state_data->state_name,
+									'search_data_city_id'=>$college_data->college_city_id,
+									'search_data_city_name'=>$city_data->city_name,
+									'search_data_course_ids'=>$search_data_course_ids,
+									'search_data_course_name'=>(!empty($user_courses))?strtolower($user_courses->concated_value):null,
+									'search_data_course_short_name'=>(!empty($user_courses_short_name))?strtolower($user_courses_short_name->concated_value):null,
+									'search_data_address'=>$college_data->college_address,
+									'search_data_meta_title'=>(!is_null($slug_data->url_meta_title))?str_replace('&', 'and', $slug_data->url_meta_title):null,
+									'search_data_meta_desc'=>(!is_null($slug_data->url_meta_desc))?str_replace('&', 'and',$slug_data->url_meta_desc):null,
+									'search_data_og_title'=>(!is_null($slug_data->url_meta_title))?str_replace('&', 'and', $slug_data->url_meta_title):null,
+									'search_data_og_desc'=>(!is_null($slug_data->url_meta_desc))?str_replace('&', 'and',$slug_data->url_meta_desc):null,
+									'search_data_meta_keywords'=>(!is_null($slug_data->url_meta_key_words))?str_replace(' ', '', str_replace(', 0','', str_replace('&', 'and', $slug_data->url_meta_key_words))):null,
+									'search_data_access_url'=>(!is_null($slug_data->url_value))?$slug_data->url_value:null,
+									'search_storage_access_url'=>$storage_url
+								);
+							}		
+						}
+
+						if(!empty($data_to_store) && is_array($data_to_store)){
+							$updated=$this->sm->store_system_search_data($data_to_store['insert_array'],TRUE);
+							if($updated){
+		                        $return['success']='Data updated';
+		                    }else{
+		                        $return['error']='Data not updated';
+		                    }
+						}else{
+							$return['error']='No data selected to export';
+						}
+					}else{
+						$return['error']='Colleges not selected.';
+					}
+
+					header('Content-Type: application/json');
+
+					echo json_encode($return);
+					session_write_close();
+				}
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+
+	//College Gallery
+
+	public function onAddCollegeGalleryFiles(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$college_id=decode_data($_college);
+				$college_gallery_category=$this->input->post('college_gallery_category');
+
+				$slug_found=$this->sm->get_slug(array('slug_type_id'=>$college_id,'slug_type'=>'7'));
+
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$college_id));
+
+				$folder_name=$slug_found->slug_value;
+
+				$user_storage_type_data=$this->sm->get_gallery_types(array('gallery_type_alias'=>$college_gallery_category));
+
+				$college_gallery_image_alt=post_data('college_gallery_image_alt');
+				$college_gallery_image_caption=post_data('college_gallery_image_caption');
+				$college_gallery_image_description=post_data('college_gallery_image_description');
+
+				//echo $user_storage_type;die;
+
+				if(!in_array($college_gallery_category, array('user_intro_video','user_youtube_video_gallery','user_youtube_video_gallery_academic_building'))){
+					if(isset($_FILES['college_gallery_image']) && $_FILES['college_gallery_image']['name']!=''){
+						// $file_banner_found=$this->sm->get_user_file(array('user_storage_type'=>$user_storage_type,'user_file_type'=>'4','user_file_type_id'=>$college_id));
+
+						// if(!empty($file_banner_found)){
+						// 	if(is_file($file_banner_found->media_disk_path)){
+						// 		@unlink($file_banner_found->media_disk_path);
+						// 		$this->sm->delete_file(array('storage_id'=>$file_banner_found->storage_id));
+						// 	}
+						// }
+
+						if(is_string($_FILES['college_gallery_image']['name'])){
+							$ext = pathinfo($_FILES['college_gallery_image']['name'], PATHINFO_EXTENSION);
+						}else if(is_array($_FILES['college_gallery_image']['name'])){
+							$ext = pathinfo($_FILES['college_gallery_image']['name'][0], PATHINFO_EXTENSION);
+						}
+
+						$gallery_data=array(
+							'file_size'=>'25',
+							'file_name'=>'college_gallery_image',
+							'file_types'=>'png,jpg,jpeg,webp',
+							'file_folder'=>'colleges',
+							'file_child_folder'=>$folder_name,
+							'file_compress'=>($ext==='webp')?false:true,
+							'file_compress_protocol'=>'webp',
+							'file_uploaded_by'=>$this->data['userdata']->user_id
+						);
+
+						$file_id=$this->onUploadFiles($gallery_data);
+
+						if(!empty($file_id) && $file_id>0){
+							//$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_file_type'=>'4','user_storage_type'=>$user_storage_type));
+
+							if(!$college_gallery_category!='user_banner'){
+								$user_gallery_storage_data=array(
+					            	'user_file_storage_id'=>$file_id,
+					            	'user_file_type'=>'4',
+					            	'user_file_type_id'=>$college_id,
+					            	'user_storage_type'=>$college_gallery_category,
+					            	'user_storage_type_2'=>$user_storage_type_data->gallery_type_id,
+					            	'user_storage_type_3'=>'gallery_files',
+					            	'user_file_alt_title'=>$college_gallery_image_alt,
+					            	'user_file_caption'=>$college_gallery_image_caption
+					            );
+							}else{
+								$user_gallery_storage_data=array(
+					            	'user_file_storage_id'=>$file_id,
+					            	'user_file_type'=>'4',
+					            	'user_file_type_id'=>$college_id,
+					            	'user_storage_type'=>$college_gallery_category,
+					            	'user_storage_type_2'=>$user_storage_type_data->gallery_type_id,
+					            	'user_file_alt_title'=>$college_gallery_image_alt,
+					            	'user_file_caption'=>$college_gallery_image_caption
+					            );
+							}
+					            
+
+				            $this->sm->store_user_file($user_gallery_storage_data);
+
+				            $return['success']='File uploaded successfully';
+							
+				        }else{
+				        	$return['error']='File not uploaded';
+				        }
+					}else{
+						$return['error']='No file selected';
+					}
+				}else{
+					$college_file_video=post_data('college_gallery_video_link');
+
+					if(!empty($college_file_video)){
+						$param['youtube_link']=$college_file_video;
+						$param['youtube_video_name']=$college_data->college_name;
+						$param['youtube_video_parent_id']=$college_id;
+
+						$gallery_types=$this->sm->get_gallery_types(array('gallery_type_alias'=>$college_gallery_category));
+
+						$gallery_type_id=$gallery_types->gallery_type_id;
+
+						$file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>$college_gallery_category,'user_file_type_id'=>$college_id,'media_disk_path_relative'=>$college_file_video));
+
+						if(!empty($file_intro_video_found)){
+							if(is_file($file_intro_video_found->media_disk_path)){
+								$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+								$this->sm->delete_user_file(array('user_file_storage_id'=>$file_intro_video_found->user_file_storage_id,'user_file_type_id'=>$college_id,'user_storage_type'=>$college_gallery_category));
+							}
+						}
+
+						$video_id=$this->onUploadFiles($param,'youtube');
+
+						if(!empty($video_id) && $video_id>0){
+							$user_intro_video_storage_data=array(
+				            	'user_file_storage_id'=>$video_id,
+				            	'user_file_type_id'=>$college_id,
+				            	'user_file_type'=>'4',
+				            	'user_storage_type'=>$college_gallery_category,
+				            	'user_storage_type_2'=>$gallery_type_id,
+				            	'user_storage_type_3'=>'gallery_files'
+				            );
+
+				            $this->sm->store_user_file($user_intro_video_storage_data);
+
+				            $return['success']='File has been uploaded';
+						}else{
+							$return['error']=$video_id;
+						}
+
+
+							// if($user_storage_type=='user_intro_video'){
+							// 	$file_intro_video_found=$this->sm->get_user_file(array('user_storage_type'=>'user_intro_video','user_file_type_id'=>$college_id));
+
+							// 	if(!empty($file_intro_video_found)){
+							// 		if(is_file($file_intro_video_found->media_disk_path)){
+							// 			@unlink($file_intro_video_found->media_disk_path);
+							// 			$this->sm->delete_file(array('storage_id'=>$file_intro_video_found->storage_id));
+							// 		}
+							// 	}
+							// }
+
+							// $video_id=$this->onUploadFiles($param,'youtube');
+
+							// if(!empty($video_id) && $video_id>0){
+							// 	if($user_storage_type=='user_intro_video'){
+							// 		$this->sm->delete_user_file(array('user_file_type_id'=>$college_id,'user_storage_type'=>'user_intro_video'));
+							// 	}
+								
+						  //           $user_intro_video_storage_data=array(
+						  //           	'user_file_storage_id'=>$video_id,
+						  //           	'user_file_type_id'=>$user_pk_id,
+						  //           	'user_file_type'=>'4',
+						  //           	'user_storage_type'=>$user_storage_type,
+						  //           	'user_storage_type_2'=>'gallery_files'
+						  //           );
+
+						  //           $this->sm->store_user_file($user_intro_video_storage_data);
+						  //       }else{
+						  //       	$return['error']='No video uploaded';
+						  //       }
+					}else{
+						$return['error']='No videos provided to upload';
+					}	
+				}
+					
+				
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onDeleteCollegeGalleryFiles(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$college_id=decode_data($_college);
+
+				$_file=post_data('_file');
+				$file_id=decode_data($_file);
+
+				$user_file=$this->sm->get_user_file(array('user_file_storage_id'=>$file_id,'user_file_type_id'=>$college_id,'user_file_type'=>'4'));
+
+				if(!empty($user_file)){
+
+					if(is_file($user_file->media_disk_path)){
+						@unlink($user_file->media_disk_path);
+						$this->sm->delete_user_file(array('user_file_storage_id'=>$file_id,'user_file_type_id'=>$college_id,'user_file_type'=>'4'));
+						$this->sm->delete_file(array('storage_id'=>$file_id));
+						$return['success']='File deleted successfully';
+					}else if(!is_file($user_file->media_disk_path)){
+						$this->sm->delete_user_file(array('user_file_storage_id'=>$file_id,'user_file_type_id'=>$college_id,'user_file_type'=>'4'));
+						$this->sm->delete_file(array('storage_id'=>$file_id));
+						$return['success']='File deleted successfully';
+					}
+					else{
+						$return['error']='File not deleted from the system';
+					}
+
+				}else{
+					$return['error']='File not found in the system';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchCollegeGalleryFiles(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+				$param['column_order'] = array(
+					null,
+					'media_org_name'
+				);
+
+				$param['column_search'] = array('media_org_name');
+				$param['order'] = array('storage_id' => 'DESC');
+
+				$param['user_storage_type_3']='gallery_files';
+
+				$posts=$this->input->post();
+
+				$college_id=decode_data($posts['_college']);
+
+				//echo $college_id;die;
+
+				$param['user_file_type_id']=$college_id;
+
+				$list = $this->sm->_get_gallery_files($posts,$param,FALSE,FALSE);
+
+				//print_obj($list);die;
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $file){
+					$no++;
+
+					$row = array();
+
+					$action='<div class="btn-group btn-group-sm">
+						<button class="btn btn-xs btn-dark btn_del_college_gallery_file" data-aid="'.encode_data($file->storage_id).'" data-cid="'.encode_data($file->user_file_type_id).'">Delete</button>
+						</div>';
+
+					if($file->media_mime=='image/jpeg' || $file->media_mime=='image/png' || $file->media_mime=='image/jpg' || $file->media_mime=='image/webp'){
+						$file_data='<img src="'.$file->media_disk_path_relative.'" class="table-user-thumb" alt="">';
+					}else if($file->media_mime=='youtube'){
+						$file_data='<a href="'.$file->media_disk_path_relative.'" target="_blank">'.$file->media_disk_path_relative.'</a>';
+					}
+	                
+					
+					$row[]	=	$no;
+					$row[]	=	$file->gallery_type;
+					$row[]	=	$file_data;	
+
+					$row[]  =	$action;	
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->sm->_get_gallery_files($posts,$param,TRUE),
+					"recordsFiltered" => $this->sm->_get_gallery_files($posts,$param,TRUE),
+					"data" => $data,
+				);
+				
+				echo json_encode($output);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	//College Gallery
+
+
+	//College Listing package
+
+	public function onGetCollegeListingdata(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+
+				$college_id=decode_data($_college);
+
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	//College Courses
+
+	public function onGetCollegeAssignedCourses(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$courses=array();
+
+				$college=post_data('college');
+
+				$_college_id=decode_data($college);
+
+				$college_data=$this->im->get_college_profile_data(array('college_id'=>$_college_id));
+
+				//echo $college_data->college_user_id;die;
+
+				$college_course_data=$this->im->get_user_course_data(array('user_id'=>$college_data->college_user_id,'user_type'=>'4'),FALSE);
+
+				//print_obj($college_course_data);die;
+
+				if(!empty($college_course_data)){
+					foreach ($college_course_data as $key => $value) {
+						$course_ids[]=$value->user_course;
+					}
+				}else{
+					$course_ids=array();
+				}
+
+				//print_obj($course_ids);die;
+
+
+				$param['column_search'] = array('course_name');
+				$param['order'] = array('course_id' => 'ASC');
+				$posts=$this->input->post();
+
+				if(!empty($posts['_search_param'])){
+					$post['search']['value']=$posts['_search_param'];
+				}
+
+				if(isset($post)){
+					$list = $this->strm->_get_courses($post,$param,FALSE,FALSE);
+				}else{
+					$list = $this->strm->_get_courses(null,$param,FALSE,FALSE);
+				}
+
+
+				$selction_type=post_data('selction_type');
+
+				foreach ($list as $key => $course) {
+
+					$sub_stream_data=$this->strm->get_course_sub_stream(array('sub_stream_id'=>$course->course_sub_stream,'sub_stream_parent_id'=>$course->course_stream));
+
+					$courses[]=array(
+						'course_id'=>encode_data($course->course_id),
+						'course_name'=>$course->course_name,
+						'course_short_name'=>($course->course_short_name!=null)?'['.$course->course_short_name.']':'',
+						'course_sub_stream'=>(!empty($sub_stream_data))?' ( '.$sub_stream_data->sub_stream_name.' )':'',
+						'course_lateral'=>($course->course_is_lateral=='1')?'{ Lateral }':'',
+						'checked'=>(in_array($course->course_id, $course_ids))?'checked':'',
+						'selected'=>(in_array($course->course_id, $course_ids))?'selected="selected"':''
+						
+					);
+				}
+
+				//print_obj($courses);die;
+
+				if($selction_type=='checkbox'){
+					$chunked=array_chunk($courses,2);
+					$this->data['courses']=$chunked;
+				}else{
+					$this->data['courses']=$courses;
+				}
+
+					
+
+				$this->data['selction_type']=$selction_type;
+
+
+				$return['html']=$this->theme->view('_pages/users/vw_assigned_courses_data_dyna',$this->data,true);
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	//College categories
+
+	public function onGetCollegeAssignedCategories(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$courses=array();
+
+				$college=post_data('college');
+				$college_country=post_data('college_country');
+
+				$country_id=decode_data($college_country);
+
+				//echo $country_id;die;
+
+				$_institute_types=array();
+
+				$_college_id=decode_data($college);
+
+				$college_data=$this->im->get_college_profile_data(array('college_id'=>$_college_id));
+
+				$category_ids=char_separated_to_array($college_data->college_category_ids);
+
+				$institute_types=$this->im->get_institute_categories(array('inst_category_country_id'=>$country_id),FALSE);
+
+
+				if(!empty($institute_types)){
+					foreach ($institute_types as $key => $value) {
+						$_institute_types[]=array(
+							'inst_category_id'=>encode_data($value->inst_category_id),
+							'inst_category_name'=>$value->inst_category_name,
+							'inst_category_short_name'=>$value->inst_category_short_name,
+							'checked'=>(in_array($value->inst_category_id, $category_ids))?'checked':''
+						);
+					}
+				}
+
+				$chunked=array_chunk($_institute_types,2);
+
+				//print_obj($chunked);die;
+
+				$this->data['categories']=$chunked;
+
+
+				$return['html']=$this->theme->view('_pages/users/vw_assigned_categories_data_dyna',$this->data,true);
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onAssignCollegeCourses(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college=post_data('college');
+				$course_streams=$this->input->post('course_streams');
+
+				//print_obj($course_streams);die;
+
+				if($college!=''){
+
+					$college_id=decode_data($college);
+
+					//echo $college_id;die;
+
+					$college_data=$this->im->get_college_profile_data(array('college_id'=>$college_id));
+
+					//echo $college_id;die;
+
+					if(!empty($course_streams) && is_array($course_streams)){
+						foreach ($course_streams as $key => $value) {
+							$cid=decode_data($value);
+							$course_data=$this->strm->get_course(array('course_id'=>$cid));
+							$_course_ids[]=$cid;
+							$_streams_ids[]=$course_data->course_stream;
+						}
+
+						//print_obj(array_filter($_streams_ids));die;
+
+						$course_ids=char_separated(array_filter($_course_ids));
+						$stids=array_filter($_streams_ids);
+						$streams_ids=char_separated($stids);
+
+						$data=array(
+							'college_course_ids'=>$course_ids,
+							'college_streams_ids'=>$streams_ids
+						);
+
+						$updated=$this->im->update_college_data($data,array('college_id'=>$college_id));
+						if($updated){
+
+
+							foreach ($course_streams as $key => $value) {
+								$_cid=decode_data($value);
+								$_course_data=$this->strm->get_course(array('course_id'=>$_cid));
+
+								$user_course_found=$this->im->get_user_course_data(array('user_id'=>$college_data->college_user_id,'user_course'=>$_cid));
+
+								if(empty($user_course_found) && !empty($college_data)){
+									$this->im->add_course_data(array('user_id'=>$college_data->college_user_id,'user_course'=>$_cid,'user_course_stream'=>$_course_data->course_stream,'user_type'=>'4'));
+								}
+							}
+
+							$return['success']='Courses assigned to the college.';
+						}else{
+							$return['error']='Data error.';
+						}
+					}else{
+						$return['error']='Select at least one course';
+					}
+				}else{
+					$return['error']='Data manipulation occurred';
+				}
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onAssignCollegeCategories(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college=post_data('college');
+				$college_categories=$this->input->post('college_categories');
+
+				//print_obj($college_categories);die;
+
+				if($college!=''){
+
+					$college_id=decode_data($college);
+
+					//echo $college_id;die;
+
+					$college_data=$this->im->get_college_profile_data(array('college_id'=>$college_id));
+
+					//echo $college_id;die;
+
+					if(!empty($college_categories) && is_array($college_categories)){
+						foreach ($college_categories as $key => $value) {
+							//echo decode_data($value);
+							$_inst_category_ids[]=decode_data($value);
+						}
+
+						//print_obj($_inst_category_ids);die;
+
+						//print_obj(array_filter($_streams_ids));die;
+
+						$inst_category_ids=char_separated(array_filter($_inst_category_ids));
+
+
+
+						$data=array(
+							'college_category_ids'=>$inst_category_ids
+						);
+
+						$updated=$this->im->update_college_data($data,array('college_id'=>$college_id));
+						if($updated){
+							$return['success']='Category assigned to the college.';
+						}else{
+							$return['error']='Data error.';
+						}
+					}else{
+						$return['error']='Select at least one category';
+					}
+				}else{
+					$return['error']='Data manipulation occurred';
+				}
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchCollegeCourses(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$param['column_order'] = array(
+					null,
+					'course_name'
+				);
+
+				$param['column_search'] = array('course_name');
+				$param['order'] = array('user_course_id' => 'DESC');
+				$param['user_type']='4';
+				
+				$posts=$this->input->post();
+
+				$param['user_id']=decode_data($posts['_college']);
+
+				$list = $this->im->_get_users_courses($posts,$param,FALSE,FALSE);
+
+				//print_obj($list);die;
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $course){
+					$no++;
+
+					$row = array();
+
+					//<a href="'.$this->data['admin_base_url'].'/institutions/colleges/add/'.encode_data($course->user_course).'/course_fees_'.encode_data($course->user_course_id).'" class="btn btn-xs btn-primary"><i class="fa fa-pen"></i></a>
+
+					if($course->is_popular=='1'){
+						$popular='<button type="button" class="btn btn-xs btn-success btn_course_is_popular" data-course_id="'.$course->user_course.'" data-college_id="'.$param['user_id'].'" data-popular_value="2" data-bs-toggle="tooltip" data-bs-placement="top" title="Make course Top in List"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>';
+					}else{
+						$popular='<button type="button" class="btn btn-xs btn-danger btn_course_is_popular" data-course_id="'.$course->user_course.'" data-college_id="'.$param['user_id'].'" data-popular_value="1" data-bs-toggle="tooltip" data-bs-placement="top" title="Make course Bottom in List"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>';
+					}
+
+					$action='<div class="btn-group btn-group-xs">'.$popular.'
+					<a href="'.$this->data['admin_base_url'].'/institutions/colleges/courses/add/'.$posts['_college'].'/'.encode_data($course->user_course_id).'" class="btn btn-xs btn-primary"><i class="fa fa-pen"></i></a>
+					<button class="btn btn-xs btn-warning btn_update_meta" data-college_id="'.$param['user_id'].'" data-course_id="'.$course->user_course.'" data-course_name="'.$course->course_short_name.'">Update Meta</button>
+					<button type="button" class="btn btn-xs btn-dark btn_del_ucourse" data-ucid="'.encode_data($course->user_course_id).'"><i class="fa fa-trash"></i></button>
+					</div>';
+
+					$total_cost=$this->im->get_user_course_grand_total(array('user_id'=>$param['user_id'],'user_course_id'=>$course->user_course),FALSE)[0]->total_cost;
+
+					$course_cost=number_to_currency(floatval($total_cost));//(isset($this->data['userdata']->currency_symbol_left) && $this->data['userdata']->currency_symbol_left!='')?$this->data['userdata']->currency_symbol_left.number_to_currency($total_cost):number_to_currency($total_cost).$this->data['userdata']->currency_symbol_right;
+
+					$course_ducration=($course->user_course_duration_month>0)?$course->user_course_duration_year.' year(s) '.$course->user_course_duration_month.' month(s)':$course->user_course_duration_year.' year(s)';
+					
+					$row[]	=	$no;
+					$row[]	=	ucwords($course->course_name).'('.$course->course_short_name.')';
+					$row[]	=	$course_ducration;
+					$row[]	=	$course_cost;
+					
+
+					$row[]  =	$action;	
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->im->_get_users_courses($posts,$param,TRUE),
+					"recordsFiltered" => $this->im->_get_users_courses($posts,$param,TRUE),
+					"data" => $data,
+				);
+
+				echo json_encode($output);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}	
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onUpdateCollegeCourseSingleData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+				$course_id=post_data('course_id');
+				$popular_value=post_data('popular_value');
+
+				$get_user_course=$this->im->get_user_course_data(array('user_course'=>$course_id,'user_id'=>$college_id));
+
+				if(!empty($get_user_course)){
+
+
+					$updated=$this->im->update_course_data(array('is_popular'=>$popular_value),array('user_course_id'=>$get_user_course->user_course_id,'user_course'=>$course_id,'user_id'=>$college_id));
+
+					if($updated){
+						$return['success']='Data updated successfully.';
+					}else{
+						$return['error']='data not updated.';
+					}
+
+				}else{
+					$return['error']='Course data not found in the system.';
+				}
+
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onAddCollegeCutoffData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$user_id=decode_data(session_userdata('admin_id'));
+
+				$posted = $this->input->post();
+
+				//print_obj($posted);die;
+
+				$college=$this->input->post('_college');
+				$college_id=decode_data($college);
+
+				//echo $college_id;
+
+				$cutoff_data=$_POST['college_cutoff'];
+				//print_obj($cutoff_data);die;
+
+				if(!empty($cutoff_data)){
+					foreach ($cutoff_data as $key => $value) {
+						$exam=decode_data($value['exams']);
+						$course=$value['courses'];
+						$year=$value['year'];
+						$round=$value['rounds'];
+
+						$categories=$value['categories'];
+						$sub_categories=$value['sub_categories'];
+						$mvalue=$value['value'];
+
+						$data_to_store[]=array(
+							'cutoff_type'=>'college',
+							'cutoff_type_id'=>$college_id,
+							'cutoff_exam_id'=>$exam,
+							'cutoff_course_id'=>$course,
+							'cutoff_category_id'=>$categories,
+							'cutoff_sub_category_id'=>$sub_categories,
+							'cutoff_rounds_id'=>$round,
+							'cutoff_marks'=>$mvalue,
+							'cutoff_year'=>$year,
+							'created_by'=>$user_id
+						);
+					}
+
+					//print_obj($data_to_store);die;
+
+					if(!empty($data_to_store)){
+
+						$this->strm->delete_cutoffs(array('cutoff_type'=>'college','cutoff_type_id'=>$college_id));
+						$added=$this->strm->store_cutoffs($data_to_store,TRUE);
+						if($added){
+							$return['success']='Cutoff added';
+						}else{
+							$return['error']='Cutoff not added';
+						}
+					}else{
+						$return['error']='Cutoff data not found to add.';
+					}
+				}else{
+					$return['error']='Cutoff data not found.';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onAddCollegeCourseData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+
+				$_college_user_course_pk_id=post_data('college_user_course_pk_id');
+
+				$course_cost_type=post_data('course_cost_type');
+
+				$course_cost_breakup_type=post_data('course_cost_breakup_type');
+
+				//echo $course_cost_type;die;
+
+				if(!empty($_college)){
+					$college_id=decode_data($_college);
+
+					if(!empty($_college_user_course_pk_id)){
+						$uc_pk_id=decode_data($_college_user_course_pk_id);
+					}
+
+					//echo 'College_id:'.$college_id.'<br>UC_PK_ID:'.$uc_pk_id;die;
+
+					if(is_numeric($college_id)){
+
+						$course=post_data('_course');
+						$duration=post_data('course_duration');
+						$duration_type=post_data('course_duration_type');
+						$duration_sub_type=post_data('course_duration_sub_type');
+						$course_type=post_data('course_type');
+						$course_pass_type=post_data('course_pass_type');
+						$course_placement_type=post_data('course_placement_type');
+						//$course_streams=$this->input->post('course_streams');
+						$course_fees=$this->input->post('registration_course_fees');
+
+						$course_cost_categories=$this->input->post('course_cost_categories');
+
+						if(!empty($course_cost_categories) && is_array($course_cost_categories)){
+							foreach ($course_cost_categories as $key => $value) {
+								$_c_categories[]=decode_data($value);
+							}
+						}
+
+						if($this->input->post('registration_course_fees_total')){
+							$course_fees_total=$this->input->post('registration_course_fees_total');
+						}else{
+							$course_fees_total='';
+						}
+
+						//echo $course_fees_total;die;
+
+						
+						$course_streams=$this->input->post('course_streams');
+						$course_sub_streams=$this->input->post('course_sub_streams');
+						$course_exams=$this->input->post('course_exams');
+
+						//print_obj($course_sub_streams);die;
+
+
+						$course_seats=post_data('college_course_seats');
+						$course_eligibility=post_data('college_course_eligibility');
+						$course_eligibility_broad=$this->input->post('college_course_eligibility_broad');
+
+						//print_obj($course_fees_total);die;
+
+						if(!empty($course)){
+							$college_streams_ids='';
+							$college_sub_stream_ids='';
+							$course_id=decode_data($course);
+							$course_found=$this->im->get_user_course_data(array('user_id'=>$college_id,'user_type'=>'4','user_course'=>$course_id));							
+
+							//print_obj($course_found);die;
+
+							if(!empty($course_found)){
+								$course_streams_found=$this->strm->_get_user_course_stream_groupconcat(array('user_id'=>$college_id,'user_type'=>'4','course_id'=>$course_id));
+								$course_streams_ids=$course_streams_found->stream_ids;
+								$college_sub_stream_ids='';
+							}
+
+
+							$this->im->delete_course_data(array('user_id'=>$college_id,'user_type'=>'4','user_course_id'=>$course_id));
+							$this->im->delete_course_fees_data(array('user_id'=>$college_id,'user_course_id'=>$course_id));
+							$this->strm->delete_user_course_stream_data(array('course_id'=>$course_id,'user_id'=>$college_id));
+							$this->strm->delete_user_courses_exam_data(array('user_id'=>$college_id,'course_id'=>$course_id));
+
+							if(empty($course_found)){
+								
+								$course_data=array(
+									'user_id'=>$college_id,
+									'user_type'=>'4',
+									'user_course'=>$course_id,
+									'user_course_stream'=>$course_streams_ids,
+									'user_course_duration_year'=>$duration,
+									'user_course_duration_month'=>null,
+									'user_course_duration_type'=>$duration_type,
+									'user_course_duration_sub_type'=>$duration_sub_type,
+									'user_course_type'=>$course_type,
+									'user_course_pass_type'=>$course_pass_type,
+									'user_course_placement_type'=>$course_placement_type,
+									'user_course_total_seats'=>$course_seats,
+									'user_course_eligibility'=>$course_eligibility,
+									'user_course_eligibility_broad'=>$course_eligibility_broad,
+									'user_course_cost_type'=>$course_cost_type,
+									'user_course_cost_breakup_type'=>$course_cost_breakup_type,
+									'user_course_cost_category'=>char_separated($_c_categories),
+									'created_by'=>$this->data['userdata']->user_id
+								);
+
+								//print_obj($course_data);die;
+
+								if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+
+									$inserted=$this->im->update_course_data($course_data,array('user_id'=>$college_id,'user_type'=>'4','user_course'=>$course_id,'user_course_id'=>$uc_pk_id));
+									$user_course_cost_pk=$uc_pk_id;
+								}else{
+									$inserted=$this->im->add_course_data($course_data);
+									$user_course_cost_pk=$inserted;
+								}								
+
+								if($inserted){
+
+									$this->im->update_course_data(array('user_course_stream'=>$course_streams_ids),array('user_id'=>$college_id,'user_type'=>'4','user_course'=>$course_id,'user_course_id'=>$user_course_cost_pk));
+
+									$all_courses=$this->im->get_user_course_data_groupconcat(array('user_id'=>$college_id,'user_type'=>'4'));
+
+									$all_courses=$this->im->get_user_course_data(array('user_id'=>$college_id,'user_type'=>'4'),FALSE);
+
+									if(!empty($all_courses)){
+										$this->im->update_college_data(array('college_course_ids'=>$all_courses->course_ids),array('college_user_id'=>$college_id));
+										// foreach ($all_courses as $key => $value) {
+										// 	$_courses[]=$value->user_course;
+										// }
+
+										// if(!empty($_courses)){
+										// 	asort($_courses);
+										// 	$college_course_ids=char_separated($_courses);
+										// 	$this->im->update_college_data(array('college_course_ids'=>$college_course_ids),array('college_user_id'=>$college_id));
+										// }										
+									}
+
+									//print_obj($course_fees);die;
+
+									if(!empty($course_fees)){
+
+										if($course_cost_type=='2'){
+											foreach ($course_fees as $key => $value){
+												foreach ($value as $k => $v) {
+												 	$user_course_tution_fee_sem_1=clean_data($v['course_tution_fee_sem_1']);
+										           	$user_course_tution_fee_sem_2= clean_data($v['course_tution_fee_sem_2']);
+										            $user_course_admisssion_fee_sem_1=clean_data($v['course_admisssion_fee_sem_1']);
+										            $user_course_admisssion_fee_sem_2=clean_data($v['course_admisssion_fee_sem_2']);
+										            $user_course_reg_fee_sem_1=clean_data($v['course_reg_fee_sem_1']);
+										            $user_course_reg_fee_sem_2=clean_data($v['course_reg_fee_sem_2']);
+										            $user_course_exam_fee_sem_1=clean_data($v['course_exam_fee_sem_1']);
+										            $user_course_exam_fee_sem_2=clean_data($v['course_exam_fee_sem_2']);
+										            $user_course_other_fee_sem_1=clean_data($v['course_other_fee_sem_1']);
+										            $user_course_other_fee_sem_2=clean_data($v['course_other_fee_sem_2']);
+
+										           
+
+										            if(!empty($course_fees_total) && $course_fees_total[$key]){
+										            	$total_fee=$course_fees_total[$key]/$duration;
+										            }else{
+										            	$total_fee=$user_course_tution_fee_sem_1+$user_course_tution_fee_sem_2+$user_course_admisssion_fee_sem_1+$user_course_admisssion_fee_sem_2+$user_course_reg_fee_sem_1+$user_course_reg_fee_sem_2+$user_course_exam_fee_sem_1+$user_course_exam_fee_sem_2+$user_course_other_fee_sem_1+$user_course_other_fee_sem_2;
+										            }
+
+													
+
+													$course_fees_data[]=array(
+														'user_course_cost_pk'=>$user_course_cost_pk,
+														'user_id'=>$college_id,
+														'user_course_id'=>$course_id,
+														'user_course_cost_category'=>$key,
+														'user_course_cost_type'=>$course_cost_type,
+														'user_course_cost_breakup_type'=>$course_cost_breakup_type,
+														'user_course_year'=>$v['course_year'],
+														'user_course_tution_fee_sem_1'=>$user_course_tution_fee_sem_1,
+														'user_course_tution_fee_sem_2'=>$user_course_tution_fee_sem_2,
+														'user_course_admisssion_fee_sem_1'=>$user_course_admisssion_fee_sem_1,
+														'user_course_admisssion_fee_sem_2'=>$user_course_admisssion_fee_sem_2,
+														'user_course_reg_fee_sem_1'=>$user_course_reg_fee_sem_1,
+														'user_course_reg_fee_sem_2'=>$user_course_reg_fee_sem_2,
+														'user_course_exam_fee_sem_1'=>$user_course_exam_fee_sem_1,
+														'user_course_exam_fee_sem_2'=>$user_course_exam_fee_sem_2,
+														'user_course_other_fee_sem_1'=>$user_course_other_fee_sem_1,
+														'user_course_other_fee_sem_2'=>$user_course_other_fee_sem_2,
+														'user_course_total_fee'=>$total_fee
+													);
+												}													
+											}
+
+											if(isset($course_fees_data) && !empty($course_fees_data)){
+												if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+													$this->im->delete_course_fees_data(array('user_course_cost_pk'=>$uc_pk_id,'user_id'=>$college_id,'user_course_id'=>$course_id));
+												}
+												$this->im->add_course_fees_data($course_fees_data,TRUE);
+											}
+										}else if($course_cost_type=='1'){
+											foreach ($course_fees as $key => $value){
+												foreach ($value as $k => $v) {
+												 	$user_course_tution_fee_sem_1=0;
+										           	$user_course_tution_fee_sem_2=0;
+										            $user_course_admisssion_fee_sem_1=0;
+										            $user_course_admisssion_fee_sem_2=0;
+										            $user_course_reg_fee_sem_1=0;
+										            $user_course_reg_fee_sem_2=0;
+										            $user_course_exam_fee_sem_1=0;
+										            $user_course_exam_fee_sem_2=0;
+										            $user_course_other_fee_sem_1=0;
+										            $user_course_other_fee_sem_2=0;
+
+													//$total_fee=clean_data($v['course_tution_total']);
+
+													if(isset($v['course_total'])){
+										            	$total_fee=$v['course_total'];
+										            }else{
+										            	$total_fee='0';
+										            }
+
+													$course_fees_data[]=array(
+														'user_course_cost_pk'=>$user_course_cost_pk,
+														'user_id'=>$college_id,
+														'user_course_id'=>$course_id,
+														'user_course_cost_category'=>$key,
+														'user_course_cost_type'=>$course_cost_type,
+														'user_course_cost_breakup_type'=>$course_cost_breakup_type,
+														'user_course_year'=>clean_data($v['course_year']),
+														'user_course_tution_fee_total'=>$v['course_tution_total'],
+														'user_course_admisssion_fee_total'=>$v['course_admission_total'],
+														'user_course_reg_fee_total'=>$v['course_reg_total'],
+														'user_course_exam_fee_total'=>$v['course_exam_total'],
+														'user_course_other_fee_total'=>$v['course_other_total'],
+														'user_course_total_fee'=>$total_fee
+													);
+												}													
+											}
+
+											//print_obj($course_fees_data);die;
+
+											if(isset($course_fees_data) && !empty($course_fees_data)){
+												if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+													$this->im->delete_course_fees_data(array('user_course_cost_pk'=>$user_course_cost_pk,'user_id'=>$college_id,'user_course_id'=>$course_id));
+												}
+												$this->im->add_course_fees_data($course_fees_data,TRUE);
+											}
+										}	
+									}
+
+									//Stream
+
+									if(!empty($course_streams)){
+
+										if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+											$this->strm->delete_user_course_stream_data(array('course_id'=>$user_course_cost_pk,'user_id'=>$college_id));
+										}
+
+
+										foreach ($course_streams as $key => $value) {
+											$stream_id=decode_data($value);
+											$stream_ids[]=decode_data($value);
+											$user_course_stream=$this->strm->get_user_course_stream(array('stream_id'=>$stream_id,
+												'course_id'=>$inserted,'user_id'=>$college_id,'user_type'=>'4'));
+
+											if(empty($user_course_stream)){
+												$stream_data=$this->strm->get_stream(array('stream_id'=>$stream_id));
+												$_course_streams=array(
+													'stream_id'=>$stream_id,
+													'stream_parent_id'=>null,
+													'stream_name'=>$stream_data->stream_name,
+													'course_id'=>$course_id,
+													'user_id'=>$college_id,
+													'user_type'=>'4'
+												);
+
+												$this->strm->store_user_course_stream_data($_course_streams);
+
+												$stream_ids=$this->strm->_get_user_course_stream_groupconcat(array('user_id'=>$college_id,'stream_parent_id'=>null));
+											}	
+										}
+
+										if(!empty($stream_ids)){
+											
+											asort($stream_ids);
+											if(!empty($college_streams_ids)){
+												$_college_streams_ids=$college_streams_ids.','.char_separated($stream_ids);
+											}else{
+												$_college_streams_ids=char_separated($stream_ids);
+											}
+
+											$cstream_ids=char_separated_to_array($_college_streams_ids);
+
+											$_cstramids=array_unique($cstream_ids);
+
+											asort($_cstramids);
+											
+											$this->im->update_college_data(array('college_streams_ids'=>char_separated($_cstramids)),array('college_user_id'=>$college_id));
+
+											$this->im->update_college_data(array('college_streams_ids'=>$stream_ids->stream_ids),array('college_user_id'=>$college_id));
+											
+										}
+									}
+
+									//Sub Streams
+									if(!empty($course_sub_streams)){
+
+										if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+											$this->strm->delete_user_course_stream_data(array('course_id'=>$user_course_cost_pk,'user_id'=>$college_id,'stream_parent_id!='=>null));
+										}
+
+
+										foreach ($course_sub_streams as $key => $value) {
+											$sub_stream_id=decode_data($value);
+											$sub_stream_ids[]=decode_data($value);
+											$user_course_stream=$this->strm->get_user_course_stream(array('stream_id'=>$sub_stream_id,
+												'course_id'=>$inserted,'user_id'=>$college_id,'user_type'=>'4'));
+
+											if(empty($user_course_stream)){
+												$sub_stream_data=$this->strm->get_course_sub_stream(array('sub_stream_id'=>$sub_stream_id));
+												$sub_stream_parent_ids[]=$sub_stream_data->sub_stream_parent_id;
+
+												$_course_sub_streams[]=array(
+													'stream_id'=>$sub_stream_id,
+													'stream_parent_id'=>$sub_stream_data->sub_stream_parent_id,
+													'stream_name'=>$sub_stream_data->sub_stream_name,
+													'course_id'=>$course_id,
+													'user_id'=>$college_id,
+													'user_type'=>'4'
+												);												
+											}	
+										}
+
+										//print_obj($_course_sub_streams);die;
+
+										$this->strm->store_user_course_stream_data($_course_sub_streams,TRUE);
+
+										if(!empty($sub_stream_ids)){
+											asort($sub_stream_ids);
+											$collges_sub_streams_ids=char_separated($sub_stream_ids);
+
+											$collges_sub_streams_ids=$this->strm->_get_user_course_stream_groupconcat(array('user_id'=>$college_id,'stream_parent_id!='=>null));
+											if(!empty($collges_sub_streams_ids)){
+												$this->im->update_college_data(array('college_sub_streams_ids'=>$collges_sub_streams_ids->stream_ids),array('college_user_id'=>$college_id));
+											}
+											
+										}
+
+										// if(isset($sub_stream_parent_ids) && !empty($sub_stream_parent_ids)){
+										// 	asort($sub_stream_parent_ids);
+										// 	if(!empty($_college_streams_ids)){
+										// 		$__college_streams_ids=$_college_streams_ids.','.char_separated($sub_stream_parent_ids);
+										// 	}else{
+										// 		$__college_streams_ids=char_separated($sub_stream_parent_ids);
+										// 	}
+
+										// 	$_cstream_ids=char_separated_to_array($__college_streams_ids);
+
+										// 	$__cstramids=array_unique($_cstream_ids);
+
+										// 	asort($__cstramids);
+
+
+										// 	$this->im->update_college_data(array('college_streams_ids'=>char_separated($__cstramids)),array('college_user_id'=>$college_id));
+										// }
+									}
+
+									if(!empty($course_exams)){
+
+										if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+											$this->strm->delete_user_courses_exam_data(array('exam_id'=>$stream_id,
+												'user_course_pk_id'=>$inserted,'user_id'=>$college_id,'user_type'=>'4'));
+										}
+
+
+										foreach ($course_exams as $key => $value) {
+											$exam_id=decode_data($value);
+											$exam_ids[]=decode_data($value);
+											$user_course_exam=$this->strm->get_user_courses_exam(array('exam_id'=>$exam_id,
+												'user_course_pk_id'=>$inserted,'user_id'=>$college_id,'user_type'=>'4'));
+
+											if(empty($user_course_exam)){
+												$exam_data=$this->strm->get_exam(array('exam_id'=>$exam_id));
+												$_course_exams=array(
+													'exam_id'=>$exam_id,
+													'exam_name'=>$exam_data->exam_short_name,
+													'user_course_pk_id'=>$inserted,
+													'course_id'=>$inserted,
+													'user_id'=>$college_id,
+													'user_type'=>'4'
+												);
+
+												$this->strm->store_user_courses_exam_data($_course_exams);
+
+
+											}	
+										}
+
+										$exam_ids=$this->strm->_get_user_course_exam_groupconcat(array('user_id'=>$college_id));
+
+										if(!empty($exam_ids)){
+											// $cexamids=removeDuplicate($exam_ids);
+											// asort($cexamids);
+											//$college_exam_ids=char_separated($exam_ids);
+											$this->im->update_college_data(array('college_exam_ids'=>$exam_ids->exam_ids),array('college_user_id'=>$college_id));
+											// $this->im->update_college_data(array('college_exam_ids'=>$cexamids),array('college_user_id'=>$college_id));
+										}
+									}
+
+									if(isset($_FILES['college_course_broucher']) && $_FILES['college_course_broucher']['name']!=''){
+
+									    $file_broucher_found=$this->sm->get_user_file(array('user_storage_type'=>'user_course_broucher','user_file_type_id'=>$inserted,'user_storage_type_2'=>$college_id));
+
+									    //print_obj($file_logo_found);die;
+
+									    if(!empty($file_broucher_found)){
+									        if(is_file($file_broucher_found->media_disk_path)){
+									            @unlink($file_broucher_found->media_disk_path);
+									            $this->sm->delete_file(array('storage_id'=>$file_broucher_found->storage_id));
+									        }
+									    }
+
+									    $broucher_data=array(
+									        'file_size'=>'1',
+									        'file_name'=>'college_course_broucher',
+									        'file_types'=>'png,jpg,jpeg,pdf',
+									        'file_folder'=>'brouchers',
+									        'file_uploaded_by'=>$this->data['userdata']->user_id
+									    );
+
+									    $file_id=$this->onUploadFiles($broucher_data);
+
+									    if(!empty($file_id) && $file_id>0){
+
+									        $this->sm->delete_user_file(array('user_file_type_id'=>$inserted,'user_storage_type'=>'user_course_broucher','user_storage_type_2'=>$college_id));
+
+									        $course_broucher_storage_data=array(
+									            'user_file_storage_id'=>$file_id,
+									            'user_file_type_id'=>$user_course_broucher,
+									            'user_file_type'=>'5',
+									            'user_storage_type'=>'user_course_broucher',
+									            'user_storage_type_2'=>$college_id
+									        );
+
+									        $this->sm->store_user_file($course_broucher_storage_data);
+									    } 
+									}
+
+									$return['success']='Course data added';
+								}else{
+									$return['error']='Course data not added';	
+								}
+							}else{
+
+								$course_data=array(
+									'user_id'=>$college_id,
+									'user_type'=>'4',
+									'user_course'=>$course_id,									
+									'user_course_duration_year'=>$duration,
+									'user_course_duration_month'=>null,
+									'user_course_duration_type'=>$duration_type,
+									'user_course_duration_sub_type'=>$duration_sub_type,
+									'user_course_type'=>$course_type,
+									'user_course_pass_type'=>$course_pass_type,
+									'user_course_placement_type'=>$course_placement_type,
+									'user_course_total_seats'=>$course_seats,
+									'user_course_eligibility'=>$course_eligibility,
+									'user_course_eligibility_broad'=>$course_eligibility_broad,
+									'user_course_cost_type'=>$course_cost_type,
+									'user_course_cost_breakup_type'=>$course_cost_breakup_type,
+									'user_course_cost_category'=>char_separated($_c_categories)
+								);
+
+								//print_obj($course_data);
+
+								$inserted=$this->im->update_course_data($course_data,array('user_id'=>$college_id,'user_type'=>'4','user_course'=>$course_id,'user_course_id'=>$uc_pk_id));
+																
+								//print_obj($inserted);die;
+								if($inserted){
+									$user_course_cost_pk=$uc_pk_id;	
+									$this->im->update_course_data(array('user_course_stream'=>$course_streams_ids),array('user_id'=>$college_id,'user_type'=>'4','user_course'=>$course_id,'user_course_id'=>$uc_pk_id));
+									$all_courses=$this->im->get_user_course_data(array('user_id'=>$college_id,'user_type'=>'4'),FALSE);
+
+									//print_obj($all_courses);
+
+									if(!empty($all_courses)){
+										foreach ($all_courses as $key => $value) {
+											$_courses[]=$value->user_course;
+										}
+
+										if(!empty($_courses)){
+											asort($_courses);
+											$college_course_ids=char_separated($_courses);
+											$this->im->update_college_data(array('college_course_ids'=>$college_course_ids),array('college_user_id'=>$college_id));
+										}										
+									}
+
+									//print_obj($course_fees);die;
+
+
+
+									if(!empty($course_fees)){
+										if($course_cost_type=='2'){
+											foreach ($course_fees as $key => $value){
+												foreach ($value as $k => $v) {
+												 	$user_course_tution_fee_sem_1=clean_data($v['course_tution_fee_sem_1']);
+										           	$user_course_tution_fee_sem_2= clean_data($v['course_tution_fee_sem_2']);
+										            $user_course_admisssion_fee_sem_1=clean_data($v['course_admisssion_fee_sem_1']);
+										            $user_course_admisssion_fee_sem_2=clean_data($v['course_admisssion_fee_sem_2']);
+										            $user_course_reg_fee_sem_1=clean_data($v['course_reg_fee_sem_1']);
+										            $user_course_reg_fee_sem_2=clean_data($v['course_reg_fee_sem_2']);
+										            $user_course_exam_fee_sem_1=clean_data($v['course_exam_fee_sem_1']);
+										            $user_course_exam_fee_sem_2=clean_data($v['course_exam_fee_sem_2']);
+										            $user_course_other_fee_sem_1=clean_data($v['course_other_fee_sem_1']);
+										            $user_course_other_fee_sem_2=clean_data($v['course_other_fee_sem_2']);
+
+													// $total_fee=$user_course_tution_fee_sem_1+$user_course_tution_fee_sem_2+$user_course_admisssion_fee_sem_1+$user_course_admisssion_fee_sem_2+$user_course_reg_fee_sem_1+$user_course_reg_fee_sem_2+$user_course_exam_fee_sem_1+$user_course_exam_fee_sem_2+$user_course_other_fee_sem_1+$user_course_other_fee_sem_2;
+
+
+										            if(!empty($course_fees_total) && $course_fees_total[$key]){
+										            	$total_fee=$course_fees_total[$key]/$duration;
+										            }else{
+										            	$total_fee=floatval($user_course_tution_fee_sem_1)+floatval($user_course_tution_fee_sem_2)+floatval($user_course_admisssion_fee_sem_1)+floatval($user_course_admisssion_fee_sem_2)+floatval($user_course_reg_fee_sem_1)+floatval($user_course_reg_fee_sem_2)+floatval($user_course_exam_fee_sem_1)+floatval($user_course_exam_fee_sem_2)+floatval($user_course_other_fee_sem_1)+floatval($user_course_other_fee_sem_2);
+										            }
+
+										            if(!is_numeric($key)){
+										            	$course_fees_data[]=array(
+															'user_course_cost_pk'=>$user_course_cost_pk,
+															'user_id'=>$college_id,
+															'user_course_id'=>$course_id,
+															'user_course_cost_category'=>$key,
+															'user_course_cost_type'=>$course_cost_type,
+															'user_course_cost_breakup_type'=>$course_cost_breakup_type,
+															'user_course_year'=>$v['course_year'],
+															'user_course_tution_fee_sem_1'=>$user_course_tution_fee_sem_1,
+															'user_course_tution_fee_sem_2'=>$user_course_tution_fee_sem_2,
+															'user_course_admisssion_fee_sem_1'=>$user_course_admisssion_fee_sem_1,
+															'user_course_admisssion_fee_sem_2'=>$user_course_admisssion_fee_sem_2,
+															'user_course_reg_fee_sem_1'=>$user_course_reg_fee_sem_1,
+															'user_course_reg_fee_sem_2'=>$user_course_reg_fee_sem_2,
+															'user_course_exam_fee_sem_1'=>$user_course_exam_fee_sem_1,
+															'user_course_exam_fee_sem_2'=>$user_course_exam_fee_sem_2,
+															'user_course_other_fee_sem_1'=>$user_course_other_fee_sem_1,
+															'user_course_other_fee_sem_2'=>$user_course_other_fee_sem_2,
+															'user_course_total_fee'=>$total_fee
+														);
+
+														//print_obj($course_fees_data);
+
+														if(isset($course_fees_data) && !empty($course_fees_data)){
+															if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+																$this->im->delete_course_fees_data(array('user_course_cost_pk'=>$uc_pk_id,'user_id'=>$college_id,'user_course_id'=>$course_id));
+															}
+															$this->im->add_course_fees_data($course_fees_data,TRUE);
+														}
+										            }
+
+														
+												}
+
+																									
+											}
+
+											//die;
+
+											
+										}else if($course_cost_type=='1'){
+											foreach ($course_fees as $key => $value){
+												foreach ($value as $k => $v) {
+												 	$user_course_tution_fee_sem_1=0;
+										           	$user_course_tution_fee_sem_2=0;
+										            $user_course_admisssion_fee_sem_1=0;
+										            $user_course_admisssion_fee_sem_2=0;
+										            $user_course_reg_fee_sem_1=0;
+										            $user_course_reg_fee_sem_2=0;
+										            $user_course_exam_fee_sem_1=0;
+										            $user_course_exam_fee_sem_2=0;
+										            $user_course_other_fee_sem_1=0;
+										            $user_course_other_fee_sem_2=0;
+
+													//$total_fee=clean_data($v['course_tution_total']);
+
+													if(!empty($course_fees_total) && $course_fees_total[$key]){
+										            	$total_fee=$course_fees_total[$key]/$duration;
+										            }else{
+										            	$total_fee=$v['course_tution_total']+$v['course_reg_total']+$v['course_admission_total']+$v['course_exam_total']+$v['course_other_total'];
+										            }
+
+													$course_fees_data[]=array(
+														'user_course_cost_pk'=>$user_course_cost_pk,
+														'user_id'=>$college_id,
+														'user_course_id'=>$course_id,
+														'user_course_cost_category'=>$key,
+														'user_course_cost_type'=>$course_cost_type,
+														'user_course_cost_breakup_type'=>$course_cost_breakup_type,
+														'user_course_year'=>clean_data($v['course_year']),
+														'user_course_tution_fee_total'=>$v['course_tution_total'],
+														'user_course_admisssion_fee_total'=>$v['course_admission_total'],
+														'user_course_reg_fee_total'=>$v['course_reg_total'],
+														'user_course_exam_fee_total'=>$v['course_exam_total'],
+														'user_course_other_fee_total'=>$v['course_other_total'],
+														'user_course_total_fee'=>$total_fee
+													);
+												}													
+											}
+
+											//print_obj($course_fees_data);die;
+
+											if(isset($course_fees_data) && !empty($course_fees_data)){
+												if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+													$this->im->delete_course_fees_data(array('user_course_cost_pk'=>$user_course_cost_pk,'user_id'=>$college_id,'user_course_id'=>$course_id));
+												}
+												$this->im->add_course_fees_data($course_fees_data,TRUE);
+											}
+										}
+									}
+
+									if(!empty($course_streams)){
+
+										//echo $course_streams;die;
+
+										//echo $course_id;die;
+
+										//print_obj($course_streams);die;
+
+										if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+											$this->strm->delete_user_course_stream_data(array('course_id'=>$course_id,'user_id'=>$college_id));
+										}
+
+
+										foreach ($course_streams as $key => $value) {
+											$stream_id=decode_data($value);
+											$stream_ids[]=decode_data($value);
+											//$this->strm->delete_user_course_stream_data(array('stream_id'=>$stream_id,'course_id'=>$user_course_cost_pk,'user_id'=>$college_id,'user_type'=>'4'));
+											//$user_course_stream=$this->strm->get_user_course_stream(array('stream_id'=>$stream_id,'course_id'=>$user_course_cost_pk,'user_id'=>$college_id,'user_type'=>'4'));
+
+											$this->strm->delete_user_course_stream_data(array('course_id'=>$course_id,'user_id'=>$college_id,'stream_id'=>$stream_id));
+
+											//if(empty($user_course_stream)){
+												$stream_data=$this->strm->get_stream(array('stream_id'=>$stream_id));
+												$__course_streams=array(
+													'stream_id'=>$stream_id,
+													'stream_parent_id'=>null,
+													'stream_name'=>$stream_data->stream_name,
+													'course_id'=>$course_id,
+													'user_id'=>$college_id,
+													'user_type'=>'4'
+												);
+
+												//print_obj($__course_streams);
+
+												$this->strm->store_user_course_stream_data($__course_streams);
+											//}	
+										}
+
+										//die;
+
+										
+
+
+										//print_obj($stream_ids);die;
+
+										
+
+										if(!empty($stream_ids)){
+											//asort($stream_ids);
+											//array_unique($stream_ids);
+											// if(!empty($college_streams_ids)){
+											// 	$_college_streams_ids=$college_streams_ids.','.char_separated($stream_ids);
+											// }else{
+											// 	$_college_streams_ids=char_separated($stream_ids);
+											// }/
+
+											$_college_streams_ids=char_separated($stream_ids);
+
+											$cstream_ids=char_separated_to_array($_college_streams_ids);
+
+											//print_obj($cstream_ids);
+
+											$_cstramids=array_unique($cstream_ids);
+
+											asort($_cstramids);
+
+											//echo char_separated($_cstramids);die;
+
+											//$streamd=array('college_streams_ids'=>char_separated($_cstramids));
+
+											//print_obj($streamd);
+
+											//echo $college_id;die;
+
+											$d=$this->im->update_college_data(array('college_streams_ids'=>char_separated($_cstramids)),array('college_user_id'=>$college_id));
+
+
+
+											//echo $d;die;
+										}
+									}
+
+									//echo $college_id;die;
+
+									//echo $_college_streams_ids;die;
+
+
+									//Sub Streams
+									if(!empty($course_sub_streams)){
+
+										// if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+										// 	$this->strm->delete_user_course_stream_data(array('course_id'=>$course_id,'user_id'=>$college_id));
+										// }
+
+										foreach ($course_sub_streams as $key => $value) {
+											$sub_stream_id=decode_data($value);
+											$sub_stream_ids[]=decode_data($value);
+											$this->strm->delete_user_course_stream_data(array('stream_id'=>$sub_stream_id,'course_id'=>$inserted,'user_id'=>$college_id,'user_type'=>'4','stream_parent_id!='=>null));
+											//$user_course_stream=$this->strm->get_user_course_stream(array('stream_id'=>$sub_stream_id,'course_id'=>$inserted,'user_id'=>$college_id,'user_type'=>'4'));
+
+											//$this->strm->delete_user_course_stream_data(array('course_id'=>$course_id,'user_id'=>$college_id,'stream_id'=>$sub_stream_id));
+
+											//print_obj($user_course_stream);die;
+
+											//if(empty($user_course_stream)){
+												$sub_stream_data=$this->strm->get_course_sub_stream(array('sub_stream_id'=>$sub_stream_id));
+												$sub_stream_parent_ids[]=$sub_stream_data->sub_stream_parent_id;
+												$_course_sub_streams[]=array(
+													'stream_id'=>$sub_stream_id,
+													'stream_parent_id'=>$sub_stream_data->sub_stream_parent_id,
+													'stream_name'=>$sub_stream_data->sub_stream_name,
+													'course_id'=>$course_id,
+													'user_id'=>$college_id,
+													'user_type'=>'4'
+												);
+
+												
+											//}	
+										}
+
+										// print_obj($_course_sub_streams);die;
+
+										if(isset($_course_sub_streams) && !empty($_course_sub_streams)){
+											$this->strm->store_user_course_stream_data($_course_sub_streams,TRUE);
+
+											if(!empty($sub_stream_ids)){
+												asort($sub_stream_ids);
+												$collges_sub_streams_ids=char_separated($sub_stream_ids);
+												$this->im->update_college_data(array('college_sub_streams_ids'=>$collges_sub_streams_ids),array('college_user_id'=>$college_id));
+											}
+										}
+
+										if(isset($sub_stream_parent_ids) && !empty($sub_stream_parent_ids)){
+											//asort($sub_stream_parent_ids);
+											//array_unique($sub_stream_parent_ids);
+
+											//print_obj($sub_stream_parent_ids);
+
+											if(!empty($_college_streams_ids)){
+												$__college_streams_ids=$_college_streams_ids.','.char_separated($sub_stream_parent_ids);
+											}else{
+												$__college_streams_ids=char_separated($sub_stream_parent_ids);
+											}
+
+											//print_obj($__college_streams_ids);die;
+
+											$_cstream_ids=char_separated_to_array($__college_streams_ids);
+
+											//print_obj($_cstream_ids);die;
+
+											$__cstramids=array_unique($_cstream_ids);
+
+											//echo char_separated($__cstramids);die;
+
+											asort($__cstramids);
+											
+											$this->im->update_college_data(array('college_streams_ids'=>char_separated($__cstramids)),array('college_user_id'=>$college_id));
+										}
+
+											
+									}
+
+									if(!empty($course_exams)){
+
+										if(isset($uc_pk_id) && !empty($uc_pk_id) && is_numeric($uc_pk_id)){
+											$this->strm->delete_user_courses_exam_data(array('user_course_pk_id'=>$user_course_cost_pk,'user_id'=>$college_id,'user_type'=>'4'));
+										}
+
+
+										foreach ($course_exams as $key => $value) {
+											$exam_id=decode_data($value);
+											$exam_ids[]=decode_data($value);
+											$user_course_exam=$this->strm->get_user_courses_exam(array('exam_id'=>$exam_id,
+												'user_course_pk_id'=>$user_course_cost_pk,'user_id'=>$college_id,'user_type'=>'4'));
+
+											if(empty($user_course_exam)){
+												$exam_data=$this->strm->get_exam(array('exam_id'=>$exam_id));
+												$_course_exams=array(
+													'exam_id'=>$exam_id,
+													'exam_name'=>$exam_data->exam_short_name,
+													'user_course_pk_id'=>$user_course_cost_pk,
+													'course_id'=>$course_id,
+													'user_id'=>$college_id,
+													'user_type'=>'4'
+												);												
+
+												$this->strm->store_user_courses_exam_data($_course_exams);
+											}	
+										}
+
+
+										if(!empty($exam_ids)){
+											asort($exam_ids);
+											$cexamids=removeDuplicate($exam_ids);
+											
+											//$college_exam_ids=char_separated($college_exam_ids);
+											$this->im->update_college_data(array('college_exam_ids'=>$cexamids),array('college_user_id'=>$college_id));
+										}
+									}
+
+									if(isset($_FILES['college_course_broucher']) && $_FILES['college_course_broucher']['name']!=''){
+
+									    $file_broucher_found=$this->sm->get_user_file(array('user_storage_type'=>'user_course_broucher','user_file_type_id'=>$course_id,'user_storage_type_2'=>$college_id));
+
+									    //print_obj($file_logo_found);die;
+
+									    if(!empty($file_broucher_found)){
+									        if(is_file($file_broucher_found->media_disk_path)){
+									            @unlink($file_broucher_found->media_disk_path);
+									            $this->sm->delete_file(array('storage_id'=>$file_broucher_found->storage_id));
+									        }
+									    }
+
+									    $broucher_data=array(
+									        'file_size'=>'1',
+									        'file_name'=>'college_course_broucher',
+									        'file_types'=>'png,jpg,jpeg,pdf',
+									        'file_folder'=>'brouchers',
+									        'file_uploaded_by'=>$this->data['userdata']->user_id
+									    );
+
+									    $file_id=$this->onUploadFiles($broucher_data);
+
+									    if(!empty($file_id) && $file_id>0){
+
+									        $this->sm->delete_user_file(array('user_file_type_id'=>$course_id,'user_storage_type'=>'user_course_broucher','user_storage_type_2'=>$college_id));
+
+									        $course_broucher_storage_data=array(
+									            'user_file_storage_id'=>$file_id,
+									            'user_file_type_id'=>$user_course_broucher,
+									            'user_file_type'=>'5',
+									            'user_storage_type'=>'user_course_broucher',
+									            'user_storage_type_2'=>$college_id
+									        );
+
+									        $this->sm->store_user_file($course_broucher_storage_data);
+									    } 
+									}
+
+									$return['success']='Course data added';
+								}else{
+									$return['error']='Course data not added';	
+								}
+							}
+						}else{
+							$return['error']='Select course to add';
+						}
+
+					}else{
+						$return['error']='Data manipulated';
+					}
+				}else{
+					$return['error']='Data manipulated';
+				}
+				
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onDeleteCollegeCourseData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$_course=post_data('_course');
+
+				$user_id=session_userdata('admin_id');
+
+				$user_id=decode_data($user_id);
+
+				$college_id=decode_data($_college);
+				$_course_id=decode_data($_course);
+
+				// echo 'College_id:'.$college_id;
+				// echo 'Course_id:'.$_course_id;die;
+
+				$course_found=$this->im->get_user_course_data(array('user_id'=>$college_id,'user_type'=>'4','user_course_id'=>$_course_id));
+
+				//print_obj($course_found);die;
+
+				if(!empty($course_found)){
+					$course_id=$course_found->user_course;
+					$deleted=$this->im->delete_course_data(array('user_id'=>$college_id,'user_type'=>'4','user_course_id'=>$_course_id));
+
+					if($deleted){
+						$this->im->delete_course_fees_data(array('user_id'=>$college_id,'user_course_id'=>$course_found->user_course));
+						$this->strm->delete_user_course_stream_data(array('course_id'=>$course_id,'user_id'=>$college_id));
+
+						$this->strm->delete_user_courses_exam_data(array('user_id'=>$college_id,'course_id'=>$course_found->user_course));
+
+						$courses=$this->strm->_get_user_course_groupconcat(array('user_id'=>$college_id));
+
+						$streams=$this->strm->_get_user_course_stream_groupconcat(array('user_id'=>$college_id,'stream_parent_id'=>null));
+						$sub_streams=$this->strm->_get_user_course_stream_groupconcat(array('user_id'=>$college_id,'stream_parent_id!='=>null));
+						$exams=$this->strm->_get_user_course_exam_groupconcat(array('user_id'=>$college_id));
+
+						if(!empty($courses)){
+							$this->im->update_college_data(array('college_course_ids'=>$courses->course_ids,'updated_by'=>$user_id,'updated_at'=>date('Y-m-d H:i:s')),array('college_user_id'=>$college_id));
+						}
+
+						if(!empty($streams)){
+
+							$this->im->update_college_data(array('college_streams_ids'=>$streams->stream_ids,'updated_by'=>$user_id,'updated_at'=>date('Y-m-d H:i:s')),array('college_user_id'=>$college_id));
+
+							$ucourses=$this->strm->get_user_course(array('user_id'=>$college_id),FALSE);
+
+							if(!empty($ucourses)){
+								foreach ($ucourses as $key => $value) {
+									$ustreams=$this->strm->_get_user_course_stream_groupconcat(array('course_id'=>$value->user_course,'user_id'=>$college_id,'stream_parent_id'=>null));
+									if(!empty($ustreams)){
+										$this->um->update_user_courses(array('user_course_stream'=>$ustreams->stream_ids),array('user_course'=>$value->user_course,'user_id'=>$college_id));
+									}
+									
+								}								
+							}
+							
+						}
+
+						if(!empty($sub_streams)){
+
+							$this->im->update_college_data(array('college_sub_streams_ids'=>$sub_streams->stream_ids,'updated_by'=>$user_id,'updated_at'=>date('Y-m-d H:i:s')),array('college_user_id'=>$college_id));
+						}
+
+						if(!empty($exams)){
+
+							$this->im->update_college_data(array('college_exam_ids'=>$exams->exam_ids,'updated_by'=>$user_id,'updated_at'=>date('Y-m-d H:i:s')),array('college_user_id'=>$college_id));
+						}
+						
+						$return['success']='Course data deleted from the system';
+					}else{
+						$return['error']='Course not deleted from the system';
+					}
+				}else{
+					$return['error']='Course data not found';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	//College Courses
+
+	//College Faculties
+
+	public function indexCollegeFaculties($college_id=null,$faculty_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+
+				$cid=decode_data($college_id);
+
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+
+				//print_obj($college_data);die;
+
+				if($college_data->college_utype=='3'){
+					$college_type='10';
+				}else{
+					$college_type='101';
+				}
+
+				$this->data['college_type']=$college_type;
+
+				$this->data['page_title']='Faculties';
+
+				$get_faculty_data=array();
+
+				if($faculty_id!=null){
+					$fid=decode_data($faculty_id);
+					$get_faculty_data=$this->im->get_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$cid,'faculty_id'=>$fid));
+				}
+
+				//print_obj($get_faculty_data);die;
+				
+
+				if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+	                $college_logo=$_college_logo->media_disk_path_relative;
+	                $college_logo_name=$_college_logo->media_org_name;
+	            }else{
+	                $college_logo=base_url().'uploads/app/default/no.jpg';
+	                $college_logo_name='';
+	            }
+
+	            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+	                $college_banner=$_college_banner->media_disk_path_relative;
+	                $college_banner_name=$_college_banner->media_org_name;
+	            }else{
+	                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+	                $college_banner_name='';
+	            }
+
+	            $qualifications=$this->im->get_qualifications(array('qualification_status'=>'1'),FALSE);
+
+	            //print_obj($qualifications);die;
+
+				if(!empty($qualifications)){
+					foreach ($qualifications as $key => $value) {
+
+						$fq=(isset($get_faculty_data) && !empty($get_faculty_data) && !empty($get_faculty_data->faculty_qualifications))?char_separated_to_array($get_faculty_data->faculty_qualifications):null;
+
+						$selected=(in_array($value->qualification_id, $fq))?'selected':'';
+						$_qualifications[]=array(
+							'qualification_id'=>encode_url($value->qualification_id),
+							'qualification_name'=>$value->qualification_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_qualifications=array();
+				}
+
+				print_obj($_qualifications);die;
+
+				$subjects=$this->im->get_subjects(array('subject_status'=>'1'),FALSE);
+
+				if(!empty($subjects)){
+					foreach ($subjects as $key => $value) {
+						$fs=(isset($get_faculty_data) && !empty($get_faculty_data) && !empty($get_faculty_data->faculty_subjects))?char_separated_to_array($get_faculty_data->faculty_subjects):null;
+
+						$selected=(in_array($value->subject_id, $fs))?'selected':'';
+						$_subjects[]=array(
+							'subject_id'=>encode_url($value->subject_id),
+							'subject_name'=>$value->subject_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_subjects=array();
+				}
+
+
+				$designations=$this->im->get_designations(array('designation_status'=>'1'),FALSE);
+
+				if(!empty($designations)){
+					foreach ($designations as $key => $value) {
+						$selected=(isset($get_faculty_data) && !empty($get_faculty_data) && in_array($value->designation_id,char_separated_to_array($get_faculty_data->faculty_designation)))?'selected':'';
+						$_designations[]=array(
+							'designation_id'=>encode_url($value->designation_id),
+							'designation_name'=>$value->designation_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_designations=array();
+				}
+
+
+				$departments=$this->im->get_departments(array('department_status'=>'1'),FALSE);
+
+				if(!empty($departments)){
+					foreach ($departments as $key => $value) {
+						$selected=(isset($get_faculty_data) && !empty($get_faculty_data) && in_array($value->department_id,char_separated_to_array($get_faculty_data->faculty_departments)))?'selected':'';
+						$_departments[]=array(
+							'department_id'=>encode_url($value->department_id),
+							'department_name'=>$value->department_name,
+							'selected'=>$selected
+						);
+					}
+				}else{
+					$_departments=array();
+				}
+
+				$param=array('menu_link_id'=>$cid,'menu_link_type'=>$menu_link_type);
+
+				//$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				$_inner_menus = $this->sm->get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				//print_obj($_inner_menus);die;
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						//$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						// if($college_data->college_utype==3){
+						// 	$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+						// }else if($college_data->college_utype==4){
+						// 	$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+						// }
+
+						$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+				//print_obj($inner_menues);die;
+
+				$college_faculty_info=$this->im->_get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'faculty_info'));
+
+				$college_faculty_intro=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+
+
+				//print_obj($college_faculty_info);die;
+
+				$this->data['college_faculty_info']=$college_faculty_info;
+				$this->data['college_faculty_intro']=$college_faculty_intro->info_value_faculty_intro;
+
+	            $this->data['college_data']=array(
+	            	'college_id'=>encode_data($college_data->college_user_id),
+	            	'college_name'=>$college_data->college_name,
+	            	'college_banner'=>$college_banner,
+	            	'college_logo'=>$college_logo,
+	            	'college_subjects'=>$_subjects,
+	            	'college_qualifications'=>$_qualifications,
+	            	'college_departments'=>$_departments,
+	            	'college_designations'=>$_designations,
+	            	'college_faculties'=>$get_faculty_data
+	            );
+
+
+
+	            $this->data['inner_menues']=$inner_menu_types;
+				$this->data['inner_menues_assigned']=$inner_menues;
+
+	            
+
+				//$get_faculty_data=$this->im->get_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$cid,'faculty_id'=>$menu_id));
+
+				$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->add_partial('partial_ads_modal')->load('users/vw_colleges_add_edit_faculty', $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}				
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onSearchCollegeFaculties(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$param['column_order'] = array(
+					null,
+					'faculty_name'
+				);
+
+				$param['column_search'] = array('faculty_name');
+				$param['order'] = array('faculty_id' => 'DESC');
+				$posts=$this->input->post();
+
+				$college=decode_data($posts['_college']);
+
+				$param['faculty_type_id']=$college;
+
+				$list = $this->im->_get_faculties($posts,$param,FALSE,FALSE);
+
+				//print_obj($list);die;
+
+				
+				$data = array();
+				$no = isset($posts['start'])?$posts['start']:0;
+
+				$action='';
+
+				foreach ($list as $user){
+					$no++;
+
+					$row = array();
+
+					// $user_image=$this->sm->get_file(array('media_type'=>'user_image','media_type_data_id'=>$user->user_id));
+
+					$action='<div class="btn-group btn-group-sm">
+						<a href="'.$this->data['admin_base_url'].'/institutions/colleges/faculty/'.encode_data($user->faculty_type_id).'/'.encode_data($user->faculty_id).'" class="btn btn-xs btn-primary">Edit</a>
+						<button class="btn btn-xs btn-dark btn_del_college_faculty" data-aid="'.encode_data($user->faculty_id).'">Delete</button>
+						</div>';
+					
+					$row[]	=	$no;
+					$row[]	=	ucwords($user->faculty_name);
+					// $row[]	=	$user->faculty_email;
+					//$row[]	=	$user->facullty_contact_no;
+					if($user->faculty_status==1){
+						$row[]  =	'<span class="btn btn-xs btn-success">Active</span>';
+					}else if($user->faculty_status==2){
+						$row[]  =	'<span class="btn btn-xs btn-danger">Deactive</span>';
+					}
+
+					$row[]  =	$action;	
+
+					$data[] = $row;	
+				}
+
+				$output = array(
+					"draw" => isset($posts['draw'])?$posts['draw']:'',
+					"recordsTotal" => $this->im->_get_faculties($posts,$param,TRUE),
+					"recordsFiltered" => $this->im->_get_faculties($posts,$param,TRUE),
+					"data" => $data,
+				);
+
+				echo json_encode($output);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}	
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}	
+
+	public function onAddCollegesFaculties(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college 			=	post_data('_college');
+				$_faculty 			=	post_data('_faculty');
+				$faculty_name 		=	post_data('college_faculty_name');
+				$faculty_email 		=	post_data('college_faculty_email');
+				$faculty_phone 		=	post_data('college_faculty_phone_no');
+				$faculty_exp 		=	post_data('college_faculty_experience');
+				$designation 		=	post_data('college_faculty_designation');
+				$department 		=	post_data('college_faculty_department');
+				$quallifications 	=	$this->input->post('college_faculty_qualifications');
+				$subjects  			=	$this->input->post('college_faculty_subjects');
+
+				$college_id=decode_data($_college);
+
+				if(!empty($subjects)){
+					foreach ($subjects as $key => $value) {
+						$_subjects[]=decode_url($value);
+					}
+
+					$reg_subjects=char_separated($_subjects);
+				}else{
+					$reg_subjects=null;
+				}
+
+				if(!empty($quallifications)){
+					foreach ($quallifications as $key => $value) {
+						$_quallifications[]=decode_url($value);
+					}
+
+					$reg_qualifications=char_separated($_quallifications);
+				}else{
+					$reg_qualifications=null;
+				}
+
+				//print_obj($reg_qualifications);
+
+				$data=array(
+					'faculty_type'=>'2',
+					'faculty_type_id'=>$college_id,
+					'faculty_name'=>$faculty_name,
+					'facullty_contact_no'=>$faculty_phone,
+					'faculty_email'=>$faculty_email,
+					'faculty_designation'=>decode_url($designation),
+					'faculty_departments'=>decode_url($department),
+					'faculty_academic_exp'=>$faculty_exp,
+					'faculty_subjects'=>$reg_subjects,
+					'faculty_qualifications'=>$reg_qualifications
+				);
+
+				//print_obj($data);die;
+
+				if(empty($_faculty)){
+					//$get_faculty_data =	$this->im->get_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$college_id));
+
+					//if(empty($get_faculty_data)){
+						$added=$this->im->add_faculties_data($data);
+						if($added){
+							$return['success']='Faculty registered';
+						}else{
+							$return['error']='Data can not be registered';
+						}										
+					// }else{
+					// 	$return['error']='Faculty already registered';
+					// }
+				}else if(!empty($_faculty)){
+					$faculty_id=decode_data($_faculty);
+					$added=$this->im->update_faculties_data($data,array('faculty_id'=>$faculty_id,'faculty_type'=>'2'));
+					if($added){
+						$return['success']='Faculty data updated';
+						$return['redirect']=$this->data['admin_base_url'].'/institutions/colleges/faculty/'.$_college;
+					}else{
+						$return['error']='Data can not be updated now';
+					}
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function onDeletefaculties(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+				$_college=post_data('_college');
+				$user_id=decode_data($_college);
+				$_faculty=post_data('_faculty');
+
+				$faculty=decode_data($_faculty);
+
+				//echo $_faculty;die;
+
+				$get_faculty_data=$this->im->get_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$user_id,'faculty_id'=>$faculty));
+
+				if(!empty($get_faculty_data)){
+					$deleted=$this->im->delete_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$user_id,'faculty_id'=>$faculty));
+
+						if($deleted){
+							$return['success']='Data deleted';
+						}else{
+							$return['error']='Data can not be deleted 1';
+						}
+				}else{
+					$return['error']='Data can not be deleted';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect(base_url());
+			}
+		}else{
+			redirect(base_url());
+		}
+	}
+
+	//College Faculties
+
+	//College Hostel Data
+
+	public function onAddCollegeHostelData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_hostel_data_id');
+				$college_id=decode_data($_college);
+
+				//echo $college_id;die;
+
+				$hostel_type=post_data('_hostel_type');
+				$hostel_data_type=post_data('_hostel_data_type');
+				$hostel=$this->input->post('hostel');
+				$college_hostel_info=post_data('college_hostel_info');
+
+				//echo $hostel_type;die;
+
+				if($hostel_type=='1'){
+					$hostel_details_type_women=post_data('hostel_details_type_women');
+
+					if($hostel_details_type_women=='1'){
+
+						if(!empty($hostel) || !empty($college_hostel_info)){
+							$total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>$hostel_data_type,'fees_type'=>$hostel_type));
+
+							//print_obj($total_fees_data);die;
+
+							$fees_start_range=post_data('fees_start_range');
+							$fees_end_range=post_data('fees_end_range');
+
+							if(empty($total_fees_data)){
+								$inserted=$this->im->add_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>'2','fees_type'=>$hostel_type,'fees_start'=>$fees_start_range,'fees_end'=>$fees_end_range ));
+							}else{
+								$inserted=$this->im->update_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>'2','fees_type'=>$hostel_type,'fees_start'=>$fees_start_range,'fees_end'=>$fees_end_range),array('fees_data_id'=>$college_id,'fess_data_id_type'=>$hostel_data_type,'fees_type'=>$hostel_type));
+							}
+
+							if($inserted){
+
+								$this->im->update_college_data(array('college_womenhostel_details_type'=>$hostel_details_type_women),array('college_user_id'=>$college_id));
+
+								$hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type));
+
+								if(empty($hostel_notes)){
+									$this->im->add_hostels_notes_data(array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type,'hostel_notes'=>$college_hostel_info));
+								}else{
+									$this->im->update_hostels_notes_data(array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type,'hostel_notes'=>$college_hostel_info),array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type));
+								}
+
+								$return['success']='Hostel data updated successfully';
+							}else{
+								$return['error']='Hostel data not added';
+							}
+						}else{
+							$return['error']='Noting to save';
+						}
+					}else if($hostel_details_type_women=='2'){
+						
+					}
+				}else if($hostel_type=='2'){
+
+
+					$hostel_details_type_men=$this->input->post('hostel_details_type_men');
+
+					if($hostel_details_type_men=='1'){
+
+						//echo 'hi2';die;
+
+						if(!empty($hostel) || !empty($college_hostel_info)){
+							$total_fees_data=$this->im->get_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>$hostel_data_type,'fees_type'=>$hostel_type));
+
+							$fees_start_range=post_data('fees_start_range');
+							$fees_end_range=post_data('fees_end_range');
+
+							if(empty($total_fees_data)){
+								$inserted=$this->im->add_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>'2','fees_type'=>$hostel_type,'fees_start'=>$fees_start_range,'fees_end'=>$fees_end_range ));
+							}else{
+								$inserted=$this->im->update_hostels_total_fees_data(array('fees_data_id'=>$college_id,'fess_data_id_type'=>'2','fees_type'=>$hostel_type,'fees_start'=>$fees_start_range,'fees_end'=>$fees_end_range),array('fees_data_id'=>$college_id,'fess_data_id_type'=>'2','fees_type'=>$hostel_type));
+							}
+
+							//print_obj($inserted);die;
+
+							if($inserted){
+
+								$this->im->update_college_data(array('college_menhostel_details_type'=>$hostel_details_type_men),array('college_user_id'=>$college_id));
+
+								$hostel_notes=$this->im->get_hostels_notes_data(array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type));
+
+								if(empty($hostel_notes)){
+									$this->im->add_hostels_notes_data(array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type,'hostel_notes'=>$college_hostel_info));
+								}else{
+									$this->im->update_hostels_notes_data(array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type,'hostel_notes'=>$college_hostel_info),array('hostel_data_type'=>$hostel_data_type,'hostel_data_type_id'=>$college_id,'hostel_type'=>$hostel_type));
+								}
+
+								$return['success']='Hostel data updated successfully';
+							}else{
+								$return['error']='Hostel data not added';
+							}
+						}else{
+							$return['error']='Noting to save';
+						}						
+
+					}else if($hostel_details_type_men=='2'){
+						
+					}
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	//College Hostel Data
+
+
+	//College Info data
+
+	public function onAddCollegeInfoData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$college_id=decode_data($_college);
+
+				$college_type=post_data('college_type');
+				//echo $college_id;
+
+				//$college_info=post_data('college_general_info');
+
+				$college_info=$this->input->post('college_general_info', FALSE);
+				$college_info_type=post_data('college_info_type');
+
+				$user_id=decode_data(session_userdata('admin_id'));
+
+				//print_obj($college_info);die;
+
+				$get_info=$this->im->get_inst_info_data(array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_type_2'=>'general_info','info_value_type'=>'2'));
+
+				//print_obj($get_info);die;
+
+				//print_obj($college_info);die;
+
+				if(!empty($get_info)){
+
+					if($college_info_type=='1'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='2'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_about'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='3'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_course_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='4'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_admission_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+						// $this->im->update_inst_info_data($data_to_insert,array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_type_2'=>'admission_info'));
+					}else if($college_info_type=='5'){
+						//$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_cutoff_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+
+						$inserted='1';
+					}else if($college_info_type=='6'){
+						// $data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_placement_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+
+						$inserted='1';
+					}else if($college_info_type=='7'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_scholarship_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+
+					}else if($college_info_type=='8'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_faculty_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='9'){
+						$inserted='1';
+					}
+
+					if($college_info_type!='6'){
+						if(isset($data_to_insert)){
+							// $inserted=$this->im->update_inst_info_data($data_to_insert,array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_type_2'=>NULL));
+							$inserted=$this->im->update_inst_info_data($data_to_insert,array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_type_2'=>'general_info'));
+							//$inserted=$this->im->add_inst_info_data($data_to_insert);
+						}
+							
+					}
+
+					
+				}else{
+					if($college_info_type=='1'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value'=>$college_info,'info_creator_id'=>$user_id);
+					}else if($college_info_type=='2'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_about'=>$college_info,'info_creator_id'=>$user_id);
+					}else if($college_info_type=='3'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_course_intro'=>htmlspecialchars($college_info),'info_creator_id'=>$user_id);
+					}else if($college_info_type=='4'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_admission_intro'=>$college_info,'info_type_2'=>NULL,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='5'){
+						//$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_cutoff_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+
+						$inserted='1';
+					}else if($college_info_type=='6'){
+						//$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_placement_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+
+						$data_to_insert='1';
+					}else if($college_info_type=='7'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_scholarship_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='8'){
+						$data_to_insert=array('info_type'=>$college_type,'info_type_id'=>$college_id,'info_value_faculty_intro'=>$college_info,'info_creator_id'=>$user_id,'info_updated_at'=>date('Y-m-d'));
+					}else if($college_info_type=='9'){
+						$inserted='1';
+					}
+
+					if($college_info_type!='6'){
+						if(isset($data_to_insert)){
+							$inserted=$this->im->add_inst_info_data($data_to_insert);
+						}						
+					}					
+				}
+
+				
+
+				if($inserted){
+					//if(!empty($college_info))
+					$this->onAddCollegeOtherInfoData($college_id,$college_type);
+					$return['success']='College info updated';
+				}else{
+					$return['error']='College info not updated';
+				}
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect();
+			}
+		}else{
+			redirect();
+		}
+	}
+
+
+	public function onAddCollegeOtherInfoData($inst_id,$inst_type){
+		$details_type=post_data('college_details_type');
+		$user_id=decode_data(session_userdata('admin_id'));
+
+		$date_modified=date('Y-m-d');
+
+		$data_to_store=array();
+
+		if($details_type=='admission_info'){
+			$admission_details=$this->input->post('admission_details');
+
+			$admission_faqus=$this->input->post('admission_faqus');
+
+			//print_obj($admission_faqus);die;
+
+			//echo $inst_type;
+
+			$d=$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'admission_info','info_value_type!='=>'2'));
+
+			//print_obj($d);die;
+
+			if(!empty($admission_details)){
+				$serial=0;
+				
+	
+				foreach ($admission_details as $key => $value){
+					$data_type=$value['data_type'];
+					$admission_content=$value['admission_content'];
+
+					if(!empty($admission_content)){
+						if(isset($value['data_type_value'])){
+							$data_type_value=decode_data($value['data_type_value']);
+						}else{
+							$data_type_value=null;
+						}
+
+						$data_to_store[]=array(
+							'info_creator_id'=>$user_id,
+							'info_type'=>$inst_type,
+							'info_type_id'=>$inst_id,
+							'info_value_id'=>$data_type_value,
+							'info_value'=>$admission_content,
+							'info_value_type'=>$data_type,
+							'info_serial'=>$serial,
+							'info_type_2'=>'admission_info',
+							'info_updated_at'=>date('Y-m-d H:i:s')
+						);
+
+						//print_obj($data_to_store);
+
+						$serial++;	
+					}
+
+
+						
+
+					//$this->im->add_inst_info_data($data_to_store);
+				}
+
+				//$return['data_to_store']=$data_to_store;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+				//print_obj($data_to_store);
+			}
+
+			if(!empty($admission_faqus)){
+				$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$inst_id,'faq_data_id_type'=>$inst_type,'faq_type'=>'4'));
+				foreach ($admission_faqus as $key => $value) {
+
+					if(!empty($value['ques']) && !empty($value['ans'])){
+						$faq_data=array(
+							'faq_data_id'=>$inst_id,
+							'faq_data_id_type'=>$inst_type,
+							'faq_type'=>'4',
+							'faq_question'=>$value['ques'],
+							'faq_ans'=>$value['ans']
+						);
+
+						$this->sm->store_system_users_faqs_data($faq_data);
+					}
+						
+				}
+			}
+		}else if($details_type=='result_info'){
+			$result_details=$this->input->post('result_details');
+
+			$result_faqus=$this->input->post('result_faqus');
+
+			//print_obj($result_details);die;
+
+			if(!empty($result_details)){
+				$serial=0;
+				// $this->im->delete_inst_info_data(array('info_creator_id'=>$user_id,'info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'result_info','info_value_type!='=>'2'));
+
+				$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'result_info','info_value_type!='=>'2'));
+
+				foreach ($result_details as $key => $value){
+					$data_type=$value['data_type'];
+					$result_content=$value['data_content'];
+
+					if(!empty($result_content)){
+						if(isset($value['data_type_value'])){
+							$data_type_value=decode_data($value['data_type_value']);
+						}else{
+							$data_type_value=null;
+						}
+
+						$data_to_store[]=array(
+							'info_creator_id'=>$user_id,
+							'info_type'=>$inst_type,
+							'info_type_id'=>$inst_id,
+							'info_value_id'=>$data_type_value,
+							'info_value'=>$result_content,
+							'info_value_type'=>$data_type,
+							'info_serial'=>$serial,
+							'info_type_2'=>'result_info',
+							'info_updated_at'=>date('Y-m-d H:i:s')
+						);
+
+						//print_obj($data_to_store);
+
+						$serial++;	
+					}
+
+					//print_obj($data_to_store);die;
+
+
+						
+
+					//$this->im->add_inst_info_data($data_to_store);
+				}
+
+				//$return['data_to_store']=$data_to_store;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+				
+
+				//print_obj($data_to_store);
+			}
+
+			if(!empty($result_faqus)){
+				$this->sm->delete_system_users_faqs_data(array('faq_data_id'=>$inst_id,'faq_data_id_type'=>$inst_type,'faq_type'=>'5'));
+				foreach ($result_faqus as $key => $value) {
+
+					if(!empty($value['ques']) && !empty($value['ans'])){
+						$faq_data=array(
+							'faq_data_id'=>$inst_id,
+							'faq_data_id_type'=>$inst_type,
+							'faq_type'=>'5',
+							'faq_question'=>$value['ques'],
+							'faq_ans'=>$value['ans']
+						);
+
+						$this->sm->store_system_users_faqs_data($faq_data);
+					}
+						
+				}
+			}
+		}else if($details_type=='placement_info'){
+
+			$college_info=$this->input->post('college_general_info');
+
+			$highest_pacakge=post_data('college_general_info_highest_pacakge');
+			$average_package=post_data('college_general_info_avg_package');
+
+			$college_placement_data=$this->input->post('college_placement_data');
+
+			$college_placement_frequent_companies=$this->input->post('college_placement_frequent_companies');
+
+
+			$college_placement_alumni_distribution_by_companies=$this->input->post('college_placement_alumni_distribution_by_companies');
+
+			$college_placement_alumni_distribution_by_sectors=$this->input->post('college_placement_alumni_distribution_by_sectors');
+
+			// $this->im->delete_inst_info_data(array('info_creator_id'=>$user_id,'info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'placement_info','info_value_type!='=>'2'));
+
+			$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'placement_info','info_value_type!='=>'2'));
+
+			if(!empty($college_info)){				
+
+				foreach ($college_info as $key => $value) {
+					$data_content=$value['data_content'];
+					$data_serial=$value['data_serial'];
+					$data_type=$value['data_type'];
+
+					if($data_type=='image'){
+						$data_type_value=$value['data_type_value'];
+						$data_type_value_alt=$value['data_type_value_alt'];
+					}else{
+						$data_type_value=null;
+						$data_type_value_alt=null;
+					}
+
+					$data_to_store[]=array(
+						'info_creator_id'=>$user_id,
+						'info_serial'=>$data_serial,
+						'info_type'=>$inst_type,
+						'info_type_2'=>'placement_info',
+						'info_type_id'=>$inst_id,
+						'info_value_type'=>$data_type,
+						'info_value_id'=>$data_type_value,
+						'info_value'=>$data_content,
+						'info_value_about'=>$data_type_value_alt,
+						'info_updated_at'=>$date_modified
+					);
+				}
+
+				//print_obj($data_to_store);die;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+			}
+
+			if($highest_pacakge>0){
+				$this->im->delete_placement_pacakge_data(array('pacakge_inst_id'=>$inst_id,'pacakge_type'=>'average'));
+
+				$package_highest_data_to_store=array(
+					'pacakge_inst_id'=>$inst_id,
+					'pacakge_type'=>'highest',
+					'pacakge_value'=>$highest_pacakge,
+					'pacakge_inst_type'=>'college'
+				);
+
+				if(!empty($package_highest_data_to_store)){
+					$this->im->add_placement_pacakge_data($package_highest_data_to_store);
+				}
+			}
+
+			if($average_package>0){
+				$this->im->delete_placement_pacakge_data(array('pacakge_inst_id'=>$inst_id,'pacakge_type'=>'average'));
+
+				$package_average_data_to_store=array(
+					'pacakge_inst_id'=>$inst_id,
+					'pacakge_type'=>'average',
+					'pacakge_value'=>$average_package,
+					'pacakge_inst_type'=>'college'
+				);
+
+				if(!empty($package_average_data_to_store)){
+					$this->im->add_placement_pacakge_data($package_average_data_to_store);
+				}
+			}
+
+
+			if(!empty($college_placement_frequent_companies)){
+				$this->im->delete_company_freq_data(array('freq_college_id'=>$inst_id));
+				foreach ($college_placement_frequent_companies as $key => $value) {
+					$college_placement_frequent_companies_data[]=array(
+						'freq_college_id'=>$inst_id,
+						'freq_company_id'=>$value['company_id'],
+						'created_by'=>$this->data['userdata']->user_id
+					);
+				}
+
+				$this->im->add_company_freq_data($college_placement_frequent_companies_data,TRUE);
+
+				$added_companies=$this->im->_get_company_freq_data_groupconcat(array('freq_college_id'=>$inst_id));
+
+				if(!empty($added_companies)){
+					$this->im->update_college_data(array('college_frequent_visited_companies'=>$added_companies->freq_company_ids),array('college_user_id'=>$inst_id));
+				}
+			}
+
+
+
+			if(!empty($college_placement_data)){
+				$this->im->delete_placement_data(array('placement_type'=>'COLLEGE','placement_type_id'=>$inst_id));
+				foreach ($college_placement_data as $key => $value) {
+
+					if(!empty($value['no_of_students']) && $value['no_of_students']>0 && !empty($value['package']) && $value['package']>0){
+						$placement_screen_type='with_highest_package';
+					}else if(!empty($value['no_of_students']) && !empty($value['package'])){
+						$placement_screen_type='with_students_count';
+					}
+					else{
+						$placement_screen_type='normal_data';
+					}
+
+					$_college_placement_data[]=array(
+						'placement_type'=>'COLLEGE',
+						'placement_type_id'=>$inst_id,
+						'placement_company'=>$value['company'],
+						'placement_year'=>$value['year'],
+						'placement_highest_package'=>$value['package'],
+						'placement_students_no'=>$value['no_of_students'],
+						'placement_screen_type'=>'with_students_count'
+					);
+				}
+
+				$this->im->add_placement_data($_college_placement_data,TRUE);
+			}
+
+
+			if(!empty($college_placement_alumni_distribution_by_companies)){
+
+				//print_obj($college_placement_alumni_distribution_by_companies);die;
+
+				$this->im->delete_placement_pacakge_alumni_data(array('alumni_type'=>'company','alumni_college_id'=>$inst_id));
+
+				foreach ($college_placement_alumni_distribution_by_companies as $key => $value) {
+					$placement_companies_alumni_data[]=array(
+						'alumni_type'=>'company',
+						'alumni_type_id'=>$value['company_id'],
+						'alumni_college_id'=>$inst_id,
+						'alumni_value'=>$value['alumni_percentage_scale']
+					);
+
+					
+				}
+
+				$this->im->add_placement_pacakge_alumni_data($placement_companies_alumni_data,TRUE);
+
+				
+			}
+
+
+			if(!empty($college_placement_alumni_distribution_by_sectors)){
+				$this->im->delete_placement_pacakge_alumni_data(array('alumni_type'=>'sector','alumni_college_id'=>$inst_id));
+				
+				foreach ($college_placement_alumni_distribution_by_sectors as $key => $value) {
+					$placement_sectors_alumni_data[]=array(
+						'alumni_type'=>'sector',
+						'alumni_type_id'=>$value['company_id'],
+						'alumni_college_id'=>$inst_id,
+						'alumni_value'=>$value['alumni_percentage_scale']
+					);
+				}
+
+				$this->im->add_placement_pacakge_alumni_data($placement_sectors_alumni_data,TRUE);
+			}
+
+		}else if($details_type=='course_info'){
+			$college_info=$this->input->post('college_general_info');
+
+			// $this->im->delete_inst_info_data(array('info_creator_id'=>$user_id,'info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'course_info'));
+
+			$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'course_info','info_value_type!='=>'2'));
+
+			if(!empty($college_info)){
+
+				foreach ($college_info as $key => $value) {
+					$data_content=$value['data_content'];
+					$data_serial=$value['data_serial'];
+					$data_type=$value['data_type'];
+
+					if($data_type=='image'){
+						$data_type_value=$value['data_type_value'];
+					}else{
+						$data_type_value=null;
+					}
+
+					$data_to_store[]=array(
+						'info_creator_id'=>$user_id,
+						'info_serial'=>$data_serial,
+						'info_type'=>$inst_type,
+						'info_type_2'=>'course_info',
+						'info_type_id'=>$inst_id,
+						'info_value_type'=>$data_type,
+						'info_value_id'=>$data_type_value,
+						'info_value'=>$data_content,
+						'info_updated_at'=>$date_modified
+					);
+				}
+
+				//print_obj($data_to_store);die;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+			}
+
+		}else if($details_type=='faculty_info'){
+			$college_info=$this->input->post('college_general_info');
+
+			if(!empty($college_info)){
+
+				// $this->im->delete_inst_info_data(array('info_creator_id'=>$user_id,'info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'faculty_info','info_value_type!='=>'2'));
+
+				$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'faculty_info','info_value_type!='=>'2'));
+
+				foreach ($college_info as $key => $value) {
+					$data_content=$value['data_content'];
+					$data_serial=$value['data_serial'];
+					$data_type=$value['data_type'];
+
+					if($data_type=='image'){
+						$data_type_value=$value['data_type_value'];
+					}else{
+						$data_type_value=null;
+					}
+
+					$data_to_store[]=array(
+						'info_creator_id'=>$user_id,
+						'info_serial'=>$data_serial,
+						'info_type'=>$inst_type,
+						'info_type_2'=>'faculty_info',
+						'info_type_id'=>$inst_id,
+						'info_value_type'=>$data_type,
+						'info_value_id'=>$data_type_value,
+						'info_value'=>$data_content,
+						'info_updated_at'=>$date_modified
+					);
+				}
+
+				//print_obj($data_to_store);die;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+			}
+
+		}else if($details_type=='scholarship_info'){
+			$college_info=$this->input->post('scholarship_details');
+
+			// $this->im->delete_inst_info_data(array('info_creator_id'=>$user_id,'info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'scholarship_info','info_value_type!='=>'2'));
+
+			$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'scholarship_info','info_value_type!='=>'2'));
+
+			if(!empty($college_info)){
+
+				foreach ($college_info as $key => $value) {
+					$data_content=$value['data_content'];
+					$data_serial=$value['data_serial'];
+					$data_type=$value['data_type'];
+
+					if($data_type=='image'){
+						$data_type_value=$value['data_type_value'];
+						$data_type_value_alt=$value['data_type_value_alt'];
+					}else{
+						$data_type_value=null;
+						$data_type_value_alt=null;
+					}
+
+					if(!empty($data_content)){
+						$data_to_store[]=array(
+							'info_creator_id'=>$user_id,
+							'info_serial'=>$data_serial,
+							'info_type'=>$inst_type,
+							'info_type_2'=>'scholarship_info',
+							'info_type_id'=>$inst_id,
+							'info_value_type'=>$data_type,
+							'info_value_id'=>$data_type_value,
+							'info_value'=>$data_content,
+							'info_value_about'=>$data_type_value_alt,
+							'info_updated_at'=>$date_modified
+						);
+					}
+
+						
+				}
+
+				//print_obj($data_to_store);die;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+			}
+		}else if($details_type=='cutoff_info'){
+			$college_info=$this->input->post('college_general_info');
+
+			if(!empty($college_info)){
+
+				// $this->im->delete_inst_info_data(array('info_creator_id'=>$user_id,'info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'cutoff_info','info_value_type!='=>'2'));
+
+				$this->im->delete_inst_info_data(array('info_type'=>$inst_type,'info_type_id'=>$inst_id,'info_type_2'=>'cutoff_info','info_value_type!='=>'2'));
+
+				foreach ($college_info as $key => $value) {
+					$data_content=$value['data_content'];
+					$data_serial=$value['data_serial'];
+					$data_type=$value['data_type'];
+
+					if($data_type=='image'){
+						$data_type_value=$value['data_type_value'];
+					}else{
+						$data_type_value=null;
+					}
+
+					$data_to_store[]=array(
+						'info_creator_id'=>$user_id,
+						'info_serial'=>$data_serial,
+						'info_type'=>$inst_type,
+						'info_type_2'=>'cutoff_info',
+						'info_type_id'=>$inst_id,
+						'info_value_type'=>$data_type,
+						'info_value_id'=>$data_type_value,
+						'info_value'=>$data_content,
+						'info_updated_at'=>$date_modified
+					);
+				}
+
+				//print_obj($data_to_store);die;
+
+				if(!empty($data_to_store)){
+					$this->im->add_inst_info_data($data_to_store,TRUE);
+				}
+
+			}
+		}
+	}
+
+
+	public function onDeleteCollegeCompanyPlacement(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$placement_id=post_data('placement_id');
+
+				$placement_data=$this->im->get_placement_data(array('placement_id'=>$placement_id));
+
+				//print_obj($placement_data);die;
+
+				if(!empty($placement_data)){
+
+					$deleted=$this->im->delete_placement_data(array('placement_id'=>$placement_id));
+
+					if($deleted){
+						$return['success']='Data has been deleted';
+					}else{
+						$return['error']='Data deleted';
+					}
+
+				}else{
+					$return['error']='Not deleted';
+				}
+
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	//College info data
+
+
+	//College Placement Data
+
+	public function indexCollegePlacement($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			if($college_id!=null){
+				$cid=decode_data($college_id);
+				$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+				$this->data['page_title']='Placements';
+
+				if(isset($cid)){
+					$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+					$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+				}else{
+					$_college_banner='';
+					$_college_logo='';
+				}				
+
+				if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+	                $college_logo=$_college_logo->media_disk_path_relative;
+	                $college_logo_name=$_college_logo->media_org_name;
+	            }else{
+	                $college_logo=base_url().'uploads/app/default/no.jpg';
+	                $college_logo_name='';
+	            }
+
+	            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+	                $college_banner=$_college_banner->media_disk_path_relative;
+	                $college_banner_name=$_college_banner->media_org_name;
+	            }else{
+	                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+	                $college_banner_name='';
+	            }
+
+	            $_placement_companies=$this->im->get_placement_companies(array('placement_company_status'=>'1'),FALSE);
+
+				if(!empty($_placement_companies)){
+					foreach ($_placement_companies as $key => $value) {
+						$placement_companies[]=array(
+							'placement_company_id'=>$value->placement_company_id,
+							'placement_company_name'=>$value->placement_company_name
+						);
+					}
+				}else{
+					$placement_companies=array();
+				}
+
+				$_placement_sectors=$this->im->get_company_sectors_data(array('sector_status'=>'active'),FALSE);
+
+				if(!empty($_placement_sectors)){
+					foreach ($_placement_sectors as $key => $value) {
+						$placement_sectors[]=array(
+							'placement_company_sector_id'=>$value->sector_id,
+							'placement_company_sector_name'=>$value->sector_name
+						);
+					}
+				}else{
+					$placement_sectors=array();
+				}
+
+				//print_obj($placement_sectors);die;
+
+	            $placement_data=$this->im->get_placement_data(array('placement_type'=>'COLLEGE','placement_type_id'=>$cid),FALSE);
+
+	            //$placement_intro=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'placement_info'));
+
+	            $placement_intro=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'general_info','info_value_type'=>'2'));
+
+	            $placement_infos=$this->im->_get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'placement_info'));
+
+	            //print_obj($placement_intro);die;
+
+	            $_placement_package_highest_data=array();
+	            $_placement_package_average_data=array();
+
+
+	            $placement_package_highest_data=$this->im->get_placement_pacakge_data(array('pacakge_type'=>$cid,'pacakge_inst_type'=>'college','pacakge_type'=>'highest'));
+
+	            for ($i=0; $i <=100 ; $i++){
+	            	$package_value=$i*100000;
+	            	$_placement_package_highest_data[]=array(
+	            		'pacakge_highest_data'=>$package_value,
+	            		'selected'=>(!empty($placement_package_highest_data) && ($package_value==$placement_package_highest_data->pacakge_value))?'selected':''
+	            	);
+	            }
+
+
+	            $placement_package_average_data=$this->im->get_placement_pacakge_data(array('pacakge_type'=>$cid,'pacakge_inst_type'=>'college','pacakge_type'=>'average'));
+
+	            for ($i=0; $i <=100 ; $i++){
+	            	$package_average_value=$i*100000;
+	            	$_placement_package_average_data[]=array(
+	            		'pacakge_avg_data'=>$package_average_value,
+	            		'selected'=>(!empty($placement_package_average_data) && ($_placement_package_average_data==$placement_package_average_data->pacakge_value))?'selected':''
+	            	);
+	            }
+
+	            //print_obj($_placement_package_highest_data);die;
+
+	            if($college_data->college_utype==3){
+	            	$menu_link_type='101';
+	            }else if($college_data->college_utype==4){
+	            	$menu_link_type='10';
+	            }
+
+
+
+				$param=array('menu_link_id'=>$cid,'menu_link_type'=>$menu_link_type);
+
+				$_inner_menus = $this->sm->get_inner_menues(NULL,$param,FALSE,FALSE);
+
+				if(!empty($_inner_menus)){
+					foreach ($_inner_menus as $key => $value) {
+
+						//$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+						if($college_data->college_utype==3){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+						}else if($college_data->college_utype==4){
+							$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+						}
+
+						$menu_form='form_'.$value->menu_type_alias_name;
+						$inner_menues[]=array(
+							'menu_id'=>$value->menu_id,
+							'menu_name'=>$value->menu_name,
+							'menu_type'=>$value->menu_type_name,
+							'menu_type_alias_name'=>$value->menu_type_alias_name,
+							'menu_form'=>$menu_form,
+							'menu_target_modal'=>$menu_target_modal,
+							'menu_link'=>$menu_link
+						);
+
+						//$inner_menu_alias[]=$value->menu_type_alias_name;
+					}					
+				}else{
+					$inner_menues=array();
+					$inner_menu_alias=array();
+				}
+
+
+				$this->data['companies_visited_frequently']=$this->im->get_company_freq_data(array('freq_college_id'=>$college_data->college_user_id),FALSE);
+
+				$this->data['companywise_alumni']=$this->im->_get_placement_pacakge_alumni_data(array('alumni_college_id'=>$college_data->college_user_id,'alumni_type'=>'company'),FALSE);
+
+				$this->data['sectorwise_alumni']=$this->im->__get_placement_pacakge_alumni_data(array('alumni_college_id'=>$college_data->college_user_id,'alumni_type'=>'sector'),FALSE);
+
+
+				//print_obj($this->data['companywise_alumni']);die;
+
+				if($college_data->college_utype=='3'){
+					$college_type='101';
+				}else if($college_data->college_utype=='4'){
+					$college_type='10';
+				}
+
+	            $this->data['college_data']=array(
+	            	'college_id'=>encode_data($college_data->college_user_id),
+	            	'college_type'=>$college_type,
+	            	'college_name'=>$college_data->college_name,
+	            	'college_banner'=>$college_banner,
+	            	'college_logo'=>$college_logo,
+	            	'college_placement_companies'=>$placement_companies,
+	            	'college_placement_company_sectors'=>$placement_sectors,
+	            	'college_highest_package'=>$_placement_package_highest_data,
+	            	'college_average_package'=>$_placement_package_average_data,
+	            	'college_placement_intro'=>$placement_intro->info_value_placement_intro,
+	            	'college_placement_intfos'=>$placement_infos,
+	            	'college_placement_data'=>$placement_data
+	            );
+
+	            $this->data['inner_menues_assigned']=$inner_menues;
+
+	            //print_obj($this->data['college_data']);die;
+
+				//$get_faculty_data=$this->im->get_faculty_data(array('faculty_type'=>'2','faculty_type_id'=>$cid,'faculty_id'=>$menu_id));
+
+				$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->add_partial('partial_ads_modal')->load('users/vw_colleges_add_edit_placement', $this->data);
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAddPlacementData(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$_college=post_data('_college');
+				$placement_data=$this->input->post('college_placement_data');
+
+				$college_id=decode_data($_college);
+
+				if(!empty($placement_data)){
+					foreach ($placement_data as $key => $value) {
+						$pdata[]=array(
+							'placement_type'=>'COLLEGE',
+							'placement_type_id'=>$college_id,
+							'placement_company'=>$value['company'],
+							'placement_year'=>$value['year'],
+							'placement_highest_package'=>$value['package']
+						);
+					}
+					$this->im->delete_placement_data(array('placement_type'=>'COLLEGE','placement_type_id'=>$college_id));
+
+					$added=$this->im->add_placement_data($pdata,TRUE);
+
+					if($added){
+						$return['success']='Placement data added successfully';	
+					}else{
+						$return['error']='Placement data not added';
+					}
+				}else{
+					$return['error']='Placement data can not be empty';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	//College Placement Data
+
+	//Colleges
+
+
+	public function onCreateSlugs(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$data_type=post_data('data_type');
+				$data_value_id=post_data('data_value_id');
+
+				if(in_array($data_type, array('university_slug','college_slug'))){
+					$data_id=decode_data($data_value_id);
+
+					if($data_type=='university_slug'){
+						$slug_found=$this->sm->get_slug(array('slug_type_id'=>$data_id,'slug_type'=>'6'));
+						$university_data=$this->im->get_university_profile_data(array('university_user_id'=>$data_id));
+						$country_data=$this->com->get_country(array('country_id'=>$university_data->university_country_id));
+						$city_data=$this->com->get_city(array('city_id'=>$university_data->university_city_id));
+						$state_data=$this->com->get_state(array('state_id'=>$university_data->university_state_id));
+						$_slug_value=$university_data->university_name.' '.$city_data->city_name.' '.$state_data->state_name;
+						$slug_value=url_slug($_slug_value);
+						$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+						$slug_type='6';
+					}else if($data_type=='college_slug'){
+						$slug_found=$this->sm->get_slug(array('slug_type_id'=>$data_id,'slug_type'=>'7'));
+						$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$data_id));
+						$country_data=$this->com->get_country(array('country_id'=>$college_data->college_country_id));
+						$city_data=$this->com->get_city(array('city_id'=>$college_data->college_city_id));
+						$state_data=$this->com->get_state(array('state_id'=>$college_data->college_state_id));
+						$_slug_value=$college_data->college_name.' '.$city_data->city_name.' '.$state_data->state_name;
+						$slug_value=url_slug($_slug_value);
+						$slug_url=base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value;
+						$slug_type='7';
+					}
+
+					 
+
+					if(!empty($slug_found)){
+						$inserted=$this->sm->update_slug(array('slug_value'=>$slug_value),array('slug_type_id'=>$data_id,'slug_type'=>$slug_type));
+						if($inserted){
+							if($slug_type=='6'){
+								$this->im->update_universities_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('university_user_id'=>$data_id));
+							}else if($slug_type=='7'){
+								$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$data_id));
+							}							
+						}
+					}else{
+						$inserted=$this->sm->store_slug(array('slug_value'=>$slug_value,'slug_type_id'=>$data_id,'slug_type'=>$slug_type));
+						if($inserted){
+							if($slug_type=='6'){
+								$this->im->update_universities_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('university_user_id'=>$data_id));
+							}else if($slug_type=='7'){
+								$this->im->update_college_data(array('access_url'=>$slug_url,'access_url_slug'=>$slug_value),array('college_user_id'=>$data_id));
+							}
+						}
+					}
+
+					if($inserted){
+						$return['success']='Slug created';
+					}else{
+						$return['error']='Slug not created';
+					}
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+
+	public function onAddInstReview(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$user_id=decode_data(session_userdata('admin_id'));
+
+				$user_data=$this->um->_get_internal_user(array('user_m_id'=>$user_id));
+
+				$_inst_id=post_data('_inst_id');
+
+				//echo $_inst_id;die;
+
+				$review_on_placement=post_data('review_on_placement');
+				$review_on_campus_life=post_data('review_on_campus_life');
+				$review_on_college=post_data('review_on_college');
+				$review_on_hostel_life=post_data('review_on_hostel_life');
+				$review_on_internship=post_data('review_on_internship');
+
+				$review_on_social_life=post_data('review_on_social_life');
+
+				$review_heading=post_data('review_heading');
+				$review_detail_admission_exam=post_data('review_detail_admission_exam');
+				$review_detail_placement=post_data('review_detail_placement');
+
+				$review_detail_interview=post_data('review_detail_interview');
+	
+				$review_detail_internship=post_data('review_detail_internship');
+				$review_detail_college=post_data('review_detail_college');
+				$review_detail_campus=post_data('review_detail_campus');
+				$review_detail_social=post_data('review_detail_social');
+				$review_detail_hostel=post_data('review_detail_hostel');
+
+				$review_detail_courses_curriculum=post_data('review_detail_courses_curriculum');
+				$review_detail_loan_scholarships=post_data('review_detail_loan_scholarships');
+				$review_remarks=post_data('review_remarks');
+
+
+				$inst_id=decode_data($_inst_id);
+
+				//echo $inst_id;die;
+
+
+				//$review=$this->um->get_review_data(array('review_user_id'=>$user_id,'review_user_type'=>$user_data->user_role,'review_inst_id'=>$inst_id));
+
+				//$review=$this->sm->get_review_data(array('review_user_id'=>'0','review_inst_id'=>$inst_id,'review_course_id'=>$inst_course_id,'review_step'=>$step_no));
+
+				//print_obj($review);die;
+
+
+				//if(empty($review)){
+
+					$inst_data=$this->im->get_college_profile_data(array('college_user_id'=>$inst_id));
+
+					$anonymus_id=md5(uniqid());
+
+					$anonymus_user=post_data('review_user_name');
+					$review_data=array(
+						'review_step'=>'step_1',
+						'review_user_id'=>'0',
+						'review_user_anonymus_id'=>$anonymus_id,
+						'review_user_as'=>'anonymus',
+						'review_user_name'=>$anonymus_user,
+						'review_inst_type'=>'college',
+						'review_inst_id'=>$inst_id,
+						'review_inst_name'=>$inst_data->college_name,
+						'review_title'=>$review_heading,
+						'review_remarks'=>$review_remarks,
+						'review_inst_overall'=>$review_detail_college,
+						'review_approved'=>'yes',
+						'review_approved_by'=>$user_id
+					);
+
+					$added=$this->sm->add_review_data($review_data);
+
+					if($added){
+
+						$steps=$this->input->post('review_steps');
+
+						if(!empty($steps)){
+							foreach ($steps as $key => $value) {
+								$review_steps_data[]=array(
+									'review_user_anonymusid'=>$anonymus_id,
+									'review_data_id'=>$added,
+									'review_step'=>$value['step'],
+									'review_inst_id'=>$inst_id,
+									'review_course_id'=>'0',
+									'review_user_id'=>'0',
+									'review_question'=>'',
+									'review_question_type'=>$value['question_type'],
+									'review_question_answer'=>$value['answer'],
+									'review_question_rating'=>$value['rating']
+								);
+							}
+
+							$this->sm->add_review_question_data($review_steps_data,TRUE);
+						}
+
+						$return['success']='Review submitted successfully.';
+					}else{
+						$return['error']='There is an error.Try again later.';
+					}
+				// }else{
+				// 	$return['error']='You have submitted your review already.';
+				// }
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onLoadReviewdata(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$inst_id=post_data('inst_id');
+				$anonymus_id=post_data('anonymus_id');
+
+				$this->data['review_data']=$this->sm->get_review_datas(array('review_user_anonymus_id'=>$anonymus_id,'review_inst_id'=>$inst_id),FALSE);
+
+				$this->data['review_q_data']=$this->sm->get_review_question_data(array('review_inst_id'=>$inst_id,'review_user_anonymusid'=>$anonymus_id),FALSE);
+
+				$return['html']=$this->theme->view('_pages/users/vw_review_data',$this->data,true);
+
+				header('Content-Type: application/json');
+
+				echo json_encode($return);
+				session_write_close();
+			}
+			else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+	public function indexCollegesScholarShipAddEdit($college_id=null){
+		if(session_userdata('isAdminLoggedin')){
+			$inst_id=$this->uri->segment(5,0);
+			$this->data['scholarship_type_id']=$inst_id;
+
+			$cid=decode_data($college_id);
+			$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$cid));
+			$this->data['page_title']='Scholarships';
+
+			if(isset($cid)){
+				$_college_banner=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_banner'));
+				$_college_logo=$this->sm->get_user_file(array('user_file_type_id'=>$cid,'user_storage_type'=>'user_logo'));
+			}else{
+				$_college_banner='';
+				$_college_logo='';
+			}				
+
+			if(!empty($_college_logo) && !empty($_college_logo->media_disk_path_relative)){
+                $college_logo=$_college_logo->media_disk_path_relative;
+                $college_logo_name=$_college_logo->media_org_name;
+            }else{
+                $college_logo=base_url().'uploads/app/default/no.jpg';
+                $college_logo_name='';
+            }
+
+            if(!empty($_college_banner) && !empty($_college_banner->media_disk_path_relative)){
+                $college_banner=$_college_banner->media_disk_path_relative;
+                $college_banner_name=$_college_banner->media_org_name;
+            }else{
+                $college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+                $college_banner_name='';
+            }
+
+
+            if($college_data->college_utype=='3'){
+				$menu_link_type='101';
+			}else if($college_data->college_utype=='4'){
+				$menu_link_type='10';
+			}
+
+
+            $param=array('menu_link_id'=>$cid,'menu_link_type'=>$menu_link_type);
+
+			//$_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+			$_inner_menus = $this->sm->get_inner_menues(NULL,$param,FALSE,FALSE);
+
+			//print_obj($_inner_menus);die;
+
+			if(!empty($_inner_menus)){
+				foreach ($_inner_menus as $key => $value) {
+
+					//$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+					if($college_data->college_utype==3){
+						$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+					}else if($college_data->college_utype==4){
+						$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+					}
+
+					$menu_form='form_'.$value->menu_type_alias_name;
+					$inner_menues[]=array(
+						'menu_id'=>$value->menu_id,
+						'menu_name'=>$value->menu_name,
+						'menu_type'=>$value->menu_type_name,
+						'menu_type_alias_name'=>$value->menu_type_alias_name,
+						'menu_form'=>$menu_form,
+						'menu_target_modal'=>$menu_target_modal,
+						'menu_link'=>$menu_link
+					);
+
+					//$inner_menu_alias[]=$value->menu_type_alias_name;
+				}					
+			}else{
+				$inner_menues=array();
+				$inner_menu_alias=array();
+			}
+
+
+            // $param=array('menu_link_id'=>$cid);
+
+			// $_inner_menus = $this->sm->_get_inner_menues(NULL,$param,FALSE,FALSE);
+
+			// if(!empty($_inner_menus)){
+			// 	foreach ($_inner_menus as $key => $value) {
+
+			// 		//$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+
+			// 		if($college_data->college_utype==3){
+			// 			$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/universities/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/universities/add/'.$college_id;
+			// 		}else if($college_data->college_utype==4){
+			// 			$menu_link=($value->menu_type_alias_name!='info')?$this->data['admin_base_url'].'/institutions/colleges/'.$value->menu_type_alias.'/'.$college_id:$this->data['admin_base_url'].'/institutions/colleges/add/'.$college_id;
+			// 		}
+
+			// 		$menu_form='form_'.$value->menu_type_alias_name;
+			// 		$inner_menues[]=array(
+			// 			'menu_id'=>$value->menu_id,
+			// 			'menu_name'=>$value->menu_name,
+			// 			'menu_type'=>$value->menu_type_name,
+			// 			'menu_type_alias_name'=>$value->menu_type_alias_name,
+			// 			'menu_form'=>$menu_form,
+			// 			'menu_target_modal'=>$menu_target_modal,
+			// 			'menu_link'=>$menu_link
+			// 		);
+
+			// 		//$inner_menu_alias[]=$value->menu_type_alias_name;
+			// 	}					
+			// }else{
+			// 	$inner_menues=array();
+			// 	$inner_menu_alias=array();
+			// }
+
+
+
+			$this->data['parent_folder_data']=$this->sm->get_file(array('storage_type'=>'1','media_org_name'=>'scholarshipdata'));
+
+			//echo decode_data($inst_id);
+
+			$scholarship_intro_data=$this->im->get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_value_type'=>'2','info_type_2'=>'general_info'));
+
+			$scholarship_detail_data=$this->im->_get_inst_info_data(array('info_type'=>'2','info_type_id'=>$cid,'info_type_2'=>'scholarship_info'));
+
+			//print_obj($scholarship_detail_data);die;
+
+
+			$this->data['college_data']=array(
+				'college_id'=>encode_data($college_data->college_user_id),
+				'college_name'=>$college_data->college_name,
+				'college_banner'=>$college_banner,
+				'college_logo'=>$college_logo,
+				'college_scholarship_intro_data'=>$scholarship_intro_data->info_value_scholarship_intro,
+				'college_scholarship_data'=>$scholarship_detail_data
+			);
+
+			$this->data['inner_menues_assigned']=$inner_menues;
+
+
+			
+
+			//print_obj($this->data['scholarship_detail_data']);die;
+
+			$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->add_partial('partial_ads_modal')->add_partial('partial_tiny_file_browser')->load('users/vw_colleges_add_edit_scholarships', $this->data);
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAddCollegeScholarshipData(){
+		if(session_userdata('isAdminLoggedin')){
+			$_scholarship_type_id=post_data('_scholarship_type_id');
+			$scholarship_type=post_data('scholarship_type');
+
+			$scholarship_type_id=decode_data($_scholarship_type_id);
+
+			$user_id=decode_data(session_userdata('admin_id'));
+
+			$scholarship_details=$this->input->post('scholarship_details');
+
+			if(!empty($scholarship_details)){
+				$serial=0;
+
+				$this->nm->delete_scholarship_data(array('scholarship_type'=>$scholarship_type,'scholarship_type_id'=>$scholarship_type_id));
+
+				foreach ($scholarship_details as $key => $value){
+					$data_type=$value['data_type'];
+					$scholarship_content=$value['scholarship_content'];
+
+					if($data_type=='image'){
+											
+						$data_type_value=decode_data($value['data_type_value']);
+						$data_to_store=array(
+							'scholarship_type'=>$scholarship_type,
+							'scholarship_type_id'=>$scholarship_type_id,
+							'scholarship_data_image_id'=>$data_type_value,
+							'scholarship_data_type'=>$data_type,
+							'scholarship_content'=>$scholarship_content,
+							'scholarship_serial'=>$serial,
+							'created_by'=>$user_id,
+							'created_at'=>date('Y-m-d H:i:s')
+						);
+					}else{
+						$data_to_store=array(
+							'scholarship_type'=>$scholarship_type,
+							'scholarship_type_id'=>$scholarship_type_id,
+							'scholarship_data_type'=>$data_type,
+							'scholarship_content'=>$scholarship_content,
+							'scholarship_serial'=>$serial,
+							'created_by'=>$user_id,
+							'created_at'=>date('Y-m-d H:i:s')
+						);
+					}
+
+					$serial++;
+										
+					$this->nm->add_scholarship_data($data_to_store);
+				}
+
+				$return['success']='Scholarships added successfully';
+			}else{
+				$return['error']='Scholarships details not added';
+			}
+
+
+			header('Content-Type: application/json; charset=utf-8');
+
+			echo json_encode($return);
+			session_write_close();
+
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onAddCollegeExams(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+
+				if(!empty($college_id)){
+					$college_id=decode_data($college_id);
+
+					$college_exams_list=$this->input->post('college_exams_list');
+
+
+					if(!empty($college_exams_list)){
+
+						foreach ($college_exams_list as $key => $value) {
+							$exams_ids[]=$value;
+						}
+
+						if(!empty($exam_ids)){
+
+							
+						}else{
+							$return['error']='No data selected to update';
+						}
+
+					}else{
+						$return['error']='No data has been selected to add';
+					}
+
+
+				}else{
+					$return['error']='data manipulation is not allowed';
+				}
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	//College Departments
+
+	// public function indexCollegesDepartments{}{
+		
+	// }
+
+
+	//College Search Page
+	public function indexCollegesSearchPageData(){
+		if(session_userdata('isAdminLoggedin')){
+			$user_id=decode_data(session_userdata('admin_id'));
+
+			$this->data['countries']=$this->com->get_country(array('country_default'=>1));
+			
+			$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->load('users/vw_colleges_searches', $this->data);
+
+				
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+
+
+	/**College Reviews**/
+	public function indexCollegeReviews(){
+		if(session_userdata('isAdminLoggedin')){
+			$user_id=decode_data(session_userdata('admin_id'));
+
+			$college_id=$this->uri->segment(5,0);
+
+			$college_id=decode_data($college_id);
+
+			$this->data['college_id']=encode_data($college_id);
+
+
+			$this->data['countries']=$this->com->get_country(array('country_default'=>1));
+			
+			$this->theme->title($this->data['page_title'])->add_partial('partial_file_upload_big_modal')->load('users/vw_colleges_reviews_list', $this->data);	
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+
+
+	/**To Update user course streams**/
+
+	public function update_user_course_streams(){
+
+		$course_cost_data=$this->im->get_course_fees_data(array('user_course_cost_pk'=>0,'user_id'=>'3735'),FALSE);
+
+		//print_obj($course_cost_data);die;
+
+		if(!empty($course_cost_data)){
+			foreach ($course_cost_data as $key => $value) {
+				
+				$course_data=$this->im->get_user_course_data(array('user_id'=>$value->user_id,'user_course'=>$value->user_course_id));
+
+				print_obj($course_data);
+
+				// if(!empty($course_data)){
+				// 	$streams_data=$this->strm->_get_user_course_stream_groupconcat(array('course_id'=>$course_data->user_course,'user_id'=>$value->user_id));
+				// 	$data_toupdate=array(
+				// 		'user_course_cost_pk'=>$course_data->user_course_id
+				// 	);
+
+				// 	//$this->im->update_course_fees_data($data_toupdate,array('user_id'=>$value->user_id,'user_course_id'=>$course_data->user_course));
+
+
+
+				// 	$stream_data_to_update=array(
+				// 		'user_course_stream'=>(!empty($streams_data))?$streams_data->stream_ids:null
+				// 	);
+
+				// 	$this->im->update_course_data($stream_data_to_update,array('user_id'=>$value->user_id,'user_course'=>$course_data->user_course));
+
+				// 	print_obj($data_toupdate);
+				// }
+
+					
+			}
+		}
+	}
+
+
+	public function update_college_logo_banner_path(){
+		$college_data=$this->um->get_college_profile_data(array('college_user_id!='=>null),FALSE);
+
+		//print_obj($college_data);
+
+		if(!empty($college_data)){
+			foreach ($college_data as $key => $value) {
+
+				$college_name=strtoupper($value->college_name);
+
+				$user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$value->college_user_id,'user_storage_type'=>'user_logo'),NULL,FALSE);
+
+		        if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+		            if(file_exists($user_logo->media_disk_path)){
+		        		$college_logo=$user_logo->media_disk_path_relative;
+		        	}else{
+		        		$college_logo=DIR_CDN.'data/app/app_data/sikshapedia-small-logo.png';
+		        	}
+		        }else{
+		            $college_logo=DIR_CDN.'data/app/app_data/sikshapedia-small-logo.png';		            
+		        }		        
+
+		        $user_logo_name=$college_name.' SIKSHAPEDIA LOGO';
+
+		        $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$value->college_user_id,'user_storage_type'=>'user_banner'));
+
+		        if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+		            if(file_exists($user_banner->media_disk_path)){
+						$college_banner=$user_banner->media_disk_path_relative;
+		        	}else{
+		        		$college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+		        	}
+		        }else{
+		            $college_banner=base_url().'uploads/app/default/pageBnr.jpg';		            
+		        }		        
+
+		        $user_banner_name=$college_name.' SIKSHAPEDIA BANNER';
+
+	            $college_logo_banner_data[]=array(
+	            	'college_user_id'=>$value->college_user_id,
+	            	'college_logo'=>$college_logo,
+	            	'college_banner'=>$college_banner,
+	            	'college_logo_alt_text'=>$user_logo_name,
+	            	'college_banner_alt_text'=>$user_banner_name
+	            );
+			}
+
+			IF(!empty($college_logo_banner_data)){
+				foreach ($college_logo_banner_data as $key => $value) {
+					$data=array(
+						'college_logo'=>$value['college_logo'],
+						'college_banner'=>$value['college_banner'],
+						'colllege_logo_alt_text'=>$value['college_logo_alt_text'],
+						'colllege_banner_alt_text'=>$value['college_banner_alt_text']
+					);
+
+					$this->im->update_college_data($data,array('college_user_id'=>$value['college_user_id']));
+				}
+			}			
+		}
+	}
+
+	public function onUpdateCollegeLogoBanners(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('_college_id');
+
+				if(!empty($college_id)){
+					$college_id=decode_data($college_id);
+
+					$college_data=$this->um->get_college_profile_data(array('college_user_id'=>$college_id));
+
+					//print_obj($college_data);
+
+					if(!empty($college_data)){
+
+						$college_name=strtoupper($college_data->college_name);
+
+						$user_logo=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_logo','user_file_type'=>'4'),NULL,FALSE);
+
+						//print_obj($user_logo);die;
+
+				        if(!empty($user_logo) && !empty($user_logo->media_disk_path_relative)){
+				        	if(file_exists($user_logo->media_disk_path)){
+				        		$college_logo=$user_logo->media_disk_path_relative;
+				        		$ext_msg='Logo & ';
+				        	}else{
+				        		$college_logo=DIR_CDN.'data/app/app_data/sikshapedia-small-logo.png';
+				        		$ext_msg='Logo Not found.Default logo updated & ';
+				        	}
+				            
+				        }else{
+				            $college_logo=DIR_CDN.'data/app/app_data/sikshapedia-small-logo.png';
+				            $ext_msg='Logo Not found.Default logo updated & ';				            
+				        }
+
+				        $user_logo_name=$college_name.' SIKSHAPEDIA LOGO';
+
+
+				        $user_banner=$this->sm->get_user_file(array('user_file_type_id'=>$college_data->college_user_id,'user_storage_type'=>'user_banner'));
+
+				        //print_obj($user_banner);die;
+
+				        if(!empty($user_banner) && !empty($user_banner->media_disk_path_relative)){
+				        	if(file_exists($user_banner->media_disk_path)){
+								$college_banner=$user_banner->media_disk_path_relative;
+								$ext_msg.='Banner updated';
+				        	}else{
+				        		$college_banner=base_url().'uploads/app/default/pageBnr.jpg';
+				        		$ext_msg.='Banner not found.Default Banner updated';
+				        	}
+				        }else{
+				            $college_banner=base_url().'uploads/app/default/pageBnr.jpg';	
+				            $ext_msg.='Banner not found.Default Banner updated';	            
+				        }
+
+				        $user_banner_name=$college_name.' SIKSHAPEDIA BANNER';
+
+			            $college_logo_banner_data=array(
+			            	'college_logo'=>$college_logo,
+			            	'college_banner'=>$college_banner,
+			            	'colllege_logo_alt_text'=>$user_logo_name,
+			            	'colllege_banner_alt_text'=>$user_banner_name
+			            );
+
+			            $updated=$this->im->update_college_data($college_logo_banner_data,array('college_user_id'=>$college_data->college_user_id));
+
+			            if($updated){
+			            	$search_data=$this->sm->__get_system_search_data(array('search_data_type'=>'COLLEGE_NAME','search_data_type_menu_id'=>$college_data->college_user_id));
+
+			            	if(!empty($search_data)){
+			            		$this->sm->update_system_search_data(array('search_storage_access_url'=>$college_logo),array('search_data_type'=>'COLLEGE_NAME','search_data_type_menu_id'=>$college_data->college_user_id));
+			            	}
+
+			            	$return['success']=$ext_msg;
+			            	$return['redirect']=$college_data->access_url;
+			            }else{
+			            	$return['error']='No data updated';
+			            }	
+					}else{
+						$return['error']='Data manipulation not allowed';
+					}
+
+				}else{
+					$return['error']='Data manipulation is not allowed';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+
+	public function update_college_stream_course_data_new(){
+		$college_id=$this->input->get('college_id');
+		$course_id=$this->input->get('course_id');
+
+		$c=array();
+
+		if(!empty($college_id)){
+			$pp=array('college_user_id'=>$college_id);
+		}else{
+			$pp=array('college_user_id!='=>null);
+		}
+
+		$course_data=$this->im->get_user_course_data(array('user_course_stream'=>NULL),FALSE);
+
+		// print_obj($course_data);die;
+
+		if(!empty($course_data)){
+
+			$no=1;
+			foreach ($course_data as $key => $value) {
+
+				$cdata=$this->strm->get_course(array('course_id'=>$value->user_course));
+
+				//print_obj($cdata);
+
+				if(!empty($cdata)){
+
+					//get_user_course_stream
+					$get_user_course_stream=$this->strm->get_user_course_stream(array('course_id'=>$value->user_course,'user_id'=>$value->user_id));
+
+
+					if(empty($get_user_course_stream)){
+						$no++;
+
+						$c[]=array('course_id'=>$value->user_course,'user_id'=>$value->user_id);
+					}
+
+					//User course streams
+					// $this->im->update_course_data(array('user_course_stream'=>$cdata->course_stream),array('user_course'=>$value->user_course,'user_id'=>$value->user_id));
+
+					// $_course_data=$this->im->get_user_course_data(array('user_course'=>$value->user_course,'user_id'=>$value->user_id));
+
+					// print_obj($_course_data);
+				}
+			}
+
+			echo 'Total data not found:'.$no;
+
+			
+
+			if(!empty($c)){
+				foreach ($c as $key => $value) {
+					$cdata=$this->strm->get_course(array('course_id'=>$value['course_id']));
+
+					print_obj($cdata);
+					$stream_data=$this->strm->get_stream(array('stream_id'=>$cdata->course_stream));
+					// $data_to_insert[]=array(
+					// 	'stream_id'=>$stream_data->stream_id,
+					// 	'stream_name'=>$stream_data->stream_name,
+					// 	'course_id'=>$value['course_id'],
+					// 	'user_id'=>$value['user_id'],
+					// 	'user_type'=>'4'
+					// );
+				}
+
+				//print_obj($data_to_insert);
+			}
+		}
+	}
+
+
+
+	public function update_college_stream_course_data_3(){
+
+		$college_id=$this->input->get('college_id');
+		$course_id=$this->input->get('course_id');
+
+		if(!empty($college_id)){
+			$pp=array('college_user_id'=>$college_id);
+		}else{
+			$pp=array('college_user_id!='=>null);
+		}
+
+		$college_data=$this->um->get_college_profile_data($pp,FALSE);
+
+		//print_obj($college_data);die;
+
+		if(!empty($college_data)){
+			foreach ($college_data as $key => $value) {
+
+				$course_data=$this->im->get_user_course_data(array('user_id'=>$value->college_user_id));
+
+				// print_obj($course_data);
+
+
+				if(!empty($course_id)){
+					$p=array('user_id'=>$value->college_user_id,'course_id'=>$course_id,'stream_parent_id'=>NULL);
+				}else{
+					$p=array('user_id'=>$value->college_user_id,'stream_parent_id'=>NULL);
+				}
+
+				$stream_ids_data=$this->strm->_get_user_course_stream_groupconcat($p);
+
+				if(!empty($stream_ids_data)){
+					$college_stream_data[]=array(
+		            	'college_user_id'=>$value->college_user_id,
+		            	'college_stream_ids'=>removeDuplicate($stream_ids_data->stream_ids),
+		            	'college_sub_stream_ids'=>removeDuplicate($stream_ids_data->sub_stream_ids)
+		            );
+				}
+
+				
+				if(!empty($course_id)){
+					$_p=array('user_id'=>$value->college_user_id,'course_id'=>$course_id);
+				}else{
+					$_p=array('user_id'=>$value->college_user_id);
+				}	
+
+
+				$exam_ids_data=$this->strm->_get_user_course_exam_groupconcat($_p);	
+
+				//print_obj($exam_ids_data);  
+
+				if(!empty($exam_ids_data)){
+					$exams_ids_data[]=array(
+		            	'college_user_id'=>$value->college_user_id,
+		            	'college_exam_ids'=>$exam_ids_data->exam_ids,
+		            );
+				}   
+
+				      
+			}
+
+			//die;
+
+			//print_obj($exams_ids_data);die;
+
+			
+			if(!empty($exams_ids_data)){
+
+				foreach ($exams_ids_data as $key => $value) {
+
+					$data=array(
+						'college_exam_ids'=>(!empty($value['college_exam_ids']) || $value['college_exam_ids']!='')?$value['college_exam_ids']:null
+					);
+
+					$this->im->update_college_data($data,array('college_user_id'=>$value['college_user_id']));
+				}
+			}
+
+			
+
+			//print_obj($college_stream_data);
+
+			
+
+			 if(!empty($college_stream_data)){
+
+				$course_streams=$this->im->get_user_course_data(array('user_id'=>$college_id,'user_course'=>$course_id));
+
+
+
+				foreach ($college_stream_data as $key => $value) {
+					if(!empty($course_streams)){
+						if(!empty($value['college_stream_ids'])){
+							$this->im->update_course_data(array('user_course_stream'=>$value['college_stream_ids']),array('user_id'=>$college_id,'user_course'=>$course_id));
+						}						
+					}
+
+					$data=array(
+						'college_streams_ids'=>$value['college_stream_ids']
+					);
+
+					// $data=array(
+					// 	'college_sub_streams_ids'=>$value['college_sub_stream_ids']
+					// );
+
+					$this->im->update_college_data($data,array('college_user_id'=>$value['college_user_id']));
+				}
+			}	
+
+			
+		}	
+	}
+
+
+	public function update_college_stream_course_data_n2(){
+		$college_id=$this->input->get('college_id');
+		$course_id=$this->input->get('course_id');
+
+		if(!empty($college_id)){
+			$pp=array('user_id'=>$college_id);
+		}else{
+			$pp=array('user_id!='=>null);
+		}
+
+		$get_user_course_stream=$this->strm->get_user_course_stream($pp,FALSE);
+
+
+		if(!empty($get_user_course_stream)){
+			foreach ($get_user_course_stream as $key => $value) {
+				$course_data=$this->strm->get_course(array('course_id'=>$value->course_id));
+
+				if(!empty($course_data)){
+					$stream_data=$this->strm->get_stream(array('stream_id'=>$course_data->course_stream));
+					$this->strm->update_user_course_stream_data(array('stream_id'=>$stream_data->stream_id,'stream_name'=>$stream_data->stream_name),array('course_id'=>$value->course_id,'user_id'=>$value->user_id));
+				}
+
+				print_obj($course_data);
+			}
+		}
+
+
+	}
+
+
+	public function update_college_stream_course_data(){
+		$college_id=$this->input->get('college_id');
+		$course_id=$this->input->get('course_id');
+
+		if(!empty($college_id)){
+			$pp=array('college_user_id'=>$college_id);
+		}else{
+			$pp=array('college_user_id!='=>null);
+		}
+
+
+		$college_data=$this->um->get_college_profile_data($pp,FALSE);
+
+		//print_obj($college_data);die;
+
+		if(!empty($college_data)){
+			foreach ($college_data as $key => $value) {
+				// if(!empty($course_id) || $course_id!=null || $course_id!=''){
+				// 	$p=array('user_id'=>$value->college_user_id,'course_id'=>$course_id,'stream_parent_id'=>NULL);
+				// }else{
+				// 	$p=array('user_id'=>$value->college_user_id,'course_id'=>$v->user_course,'stream_parent_id'=>NULL);
+				// }
+
+				$p=array('user_id'=>$value->college_user_id,'stream_parent_id'=>NULL);
+
+				$stream_ids_data=$this->strm->_get_user_course_stream_groupconcat($p);
+
+				//print_obj($stream_ids_data);die;
+
+				
+
+				if(!empty($stream_ids_data)){
+					// $college_stream_data[]=array(
+		            // 	'college_user_id'=>$value->college_user_id,
+		            // 	'course_id'=>$v->user_course,
+		            // 	'college_stream_ids'=>removeDuplicate($stream_ids_data->stream_ids)
+		            // );
+
+		            $_data=array(
+						'college_streams_ids'=>$stream_ids_data->stream_ids
+					);
+
+					// $data=array(
+					// 	'college_sub_streams_ids'=>$value['college_sub_stream_ids']
+					// );
+
+					$this->im->update_college_data($_data,array('college_user_id'=>$value->college_user_id));
+				}
+
+				
+				// if(!empty($course_id)){
+				// 	$_p=array('user_id'=>$value->college_user_id,'course_id'=>$course_id);
+				// }else{
+				// 	$_p=array('user_id'=>$value->college_user_id,'course_id'=>$v->user_course);
+				// }	
+
+				$_p=array('user_id'=>$value->college_user_id);
+
+				$exam_ids_data=$this->strm->_get_user_course_exam_groupconcat($_p);	
+
+				//print_obj($exam_ids_data);  
+
+				if(!empty($exam_ids_data)){
+					// $exams_ids_data[]=array(
+		            // 	'college_user_id'=>$value->college_user_id,
+		            // 	'course_id'=>$v->user_course,
+		            // 	'college_exam_ids'=>$exam_ids_data->exam_ids,
+		            // );
+
+		            $data=array(
+						'college_exam_ids'=>$exam_ids_data->exam_ids
+					);
+
+					$this->im->update_college_data($data,array('college_user_id'=>$value->college_user_id));
+				} 
+
+				$course_data=$this->im->get_user_course_data(array('user_id'=>$value->college_user_id),FALSE);
+
+				if(!empty($course_data)){
+					foreach ($course_data as $k => $v) {
+
+						$course_pk_id[]=array(
+							'course_pk_id'=>$v->user_course_id,
+							'college_id'=>$value->college_user_id,
+							'course_id'=>$v->user_course
+						);
+					}
+					
+
+					if(!empty($course_pk_id)){
+						foreach ($course_pk_id as $_k => $_v) {
+							$this->im->update_course_fees_data(array('user_course_cost_pk'=>$_v['course_pk_id']),array('user_id'=>$_v['college_id'],'user_course_id'=>$_v['course_id']));
+						}
+					}
+				}
+				
+				
+
+
+			}
+			
+		}
+
+
+	}
+
+
+	public function onUpdateCollegeStreamsCourse(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('_college_id');
+
+				if(!empty($college_id)){
+					$college_id=decode_data($college_id);
+
+					if(!empty($college_id)){
+						$pp=array('college_user_id'=>$college_id);
+					}else{
+						$pp=array('college_user_id!='=>null);
+					}
+
+					$college_data=$this->um->get_college_profile_data($pp);
+
+					if(!empty($college_data)){
+		
+						$p=array('user_id'=>$college_data->college_user_id,'stream_parent_id'=>NULL);
+
+						$stream_ids_data=$this->strm->_get_user_course_stream_groupconcat($p);
+
+						//print_obj($stream_ids_data);die;
+
+
+						if(!empty($stream_ids_data) && !empty($stream_ids_data->stream_ids)){
+
+				            $_data=array(
+								'college_streams_ids'=>$stream_ids_data->stream_ids
+							);
+
+							$this->im->update_college_data($_data,array('college_user_id'=>$college_data->college_user_id));
+
+
+							$_p=array('user_id'=>$college_data->college_user_id);
+
+							$exam_ids_data=$this->strm->_get_user_course_exam_groupconcat($_p);	
+
+							if(!empty($exam_ids_data)){
+
+					            $data=array(
+									'college_exam_ids'=>$exam_ids_data->exam_ids
+								);
+
+								$this->im->update_college_data($data,array('college_user_id'=>$college_data->college_user_id));
+							} 
+
+							$course_data=$this->im->get_user_course_data(array('user_id'=>$college_data->college_user_id),FALSE);
+
+							if(!empty($course_data)){
+								foreach ($course_data as $k => $v) {
+
+									$course_pk_id[]=array(
+										'course_pk_id'=>$v->user_course_id,
+										'college_id'=>$college_data->college_user_id,
+										'course_id'=>$v->user_course
+									);
+
+									$course_stream_ids_data=$this->strm->_get_user_course_stream_groupconcat(array('course_id'=>$v->user_course,'user_id'=>$college_data->college_user_id,'stream_parent_id'=>NULL));
+
+
+									if(!empty($course_stream_ids_data) && !empty($course_stream_ids_data->stream_ids)){
+										$this->im->update_course_data(array('user_course_stream'=>$course_stream_ids_data->stream_ids),array('user_course'=>$v->user_course,'user_id'=>$college_data->college_user_id));
+									}									
+								}
+								
+
+								if(!empty($course_pk_id)){
+									foreach ($course_pk_id as $_k => $_v) {
+										$this->im->update_course_fees_data(array('user_course_cost_pk'=>$_v['course_pk_id']),array('user_id'=>$_v['college_id'],'user_course_id'=>$_v['course_id']));
+									}
+								}
+
+								$ucourses=$this->strm->_get_user_course_groupconcat(array('user_id'=>$college_data->college_user_id));
+
+								if(!empty($ucourses)){
+									$this->im->update_college_data(array('college_course_ids'=>$ucourses->course_idss),array('college_user_id'=>$college_data->college_user_id));
+								}
+
+
+								
+							}
+
+							$course_cost_data=$this->im->get_course_fees_data(array('user_id'=>$college_data->college_user_id),FALSE);
+
+							if(!empty($course_cost_data)){
+								$this->im->delete_course_fees_data(array('user_id'=>$college_data->college_user_id,'user_course_year'=>'0'));
+								$this->im->delete_course_fees_data(array('user_id'=>$college_data->college_user_id,'user_course_total_fee'=>'0'));
+								foreach ($course_cost_data as $key => $value) {
+									
+								}
+							}
+
+							$return['success']='Data has been updated.';
+						}else{
+							$return['error']='Courses or Streams not added yet';
+						}
+												
+					}else{
+						$return['error']='Data not updated';
+					}
+
+				}else{
+					$return['error']='Data manipulation is not allowed';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onCreateCollegeNewUser(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+				$college_user_id=post_data('college_user_id');
+
+				$college_data=$this->im->_get_college_specific_data('college_id,college_user_id,college_name,college_email,access_url',array('college_id'=>$college_id),TRUE);
+
+				//print_obj($college_data);die;
+
+				if(!empty($college_data)){
+					$password	=	password_hash('Password@123', PASSWORD_BCRYPT, array('cost'=>12));
+					$userdata=array(
+						'user_role'=>'4',
+						'user_profile_pk_id'=>$college_id,
+						'user_name'=>strtoupper(str_replace(' ','',$college_data[0]->college_name)).$college_id,
+						'user_password'=>$password,
+						'user_password_visible'=>encode_data('Password@123'),
+						'user_blocked'=>'2',
+						'user_approved'=>'1',
+						'user_email_verified'=>'2',
+						'user_phone_no_verified'=>'2',
+						'user_created_through'=>'3',
+						'created_by'=>$this->data['userdata']->user_id,
+						'created_by_type'=>$this->data['userdata']->user_role,
+					);
+
+					$user_id=$this->um->add_user_data($userdata);
+
+					if($user_id){
+
+						$p=array('user_id'=>$college_data[0]->college_user_id,'stream_parent_id'=>NULL);
+
+						$stream_ids_data=$this->strm->_get_user_course_stream_groupconcat($p);
+
+						if(!empty($stream_ids_data)){
+							$search_data_stream_ids=$stream_ids_data->stream_ids;
+						}else{
+							$search_data_stream_ids=null;
+						}
+
+						$__p=array('user_id'=>$college_data[0]->college_user_id,'stream_parent_id!='=>NULL);
+
+						$sub_stream_ids_data=$this->strm->_get_user_course_substream_groupconcat($__p);
+
+						if(!empty($sub_stream_ids_data)){
+							$sub_search_data_stream_ids=$sub_stream_ids_data->stream_ids;
+						}else{
+							$sub_search_data_stream_ids=null;
+						}
+
+						$_p=array('user_id'=>$college_data[0]->college_user_id);
+
+						$exam_ids_data=$this->strm->_get_user_course_exam_groupconcat($_p);
+
+						if(!empty($exam_ids_data)){
+							$search_data_exam_ids=$exam_ids_data->exam_ids;
+						}else{
+							$search_data_exam_ids=null;
+						}
+
+						$course_stream_ids_data=$this->strm->__get_user_course_groupconcat(array('user_id'=>$college_data[0]->college_user_id));
+
+						if(!empty($course_stream_ids_data)){
+							$search_data_course_ids=$course_stream_ids_data->course_ids;
+						}else{
+							$search_data_course_ids=null;
+						}
+
+						$this->im->update_college_data(array('college_course_ids'=>$search_data_course_ids,'college_streams_ids'=>$search_data_stream_ids,'college_exam_ids'=>$search_data_exam_ids,'college_sub_streams_ids'=>$sub_search_data_stream_ids,'college_user_id'=>$college_data[0]->college_user_id),array('college_id'=>$college_id));
+
+						$this->um->update_user_data(array('user_id'=>$college_data[0]->college_user_id),array('user_id'=>$user_id));
+
+						$info_menu_link=$college_data[0]->access_url;
+						$course_menu_link=$college_data[0]->access_url.'/course-and-fees';
+						$gallery_menu_link=$college_data[0]->access_url.'/gallery';
+						$review_menu_link=$college_data[0]->access_url.'/reviews';
+
+						$get_info_menu=$this->sm->get_menues(array('menu_link'=>$info_menu_link));
+
+						if(empty($get_info_menu)){
+							$info_menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_country_id'=>'99',
+								'menu_country_code'=>'IN',
+								'menu_country'=>'India',
+								'menu_type'=>'1',
+								'menu_link_type'=>'10',
+								'menu_link'=>$info_menu_link,
+								'menu_link_id'=>$college_data[0]->college_user_id,
+								'menu_name'=>'INFO',
+								'menu_name_alias'=>'INFO',
+								'menu_slug'=>'info',
+								'menu_serial'=>'1',
+								'menu_is_inner'=>'1',
+								'menu_main_widget'=>'a:12:{i:0;s:18:"front_info_section";i:1;s:24:"front_google_ads_section";i:2;s:25:"front_course_fees_section";i:3;s:24:"front_google_ads_section";i:4;s:40:"front_course_fees_brief_with_ads_section";i:5;s:24:"front_google_ads_section";i:6;s:23:"front_placement_section";i:7;s:24:"front_facilities_section";i:8;s:24:"front_news_brief_section";i:9;s:25:"front_google_maps_section";i:10;s:29:"front_college_comment_section";i:11;s:42:"front_nearby_colleges_universities_section";}'
+							);
+
+							$this->sm->store_menu($info_menu_data);
+						}
+
+
+						$get_course_menu=$this->sm->get_menues(array('menu_link'=>$course_menu_link));
+
+						if(empty($get_course_menu)){
+							$course_menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_country_id'=>'99',
+								'menu_country_code'=>'IN',
+								'menu_country'=>'India',
+								'menu_type'=>'2',
+								'menu_link_type'=>'10',
+								'menu_link'=>$course_menu_link,
+								'menu_link_id'=>$college_data[0]->college_user_id,
+								'menu_name'=>'COURSE & FEES',
+								'menu_name_alias'=>'Course & Fees',
+								'menu_slug'=>'course-and-fees',
+								'menu_serial'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_main_widget'=>'a:6:{i:0;s:25:"front_course_fees_section";i:1;s:40:"front_course_fees_brief_with_ads_section";i:2;s:24:"front_news_brief_section";i:3;s:29:"front_college_comment_section";i:4;s:42:"front_nearby_colleges_universities_section";i:5;s:24:"front_google_ads_section";}'
+							);
+
+							$this->sm->store_menu($course_menu_data);
+						}
+
+
+						$get_gallery_menu=$this->sm->get_menues(array('menu_link'=>$gallery_menu_link));
+
+						if(empty($get_gallery_menu)){
+							$gallery_menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_country_id'=>'99',
+								'menu_country_code'=>'IN',
+								'menu_country'=>'India',
+								'menu_type'=>'7',
+								'menu_link_type'=>'10',
+								'menu_link'=>$gallery_menu_link,
+								'menu_link_id'=>$college_data[0]->college_user_id,
+								'menu_name'=>'GALLERY',
+								'menu_name_alias'=>'Gallery',
+								'menu_slug'=>'gallery',
+								'menu_serial'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_main_widget'=>'a:5:{i:0;s:21:"front_gallery_section";i:1;s:24:"front_news_brief_section";i:2;s:29:"front_college_comment_section";i:3;s:42:"front_nearby_colleges_universities_section";i:4;s:24:"front_google_ads_section";}'
+							);
+
+							$this->sm->store_menu($gallery_menu_data);
+						}
+
+						$get_review_menu=$this->sm->get_menues(array('menu_link'=>$review_menu_link));
+
+						if(empty($get_review_menu)){
+							$review_menu_data=array(
+								'menu_category_id'=>'2',
+								'menu_country_id'=>'99',
+								'menu_country_code'=>'IN',
+								'menu_country'=>'India',
+								'menu_type'=>'4',
+								'menu_link_type'=>'10',
+								'menu_link'=>$review_menu_link,
+								'menu_link_id'=>$college_data[0]->college_user_id,
+								'menu_name'=>'REVIEWS',
+								'menu_name_alias'=>'Reviews',
+								'menu_slug'=>'reviews',
+								'menu_serial'=>'2',
+								'menu_is_inner'=>'1',
+								'menu_main_widget'=>'a:4:{i:0;s:25:"front_review_list_section";i:1;s:24:"front_google_ads_section";i:2;s:29:"front_college_comment_section";i:3;s:42:"front_nearby_colleges_universities_section";}'
+							);
+
+							$this->sm->store_menu($review_menu_data);
+						}
+
+
+						//$this->strm->delete_user_course_stream_data(array('user_id'=>$college_user_id));
+						//$this->im->delete_course_data(array('user_id'=>$college_user_id));
+						//$this->im->delete_course_fees_data(array('user_id'=>$college_user_id));
+
+						$return['success']='College user created';
+					}else{
+						$return['error']='User not created.';
+					}
+				}else{
+					$return['error']='College not found in the system.';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onUpdateTopListColleges(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');				
+				$update_type=post_data('update_type');
+
+				if($update_type=='new'){
+					$position=post_data('college_position');
+					$data=array('college_status'=>'1','college_is_top'=>'1','college_is_top_short_order'=>$position,'college_is_top_visible_home'=>'1','is_verified_by_admin'=>'1');
+
+					$updated=$this->im->update_college_data($data,array('college_user_id'=>$college_id));
+
+					if($updated){
+						$return['success']='List updated';
+					}else{
+						$return['error']='List not updated';
+					}
+				}else if($update_type=='del'){
+					$data=array('college_status'=>'1','college_is_top'=>'2','college_is_top_short_order'=>'0','college_is_top_visible_home'=>'2','is_verified_by_admin'=>'1');
+
+					$updated=$this->im->update_college_data($data,array('college_user_id'=>$college_id));
+
+					if($updated){
+						$return['success']='List updated';
+					}else{
+						$return['error']='List not updated';
+					}
+				}
+					
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	/**Search Data Import**/
+
+	//https://www.sikshapedia.com/admin08wayto/institutions/update_search_data?import_type=college_inner_menu&import_type2=college_inner_menu_info_url&data_limit=6000&data_start=0=6000
+
+	public function import_search_data(){
+		$import_type=$this->input->get('import_type');
+		$import_type2=$this->input->get('import_type2');
+		$data_limit=$this->input->get('data_limit');
+		$data_start=$this->input->post('data_start');
+
+		//'DATE(url_last_update)'=>'2023
+
+		if(empty($import_type2)){
+			$slug_data=$this->sm->_get_slug_urls(array('url_glob_type'=>$import_type,'url_meta_title!='=>''),$data_limit,$data_start);
+		}else {
+			$slug_data=$this->sm->_get_slug_urls(array('url_glob_type'=>$import_type,'url_sub_type'=>$import_type2,'url_meta_title!='=>''),$data_limit,$data_start);
+		}
+
+		
+		//print_obj($slug_data);die;
+	
+
+		if(!empty($slug_data)){
+			foreach ($slug_data as $key => $value) {
+				if($value->url_glob_type=='colleges_search'){
+					$search_data_type='COLLEGE_SEARCH_PAGE';
+					$system_data_search=$this->sm->get_system_search_data(array('search_data_access_url'=>$value->url_value,'search_data_type'=>$search_data_type));
+
+					$country_data=$this->com->get_country(array('country_id'=>$value->url_country));
+						$city_data=$this->com->get_city(array('city_id'=>$value->url_city));
+						$state_data=$this->com->get_state(array('state_id'=>$value->url_state));
+						$system_data_search_inserted=array(
+							'search_data_type'=>$search_data_type,
+							'search_data_type_id'=>$value->url_id,
+							'search_data_name'=>strtoupper($value->url_meta_heading),
+							'search_data_short_name'=>null,
+							'search_data_country_id'=>$country_data->country_id,
+							'search_data_country'=>$country_data->country_name,
+							'search_data_state_id'=>$state_data->state_id,
+							'search_data_state_name'=>$state_data->state_name,
+							'search_data_city_name'=>$city_data->city_name,
+							'search_data_city_id'=>$city_data->city_id,
+							'search_data_address'=>null,
+							'search_data_meta_title'=>strtoupper($value->url_meta_title),
+							'search_data_meta_desc'=>strtoupper($value->url_meta_desc),
+							'search_data_meta_keywords'=>strtoupper($value->url_meta_key_words),
+							'search_data_og_title'=>strtoupper($value->url_og_title),
+							'search_data_og_desc'=>strtoupper($value->url_og_desc),
+							'search_storage_access_url'=>null,
+							'search_data_access_url'=>$value->url_value,
+							'search_data_tags'=>''
+						);
+
+						
+						if(empty($system_data_search)){									
+							$this->sm->store_system_search_data($system_data_search_inserted);
+						}else{
+							$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_access_url'=>$value->url_value,'search_data_type'=>$search_data_type));
+						}
+				}
+
+				else if($value->url_glob_type=='college_inner_menu'){
+					$college=$this->im->____get_colleges(array('college_user_id'=>$value->url_type_id),'*',TRUE);
+
+					if($college->college_is_university=='no'){
+						$search_data_type='COLLEGE_NAME';
+					}else{
+						$search_data_type='UNIVERSITY_NAME';
+					}
+
+					$country_data=$this->com->get_country(array('country_id'=>$value->url_country));
+					$city_data=$this->com->get_city(array('city_id'=>$value->url_city));
+					$state_data=$this->com->get_state(array('state_id'=>$value->url_state));
+
+					if($college->college_affiliation_type!=null){
+						$sdai=$this->im->get_group_concat_affiliation_types('statutory_body_abbr','statutory_body_id',$college->college_affiliation_type);
+						$affiliations=($sdai->concated_value!='')?$sdai->concated_value:null;
+						$search_data_affiliations_ids=$college->college_affiliation_type;
+
+					}else{
+						$affiliations=null;
+						$search_data_affiliations_ids=null;
+					}
+
+					if($college->college_course_ids!=null){
+						$search_data_course_ids=$college->college_course_ids;
+						$sdcn=$this->im->get_group_concat_user_course_data('course_name','course_id',$search_data_course_ids);
+						$search_data_course_name=strtoupper($sdcn->concated_value);
+					}else{
+						$search_data_course_ids=null;
+						$search_data_course_name=null;
+					}
+
+					if($college->college_streams_ids!=null){
+						$search_data_stream_ids =$college->college_streams_ids;
+						$sdsn=$this->strm->_get_user_course_stream_groupconcat(array('user_id'=>$college->college_user_id));
+						$search_data_stream_name=strtoupper($sdsn->stream_names);
+					}else{
+						$search_data_stream_ids ='';
+						$search_data_stream_name=null;
+					}
+
+
+					if($college->college_type_name!=''){
+						$search_data_type_name=strtoupper(str_replace('-', ' ', $college->college_type_name));
+					}else{
+						$search_data_type_name='';
+					}
+
+
+
+					$system_data_search_inserted=array(
+						'search_data_type'=>$search_data_type,
+						'search_data_type_name'=>$search_data_type_name,
+						'search_data_type_id'=>$value->url_id,
+						'search_data_name'=>strtoupper($value->url_meta_title),
+						'search_data_short_name'=>$college->college_short_name,
+						'search_data_affiliations'=>$affiliations,
+						'search_data_affiliations_ids'=>$search_data_affiliations_ids,						
+						'search_data_country_id'=>$country_data->country_id,
+						'search_data_country'=>$country_data->country_name,
+						'search_data_state_id'=>$state_data->state_id,
+						'search_data_state_name'=>$state_data->state_name,
+						'search_data_city_name'=>$city_data->city_name,
+						'search_data_city_id'=>$city_data->city_id,
+						'search_data_address'=>$college->college_address,
+						'search_data_course_ids'=>$search_data_course_ids,
+						'search_data_course_name'=>$search_data_course_name,
+						'search_data_stream_ids'=>$search_data_stream_ids,
+						'search_data_stream_name'=>$search_data_stream_name,
+						'search_data_meta_title'=>strtoupper($value->url_meta_title),
+						'search_data_meta_desc'=>strtoupper($value->url_meta_desc),
+						'search_data_meta_keywords'=>strtoupper($value->url_meta_key_words),
+						'search_data_og_title'=>strtoupper($value->url_og_title),
+						'search_data_og_desc'=>strtoupper($value->url_og_desc),
+						'search_storage_access_url'=>$college->college_logo,
+						'search_data_access_url'=>$value->url_value,
+						'search_data_tags'=>null
+					);
+
+					//print_obj($system_data_search_inserted);
+
+					
+					if(empty($system_data_search)){									
+						$insert_id['insert_id']=$this->sm->store_system_search_data($system_data_search_inserted);
+						print_obj($insert_id);
+					}else{
+						$this->sm->update_system_search_data($system_data_search_inserted,array('search_data_access_url'=>$value->url_value,'search_data_type'=>$search_data_type));
+						$update_id['update_id']=$value->url_id;
+						print_obj($update_id);
+					}
+				}
+			}
+		}
+	}
+
+
+	public function onDeleteCollegeRanks(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$college_id=post_data('college_id');
+				$ranking_id=post_data('ranking_id');
+
+				$ranking_data=$this->im->get_inst_ranking_data(array('ranking_inst_id'=>$college_id));
+
+				if(!empty($ranking_data)){
+					$deleted=$this->im->delete_inst_ranking_data(array('ranking_inst_id'=>$college_id,'inst_rank_id'=>$ranking_id));
+
+					if($deleted){
+						$concated_value=$this->im->get_group_concat_inst_ranking_data(array('ranking_inst_id'=>$college_id));
+						if(!empty($concated_value)){
+							$this->im->update_college_data(array('college_ranking_ids'=>$concated_value->concated_value),array('college_user_id'=>$college_id));
+						}
+						$return['success']='Rank has been deleted';
+					}else{
+						$return['error']='Rank has not been deleted';
+					}
+
+				}else{
+					$return['error']='Ranking data not found in the system';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	} 
+
+
+	//Cache management
+	public function onUpdateCache(){
+		if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$cache_type=post_data('cache_type');
+				$cache_url=post_data('cache_url');
+
+				if($cache_type=='college_url_cache'){
+
+					$substringToRemove = "https://www.sikshapedia.com/";
+
+					$newUrl = str_replace($substringToRemove, '', $cache_url);
+
+					// Deletes cache for /foo/bar
+					$this->output->delete_cache(base_url());
+					$this->output->delete_cache($newUrl);
+					$this->output->delete_cache($newUrl.'/courses-and-fees');
+					$this->output->delete_cache($newUrl.'/course-and-fees');
+
+					$return['success']='Cache updated';
+					$return['redirect']=$cache_url;
+
+				}else{
+					$return['error']='Cache can not be updated';
+				}
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function indexLeads(){
+		if(session_userdata('isAdminLoggedin')){
+
+			$this->theme->title($this->data['page_title'])->load('users/vw_colleges_leads', $this->data);
+
+
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+	}
+
+
+	public function onSearcheLeads(){
+
+        if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+	            try {
+	                
+	                $param['column_order'] = array(
+	                    null,
+	                    'cad_name',
+	                );
+	                
+	                $param['column_search'] = array('cad_name','cad_email','cad_phone','course_name','state_name','city_name','district_name');
+	                $param['order'] = array('cad_id' => 'DESC');
+	                
+	                $posts=$this->input->post();
+	    
+	                $list = $this->sm->get_admissions_list($posts,$param,FALSE);
+	    
+	                //print_obj($list);die;
+	                    
+	                $data = array();
+	                $no = isset($posts['start'])?$posts['start']:0;
+	    
+	                $action='';
+	    
+	                foreach ($list as $lead){
+	                    $no++;
+	    
+	                    $row = array();
+
+	                    // Format the date and time to your desired format
+	                    $formattedString = date("F j, Y, g:i a",strtotime($lead->created_at));
+
+	                    $row[]  =   $no;	                         
+	                    $row[]  =   $lead->cad_name;                    
+	                    $row[]  =   $lead->cad_phone.'<br>'.$lead->cad_email;
+	                    $row[]  =   $lead->course_name;                   
+	                    $row[]  =   $lead->state_name;
+	                    $row[]  =   $lead->city_name;
+	                    $row[]  =   $lead->district_name;
+	                    $row[]  =   $formattedString;
+	    
+	                    $data[] = $row; 
+	                }
+	    
+	                $output = array(
+	                    "draw" => isset($posts['draw'])?$posts['draw']:'',
+	                    "recordsTotal" => $this->sm->get_admissions_list($posts,$param,TRUE),
+	                    "recordsFiltered" => $this->sm->get_admissions_list($posts,$param,TRUE),
+	                    "data" => $data,
+	                );
+	                
+	                echo json_encode($output);
+
+	                
+	            } catch (\Exception $e) {
+	                return $e->getMessage();
+	            }
+	        }else{
+
+	        }
+
+        }else{
+            return $this->response->setStatusCode(405)->setBody('Method Not Allowed');
+        }
+    }
+
+
+    public function onLoadLeadsCourses(){
+    	 if(session_userdata('isAdminLoggedin')==TRUE && session_userdata('admin_id')){
+			if($this->input->is_ajax_request() && $this->input->server('REQUEST_METHOD')=='POST'){
+
+				$leads_streams='';
+
+				$course_streams=$this->input->post('leads_streams');
+
+				if(!empty($course_streams)){
+					$leads_streams=implode(',', $course_streams);
+				}
+
+				$return['courses']=$this->sm->get_college_leads_courses($leads_streams);
+
+				header('Content-Type: application/json; charset=utf-8');
+
+				echo json_encode($return);
+				session_write_close();
+
+			}else{
+				redirect($this->data['admin_base_url']);
+			}
+		}else{
+			redirect($this->data['admin_base_url']);
+		}
+    }
+}

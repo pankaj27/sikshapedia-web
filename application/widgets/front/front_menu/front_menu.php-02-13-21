@@ -1,0 +1,88 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * 
+ */
+class Front_menu extends Widget
+{
+	
+	function run($visible = FALSE) {
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$top_menues=$this->sm->get_menues(array('menu_is_top'=>'1','menu_is_active'=>'1','menu_parent_id'=>'0'),FALSE,'menu_serial','ASC',FALSE);
+
+        //print_obj($top_menues);die;
+
+        $main_menues=array();
+
+    	if(!empty($top_menues)){
+    		foreach ($top_menues as $key => $value) {
+    			$sub_menues=$this->sm->get_menues(array('menu_is_top'=>'2','menu_is_active'=>'1','menu_parent_id'=>$value->menu_id),FALSE); 
+
+                $sub_menues_data=array();             
+
+    			if(!empty($sub_menues)){
+    			   	foreach ($sub_menues as $k => $v) {
+
+                       $sub_menues_data_2=array();                       
+
+                       $menu_columns=$this->sm->get_menue_columns(array('menu_column_parent_id'=>$v->menu_id),FALSE);                       
+
+                        if(!empty($menu_columns)){
+                            foreach ($menu_columns as $__k => $__v) {
+                                $sub_menues_column_data_2=array();
+
+                                if($__v->menu_column_has_menu=='1'){
+                                    $sub_menues_2=$this->sm->get_menues(array('menu_is_top'=>'2','menu_is_active'=>'1','menu_parent_id'=>$__v->menu_column_parent_id,'menu_column_id'=>$__v->menu_column_id),FALSE);
+
+                                    foreach ($sub_menues_2 as $_k => $_v) {
+                                        $sub_menues_column_data_2[]=array(
+                                            'menu_name'=>$_v->menu_name,
+                                            'menu_link'=>$_v->menu_link                           
+                                        );
+                                    }
+
+                                    if($__v->menu_column_has_menu=='0'){
+                                        $column_width='6';
+                                    }else if($__v->menu_column_has_menu=='1'){
+                                        $column_width=$__v->menu_column_no;
+                                    }else if($__v->menu_column_has_menu=='2'){
+                                        $column_width='4';
+                                    }
+
+                                    $sub_menues_data_2[]=array(
+                                        'menu_column'=>$__v->menu_column_name,
+                                        'menu_column_width'=>$column_width,
+                                        'sub_menues'=>$sub_menues_column_data_2                                                                   
+                                    );
+                                }
+                                    
+                            }
+                        }                       
+
+                       $sub_menues_data[]=array(
+                           'menu_name'=>$v->menu_name,
+                           'sub_menues'=>$sub_menues_data_2
+                       );
+                    }	
+    			}
+
+    			$main_menues['menues'][]=array(
+    				'menu_name'=>$value->menu_name,
+                    'menu_link'=>$value->menu_link,
+    				'sub_menues'=>$sub_menues_data                    
+    			);
+    		}
+
+            //die;
+
+            //print_obj($main_menues);die;
+    	}
+
+
+    	$data['top_menues']=$main_menues;
+
+        if ($visible) $this->render('front_menu',$data);
+    }
+}

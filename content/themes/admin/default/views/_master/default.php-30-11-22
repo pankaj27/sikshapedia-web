@@ -1,0 +1,81 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url('public/data/app/app_data/waytologo.png');?>">
+    <title><?php echo Events::trigger('the_title', $title, 'string'); ?></title>
+    
+    <script type="text/javascript">
+        var base_url='<?php echo $this->data['admin_base_url'];?>';
+        var csrf_name='<?php echo $csrf['name'];?>';
+        var csrf_hash='<?php echo $csrf['hash'];?>';
+        var _xtYu='<?php echo $security_token;?>';
+    </script>
+    <?php echo @$css_files; ?>
+    
+    <?php
+    $script_arr=array(
+        js('assets/vendors/core/core'),
+        js('https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
+        js(get_common_url('assets/js/jquery.validate.min')),
+        js(get_common_url('assets/js/additional-methods.min')),
+        js('assets/js/form-data-json.min'),
+        js('assets/js/cryptojs-aes.min'),
+        js('assets/js/cryptojs-aes-format')
+    );
+
+    echo implode("\t", $script_arr);
+
+    ?>
+</head>
+<body class="sidebar-white" id="body_tag">
+    <div class="main-wrapper">        
+        <?php echo @$layout;?>
+    </div>
+
+    <style type="text/css">
+        .tagify{
+            height: inherit;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TableDnD/0.9.1/jquery.tablednd.js" integrity="sha256-d3rtug+Hg1GZPB7Y/yTcRixO/wlI78+2m08tosoRn7A=" crossorigin="anonymous"></script>
+    <?php echo @$js_files;?>
+
+    <script type="text/javascript">
+        window.onload = function(){
+            if(window.navigator.onLine){
+                onLine()
+            }else{
+                offLine()
+            }
+        }
+
+        window.addEventListener("online", function(){
+           onLine(); 
+        });
+        window.addEventListener("offline", function(){
+            offLine(); 
+        });
+
+        function onLine(){
+            $.notify('Back to Online',{position:'top center',className:"success"});
+        }
+        function offLine(){
+            Swal.fire({
+              icon: 'error',
+              title: 'You are offline.Check your network connection.',
+              timer:2000,
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              allowOutsideClick: false,
+            });
+        }
+    </script>
+</body>
+</html>

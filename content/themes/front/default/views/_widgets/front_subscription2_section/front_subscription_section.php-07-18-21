@@ -1,0 +1,26 @@
+<div class="commonSec subscribeSec">
+    <div class="wrapper">
+      <h2 class="text-center text-white">SUBSCRIBE TO OUR NEWS LETTER</h2>
+      <p class="text-center text-info">COLLEGE NOTIFICATION  <i class="fas fa-circle fa-sm"></i>  EXAM  NOTIFICATION  <i class="fas fa-circle fa-sm"></i>  NEWS UPDATE</p>
+
+      <form>
+        <div class="row form-row">
+           <div class="col-6 col-md-3">
+            <input type="text" class="form-control" placeholder="Enter your email">
+           </div>
+           <div class="col-6 col-md-3">
+            <input type="text" class="form-control" placeholder="Enter your phone no">
+           </div>
+           <div class="col-8 col-md-4">
+            <select class="form-control" >
+            </select>
+           </div>
+           <div class="col-4 col-md-2">
+            <button class="btn btn-secondary btn-block" type="button">Submit</button>
+           </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>

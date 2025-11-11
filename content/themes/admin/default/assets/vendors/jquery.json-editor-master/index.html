@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JQuery JSON Editor Example</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            width: 80%;
+            margin: 50px auto 100px;
+        }
+        #json-input {
+            display: block;
+            width: 100%;
+            height: 200px;
+        }
+        #translate {
+            display: block;
+            height: 28px;
+            margin: 20px 0;
+            border-radius: 3px;
+            border: 2px solid;
+            cursor: pointer;
+        }
+        #json-display {
+            border: 1px solid #000;
+            margin: 0;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="./dist/jquery.json-editor.min.js"></script>
+
+    <h1><a href="https://github.com/dblate/jquery.json-editor">JSON EDITOR</a></h1>
+
+    <ul>
+        <li>在 <code>textarea</code> 中输入 <code>JSON</code>，点击 <code>Translate To HTML</code> 按钮更新编辑器</li>
+        <li>编辑 <code>JSON</code> 时应遵循 <a href="http://json.org/">JSON 格式规范</a></li>
+        <li>在控制台中使用 <code>editor.get()</code> 获取当前的 <code>JSON</code> 值</li>
+    </ul>
+
+    <textarea id="json-input" autocomplete="off">
+         {
+          "name": "jquery.json-editor",
+          "description": "A json editor based on jquery.json-viewer.",
+          "author": "yuhui06",
+          "version": "1.0.0",
+          "homepage": "https://github.com/dblate/jquery.json-editor",
+          "demo": "https://dblate.github.io/jquery.json-editor/",
+          "release-date": {
+             "year": 2018,
+             "month": 5,
+             "day": 25
+          },
+          "dependencies": "jquery",
+          "devDependencies": "fis3",
+          "fis3-plugins": [{
+            "name": "uglify-js",
+            "usage": "optimizer"
+          }, {
+            "name": "js-require-css",
+            "usage": "css inline"
+          }],
+          "UMD": false
+        }
+        
+    </textarea>
+    <button id="translate">Translate To HTML</button>
+    <pre id="json-display"></pre>
+
+    <script type="text/javascript">
+        function getJson() {
+            try {
+                return JSON.parse($('#json-input').val());
+            } catch (ex) {
+                alert('Wrong JSON Format: ' + ex);
+            }
+        }
+
+        var editor = new JsonEditor('#json-display', getJson());
+        $('#translate').on('click', function () {
+            editor.load(getJson());
+        });
+    </script>
+</body>
+</html>

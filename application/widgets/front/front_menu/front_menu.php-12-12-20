@@ -1,0 +1,66 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * 
+ */
+class Front_menu extends Widget
+{
+	
+	function run($visible = FALSE) {
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$top_menues=$this->sm->get_menues(array('menu_is_top'=>'1','menu_is_active'=>'1'),FALSE);
+
+    	if(!empty($top_menues)){
+    		foreach ($top_menues as $key => $value) {
+    			$sub_menues=$this->sm->get_menues(array('menu_is_top'=>'2','menu_is_active'=>'1','menu_parent_id'=>$value->menu_id),FALSE);
+
+                
+
+    			// if(!empty($sub_menues)){
+    			   				
+    			// }
+
+    			$main_menues[]=array(
+    				'menu_name'=>$value->menu_name,
+    				'sub_menues'=>isset($sub_menues)?$sub_menues:'',
+
+    			);
+    		}
+
+    		//print_obj($main_menues);
+    	}else{
+    		$main_menues=array();
+    	}
+
+    	if(!empty($main_menues) && !empty($main_menues['sub_menues'])){
+			foreach ($main_menues['sub_menues'] as $k => $v) {
+				$sub_menues_2=$this->sm->get_menues(array('menu_is_top'=>'2','menu_is_active'=>'1','menu_parent_id'=>$v->menu_id),FALSE);
+                if($v->menu_is_connected=='1'){
+                    $top_menues_states=$this->com->get_states(array('state_status'=>'1','is_top'=>'1','state_serial','ASC'));
+                }else{
+                    $top_menues_states=array();
+                }
+				$_sub_menues[$v->menu_id][]=array(
+					'menu_name'=>$v->menu_name,
+                    'top_menu_states'=>$top_menu_states
+				);
+			} 
+    	}
+
+
+    	if(isset($_sub_menues) && !empty($_sub_menues)){
+    		array_merge($main_menues,$_sub_menues);
+    	}
+
+
+    	print_obj($main_menues);die;
+
+
+    	$data['top_menues']=$main_menues;
+
+    	$data['hi']='hi';
+        if ($visible) $this->render('front_menu',$data);
+    }
+}

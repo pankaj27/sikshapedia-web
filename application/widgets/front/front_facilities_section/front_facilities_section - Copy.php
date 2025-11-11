@@ -1,0 +1,56 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * 
+ */
+class Front_facilities_section extends Widget
+{
+	function run($visible = FALSE){
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$segment_1=$this->uri->segment(1,0); //country
+		$segment_2=$this->uri->segment(2,0); //college,university url
+
+		$colleges_data=array();
+		$college_facilities=array();
+
+
+		if((is_string($segment_1) && $segment_1!='0') && (is_string($segment_2) && $segment_2!='0')){
+			$country_data=$this->com->get_country(array('country_iso_code_2'=>$segment_1));
+
+			if(!empty($country_data)){
+				$slug_found=$this->sm->get_slug(array('slug_value'=>$segment_2));
+
+				if(!empty($slug_found)){
+					$slug_type=$slug_found->slug_type;
+					$slug_type_id=$slug_found->slug_type_id;
+
+					if($slug_type=='6'){ //university
+
+					}else if($slug_type=='7'){ //college
+						$college_data=$this->im->get_college_profile_data(array('college_user_id'=>$slug_type_id));
+
+						if(!empty($college_data) && !empty($college_data->college_facilities)){
+		                    $cfacilities=$this->sm->get_system_facilities_in('facility_id',$college_data->college_facilities);
+
+		                    if(!empty($cfacilities)){
+								foreach ($cfacilities as $k => $v) {
+			                        $college_facilities[]=array(
+			                            'facility_name'=>$v->facility_name,
+			                            'facility_icon'=>$v->facility_icon,
+			                            'facility_icon_3'=>$v->facility_icon_3
+			                        );
+			                    }
+		                    }           
+		                }
+					}
+				}
+			}
+		}
+
+    	$data['college_facilities']=$college_facilities;
+
+    	if ($visible) $this->render('front_facilities_section',$data);
+	}
+}

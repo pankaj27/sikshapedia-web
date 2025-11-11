@@ -1,0 +1,256 @@
+jQuery(function($) {
+  "use strict";
+
+//Filter
+	var start = 1;
+    var limit = 6;
+   	var doneScrollingInterval = 500;
+   	var scrollTimer=-1; 
+   	var processing=false;               //timer identifier
+
+   // var position = $(window).scrollTop();
+
+   var position=0;
+
+
+     $(window).scroll(function(){
+        var scroll = $(window).scrollTop();
+        var last_id=$('div .grid_list:last').index()+1;
+
+        if ($(window).data('ajax_in_progress') === true)
+            return;
+        
+        //if(scroll > position){
+            if (scrollTimer != -1){
+                 clearTimeout(scrollTimer);
+            }
+
+           // if (processing){
+                if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2){
+                    $(window).data('ajax_in_progress', true);
+                    start++;
+                    doScroll(true,start);
+                   // console.log('Scrolling....'+last_id);
+                    //$(window).scrollTop($(window).scrollTop()-1);
+                }
+           // }
+        //}
+
+        position = scroll;      
+    });
+
+    //  $(window).scroll(function(){
+    //     //var lastId = $('.loader').attr('id');
+    //     var last_id=$('div .grid_list:last').index()+1;
+    //     if($(window).scrollTop() >= ($(document).height() - $(window).height())){
+    //         doScroll();
+    //         console.log('Scrolling....'+last_id);
+    //     }
+    // });
+
+    //listen to scroll function
+  // $('#udata_lists').scroll(function(){
+
+  //       //[Kent] Before we service the event, we check if the last scroll event was handled/completed.
+  //       //If it is not yet compelted, don't start another one and jump out of the code.
+  //       if ($(window).data('ajax_in_progress') === true)
+  //           return;
+
+  //       //define what we need
+  //       var scrolltop=$('#udata_lists').attr('scrollTop');
+  //       var scrollheight=$('#udata_lists').attr('scrollHeight');
+  //       var windowheight=$('#udata_lists').attr('clientHeight');
+  //       var scrolloffset=20;
+
+  //       //get number of div which will append to script in case of limit database to page 2 or 3 or...
+  //       size =  $('#udata_lists > div').children().size();
+
+  //       //if we reach to bottom of div we are going to call to ajax function
+  //       if(scrolltop>=(scrollheight-(windowheight+scrolloffset))){
+  //           $(window).data('ajax_in_progress', true);  //[Kent] prevent more scroll events as AJAX request will soon begin. 
+
+            
+
+  //           // if remain of size(count of div) is 0 then we have more data to show because 
+  //           // we limit data provided by script to 7 field(we handle situation that we had 
+  //           // 14 or 21 respond from database in "next step" because if there is no data to 
+  //           // show we dont have to let script to run)
+  //           if(size % 7 == 0){
+  //               //call to load data function
+  //               setTimeout(function(){doScroll()}, 1500);
+  //           }else{
+  //               //do nothing its just in case we need to append something like no more data to load
+  //           }
+  //       }
+  //   });   
+
+
+
+  $('body').on('click','.coursefilter',function(){
+    var cu=$(this).val();
+    var st=$('.statefilter :selected').val();
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+  });
+
+
+$('body').on('click','.streamfilter',function(){
+    var cu=$(this).val();
+    var st=$('.statefilter :selected').val();
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+  }); 
+  
+
+  $('body').on('click','.statefilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$('html').html()
+
+    //$("#main_content").load(data_url);
+  }); 
+
+
+  $('body').on('click','.cityfilter',function(){
+    var st=$(this).val();
+    var cu=$('.cityfilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+
+   $('body').on('click','.typefilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+   $('body').on('click','.categoryfilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+   $('body').on('click','.affiliationfilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+   $('body').on('click','.agencyfilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+
+   if($('#udata_lists').length>0){
+        doScroll();
+   }
+
+
+   
+
+    function doScroll(to_append=false,_start=0){
+    	// start += limit;
+    	$.ajax({
+        	type:'POST',
+        	url:base_url+'filterdata',
+        	data:{csrf_test_name:csrf_hash,_l:limit,_s:_start,_c:_c,_st:_st,_ct:_ct,_strm:_strm,_cu:_cu,_exam:_exam,_ctype:_ctype,_appr:_appr,_aff:_aff,_c_cate:_c_cate,_agn:_agn},
+        	cache:false,
+        	beforeSend:function(){
+        		processing = true;
+                $('#data_loader').html('<img src="'+loader_gif+'" height="50px">');
+        	},
+        	success:function(d){
+        		if(d.html!=''){
+                    
+
+                    if(to_append==true){
+                        $("#udata_lists").append(d.html);
+                    }else if(to_append==false){
+                        $("#udata_lists").html(d.html);
+                    }
+							
+        			
+        			
+                    $(window).data('ajax_in_progress', false);
+        		}
+
+                console.log(start);
+        	},
+            complete:function(xhr,status){
+                $('#data_loader').html('');
+            }
+        });
+    }
+
+    function doLoadData(l,s,_c,_st,_ct,_strm,_cu,_exam){
+        // start += limit;
+        $.ajax({
+            type:'POST',
+            url:base_url+'filterdata',
+            data:{csrf_test_name:csrf_hash,_l:l,_s:s,_c:_c,_st:_st,_ct:_ct,_strm:_strm,_cu:_cu,_exam:_exam},
+            cache:false,
+            beforeSend:function(){
+                processing = true;
+            },
+            success:function(d){
+                if(d.html!=''){
+
+                     $("#udata_lists").html(d.html);       
+                    
+                    
+                    $(window).data('ajax_in_progress', false);
+                }
+            }
+        });
+    }
+});

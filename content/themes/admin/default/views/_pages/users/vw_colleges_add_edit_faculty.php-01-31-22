@@ -1,0 +1,245 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?php echo $admin_base_url;?>/institutions/colleges/add/<?php echo $college_id;?>"><?php echo (!empty($college_data))?$college_data['college_name']:'';?></a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College Faculty Data</li>
+		</ol>
+	</nav>
+
+	<?php
+	if(isset($college_data) && (!empty($college_data))){
+		?>
+		<div class="profile-page tx-13">
+                        <div class="row">
+                        <div class="col-12 grid-margin">
+                                    <div class="profile-header">
+                                          <div class="cover">
+                                                <div class="gray-shade"></div>
+                                                <figure>
+                                                      <img src="<?php echo (!empty($college_data))?$college_data['college_banner']:'';?>" class="img-fluid" alt="profile cover" style="height: 300px;">
+                                                </figure>
+                                                <div class="cover-body d-flex justify-content-between align-items-center">
+                                                      <div>
+                                                            <img class="profile-pic" src="<?php echo (!empty($college_data))?$college_data['college_logo']:'';?>" alt="profile">
+                                                            <a href="<?php echo (!empty($college_data))?$college_data['college_access_url']:'';?>" target="_blank"><span class="profile-name"><?php echo (!empty($college_data))?$college_data['college_name']:'';?></span></a>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div class="header-links">
+                                                <ul class="links d-flex align-items-center mt-3 mt-md-0">
+                                                      <li class="header-link-item d-flex align-items-center active">
+                                                            <button class="btn btn-primary btn-icon-text btn-edit-profile" data-toggle="modal" data-target="#collegeInnerMenuesModal"> Create inner Menues</button>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                              </div>
+                        </div>
+                        </div>
+                  </div>
+                  <?php
+                  if(isset($inner_menues_assigned) && !empty($inner_menues_assigned)){
+                        ?>
+                        <div class="profile-page tx-13">
+                              <div class="row">
+                                    <div class="col-12 grid-margin">
+                                          <div class="profile-header">
+                                          <?php
+                                          foreach ($inner_menues_assigned as $key => $value) {
+                                                ?>
+                                                <a class="btn btn-primary btn-icon-text btn-edit-profile" href="<?php echo $value['menu_link'];?>"> <?php echo $value['menu_name'];?></a>
+                                                <?php
+                                          }
+                                          ?>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                        <?php
+                  }
+                  ?>
+
+                  <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                              <div class="card">
+                                    <div class="card-body">
+                                          <h6 class="card-title">Faculty Section Introduction</h6>
+                                          
+                                          <div class="row">
+                                                <form id="form_college_faculty_intro">
+                                                      
+                                                      <div class="col-sm-12">
+                                                            <input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+                                                            <input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+                                                            <input type="hidden" name="college_info_type" value="8">
+                                                            <div class="form-group">
+                                                                  <textarea class="form-control college_info" name="college_general_info" id="college_general_info" rows="10" >
+                                                                        <?php
+                                                                        if(!empty($college_data['college_faculty_info'])){
+                                                                              echo $college_data['college_faculty_info'];
+                                                                        }
+                                                                        ?>
+                                                                  </textarea>
+                                                            </div>                                                            
+                                                      </div>
+                                                      <div class="col-sm-12">
+                                                        <button type="submit" class="btn btn-primary" id="btn_save_faculty_info">Save</button>
+                                                    </div>
+                                              </form>
+                                          </div>
+                              </div>
+                        </div>
+                  </div>
+		<div class="row">
+			<div class="col-md-6 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h6 class="card-title"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College Faculty- [ <?php echo (!empty($college_data))?$college_data['college_name']:'';?> ]-[ Faculty Data]</h6>
+						<form id="form_college_faculty">
+							<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+							<input type="hidden" class="form-control" name="_faculty" value="<?php echo (!empty($college_data['college_faculties']))?encode_data($college_data['college_faculties']->faculty_id):'';?>">
+							<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+
+							<div class="row">
+            					<div class="col-sm-4">
+            						<div class="form-group">
+            							<label>Faculty Name</label>
+										<input type="text" class="form-control" placeholder="Faculty Name" name="college_faculty_name" id="college_faculty_name" value="<?php echo (!empty($college_data['college_faculties']))?$college_data['college_faculties']->faculty_name:'';?>">
+            						</div>
+            					</div>
+            					<div class="col-sm-4">
+            						<div class="form-group">
+            							<label>Faculty Email</label>
+										<input type="text" class="form-control" placeholder="Faculty Email" name="college_faculty_email" id="college_faculty_email" value="<?php echo (!empty($college_data['college_faculties']))?$college_data['college_faculties']->faculty_email:'';?>">
+            						</div>
+            					</div>
+            				
+            					<div class="col-sm-4">
+            						<div class="form-group">
+            							<label>Faculty Phone No.</label>
+										<input type="text" class="form-control" placeholder="Faculty Phone No" name="college_faculty_phone_no" id="college_faculty_phone_no" value="<?php echo (!empty($college_data['college_faculties']))?$college_data['college_faculties']->facullty_contact_no:'';?>">
+            						</div>
+            					</div>
+            				</div>
+            				<div class="row">
+            					<div class="col-sm-4">
+            						<div class="form-group">
+            							<label>Faculty Experience</label>
+										<input type="text" class="form-control" placeholder="Faculty Experience" name="college_faculty_experience" id="college_faculty_experience" value="<?php echo (!empty($college_data['college_faculties']))?$college_data['college_faculties']->faculty_academic_exp:'';?>">
+            						</div>
+            					</div>
+            					<div class="col-sm-4">
+            						<div class="form-group">
+            							<label>Faculty Designation</label>
+            							<select class="form-control" name="college_faculty_designation">
+            								<option value="0">Select Designation</option>
+            								<?php
+            								if (!empty($college_data['college_designations'])) {
+            									foreach ($college_data['college_designations'] as $key => $value) {
+            										?>
+            										<option value="<?php echo $value['designation_id'];?>" <?php echo $value['selected'];?>><?php echo $value['designation_name'];?></option>
+            										<?php
+            									}
+            								}
+            								?>
+            							</select>
+            						</div>
+            					</div>
+            					<div class="col-sm-4">
+            						<div class="form-group">
+            							<label>Faculty Department</label>
+            							<select class="form-control" name="college_faculty_department">
+            								<option value="0">Select Department</option>
+            								<?php
+            								if (!empty($college_data['college_departments'])) {
+            									foreach ($college_data['college_departments'] as $key => $value) {
+            										?>
+            										<option value="<?php echo $value['department_id'];?>" <?php echo $value['selected'];?>><?php echo $value['department_name'];?></option>
+            										<?php
+            									}
+            								}
+            								?>
+            							</select>
+            						</div>
+            					</div>
+            				</div>
+            				<div class="row">
+	      					<div class="col-sm-12">
+	      						<div class="form-group">
+	      							<label class="control-label">Faculty Qualifications</label>
+	      							<select class="form-control" multiple="true"  name="college_faculty_qualifications[]" id="college_faculty_qualifications">
+	      							<?php
+	      							if(!empty($college_data['college_qualifications'])){
+	      								foreach ($college_data['college_qualifications'] as $_k => $_v) {
+	      									?>
+	      									<option value="<?php echo $_v['qualification_id'];?>" <?php echo $_v['selected'];?>><?php echo $_v['qualification_name'];?></option>
+	      									<?php
+	      								}
+	      							}
+	      							?>
+	      							</select>
+	      							
+	      						</div>
+	      					</div>
+            				</div>
+            				<div class="row">
+            					<div class="col-sm-12">
+            						<div class="form-group">
+            							<label class="control-label">Faculty Subjects of Expertise</label>
+            							<select class="form-control" multiple="true"  name="college_faculty_subjects[]" id="college_faculty_subjects">
+	            							<?php
+	            							if(!empty($college_data['college_subjects'])){
+	            								foreach ($college_data['college_subjects'] as $__k => $__v) {
+	            									?>
+	            									<option value="<?php echo $__v['subject_id'];?>" <?php echo $__v['selected'];?>><?php echo $__v['subject_name'];?></option>
+	            									<?php
+	            								}
+	            							}
+	            							?>
+            							</select>
+            						</div>
+            					</div>
+            				</div>
+
+            				<div class="row">
+								<div class="col-sm-3">
+									<button class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0" type="submit" id="btn_save_college_faculty">Save</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h6 class="card-title">Faculties</h6>
+
+						<div class="table-responsive">
+							<table id="college_faculties_list_table" class="table">
+								<thead>
+			                      <tr>
+		                      		<th>#</th>
+			                        <th>Name</th>
+			                        <!-- <th>Email</th> -->
+			                        <!-- <th>Phone No.</th> -->
+			                        <th>Status</th>
+			                        <th>Action</th>			                         
+			                      </tr>
+			                    </thead>
+			                    <tbody>		                    	
+			                    </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	?>
+</div>
+
+<script type="text/javascript">let _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>'; let colleg_faq_row ='';</script>

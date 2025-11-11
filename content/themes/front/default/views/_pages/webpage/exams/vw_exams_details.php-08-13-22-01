@@ -1,0 +1,751 @@
+<section class="bradcumSec bg-white py-2">
+   <div class="wrapper">
+        <div class="row">
+            <div class="col-md-10">
+                <nav aria-label="breadcrumb" >
+                    <ol class="breadcrumb bg-white m-0 pl-0">
+                      <?php
+                      foreach ($exams_data['breadcumb'] as $key => $value) {
+                        ?>
+                        <li class="breadcrumb-item <?php echo (empty($value))?'active':'';?>">
+                          <?php
+                          if(!empty($value)){
+                            ?>
+                            <a href="<?php echo $value;?>"><?php echo $key;?></a>
+                            <?php
+                          }else{
+                            echo $key;
+                          }
+                          ?>
+                        </li>
+                        <?php
+                      }
+                      ?>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-12">
+                <div class="media">
+                    <img src="<?php echo $exams_data['exam_logo'];?>" class="mr-3 h-60p" alt="<?php echo $exams_data['exam_name'];?>">
+                    <div class="media-body">
+                        <div class="row">
+
+                            <div class="col-sm-8">
+                                <h5 class="mt-0"><?php echo $exams_data['exam_heading'];?></h5>
+                            </div>
+                            <!-- <div class="col-sm-4">
+                                <div class="border p-2 d-inline float-sm-right ">
+                                    <i class="far fa-clock"></i> 
+                                    <span>Results: 07 Mar `21 </span>| <a href="#" class="color2"> See all dates</a>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php
+if(!empty($exam_menu)){
+  ?>
+    <section class="tabSliderSec border-top">
+      <div class="weapper">
+        <div class="swiper-container tabSlider navTabSlider">
+          <div class="swiper-wrapper">
+           
+            <?php
+            foreach ($exam_menu as $key => $value) {
+              if(!empty($value['child_menu'])){
+                ?>
+                <div class="nav-item dropdown" style="z-index: 1000;position: relative;">
+                  <a href="<?php echo $value['menu_link'];?>" class="nav-link dropdown-toggle swiper-slide <?php echo ($value['menu_active']=='yes')?'active':'';?>" type="button" data-toggle="dropdown" style="border:none;"><?php echo $value['menu_name'];?>
+                  <span class="caret"></span></a>
+                  <ul class="dropdown-menu" style="border-top:none;margin-top: 0px;">
+                    <?php
+                    foreach ($value['child_menu'] as $k => $v){
+                      ?>
+                      <li style="margin-top: 0px;"><a href="<?php echo $v['menu_link'];?>" class="<?php echo ($value['menu_active']=='yes')?'active':'';?>"><?php echo $v['menu_name'];?></a></li>
+                      <?php
+                    }
+                    ?>
+                  </ul>
+                </div>
+                <?php                
+              }else{
+                ?>
+                <a href="<?php echo $value['menu_link'];?>" class="swiper-slide navLink <?php echo ($value['menu_active']=='yes')?'active':'';?>"> <?php echo $value['menu_name'];?> </a>
+                <?php
+              }
+            }
+            ?>
+          </div>
+          <div class="swiper-button-next swiper-button-white"></div>
+          <div class="swiper-button-prev swiper-button-white"></div>
+        </div>
+      </div>
+    </section>
+  <?php
+}
+
+?>
+
+
+
+<section class="pageDetailsSec py-4">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="adBlock" style="margin-top: 5px; margin-bottom:5px;">      
+          <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9545373166119354"
+               crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:728px;height:90px"
+                 data-ad-client="ca-pub-9545373166119354"
+                 data-ad-slot="2846553403"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- <div class="col-lg-2 d-none d-lg-block">
+          <div class="card numberingListCard ">
+              <div class="list-group list-group-flush  ">
+                  <a href="" class="list-group-item list-group-item-action active"><span class="number">01</span> <span> JEE Main 2021 Exam Dates</span></a>
+                  <a href="" class="list-group-item list-group-item-action"> <span class="number">02</span><span> JEE Main 2021 Exam Dates</span></a>
+                  <a href="" class="list-group-item list-group-item-action"> <span class="number">02</span><span> JEE Main 2021 Exam Dates</span></a>
+                  <a href="" class="list-group-item list-group-item-action"> <span class="number">02</span><span> JEE Main 2021 Exam Dates</span></a>
+                  <a href="" class="list-group-item list-group-item-action"> <span class="number">02</span><span> JEE Main 2021 Exam Dates</span></a>
+                  <a href="" class="list-group-item list-group-item-action"> <span class="number">02</span><span> JEE Main 2021 Exam Dates</span></a>
+                  <a href="" class="list-group-item list-group-item-action"> <span class="number">02</span><span> JEE Main 2021 Exam Dates</span></a>
+                 
+              </div>
+          </div>
+      </div>   -->
+      <div class="col-lg-9 mb-4 mb-lg-0">
+        
+      <?php $this->widget->run('front_exam_details_data',TRUE,$exams_data['exam_id'],$menu_data_id,$menu_slug);?>
+
+      <?php $this->widget->run('front_exam_page_button_section',FALSE,$exams_data['exam_id']);?>
+
+      </div>
+
+      <div class="col-lg-3 ">
+       <!--  <a href="" class="btn btn-primary mb-3 btn-block  d-flex justify-content-between align-items-center "><span>APPLY NOW </span> <i class="far fa-envelope"></i></a>
+        <a href="" class="btn btn-warning  mb-3 btn-block d-flex justify-content-between "> <span>DOWNLOAD PRACTICE PAPPERS </span> <i class="fas fa-download"></i></a>
+        
+
+        <div class="card notificationCard mb-4">
+          <div class="card-header bg-orange-gradient border-none d-flex justify-content-between align-items-center">
+            <h5 class="m-0">Notification</h5>
+            <i class="fas fa-bell"></i>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+          </ul>
+          <div class="card-header bg-white text-center">
+            <a class="#">View All News</a>
+          </div>
+        </div>
+
+        <div class="card interestCard mb-4">
+          <div class="card-body ">
+            <div class="icon text-center mb-3">
+              <svg width="144" height="47" viewBox="0 0 144 47" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M72.5 4.3h4.3V1.5h-6.55v3.55h1.5a.75.75 0 01.75-.75z" fill="#FFCC75"></path><path fill="#F2EBD9" d="M70.25 33.167h5.25V42.5h-5.25zM63.5 33.167h5.25V42.5H63.5z"></path><path fill="#FFF" d="M63.5 44h12v1.5h-12zM57 43.25V29.5h-9.5v16h10.25V44a.75.75 0 01-.75-.75zm-5.833-7.833a.75.75 0 01-1.5 0v-3a.75.75 0 011.5 0v3zm3.666 0a.75.75 0 01-1.5 0v-3a.75.75 0 011.5 0v3zM91.5 45.5v-16H82v13.75a.75.75 0 01-.75.75v1.5H91.5zm-3.667-13.083a.75.75 0 011.5 0v3a.75.75 0 01-1.5 0v-3zm-3.666 0a.75.75 0 011.5 0v3a.75.75 0 01-1.5 0v-3z"></path><path d="M81.25 44a.75.75 0 01-.75-.75V19.4h-5.25a.75.75 0 01-.75-.75H73a.75.75 0 01-.75.75H58.5v23.85a.75.75 0 01-.75.75v1.5H62V32.417a.75.75 0 01.75-.75h13.5a.75.75 0 01.75.75V45.5h4.25V44zM69.5 29.167a3.637 3.637 0 01-3.633-3.634A3.638 3.638 0 0169.5 21.9a3.637 3.637 0 013.633 3.633 3.638 3.638 0 01-3.633 3.634z" fill="#FFF"></path><path d="M69.5 23.4a2.136 2.136 0 00-2.133 2.133c0 1.177.957 2.134 2.133 2.134a2.136 2.136 0 002.133-2.134A2.136 2.136 0 0069.5 23.4z" fill="#98D9D5"></path><path fill="#F2EBD9" d="M47.5 25.5H57V28h-9.5zM82 25.5h9.5V28H82z"></path><path d="M74.5 18.65a.75.75 0 01.75-.75h3.844L69.5 10.307 59.906 17.9H72.25a.75.75 0 01.75.75h1.5z" fill="#FF6E1D"></path><path d="M92.25 24H82v-5.35a.738.738 0 00-.005-.082c0-.007-.002-.013-.003-.02a.759.759 0 00-.01-.06l-.006-.023a.756.756 0 00-.016-.055l-.008-.023a.76.76 0 00-.06-.122l-.013-.022a.762.762 0 00-.033-.047l-.013-.018a.754.754 0 00-.053-.059l-.006-.005a.715.715 0 00-.054-.048l-.005-.004L70.25 8.987V1.5h6.55v2.8h-4.3a.75.75 0 000 1.5h5.05a.75.75 0 00.75-.75V.75a.75.75 0 00-.75-.75H69.5a.75.75 0 00-.75.75v8.237l-11.466 9.075-.004.004a.762.762 0 00-.054.048l-.006.005a.754.754 0 00-.053.059l-.013.018a.762.762 0 00-.033.047l-.014.022a.772.772 0 00-.059.122l-.008.023a.729.729 0 00-.016.055l-.006.023a.751.751 0 00-.01.06c-.001.007-.003.013-.003.02a.763.763 0 00-.005.082V24H46.75a.75.75 0 00-.75.75v21.5c0 .414.336.75.75.75h45.5a.75.75 0 00.75-.75v-21.5a.75.75 0 00-.75-.75zM63.5 45.5V44h12v1.5h-12zm12-12.333V42.5h-5.25v-9.333h5.25zM68.75 42.5H63.5v-9.333h5.25V42.5zM77 32.417a.75.75 0 00-.75-.75h-13.5a.75.75 0 00-.75.75V45.5H47.5v-16H57v13.75a.75.75 0 001.5 0V19.4h13.75a.75.75 0 000-1.5H59.906l9.594-7.593 9.594 7.593H75.25a.75.75 0 000 1.5h5.25v23.85a.75.75 0 001.5 0V29.5h9.5v16H77V32.417zM91.5 28H82v-2.5h9.5V28zM57 28h-9.5v-2.5H57V28z" fill="#082947"></path><path d="M50.417 31.667a.75.75 0 00-.75.75v3a.75.75 0 001.5 0v-3a.75.75 0 00-.75-.75zM54.083 31.667a.75.75 0 00-.75.75v3a.75.75 0 001.5 0v-3a.75.75 0 00-.75-.75zM88.583 36.167a.75.75 0 00.75-.75v-3a.75.75 0 00-1.5 0v3c0 .414.336.75.75.75zM84.917 36.167a.75.75 0 00.75-.75v-3a.75.75 0 00-1.5 0v3c0 .414.335.75.75.75zM69.5 21.9a3.637 3.637 0 00-3.633 3.633 3.637 3.637 0 003.633 3.634 3.637 3.637 0 003.633-3.634A3.637 3.637 0 0069.5 21.9zm0 5.767a2.136 2.136 0 01-2.133-2.134c0-1.176.957-2.133 2.133-2.133 1.176 0 2.133.957 2.133 2.133a2.136 2.136 0 01-2.133 2.134z" fill="#082947"></path><g fill="#F7F7F7"><path d="M35.798 28.418c2.108-5.69 2.345-9.798 1.928-12.542-.487-3.207-3.458-5.645-6.576-5.086-3.664.657-3.755 4.689-3.755 4.689s-3.711-1.573-5.802 1.507c-1.779 2.62-.76 6.327 1.972 8.076 2.337 1.497 6.177 2.968 12.233 3.356z"></path></g><g fill="#F5F5F5"><path d="M5.053 37.714c4.014-1.76 6.267-3.697 7.484-5.29 1.421-1.863 1.197-4.63-.657-5.969-2.18-1.573-4.32.402-4.32.402S6.515 24.14 3.866 24.6c-2.254.39-3.668 2.78-3.207 5.076.395 1.966 1.557 4.698 4.394 8.04z"></path></g><g fill="#F5F5F5"><path d="M130.563 29.139c-3.064-5.239-4.01-9.242-4.077-12.018-.077-3.242 2.426-6.16 5.593-6.15 3.723.011 4.513 3.966 4.513 3.966s3.381-2.194 5.975.477c2.207 2.272 1.847 6.098-.54 8.296-2.041 1.88-5.567 3.995-11.464 5.429z"></path></g><g fill="#F0F0F0"><path d="M109.178 37.873c-3.374-2.799-5.005-5.282-5.735-7.15-.854-2.181.124-4.779 2.276-5.555 2.53-.912 4.042 1.577 4.042 1.577s1.753-2.324 4.173-1.152c2.06.996 2.76 3.682 1.683 5.763-.921 1.78-2.791 4.086-6.44 6.517z"></path></g><g opacity="0.632" fill="#F0F0F0"><path d="M98.277 14.912c-2.336-1.938-3.465-3.657-3.97-4.95-.591-1.51.086-3.308 1.575-3.846 1.751-.631 2.799 1.092 2.799 1.092s1.214-1.609 2.889-.798c1.425.69 1.91 2.55 1.165 3.99-.638 1.233-1.933 2.83-4.458 4.512z"></path></g><g opacity="0.632" fill="#F0F0F0"><path d="M27.277 44.912c-2.336-1.938-3.465-3.657-3.97-4.95-.591-1.51.086-3.308 1.575-3.846 1.751-.631 2.799 1.092 2.799 1.092s1.214-1.609 2.889-.798c1.425.69 1.91 2.55 1.165 3.99-.638 1.233-1.933 2.83-4.458 4.512z"></path></g><g opacity="0.632" fill="#F0F0F0"><path d="M50.277 13.912c-2.336-1.938-3.465-3.657-3.97-4.95-.591-1.51.086-3.308 1.575-3.846 1.751-.631 2.799 1.092 2.799 1.092S51.895 4.6 53.57 5.41c1.425.69 1.91 2.55 1.165 3.99-.638 1.233-1.933 2.83-4.458 4.512z"></path></g></g></svg>
+            </div>
+            <h6 class="mb-3 text-center">INTERESTED IN THIS COLLEGE ?</h6>
+            <a href="#" class="btn btn-warning  btn-block d-flex justify-content-between align-items-center"> <span>ASK QUESTION </span> <i class="fas fa-question"></i></a>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h5 class="m-0">Featured News</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+          </ul>
+          <div class="card-header bg-white text-center">
+            <a class="#">View All News</a>
+          </div>
+        </div>
+
+
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h5 class="m-0">Featured News</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="media">
+                <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                <div class="media-body">
+                  <h6 class="mb-0 color2">Media heading</h6>
+                  <small> sit amet nibh libero, in gravida nulla. </small> 
+                </div>
+              </a>
+            </li>
+          </ul>
+          <div class="card-header bg-white text-center">
+            <a class="#">View All News</a>
+          </div>
+        </div> -->
+
+        <!-- <div class="mb-4">
+          <button type="button" class="btn btn-lg btn-primary mb-3 btn-block  d-flex justify-content-between align-items-center" style="background-color:#ff9425;border-color: #ff9425;" ><span>APPLY NOW </span> <i class="far fa-envelope"></i></button>
+
+        </div> -->
+
+        <?php //$this->widget->run('front_exam_notifications_section',TRUE);?>
+        <?php $this->widget->run('front_exams_upcomming_side_section',TRUE,$exams_data['exam_id']);?>
+        <?php $this->widget->run('front_exams_courses_side_section',TRUE,$exams_data['exam_id']);?>
+        <?php $this->widget->run('front_google_ads_section',TRUE,'square');?>
+        <?php $this->widget->run('front_exams_colleges_side_section',TRUE,$exams_data['exam_id']);?>
+        <?php $this->widget->run('front_exam_side_menu_section',TRUE,$exams_data['exam_id']);?>
+        
+        
+
+
+      </div>
+
+    </div>
+  </div> 
+</section>
+<section class="pageDetailsSec py-4">
+  <div class="wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <?php $this->widget->run('front_exam_fees_mock_section',TRUE);?>
+        </div>
+        
+    </div>
+  </div>
+ </section>
+
+ <!-- <section class="pageDetailsSec py-4">
+  <div class="wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="jsx-222626221 section_wrapper my-4 pb-5">
+                <div class="jsx-222626221 article_heading">
+                    <h2 class="jsx-222626221 font-weight-normal">
+                        <b class="jsx-222626221">Sample/Mock</b> Papers</h2>
+                    </div><div class="jsx-222626221 row"><div class="jsx-222626221 col-md-3 col-sm-6"><a href="https://images.static-collegedunia.com/public/college_data/images/entrance/sample_paper/1604919726XAT_2019.pdf" target="_blank" class="jsx-222626221 text-md"><div class="jsx-222626221 download_sample"><span class="jsx-222626221 month">2021</span><h3 class="jsx-222626221 text-base py-2">XAT Paper.pdf</h3><span class="jsx-222626221 text-md">Download here<span class="jsx-222626221 icon mock_paper_download_button"><svg id="new_download_as_pdf_svg__Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 49.2 45.5" xml:space="preserve" fill="#fff"><style></style><path d="M39.3 29.4c-1.1-1.9-5.8-3.2-9.9-3.4-.4-.4-.8-.8-1.1-1.3-3.6-4.1-5-10-5.5-13.1-.1-.7-.1-1.2-.2-1.6 0-.3-.1-1-.9-1-.2 0-.4.1-.6.3-.3.3-.2.6-.2 1s.1 1 .2 1.6c.3 3.2.4 9.2-2 14.1-.3.5-.5 1-.8 1.4-4.6 1.3-8.3 3.7-8.8 5.7-.2.7 0 1.4.5 1.9.6.6 1.3.9 2.1.9 2.2 0 4.6-2.4 7.3-7.2 1.2-.3 2.4-.5 3.6-.7.4 0 1.2-.1 1.6-.2 1.2-.2 2.6-.3 4.1-.2 3.3 3.5 6 5.2 8.1 5.2 1.1 0 2-.5 2.5-1.5.4-.6.4-1.3 0-1.9zm-27.2 4.8c-.3 0-.6-.1-.9-.4-.1-.1-.1-.2-.1-.4.3-1 2.6-2.8 6.1-4-2 3.1-3.8 4.8-5.1 4.8zm12.3-8c-.4.1-1.1.2-1.5.2-.8.1-1.6.2-2.4.4 0-.1.1-.1.1-.2 1.2-2.4 1.9-5.2 2.2-8.4 1.1 3.1 2.5 5.6 4.3 7.6l.2.2c-1.1 0-2 .1-2.9.2zm13.5 4.3c-.3.5-.6.7-1.2.7-1.3 0-3.2-1.2-5.6-3.4 3.6.5 6.3 1.6 6.8 2.4.1.1.1.2 0 .3zm0 0"></path></svg></span></span></div></a></div></div></div>
+            <hr class="jsx-3025402055 jsx-1091906639">
+        </div>
+        
+    </div>
+  </div>
+ </section> -->
+ 
+<?php
+if($show_bottom_ads==TRUE){
+  ?>
+  <div class="adBlock">
+    <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9545373166119354"
+          crossorigin="anonymous"></script>
+      <!-- wayto_hz_1_ads -->
+      <ins class="adsbygoogle"
+          style="display:inline-block;width:728px;height:90px"
+          data-ad-client="ca-pub-9545373166119354"
+          data-ad-slot="7117741101" style="clear: both; display: flex;justify-content: center;margin-left:50px;margin-right:50px;"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+  <?php
+}
+?>
+
+<section class="pageDetailsSec py-4">
+  <div class="wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <?php $this->widget->run('front_college_comment_section',TRUE);?>
+        </div>        
+    </div>
+  </div>
+ </section>
+
+
+<?php $this->widget->run('front_exam_news_section',TRUE,$exams_data['exam_id']);?>
+
+
+
+<div class="adBlock">
+  <div id="bodyslot_5" class="bodyslot bodyslot-dynamic clearfix" style="padding: 9px!important;margin-top: -11px!important;background: #f5f8f905!important;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9545373166119354"
+                  crossorigin="anonymous"></script>
+    <!-- wayto_hz_1_ads -->
+    <ins class="adsbygoogle"
+        style="display:inline-block;width:728px;height:90px"
+        data-ad-client="ca-pub-9545373166119354"
+        data-ad-slot="7117741101" style="clear: both; display: flex;justify-content: center;margin-left:50px;margin-right:50px;"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
+<?php $this->widget->run('front_subscription_section',TRUE);?>
+
+<script type="text/javascript">
+  var _c='';
+   
+</script>
+
+
+ <style>
+ .section_wrapper.jsx-222626221 .download_sample.jsx-222626221 {
+    position: relative;
+    background: rgb(248, 248, 248);
+    padding: 20px 15px;
+    font-size: 1.2rem;
+ }
+ .section_wrapper.jsx-222626221 .download_sample.jsx-222626221 .month.jsx-222626221 {
+    color: rgb(255, 138, 0);
+    font-weight: 900;
+    display: block;
+    line-height: 1.6;
+    margin-bottom: -8px;
+}
+.section_wrapper.jsx-222626221 .download_sample.jsx-222626221 h3.jsx-222626221 {
+    font-weight: 600;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    color: rgb(54, 54, 54);
+}
+.section_wrapper.jsx-222626221 .download_sample.jsx-222626221 .text-md.jsx-222626221 {
+    color: rgb(151, 151, 151);
+}
+.section_wrapper.jsx-222626221 .download_sample.jsx-222626221 .text-md.jsx-222626221 .mock_paper_download_button.jsx-222626221 {
+    background: rgb(255, 138, 0);
+    width: 50px;
+    height: 50px;
+    fill: rgb(255, 255, 255);
+    border-radius: 50%;
+    position: absolute;
+    right: 30px;
+    bottom: -20px;
+}
+.icon {
+    display: inline-block;
+    line-height: initial;
+    height: 15px;
+    width: 15px;
+}
+ </style>
+
+<style>
+  .dropdown-menu{
+    z-index: 99999 !important
+  }
+    .dropdown-menu li a{
+        background-image: none;
+        color: #666;
+        border-right: 0 none;
+        text-align: left;
+        display: block;
+        line-height: 22px;
+        padding: 8px 12px;
+        text-transform: none;
+        font-size: 13px;
+        letter-spacing: normal;
+        border-right: 0 solid;
+        text-decoration:none;
+    }
+   .dropdown-menu li:hover {
+        background-color: #eee;
+    }
+
+    @media all and (min-width: 992px) {
+      .nav-item .dropdown-menu{ display: none; }
+      .nav-item:hover .nav-link{   }
+      .nav-item:hover .dropdown-menu{ display: block; }
+      .nav-item .dropdown-menu{ margin-top:0; }
+    }
+</style>
+
+<style>
+  .btn-round{
+    border-radius: 20px;
+  }
+  
+ 
+</style>
+
+<style type="text/css">
+  .bodyslot-new {
+      background: #F5F8F9;
+      padding-bottom: 16px;
+      margin-top: 0;
+      margin-bottom: 10px;
+  }
+
+  .live-form-container-new .live-form-heading--icon {
+      height: 30px;
+      width: 30px;
+      margin-right: 10px;
+  }
+  .live-form-container-new h4 {
+      padding: 16px;
+      text-transform: uppercase;
+      color: #000;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-align-items: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      background: #f5f8f9;
+  }
+
+  .live-form-container-new .live-form-heading--icon svg {
+      height: 30px;
+      width: 30px;
+  }
+
+  .live-form-container-new h4 .sponsored {
+      font-size: 13px;
+      background: #ef233f1f;
+      border-radius: 30px;
+      color: #EF233F;
+      padding: 5px 20px;
+  }
+    
+    .live-form-container-new .live-form-body-row {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      box-shadow: 0 0 4px 0 #cfcfcf80;
+      border-radius: 4px 4px 0px 0px;
+      overflow-x: scroll;
+  }
+
+  .live-form-container-new {
+      overflow: hidden;
+      text-align: initial;
+      background: #FFFFFF;
+      box-shadow: 0 0 4px 0 #cfcfcf80;
+      border-radius: 4px;
+  }
+    
+    .ads_body_live_form_container{
+      -webkit-text-decoration: none;
+      text-decoration: none;
+      margin: 0 auto 0px;
+      max-width: 100%;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+    }
+
+    .live-form-container-new {
+      overflow: hidden;
+      text-align: initial;
+      background: #FFFFFF;
+      box-shadow: 0 0 4px 0 #cfcfcf80;
+      border-radius: 4px;
+    }
+    
+    .ads_live_form_desktop_tnew{
+      -webkit-text-decoration: none;
+      text-decoration: none;
+      margin: 0 auto 0px;
+      max-width: 100%;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+    }
+    
+    .ads_live_form_desktop_tnew {
+      background: #fff;
+      position: relative;
+      min-height: 100px;
+      height: 100%;
+      display: block;
+      font-size: 14px;
+      line-height: 18px;
+      color: #333;
+      font-weight: 400;
+      flex: 1;
+      padding: 16px;
+      padding-top: 12px;
+      text-align: left;
+      border-right: 1px solid #00000012;
+  }
+
+  .live-form-container-new .ads_body_live_form_container:nth-child(odd) a .ads_bottom_border {
+      background: #ff7900;
+  }
+  .live-form-container-new .ads_body_live_form_container:nth-child(even) a .ads_bottom_border {
+      background: #4FB8DD;
+  }
+
+  a.ads-live-form-review-banner .ads-bottom-border {
+      position: absolute;
+      bottom: 0px;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: #ff7900 !important;
+  }
+    a.ads_live_form_desktop_tnew:last-child {
+      border-right: 1px  solid #00000012;
+    }
+    .top-section {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    .top-section.logo {
+        border: 2px  solid #E7EBEF;
+        height: 48px;
+        width: 48px;
+        min-width: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
+    }
+    .top-section .college_name {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20px;
+      color: #4FB8DD;
+      height: 42px;
+      overflow: hidden;
+    }
+    .ads_live_form_desktop_tnew .extra_info, .ads_live_form_desktop_tnew:hover .extra_info {
+      color: #333;
+    }
+    .extra_info {
+      height: 72px;
+      overflow: hidden;
+    }
+    .info-section .admission_info {
+      line-height: 17px;
+      color: #1BCE90;
+      margin-top: 4px;
+      height: 32px;
+      overflow: hidden;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+    .apply-btn {
+      text-align: center;
+    }
+    .ads_live_form_desktop_tnew .apply, .ads_live_form_desktop_tnew .apply:hover {
+      background: #ff7900;
+      display: inline-block;
+      font-size: 14px;
+      color: #fff;
+      min-width: 220px;
+      text-align: center;
+      text-transform: uppercase;
+      border-radius: 4px;
+      padding: 6px;
+      margin-top: 8px;
+    }
+    .ads_live_form_desktop_tnew .ads_bottom_border {
+      position: absolute;
+      bottom: 0px;
+      left: 0;
+      width: 100%;
+      height: 5px;
+    }
+    a.ads-live-form-review-banner {
+      min-height: 210px;
+      min-width: 255px;
+      height: 100%;
+      color: #333;
+      padding: 16px 16px 20px 16px;
+      background: #FFF8F1;
+  }
+</style>
+
+<style type="text/css">
+        .sticky-item {
+            position: sticky;
+            top: 0px;
+        }
+        .card.jsx-626553351 {
+            box-shadow: rgb(207 207 207 / 50%) 0px 0px 4px 0px;
+            border-radius: 5px;
+        }
+        .bg-white {
+            background-color: #fff;
+        }
+        .default-header.jsx-626553351 {
+            background-color: rgb(248, 248, 248);
+            color: rgb(50, 60, 79);
+            font-weight: 700;
+            font-size: 15px;
+            min-height: 55px;
+            border-bottom: 1px solid rgba(204, 204, 204, 0.8);
+            overflow: hidden;
+        }
+        .pl-4, .px-4 {
+            padding-left: 1rem;
+        }
+        .align-items-center {
+            -webkit-align-items: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        .d-flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+        .list-unstyled {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        ul {
+            display: block;
+            list-style-type: disc;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            padding-inline-start: 40px;
+        }
+        .sidebar-single-elem {
+            min-height: 35px;
+        }
+        .pl-3, .px-3 {
+            padding-left: 0.75rem;
+        }
+        .pr-3, .px-3 {
+            padding-right: 0.75rem;
+        }
+        .pb-2, .py-2 {
+            padding-bottom: 0.5rem;
+        }
+        .pt-2, .py-2 {
+            padding-top: 0.5rem;
+        }
+        .border-bottom {
+            border-bottom: 1px solid #dedede;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        user agent stylesheet
+        li {
+            display: list-item;
+            text-align: -webkit-match-parent;
+        }
+        .text-decoration-none {
+            -webkit-text-decoration: none;
+            text-decoration: none;
+        }
+
+        .icon-sidebar-btn-lead{
+          width: 20%;
+    height: 49px;
+    float: right;
+    padding: 0.5rem;
+    margin-top: -0.5rem;
+    margin-right: -0.75rem;
+    margin-bottom: -0.5rem;
+        }
+      </style>
+
+<script type="text/javascript">
+  var wbpage='exampage';var _vtype='';var page='exam_details_page';var _st='';var _ct='';
+</script>

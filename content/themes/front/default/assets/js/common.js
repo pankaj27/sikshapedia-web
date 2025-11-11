@@ -1,0 +1,1308 @@
+jQuery(function($) {
+  "use strict";
+
+  jQuery.validator.addMethod("valueNotEquals", function(value, element, arg){
+    return arg !== value;
+  }, "Value must not equal arg.");
+
+  jQuery.validator.addMethod("pwcheck", function (value, element) {
+    return this.optional(element) || /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(value);
+  }, "Password must contain atleast one digit , one lowercase letter , one uppercase letter and one special character(!@#$%^&)");
+
+  jQuery.validator.addMethod("notEqualTo", function(value, element, param) {
+  return this.optional(element) || value != param;
+	}, "Please specify a different (non-default) value");
+
+  jQuery.validator.addMethod("fullname", function(value, element) {
+    if (/^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)/.test(value)) {
+      return true;
+    } else {
+      return false;
+    };
+  }, 'Please enter your full name.');
+
+  jQuery.validator.addMethod("linkedinprofile", function(value, element, param) {
+  return this.optional(element) || /(ftp|http|https):\/\/?(?:www\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(value);
+  }, "Please specify a different (non-default) value");
+
+
+  // Custom validation rule for letters and spaces only
+    $.validator.addMethod("lettersonly", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+    }, "Letters and spaces only.");
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 10000
+  });
+
+
+  $("#applicant_course").chosen({no_results_text: "Select Course"});
+
+  if($('#form_apply_for_college_with_login').length > 0) {
+    $("#happlicant_course").chosen({no_results_text: "Select Course"});
+  }
+
+  if($('#applicant_institute').length > 0) {
+   // $("#applicant_institute").chosen({ no_results_text: "Select College" });
+    
+    // When applicant_college changes, trigger the event
+    // $('body').on('change', '#applicant_institute', function() {
+    //   var _inst = $('#applicant_institute option:selected').val();
+      
+    //   $.ajax({
+    //     type: 'POST',
+    //     url: base_url+'/get_courses',
+    //     data: { [csrf_name]: csrf_hash, _inst: _inst },
+    //     success: function(d) {
+
+    //       if (d.searched_data) {
+    //         // Clear the previous options (except the first "Select" option)
+    //         $('#applicant_course').empty();
+    //         // var html='<option value="0">Select Course</option>';
+            
+    //         // Add a placeholder option (optional)
+    //         $('#applicant_course').append('<option value="0">Select Course</option>');
+
+    //         // Iterate over the returned searched_data
+    //          $.each(d.searched_data, function(index, course) {
+    //           // Create a new option element with course details
+    //           var option = $('<option></option>')
+    //             .val(course.course_id)
+    //             .text(course.course_name);
+
+    //           // Check if the course should be selected
+    //           if (course.selected) {
+    //             option.attr('selected', 'selected');
+    //           }
+
+    //           // Append the option to the select box
+    //           $('#applicant_course').append(option);
+    //         });
+
+    //         // Trigger chosen update if you're using chosen for the course select box
+    //         $('#applicant_course').trigger("chosen:updated");
+    //       }
+    //     }
+    //   });
+    // });
+
+
+   
+    $('#form_apply_for_mob_home_college').validate({
+        rules: {
+            // Hidden fields
+            applicant_course: {
+                required: true
+            },
+            applicant_country_id: {
+                required: true
+            },
+            applicant_city_id: {
+                required: true
+            },
+            applicant_state_id: {
+                required: true
+            },
+            // Non-hidden fields
+            applicant_name: {
+                required: true,
+                fullname: true // Allows only alphabets and spaces
+            },
+            applicant_email: {
+                required: true,
+                email: true // Ensures valid email format
+            },
+            applicant_phno: {
+                required: true,
+                digits: true // Allows only numbers (you can modify based on phone number format)
+            }
+        },
+        messages: {
+            applicant_course: "Please select a course.",
+            applicant_country_id: "Please select a country.",
+            applicant_city_id: "Please select a city.",
+            applicant_state_id: "Please select a state.",
+            applicant_name: {
+                required: "Please enter your name.",
+            },
+            applicant_email: {
+                required: "Please enter your email.",
+                email: "Please enter a valid email address."
+            },
+            applicant_phno: {
+                required: "Please enter your phone number.",
+                digits: "Phone number must contain only numbers."
+            }
+        },
+        errorPlacement: function(error, element) {
+            // This will ensure the error is placed right below the input field
+            if (element.attr("name") === "applicant_phno") {
+                error.insertAfter(element.closest('.input-group')); // For input group like phone
+            } else {
+                error.insertAfter(element); // For regular inputs
+            }
+        },
+        // Optional: Highlight error input fields for better visibility
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+          // Create FormData from the form element
+          var formData = new FormData(form);
+          formData.append([csrf_name], csrf_hash);
+          formData.append('form_type', 'without_login_home_page');
+
+          // Make AJAX call
+          $.ajax({
+            type: 'POST',
+            url: base_url + 'registerapplication',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000000,
+            beforeSend: function() {
+              $('#applicant_full_name').prop('disabled', true);
+              $('#applicant_email').prop('disabled', true);
+              $('#applicant_ph').prop('disabled', true);
+              $('#btn_submit_application').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+            },
+            success: function(d, status, xhr) {
+              if (d.success) {
+                var msg_ver = '<div class="alert alert-success">' + d.success + '</div>';
+                $('#applicant_msg_ver').html(msg_ver);
+                // $('#form_apply_for_home_college')[0].reset();
+                // $('#form_apply_for_college').css('display', 'none');
+
+                // // Populate the fields in the verification form
+                // $('#form_student_verify_otp').find('#applicant_institute').val(d._inst);
+                // $('#form_student_verify_otp').find('#_application').val(d._applicant);
+                // $('#form_student_verify_otp').find('#_applicant').val(d._applicant);
+                // $('#form_student_verify_otp').find('#_applicant_course').val(d._course);
+                // $('#form_student_verify_otp').find('#applicant_email').val(d._email);
+                // $('#form_student_verify_otp').find('#applicant_php').val(d._ph);
+                // $('#form_student_verify_otp').css('display', 'block');
+                // $('#form_apply_for_home_college').css('display','none');
+
+                setTimeout(function(){
+                  $('#form_apply_for_mob_home_college')[0].reset();
+                  $('#regHomeApplyMobileModal').modal('hide');
+                },2000);
+              } else {
+                var msg_ver = '<div class="alert alert-danger">' + d.error + '</div>';
+                $('#applicant_msg_ver').html(msg_ver);
+                $('#btn_submit_application').html('Submit').prop('disabled', false);
+              }
+            },
+            error: function(jqXhr) {
+              if (jqXhr.status === 400 || jqXhr.status === 403) {
+                window.location.reload();
+              }
+            },
+            complete: function(status, xhr) {
+              $('#applicant_full_name').prop('disabled', false);
+              $('#applicant_email').prop('disabled', false);
+              $('#applicant_ph').prop('disabled', false);
+              $('#btn_submit_application').html('Submit').prop('disabled', false);
+            }
+          });
+        }
+    });
+
+
+
+
+    $('#form_apply_for_home_college').validate({
+      ignore: [],
+      rules: {
+        applicant_course: {
+          valueNotEquals: '0'
+        },
+        applicant_full_name: {
+          required: true
+        },
+        applicant_email: {
+          required: true,
+          email: true
+        },
+        applicant_ph: {
+          required: true,
+          digits: true
+        },
+        applicant_country: {
+          valueNotEquals: '0'
+        },
+        applicant_state: {
+          valueNotEquals: '0'
+        },
+        applicant_city: {
+          valueNotEquals: '0'
+        }
+      },
+      messages: {
+        applicant_institute: {
+          valueNotEquals: 'Select College You Are Interested in'
+        },
+        applicant_course: {
+          valueNotEquals: 'Select Course You Are Interested in'
+        },
+        applicant_full_name: {
+          required: 'Enter valid Name'
+        },
+        applicant_email: {
+          required: 'Enter Email Address',
+          email: 'Email is not valid',
+          remote: jQuery.validator.format("{0} is already in use")
+        },
+        applicant_ph: {
+          required: 'Enter valid Phone Number',
+          digits: 'Only numeric values allowed',
+          remote: jQuery.validator.format("{0} is already in use")
+        },
+        applicant_country: {
+          valueNotEquals: "Select a valid country"
+        },
+        applicant_state: {
+          valueNotEquals: "Select a valid state"
+        },
+        applicant_city: {
+          valueNotEquals: "Select a valid City"
+        },
+        applicant_course: {
+          valueNotEquals: "Select a valid course"
+        }
+      },
+      submitHandler: function(form) {
+        // Create FormData from the form element
+        var formData = new FormData(form);
+        formData.append([csrf_name], csrf_hash);
+        formData.append('form_type', 'without_login');
+
+        // Make AJAX call
+        $.ajax({
+          type: 'POST',
+          url: base_url + 'registerapplication',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          timeout: 60000000,
+          beforeSend: function() {
+            $('#applicant_full_name').prop('disabled', true);
+            $('#applicant_email').prop('disabled', true);
+            $('#applicant_ph').prop('disabled', true);
+            $('#btn_submit_home_application').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
+          },
+          success: function(d, status, xhr) {
+            if (d.success) {
+              var msg_ver = '<div class="alert alert-success">' + d.success + '</div>';
+              $('#msg_ver').html(msg_ver);
+              $('#form_apply_for_home_college')[0].reset();
+              $('#form_apply_for_college').css('display', 'none');
+              setTimeout(function(){
+                $('#regHomeApplyModal').modal('hide');
+              },1500);
+
+              // Populate the fields in the verification form
+              // $('#form_student_verify_otp').find('#applicant_institute').val(d._inst);
+              // $('#form_student_verify_otp').find('#_application').val(d._applicant);
+              // $('#form_student_verify_otp').find('#_applicant').val(d._applicant);
+              // $('#form_student_verify_otp').find('#_applicant_course').val(d._course);
+              // $('#form_student_verify_otp').find('#applicant_email').val(d._email);
+              // $('#form_student_verify_otp').find('#applicant_php').val(d._ph);
+              // $('#form_student_verify_otp').css('display', 'block');
+              // $('#form_apply_for_home_college').css('display','none');
+            } else {
+              var msg_ver = '<div class="alert alert-danger">' + d.error + '</div>';
+              $('#msg_ver').html(msg_ver);
+            }
+          },
+          error: function(jqXhr) {
+            if (jqXhr.status === 400 || jqXhr.status === 403) {
+              window.location.reload();
+            }
+          },
+          complete: function(status, xhr) {
+            $('#applicant_full_name').prop('disabled', false);
+            $('#applicant_email').prop('disabled', false);
+            $('#applicant_ph').prop('disabled', false);
+            $('#btn_submit_home_application').html('Submit').prop('disabled', false);
+          }
+        });
+      }
+    });
+  }
+
+
+  
+
+  $("#applicant_country").chosen({no_results_text: "Select Country"});
+  $("#applicant_state").chosen({no_results_text: "Select State/Province"});
+  $("#applicant_city").chosen({no_results_text: "Select City"});
+ //$("#register_student_course").chosen({no_results_text: "Select City"});
+
+ $('#claimer_designation').chosen({no_results_text: "Select Designation"});
+
+
+ 	$('#form_password').validate({
+    rules:{
+      user_current_password:{
+        required:true,
+        minlength:8,
+        maxlength:16,
+        pwcheck:true
+      },
+      user_new_password:{
+        required:true,
+        minlength:8,
+        maxlength:16,
+        pwcheck:true,
+        notEqualTo:'user_current_password'
+      },
+      user_conf_password:{
+       equalTo: "#user_new_password"
+      },
+    },
+    messages:{
+      user_current_password:{
+        required:'Please enter current password',
+        minlength:'Minimum 8 characters required',
+        maxlength:'Maximum 16 characters allowed'
+      },
+      user_new_password:{
+        required:'Please enter your new password',
+        minlength:'Minimum 8 characters required',
+        maxlength:'Maximum 16 characters allowed'
+      }
+    },
+    submitHandler:function(f){
+    	var f_data = FormDataJson.formToJson(document.getElementById("form_password"));
+    		var ctext= CryptoJS.AES.encrypt(JSON.stringify(f_data), _xtYu, { format: CryptoJSAesJson }).toString();
+
+    	$.ajax({
+    		type:'POST',
+    		url:base_url+'update_single',
+    		data:{ctext:ctext,csrf_test_name:csrf_hash},
+    		cache:false,
+    		beforeSend:function(){
+	          $('#form_password').find('#user_current_password').prop('disabled',true);
+	          $('#form_password').find('#user_new_password').prop('disabled',true);
+	          $('#form_password').find('#user_conf_password').prop('disabled',true);
+	          $('#btn_update_password').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+	        },
+	        success:function(d,status,xhr){
+	          if(d.success){
+	            //setTimeout(function(){
+	              Toast.fire({
+				    icon: 'success',
+				    title: d.success
+				  });
+	              	$('#form_password').find('#user_current_password').prop('disabled',false);
+	          		$('#form_password').find('#user_new_password').prop('disabled',false);
+	          		$('#form_password').find('#user_conf_password').prop('disabled',false);
+	            	$('#btn_update_password').html('Update password').prop('disabled',false);
+
+	            	$('#form_password')[0].reset();
+	            	$('#passModal').modal('hide');
+	            //},1200);	            
+	          }else{
+	          	Toast.fire({
+				    icon: 'error',
+				    title: d.error
+				});
+	            $('#form_password').find('#user_current_password').prop('disabled',false);
+	          	$('#form_password').find('#user_new_password').prop('disabled',false);
+	          	$('#form_password').find('#user_conf_password').prop('disabled',false);
+	            $('#btn_update_password').html('Update password').prop('disabled',false);
+	          }
+	        },
+	        error: function( jqXhr ) {
+		        if( jqXhr.status == 400 ) {
+		        	window.location.reload();
+		        }else if( jqXhr.status == 403 ) {
+		        	window.location.reload();
+		        }
+				$('#form_password').find('#user_current_password').prop('disabled',false);
+	          	$('#form_password').find('#user_new_password').prop('disabled',false);
+	          	$('#form_password').find('#user_conf_password').prop('disabled',false);
+	            $('#btn_update_password').html('Update password').prop('disabled',false);
+	        },
+	        complete:function(status,xhr){
+	         // $('#btn_submit').html('Sign In');
+	        }
+    	});
+    }
+	});
+
+if($('#applicant_country').length>0){
+    setTimeout(function(){
+
+
+
+    var html='<option value="0">Select Country</option>';
+    $.ajax({
+      type:'GET',
+      url:base_url+'get_countries',
+      data:{},
+      beforeSend: function(){ 
+        $("#applicant_country").empty(); 
+      },
+      success:function(d){
+        $.each(d,function(k,v){
+          html+='<option value="'+v['country_id']+'#'+v['country_code']+'" data-ccode="'+v['country_code']+'">'+v['country_name']+'</option>';
+        });
+
+         //console.log(html);
+        
+        $('#applicant_country').html(html);
+
+       $("#applicant_country").trigger("chosen:updated");
+
+       //_loadstates($("#register_student_state :selected").val());
+       //$("#applicant_state").trigger("chosen:updated");
+
+      }
+    });
+
+    
+
+  },1000);
+}
+
+
+  $('body').on('change','#applicant_country',function(){
+    var ccode=$('#applicant_country :selected').val();
+    const myArr = ccode.split("#");
+    var country=myArr[0];
+    $('#label_ph').html('Phone No ('+myArr[1]+')');
+    
+    console.log(myArr[1]);
+    _loadstates(country);
+
+    if(ccode!=''){
+      $('#applicant_country-error').html('').css('display','none');
+    }
+  });
+
+  $('body').on('change','#applicant_state',function(){
+
+    var ccode=$('#applicant_country :selected').val();
+    const myArr = ccode.split("#");
+    var country=myArr[0];
+    var state=$('#applicant_state :selected').val();
+    console.log(state);
+    if(state!='0'){
+      _loadcities(country,state);
+      $("#applicant_city").trigger("chosen:updated");
+      $('#applicant_city').prop('disabled',false);
+      $('#applicant_state-error').html('').css('display','none');
+    }else{
+      $('#applicant_city').prop('disabled',true);
+    }
+  });
+
+
+  $('#form_apply_for_college').validate({
+    ignore: [],
+    rules:{
+      applicant_course:{
+        valueNotEquals:'0'
+      },
+      applicant_full_name:{
+        required:true
+      },
+      applicant_email:{
+        required:true,
+        email:true
+      },
+      applicant_ph:{
+        required:true,
+        digits:true
+      },
+      applicant_country:{
+        valueNotEquals:'0'
+      },
+      applicant_state:{
+        valueNotEquals:'0'
+      },
+      applicant_city:{
+        valueNotEquals:'0'
+      },
+      applicant_course:{
+        valueNotEquals:'0'
+      }
+    },    
+    messages:{
+      applicant_course:{
+        valueNotEquals:'Select Course You Interested in'
+      },
+      applicant_full_name:{
+        required:'Enter valid Name'
+      },
+      applicant_email:{
+        required:'Enter Email Address',
+        email:'Email is not valid',
+        remote:jQuery.validator.format("{0} is already in use")
+      },
+      applicant_ph:{
+        required:'Enter valid Phone Number',
+        digits:'Only numeric value allowed',
+        remote:jQuery.validator.format("{0} is already in use")
+      },
+      applicant_country:{
+        valueNotEquals:"Select a valid country"
+      },
+      applicant_state:{
+        valueNotEquals:"Select a valid state"
+      },
+      applicant_city:{
+        valueNotEquals:"Select a valid City"
+      },
+      applicant_course:{
+        valueNotEquals:"Select a valid course"
+      }
+    },
+    submitHandler:function(){
+
+      //var f_data = FormDataJson.formToJson(document.getElementById("form_apply_for_college"));
+     /// var ctext= CryptoJS.AES.encrypt(JSON.stringify(f_data), _xtYu, { format: CryptoJSAesJson }).toString();
+
+      var formData=new FormData($('#form_apply_for_college')[0]);
+      formData.append([csrf_name],csrf_hash);
+      formData.append('form_type','without_login');
+
+      $.ajax({
+        type:'POST',
+        url:base_url+'registerapplication',
+        data:formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        timeout: 60000000,
+        beforeSend:function(){
+          $('#applicant_full_name').prop('disabled',true);
+          $('#applicant_email').prop('disabled',true);
+          $('#applicant_ph').prop('disabled',true);
+          $('#btn_submit_application').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+        },
+        success:function(d,status,xhr){
+          if(d.success){
+            //setTimeout(function(){
+              // Toast.fire({
+              //   icon: 'success',
+              //   title: d.success
+              // });
+
+              var msg_ver='<div class="alert alert-success">'+d.success+'</div>';
+
+              $('#msg_ver').html(msg_ver);
+              $('#applicant_full_name').prop('disabled',false);
+              $('#applicant_email').prop('disabled',false);
+              $('#applicant_ph').prop('disabled',false);
+              $('#btn_submit_application').html('Submit').prop('disabled',false);
+
+              $('#form_apply_for_college')[0].reset();
+              $('#form_apply_for_college').css('display','none');
+
+              $('#form_student_verify_otp').find('#applicant_institute').val(d._inst);
+              $('#form_applicant_question').find('#_application').val(d._applicant);
+              $('#form_student_verify_otp').find('#_applicant').val(d._applicant);
+              $('#form_student_verify_otp').find('#_applicant_course').val(d._course);
+              $('#form_student_verify_otp').find('#applicant_email').val(d._email);
+              $('#form_student_verify_otp').find('#applicant_php').val(d._ph);
+              $('#form_student_verify_otp').css('display','block');
+              //$('#reg3ApplyModal').modal('hide');
+            //},1200);              
+          }else{
+            // Toast.fire({
+            //   icon: 'error',
+            //   title: d.error
+            // });
+            var msg_ver='<div class="alert alert-success">'+d.success+'</div>';
+
+            $('#msg_ver').html(msg_ver);
+            $('#applicant_full_name').prop('disabled',false);
+            $('#applicant_email').prop('disabled',false);
+            $('#applicant_ph').prop('disabled',false);
+            $('#btn_submit_application').html('Submit').prop('disabled',false);
+          }
+        },
+        error: function( jqXhr ) {
+          if( jqXhr.status == 400 ) {
+            window.location.reload();
+          }else if( jqXhr.status == 403 ) {
+            window.location.reload();
+          }
+          $('#applicant_full_name').prop('disabled',false);
+          $('#applicant_email').prop('disabled',false);
+          $('#applicant_ph').prop('disabled',false);
+          $('#btn_submit_application').html('Submit').prop('disabled',false);
+        },
+        complete:function(status,xhr){
+         // $('#btn_submit').html('Sign In');
+        }
+      });
+    }
+  });
+
+  $('#form_apply_for_college_with_login').validate({
+    ignore:[],
+    rules:{
+      applicant_course:{
+        valueNotEquals:'0'
+      }
+    },    
+    messages:{
+      applicant_course:{
+        valueNotEquals:"Select a valid course"
+      }
+    },
+    errorPlacement: function(label, element) {
+      label.addClass('mt-2 text-danger');
+      label.insertAfter(element);
+    },
+    highlight: function(element, errorClass) {
+      $(element).parent().addClass('has-danger')
+      $(element).addClass('form-control-danger')
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).parent().removeClass('has-danger').addClass('has-success')
+      $(element).removeClass('form-control-danger');
+      $(element).addClass('form-control-success')
+    },
+    submitHandler:function(){
+
+      // var f_data = FormDataJson.formToJson(document.getElementById("form_apply_for_college_2"));
+      // var ctext= CryptoJS.AES.encrypt(JSON.stringify(f_data), _xtYu, { format: CryptoJSAesJson }).toString();
+
+      var formData=new FormData($('#form_apply_for_college_with_login')[0]);
+      formData.append([csrf_name],csrf_hash);
+      formData.append('form_type','with_login');
+
+      $.ajax({
+        type:'POST',
+        url:base_url+'registerapplication',
+        data:formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        timeout: 60000000,
+        beforeSend:function(){
+          $('#form_apply_for_college_with_login #btn_submit_application_2').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+        },
+        success:function(d,status,xhr){
+          if(d.success){
+            //setTimeout(function(){
+              // Toast.fire({
+              //   icon: 'success',
+              //   title: d.success
+              // });
+
+              var msg_ver='<div class="alert alert-success">'+d.success+'</div>';
+
+              $('#msg_ver').html(msg_ver);
+              $('#form_apply_for_college_with_login #btn_submit_application_2').html('Submit').prop('disabled',false);
+
+              $('#form_apply_for_college_with_login')[0].reset();
+              //$('#form_apply_for_college_with_login').css('display','none');
+            //},1200);
+            setTimeout(function(){
+              $('#reg3ApplyModal').modal('hide');
+            },1200);            
+          }else{
+            // Toast.fire({
+            //   icon: 'error',
+            //   title: d.error
+            // });
+            var msg_ver='<div class="alert alert-success">'+d.success+'</div>';
+
+            $('#msg_ver').html(msg_ver);
+            $('#form_apply_for_college_with_login #btn_submit_application_2').html('Submit').prop('disabled',false);
+          }
+        },
+        error: function( jqXhr ) {
+          if( jqXhr.status == 400 ) {
+            window.location.reload();
+          }else if( jqXhr.status == 403 ) {
+            window.location.reload();
+          }
+          $('#form_apply_for_college_with_login #btn_submit_application_2').html('Submit').prop('disabled',false);
+        },
+        complete:function(status,xhr){
+         // $('#btn_submit').html('Sign In');
+        }
+      });
+    }
+  });
+
+
+
+$('#form_applicant_question').validate({
+  rules:{
+    _applicant_question:{
+      required:true,
+      minlength:10,
+      maxlength:300
+    }
+  },
+  messages:{
+    _applicant_question:{
+      required:'Enter a question under 300 characters',
+      minlength:'Minimum 10 charachters required',
+      maxlength:'Maximum 300 charachter allowed'
+    }
+  },
+  submitHandler:function(){
+    var _applicant_question=$('#_applicant_question').val();
+    $.ajax({
+      type:'POST',
+      url:base_url+'registerapplicationquery',
+      data: $('#form_applicant_question').serialize(),
+      cache:false,
+      beforeSend:function(){
+        $('#btn_app_question').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+      },
+      success:function(d,status,xhr){
+        if(d.success){
+          $('#msg_appli_ques').html('<div class="alert alert-success">'+d.success+'</div>');
+          $('#applicant_question_div').css('display','none');
+        }else{
+          $('#msg_appli_ques').html('<div class="alert alert-warning">'+d.error+'</div>');
+        }
+      },
+      complete:function(xhr,status){
+        $('#btn_app_question').html('Submit').prop('disabled',false);
+      }
+    });
+  }
+});
+
+
+$('#form_student_verify_otp').validate({
+    rules:{
+      applicant_ph_otp:{
+        required:true,
+        digits:true,
+        minlength:4,
+        maxlength:4
+      }
+    },
+    messages:{
+      applicant_ph_otp:{
+        required:'Enter OTP sent to your mobile no.',
+        digits:'Only numeric value allowed',
+        minlength:'Minimum 4 digits required',
+        maxlength:'Maximum 4 digits allowed'
+      }
+    },
+    submitHandler:function(){
+      var temp=$('#_applicant').val(); 
+      var ph_otp=$('#applicant_ph_otp').val();
+      $.ajax({
+        type:'POST',
+        url:base_url+'verify_application_otp',
+        data:{csrf_test_name:csrf_hash,applicant_php:temp,applicant_ph_otp:ph_otp,aut_source:$('#_applicant_aut_source').val()},
+        beforeSend:function(){
+          $('#btn_verify_otp').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+        },
+        success:function(d){
+           if(d.success){
+            //$('#btn_verify_otp').html(d.success);
+           // $('#btn_otp_resend').css('display','none');
+           var suc_data=d.success;
+
+           var _msg='';
+
+          //_msg+='<h6 class="text-center mb-3">'+suc_data.thanks_heading+'</h6>';
+          // _msg+='<p>'+suc_data.thanks_msg+'</p>';
+          // _msg+='<p style="text-align:center;">'+suc_data.thanks_msg_second+'</p>';
+
+
+          if(suc_data.colleges_of_interest!=''){
+            _msg+='<hr>';
+            _msg+='<h6 class="text-center mb-3">Colleges You Might Be Also interested in.</h6>';
+
+            
+            _msg+='<div class="row form-row">';
+
+            $.each(suc_data.colleges_of_interest,function(k,v){
+                _msg+='<div class="col-lg-4">';
+                _msg+='<div class="card shadow-sm">';
+                  _msg+='<div class="position-relative">';
+                    _msg+='<img src="'+v['college_banner']+'" class="card-img" alt="'+v['college_name']+'" style="height: 150px !important;">';
+                    _msg+='<div class="card-img-overlay d-flex  p-2">';
+                      _msg+='<div class="align-self-end">';
+                        _msg+='<a href="'+v['access_url']+'"> <img src="'+v['college_logo']+'" class="w-40" alt="" style="height:30px !important;"></a>';
+                        _msg+='<h6 class="m-0 f12"><a href="'+v['access_url']+'" class="text-white">'+v['college_name']+'</a></h6>';
+                        _msg+='<p class="m-0 f10 text-white"><i class="fa fa-map-marker"></i> '+v['college_city']+','+v['college_state']+' </p>';
+                      _msg+='</div>';
+                    _msg+='</div>';
+                  _msg+='</div>';
+                  _msg+='<div class="card-body p-2">';
+                    _msg+='<div class="d-flex justify-content-between align-items-center">';
+                      _msg+='<div class="">';
+                        _msg+='<h6 class="m-0 f12">'+v['college_course_short_name']+' </h6>';
+                        //_msg+='<p class="m-0 f10"><span class="color2">[ '+v['college_course_short_name']+' ]</span></p>';
+                      _msg+='</div>';
+                      _msg+='<div class="">';
+                        _msg+='<a href="'+v['access_url']+'" class="btn btn-primary btn-sm">Explore</a>';
+                      _msg+='</div>';
+                    _msg+='</div>';
+                  _msg+='</div>';
+                _msg+='</div>';
+              _msg+='</div>';
+            });
+
+            
+            _msg+='</div>'
+          }
+              
+
+            
+          setTimeout(function(){
+            $('#reg3ApplyModal').modal('hide');
+            $('#applicationthankYouModal #modal_body').html(_msg);
+            $('#applicationthankYouModal').modal('show');
+            $('#form_apply_for_college').css('display','block');
+            $('#form_student_verify_otp').css('display','none');
+            if(d.whatsapp_link){
+              window.location.href=d.whatsapp_link;
+            }
+
+            if(d.callnow_link){
+              window.location.href=d.callnow_link;
+            }
+          },1000);
+          
+         }else if(d.error){
+          $('#msg_ver').html('<div class="alert alert-warning">'+d.error+'</div>').css('display','block');
+          $('#btn_verify_otp').html('Verify').prop('disabled',false);
+         }
+        },
+        complete:function(xhr,status){
+          //$('#btn_verify_otp').html('Verify').prop('disabled',false);
+
+          setTimeout(function(){
+            $('#msg_ver').html('');
+            $('#btn_verify_otp').html('Verify').prop('disabled',false);
+          },1500);
+        }
+      });
+    }
+});
+
+
+$('body').on('click','#btn_ask_question',function(){
+  $('#applicant_question_div').css('display','block');
+  $(this).css('display','none');
+});
+
+
+$('#form_claim_for_college').validate({
+  rules:{
+    claimer_full_name:{
+      required:true,
+      fullname: true,
+      minlength:5
+    },
+    claimer_email:{
+      required:true,
+      email:true
+    },
+    claimer_mobile_no:{
+      required:true,
+      digits:true,
+      minlength:10,
+      maxlength:10
+    },
+    claimer_inst_landline_no:{
+      required:true
+    },
+    claimer_designation:{
+      valueNotEquals:'0'
+    },
+    claimer_referer:{
+      fullname: true
+    },
+    claimer_referer_ph_no:{
+      digits:true,
+      minlength:10,
+      maxlength:10
+    },
+    claimer_linkedin_profile_link:{
+      linkedinprofile:true
+    }
+  },
+  messages:{
+    claimer_full_name:{
+      required:'Name must contain atleast 5 characters',
+      fullname: 'Name is not valid',
+      minlength:'Minimum 5 charachters required'
+    },
+    claimer_email:{
+      required:'Please enter valid email address',
+      email:'Email address is not valid'
+    },
+    claimer_mobile_no:{
+      required:'Please enter your mobile no',
+      digits:'Only numeric values are allowed',
+      minlength:'Minimum 10 digista required',
+      maxlength:'Maximum 10 digits allowed'
+    },
+    claimer_inst_landline_no:{
+      required:'Please enter landline no of the institute'
+    },
+    claimer_designation:{
+      valueNotEquals:'please select your designation'
+    },
+    claimer_referer:{
+      fullname: 'Name is not valid'
+    },
+    claimer_referer_ph_no:{
+      digits:'Only numeric values are allowed',
+      minlength:'Minimum 10 digista required',
+      maxlength:'Maximum 10 digits allowed'
+    },
+    claimer_linkedin_profile_link:{
+      linkedinprofile:'Not a valid Linkedin Profile'
+    }
+  },
+  submitHandler:function(){
+    $.ajax({
+      type:'POST',
+      url:base_url+'claiminstitute',
+      data:$('#form_claim_for_college').serialize(),
+      beforeSend:function(){
+        $('#btn_add_claim').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+      },
+      success:function(d){
+        if(d.success){
+          $('#claim_thanks_msg').html('<h5 class="m-0 d-inline">Thank You</h5><br>'+d.success);
+          $('#form_claim_for_college').css('display','none');
+          setTimeout(function(){
+            window.location.href=d.redirect;
+          },1200);
+        }else{
+          $('#claim_thanks_msg').html('<div class="alert alert-error"><h5 class="m-0 d-inline">Error</h5><br>'+d.error+'</div>');
+        }
+      },
+      complete:function(status,xhr){
+        $('#btn_add_claim').html('Submit').prop('disabled',false);
+      }
+    });
+  }
+});
+
+
+$("body").on("click", "#btn_get_contact_details", function () {
+  $('#reg3ApplyModal').find('#_applicant_aut_source').val('apply_button');
+  $(".apply").click();
+});
+
+
+  
+//$.lockfixed(".sticky-item",{offset: {top: 110, bottom: 620}});
+//$.lockfixed(".sticky-item",{offset: {top: 70, bottom: 100}}); 
+
+
+
+  if(wbpage=='inst_web_page'){
+    setTimeout(function(){
+      $('#reg3ApplyModal').find('#_applicant_aut_source').val('apply_button');
+      $('.apply').click();
+    },5000);
+  }else if(wbpage=='home_page'){
+    
+
+    setTimeout(function(){
+      //$('#regHomeApplyModal').modal('show');
+      // Check the window width
+      if (window.innerWidth < 768) {
+        // If on mobile (less than 768px wide), show the mobile modal
+        $('#regHomeApplyModal').modal('hide');
+        $('#regHomeApplyMobileModal').modal('show');
+
+      } else {
+        // If on larger screens (768px or wider), show the desktop modal
+        $('#regHomeApplyMobileModal').modal('hide');
+        $('#regHomeApplyModal').modal('show');
+      }
+    },5000);
+
+    if (window.innerWidth < 768) {
+
+      $('body').on('click','#courseSelect',function(){
+        $('#courseModal').modal('show');
+      });
+
+      $('body').on('click','#countrySelect',function(){
+        $('#countryModal').modal('show');
+      });
+
+      $('body').on('click','#citySelect',function(){
+        $('#cityModal').modal('show');
+      });
+
+      $('.applicant_course').on('click', function() {
+        var course = $(this).data('course_id');
+        var course_name = $(this).data('course_name');
+        $('#regHomeApplyMobileModal').find('#applicant_course').val(course);
+        $('#selectedCourseText').text(course_name);
+        $('#courseModal').modal('hide');
+      });
+
+      $('.country_codes').on('click', function() {
+        var country_id = $(this).data('country_id');
+        var country_code = $(this).data('country_code');
+        var country_phone_code=$(this).data('country_phone_code');
+        $('#regHomeApplyMobileModal').find('#applicant_country_id').val(country_id);
+        $('#regHomeApplyMobileModal').find('#applicant_country_code').val(country_code);
+        $('#selectedCountryText').text(country_phone_code);
+        $('#countryModal').modal('hide');
+      });
+
+      $('.city_codes').on('click', function() {
+        var city_id = $(this).data('city_id');
+        var city_name = $(this).data('city_name');
+        var state_id = $(this).data('city_state_id');
+        $('#regHomeApplyMobileModal').find('#applicant_city_id').val(city_id);
+        $('#regHomeApplyMobileModal').find('#applicant_state_id').val(state_id);
+        $('#regHomeApplyMobileModal').find('#citySelect').val(city_name);
+        $('#cityModal').modal('hide');
+      });
+
+      
+
+      // $(document).ready(function() {
+      //   $('.list-group-item').on('click', function() {
+      //     // Get the selected course text
+      //     var selectedCourse = $(this).text();
+          
+      //     // Update the .course-text with the selected course
+      //     $('.course-text').text(selectedCourse);
+          
+      //     // Close the modal
+      //     $('#courseModal').modal('hide');
+      //   });
+      // });
+
+    }
+    // Get the modal element
+  
+  }
+
+
+$('body').on('click','.apply',function(){
+  var aut_source=$(this).data('aut_source');
+  var cimg=$(this).data('clogo');
+  var _cname=$(this).data('cname');
+  var inst_id=$(this).data('inst');
+  var inst_type=$(this).data('inst_type');
+  var cphcode=$(this).data('cphcode');
+  var _cou=$(this).data('cou');
+  if(cimg==''){
+    img='https://www.sikshapedia.com/public/data/app/2024/PtDOfrxiA6.png';
+    _cname='Sikshapedia Blogs';
+  }
+  $('#reg3ApplyModal').find('.img_logo').attr('src',cimg);
+  $('#reg3ApplyModal').find('.img_logo').attr('alt',_cname);
+  $('#reg3ApplyModal').find('#applicant_institute').val(inst_id);
+  $('#reg3ApplyModal').find('#applicant_institute_type').val(inst_type);
+  $('#reg3ApplyModal').find('.media-body').html('Register Now To Apply<br>'+_cname);
+  $('#reg3ApplyModal').find('#sayCarousol img').attr('src',cimg);
+  $('#reg3ApplyModal').find('#applicant_aut_source').val(aut_source);
+  $('#reg3ApplyModal').find('#_applicant_aut_source').val(aut_source);
+  $('#reg3ApplyModal').modal('show');
+});
+
+  function _loadstates(c){
+    var json_data='';
+     // Select the button element by its ID
+    var button = document.getElementById("btn_submit_application");
+    var shtml='<option value="0">Select State/Province</option>';
+
+    $.getJSON(base_url+'get_states/'+c, '', function (d, textStatus, jqXHR){
+
+        if(d!=null){
+            json_data=d;
+            shtml='<option value="0">Select State/Province</option>';
+
+            $.each(json_data,function(k,v){
+              shtml+='<option value="'+v.state_id+'">'+v.state_name+'</option>';
+            });
+
+            $('#applicant_state').html(shtml);
+
+            $("#applicant_state").trigger("chosen:updated");
+            $('.btn-temp').prop('disabled',false);
+
+            // Remove the "disabled" attribute
+            //button.removeAttribute("disabled");
+        }else{
+          console.log(4);
+          shtml='<option value="0">No State/Province Found</option>';
+          $('#applicant_state').html(shtml);
+          $("#applicant_state").val('').trigger("chosen:updated");
+          $('.btn-temp').prop('disabled',true);
+
+          // Remove the "disabled" attribute
+          //button.addAttribute("disabled");
+        }  
+    });
+  }
+
+    function _loadcities(c,s){
+      var chtml='<option value="0">Select City</option>';
+
+      $.ajax({
+        type:'POST',
+        url:base_url+'get_cities',
+        data:{[csrf_name]:csrf_hash,_co:c,_st:s},
+        beforeSend: function(){ 
+          $("#applicant_city").empty(); 
+        },
+        success:function(d){
+          $.each(d.searched_cities,function(k,v){
+            chtml+='<option value="'+v['city_id']+'">'+v['city_name']+'</option>';
+          });
+          
+          $('#applicant_city').html(chtml);
+
+         $("#applicant_city").trigger("chosen:updated");
+        }
+      });
+    }
+
+
+     function __loadcities(c){
+      var chtml='<option value="0">Select City</option>';
+
+      $.ajax({
+        type:'POST',
+        url:base_url+'get_cities',
+        data:{[csrf_name]:csrf_hash,_co:c,_st:s},
+        beforeSend: function(){ 
+          $("#applicant_city").empty(); 
+        },
+        success:function(d){
+          $.each(d.searched_cities,function(k,v){
+            chtml+='<option value="'+v['city_id']+'">'+v['city_name']+'</option>';
+          });
+          
+          $('#applicant_city').html(chtml);
+
+         $("#applicant_city").trigger("chosen:updated");
+        }
+      });
+    }
+
+
+    $('#form_college_comment').validate({
+      rules:{
+        comment_value:{
+          required:true,
+          minlength:30,
+          maxlength:300
+        }
+      },
+      messages:{
+        comment_value:{
+          required:'Please enter your comment',
+          minlength:'Please enter atleast 30 characters',
+          maxlength:'Maximum 300 characters allowed'
+        }
+      },
+      submitHandler:function(){
+        var formData=new FormData($('#form_college_comment')[0]);
+        formData.append([csrf_name],csrf_hash);
+        formData.append('comment_type',comment_type);
+        formData.append('comment_type_id',comment_type_id);
+        formData.append('comment_to_reply','');
+        $.ajax({
+          type:'POST',
+          url:base_url+'comment',
+          data:formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          timeout: 60000000,
+          beforeSend:function(){
+             $('#btn_post_comment').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+          },
+          success:function(d){
+            $('#form_college_comment')[0].reset();
+            if(d.success){
+              $('#comment_msg').html('<div class="alert alert-success">'+d.success+'</div>');
+
+              setTimeout(function(){
+                 $('#comment_msg').html('');
+              },3000);
+            }
+          },
+          complete:function(status,xhr){
+            $('#btn_post_comment').html('Post your Comment').prop('disabled',false);
+          }
+        });
+      }
+    });
+
+    function submit_reply_comment(form_id,button_id,msg_id){
+      $('#'+form_id).validate({
+        rules:{
+          comment_value:{
+            required:true,
+            minlength:30,
+            maxlength:300
+          }
+        },
+        messages:{
+          comment_value:{
+            required:'Please enter your comment',
+            minlength:'Please enter atleast 30 characters',
+            maxlength:'Maximum 300 characters allowed'
+          }
+        },
+        submitHandler:function(){
+          var formData=new FormData($('#'+form_id)[0]);
+          formData.append([csrf_name],csrf_hash);
+          formData.append('comment_type',comment_type);
+          formData.append('comment_type_id',comment_type_id);
+          $.ajax({
+            type:'POST',
+            url:base_url+'comment',
+            data:formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000000,
+            beforeSend:function(){
+               $('#'+button_id).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled',true);
+            },
+            success:function(d){
+              $('#form_college_comment')[0].reset();
+              if(d.success){
+                $('#'+msg_id).html('<div class="alert alert-success">'+d.success+'</div>');
+
+                setTimeout(function(){
+                   $('#'+msg_id).html('');
+                },3000);
+              }
+            },
+            complete:function(status,xhr){
+              $('#'+button_id).html('Reply').prop('disabled',false);
+            }
+          });
+        }
+      });
+    }
+
+
+
+});
+

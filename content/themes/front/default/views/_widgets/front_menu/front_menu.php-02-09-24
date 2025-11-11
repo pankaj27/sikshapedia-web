@@ -1,0 +1,2656 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>NURSING</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP CITIES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kolkata/nursing">TOP NURSING COLLEGES IN KOLKATA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/patna/nursing">TOP NURSING COLLEGES IN PATNA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/raipur/nursing">TOP NURSING COLLEGE IN RAIPUR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/jharkhand/ranchi/nursing">TOP NURSING COLLEGES IN RANCHI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/new-delhi/nursing">TOP NURSING COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/chennai/nursing">TOP NURSING COLLEGE IN CHENNAI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/meerut/nursing">TOP NURSING COLLEGE IN MEERUT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/lucknow/nursing">TOP NURSING COLLEGES IN LUCKNOW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/derhadun/nursing">TOP NURSING COLLEGE IN DEHRADUN</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/nursing">TOP NURSING COLLEGES IN WEST BENGAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/nursing">TOP NURSING COLLEGES IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/jharkhand/nursing">TOP NURSING COLLEGES IN JHARKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/nursing">TOP NURSING COLLEGES IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/nursing">TOP NURSING COLLEGES IN UTTARAKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/nursing">TOP NURSING COLLEGES IN MAHARASHTRA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/nursing">TOP NURSING COLLEGES IN TAMIL NADU</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/haryana/nursing">TOP NURSING COLLEGES IN HARYANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/nursing">TOP NURSING COLLEGES IN CHHATTISHGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/nursing">TOP NURSING COLLEGES IN ORISSA</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP NURSING COLLEGES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/east-west-education-institute-bardhaman-west-bengal">EAST WEST EDUCATION INSTITUTE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/joy-welfare-nursing-institute-kalyani-west-bengal">JOY WELFARE NURSING INSTITUTE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/gitanjali-institute-of-nursing-birbhum-west-bengal">GITANJALI INSTITUTE OF NURSING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/p-n-das-academy-of-nursing-paschim-midnapur-west-bengal">P N DAS ACADEMY OF NURSING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/b-p-poddar-and-parvati-devi-academy-of-nursing-kolkata-west-bengal">B.P PODDAR AND PARVATI DEVI ACADEMY OF NURSING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/jagannath-gupta-institute-of-medical-sciences-and-hospital-kolkata-west-bengal">JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/school-of-nursing-ruby-general-hospital-kolkata-west-bengal">SCHOOL OF NURSING RUBY GENERAL HOSPITAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/ramakrishna-mission-seva-pratishthan-kolkata-west-bengal">RAMAKRISHNA MISSION SEVA PRATISHTHAN</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP NURSING EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/wbjee-jenpas-ug">WBJEE JENPAS UG</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ignou-opennet">IGNOU OPENNET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ruhs-nursing">RUHS NURSING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/neet">NEET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/pgimer-bsc-nursing">PGIMER BSC NURSING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aiims-bsc-nursing">AIIMS BSC NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      <!--
+        <li id="menu1">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> TOP COLLEGES</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/east-west-education-institute-bardhaman-west-bengal/east-west-education-institute-bardhaman-west-bengal-banner.webp" alt="EAST WEST EDUCATION INSTITUTE" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/east-west-education-institute-bardhaman-west-bengal">EAST WEST EDUCATION INSTITUTE</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/joy-welfare-nursing-institute-kalyani-west-bengal/KCsTjBSlFE.webp" alt="JOY WELFARE NURSING INSTITUTE" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/joy-welfare-nursing-institute-kalyani-west-bengal">JOY WELFARE NURSING INSTITUTE</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/gitanjali-institute-of-nursing-birbhum-west-bengal/Y6VCNGMqwn.webp" alt="GITANJALI INSTITUTE OF NURSING" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/gitanjali-institute-of-nursing-birbhum-west-bengal">GITANJALI INSTITUTE OF NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/p-n-das-academy-of-nursing-paschim-midnapur-west-bengal/Bd4hJp3qAW.webp" alt="P N DAS ACADEMY OF NURSING" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/p-n-das-academy-of-nursing-paschim-midnapur-west-bengal">P N DAS ACADEMY OF NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/b-p-poddar-and-parvati-devi-academy-of-nursing-kolkata-west-bengal/iZ2NgavnYW.webp" alt="B.P PODDAR AND PARVATI DEVI ACADEMY OF NURSING" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/b-p-poddar-and-parvati-devi-academy-of-nursing-kolkata-west-bengal">B.P PODDAR AND PARVATI DEVI ACADEMY OF NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/jagannath-gupta-institute-of-medical-sciences-and-hospital-kolkata-west-bengal/qYTiZhGWmX.webp" alt="JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/jagannath-gupta-institute-of-medical-sciences-and-hospital-kolkata-west-bengal">JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/school-of-nursing-ruby-general-hospital-kolkata-west-bengal/SV04vLUWXl.webp" alt="SCHOOL OF NURSING RUBY GENERAL HOSPITAL" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/school-of-nursing-ruby-general-hospital-kolkata-west-bengal">SCHOOL OF NURSING RUBY GENERAL HOSPITAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/colleges/ramakrishna-mission-seva-pratishthan-kolkata-west-bengal/rJRjeIqOBn.webp" alt="RAMAKRISHNA MISSION SEVA PRATISHTHAN" loading="lazy" style="height:81px;width:170px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/in/ramakrishna-mission-seva-pratishthan-kolkata-west-bengal">RAMAKRISHNA MISSION SEVA PRATISHTHAN</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu2">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> TOP NURSING EXAMS</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/VtNrnDfJ1S.webp" alt="WBJEE JENPAS UG" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/wbjee-jenpas-ug">WBJEE JENPAS UG</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/PO7VHEIshM.webp" alt="IGNOU OPENNET" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/ignou-opennet">IGNOU OPENNET</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/bsxySIjXPn.webp" alt="RUHS NURSING" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/ruhs-nursing">RUHS NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/fFAqMbeiHd.webp" alt="NEET" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/neet">NEET</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/tKms6cypLS.webp" alt="PGIMER BSC NURSING" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/pgimer-bsc-nursing">PGIMER BSC NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/PUwVanIGX0.webp" alt="JIPMER BSC NURSING" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/jipmer-bsc-nursing">JIPMER BSC NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 ">
+                  <ul class="isaTliststy04 clearfix">
+                    <li class="text-center">
+                      <img src="https://www.sikshapedia.com/public/data/exams/2022/yEao26QGZH.webp" alt="AIIMS BSC NURSING" loading="lazy" style="height:81px;width:100px" draggable="false">
+                    </li>
+                    <li class="isaHeading clearfix">
+                      <a href="https://www.sikshapedia.com/exams/aiims-bsc-nursing">AIIMS BSC NURSING</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      -->
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED NURSING COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/the-neotia-university-kolkata-west-bengal/the-neotia-university-kolkata-west-bengal-logo.webp" class="mr-3" loading="lazy" alt="THE NEOTIA UNIVERSITY" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/the-neotia-university-kolkata-west-bengal">THE NEOTIA UNIVERSITY</a>
+              </h5>
+              <p>Kolkata,West Bengal</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/peerless-institute-of-nursing-peerlesshospital-and-b-k-roy-research-centre-kolkata-west-bengal/K6ScAQb2RY.webp" class="mr-3" loading="lazy" alt="PEERLESS INSTITUTE OF NURSING" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/peerless-institute-of-nursing-kolkata-west-bengal">PEERLESS INSTITUTE OF NURSING</a>
+              </h5>
+              <p>Birbhum,West Bengal</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/narayan-nursing-college-rohtas-bihar/4EjH1Ouc6m.webp" class="mr-3" loading="lazy" alt="Narayan Nursing College" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/narayan-nursing-college-rohtas-bihar">NARAYAN NURSING COLLEGE</a>
+              </h5>
+              <p>Rohtas,Bihar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>ENGINEERING</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP CITIES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/vishakapatnam/engineering">TOP ENGINEERING COLLEGE IN VISHAKAPATNAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/raipur/engineering">TOP ENGINEERING COLLEGE IN RAIPUR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/new-delhi/engineering">TOP ENGINEERING COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/bhopal/engineering">TOP ENGINEERING COLLEGE IN BHOPAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/bhubaneswar/engineering">TOP ENGINEERING COLLEGE IN BHUBANESWAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/chennai/engineering">TOP ENGINEERING COLLEGE IN CHENNAI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/hydrabad/engineering">TOP ENGINEERING COLLEGE IN HYDERABAD</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/lucknow/engineering">TOP ENGINEERING COLLEGE IN LUCKNOW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kolkata/engineering/">TOP ENGINEERING COLLEGE IN KOLKATA</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/engineering">TOP ENGINEERING COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/himachal-pradesh/engineering">TOP ENGINEERING COLLEGE IN HIMACHAL PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/engineering">TOP ENGINEERING COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/engineering">TOP ENGINEERING COLLEGE IN MAHARASTRA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/engineering">TOP ENGINEERING COLLEGE IN TAMIL NADU</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/engineering/">TOP ENGINEERING COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/engineering">TOP ENGINEERING COLLEGE IN UTTRAKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/engineering">TOP ENGINEERING COLLEGE IN WEST BENGAL </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP ENGINEERING EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/gateg">GATE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/wbjee">WBJEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/viteee">VITEEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/jee-main">JEE MAIN</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ojee">OJEE</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP COLLEGES</li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/gayatri-vidya-parishad-college-of-engineering-vishakapatnam-andhra-pradesh">GAYATRI VIDYA PARISHAD COLLEGE OF ENGINEERING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-delhi-new-delhi-delhi-ncr">INDIAN INSTITUTE OF TECHNOLOGY DELHI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/indraprastha-institute-of-information-technology-new-delhi-delhi-ncr">INDRAPRASTHA INSTITUTE OF INFORMATION TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/indira-gandhi-institute-of-technology-dhenkanal-orissa">INDIRA GANDHI INSTITUTE OF TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/ssn-college-of-engineering-chennai-tamil-nadu">SSN COLLEGE OF ENGINEERING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/saroj-institute-of-technology-and-management-lucknow-uttar-pradesh">SAROJ INSTITUTE OF TECHNOLOGY AND MANAGEMENT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/guru-nanak-institute-of-technology-kolkata-west-bengal">GURU NANAK INSTITUTE OF TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/vedica-institute-of-technology-bhopal-madhya-pradesh">VEDICA INSTITUTE OF TECHNOLOGY</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED B.TECH COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">        
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/narula-institute-of-technology-kolkata-west-bengal/narula-institute-of-technology-sikshapedia-logo.webp" class="mr-3" loading="lazy" alt="NARULA INSTITUTE OF TECHNOLOGY" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/narula-institute-of-technology-kolkata-west-bengal">NARULA INSTITUTE OF TECHNOLOGY</a>
+              </h5>
+              <p>KOLKATA,WEST BENGAL </p>
+            </div>
+          </div>
+        </div>        
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/gayatri-vidya-parishad-college-of-engineering-vishakapatnam-andhra-pradesh/FoKyGS_Dua.jpg" class="mr-3" loading="lazy" alt="GAYATRI VIDYA PARISHAD COLLEGE OF ENGINEERING" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/gayatri-vidya-parishad-college-of-engineering-vishakapatnam-andhra-pradesh">GAYATRI VIDYA PARISHAD COLLEGE OF ENGINEERING</a>
+              </h5>
+              <p>VISHAKAPATNAM,ANDHRA PRADESH</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/maharaja-agrasen-institute-of-technology-new-delhi-delhi-ncr/5kLfwEpD2Y.webp" class="mr-3" loading="lazy" alt="INDRAPRASTHA INSTITUTE OF INFORMATION TECHNOLOGY" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/maharaja-agrasen-institute-of-technology-new-delhi-delhi-ncr">MAHARAJA AGRASEN INSTITUTE OF TECHNOLOGY</a>
+              </h5>
+              <p>NEW DELHI, DELHI NCR</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>PHARMACY</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP CITIES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kolkata/pharmacy">TOP PHARMACY COLLEGES IN KOLKATA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/new-delhi/pharmacy">TOP PHARMACY COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/hydrabad/pharmacy">TOP PHARMACY COLLEGES IN HYDERABAD</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/bhopal/pharmacy">TOP PHARMACY COLLEGE IN BHOPAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/chennai/pharmacy">TOP PHARMACY COLLEGE IN CHENNAI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/lucknow/pharmacy">TOP PHARMACY COLLEGES IN LUCKNOW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/derhadun/pharmacy">TOP PHARMACY COLLEGE IN DEHRADUN</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/raipur/pharmacy">TOP PHARMACY COLLEGES IN RAIPUR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/guntur/pharmacy">TOP PHARMACY COLLEGES IN GUNTUR</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/pharmacy">TOP PHARMACY COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/pharmacy">TOP PHARMACY COLLEGE IN CHATTISGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/haryana/pharmacy">TOP PHARMACY COLLEGE IN HARYANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/pharmacy">TOP PHARMACY COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/pharmacy">TOP PHARMACY COLLEGE IN ORISSA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/pharmacy">TOP PHARMACY COLLEGE IN TAMIL NADU</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/pharmacy">TOP PHARMACY COLLEGE IN TELANGANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/pharmacy">TOP PHARMACY COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/pharmacy">TOP PHARMACY COLLEGE IN UTTRAKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/pharmacy">TOP PHARMACY COLLEGE IN WEST BENGAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/niper-jee">NIPER JEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/bcece">BCECE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/gpat">GPAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ts-eamcet">TS EAMCET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/kcet">KCET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ap-eamcet">AP EAMCET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/keam">KEAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/wbjee">WBJEE</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP PHARMACY COLLEGES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/sri-venkateswara-institute-of-medical-sciences-tirupati-andhra-pradesh">SRI VENKATESWARA INSTITUTE OF MEDICAL SCIENCES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/sri-jayadev-college-of-pharmaceutical-sciences-bhubaneswar-orissa">SRI JAYADEV COLLEGE OF PHARMACEUTICAL SCIENCES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/royal-college-of-pharmacy-raipur-chhattisgarh">ROYAL COLLEGE OF PHARMACY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/srm-institute-of-science-and-technology-chennai-tamil-nadu">SRM INSTITUTE OF SCIENCE AND TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/delhi-pharmaceutical-sciences-and-research-university-new-delhi-delhi-ncr">DPSRU NEW DELHI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/sultan-ul-uloom-college-of-pharmacy-hyderabad-telangana">SULTAN UL ULOOM COLLEGE OF PHARMACY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/sgt-medical-college-hospital-and-research-institute-gurgaon-haryana">SGT MEDICAL COLLEGE HOSPITAL AND RESEARCH INSTITUTE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/himalayan-institute-of-medical-sciences-derhadun-uttarakhand">HIMALAYAN INSTITUTE OF MEDICAL SCIENCES</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <!-- <li id="menu1">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> EXAMS</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-4 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> NATIONAL LEVEL </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/gpat">GPAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/niper-jee">NIPER JEE</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu2">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> BACHELOR IN PHARMACY (B.PHARM)</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-4 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP B.PHARM COLLEGES (BY CITY) </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kolkata/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN KOLKATA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/patna/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN PATNA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/hydrabad/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN HYDERABAD</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/jharkhand/bokaro-steel-city/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN BOKARO</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/durgapur/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN DURGAPUR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/noida/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN NOIDA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/lucknow/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN LUCKNOW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kalyani/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN KALYANI</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-4 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP B.PHARM COLLEGES (BY STATE) </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN WEST BENGAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/jharkhand/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN JHARKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN ORISSA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/pharmacy/bachelor-of-pharmacy">B.PHARM COLLEGES IN TAMIL NADU</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu3">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> DIPLOMA IN PHARMACY (D.PHARM)</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-4 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP D.PHARM COLLEGES (BY CITY) </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kolkata/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN KOLKATA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/patna/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN PATNA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/hydrabad/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN HYDERABAD</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/noida/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN NOIDA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/lucknow/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN LUCKNOW</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-4 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP D.PHARM COLLEGES (BY STATE) </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN WEST BENGAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/jharkhand/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN JHARKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN ORISSA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/pharmacy/diploma-in-pharmacy">D.PHARM COLLEGES IN TAMIL NADU</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li> -->
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED PHARMACY COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/raipur-institute-of-technology-raipur-chhattisgarh/raipur-institute-of-technology-raipur-chhattisgarh-logo.webp" class="mr-3" loading="lazy" alt="RAIPUR INSTITUTE OF TECHNOLOGY" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/raipur-institute-of-technology-raipur-chhattisgarh">RAIPUR INSTITUTE OF TECHNOLOGY</a>
+              </h5>
+              <p>RAIPUR,CHHATTISGARH </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/acharya-and-amp-bm-reddy-college-of-pharmacy-bangalore-karnataka/qotF5eMxD3.jpg" class="mr-3" loading="lazy" alt="Acharya And BM Reddy College Of Pharmacy 78615" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/acharya-and-bm-reddy-college-of-pharmacy-bangalore-karnataka">Acharya And BM Reddy College Of Pharmacy</a>
+              </h5>
+              <p>Bangalore,Karnataka</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/haldia-institute-of-pharmacy-haldia-west-bengal/nREHW2Zd7T.webp" class="mr-3" loading="lazy" alt="Haldia Institute Of Pharmacy 78615" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/haldia-institute-of-pharmacy-haldia-west-bengal">Haldia Institute Of Pharmacy</a>
+              </h5>
+              <p>Haldia,West Bengal</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>MEDICAL</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/medical">TOP MEDICAL COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/medical">TOP MEDICAL COLLEGE IN CHATTISGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/haryana/medical">TOP MEDICAL COLLEGE IN HARYANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/himachal-pradesh/medical">TOP MEDICAL COLLEGE IN HIMACHAL PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/kerala/medical">TOP MEDICAL COLLEGE IN KERALA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/medical">TOP MEDICAL COLLEGE IN MAHARASTRA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/medical">TOP MEDICAL COLLEGE IN TAMIL NADU</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/medical">TOP MBBS COLLEGES IN NEW DELHI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/medical">TOP MEDICAL COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/medical">TOP MEDICAL COLLEGE IN WEST BENGAL </a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/assam/medical">TOP MEDICAL COLLEGE IN ASSAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/medical">TOP MEDICAL COLLEGE IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/medical">TOP MEDICAL COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/gujarat/medical">TOP MEDICAL COLLEGE IN GUJRAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/karnataka/medical">TOP MEDICAL COLLEGE IN KARNATAKA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/medical">TOP MEDICAL COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/medical">TOP MEDICAL COLLEGE IN ORISSA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/medical">TOP MEDICAL COLLEGE IN TELANGANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/medical">TOP MEDICAL COLLEGE IN UTTARAKHAND</a>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div class="col-lg-4 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP MEDICAL COLLEGE </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/maulana-azad-medical-college-new-delhi-delhi-ncr">MAULANA AZAD MEDICAL COLLEGE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/srm-institute-of-science-and-technology-chennai-tamil-nadu">SRM INSTITUTE OF SCIENCE AND TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/shyam-shah-medical-college-rewa-madhya-pradesh">SHYAM SHAH MEDICAL COLLEGE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/apollo-institute-of-medical-science-hyderabad-telangana">APOLLO INSTITUTE OF MEDICAL SCIENCE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/rajarshi-chhatrapati-shahu-maharaj-government-medical-college-and-cpr-hospital-kolhapur-maharashtra">RAJARSHI CHHATRAPATI SHAHU MAHARAJ GOVERNMENT MEDICAL COLLEGE AND CPR HOSPITAL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/fmg-academy-group-of-institutions-noida-uttar-pradesh">FMG ACADEMY GROUP OF INSTITUTIONS</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/veer-surendra-sai-institute-of-medical-sciences-and-research-sambalpur-orissa">VEER SURENDRA SAI INSTITUTE OF MEDICAL SCIENCES AND RESEARCH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/jagannath-gupta-institute-of-medical-sciences-and-hospital-kolkata-west-bengal">JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-2 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/neet">NEET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/saat">SAAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ini-cet">INI CET</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED MEDICAL COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/nimas-kolkata-kolkata-west-bengal/WNjA2PYQkO.webp" class="mr-3" loading="lazy" alt="NIMAS, Kolkata 276" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/nimas-kolkata-kolkata-west-bengal">NIMAS, Kolkata</a>
+              </h5>
+              <p>Kolkata,West Bengal</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/saveetha-medical-college-chennai-tamil-nadu/saveetha-medical-college-chennai-tamil-nadu-logo.webp" class="mr-3" loading="lazy" alt="Saveetha Medical College 276" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/saveetha-medical-college-chennai-tamil-nadu">Saveetha Medical College</a>
+              </h5>
+              <p>Chennai,Tamil Nadu</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/nshm-knowledge-campus-kolkata-kolkata-west-bengal/q52W6cjC3h.webp" class="mr-3" loading="lazy" alt="NSHM Knowledge Campus Kolkata 276" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/nshm-knowledge-campus-kolkata-kolkata-west-bengal">NSHM Knowledge Campus Kolkata</a>
+              </h5>
+              <p>Kolkata,West Bengal</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>PARAMEDICAL</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/paramedical">TOP PARAMEDICAL COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/paramedical">TOP PARAMEDICAL COLLEGE IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/paramedical">TOP PARAMEDICAL COLLEGE IN CHATTISGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/paramedical">TOP PARAMEDICAL COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/paramedical">TOP PARAMEDICAL COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/rajasthan/paramedical">TOP PARAMEDICAL COLLEGE IN RAJASTHAN</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/paramedical">TOP PARAMEDICAL COLLEGE IN TAMIL NADU </a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/paramedical">TOP PARAMEDICAL COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/paramedical">TOP PARAMEDICAL COLLEGE IN URTTARAKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/paramedical">TOP PARAMEDICAL COLLEGE IN WEST BENGAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/neet-pg">NEET PG</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ipu-cet">IPU CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aiims-msc-entrance-examination">AIIMS MSC</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ini-cet">INI CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ignou-opennet">IGNOU OPENNET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/wbjee-jenpas-ug">WBJEE JENPAS</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP PARAMEDICAL COLLEGES </li>
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/madanapalle-institute-of-technology-and-science-madanapalle-andhra-pradesh">MADANAPALLE INSTITUTE OF TECHNOLOGY AND SCIENCE</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/national-institute-of-health-education-and-research-patna-bihar">NATIONAL INSTITUTE OF HEALTH EDUCATION & RESEARCH</a>
+                    </li>
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/gd-rungta-college-of-science-and-technology-bhilai-bhilai-nagar-chhattisgarh">GD RUNGTA COLLEGE OF SCIENCE AND TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/maharaja-agrasen-institute-of-management-and-technology-studies-new-delhi-delhi-ncr">MAHARAJA AGRASEN INSTITUTE OF MANAGEMENT AND TECHNOLOGY STUDIES</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/charnock-health-care-institute-kolkata-west-bengal">CHARNOCK HEALTH CARE INSTITUTE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/shri-guru-ram-rai-institute-of-technology-and-science-derhadun-uttarakhand">SHRI GURU RAM RAI INSTITUTE OF TECHNOLOGY AND SCIENCE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/ds-group-of-institutions-ghaziabad-uttar-pradesh">DS GROUP OF INSTITUTIONS</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/dr-m-g-r-educational-and-research-institute-chennai-tamil-nadu">DR. M.G.R EDUCATIONAL AND RESEARCH INSTITUTE</a>
+                    </li>
+                  </ul>
+                </div>               
+              </div>
+            </div>
+          </div>
+        </li>
+        <!-- <li id="menu1">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> EXAMS &amp; TOP UNIVERSITIES</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-8 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> POPULAR LAW EXAMS </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/SFZIj_WQiz.jpg" loading="lazy" alt="CLAT " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/clat"> CLAT  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/bHQZeyvknW.jpg" loading="lazy" alt="DU LLB " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/du-llb"> DU LLB  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/YJhjK0CaL7.jpg" loading="lazy" alt="MH CET LAW " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/mh-cet-law"> MH CET LAW  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/7n_ARabz1H.jpg" loading="lazy" alt="AILET " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/ailet"> AILET  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li> -->
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED LAW COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/iit-kharagpur-kharagpur-west-bengal/iit-kharagpur-kharagpur-west-bengal-logo.webp" class="mr-3" loading="lazy" alt="IIT KHARAGPUR" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/iit-kharagpur-kharagpur-west-bengal">IIT KHARAGPUR</a>
+              </h5>
+              <p>KHARAGPUR, WEST BENGAL</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/sai-group-of-institutions-derhadun-uttarakhand/sai-group-of-institutions-derhadun-uttarakhand-logo.webp" class="mr-3" loading="lazy" alt="SAI GROUP OF INSTITUTIONS" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/ims-law-college-noida-uttar-pradesh">SAI GROUP OF INSTITUTIONS</a>
+              </h5>
+              <p>DERHADUN, UTTARAKHAND</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/maharani-laxmibai-medical-college-jhansi-uttar-pradesh/QMxB8GJPhs.jpg" class="mr-3" loading="lazy" alt="MAHARANI LAXMIBAI MEDICAL COLLEGE" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/chaitanya-deemed-to-be-university-warangal-telangana">MAHARANI LAXMIBAI MEDICAL COLLEGE</a>
+              </h5>
+              <p>HANSI, UTTAR PRADESH </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>LAW</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/law">TOP LAW COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/law">TOP LAW COLLEGES IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/law">TOP LAW COLLEGE IN CHATTISGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/law">TOP LAW COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/law">TOP LAW COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/law">TOP LAW COLLEGE IN ORISSA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/law">TOP LAW COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/law">TOP LAW COLLEGE IN UTTARAKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/law">TOP LAW COLLEGES IN WEST BENGAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP CITIES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/karnataka/bangalore/law">TOP LAW COLLEGES IN BANGALORE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/mumbai/law">TOP LAW COLLEGES IN MUMBAI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/chennai/law">TOP LAW COLLEGES IN CHENNAI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/pune/law">TOP LAW COLLEGES IN PUNE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana/hydrabad/law">TOP LAW COLLEGES IN HYDRABAD</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/rajasthan/jaipur/law">TOP LAW COLLEGES IN JAIPUR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/indore/law">TOP LAW COLLEGES IN INDORE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/gujarat/ahmedabad/law">TOP LAW COLLEGES IN AHMEDABAD</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/lucknow/law">TOP LAW COLLEGES IN LUCKNOW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/bhopal/law">TOP LAW COLLEGES IN BHOPAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ailet">AILET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/lsat">LSAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/clat">CLAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/du-llb">DU LLB</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aibe">AIBE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ilicat">ILICAT</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP LAW COLLEGE </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/dr-ambedkar-global-law-institute-tirupati-andhra-pradesh">DR AMBEDKAR GLOBAL LAW INSTITUTE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/kiit-school-of-law-bhubaneswar-orissa">KIIT SCHOOL OF LAW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/tnb-law-college-bhagalpur-bihar">TNB LAW COLLEGE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/rajesh-pandey-college-of-law-lucknow-uttar-pradesh">RAJESH PANDEY COLLEGE OF LAW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/icfai-law-school-derhadun-uttarakhand">ICFAI LAW SCHOOL</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/career-college-of-law-bhopal-madhya-pradesh">CAREER COLLEGE OF LAW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/kingston-law-college-klc-kolkata-west-bengal">KINGSTON LAW COLLEGE</a>
+                    </li>
+                  </ul>
+                </div>               
+              </div>
+            </div>
+          </div>
+        </li>
+        <!-- <li id="menu1">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> EXAMS &amp; TOP UNIVERSITIES</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-8 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> POPULAR LAW EXAMS </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/SFZIj_WQiz.jpg" loading="lazy" alt="CLAT " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/clat"> CLAT  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/bHQZeyvknW.jpg" loading="lazy" alt="DU LLB " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/du-llb"> DU LLB  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/YJhjK0CaL7.jpg" loading="lazy" alt="MH CET LAW " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/mh-cet-law"> MH CET LAW  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/7n_ARabz1H.jpg" loading="lazy" alt="AILET " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/ailet"> AILET  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li> -->
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED LAW COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/kingston-law-college-kolkata-west-bengal/vFEsneqC_0.jpeg" class="mr-3" loading="lazy" alt="Kingston Law College 5" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/kingston-law-college-klc-kolkata-west-bengal">Kingston Law College</a>
+              </h5>
+              <p>Kolkata,West Bengal</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/ims-law-college-noida-uttar-pradesh/Y_fiu5Myk6.png" class="mr-3" loading="lazy" alt="IMS Law College 5" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/ims-law-college-noida-uttar-pradesh">IMS Law College</a>
+              </h5>
+              <p>Noida,Uttar Pradesh</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/chaitanya-deemed-to-be-university-warangal-telangana/92VHn10e6p.webp" class="mr-3" loading="lazy" alt="Chaitanya (Deemed To Be University) 5" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/chaitanya-deemed-to-be-university-warangal-telangana">Chaitanya (Deemed To Be University)</a>
+              </h5>
+              <p>Warangal,Telangana</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</li>
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>MANAGEMENT</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">                
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/management">TOP MANAGEMENT COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/assam/management">TOP MANAGEMENT COLLEGE IN ASSAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/management">TOP MANAGEMENT COLLEGE IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/management">TOP MANAGEMENT COLLEGE IN CHATTISGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/jharkhand/management">TOP MANAGEMENT COLLEGE IN JHARKHAND
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/management">TOP MANAGEMENT COLLEGE IN MAHARASTRA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/management">TOP MANAGEMENT COLLEGE IN ORISSA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/management">TOP MANAGEMENT COLLEGE IN TAMIL NADU</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/management">TOP MANAGEMENT COLLEGE IN WEST BENGAL</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP CITIES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/vishakapatnam/management">TOP MANAGEMENT COLLEGE IN VISHAKAPATNAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/assam/guwahati/management">TOP MANAGEMENT COLLEGE IN GUWAHATI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/patna/management">TOP MANAGEMENT COLLEGE IN PATNA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/raipur/management">TOP MANAGEMENT COLLEGE IN RAIPUR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/new-delhi/management">TOP MANAGEMENT COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/karnataka/mysore/management">TOP MANAGEMENT COLLEGE IN MYSORE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa/bhubaneswar/management">TOP MANAGEMENT COLLEGE IN BHUBANESWAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/coimbatore/management">TOP MANAGEMENT COLLEGE IN COIMBATORE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/kolkata/management">TOP MANAGEMENT COLLEGE IN KOLKATA</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/cat">CAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/mat">MAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/xat">XAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/gmat">GMAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/tsicet">TSICET
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra/management">IIFT</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aima-ugat">AIMA UGAT</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP MANAGEMENT COLLEGE </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/symbiosis-college-of-arts-and-commerce-pune-maharashtra">INDIAN INSTITUTE OF MANAGEMENT CALCUTTA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/mat">SYMBIOSIS COLLEGE OF ARTS AND COMMERCE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/royal-school-of-management-and-technology-bhubaneswar-orissa">ROYAL SCHOOL OF MANAGEMENT AND TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/srm-institute-of-science-and-technology-chennai-tamil-nadu">SRM INSTITUTE OF SCIENCE AND TECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/nshm-knowledge-campus-durgapur-west-bengal">NSHM KNOWLEDGE CAMPUS
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/hmr-institute-of-technology-and-management-new-delhi-delhi-ncr">HMR INSTITUTE OF TECHNOLOGY AND MANAGEMENT
+                      </a>
+                    </li>
+                  </ul>
+                </div>              
+              </div>
+            </div>
+          </div>
+        </li>
+        <!-- <li id="menu1">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> EXAMS &amp; TOP UNIVERSITIES</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-8 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> POPULAR LAW EXAMS </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/SFZIj_WQiz.jpg" loading="lazy" alt="CLAT " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/clat"> CLAT  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/bHQZeyvknW.jpg" loading="lazy" alt="DU LLB " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/du-llb"> DU LLB  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/YJhjK0CaL7.jpg" loading="lazy" alt="MH CET LAW " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/mh-cet-law"> MH CET LAW  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="mb-1 d-flex navMedia">
+                        <div class=" mr-2">
+                          <img src="https://www.sikshapedia.com/public/data/exams/2021/7n_ARabz1H.jpg" loading="lazy" alt="AILET " draggable="false" width="40" height="40">
+                        </div>
+                        <div>
+                          <a class="cd-nav-dropdown-sub-heads" href="https://www.sikshapedia.com/exams/ailet"> AILET  &gt; </a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li> -->
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED LAW COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/raipur-institute-of-technology-raipur-chhattisgarh/raipur-institute-of-technology-raipur-chhattisgarh-logo.webp" class="mr-3" loading="lazy" alt="RAIPUR INSTITUTE OF TECHNOLOGY" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/raipur-institute-of-technology-raipur-chhattisgarh">RAIPUR INSTITUTE OF TECHNOLOGY</a>
+              </h5>
+              <p>RAIPUR, CHHATTISGARH </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/eklavya-college-of-technology-and-science-khorda-bhubaneswar-orissa/879bMAmorn.jpg" class="mr-3" loading="lazy" alt="EKLAVYA COLLEGE OF TECHNOLOGY AND SCIENCE" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/eklavya-college-of-technology-and-science-bhubaneswar-orissa">EKLAVYA COLLEGE OF TECHNOLOGY AND SCIENCE</a>
+              </h5>
+              <p>BHUBANESWAR, ORISSA</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/iit-bombay-mumbai-maharashtra/iit-bombay-mumbai-maharashtra-logo.webp" class="mr-3" loading="lazy" alt="IIT BOMBAY" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/chaitanya-deemed-to-be-university-warangal-telangana">IIT BOMBAY</a>
+              </h5>
+              <p>MUMBAI, MAHARASHTRA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>OTHER COLLEGES</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-2 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> POPULAR COURSES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/arts">ARTS</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/agriculture">AGRICULTURE</a>
+                    </li>
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering/master-of-technology">ARTIFICIAL INTELLIGENCE</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bio-technology">BIOTECHNOLOGY</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/commerce">COMMERCE</a>
+                    </li>
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering/master-of-technology">FASHION DESIGNING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering/master-of-technology">MICROBIOLOGY</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/computer-science">COMPUTER SCIENCE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/mass-communications">MASS COMMUNICATION</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/hotel-management">HOTEL MANAGEMENT</a>
+                    </li>
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering/master-of-technology">HOSPITALITY MANAGEMENT</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/education/bachelor-of-education">B.ED</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/education/diploma-in-elementary-education">D.EL.ED</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/science">SCIENCE</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> POPULAR EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/leet">Haryana Lateral Entry Entrance Test (LEET)</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/tanata">Tamil Nadu Aptitude Test In Architecture (TANATA)</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/atma">AIMS Test for Management Admissions (ATMA)</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/jkcet">Jammu and Kashmir Board of Professional Entrance Examinations (JKCET)</a>
+                    </li>
+                    <li> 
+                      <a href="https://www.sikshapedia.com/exams/bit-mca">irla Institute of Technology Master of Computer Applications (BIT MCA)</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/reap">Rajasthan Engineering Admission Process(REAP)</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/nimcet">National Institute of Technology Master of Computer Applications Common Entrance Test (NIMCET)</a>
+                    </li>
+                    <!-- <li>
+                      <a href="https://www.sikshapedia.com/exams/jnu-ceeb">JNU CEEB</a>
+                    </li> -->
+                  </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP IIT's </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-kharagpur-kharagpur-west-bengal">IIT Kharagpur</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-delhi-new-delhi-delhi-ncr">IIT DELHI</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-bombay-mumbai-maharashtra">IIT Bombay</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-madras-chennai-tamil-nadu">IIT Madras</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-guwahati-guwahati-assam">IIT Guwahati</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-roorkee-roorkee-uttarakhand">IIT Roorkee</a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-hyderabad-hyderabad-telangana">IIT Hyderabad</a>
+                    </li>
+                    <li> 
+                      <a href="https://www.sikshapedia.com/in/iit-kanpur-kanpur-uttar-pradesh">IIT Kanpur</a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/iit-jodhpur-jodhpur-rajasthan">IIT Jodhpur </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP IIM's </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/indian-institute-of-management-lucknow-uttar-pradesh">IIM Lucknow</a>
+                    </li>
+                      <li>
+                      <a href="https://www.sikshapedia.com/in/indian-institute-of-management-vishakapatnam-andhra-pradesh">IIM Visakhapatnam</a>
+                    </li>
+                  <!-- <li>
+                      <a href="https://www.sikshapedia.com/in/indian-institute-of-management-kozhikode-kozhikode-kerala">IIM Kozhikode</a>
+                    </li> -->
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/indian-institute-of-management-bangalore-karnataka">IIM Bangalore</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/indian-institute-of-management-calcutta-kolkata-west-bengal">IIM Calcutta</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/indian-institute-of-management-ahmedabad-gujarat">IIM Ahemedabad</a>
+                    </li>                    
+                  </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP AIIMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/aiims-delhi-new-delhi-delhi-ncr">AIIMS Delhi</a>
+                    </li>                    
+                  </ul>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+     <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED LAW COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/uttar-banga-krishi-vishwavidyalaya-cooch-beher-west-bengal/uttar-banga-krishi-vishwavidyalaya-cooch-beher-west-bengal-logo.webp" class="mr-3" loading="lazy" alt="UTTAR BANGA KRISHI VISHWAVIDYALAYA" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/uttar-banga-krishi-vishwavidyalaya-cooch-beher-west-bengal">UTTAR BANGA KRISHI VISHWAVIDYALAYA</a>
+              </h5>
+              <p>COOCH BEHER, WEST BENGAL</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/iit-kanpur-kanpur-uttar-pradesh/iit-kanpur-kanpur-uttar-pradesh-logo.webp" class="mr-3" loading="lazy" alt="IIT KANPUR" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/iit-kanpur-kanpur-uttar-pradesh">IIT KANPUR</a>
+              </h5>
+              <p> KANPUR, UTTAR PRADESH </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/international-institute-of-hotel-management-kolkata-west-bengal/y2AhtaoqXZ.webp" class="mr-3" loading="lazy" alt="INTERNATIONAL INSTITUTE OF HOTEL MANAGEMENT" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/international-institute-of-hotel-management-kolkata-west-bengal">INTERNATIONAL INSTITUTE OF HOTEL MANAGEMENT</a>
+              </h5>
+              <p>KOLKATA, WEST BENGAL </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+
+
+<li aria-haspopup="true" class="btn_custom">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>TOP REVIEWED COLLEGES</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/assam?dpr=reviews">TOP REVIEWED  COLLEGE IN ASSAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar?dpr=reviews">TOP REVIEWED COLLEGE IN BIHAR</a>
+                    </li>
+                  
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr?dpr=reviews">TOP REVIEWED COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/gujarat?dpr=reviews">TOP REVIEWED COLLEGE IN GUJRAT</a>
+                    </li>
+                   
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/karnataka?dpr=reviews">TOP REVIEWED COLLEGE IN KARNATAKA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh?dpr=reviews">TOP REVIEWED COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/orissa?dpr=reviews">TOP REVIEWED COLLEGE IN ORISSA</a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/telangana?dpr=reviews">TOP REVIEWED COLLEGE IN TELANGANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand?dpr=reviews">TOP REVIEWED COLLEGE IN UTTARAKHAND</a>
+                    </li>
+                  </ul>
+                </div>
+               
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> OTHER TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh?dpr=reviews">TOP REVIEWED COLLEGE IN ANDHRA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh?dpr=reviews">TOP REVIEWED COLLEGE IN CHATTISGARH</a>
+                    </li>
+                  
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/haryana?dpr=reviews">TOP REVIEWED COLLEGE IN HARYANA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/himachal-pradesh?dpr=reviews">TOP REVIEWED COLLEGE IN HIMACHAL PRADESH</a>
+                    </li>
+                   
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/kerala?dpr=reviews">TOP REVIEWED COLLEGE IN KERALA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra?dpr=reviews">TOP REVIEWED COLLEGE IN MAHARASTRA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu?dpr=reviews">TOP REVIEWED COLLEGE IN TAMIL NADU</a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh?dpr=reviews">TOP REVIEWED COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal?dpr=reviews">TOP REVIEWED COLLEGE IN WEST BENGAL</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TRENDING COURSES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/management?dpr=reviews">MANAGEMENT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/agriculture?dpr=reviews">AGRICULTURE</a>
+                    </li>
+                  
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering?dpr=reviews">ENGINEERING</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/medical?dpr=reviews">MEDICAL</a>
+                    </li>
+                   
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/law?dpr=reviews">LAW</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/computer-science?dpr=reviews">COMPUTER SCIENCE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/paramedical?dpr=reviews">PARAMEDICAL</a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/pharmacy?dpr=reviews">PHARMACY</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TRENDING EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/cat">CAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/lsat">LSAT</a>
+                    </li>
+                  
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/xat">XAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aieee">AIEEE</a>
+                    </li>
+                   
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/neet">NEET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/wbjee">WBJEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ipu-cet">IPU CET</a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/bitsat">BITSAT</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED LAW COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/national-institute-of-pharmaceutical-education-and-research-guwahati-assam/national-institute-of-pharmaceutical-education-and-research-guwahati-assam-logo.webp" class="mr-3" loading="lazy" alt="NATIONAL INSTITUTE OF PHARMACEUTICAL EDUCATION AND RESEARCH" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/national-institute-of-pharmaceutical-education-and-research-guwahati-assam">NATIONAL INSTITUTE OF PHARMACEUTICAL EDUCATION AND RESEARCH</a>
+              </h5>
+              <p>GUWAHATI, ASSAM </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/iit-guwahati-guwahati-assam/iit-guwahati-guwahati-assam-logo.webp" class="mr-3" loading="lazy" alt="IIT GUWAHATI" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/iit-guwahati-guwahati-assam">IIT GUWAHATI</a>
+              </h5>
+              <p>GUWAHATI, ASSAM</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/indian-institute-of-science-bangalore-karnataka/indian-institute-of-science-bangalore-karnataka-logo.webp" class="mr-3" loading="lazy" alt="INDIAN INSTITUTE OF SCIENCE" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/indian-institute-of-science-bangalore-karnataka">INDIAN INSTITUTE OF SCIENCE</a>
+              </h5>
+              <p>MUMBAI, MAHARASHTRA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+
+<!--
+
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>ALL COURSES</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> ENGINEERING</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> ENGINEERING COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering/bachelor-of-technology">B.TECH COLLEGES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/engineering/master-of-technology">M.TECH COLLEGES</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/jee-advanced">JEE ADVANCED</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/jee-main">JEE MAIN</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/gate">GATE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/bitsat">BITSAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/keam">KEAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ts-eamcet">TS EAMCET</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu1">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> MANAGEMENT</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> MANAGEMENT COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/management/bachelor-of-business-administration">BBA COLLEGES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/management/master-of-business-administration">MBA COLLEGES</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/cat">CAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/nmat">NMAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/xat">XAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/gmat">GMAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ojee">OJEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/upsee">UPSEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ipu-cet">IPU CET</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu2">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> COMPUTER APPLICATIONS</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> COMPUTER APPLICATIONS COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/computer-applications/bachelor-of-computer-application-hons">BCA COLLEGES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/computer-applications/master-of-computer-applications">MCA COLLEGES</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ojee">OJEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/upsee">UPSEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ipu-cet">IPU CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/atma">ATMA</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/pu-cet">PU CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/bumat">BUMAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/tsicet">TSICET</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu3">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> DENTAL</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> DENTAL COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/dental/bachelor-of-dental-surgery">BDS COLLEGES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/dental/master-of-dental-surgery">MDS COLLEGES</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aiims-pg">AIIMS PG</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/saat">SAAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ruet">RUET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/neet-mds">NEET MDS</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu4">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> HOTEL MANAGEMENT</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> HOTEL MANAGEMENT COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/hotel-management/bachelor-of-hotel-management">BHM COLLEGES</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/upsee">UPSEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/nchmct-jee">NCHMCT JEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aima-ugat">MAH BHMCT CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/maharashtra">AIMA UGAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/vee">VEE</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/saat">SAAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/aihmct-wat">AIHMCT WAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/q-care">Q CARE</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu5">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> EDUCATION</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EDUCATION COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/education/bachelor-of-education">B.ED COLLEGES</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/education/master-of-education">M.ED COLLEGES</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ipu-cet">IPU CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/tissnet">TISSNET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/mgu-cat">MGU CAT</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/cg-pre-bed">CG PRE BED</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/mah-bed-cet">MAH BED CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/hpu-bed">HPU BED</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ku-pgcet">KU PGCET</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="menu6">
+          <span class="isaMenu-click02">
+            <i class="isaMenu-arrow"></i>
+          </span>
+          <a href="#"> MASS COMMUNICATION</a>
+          <div class="isaTitemRight clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> MASS COMMUNICATIONS COLLEGES DEGREES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/mass-communication/bachelor-of-journalism-and-mass-communication">BACHELORS IN MASS COMM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/mass-communication/master-of-journalism-and-mass-communication">MASTERS IN MASS COMM</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> EXAMS </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/ipu-cet">IPU CET</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/acj-entrance-exam">ACJ ENTRANCE EXAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/exams/iimc">IIMC</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED ALL COURSES COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/indraprastha-institute-of-information-technology-new-delhi-delhi-ncr/a25rSzXRCy.jpg" class="mr-3" loading="lazy" alt="Indraprastha Institute Of Information Technology 7" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/indraprastha-institute-of-information-technology-new-delhi-delhi-ncr">Indraprastha Institute Of Information Technology</a>
+              </h5>
+              <p>New Delhi,Delhi NCR</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/department-of-pharmaceutical-sciences-nainital-uttarakhand/swoePUZRtE.png" class="mr-3" loading="lazy" alt="Department of pharmaceutical sciences" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/department-of-pharmaceutical-sciences-nainital-uttarakhand">Department of pharmaceutical sciences</a>
+              </h5>
+              <p>Nainital,Uttarakhand</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/sri-ramakrishna-mission-vidyalaya-college-of-education-coimbatore-tamil-nadu/XTaqyIO3MK.jpg" class="mr-3" loading="lazy" alt="Sri Ramakrishna Mission Vidyalaya College Of Education 7" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/sri-ramakrishna-mission-vidyalaya-college-of-education-coimbatore-tamil-nadu">Sri Ramakrishna Mission Vidyalaya College Of Education</a>
+              </h5>
+              <p>Coimbatore,Tamil Nadu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+
+
+
+<li aria-haspopup="true">
+  <span class="isaMenu-click">
+    <i class="isaMenu-arrow"></i>
+  </span>
+  <a href="" class="navtext">
+    <span>Filter By</span>
+    <span>TOP REVIEWD COLLEGE</span>
+  </a>
+  <div class="isaShopTabing isaDepartmentMenu clearfix">
+    <div class="isaShopwp clearfix" style="height: 100%;">
+      <ul class="isaTabItem clearfix">
+        <li class="isaShopLink-active" id="menu0">
+          <div class="clearfix" style="height: 100%;">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-3 col-md-12 clearfix">
+                  <ul class="isaTliststy02 clearfix">
+                    <li class="isaHeading clearfix"> TOP STATES </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/andhra-pradesh/paramedical">TOP REVIEWED COLLEGE IN ASSAM</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/bihar/paramedical">TOP PARAMEDICAL COLLEGE IN BIHAR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/chhattisgarh/paramedical">TOP PARAMEDICAL COLLEGE IN CHATTISGARH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/delhi-ncr/paramedical">TOP PARAMEDICAL COLLEGE IN DELHI NCR</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/madhya-pradesh/paramedical">TOP PARAMEDICAL COLLEGE IN MADHYA PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/rajasthan/paramedical">TOP PARAMEDICAL COLLEGE IN RAJASTHAN</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/tamil-nadu/paramedical">TOP PARAMEDICAL COLLEGE IN TAMIL NADU </a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttar-pradesh/paramedical">TOP PARAMEDICAL COLLEGE IN UTTAR PRADESH</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/uttarakhand/paramedical">TOP PARAMEDICAL COLLEGE IN URTTARAKHAND</a>
+                    </li>
+                    <li>
+                      <a href="https://www.sikshapedia.com/in/colleges/west-bengal/paramedical">TOP PARAMEDICAL COLLEGE IN WEST BENGAL</a>
+                    </li>
+                  </ul>
+                </div>                
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="navFooter">
+      <h4 class="title">
+        <strong>FEATURED LAW COLLEGES IN </strong>
+      </h4>
+      <div class="row form-row">
+       <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/kingston-law-college-kolkata-west-bengal/vFEsneqC_0.jpeg" class="mr-3" loading="lazy" alt="Kingston Law College 5" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/kingston-law-college-klc-kolkata-west-bengal">Kingston Law College</a>
+              </h5>
+              <p>Kolkata,West Bengal</p>
+            </div>
+          </div>
+        </div> 
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/ims-law-college-noida-uttar-pradesh/Y_fiu5Myk6.png" class="mr-3" loading="lazy" alt="IMS Law College 5" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/ims-law-college-noida-uttar-pradesh">IMS Law College</a>
+              </h5>
+              <p>Noida,Uttar Pradesh</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="media navMedia">
+            <img src="https://www.sikshapedia.com/public/data/colleges/chaitanya-deemed-to-be-university-warangal-telangana/92VHn10e6p.webp" class="mr-3" loading="lazy" alt="Chaitanya (Deemed To Be University) 5" draggable="false">
+            <div class="media-body">
+              <h5>
+                <a href="https://www.sikshapedia.com/in/chaitanya-deemed-to-be-university-warangal-telangana">Chaitanya (Deemed To Be University)</a>
+              </h5>
+              <p>Warangal,Telangana</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+
+-->
+<li class="isaSearchBar">
+  <button class="isaSearchToggler">
+    <i class="fas fa-search"></i>
+  </button>
+</li>
+
+<!-- <li aria-haspopup="true" class="wsshopmyaccount">
+  <a href="https://consultantregistration.ncriptech.com"> ASSOCIATE LOGIN</a>
+</li>
+<li aria-haspopup="true" class="wsshopmyaccount">
+  <a href="https://www.sikshapedia.com/in/colleges"> TOP COLLEGES</a>
+</li>
+<li aria-haspopup="true" class="wsshopmyaccount">
+  <a href="https://www.sikshapedia.com/courses"> TOP COURSES</a>
+</li>
+<li aria-haspopup="true" class="wsshopmyaccount">
+  <a href="https://www.sikshapedia.com/exams"> EXAMS</a>
+</li>
+<li aria-haspopup="true" class="wsshopmyaccount">
+  <a href="https://www.sikshapedia.com/news"> NEWS</a>
+</li>
+<li aria-haspopup="true" class="wsshopmyaccount">
+  <a href="https://www.sikshapedia.com/reviews/write"> WRITE REVIEW</a>
+</li> -->
+
+
+<style type="text/css">
+  .btn_custom{
+    background-color: #fd572e;
+    color: #fff;
+  }
+
+  .btn_custom a.navtext span{
+    color: #fff !important;
+  }
+
+
+  .btn_custom span:after {
+    color: #fff!important;
+  }
+
+  li.btn_custom:hover>a {
+      background-color: #fd572e!important;
+      color: #fff;
+  }
+</style>

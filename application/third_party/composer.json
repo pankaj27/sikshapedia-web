@@ -1,0 +1,10 @@
+{
+    "require": {
+        "google/apiclient": "^2.0",
+        "facebook/graph-sdk" : "~5.0",
+        "ps/image-optimizer": "^2.0",
+        "nielse63/phpimagecache": "^1.0",
+        "spatie/image-optimizer": "^1.4",
+        "phpmailer/phpmailer": "^6.5"
+    }
+}

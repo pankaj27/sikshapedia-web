@@ -1,0 +1,844 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-brand">
+          <?php
+          if(isset($system_general_settings->system_logo) && $system_general_settings->system_logo!=''){
+            ?>
+            <img src="<?php echo $system_general_settings->system_logo;?>" alt="<?php echo $system_general_settings->system_meta_title;?>" class="main_logo_header">
+            <?php
+          }else if(isset($system_general_settings->system_meta_title) && $system_general_settings->system_meta_title!=''){
+            echo $system_general_settings->system_meta_title;
+          }
+          ?>
+        </a>
+        <div class="sidebar-toggler not-active">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="sidebar-body">
+        <ul class="nav">
+          <li class="nav-item nav-category">Main</li>
+          <li class="nav-item">
+            <a href="<?php echo $admin_base_url;?>/dashboard" class="nav-link">
+              <i class="link-icon" data-feather="box"></i>
+              <span class="link-title">Dashboard</span>
+            </a>
+          </li>
+
+
+          <?php
+          if(in_array('can_access_streams_data', $permissions)){
+            ?>
+            <li class="nav-item nav-category">All Streams</li>
+            <li class="nav-item <?php echo (is_controller('Streams'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('Streams'))?'':'collapsed';?>" data-toggle="collapse" href="#streams-pages" role="button" aria-expanded="false" aria-controls="streams-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">Streams</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('Streams'))?'show':'';?>" id="streams-pages">
+                <ul class="nav sub-menu">
+
+                  <?php
+                  if(in_array('can_access_streams_list_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams" class="nav-link <?php echo (is_controller('Streams') && is_method('index'))?'active':'';?>">Streams</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_degrees_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams/degrees" class="nav-link <?php echo (is_controller('Streams') && is_method('indexDegrees'))?'active':'';?>">Degrees</a>
+                    </li>
+                    <?php
+                  }
+
+
+                  if(in_array('can_access_exams_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams/exams" class="nav-link">Exams</a>
+                    </li> 
+                    <?php
+                  }
+
+                  if(in_array('can_access_courses_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams/courses" class="nav-link">Courses</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_courses_category_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams/courses/category" class="nav-link">Courses Category</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_courses_details_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams/courses/details" class="nav-link">Courses Details</a>
+                    </li>
+                    <?php
+                  }
+
+                  ?>
+                  
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+          ?>
+            
+
+          <?php
+          if(in_array('can_access_system_user_data', $permissions)){
+            ?>
+            <li class="nav-item nav-category">All Users</li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#users-pages" role="button" aria-expanded="false" aria-controls="users-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">System Users</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse" id="users-pages">
+                <ul class="nav sub-menu">
+                  <?php
+                  if(in_array('can_access_system_user_inner_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/users/internal" class="nav-link <?php echo (is_controller('Users') && is_method('indexSystemUsers'))?'active':'';?>">System Users</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_user_college_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/users/colleges" class="nav-link <?php echo (is_controller('Users') && is_method('indexCollegeUsers'))?'active':'';?>">College Users</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_user_university_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/users/universities" class="nav-link <?php echo (is_controller('Users') && is_method('indexUniversityUsers'))?'active':'';?>">University Users</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_user_school_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/users/schools" class="nav-link <?php echo (is_controller('Users') && is_method('indexSchoolUsers'))?'active':'';?>">School Users</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_user_users_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/users/students" class="nav-link <?php echo (is_controller('Streams') && is_method('indexDegrees'))?'active':'';?>">Student Users</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_user_group_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/users/groups" class="nav-link <?php echo (is_controller('Streams') && is_method('indexDegrees'))?'active':'';?>">User Groups</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_user_applicant_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/applicants" class="nav-link <?php echo (is_controller('Streams') && is_method('indexDegrees'))?'active':'';?>">Applicants</a>
+                    </li>
+                    <?php
+                  }
+                  ?>
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+          ?>
+
+
+          <?php
+          if(in_array('can_upload_universities', $permissions) || in_array('can_upload_colleges', $permissions)){
+            ?>
+            <li class="nav-item nav-category">All Institutions</li>
+              <li class="nav-item <?php echo (is_controller('Institutions'))?'active':'';?>">
+                <a class="nav-link <?php echo (is_controller('Institutions'))?'':'collapsed';?>" data-toggle="collapse" href="#institution-pages" role="button" aria-expanded="false" aria-controls="institution-pages">
+                  <i class="link-icon" data-feather="users"></i>
+                  <span class="link-title">Institutions</span>
+                  <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse <?php echo (is_controller('Institutions'))?'show':'';?>" id="institution-pages">
+                  <ul class="nav sub-menu">
+                    <?php
+                    if(in_array('can_upload_universities', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/institutions/universities" class="nav-link <?php echo (is_controller('Institutions') && (is_method('indexUniversities') || is_method('indexUniversitiesAddEdit')))?'active':'';?>">Universities</a>
+                      </li>
+                      <?php
+                    }
+
+                    if(in_array('can_upload_colleges', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/institutions/colleges" class="nav-link <?php echo (is_controller('Institutions') && (is_method('indexColleges') || is_method('indexCollegesAddEdit')))?'active':'';?>">Colleges</a>
+                      </li>
+                      <?php
+                    }
+
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/facultydepartments" class="nav-link <?php echo (is_controller('Institutions') && (is_method('indexColleges') || is_method('indexCollegesAddEdit')))?'active':'';?>">Faculty Departments</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/affiliations" class="nav-link <?php echo (is_controller('Institutions') && (is_method('indexColleges') || is_method('indexCollegesAddEdit')))?'active':'';?>">Affiliations</a>
+                    </li>
+
+
+                    <?php
+
+                    if(in_array('can_upload_colleges', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/institutions/leads" class="nav-link <?php echo (is_controller('Institutions') && (is_method('indexLeads')))?'active':'';?>">College Leads</a>
+                      </li>
+                      <?php
+                    }
+
+                    if(in_array('can_upload_news', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/news" class="nav-link <?php echo (is_controller('News') && (is_method('index') || is_method('indexEdit') || is_method('indexAdd')))?'active':'';?>">New & Articles</a>
+                      </li>
+                      <?php
+                    }
+
+
+                    if(in_array('can_access_email_campaigns', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/emailcampaigns" class="nav-link <?php echo (is_controller('Campaigns') && (is_method('index') || is_method('indexAddEditCampaigns') || is_method('indexAdd')))?'active':'';?>">Email Campaigns</a>
+                      </li>
+                      <?php
+                    }
+                    ?>
+                    
+                    
+                  </ul>
+                </div>
+              </li>
+            <?php
+          }
+          ?>
+
+          <?php
+          if(in_array('can_access_coupons_data', $permissions)){
+            ?>
+            <li class="nav-item nav-category">System Coupons</li>
+            <li class="nav-item <?php echo (is_controller('Coupon'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('Coupon'))?'':'collapsed';?>" role="button" aria-expanded="false" aria-controls="coupon-pages" data-toggle="collapse" href="#coupon-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">Coupons</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('Coupon'))?'show':'';?>" id="coupon-pages">
+                  <ul class="nav sub-menu">
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/coupons" class="nav-link <?php echo (is_controller('Coupon') && (is_method('index') || is_method('index')))?'active':'';?>">Coupon Package</a>
+                    </li>
+                  </ul>
+                </div>
+            </li>
+            <?php
+          }
+          ?>
+
+          
+
+          <?php
+          if(in_array('can_access_system_ads', $permissions)){
+            ?>
+            <li class="nav-item nav-category">System Ads</li>
+            <li class="nav-item <?php echo (is_controller('Ads'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('Ads'))?'':'collapsed';?>" role="button" aria-expanded="false" aria-controls="ads-pages" data-toggle="collapse" href="#ads-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">Ads</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('Ads'))?'show':'';?>" id="ads-pages">
+                <ul class="nav sub-menu">
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/packages" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Ads Package</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/premiumhtml" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Paid Html Ads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/premiumimage" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Paid Image Ads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/freeimage" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Free Image Ads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/premiumimage" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Paid Inner Link Ads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/premiumlinks" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Free Inner Link Ads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads/freeinnerlinks" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">Free Inner Link Ads</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/ads" class="nav-link <?php echo (is_controller('Ads') && (is_method('index') || is_method('index')))?'active':'';?>">All Ads</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+          ?>
+
+          <?php
+          if(in_array('can_access_system_reviews', $permissions)){
+            ?>
+            <li class="nav-item nav-category">System Reviews</li>
+            <li class="nav-item <?php echo (is_controller('Reviews'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('Reviews'))?'':'collapsed';?>" role="button" aria-expanded="false" aria-controls="SEO-pages" data-toggle="collapse" href="#reviews-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">Reviews</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('Reviews'))?'show':'';?>" id="reviews-pages">
+                <ul class="nav sub-menu">
+                  <?php
+                  if(in_array('can_access_system_college_reviews', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/reviews/colleges" class="nav-link <?php echo (is_controller('Reviews') && (is_method('index')))?'active':'';?>">Colleges Reviews</a>
+                    </li>
+                    <?php
+                  }
+                  ?>
+                  <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/comments/colleges" class="nav-link <?php echo (is_controller('Comments') && (is_method('index')))?'active':'';?>">Colleges Comments</a>
+                    </li>
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+
+
+
+          if(in_array('can_access_system_blogs', $permissions)){
+            ?>
+            <li class="nav-item nav-category">Blog Posts</li>
+            <li class="nav-item">
+              <a href="<?php echo $admin_base_url;?>/blogs" class="nav-link <?php echo is_controller('Blogs')?'active':'';?>">Posts</a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo $admin_base_url;?>/blogs/add" class="nav-link <?php echo is_controller('Blogs')?'active':'';?>">Create Posts</a>
+            </li>
+            <?php
+          }
+
+
+          ?>
+
+
+          <?php
+          if(in_array('can_access_system_seo', $permissions)){
+            ?>
+            <li class="nav-item nav-category">System SEO</li>
+            <li class="nav-item <?php echo (is_controller('SEO'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('SEO'))?'':'collapsed';?>" role="button" aria-expanded="false" aria-controls="SEO-pages" data-toggle="collapse" href="#SEO-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">SEO</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('SEO'))?'show':'';?>" id="SEO-pages">
+                <ul class="nav sub-menu">
+                  <?php
+                  if(in_array('can_access_system_college_seo', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/colleges" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexColleges')))?'active':'';?>">Colleges</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_search_seo', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/searches/colleges" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexSearches')))?'active':'';?>">College Search</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_exam_seo', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/exams" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexExams')))?'active':'';?>">Exams</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/exams/streams" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexExams')))?'active':'';?>">Exams Stream Pages</a>
+                    </li>
+                    <?php
+                  }
+
+
+                  /*if(in_array('can_access_system_courses_seo', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/courses" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexCourses')))?'active':'';?>">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/courses/catgeories" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexCourses')))?'active':'';?>">Courses Category List</a>
+                    </li>
+                    <?php
+                  }*/
+
+                  if(in_array('can_access_system_courses_seo', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/streams/courses" class="nav-link">Courses</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_search_seo', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/searches" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexSearches')))?'active':'';?>">Search</a>
+                    </li>
+                    <?php
+                  }
+
+
+                  if(in_array('can_access_system_sitemaps', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/sitemaps" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexSearches')))?'active':'';?>">Sitemaps</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_colleges_structured_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/college_structured_data" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexSearches')))?'active':'';?>">College Structured Data</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_system_colleges_structured_data', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/course_structured_data" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexSearches')))?'active':'';?>">Course Structured Data</a>
+                    </li>
+                    <?php
+                  }
+
+                  if(in_array('can_access_url_checker', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/urlchecker" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexSearches')))?'active':'';?>">URL Checker</a>
+                    </li>
+                    <?php
+                  }
+
+
+                  if(in_array('can_tools_editor', $permissions)){
+                    ?>
+                    <li class="nav-item">
+                      <a href="<?php echo $admin_base_url;?>/seo/fileeditor" class="nav-link <?php echo (is_controller('SEO') && (is_method('indexFileeditor')))?'active':'';?>">File Editor</a>
+                    </li>
+                    <?php
+                  }
+
+
+                  ?>
+                  
+                  
+                  
+                  
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+
+          if(in_array('can_access_system_reports', $permissions)){
+            ?>
+            <li class="nav-item nav-category">System Reports</li>
+            <li class="nav-item <?php echo (is_controller('REPORTS'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('REPORTS'))?'':'collapsed';?>" role="button" aria-expanded="false" aria-controls="SEO-pages" data-toggle="collapse" href="#SEO-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">Reports</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('SEO'))?'show':'';?>" id="SEO-pages">
+                <ul class="nav sub-menu">
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/reports/scholarshipReports" class="nav-link <?php echo (is_controller('REPORTS') && (is_method('scholarshipReports')))?'active':'';?>">Scholarships</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+
+          ?>
+
+          <?php
+          if(in_array('can_access_system_appearance', $permissions)){
+            ?>
+            <li class="nav-item nav-category">System Appearance</li>
+            <li class="nav-item <?php echo (is_controller('Appearance'))?'active':'';?>">
+              <a class="nav-link <?php echo (is_controller('Appearance'))?'':'collapsed';?>" role="button" aria-expanded="false" aria-controls="Appearance-pages" data-toggle="collapse" href="#Appearance-pages">
+                <i class="link-icon" data-feather="users"></i>
+                <span class="link-title">Apperance</span>
+                <i class="link-arrow" data-feather="chevron-down"></i>
+              </a>
+              <div class="collapse <?php echo (is_controller('Appearance'))?'show':'';?>" id="Appearance-pages">
+                <ul class="nav sub-menu">
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/settings/menues" class="nav-link <?php echo (is_controller('Appearance') && (is_method('indexMenues') || is_method('indexMenues')))?'active':'';?>">Menues</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo $admin_base_url;?>/settings/banners" class="nav-link <?php echo (is_controller('Appearance') && (is_method('indexBanners')))?'active':'';?>">Banners</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <?php
+          }
+          ?>
+
+
+          <?php
+          //if(in_array('can_access_system_settings', $permissions)){
+            if($userdata->user_role!='5'){
+              ?>
+              <li class="nav-item nav-category">System</li>
+              <li class="nav-item <?php echo (is_controller('Country'))?'active':'';?>">
+                <a class="nav-link <?php echo (is_controller('Country'))?'':'collapsed';?>" data-toggle="collapse" href="#system-pages" role="button" aria-expanded="false" aria-controls="system-pages">
+                  <i class="link-icon" data-feather="settings"></i>
+                  <span class="link-title">Settings</span>
+                  <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse <?php echo (is_controller('Country'))?'show':'';?>" id="system-pages">
+                  <ul class="nav sub-menu">
+                    <?php
+                    if(in_array('can_access_system_settings', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings" class="nav-link">General Settings</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/social" class="nav-link">Social Settings</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/server" class="nav-link">Server Settings</a>
+                      </li>
+                      <?php
+                    }
+                    ?>
+
+                    <?php
+                     if(in_array('can_access_file_browser', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/browser" class="nav-link">File Browser</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/browser/compress" class="nav-link">File Compress</a>
+                      </li>
+                      <?php
+                     }
+                    ?>
+
+                    <?php
+                    if(in_array('can_access_countries_data', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/countries" class="nav-link <?php echo (is_controller('Country'))?'active':'';?>">Countries</a>
+                      </li>
+                      <?php
+                    }
+
+                    if(in_array('can_access_menues_data', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/menues" class="nav-link <?php echo (is_controller('Menues'))?'active':'';?>">Menues</a>
+                      </li>
+                      <?php
+                    }
+                    ?>
+
+
+                    <?php 
+                    if(in_array('can_access_companies_data', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/companies" class="nav-link <?php echo (is_controller('Country'))?'active':'';?>">Companies</a>
+                      </li>
+                      <?php
+                    }
+                    ?>
+                    
+                    <?php
+                    if(in_array('can_access_ranking_agencies_data', $permissions)){
+                      ?>
+                      <li class="nav-item">
+                        <a href="<?php echo $admin_base_url;?>/settings/ranking-agencies" class="nav-link <?php echo (is_controller('Country'))?'active':'';?>">Ranking Agencies</a>
+                      </li>
+                      <?php
+                    }
+                    ?>
+                    
+                    
+                  </ul>
+                </div>
+              </li>
+              <?php
+             }
+          //}
+             
+          ?>
+
+              
+
+
+          <!-- <li class="nav-item">
+            <a href="../apps/chat.html" class="nav-link">
+              <i class="link-icon" data-feather="message-square"></i>
+              <span class="link-title">Chat</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="../apps/calendar.html" class="nav-link">
+              <i class="link-icon" data-feather="calendar"></i>
+              <span class="link-title">Calendar</span>
+            </a>
+          </li> -->
+
+
+          <!-- <li class="nav-item nav-category">Components</li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
+              <i class="link-icon" data-feather="feather"></i>
+              <span class="link-title">UI Kit</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="uiComponents">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="../ui-components/alerts.html" class="nav-link">Alerts</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/badges.html" class="nav-link">Badges</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/breadcrumbs.html" class="nav-link">Breadcrumbs</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/buttons.html" class="nav-link">Buttons</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/button-group.html" class="nav-link">Button group</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/cards.html" class="nav-link">Cards</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/carousel.html" class="nav-link">Carousel</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../ui-components/collapse.html" class="nav-link">Collapse</a>
+                  </li>
+                <li class="nav-item">
+                  <a href="../ui-components/dropdowns.html" class="nav-link">Dropdowns</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/list-group.html" class="nav-link">List group</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/media-object.html" class="nav-link">Media object</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/modal.html" class="nav-link">Modal</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/navs.html" class="nav-link">Navs</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/navbar.html" class="nav-link">Navbar</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/pagination.html" class="nav-link">Pagination</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/popover.html" class="nav-link">Popovers</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/progress.html" class="nav-link">Progress</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/scrollbar.html" class="nav-link">Scrollbar</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/scrollspy.html" class="nav-link">Scrollspy</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/spinners.html" class="nav-link">Spinners</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../ui-components/tooltips.html" class="nav-link">Tooltips</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
+              <i class="link-icon" data-feather="anchor"></i>
+              <span class="link-title">Advanced UI</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="advancedUI">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="../advanced-ui/cropper.html" class="nav-link">Cropper</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../advanced-ui/owl-carousel.html" class="nav-link">Owl carousel</a>
+                  </li>
+                <li class="nav-item">
+                  <a href="../advanced-ui/sweet-alert.html" class="nav-link">Sweet Alert</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
+              <i class="link-icon" data-feather="inbox"></i>
+              <span class="link-title">Forms</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="forms">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="../forms/basic-elements.html" class="nav-link">Basic Elements</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../forms/advanced-elements.html" class="nav-link">Advanced Elements</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../forms/editors.html" class="nav-link">Editors</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../forms/wizard.html" class="nav-link">Wizard</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  data-toggle="collapse" href="#charts" role="button" aria-expanded="false" aria-controls="charts">
+              <i class="link-icon" data-feather="pie-chart"></i>
+              <span class="link-title">Charts</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="charts">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="../charts/apex.html" class="nav-link">Apex</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../charts/chartjs.html" class="nav-link">ChartJs</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../charts/flot.html" class="nav-link">Flot</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../charts/morrisjs.html" class="nav-link">Morris</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../charts/peity.html" class="nav-link">Peity</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../charts/sparkline.html" class="nav-link">Sparkline</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
+              <i class="link-icon" data-feather="layout"></i>
+              <span class="link-title">Table</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="tables">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="../tables/basic-table.html" class="nav-link">Basic Tables</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../tables/data-table.html" class="nav-link">Data Table</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#icons" role="button" aria-expanded="false" aria-controls="icons">
+              <i class="link-icon" data-feather="smile"></i>
+              <span class="link-title">Icons</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="icons">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="../icons/feather-icons.html" class="nav-link">Feather Icons</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../icons/flag-icons.html" class="nav-link">Flag Icons</a>
+                </li>
+                <li class="nav-item">
+                  <a href="../icons/mdi-icons.html" class="nav-link">Mdi Icons</a>
+                </li>
+              </ul>
+            </div>
+          </li> -->
+          
+
+        </ul>
+      </div>
+</nav>

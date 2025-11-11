@@ -1,0 +1,41 @@
+<?php 
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+if(!empty($scholarship_data)){
+	?>
+	<div class="card infoCard mb-4">
+		<div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+		    <div class="media">
+		      <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+		      <div class="media-body">
+		        <h5 class="mt-0 text-dark"><a href="#" class="text-dark"> By <?php echo $college_intro_data['info_curator'];?>  </a> </h5>
+		        <p class="m-0">Content Curator 
+		          <a href="#" class="text-info"><i class="fab fa-facebook"></i></a>
+		          <a href="#"  class="text-info"><i class="fab fa-twitter"></i></a>
+		          <a href="#" class="text-info"><i class="fab fa-linkedin-in"></i></a>
+		        </p>
+		      </div>
+		    </div>
+		    <div class="updateDate"></div>
+		</div>
+		<div class="card-body">
+			<?php
+
+				if(!empty($scholarship_data)){
+					foreach ($scholarship_data as $key => $value) {
+
+						if($value->scholarship_data_type=='general'){
+							echo $value->scholarship_content;
+						}else if($value->scholarship_data_type=='image'){
+							?>
+							<img src="<?php echo $value->scholarship_content;?>" class="img-thumbnail" loading="lazy">
+							<?php
+						}
+						
+					}
+				}
+			?>
+		</div>
+	</div>
+	<?php
+}

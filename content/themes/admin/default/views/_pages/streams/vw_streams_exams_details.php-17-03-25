@@ -1,0 +1,473 @@
+<div class="page-content">
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Inner Menus >> <a href="<?php echo $exam_data['exam_link'];?>" target="_blank"><?php echo $exam_data['exam_short_name'];?></a>  <a href="<?php echo $this->data['admin_base_url'];?>/streams/exams" class="btn btn-xs btn-primary" style="float:right;">Back</a></h6>
+					
+					<form id="form_exam_inner_menus">
+						<input type="hidden" name="_exam" id="_exam" value="<?php echo $exam_id;?>">
+						<input type="hidden" name="_exam_menu" id="_exam_menu" value="<?php echo $exam_menu_id;?>">
+						<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+						<div class="row">
+							<div class="col-md-12">
+								<label><strong><?php echo $exam_data['exam_short_name'];?></strong></label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-8">
+								<div class="form-group">
+									<label class="control-label">Menu Name</label>
+									<input class="form-control" placeholder="Enter menu title" name="exam_menu_name" id="exam_menu_name" value="<?php echo (isset($menu_data) && !empty($menu_data))?$menu_data->menu_name:'';?>">
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label class="control-label">Parent Menu</label>
+									<select class="form-control" name="exam_parent_menu" id="exam_parent_menu">
+										<option value="0">None</option>
+										<?php
+										if(!empty($exam_data['exam_menus'])){
+											foreach ($exam_data['exam_menus'] as $key => $value) {
+												?>
+												<option value="<?php echo $value['menu_id'];?>"><?php echo $value['menu_name'];?></option>
+												<?php
+											}
+										}
+										?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="control-label">Menu Title (Meta Title,Page Heading)</label>
+									<textarea class="form-control" placeholder="Menu Title (Meta Title,Page Heading)" name="exam_menu_title" id="exam_menu_title" rows="2"><?php echo (isset($slug_data) && !empty($slug_data))?$slug_data->url_page_heading:'';?></textarea>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="control-label">Menu Page Sub Heading</label>
+									<textarea class="form-control" placeholder="Menu Page Sub Heading" name="exam_menu_sub_title" id="exam_menu_sub_title" rows="2"><?php echo (isset($slug_data) && !empty($slug_data))?$slug_data->url_page_sub_heading:'';?></textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="control-label">Menu Meta Description</label>
+									<textarea class="form-control" placeholder="Menu Meta Description" name="exam_menu_description" id="exam_menu_description" rows="3"><?php echo (isset($slug_data) && !empty($slug_data))?$slug_data->url_meta_desc:'';?></textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="control-label">Menu Page Keywords</label>
+									<input class="form-control" placeholder="Menu Page Keywords" name="exam_menu_keywords" id="exam_menu_keywords" value="<?php echo (isset($slug_data) && !empty($slug_data))?$slug_data->url_meta_key_words:'';?>">
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label class="control-label">Fixed Menu Type</label>
+									<select class="form-control" name="exam_menu_type" id="exam_menu_fixed_type">
+										<option value="none"  <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_fixed_type=='none'))?'selected':'';?>>None</option>
+										<option value="overview" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_fixed_type=='overview'))?'selected':'';?>>Overview</option>
+										<option value="news"  <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_fixed_type=='news'))?'selected':'';?>>News</option>
+										<option value="college_predictor" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_fixed_type=='college_predictor'))?'selected':'';?>>College Predictor</option>
+										<option value="participating_colleges" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_fixed_type=='participating_colleges'))?'selected':'';?>>Participating Colleges</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label class="control-label">Open Link in New Tab</label>
+									<select class="form-control" name="exam_menu_open_new_tab" id="exam_menu_open_new_tab">
+										<option value="2" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_open_new_tab=='2'))?'selected':'';?>>No</option>
+										<option value="1" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_open_new_tab=='1'))?'selected':'';?>>Yes</option>										
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label class="control-label">Status</label>
+									<select class="form-control" name="exam_menu_status" id="exam_menu_status">
+										<option value="1" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_is_active=='1'))?'selected':'';?>>Active</option>
+										<option value="2" <?php echo (isset($menu_data) && !empty($menu_data) && ($menu_data->menu_is_active=='2'))?'selected':'';?>>Deactive</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-12">
+								<button class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0" type="submit" id="btn_save_exam_menu">Save</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="alert alert-info">
+				<p><strong>Note:</strong>To change the menus order move the menu row up or down.</p>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-condensed table-sortable sortable-container" id="table_exam_menu">
+							<thead>
+								<th>#</th>
+								<th>Menu</th>
+								<th>Menu in Exam List</th>
+								<th>Child Menu</th>
+								<th>Status</th>
+								<th>Action</th>
+								<th></th>
+								<th><button type="button" class="btn btn-warning btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#practicePaperUploadModal">Add Practice Papers</button></th>
+							</thead>
+							<tbody>
+								<?php
+								if(!empty($exam_data['exam_menus'])){
+									$x=0;
+									foreach ($exam_data['exam_menus'] as $key => $value){
+										?>
+										<tr class="sortable-item" data-id="<?php echo $value['menu_id'];?>">
+											<td><i class="mdi mdi-cursor-move"></i> <?php echo $value['menu_serial'];?></td>
+											<td>
+												<?php
+												if(!empty($value['menu_link'])){
+													?>
+													<a href="<?php echo $value['menu_link'];?>" target="_blank"><strong><?php echo $value['menu_name'];?></strong></a>
+													<?php
+												}else{
+													?>
+													<strong><?php echo $value['menu_name'];?></strong><br>
+													<span>SEO Link & Menu Link Not Generated Yet</span>
+													<?php
+												}
+
+												?>
+											</td>
+											
+											<td><?php echo $value['menu_show_in_exam_list'];?></td>
+											<td>
+
+												<?php
+												if(!empty($value['child_menu'])){
+													?>
+													<button type="button" class="btn btn-xs btn-danger" data-toggle="collapse" data-target="#collapseme<?php echo $value['menu_id'];?>" class="accordion-toggle" data-menu_id="<?php echo $value['menu_id'];?>">Child Menues</button>
+													<?php
+												}else{
+													?>
+													<span class="btn btn-xs btn-dark">None</span>
+													<?php
+												}
+												?>
+
+
+											</td>
+											<td>
+												<?php
+												if($value['menu_is_active']=='1'){
+													?>
+													<span class="btn btn-xs btn-success">Active</span>
+													<?php
+												}else if($value['menu_is_active']=='2'){
+													?>
+													<span class="btn btn-xs btn-dark">Deactive</span>
+													<?php
+												}
+
+												?>
+											</td>
+											<td><a href="<?php echo $value['menu_add_details_link'];?>" class="btn btn-xs btn-primary">Add Details</a></td>
+											<td><a href="<?php echo $value['menu_edit'];?>" class="btn btn-xs btn-primary">Edit Menu</a></td>
+											<td><button type="button" class="btn btn-xs btn-danger btn_del_exam_details_menu" data-exam_id="<?php echo $exam_id;?>" data-exam_menu_id="<?php echo $value['menu_id'];?>">Delete Menu</button></td>	
+											<td>
+												<div class="btn-group">
+													<button type="button" class="btn btn-xs btn-dark btn_add_menu_widget" data-exam_id="<?php echo $exam_id;?>" data-menu_name="<?php echo $value['menu_name'];?>" data-menu_id="<?php echo $value['menu_id'];?>" data-target="#menuWidgetAddModal" data-toggle="modal">Add Widget</button>
+													<button type="button" class="btn btn-xs btn-success btn_add_to_parent_menu" data-exam_id="<?php echo $exam_id;?>" data-exam_menu_id="<?php echo $value['menu_id'];?>">Add to Parent Menu</button>
+												</div>
+											</td>										
+										</tr>
+										
+										<?php
+										if(!empty($value['child_menu'])){
+											?>
+											<tr>
+												<td class="hiddenRow" colspan="7">
+													<div class="col-md-12 accordian-body collapse" id="collapseme<?php echo $value['menu_id'];?>" style="margin-top:10px;margin-bottom:10px;">
+													
+														<table>
+															<tbody>
+																<?php
+																$zx=1;
+																foreach ($value['child_menu'] as $k => $v) {
+																	?>
+																	<tr>
+																		<td><?php echo $zx;?></td>
+																		<td><a href="<?php echo $v['menu_link'];?>" target="_blank"><?php echo $v['menu_name'];?></a></td>
+																		<td><?php echo $v['menu_show_in_exam_list'];?></td>
+																		<td>
+																			<div class="btn-group">
+																				<a href="<?php echo $v['menu_add_details_link'];?>" class="btn btn-xs btn-primary" target="_blank">Add Details</a>
+																				<button type="button" class="btn btn-xs btn-dark btn_add_menu_widget" data-exam_id="<?php echo $exam_id;?>" data-menu_name="<?php echo $v['menu_name'];?>" data-menu_id="<?php echo $v['menu_id'];?>" data-target="#menuWidgetAddModal" data-toggle="modal">Add Widget</button>
+																			</div>
+
+																		</td>
+																		
+																		<td><a href="<?php echo $v['menu_edit'];?>" class="btn btn-xs btn-primary">Edit Menu</a></td>
+																		<td><button type="button" class="btn btn-xs btn-danger btn_del_exam_details_menu"  data-exam_id="<?php echo $exam_id;?>" data-exam_menu_id="<?php echo $value['menu_id'];?>">Delete Menu</button></td>
+																	</tr>
+																	<?php
+																	$zx++;
+																}
+																?>
+															</tbody>
+														</table>
+													</div>
+												</td>
+											</tr>
+											<?php
+										}
+											
+										$x++;
+									}
+								}
+								?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+	
+		<?php
+		if(!empty($exam_data['exam_menus'])){
+			?>
+			<div class="col-md-12">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<?php
+					$i=0;
+					foreach ($exam_data['exam_menus'] as $key => $value) {
+						
+							?>
+							<li class="nav-item">
+							    <a class="nav-link <?php echo ($i==0)?'active':'';?>" id="tab-<?php echo $j;?>" data-toggle="tab" href="#<?php echo url_slug(strtolower($value->menu_name));?>" role="tab" aria-controls="<?php echo url_slug(strtolower($value->menu_name));?>" aria-selected="true"><?php echo $value->menu_name;?></a>
+							</li>
+							<?php
+							$i++;	
+												
+					}
+					?>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<?php
+					$j=0;
+					foreach ($exam_data['exam_menus'] as $key => $value){
+						
+							?>
+							<div class="tab-pane fade <?php echo ($j==0)?'show active':'';?>" id="<?php echo url_slug(strtolower($value->menu_name));?>" role="tabpanel" aria-labelledby="<?php echo url_slug(strtolower($value->menu_name));?>-tab">
+							  	<div class="card">
+							  		<div class="card-header">
+							  			<div class="card-title"><?php echo $value->menu_name;?></div>
+							  		</div>
+							  	</div>
+							 </div>
+							<?php
+							$j++;
+					}
+					?>
+				</div>
+			</div>
+			<?php
+		}
+		?>
+	</div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="practicePaperUploadModal" tabindex="-1" role="dialog" aria-labelledby="collegeFilesUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="practicePaperUploadModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            
+            <div class="modal-body">
+            	<form id="form_up_practice_paper" enctype="multipart/form-data">
+            		<input type="hidden" name="file_type" value="9">
+            		<div class="row">
+            			<div class="col-md-6">
+            				<div class="form-group">
+            					<label>File Type</label>
+            					<select class="form-control" name="file_types" id="file_types">
+            						<option value="9">Question paper</option>
+            						<option value="10">Asnwer paper</option>
+            						<option value="11">Speaking Practice paper</option>
+            						<option value="12">Writing Practice paper</option>
+            						<option value="13">Listening paper</option>
+            						<option value="14">Sample paper</option>
+            					</select>
+            				</div>
+            			</div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Practice Paper</label>
+                                <input type="file" name="practice_paper" class="file-upload-default">
+                                <div class="input-group col-xs-12">
+                                    <input type="text" class="form-control file-upload-info" disabled="" placeholder="Practice Paper" value="">
+                                    <span class="input-group-append">
+                                        <button class="file-upload-browse btn btn-primary" type="button">Practice Paper</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="file_question_file_div" style="display:none;">
+            			<div class="col-md-12">
+            				<div class="form-group">
+            					<label>Select Question Paper</label>
+            					<select class="form-control" name="file_question_file" id="file_question_file">
+            						<option value="0">Select Question paper</option>
+            						<?php
+            						if(!empty($practice_papers)){
+            							foreach ($practice_papers as $key => $value) {
+            								?>
+            								<option value="<?php echo $value->storage_id;?>"><?php echo $value->user_storage_type_2;?></option>
+            								<?php
+            							}
+            						}
+            						?>
+            					</select>
+            				</div>
+            			</div>
+            		</div>
+                    <div class="row">
+                    	<div class="col-md-4">
+            				<div class="form-group">
+            					<label>File Year (Optional)</label>
+            					<input type="text" name="file_year" class="form-control" id="file_year">
+            				</div>
+            			</div>
+                    	<div class="col-md-8">
+                    		<label>Paper Title</label>
+                    		<input type="text" name="file_title" class="form-control" id="file_title">
+                    	</div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-md-12">
+                    		<div class="col-md-12">
+                    			<button type="submit" class="btn btn-primary" id="upload_practice_paper">Upload</button>
+                    		</div>
+                    	</div>
+                    </div>
+            	</form>
+            </div>
+            <div class="modal-footer">
+                <div class="table-responsive" style="width:100%;">
+					<table id="practice_paper_list_table" class="table" style="width: 100%;">
+						<thead>
+	                      <tr>
+	                        <th>#</th>
+	                        <th>File Type</th>
+	                        <th>File Name</th>
+	                        <th>Year</th>
+	                        <th>File</th>
+	                        <th>Action</th>
+	                      </tr>
+	                    </thead>
+	                    <tbody>		                    	
+	                    </tbody>
+					</table>
+				</div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade bd-example-modal-xl" id="updateParentMenuModal" tabindex="-1" role="dialog" aria-labelledby="updateParentMenuModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateParentMenuModalTitle">Update Parent Menu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_update_parent_menu" enctype="multipart/form-data">
+	            <div class="modal-body">
+	            	
+	            		<input type="hidden" name="child_menu_id" id="child_menu_id">
+	            		<div class="row">
+	                        <div class="col-md-12">
+	                            <div class="form-group">
+	                                <label>Practice Paper</label>
+	                                <select class="form-control" name="parent_menu_id" id="parent_menu_id">
+										<option value="0">Select Parent Menu</option>
+										<?php
+										if(!empty($exam_data['exam_menus'])){
+											foreach ($exam_data['exam_menus'] as $key => $value) {
+												?>
+												<option value="<?php echo $value['menu_id'];?>"><?php echo $value['menu_name'];?></option>
+												<?php
+											}
+										}
+										?>
+									</select>
+	                            </div>
+	                        </div>
+	                    </div>
+	            	
+	            </div>
+	            <div class="modal-footer">
+	               <button type="submit" class="btn btn-primary">Update</button>
+	            </div>
+	        </form>
+            
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+	/*.sortable-item{
+		cursor: move;
+	}
+
+	.hiddenRow {
+	    padding: 0 !important;
+	}
+
+ 
+    table#table_exam_menu tr.sorting-row td {background-color: #ccc;}
+    table#table_exam_menu.sorting-table {cursor: ns-resize; box-shadow: none; outline: 1px solid #333;}
+    table#table_exam_menu.sorting-table tbody tr:not(.sorting-row) td {opacity: 1; color: #bbb; text-shadow: 0 1px 0 rgba(255, 255, 255, 1);}*/
+</style>
+
+<script type="text/javascript">var p_row='';var exam_id='<?php echo $exam_id;?>';var parent_folder='<?php echo $parent_folder_data->media_disk_name;?>';var exam_menu_faq_row='';var exam_menues ='';var exam_news='';var exam_page_question_paper ='';var exam_page_answer_paper ='';var exam_page_speaking_test_paper ='';var exam_page_writing_practice_paper='';var exam_page_listening_practice_paper='';var exam_page_sample_practice_paper ='';var exam_page_syllabus_pdfs ='';
+</script>

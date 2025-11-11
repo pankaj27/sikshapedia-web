@@ -1,0 +1,405 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Add news</li>
+		</ol>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">News <?php echo (isset($exam_data))?'[ '.$exam_data->exam_short_name.'- '.$exam_data->exam_full_name.' ]':'';?></h6>
+					<div class="col-md-12">
+						<form id="form_news_add_edit" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+							<input type="hidden" name="_news" id="_news" class="form-control" value="<?php echo (!empty($news_data))?encode_data($news_data->news_id):'';?>">
+							<input type="hidden" name="_news_type" id="_news_type" class="form-control" value="<?php echo (!empty($news_type))?$news_type:'';?>">
+							<input type="hidden" name="_news_type_id" id="_news_type_id" class="form-control" value="<?php echo (!empty($news_type_id))?$news_type_id:'';?>">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">News Category</label>
+										<select class="form-control" name="news_category" id="news_category">
+											<option value="0">Select category</option>
+											<?php
+											if(isset($news_type_id)){
+												?>
+												<option value="3" selected>Exam News</option>
+												<?php
+											}else{
+												?>
+												<option value="1" <?php echo (!empty($news_data) && ($news_data->news_type=='1'))?'selected':'';?>>College News</option>
+												<option value="2" <?php echo (!empty($news_data) && ($news_data->news_type=='2'))?'selected':'';?>>University News</option>
+												<option value="3" <?php echo (!empty($news_data) && ($news_data->news_type=='3'))?'selected':'';?>>Exam News</option>
+												<option value="4" <?php echo (!empty($news_data) && ($news_data->news_type=='4'))?'selected':'';?>>Admission news</option>
+												<?php
+											}
+											?>
+											
+										</select>
+									</div>
+								</div>
+
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">News Country</label>
+										<select class="form-control" name="news_country" id="news_country">
+											<option value="0">Select Country</option>
+											<?php
+											if(!empty($countries)){
+												foreach($countries as $key=>$value){
+													?>
+													<option value="<?php echo encode_data($value->country_id);?>" <?php echo (!empty($news_data) && ($news_data->news_country==$value->country_id))?'selected':'';?>><?php echo $value->country_name;?></option>
+													<?php
+												}
+											}
+											?>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Featured News</label>
+										<select class="form-control" name="news_is_featured" id="news_is_featured">
+											<option value="2" <?php echo (!empty($news_data) && ($news_data->news_is_featured=='2'))?'selected':'';?>>No</option>
+											<option value="1" <?php echo (!empty($news_data) && ($news_data->news_is_featured=='1'))?'selected':'';?>>Yes</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">Publish News</label>
+										<select class="form-control" name="news_publish" id="news_publish">
+											<option value="1" <?php echo (!empty($news_data) && ($news_data->is_published=='1'))?'selected':'';?>>Yes</option>
+											<option value="2" <?php echo (!empty($news_data) && ($news_data->is_published=='2'))?'selected':'';?>>No</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="row" id="category_type_row" style="display:none;">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="control-label" id="category_type_label">College</label>
+										<select class="form-control" name="news_category_type_value" id="news_category_type_value">
+											
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-9">
+									<div class="form-group">
+										<label class="control-label">News Title</label>
+										<input type="text" name="news_title" id="news_title" class="form-control" value="<?php echo (!empty($news_data))?$news_data->news_title:'';?>">
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label class="control-label">News Short Title</label>
+										<input type="text" name="news_short_title" id="news_short_title" class="form-control" value="<?php echo (!empty($news_data))?$news_data->news_short_title:'';?>">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label>News Banner</label>
+										<div class="input-group col-xs-12">
+											<input type="hidden" id="news_banner_image_id" name="news_banner_image_id" value="<?php echo (!empty($news_data))?encode_data($news_data->news_image_banner_id):'';?>">
+											<input type="text" class="form-control file-upload-info" placeholder="Browse Image" id="news_banner_image_url" name="news_banner_image_url" value="<?php echo (!empty($news_data))?$news_data->news_image_banner_url:'';?>">
+											<span class="input-group-append">
+												<button class="file-upload-browse btn btn-primary" data-target="#tinyFileBrowserModal" data-toggle="modal" id="btn_news_banner_image_url" type="button">Browse Image</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<?php
+							if(!empty($news_data) && $news_data->news_image_banner_url!=NULL){
+								?>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label>News Banner Image</label>
+											<div class="input-group col-xs-12">
+												<img src="<?php echo $news_data->news_image_banner_url;?>" class="img-thumbnail">
+											</div>
+										</div>
+									</div>
+								</div>
+								<?php
+							}
+							?>
+							<div class="row">
+								<div  class="row table-responsive" id="heading_rows">
+									<table class="table">
+										<?php $table_row='0';?>
+
+
+										<?php
+										if(!empty($news_detail_data)){
+											foreach ($news_detail_data as $key => $value) {
+												
+												if($value->news_data_type=='general'){
+													?>
+													<tr id="trNews<?php echo $table_row;?>">
+														<td>
+															<div class="form-group row">
+																<div class="col-md-12">
+													            	<label for="system_meta_title">News Detail</label>
+													            	<input type="hidden" name="news_details[<?php echo $table_row;?>][data_type]" value="general">
+													            	<textarea class="form-control news_details" rows="40" name="news_details[<?php echo $table_row;?>][news_content]"><?php echo $value->news_content;?></textarea>
+													          	</div>
+													        </div>
+													        <?php
+													        if($table_row>0){
+													        	?>
+													        	<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull0right" onclick="$('#trNews<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+													        	<?php
+													        }
+													        ?>
+														</td>
+													</tr>
+													<?php
+												}else if($value->news_data_type=='image'){
+													?>
+													<tr id="trNews<?php echo $table_row;?>">
+												        <td>
+													        <div class="form-group row">
+														        <div class="col-md-12">
+														        	<label>Image Data</label>
+														        	<input type="hidden" name="news_details[<?php echo $table_row;?>][data_type]" value="image">
+														        	<input type="hidden" name="news_details[<?php echo $table_row;?>][data_type_value]" value="<?php echo encode_data($value->news_data_image_id);?>">
+														        	<input type="hidden" name="news_details[<?php echo $table_row;?>][news_content]" value="<?php echo $value->news_content;?>">
+														        	<div class="row"><img src="<?php echo $value->news_content;?>" class="img-thumbnail" alt="Cinque Terre"></div>
+														        <div>
+													        </div>
+													        <div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull-right" onclick="$('#trNews<?php echo $table_row;?>').remove()">Delete Row</button></div></div>
+												        </td>
+											        <tr>												
+													<?php
+												}else if($value->news_data_type=='youtube'){
+													?>
+													<tr id="trNews<?php echo $table_row;?>">
+														<td>
+															<div class="form-group row">
+																<div class="col-md-12">
+																	<label>Youtube Video</label>
+																	<input type="hidden" name="news_details[<?php echo $table_row;?>][data_type]" value="youtube">
+																</div>
+															</div>
+														</td>
+													</tr>
+													<?php
+												}
+												$table_row++;
+											}
+										}else{
+											?>
+											<tr id="trNews<?php echo $table_row;?>">
+												<td>
+													<div class="form-group row">
+														<div class="col-md-12">
+											            	<label for="system_meta_title">News Detail</label>
+											            	<input type="hidden" name="news_details[<?php echo $table_row;?>][data_type]" value="general">
+											            	<textarea class="form-control news_details" rows="40" name="news_details[<?php echo $table_row;?>][news_content]"></textarea>
+											          	</div>
+											        </div>
+												</td>
+											</tr>
+											<?php
+										}
+
+										?>
+										
+									</table>
+
+									<script type="text/javascript">var hdr='<?php echo ($table_row==0)?($table_row+1):$table_row;?>';</script>
+								</div>
+
+							<div class="row">
+								<div class="buy-now-wrapper" id="buttons_wrapper">
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" id="btn_add_heading">Add Heading</button>
+									<button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0" data-toggle="modal" data-target="#tinyFileBrowserModal">Add Image</button>
+									<button type="button" class="btn btn-dark btn-icon-text mb-2 mb-md-0" id="btn_add_youtube">Add Youtube Video</button>
+									<button type="submit" class="btn btn-success btn-icon-text mb-2 mb-md-0" id="btn_save_news">Save Data</button>
+								</div>
+							</div>
+
+
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<style type="text/css">
+	.select2-container{
+		width: 100% !important;
+	}
+
+	#news_category_type_value_chosen{
+		width: 100% !important;
+	}
+
+	.table td img {
+	    width: 30% !important;
+	    height: 346px !important;
+	    border-radius: 0% !important; 
+	}
+</style>
+
+<script type="text/javascript">var parent_folder='<?php echo $parent_folder_data->media_disk_name;?>';var news_type='';var news_types_id='<?php echo (isset($news_type_id))?$news_type_id:'';?>';</script>
+
+
+<script type="text/javascript">
+	jQuery(function($) {
+		'use strict';
+
+		tiny_mce('.news_details');
+
+		$(document).on('click','#btn_add_heading',function(){
+        var heading_rows='';
+
+          heading_rows+='<tr id="trNews' + hdr + '">';
+      heading_rows+='<td>';
+        heading_rows+='<div class="form-group row">';
+          heading_rows+='<div class="col-md-12">';
+                  heading_rows+='<label for="system_meta_title">News Detail</label>';
+                  heading_rows+='<input type="hidden" name="news_details['+ hdr +'][data_type]" value="general">';
+                  heading_rows+='<textarea class="form-control news_details" rows="40" name="news_details['+ hdr +'][news_content]"></textarea>';
+                heading_rows+='</div>';
+            heading_rows+='</div>';
+        heading_rows+='<div class="form-group row"><div class="col-md-12"><button type="button" class="btn btn-danger btn-icon-text mb-2 mb-md-0 pull0right" onclick="$(\'#trNews' + hdr + '\').remove()">Delete Row</button></div></div>';
+      heading_rows+='</td>';
+      heading_rows+='</tr>';
+
+        $('#heading_rows tbody').append(heading_rows);
+
+        tiny_mce('.news_details');
+
+        hdr++;
+    });
+
+		function tiny_mce(ctrl_area){
+		    tinymce.init({
+		      selector: ctrl_area,
+		      entity_encoding : "raw",
+		      height: 400,
+		      theme: 'silver',
+		      font_formats:"UbuntuCondensed-Regular;Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats",
+		      plugins: [
+		        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+		        'searchreplace wordcount visualblocks visualchars code fullscreen table',
+		      ],
+		      toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+		      toolbar2: 'forecolor backcolor emoticons | codesample',
+		      table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+		      setup: function(editor) {
+		        // Register our custom button callback function
+		        editor.on('init',function(e) {
+		            //tinyMceEditLink(editor);
+		            tinyMceEditLinkSearch(editor);
+		        });
+
+		      },
+		      table_appearance_options: true,
+		      table_use_colgroups: true
+		    });
+		  }
+
+		function tinyMceEditLinkSearch(editor){
+			  editor.windowManager.oldOpen = editor.windowManager.open;  // save for later
+			    editor.windowManager.open = function (t, r) {    // replace with our own function
+			        var modal = this.oldOpen.apply(this, [t, r]);  // call original
+			        var h='';
+			        h+='<select class="form-control" id="search_form">';
+			        h+='<optgroup label="Exams">';
+			        h+='<option value="exam">Search from exams</option>';
+			        h+='</optgroup>';
+			        h+='<optgroup label="Colleges & Universities">';
+			        h+='<option value="college">Search from college</option>';
+			        h+='<option value="universities">Search from universities</option>';
+			        h+='</optgroup>';
+			        h+='<optgroup label="Streams & Courses">';
+			        h+='<option value="streams">Search from streams</option>';
+			        h+='<option value="courses">Search from course</option>';
+			        h+='</optgroup>';
+			        h+='<optgroup label="Other News">';
+			        h+='<option value="news">Search from news</option>';
+			        h+='</optgroup>';
+			        h+='<optgroup label="Blogs">';
+			        h+='<option value="blogs">Search from blogs</option>';
+			        h+='</optgroup>';
+			        h+='</select>'
+
+			        if (t.title === "Insert/Edit Link") {
+			            $('.tox-form').prepend('<div class="tox-form__group" aria-disabled="false"><label class="tox-label" for="form-field_9522091895521669618487996">Search URL</label><div class="tox-form__controls-h-stack"><div class="tox-control-wrap" aria-disabled="false">'+h+'<div class="tox-control-wrap__status-icon-wrap"><div title="invalid" aria-live="polite" id="aria-invalid_427930829591669618476687" class="tox-icon tox-control-wrap__status-icon-invalid"><svg width="24" height="24" focusable="false"><path d="M19.8 18.3c.2.5.3.9 0 1.2-.1.3-.5.5-1 .5H5.2c-.5 0-.9-.2-1-.5-.3-.3-.2-.7 0-1.2L11 4.7l.5-.5.5-.2c.2 0 .3 0 .5.2.2 0 .3.3.5.5l6.8 13.6zM12 18c.3 0 .5-.1.7-.3.2-.2.3-.4.3-.7a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7c0 .3.1.5.3.7.2.2.4.3.7.3zm.7-3l.3-4a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7l.3 4h1.4z" fill-rule="evenodd"></path></svg></div></div></div></div></div><div class="tox-form__group" aria-disabled="false"><label class="tox-label" for="form-field_9522091895521669618487996">Search URL</label><div class="tox-form__controls-h-stack"><div class="tox-control-wrap" aria-disabled="false"><input type="text" role="combobox" aria-autocomplete="list" aria-haspopup="true" tabindex="-1" class="tox-textfield jAuto" aria-expanded="false" id="search-box"><div id="suggesstion-box"><ul id="search_tag-list"></ul></div><div class="tox-control-wrap__status-icon-wrap"><div title="invalid" aria-live="polite" id="aria-invalid_427930829591669618476687" class="tox-icon tox-control-wrap__status-icon-invalid"><svg width="24" height="24" focusable="false"><path d="M19.8 18.3c.2.5.3.9 0 1.2-.1.3-.5.5-1 .5H5.2c-.5 0-.9-.2-1-.5-.3-.3-.2-.7 0-1.2L11 4.7l.5-.5.5-.2c.2 0 .3 0 .5.2.2 0 .3.3.5.5l6.8 13.6zM12 18c.3 0 .5-.1.7-.3.2-.2.3-.4.3-.7a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7c0 .3.1.5.3.7.2.2.4.3.7.3zm.7-3l.3-4a1 1 0 00-.3-.7 1 1 0 00-.7-.3 1 1 0 00-.7.3 1 1 0 00-.3.7l.3 4h1.4z" fill-rule="evenodd"></path></svg></div></div></div></div></div>'
+			            );
+
+			            $('.tox-dialog__footer-end').prepend(
+			                '<button title="Custom button" type="button" data-alloy-tabstop="true" tabindex="-1" class="tox-button" id="custom_button">Search</button>'
+			            );
+
+			        }
+
+			        return modal; // Template plugin is dependent on this return value
+			    };
+			}
+
+		function load_search_link_list(search_tag,search_from){
+		    var link_html='';
+
+		    $.ajax({
+		          type: "GET",
+		          url: base_url+'/link_list',
+		          data: 'search_from='+search_from+'&search_tag=' + search_tag,
+		          dataType: "json",
+		          beforeSend: function() {
+		              $("#search-box").css("background", "#FFF url("+loader_icon+") no-repeat 165px");
+		          },
+		          success: function(d) {
+		             if(d.link_list!=''){
+		              var dd=JSON.parse(d.link_list);
+		              $.each(dd,function(i,v){
+		                link_html+='<li class="search_list_val" data-link_list="'+v.value+'">'+v.title+'</li>';
+		              });
+		             }
+		              $("#suggesstion-box").show();
+		              $("#search_tag-list").html(link_html);
+		              $("#search-box").css("background", "#FFF");
+		          }
+		      });
+		  }
+
+
+		$('body').on('click','#custom_button',function(){
+		    var search_tag=$('input#search-box').val();
+		    var search_from=$('#search_form :selected').val();
+		    load_search_link_list(search_tag,search_from);
+		});
+
+		$('body').on('click','.search_list_val',function(){
+		    var selected_url=$(this).data('link_list');
+
+		    console.log(selected_url);
+
+		    $('input[type=url]').val(selected_url);
+		    $("#suggesstion-box").hide();
+		});
+	});
+</script>

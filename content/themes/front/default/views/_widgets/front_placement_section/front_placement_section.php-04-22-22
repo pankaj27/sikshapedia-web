@@ -1,0 +1,63 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php
+
+if(!empty($college_placement_intro)){
+  ?>
+  <div class="card infoCard mb-4">
+    <div class="card-header bg-white d-sm-flex justify-content-between align-items-center">
+      <div class="media">
+      <!-- <a href="#" class="mr-3 "><img class="img-circle" src="assets/img/avatar.jpg" width="60" alt=""></a> -->
+      <div class="media-body">
+        <h5 class="mt-0 text-dark"><a href="#" class="text-dark"> About Placement  </a> </h5>
+        
+      </div>
+    </div>
+    <div class="updateDate color2"></div>
+    </div>
+    <div class="card-body readall">
+      <?php echo $college_placement_intro;?>
+    </div>
+  </div>
+  <?php
+}
+
+
+
+
+if(!empty($college_placements)){
+	?>
+
+<div class="card infoCard mb-4">
+    <div class="card-header bg-white">
+      <h5 class="m-0 color2">FREQUENTLY VISITED COMPANIES</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+
+        <?php
+          foreach ($college_placements as $key => $value){
+       ?>
+
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 mt-2">
+          <div class="text-center">
+            <div class="img-thumbnail rounded d-block" style="display: flex;height:130px;justify-content: center;align-items: center;position: relative;">
+              <img class="mx-auto" src="<?php echo $value['company_image'];?>" alt="<?php echo $value['company_name'];?>" style="display: flex;justify-content: center;margin-left: auto;margin-right: auto; width: 60%;vertical-align: middle;">
+              <span class="text-sm font-weight-semi mt-2 pt-5" style="position: absolute;width:100%;bottom:2px;left: 0%;text-align:center;"> <?php echo $value['company_name'];?></span>
+            </div>
+          </div>
+        </div>
+
+        <?php
+        }
+        ?>
+
+      </div>
+    </div>
+</div>
+
+
+	<?php
+}
+
+?>

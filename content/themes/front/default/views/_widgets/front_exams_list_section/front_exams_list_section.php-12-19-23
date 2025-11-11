@@ -1,0 +1,283 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<section class="wayto-2011069378 mx-4">
+	<div class="wayto-2011069378 px-4 mt-12 mb-12">
+      <h1 class="wayto-2011069378 text-60">Explore by Category</h1>
+      <span class="wayto-2011069378 h2 grey-color font-weight-bold">BROWSE 100+ ENTRANCE EXAMS</span>
+   	</div>
+   	<div class="wayto-2011069378 d-flex justify-content-center my-6 flex-wrap">
+   		<?php
+   		 if(!empty($streams)){
+   		 	foreach ($streams as $key => $value){
+   		 		?>
+   		 		
+   		 		<div class="wayto-2011069378 examcategory-container d-flex zoom searchpage-container">
+			        <div class="wayto-2011069378 examcategory-left p-6 position-relative text-center" style="background-color:#0a2435;">
+			            <div class="wayto-2011069378 svg-m">
+			               <a class="wayto-2011069378" href="<?php echo $value['stream_url'];?>">
+			                  <?php echo $value['stream_icon'];?>
+			               </a>
+			            </div>
+			            <h1 class="wayto-2011069378 d-flex justify-content-center text-uppercase "><a class="wayto-2011069378" href="<?php echo $value['stream_url'];?>"  style="color:#fff;"><?php echo $value['stream_name'];?></a></h1>
+			        </div>
+			        <div class="wayto-2011069378 examcategory-right">
+			        	<?php
+			        	if(!empty($value['stream_exams'])){
+			        		foreach ($value['stream_exams'] as $k => $v) {
+			        			?>
+			        			<div class="wayto-2011069378">
+					               <a class="wayto-2011069378 card-body-text" href="<?php echo $v['exam_url'];?>">
+					                  <span class="wayto-2011069378 font-weight-semi"><?php echo $v['exam_short_name'];?></span> <!-- -->-<!-- --> <!-- --><?php echo $v['exam_full_name'];?>
+					               </a>
+					            </div>
+			        			<?php
+			        		}
+			        	}
+			        	?>
+			            
+			            
+			           
+			        </div>
+			    </div>
+   		 		<?php
+   		 	}
+   		 }
+   		?>
+   	</div>
+</section>
+
+<style type="text/css">
+   		 			div.svg-m svg{
+   		 				    height: 110px;
+    						width: 100%;
+   		 			}
+   		 		</style>
+
+<style>
+
+.pl-4, .px-4 {
+    padding-left: 1rem;
+}
+.pr-4, .px-4 {
+    padding-right: 1rem;
+}
+.mb-12, .my-12 {
+    margin-bottom: 3rem;
+}
+.mt-12, .my-12 {
+    margin-top: 3rem;
+}
+.text-60.wayto-2011069378 {
+    font-size: 45px;
+    color: #3b61ad;
+}
+.font-weight-bold, h1.font-weight-bold, h2.font-weight-bold, h3.font-weight-bold, h4.font-weight-bold, h5.font-weight-bold, h6.font-weight-bold, .h1.font-weight-bold, .h2.font-weight-bold, .h3.font-weight-bold, .h4.font-weight-bold, .h5.font-weight-bold, .h6.font-weight-bold {
+    font-weight: 700;
+}
+.grey-color.wayto-2011069378 {
+    color: #a9a9a9;
+}
+/*h2, .h2 {
+    font-size: 1.125rem;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+}*/
+.mb-6, .my-6 {
+    margin-bottom: 1.5rem;
+}
+
+.mt-6, .my-6 {
+    margin-top: 1.5rem;
+}
+.justify-content-center {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.flex-wrap {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+.d-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.zoom.wayto-2011069378:hover {
+    -webkit-transform: scale(1.06);
+    -ms-transform: scale(1.06);
+    transform: scale(1.06);
+}
+.examcategory-container.wayto-2011069378:hover {
+    z-index: 100;
+}
+.zoom.wayto-2011069378 {
+    -webkit-transition: all 0.25s ease 0s;
+    transition: all 0.25s ease 0s;
+}
+.examcategory-container.wayto-2011069378 {
+    border: 1px solid #d6d0d0;
+    width: 49%;
+}
+.zoom.wayto-2011069378 {
+    -webkit-transition: all 0.25s ease 0s;
+    transition: all 0.25s ease 0s;
+}
+.examcategory-container.wayto-2011069378 {
+    border: 1px solid #d6d0d0;
+    width: 49%;
+}
+.examcategory-container.wayto-2011069378 .examcategory-left.wayto-2011069378 {
+    -webkit-flex: 0 0 33.333%;
+    -ms-flex: 0 0 33.333%;
+    flex: 0 0 33.333%;
+}
+.text-center {
+    text-align: center;
+}
+.p-6 {
+    padding: 1.5rem;
+}
+.position-relative {
+    position: relative;
+}
+.examcategory-container.wayto-2011069378 .examcategory-right.wayto-2011069378 {
+    z-index: -1;
+    border-left: 1px solid #d6d0d0;
+}
+.examcategory-right.wayto-2011069378 {
+    padding: 12px 18px;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    background: #f8f8f8;
+    border-left: 1px solid #d6d0d0;
+    min-height: 330px;
+    overflow: hidden;
+    position: relative;
+}
+.svg-m.wayto-2011069378 {
+    height: 140px;
+    width: 140px;
+    margin: 0 auto;
+}
+a {
+    color: #ff7900;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    background-color: transparent;
+}
+.text-uppercase {
+    text-transform: uppercase;
+}
+.justify-content-center {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.examcategory-container.wayto-2011069378 .examcategory-left.wayto-2011069378 h1.wayto-2011069378 a.wayto-2011069378 {
+    color: #fffffff;
+    font-size: 17px;
+    text-align: center;
+}
+.examcategory-container.wayto-2011069378 .examcategory-right.wayto-2011069378 {
+    z-index: -1;
+    border-left: 1px solid #d6d0d0;
+}
+.card-body-text.wayto-2011069378 {
+    display: block;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 23px;
+    color: #6d6d6d;
+}
+
+a {
+    color: #ff7900;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    background-color: transparent;
+}
+.font-weight-semi {
+    font-weight: 600;
+}
+.examcategory-container.wayto-2011069378:hover .examcategory-left.wayto-2011069378 {
+    background: linear-gradient(
+60deg
+,#ffa726,#fb8c00);
+}
+.examcategory-container.wayto-2011069378:hover .examcategory-right.wayto-2011069378 {
+    border-left: 0;
+    background: #0a2435;
+}
+
+.examcategory-container.wayto-2011069378:hover .examcategory-right.wayto-2011069378 button.wayto-2011069378 {
+    color: #fff;
+    background: #ff6c00;
+}
+.examcategory-card-button.wayto-2011069378:hover {
+    -webkit-text-decoration: underline;
+    text-decoration: underline;
+}
+.examcategory-card-button.wayto-2011069378 {
+    outline: none;
+    border: none;
+    background-color: #dadada;
+    font-size: 13px;
+    color: #6d6d6d;
+}
+button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled) {
+    cursor: pointer;
+}
+.pl-2, .px-2 {
+    padding-left: 0.5rem;
+}
+.pr-2, .px-2 {
+    padding-right: 0.5rem;
+}
+.pb-1, .py-1 {
+    padding-bottom: 0.25rem;
+}
+.pt-1, .py-1 {
+    padding-top: 0.25rem;
+}
+.mr-1, .mx-1 {
+    margin-right: 0.25rem;
+}
+button, [type="button"], [type="reset"], [type="submit"] {
+    -webkit-appearance: button;
+}
+button, select {
+    text-transform: none;
+}
+button, input {
+    overflow: visible;
+}
+input, button, select, optgroup, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+button {
+    border-radius: 0;
+}
+
+.examcategory-container.wayto-2011069378:hover .examcategory-right.wayto-2011069378 a.wayto-2011069378, .examcategory-container.wayto-2011069378:hover .examcategory-right.wayto-2011069378 span.wayto-2011069378 {
+    color: #fff;
+}
+
+
+
+
+
+</style>

@@ -1,0 +1,1507 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Colleges List</li>
+		</ol>
+	</nav>
+
+
+	<?php
+	if($userdata->user_role!='1' && !empty($quota)){
+		?>
+		<!-- <div class="row">
+			<div class="col-12 col-xl-12 stretch-card">
+				<div class="row flex-grow alert alert-danger">
+					<strong>Note:If the per day quota is not fullfilled then the amount will not be calculated for that day.</strong>
+				</div>
+			</div>
+		</div> -->
+		<div class="row">
+	        <div class="col-12 col-xl-12 stretch-card">
+	            <div class="row flex-grow">
+	            	
+		            <div class="col-md-3 grid-margin stretch-card">
+		                <div class="card">
+		                  	<div class="card-body">
+			                    <div class="d-flex justify-content-between align-items-baseline">
+			                      <h6 class="card-title mb-0">Upload Quota(Day)</h6>
+			                    </div>
+			                    <div class="row">
+			                      <div class="col-md-12">
+			                        <h3 class="mb-2"><?php echo $quota['quota_to_upload_perday'];?></h3>
+			                        <div class="d-flex align-items-baseline">
+			                          <p class="text-success">
+			                            <span>Quota must be completed</span>
+			                          </p>
+			                        </div>
+			                      </div>
+			                    </div>
+		                  	</div>
+		                </div>
+		            </div>
+	              <div class="col-md-3 grid-margin stretch-card">
+	                <div class="card">
+	                  <div class="card-body">
+	                    <div class="d-flex justify-content-between align-items-baseline">
+	                      <h6 class="card-title mb-0">Total Upload</h6>
+	                    </div>
+	                    <div class="row">
+	                      <div class="col-md-12">
+	                        <h3 class="mb-2"><?php echo $quota['completed'];?></h3>
+	                        <div class="d-flex align-items-baseline">
+	                          <p class="text-success">
+	                            <span><?php echo $quota['today'];?></span>
+	                          </p>
+	                        </div>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="col-md-3 grid-margin stretch-card">
+	                <div class="card">
+	                  <div class="card-body">
+	                    <div class="d-flex justify-content-between align-items-baseline">
+	                      <h6 class="card-title mb-0">Admin Approved</h6>
+	                    </div>
+	                    <div class="row">
+	                      <div class="col-md-12">
+	                        <h3 class="mb-2"><?php echo $quota['approved'];?></h3>
+	                        <div class="d-flex align-items-baseline">
+	                          <p class="text-success">
+	                            <span><?php echo $quota['today'];?></span>
+	                          </p>
+	                        </div>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="col-md-3 grid-margin stretch-card">
+	                <div class="card">
+	                  <div class="card-body">
+	                    <div class="d-flex justify-content-between align-items-baseline">
+	                      <h6 class="card-title mb-0">Admin Not Approved</h6>
+	                    </div>
+	                    <div class="row">
+	                      <div class=" col-md-12">
+	                        <h3 class="mb-2"><?php echo $quota['not_approved'];?></h3>
+	                        <div class="d-flex align-items-baseline">
+	                          <p class="text-danger">
+	                            <span><?php echo $quota['today'];?></span>
+	                          </p>
+	                        </div>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
+	              <div class="col-md-3 grid-margin stretch-card">
+	                <div class="card">
+	                  <div class="card-body">
+	                    <div class="d-flex justify-content-between align-items-baseline">
+	                      <h6 class="card-title mb-0">Earning</h6>
+	                    </div>
+	                    <div class="row">
+	                      <div class="col-md-12">
+	                        <h3 class="mb-2">₹<?php echo $quota['total_earned'];?></h3>
+	                        <div class="d-flex align-items-baseline">
+	                          <p class="text-success">
+	                            <span><?php echo $quota['today'];?></span>
+	                          </p>
+	                        </div>
+	                      </div>
+	                    </div>
+	                  </div>
+	                </div>
+	              </div>
+	            </div>
+	        </div>
+	    </div>
+		<?php
+	}
+	?>
+
+	<?php
+	if($userdata->user_role=='5'){
+		?>
+		<div class="row">
+			<div class="col-md-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h6 class="card-title">Sample College for Reference (Do not change anything in it)</h6>
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<table id="" class="table">
+									<thead>
+				                      <tr>
+				                        <th>#</th>
+				                        <th>Name</th>
+				                        <th>Action</th>
+				                      </tr>
+				                    </thead>
+				                    <tbody>
+				                    <?php
+				                    if(!empty($sample_colleges)){
+				                    	$i=1;
+				                    	foreach ($sample_colleges as $key => $value) {
+				                    		?>
+				                    		<tr>
+				                    			<td><?php echo $i;?></td>
+				                    			<td><?php echo $value['college_name'];?></td>
+				                    			<td><a href="<?php echo $value['college_edit_link'];?>" class="btn btn-sm btn-primary">View</a></td>
+				                    		</tr>
+				                    		<?php
+				                    		$i++;
+				                    	}
+				                    }
+				                    ?>	                    	
+				                    </tbody>
+								</table>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	?>
+	<div class="row">
+		<div class="col-md-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Colleges 
+						<?php
+						//if($dup_count==0){
+							?>
+							<a href="<?php echo $admin_base_url;?>/institutions/colleges/add" class="btn btn-sm btn-primary pull-right" id="btn_add_college">Add</a>
+							<?php
+						//}
+
+						?>
+						 
+
+
+						<?php
+						if($userdata->user_role!='5'){
+							?>
+							<!-- <button class="btn btn-primary" data-toggle="modal" data-target="#collegeImportModal" id>Import</button> -->
+							<?php
+						}
+
+						if($userdata->user_role=='1'){
+							?>
+							<button class="btn btn-primary" id="btn_export_search_data">Export</button>
+							<?php
+						}
+
+						?>
+					</h6>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<h6>Filter By Location,Course,Streams</h6>
+
+							<?php
+							//if($userdata->user_role!='1'){
+								?>
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label>Countries</label>
+											<select class="form-control" id="search_college_country">
+												<option value="0">Select Country</option>
+												<?php
+												foreach ($countries as $key => $value) {
+													?>
+													<option value="<?php echo $value->country_id;?>"><?php echo $value->country_name;?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label>States</label>
+											<select class="form-control" id="search_college_state">
+												<option value="0">Select state</option>
+												<?php
+												if(!empty($states)){
+													foreach ($states as $key => $value) {
+														?>
+														<option value="<?php echo $value->state_id;?>"><?php echo $value->state_name;?></option>
+														<?php
+													}
+												}
+													
+												?>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group">
+											<label>City</label>
+											<select class="form-control" id="search_college_city">
+												<option value="0">Select City</option>
+												?>
+											</select>
+										</div>
+									</div>
+								
+								
+								<?php
+							//}
+
+							?>
+
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">Type</label>
+										<select class="form-control" name="inst_type" id="inst_type">
+											<option value="0">Select Type</option>
+											<?php
+											foreach ($institue_types as $key => $value) {
+												?>
+												<option value="<?php echo $value['inst_type'];?>"><?php echo $value['inst_type_name'];?></option>
+												<?php
+											}
+
+											?>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label">Course Streams</label>
+										<select class="form-control" name="inst_course_streams" id="inst_course_streams">
+											<option value="0">Select Stream</option>
+											<?php
+											foreach ($inst_streams as $key => $value) {
+												?>
+												<option value="<?php echo $value['stream_id'];?>"><?php echo $value['stream_name'];?></option>
+												<?php
+											}
+
+											?>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php
+					if($userdata->user_role=='1'){
+						?>
+						<div class="row">
+							<div class="col-md-12">
+								<h6>Filter By Created User</h6>
+									<div class="row">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label>Operators <span id="total_entry"></span></label>
+												<select class="form-control" id="search_college_operator">
+													<option value="0">Select Operator</option>
+													<?php
+													foreach ($insternal_users as $key => $value) {
+														?>
+														<option value="<?php echo $value->user_id;?>"><?php echo $value->user_fullname;?></option>
+														<?php
+													}
+													?>
+												</select>
+											</div>
+										</div>
+									
+								</div>
+							</div>
+						</div>
+						<?php
+					}
+					?>
+
+					<hr>
+
+					<div class="row">
+						<div class="col-md-12" id="potential_duplicates">
+						</div>
+					</div>						
+							
+					<hr>
+
+					<div class="accordion" id="accordionExample">
+					  <div class="card">
+					    <div class="card-header" id="headingOne">
+					      <h2 class="mb-0">
+					        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					          Top Colleges in Home Page
+					        </button>
+					      </h2>
+					    </div>
+
+					    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					      <div class="card-body">
+					      	<div class="row">
+					      		<div class="col-md-12">
+									<table class="table">
+										<thead>
+											<th>Add New Colleges</th>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<form id="form_top_college_add">
+														<div class="row">
+															<div class="col-md-12">
+																<select class="form-control" name="top_colleges" id="top_colleges">
+																	<option value="0">Select new College</option>
+																	<?php
+																	if(!empty($all_colleges)){
+																		foreach ($all_colleges as $key => $value) {
+																			?>
+																			<option value="<?php echo $value['college_user_id'];?>"><?php echo $value['college_name'];?></option>
+																			<?php
+																		}
+																	}
+																	?>
+																</select>
+															</div>
+														</div>
+														<div class="row" style="margin-top: 10px;">
+															<div class="col-md-12">
+																<input type="text" name="top_college_position" id="top_college_position" class="form-control" placeholder="Position">
+															</div>
+														</div>
+														<div class="row" style="margin-top: 10px;">
+															<div class="col-md-12">
+																<button class="btn btn-xs btn-primary" id="btn_add_college_toplist">Add</button>
+															</div>
+														</div>
+													</form>
+													
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+					      	</div>
+					        <div class="row">
+								<div class="col-md-12">
+									<div class="table-responsive">
+									    
+										<table id="top_college_list_table" class="table">
+											<thead>
+						                      <tr>
+						                      	<th>Data</th>
+						                      	<th>Action</th>
+						                      </tr>
+						                    </thead>
+						                    <tbody>
+						                    <?php
+						                    if(!empty($top_college)){
+						                    	$i=1;
+							                    foreach ($top_college as $key => $value) {
+							                    	?>
+							                    	<tr>
+							                    		<td><?php echo $i;?></td>
+							                    		<td>
+							                    			<div class="col-md-12 grid_margin">
+															  <div class="d-flex align-items-center justify-content-between">
+														        <div class="d-flex align-items-center">
+														          <img class="img-xs rounded-circle" src="<?php echo $value['college_logo'];?>" alt="">
+														          <div class="ms-2">
+														            <p><?php echo $value['college_name'];?></p>
+														          </div>
+														        </div>
+														      </div>
+															</div>
+							                    		</td>
+							                    		<td>
+							                    			<div class="d-flex post-actions">
+													        	<button class="btn btn-xs btn-danger btn_remove_from_top" data-college_id="<?php echo $value['college_user_id'];?>"><i class="fa fa-trash"></i></button>
+													      	</div>
+							                    		</td>
+							                    	</tr>
+							                    	<?php
+
+							                    	$i++;
+							                    }
+						                    }else{
+						                    	?>
+						                    	<tr>
+						                    		<td>No Data found</td>
+						                    	</tr>
+						                    	<?php
+						                    }
+						                    
+						                    ?>                  	
+						                    </tbody>
+										</table>
+									</div>
+								</div>
+								
+							</div>
+					      </div>
+					    </div>
+
+					    <style type="text/css">
+					    	#top_colleges_chosen{
+					    		width:100% !important;
+					    	}
+					    </style>
+					  </div>							  
+					</div>
+
+					<hr>						
+					
+					<?php
+					if($userdata->user_role=='1'){
+						?>
+						<div class="row">
+							<div class="col-md-12">
+								<input type="text" id="selected_colleges_for_search" value="">
+								<button class="btn btn-sm btn-primary" id="btn_update_search_data">Upload College Search Data</button>
+							</div>
+						</div>
+						<?php
+					}
+					?>
+					
+					<div class="row">
+						<div class="table-responsive">
+							<!-- <div>
+						        Toggle column: <a class="toggle-vis" data-column="3">State</a> - <a class="toggle-vis" data-column="4">City</a> - <a class="toggle-vis" data-column="5">Estd. Year</a> - <a class="toggle-vis" data-column="7">Slug</a>
+						    </div> -->
+
+						    
+							<table id="college_list_table" class="table">
+								<thead>
+			                      <tr>
+			                        <th>#
+			                        	<?php
+			                        	if($userdata->user_role=='1'){
+			                        		?>
+			                        		<input type="checkbox" id="include_all_in_search">
+			                        		<?php
+			                        	}
+
+			                        	?>
+			                        </th>
+			                        <th>Name</th>
+			                       <!--  <th>Country</th>
+			                        <th>State</th>
+			                        <th>City</th> -->
+			                        <!-- <th>Estd. Year</th> -->
+			                        <th>Status</th>
+			                        <!-- <th>Slug</th> -->
+			                        <th>Action</th>
+			                      </tr>
+			                    </thead>
+			                    <tbody>		                    	
+			                    </tbody>
+							</table>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		
+
+			
+</div>
+
+<div class="modal fade bd-example-modal-xl" id="collegeImportModal" tabindex="-1" role="dialog" aria-labelledby="collegeImportModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeImportModal">Import Colleges</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="<?php echo ($userdata->user_role=='5')?'form_college_excel_2':'form_college_excel';?>">
+	            <div class="modal-body">	            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<?php
+	            		if($userdata->user_role=='5'){
+	            			?>
+	            			<div class="form-group">
+		            			<div class="alert alert-info">
+		            				<p>
+		            					<ul>
+		            						<li>1.Download sample excel file</li>
+		            						<li>2.Choose a state in India</li>
+		            						<li>3.Choose an University from the University list in the side menu.University must be from the list.</li>
+		            						<li>4.Fill up the excel file & save to a folder of your choice in your computer.</li>
+		            						<li>5.Now browse that excel file you have saved</li>
+		            						<li>6.Click on Upload & the data will be uploaded & populated i the list</li>
+		            						<li>7.Once all the data uploaded then you will be able to fill up other important data of the colleges by editing the college< data./li>
+		            						<li><b>Note 1:</b>If there is any duplicate data or blank data then the data will not be uploaded properly.In excel file rows should not exceeds upto 50 rows.Download the sample file for reference.</li>
+		            						<li><b>Note 2:</b>After importing data you need to complete the all the required data of the colleges like college logo,college banner,college course related data.Data you can grab from Google or <b>https://collegedunia.com/</b>.Just paste and search the name of the college.</li>
+		            						<li><b>Note 3:</b>Do not close or click any where in the form while uploading data.</li>
+		            					</ul>
+		            				</p>
+		            			</div>
+		            		</div>
+		            		<div class="form-group">
+	            				<label>State</label>
+	            				<select class="form-control" name="country_states" id="country_states">
+	            					<option value="0">Select State</option>
+	            					<?php
+	            					if(!empty($country_states)){
+	            						foreach ($country_states as $key => $value) {
+	            							?>
+	            							<option value="<?php echo encode_data($value->state_id);?>"><?php echo $value->state_name;?></option>
+	            							<?php
+	            						}
+	            					}
+	            					?>
+	            				</select>
+		            		</div>
+		            		<div class="form-group">
+	            				<label>University</label>
+	            				<select class="form-control" name="country_universities" id="college_university">
+	            					<option value="0">Select University</option>            					
+	            				</select>
+		            		</div>
+	            			<?php
+	            		}
+	            		?>
+			            		
+	            		<div class="form-group">
+							<label>Select File (Only .xlsx file allowed)</label>
+							<input type="file" name="college_excel" class="file-upload-default">
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Excel File">
+								<span class="input-group-append">									
+									<button class="file-upload-browse btn btn-primary" type="button">Browse</button>
+								</span>
+							</div>
+						</div>
+	            </div>
+	            <div class="modal-footer">
+	            	<?php
+	            	if($userdata->user_role=='5'){
+	            		?>
+	            		<a href="https://waytoadmissions.com/uploads/app/samples/sample_file.xlsx" class="btn btn-success" download>Download Sample File</a>
+	            		<?php
+	            	}
+
+
+	            	if($userdata->user_role=='5'){
+	            		?>
+	            		<button type="submit" class="btn btn-primary" id="btn_import_college_data_preview">Preview</button>
+	            		<button type="submit" class="btn btn-primary" id="btn_import_college" style="display: none;">Upload</button>
+	            		<?php
+	            	}else{
+	            		?>
+	            		<button type="submit" class="btn btn-primary" id="btn_import_college">Upload</button>
+	            		<?php
+	            	}
+	            	?>
+	            	
+	                
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-xl" id="collegeImportPreviewModal" tabindex="-1" role="dialog" aria-labelledby="collegeImportPreviewModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeImportModal">Import Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="collegeQuickUpdateModal" tabindex="-1" role="dialog" aria-labelledby="collegeQuickUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeQuickUpdateModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_quick_upload">
+	            <div class="modal-body">	            	
+            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+            		<input type="hidden" name="_college_id" id="_college_id" value="">
+		            		
+            		<div class="row">
+		            	<div class="col-md-12">
+		            		<div class="form-group">
+								<label>College Name</label>
+								<input type="text" class="form-control" placeholder="College Name" name="college_name" id="college_name">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+		            		<div class="form-group">
+								<label>College Email</label>
+								<input type="text" class="form-control" placeholder="Enter official email" name="college_email" id="college_email">
+							</div>
+						</div>
+						<div class="col-md-3">
+		            		<div class="form-group">
+								<label>College Phone No.</label>
+								<input type="text" class="form-control" placeholder="Enter official phone no." name="college_phone" id="college_phone">
+							</div>
+						</div>
+						<div class="col-md-3">
+		            		<div class="form-group">
+								<label>College Estd. Year</label>
+								<input type="text" class="form-control" placeholder="Enter Estd. Year" name="college_estd" id="college_estd">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="control-label">Pincode</label>
+								<input type="text" class="form-control" placeholder="College pincode" name="college_pincode" value="">
+							</div>
+						</div>
+					</div>
+					<div class="row">							
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Address</label>
+								<textarea class="form-control" rows="3" placeholder="College Address" name="college_address"></textarea>
+							</div>
+						</div>							
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>College Logo</label>
+								<input type="file" name="college_logo" class="file-upload-default">
+								<div class="input-group col-xs-12">
+									<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Logo" value="" id="college_logo_name">
+									<span class="input-group-append">
+										<button class="file-upload-browse btn btn-primary" type="button">Browse Logo</button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>College Banner</label>
+								<input type="file" name="college_banner" class="file-upload-default">
+								<div class="input-group col-xs-12">
+									<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Banner" value="" id="college_banner_name">
+									<span class="input-group-append">
+										<button class="file-upload-browse btn btn-primary" type="button">Browse Banner</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>College is Featured</label>
+								<select class="form-control" name="college_is_featured" id="college_is_featured">
+									<option value="2">No</option>
+									<option value="1">Yes</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>College Visible in Search Result Grid</label>
+								<select class="form-control" name="college_is_visible_in_search" id="college_is_visible_in_search">
+									<option value="1">Yes</option>
+									<option value="2">No</option>									
+								</select>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>College Show in Home Page as Top College</label>
+								<select class="form-control" name="college_is_top_college" id="college_is_top_college">
+									<option value="2">No</option>
+									<option value="1">Yes</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Admin Verified</label>
+								<select class="form-control" name="college_admin_verified" id="college_admin_verified">
+									<option value="2">No</option>
+									<option value="1">Yes</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Has Leads Access</label>
+								<select class="form-control" name="college_has_leads_access" id="college_has_leads_access">
+									<option value="no">No</option>
+									<option value="yes">Yes</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+                                <label>Leads Max</label>
+								<input type="text" class="form-control" name="college_leads_max" id="college_leads_max" value="" disabled="true">
+                            </div>
+                        </div>
+						<div class="col-md-3">
+							<div class="form-group">
+                                <label>Leads Per Day</label>
+								<input type="text" class="form-control" name="college_leads_per_day" id="college_leads_per_day" value="" disabled="true">
+                            </div>
+                        </div>
+						<div class="col-md-3">
+							<div class="form-group">
+                                <label>Leads Start Date</label>
+								<input type="text" class="form-control" name="college_start_date" id="college_start_date" value="" disabled="true">
+                            </div>
+                        </div>
+						<div class="col-md-3">
+							<div class="form-group">
+                                <label>Leads End Date</label>
+								<input type="text" class="form-control" name="college_end_date" id="college_end_date" value="" disabled="true">
+                            </div>
+                        </div>
+						
+					</div>
+	            	
+	            </div>
+	            <div class="modal-footer">	            	
+	                <button type="submit" class="btn btn-primary" id="btn_update_college_quick">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-xl modal-fullscreen" id="collegeReviewModal" tabindex="-1" role="dialog" aria-labelledby="collegeReviewModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeReviewModalTitle">Add Review</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_inst_review_upload">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+            	<input type="hidden" name="_inst_id" id="_inst_id" value="">
+	            <div class="modal-body">	            	
+            		
+
+            		<?php
+					if($userdata->user_role=='1'){
+						?>
+						<div class="row">
+							<div class="col-md-12">
+					    		<div class="form-group">
+									<label>Review as Anonymus</label>
+									<input type="text" class="form-control" placeholder="Heading" name="review_user_name" id="review_user_name" value="">
+								</div>
+							</div>
+						</div>
+						<?php
+					}
+					?>
+							
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label>Set Nice Title</label>
+								<input type="text" class="form-control" placeholder="Heading" name="review_heading" id="review_heading" value="">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Admission Process & Exams info-Rating (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[0][step]" value="step_1">
+								<input type="hidden" name="review_steps[0][question_type]" value="1">
+								<select class="form-control"  name="review_steps[0][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[0][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Course Curriculam & Faculty info-Rating (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[1][step]" value="step_2">
+								<input type="hidden" name="review_steps[1][question_type]" value="2">
+								<select class="form-control" name="review_steps[1][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[1][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Loan & Scholarship Info (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[2][step]" value="step_3">
+								<input type="hidden" name="review_steps[2][question_type]" value="3">
+								<select class="form-control"  name="review_steps[2][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review"  name="review_steps[2][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Fees Structure & Facilities Info-Rating (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[3][step]" value="step_4">
+								<input type="hidden" name="review_steps[3][question_type]" value="4">
+								<select class="form-control"  name="review_steps[3][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[3][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Campus & Social Life Info (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[4][step]" value="step_5">
+								<input type="hidden" name="review_steps[4][question_type]" value="5">
+								<select class="form-control" name="review_steps[4][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[4][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Hostel Facility or Accomodation Info (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[5][step]" value="step_6">
+								<input type="hidden" name="review_steps[5][question_type]" value="6">
+								<select class="form-control"  name="review_steps[5][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[5][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Internship Review (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[6][step]" value="step_7">
+								<input type="hidden" name="review_steps[6][question_type]" value="7">
+								<select class="form-control" name="review_on_internship" name="review_steps[6][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[6][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Campus Placement Info-Rating (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[7][step]" value="step_8">
+								<input type="hidden" name="review_steps[7][question_type]" value="8">
+								<select class="form-control" name="review_steps[7][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[7][answer]"></textarea>
+							</div>
+						</div>
+					</div>				
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Interview Review (minimum 200 charachters required)</label>
+								<input type="hidden" name="review_steps[8][step]" value="step_9">
+								<input type="hidden" name="review_steps[8][question_type]" value="9">
+								<select class="form-control"  name="review_steps[8][rating]" style="margin-bottom:10px;">
+									<?php
+									for ($i=1; $i <=10 ; $i++) { 
+										?>
+										<option value="<?php echo $i;?>"><?php echo $i;?></option>
+										<?php
+									}
+									?>
+								</select>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_steps[8][answer]"></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">College Review (minimum 200 charachters required)</label>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_detail_college"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Remarks (minimum 30 words required)</label>
+								<textarea class="form-control review_detail" rows="3" placeholder="Write your detailed review" name="review_remarks"></textarea>
+							</div>
+						</div>
+					</div>
+
+						            	
+					</div>
+					<div class="row">	            	
+						<button type="submit" class="btn btn-primary" id="btn_update_review">Submit</button>
+					</div>
+
+	            		
+
+            	</div>	
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade bd-example-modal-xl" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="courseModal">Courses Offered</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_courses">
+            	<input type="hidden" name="college" id="college" value="">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+            		<div class="row">
+            			<div class="col-md-12">
+            				<div class="form-group">
+								<select class="form-control" multiple="true" name="course_streams[]" id="college_courses">
+								</select>
+							</div>
+            			</div>
+            		</div>
+            		<!-- <div class="row">
+            			<div class="col-md-12">
+	            			<input type="text" class="form-control" id="search_param_course" placeholder="Search courses" style="border-color: #000000;">
+	            		</div>
+            		</div>
+            		<div class="row" style="padding-top: 20px;"></div>
+            		<div class="row" id="courses_offered_row">
+						
+					</div> -->	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-primary" id="btn_add_courses_to_college" disabled="">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Categories</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_categories">
+            	<input type="hidden" name="college" id="college" value="">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+
+            		<div class="row">
+						
+					</div>	            	
+	            </div>
+	            <div class="modal-footer">
+        			<div class="col-lg-12">
+        				<div class="form-group">
+        					<input type="checkbox" name="college_categories[]" value="0" >
+        					<span>Not Applicable</span>
+        					<button type="submit" class="btn btn-primary" id="btn_add_categories_to_college" style="float: right;" disabled="">Update</button>
+        				</div>
+        			</div>	                
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="featuredCollegeModal" tabindex="-1" role="dialog" aria-labelledby="featuredCollegeModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_courses">
+            	<input type="hidden" name="college" id="college" value="">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<div class="form-group">
+							
+						</div>
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-primary" id="btn_add_courses_to_college" disabled="">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="collegeNewswModal" tabindex="-1" role="dialog" aria-labelledby="collegeNewswModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">College News</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_news">
+            	<input type="hidden" name="cid" id="cid" value="">
+            	<input type="hidden" name="news_type" id="news_type" value="1">
+            	<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            <div class="modal-body">	            	
+            		<div class="row">
+            			<div class="col-md-12">
+            				<div class="form-group">
+								<select class="form-control" multiple="true" name="course_news[]" id="course_news">
+								</select>
+							</div>
+            			</div>
+            		</div>            	
+	            </div>
+	            <div class="modal-footer">
+	            	<a class="btn btn-success" href="<?php echo $admin_base_url;?>/news/add" target="_blank">Add News</a>
+	                <button type="submit" class="btn btn-primary" id="btn_add_news_to_college" disabled="">Update</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-xl" id="collegeBroucherUpdateModal" tabindex="-1" role="dialog" aria-labelledby="collegeBroucherUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeBroucherUpdateModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form id="form_college_broucher_upload">
+	            <div class="modal-body">	            	
+            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+            		<input type="hidden" name="_college_id" id="_college_id" value="">
+		            <input type="hidden" name="_upload_file_type" id="_upload_file_type" value="user_broucher">
+					<div class="row">
+						<div class="col-md-6">
+							<select class="form-control" name="collge_broucher_type" id="collge_broucher_type">
+								<option value="0">Select Broucher Type</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<select class="form-control" name="collge_broucher_year" id="collge_broucher_year">
+								<option value="0">Select Broucher Year</option>
+								<?php
+								for ($i=$broucher_start_year; $i <=$broucher_end_year; $i++) { 
+									?>
+									<option value="<?php echo $i;?>"><?php echo $i;?></option>
+									<?php
+								}
+								?>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="file" name="college_file" class="file-upload-default">
+								<div class="input-group col-xs-12">
+									<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Broucher Snapshot" value="" id="college_broucher_name">
+									<span class="input-group-append">
+										<button class="file-upload-browse btn btn-primary" type="button" id="browse_btn">Browse Broucher Snapshot</button>
+									</span>
+								</div>
+								<label class="error" id="college_file-error"></label>
+							</div>
+						</div>
+					</div>
+
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="alert alert-info">Actual Broucher file needs to be uploaded.For each snapshot upload there is no need to upload Actual Broucher file every time .Only once is required.If the Actual Broucher File needs to be updated then new file can be uploaded.</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<input type="file" name="college_broucher_file" class="file-upload-default">
+								<div class="input-group col-xs-12">
+									<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse Broucher" value="" id="college_broucher_file_name">
+									<span class="input-group-append">
+										<button class="file-upload-browse btn btn-primary" type="button" id="browse_btn">Browse Actual Broucher</button>
+									</span>
+								</div>
+								<label class="error" id="college_broucher_file-error"></label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<button type="submit" class="btn btn-dark" id="btn_update_college_broucher">Update</button>
+							</div>
+						</div>
+					</div>
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <div class="table-responsive" style="width:100%;">
+						<table id="broucher_list_table" class="table">
+							<thead>
+		                      <tr>
+		                        <th>#</th>
+		                        <th>Type</th>
+		                        <th>Year</th>
+		                        <th>Broucher Snapshot</th>
+		                        <th>Broucher</th>
+		                      </tr>
+		                    </thead>
+		                    <tbody>		                    	
+		                    </tbody>
+						</table>
+					</div>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="collegeGallerUpdateModal" tabindex="-1" role="dialog" aria-labelledby="collegeGallerUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeGallerUpdateModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            
+	            <div class="modal-body">
+	            	<form id="form_college_gallery_upload">	            	
+	            		<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+	            		<input type="hidden" name="_college" id="_college_id" value="">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>Select Category</label>
+									<select class="form-control" name="college_gallery_category" id="college_gallery_category">
+										<option value="0">Select Category</option>
+										<?php
+										if(!empty($gallery_types) && !empty($gallery_types)){
+											foreach ($gallery_types as $k => $v) {
+												?>
+												<option value="<?php echo $v->gallery_type_alias;?>"><?php echo $v->gallery_type;?></option>
+												<?php
+											}
+										}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6" id="file_div">
+								<div class="form-group">
+									<label>Gallery File</label>
+									<input type="file" name="college_gallery_image" class="file-upload-default">
+									<div class="input-group col-xs-12">
+										<input type="text" class="form-control file-upload-info" disabled="" placeholder="Browse File" value="" id="college_gallery_image">
+										<span class="input-group-append">
+											<button class="file-upload-browse btn btn-primary" type="button" id="browse_btn">Browse File</button>
+											
+										</span>
+									</div>
+									<label class="error" id="college_file-error"></label>
+								</div>
+							</div>
+							<div class="col-md-6" id="video_div" style="display: none;">
+								<div class="form-group">
+									<label>Gallery File</label>
+									<div class="input-group col-xs-12">
+										<input type="text" class="form-control file-upload-info" placeholder="Paster Youtube Video URL" value="" name="college_gallery_video_link" id="college_gallery_video_link">
+										<span class="input-group-append">
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-dark" id="btn_save_form_gallery">Update</button>
+							</div>
+						</div>
+	            	</form>            	
+	            </div>
+	            <div class="modal-footer">
+	                <div class="table-responsive" style="width:100%;">
+						<table id="college_gallery_list_table2" class="table">
+							<thead>
+		                      <tr>
+		                        <th>#</th>
+		                        <th>Type</th>
+		                        <th>File</th>
+		                        <th>Action</th>
+		                      </tr>
+		                    </thead>
+		                    <tbody>		                    	
+		                    </tbody>
+						</table>
+					</div>
+	            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-xl" id="collegeFilesUpdateModal" tabindex="-1" role="dialog" aria-labelledby="collegeFilesUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeFilesUpdateModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            
+	            <div class="modal-body">
+	            	<form id="form_up_gallery">
+
+	            		<select class="form-control" name="category_name">
+	            			<option value="0">Select</option>
+	            			<option value="1">1</option>
+	            		</select>
+	            		
+	            		<button type="submit" class="btn btn-sm btn-dark" id="btn_save_gallery_file"></button>
+	            	</form>
+	            </div>
+	            <div class="modal-footer">
+	                <div class="table-responsive" style="width:100%;">
+						<table id="college_gallery_list_table" class="table">
+							<thead>
+		                      <tr>
+		                        <th>#</th>
+		                        <th>File Type</th>
+		                        <th>File</th>
+		                        <th>Action</th>
+		                      </tr>
+		                    </thead>
+		                    <tbody>		                    	
+		                    </tbody>
+						</table>
+					</div>
+	            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" id="collegeMenuWidgetsModal" tabindex="-1" role="dialog" aria-labelledby="collegeMenuWidgetsModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collegeMenuWidgetsModal">Add Widgets To Menu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+	#college_courses_chosen{
+		width: 100% !important;
+	}
+
+	#course_news_chosen{
+		width: 100% !important;
+	}
+
+
+	li.search-choice span{
+		background-color: #052b51 !important;
+    	color: #fff !important;
+	}
+
+	.chosen-container-multi .chosen-choices li.search-choice{
+		background-color: #052b51 !important;
+    	color: #fff !important;
+    	border: 1px #052b51 #aaa !important;
+    	background-image: none !important;
+    	background-image: none !important;
+	}
+	.tab-card {
+  border:1px solid #eee;
+}
+
+.tab-card-header {
+  background:none;
+}
+/* Default mode */
+.tab-card-header > .nav-tabs {
+  border: none;
+  margin: 0px;
+}
+.tab-card-header > .nav-tabs > li {
+  margin-right: 2px;
+}
+.tab-card-header > .nav-tabs > li > a {
+  border: 0;
+  border-bottom:2px solid transparent;
+  margin-right: 0;
+  color: #737373;
+  padding: 2px 15px;
+}
+
+.tab-card-header > .nav-tabs > li > a.show {
+    border-bottom:2px solid #007bff;
+    color: #007bff;
+}
+.tab-card-header > .nav-tabs > li > a:hover {
+    color: #007bff;
+}
+
+.tab-card-header > .tab-content {
+  padding-bottom: 0;
+}
+</style>
+
+<script type="text/javascript">let _college='';let country='<?php echo encode_data('99');?>';let colleg_faq_row='';let colleg_placement_faq_row='';let colleg_scholarship_faq_row='';let _ur='';var colleg_ranking_row='';var p_row='';</script>
+
+<script>
+        $(document).ready(function () {
+            // When the "Check All" checkbox is clicked
+            $('#include_all_in_search').click(function () {
+                // Use the .prop() method to set the checked property of all other checkboxes
+                $('.otherCheckbox').prop('checked', this.checked);
+
+                // Create an empty array to store the selected values
+                var selectedValues = [];
+
+                // Iterate over the checkboxes with class "otherCheckbox"
+                $('.otherCheckbox:checked').each(function () {
+                    selectedValues.push($(this).val()); // Add the value to the array
+                });
+
+                // Convert the array to a comma-separated string
+                var selectedValuesString = selectedValues.join(', ');
+
+                // Display the selected values in an alert or any other desired way
+                $("#selected_colleges_for_search").val(selectedValuesString);
+            });
+
+            $('#btn_update_search_data').on('click',function(){
+            	var selected_val=$("#selected_colleges_for_search").val();
+            	if(selected_val!=''){
+            		$.ajax({
+            			type:'POST',
+            			url:base_url+'/seo/college_searchesdata_update',
+            			data:{[csrf_name]:csrf_hash,selected_colleges_for_search:selected_val},
+            			success:function(d){
+            				
+            			}
+	            	});
+            	}	            	
+            });
+
+        });
+    </script>

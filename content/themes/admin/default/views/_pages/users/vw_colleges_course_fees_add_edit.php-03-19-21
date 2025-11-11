@@ -1,0 +1,539 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="page-content">
+	<nav class="page-breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?php echo $admin_base_url;?>/institutions/colleges/add/<?php echo $college_id;?>"><?php echo (!empty($college_data))?'Back to '.$college_data['college_name']:'';?></a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College Course & Fees Data</li>
+		</ol>
+	</nav>
+
+	<div class="profile-page tx-13">
+		<div class="row">
+				<div class="col-md-12 grid-margin stretch-card">
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title"><?php echo (!empty($college_data['college_faculties']))?'Update':'Add';?> College - [ <?php echo (!empty($college_data))?$college_data['college_name']:'';?> ]-[ Course & Fees Data]</h6>
+
+							<form id="form_college_courses_fees">
+								<input type="hidden" class="form-control" name="_college" value="<?php echo (!empty($college_data))?$college_data['college_id']:'';?>">
+								<input type="hidden" name="<?php echo $csrf['name'];?>" value="<?php echo $csrf['hash'];?>">
+								<input type="hidden" name="college_user_course_pk_id" value="<?php echo !empty($college_data['collge_course_pk_id'])?$college_data['collge_course_pk_id']:'';?>">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label>Course Name</label>
+							            	<select class="form-control" id="_course" name="_course" >
+							            		<option value="0">Select Course to Add</option>
+												<?php
+								            	if(!empty($college_data['college_courses'])){
+								            		foreach ($college_data['college_courses'] as $key => $value) {
+								            			?>
+								            			<option value="<?php echo $value['course_id'];?>" <?php echo $value['selected'];?>><?php echo $value['course_name'];?></option>
+								            			<?php
+								            		}
+								            	}
+								            	?>
+							            	</select>								            	
+						            	</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Total Seats</label>
+											<input type="text" class="form-control" name="college_course_seats" placeholder="Seats available" value="<?php echo !empty($college_data['couese_seats'])?$college_data['couese_seats']:'';?>">
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Eligibility</label>
+							            	<input type="text" class="form-control" name="college_course_eligibility" placeholder="Eligibility" value="<?php echo !empty($college_data['college_course_eligibility'])?$college_data['college_course_eligibility']:'';?>">								            	
+						            	</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label>Eligibility Description</label>
+											<textarea class="form-control college_info" name="college_course_eligibility_broad" id="college_course_eligibility_broad" rows="10" >
+												<?php echo !empty($college_data['course_eligibility_desc'])?$college_data['course_eligibility_desc']:'';?>
+											</textarea>
+										</div>
+									</div>
+								</div>
+
+								<h6>Course Duration</h6>
+								<hr>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Course Duration (Years)</label>
+							            	<select class="form-control" id="course_duration" name="course_duration">
+							            		<option value="0">Select Course Duration</option>
+												<?php
+								            	if(!empty($college_data['college_course_duration'])){
+								            		foreach ($college_data['college_course_duration'] as $key => $value) {
+								            			?>
+								            			<option value="<?php echo $value['course_duration_year'];?>" <?php echo $value['selected'];?>><?php echo $value['course_duration_year'];?></option>
+								            			<?php
+								            		}
+								            	}
+								            	?>
+							            	</select>								            	
+						            	</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Course Duration Type</label>
+							            	<select class="form-control" id="course_duration_type" name="course_duration_type" >
+							            		<option value="0">Select Duration Type</option>
+												<?php
+								            	if(!empty($college_data['course_duration_types'])){
+								            		foreach ($college_data['course_duration_types'] as $key => $value) {
+								            			?>
+								            			<option value="<?php echo $value['duration_type'];?>" <?php echo $value['selected'];?>><?php echo $value['duration_type'];?></option>
+								            			<?php
+								            		}
+								            	}
+								            	?>
+							            	</select>							            	
+						            	</div>
+									</div>
+								</div>
+
+								<h6>Others</h6>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label>Course Type</label>
+							            	<select class="form-control" id="course_type" name="course_type" >
+							            		<option value="0">Select Course Type</option>
+												<?php
+								            	if(!empty($college_data['college_course_types'])){
+								            		foreach ($college_data['college_course_types'] as $key => $value) {
+								            			?>
+								            			<option value="<?php echo $value['course_type'];?>" <?php echo $value['selected'];?>><?php echo $value['course_type'];?></option>
+								            			<?php
+								            		}
+								            	}
+								            	?>
+							            	</select>
+								            	
+						            	</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="form-group">
+											<label>Course Pass Type</label>
+							            	<select class="form-control" id="course_pass_type" name="course_pass_type" >
+							            		<option value="0">Select Course Pass Type</option>
+												<?php
+								            	if(!empty($college_data['college_course_pass_types'])){
+								            		foreach ($college_data['college_course_pass_types'] as $key => $value) {
+								            			?>
+								            			<option value="<?php echo $value['course_pass_type'];?>" <?php echo $value['selected'];?>><?php echo $value['course_pass_type'];?></option>
+								            			<?php
+								            		}
+								            	}
+								            	?>
+							            	</select>
+								            	
+						            	</div>
+									</div>
+								
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label>Placement Type</label>
+							            	<select class="form-control" id="course_placement_type" name="course_placement_type" >
+							            		<option value="0">Select Placement Type</option>
+												<?php
+								            	if(!empty($college_data['college_placement_types'])){
+								            		foreach ($college_data['college_placement_types'] as $key => $value) {
+								            			?>
+								            			<option value="<?php echo $value['placement_type'];?>" <?php echo $value['selected'];?>><?php echo $value['placement_type'];?></option>
+								            			<?php
+								            		}
+								            	}
+								            	?>
+							            	</select>	
+						            	</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="form-group">
+											<label>Cost Type</label>
+											<select class="form-control" id="course_cost_type" name="course_cost_type">
+												<?php
+												if(!empty($college_data['course_cost_types'])){
+													foreach ($college_data['course_cost_types'] as $key => $value) {
+														?>
+														<option value="<?php echo $value['cost_key'];?>" <?php echo $value['selected'];?>><?php echo $value['cost_value'];?></option>
+														<?php
+													}
+												}
+												?>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label>Cost Category</label>
+											<br>
+											<?php
+											if(!empty($college_data['course_cost_categories'])){
+												foreach ($college_data['course_cost_categories'] as $key => $value) {
+													?>
+													<input type="checkbox" name="course_cost_categories[]" value="<?php echo $value['category_id'];?>" <?php echo ($value['default_selected']!='')?$value['default_selected']:$value['selected'];?>><span style="padding-left: 10px;"><?php echo $value['category_name'];?></span><br>
+													<?php
+												}
+											}
+											?>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label>Course Cost (In general) <?php echo $college_data['course_cost_type'];?></label>
+											<div class="table-responsive">
+												<?php
+												if(!empty($college_data['course_cost_type']) && $college_data['course_cost_type']=='1'){
+													?>
+													<table class="table" id="course_price_list_table_1">
+														<thead>
+										                    <tr>
+										                        <th>Year</th>
+										                        <th>Total Fees(<?php echo $user_currency;?>)</th>
+										                    </tr>
+										                </thead>
+										                <tbody>
+										                	<?php
+										                	
+										                	$i=1;
+										                	if(!empty($college_data['course_cost'])){
+										                		foreach ($college_data['course_cost'] as $key => $value){
+										                			?>
+										                			<tr>
+															            <td><?php echo $value['user_course_year_ordinal'];?> Year <input type="hidden" name="registration_course_fees[<?php echo $i;?>][course_year]" value="<?php echo $value['user_course_year'];?>"></td>
+															            <td>
+															            <input type="number" class="form-control" min="0" class="" value="<?php echo $value['user_course_total_fee'];?>" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_tution_total]">';
+															            </td>
+														            <tr>
+										                			<?php
+										                			$i++;
+										                		}
+										                	}
+										                	?>
+										                </tbody>
+													</table>
+													<?php
+												}else if(!empty($college_data['course_cost_type']) && $college_data['course_cost_type']=='2'){
+													?>
+													<table class="table" id="course_price_list_table">
+									                    <thead>
+										                    <tr>
+										                        <th>Year</th>
+										                        <th>Tuition Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Admission Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Registration Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Exam Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Other Fees(<?php echo $user_currency;?>)</th>
+										                    </tr>
+										                </thead>
+										                <tbody>
+										                	<?php
+										                	$i=1;
+										                	if(!empty($college_data['course_cost'])){
+										                		foreach ($college_data['course_cost'] as $key => $value) {
+										                			?>
+										                			<tr>
+										                				<td><?php echo $value['user_course_year_ordinal'];?> Year <input type="hidden" name="registration_course_fees[<?php echo $i;?>][course_year]" value="<?php echo $value['user_course_year'];?>"></td>
+										                				<td>
+										                					<table class="table">
+										                						<tbody>
+										                							<tr>
+										                								<td><label>Semester 1</label></br>
+										                								<input type="number" min="0" class="valid" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_tution_fee_sem_1]" value="<?php echo $value['user_course_tution_fee_sem_1'];?>"></td>
+										                							</tr>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 2</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_tution_fee_sem_2]" value="<?php echo $value['user_course_tution_fee_sem_2'];?>">
+										                								</td>
+										                							</tr>
+										                						</tbody>
+										                					</table>
+										                				</td>
+										                				<td>
+										                					<table>
+										                						<tbody>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 1</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_admisssion_fee_sem_1]" value="<?php echo $value['user_course_admisssion_fee_sem_1'];?>">
+										                								</td>
+										                							</tr>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 2</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_admisssion_fee_sem_2]" value="<?php echo $value['user_course_admisssion_fee_sem_2'];?>">
+										                								</td>
+										                							</tr>
+										                						</tbody>
+										                					</table>
+										                				</td>
+										                				<td>
+										                					<table>
+										                						<tbody>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 1</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_reg_fee_sem_1]" value="<?php echo $value['user_course_reg_fee_sem_1'];?>">
+										                								</td>
+										                							</tr>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 2</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_reg_fee_sem_2]" value="<?php echo $value['user_course_reg_fee_sem_2'];?>">
+										                								</td>
+										                							</tr>
+										                						</tbody>
+										                					</table>
+										                				</td>
+										                				<td>
+										                					<table>
+										                						<tbody>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 1</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_exam_fee_sem_1]" value="<?php echo $value['user_course_exam_fee_sem_1'];?>">
+										                								</td>
+										                							</tr>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 2</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_exam_fee_sem_2]" value="<?php echo $value['user_course_exam_fee_sem_2'];?>">
+										                								</td>
+										                							</tr>
+										                						</tbody>
+										                					</table>
+										                				</td>
+										                				<td>
+										                					<table>
+										                						<tbody>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 1</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_other_fee_sem_1]" value="<?php echo $value['user_course_other_fee_sem_1'];?>">
+										                								</td>
+										                							</tr>
+										                							<tr>
+										                								<td>
+										                									<label>Semester 2</label></br>
+										                									<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $i;?>][course_other_fee_sem_2]" value="<?php echo $value['user_course_other_fee_sem_2'];?>">
+										                								</td>
+										                							</tr>
+										                						</tbody>
+										                					</table>
+										                				</td>
+										                			</tr>
+										                			<?php
+										                			$i++;
+										                		}
+											                }											                		
+										                	?>
+										                </tbody>
+									                </table>
+													<?php
+												}else{
+													?>
+													<table class="table" id="course_price_list_table_1" style="display: none;">
+														<thead>
+										                    <tr>
+										                        <th>Year</th>
+										                        <th>Total Fees(<?php echo $user_currency;?>)</th>
+										                    </tr>
+										                </thead>
+										                <tbody>
+										                	
+										                </tbody>
+													</table>
+													<table class="table" id="course_price_list_table">
+									                    <thead>
+										                    <tr>
+										                        <th>Year</th>
+										                        <th>Tuition Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Admission Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Registration Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Exam Fees(<?php echo $user_currency;?>)</th>
+										                        <th>Other Fees(<?php echo $user_currency;?>)</th>
+										                    </tr>
+										                </thead>
+										                <tbody></tbody>
+										            </table>
+													<?php
+												}
+												?>
+								            </div>
+							        	</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Tag Streams</label>
+											<br>
+											<?php
+											if(!empty($college_data['college_streams'])){
+												foreach ($college_data['college_streams'] as $key => $value) {
+													?>
+													<input type="checkbox" name="course_streams[]" value="<?php echo $value['stream_id'];?>" <?php echo $value['selected'];?>><span style="padding-left: 10px;"><?php echo $value['stream_name'];?></span><br>
+													<?php
+												}
+											}
+											?>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Tag Exams</label>
+											<br>
+											<?php
+											if(!empty($college_data['college_exams'])){
+												foreach ($college_data['college_exams'] as $key => $value) {
+													?>
+													<input type="checkbox" name="course_exams[]" value="<?php echo $value['exam_id'];?>" <?php echo $value['selected'];?>><span style="padding-left: 10px;"><?php echo $value['exam_short_name'];?></span><br>
+													<?php
+												}
+											}
+											?>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+							           <button type="submit" class="btn btn-primary" id="btn_save_course">Save</button>
+							        </div>
+							    </div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	let selected_dy_last_val=<?php echo isset($j)?$j:1;?>;
+	let colleg_faq_row ='';
+	let _college='<?php echo (!empty($college_data))?$college_data['college_id']:'';?>';
+
+	let cost_html='';
+	
+	<?php	
+	if(!empty($college_data['course_cost'])){
+		$j=1;
+		foreach ($college_data['course_cost'] as $key => $value) {
+		?>
+		cost_html+='<tr>';
+			cost_html+='<td><?php echo $value['user_course_year_ordinal'];?> Year <input type="hidden" name="registration_course_fees[<?php echo $j;?>][course_year]" value="<?php echo $value['user_course_year'];?>"></td>';
+			cost_html+='<td>';
+				cost_html+='<table class="table">';
+					cost_html+='<tbody>';
+						cost_html+='<tr>';
+							cost_html+='<td><label>Semester 1</label></br>';
+							cost_html+='<input type="number" min="0" class="valid" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_tution_fee_sem_1]" value="<?php echo $value['user_course_tution_fee_sem_1'];?>"></td>';
+						cost_html+='</tr>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 2</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_tution_fee_sem_2]" value="<?php echo $value['user_course_tution_fee_sem_2'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+					cost_html+='</tbody>';
+				cost_html+='</table>';
+			cost_html+='</td>';
+			cost_html+='<td>';
+				cost_html+='<table>';
+					cost_html+='<tbody>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 1</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_admisssion_fee_sem_1]" value="<?php echo $value['user_course_admisssion_fee_sem_1'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 2</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_admisssion_fee_sem_2]" value="<?php echo $value['user_course_admisssion_fee_sem_2'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+					cost_html+='</tbody>';
+				cost_html+='</table>';
+			cost_html+='</td>';
+			cost_html+='<td>';
+				cost_html+='<table>';
+					cost_html+='<tbody>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 1</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_reg_fee_sem_1]" value="<?php echo $value['user_course_reg_fee_sem_1'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 2</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_reg_fee_sem_2]" value="<?php echo $value['user_course_reg_fee_sem_2'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+					cost_html+='</tbody>';
+				cost_html+='</table>';
+			cost_html+='</td>';
+			cost_html+='<td>';
+				cost_html+='<table>';
+					cost_html+='<tbody>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 1</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_exam_fee_sem_1]" value="<?php echo $value['user_course_exam_fee_sem_1'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 2</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_exam_fee_sem_2]" value="<?php echo $value['user_course_exam_fee_sem_2'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+					cost_html+='</tbody>';
+				cost_html+='</table>';
+			cost_html+='</td>';
+			cost_html+='<td>';
+				cost_html+='<table>';
+					cost_html+='<tbody>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 1</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_other_fee_sem_1]" value="<?php echo $value['user_course_other_fee_sem_1'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+						cost_html+='<tr>';
+							cost_html+='<td>';
+								cost_html+='<label>Semester 2</label></br>';
+								cost_html+='<input type="number" min="0" class="" aria-invalid="false" name="registration_course_fees[<?php echo $j;?>][course_other_fee_sem_2]" value="<?php echo $value['user_course_other_fee_sem_2'];?>">';
+							cost_html+='</td>';
+						cost_html+='</tr>';
+					cost_html+='</tbody>';
+				cost_html+='</table>';
+			cost_html+='</td>';
+		cost_html+='</tr>';
+		<?php
+		$j++;
+		}
+	}
+	?>
+
+	
+
+</script>

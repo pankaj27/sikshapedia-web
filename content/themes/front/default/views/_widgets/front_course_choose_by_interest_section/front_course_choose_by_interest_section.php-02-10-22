@@ -1,0 +1,48 @@
+<?php
+if(!empty($streams)){
+  ?>
+  <h4 class="text-center text-uppercase mt-5"> Choose by INTEREST</h4>
+  <p class="text-center mb-4">Waytoadmissions.com is an extensive search engine for the students, parents,and education industry players who are seeking information</p>
+  <div class="row">
+  <?php
+  foreach ($streams as $key => $value) {
+    ?>
+    <style>
+    .icon {
+        display: inline-block;
+        line-height: initial;
+        height: 30PX;
+        width: 35PX;
+    }
+    </style>
+    
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+        <div class="card listStreamsCard mb-3">
+            <div class="card-header">
+                <span class="icon"><?php echo $value['strteam_icon'];?></span>
+                <a href="<?php echo $value['stream_access_url'];?>"><h5 class="text-uppercase m-0"><?php echo $value['stream_name'];?></h5></a>
+            </div>
+            <div class="card-body">
+              <?php
+              if(!empty($stream_degrees[$value['stream_id']])){
+
+                foreach ($stream_degrees[$value['stream_id']] as $k => $v) {
+                  ?>
+                  <a href="<?php echo $v['degree_access_url'];?>" class="btn btn-outline-primary btn-sm mb-1 "><?php echo $v['degree_name'];?> <span class="badge badge-light"></span> </a>
+                  <?php
+                }
+              }
+              ?>
+              <a href="<?php echo $value['stream_access_url'];?>" class="btn btn-primary btn-sm btn-block mt-2">Explore all courses </a>
+            </div>
+          </div>
+    </div>
+    <?php
+  }
+
+  ?>   
+  </div>
+  <?php
+
+}
+?>

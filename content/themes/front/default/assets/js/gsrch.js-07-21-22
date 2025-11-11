@@ -1,0 +1,199 @@
+jQuery(function($) {
+  "use strict";
+
+    var page = 0;
+    var limit=6;
+    var isDataLoading = true;
+    var isLoading = true;
+    var action = 'inactive';
+    
+
+
+
+    $('body').on('click','.coursefilter',function(){
+    var cu=$(this).val();
+    var st=$('.statefilter :selected').val();
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+  });
+
+
+$('body').on('click','.streamfilter',function(){
+    var cu=$(this).val();
+    var st=$('.statefilter :selected').val();
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+  }); 
+  
+
+  $('body').on('click','.statefilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$('html').html()
+
+    //$("#main_content").load(data_url);
+  }); 
+
+
+  $('body').on('click','.cityfilter',function(){
+    var st=$(this).val();
+    var cu=$('.cityfilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+
+   $('body').on('click','.typefilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+   $('body').on('click','.categoryfilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+   $('body').on('click','.affiliationfilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+   $('body').on('click','.agencyfilter',function(){
+    var st=$(this).val();
+    var cu=$('.coursefilter').val();
+    //alert(st)
+    //doScroll(limit,start,_c,st,_ct,_strm,cu,_exam,false);
+
+    var data_url=$(this).attr('data-url');
+    console.log(data_url);
+    window.location.href=data_url;
+
+    //$("#main_content").load(data_url);
+  });
+
+
+   function load_more(page=0) {
+        $.ajax({
+            url:base_url+'filterdata',
+            type: "POST",
+            dataType: "json",
+            data:{csrf_test_name:csrf_hash,_l:limit,_s:page,_c:_c,_st:_st,_ct:_ct,_strm:_strm,_cu:_cu,_exam:_exam,_ctype:_ctype,_appr:_appr,_aff:_aff,_c_cate:_c_cate,_agn:_agn},
+        }).done(function (d) {
+            isLoading = false;
+            if (d.length == 0) {
+                isDataLoading = false;
+               $('#loader').hide();
+               action = 'active';
+                return;
+            }else{
+                $('#loader').hide();
+               $(window).data('ajax_in_progress', false);
+                // if($('#udata_lists').length>0){
+                //     $('#udata_lists').html('');
+                // }
+                $('#udata_lists').append(d.html).show('slow'); 
+                action = 'inactive';
+            }
+               
+            console.log(page);
+        }).fail(function (jqXHR, ajaxOptions, thrownError) {
+            console.log('No response');
+        });
+    }
+
+
+   if($('#udata_lists').length>0){
+    if(action == 'inactive')
+    {
+      action = 'active';
+      load_more(page);
+    }
+   }
+
+
+
+    // $(window).scroll(function(){
+    //   if($(window).scrollTop() + $(window).height() > $("#load_data").height() && action == 'inactive')
+    //   {
+    //     lazzy_loader(limit);
+    //     action = 'active';
+    //     start = start + limit;
+    //     setTimeout(function(){
+    //       load_data(limit, start);
+    //     }, 1000);
+    //   }
+    // });
+
+//$('#footer').offset().top 
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() >=$('#footer').offset().top && action == 'inactive') {
+            $('#loader').show();
+            if ($(window).data('ajax_in_progress') === true)
+            return;
+            if (isLoading == false) {
+                isLoading = true;
+                action = 'active';
+                page=page+limit;
+                if (isDataLoading) {
+                    setTimeout(function(){
+                      load_more(page);
+                    }, 10);
+                }
+            }
+        }
+    });
+
+
+
+
+    
+
+
+
+
+
+});

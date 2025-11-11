@@ -1,0 +1,99 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+
+/**
+ * 
+ */
+class Front_course_choose_by_level_section extends Widget
+{
+	function run($visible = FALSE){
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$slug_1=$this->uri->segment(1,0);
+		$slug_2=$this->uri->segment(2,0);
+
+		$categories=array();
+		$streams=array();
+
+		// if((is_string($slug_1) && $slug_1!='0') && (is_string($slug_2) && $slug_2=='courses')){
+		if((is_string($slug_1) && $slug_1=='courses')){
+
+			//$country=$this->com->get_country(array('country_iso_code_2'=>strtoupper($slug_1)));
+
+			$course_categories=$this->strm->get_stream_category(array('stream_category_status'=>'1','slug_type'=>'8'),FALSE,null,'ASC');
+
+			if(!empty($course_categories)){
+				foreach ($course_categories as $key => $value) {
+
+					$course_back_img=$this->sm->get_user_file(array('user_file_type_id'=>$value->course_category_id,'user_storage_type'=>'course_category_image'));
+
+					if(!empty($course_back_img) && !empty($course_back_img->media_disk_path_relative)){
+	                    $category_image=$course_back_img->media_disk_path_relative;
+	                }else{
+	                    $category_image=base_url().'uploads/app/default/pageBnr.jpg';
+	                }	                
+
+
+					$_categories[]=array(
+						'category_id'=>$value->stream_category_id,
+						'category_name'=>$value->stream_category,
+						'category_show_name'=>$value->stream_category_show_name,
+						'category_desc'=>$value->stream_category_description,
+						'category_image'=>$category_image,
+						'category_slug'=>$value->slug_value,
+						'category_access_url'=>base_url('courses/'.$value->slug_value)						
+					);
+				}
+
+				//print_obj($_categories);die;
+
+				if(!empty($_categories)){
+					$categories=array_chunk($_categories, 3);
+
+					if(count($categories)<=2){
+						$course_ads[]=array(
+							'ads_link'=>'https://paruluniversity.ac.in/landingpage/2021/pu-admissions/?utm_source=collegedunia&amp;utm_type=bann&amp;utm_campaign=Parul2021',
+							'ads_image'=>'https://images.static-collegedunia.com//public/image/client_images_new/B_ParulUniversityGenericDS_S_27_120210128144856.png'
+						);
+					}
+
+					array_splice( $categories, 1, 0, $course_ads );
+
+					//array_push($course_ads,$categories);
+				}
+
+				if(!empty($_categories)){
+					foreach ($_categories as $key => $value) {
+						$_streams=$this->strm->get_inset_stream('stream_category',$value['category_id']);
+
+		                if(!empty($_streams)){
+		                	foreach ($_streams as $k => $v) {
+		                		$stream_course_count=$this->strm->get_total_courses(array('course_stream'=>$v->stream_id));
+
+		                		$stream_slug=$this->sm->get_slug(array('slug_type'=>'3','slug_type_id'=>$v->stream_id));
+
+		                		$streams[$value['category_id']][]=array(
+		                			'stream_name'=>$v->stream_name,
+		                			'stream_course_count'=>$stream_course_count,
+		                			'stream_access_url'=>base_url('courses/'.$value['category_slug'].'/'.$stream_slug->slug_value)
+		                		);
+		                	}
+		                
+		                	array_unique($streams, SORT_REGULAR);
+		                }
+					}					
+				}
+			}
+	
+		}
+
+		//print_obj($streams);die;
+
+
+		$data['course_categories']=$categories;
+		$data['category_streams']=$streams;
+
+		if ($visible) $this->render('front_course_choose_by_level_section',$data);
+	}
+}

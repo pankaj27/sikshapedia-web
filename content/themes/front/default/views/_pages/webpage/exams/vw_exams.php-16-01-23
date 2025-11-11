@@ -1,0 +1,105 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<div class="examSearchWrapper">
+    <section class="examBnrSec overlayBnr">
+      <img src="https://static.waytoadmissions.com/data/app/app_data/notebook.webp" class="examBnrImg">
+      <div class="eaxmBannerContent">
+          <div class="wrapper">
+              
+              <div class="searchPanelBox">
+                  <h2 class="boxTitle text-white text-center mb-3"><strong>Entrance Exams</strong> In <?php echo $default_country_data->country_name;?></h2>
+                  <button id="examSearchClose">
+                    <svg version="1.1" class="closeSvg"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 409.806 409.806"  xml:space="preserve">
+                      <path d="M228.929,205.01L404.596,29.343c6.78-6.548,6.968-17.352,0.42-24.132c-6.548-6.78-17.352-6.968-24.132-0.42
+                        c-0.142,0.137-0.282,0.277-0.42,0.42L204.796,180.878L29.129,5.21c-6.78-6.548-17.584-6.36-24.132,0.42
+                        c-6.388,6.614-6.388,17.099,0,23.713L180.664,205.01L4.997,380.677c-6.663,6.664-6.663,17.468,0,24.132
+                        c6.664,6.662,17.468,6.662,24.132,0l175.667-175.667l175.667,175.667c6.78,6.548,17.584,6.36,24.132-0.42
+                        c6.387-6.614,6.387-17.099,0-23.712L228.929,205.01z"/>
+                    </svg>
+                  </button>
+                  <form>
+                      <div class="searchPanel" id="examSearch">                
+                          <div class="searchBox"><input type="text" class="keyword" placeholder="Search Entrance Exams" autocomplete="off" id="search_exams"><span class="searchIcon"><svg style="margin-left:18px;" width="20" height="19" viewBox="0 0 20 19" xmlns="http://www.w3.org/2000/svg"><path d="M18.889 17.313l-4.844-4.845a7.223 7.223 0 001.596-4.536 7.265 7.265 0 10-7.265 7.264 7.223 7.223 0 004.537-1.596l4.844 4.844 1.132-1.13zM8.317 13.881a6.008 6.008 0 110-12.015 6.008 6.008 0 010 12.015z" stroke-width="0.889" fill-rule="evenodd"></path></svg></span></div>
+                      </div>
+                  </form>
+              </div>
+                 
+               <?php $this->widget->run('front_exam_upcomming_section',TRUE);?>
+
+              <div class="searchCategorySec">
+
+                <div class="jsx-4201486923 jsx-2011069378 jsx-3155908256 position-relative pr-5  search-div ">
+                    <ul class="jsx-4201486923 jsx-2011069378 jsx-3155908256 search-ul px-5 mb-5" id="ul_exam_list">
+                    
+                   </ul>
+
+                   <h5 class="mb-3">POPULAR EXAMS</h5>
+                <div class="btnGroup mb-3">
+                  <a href="#" class="btn btn-light btn-sm "> National Eligibility Cum Entrance Test  </a>
+                  <a href="#" class="btn btn-light btn-sm "> National Eligibility Cum Entrance Test  </a>
+                  <a href="#" class="btn btn-light btn-sm "> National Eligibility Cum Entrance Test  </a>
+                  <a href="#" class="btn btn-light btn-sm "> National Eligibility Cum Entrance Test  </a>
+                  <a href="#" class="btn btn-light btn-sm "> National Eligibility Cum Entrance Test  </a>
+                </div>
+                <h5 class="mb-3">SEARCH BY STREAM</h5>
+                <div class="btnGroup">
+                  <a href="#" class="btn btn-light btn-sm "> Engineering <span class="badge badge-primary">4</span> </a>
+                  <a href="#" class="btn btn-light btn-sm "> Engineering <span class="badge badge-primary">4</span> </a>
+                  <a href="#" class="btn btn-light btn-sm "> Engineering <span class="badge badge-primary">4</span> </a>
+                  <a href="#" class="btn btn-light btn-sm "> Engineering <span class="badge badge-primary">4</span> </a>
+                  <a href="#" class="btn btn-light btn-sm "> Engineering <span class="badge badge-primary">4</span> </a>
+                </div>
+              </div>
+                </div>
+
+
+                
+
+
+          </div>
+      </div>
+    </section>
+    <?php $this->widget->run('front_exams_list_section',TRUE);?>
+
+   
+</div><!-- //examSearchWrapper -->
+
+ <?php $this->widget->run('front_subscription_section',TRUE);?>
+<style type="text/css">
+    .exam-logo.jsx-2566320323 {
+        height: 80px;
+        width: 80px;
+        max-width: 80px;
+        background: rgb(58 58 60);
+        vertical-align: middle;
+        overflow: hidden;
+    }
+
+    .title-container.jsx-2566320323 {
+        overflow-wrap: break-word;
+        padding-right: 120px;
+    }
+    a.jsx-2566320323 {
+        text-decoration: none;
+    }
+    .text-sidebar-heading {
+        color: #4d586c;
+    }
+    .exam-stream.jsx-2566320323, .exam-course-link.jsx-2566320323 {
+        font-size: 15px;
+        color: rgb(59, 97, 173) !important;
+    }
+    a.jsx-2566320323 {
+        text-decoration: none;
+    }
+    .title-container.jsx-2566320323 {
+        overflow-wrap: break-word;
+        padding-right: 120px;
+    }
+</style>
+
+<script type="text/javascript">
+    var wbpage='exam_page';
+    var page='exam_page';
+    var _vtype='';
+</script>

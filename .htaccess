@@ -1,0 +1,76 @@
+Options +FollowSymLinks
+Options -Indexes
+DirectoryIndex s0l90pk450s.php
+RewriteEngine on
+
+
+# Exclude certain directories from rewrite rules
+RewriteRule ^(system|application|uploads|vendor|\.git|\.svn|\.hg) - [L]
+
+# Caching policy for static files
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Set expiration for image files
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+
+    # Set expiration for CSS and JavaScript files
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+
+    # Set expiration for font files
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+
+    # Set expiration for other static files
+    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
+
+# Enable caching via headers
+<IfModule mod_headers.c>
+    # Enable ETag header
+    Header unset ETag
+    FileETag None
+
+    # Cache-Control headers for static files
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg|css|js|woff|woff2|ttf|otf|pdf|webp)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    
+    # Cache-Control for HTML (adjust if needed for dynamic content)
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "max-age=3600, public, must-revalidate"
+    </FilesMatch>
+
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+
+# Main rewrite rules
+RewriteCond $1 !^(s0l90pk450s\.php|images|robots\.txt|css|js|fonts|uploads|vendor)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ s0l90pk450s.php/$1 [L,QSA]
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW HOTLINKID:YDn3QZ6mfu
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?sikshapedia.com/.*$      [NC]
+RewriteRule .*\.(mpg|wma|exe|php|mp3|zip|txt|rar|html)$ https://sikshapedia.com [R,NC]
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE YDn3QZ6mfu:HOTLINKID
+

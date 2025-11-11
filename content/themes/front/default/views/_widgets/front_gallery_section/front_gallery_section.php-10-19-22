@@ -1,0 +1,32 @@
+<?php
+
+if(!empty($gallery_data)){
+  foreach ($gallery_data as $key => $value) {
+    if(!empty($value['gallery_files'])){
+    ?>
+    <div class="card imageCard mb-4">
+      <div class="card-header bg-white">
+        <h5 class="m-0 color2"> <?php echo $value['gallery_type'];?></h5>
+      </div>
+      <div class="card-body">
+        <div class="row form-row">
+          <?php
+          
+            foreach ($value['gallery_files'] as $k => $v) {
+              ?>
+              <div class="col-6 col-sm-4 col-md-3 mb-2">
+                <a href="<?php echo $v['storage_file'];?>" data-fancybox="events" class="imgBox h-150"><img class="img-thumbnail" src="<?php echo $v['storage_file'];?>" style="height:150px !important;"  draggable="false"></a>
+              </div>
+              <?php
+            }
+          
+          ?>
+        </div>
+      </div>
+    </div>
+    <?php
+    }
+  }
+}
+
+?>

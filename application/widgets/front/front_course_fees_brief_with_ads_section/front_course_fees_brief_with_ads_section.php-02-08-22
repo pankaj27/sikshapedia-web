@@ -1,0 +1,226 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * 
+ */
+class Front_course_fees_brief_with_ads_section extends Widget
+{
+	function run($visible = FALSE){
+		$this->front_theme='default';
+    	$this->get_type(2);
+
+    	$segment_1=$this->uri->segment(1,0); //country
+        $segment_2=$this->uri->segment(2,0); //college,university url
+        $segment_3=$this->uri->segment(3,0); //inner menues
+        $segment_4=$this->uri->segment(4,0);//city
+
+        //echo $visible;die;
+
+        if($visible=='1'){
+        	$visible=TRUE;
+        }
+
+        $course_fees_data=array();
+        $college_data=array();
+        $course_stream_details=array();
+
+        if((is_string($segment_1) && $segment_1!='0') && (is_string($segment_2) && $segment_2!='0') || (is_string($segment_3) && $segment_3!='0')){
+
+            $country_data=$this->com->get_country(array('country_iso_code_2'=>$segment_1));
+
+            if(!empty($country_data)){
+                $slug_found=$this->sm->get_slug(array('slug_value'=>$segment_2));
+
+                // print_obj($slug_found);die;
+
+                if(!empty($slug_found)){
+                    $slug_type=$slug_found->slug_type;
+                    $slug_type_id=$slug_found->slug_type_id;
+                    $slug_value=$slug_found->slug_value;
+
+                    if($slug_type=='6'){//University
+
+                    }else if($slug_type=='7'){//College
+                        $_college_data=$this->im->get_college_profile_data(array('college_user_id'=>$slug_type_id));
+
+                        //print_obj($_college_data);die;
+
+                        if(!empty($_college_data)){
+                            $college_data=array(
+                                'college_name'=>strtoupper($_college_data->college_name)
+                            );
+
+                           
+
+                            //echo $currency;die;
+                            //print_obj($college_data);die;
+
+                            $param=array(
+                                'order'=>array('user_course_id' => 'ASC'),
+                                'user_type'=>'4',
+                                'user_id'=>$slug_type_id
+                            );
+
+                            $_course_fees_data = $this->im->_get_users_courses(null,$param,FALSE,FALSE);
+
+                            if(!empty($_course_fees_data)){
+
+                                // foreach ($_course_fees_data as $key => $value) {
+                                //     $course_duration_type[]=$value->user_course_duration_type;
+                                // }
+
+                                // print_obj(array_unique($course_duration_type));die;
+
+                                //print_obj($_course_fees_data);die;
+
+                                $exam_data=array();
+
+                                foreach ($_course_fees_data as $key => $value){
+                                    $user_courses_exams=$this->strm->get_user_courses_exam(array('user_id'=>$slug_type_id,'course_id'=>$value->user_course,'user_type'=>'4'),FALSE);
+
+                                    if(!empty($user_courses_exams)){
+                                        foreach ($user_courses_exams as $ke => $vx) {
+                                            $exam_data[$value->user_course][]='<a href="javascript:void(0);">'.$vx->exam_name.'</a>';
+                                        }
+                                    }
+
+                                    $user_course_streams=$this->strm->get_user_course_stream(array('user_id'=>$slug_type_id,'course_id'=>$value->user_course_id,'user_type'=>'4'),FALSE);
+
+                                    //print_obj($user_course_streams);die;
+
+                                    $total_streams=count($user_course_streams);
+
+                                    if(!empty($user_course_streams)){
+                                        foreach ($user_course_streams as $ke => $vx) {
+                                            $stream_data[$value->user_course][]='<a href="javascript:void(0);">'.$vx->stream_name.'</a>';
+                                        }
+                                    }
+
+                                    if($value->course_is_lateral=='1'){
+                                        $course_short_name=strtoupper($value->course_short_name).'{Lateral}';
+                                    }else{
+                                        $course_short_name=strtoupper($value->course_short_name);
+                                    }
+
+                                    $course_formatted_name=strtoupper($value->course_name).' ['.$course_short_name.']';
+
+                                    if($value->user_course_cost_breakup_type=='1'){
+                                        $cost_data=$this->im->get_course_fees_data(array('user_course_cost_category'=>'GENERAL','user_id'=>$slug_type_id,'user_course_id'=>$value->user_course,'user_course_year'=>'1'));
+                                        $total_cost=sprintf('%0.2f',$cost_data->user_course_total_fee);
+
+                                        if($cost_data->user_course_total_fee>0){
+                                            if($college_user_data->currency_symbol_left!=''){
+                                                $course_cost=$college_user_data->currency_symbol_left.$total_cost;
+                                            }else if($college_user_data->currency_symbol_left==''){
+                                                $course_cost='₹'.$total_cost;
+                                            }
+                                            else if($college_user_data->currency_symbol_right!=''){
+                                                $course_cost=$total_cost.$college_user_data->currency_symbol_right;
+                                            }else if($college_user_data->currency_symbol_right==''){
+                                                $course_cost=$total_cost.'₹';
+                                            }
+
+                                            $_course_cost=$course_cost;
+                                            $course_cost_for='(1st Year Fees)';
+                                        }else{
+                                            $_course_cost=' Not Specified';
+                                            $course_cost_for='';
+                                        }                                       
+                                    }else if($value->user_course_cost_breakup_type=='2'){
+
+                                        $cost_data=$this->im->get_user_course_grand_total(array('user_id'=>$slug_type_id,'user_course_cost_category'=>'GENERAL','user_course_id'=>$value->user_course));
+                                        $total_cost=sprintf('%0.2f',$cost_data[0]->total_cost);                                      
+
+                                        if($cost_data[0]->total_cost>0){
+                                            if($college_user_data->currency_symbol_left!=''){
+                                                $course_cost=$college_user_data->currency_symbol_left.$total_cost;
+                                            }else if($college_user_data->currency_symbol_left==''){
+                                                $course_cost='₹'.$total_cost;
+                                            }
+                                            else if($college_user_data->currency_symbol_right!=''){
+                                                $course_cost=$total_cost.$college_user_data->currency_symbol_right;
+                                            }else if($college_user_data->currency_symbol_right==''){
+                                                $course_cost=$total_cost.'₹';
+                                            }
+
+                                            $_course_cost=$course_cost;
+                                            $course_for='(Total Fees)';
+                                        }else{
+                                            $_course_cost=' Not Specified';
+                                            $course_cost_for='';
+                                        }                                   
+                                    }else{
+                                        $cost_data=$this->im->get_course_fees_data(array('user_course_cost_category'=>'GENERAL','user_id'=>$slug_type_id,'user_course_id'=>$value->user_course,'user_course_year'=>'1'));
+                                        $total_cost=sprintf('%0.2f',$cost_data->user_course_total_fee);
+                                        
+
+                                        if($cost_data->user_course_total_fee>0){
+                                            if($college_user_data->currency_symbol_left!=''){
+                                                $course_cost=$college_user_data->currency_symbol_left.$total_cost;
+                                            }else if($college_user_data->currency_symbol_left==''){
+                                                $course_cost='₹'.$total_cost;
+                                            }
+                                            else if($college_user_data->currency_symbol_right!=''){
+                                                $course_cost=$total_cost.$college_user_data->currency_symbol_right;
+                                            }else if($college_user_data->currency_symbol_right==''){
+                                                $course_cost=$total_cost.'₹';
+                                            }
+
+                                            $_course_cost=$course_cost;
+                                            $course_cost_for='(1st Year Fees)';
+                                        }else{
+                                            $_course_cost=' Not Specified';
+                                            $course_cost_for='';
+                                        }
+                                    }
+
+                                    //echo $_course_cost.'<br>';
+
+                                    if(!empty($exam_data)){
+                                        $_exams_accepted=char_separated($exam_data[$value->user_course],' | ');
+                                    }else{
+                                        $_exams_accepted='';
+                                    }
+
+                                    if(!empty($stream_data)){
+                                        $_stream_data=char_separated($stream_data[$value->user_course],' | ');
+                                    }
+
+
+                                    $course_fees_data[]=array(
+                                        'course_full_name'=>strtoupper($value->course_name),
+                                        'course_short_name'=>$course_short_name,
+                                        'course_formatted_name'=>$course_formatted_name,
+                                        'course_type'=>strtoupper($value->user_course_type),
+                                        'course_pass_type'=>strtoupper($value->user_course_pass_type),
+                                        'course_placement'=>strtoupper($value->user_course_placement_type),
+                                        'course_duration'=>($value->user_course_duration_year!='')?$value->user_course_duration_year.' YEARS':'',
+                                        'course_duration_type'=>strtoupper($value->user_course_duration_type),
+                                        'course_fees_1st_tear'=>$_course_cost,
+                                        'course_cost_for'=>$course_cost_for,
+                                        'course_eligibility'=>$value->user_course_eligibility,
+                                        'course_exams_accepted'=>$_exams_accepted,
+                                        'course_total_streams'=>$total_streams,
+                                        'course_streams'=>$_stream_data,
+                                        'course_link'=>base_url().strtolower($country_data->country_iso_code_2).'/'.$slug_value.'/courses-fees/'.url_slug(strtolower($value->course_name))
+                                    );
+                                }
+
+                               //die;
+
+                                //print_obj($course_fees_data);die;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $data['course_fees_data']=$course_fees_data;
+        $data['college_data']=$college_data;
+
+        //print_obj($data['college_data']);die;
+
+        if ($visible) $this->render('front_course_fees_brief_with_ads_section',$data);
+	}
+}

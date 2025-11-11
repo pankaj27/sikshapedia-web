@@ -1,0 +1,31 @@
+
+<section class="commonSec topExmSec bg-white">
+    <div class="wrapper">
+      <div class="section-title">
+        <h2>Top Courses</h2>
+      </div>
+      <div class="btnGroup text-center">
+      <a href="#" class="btn btn-outline-primary">BE</a>
+      <a href="#" class="btn btn-outline-primary">B.Tech</a>
+      <a href="#" class="btn btn-outline-primary">MBBS</a>
+      <a href="#" class="btn btn-outline-primary">B.Sc</a>
+      <a href="#" class="btn btn-outline-primary">B.Com</a>
+      <a href="#" class="btn btn-outline-primary">B.A</a>
+      <a href="#" class="btn btn-outline-primary">MBA/PGDM</a>
+      <a href="#" class="btn btn-outline-primary">M.Sc</a>
+      <a href="#" class="btn btn-outline-primary">LLB</a>
+      <a href="#" class="btn btn-outline-primary">B.Ed</a>
+      <a href="#" class="btn btn-outline-primary">B.Sc(Agriculture)</a>
+      <a href="#" class="btn btn-outline-primary">B.Pharm</a>
+      <a href="#" class="btn btn-outline-primary">BBA/BBM</a>
+      <a href="#" class="btn btn-outline-primary">BCA</a>
+      <a href="#" class="btn btn-outline-primary">ME</a>
+      <a href="#" class="btn btn-outline-primary">M.Tech</a>
+      <a href="#" class="btn btn-outline-primary">M.A</a>
+      <a href="#" class="btn btn-outline-primary">B.Arch</a>
+      <a href="#" class="btn btn-outline-primary">MCA</a>
+      <a href="#" class="btn btn-outline-primary">B.Sc(Nursing)</a>
+      </div>
+
+    </div>
+  </section>

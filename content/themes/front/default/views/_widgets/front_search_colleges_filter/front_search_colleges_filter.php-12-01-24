@@ -1,0 +1,230 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<div class="isa-filter">
+  <div class="forlerForm">
+  
+        <!-- <div class="isa-filter-block">
+            <h4>Search</h4>
+            <div class="isa-filter-content">
+                <input type="search" placeholder="Search">
+            </div>
+        </div> 
+        <div class="isa-filter-block">
+          <h4>Selected Filter</h4>
+          <div class="isa-filter-content nicescroll">
+            <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+            <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+            <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+            <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+            <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+            <a href="#" class="btn btn-sm btn-outline-primary">Selected <span class="badge badge-light"><i class="fas fa-times"></i></span> </a>
+          </div> 
+        </div> -->
+
+        <div class="isa-filter-block">
+            <h4>State</h4>
+            <ul class="isa-filter-content list nicescroll">
+              <?php
+
+              if(!empty($country_states)){
+                foreach ($country_states as $key => $value) {
+                  ?>
+                  <li>
+                    <input class="filter statefilter" type="radio" name="state" id="radio<?php echo $value['state_id'];?>" value="<?php echo $value['state_id'];?>" data-sname="<?php echo $value['state_name_slug'];?>" data-ty="states" <?php echo $value['state_selected'];?> data-url="<?php echo $value['url_slug'];?>">
+                    <label class="checkbox-label filter_state_label" for="radio<?php echo $value['state_id'];?>"><?php echo $value['state_name'];?></label>
+                  </li>
+                  <?php
+                }
+              }
+
+              ?>
+            </ul> 
+        </div>
+
+  
+        <?php
+
+        if(!empty($country_cities)){
+          ?>
+          <div class="isa-filter-block">
+            <h4>City</h4>
+            <ul class="isa-filter-content list nicescroll" id="city_list">
+          
+          <?php
+
+          foreach ($country_cities as $key => $value) {
+            ?>
+            <li>
+              <input class="filter cityfilter" type="radio" name="cities" id="radio<?php echo $value['city_id'];?>" value="<?php echo $value['city_id'];?>" <?php echo $value['city_selected'];?> data-url="<?php echo $value['url_slug'];?>">
+              <label class="checkbox-label" for="radio<?php echo $value['city_id'];?>"><?php echo $value['city_name'];?></label>
+            </li>
+            <?php
+          }
+          ?>
+          </ul>
+        </div>
+          <?php
+
+        }
+
+        ?>
+            
+
+      
+        
+
+        <?php
+        if(!empty($course_streams)){
+          ?>
+          <div class="isa-filter-block">
+            <h4>Streams</h4>
+            <ul class="isa-filter-content list nicescroll">
+            <?php
+            foreach ($course_streams as $key => $value) {
+              ?>
+              <li>
+                <input class="filter streamfilter" type="radio" name="stream" id="radio<?php echo $value['stream_id'];?>" value="<?php echo $value['stream_id'];?>" <?php echo $value['stream_selected'];?> data-url="<?php echo $value['url_slug'];?>">
+                <label class="checkbox-label" for="radio<?php echo $value['stream_id'];?>" data-ty="stream" data-ctrl="radio"><?php echo $value['stream_name'];?></label>
+              </li>
+              <?php
+            }
+            ?>
+            </ul>
+          </div>
+          <?php
+        }
+
+        ?>
+
+        
+
+
+        <div class="isa-filter-block">
+            <h4>Type of College</h4>
+            <ul class="isa-filter-content list nicescroll">
+              <?php
+
+              if(!empty($institute_types)){
+                foreach ($institute_types as $key => $value) {
+                  ?>
+                  <li>
+                    <input class="filter typefilter" type="radio" name="collegetypes" id="radio<?php echo $value['inst_type'];?>" value="<?php echo $value['inst_type'];?>" data-url="<?php echo $value['url_slug'];?>" <?php echo $value['inst_type_selected'];?>>
+                    <label class="checkbox-label" for="radio<?php echo $value['inst_type'];?>"><?php echo $value['inst_type_short_name'];?></label>
+                  </li>
+                  <?php
+                }
+              }
+
+              ?>
+            </ul> 
+        </div>
+
+        
+
+
+        <!-- <div class="isa-filter-block">
+            <h4>Course Duration</h4>
+            <ul class="isa-filter-content list nicescroll">
+              <?php
+
+              if(!empty($course_duration)){
+                foreach ($course_duration as $key => $value) {
+                  ?>
+                  <li>
+                    <input class="filter" type="radio" id="radio<?php echo $value['duration_value'];?>" name="duration" value="<?php echo $value['duration_value'];?>">
+                    <label class="checkbox-label" for="radio<?php echo $value['duration_value'];?>"><?php echo $value['duration_name'];?></label>
+                  </li>
+                  <?php
+                }
+              }
+
+              ?>
+            </ul> 
+        </div> -->
+
+
+        <div class="isa-filter-block">
+            <h4>Agency</h4>
+            <ul class="isa-filter-content list nicescroll">
+              <?php
+
+              if(!empty($agencies)){
+                foreach ($agencies as $key => $value) {
+                  ?>
+                  <li>
+                    <input class="filter agencyfilter" type="radio" id="radio<?php echo $value['agency_id'];?>" name="agencies" value="<?php echo $value['agency_id'];?>"  data-url="<?php echo $value['url_slug'];?>" <?php echo $value['agency_selected'];?>>
+                    <label class="checkbox-label" for="radio<?php echo $value['agency_id'];?>"><?php echo $value['agency_short_name'];?></label>
+                  </li>
+                  <?php
+                }
+              }
+
+              ?>
+            </ul> 
+        </div>
+
+        
+
+        <div class="isa-filter-block">
+            <h4>Affiliation</h4>
+            <ul class="isa-filter-content list nicescroll">
+              <?php
+
+              if(!empty($affiliation_types)){
+                foreach ($affiliation_types as $key => $value) {
+                  ?>
+                  <li>
+                    <input class="filter affiliationfilter" type="radio" id="radio<?php echo $value['statutory_body_id'];?>" name="approval" value="<?php echo $value['statutory_body_id'];?>" data-url="<?php echo $value['url_slug'];?>" <?php echo $value['statutory_body_selected'];?>>
+                    <label class="checkbox-label" for="radio<?php echo $value['statutory_body_id'];?>"><?php echo $value['statutory_body_abbr'];?></label>
+                  </li>
+                  <?php
+                }
+              }
+
+              ?>
+            </ul> 
+        </div>
+
+
+        <div class="isa-filter-block">
+            <h4>College Category</h4>
+            <ul class="isa-filter-content list nicescroll">
+              <?php
+
+              if(!empty($institute_categories)){
+                foreach ($institute_categories as $key => $value) {
+                  ?>
+                  <li>
+                    <input class="filter categoryfilter" type="radio" id="radio<?php echo $value['inst_category_id'];?>" name="category" value="<?php echo $value['inst_category_id'];?>" data-url="<?php echo $value['url_slug'];?>" <?php echo $value['inst_category_selected'];?>>
+                    <label class="checkbox-label" for="radio<?php echo $value['inst_category_id'];?>"><?php echo $value['inst_category_short_name'];?></label>
+                  </li>
+                  <?php
+                }
+              }
+
+              ?>
+            </ul> 
+        </div>
+
+       
+        <div class="isa-filter-block">
+        </div>
+
+  </div>  
+  <a href="javascript:void(0);" class="isa-close"><i class="fas fa-times"></i></a>
+  
+
+
+
+
+</div> 
+<a href="javascript:void(0);" class="isa-filter-trigger"><i class="fas fa-filter"></i> Filters</a>
+
+
+<style type="text/css">
+  ul.isa-filter-content{
+    max-height: 180px !important;
+  }
+  div.forlerForm{
+    max-height: 400px !important;
+  }
+</style>

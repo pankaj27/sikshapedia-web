@@ -1,0 +1,221 @@
+<?php
+if(!empty($google_maps_data)){
+  ?>
+ 
+  <div class="jsx-2705322352  address bg-white mt-4">
+    <div class="jsx-2705322352 card-body">
+      <div class="jsx-2705322352 row">
+        <div class="jsx-2705322352 address-box p-4 col-6">
+          <div class="jsx-2705322352 location-box position-relative">
+            <div class="jsx-2705322352 info d-flex">
+              <span class="jsx-2705322352 icon location-svg-list location mr-7"></span>
+              <h3 class="jsx-2705322352 text-lg text-white"><?php echo (!empty($google_maps_data['college_zipcode']))?($google_maps_data['college_city'].'-'.$google_maps_data['college_zipcode']):$google_maps_data['college_city'];?>  <br class="jsx-2705322352"> <?php echo $google_maps_data['college_address'];?> <br class="jsx-2705322352"><?php echo $google_maps_data['college_state'];?>, <?php echo $google_maps_data['college_country'];?> 
+                 
+
+
+                </h3>
+            </div>
+            <?php
+            if(!empty($google_maps_data['college_direction'])){
+              ?>
+              <div class="jsx-2705322352 info d-flex text-uppercase mt-5">
+                <span class="jsx-2705322352 icon location-svg-list bullet mr-7 mt-1"></span>
+                <span class="jsx-2705322352 text-white text-sm d-flex">
+                  <span class="jsx-2705322352 distance bg-white text-secondary px-2 mr-7">1.11 KM</span>
+                  <span class="jsx-2705322352 loc-name d-inline-flex">
+                    <span class="jsx-2705322352 icon bus location-svg-list mr-2"></span>I.I.T. Main Gate </span>
+                </span>
+              </div>
+              <?php
+            }
+            ?>
+              
+          </div>
+       
+         <?php
+          if($google_maps_data['college_paid']==="paid"){
+            ?>
+            <div class="jsx-2705322352 contact pt-4 text-white">
+              <div class="jsx-2705322352 info mt-5 d-flex">
+                <span class="jsx-2705322352 icon call location-svg-list mr-7"></span>
+                <p class="jsx-2705322352 m-0 font-weight-bold text-uppercase"> <?php echo $google_maps_data['college_phone_no'];?></p>
+              </div>
+            </div>
+            <?php
+          }
+          ?>
+            
+          <div class="jsx-2705322352 email-contact text-white">
+            <div class="jsx-2705322352 info mt-6 d-flex">
+              <span class="jsx-2705322352 icon email location-svg-list mr-7"></span>
+              <span class="jsx-2705322352 m-0 pointer text-blue text-uppercase font-weight-bold" style="cursor: auyo !important;"><?php echo $google_maps_data['college_email_address'] ;?></span>
+            </div>
+          </div>
+
+          <?php
+          //if($google_maps_data['college_paid']=="paid"){
+            ?>
+            <div class="jsx-2705322352 email-contact text-white">
+                <div class="jsx-2705322352 info mt-6 d-flex">
+                  <span class="jsx-2705322352 icon sms location-svg-list mr-7"></span>
+                  <span class="jsx-2705322352 m-0 pointer text-blue text-uppercase font-weight-bold" style="cursor: auyo !important;"><?php echo $google_maps_data['college_phone_no'] ;?></span>
+                </div>
+              </div>
+            <?php
+          //}
+          ?>
+          
+         
+          
+        </div>
+        <div class="jsx-2705322352 col-6 p-0">
+          <div id="google-map" class="jsx-2514834862 map undefined india-college-map">
+            <iframe data-src="<?php echo $google_maps_data['college_google_map'];?>" src="<?php echo $google_maps_data['college_google_map'];?>" class="jsx-2514834862 lazyloaded"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php
+}
+?>
+
+
+
+<style type="text/css">
+  .address.jsx-2705322352 {
+    border-radius: 4px;
+    box-shadow: 0 0 4px 0 rgb(207 207 207 / 50%);
+    margin-bottom: 20px;
+  }
+  .address.jsx-2705322352 .card-body.jsx-2705322352 {
+    padding: 0px 15px;
+  }
+  .address.jsx-2705322352 .address-box.jsx-2705322352 {
+    background-color: #323c4f !important;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    min-height: 440px;
+  }
+  .address.jsx-2705322352 .address-box.jsx-2705322352 .location-box.jsx-2705322352 {
+    min-height: 100px;
+    border-bottom: 2px solid #6f7683;
+    padding-bottom: 30px;
+  }
+  .address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .icon.location.jsx-2705322352 {
+    background-position: -150px 0px;
+    -webkit-filter: invert(1);
+    filter: invert(1);
+    height: 20px;
+    width: 20px;
+    fill: #fff;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .location-svg-list.jsx-2705322352 {
+    background: url(https://images.collegedunia.com/public/asset/img/college_address.svg) no-repeat;
+    background-size: auto 100%;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 h3.jsx-2705322352 {
+    line-height: 1.5;
+}
+.text-white {
+    color: #fff;
+}
+.text-lg {
+    font-size: 1rem;
+}
+.text-uppercase {
+    text-transform: uppercase;
+}
+.mt-5, .my-5 {
+    margin-top: 1.25rem;
+}
+.text-white {
+    color: #fff;
+}
+.pt-4, .py-4 {
+    padding-top: 1rem;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .location-svg-list.jsx-2705322352 {
+    background: url(https://images.collegedunia.com/public/asset/img/college_address.svg) no-repeat;
+    background-size: auto 100%;
+}
+.icon {
+    display: inline-block;
+    line-height: initial;
+    height: 15px;
+    width: 15px;
+}
+.mr-7, .mx-7 {
+    margin-right: 1.75rem;
+}
+p.m-0 {
+    margin: 0;
+}
+.mt-6, .my-6 {
+    margin-top: 1.5rem;
+}
+
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .icon.email.jsx-2705322352 {
+    background-position: -18px 0px;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .location-svg-list.jsx-2705322352 {
+    background: url(https://images.collegedunia.com/public/asset/img/college_address.svg) no-repeat;
+    background-size: auto 100%;
+}
+.text-blue.jsx-2705322352 {
+    color: #4fb8dd;
+}
+.pointer {
+    cursor: pointer;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .icon.sms.jsx-2705322352 {
+    background-position: -36px 0px;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .location-svg-list.jsx-2705322352 {
+    background: url(https://images.collegedunia.com/public/asset/img/college_address.svg) no-repeat;
+    background-size: auto 100%;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .website.jsx-2705322352 {
+    width: 100%;
+    margin-left: -16px;
+    position: absolute;
+    background-color: #222b3a;
+    border-bottom-left-radius: 4px;
+    bottom: 0;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .icon.website-icon.jsx-2705322352 {
+    background-position: -148px 0px;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .location-svg-list.jsx-2705322352 {
+    background: url(https://images.collegedunia.com/public/asset/img/college_address.svg) no-repeat;
+    background-size: auto 100%;
+}
+.map.jsx-2514834862 {
+    height: 100%;
+}
+.map.india-college-map.jsx-2514834862 iframe.jsx-2514834862 {
+    height: 440px;
+}
+.map.jsx-2514834862 iframe.jsx-2514834862 {
+    width: 100%;
+    frameborder: 0;
+    border: 0;
+}
+
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .icon.location.jsx-2705322352 {
+    background-position: -150px 0px;
+    -webkit-filter: invert(1);
+    filter: invert(1);
+    height: 20px;
+    width: 20px;
+    fill: #fff;
+}
+.address.jsx-2705322352 .address-box.jsx-2705322352 .info.jsx-2705322352 .location-svg-list.jsx-2705322352 {
+    background: url(https://images.collegedunia.com/public/asset/img/college_address.svg) no-repeat;
+    background-size: auto 100%;
+}
+  .mt-4, .my-4 {
+    margin-top: 1rem;
+  }
+
+</style>

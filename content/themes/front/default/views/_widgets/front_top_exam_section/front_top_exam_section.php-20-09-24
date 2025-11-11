@@ -1,0 +1,136 @@
+<?php 
+
+if(!empty($top_exams)){
+    ?>
+    <section class="commonSec topExmSec bg-white">
+      <div class="wrapper">
+        <div class="section-title text-white">
+          <h2>Top Exams</h2>
+        </div>
+        <div class="btnGroup flex-wrap home-page-mob-exam-bottomsection">
+          <div class="row">
+
+            <?php
+            foreach ($top_exams as $key => $value) {
+                ?>
+                <div class="col-md-4">
+                  <div class="grid__item grid__item--1">
+                    <div class="item">
+                      <div class="cousubcon">
+                        <h5>
+                        <a title="<?php echo $value['exam_short_name'];?>" target="_blank" class="text-h2 mt-1 mb-2 d-block text-secondary title" href="<?php echo $value['exam_link'];?>"><?php echo $value['exam_short_name'];?></a>
+                        </h5>
+                        <p><?php echo $value['exam_short_desc'];?></p>
+                      </div>
+                      <div class="over1">
+                        <div class="row">
+                          <div class="col-lg-8 col-sm-8">
+                            <a href="<?php echo $value['exam_readmore_link'];?>" class="over">Read More</a>
+                          </div>
+                          <div class="col-lg-4 col-sm-4">
+                            <div class="over-icon over-icon-mob-home">
+                              <img src="<?php echo $value['exam_logo'];?>" height="60px" width="60px" alt="<?php echo $value['exam_short_name'];?>">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php
+            }
+            ?> 
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <?php
+}
+?>
+
+
+<style>
+  /******** Top Exams**********/
+  /* .over-icon-mob-home{
+    margin-left: 250px !important;
+  } */
+    .grid__item{
+        margin-top:15px;
+    }
+    .grid__item .item {
+        border: 1px #00000036 solid;
+        border-radius: 4%;
+        padding-bottom: 5px;
+        transition: box-shadow 0.3s ease;
+    }
+    .cousubcon {
+        /* border: 1px solid #d7d3d3; */
+        padding: 21px!important;
+        margin-right: 0px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: #f6f6f6;
+        margin-top: 0px;
+    }
+    .cousubcon .time {
+        position: relative;
+        top: -16px;
+        text-decoration: none;
+        color: #fff;
+        font-weight: 400;
+        padding: 8px 14px;
+        background-color: #40414de0;
+        font-size: 15px;
+        border: 1px solid #40414de0;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    .cousubcon h5 {
+        color: #000;
+        font-size: 23px;
+        /* margin-top: 20px; */
+    }
+    .cousubcon p {
+        color: #201e1e;
+        font-size: 15px;
+        line-height: 20px;
+    }
+
+    .over1 {
+        background-color: #e7e7e7;
+        padding: 20px;
+        margin-right: 0px;
+        margin-bottom: -6px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        /* border-radius: 8px; */
+    }
+    .over1 .over {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 400;
+        text-decoration: none;
+        padding: 8px 20px;
+        background-color: #fd390e!important;
+        border-radius: 6px;
+        /* text-align: center; */
+    }
+
+    .over-icon {
+        /* width: 56%; */
+        margin-top: -56px;
+        background-color: #fff;
+        height: 100px;
+        width: 100px;
+        padding: 5px;
+        border-radius: 50%;
+        border: 7px solid #f4f4f4;
+        text-align: center;
+        line-height: 80px;
+    }
+    /**********End of Top Exams******************/
+</style>

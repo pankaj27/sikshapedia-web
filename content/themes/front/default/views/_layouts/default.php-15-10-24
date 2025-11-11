@@ -1,0 +1,33 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+<?php echo @$partial_header;?>
+<?php echo @$partial_account_header;?>
+<?php echo @$partial_account_header_public;?>
+<?php echo @$content;?>
+<?php echo @$partial_footer;?>
+
+<?php echo @$partial_register_cdm_modal;?>
+
+<?php echo @$partial_password_change_modal;?>
+
+<?php echo @$partial_account_faculties_settings_modal;?>
+
+<?php echo @$partial_apply_modal;?>
+
+
+
+<?php echo @$partial_apply_job_modal;?>
+
+<?php echo @$partial_claim_modal;?>
+
+<?php echo @$partial_ask_question_modal;?>
+
+<?php echo @$partial_application_thanks_modal;?>
+
+<?php echo @$partial_subscription_thank_you_modal;?>
+
+<?php echo @$partial_phone_no_verification_modal;?>
+
+<?php echo @$partial_apply_through_stream_page_modal;?>
+
+<?php echo @$partial_ask_question_of_courses_modal;?>

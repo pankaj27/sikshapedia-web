@@ -1,0 +1,42 @@
+jQuery(function($) {
+  "use strict";
+
+//Filter
+	var start = 0;
+    var limit = 12;
+   	var doneScrollingInterval = 500;
+   	var scrollTimer=-1; 
+   	var processing=false;               //timer identifier
+
+
+     $(window).scroll(function(){
+        //var lastId = $('.loader').attr('id');
+        var last_id=$('div .grid_list:last').index()+1;
+        if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.2){
+            doScroll();
+            //console.log('Scrolling....'+last_id);
+        }
+    });
+
+    doScroll();
+
+    function doScroll(){
+    	start += limit;
+    	$.ajax({
+        	type:'POST',
+        	url:base_url+'filterdata',
+        	data:{csrf_test_name:csrf_hash,_l:limit,_s:start,_c:_c,_st:_st,_ct:_ct,_strm:_strm,_cu:_cu,_exam:_exam},
+        	cache:false,
+        	beforeSend:function(){
+        		processing = true;
+        	},
+        	success:function(d){
+        		if(d.html!=''){
+							
+        			$("#udata_lists").append(d.html);
+        			processing = false;
+        		}
+        	}
+        });
+    }
+});

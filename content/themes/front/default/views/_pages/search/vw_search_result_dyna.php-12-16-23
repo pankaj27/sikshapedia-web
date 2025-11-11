@@ -1,0 +1,37 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+
+<?php
+if(!empty($searched_data)){
+	?>
+	<div class="jsx-2743981883 desktop-search-list bg-offwhite">
+	<?php
+	foreach ($searched_data as $key => $value) {
+		?>
+		<span class="jsx-2743981883 menu-items pb-2  d-flex align-items-center text-heading undefined">
+          <div class="jsx-2743981883 d-inline-block  align-self-start pt-1">
+            <img data-src="<?php echo $value['searched_data_logo'];?>" src="<?php echo $value['searched_data_logo'];?>" alt="logo" class="jsx-2355921263 logo-img lazyloaded">
+          </div>
+          <div class="jsx-2743981883 col text-new font-weight-bold text-capitalize"><a href="<?php echo $value['searched_access_url'];?>" class="jsx-2743981883 mb-0 h2 list-name"><?php echo $value['serach_data_name'];?></a><div class="jsx-2743981883 d-flex flex-nowrap tabs-container" wfd-id="2542"></div>
+          </div>
+          <p class="jsx-2743981883 m-0 text-17 text-subheading text-tiny font-weight-bold text-capitalize "><?php echo $value['search_data_type'];?></p>
+        </span>
+		<?php	
+	}
+	?>
+	</div>
+	<?php
+}else{
+	?>
+	<h5>TRENDING SEARCHES</h5>
+  	<ul class="">
+	    <li>Upcoming Exams
+	    <li> "IIT" in Colleges</li>
+	    <li>"CAT" in Exams</li>
+	    <li>"Cat Cutoff" in News</li>
+	    <li>"MBA Colleges" in Delhi/NCR</li>
+	    <li>"MCA Colleges" in Delhi/NCR</li>
+  	</ul>
+	<?php
+}
+?>

@@ -1,0 +1,209 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<section class="headerBnrSec overlayBnr">
+    <img src="<?php echo $college_data['college_banner'];?>" class="headerBnrImg" alt="">
+    <div class="wrapper">
+      <div class="headerBnrPanel">
+        <div class="bnrThumbBox">
+          <div class="bnrThumb shadow bg-white"><img src="<?php echo $college_data['college_logo'];?>"></div>
+          <div class="bnrThumbCon pt-2">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb p-0 bg-none mb-1">
+                <?php
+              foreach ($college_data['college_breadcrumb'] as $key => $value) {
+                ?>
+                <li class="breadcrumb-item <?php echo (empty($value))?'active':'';?>">
+                  <?php
+                  if(!empty($value)){
+                    ?>
+                    <a href="<?php echo $value;?>"><strong><?php echo $key;?></strong></a>
+                    <?php
+                  }else{
+                    echo $key;
+                  }
+                  ?>
+                </li>
+                <?php
+              }
+              ?>
+              </ol>
+            </nav>
+            <h5 class="m-0 bnrTitle text-truncate text-uppercase w-75"><?php echo $college_data['college_formatted_name'];?></h5>
+            <div class="m-0  d-lg-flex  justify-content-between tagLists w-75">
+              <div class="text-truncate tags">
+                <span><i class="fas fa-map-marker-alt"></i> <?php echo $college_data['college_city'];?>,<?php echo $college_data['college_state'];?> </span> 
+                <?php
+                if(!empty($college_data['college_university'])){
+                  ?>
+                  <span><i class="fas fa-flag"></i> <?php echo $college_data['college_university'];?></span>
+                  <?php
+                }
+
+                ?> 
+                <span><i class="fas fa-thumbtack"></i> ESTD <?php echo $college_data['college_estd'];?> </span> 
+                <span><i class="fas fa-university"> </i> <?php echo $college_data['college_type'];?> </span> 
+                <!-- <span><i class="fas fa-tags"> </i>  10 QUESTIONS </span>  -->
+                <?php
+                if(!empty($college_data['college_affiliations'])){
+                  ?>
+                  <span><i class="fas fa-bookmark"> </i> <?php echo $college_data['college_affiliations'];?> </span> 
+                  <?php
+                }
+
+                ?>
+                <!-- <span><i class="fas fa-tags"> </i>  ANSWERED </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> 
+                <span><i class="fas fa-tags"> </i>  RANKED 2 </span> --> 
+              </div>
+              <!-- <div class="pl-2"><a href="">  MORE </a></div>  -->
+            </div>
+          </div>
+
+        </div>
+       <!--  <div class="headerBnrCon d-none d-md-block">
+          <div class="ratingBox ">
+              <div class="points">9.2</div>
+              <div class="reviewStars">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
+                <div class="reviewCounts">17 REVIEWS</div>
+              </div>
+          </div>
+          <a href="#" class="btn btn-outline-light btnContact">GET CONTACT DETAILS</a>
+          <a href="#" class="btn btn-link text-white btnclaim"> <i class="fas fa-dot-circle text-warning pals" ></i>  Claim This College</a>
+
+          <button type="button" class="btnFavorite active"></button>
+
+        </div> -->
+       
+      </div>
+    </div>
+  </section>
+
+  <?php
+  if(!empty($college_data['college_inner_menues'])){
+    ?>
+    <section class="tabSliderSec">
+          <div class="swiper-container tabSlider navTabSlider">
+            <div class="swiper-wrapper">
+              <?php
+              foreach ($college_data['college_inner_menues'] as $key => $value) {
+               ?>
+               <a href="<?php echo $value['menu_link'];?>" class="swiper-slide navLink <?php echo ($value['menu_default_active']!='')?$value['menu_default_active']:$value['menu_active'];?> text-nowrap false nav-item d-inline-block text-capitalize font-weight-bold text-secondary text-base pt-4 pb-3"> <?php echo $value['menu_name'];?> </a>
+               <?php
+              }
+              ?>
+            </div>
+            <div class="swiper-button-next swiper-button-white"></div>
+            <div class="swiper-button-prev swiper-button-white"></div>
+          </div>
+    </section>
+    <?php
+  }
+
+  ?>
+
+      
+
+
+<section class="pageDetailsSec py-4">
+    <div class="wrapper">
+      <div class="row">
+        <div class="col-lg-9 mb-4 mb-lg-0">
+        <?php
+        if(!empty($college_data['college_menu_widgets'])){
+          foreach ($college_data['college_menu_widgets'] as $key => $value) {
+            $this->widget->run($value,TRUE,['country_id'=>$college_data['college_country_id'],'college_id'=>$college_data['college_id'],'college_info_type'=>'1']);
+          }
+        }
+        ?>
+      </div>
+
+        <div class="col-lg-3 ">
+          <!-- <a href="" class="btn btn-primary mb-3 btn-block  d-flex justify-content-between mb-3"><span>APPLY NOW </span> <i class="far fa-envelope"></i></a>
+          <a href="" class="btn btn-warning  mb-3 btn-block d-flex justify-content-between mb-3"> <span>DOWNLOAD BROCHURE </span> <i class="fas fa-download"></i></a> -->
+
+          <?php $this->widget->run('front_college_same_group_section',TRUE,['country_id'=>$college_data['college_country_id'],'college_id'=>$college_data['college_id'],'college_type'=>'1']);?>
+
+
+         <!--  <div class="card mb-4">
+            <div class="card-header bg-white">
+              <h5 class="m-0">Featured News</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <div class="card-header bg-white text-center">
+              <a class="#">View All News</a>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-header bg-white">
+              <h5 class="m-0">Featured News</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-1.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-2.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="#" class="media">
+                  <img src="assets/img/img-3.jpg" width="40" class="mr-2" alt="..."> 
+                  <div class="media-body">
+                    <h6 class="mb-0 color2">Media heading</h6>
+                    <small> sit amet nibh libero, in gravida nulla. </small> 
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <div class="card-header bg-white text-center">
+              <a class="#">View All News</a>
+            </div>
+          </div> -->
+        </div>
+
+      </div>
+    </div> 
+  </section>
+
+  <script type="text/javascript">let curl='<?php echo current_url();?>';</script>
