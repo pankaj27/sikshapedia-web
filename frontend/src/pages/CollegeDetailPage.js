@@ -167,14 +167,19 @@ const CollegeDetailPage = () => {
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="text-2xl font-bold">
-              <span className="text-orange-600">Siksha</span>
-              <span className="text-blue-600">pedia</span>
+            <Link to="/" className="flex items-center">
+              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
             </Link>
             <nav className="flex items-center gap-6">
               <Link to="/colleges" className="text-gray-700 hover:text-orange-600">Back to Colleges</Link>
-              <Link to="/login"><Button variant="ghost">Login</Button></Link>
-              <Link to="/register"><Button className="bg-orange-600 hover:bg-orange-700">Sign Up</Button></Link>
+              {user ? (
+                <Link to="/dashboard"><Button variant="ghost">Dashboard</Button></Link>
+              ) : (
+                <>
+                  <Link to="/login"><Button variant="ghost">Login</Button></Link>
+                  <Link to="/register"><Button className="bg-orange-600 hover:bg-orange-700">Sign Up</Button></Link>
+                </>
+              )}
             </nav>
           </div>
         </div>
