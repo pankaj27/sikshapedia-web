@@ -1,17 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { FiMapPin, FiStar, FiPhone, FiMail, FiGlobe, FiBookmark, FiShare2 } from 'react-icons/fi';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { FiMapPin, FiStar, FiPhone, FiMail, FiGlobe, FiBookmark, FiShare2, FiMessageCircle, FiSend } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 
 const CollegeDetailPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [user, setUser] = useState(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [showQuestionForm, setShowQuestionForm] = useState(false);
+
+  // Review form state
+  const [reviewForm, setReviewForm] = useState({
+    rating: 5,
+    review_title: '',
+    review_text: '',
+    course: '',
+    year_of_study: '',
+    ratings: {
+      academics: 0,
+      placements: 0,
+      infrastructure: 0,
+      faculty: 0,
+      campus_life: 0
+    }
+  });
+
+  // Question form state
+  const [questionText, setQuestionText] = useState('');
+  const [answerText, setAnswerText] = useState('');
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   useEffect(() => {
     fetchCollege();
+    fetchReviews();
+    fetchQuestions();
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, [id]);
 
   const fetchCollege = async () => {
@@ -22,6 +57,85 @@ const CollegeDetailPage = () => {
       console.error('Error fetching college:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const response = await api.get(`/reviews/college/${id}`);
+      setReviews(response.data);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await api.get(`/questions/college/${id}`);
+      setQuestions(response.data);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      alert('Please login to submit a review');
+      navigate('/login');
+      return;
+    }
+    try {
+      await api.post('/reviews', { ...reviewForm, college_id: id });
+      alert('Review submitted successfully!');
+      setShowReviewForm(false);
+      setReviewForm({
+        rating: 5,
+        review_title: '',
+        review_text: '',
+        course: '',
+        year_of_study: '',
+        ratings: { academics: 0, placements: 0, infrastructure: 0, faculty: 0, campus_life: 0 }
+      });
+      fetchReviews();
+      fetchCollege(); // Refresh to get updated rating
+    } catch (error) {
+      alert(error.response?.data?.detail || 'Error submitting review');
+    }
+  };
+
+  const handleQuestionSubmit = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      alert('Please login to ask a question');
+      navigate('/login');
+      return;
+    }
+    try {
+      await api.post('/questions', { college_id: id, question: questionText });
+      alert('Question submitted successfully!');
+      setShowQuestionForm(false);
+      setQuestionText('');
+      fetchQuestions();
+    } catch (error) {
+      alert(error.response?.data?.detail || 'Error submitting question');
+    }
+  };
+
+  const handleAnswerSubmit = async (questionId) => {
+    if (!user) {
+      alert('Please login to answer');
+      navigate('/login');
+      return;
+    }
+    try {
+      await api.post('/questions/answer', { question_id: questionId, answer: answerText });
+      alert('Answer submitted successfully!');
+      setSelectedQuestion(null);
+      setAnswerText('');
+      fetchQuestions();
+    } catch (error) {
+      alert(error.response?.data?.detail || 'Error submitting answer');
     }
   };
 
