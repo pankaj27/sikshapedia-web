@@ -530,12 +530,129 @@ const CollegeDetailPage = () => {
                 </div>
               </div>
 
-              <Button className="w-full mt-6 bg-orange-600 hover:bg-orange-700">Apply Now</Button>
+              <Button onClick={() => setShowApplicationForm(true)} className="w-full mt-6 bg-orange-600 hover:bg-orange-700">Apply Now</Button>
               <Button variant="outline" className="w-full mt-2">Download Brochure</Button>
             </div>
           </aside>
         </div>
       </div>
+
+      {/* Application Modal */}
+      {showApplicationForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold mb-4">Apply to {college.name}</h2>
+              <p className="text-gray-600 mb-6">Fill out the form below to apply for admission</p>
+              
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                if (!user) {
+                  alert('Please login to apply');
+                  navigate('/login');
+                  return;
+                }
+                const formData = new FormData(e.target);
+                const data = {
+                  college_id: id,
+                  course_id: 'course_btech',
+                  student_name: formData.get('student_name'),
+                  email: formData.get('email'),
+                  phone: formData.get('phone'),
+                  date_of_birth: formData.get('date_of_birth'),
+                  gender: formData.get('gender'),
+                  category: formData.get('category'),
+                  class_10_percentage: parseFloat(formData.get('class_10_percentage')),
+                  class_12_percentage: parseFloat(formData.get('class_12_percentage')),
+                  entrance_exam: formData.get('entrance_exam'),
+                  entrance_exam_score: formData.get('entrance_exam_score') ? parseFloat(formData.get('entrance_exam_score')) : null,
+                  preferred_course: formData.get('preferred_course'),
+                  message: formData.get('message')
+                };
+                
+                try {
+                  await api.post('/applications', data);
+                  alert('Application submitted successfully!');
+                  setShowApplicationForm(false);
+                } catch (error) {
+                  alert(error.response?.data?.detail || 'Error submitting application');
+                }
+              }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Full Name *</label>
+                    <Input name="student_name" required placeholder="John Doe" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email *</label>
+                    <Input name="email" type="email" required placeholder="john@example.com" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone *</label>
+                    <Input name="phone" required placeholder="1234567890" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Date of Birth *</label>
+                    <Input name="date_of_birth" type="date" required />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Gender *</label>
+                    <select name="gender" required className="w-full px-3 py-2 border rounded">
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Category *</label>
+                    <select name="category" required className="w-full px-3 py-2 border rounded">
+                      <option value="">Select</option>
+                      <option value="General">General</option>
+                      <option value="OBC">OBC</option>
+                      <option value="SC">SC</option>
+                      <option value="ST">ST</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Class 10 Percentage *</label>
+                    <Input name="class_10_percentage" type="number" step="0.01" required placeholder="85.5" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Class 12 Percentage *</label>
+                    <Input name="class_12_percentage" type="number" step="0.01" required placeholder="90.0" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Entrance Exam</label>
+                    <Input name="entrance_exam" placeholder="JEE Main, NEET, etc." />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Entrance Exam Score</label>
+                    <Input name="entrance_exam_score" type="number" step="0.01" placeholder="150" />
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Preferred Course *</label>
+                  <Input name="preferred_course" required placeholder="B.Tech Computer Science" />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Message (Optional)</label>
+                  <textarea
+                    name="message"
+                    className="w-full px-3 py-2 border rounded"
+                    placeholder="Additional information..."
+                    rows="3"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button type="submit" className="bg-orange-600 hover:bg-orange-700">Submit Application</Button>
+                  <Button type="button" onClick={() => setShowApplicationForm(false)} variant="outline">Cancel</Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
