@@ -746,6 +746,200 @@ async def get_saved_colleges(current_user: User = Depends(get_current_user)):
     return colleges
 
 # ============================================
+# Exam Routes
+# ============================================
+
+@api_router.get("/exams", response_model=List[Exam])
+async def get_exams(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    search: Optional[str] = None,
+    stream: Optional[str] = None,
+    exam_level: Optional[str] = None,
+    exam_type: Optional[str] = None
+):
+    query = {}
+    
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"full_name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
+    
+    if stream:
+        query["streams"] = {"$in": [stream]}
+    
+    if exam_level:
+        query["exam_level"] = exam_level
+    
+    if exam_type:
+        query["exam_type"] = exam_type
+    
+    exams = await db.exams.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for exam in exams:
+        if isinstance(exam.get('created_at'), str):
+            exam['created_at'] = datetime.fromisoformat(exam['created_at'])
+    
+    return exams
+
+@api_router.get("/exams/{exam_id}", response_model=Exam)
+async def get_exam(exam_id: str):
+    exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+    if not exam:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    if isinstance(exam.get('created_at'), str):
+        exam['created_at'] = datetime.fromisoformat(exam['created_at'])
+    
+    return Exam(**exam)
+
+@api_router.post("/exams", response_model=Exam)
+async def create_exam(exam_data: ExamCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can create exams")
+    
+    exam = Exam(**exam_data.model_dump())
+    exam_dict = exam.model_dump()
+    exam_dict['created_at'] = exam_dict['created_at'].isoformat()
+    
+    await db.exams.insert_one(exam_dict)
+    return exam
+
+# ============================================
+# Course Routes
+# ============================================
+
+@api_router.get("/courses", response_model=List[CourseDetail])
+async def get_courses(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    search: Optional[str] = None,
+    stream: Optional[str] = None,
+    degree_type: Optional[str] = None
+):
+    query = {}
+    
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"full_name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
+    
+    if stream:
+        query["stream"] = {"$regex": stream, "$options": "i"}
+    
+    if degree_type:
+        query["degree_type"] = degree_type
+    
+    courses = await db.courses.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for course in courses:
+        if isinstance(course.get('created_at'), str):
+            course['created_at'] = datetime.fromisoformat(course['created_at'])
+    
+    return courses
+
+@api_router.get("/courses/{course_id}", response_model=CourseDetail)
+async def get_course(course_id: str):
+    course = await db.courses.find_one({"id": course_id}, {"_id": 0})
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    if isinstance(course.get('created_at'), str):
+        course['created_at'] = datetime.fromisoformat(course['created_at'])
+    
+    return CourseDetail(**course)
+
+@api_router.post("/courses", response_model=CourseDetail)
+async def create_course(course_data: CourseDetailCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can create courses")
+    
+    course = CourseDetail(**course_data.model_dump())
+    course_dict = course.model_dump()
+    course_dict['created_at'] = course_dict['created_at'].isoformat()
+    
+    await db.courses.insert_one(course_dict)
+    return course
+
+# ============================================
+# Application Routes
+# ============================================
+
+@api_router.post("/applications", response_model=Application)
+async def create_application(app_data: ApplicationCreate, current_user: User = Depends(get_current_user)):
+    college = await db.colleges.find_one({"id": app_data.college_id})
+    if not college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    application = Application(**app_data.model_dump(), user_id=current_user.id)
+    app_dict = application.model_dump()
+    app_dict['created_at'] = app_dict['created_at'].isoformat()
+    app_dict['updated_at'] = app_dict['updated_at'].isoformat()
+    
+    await db.applications.insert_one(app_dict)
+    return application
+
+@api_router.get("/applications/my", response_model=List[Application])
+async def get_my_applications(current_user: User = Depends(get_current_user)):
+    applications = await db.applications.find({"user_id": current_user.id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    
+    for app in applications:
+        if isinstance(app.get('created_at'), str):
+            app['created_at'] = datetime.fromisoformat(app['created_at'])
+        if isinstance(app.get('updated_at'), str):
+            app['updated_at'] = datetime.fromisoformat(app['updated_at'])
+    
+    return applications
+
+@api_router.get("/applications/{application_id}", response_model=Application)
+async def get_application(application_id: str, current_user: User = Depends(get_current_user)):
+    application = await db.applications.find_one({"id": application_id}, {"_id": 0})
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    if application['user_id'] != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to view this application")
+    
+    if isinstance(application.get('created_at'), str):
+        application['created_at'] = datetime.fromisoformat(application['created_at'])
+    if isinstance(application.get('updated_at'), str):
+        application['updated_at'] = datetime.fromisoformat(application['updated_at'])
+    
+    return Application(**application)
+
+# ============================================
+# User Dashboard Routes
+# ============================================
+
+@api_router.get("/dashboard/stats")
+async def get_user_dashboard_stats(current_user: User = Depends(get_current_user)):
+    total_applications = await db.applications.count_documents({"user_id": current_user.id})
+    total_reviews = await db.reviews.count_documents({"user_id": current_user.id})
+    saved_colleges_count = len(current_user.saved_colleges)
+    
+    recent_applications = await db.applications.find(
+        {"user_id": current_user.id}, 
+        {"_id": 0}
+    ).sort("created_at", -1).limit(5).to_list(5)
+    
+    for app in recent_applications:
+        if isinstance(app.get('created_at'), str):
+            app['created_at'] = datetime.fromisoformat(app['created_at'])
+        if isinstance(app.get('updated_at'), str):
+            app['updated_at'] = datetime.fromisoformat(app['updated_at'])
+    
+    return {
+        "total_applications": total_applications,
+        "total_reviews": total_reviews,
+        "saved_colleges": saved_colleges_count,
+        "recent_applications": recent_applications
+    }
+
+# ============================================
 # Stats Route
 # ============================================
 
@@ -754,11 +948,15 @@ async def get_stats():
     total_colleges = await db.colleges.count_documents({})
     total_reviews = await db.reviews.count_documents({})
     total_users = await db.users.count_documents({})
+    total_exams = await db.exams.count_documents({})
+    total_courses = await db.courses.count_documents({})
     
     return {
         "total_colleges": total_colleges,
         "total_reviews": total_reviews,
-        "total_users": total_users
+        "total_users": total_users,
+        "total_exams": total_exams,
+        "total_courses": total_courses
     }
 
 # Include the router in the main app
