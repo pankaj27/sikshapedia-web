@@ -1,36 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiMapPin, FiStar, FiTrendingUp, FiBookOpen, FiAward } from 'react-icons/fi';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { 
+  FiSearch, FiMenu, FiX, FiChevronDown, FiChevronRight, FiStar, 
+  FiMapPin, FiBell, FiUser, FiPhone, FiMail
+} from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('colleges');
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredColleges, setFeaturedColleges] = useState([]);
-  const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0, total_users: 0 });
+  const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0 });
   const [loading, setLoading] = useState(true);
+  
+  // UI States
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [drawerMenuOpen, setDrawerMenuOpen] = useState(false);
+  const [counsellingFormOpen, setCounsellingFormOpen] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeCourseTab, setActiveCourseTab] = useState('bachelors');
+  const [activeRankingYear, setActiveRankingYear] = useState('2024');
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    mobile: '',
+    city: '',
+    course: ''
+  });
 
   useEffect(() => {
     fetchData();
+    startBackgroundSlider();
   }, []);
 
   const fetchData = async () => {
     try {
       const [collegesRes, statsRes] = await Promise.all([
-        api.get('/colleges/featured?limit=8'),
+        api.get('/colleges/featured?limit=16'),
         api.get('/stats')
-      ]);
+      ])
       setFeaturedColleges(collegesRes.data);
       setStats(statsRes.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const startBackgroundSlider = () => {
+    setInterval(() => {
+      setActiveSlide(prev => (prev + 1) % 3);
+    }, 5000);
   };
 
   const handleSearch = (e) => {
@@ -40,323 +70,43 @@ const HomePage = () => {
     }
   };
 
-  const streams = [
-    { name: 'Engineering', icon: '🔧', color: 'bg-blue-100 text-blue-700', count: '5000+' },
-    { name: 'Medical', icon: '🏥', color: 'bg-red-100 text-red-700', count: '2000+' },
-    { name: 'Management', icon: '💼', color: 'bg-green-100 text-green-700', count: '3000+' },
-    { name: 'Commerce', icon: '💰', color: 'bg-yellow-100 text-yellow-700', count: '2500+' },
-    { name: 'Arts', icon: '🎨', color: 'bg-purple-100 text-purple-700', count: '1800+' },
-    { name: 'Science', icon: '🔬', color: 'bg-indigo-100 text-indigo-700', count: '2200+' },
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post('/inquiries', {
+        ...formData,
+        college_id: 'general-inquiry',
+        student_name: formData.name,
+        course_interested: formData.course,
+        message: 'General counselling inquiry'
+      });
+      alert('Thank you! We will contact you soon.');
+      setCounsellingFormOpen(false);
+      setFormData({ name: '', email: '', mobile: '', city: '', course: '' });
+    } catch (error) {
+      alert('Failed to submit. Please try again.');
+    }
+  };
+
+  const courses = [
+    { name: 'Engineering', icon: '🔧', courses: 'B.Tech, M.Tech', color: 'bg-blue-50' },
+    { name: 'Management', icon: '💼', courses: 'MBA, PGDM', color: 'bg-green-50' },
+    { name: 'Medical', icon: '🏥', courses: 'MBBS, BDS', color: 'bg-red-50' },
+    { name: 'Commerce', icon: '💰', courses: 'B.Com, M.Com', color: 'bg-yellow-50' },
+    { name: 'Arts', icon: '🎨', courses: 'BA, MA', color: 'bg-purple-50' },
+    { name: 'Science', icon: '🔬', courses: 'B.Sc, M.Sc', color: 'bg-indigo-50' },
+    { name: 'Law', icon: '⚖️', courses: 'LLB, LLM', color: 'bg-gray-50' },
+    { name: 'Design', icon: '✏️', courses: 'B.Des, M.Des', color: 'bg-pink-50' }
   ];
 
+  const exams = [
+    { name: 'JEE Main', level: 'Engineering', icon: '/assets/exam/jee.svg' },
+    { name: 'NEET', level: 'Medical', icon: '/assets/exam/neet.svg' },
+    { name: 'CAT', level: 'Management', icon: '/assets/exam/cat.svg' },
+    { name: 'GATE', level: 'Engineering', icon: '/assets/exam/gate.svg' }
+  ];
+
+  const recentVisits = ['Engineering Colleges', 'MBA Colleges', 'Medical Colleges', 'Top IITs'];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2" data-testid="logo">
-              <div className="text-2xl font-bold">
-                <span className="text-orange-600">Siksha</span>
-                <span className="text-blue-600">pedia</span>
-              </div>
-            </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/colleges" className="text-gray-700 hover:text-orange-600 font-medium">Colleges</Link>
-              <Link to="/exams" className="text-gray-700 hover:text-orange-600 font-medium">Exams</Link>
-              <Link to="/courses" className="text-gray-700 hover:text-orange-600 font-medium">Courses</Link>
-              <Link to="/reviews" className="text-gray-700 hover:text-orange-600 font-medium">Reviews</Link>
-              <Link to="/compare" className="text-gray-700 hover:text-orange-600 font-medium">Compare</Link>
-            </nav>
-            <div className="flex items-center gap-3">
-              <Link to="/login">
-                <Button variant="ghost" data-testid="login-button">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-orange-600 hover:bg-orange-700" data-testid="register-button">Sign Up</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section with Search */}
-      <section className="bg-gradient-to-r from-orange-50 via-white to-blue-50 py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-testid="hero-title">
-              Find Your Dream College
-            </h1>
-            <p className="text-xl text-gray-600">Explore 10,000+ Colleges, Exams, Courses & More</p>
-          </div>
-
-          {/* Search Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="bg-white rounded-t-lg shadow-lg">
-              <TabsList className="w-full grid grid-cols-3 bg-gray-100 rounded-none h-14">
-                <TabsTrigger value="colleges" className="text-base font-semibold data-[state=active]:bg-white data-[state=active]:text-orange-600" data-testid="tab-colleges">
-                  <FiBookOpen className="mr-2" /> Colleges
-                </TabsTrigger>
-                <TabsTrigger value="exams" className="text-base font-semibold data-[state=active]:bg-white data-[state=active]:text-orange-600" data-testid="tab-exams">
-                  <FiAward className="mr-2" /> Exams
-                </TabsTrigger>
-                <TabsTrigger value="courses" className="text-base font-semibold data-[state=active]:bg-white data-[state=active]:text-orange-600" data-testid="tab-courses">
-                  <FiTrendingUp className="mr-2" /> Courses
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="colleges" className="p-6 m-0">
-                <form onSubmit={handleSearch}>
-                  <div className="flex gap-3">
-                    <Input
-                      placeholder="Search by College Name, Course, or Location"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-12 text-base"
-                      data-testid="search-colleges-input"
-                    />
-                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 px-8" data-testid="search-colleges-button">
-                      <FiSearch className="mr-2" /> Search
-                    </Button>
-                  </div>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="exams" className="p-6 m-0">
-                <div className="flex gap-3">
-                  <Input placeholder="Search for Exams like JEE, NEET, CAT..." className="h-12 text-base" />
-                  <Button size="lg" className="bg-orange-600 hover:bg-orange-700 px-8">
-                    <FiSearch className="mr-2" /> Search
-                  </Button>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="courses" className="p-6 m-0">
-                <div className="flex gap-3">
-                  <Input placeholder="Search for Courses like BTech, MBBS, MBA..." className="h-12 text-base" />
-                  <Button size="lg" className="bg-orange-600 hover:bg-orange-700 px-8">
-                    <FiSearch className="mr-2" /> Search
-                  </Button>
-                </div>
-              </TabsContent>
-            </div>
-          </Tabs>
-        </div>
-      </section>
-
-      {/* Stats Bar */}
-      <section className="bg-orange-600 text-white py-6">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8 text-center">
-            <div data-testid="stat-colleges">
-              <div className="text-3xl font-bold mb-1">{stats.total_colleges}+</div>
-              <div className="text-orange-100">Colleges</div>
-            </div>
-            <div data-testid="stat-reviews">
-              <div className="text-3xl font-bold mb-1">{stats.total_reviews}+</div>
-              <div className="text-orange-100">Reviews</div>
-            </div>
-            <div data-testid="stat-users">
-              <div className="text-3xl font-bold mb-1">{stats.total_users}+</div>
-              <div className="text-orange-100">Happy Students</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Browse by Stream */}
-      <section className="py-12 px-4 bg-white">
-        <div className="container mx-auto max-w-7xl">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8" data-testid="browse-streams-title">
-            Browse Top Streams
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {streams.map((stream) => (
-              <Link
-                key={stream.name}
-                to={`/colleges?course=${stream.name}`}
-                className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all hover:border-orange-600 group"
-                data-testid={`stream-${stream.name.toLowerCase()}`}
-              >
-                <div className="text-center">
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{stream.icon}</div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{stream.name}</h3>
-                  <p className="text-sm text-gray-500">{stream.count} Colleges</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Top Colleges */}
-      <section className="py-12 px-4 bg-gray-50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900" data-testid="top-colleges-title">
-              Top Colleges in India
-            </h2>
-            <Link to="/colleges">
-              <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50" data-testid="view-all-colleges">
-                View All Colleges
-              </Button>
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-white rounded-lg overflow-hidden shadow animate-pulse">
-                  <div className="h-40 bg-gray-200"></div>
-                  <div className="p-4">
-                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredColleges.map((college) => (
-                <Link
-                  key={college.id}
-                  to={`/colleges/${college.id}`}
-                  className="bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition-shadow border border-gray-200 hover:border-orange-600"
-                  data-testid={`college-card-${college.id}`}
-                >
-                  <div className="relative h-40 bg-gradient-to-br from-blue-500 to-indigo-600">
-                    {college.images?.[0] ? (
-                      <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold">
-                        {college.name.charAt(0)}
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-xs font-semibold">
-                      #{college.ranking || 'N/A'}
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-base mb-2 line-clamp-2 text-gray-900">{college.name}</h3>
-                    <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
-                      <FiMapPin className="text-orange-600 flex-shrink-0" />
-                      <span className="truncate">{college.location?.city}, {college.location?.state}</span>
-                    </div>
-                    <div className="flex items-center justify-between pt-2 border-t">
-                      <div className="flex items-center gap-1">
-                        <FiStar className="text-yellow-500" />
-                        <span className="font-bold text-sm">{college.rating || 'N/A'}</span>
-                      </div>
-                      <div className="text-xs text-gray-600">
-                        <span className="font-bold text-orange-600">₹{(college.average_fees / 100000).toFixed(1)}L</span>/yr
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="py-12 px-4 bg-white">
-        <div className="container mx-auto max-w-7xl">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12" data-testid="why-choose-title">
-            Why Choose Sikshapedia?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiBookOpen className="text-3xl text-orange-600" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">10,000+ Colleges</h3>
-              <p className="text-gray-600 text-sm">Comprehensive database of colleges across India</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiStar className="text-3xl text-blue-600" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Authentic Reviews</h3>
-              <p className="text-gray-600 text-sm">Real student reviews and ratings</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiTrendingUp className="text-3xl text-green-600" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Latest Rankings</h3>
-              <p className="text-gray-600 text-sm">Updated rankings and placement data</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiAward className="text-3xl text-purple-600" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Expert Guidance</h3>
-              <p className="text-gray-600 text-sm">Free counseling and admission support</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-4" data-testid="cta-title">Start Your College Search Today!</h2>
-          <p className="text-xl mb-8 text-orange-100">Find the perfect college that matches your dreams and aspirations</p>
-          <div className="flex gap-4 justify-center">
-            <Link to="/colleges">
-              <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100" data-testid="cta-explore">
-                Explore Colleges
-              </Button>
-            </Link>
-            <Link to="/compare">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-orange-800" data-testid="cta-compare">
-                Compare Colleges
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12 px-4">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">Sikshapedia</h3>
-              <p className="text-sm text-gray-400">Your trusted partner in finding the perfect college for your future.</p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Top Streams</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/colleges?course=Engineering" className="hover:text-orange-600">Engineering</Link></li>
-                <li><Link to="/colleges?course=Medical" className="hover:text-orange-600">Medical</Link></li>
-                <li><Link to="/colleges?course=Management" className="hover:text-orange-600">Management</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/about" className="hover:text-orange-600">About Us</Link></li>
-                <li><Link to="/contact" className="hover:text-orange-600">Contact</Link></li>
-                <li><Link to="/blog" className="hover:text-orange-600">Blog</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>Email: info@sikshapedia.com</li>
-                <li>Phone: +91-1234567890</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 Sikshapedia. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-export default HomePage;
+    <div className=\"min-h-screen bg-white relative\">\n      {/* Background Slider */}\n      <div className=\"fixed inset-0 h-screen md:h-auto\">\n        {[1, 2, 3].map((num, idx) => (\n          <div\n            key={num}\n            className={`absolute inset-0 transition-opacity duration-1000 ${\n              activeSlide === idx ? 'opacity-100' : 'opacity-0'\n            }`}\n          >\n            <img\n              src={`/assets/slider${num}.jpg`}\n              alt={`Slide ${num}`}\n              className=\"w-full h-full object-cover\"\n              onError={(e) => e.target.src = `/assets/banner${num}.jpg`}\n            />\n          </div>\n        ))}\n        <div className=\"absolute inset-0 bg-gradient-to-b from-black/50 to-transparent\"></div>\n      </div>\n\n      {/* Header */}\n      <header className=\"relative z-30 bg-white/95 backdrop-blur-sm shadow-sm sticky top-0\">\n        <nav className=\"container mx-auto px-4\">\n          <div className=\"flex items-center justify-between h-16\">\n            {/* Mobile Menu Toggle */}\n            <button\n              onClick={() => setMobileMenuOpen(true)}\n              className=\"lg:hidden text-2xl text-gray-700\"\n            >\n              <FiMenu />\n            </button>\n\n            {/* Logo */}\n            <Link to=\"/\" className=\"flex items-center\">\n              <img\n                src=\"/assets/sikshapedia_logo.png\"\n                alt=\"Sikshapedia\"\n                className=\"h-8\"\n                onError={(e) => {\n                  e.target.style.display = 'none';\n                  e.target.nextSibling.style.display = 'block';\n                }}\n              />\n              <div className=\"text-2xl font-bold ml-2\" style={{display: 'none'}}>\n                <span className=\"text-orange-600\">Siksha</span>\n                <span className=\"text-blue-600\">pedia</span>\n              </div>\n            </Link>\n\n            {/* Desktop Navigation */}\n            <div className=\"hidden lg:flex items-center gap-6\">\n              <Link to=\"/colleges\" className=\"text-gray-700 hover:text-orange-600 font-medium\">All Courses</Link>\n              <Link to=\"/colleges?course=MBA\" className=\"text-gray-700 hover:text-orange-600 font-medium\">MBA</Link>\n              <Link to=\"/colleges?course=MBBS\" className=\"text-gray-700 hover:text-orange-600 font-medium\">MBBS</Link>\n              <Link to=\"/colleges?course=Engineering\" className=\"text-gray-700 hover:text-orange-600 font-medium\">Engineering</Link>\n              \n              {/* Explore Dropdown */}\n              <div className=\"relative group\">\n                <button className=\"flex items-center gap-1 text-gray-700 hover:text-orange-600 font-medium\">\n                  Explore <FiChevronDown />\n                </button>\n                <div className=\"absolute top-full left-0 mt-2 bg-white shadow-xl rounded-lg p-6 w-[800px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all\">\n                  <div className=\"grid grid-cols-3 gap-6\">\n                    <div>\n                      <h3 className=\"font-bold mb-3 text-orange-600\">Top Colleges</h3>\n                      <ul className=\"space-y-2 text-sm\">\n                        <li><Link to=\"/colleges\" className=\"hover:text-orange-600\">Engineering Colleges</Link></li>\n                        <li><Link to=\"/colleges\" className=\"hover:text-orange-600\">Medical Colleges</Link></li>\n                        <li><Link to=\"/colleges\" className=\"hover:text-orange-600\">MBA Colleges</Link></li>\n                      </ul>\n                    </div>\n                    <div>\n                      <h3 className=\"font-bold mb-3 text-orange-600\">Exams</h3>\n                      <ul className=\"space-y-2 text-sm\">\n                        <li><Link to=\"/exams\" className=\"hover:text-orange-600\">JEE Main</Link></li>\n                        <li><Link to=\"/exams\" className=\"hover:text-orange-600\">NEET</Link></li>\n                        <li><Link to=\"/exams\" className=\"hover:text-orange-600\">CAT</Link></li>\n                      </ul>\n                    </div>\n                    <div>\n                      <h3 className=\"font-bold mb-3 text-orange-600\">Resources</h3>\n                      <ul className=\"space-y-2 text-sm\">\n                        <li><Link to=\"/rankings\" className=\"hover:text-orange-600\">Rankings</Link></li>\n                        <li><Link to=\"/compare\" className=\"hover:text-orange-600\">Compare</Link></li>\n                        <li><Link to=\"/reviews\" className=\"hover:text-orange-600\">Reviews</Link></li>\n                      </ul>\n                    </div>\n                  </div>\n                </div>\n              </div>\n            </div>\n\n            {/* Right Side Icons & Buttons */}\n            <div className=\"flex items-center gap-3\">\n              <button className=\"text-gray-700 hover:text-orange-600 hidden md:block\">\n                <FiSearch className=\"text-xl\" />\n              </button>\n              <button className=\"text-gray-700 hover:text-orange-600 hidden md:block\">\n                <FiBell className=\"text-xl\" />\n              </button>\n              <button className=\"text-gray-700 hover:text-orange-600 hidden md:block\">\n                <FiUser className=\"text-xl\" />\n              </button>\n              <Button\n                onClick={() => setCounsellingFormOpen(true)}\n                className=\"bg-orange-600 hover:bg-orange-700 hidden lg:inline-flex\"\n              >\n                Need Counselling?\n              </Button>\n            </div>\n          </div>\n        </nav>\n      </header>\n\n      {/* Mobile Menu Drawer */}\n      {mobileMenuOpen && (\n        <div className=\"fixed inset-0 z-50\">\n          <div className=\"absolute inset-0 bg-black/50\" onClick={() => setMobileMenuOpen(false)}></div>\n          <div className=\"absolute top-0 left-0 h-full w-80 bg-white shadow-xl transform transition-transform overflow-y-auto\">\n            <div className=\"p-4 border-b flex justify-between items-center\">\n              <h2 className=\"font-bold text-lg\">Menu</h2>\n              <button onClick={() => setMobileMenuOpen(false)} className=\"text-2xl\">\n                <FiX />\n              </button>\n            </div>\n            <nav className=\"p-4 space-y-4\">\n              <Link to=\"/colleges\" className=\"block py-2 hover:text-orange-600\">All Colleges</Link>\n              <Link to=\"/exams\" className=\"block py-2 hover:text-orange-600\">Exams</Link>\n              <Link to=\"/courses\" className=\"block py-2 hover:text-orange-600\">Courses</Link>\n              <Link to=\"/rankings\" className=\"block py-2 hover:text-orange-600\">Rankings</Link>\n              <Link to=\"/login\" className=\"block py-2 hover:text-orange-600\">Login</Link>\n              <Link to=\"/register\" className=\"block py-2 text-orange-600 font-semibold\">Sign Up</Link>\n            </nav>\n          </div>\n        </div>\n      )}\n\n      {/* Counselling Form Modal */}\n      {counsellingFormOpen && (\n        <div className=\"fixed inset-0 z-50 flex items-center justify-center p-4\">\n          <div className=\"absolute inset-0 bg-black/50\" onClick={() => setCounsellingFormOpen(false)}></div>\n          <div className=\"relative bg-white rounded-lg p-6 w-full max-w-md shadow-2xl\">\n            <button\n              onClick={() => setCounsellingFormOpen(false)}\n              className=\"absolute top-4 right-4 text-2xl text-gray-500 hover:text-gray-700\"\n            >\n              <FiX />\n            </button>\n            <h2 className=\"text-2xl font-bold mb-6\">Need Counselling?</h2>\n            <form onSubmit={handleFormSubmit} className=\"space-y-4\">\n              <div>\n                <label className=\"block text-sm font-medium mb-1\">Name *</label>\n                <Input\n                  required\n                  value={formData.name}\n                  onChange={(e) => setFormData({...formData, name: e.target.value})}\n                  placeholder=\"Your name\"\n                />\n              </div>\n              <div>\n                <label className=\"block text-sm font-medium mb-1\">Email *</label>\n                <Input\n                  type=\"email\"\n                  required\n                  value={formData.email}\n                  onChange={(e) => setFormData({...formData, email: e.target.value})}\n                  placeholder=\"your@email.com\"\n                />\n              </div>\n              <div>\n                <label className=\"block text-sm font-medium mb-1\">Mobile *</label>\n                <Input\n                  required\n                  value={formData.mobile}\n                  onChange={(e) => setFormData({...formData, mobile: e.target.value})}\n                  placeholder=\"+91 XXXXX XXXXX\"\n                />\n              </div>\n              <div>\n                <label className=\"block text-sm font-medium mb-1\">City</label>\n                <Input\n                  value={formData.city}\n                  onChange={(e) => setFormData({...formData, city: e.target.value})}\n                  placeholder=\"Your city\"\n                />\n              </div>\n              <div>\n                <label className=\"block text-sm font-medium mb-1\">Course Interest</label>\n                <select\n                  value={formData.course}\n                  onChange={(e) => setFormData({...formData, course: e.target.value})}\n                  className=\"w-full border rounded px-3 py-2\"\n                >\n                  <option value=\"\">Select course</option>\n                  <option value=\"Engineering\">Engineering</option>\n                  <option value=\"Medical\">Medical</option>\n                  <option value=\"Management\">Management</option>\n                  <option value=\"Commerce\">Commerce</option>\n                  <option value=\"Arts\">Arts</option>\n                </select>\n              </div>\n              <Button type=\"submit\" className=\"w-full bg-orange-600 hover:bg-orange-700\">\n                Submit\n              </Button>\n            </form>\n          </div>\n        </div>\n      )}\n\n      {/* Hero Content */}\n      <div className=\"relative z-10 pt-20 pb-32 px-4\">\n        <div className=\"container mx-auto max-w-6xl text-center text-white\">\n          <h1 className=\"text-4xl md:text-6xl font-bold mb-6\">Quick Search ...</h1>\n          \n          {/* Search Bar */}\n          <form onSubmit={handleSearch} className=\"max-w-3xl mx-auto mb-8\">\n            <div className=\"bg-white rounded-lg shadow-2xl p-2 flex gap-2\">\n              <div className=\"flex-1 flex items-center gap-2 px-3\">\n                <FiSearch className=\"text-gray-400 text-xl\" />\n                <Input\n                  placeholder=\"Search colleges, courses, exams...\"\n                  value={searchQuery}\n                  onChange={(e) => setSearchQuery(e.target.value)}\n                  className=\"border-0 focus-visible:ring-0 text-gray-900\"\n                />\n              </div>\n              <Button type=\"submit\" size=\"lg\" className=\"bg-orange-600 hover:bg-orange-700\">\n                Search\n              </Button>\n            </div>\n          </form>\n\n          {/* Recent Visits */}\n          <div className=\"flex flex-wrap justify-center gap-3\">\n            <span className=\"text-sm text-white/80\">Your recent visits:</span>\n            {recentVisits.map((visit, idx) => (\n              <Link\n                key={idx}\n                to={`/colleges?search=${visit}`}\n                className=\"text-sm bg-white/20 hover:bg-white/30 px-4 py-1 rounded-full backdrop-blur-sm transition\"\n              >\n                {visit}\n              </Link>\n            ))}\n          </div>\n        </div>\n      </div>\n\n      {/* Main Content Sections */}\n      <div className=\"relative z-20 bg-white\">\n        {/* Explore Top Courses */}\n        <section className=\"py-12\">\n          <div className=\"container mx-auto px-4\">\n            <h2 className=\"text-3xl font-bold text-center mb-8\">Explore Top Courses</h2>\n            <div className=\"grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4\">\n              {courses.map((course, idx) => (\n                <Link\n                  key={idx}\n                  to={`/colleges?course=${course.name}`}\n                  className={`${course.color} rounded-xl p-6 text-center hover:shadow-lg transition`}\n                >\n                  <div className=\"text-5xl mb-3\">{course.icon}</div>\n                  <h3 className=\"font-bold text-sm mb-1\">{course.name}</h3>\n                  <p className=\"text-xs text-gray-600\">{course.courses}</p>\n                </Link>\n              ))}\n            </div>\n          </div>\n        </section>\n\n        {/* Top Universities Carousel */}\n        <section className=\"py-12 bg-gray-50\">\n          <div className=\"container mx-auto px-4\">\n            <div className=\"flex justify-between items-center mb-8\">\n              <h2 className=\"text-3xl font-bold\">Explore Top University & Colleges</h2>\n              <Link to=\"/colleges\">\n                <Button variant=\"outline\" className=\"border-orange-600 text-orange-600\">View All</Button>\n              </Link>\n            </div>\n\n            {loading ? (\n              <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6\">\n                {[...Array(8)].map((_, i) => (\n                  <div key={i} className=\"bg-white rounded-lg p-4 animate-pulse\">\n                    <div className=\"h-40 bg-gray-200 rounded mb-4\"></div>\n                    <div className=\"h-4 bg-gray-200 rounded mb-2\"></div>\n                    <div className=\"h-4 bg-gray-200 rounded w-2/3\"></div>\n                  </div>\n                ))}\n              </div>\n            ) : (\n              <Swiper\n                modules={[Navigation]}\n                navigation\n                spaceBetween={20}\n                slidesPerView={1}\n                breakpoints={{\n                  640: { slidesPerView: 2 },\n                  768: { slidesPerView: 3 },\n                  1024: { slidesPerView: 4 }\n                }}\n              >\n                {featuredColleges.map((college) => (\n                  <SwiperSlide key={college.id}>\n                    <Link\n                      to={`/colleges/${college.id}`}\n                      className=\"block bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition\"\n                    >\n                      <div className=\"relative h-40 bg-gradient-to-br from-blue-500 to-indigo-600\">\n                        {college.images?.[0] ? (\n                          <img src={college.images[0]} alt={college.name} className=\"w-full h-full object-cover\" />\n                        ) : (\n                          <div className=\"w-full h-full flex items-center justify-center text-white text-4xl font-bold\">\n                            {college.name.charAt(0)}\n                          </div>\n                        )}\n                        {college.nirf_ranking && (\n                          <div className=\"absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-sm font-bold\">\n                            #{college.nirf_ranking}\n                          </div>\n                        )}\n                      </div>\n                      <div className=\"p-4\">\n                        <h3 className=\"font-bold mb-2 line-clamp-2\">{college.name}</h3>\n                        <div className=\"flex items-center gap-1 text-sm text-gray-600 mb-2\">\n                          <FiMapPin className=\"text-orange-600\" />\n                          <span className=\"truncate\">{college.location?.city}, {college.location?.state}</span>\n                        </div>\n                        <div className=\"flex justify-between items-center pt-2 border-t\">\n                          <div className=\"flex items-center gap-1\">\n                            <FiStar className=\"text-yellow-500\" />\n                            <span className=\"font-bold text-sm\">{college.rating || 'N/A'}</span>\n                          </div>\n                          <span className=\"text-orange-600 font-bold text-sm\">\n                            ₹{(college.average_fees / 100000).toFixed(1)}L/yr\n                          </span>\n                        </div>\n                      </div>\n                    </Link>\n                  </SwiperSlide>\n                ))}\n              </Swiper>\n            )}\n          </div>\n        </section>\n\n        {/* College Ranking 2024 */}\n        <section className=\"py-12\">\n          <div className=\"container mx-auto px-4\">\n            <div className=\"flex justify-between items-center mb-6\">\n              <h2 className=\"text-3xl font-bold\">College Ranking 2024</h2>\n              <select\n                value={activeRankingYear}\n                onChange={(e) => setActiveRankingYear(e.target.value)}\n                className=\"border rounded px-4 py-2\"\n              >\n                <option value=\"2024\">2024</option>\n                <option value=\"2023\">2023</option>\n                <option value=\"2022\">2022</option>\n              </select>\n            </div>\n\n            <div className=\"bg-white rounded-lg shadow overflow-x-auto\">\n              <table className=\"w-full\">\n                <thead className=\"bg-gray-50\">\n                  <tr>\n                    <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase\">Rank</th>\n                    <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase\">College</th>\n                    <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase\">Location</th>\n                    <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase\">Rating</th>\n                    <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase\">Fees</th>\n                  </tr>\n                </thead>\n                <tbody className=\"divide-y divide-gray-200\">\n                  {featuredColleges.slice(0, 10).map((college, idx) => (\n                    <tr key={college.id} className=\"hover:bg-gray-50\">\n                      <td className=\"px-6 py-4 whitespace-nowrap text-sm font-bold\">{idx + 1}</td>\n                      <td className=\"px-6 py-4\">\n                        <Link to={`/colleges/${college.id}`} className=\"font-semibold hover:text-orange-600\">\n                          {college.name}\n                        </Link>\n                      </td>\n                      <td className=\"px-6 py-4 whitespace-nowrap text-sm text-gray-600\">\n                        {college.location?.city}\n                      </td>\n                      <td className=\"px-6 py-4 whitespace-nowrap\">\n                        <div className=\"flex items-center gap-1\">\n                          <FiStar className=\"text-yellow-500\" />\n                          <span className=\"font-semibold\">{college.rating || 'N/A'}</span>\n                        </div>\n                      </td>\n                      <td className=\"px-6 py-4 whitespace-nowrap text-sm font-semibold text-orange-600\">\n                        ₹{(college.average_fees / 100000).toFixed(1)}L\n                      </td>\n                    </tr>\n                  ))}\n                </tbody>\n              </table>\n            </div>\n          </div>\n        </section>\n\n        {/* Explore Exams */}\n        <section className=\"py-12 bg-gray-50\">\n          <div className=\"container mx-auto px-4\">\n            <h2 className=\"text-3xl font-bold text-center mb-8\">Explore Top Exam</h2>\n            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6\">\n              {exams.map((exam, idx) => (\n                <Link\n                  key={idx}\n                  to={`/exams/${exam.name.toLowerCase().replace(/\\s+/g, '-')}`}\n                  className=\"bg-white rounded-lg p-6 text-center hover:shadow-lg transition\"\n                >\n                  <div className=\"w-20 h-20 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center\">\n                    <span className=\"text-3xl\">📝</span>\n                  </div>\n                  <h3 className=\"font-bold text-lg mb-2\">{exam.name}</h3>\n                  <p className=\"text-sm text-gray-600\">{exam.level}</p>\n                </Link>\n              ))}\n            </div>\n          </div>\n        </section>\n\n        {/* Newsletter */}\n        <section className=\"py-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white\">\n          <div className=\"container mx-auto px-4 text-center\">\n            <h2 className=\"text-3xl font-bold mb-4\">Subscribe For Regular Alerts</h2>\n            <p className=\"text-xl mb-8 text-orange-100\">Get updates on admissions, exams, and more</p>\n            <form className=\"max-w-2xl mx-auto flex gap-3\">\n              <Input\n                type=\"email\"\n                placeholder=\"Enter your email\"\n                className=\"h-12 bg-white text-gray-900\"\n              />\n              <Button size=\"lg\" variant=\"secondary\" className=\"bg-white text-orange-600 hover:bg-gray-100\">\n                Subscribe\n              </Button>\n            </form>\n          </div>\n        </section>\n\n        {/* Footer */}\n        <footer className=\"bg-gray-900 text-gray-300 py-12\">\n          <div className=\"container mx-auto px-4\">\n            <div className=\"grid grid-cols-1 md:grid-cols-4 gap-8 mb-8\">\n              <div>\n                <h3 className=\"text-white font-bold text-lg mb-4\">Sikshapedia</h3>\n                <p className=\"text-sm\">Your trusted partner in finding the perfect college.</p>\n              </div>\n              <div>\n                <h4 className=\"text-white font-semibold mb-4\">Tools</h4>\n                <ul className=\"space-y-2 text-sm\">\n                  <li><Link to=\"/compare\" className=\"hover:text-orange-600\">Compare Colleges</Link></li>\n                  <li><Link to=\"/rankings\" className=\"hover:text-orange-600\">Rankings</Link></li>\n                  <li><Link to=\"/reviews\" className=\"hover:text-orange-600\">Reviews</Link></li>\n                </ul>\n              </div>\n              <div>\n                <h4 className=\"text-white font-semibold mb-4\">Company</h4>\n                <ul className=\"space-y-2 text-sm\">\n                  <li><Link to=\"/about\" className=\"hover:text-orange-600\">About Us</Link></li>\n                  <li><Link to=\"/contact\" className=\"hover:text-orange-600\">Contact</Link></li>\n                  <li><Link to=\"/admin\" className=\"hover:text-orange-600\">Admin</Link></li>\n                </ul>\n              </div>\n              <div>\n                <h4 className=\"text-white font-semibold mb-4\">Follow Us</h4>\n                <div className=\"flex gap-4\">\n                  <a href=\"#\" className=\"hover:text-orange-600\">FB</a>\n                  <a href=\"#\" className=\"hover:text-orange-600\">TW</a>\n                  <a href=\"#\" className=\"hover:text-orange-600\">IG</a>\n                  <a href=\"#\" className=\"hover:text-orange-600\">LI</a>\n                </div>\n              </div>\n            </div>\n            <div className=\"border-t border-gray-800 pt-8 text-center text-sm\">\n              <p>&copy; 2024 Sikshapedia. All rights reserved.</p>\n            </div>\n          </div>\n        </footer>\n      </div>\n    </div>\n  );\n};\n\nexport default HomePage;
