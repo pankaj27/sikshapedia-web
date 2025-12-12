@@ -50,8 +50,8 @@ EXAMS_DATA = [
         },
         "previous_year_cutoffs": [
             {"year": 2024, "category": "General", "cutoff": 90},
-            {"year": 2024, "category": "OBC": 74},
-            {"year": 2024, "category": "SC": 46}
+            {"year": 2024, "category": "OBC", "cutoff": 74},
+            {"year": 2024, "category": "SC", "cutoff": 46}
         ],
         "study_materials": [
             {"name": "JEE Main Syllabus", "type": "PDF", "url": "#"},
