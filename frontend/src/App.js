@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import CollegeDuniaHome from './pages/CollegeDuniaHome';
+import HomePage from './pages/HomePage';
 import CollegeListingPage from './pages/CollegeListingPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
 import LoginPage from './pages/LoginPage';
@@ -15,7 +15,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<CollegeDuniaHome />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/colleges" element={<CollegeListingPage />} />
           <Route path="/colleges/:id" element={<CollegeDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
