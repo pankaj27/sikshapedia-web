@@ -12,6 +12,7 @@ import 'swiper/css/pagination';
 
 const CollegeDuniaHome = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredColleges, setFeaturedColleges] = useState([]);
   const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0 });
