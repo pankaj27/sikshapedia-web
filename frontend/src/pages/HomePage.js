@@ -450,7 +450,7 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-white font-bold text-lg mb-4">Sikshapedia</h3>
+              <h3 className="text-white font-bold text-lg mb-4">AdmissionBuddy</h3>
               <p className="text-sm">Your trusted partner in finding the perfect college for your future.</p>
             </div>
             <div>
