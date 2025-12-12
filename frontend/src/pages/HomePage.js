@@ -118,12 +118,20 @@ const CollegeDuniaHome = () => {
               <button className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
                 <FiSearch /> Search
               </button>
-              <Link to="/login">
-                <Button variant="ghost" className="hidden md:inline-flex">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-orange-600 hover:bg-orange-700 hidden md:inline-flex">Sign Up</Button>
-              </Link>
+              {user ? (
+                <Link to="/dashboard">
+                  <Button className="bg-orange-600 hover:bg-orange-700 hidden md:inline-flex">Dashboard</Button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button variant="ghost" className="hidden md:inline-flex">Login</Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button className="bg-orange-600 hover:bg-orange-700 hidden md:inline-flex">Sign Up</Button>
+                  </Link>
+                </>
+              )}
               <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 {mobileMenuOpen ? <FiX className="text-2xl" /> : <FiMenu className="text-2xl" />}
               </button>
