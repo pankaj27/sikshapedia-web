@@ -241,7 +241,12 @@ const CollegeDetailPage = () => {
                 <TabsTrigger value="overview" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Overview</TabsTrigger>
                 <TabsTrigger value="courses" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Courses & Fees</TabsTrigger>
                 <TabsTrigger value="admissions" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Admissions</TabsTrigger>
-                <TabsTrigger value="reviews" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Reviews</TabsTrigger>
+                <TabsTrigger value="reviews" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">
+                  Reviews ({reviews.length})
+                </TabsTrigger>
+                <TabsTrigger value="qa" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">
+                  Q&A ({questions.length})
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="mt-6">
