@@ -52,11 +52,8 @@ const CollegeListingPage = () => {
       <header className="bg-white shadow-sm border-b sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="text-2xl font-bold">
-                <span className="text-orange-600">Siksha</span>
-                <span className="text-blue-600">pedia</span>
-              </div>
+            <Link to="/" className="flex items-center">
+              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
             </Link>
             <div className="flex-1 max-w-xl mx-8">
               <form onSubmit={handleSearch}>
