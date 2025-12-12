@@ -104,6 +104,178 @@ class Scholarship(BaseModel):
     eligibility: str
     description: str
 
+# Exam Models
+class Exam(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: str
+    full_name: str
+    description: str
+    conducting_body: str
+    exam_level: str  # National, State, University
+    exam_type: str  # Entrance, Eligibility
+    streams: List[str] = []  # Engineering, Medical, Management, etc.
+    
+    # Exam Details
+    exam_mode: str  # Online, Offline, Both
+    exam_duration: str
+    total_marks: int
+    num_questions: int
+    exam_pattern: Dict
+    syllabus: Optional[str] = None
+    
+    # Important Dates
+    application_start_date: Optional[str] = None
+    application_end_date: Optional[str] = None
+    exam_date: Optional[str] = None
+    result_date: Optional[str] = None
+    counseling_date: Optional[str] = None
+    
+    # Eligibility
+    eligibility: Dict
+    age_limit: Optional[str] = None
+    
+    # Fees & Cutoffs
+    application_fee: Dict  # General, OBC, SC/ST
+    previous_year_cutoffs: List[Dict] = []
+    
+    # Study Materials
+    study_materials: List[Dict] = []  # name, type, url
+    sample_papers: List[Dict] = []
+    important_topics: List[str] = []
+    
+    # Stats
+    total_applicants: Optional[int] = None
+    total_seats: Optional[int] = None
+    difficulty_level: Optional[str] = None
+    
+    # Related
+    accepting_colleges: List[str] = []  # College IDs
+    official_website: Optional[str] = None
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ExamCreate(BaseModel):
+    name: str
+    slug: str
+    full_name: str
+    description: str
+    conducting_body: str
+    exam_level: str
+    exam_type: str
+    streams: List[str]
+    exam_mode: str
+    exam_duration: str
+    total_marks: int
+    num_questions: int
+    exam_pattern: Dict
+    eligibility: Dict
+    application_fee: Dict
+
+# Course Models (Enhanced)
+class CourseDetail(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: str
+    full_name: str
+    description: str
+    degree_type: str  # UG, PG, Diploma, Certificate
+    stream: str  # Engineering, Medical, Management, etc.
+    sub_stream: Optional[str] = None
+    
+    # Duration & Fees
+    duration: str
+    average_fees: float
+    fee_range: Dict  # min, max
+    
+    # Eligibility
+    eligibility: str
+    entrance_exams: List[str] = []  # Exam IDs
+    
+    # Curriculum
+    syllabus: Optional[str] = None
+    subjects: List[str] = []
+    specializations: List[str] = []
+    
+    # Career
+    career_options: List[str] = []
+    average_salary: Optional[float] = None
+    top_recruiters: List[str] = []
+    
+    # Colleges Offering
+    total_colleges: int = 0
+    top_colleges: List[str] = []  # College IDs
+    
+    # Stats
+    popularity_score: int = 0
+    difficulty_level: Optional[str] = None
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CourseDetailCreate(BaseModel):
+    name: str
+    slug: str
+    full_name: str
+    description: str
+    degree_type: str
+    stream: str
+    duration: str
+    average_fees: float
+    eligibility: str
+    entrance_exams: List[str]
+    career_options: List[str]
+
+# Application/Inquiry Models (Enhanced)
+class Application(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    college_id: str
+    course_id: str
+    
+    # Student Info
+    student_name: str
+    email: EmailStr
+    phone: str
+    date_of_birth: str
+    gender: str
+    category: str  # General, OBC, SC, ST
+    
+    # Academic Info
+    class_10_percentage: float
+    class_12_percentage: float
+    entrance_exam: Optional[str] = None
+    entrance_exam_score: Optional[float] = None
+    
+    # Application Status
+    status: str = "submitted"  # submitted, under_review, accepted, rejected
+    application_number: str = Field(default_factory=lambda: f"APP{str(uuid.uuid4())[:8].upper()}")
+    
+    # Additional
+    preferred_course: str
+    message: Optional[str] = None
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ApplicationCreate(BaseModel):
+    college_id: str
+    course_id: str
+    student_name: str
+    email: EmailStr
+    phone: str
+    date_of_birth: str
+    gender: str
+    category: str
+    class_10_percentage: float
+    class_12_percentage: float
+    entrance_exam: Optional[str] = None
+    entrance_exam_score: Optional[float] = None
+    preferred_course: str
+    message: Optional[str] = None
+
 class College(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
