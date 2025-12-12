@@ -9,6 +9,8 @@ import ExamDetailPage from './pages/ExamDetailPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import StudentDashboard from './pages/EnhancedStudentDashboard';
+import GlobalSearchPage from './pages/GlobalSearchPage';
+import EligibilityChecker from './pages/EligibilityChecker';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
