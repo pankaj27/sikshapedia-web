@@ -310,9 +310,174 @@ const CollegeDetailPage = () => {
               </TabsContent>
 
               <TabsContent value="reviews" className="mt-6">
+                <div className="bg-white rounded-lg shadow p-6 mb-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold">Student Reviews</h2>
+                    <Button onClick={() => setShowReviewForm(!showReviewForm)} className="bg-orange-600 hover:bg-orange-700">
+                      Write a Review
+                    </Button>
+                  </div>
+
+                  {/* Review Form */}
+                  {showReviewForm && (
+                    <form onSubmit={handleReviewSubmit} className="mb-6 p-6 bg-gray-50 rounded-lg">
+                      <h3 className="font-bold text-lg mb-4">Write Your Review</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Overall Rating</label>
+                          <select
+                            value={reviewForm.rating}
+                            onChange={(e) => setReviewForm({...reviewForm, rating: parseInt(e.target.value)})}
+                            className="w-full px-3 py-2 border rounded"
+                            required
+                          >
+                            {[5,4,3,2,1].map(r => <option key={r} value={r}>{r} Star{r>1?'s':''}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Course</label>
+                          <Input
+                            value={reviewForm.course}
+                            onChange={(e) => setReviewForm({...reviewForm, course: e.target.value})}
+                            placeholder="e.g., B.Tech CSE"
+                          />
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">Review Title</label>
+                        <Input
+                          value={reviewForm.review_title}
+                          onChange={(e) => setReviewForm({...reviewForm, review_title: e.target.value})}
+                          placeholder="Summarize your experience"
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">Your Review</label>
+                        <textarea
+                          value={reviewForm.review_text}
+                          onChange={(e) => setReviewForm({...reviewForm, review_text: e.target.value})}
+                          className="w-full px-3 py-2 border rounded min-h-32"
+                          placeholder="Share your experience..."
+                          required
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button type="submit" className="bg-orange-600 hover:bg-orange-700">Submit Review</Button>
+                        <Button type="button" onClick={() => setShowReviewForm(false)} variant="outline">Cancel</Button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* Reviews List */}
+                  {reviews.length > 0 ? (
+                    <div className="space-y-4">
+                      {reviews.map((review) => (
+                        <div key={review.id} className="border-b pb-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h4 className="font-bold">{review.review_title}</h4>
+                              <p className="text-sm text-gray-600">By {review.user_name} {review.course && `• ${review.course}`}</p>
+                            </div>
+                            <div className="flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded font-bold">
+                              <FiStar /> {review.rating}
+                            </div>
+                          </div>
+                          <p className="text-gray-700">{review.review_text}</p>
+                          <p className="text-xs text-gray-500 mt-2">{new Date(review.created_at).toLocaleDateString()}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 text-center py-8">No reviews yet. Be the first to review!</p>
+                  )}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="qa" className="mt-6">
                 <div className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-2xl font-bold mb-4">Student Reviews</h2>
-                  <p className="text-gray-600">Reviews coming soon...</p>
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold">Questions & Answers</h2>
+                    <Button onClick={() => setShowQuestionForm(!showQuestionForm)} className="bg-orange-600 hover:bg-orange-700">
+                      <FiMessageCircle className="mr-2" /> Ask Question
+                    </Button>
+                  </div>
+
+                  {/* Question Form */}
+                  {showQuestionForm && (
+                    <form onSubmit={handleQuestionSubmit} className="mb-6 p-4 bg-gray-50 rounded-lg">
+                      <textarea
+                        value={questionText}
+                        onChange={(e) => setQuestionText(e.target.value)}
+                        className="w-full px-3 py-2 border rounded mb-3"
+                        placeholder="Ask your question about this college..."
+                        required
+                        rows="3"
+                      />
+                      <div className="flex gap-2">
+                        <Button type="submit" className="bg-orange-600 hover:bg-orange-700">Submit Question</Button>
+                        <Button type="button" onClick={() => setShowQuestionForm(false)} variant="outline">Cancel</Button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* Questions List */}
+                  {questions.length > 0 ? (
+                    <div className="space-y-6">
+                      {questions.map((q) => (
+                        <div key={q.id} className="border rounded-lg p-4">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold flex-shrink-0">
+                              {q.user_name.charAt(0)}
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-semibold">{q.user_name}</p>
+                              <p className="text-gray-700 mt-1">{q.question}</p>
+                              <p className="text-xs text-gray-500 mt-1">{new Date(q.created_at).toLocaleDateString()}</p>
+                            </div>
+                          </div>
+
+                          {/* Answers */}
+                          {q.answers && q.answers.length > 0 && (
+                            <div className="ml-13 space-y-3 mt-4">
+                              {q.answers.map((ans) => (
+                                <div key={ans.id} className="bg-gray-50 p-3 rounded">
+                                  <p className="text-sm font-semibold text-orange-600">{ans.user_name}</p>
+                                  <p className="text-sm text-gray-700 mt-1">{ans.answer}</p>
+                                  <p className="text-xs text-gray-500 mt-1">{new Date(ans.created_at).toLocaleDateString()}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Answer Form */}
+                          {selectedQuestion === q.id ? (
+                            <div className="ml-13 mt-3">
+                              <textarea
+                                value={answerText}
+                                onChange={(e) => setAnswerText(e.target.value)}
+                                className="w-full px-3 py-2 border rounded text-sm"
+                                placeholder="Write your answer..."
+                                rows="2"
+                              />
+                              <div className="flex gap-2 mt-2">
+                                <Button size="sm" onClick={() => handleAnswerSubmit(q.id)} className="bg-orange-600 hover:bg-orange-700">
+                                  <FiSend className="mr-1" /> Submit
+                                </Button>
+                                <Button size="sm" onClick={() => setSelectedQuestion(null)} variant="outline">Cancel</Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <Button size="sm" onClick={() => setSelectedQuestion(q.id)} variant="ghost" className="ml-13 mt-3">
+                              Answer this question
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 text-center py-8">No questions yet. Be the first to ask!</p>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
