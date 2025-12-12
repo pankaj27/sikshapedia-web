@@ -4,6 +4,11 @@ import { AuthProvider } from './contexts/AuthContext';
 import HomePage from './pages/HomePage';
 import CollegeListingPage from './pages/CollegeListingPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
+import ExamsPage from './pages/ExamsPage';
+import ExamDetailPage from './pages/ExamDetailPage';
+import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import StudentDashboard from './pages/StudentDashboard';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -18,6 +23,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/colleges" element={<CollegeListingPage />} />
           <Route path="/colleges/:id" element={<CollegeDetailPage />} />
+          <Route path="/exams" element={<ExamsPage />} />
+          <Route path="/exams/:id" element={<ExamDetailPage />} />
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/courses/:id" element={<CourseDetailPage />} />
+          <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
