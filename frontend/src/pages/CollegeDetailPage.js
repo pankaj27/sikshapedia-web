@@ -225,7 +225,7 @@ const CollegeDetailPage = () => {
             <div className="flex gap-2">
               <Button variant="outline"><FiBookmark className="mr-2" /> Save</Button>
               <Button variant="outline"><FiShare2 className="mr-2" /> Share</Button>
-              <Button className="bg-orange-600 hover:bg-orange-700">Apply Now</Button>
+              <Button onClick={() => setShowApplicationForm(true)} className="bg-orange-600 hover:bg-orange-700">Apply Now</Button>
             </div>
           </div>
         </div>
