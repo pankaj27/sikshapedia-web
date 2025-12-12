@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { FiSearch, FiMenu, FiX, FiChevronDown, FiStar, FiMapPin, FiBookOpen } from 'react-icons/fi';
-import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -13,7 +12,14 @@ import 'swiper/css/pagination';
 
 const CollegeDuniaHome = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredColleges, setFeaturedColleges] = useState([]);
   const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0 });
