@@ -92,15 +92,8 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <img src="/assets/sikshapedia_logo.png" alt="Sikshapedia" className="h-8" onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'block';
-              }} />
-              <div className="text-2xl font-bold" style={{display: 'none'}}>
-                <span className="text-orange-600">Siksha</span>
-                <span className="text-blue-600">pedia</span>
-              </div>
+            <Link to="/" className="flex items-center">
+              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
             </Link>
 
             {/* Desktop Navigation */}
