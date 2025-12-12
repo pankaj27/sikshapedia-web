@@ -30,6 +30,8 @@ function App() {
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:id" element={<CourseDetailPage />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route path="/search" element={<GlobalSearchPage />} />
+          <Route path="/eligibility-checker" element={<EligibilityChecker />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
