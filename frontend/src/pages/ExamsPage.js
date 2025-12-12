@@ -54,9 +54,8 @@ const ExamsPage = () => {
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/" className="text-2xl font-bold">
-              <span className="text-orange-600">Siksha</span>
-              <span className="text-blue-600">pedia</span>
+            <Link to="/" className="flex items-center">
+              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
             </Link>
             <div className="flex gap-4">
               <Link to="/">
