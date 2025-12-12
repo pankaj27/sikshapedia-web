@@ -100,8 +100,8 @@ EXAMS_DATA = [
         },
         "previous_year_cutoffs": [
             {"year": 2024, "category": "General", "cutoff": 720},
-            {"year": 2024, "category": "OBC": 690},
-            {"year": 2024, "category": "SC": 600}
+            {"year": 2024, "category": "OBC", "cutoff": 690},
+            {"year": 2024, "category": "SC", "cutoff": 600}
         ],
         "study_materials": [],
         "sample_papers": [],
