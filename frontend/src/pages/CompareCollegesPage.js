@@ -105,32 +105,32 @@ const CompareCollegesPage = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Add College Section */}
         {selectedColleges.length < 4 && (
-          <div className=\"mb-6\">
+          <div className="mb-6">
             {!showSearch ? (
-              <Button onClick={() => setShowSearch(true)} className=\"bg-orange-600 hover:bg-orange-700\">
-                <FiPlus className=\"mr-2\" /> Add College to Compare
+              <Button onClick={() => setShowSearch(true)} className="bg-orange-600 hover:bg-orange-700">
+                <FiPlus className="mr-2" /> Add College to Compare
               </Button>
             ) : (
-              <div className=\"bg-white rounded-lg shadow p-4\">
-                <div className=\"flex gap-2 mb-3\">
+              <div className="bg-white rounded-lg shadow p-4">
+                <div className="flex gap-2 mb-3">
                   <Input
-                    placeholder=\"Search colleges...\"
+                    placeholder="Search colleges..."
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
                     autoFocus
                   />
-                  <Button onClick={() => setShowSearch(false)} variant=\"outline\">Cancel</Button>
+                  <Button onClick={() => setShowSearch(false)} variant="outline">Cancel</Button>
                 </div>
                 {searchResults.length > 0 && (
-                  <div className=\"space-y-2\">
+                  <div className="space-y-2">
                     {searchResults.map(college => (
                       <div
                         key={college.id}
                         onClick={() => addCollege(college)}
-                        className=\"p-3 hover:bg-gray-50 cursor-pointer rounded border\"
+                        className="p-3 hover:bg-gray-50 cursor-pointer rounded border"
                       >
-                        <p className=\"font-semibold\">{college.name}</p>
-                        <p className=\"text-sm text-gray-600\">{college.location.city}, {college.location.state}</p>
+                        <p className="font-semibold">{college.name}</p>
+                        <p className="text-sm text-gray-600">{college.location.city}, {college.location.state}</p>
                       </div>
                     ))}
                   </div>
