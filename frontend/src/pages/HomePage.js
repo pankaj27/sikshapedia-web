@@ -420,12 +420,10 @@ const CollegeDuniaHome = () => {
                             e.preventDefault();
                             navigate(`/colleges/${college.id}/apply`);
                           }}
-                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold flex items-center justify-between px-3 group"
+                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-semibold flex items-center justify-between px-2.5 group"
                         >
                           <span>Apply Now</span>
-                          <div className="bg-orange-700 group-hover:bg-orange-800 rounded-sm w-5 h-5 flex items-center justify-center">
-                            <FiChevronDown className="text-sm transform -rotate-90" />
-                          </div>
+                          <span className="text-base font-normal">›</span>
                         </Button>
                       </div>
                     </div>
@@ -549,12 +547,10 @@ const CollegeDuniaHome = () => {
                     </div>
                     <Button 
                       onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/apply`)}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold flex items-center justify-between px-3 group"
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-semibold flex items-center justify-between px-2.5 group"
                     >
                       <span>Apply Now</span>
-                      <div className="bg-orange-700 group-hover:bg-orange-800 rounded-sm w-5 h-5 flex items-center justify-center">
-                        <FiChevronDown className="text-sm transform -rotate-90" />
-                      </div>
+                      <span className="text-base font-normal">›</span>
                     </Button>
                   </div>
                 </div>
