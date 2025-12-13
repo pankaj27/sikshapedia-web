@@ -14,6 +14,8 @@ import EligibilityChecker from './pages/EligibilityChecker';
 import StudyAbroadPage from './pages/StudyAbroadPage';
 import ScholarshipsPage from './pages/ScholarshipsPage';
 import CompareCollegesPage from './pages/CompareCollegesPage';
+import BlogPage from './pages/BlogPage';
+import BlogDetailPage from './pages/BlogDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
