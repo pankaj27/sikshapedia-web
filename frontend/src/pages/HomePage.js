@@ -418,12 +418,27 @@ const CollegeDuniaHome = () => {
                     <FiAward className="text-blue-600" />
                     <span>{school.board} Board</span>
                   </div>
-                  <div className="flex justify-between items-center pt-2 border-t">
+                  <div className="flex justify-between items-center pt-2 border-t mb-3">
                     <div className="flex items-center gap-1">
                       <FiStar className="text-yellow-500" />
                       <span className="font-bold text-sm">{school.rating}</span>
                     </div>
                     <span className="text-orange-600 font-bold text-sm">₹{school.fees}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={() => navigate(`/colleges?type=school&name=${encodeURIComponent(school.name)}`)}
+                      className="flex-1 bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto"
+                    >
+                      Apply Now
+                    </Button>
+                    <Button 
+                      onClick={() => window.open(`/schools/${school.name}/brochure`, '_blank')}
+                      variant="outline"
+                      className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                    >
+                      Download Brochure
+                    </Button>
                   </div>
                 </div>
               </div>
