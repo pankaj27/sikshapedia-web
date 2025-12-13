@@ -47,18 +47,12 @@ const Header = () => {
     navigate('/');
   };
 
-  const studyGoals = [
-    { name: 'All Courses', link: '/courses' },
-    { name: 'B.Tech', link: '/courses?type=btech' },
-    { name: 'MBA', link: '/courses?type=mba' },
-    { name: 'M.Tech', link: '/courses?type=mtech' },
-    { name: 'MBBS', link: '/courses?type=mbbs' },
-    { name: 'B.Com', link: '/courses?type=bcom' },
-    { name: 'B.Sc', link: '/courses?type=bsc' },
-    { name: 'B.Sc (Nursing)', link: '/courses?type=bsc-nursing' },
-    { name: 'BA', link: '/courses?type=ba' },
-    { name: 'BBA', link: '/courses?type=bba' },
-    { name: 'BCA', link: '/courses?type=bca' }
+  const admissionGoals = [
+    { name: 'School Admission', link: '/colleges?type=school' },
+    { name: 'College Admission', link: '/colleges' },
+    { name: 'University Admission', link: '/colleges?type=university' },
+    { name: 'Course', link: '/courses' },
+    { name: 'Exam', link: '/exams' },
   ];
 
   const exploreMenuItems = [
