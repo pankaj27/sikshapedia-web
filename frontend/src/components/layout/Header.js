@@ -79,7 +79,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 gap-4 max-w-full relative">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
-            <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
+            <img src="/assets/admission-buddy-logo.png" alt="Admission Buddy" className="h-12" />
           </Link>
 
           {/* Select Goal Dropdown - Desktop */}
