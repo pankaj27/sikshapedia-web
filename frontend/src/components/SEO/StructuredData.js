@@ -6,8 +6,8 @@ export const OrganizationSchema = () => {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": "AdmissionBuddy",
-    "url": "https://campus-scout-3.preview.emergentagent.com",
-    "logo": "https://campus-scout-3.preview.emergentagent.com/admissionbuddy-logo.png",
+    "url": "https://campusconnect-89.preview.emergentagent.com",
+    "logo": "https://campusconnect-89.preview.emergentagent.com/admissionbuddy-logo.png",
     "description": "Find detailed information about top colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details.",
     "sameAs": [
       "https://www.facebook.com/admissionbuddy",
@@ -36,7 +36,7 @@ export const CollegeSchema = ({ college }) => {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": college.name,
-    "url": `https://campus-scout-3.preview.emergentagent.com/colleges/${college.id}`,
+    "url": `https://campusconnect-89.preview.emergentagent.com/colleges/${college.id}`,
     "description": college.description,
     "address": {
       "@type": "PostalAddress",
@@ -69,7 +69,7 @@ export const BreadcrumbSchema = ({ items }) => {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": `https://campus-scout-3.preview.emergentagent.com${item.url}`
+      "item": `https://campusconnect-89.preview.emergentagent.com${item.url}`
     }))
   };
 
