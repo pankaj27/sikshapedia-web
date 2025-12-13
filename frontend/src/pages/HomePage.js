@@ -31,7 +31,6 @@ const CollegeDuniaHome = () => {
   const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0 });
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('colleges');
   const [activeRankingYear, setActiveRankingYear] = useState('2024');
 
   useEffect(() => {
