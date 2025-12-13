@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import CollegeListingPage from './pages/CollegeListingPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
+import SchoolsPage from './pages/SchoolsPage';
 import ExamsPage from './pages/ExamsPage';
 import ExamDetailPage from './pages/ExamDetailPage';
 import CoursesPage from './pages/CoursesPage';
@@ -42,6 +43,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/colleges" element={<CollegeListingPage />} />
             <Route path="/colleges/:id" element={<CollegeDetailPage />} />
+            <Route path="/schools" element={<SchoolsPage />} />
             <Route path="/exams" element={<ExamsPage />} />
             <Route path="/exams/:id" element={<ExamDetailPage />} />
             <Route path="/courses" element={<CoursesPage />} />
