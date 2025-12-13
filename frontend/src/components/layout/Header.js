@@ -207,8 +207,8 @@ const Header = () => {
         </div>
 
       {/* Course Categories Bar - Desktop */}
-      <div className="hidden lg:block border-t border-gray-200 bg-gray-50">
-        <div className="w-full px-6">
+      <div className="hidden lg:block border-t border-gray-200 bg-gray-50 w-full">
+        <div className="px-6">
           <div className="flex items-center gap-6 py-2 overflow-x-auto">
             <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">
               All Courses
