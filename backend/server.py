@@ -996,6 +996,133 @@ async def get_user_dashboard_stats(current_user: User = Depends(get_current_user
     }
 
 # ============================================
+# Study Abroad Routes
+# ============================================
+
+@api_router.get("/study-abroad", response_model=List[StudyAbroadUniversity])
+async def get_study_abroad_universities(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    country: Optional[str] = None,
+    search: Optional[str] = None
+):
+    query = {}
+    
+    if country:
+        query["country"] = country
+    
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"city": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
+    
+    universities = await db.study_abroad.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for uni in universities:
+        if isinstance(uni.get('created_at'), str):
+            uni['created_at'] = datetime.fromisoformat(uni['created_at'])
+    
+    return universities
+
+@api_router.get("/study-abroad/{university_id}", response_model=StudyAbroadUniversity)
+async def get_study_abroad_university(university_id: str):
+    university = await db.study_abroad.find_one({"id": university_id}, {"_id": 0})
+    if not university:
+        raise HTTPException(status_code=404, detail="University not found")
+    
+    if isinstance(university.get('created_at'), str):
+        university['created_at'] = datetime.fromisoformat(university['created_at'])
+    
+    return StudyAbroadUniversity(**university)
+
+@api_router.get("/study-abroad/countries/list")
+async def get_countries():
+    countries = await db.study_abroad.distinct("country")
+    return {"countries": sorted(countries)}
+
+# ============================================
+# Scholarship Routes
+# ============================================
+
+@api_router.get("/scholarships", response_model=List[ScholarshipProgram])
+async def get_scholarships(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    type: Optional[str] = None,
+    level: Optional[str] = None,
+    search: Optional[str] = None
+):
+    query = {}
+    
+    if type:
+        query["type"] = type
+    
+    if level:
+        query["level"] = level
+    
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"provider": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
+    
+    scholarships = await db.scholarships.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for scholarship in scholarships:
+        if isinstance(scholarship.get('created_at'), str):
+            scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
+    
+    return scholarships
+
+@api_router.get("/scholarships/{scholarship_id}", response_model=ScholarshipProgram)
+async def get_scholarship(scholarship_id: str):
+    scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
+    if not scholarship:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    
+    if isinstance(scholarship.get('created_at'), str):
+        scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
+    
+    return ScholarshipProgram(**scholarship)
+
+# ============================================
+# Loan Routes
+# ============================================
+
+@api_router.get("/loans", response_model=List[LoanProvider])
+async def get_loan_providers(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    type: Optional[str] = None
+):
+    query = {}
+    
+    if type:
+        query["type"] = type
+    
+    loans = await db.loans.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for loan in loans:
+        if isinstance(loan.get('created_at'), str):
+            loan['created_at'] = datetime.fromisoformat(loan['created_at'])
+    
+    return loans
+
+@api_router.get("/loans/{loan_id}", response_model=LoanProvider)
+async def get_loan_provider(loan_id: str):
+    loan = await db.loans.find_one({"id": loan_id}, {"_id": 0})
+    if not loan:
+        raise HTTPException(status_code=404, detail="Loan provider not found")
+    
+    if isinstance(loan.get('created_at'), str):
+        loan['created_at'] = datetime.fromisoformat(loan['created_at'])
+    
+    return LoanProvider(**loan)
+
+# ============================================
 # Stats Route
 # ============================================
 
@@ -1006,13 +1133,17 @@ async def get_stats():
     total_users = await db.users.count_documents({})
     total_exams = await db.exams.count_documents({})
     total_courses = await db.courses.count_documents({})
+    total_scholarships = await db.scholarships.count_documents({})
+    total_study_abroad = await db.study_abroad.count_documents({})
     
     return {
         "total_colleges": total_colleges,
         "total_reviews": total_reviews,
         "total_users": total_users,
         "total_exams": total_exams,
-        "total_courses": total_courses
+        "total_courses": total_courses,
+        "total_scholarships": total_scholarships,
+        "total_study_abroad": total_study_abroad
     }
 
 # Include the router in the main app
