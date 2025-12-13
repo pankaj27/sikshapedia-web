@@ -595,9 +595,9 @@ const CollegeListingPage = () => {
                             <React.Fragment key={college.id}>
                               <tr className="border-b border-gray-200 hover:bg-orange-50 transition-colors">
                                 {/* CD RANK */}
-                                <td className="px-4 py-6 align-top">
-                                  <div className="flex flex-col items-center gap-2">
-                                    <div className="text-2xl font-bold text-gray-400">#{globalIndex + 1}</div>
+                                <td className="px-3 py-4 align-top">
+                                  <div className="flex flex-col items-center gap-1.5">
+                                    <div className="text-xl font-bold text-gray-400">#{globalIndex + 1}</div>
                                     <div className="w-11 h-11 rounded overflow-hidden border-2 border-gray-200">
                                       {college.images?.[0] ? (
                                         <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
@@ -611,98 +611,95 @@ const CollegeListingPage = () => {
                                 </td>
 
                                 {/* COLLEGES */}
-                                <td className="px-4 py-6 align-top">
+                                <td className="px-3 py-4 align-top">
                                   <div className="max-w-md">
-                                    <div className="flex items-start gap-2 mb-2">
-                                      <Link to={`/colleges/${college.id}`} className="text-base font-bold text-blue-600 hover:underline leading-tight">
+                                    <div className="flex items-start gap-2 mb-1.5">
+                                      <Link to={`/colleges/${college.id}`} className="text-sm font-bold text-blue-600 hover:underline leading-tight">
                                         {college.name}
                                       </Link>
                                       {college.featured && (
-                                        <span className="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
+                                        <span className="bg-yellow-100 text-yellow-800 text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
                                       )}
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                                      <FiMapPin className="text-orange-600 flex-shrink-0" size={12} />
+                                    <div className="flex items-center gap-1.5 text-[11px] text-gray-600 mb-1">
+                                      <FiMapPin className="text-orange-600 flex-shrink-0" size={11} />
                                       <span>{college.location?.city}, {college.location?.state}</span>
                                       <span className="text-gray-400">|</span>
                                       <span className="text-blue-600 font-medium">{college.type}</span>
                                     </div>
-                                    <div className="text-xs text-gray-600 mb-3">{college.accreditation || 'NAAC A+'} Approved</div>
-                                    <div className="flex flex-wrap gap-2 mb-2">
+                                    <div className="text-[10px] text-gray-600 mb-2">{college.accreditation || 'NAAC A+'} Approved</div>
+                                    <div className="flex flex-wrap gap-1.5 mb-1.5">
                                       <Link to={`/colleges/${college.id}`}>
-                                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs h-8 px-3">
+                                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-[11px] h-7 px-2.5">
                                           Apply Now
                                         </Button>
                                       </Link>
-                                      <Button size="sm" variant="outline" className="text-xs h-8 px-3 border-gray-300">
+                                      <Button size="sm" variant="outline" className="text-[11px] h-7 px-2.5 border-gray-300">
                                         Download Brochure
                                       </Button>
                                       <Button 
                                         size="sm" 
                                         variant="ghost" 
-                                        className={`text-xs h-8 px-3 ${isInCompare ? 'bg-orange-100 text-orange-700' : 'text-gray-600'}`}
+                                        className={`text-[11px] h-7 px-2.5 ${isInCompare ? 'bg-orange-100 text-orange-700' : 'text-gray-600'}`}
                                         onClick={() => toggleCompare(college.id)}
                                       >
-                                        {isInCompare ? <FiCheckCircle className="mr-1" /> : null}
+                                        {isInCompare ? <FiCheckCircle className="mr-1" size={11} /> : null}
                                         {isInCompare ? 'Added' : 'Add To Compare'}
                                       </Button>
                                     </div>
-                                    <div className="text-[10px] text-gray-500">
+                                    <div className="text-[10px] text-gray-500 mt-1">
                                       <span className="font-semibold">CD Score:</span> {Math.floor(Math.random() * 500) + 1000}/2000
                                     </div>
-                                    {college.accreditation && (
-                                      <div className="text-[10px] text-gray-600 mt-1">{college.accreditation}</div>
-                                    )}
                                   </div>
                                 </td>
 
                                 {/* COURSE FEES */}
-                                <td className="px-4 py-6 align-top">
+                                <td className="px-3 py-4 align-top">
                                   <div>
-                                    <div className="text-lg font-bold text-gray-900 mb-1">
+                                    <div className="text-base font-bold text-gray-900 mb-0.5">
                                       ₹{(college.average_fees / 100000).toFixed(2)}L
                                     </div>
-                                    <div className="text-[10px] text-gray-500 mb-2">1st Year Fees</div>
-                                    <Link to={`/colleges/${college.id}#fees`} className="text-xs text-blue-600 hover:underline">
+                                    <div className="text-[10px] text-gray-500 mb-1.5">1st Year Fees</div>
+                                    <Link to={`/colleges/${college.id}#fees`} className="text-[11px] text-blue-600 hover:underline">
                                       Compare Fees
                                     </Link>
                                   </div>
                                 </td>
 
                                 {/* PLACEMENT */}
-                                <td className="px-4 py-6 align-top">
+                                <td className="px-3 py-4 align-top">
                                   <div>
-                                    <div className="text-[10px] text-gray-500 mb-1">Average Package</div>
-                                    <div className="text-base font-bold text-green-600 mb-3">
+                                    <div className="text-[10px] text-gray-500 mb-0.5">Average Package</div>
+                                    <div className="text-sm font-bold text-green-600 mb-2">
                                       ₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : 'N/A'}L
                                     </div>
-                                    <div className="text-[10px] text-gray-500 mb-1">Highest Package</div>
-                                    <div className="text-base font-bold text-gray-900 mb-2">
+                                    <div className="text-[10px] text-gray-500 mb-0.5">Highest Package</div>
+                                    <div className="text-sm font-bold text-gray-900 mb-1.5">
                                       ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : 'N/A'}L
                                     </div>
-                                    <Link to={`/colleges/${college.id}#placement`} className="text-xs text-blue-600 hover:underline">
+                                    <Link to={`/colleges/${college.id}#placement`} className="text-[11px] text-blue-600 hover:underline">
                                       Compare Placement
                                     </Link>
                                   </div>
                                 </td>
 
                                 {/* USER REVIEWS */}
-                                <td className="px-4 py-6 align-top">
+                                <td className="px-3 py-4 align-top">
                                   <div>
-                                    <div className="flex items-baseline gap-1 mb-1">
-                                      <span className="text-xl font-bold text-gray-900">{college.rating || '4.5'}</span>
+                                    <div className="flex items-baseline gap-0.5 mb-0.5">
+                                      <span className="text-lg font-bold text-gray-900">{college.rating || '4.5'}</span>
                                       <span className="text-gray-500 text-xs">/5</span>
                                     </div>
-                                    <div className="flex gap-0.5 mb-2">
+                                    <div className="flex gap-0.5 mb-1.5">
                                       {[...Array(5)].map((_, i) => (
                                         <FiStar 
                                           key={i} 
                                           className={`${i < Math.floor(college.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                                          size={12} 
+                                          size={11} 
                                         />
                                       ))}
                                     </div>
-                                    <div className="text-[10px] text-gray-500 mb-2">
+                                    <div className="text-[10px] text-gray-500 mb-1.5">
                                       Based on {college.reviews || Math.floor(Math.random() * 500) + 50} User<br />Reviews
                                     </div>
                                     <div className="text-[10px] text-gray-700 font-medium">
@@ -712,23 +709,23 @@ const CollegeListingPage = () => {
                                 </td>
 
                                 {/* RANKING */}
-                                <td className="px-4 py-6 align-top">
+                                <td className="px-3 py-4 align-top">
                                   <div>
-                                    <div className="text-xs text-gray-600 mb-2">
+                                    <div className="text-[11px] text-gray-600 mb-1.5">
                                       #{globalIndex + 1}th/500 in India
                                     </div>
-                                    <div className="flex items-center gap-1 mb-3">
-                                      <FiAward className="text-orange-600 flex-shrink-0" size={14} />
+                                    <div className="flex items-center gap-1 mb-2">
+                                      <FiAward className="text-orange-600 flex-shrink-0" size={12} />
                                       <span className="text-[10px] font-bold text-gray-700">Collegedunia</span>
                                     </div>
-                                    <div className="flex flex-wrap gap-1 mb-2">
+                                    <div className="flex flex-wrap gap-1 mb-1.5">
                                       {['NIRF', 'IIRF', 'IT'].map((agency) => (
                                         <div key={agency} className="w-5 h-5 bg-gray-200 rounded border border-gray-300 flex items-center justify-center">
                                           <span className="text-[8px] font-bold text-gray-700">{agency.slice(0, 2)}</span>
                                         </div>
                                       ))}
                                     </div>
-                                    <Link to={`/colleges/${college.id}#ranking`} className="text-xs text-blue-600 hover:underline">
+                                    <Link to={`/colleges/${college.id}#ranking`} className="text-[11px] text-blue-600 hover:underline">
                                       + 4 More
                                     </Link>
                                   </div>
