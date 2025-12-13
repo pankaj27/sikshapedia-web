@@ -1917,6 +1917,387 @@ async def update_session_status(
     return {"message": "Session status updated successfully"}
 
 # ============================================
+# Payment & Subscription Routes
+# ============================================
+
+@api_router.get("/subscription-plans")
+async def get_subscription_plans():
+    plans = [
+        {
+            "id": "premium-monthly",
+            "name": "Premium Monthly",
+            "price": 299,
+            "duration": "1 month",
+            "features": [
+                "Access to all premium study materials",
+                "Unlimited downloads",
+                "Priority counseling sessions",
+                "Advanced eligibility checker",
+                "Ad-free experience",
+                "Early access to new features"
+            ]
+        },
+        {
+            "id": "premium-yearly",
+            "name": "Premium Yearly",
+            "price": 2999,
+            "duration": "12 months",
+            "features": [
+                "All Monthly features",
+                "Save 17% compared to monthly",
+                "Free career assessment (worth ₹1000)",
+                "Exclusive webinars and workshops",
+                "Dedicated support",
+                "Lifetime access to recorded sessions"
+            ],
+            "popular": True
+        }
+    ]
+    return plans
+
+@api_router.post("/create-payment-intent")
+async def create_payment_intent(
+    plan_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    plans = {
+        "premium-monthly": {"amount": 299, "name": "Premium Monthly"},
+        "premium-yearly": {"amount": 2999, "name": "Premium Yearly"}
+    }
+    
+    if plan_id not in plans:
+        raise HTTPException(status_code=400, detail="Invalid plan")
+    
+    plan = plans[plan_id]
+    
+    # In production, create actual Stripe payment intent
+    # For now, return mock data
+    payment_intent = {
+        "id": f"pi_{str(uuid.uuid4())[:24]}",
+        "amount": plan["amount"] * 100,  # Convert to paise
+        "currency": "inr",
+        "status": "requires_payment_method",
+        "client_secret": f"pi_{str(uuid.uuid4())[:24]}_secret_{str(uuid.uuid4())[:24]}"
+    }
+    
+    return payment_intent
+
+@api_router.post("/confirm-subscription")
+async def confirm_subscription(
+    plan_id: str,
+    payment_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    plans_config = {
+        "premium-monthly": {"duration_days": 30, "name": "Premium Monthly", "amount": 299},
+        "premium-yearly": {"duration_days": 365, "name": "Premium Yearly", "amount": 2999}
+    }
+    
+    if plan_id not in plans_config:
+        raise HTTPException(status_code=400, detail="Invalid plan")
+    
+    plan = plans_config[plan_id]
+    
+    # Create subscription
+    subscription = Subscription(
+        user_id=current_user.id,
+        plan_type=plan["name"],
+        amount=plan["amount"],
+        start_date=datetime.now(timezone.utc),
+        end_date=datetime.now(timezone.utc) + timedelta(days=plan["duration_days"]),
+        status="active",
+        payment_id=payment_id,
+        features=["premium_materials", "unlimited_downloads", "priority_support"]
+    )
+    
+    sub_dict = subscription.model_dump()
+    sub_dict['start_date'] = sub_dict['start_date'].isoformat()
+    sub_dict['end_date'] = sub_dict['end_date'].isoformat()
+    sub_dict['created_at'] = sub_dict['created_at'].isoformat()
+    
+    await db.subscriptions.insert_one(sub_dict)
+    
+    # Create payment transaction
+    transaction = PaymentTransaction(
+        user_id=current_user.id,
+        transaction_type="subscription",
+        amount=plan["amount"],
+        payment_method="stripe",
+        payment_id=payment_id,
+        status="completed",
+        item_name=plan["name"]
+    )
+    trans_dict = transaction.model_dump()
+    trans_dict['created_at'] = trans_dict['created_at'].isoformat()
+    await db.payment_transactions.insert_one(trans_dict)
+    
+    # Update user role or add premium flag
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"subscription_status": "premium", "subscription_end": sub_dict['end_date']}}
+    )
+    
+    # Create notification
+    notification = Notification(
+        user_id=current_user.id,
+        type="application_update",
+        title="Premium Subscription Activated!",
+        message=f"Your {plan['name']} subscription is now active. Enjoy premium features!",
+        link="/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
+    
+    return {"message": "Subscription activated successfully", "subscription": subscription}
+
+@api_router.get("/my-subscription")
+async def get_my_subscription(current_user: User = Depends(get_current_user)):
+    subscription = await db.subscriptions.find_one(
+        {"user_id": current_user.id, "status": "active"},
+        {"_id": 0}
+    )
+    
+    if not subscription:
+        return {"status": "none", "message": "No active subscription"}
+    
+    if isinstance(subscription.get('start_date'), str):
+        subscription['start_date'] = datetime.fromisoformat(subscription['start_date'])
+    if isinstance(subscription.get('end_date'), str):
+        subscription['end_date'] = datetime.fromisoformat(subscription['end_date'])
+    if isinstance(subscription.get('created_at'), str):
+        subscription['created_at'] = datetime.fromisoformat(subscription['created_at'])
+    
+    return subscription
+
+# ============================================
+# Referral System Routes
+# ============================================
+
+@api_router.post("/apply-referral-code")
+async def apply_referral_code(referral_code: str, current_user: User = Depends(get_current_user)):
+    # Find user with this referral code
+    referrer = await db.users.find_one({"referral_code": referral_code}, {"_id": 0})
+    
+    if not referrer:
+        raise HTTPException(status_code=404, detail="Invalid referral code")
+    
+    if referrer['id'] == current_user.id:
+        raise HTTPException(status_code=400, detail="You cannot use your own referral code")
+    
+    # Check if already applied a referral
+    existing = await db.referral_tracking.find_one({"referred_user_id": current_user.id})
+    if existing:
+        raise HTTPException(status_code=400, detail="You have already used a referral code")
+    
+    # Create referral tracking
+    referral = ReferralTracking(
+        referrer_id=referrer['id'],
+        referrer_name=referrer['name'],
+        referred_user_id=current_user.id,
+        referred_user_name=current_user.name,
+        referred_user_email=current_user.email,
+        status="completed",
+        earnings_amount=200.0,
+        earnings_paid=True
+    )
+    ref_dict = referral.model_dump()
+    ref_dict['created_at'] = ref_dict['created_at'].isoformat()
+    await db.referral_tracking.insert_one(ref_dict)
+    
+    # Add earnings to referrer
+    earning_transaction = EarningTransaction(
+        user_id=referrer['id'],
+        type="referral",
+        amount=200.0,
+        description=f"Referral bonus for {current_user.name}",
+        reference_id=current_user.id
+    )
+    earn_dict = earning_transaction.model_dump()
+    earn_dict['created_at'] = earn_dict['created_at'].isoformat()
+    await db.earnings.insert_one(earn_dict)
+    
+    # Update referrer's totals
+    await db.users.update_one(
+        {"id": referrer['id']},
+        {
+            "$inc": {"total_earnings": 200.0, "referral_count": 1}
+        }
+    )
+    
+    # Give bonus to referred user
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$inc": {"total_earnings": 100.0}}
+    )
+    
+    referred_earning = EarningTransaction(
+        user_id=current_user.id,
+        type="referral",
+        amount=100.0,
+        description=f"Sign-up bonus via referral code",
+        reference_id=referrer['id']
+    )
+    ref_earn_dict = referred_earning.model_dump()
+    ref_earn_dict['created_at'] = ref_earn_dict['created_at'].isoformat()
+    await db.earnings.insert_one(ref_earn_dict)
+    
+    # Notifications
+    notif_referrer = Notification(
+        user_id=referrer['id'],
+        type="review_earning",
+        title="Referral Bonus Earned!",
+        message=f"You earned ₹200 for referring {current_user.name}",
+        link="/dashboard"
+    )
+    notif_ref_dict = notif_referrer.model_dump()
+    notif_ref_dict['created_at'] = notif_ref_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_ref_dict)
+    
+    notif_referred = Notification(
+        user_id=current_user.id,
+        type="review_earning",
+        title="Welcome Bonus!",
+        message=f"You received ₹100 sign-up bonus",
+        link="/dashboard"
+    )
+    notif_ref2_dict = notif_referred.model_dump()
+    notif_ref2_dict['created_at'] = notif_ref2_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_ref2_dict)
+    
+    return {"message": "Referral applied successfully! You received ₹100 bonus"}
+
+@api_router.get("/my-referrals")
+async def get_my_referrals(current_user: User = Depends(get_current_user)):
+    referrals = await db.referral_tracking.find(
+        {"referrer_id": current_user.id},
+        {"_id": 0}
+    ).to_list(100)
+    
+    for ref in referrals:
+        if isinstance(ref.get('created_at'), str):
+            ref['created_at'] = datetime.fromisoformat(ref['created_at'])
+    
+    total_earnings = sum(r['earnings_amount'] for r in referrals if r['earnings_paid'])
+    
+    return {
+        "total_referrals": len(referrals),
+        "total_earnings": total_earnings,
+        "referrals": referrals
+    }
+
+# ============================================
+# Institution Panel Routes
+# ============================================
+
+@api_router.post("/institution/register")
+async def register_institution(
+    name: str,
+    email: EmailStr,
+    password: str,
+    phone: str,
+    college_id: str,
+    contact_person: str,
+    designation: str
+):
+    # Check if institution exists
+    existing = await db.institutions.find_one({"email": email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Institution already registered")
+    
+    # Verify college exists
+    college = await db.colleges.find_one({"id": college_id})
+    if not college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Create institution account
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    
+    institution = Institution(
+        name=name,
+        email=email,
+        phone=phone,
+        college_id=college_id,
+        contact_person=contact_person,
+        designation=designation,
+        subscription_plan="basic"
+    )
+    
+    inst_dict = institution.model_dump()
+    inst_dict['created_at'] = inst_dict['created_at'].isoformat()
+    inst_dict['password'] = hashed_password.decode('utf-8')
+    inst_dict['role'] = 'institution'
+    
+    await db.institutions.insert_one(inst_dict)
+    
+    return {"message": "Institution registered successfully", "email": email}
+
+@api_router.post("/institution/login")
+async def institution_login(email: EmailStr, password: str):
+    institution = await db.institutions.find_one({"email": email})
+    
+    if not institution:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not bcrypt.checkpw(password.encode('utf-8'), institution['password'].encode('utf-8')):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Update last login
+    await db.institutions.update_one(
+        {"email": email},
+        {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    token = create_access_token({"sub": email, "role": "institution", "id": institution['id']})
+    
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "institution": {
+            "id": institution['id'],
+            "name": institution['name'],
+            "email": institution['email'],
+            "college_id": institution['college_id'],
+            "role": "institution"
+        }
+    }
+
+@api_router.get("/institution/dashboard")
+async def get_institution_dashboard(current_user: User = Depends(get_current_user)):
+    if current_user.role != "institution":
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Get institution data
+    institution = await db.institutions.find_one({"id": current_user.id}, {"_id": 0})
+    
+    if not institution:
+        raise HTTPException(status_code=404, detail="Institution not found")
+    
+    # Get applications for this college
+    applications = await db.applications.find(
+        {"college_id": institution['college_id']},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    # Count by status
+    status_counts = {
+        "submitted": 0,
+        "under_review": 0,
+        "accepted": 0,
+        "rejected": 0
+    }
+    
+    for app in applications:
+        status_counts[app.get('status', 'submitted')] += 1
+    
+    return {
+        "institution": institution,
+        "total_applications": len(applications),
+        "status_breakdown": status_counts,
+        "recent_applications": applications[:10]
+    }
+
+# ============================================
 # Study Abroad Routes
 # ============================================
 
