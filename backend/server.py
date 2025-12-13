@@ -1370,6 +1370,224 @@ async def get_user_dashboard_stats(current_user: User = Depends(get_current_user
     }
 
 # ============================================
+# Education Loan Routes
+# ============================================
+
+@api_router.get("/education-loans", response_model=List[EducationLoan])
+async def get_education_loans(
+    loan_type: Optional[str] = None,
+    max_interest_rate: Optional[float] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    query = {}
+    
+    if loan_type:
+        query["loan_type"] = loan_type
+    
+    if max_interest_rate:
+        query["interest_rate"] = {"$lte": max_interest_rate}
+    
+    loans = await db.education_loans.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for loan in loans:
+        if isinstance(loan.get('created_at'), str):
+            loan['created_at'] = datetime.fromisoformat(loan['created_at'])
+    
+    return loans
+
+@api_router.get("/education-loans/{loan_id}", response_model=EducationLoan)
+async def get_education_loan(loan_id: str):
+    loan = await db.education_loans.find_one({"id": loan_id}, {"_id": 0})
+    if not loan:
+        raise HTTPException(status_code=404, detail="Education loan not found")
+    
+    if isinstance(loan.get('created_at'), str):
+        loan['created_at'] = datetime.fromisoformat(loan['created_at'])
+    
+    return EducationLoan(**loan)
+
+@api_router.post("/loan-applications", response_model=LoanApplication)
+async def create_loan_application(app_data: LoanApplicationCreate, current_user: User = Depends(get_current_user)):
+    loan = await db.education_loans.find_one({"id": app_data.loan_id})
+    if not loan:
+        raise HTTPException(status_code=404, detail="Education loan not found")
+    
+    application = LoanApplication(
+        **app_data.model_dump(),
+        user_id=current_user.id,
+        bank_name=loan['bank_name']
+    )
+    app_dict = application.model_dump()
+    app_dict['created_at'] = app_dict['created_at'].isoformat()
+    app_dict['updated_at'] = app_dict['updated_at'].isoformat()
+    
+    await db.loan_applications.insert_one(app_dict)
+    
+    # Create notification
+    notification = Notification(
+        user_id=current_user.id,
+        type="application_update",
+        title="Loan Application Submitted!",
+        message=f"Your loan application {application.application_number} for {loan['bank_name']} has been submitted successfully. We'll notify you once it's reviewed.",
+        link="/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
+    
+    return application
+
+@api_router.get("/loan-applications/my", response_model=List[LoanApplication])
+async def get_my_loan_applications(current_user: User = Depends(get_current_user)):
+    applications = await db.loan_applications.find(
+        {"user_id": current_user.id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    for app in applications:
+        if isinstance(app.get('created_at'), str):
+            app['created_at'] = datetime.fromisoformat(app['created_at'])
+        if isinstance(app.get('updated_at'), str):
+            app['updated_at'] = datetime.fromisoformat(app['updated_at'])
+    
+    return applications
+
+# ============================================
+# Scholarship Routes
+# ============================================
+
+@api_router.get("/scholarships", response_model=List[Scholarship])
+async def get_scholarships(
+    scholarship_type: Optional[str] = None,
+    provider: Optional[str] = None,
+    education_level: Optional[str] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    query = {"active": True}
+    
+    if scholarship_type:
+        query["scholarship_type"] = scholarship_type
+    
+    if provider:
+        query["provider"] = provider
+    
+    if education_level:
+        query["education_level"] = education_level
+    
+    scholarships = await db.scholarships.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for scholarship in scholarships:
+        if isinstance(scholarship.get('created_at'), str):
+            scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
+    
+    return scholarships
+
+@api_router.get("/scholarships/{scholarship_id}", response_model=Scholarship)
+async def get_scholarship(scholarship_id: str):
+    scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
+    if not scholarship:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    
+    if isinstance(scholarship.get('created_at'), str):
+        scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
+    
+    return Scholarship(**scholarship)
+
+@api_router.post("/scholarship-applications", response_model=ScholarshipApplication)
+async def create_scholarship_application(app_data: ScholarshipApplicationCreate, current_user: User = Depends(get_current_user)):
+    scholarship = await db.scholarships.find_one({"id": app_data.scholarship_id})
+    if not scholarship:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    
+    # Check if user already applied
+    existing = await db.scholarship_applications.find_one({
+        "user_id": current_user.id,
+        "scholarship_id": app_data.scholarship_id
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="You have already applied for this scholarship")
+    
+    application = ScholarshipApplication(
+        **app_data.model_dump(),
+        user_id=current_user.id,
+        scholarship_name=scholarship['name']
+    )
+    app_dict = application.model_dump()
+    app_dict['created_at'] = app_dict['created_at'].isoformat()
+    app_dict['updated_at'] = app_dict['updated_at'].isoformat()
+    
+    await db.scholarship_applications.insert_one(app_dict)
+    
+    # Create notification
+    notification = Notification(
+        user_id=current_user.id,
+        type="application_update",
+        title="Scholarship Application Submitted!",
+        message=f"Your application {application.application_number} for {scholarship['name']} has been submitted. Check your email for further updates.",
+        link="/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
+    
+    return application
+
+@api_router.get("/scholarship-applications/my", response_model=List[ScholarshipApplication])
+async def get_my_scholarship_applications(current_user: User = Depends(get_current_user)):
+    applications = await db.scholarship_applications.find(
+        {"user_id": current_user.id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    for app in applications:
+        if isinstance(app.get('created_at'), str):
+            app['created_at'] = datetime.fromisoformat(app['created_at'])
+        if isinstance(app.get('updated_at'), str):
+            app['updated_at'] = datetime.fromisoformat(app['updated_at'])
+    
+    return applications
+
+@api_router.get("/scholarship-applications/check-eligibility")
+async def check_scholarship_eligibility(
+    cgpa: float,
+    annual_income: float,
+    category: str,
+    current_user: User = Depends(get_current_user)
+):
+    # Get all active scholarships
+    scholarships = await db.scholarships.find({"active": True}, {"_id": 0}).to_list(100)
+    
+    eligible_scholarships = []
+    
+    for scholarship in scholarships:
+        # Basic eligibility logic (can be enhanced)
+        is_eligible = True
+        
+        # Income-based scholarships (need-based)
+        if scholarship['scholarship_type'] == 'Need-based' and annual_income > 500000:
+            is_eligible = False
+        
+        # Merit-based scholarships
+        if scholarship['scholarship_type'] == 'Merit-based' and cgpa < 7.5:
+            is_eligible = False
+        
+        if is_eligible:
+            eligible_scholarships.append({
+                "id": scholarship['id'],
+                "name": scholarship['name'],
+                "amount": scholarship['amount'],
+                "provider": scholarship['provider'],
+                "deadline": scholarship['deadline']
+            })
+    
+    return {
+        "eligible_count": len(eligible_scholarships),
+        "scholarships": eligible_scholarships
+    }
+
+# ============================================
 # Study Abroad Routes
 # ============================================
 
