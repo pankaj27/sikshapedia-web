@@ -93,6 +93,12 @@ const CollegeDuniaHome = () => {
         keywords="colleges in india, top universities, engineering colleges, medical colleges, MBA colleges, admissions 2024, college rankings, NIRF rankings, JEE, NEET, CAT preparation, course finder, study abroad"
         canonical="/"
       />
+      <MetaTags 
+        title="AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024"
+        description="Find detailed information about 10,000+ colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details. Read reviews and make informed decisions."
+        keywords="colleges in india, top universities, engineering colleges, medical colleges, MBA colleges, admissions 2024, college rankings, NIRF rankings, JEE, NEET, CAT preparation, course finder, study abroad"
+        canonical="/"
+      />
       {/* Hero Section with Background Slider */}
       <section className="relative h-[500px] overflow-hidden">
         <Swiper
