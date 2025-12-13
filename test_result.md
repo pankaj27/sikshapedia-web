@@ -373,13 +373,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "College Module"
-    - "College Detail Page - Reviews Tab"
-    - "College Detail Page - Q&A Tab"
-    - "Application Modal"
+    - "Premium Subscription & Stripe Payment Integration"
   stuck_tasks: []
-  test_all: true
-  test_priority: "stuck_first"
+  test_all: false
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "testing"
