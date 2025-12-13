@@ -423,8 +423,8 @@ const CollegeDuniaHome = () => {
                           className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold flex items-center justify-between px-3 group"
                         >
                           <span>Apply Now</span>
-                          <div className="bg-orange-700 group-hover:bg-orange-800 rounded-sm p-0.5 flex items-center justify-center">
-                            <FiArrowRight className="text-[11px]" />
+                          <div className="bg-orange-700 group-hover:bg-orange-800 rounded-sm w-5 h-5 flex items-center justify-center">
+                            <FiChevronDown className="text-sm transform -rotate-90" />
                           </div>
                         </Button>
                       </div>
@@ -552,8 +552,8 @@ const CollegeDuniaHome = () => {
                       className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold flex items-center justify-between px-3 group"
                     >
                       <span>Apply Now</span>
-                      <div className="bg-orange-700 group-hover:bg-orange-800 rounded-sm p-0.5 flex items-center justify-center">
-                        <FiArrowRight className="text-[11px]" />
+                      <div className="bg-orange-700 group-hover:bg-orange-800 rounded-sm w-5 h-5 flex items-center justify-center">
+                        <FiChevronDown className="text-sm transform -rotate-90" />
                       </div>
                     </Button>
                   </div>
