@@ -111,6 +111,7 @@ const CollegeDuniaHome = () => {
                   <Link to="/compare" className="block py-2 hover:text-orange-600">⚖️ Compare Colleges</Link>
                   <Link to="/study-abroad" className="block py-2 hover:text-orange-600">✈️ Study Abroad</Link>
                   <Link to="/scholarships" className="block py-2 hover:text-orange-600">💰 Scholarships & Loans</Link>
+                  <Link to="/blog" className="block py-2 hover:text-orange-600">📝 Blog & Articles</Link>
                 </div>
               </div>
             </nav>
