@@ -61,7 +61,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-blue-950 text-gray-300">
+    <footer className="bg-black text-gray-300">
       {/* Newsletter Section */}
       <div className="bg-gradient-to-r from-orange-600 to-orange-500 py-8">
         <div className="container mx-auto px-4">
@@ -181,7 +181,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Footer */}
-      <div className="border-t border-blue-900">
+      <div className="border-t border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Logo and Copyright */}
