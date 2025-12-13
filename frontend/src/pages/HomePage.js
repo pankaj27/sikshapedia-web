@@ -525,29 +525,32 @@ const CollegeDuniaHome = () => {
                     <span className="font-semibold">Ranked {school.rank}</span> / 100
                   </div>
 
-                  {/* Action Buttons - Compact */}
+                  {/* Action Buttons - With Icons */}
                   <div className="space-y-1.5">
                     <div className="flex gap-1.5">
                       <Button 
                         onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/compare`)}
                         variant="outline"
-                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
+                        className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
                       >
+                        <FiBarChart2 className="text-xs" />
                         Compare
                       </Button>
                       <Button 
                         onClick={() => window.open(`/schools/${school.name}/brochure`, '_blank')}
                         variant="outline"
-                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
+                        className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
                       >
+                        <FiDownload className="text-xs" />
                         Brochure
                       </Button>
                     </div>
                     <Button 
                       onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/apply`)}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold"
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold flex items-center justify-center gap-1"
                     >
                       Apply Now
+                      <FiArrowRight className="text-xs" />
                     </Button>
                   </div>
                 </div>
