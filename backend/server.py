@@ -2021,62 +2021,67 @@ async def create_checkout_session(
     
     return {"url": session.url, "session_id": session.session_id}
 
-@api_router.post("/confirm-subscription")
-async def confirm_subscription(
-    plan_id: str,
-    payment_id: str,
+@api_router.get("/checkout-status/{session_id}")
+async def get_checkout_status(
+    request: Request,
+    session_id: str,
     current_user: User = Depends(get_current_user)
 ):
-    plans_config = {
-        "premium-monthly": {"duration_days": 30, "name": "Premium Monthly", "amount": 299},
-        "premium-yearly": {"duration_days": 365, "name": "Premium Yearly", "amount": 2999}
-    }
+    # Initialize Stripe Checkout
+    host_url = str(request.base_url)
+    webhook_url = f"{host_url}api/webhook/stripe"
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
     
-    if plan_id not in plans_config:
-        raise HTTPException(status_code=400, detail="Invalid plan")
+    # Get checkout session status from Stripe
+    checkout_status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
     
-    plan = plans_config[plan_id]
-    
-    # Create subscription
-    subscription = Subscription(
-        user_id=current_user.id,
-        plan_type=plan["name"],
-        amount=plan["amount"],
-        start_date=datetime.now(timezone.utc),
-        end_date=datetime.now(timezone.utc) + timedelta(days=plan["duration_days"]),
-        status="active",
-        payment_id=payment_id,
-        features=["premium_materials", "unlimited_downloads", "priority_support"]
+    # Check if payment was already processed (to prevent double processing)
+    existing_transaction = await db.payment_transactions.find_one(
+        {"payment_id": session_id, "status": "completed"}
     )
     
-    sub_dict = subscription.model_dump()
-    sub_dict['start_date'] = sub_dict['start_date'].isoformat()
-    sub_dict['end_date'] = sub_dict['end_date'].isoformat()
-    sub_dict['created_at'] = sub_dict['created_at'].isoformat()
-    
-    await db.subscriptions.insert_one(sub_dict)
-    
-    # Create payment transaction
-    transaction = PaymentTransaction(
-        user_id=current_user.id,
-        transaction_type="subscription",
-        amount=plan["amount"],
-        payment_method="stripe",
-        payment_id=payment_id,
-        status="completed",
-        item_name=plan["name"]
-    )
-    trans_dict = transaction.model_dump()
-    trans_dict['created_at'] = trans_dict['created_at'].isoformat()
-    await db.payment_transactions.insert_one(trans_dict)
-    
-    # Update user role or add premium flag
-    await db.users.update_one(
-        {"id": current_user.id},
-        {"$set": {"subscription_status": "premium", "subscription_end": sub_dict['end_date']}}
-    )
-    
-    # Create notification
+    if checkout_status.payment_status == "paid" and not existing_transaction:
+        # Extract metadata
+        plan_id = checkout_status.metadata.get("plan_id")
+        user_id = checkout_status.metadata.get("user_id")
+        
+        if plan_id not in SUBSCRIPTION_PACKAGES:
+            raise HTTPException(status_code=400, detail="Invalid plan in metadata")
+        
+        plan = SUBSCRIPTION_PACKAGES[plan_id]
+        
+        # Create subscription
+        subscription = Subscription(
+            user_id=user_id,
+            plan_type=plan["name"],
+            amount=plan["amount"],
+            start_date=datetime.now(timezone.utc),
+            end_date=datetime.now(timezone.utc) + timedelta(days=plan["duration_days"]),
+            status="active",
+            payment_id=session_id,
+            features=["premium_materials", "unlimited_downloads", "priority_support"]
+        )
+        
+        sub_dict = subscription.model_dump()
+        sub_dict['start_date'] = sub_dict['start_date'].isoformat()
+        sub_dict['end_date'] = sub_dict['end_date'].isoformat()
+        sub_dict['created_at'] = sub_dict['created_at'].isoformat()
+        
+        await db.subscriptions.insert_one(sub_dict)
+        
+        # Update payment transaction status
+        await db.payment_transactions.update_one(
+            {"payment_id": session_id},
+            {"$set": {"status": "completed"}}
+        )
+        
+        # Update user subscription status
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"subscription_status": "premium", "subscription_end": sub_dict['end_date']}}
+        )
+        
+        # Create notification
     notification = Notification(
         user_id=current_user.id,
         type="application_update",
