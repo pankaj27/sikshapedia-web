@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { FiMapPin, FiStar, FiCheckCircle, FiAward, FiEdit3, FiGrid, FiTarget, FiFilter, FiChevronDown } from 'react-icons/fi';
+import { FiMapPin, FiStar, FiCheckCircle, FiAward, FiEdit3, FiGrid, FiTarget, FiFilter, FiChevronDown, FiUser } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
@@ -10,7 +10,7 @@ const CollegeListingPage = () => {
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
   const [showContent, setShowContent] = useState(false);
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
   const [filters, setFilters] = useState({
@@ -59,7 +59,7 @@ const CollegeListingPage = () => {
     }));
   };
 
-  const paginatedColleges = colleges.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const paginatedColleges = colleges.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const totalPages = Math.ceil(colleges.length / itemsPerPage);
 
   return (
@@ -68,10 +68,16 @@ const CollegeListingPage = () => {
       <div className="bg-white border-b">
         <div className="container mx-auto px-6 py-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">Top Colleges in India 2025</h1>
-          <p className="text-gray-600 text-lg">
-            Discover the best colleges in India with comprehensive rankings, fees structure, placement records, 
-            and admission details. Compare top institutions and make an informed decision for your future.
+          <p className="text-gray-700 text-base leading-relaxed mb-6">
+            India has over 4359 colleges, including 3623 private colleges and 676 government colleges. 
+            Admissions in India are done mainly through entrance exams like JEE Main, NEET, CAT. 
+            The fees vary from <strong>₹10,000 at government colleges</strong> to <strong>₹40 Lakh at top private institutions</strong>, 
+            while the Median Package ranges from ₹3 LPA to ₹25 LPA.
           </p>
+          <ul className="list-disc list-inside text-gray-700 space-y-2">
+            <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
+            <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia rankings.</li>
+          </ul>
         </div>
       </div>
 
@@ -104,6 +110,21 @@ const CollegeListingPage = () => {
         </div>
       </div>
 
+      {/* AUTHOR INFO */}
+      <div className="bg-white py-4 border-b">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">
+              <FiUser size={20} />
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900">Content Team</p>
+              <p className="text-xs text-gray-600">Content Curator | Updated 3+ months ago</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CONTENT SECTION FOR SEO/RANKING */}
       <div className="bg-white py-8">
         <div className="container mx-auto px-6">
@@ -128,124 +149,91 @@ const CollegeListingPage = () => {
           </div>
 
           {/* Collapsible Content */}
-          <div className={`transition-all duration-300 overflow-hidden ${showContent ? 'max-h-full opacity-100' : 'max-h-0 opacity-0'}`}>
-          {/* Introductory Content */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">About Colleges in India</h2>
-            <div className="prose max-w-none text-gray-700">
-              <p className="text-lg leading-relaxed mb-4">
-                India is home to over 4,359 colleges offering diverse programs across engineering, medicine, management, 
-                arts, and sciences. These institutions include 676 government colleges and 3,623 private colleges, 
-                providing quality education to millions of students annually.
-              </p>
-              <p className="text-lg leading-relaxed mb-4">
-                The higher education landscape in India features prestigious institutions like IITs, NITs, IIMs, 
-                and AIIMS that consistently rank among the top in the world. With fees ranging from ₹10,000 to ₹40 Lakh 
-                and placement packages from ₹3 LPA to ₹25 LPA, students have a wide variety of options to choose from.
-              </p>
-            </div>
-          </div>
-
-          {/* Featured Image/Video Section */}
-          <div className="mb-12">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 border border-gray-200">
-              <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <FiGrid className="text-6xl text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 font-medium">Video: Complete Guide to College Admissions 2025</p>
-                </div>
-              </div>
+          {showContent && (
+          <div className="space-y-12">
+          {/* Table of Contents */}
+          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+            <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <a href="#highlights" className="text-sm text-blue-600 hover:underline">01. Colleges in India Highlights</a>
+              <a href="#top-colleges" className="text-sm text-blue-600 hover:underline">02. Top Colleges in India 2025</a>
+              <a href="#govt-colleges" className="text-sm text-blue-600 hover:underline">03. Govt Colleges in India 2025</a>
+              <a href="#private-colleges" className="text-sm text-blue-600 hover:underline">04. Private Colleges in India 2025</a>
+              <a href="#admission" className="text-sm text-blue-600 hover:underline">05. Colleges in India: Admission 2025</a>
+              <a href="#faqs" className="text-sm text-blue-600 hover:underline">06. Colleges in India FAQs</a>
             </div>
           </div>
 
           {/* Highlights Table */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Colleges in India - Key Highlights</h2>
+          <div id="highlights">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Colleges in India Highlights</h2>
             <div className="bg-white rounded-lg shadow-md overflow-hidden border">
               <table className="w-full">
                 <tbody>
                   <tr className="border-b">
-                    <td className="px-6 py-4 font-semibold bg-gray-50 w-1/3">Total Number of Colleges</td>
+                    <td className="px-6 py-4 font-semibold bg-gray-50 w-1/2">Number of Colleges in India</td>
                     <td className="px-6 py-4">4,359</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="px-6 py-4 font-semibold bg-gray-50">Government Colleges</td>
+                    <td className="px-6 py-4 font-semibold bg-gray-50">Number of Govt Colleges in India</td>
                     <td className="px-6 py-4">676</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="px-6 py-4 font-semibold bg-gray-50">Private Colleges</td>
+                    <td className="px-6 py-4 font-semibold bg-gray-50">Number of Private Colleges in India</td>
                     <td className="px-6 py-4">3,623</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="px-6 py-4 font-semibold bg-gray-50">Top Ranked College</td>
+                    <td className="px-6 py-4 font-semibold bg-gray-50">Top College</td>
                     <td className="px-6 py-4">
-                      <Link to="/colleges/iit-bombay" className="text-blue-600 hover:underline font-medium">
-                        IIT Bombay - Mumbai, Maharashtra
-                      </Link>
+                      <Link to="/colleges/iit-bombay" className="text-blue-600 hover:underline font-medium">IIT Bombay</Link>
                     </td>
                   </tr>
                   <tr className="border-b">
-                    <td className="px-6 py-4 font-semibold bg-gray-50">Fees Range</td>
+                    <td className="px-6 py-4 font-semibold bg-gray-50">Total Fees Range</td>
                     <td className="px-6 py-4">₹10,000 - ₹40,00,000 per year</td>
                   </tr>
-                  <tr className="border-b">
-                    <td className="px-6 py-4 font-semibold bg-gray-50">Average Package Range</td>
-                    <td className="px-6 py-4">₹3 LPA - ₹25 LPA</td>
-                  </tr>
                   <tr>
-                    <td className="px-6 py-4 font-semibold bg-gray-50">Popular Courses</td>
-                    <td className="px-6 py-4">B.Tech, MBBS, MBA, B.Com, B.Sc, BBA</td>
+                    <td className="px-6 py-4 font-semibold bg-gray-50">Median Package</td>
+                    <td className="px-6 py-4">₹3 LPA - ₹25 LPA</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          {/* Top Colleges Overview Table */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Top 10 Colleges in India 2025</h2>
+          {/* Top 10 Colleges Table */}
+          <div id="top-colleges">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Top Colleges in India 2025</h2>
+            <p className="text-gray-700 mb-6">
+              There are 676 government and 3623 private colleges in India, totaling 4359 institutions. 
+              The rankings, total seats, and total course fees of India's top ten colleges are listed below.
+            </p>
             <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Rank</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">College Name</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Location</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Type</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Fees (₹)</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Avg Package</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Colleges</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Total Course Fees</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Median Placement</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Top Recruiters</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    { rank: 1, name: 'IIT Bombay', location: 'Mumbai, Maharashtra', type: 'Government', fees: '2.00L', package: '20.34L' },
-                    { rank: 2, name: 'AIIMS Delhi', location: 'New Delhi, Delhi', type: 'Government', fees: '0.10L', package: '18.50L' },
-                    { rank: 3, name: 'IIT Delhi', location: 'New Delhi, Delhi', type: 'Government', fees: '2.54L', package: '19.27L' },
-                    { rank: 4, name: 'IIM Ahmedabad', location: 'Ahmedabad, Gujarat', type: 'Government', fees: '25.00L', package: '32.79L' },
-                    { rank: 5, name: 'IIT Madras', location: 'Chennai, Tamil Nadu', type: 'Government', fees: '2.18L', package: '18.58L' },
-                    { rank: 6, name: 'IIT Kanpur', location: 'Kanpur, Uttar Pradesh', type: 'Government', fees: '2.09L', package: '17.82L' },
-                    { rank: 7, name: 'IIT Kharagpur', location: 'Kharagpur, West Bengal', type: 'Government', fees: '2.42L', package: '16.50L' },
-                    { rank: 8, name: 'BHU Varanasi', location: 'Varanasi, Uttar Pradesh', type: 'Government', fees: '0.48L', package: '12.40L' },
-                    { rank: 9, name: 'DU Delhi', location: 'New Delhi, Delhi', type: 'Government', fees: '0.15L', package: '8.92L' },
-                    { rank: 10, name: 'BITS Pilani', location: 'Pilani, Rajasthan', type: 'Private', fees: '4.94L', package: '15.30L' },
-                  ].map((college) => (
-                    <tr key={college.rank} className="border-b hover:bg-gray-50">
-                      <td className="px-6 py-4 font-bold text-orange-600">#{college.rank}</td>
-                      <td className="px-6 py-4">
-                        <Link to={`/colleges/${college.rank}`} className="text-blue-600 hover:underline font-medium">
-                          {college.name}
-                        </Link>
+                    { name: 'IIT Bombay', fees: '8.75L', placement: '19.61 LPA', recruiters: 'Google, Microsoft, Apple, Goldman Sachs' },
+                    { name: 'IIT Delhi', fees: '8.66L', placement: '19.08 LPA', recruiters: 'Google, Uber, Microsoft, Goldman Sachs' },
+                    { name: 'IIT Madras', fees: '9.39L', placement: '17.50 LPA', recruiters: 'Oracle, Qualcomm, Apple, JP Morgan' },
+                    { name: 'IIT Kanpur', fees: '8.6L', placement: '19.40 LPA', recruiters: 'Google, Microsoft, Oracle, Qualcomm' },
+                    { name: 'IIT Kharagpur', fees: '10.29L', placement: '19.76 LPA', recruiters: 'Google, Barclays, EXL, Schlumberger' },
+                    { name: 'BITS Pilani', fees: '23.9L', placement: '18.20 LPA', recruiters: 'Google, DE Shaw, Qualcomm, Adobe' },
+                  ].map((college, idx) => (
+                    <tr key={idx} className="border-b hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <Link to={`/colleges/${idx + 1}`} className="text-blue-600 hover:underline font-medium">{college.name}</Link>
                       </td>
-                      <td className="px-6 py-4 text-gray-600">{college.location}</td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs rounded ${
-                          college.type === 'Government' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                        }`}>
-                          {college.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 font-semibold">₹{college.fees}</td>
-                      <td className="px-6 py-4 font-semibold text-green-600">₹{college.package}</td>
+                      <td className="px-4 py-3 font-semibold">₹{college.fees}</td>
+                      <td className="px-4 py-3 font-semibold text-green-600">₹{college.placement}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600">{college.recruiters}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -253,112 +241,39 @@ const CollegeListingPage = () => {
             </div>
           </div>
 
-          {/* Popular Courses Section */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Popular Courses in India</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { name: 'B.Tech/Engineering', colleges: '2,547', avgFees: '₹1.2L - ₹15L' },
-                { name: 'MBBS/Medical', colleges: '612', avgFees: '₹0.5L - ₹25L' },
-                { name: 'MBA/Management', colleges: '3,876', avgFees: '₹2L - ₹25L' },
-                { name: 'B.Com/Commerce', colleges: '2,134', avgFees: '₹15K - ₹3L' },
-                { name: 'B.Sc/Science', colleges: '1,945', avgFees: '₹20K - ₹4L' },
-                { name: 'BBA/Business', colleges: '1,523', avgFees: '₹50K - ₹8L' },
-              ].map((course, idx) => (
-                <div key={idx} className="bg-white rounded-lg shadow-md p-6 border hover:shadow-lg transition-shadow">
-                  <h3 className="font-bold text-lg text-gray-900 mb-2">{course.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{course.colleges} Colleges</p>
-                  <p className="text-sm font-semibold text-orange-600">Fees: {course.avgFees}</p>
-                </div>
-              ))}
-            </div>
+          {/* Other sections */}
+          <div id="govt-colleges">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Govt Colleges in India 2025</h2>
+            <p className="text-gray-700">There are 676 government colleges in India offering quality education at affordable fees.</p>
           </div>
 
-          {/* Top States/Cities Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Top States</h3>
-              <div className="bg-white rounded-lg shadow-md border">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-sm font-semibold">State</th>
-                      <th className="px-4 py-3 text-left text-sm font-semibold">Colleges</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { state: 'Maharashtra', count: '612' },
-                      { state: 'Tamil Nadu', count: '587' },
-                      { state: 'Karnataka', count: '453' },
-                      { state: 'Uttar Pradesh', count: '425' },
-                      { state: 'Delhi', count: '347' },
-                    ].map((item, idx) => (
-                      <tr key={idx} className="border-b">
-                        <td className="px-4 py-3">{item.state}</td>
-                        <td className="px-4 py-3 font-semibold text-orange-600">{item.count}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Top Cities</h3>
-              <div className="bg-white rounded-lg shadow-md border">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-sm font-semibold">City</th>
-                      <th className="px-4 py-3 text-left text-sm font-semibold">Colleges</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { city: 'Mumbai', count: '245' },
-                      { city: 'Delhi', count: '234' },
-                      { city: 'Bangalore', count: '198' },
-                      { city: 'Chennai', count: '176' },
-                      { city: 'Pune', count: '165' },
-                    ].map((item, idx) => (
-                      <tr key={idx} className="border-b">
-                        <td className="px-4 py-3">{item.city}</td>
-                        <td className="px-4 py-3 font-semibold text-orange-600">{item.count}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div id="private-colleges">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Private Colleges in India 2025</h2>
+            <p className="text-gray-700">There are 3623 private colleges in India with various specializations.</p>
           </div>
 
-          {/* Admission Information */}
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">College Admission Process 2025</h2>
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8 border">
-              <p className="text-gray-700 leading-relaxed mb-4">
-                Most colleges in India conduct admissions through entrance examinations such as JEE Main, NEET, CAT, 
-                GATE, and CLAT. Additionally, some institutions offer direct admission based on merit in qualifying 
-                examinations like Class 12th boards.
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                {['JEE Main', 'NEET', 'CAT', 'CLAT', 'GATE', 'CMAT', 'XAT', 'MAT'].map((exam) => (
-                  <div key={exam} className="bg-white rounded-lg px-4 py-3 text-center font-semibold text-gray-700 shadow-sm">
-                    {exam}
-                  </div>
-                ))}
+          <div id="admission">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Colleges in India: Admission 2025</h2>
+            <p className="text-gray-700">Admissions are mainly through entrance exams like JEE Main, NEET, CAT, etc.</p>
+          </div>
+
+          <div id="faqs">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Colleges in India FAQs</h2>
+            <div className="space-y-4">
+              <div className="bg-gray-50 rounded-lg p-4 border">
+                <h3 className="font-bold mb-2">How many colleges are there in India?</h3>
+                <p className="text-gray-700">There are approximately 4,359 colleges in India.</p>
               </div>
             </div>
           </div>
           </div>
+          )}
         </div>
       </div>
 
       {/* COLLEGE LISTING SECTION WITH FILTERS */}
       <div className="bg-gray-50 py-12">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Browse All Colleges</h2>
-          
           <div className="flex gap-6">
             {/* LEFT SIDEBAR - FILTERS */}
             <aside className={`w-80 flex-shrink-0 transition-all ${showFilters ? '' : 'hidden'}`}>
@@ -400,43 +315,22 @@ const CollegeListingPage = () => {
                     <select
                       value={filters.state}
                       onChange={(e) => setFilters({...filters, state: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-2 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-2 focus:ring-2 focus:ring-orange-500 text-sm"
                     >
                       <option value="">Select State</option>
                       <option value="Maharashtra">Maharashtra</option>
                       <option value="Delhi">Delhi</option>
                       <option value="Karnataka">Karnataka</option>
-                      <option value="Tamil Nadu">Tamil Nadu</option>
-                      <option value="Uttar Pradesh">Uttar Pradesh</option>
                     </select>
                     <select
                       value={filters.city}
                       onChange={(e) => setFilters({...filters, city: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
                     >
                       <option value="">Select City</option>
                       <option value="Mumbai">Mumbai</option>
                       <option value="Delhi">Delhi</option>
                       <option value="Bangalore">Bangalore</option>
-                      <option value="Chennai">Chennai</option>
-                      <option value="Pune">Pune</option>
-                    </select>
-                  </div>
-
-                  {/* Course */}
-                  <div>
-                    <label className="font-semibold text-sm mb-3 block text-gray-700">Course</label>
-                    <select
-                      value={filters.course}
-                      onChange={(e) => setFilters({...filters, course: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                    >
-                      <option value="">All Courses</option>
-                      <option value="btech">B.Tech</option>
-                      <option value="mbbs">MBBS</option>
-                      <option value="mba">MBA</option>
-                      <option value="bcom">B.Com</option>
-                      <option value="bsc">B.Sc</option>
                     </select>
                   </div>
 
@@ -449,14 +343,14 @@ const CollegeListingPage = () => {
                         placeholder="Min Fees"
                         value={filters.minFees}
                         onChange={(e) => setFilters({...filters, minFees: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
                       />
                       <input 
                         type="number"
                         placeholder="Max Fees"
                         value={filters.maxFees}
                         onChange={(e) => setFilters({...filters, maxFees: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
                       />
                     </div>
                   </div>
@@ -471,164 +365,225 @@ const CollegeListingPage = () => {
               </div>
             </aside>
 
-            {/* MAIN CONTENT - COLLEGE LISTING */}
+            {/* MAIN CONTENT - COLLEGE TABLE */}
             <main className="flex-1">
               {/* Top Bar */}
-              <div className="mb-6 flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-sm"
-                  >
-                    <FiFilter />
-                    {showFilters ? 'Hide' : 'Show'} Filters
-                  </button>
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {loading ? 'Loading...' : `${colleges.length} Colleges Found`}
-                  </h3>
-                </div>
-                <select className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm">
-                  <option>Sort by: Ranking</option>
-                  <option>Fees: Low to High</option>
-                  <option>Fees: High to Low</option>
-                  <option>Rating: High to Low</option>
-                </select>
+              <div className="mb-6 flex justify-between items-center">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-sm shadow-sm"
+                >
+                  <FiFilter />
+                  {showFilters ? 'Hide' : 'Show'} Filters
+                </button>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {loading ? 'Loading...' : `${colleges.length} Colleges Found`}
+                </h3>
               </div>
 
-              {/* College Cards */}
+              {/* COLLEGE TABLE */}
               {loading ? (
-                <div className="space-y-4">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="bg-white rounded-lg p-6 shadow-md animate-pulse">
-                      <div className="flex gap-6">
-                        <div className="w-20 h-20 bg-gray-200 rounded-lg"></div>
-                        <div className="flex-1 space-y-3">
-                          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                  <p className="text-gray-600">Loading colleges...</p>
                 </div>
               ) : colleges.length === 0 ? (
-                <div className="bg-white rounded-lg p-12 text-center shadow-md">
+                <div className="bg-white rounded-lg shadow-md p-12 text-center">
                   <p className="text-gray-600 text-lg">No colleges found. Try adjusting your filters.</p>
                 </div>
               ) : (
                 <>
-                  <div className="space-y-4">
-                    {paginatedColleges.map((college, index) => (
-                      <div key={college.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow border">
-                        <div className="p-6">
-                          <div className="flex gap-6">
-                            {/* Rank & Logo */}
-                            <div className="flex flex-col items-center">
-                              <div className="text-2xl font-bold text-gray-400 mb-2">#{index + 1}</div>
-                              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center text-white font-bold overflow-hidden">
-                                {college.images?.[0] ? (
-                                  <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
-                                ) : (
-                                  <span className="text-xl">{college.name.charAt(0)}</span>
-                                )}
-                              </div>
-                            </div>
+                  {/* TABLE WITH HEADERS */}
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden border">
+                    <table className="w-full">
+                      {/* TABLE HEADER */}
+                      <thead className="bg-gray-50 border-b-2 border-gray-200">
+                        <tr>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-700">CD Rank</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-700">Colleges</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-700">Course Fees</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-700">Placement</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-700">User Reviews</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-700">Ranking</th>
+                        </tr>
+                      </thead>
+                      
+                      {/* TABLE BODY */}
+                      <tbody>
+                        {paginatedColleges.map((college, index) => (
+                          <React.Fragment key={college.id}>
+                            <tr className="border-b hover:bg-gray-50">
+                              {/* CD RANK COLUMN */}
+                              <td className="px-4 py-6 align-top">
+                                <div className="flex flex-col items-center gap-2">
+                                  <div className="text-3xl font-bold text-gray-400">#{(currentPage - 1) * itemsPerPage + index + 1}</div>
+                                  <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded flex items-center justify-center overflow-hidden">
+                                    {college.images?.[0] ? (
+                                      <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
+                                    ) : (
+                                      <span className="text-white font-bold text-lg">{college.name.charAt(0)}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </td>
 
-                            {/* College Details */}
-                            <div className="flex-1">
-                              <div className="flex items-start justify-between mb-3">
+                              {/* COLLEGES COLUMN */}
+                              <td className="px-4 py-6 align-top">
                                 <div>
                                   <div className="flex items-center gap-2 mb-2">
-                                    <Link to={`/colleges/${college.id}`} className="text-xl font-bold text-blue-600 hover:underline">
+                                    <Link to={`/colleges/${college.id}`} className="text-lg font-bold text-blue-600 hover:underline">
                                       {college.name}
                                     </Link>
                                     {college.featured && (
-                                      <span className="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded font-semibold">Featured</span>
+                                      <span className="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded font-semibold">Featured</span>
                                     )}
-                                    {college.verified && <FiCheckCircle className="text-green-600" />}
                                   </div>
-                                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
+                                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                                     <FiMapPin className="text-orange-600" />
                                     <span>{college.location?.city}, {college.location?.state}</span>
                                     <span className="text-gray-400">|</span>
-                                    <span className="font-medium text-blue-600">{college.type}</span>
+                                    <span>{college.accreditation || 'NAAC A+'}</span>
                                   </div>
-                                  <div className="text-sm text-gray-600">{college.accreditation || 'NAAC A+'}</div>
+                                  <div className="flex gap-2 mb-2">
+                                    <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-xs">
+                                      Apply Now
+                                    </Button>
+                                    <Button size="sm" variant="outline" className="text-xs">Download Brochure</Button>
+                                    <Button size="sm" variant="ghost" className="text-xs">Add To Compare</Button>
+                                  </div>
+                                  <div className="text-xs text-gray-500">CD Score: {Math.floor(Math.random() * 500) + 1000}/2000</div>
                                 </div>
-                                {college.rating && (
-                                  <div className="flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-lg font-bold">
-                                    <FiStar className="fill-current" />
-                                    {college.rating}/5
-                                  </div>
-                                )}
-                              </div>
+                              </td>
 
-                              {/* Metrics Grid */}
-                              <div className="grid grid-cols-3 gap-6 py-4 border-t border-b border-gray-200 mb-4">
+                              {/* COURSE FEES COLUMN */}
+                              <td className="px-4 py-6 align-top">
                                 <div>
-                                  <div className="text-xs text-gray-500 mb-1">Course Fees</div>
-                                  <div className="text-lg font-bold text-gray-900">₹{(college.average_fees / 100000).toFixed(2)}L</div>
-                                  <div className="text-xs text-gray-500">1st Year</div>
+                                  <div className="text-xl font-bold text-gray-900 mb-1">₹{(college.average_fees / 100000).toFixed(2)}L</div>
+                                  <div className="text-xs text-gray-500 mb-2">1st Year Fees</div>
+                                  <Link to={`/colleges/${college.id}#fees`} className="text-xs text-blue-600 hover:underline">
+                                    Compare Fees
+                                  </Link>
                                 </div>
+                              </td>
+
+                              {/* PLACEMENT COLUMN */}
+                              <td className="px-4 py-6 align-top">
                                 <div>
                                   <div className="text-xs text-gray-500 mb-1">Average Package</div>
-                                  <div className="text-lg font-bold text-green-600">
+                                  <div className="text-lg font-bold text-green-600 mb-3">
                                     ₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : 'N/A'}L
                                   </div>
-                                  <div className="text-xs text-gray-500">
-                                    Highest: ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : 'N/A'}L
+                                  <div className="text-xs text-gray-500 mb-1">Highest Package</div>
+                                  <div className="text-lg font-bold text-gray-900 mb-2">
+                                    ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : 'N/A'}L
                                   </div>
+                                  <Link to={`/colleges/${college.id}#placement`} className="text-xs text-blue-600 hover:underline">
+                                    Compare Placement
+                                  </Link>
                                 </div>
-                                <div>
-                                  <div className="text-xs text-gray-500 mb-1">Ranking</div>
-                                  <div className="flex items-center gap-1 text-orange-600 font-bold">
-                                    <FiAward />
-                                    <span>#{index + 1}</span>
-                                  </div>
-                                  <div className="text-xs text-gray-500">India 2025</div>
-                                </div>
-                              </div>
+                              </td>
 
-                              {/* Action Buttons */}
-                              <div className="flex items-center gap-3">
-                                <Link to={`/colleges/${college.id}`}>
-                                  <Button className="bg-orange-600 hover:bg-orange-700 text-white">
-                                    Apply Now
-                                  </Button>
-                                </Link>
-                                <Button variant="outline">Download Brochure</Button>
-                                <Button variant="ghost" className="text-gray-600">Compare</Button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                              {/* USER REVIEWS COLUMN */}
+                              <td className="px-4 py-6 align-top">
+                                <div>
+                                  <div className="flex items-baseline gap-1 mb-2">
+                                    <span className="text-2xl font-bold text-gray-900">{college.rating || '4.5'}</span>
+                                    <span className="text-gray-500 text-sm">/5</span>
+                                  </div>
+                                  <div className="flex gap-0.5 mb-3">
+                                    {[...Array(5)].map((_, i) => (
+                                      <FiStar key={i} className={`${i < Math.floor(college.rating || 4.5) ? 'fill-yellow-500 text-yellow-500' : 'text-gray-300'}`} size={14} />
+                                    ))}
+                                  </div>
+                                  <div className="text-xs text-gray-500 mb-2">Based on {college.reviews || 0} User Reviews</div>
+                                  <div className="text-xs text-gray-700 font-medium">Best in {['Infrastructure', 'Placements', 'Academics'][index % 3]}</div>
+                                </div>
+                              </td>
+
+                              {/* RANKING COLUMN */}
+                              <td className="px-4 py-6 align-top">
+                                <div>
+                                  <div className="text-sm text-gray-600 mb-2">#{(currentPage - 1) * itemsPerPage + index + 1}th/500 in India</div>
+                                  <div className="flex items-center gap-1 mb-3">
+                                    <FiAward className="text-orange-600" size={16} />
+                                    <span className="text-xs font-semibold text-gray-700">Collegedunia 2025</span>
+                                  </div>
+                                  <div className="flex flex-wrap gap-1 mb-2">
+                                    {['NIRF', 'IIRF', 'India Today'].slice(0, 2).map((agency) => (
+                                      <div key={agency} className="w-5 h-5 bg-gray-100 rounded border border-gray-200 flex items-center justify-center">
+                                        <span className="text-[8px] font-bold text-gray-600">{agency.charAt(0)}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <Link to={`/colleges/${college.id}#ranking`} className="text-xs text-blue-600 hover:underline">
+                                    + 4 More
+                                  </Link>
+                                </div>
+                              </td>
+                            </tr>
+
+                            {/* FEATURED BANNER - Show after every 3rd college */}
+                            {(index + 1) % 3 === 0 && (index + 1) < paginatedColleges.length && (
+                              <tr className="bg-orange-50 border-b border-orange-200">
+                                <td colSpan="6" className="px-4 py-2">
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-semibold text-orange-700">Sponsored</span>
+                                    <span className="text-gray-400">|</span>
+                                    <span className="text-gray-600">Featured College</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
 
-                  {/* Pagination */}
+                  {/* PAGINATION */}
                   {totalPages > 1 && (
                     <div className="flex justify-center items-center gap-2 mt-8">
                       <Button
                         variant="outline"
-                        onClick={() => setPage(p => Math.max(1, p - 1))}
-                        disabled={page === 1}
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="text-sm"
                       >
                         Previous
                       </Button>
-                      {[...Array(Math.min(5, totalPages))].map((_, i) => (
-                        <Button
-                          key={i + 1}
-                          variant={page === i + 1 ? 'default' : 'outline'}
-                          onClick={() => setPage(i + 1)}
-                          className={page === i + 1 ? 'bg-orange-600 hover:bg-orange-700' : ''}
-                        >
-                          {i + 1}
-                        </Button>
-                      ))}
+                      
+                      {/* Page Numbers */}
+                      {[...Array(Math.min(10, totalPages))].map((_, i) => {
+                        const pageNum = i + 1;
+                        return (
+                          <Button
+                            key={pageNum}
+                            variant={currentPage === pageNum ? 'default' : 'outline'}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`text-sm min-w-[40px] ${currentPage === pageNum ? 'bg-orange-600 hover:bg-orange-700 text-white' : ''}`}
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                      
+                      {totalPages > 10 && (
+                        <>
+                          <span className="text-gray-500">...</span>
+                          <Button
+                            variant={currentPage === totalPages ? 'default' : 'outline'}
+                            onClick={() => setCurrentPage(totalPages)}
+                            className={`text-sm min-w-[40px] ${currentPage === totalPages ? 'bg-orange-600 hover:bg-orange-700 text-white' : ''}`}
+                          >
+                            {totalPages}
+                          </Button>
+                        </>
+                      )}
+                      
                       <Button
                         variant="outline"
-                        onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                        disabled={page === totalPages}
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="text-sm"
                       >
                         Next
                       </Button>
