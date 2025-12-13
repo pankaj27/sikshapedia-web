@@ -290,6 +290,20 @@ const Header = () => {
       )}
     </div>
 
+    {/* Floating Action Buttons - Below Sign Up */}
+    <div className="hidden lg:flex fixed right-6 top-20 flex-col gap-2 z-40">
+      <Link to="/compare">
+        <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg shadow-md transition-all whitespace-nowrap">
+          Compare Colleges
+        </button>
+      </Link>
+      <Link to="/study-abroad">
+        <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg shadow-md transition-all whitespace-nowrap">
+          Study Abroad
+        </button>
+      </Link>
+    </div>
+
   </header>
   );
 };
