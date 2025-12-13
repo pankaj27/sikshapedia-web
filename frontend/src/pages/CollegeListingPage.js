@@ -48,34 +48,6 @@ const CollegeListingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <div className="flex-1 max-w-xl mx-8">
-              <form onSubmit={handleSearch}>
-                <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <Input
-                    placeholder="Search colleges..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </form>
-            </div>
-            <div className="flex gap-3">
-              <Link to="/login"><Button variant="ghost">Login</Button></Link>
-              <Link to="/register"><Button className="bg-orange-600 hover:bg-orange-700">Sign Up</Button></Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           {/* Sidebar Filters */}
