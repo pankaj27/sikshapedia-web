@@ -473,6 +473,30 @@ class CollegeAPITester:
         self.test_college_reviews_endpoint(TEST_COLLEGE_ID)
         self.test_college_questions_endpoint(TEST_COLLEGE_ID)
         
+        # Test Review System APIs
+        print(f"\n📝 Testing Review System APIs:")
+        print("-" * 40)
+        self.test_review_submission_without_auth(TEST_COLLEGE_ID)
+        self.test_review_data_validation(TEST_COLLEGE_ID)
+        
+        # Test Q&A System APIs
+        print(f"\n❓ Testing Q&A System APIs:")
+        print("-" * 40)
+        self.test_question_submission_without_auth(TEST_COLLEGE_ID)
+        self.test_answer_submission_without_auth()
+        self.test_question_data_validation(TEST_COLLEGE_ID)
+        
+        # Test Application System APIs
+        print(f"\n📋 Testing Application System APIs:")
+        print("-" * 40)
+        self.test_application_submission_without_auth(TEST_COLLEGE_ID)
+        self.test_application_data_validation(TEST_COLLEGE_ID)
+        
+        # Test Edge Cases
+        print(f"\n🔍 Testing Edge Cases:")
+        print("-" * 40)
+        self.test_nonexistent_college_endpoints()
+        
         # Summary
         print("\n📊 Test Summary:")
         print("=" * 60)
