@@ -660,7 +660,7 @@ async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
     
     return colleges
 
-@api_router.get("/colleges/{college_id}", response_model=College)
+@api_router.get("/colleges/{college_id}")
 async def get_college(college_id: str):
     college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
     if not college:
