@@ -500,6 +500,36 @@ class AnswerCreate(BaseModel):
     question_id: str
     answer: str
 
+# Notification Models
+class Notification(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    type: str  # admission_alert, exam_alert, application_update, review_earning
+    title: str
+    message: str
+    link: Optional[str] = None
+    read: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class NotificationCreate(BaseModel):
+    user_id: str
+    type: str
+    title: str
+    message: str
+    link: Optional[str] = None
+
+# Earnings Models
+class EarningTransaction(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    type: str  # review, referral
+    amount: float
+    description: str
+    reference_id: str  # review_id or referral_user_id
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Inquiry Models
 class Inquiry(BaseModel):
     model_config = ConfigDict(extra="ignore")
