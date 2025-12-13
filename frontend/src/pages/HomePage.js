@@ -485,7 +485,12 @@ const CollegeDuniaHome = () => {
                   )}
                 </div>
 
-                <div className="p-3">
+                {/* School Logo Badge - Overlapping */}
+                <div className="absolute -top-6 left-3 w-12 h-12 bg-white rounded-full border-2 border-white shadow-lg flex items-center justify-center z-10">
+                  <FiBook className="text-green-600 text-xl" />
+                </div>
+
+                <div className="p-3 pt-8">
                   {/* School Name and Location */}
                   <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600 transition cursor-pointer">{school.name}</h3>
                   <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2">
