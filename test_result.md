@@ -353,8 +353,7 @@ test_plan:
     - "College Detail Page - Reviews Tab"
     - "College Detail Page - Q&A Tab"
     - "Application Modal"
-  stuck_tasks:
-    - "College Module"
+  stuck_tasks: []
   test_all: true
   test_priority: "stuck_first"
 
