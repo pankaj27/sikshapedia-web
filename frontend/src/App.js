@@ -35,6 +35,9 @@ function App() {
           <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/search" element={<GlobalSearchPage />} />
           <Route path="/eligibility-checker" element={<EligibilityChecker />} />
+          <Route path="/study-abroad" element={<StudyAbroadPage />} />
+          <Route path="/scholarships" element={<ScholarshipsPage />} />
+          <Route path="/compare" element={<CompareCollegesPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
