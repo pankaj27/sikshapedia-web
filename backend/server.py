@@ -600,7 +600,7 @@ async def get_me(current_user: User = Depends(get_current_user)):
 async def root():
     return {"message": "Sikshapedia API - College Discovery Platform"}
 
-@api_router.get("/colleges")
+@api_router.get("/colleges", response_model=List[College])
 async def get_colleges(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
@@ -650,7 +650,7 @@ async def get_colleges(
     
     return colleges
 
-@api_router.get("/colleges/featured")
+@api_router.get("/colleges/featured", response_model=List[College])
 async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
     colleges = await db.colleges.find({}, {"_id": 0}).sort("nirf_ranking", 1).limit(limit).to_list(limit)
     
@@ -660,7 +660,7 @@ async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
     
     return colleges
 
-@api_router.get("/colleges/{college_id}")
+@api_router.get("/colleges/{college_id}", response_model=College)
 async def get_college(college_id: str):
     college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
     if not college:
