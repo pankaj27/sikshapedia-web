@@ -129,27 +129,27 @@ const Header = () => {
 
             {/* Explore Dropdown */}
             <div 
-              className="relative explore-dropdown"
+              className="relative"
               onMouseEnter={() => setExploreDropdownOpen(true)}
               onMouseLeave={() => setExploreDropdownOpen(false)}
             >
-              <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-600">
-                <FiGrid />
+              <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-600">
+                <FiGrid size={16} />
                 <span>Explore</span>
               </button>
               
               {exploreDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-                  <div className="grid grid-cols-2 gap-1 p-2">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[60]">
+                  <div className="flex flex-col gap-1">
                     {exploreMenuItems.map((item, idx) => (
                       <Link
                         key={idx}
                         to={item.link}
                         onClick={() => setExploreDropdownOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors rounded"
+                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                       >
-                        <span>{item.icon}</span>
-                        <span className="text-xs">{item.title}</span>
+                        <span className="text-lg">{item.icon}</span>
+                        <span>{item.title}</span>
                       </Link>
                     ))}
                   </div>
