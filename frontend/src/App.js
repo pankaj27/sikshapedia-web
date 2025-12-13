@@ -18,6 +18,8 @@ import ScholarshipsPage from './pages/EnhancedScholarshipsPage';
 import EducationLoansPage from './pages/EducationLoansPage';
 import StudyMaterialsPage from './pages/StudyMaterialsPage';
 import CounselingPage from './pages/CounselingPage';
+import PremiumPage from './pages/PremiumPage';
+import InstitutionDashboard from './pages/InstitutionDashboard';
 import CompareCollegesPage from './pages/CompareCollegesPage';
 import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
@@ -51,6 +53,8 @@ function App() {
             <Route path="/loans" element={<EducationLoansPage />} />
             <Route path="/study-materials" element={<StudyMaterialsPage />} />
             <Route path="/counseling" element={<CounselingPage />} />
+            <Route path="/premium" element={<PremiumPage />} />
+            <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
             <Route path="/compare" element={<CompareCollegesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:id" element={<BlogDetailPage />} />
