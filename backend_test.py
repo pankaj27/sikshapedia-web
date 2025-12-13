@@ -1,0 +1,315 @@
+#!/usr/bin/env python3
+"""
+Backend API Testing Script for AdmissionBuddy College Module
+Tests the college-related endpoints after recent fixes
+"""
+
+import requests
+import json
+import sys
+from datetime import datetime
+
+# Configuration
+BACKEND_URL = "https://campus-scout-3.preview.emergentagent.com/api"
+TEST_COLLEGE_ID = "iit-bombay-002"
+
+class CollegeAPITester:
+    def __init__(self):
+        self.results = []
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Content-Type': 'application/json',
+            'User-Agent': 'AdmissionBuddy-Test-Client/1.0'
+        })
+
+    def log_result(self, test_name, status, details, response_data=None):
+        """Log test result"""
+        result = {
+            'test': test_name,
+            'status': status,
+            'details': details,
+            'timestamp': datetime.now().isoformat(),
+            'response_data': response_data
+        }
+        self.results.append(result)
+        
+        status_symbol = "✅" if status == "PASS" else "❌" if status == "FAIL" else "⚠️"
+        print(f"{status_symbol} {test_name}: {details}")
+
+    def test_api_root(self):
+        """Test API root endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/")
+            if response.status_code == 200:
+                data = response.json()
+                if "message" in data:
+                    self.log_result("API Root", "PASS", f"API accessible, message: {data['message']}")
+                    return True
+                else:
+                    self.log_result("API Root", "FAIL", "API accessible but unexpected response format")
+                    return False
+            else:
+                self.log_result("API Root", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result("API Root", "FAIL", f"Connection error: {str(e)}")
+            return False
+
+    def test_colleges_endpoint(self):
+        """Test GET /api/colleges endpoint"""
+        try:
+            # Test basic endpoint
+            response = self.session.get(f"{BACKEND_URL}/colleges")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    college_count = len(data)
+                    self.log_result("GET /colleges", "PASS", f"Retrieved {college_count} colleges")
+                    
+                    # Check if we have colleges and validate structure
+                    if college_count > 0:
+                        sample_college = data[0]
+                        required_fields = ['id', 'name', 'location', 'type', 'average_fees', 'description']
+                        missing_fields = [field for field in required_fields if field not in sample_college]
+                        
+                        if not missing_fields:
+                            self.log_result("College Structure", "PASS", "All required fields present in college data")
+                            
+                            # Check ranking field specifically (this was the bug that was fixed)
+                            if 'ranking' in sample_college:
+                                ranking = sample_college['ranking']
+                                if isinstance(ranking, dict):
+                                    self.log_result("Ranking Field", "PASS", f"Ranking is properly structured as object: {ranking}")
+                                else:
+                                    self.log_result("Ranking Field", "WARN", f"Ranking field type: {type(ranking)}")
+                            else:
+                                self.log_result("Ranking Field", "WARN", "No ranking field found in college data")
+                                
+                        else:
+                            self.log_result("College Structure", "FAIL", f"Missing required fields: {missing_fields}")
+                    
+                    return True
+                else:
+                    self.log_result("GET /colleges", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result("GET /colleges", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result("GET /colleges", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_colleges_with_params(self):
+        """Test GET /colleges with various query parameters"""
+        test_params = [
+            {"search": "IIT", "description": "Search for IIT colleges"},
+            {"city": "Mumbai", "description": "Filter by Mumbai city"},
+            {"state": "Maharashtra", "description": "Filter by Maharashtra state"},
+            {"type": "Government", "description": "Filter by Government type"},
+            {"min_fees": "100000", "max_fees": "500000", "description": "Filter by fees range"},
+            {"sort_by": "nirf_ranking", "description": "Sort by NIRF ranking"}
+        ]
+        
+        for params in test_params:
+            try:
+                description = params.pop("description")
+                response = self.session.get(f"{BACKEND_URL}/colleges", params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_result(f"Colleges Query - {description}", "PASS", f"Retrieved {len(data)} results")
+                else:
+                    self.log_result(f"Colleges Query - {description}", "FAIL", f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_result(f"Colleges Query - {description}", "FAIL", f"Error: {str(e)}")
+
+    def test_featured_colleges(self):
+        """Test GET /api/colleges/featured endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/colleges/featured")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_result("GET /colleges/featured", "PASS", f"Retrieved {len(data)} featured colleges")
+                    
+                    # Validate featured colleges have proper ranking
+                    if len(data) > 0:
+                        for i, college in enumerate(data[:3]):  # Check first 3
+                            if 'ranking' in college:
+                                ranking = college['ranking']
+                                if isinstance(ranking, dict):
+                                    self.log_result(f"Featured College {i+1} Ranking", "PASS", f"Proper ranking structure: {ranking}")
+                                else:
+                                    self.log_result(f"Featured College {i+1} Ranking", "WARN", f"Ranking type: {type(ranking)}")
+                    
+                    return True
+                else:
+                    self.log_result("GET /colleges/featured", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result("GET /colleges/featured", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result("GET /colleges/featured", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_specific_college(self, college_id):
+        """Test GET /api/colleges/{college_id} endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/colleges/{college_id}")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, dict) and 'id' in data:
+                    self.log_result(f"GET /colleges/{college_id}", "PASS", f"Retrieved college: {data.get('name', 'Unknown')}")
+                    
+                    # Validate specific fields that were causing issues
+                    validation_results = []
+                    
+                    # Check ranking field (main bug that was fixed)
+                    if 'ranking' in data:
+                        ranking = data['ranking']
+                        if isinstance(ranking, dict):
+                            validation_results.append("✅ Ranking field is properly structured as object")
+                        else:
+                            validation_results.append(f"⚠️ Ranking field type: {type(ranking)}")
+                    else:
+                        validation_results.append("⚠️ No ranking field found")
+                    
+                    # Check other required fields that were mentioned in Pydantic validation errors
+                    required_fields = {
+                        'slug': 'Slug field',
+                        'established_year': 'Established year field', 
+                        'total_courses': 'Total courses field',
+                        'contact_info': 'Contact info field'
+                    }
+                    
+                    for field, description in required_fields.items():
+                        if field in data and data[field] is not None:
+                            validation_results.append(f"✅ {description} present")
+                        else:
+                            validation_results.append(f"⚠️ {description} missing or null")
+                    
+                    # Check course data structure
+                    if 'courses' in data:
+                        courses = data['courses']
+                        if isinstance(courses, list):
+                            validation_results.append(f"✅ Courses field is properly structured list with {len(courses)} items")
+                        else:
+                            validation_results.append(f"⚠️ Courses field type: {type(courses)}")
+                    
+                    self.log_result(f"College {college_id} Validation", "PASS", "; ".join(validation_results))
+                    return True
+                else:
+                    self.log_result(f"GET /colleges/{college_id}", "FAIL", "Invalid response structure")
+                    return False
+            elif response.status_code == 404:
+                self.log_result(f"GET /colleges/{college_id}", "FAIL", f"College not found (404)")
+                return False
+            else:
+                self.log_result(f"GET /colleges/{college_id}", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result(f"GET /colleges/{college_id}", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_college_reviews_endpoint(self, college_id):
+        """Test GET /api/reviews/college/{college_id} endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/reviews/college/{college_id}")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_result(f"GET /reviews/college/{college_id}", "PASS", f"Retrieved {len(data)} reviews")
+                    return True
+                else:
+                    self.log_result(f"GET /reviews/college/{college_id}", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result(f"GET /reviews/college/{college_id}", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result(f"GET /reviews/college/{college_id}", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_college_questions_endpoint(self, college_id):
+        """Test GET /api/questions/college/{college_id} endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/questions/college/{college_id}")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_result(f"GET /questions/college/{college_id}", "PASS", f"Retrieved {len(data)} questions")
+                    return True
+                else:
+                    self.log_result(f"GET /questions/college/{college_id}", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result(f"GET /questions/college/{college_id}", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result(f"GET /questions/college/{college_id}", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def run_all_tests(self):
+        """Run all college API tests"""
+        print("🚀 Starting College Module API Tests")
+        print("=" * 60)
+        
+        # Test API connectivity
+        if not self.test_api_root():
+            print("❌ API not accessible, stopping tests")
+            return False
+        
+        print("\n📋 Testing College Endpoints:")
+        print("-" * 40)
+        
+        # Test main college endpoints
+        self.test_colleges_endpoint()
+        self.test_colleges_with_params()
+        self.test_featured_colleges()
+        
+        # Test specific college (the one mentioned in the review request)
+        print(f"\n🎯 Testing Specific College ({TEST_COLLEGE_ID}):")
+        print("-" * 40)
+        self.test_specific_college(TEST_COLLEGE_ID)
+        self.test_college_reviews_endpoint(TEST_COLLEGE_ID)
+        self.test_college_questions_endpoint(TEST_COLLEGE_ID)
+        
+        # Summary
+        print("\n📊 Test Summary:")
+        print("=" * 60)
+        
+        passed = len([r for r in self.results if r['status'] == 'PASS'])
+        failed = len([r for r in self.results if r['status'] == 'FAIL'])
+        warnings = len([r for r in self.results if r['status'] == 'WARN'])
+        
+        print(f"✅ Passed: {passed}")
+        print(f"❌ Failed: {failed}")
+        print(f"⚠️ Warnings: {warnings}")
+        print(f"📈 Total Tests: {len(self.results)}")
+        
+        # Show failed tests
+        failed_tests = [r for r in self.results if r['status'] == 'FAIL']
+        if failed_tests:
+            print(f"\n❌ Failed Tests Details:")
+            for test in failed_tests:
+                print(f"  • {test['test']}: {test['details']}")
+        
+        return failed == 0
+
+if __name__ == "__main__":
+    tester = CollegeAPITester()
+    success = tester.run_all_tests()
+    
+    # Save detailed results
+    with open('/app/test_results_backend.json', 'w') as f:
+        json.dump(tester.results, f, indent=2)
+    
+    print(f"\n📄 Detailed results saved to: /app/test_results_backend.json")
+    
+    if success:
+        print("🎉 All tests passed!")
+        sys.exit(0)
+    else:
+        print("💥 Some tests failed!")
+        sys.exit(1)
