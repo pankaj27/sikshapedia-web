@@ -14,7 +14,8 @@ import StudentDashboard from './pages/EnhancedStudentDashboardV2';
 import GlobalSearchPage from './pages/GlobalSearchPage';
 import EligibilityChecker from './pages/EligibilityChecker';
 import StudyAbroadPage from './pages/StudyAbroadPage';
-import ScholarshipsPage from './pages/ScholarshipsPage';
+import ScholarshipsPage from './pages/EnhancedScholarshipsPage';
+import EducationLoansPage from './pages/EducationLoansPage';
 import CompareCollegesPage from './pages/CompareCollegesPage';
 import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
@@ -45,6 +46,7 @@ function App() {
             <Route path="/eligibility-checker" element={<EligibilityChecker />} />
             <Route path="/study-abroad" element={<StudyAbroadPage />} />
             <Route path="/scholarships" element={<ScholarshipsPage />} />
+            <Route path="/loans" element={<EducationLoansPage />} />
             <Route path="/compare" element={<CompareCollegesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:id" element={<BlogDetailPage />} />
