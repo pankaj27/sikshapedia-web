@@ -223,12 +223,6 @@ const Header = () => {
                 {goal.name}
               </Link>
             ))}
-            <Link to="/compare" className="text-sm font-semibold text-orange-600 hover:text-orange-700 whitespace-nowrap transition-colors no-underline bg-orange-50 px-3 py-1 rounded-md border border-orange-200" spellCheck="false">
-              Compare Colleges
-            </Link>
-            <Link to="/study-abroad" className="text-sm font-semibold text-blue-600 hover:text-blue-700 whitespace-nowrap transition-colors no-underline bg-blue-50 px-3 py-1 rounded-md border border-blue-200" spellCheck="false">
-              Study Abroad
-            </Link>
           </div>
         </div>
       </div>
