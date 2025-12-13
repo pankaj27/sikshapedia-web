@@ -163,28 +163,6 @@ const CollegeDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <nav className="flex items-center gap-6">
-              <Link to="/colleges" className="text-gray-700 hover:text-orange-600">Back to Colleges</Link>
-              {user ? (
-                <Link to="/dashboard"><Button variant="ghost">Dashboard</Button></Link>
-              ) : (
-                <>
-                  <Link to="/login"><Button variant="ghost">Login</Button></Link>
-                  <Link to="/register"><Button className="bg-orange-600 hover:bg-orange-700">Sign Up</Button></Link>
-                </>
-              )}
-            </nav>
-          </div>
-        </div>
-      </header>
-
       {/* College Header */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-6">
