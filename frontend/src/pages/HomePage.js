@@ -147,15 +147,21 @@ const CollegeDuniaHome = () => {
                 ))}
               </div>
               <form onSubmit={handleSearch} className="p-6">
-                <div className="flex gap-2 mb-3">
-                  <Input
-                    placeholder={`Search ${activeTab}...`}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-12 text-lg"
-                  />
-                  <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 px-8">
-                    <FiSearch className="mr-2" /> Search
+                <div className="flex gap-3 mb-3">
+                  <div className="flex-1 relative">
+                    <Input
+                      placeholder={`Search ${activeTab}...`}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="h-14 text-lg pl-12 pr-4 border-2 border-gray-300 focus:border-orange-500"
+                    />
+                    <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="bg-orange-600 hover:bg-orange-700 h-14 px-10 text-lg font-bold shadow-lg hover:shadow-xl transition-all"
+                  >
+                    Search
                   </Button>
                 </div>
                 
