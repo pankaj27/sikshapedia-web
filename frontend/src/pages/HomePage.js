@@ -188,6 +188,12 @@ const CollegeDuniaHome = () => {
               </div>
               <span className="text-sm font-semibold text-center">All Colleges</span>
             </Link>
+            <Link to="/colleges?type=school" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-red-200 transition">
+                <FiBook className="text-red-600 text-2xl" />
+              </div>
+              <span className="text-sm font-semibold text-center">All Schools</span>
+            </Link>
             <Link to="/exams" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 transition">
                 <FiFileText className="text-green-600 text-2xl" />
