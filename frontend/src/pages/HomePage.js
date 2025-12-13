@@ -342,7 +342,18 @@ const CollegeDuniaHome = () => {
                       )}
                     </div>
 
-                    <div className="p-3">
+                    {/* College Logo Badge - Overlapping */}
+                    <div className="absolute -top-6 left-3 w-12 h-12 bg-white rounded-full border-2 border-white shadow-lg flex items-center justify-center z-10">
+                      {college.images?.[0] ? (
+                        <img src={college.images[0]} alt={`${college.name} logo`} className="w-full h-full rounded-full object-cover" />
+                      ) : (
+                        <div className="text-blue-600 font-bold text-lg">
+                          {college.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-3 pt-8">
                       {/* College Name and Location */}
                       <Link to={`/colleges/${college.id}`}>
                         <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600">{college.name}</h3>
