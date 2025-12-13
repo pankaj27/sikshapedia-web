@@ -10,7 +10,7 @@ import ExamsPage from './pages/ExamsPage';
 import ExamDetailPage from './pages/ExamDetailPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
-import StudentDashboard from './pages/EnhancedStudentDashboard';
+import StudentDashboard from './pages/EnhancedStudentDashboardV2';
 import GlobalSearchPage from './pages/GlobalSearchPage';
 import EligibilityChecker from './pages/EligibilityChecker';
 import StudyAbroadPage from './pages/StudyAbroadPage';
