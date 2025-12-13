@@ -206,11 +206,8 @@ const Header = () => {
           </button>
         </div>
 
-      {/* Border Line - Edge to Edge */}
-      <div className="hidden lg:block w-screen border-t border-gray-200 relative left-1/2 right-1/2 -mx-[50vw]"></div>
-      
-      {/* Course Categories Bar - Desktop */}
-      <div className="hidden lg:block w-screen bg-gray-50 relative left-1/2 right-1/2 -mx-[50vw]">
+      {/* Course Categories Bar - Desktop with Edge-to-Edge Border and Background */}
+      <div className="hidden lg:block w-full border-t border-gray-200 bg-gray-50">
         <div className="px-6">
           <div className="flex items-center gap-6 py-2 overflow-x-auto" spellCheck="false">
             <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
