@@ -118,16 +118,13 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-3">
             {/* Write Review Button */}
             <Link to="/colleges">
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-2 border-orange-600 text-orange-600 hover:bg-orange-50 text-sm"
-              >
-                <FiEdit3 size={16} />
-                <div className="text-left">
-                  <div className="font-semibold">Write a Review</div>
-                  <div className="text-xs">Get Upto ₹300*</div>
+              <button className="flex items-center gap-2 px-3 py-2 border-2 border-orange-600 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors">
+                <FiEdit3 size={18} />
+                <div className="text-left leading-tight">
+                  <div className="text-sm font-semibold whitespace-nowrap">Write a Review</div>
+                  <div className="text-xs whitespace-nowrap">Get Upto ₹300*</div>
                 </div>
-              </Button>
+              </button>
             </Link>
 
             {/* Explore Dropdown */}
