@@ -389,7 +389,7 @@ const CollegeDuniaHome = () => {
                         </div>
                       )}
 
-                      {/* Action Buttons - Compact */}
+                      {/* Action Buttons - With Icons */}
                       <div className="space-y-1.5">
                         <div className="flex gap-1.5">
                           <Button 
@@ -398,8 +398,9 @@ const CollegeDuniaHome = () => {
                               navigate(`/colleges/${college.id}/compare`);
                             }}
                             variant="outline"
-                            className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
+                            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
                           >
+                            <FiBarChart2 className="text-xs" />
                             Compare
                           </Button>
                           <Button 
@@ -408,8 +409,9 @@ const CollegeDuniaHome = () => {
                               window.open(`/colleges/${college.id}/brochure`, '_blank');
                             }}
                             variant="outline"
-                            className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
+                            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
                           >
+                            <FiDownload className="text-xs" />
                             Brochure
                           </Button>
                         </div>
@@ -418,9 +420,10 @@ const CollegeDuniaHome = () => {
                             e.preventDefault();
                             navigate(`/colleges/${college.id}/apply`);
                           }}
-                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold"
+                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold flex items-center justify-center gap-1"
                         >
                           Apply Now
+                          <FiArrowRight className="text-xs" />
                         </Button>
                       </div>
                     </div>
