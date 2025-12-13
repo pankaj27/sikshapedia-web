@@ -336,7 +336,7 @@ const CollegeDuniaHome = () => {
                       </div>
                       {/* Admission Open Badge */}
                       {idx < 4 && (
-                        <div className="absolute bottom-1 left-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+                        <div className="absolute bottom-1 right-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
                           Admission 2025 Open
                         </div>
                       )}
@@ -479,7 +479,7 @@ const CollegeDuniaHome = () => {
                   
                   {/* Admission Open Badge */}
                   {idx < 5 && (
-                    <div className="absolute bottom-1 left-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+                    <div className="absolute bottom-1 right-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
                       Admission 2025 Open
                     </div>
                   )}
