@@ -1239,6 +1239,46 @@ async def get_articles_by_category(category: str, limit: int = Query(10, ge=1, l
 # Stats Route
 # ============================================
 
+@api_router.get("/locations/states")
+async def get_states():
+    """Get all unique states with college count"""
+    pipeline = [
+        {"$group": {"_id": "$location.state", "count": {"$sum": 1}}},
+        {"$match": {"_id": {"$ne": None}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 30}
+    ]
+    states = await db.colleges.aggregate(pipeline).to_list(30)
+    return [{"state": s["_id"], "college_count": s["count"]} for s in states]
+
+@api_router.get("/locations/cities")
+async def get_cities(state: Optional[str] = None):
+    """Get all unique cities with college count"""
+    match_stage = {}
+    if state:
+        match_stage = {"location.state": state}
+    
+    pipeline = [
+        {"$match": match_stage} if match_stage else {"$match": {}},
+        {"$group": {"_id": {"city": "$location.city", "state": "$location.state"}, "count": {"$sum": 1}}},
+        {"$match": {"_id.city": {"$ne": None}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 50}
+    ]
+    cities = await db.colleges.aggregate(pipeline).to_list(50)
+    return [{"city": c["_id"]["city"], "state": c["_id"]["state"], "college_count": c["count"]} for c in cities]
+
+@api_router.get("/locations/countries")
+async def get_countries():
+    """Get all unique countries for study abroad"""
+    pipeline = [
+        {"$group": {"_id": "$country", "count": {"$sum": 1}}},
+        {"$match": {"_id": {"$ne": None}}},
+        {"$sort": {"count": -1}}
+    ]
+    countries = await db.study_abroad.aggregate(pipeline).to_list(100)
+    return [{"country": c["_id"], "university_count": c["count"]} for c in countries]
+
 @api_router.get("/stats")
 async def get_stats():
     total_colleges = await db.colleges.count_documents({})
