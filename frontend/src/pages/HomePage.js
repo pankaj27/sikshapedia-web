@@ -311,28 +311,32 @@ const CollegeDuniaHome = () => {
             >
               {featuredColleges.map((college) => (
                 <SwiperSlide key={college.id}>
-                  <Link to={`/colleges/${college.id}`} className="block bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition">
-                    <div className="relative h-40 bg-gradient-to-br from-blue-500 to-indigo-600">
-                      {college.images?.[0] ? (
-                        <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold">
-                          {college.name.charAt(0)}
-                        </div>
-                      )}
-                      {college.nirf_ranking && (
-                        <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-sm font-bold">
-                          #{college.nirf_ranking}
-                        </div>
-                      )}
-                    </div>
+                  <div className="bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition">
+                    <Link to={`/colleges/${college.id}`}>
+                      <div className="relative h-40 bg-gradient-to-br from-blue-500 to-indigo-600">
+                        {college.images?.[0] ? (
+                          <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold">
+                            {college.name.charAt(0)}
+                          </div>
+                        )}
+                        {college.nirf_ranking && (
+                          <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-sm font-bold">
+                            #{college.nirf_ranking}
+                          </div>
+                        )}
+                      </div>
+                    </Link>
                     <div className="p-4">
-                      <h3 className="font-bold mb-2 line-clamp-2">{college.name}</h3>
+                      <Link to={`/colleges/${college.id}`}>
+                        <h3 className="font-bold mb-2 line-clamp-2 hover:text-orange-600">{college.name}</h3>
+                      </Link>
                       <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
                         <FiMapPin className="text-orange-600" />
                         <span className="truncate">{college.location?.city}, {college.location?.state}</span>
                       </div>
-                      <div className="flex justify-between items-center pt-2 border-t">
+                      <div className="flex justify-between items-center pt-2 border-t mb-3">
                         <div className="flex items-center gap-1">
                           <FiStar className="text-yellow-500" />
                           <span className="font-bold text-sm">{college.rating || 'N/A'}</span>
@@ -341,8 +345,29 @@ const CollegeDuniaHome = () => {
                           ₹{(college.average_fees / 100000).toFixed(1)}L/yr
                         </span>
                       </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(`/colleges/${college.id}/apply`);
+                          }}
+                          className="flex-1 bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto"
+                        >
+                          Apply Now
+                        </Button>
+                        <Button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.open(`/colleges/${college.id}/brochure`, '_blank');
+                          }}
+                          variant="outline"
+                          className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                        >
+                          Download Brochure
+                        </Button>
+                      </div>
                     </div>
-                  </Link>
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>
