@@ -300,7 +300,10 @@ const CollegeDuniaHome = () => {
           ) : (
             <Swiper
               modules={[Navigation]}
-              navigation
+              navigation={{
+                nextEl: '.swiper-button-next-custom',
+                prevEl: '.swiper-button-prev-custom',
+              }}
               spaceBetween={20}
               slidesPerView={1}
               breakpoints={{
@@ -308,6 +311,7 @@ const CollegeDuniaHome = () => {
                 768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 }
               }}
+              className="college-carousel"
             >
               {featuredColleges.map((college, idx) => (
                 <SwiperSlide key={college.id}>
