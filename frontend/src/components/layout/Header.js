@@ -125,7 +125,7 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-3 relative">
             {/* Write Review Button */}
             <Link to="/colleges">
-              <button className="flex items-center gap-2 px-3 py-1 border-2 border-orange-600 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors">
+              <button className="flex items-center gap-2 px-3 py-1 border-2 border-orange-500 text-orange-400 hover:bg-orange-500/20 rounded-lg transition-colors">
                 <FiEdit3 size={16} />
                 <div className="text-left leading-tight">
                   <div className="text-xs font-semibold whitespace-nowrap">Write a Review</div>
@@ -142,7 +142,7 @@ const Header = () => {
             >
               <button 
                 ref={exploreButtonRef}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-600"
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors border border-white/30 rounded-lg hover:border-orange-400"
               >
                 <FiGrid size={16} />
                 <span>Explore</span>
