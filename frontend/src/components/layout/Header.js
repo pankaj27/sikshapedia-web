@@ -165,17 +165,21 @@ const Header = () => {
                   onMouseLeave={() => setExploreDropdownOpen(false)}
                 >
                   <div className="flex flex-col gap-1">
-                    {exploreMenuItems.map((item, idx) => (
-                      <Link
-                        key={idx}
-                        to={item.link}
-                        onClick={() => setExploreDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
-                      >
-                        <span className="text-lg">{item.icon}</span>
-                        <span>{item.title}</span>
-                      </Link>
-                    ))}
+                    {exploreMenuItems.map((item, idx) => {
+                      const iconComponents = { FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone };
+                      const IconComponent = iconComponents[item.icon] || FiGrid;
+                      return (
+                        <Link
+                          key={idx}
+                          to={item.link}
+                          onClick={() => setExploreDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        >
+                          <IconComponent className="text-lg" />
+                          <span>{item.title}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>,
                 document.body
