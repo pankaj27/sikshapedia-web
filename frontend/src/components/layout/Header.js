@@ -210,14 +210,14 @@ const Header = () => {
       <div className="hidden lg:block border-t border-gray-200 bg-gray-50 w-full">
         <div className="px-6">
           <div className="flex items-center gap-6 py-2 overflow-x-auto">
-            <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">
+            <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline">
               All Courses
             </Link>
             {studyGoals.slice(1, 11).map((goal, idx) => (
               <Link
                 key={idx}
                 to={goal.link}
-                className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors"
+                className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline"
               >
                 {goal.name}
               </Link>
