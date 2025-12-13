@@ -60,7 +60,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50 w-full overflow-x-hidden">
+    <header className="bg-white shadow-md sticky top-0 z-[100] w-full overflow-x-hidden">
       {/* Main Header */}
       <div className="px-6">
         <div className="flex items-center justify-between h-16 gap-4 max-w-full">
@@ -82,7 +82,7 @@ const Header = () => {
             </button>
             
             {goalDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+              <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-[9999]">
                 {studyGoals.map((goal, idx) => (
                   <Link
                     key={idx}
@@ -139,7 +139,7 @@ const Header = () => {
               </button>
               
               {exploreDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[60]">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[9999]">
                   <div className="flex flex-col gap-1">
                     {exploreMenuItems.map((item, idx) => (
                       <Link
