@@ -332,6 +332,34 @@ class LoanProvider(BaseModel):
     contact: Dict
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Blog/Article Models
+class Article(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    slug: str
+    content: str
+    excerpt: str
+    author_id: str
+    author_name: str
+    category: str  # Admissions, Exams, Career, Study Tips, College Life
+    tags: List[str] = []
+    featured_image: Optional[str] = None
+    views: int = 0
+    likes: int = 0
+    published: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ArticleCreate(BaseModel):
+    title: str
+    slug: str
+    content: str
+    excerpt: str
+    category: str
+    tags: List[str] = []
+    featured_image: Optional[str] = None
+
 class College(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
