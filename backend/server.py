@@ -1151,6 +1151,83 @@ async def get_loan_provider(loan_id: str):
     return LoanProvider(**loan)
 
 # ============================================
+# Blog/Article Routes
+# ============================================
+
+@api_router.get("/articles", response_model=List[Article])
+async def get_articles(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    category: Optional[str] = None,
+    search: Optional[str] = None
+):
+    query = {"published": True}
+    
+    if category:
+        query["category"] = category
+    
+    if search:
+        query["$or"] = [
+            {"title": {"$regex": search, "$options": "i"}},
+            {"excerpt": {"$regex": search, "$options": "i"}},
+            {"content": {"$regex": search, "$options": "i"}}
+        ]
+    
+    articles = await db.articles.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    for article in articles:
+        if isinstance(article.get('created_at'), str):
+            article['created_at'] = datetime.fromisoformat(article['created_at'])
+        if isinstance(article.get('updated_at'), str):
+            article['updated_at'] = datetime.fromisoformat(article['updated_at'])
+    
+    return articles
+
+@api_router.get("/articles/{article_id}", response_model=Article)
+async def get_article(article_id: str):
+    article = await db.articles.find_one({"id": article_id}, {"_id": 0})
+    if not article:
+        raise HTTPException(status_code=404, detail="Article not found")
+    
+    # Increment views
+    await db.articles.update_one({"id": article_id}, {"$inc": {"views": 1}})
+    article['views'] = article.get('views', 0) + 1
+    
+    if isinstance(article.get('created_at'), str):
+        article['created_at'] = datetime.fromisoformat(article['created_at'])
+    if isinstance(article.get('updated_at'), str):
+        article['updated_at'] = datetime.fromisoformat(article['updated_at'])
+    
+    return Article(**article)
+
+@api_router.post("/articles", response_model=Article)
+async def create_article(article_data: ArticleCreate, current_user: User = Depends(get_current_user)):
+    article = Article(
+        **article_data.model_dump(),
+        author_id=current_user.id,
+        author_name=current_user.name
+    )
+    article_dict = article.model_dump()
+    article_dict['created_at'] = article_dict['created_at'].isoformat()
+    article_dict['updated_at'] = article_dict['updated_at'].isoformat()
+    
+    await db.articles.insert_one(article_dict)
+    return article
+
+@api_router.get("/articles/category/{category}")
+async def get_articles_by_category(category: str, limit: int = Query(10, ge=1, le=50)):
+    articles = await db.articles.find(
+        {"category": category, "published": True}, 
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    for article in articles:
+        if isinstance(article.get('created_at'), str):
+            article['created_at'] = datetime.fromisoformat(article['created_at'])
+    
+    return articles
+
+# ============================================
 # Stats Route
 # ============================================
 
