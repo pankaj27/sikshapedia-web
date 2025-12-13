@@ -1194,6 +1194,7 @@ async def get_user_dashboard_stats(current_user: User = Depends(get_current_user
     total_applications = await db.applications.count_documents({"user_id": current_user.id})
     total_reviews = await db.reviews.count_documents({"user_id": current_user.id})
     saved_colleges_count = len(current_user.saved_colleges)
+    unread_notifications = await db.notifications.count_documents({"user_id": current_user.id, "read": False})
     
     recent_applications = await db.applications.find(
         {"user_id": current_user.id}, 
@@ -1206,10 +1207,23 @@ async def get_user_dashboard_stats(current_user: User = Depends(get_current_user
         if isinstance(app.get('updated_at'), str):
             app['updated_at'] = datetime.fromisoformat(app['updated_at'])
     
+    # Get application status breakdown
+    status_breakdown = {
+        "submitted": await db.applications.count_documents({"user_id": current_user.id, "status": "submitted"}),
+        "under_review": await db.applications.count_documents({"user_id": current_user.id, "status": "under_review"}),
+        "accepted": await db.applications.count_documents({"user_id": current_user.id, "status": "accepted"}),
+        "rejected": await db.applications.count_documents({"user_id": current_user.id, "status": "rejected"})
+    }
+    
     return {
         "total_applications": total_applications,
         "total_reviews": total_reviews,
         "saved_colleges": saved_colleges_count,
+        "total_earnings": current_user.total_earnings,
+        "unread_notifications": unread_notifications,
+        "referral_code": current_user.referral_code,
+        "referral_count": current_user.referral_count,
+        "application_status_breakdown": status_breakdown,
         "recent_applications": recent_applications
     }
 
