@@ -60,7 +60,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-black/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+    <header className="bg-blue-900/95 backdrop-blur-md shadow-lg sticky top-0 z-50">
       {/* Main Header */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
@@ -71,7 +71,7 @@ const Header = () => {
 
           {/* Select Goal Dropdown - Desktop */}
           <div 
-            className="hidden lg:flex relative"
+            className="hidden lg:flex relative goal-dropdown"
             onMouseEnter={() => setGoalDropdownOpen(true)}
             onMouseLeave={() => setGoalDropdownOpen(false)}
           >
@@ -82,12 +82,15 @@ const Header = () => {
             </button>
             
             {goalDropdownOpen && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50">
+              <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
                 {studyGoals.map((goal, idx) => (
                   <Link
                     key={idx}
                     to={goal.link}
-                    onClick={() => setSelectedGoal(goal.name)}
+                    onClick={() => {
+                      setSelectedGoal(goal.name);
+                      setGoalDropdownOpen(false);
+                    }}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                   >
                     {goal.name}
@@ -129,7 +132,7 @@ const Header = () => {
 
             {/* Explore Dropdown */}
             <div 
-              className="relative"
+              className="relative explore-dropdown"
               onMouseEnter={() => setExploreDropdownOpen(true)}
               onMouseLeave={() => setExploreDropdownOpen(false)}
             >
@@ -139,16 +142,17 @@ const Header = () => {
               </button>
               
               {exploreDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-2 z-50">
+                <div className="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
                   <div className="grid grid-cols-2 gap-1 p-2">
                     {exploreMenuItems.map((item, idx) => (
                       <Link
                         key={idx}
                         to={item.link}
+                        onClick={() => setExploreDropdownOpen(false)}
                         className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors rounded"
                       >
                         <span>{item.icon}</span>
-                        <span>{item.title}</span>
+                        <span className="text-xs">{item.title}</span>
                       </Link>
                     ))}
                   </div>
@@ -203,7 +207,7 @@ const Header = () => {
         </div>
 
       {/* Course Categories Bar - Desktop */}
-      <div className="hidden lg:block border-t border-white/10">
+      <div className="hidden lg:block border-t border-blue-800/50 bg-blue-950/30">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-6 py-2 overflow-x-auto">
             <Link to="/courses" className="text-sm font-medium text-white/90 hover:text-orange-400 whitespace-nowrap transition-colors">
