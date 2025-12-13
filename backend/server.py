@@ -530,6 +530,148 @@ class EarningTransaction(BaseModel):
     reference_id: str  # review_id or referral_user_id
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Education Loan Models
+class EducationLoan(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    bank_name: str
+    loan_type: str  # Domestic, International
+    interest_rate: float
+    max_loan_amount: float
+    repayment_period: int  # in years
+    processing_fee: float
+    collateral_required: bool
+    features: List[str] = []
+    eligibility_criteria: str
+    documents_required: List[str] = []
+    website_url: Optional[str] = None
+    contact_number: Optional[str] = None
+    rating: float = 0.0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class LoanApplication(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    loan_id: str
+    bank_name: str
+    
+    # Applicant Details
+    full_name: str
+    email: EmailStr
+    phone: str
+    date_of_birth: str
+    
+    # Education Details
+    course_name: str
+    college_name: str
+    course_fees: float
+    course_duration: int  # in years
+    
+    # Financial Details
+    loan_amount_required: float
+    annual_family_income: float
+    existing_loans: Optional[str] = None
+    
+    # Documents
+    documents_submitted: List[str] = []
+    
+    # Status
+    status: str = "submitted"  # submitted, under_review, approved, rejected
+    application_number: str = Field(default_factory=lambda: f"LOAN{str(uuid.uuid4())[:8].upper()}")
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class LoanApplicationCreate(BaseModel):
+    loan_id: str
+    full_name: str
+    email: EmailStr
+    phone: str
+    date_of_birth: str
+    course_name: str
+    college_name: str
+    course_fees: float
+    course_duration: int
+    loan_amount_required: float
+    annual_family_income: float
+    existing_loans: Optional[str] = None
+
+# Scholarship Models
+class Scholarship(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    provider: str  # Government, Private, College
+    scholarship_type: str  # Merit-based, Need-based, Sports, etc.
+    amount: float
+    eligibility: str
+    applicable_courses: List[str] = []
+    education_level: str  # UG, PG, PhD
+    deadline: str
+    application_link: Optional[str] = None
+    documents_required: List[str] = []
+    description: str
+    benefits: List[str] = []
+    selection_process: str
+    active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ScholarshipApplication(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    scholarship_id: str
+    scholarship_name: str
+    
+    # Applicant Details
+    full_name: str
+    email: EmailStr
+    phone: str
+    date_of_birth: str
+    gender: str
+    category: str  # General, OBC, SC, ST
+    
+    # Academic Details
+    current_course: str
+    current_college: str
+    current_year: str
+    cgpa: float
+    class_10_percentage: float
+    class_12_percentage: float
+    
+    # Financial Details
+    annual_family_income: float
+    
+    # Additional Info
+    achievements: Optional[str] = None
+    why_deserve_scholarship: str
+    
+    # Status
+    status: str = "submitted"  # submitted, under_review, approved, rejected
+    application_number: str = Field(default_factory=lambda: f"SCH{str(uuid.uuid4())[:8].upper()}")
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ScholarshipApplicationCreate(BaseModel):
+    scholarship_id: str
+    full_name: str
+    email: EmailStr
+    phone: str
+    date_of_birth: str
+    gender: str
+    category: str
+    current_course: str
+    current_college: str
+    current_year: str
+    cgpa: float
+    class_10_percentage: float
+    class_12_percentage: float
+    annual_family_income: float
+    achievements: Optional[str] = None
+    why_deserve_scholarship: str
+
 # Inquiry Models
 class Inquiry(BaseModel):
     model_config = ConfigDict(extra="ignore")
