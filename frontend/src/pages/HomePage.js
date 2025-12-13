@@ -60,21 +60,21 @@ const CollegeDuniaHome = () => {
   };
 
   const studyGoals = [
-    { name: 'Engineering', icon: '🔧', courses: 'B.Tech, M.Tech', count: '5000+' },
-    { name: 'Management', icon: '💼', courses: 'MBA, PGDM', count: '3000+' },
-    { name: 'Medical', icon: '🏥', courses: 'MBBS, BDS', count: '2000+' },
-    { name: 'Commerce', icon: '💰', courses: 'B.Com, M.Com', count: '2500+' },
-    { name: 'Arts', icon: '🎨', courses: 'BA, MA', count: '1800+' },
-    { name: 'Science', icon: '🔬', courses: 'B.Sc, M.Sc', count: '2200+' },
-    { name: 'Law', icon: '⚖️', courses: 'LLB, LLM', count: '1000+' },
-    { name: 'Design', icon: '✏️', courses: 'B.Des, M.Des', count: '800+' }
+    { name: 'Engineering', icon: 'FiTool', courses: 'B.Tech, M.Tech', count: '5000+', color: 'text-blue-600' },
+    { name: 'Management', icon: 'FiBriefcase', courses: 'MBA, PGDM', count: '3000+', color: 'text-purple-600' },
+    { name: 'Medical', icon: 'FiActivity', courses: 'MBBS, BDS', count: '2000+', color: 'text-red-600' },
+    { name: 'Commerce', icon: 'FiTrendingUp', courses: 'B.Com, M.Com', count: '2500+', color: 'text-green-600' },
+    { name: 'Arts', icon: 'FiFeather', courses: 'BA, MA', count: '1800+', color: 'text-pink-600' },
+    { name: 'Science', icon: 'FiCpu', courses: 'B.Sc, M.Sc', count: '2200+', color: 'text-indigo-600' },
+    { name: 'Law', icon: 'FiShield', courses: 'LLB, LLM', count: '1000+', color: 'text-yellow-600' },
+    { name: 'Design', icon: 'FiLayout', courses: 'B.Des, M.Des', count: '800+', color: 'text-orange-600' }
   ];
 
   const programs = [
-    { title: 'College Ranking', subtitle: 'Find Top Colleges', icon: '🏆', color: 'bg-orange-100' },
-    { title: 'Exams', subtitle: 'JEE, NEET, CAT', icon: '📝', color: 'bg-blue-100' },
-    { title: 'Compare Colleges', subtitle: 'Side by Side', icon: '⚖️', color: 'bg-green-100' },
-    { title: 'Course Finder', subtitle: 'Find Best Courses', icon: '🎓', color: 'bg-purple-100' }
+    { title: 'College Ranking', subtitle: 'Find Top Colleges', icon: 'FiAward', color: 'bg-orange-100', iconColor: 'text-orange-600' },
+    { title: 'Exams', subtitle: 'JEE, NEET, CAT', icon: 'FiFileText', color: 'bg-blue-100', iconColor: 'text-blue-600' },
+    { title: 'Compare Colleges', subtitle: 'Side by Side', icon: 'FiBarChart2', color: 'bg-green-100', iconColor: 'text-green-600' },
+    { title: 'Course Finder', subtitle: 'Find Best Courses', icon: 'FiCompass', color: 'bg-purple-100', iconColor: 'text-purple-600' }
   ];
 
   const cities = [
