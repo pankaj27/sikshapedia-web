@@ -660,21 +660,21 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Explore Colleges in Popular Places</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {cities.map((city, idx) => (
-              <Link
-                key={idx}
-                to={`/colleges?city=${city.name}`}
-                className="bg-white rounded-lg p-4 text-center hover:shadow-lg transition"
-              >
-                <div className="w-16 h-16 mx-auto mb-2 bg-gray-100 rounded-full flex items-center justify-center">
-                  <img src={city.image} alt={city.name} className="w-10 h-10" onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.textContent = city.name.charAt(0);
-                  }} />
-                </div>
-                <h3 className="font-semibold text-sm">{city.name}</h3>
-              </Link>
-            ))}
+            {cities.map((city, idx) => {
+              const IconComponent = getIconComponent(city.icon);
+              return (
+                <Link
+                  key={idx}
+                  to={`/colleges?city=${city.name}`}
+                  className="bg-white rounded-lg p-4 text-center hover:shadow-lg transition group"
+                >
+                  <div className={`w-16 h-16 mx-auto mb-2 ${city.color} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <IconComponent className={`text-3xl ${city.iconColor}`} />
+                  </div>
+                  <h3 className="font-semibold text-sm group-hover:text-orange-600 transition">{city.name}</h3>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
