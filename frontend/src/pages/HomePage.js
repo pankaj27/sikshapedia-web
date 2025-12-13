@@ -350,8 +350,65 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
+      {/* Top Schools Section */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold">Top Schools in India</h2>
+            <Link to="/colleges?type=school">
+              <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All Schools</Button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L/yr', type: 'Day School', icon: 'FiBook' },
+              { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L/yr', type: 'Day School', icon: 'FiBook' },
+              { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L/yr', type: 'Boarding', icon: 'FiBook' },
+              { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L/yr', type: 'Boarding', icon: 'FiBook' },
+              { name: 'Bishop Cotton School', location: 'Shimla', board: 'ICSE', rating: 4.6, fees: '6L/yr', type: 'Boarding', icon: 'FiBook' },
+              { name: 'La Martiniere College', location: 'Kolkata', board: 'ICSE', rating: 4.7, fees: '1.5L/yr', type: 'Day School', icon: 'FiBook' },
+              { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L/yr', type: 'Day School', icon: 'FiBook' },
+              { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L/yr', type: 'Boarding', icon: 'FiBook' }
+            ].map((school, idx) => (
+              <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition group border">
+                <div className="relative h-40 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+                  <FiBook className="text-white text-6xl opacity-20" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <FiBook className="text-green-600 text-3xl" />
+                    </div>
+                  </div>
+                  <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-xs font-bold">
+                    {school.type}
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold mb-2 line-clamp-2 group-hover:text-orange-600 transition">{school.name}</h3>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
+                    <FiMapPin className="text-orange-600" />
+                    <span className="truncate">{school.location}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+                    <FiAward className="text-blue-600" />
+                    <span>{school.board} Board</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-2 border-t">
+                    <div className="flex items-center gap-1">
+                      <FiStar className="text-yellow-500" />
+                      <span className="font-bold text-sm">{school.rating}</span>
+                    </div>
+                    <span className="text-orange-600 font-bold text-sm">₹{school.fees}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Ranking Table */}
-      <section className="py-12">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold">College Rankings {activeRankingYear}</h2>
