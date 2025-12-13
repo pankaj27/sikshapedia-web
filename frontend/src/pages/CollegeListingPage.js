@@ -234,8 +234,8 @@ const CollegeListingPage = () => {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 border-b">Details</th>
-                    <th className="px-4 py-2 text-left text-xs font-bold text-gray-700 border-b">Statistics</th>
+                    <th className="px-4 py-2 text-left text-sm font-bold text-gray-700 border-b">Details</th>
+                    <th className="px-4 py-2 text-left text-sm font-bold text-gray-700 border-b">Statistics</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -250,8 +250,8 @@ const CollegeListingPage = () => {
                     { label: 'Accepted Entrance Exam', value: 'JEE Main, TNEA, MHT CET, UPTAC, Maharashtra JEE Main' },
                   ].map((row, idx) => (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-4 py-2 text-xs font-semibold text-gray-900 border-b">{row.label}</td>
-                      <td className="px-4 py-2 text-xs text-gray-700 border-b">{row.value}</td>
+                      <td className="px-4 py-2 text-sm font-semibold text-gray-900 border-b">{row.label}</td>
+                      <td className="px-4 py-2 text-sm text-gray-700 border-b">{row.value}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -272,11 +272,11 @@ const CollegeListingPage = () => {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-gray-700 border-b">Colleges</th>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-gray-700 border-b">Seats</th>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-gray-700 border-b">Total Course Fees</th>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-gray-700 border-b">Median Placement</th>
-                    <th className="px-3 py-2 text-left text-xs font-bold text-gray-700 border-b">Top Recruiters</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Colleges</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Seats</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Total Course Fees</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Median Placement</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Top Recruiters</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -294,12 +294,12 @@ const CollegeListingPage = () => {
                   ].map((college, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
                       <td className="px-3 py-2">
-                        <Link to={`/colleges/${idx + 1}`} className="text-blue-600 hover:underline text-xs font-medium">{college.name}</Link>
+                        <Link to={`/colleges/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{college.name}</Link>
                       </td>
-                      <td className="px-3 py-2 text-xs text-gray-700">{college.seats}</td>
-                      <td className="px-3 py-2 text-xs font-semibold text-gray-900">{college.fees}</td>
-                      <td className="px-3 py-2 text-xs font-semibold text-green-600">{college.placement}</td>
-                      <td className="px-3 py-2 text-[10px] text-gray-600">{college.recruiters}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{college.seats}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{college.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{college.placement}</td>
+                      <td className="px-3 py-2 text-xs text-gray-600">{college.recruiters}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -343,8 +343,8 @@ const CollegeListingPage = () => {
                 { q: 'What is the fee range for colleges in India?', a: 'The fee range varies from ₹10,000 per year in some government colleges to ₹40 Lakh in top private institutions.' },
               ].map((faq, idx) => (
                 <div key={idx} className="bg-gray-50 rounded-lg p-3 border">
-                  <h3 className="font-bold text-sm text-gray-900 mb-1">{faq.q}</h3>
-                  <p className="text-xs text-gray-700">{faq.a}</p>
+                  <h3 className="font-bold text-base text-gray-900 mb-1">{faq.q}</h3>
+                  <p className="text-sm text-gray-700">{faq.a}</p>
                 </div>
               ))}
             </div>
