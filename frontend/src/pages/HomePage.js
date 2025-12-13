@@ -33,6 +33,16 @@ const CollegeDuniaHome = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeRankingYear, setActiveRankingYear] = useState('2024');
 
+  // Icon component mapper
+  const iconComponents = {
+    FiTool, FiBriefcase, FiActivity, FiTrendingUp, FiFeather, FiCpu, FiShield, FiLayout,
+    FiAward, FiFileText, FiBarChart2, FiCompass
+  };
+
+  const getIconComponent = (iconName) => {
+    return iconComponents[iconName] || FiBookOpen;
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
