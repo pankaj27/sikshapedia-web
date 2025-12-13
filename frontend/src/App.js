@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import CollegeListingPage from './pages/CollegeListingPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
@@ -28,29 +29,31 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/colleges" element={<CollegeListingPage />} />
-          <Route path="/colleges/:id" element={<CollegeDetailPage />} />
-          <Route path="/exams" element={<ExamsPage />} />
-          <Route path="/exams/:id" element={<ExamDetailPage />} />
-          <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/courses/:id" element={<CourseDetailPage />} />
-          <Route path="/dashboard" element={<StudentDashboard />} />
-          <Route path="/search" element={<GlobalSearchPage />} />
-          <Route path="/eligibility-checker" element={<EligibilityChecker />} />
-          <Route path="/study-abroad" element={<StudyAbroadPage />} />
-          <Route path="/scholarships" element={<ScholarshipsPage />} />
-          <Route path="/compare" element={<CompareCollegesPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:id" element={<BlogDetailPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/colleges/add" element={<AddCollege />} />
-        </Routes>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/colleges" element={<CollegeListingPage />} />
+            <Route path="/colleges/:id" element={<CollegeDetailPage />} />
+            <Route path="/exams" element={<ExamsPage />} />
+            <Route path="/exams/:id" element={<ExamDetailPage />} />
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/:id" element={<CourseDetailPage />} />
+            <Route path="/dashboard" element={<StudentDashboard />} />
+            <Route path="/search" element={<GlobalSearchPage />} />
+            <Route path="/eligibility-checker" element={<EligibilityChecker />} />
+            <Route path="/study-abroad" element={<StudyAbroadPage />} />
+            <Route path="/scholarships" element={<ScholarshipsPage />} />
+            <Route path="/compare" element={<CompareCollegesPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogDetailPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/colleges/add" element={<AddCollege />} />
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </AuthProvider>
   );
