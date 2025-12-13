@@ -60,10 +60,10 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-[100] w-full overflow-x-hidden">
+    <header className="bg-white shadow-md sticky top-0 z-[100] w-full">
       {/* Main Header */}
       <div className="px-6">
-        <div className="flex items-center justify-between h-16 gap-4 max-w-full">
+        <div className="flex items-center justify-between h-16 gap-4 max-w-full relative">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
             <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
