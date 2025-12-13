@@ -6,6 +6,9 @@ import { FiSearch, FiMenu, FiX, FiChevronDown, FiStar, FiMapPin, FiBookOpen } fr
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import MetaTags from '../components/SEO/MetaTags';
+import LocationSearch from '../components/LocationSearch';
+import LatestNews from '../components/LatestNews';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
