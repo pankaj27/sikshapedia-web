@@ -27,6 +27,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production'
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 
+# Stripe Configuration
+STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', '')
+
+# Fixed subscription packages - NEVER accept amounts from frontend
+SUBSCRIPTION_PACKAGES = {
+    "premium-monthly": {"amount": 299.0, "name": "Premium Monthly", "duration_days": 30},
+    "premium-yearly": {"amount": 2999.0, "name": "Premium Yearly", "duration_days": 365}
+}
+
 # Create the main app
 app = FastAPI(title="Sikshapedia API", version="2.0.0")
 api_router = APIRouter(prefix="/api")
