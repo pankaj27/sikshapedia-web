@@ -104,3 +104,25 @@ export const FAQSchema = ({ faqs }) => {
     </Helmet>
   );
 };
+
+export const WebsiteSchema = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AdmissionBuddy",
+    "url": "https://campusconnect-89.preview.emergentagent.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://campusconnect-89.preview.emergentagent.com/colleges?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(schema)}
+      </script>
+    </Helmet>
+  );
+};
