@@ -1680,6 +1680,187 @@ async def check_scholarship_eligibility(
     }
 
 # ============================================
+# Study Materials Routes
+# ============================================
+
+@api_router.get("/study-materials", response_model=List[StudyMaterial])
+async def get_study_materials(
+    exam_name: Optional[str] = None,
+    subject: Optional[str] = None,
+    material_type: Optional[str] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    query = {}
+    
+    if exam_name:
+        query["exam_name"] = exam_name
+    
+    if subject:
+        query["subject"] = subject
+    
+    if material_type:
+        query["material_type"] = material_type
+    
+    materials = await db.study_materials.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for material in materials:
+        if isinstance(material.get('created_at'), str):
+            material['created_at'] = datetime.fromisoformat(material['created_at'])
+    
+    return materials
+
+@api_router.get("/study-materials/{material_id}", response_model=StudyMaterial)
+async def get_study_material(material_id: str):
+    material = await db.study_materials.find_one({"id": material_id}, {"_id": 0})
+    if not material:
+        raise HTTPException(status_code=404, detail="Study material not found")
+    
+    # Increment download count
+    await db.study_materials.update_one(
+        {"id": material_id},
+        {"$inc": {"downloads": 1}}
+    )
+    
+    if isinstance(material.get('created_at'), str):
+        material['created_at'] = datetime.fromisoformat(material['created_at'])
+    
+    return StudyMaterial(**material)
+
+@api_router.post("/study-materials", response_model=StudyMaterial)
+async def create_study_material(material_data: StudyMaterialCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can create study materials")
+    
+    material = StudyMaterial(**material_data.model_dump())
+    material_dict = material.model_dump()
+    material_dict['created_at'] = material_dict['created_at'].isoformat()
+    
+    await db.study_materials.insert_one(material_dict)
+    return material
+
+# ============================================
+# Counseling Routes
+# ============================================
+
+@api_router.get("/counselors", response_model=List[Counselor])
+async def get_counselors(
+    specialization: Optional[str] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    query = {}
+    
+    if specialization:
+        query["specialization"] = {"$in": [specialization]}
+    
+    counselors = await db.counselors.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for counselor in counselors:
+        if isinstance(counselor.get('created_at'), str):
+            counselor['created_at'] = datetime.fromisoformat(counselor['created_at'])
+    
+    return counselors
+
+@api_router.get("/counselors/{counselor_id}", response_model=Counselor)
+async def get_counselor(counselor_id: str):
+    counselor = await db.counselors.find_one({"id": counselor_id}, {"_id": 0})
+    if not counselor:
+        raise HTTPException(status_code=404, detail="Counselor not found")
+    
+    if isinstance(counselor.get('created_at'), str):
+        counselor['created_at'] = datetime.fromisoformat(counselor['created_at'])
+    
+    return Counselor(**counselor)
+
+@api_router.post("/counseling-sessions", response_model=CounselingSession)
+async def book_counseling_session(session_data: CounselingSessionCreate, current_user: User = Depends(get_current_user)):
+    counselor = await db.counselors.find_one({"id": session_data.counselor_id})
+    if not counselor:
+        raise HTTPException(status_code=404, detail="Counselor not found")
+    
+    # Check if slot is available (simplified check)
+    existing_session = await db.counseling_sessions.find_one({
+        "counselor_id": session_data.counselor_id,
+        "session_date": session_data.session_date,
+        "session_time": session_data.session_time,
+        "status": "scheduled"
+    })
+    
+    if existing_session:
+        raise HTTPException(status_code=400, detail="This slot is already booked. Please choose another time.")
+    
+    session = CounselingSession(
+        **session_data.model_dump(),
+        user_id=current_user.id,
+        counselor_name=counselor['name']
+    )
+    session_dict = session.model_dump()
+    session_dict['created_at'] = session_dict['created_at'].isoformat()
+    session_dict['updated_at'] = session_dict['updated_at'].isoformat()
+    
+    await db.counseling_sessions.insert_one(session_dict)
+    
+    # Update counselor's total sessions
+    await db.counselors.update_one(
+        {"id": session_data.counselor_id},
+        {"$inc": {"total_sessions": 1}}
+    )
+    
+    # Create notification
+    notification = Notification(
+        user_id=current_user.id,
+        type="application_update",
+        title="Counseling Session Booked!",
+        message=f"Your counseling session {session.booking_number} with {counselor['name']} is scheduled for {session_data.session_date} at {session_data.session_time}",
+        link="/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
+    
+    return session
+
+@api_router.get("/counseling-sessions/my", response_model=List[CounselingSession])
+async def get_my_counseling_sessions(current_user: User = Depends(get_current_user)):
+    sessions = await db.counseling_sessions.find(
+        {"user_id": current_user.id},
+        {"_id": 0}
+    ).sort("session_date", -1).to_list(100)
+    
+    for session in sessions:
+        if isinstance(session.get('created_at'), str):
+            session['created_at'] = datetime.fromisoformat(session['created_at'])
+        if isinstance(session.get('updated_at'), str):
+            session['updated_at'] = datetime.fromisoformat(session['updated_at'])
+    
+    return sessions
+
+@api_router.patch("/counseling-sessions/{session_id}/status")
+async def update_session_status(
+    session_id: str,
+    status: str,
+    current_user: User = Depends(get_current_user)
+):
+    valid_statuses = ["scheduled", "completed", "cancelled"]
+    if status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status")
+    
+    session = await db.counseling_sessions.find_one({"id": session_id}, {"_id": 0})
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    if session['user_id'] != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    await db.counseling_sessions.update_one(
+        {"id": session_id},
+        {"$set": {"status": status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"message": "Session status updated successfully"}
+
+# ============================================
 # Study Abroad Routes
 # ============================================
 
