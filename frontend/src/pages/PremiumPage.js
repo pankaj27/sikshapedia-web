@@ -44,27 +44,25 @@ const PremiumPage = () => {
     setSelectedPlan(plan);
 
     try {
-      // Create payment intent
-      const intentRes = await api.post('/create-payment-intent', null, {
-        params: { plan_id: plan.id }
-      });
-
-      // Simulate payment success (in production, integrate with Stripe)
-      const paymentId = `pay_${Math.random().toString(36).substr(2, 9)}`;
+      // Get origin URL from window
+      const originUrl = window.location.origin;
       
-      // Confirm subscription
-      await api.post('/confirm-subscription', null, {
+      // Create Stripe checkout session
+      const response = await api.post('/create-checkout-session', null, {
         params: {
           plan_id: plan.id,
-          payment_id: paymentId
+          origin_url: originUrl
         }
       });
 
-      alert('Payment successful! Your premium subscription is now active.');
-      fetchData();
+      // Redirect to Stripe Checkout
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      } else {
+        throw new Error('No checkout URL received');
+      }
     } catch (error) {
-      alert(error.response?.data?.detail || 'Payment failed. Please try again.');
-    } finally {
+      alert(error.response?.data?.detail || 'Failed to create checkout session. Please try again.');
       setProcessingPayment(false);
       setSelectedPlan(null);
     }
