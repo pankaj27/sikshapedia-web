@@ -650,7 +650,7 @@ async def get_colleges(
     
     return colleges
 
-@api_router.get("/colleges/featured", response_model=List[College])
+@api_router.get("/colleges/featured")
 async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
     colleges = await db.colleges.find({}, {"_id": 0}).sort("nirf_ranking", 1).limit(limit).to_list(limit)
     
