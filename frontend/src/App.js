@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
@@ -27,9 +28,10 @@ import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Layout>
+    <HelmetProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/colleges" element={<CollegeListingPage />} />
@@ -53,9 +55,10 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/colleges/add" element={<AddCollege />} />
           </Routes>
-        </Layout>
-      </BrowserRouter>
-    </AuthProvider>
+          </Layout>
+        </BrowserRouter>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 
