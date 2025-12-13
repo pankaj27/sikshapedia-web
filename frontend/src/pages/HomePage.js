@@ -453,7 +453,7 @@ const CollegeDuniaHome = () => {
               { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L', type: 'Day School', rank: 10 },
               { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
             ].map((school, idx) => (
-              <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border">
+              <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border relative">
                 {/* Header Image with Badges - Compact */}
                 <div className="relative h-24 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
                   <FiBook className="text-white text-5xl opacity-20" />
