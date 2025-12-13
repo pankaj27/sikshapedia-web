@@ -198,10 +198,12 @@ const CollegeListingPage = () => {
                                 <span className="font-semibold text-gray-900">{college.total_courses}</span> Courses
                               </span>
                               <span className="text-gray-600">
-                                Estd. <span className="font-semibold text-gray-900">{college.established_year}</span>
+                                Estd. <span className="font-semibold text-gray-900">{college.established_year || college.established}</span>
                               </span>
-                              {college.ranking && (
-                                <span className="text-orange-600 font-semibold">Rank #{college.ranking}</span>
+                              {(college.ranking?.nirf || college.ranking) && (
+                                <span className="text-orange-600 font-semibold">
+                                  Rank #{typeof college.ranking === 'object' ? college.ranking.nirf : college.ranking}
+                                </span>
                               )}
                             </div>
                             <div className="flex items-center gap-4">
