@@ -206,12 +206,6 @@ const CollegeDuniaHome = () => {
               </div>
               <span className="text-sm font-semibold text-center">All Courses</span>
             </Link>
-            <Link to="/scholarships" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-yellow-200 transition">
-                <FiAward className="text-yellow-600 text-2xl" />
-              </div>
-              <span className="text-sm font-semibold text-center">Scholarships</span>
-            </Link>
             <Link to="/loans" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
                 <FiTrendingUp className="text-pink-600 text-2xl" />
