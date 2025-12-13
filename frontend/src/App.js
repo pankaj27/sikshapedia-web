@@ -19,6 +19,7 @@ import EducationLoansPage from './pages/EducationLoansPage';
 import StudyMaterialsPage from './pages/StudyMaterialsPage';
 import CounselingPage from './pages/CounselingPage';
 import PremiumPage from './pages/PremiumPage';
+import PremiumSuccess from './pages/PremiumSuccess';
 import InstitutionDashboard from './pages/InstitutionDashboard';
 import CompareCollegesPage from './pages/CompareCollegesPage';
 import BlogPage from './pages/BlogPage';
@@ -54,6 +55,7 @@ function App() {
             <Route path="/study-materials" element={<StudyMaterialsPage />} />
             <Route path="/counseling" element={<CounselingPage />} />
             <Route path="/premium" element={<PremiumPage />} />
+            <Route path="/premium/success" element={<PremiumSuccess />} />
             <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
             <Route path="/compare" element={<CompareCollegesPage />} />
             <Route path="/blog" element={<BlogPage />} />
