@@ -1,0 +1,15 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /api
+
+Allow: /
+Allow: /colleges
+Allow: /exams
+Allow: /courses
+Allow: /study-abroad
+Allow: /scholarships
+Allow: /blog
+
+Sitemap: https://campus-scout-3.preview.emergentagent.com/sitemap.xml
