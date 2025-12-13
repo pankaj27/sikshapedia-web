@@ -184,6 +184,50 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
+      {/* Quick Links Section */}
+      <section className="py-8 border-b">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <Link to="/colleges" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 text-3xl">
+                🎓
+              </div>
+              <span className="text-sm font-semibold text-center">All Colleges</span>
+            </Link>
+            <Link to="/exams" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 text-3xl">
+                📝
+              </div>
+              <span className="text-sm font-semibold text-center">All Exams</span>
+            </Link>
+            <Link to="/courses" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2 text-3xl">
+                📚
+              </div>
+              <span className="text-sm font-semibold text-center">All Courses</span>
+            </Link>
+            <Link to="/scholarships" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-2 text-3xl">
+                💰
+              </div>
+              <span className="text-sm font-semibold text-center">Scholarships</span>
+            </Link>
+            <Link to="/loans" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 text-3xl">
+                🏦
+              </div>
+              <span className="text-sm font-semibold text-center">Education Loans</span>
+            </Link>
+            <Link to="/study-materials" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-2 text-3xl">
+                📖
+              </div>
+              <span className="text-sm font-semibold text-center">Study Materials</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Study Goals Carousel */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
