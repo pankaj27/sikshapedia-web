@@ -215,9 +215,9 @@ const CollegeDetailPage = () => {
                   <FiStar className="inline mr-1" />
                   {college.rating || 'N/A'} ({college.total_reviews} reviews)
                 </div>
-                {college.ranking && (
+                {(college.ranking?.nirf || college.ranking) && (
                   <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded font-bold">
-                    Rank #{college.ranking}
+                    Rank #{typeof college.ranking === 'object' ? college.ranking.nirf : college.ranking}
                   </div>
                 )}
               </div>
