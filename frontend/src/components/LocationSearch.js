@@ -140,19 +140,25 @@ const LocationSearch = () => {
 
         {activeTab === 'city' && (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {topCities.map((city, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleLocationClick('city', city.name)}
-                className="bg-white p-4 rounded-lg shadow-md hover:shadow-xl transition-all text-center group"
-              >
-                <div className="text-3xl mb-2">{city.icon}</div>
-                <div className="font-semibold text-gray-900 group-hover:text-orange-600">
-                  {city.name}
-                </div>
-                <div className="text-xs text-gray-500">{city.state}</div>
-              </button>
-            ))}
+            {topCities.map((city, idx) => {
+              const iconComponents = { FiHome, FiMapPin, FiCpu, FiTrendingUp, FiStar, FiBookOpen };
+              const IconComponent = iconComponents[city.icon] || FiMapPin;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleLocationClick('city', city.name)}
+                  className="bg-white p-4 rounded-lg shadow-md hover:shadow-xl transition-all text-center group"
+                >
+                  <div className="flex justify-center mb-2">
+                    <IconComponent className="text-3xl text-orange-600 group-hover:scale-110 transition-transform" />
+                  </div>
+                  <div className="font-semibold text-gray-900 group-hover:text-orange-600">
+                    {city.name}
+                  </div>
+                  <div className="text-xs text-gray-500">{city.state}</div>
+                </button>
+              );
+            })}
           </div>
         )}
 
