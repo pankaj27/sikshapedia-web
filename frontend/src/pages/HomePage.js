@@ -90,12 +90,12 @@ const CollegeDuniaHome = () => {
   const cities = [
     { name: 'Delhi', image: '/assets/cities/New Delhi.svg' },
     { name: 'Mumbai', image: '/assets/cities/Mumbai.svg' },
-    { name: 'Bangalore', image: '/assets/cities/Mumbai.svg' },
+    { name: 'Bangalore', image: '/assets/cities/Bangalore.svg' },
     { name: 'Hyderabad', image: '/assets/cities/Hyderabad.svg' },
-    { name: 'Chennai', image: '/assets/cities/Mumbai.svg' },
-    { name: 'Pune', image: '/assets/cities/Mumbai.svg' },
+    { name: 'Chennai', image: '/assets/cities/Chennai.svg' },
+    { name: 'Pune', image: '/assets/cities/Pune.svg' },
     { name: 'Kolkata', image: '/assets/cities/Kolkata.svg' },
-    { name: 'Nagpur', image: '/assets/cities/nagpur.svg' }
+    { name: 'Bhopal', image: '/assets/cities/Bhopal.svg' }
   ];
 
   const rankingAgencies = ['India Today', 'NIRF', 'The Week', 'Outlook'];
