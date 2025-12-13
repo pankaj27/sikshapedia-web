@@ -186,9 +186,9 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Logo and Copyright */}
             <div className="flex flex-col items-center md:items-start gap-2">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-8" />
+              <img src="/assets/footer-logo.png" alt="Admission Buddy" className="h-10" />
               <p className="text-sm text-gray-400">
-                © {new Date().getFullYear()} AdmissionBuddy. All rights reserved.
+                © {new Date().getFullYear()} Admission Buddy. All rights reserved.
               </p>
             </div>
 
