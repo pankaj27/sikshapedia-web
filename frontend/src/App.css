@@ -53,6 +53,15 @@
   border-color: #ea580c;
 }
 
+/* Remove default link underlines */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
 /* Smooth transitions */
 * {
   transition: all 0.2s ease-in-out;
