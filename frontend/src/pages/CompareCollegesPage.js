@@ -219,12 +219,12 @@ const CompareCollegesPage = () => {
                   label=\"Established Year\"
                   values={selectedColleges.map(c => c.established || 'N/A')}
                 />
-                <tr className=\"border-b\">
-                  <td className=\"px-4 py-3 font-semibold bg-gray-50 sticky left-0 z-10\">Actions</td>
+                <tr className="border-b">
+                  <td className="px-4 py-3 font-semibold bg-gray-50 sticky left-0 z-10">Actions</td>
                   {selectedColleges.map(college => (
-                    <td key={college.id} className=\"px-4 py-3 text-center\">
+                    <td key={college.id} className="px-4 py-3 text-center">
                       <Link to={`/colleges/${college.id}`}>
-                        <Button size=\"sm\" className=\"bg-orange-600 hover:bg-orange-700 w-full\">
+                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 w-full">
                           View Details
                         </Button>
                       </Link>
