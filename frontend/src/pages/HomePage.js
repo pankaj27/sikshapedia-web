@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { FiSearch, FiMenu, FiX, FiChevronDown, FiStar, FiMapPin, FiBookOpen, FiFileText, FiAward, FiTrendingUp, FiZap, FiTool, FiBriefcase, FiActivity, FiFeather, FiCpu, FiShield, FiLayout, FiBarChart2, FiCompass } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiX, FiChevronDown, FiStar, FiMapPin, FiBookOpen, FiFileText, FiAward, FiTrendingUp, FiZap, FiTool, FiBriefcase, FiActivity, FiFeather, FiCpu, FiShield, FiLayout, FiBarChart2, FiCompass, FiUsers, FiBook } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
