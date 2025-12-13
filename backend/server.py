@@ -648,7 +648,7 @@ async def get_colleges(
         if isinstance(college.get('created_at'), str):
             college['created_at'] = datetime.fromisoformat(college['created_at'])
     
-    return colleges
+    return [College(**college) for college in colleges]
 
 @api_router.get("/colleges/featured", response_model=List[College])
 async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
@@ -658,7 +658,7 @@ async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
         if isinstance(college.get('created_at'), str):
             college['created_at'] = datetime.fromisoformat(college['created_at'])
     
-    return colleges
+    return [College(**college) for college in colleges]
 
 @api_router.get("/colleges/{college_id}", response_model=College)
 async def get_college(college_id: str):
