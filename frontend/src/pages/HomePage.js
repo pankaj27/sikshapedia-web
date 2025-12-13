@@ -282,9 +282,20 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold">Top Universities & Colleges</h2>
-            <Link to="/colleges">
-              <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All</Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              {/* Custom Navigation Arrows */}
+              <div className="flex gap-2">
+                <button className="swiper-button-prev-custom w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
+                  <FiChevronDown className="transform rotate-90 text-gray-600" />
+                </button>
+                <button className="swiper-button-next-custom w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
+                  <FiChevronDown className="transform -rotate-90 text-gray-600" />
+                </button>
+              </div>
+              <Link to="/colleges">
+                <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All</Button>
+              </Link>
+            </div>
           </div>
 
           {loading ? (
