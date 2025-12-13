@@ -225,10 +225,23 @@ const CollegeDuniaHome = () => {
       {/* Study Goals Carousel */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Select Your Study Goal</h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold">Select Your Study Goal</h2>
+            <div className="flex gap-2">
+              <button className="swiper-button-prev-goals w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
+                <FiChevronDown className="transform rotate-90 text-gray-600" />
+              </button>
+              <button className="swiper-button-next-goals w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
+                <FiChevronDown className="transform -rotate-90 text-gray-600" />
+              </button>
+            </div>
+          </div>
           <Swiper
             modules={[Navigation]}
-            navigation
+            navigation={{
+              nextEl: '.swiper-button-next-goals',
+              prevEl: '.swiper-button-prev-goals',
+            }}
             spaceBetween={20}
             slidesPerView={2}
             breakpoints={{
