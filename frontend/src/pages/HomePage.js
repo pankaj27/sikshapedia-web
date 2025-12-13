@@ -237,16 +237,21 @@ const CollegeDuniaHome = () => {
               1024: { slidesPerView: 6 }
             }}
           >
-            {studyGoals.map((goal, idx) => (
-              <SwiperSlide key={idx}>
-                <Link to={`/colleges?course=${goal.name}`} className="block bg-white rounded-lg p-6 text-center hover:shadow-lg transition border">
-                  <div className="text-5xl mb-3">{goal.icon}</div>
-                  <h3 className="font-bold text-lg mb-1">{goal.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{goal.courses}</p>
-                  <span className="text-xs text-orange-600 font-semibold">{goal.count} Colleges</span>
-                </Link>
-              </SwiperSlide>
-            ))}
+            {studyGoals.map((goal, idx) => {
+              const IconComponent = getIconComponent(goal.icon);
+              return (
+                <SwiperSlide key={idx}>
+                  <Link to={`/colleges?course=${goal.name}`} className="block bg-white rounded-lg p-6 text-center hover:shadow-lg transition border group">
+                    <div className="flex justify-center mb-3">
+                      <IconComponent className={`text-5xl ${goal.color} group-hover:scale-110 transition-transform`} />
+                    </div>
+                    <h3 className="font-bold text-lg mb-1">{goal.name}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{goal.courses}</p>
+                    <span className="text-xs text-orange-600 font-semibold">{goal.count} Colleges</span>
+                  </Link>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </section>
