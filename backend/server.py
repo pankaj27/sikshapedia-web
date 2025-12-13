@@ -764,6 +764,62 @@ class CounselingSessionCreate(BaseModel):
     current_education: str
     query_description: str
 
+# Payment & Subscription Models
+class Subscription(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    plan_type: str  # Premium Monthly, Premium Yearly
+    amount: float
+    start_date: datetime
+    end_date: datetime
+    status: str = "active"  # active, expired, cancelled
+    payment_id: Optional[str] = None
+    features: List[str] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class PaymentTransaction(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    transaction_type: str  # subscription, material_purchase, premium_upgrade
+    amount: float
+    currency: str = "INR"
+    payment_method: str  # stripe, razorpay
+    payment_id: str
+    status: str  # pending, completed, failed
+    item_id: Optional[str] = None
+    item_name: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ReferralTracking(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    referrer_id: str
+    referrer_name: str
+    referred_user_id: str
+    referred_user_name: str
+    referred_user_email: EmailStr
+    status: str = "pending"  # pending, completed, failed
+    earnings_amount: float = 200.0
+    earnings_paid: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Institution Models
+class Institution(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    phone: str
+    college_id: str  # Link to college in colleges collection
+    contact_person: str
+    designation: str
+    subscription_plan: str = "basic"  # basic, pro, enterprise
+    applications_received: int = 0
+    last_login: Optional[datetime] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Inquiry Models
 class Inquiry(BaseModel):
     model_config = ConfigDict(extra="ignore")
