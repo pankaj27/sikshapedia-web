@@ -289,22 +289,6 @@ const Header = () => {
       )}
     </div>
 
-    {/* Quick Action Buttons (Study Abroad & Course Finder) - Floating */}
-    <div className="hidden lg:flex fixed right-6 top-20 flex-col gap-2 z-40">
-      <Link to="/study-abroad">
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white text-sm shadow-lg flex items-center gap-2">
-          <FiSearch size={16} />
-          Study Abroad
-        </Button>
-      </Link>
-      <Link to="/courses">
-        <Button className="bg-green-600 hover:bg-green-700 text-white text-sm shadow-lg flex items-center gap-2 relative">
-          <FiSearch size={16} />
-          Course Finder
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded">NEW</span>
-        </Button>
-      </Link>
-    </div>
   </header>
   );
 };
