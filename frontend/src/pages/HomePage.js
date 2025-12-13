@@ -261,13 +261,18 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Explore Programs</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {programs.map((program, idx) => (
-              <div key={idx} className={`${program.color} rounded-xl p-6 text-center hover:shadow-lg transition cursor-pointer`}>
-                <div className="text-5xl mb-3">{program.icon}</div>
-                <h3 className="font-bold text-xl mb-2">{program.title}</h3>
-                <p className="text-gray-600">{program.subtitle}</p>
-              </div>
-            ))}
+            {programs.map((program, idx) => {
+              const IconComponent = getIconComponent(program.icon);
+              return (
+                <div key={idx} className={`${program.color} rounded-xl p-6 text-center hover:shadow-lg transition cursor-pointer group`}>
+                  <div className="flex justify-center mb-3">
+                    <IconComponent className={`text-5xl ${program.iconColor} group-hover:scale-110 transition-transform`} />
+                  </div>
+                  <h3 className="font-bold text-xl mb-2">{program.title}</h3>
+                  <p className="text-gray-600">{program.subtitle}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
