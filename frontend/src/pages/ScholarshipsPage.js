@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSearch, FiDollarSign, FiAward, FiCalendar, FiExternalLink } from 'react-icons/fi';
+import { FiSearch, FiDollarSign, FiAward, FiCalendar, FiExternalLink, FiCheckCircle, FiFilter, FiUsers } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import MetaTags from '../components/SEO/MetaTags';
 
 const ScholarshipsPage = () => {
   const [scholarships, setScholarships] = useState([]);
