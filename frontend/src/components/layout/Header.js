@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid } from 'react-icons/fi';
 import { Button } from '../ui/button';
@@ -11,6 +12,8 @@ const Header = () => {
   const [goalDropdownOpen, setGoalDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGoal, setSelectedGoal] = useState('Select Goal');
+  const exploreButtonRef = useRef(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -18,6 +21,16 @@ const Header = () => {
       setUser(JSON.parse(savedUser));
     }
   }, []);
+
+  useEffect(() => {
+    if (exploreDropdownOpen && exploreButtonRef.current) {
+      const rect = exploreButtonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY + 8,
+        right: window.innerWidth - rect.right
+      });
+    }
+  }, [exploreDropdownOpen]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -133,13 +146,24 @@ const Header = () => {
               onMouseEnter={() => setExploreDropdownOpen(true)}
               onMouseLeave={() => setExploreDropdownOpen(false)}
             >
-              <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-600">
+              <button 
+                ref={exploreButtonRef}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-600"
+              >
                 <FiGrid size={16} />
                 <span>Explore</span>
               </button>
               
-              {exploreDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[9999]">
+              {exploreDropdownOpen && createPortal(
+                <div 
+                  className="fixed w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[99999]"
+                  style={{ 
+                    top: `${dropdownPosition.top}px`, 
+                    right: `${dropdownPosition.right}px` 
+                  }}
+                  onMouseEnter={() => setExploreDropdownOpen(true)}
+                  onMouseLeave={() => setExploreDropdownOpen(false)}
+                >
                   <div className="flex flex-col gap-1">
                     {exploreMenuItems.map((item, idx) => (
                       <Link
@@ -153,7 +177,8 @@ const Header = () => {
                       </Link>
                     ))}
                   </div>
-                </div>
+                </div>,
+                document.body
               )}
             </div>
 
