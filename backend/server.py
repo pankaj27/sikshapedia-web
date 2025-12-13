@@ -1038,6 +1038,112 @@ async def get_application(application_id: str, current_user: User = Depends(get_
     
     return Application(**application)
 
+@api_router.patch("/applications/{application_id}/status")
+async def update_application_status(
+    application_id: str, 
+    status: str,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update application status")
+    
+    valid_statuses = ["submitted", "under_review", "accepted", "rejected"]
+    if status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+    
+    result = await db.applications.update_one(
+        {"id": application_id},
+        {"$set": {"status": status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    # Get application to send notification
+    application = await db.applications.find_one({"id": application_id}, {"_id": 0})
+    
+    # Create notification for user
+    notification = Notification(
+        user_id=application['user_id'],
+        type="application_update",
+        title=f"Application {status.replace('_', ' ').title()}",
+        message=f"Your application {application['application_number']} status has been updated to {status}",
+        link=f"/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
+    
+    return {"message": "Application status updated successfully", "status": status}
+
+# ============================================
+# Notifications Routes
+# ============================================
+
+@api_router.get("/notifications", response_model=List[Notification])
+async def get_notifications(current_user: User = Depends(get_current_user)):
+    notifications = await db.notifications.find(
+        {"user_id": current_user.id}, 
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    for notif in notifications:
+        if isinstance(notif.get('created_at'), str):
+            notif['created_at'] = datetime.fromisoformat(notif['created_at'])
+    
+    return notifications
+
+@api_router.get("/notifications/unread-count")
+async def get_unread_notifications_count(current_user: User = Depends(get_current_user)):
+    count = await db.notifications.count_documents({"user_id": current_user.id, "read": False})
+    return {"count": count}
+
+@api_router.patch("/notifications/{notification_id}/read")
+async def mark_notification_read(notification_id: str, current_user: User = Depends(get_current_user)):
+    result = await db.notifications.update_one(
+        {"id": notification_id, "user_id": current_user.id},
+        {"$set": {"read": True}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    
+    return {"message": "Notification marked as read"}
+
+@api_router.post("/notifications/mark-all-read")
+async def mark_all_notifications_read(current_user: User = Depends(get_current_user)):
+    await db.notifications.update_many(
+        {"user_id": current_user.id, "read": False},
+        {"$set": {"read": True}}
+    )
+    return {"message": "All notifications marked as read"}
+
+# ============================================
+# Earnings Routes
+# ============================================
+
+@api_router.get("/earnings")
+async def get_earnings(current_user: User = Depends(get_current_user)):
+    transactions = await db.earnings.find(
+        {"user_id": current_user.id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    for trans in transactions:
+        if isinstance(trans.get('created_at'), str):
+            trans['created_at'] = datetime.fromisoformat(trans['created_at'])
+    
+    # Calculate totals by type
+    review_earnings = sum(t['amount'] for t in transactions if t['type'] == 'review')
+    referral_earnings = sum(t['amount'] for t in transactions if t['type'] == 'referral')
+    
+    return {
+        "total_earnings": current_user.total_earnings,
+        "review_earnings": review_earnings,
+        "referral_earnings": referral_earnings,
+        "transactions": transactions
+    }
+
 # ============================================
 # User Dashboard Routes
 # ============================================
