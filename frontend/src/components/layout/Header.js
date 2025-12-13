@@ -60,7 +60,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-black/60 backdrop-blur-lg shadow-lg sticky top-0 z-50">
+    <header className="bg-white shadow-md sticky top-0 z-50">
       {/* Main Header */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
@@ -75,7 +75,7 @@ const Header = () => {
             onMouseEnter={() => setGoalDropdownOpen(true)}
             onMouseLeave={() => setGoalDropdownOpen(false)}
           >
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
               <span>🎓</span>
               <span>{selectedGoal}</span>
               <FiChevronDown className={`transition-transform ${goalDropdownOpen ? 'rotate-180' : ''}`} />
@@ -109,7 +109,7 @@ const Header = () => {
                 placeholder="Search for Colleges, Exams, Courses and More..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm text-white placeholder-gray-300"
+                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm text-gray-900 placeholder-gray-500"
               />
             </div>
           </form>
@@ -120,7 +120,7 @@ const Header = () => {
             <Link to="/colleges">
               <Button 
                 variant="outline" 
-                className="flex items-center gap-2 border-orange-500 text-orange-400 hover:bg-orange-500/20 text-sm bg-white/5"
+                className="flex items-center gap-2 border-orange-600 text-orange-600 hover:bg-orange-50 text-sm"
               >
                 <FiEdit3 size={16} />
                 <div className="text-left">
@@ -136,7 +136,7 @@ const Header = () => {
               onMouseEnter={() => setExploreDropdownOpen(true)}
               onMouseLeave={() => setExploreDropdownOpen(false)}
             >
-              <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors border border-white/20 rounded-lg hover:border-orange-400 bg-white/5">
+              <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-600">
                 <FiGrid />
                 <span>Explore</span>
               </button>
@@ -161,7 +161,7 @@ const Header = () => {
             </div>
 
             {/* Notification Bell */}
-            <button className="p-2 text-white hover:text-orange-400 transition-colors relative">
+            <button className="p-2 text-gray-700 hover:text-orange-600 transition-colors relative">
               <FiBell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
@@ -170,7 +170,7 @@ const Header = () => {
             {user ? (
               <div className="flex items-center gap-3">
                 <Link to="/dashboard">
-                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-orange-400">
+                  <Button variant="ghost" className="flex items-center gap-2 text-gray-700 hover:text-orange-600">
                     <FiUser />
                     {user.name}
                   </Button>
@@ -179,7 +179,7 @@ const Header = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" className="text-white hover:text-orange-400 text-sm">
+                  <Button variant="ghost" className="text-gray-700 hover:text-orange-600 text-sm">
                     Login
                   </Button>
                 </Link>
@@ -192,7 +192,7 @@ const Header = () => {
             )}
 
             {/* Hamburger Menu Icon */}
-            <button className="p-2 text-white hover:text-orange-400 transition-colors">
+            <button className="p-2 text-gray-700 hover:text-orange-600 transition-colors">
               <FiMenu size={24} />
             </button>
           </div>
@@ -207,17 +207,17 @@ const Header = () => {
         </div>
 
       {/* Course Categories Bar - Desktop */}
-      <div className="hidden lg:block border-t border-white/10 bg-black/40">
+      <div className="hidden lg:block border-t border-gray-200 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-6 py-2 overflow-x-auto">
-            <Link to="/courses" className="text-sm font-medium text-white/90 hover:text-orange-400 whitespace-nowrap transition-colors">
+            <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">
               All Courses
             </Link>
             {studyGoals.slice(1, 11).map((goal, idx) => (
               <Link
                 key={idx}
                 to={goal.link}
-                className="text-sm font-medium text-white/90 hover:text-orange-400 whitespace-nowrap transition-colors"
+                className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors"
               >
                 {goal.name}
               </Link>
