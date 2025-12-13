@@ -233,7 +233,7 @@ const Header = () => {
             <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               All Courses
             </Link>
-            {studyGoals.slice(1, 11).map((goal, idx) => (
+            {admissionGoals.slice(1, 5).map((goal, idx) => (
               <Link
                 key={idx}
                 to={goal.link}
