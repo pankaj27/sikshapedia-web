@@ -337,15 +337,14 @@ metadata:
 
 test_plan:
   current_focus:
+    - "College Module"
     - "College Detail Page - Reviews Tab"
     - "College Detail Page - Q&A Tab"
     - "Application Modal"
-    - "Global Search Page"
-    - "Eligibility Checker"
-    - "Enhanced Dashboard"
-  stuck_tasks: []
+  stuck_tasks:
+    - "College Module"
   test_all: true
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
   - agent: "testing"
