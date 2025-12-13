@@ -9,6 +9,7 @@ const CollegeListingPage = () => {
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [compareList, setCompareList] = useState([]);
   const [sortBy, setSortBy] = useState('ranking');
@@ -199,8 +200,31 @@ const CollegeListingPage = () => {
       </div>
 
       {/* ALL CONTENT SECTIONS */}
-      <div className="bg-white py-12">
-        <div className="container mx-auto px-6 space-y-12">
+      <div className="bg-white py-8">
+        <div className="container mx-auto px-6">
+          {/* Read More Button */}
+          <div className="text-center mb-6">
+            <button
+              onClick={() => setShowContent(!showContent)}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors shadow-md"
+            >
+              {showContent ? (
+                <>
+                  <span>Read Less</span>
+                  <FiChevronDown className="transform rotate-180 transition-transform" />
+                </>
+              ) : (
+                <>
+                  <span>Read More</span>
+                  <FiChevronDown className="transition-transform" />
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Collapsible Content */}
+          {showContent && (
+          <div className="space-y-12">
           
           {/* HIGHLIGHTS TABLE */}
           <section id="highlights">
@@ -325,6 +349,8 @@ const CollegeListingPage = () => {
               ))}
             </div>
           </section>
+          </div>
+          )}
         </div>
       </div>
 
