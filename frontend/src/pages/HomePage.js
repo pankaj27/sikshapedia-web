@@ -88,14 +88,14 @@ const CollegeDuniaHome = () => {
   ];
 
   const cities = [
-    { name: 'Delhi', icon: 'FiMapPin', color: 'bg-red-100', iconColor: 'text-red-600' },
-    { name: 'Mumbai', icon: 'FiHome', color: 'bg-blue-100', iconColor: 'text-blue-600' },
-    { name: 'Bangalore', icon: 'FiCpu', color: 'bg-purple-100', iconColor: 'text-purple-600' },
-    { name: 'Hyderabad', icon: 'FiTrendingUp', color: 'bg-green-100', iconColor: 'text-green-600' },
-    { name: 'Chennai', icon: 'FiStar', color: 'bg-yellow-100', iconColor: 'text-yellow-600' },
-    { name: 'Pune', icon: 'FiBookOpen', color: 'bg-indigo-100', iconColor: 'text-indigo-600' },
-    { name: 'Kolkata', icon: 'FiMapPin', color: 'bg-pink-100', iconColor: 'text-pink-600' },
-    { name: 'Indore', icon: 'FiTrendingUp', color: 'bg-teal-100', iconColor: 'text-teal-600' }
+    { name: 'Delhi', image: '/assets/cities/New Delhi.svg' },
+    { name: 'Mumbai', image: '/assets/cities/Mumbai.svg' },
+    { name: 'Bangalore', image: '/assets/cities/Mumbai.svg' },
+    { name: 'Hyderabad', image: '/assets/cities/Hyderabad.svg' },
+    { name: 'Chennai', image: '/assets/cities/Mumbai.svg' },
+    { name: 'Pune', image: '/assets/cities/Mumbai.svg' },
+    { name: 'Kolkata', image: '/assets/cities/Kolkata.svg' },
+    { name: 'Nagpur', image: '/assets/cities/nagpur.svg' }
   ];
 
   const rankingAgencies = ['India Today', 'NIRF', 'The Week', 'Outlook'];
