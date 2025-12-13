@@ -307,31 +307,258 @@ const CollegeListingPage = () => {
             </div>
           </section>
 
-          {/* Additional sections placeholders */}
+          {/* Video Section */}
+          <section className="my-6">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Complete Guide to College Admissions 2025</h3>
+              <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                <div className="text-center p-6">
+                  <FiGrid className="text-6xl text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 font-medium">Video: How to Choose the Right College</p>
+                  <p className="text-sm text-gray-500 mt-2">Watch our comprehensive guide on college selection and admissions</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Government Colleges Section */}
           <section id="govt-colleges">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Govt Colleges in India 2025</h2>
-            <p className="text-gray-700 text-sm mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Govt Colleges in India 2025</h2>
+            <p className="text-gray-700 text-sm mb-4">
               IIT Bombay, IIT Delhi, and IIT Madras are among the <strong>676 government universities</strong> in India 
               that offer programs. This list includes the highest package, median placement, average placement, and total 
               course fees for Government colleges in India.
             </p>
+            
+            {/* Image Placeholder */}
+            <div className="mb-4">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 border flex items-center justify-center">
+                <div className="text-center">
+                  <FiAward className="text-6xl text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600 font-medium">Top Government Colleges in India</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College Name</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Location</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Avg Package</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'IIT Bombay', location: 'Mumbai', fees: '₹8.75L', package: '₹19.61 LPA' },
+                    { name: 'IIT Delhi', location: 'Delhi', fees: '₹8.66L', package: '₹19.08 LPA' },
+                    { name: 'IIT Madras', location: 'Chennai', fees: '₹9.39L', package: '₹17.50 LPA' },
+                    { name: 'NIT Trichy', location: 'Trichy', fees: '₹5.6L', package: '₹14.35 LPA' },
+                    { name: 'DTU Delhi', location: 'Delhi', fees: '₹7.8L', package: '₹12.4 LPA' },
+                  ].map((college, idx) => (
+                    <tr key={idx} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{college.name}</td>
+                      <td className="px-3 py-2 text-sm">{college.location}</td>
+                      <td className="px-3 py-2 text-sm font-semibold">{college.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{college.package}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
+          {/* Private Colleges Section */}
           <section id="private-colleges">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Private Colleges in India 2025</h2>
-            <p className="text-gray-700 text-sm mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Private Colleges in India 2025</h2>
+            <p className="text-gray-700 text-sm mb-4">
               There are 4626 private colleges in India, of which 3623 offer programs. The median package ranges from 
               ₹8.99 LPA at VIT Vellore to ₹29.37 LPA at IIIT Bangalore.
             </p>
+            
+            <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College Name</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Location</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Avg Package</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'BITS Pilani', location: 'Pilani', fees: '₹23.9L', package: '₹18.20 LPA' },
+                    { name: 'VIT Vellore', location: 'Vellore', fees: '₹7.83L', package: '₹8.99 LPA' },
+                    { name: 'Manipal Institute', location: 'Manipal', fees: '₹18.2L', package: '₹11.5 LPA' },
+                    { name: 'SRM Chennai', location: 'Chennai', fees: '₹10L', package: '₹9.2 LPA' },
+                    { name: 'Amity Noida', location: 'Noida', fees: '₹8.5L', package: '₹7.8 LPA' },
+                  ].map((college, idx) => (
+                    <tr key={idx} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{college.name}</td>
+                      <td className="px-3 py-2 text-sm">{college.location}</td>
+                      <td className="px-3 py-2 text-sm font-semibold">{college.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{college.package}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
 
+          {/* ROI Wise Section */}
+          <section id="roi-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India ROI Wise 2025</h2>
+            <p className="text-gray-700 text-sm mb-3">
+              Return on Investment (ROI) is calculated based on course fees and placement packages. Here are the top colleges with best ROI.
+            </p>
+            <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Rank</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Total Fees</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Avg Package</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">ROI %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { rank: 1, name: 'IIT BHU', fees: '₹8.35L', package: '₹20 LPA', roi: '239.52%' },
+                    { rank: 2, name: 'NIT Trichy', fees: '₹5.6L', package: '₹14.35 LPA', roi: '256.25%' },
+                    { rank: 3, name: 'IIT Bombay', fees: '₹8.75L', package: '₹19.61 LPA', roi: '224.11%' },
+                  ].map((college) => (
+                    <tr key={college.rank} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-bold text-orange-600">{college.rank}</td>
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{college.name}</td>
+                      <td className="px-3 py-2 text-sm">{college.fees}</td>
+                      <td className="px-3 py-2 text-sm text-green-600">{college.package}</td>
+                      <td className="px-3 py-2 text-sm font-bold text-green-700">{college.roi}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Lowest Fees Section */}
+          <section id="lowest-fees">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges with the Lowest Fees</h2>
+            <p className="text-gray-700 text-sm mb-3">
+              Looking for affordable education? Here are colleges offering quality education at the lowest fees.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              {[
+                { name: 'AU Allahabad', fees: '₹4,400', type: 'Government' },
+                { name: 'Jamia Millia', fees: '₹14,600', type: 'Government' },
+                { name: 'BHU Varanasi', fees: '₹48,000', type: 'Government' },
+              ].map((college, idx) => (
+                <div key={idx} className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-4 border">
+                  <h3 className="font-bold text-base text-gray-900 mb-1">{college.name}</h3>
+                  <p className="text-2xl font-bold text-green-600 mb-1">{college.fees}</p>
+                  <p className="text-xs text-gray-600">{college.type}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Top Ranked by Agencies */}
+          <section id="agencies">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top-Ranked Colleges by Agencies</h2>
+            <p className="text-gray-700 text-sm mb-3">
+              Rankings from various agencies including NIRF, IIRF, India Today, and The Week.
+            </p>
+          </section>
+
+          {/* NIRF Rankings */}
+          <section id="nirf">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top-Ranked Colleges by NIRF</h2>
+            <p className="text-gray-700 text-sm mb-3">
+              National Institutional Ranking Framework (NIRF) rankings for 2025.
+            </p>
+          </section>
+
+          {/* Admission Section */}
           <section id="admission">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Colleges in India: Admission 2025</h2>
-            <p className="text-gray-700 text-sm mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India: Admission 2025</h2>
+            <p className="text-gray-700 text-sm mb-4">
               Colleges in India offer admission mainly through entrance exams like JEE Main. Some colleges also provide 
               direct admission based on merit or college entrance tests. Apart from this, most colleges require a minimum 
               of 45% in Class 12th.
             </p>
+            
+            {/* Image for Admission Process */}
+            <div className="mb-4">
+              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-8 border flex items-center justify-center">
+                <div className="text-center">
+                  <FiTarget className="text-6xl text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600 font-medium">College Admission Process 2025</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Top Specializations */}
+          <section id="specialisations">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top Specialisations</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['Computer Science', 'Mechanical', 'Electronics', 'Civil', 'Information Technology', 'Electrical', 'Chemical', 'Biotechnology'].map((spec) => (
+                <div key={spec} className="bg-blue-50 rounded-lg p-3 border text-center">
+                  <p className="font-semibold text-sm text-gray-900">{spec}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Top States */}
+          <section id="states">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top States</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { state: 'Maharashtra', count: 612 },
+                { state: 'Tamil Nadu', count: 587 },
+                { state: 'Karnataka', count: 453 },
+                { state: 'Uttar Pradesh', count: 425 },
+              ].map((item) => (
+                <div key={item.state} className="bg-white rounded-lg p-3 border flex justify-between items-center">
+                  <span className="font-semibold text-sm">{item.state}</span>
+                  <span className="text-orange-600 font-bold">{item.count} Colleges</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Top Cities */}
+          <section id="cities">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top Cities</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { city: 'Mumbai', count: 245 },
+                { city: 'Delhi', count: 234 },
+                { city: 'Bangalore', count: 198 },
+                { city: 'Chennai', count: 176 },
+              ].map((item) => (
+                <div key={item.city} className="bg-white rounded-lg p-3 border flex justify-between items-center">
+                  <span className="font-semibold text-sm">{item.city}</span>
+                  <span className="text-orange-600 font-bold">{item.count} Colleges</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Entrance Exams */}
+          <section id="exams">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Entrance Exams</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['JEE Main', 'NEET', 'CAT', 'GATE', 'CLAT', 'CMAT', 'XAT', 'MAT'].map((exam) => (
+                <div key={exam} className="bg-green-50 rounded-lg p-3 border text-center">
+                  <p className="font-bold text-sm text-gray-900">{exam}</p>
+                </div>
+              ))}
+            </div>
           </section>
 
           <section id="faqs">
