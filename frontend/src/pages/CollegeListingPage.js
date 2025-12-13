@@ -596,17 +596,8 @@ const CollegeListingPage = () => {
                               <tr className="border-b border-gray-200 hover:bg-orange-50 transition-colors">
                                 {/* CD RANK */}
                                 <td className="px-3 py-4 align-top">
-                                  <div className="flex flex-col items-center gap-1.5">
-                                    <div className="text-xl font-bold text-gray-400">#{globalIndex + 1}</div>
-                                    <div className="w-11 h-11 rounded overflow-hidden border-2 border-gray-200">
-                                      {college.images?.[0] ? (
-                                        <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
-                                      ) : (
-                                        <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
-                                          {college.name.charAt(0)}
-                                        </div>
-                                      )}
-                                    </div>
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-2xl font-bold text-gray-400">#{globalIndex + 1}</div>
                                   </div>
                                 </td>
 
