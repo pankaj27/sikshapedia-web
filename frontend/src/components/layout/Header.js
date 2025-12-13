@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid } from 'react-icons/fi';
 import { Button } from '../ui/button';
 
 const Header = () => {
@@ -8,7 +8,9 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
+  const [goalDropdownOpen, setGoalDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGoal, setSelectedGoal] = useState('Select Goal');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -32,79 +34,135 @@ const Header = () => {
     navigate('/');
   };
 
+  const studyGoals = [
+    { name: 'All Courses', link: '/courses' },
+    { name: 'B.Tech', link: '/courses?type=btech' },
+    { name: 'MBA', link: '/courses?type=mba' },
+    { name: 'M.Tech', link: '/courses?type=mtech' },
+    { name: 'MBBS', link: '/courses?type=mbbs' },
+    { name: 'B.Com', link: '/courses?type=bcom' },
+    { name: 'B.Sc', link: '/courses?type=bsc' },
+    { name: 'B.Sc (Nursing)', link: '/courses?type=bsc-nursing' },
+    { name: 'BA', link: '/courses?type=ba' },
+    { name: 'BBA', link: '/courses?type=bba' },
+    { name: 'BCA', link: '/courses?type=bca' }
+  ];
+
   const exploreMenuItems = [
-    { title: 'Study Abroad', link: '/study-abroad' },
-    { title: 'Scholarships', link: '/scholarships' },
-    { title: 'Loans', link: '/loans' },
-    { title: 'Compare Colleges', link: '/compare' },
-    { title: 'College Predictor', link: '/eligibility-checker' },
-    { title: 'Blogs & Articles', link: '/blog' },
-    { title: 'About Us', link: '/about' },
-    { title: 'Contact', link: '/contact' }
+    { title: 'Study Abroad', link: '/study-abroad', icon: '✈️' },
+    { title: 'Scholarships', link: '/scholarships', icon: '💰' },
+    { title: 'Education Loans', link: '/loans', icon: '🏦' },
+    { title: 'Compare Colleges', link: '/compare', icon: '⚖️' },
+    { title: 'College Predictor', link: '/eligibility-checker', icon: '🎯' },
+    { title: 'Blogs & Articles', link: '/blog', icon: '📝' },
+    { title: 'About Us', link: '/about', icon: 'ℹ️' },
+    { title: 'Contact', link: '/contact', icon: '📞' }
   ];
 
   return (
     <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+      {/* Main Header */}
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
             <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8 flex-1 justify-center">
-            <Link to="/colleges" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-              Colleges
-            </Link>
-            <Link to="/exams" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-              Exams
-            </Link>
-            <Link to="/courses" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-              Courses
-            </Link>
+          {/* Select Goal Dropdown - Desktop */}
+          <div 
+            className="hidden lg:flex relative"
+            onMouseEnter={() => setGoalDropdownOpen(true)}
+            onMouseLeave={() => setGoalDropdownOpen(false)}
+          >
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
+              <span>🎓</span>
+              <span>{selectedGoal}</span>
+              <FiChevronDown className={`transition-transform ${goalDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
             
-            {/* Explore More Dropdown */}
+            {goalDropdownOpen && (
+              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50">
+                {studyGoals.map((goal, idx) => (
+                  <Link
+                    key={idx}
+                    to={goal.link}
+                    onClick={() => setSelectedGoal(goal.name)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                  >
+                    {goal.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Search Bar - Desktop */}
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl">
+            <div className="relative w-full">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search for Colleges, Exams, Courses and More..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+              />
+            </div>
+          </form>
+
+          {/* Right Side Actions - Desktop */}
+          <div className="hidden lg:flex items-center gap-3">
+            {/* Write Review Button */}
+            <Link to="/colleges">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2 border-orange-600 text-orange-600 hover:bg-orange-50 text-sm"
+              >
+                <FiEdit3 size={16} />
+                <div className="text-left">
+                  <div className="font-semibold">Write a Review</div>
+                  <div className="text-xs">Get Upto ₹300*</div>
+                </div>
+              </Button>
+            </Link>
+
+            {/* Explore Dropdown */}
             <div 
               className="relative"
               onMouseEnter={() => setExploreDropdownOpen(true)}
               onMouseLeave={() => setExploreDropdownOpen(false)}
             >
-              <button className="flex items-center gap-1 text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                Explore More
-                <FiChevronDown className={`transition-transform ${exploreDropdownOpen ? 'rotate-180' : ''}`} />
+              <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border rounded-lg hover:border-orange-600">
+                <FiGrid />
+                <span>Explore</span>
               </button>
               
               {exploreDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                  {exploreMenuItems.map((item, idx) => (
-                    <Link
-                      key={idx}
-                      to={item.link}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
-                    >
-                      {item.title}
-                    </Link>
-                  ))}
+                <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-2 z-50">
+                  <div className="grid grid-cols-2 gap-1 p-2">
+                    {exploreMenuItems.map((item, idx) => (
+                      <Link
+                        key={idx}
+                        to={item.link}
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors rounded"
+                      >
+                        <span>{item.icon}</span>
+                        <span>{item.title}</span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          </nav>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
-            <form onSubmit={handleSearch} className="relative">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search colleges, exams..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 w-64"
-              />
-            </form>
+            {/* Notification Bell */}
+            <button className="p-2 text-gray-700 hover:text-orange-600 transition-colors relative">
+              <FiBell size={20} />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
 
-            {/* Auth Buttons */}
+            {/* Auth Buttons / User Profile */}
             {user ? (
               <div className="flex items-center gap-3">
                 <Link to="/dashboard">
@@ -113,28 +171,26 @@ const Header = () => {
                     {user.name}
                   </Button>
                 </Link>
-                <Button 
-                  onClick={handleLogout}
-                  variant="outline"
-                  className="border-orange-600 text-orange-600 hover:bg-orange-50"
-                >
-                  Logout
-                </Button>
               </div>
             ) : (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" className="text-gray-700">
+                  <Button variant="ghost" className="text-gray-700 text-sm">
                     Login
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                  <Button className="bg-orange-600 hover:bg-orange-700 text-white text-sm">
                     Sign Up
                   </Button>
                 </Link>
               </div>
             )}
+
+            {/* Hamburger Menu Icon */}
+            <button className="p-2 text-gray-700 hover:text-orange-600 transition-colors">
+              <FiMenu size={24} />
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -146,65 +202,106 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t">
-            <form onSubmit={handleSearch} className="mb-4">
-              <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-            </form>
-
-            <nav className="flex flex-col gap-2">
-              <Link to="/colleges" className="py-2 text-gray-700 hover:text-orange-600">
-                Colleges
+      {/* Course Categories Bar - Desktop */}
+      <div className="hidden lg:block border-t">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-6 py-2 overflow-x-auto">
+            <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">
+              All Courses
+            </Link>
+            {studyGoals.slice(1, 11).map((goal, idx) => (
+              <Link
+                key={idx}
+                to={goal.link}
+                className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors"
+              >
+                {goal.name}
               </Link>
-              <Link to="/exams" className="py-2 text-gray-700 hover:text-orange-600">
-                Exams
-              </Link>
-              <Link to="/courses" className="py-2 text-gray-700 hover:text-orange-600">
-                Courses
-              </Link>
-              
-              <div className="border-t pt-2 mt-2">
-                <p className="text-xs font-semibold text-gray-500 mb-2">EXPLORE MORE</p>
-                {exploreMenuItems.map((item, idx) => (
-                  <Link
-                    key={idx}
-                    to={item.link}
-                    className="block py-2 text-sm text-gray-700 hover:text-orange-600"
-                  >
-                    {item.title}
-                  </Link>
-                ))}
-              </div>
-
-              {!user && (
-                <div className="flex flex-col gap-2 mt-4 pt-4 border-t">
-                  <Link to="/login">
-                    <Button variant="outline" className="w-full">
-                      Login
-                    </Button>
-                  </Link>
-                  <Link to="/register">
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </nav>
+            ))}
           </div>
-        )}
+        </div>
       </div>
-    </header>
+
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden py-4 border-t">
+          <form onSubmit={handleSearch} className="mb-4">
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+          </form>
+
+          <nav className="flex flex-col gap-2">
+            <div className="mb-3">
+              <p className="text-xs font-semibold text-gray-500 mb-2">STUDY GOALS</p>
+              {studyGoals.map((goal, idx) => (
+                <Link
+                  key={idx}
+                  to={goal.link}
+                  className="block py-2 text-sm text-gray-700 hover:text-orange-600"
+                >
+                  {goal.name}
+                </Link>
+              ))}
+            </div>
+
+            <div className="border-t pt-2 mt-2">
+              <p className="text-xs font-semibold text-gray-500 mb-2">EXPLORE MORE</p>
+              {exploreMenuItems.map((item, idx) => (
+                <Link
+                  key={idx}
+                  to={item.link}
+                  className="flex items-center gap-2 py-2 text-sm text-gray-700 hover:text-orange-600"
+                >
+                  <span>{item.icon}</span>
+                  <span>{item.title}</span>
+                </Link>
+              ))}
+            </div>
+
+            {!user && (
+              <div className="flex flex-col gap-2 mt-4 pt-4 border-t">
+                <Link to="/login">
+                  <Button variant="outline" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </nav>
+        </div>
+      )}
+    </div>
+
+    {/* Quick Action Buttons (Study Abroad & Course Finder) - Floating */}
+    <div className="hidden lg:flex fixed right-6 top-20 flex-col gap-2 z-40">
+      <Link to="/study-abroad">
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white text-sm shadow-lg flex items-center gap-2">
+          <FiSearch size={16} />
+          Study Abroad
+        </Button>
+      </Link>
+      <Link to="/courses">
+        <Button className="bg-green-600 hover:bg-green-700 text-white text-sm shadow-lg flex items-center gap-2 relative">
+          <FiSearch size={16} />
+          Course Finder
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded">NEW</span>
+        </Button>
+      </Link>
+    </div>
+  </header>
   );
 };
 
