@@ -7,7 +7,7 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import MetaTags from '../components/SEO/MetaTags';
-import { OrganizationSchema } from '../components/SEO/StructuredData';
+import { OrganizationSchema, WebsiteSchema } from '../components/SEO/StructuredData';
 import LocationSearch from '../components/LocationSearch';
 import LatestNews from '../components/LatestNews';
 import TopCollegesByStream from '../components/TopCollegesByStream';
