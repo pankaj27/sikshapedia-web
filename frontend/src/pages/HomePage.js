@@ -435,57 +435,104 @@ const CollegeDuniaHome = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L/yr', type: 'Day School', icon: 'FiBook' },
-              { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L/yr', type: 'Day School', icon: 'FiBook' },
-              { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L/yr', type: 'Boarding', icon: 'FiBook' },
-              { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L/yr', type: 'Boarding', icon: 'FiBook' },
-              { name: 'Bishop Cotton School', location: 'Shimla', board: 'ICSE', rating: 4.6, fees: '6L/yr', type: 'Boarding', icon: 'FiBook' },
-              { name: 'La Martiniere College', location: 'Kolkata', board: 'ICSE', rating: 4.7, fees: '1.5L/yr', type: 'Day School', icon: 'FiBook' },
-              { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L/yr', type: 'Day School', icon: 'FiBook' },
-              { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L/yr', type: 'Boarding', icon: 'FiBook' }
+              { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
+              { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L', type: 'Day School', rank: 5 },
+              { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L', type: 'Boarding', rank: 2 },
+              { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L', type: 'Boarding', rank: 3 },
+              { name: 'Bishop Cotton School', location: 'Shimla', board: 'ICSE', rating: 4.6, fees: '6L', type: 'Boarding', rank: 8 },
+              { name: 'La Martiniere College', location: 'Kolkata', board: 'ICSE', rating: 4.7, fees: '1.5L', type: 'Day School', rank: 6 },
+              { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L', type: 'Day School', rank: 10 },
+              { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
             ].map((school, idx) => (
-              <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition group border">
-                <div className="relative h-40 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+              <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border">
+                {/* Header Image with Badges */}
+                <div className="relative h-32 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
                   <FiBook className="text-white text-6xl opacity-20" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg">
                       <FiBook className="text-green-600 text-3xl" />
                     </div>
                   </div>
-                  <div className="absolute top-2 right-2 bg-orange-600 text-white px-2 py-1 rounded text-xs font-bold">
-                    {school.type}
+                  
+                  {/* Top Right Badges */}
+                  <div className="absolute top-2 right-2 flex flex-col gap-1">
+                    {idx < 3 && (
+                      <div className="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                        <FiCheckCircle className="text-xs" /> Verified
+                      </div>
+                    )}
+                    {idx < 2 && (
+                      <div className="bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                        <FiStar className="text-xs" /> Featured
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold mb-2 line-clamp-2 group-hover:text-orange-600 transition">{school.name}</h3>
-                  <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
-                    <FiMapPin className="text-orange-600" />
-                    <span className="truncate">{school.location}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
-                    <FiAward className="text-blue-600" />
-                    <span>{school.board} Board</span>
-                  </div>
-                  <div className="flex justify-between items-center pt-2 border-t mb-3">
-                    <div className="flex items-center gap-1">
-                      <FiStar className="text-yellow-500" />
-                      <span className="font-bold text-sm">{school.rating}</span>
+                  
+                  {/* Admission Open Badge */}
+                  {idx < 5 && (
+                    <div className="absolute bottom-2 left-2 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                      Admission 2025 Open
                     </div>
-                    <span className="text-orange-600 font-bold text-sm">₹{school.fees}</span>
+                  )}
+                </div>
+
+                <div className="p-4">
+                  {/* School Name and Location */}
+                  <h3 className="font-bold text-base mb-1 line-clamp-2 hover:text-orange-600 transition cursor-pointer">{school.name}</h3>
+                  <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                      <FiMapPin className="text-orange-600" />
+                      <span>{school.location}</span>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-3 gap-2 mb-3 pb-3 border-b">
+                    <div className="text-center">
+                      <div className="text-orange-600 font-bold text-base">₹{school.fees}</div>
+                      <div className="text-xs text-gray-500">Annual Fees</div>
+                    </div>
+                    <div className="text-center border-x">
+                      <div className="text-orange-600 font-bold text-base">{school.board}</div>
+                      <div className="text-xs text-gray-500">Board</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-orange-600 font-bold text-base flex items-center justify-center gap-1">
+                        <FiStar className="text-yellow-500" />
+                        {school.rating}
+                      </div>
+                      <div className="text-xs text-gray-500">Rating</div>
+                    </div>
+                  </div>
+
+                  {/* Ranking */}
+                  <div className="text-xs text-gray-600 mb-3">
+                    <span className="font-semibold">Ranked {school.rank}</span> out of 100 | Top Schools India
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <Button 
+                        onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/compare`)}
+                        variant="outline"
+                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                      >
+                        Compare
+                      </Button>
+                      <Button 
+                        onClick={() => window.open(`/schools/${school.name}/brochure`, '_blank')}
+                        variant="outline"
+                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                      >
+                        Brochure
+                      </Button>
+                    </div>
                     <Button 
-                      onClick={() => navigate(`/colleges?type=school&name=${encodeURIComponent(school.name)}`)}
-                      className="flex-1 bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto"
+                      onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/apply`)}
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-sm py-2.5 h-auto font-bold"
                     >
                       Apply Now
-                    </Button>
-                    <Button 
-                      onClick={() => window.open(`/schools/${school.name}/brochure`, '_blank')}
-                      variant="outline"
-                      className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
-                    >
-                      Download Brochure
                     </Button>
                   </div>
                 </div>
