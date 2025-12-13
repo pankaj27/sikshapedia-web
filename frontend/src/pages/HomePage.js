@@ -125,24 +125,24 @@ const CollegeDuniaHome = () => {
         {/* Search Overlay */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-center text-white max-w-4xl px-4 w-full">
-            <h1 className="text-3xl md:text-5xl font-bold mb-8">Find Over 250+ Exams in India</h1>
+            <h1 className="text-3xl md:text-5xl font-bold mb-8 drop-shadow-lg">Find Over 250+ Exams in India</h1>
             
-            {/* Single Search Input */}
-            <div className="bg-white rounded-lg shadow-2xl overflow-hidden max-w-3xl mx-auto">
-              <form onSubmit={handleSearch} className="p-4">
-                <div className="flex gap-2">
+            {/* Single Search Input with Semi-transparent Background */}
+            <div className="backdrop-blur-sm bg-white/95 rounded-2xl shadow-2xl overflow-hidden max-w-3xl mx-auto border border-white/20">
+              <form onSubmit={handleSearch} className="p-5">
+                <div className="flex gap-3">
                   <div className="flex-1 relative">
                     <Input
                       placeholder="Search for colleges, exams, courses and more.."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-14 text-base pl-12 pr-4 border-2 border-gray-300 focus:border-orange-500 rounded-lg"
+                      className="h-14 text-base pl-12 pr-4 border-0 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 rounded-xl shadow-sm transition-all"
                     />
-                    <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                    <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
                   </div>
                   <Button 
                     type="submit" 
-                    className="bg-orange-600 hover:bg-orange-700 h-14 px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 h-14 px-10 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
                   >
                     Search
                   </Button>
@@ -155,7 +155,7 @@ const CollegeDuniaHome = () => {
               <Link to="/counseling">
                 <Button 
                   type="button" 
-                  className="bg-white text-orange-600 hover:bg-gray-100 h-12 px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
+                  className="backdrop-blur-sm bg-white/95 text-orange-600 hover:bg-white border border-white/30 h-12 px-8 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
