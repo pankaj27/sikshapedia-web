@@ -312,84 +312,82 @@ const CollegeDuniaHome = () => {
               {featuredColleges.map((college, idx) => (
                 <SwiperSlide key={college.id}>
                   <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border">
-                    {/* Header Image with Badges */}
-                    <div className="relative h-32 bg-gradient-to-br from-blue-500 to-indigo-600">
+                    {/* Header Image with Badges - Reduced Height */}
+                    <div className="relative h-24 bg-gradient-to-br from-blue-500 to-indigo-600">
                       {college.images?.[0] ? (
                         <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold">
+                        <div className="w-full h-full flex items-center justify-center text-white text-3xl font-bold">
                           {college.name.charAt(0)}
                         </div>
                       )}
                       {/* Top Right Badges */}
-                      <div className="absolute top-2 right-2 flex flex-col gap-1">
+                      <div className="absolute top-1 right-1 flex flex-col gap-1">
                         {idx < 3 && (
-                          <div className="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                            <FiCheckCircle className="text-xs" /> Verified
+                          <div className="bg-green-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
+                            <FiCheckCircle className="text-[10px]" /> Verified
                           </div>
                         )}
                         {idx < 2 && (
-                          <div className="bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                            <FiStar className="text-xs" /> Featured
+                          <div className="bg-purple-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
+                            <FiStar className="text-[10px]" /> Featured
                           </div>
                         )}
                       </div>
                       {/* Admission Open Badge */}
                       {idx < 4 && (
-                        <div className="absolute bottom-2 left-2 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="absolute bottom-1 left-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
                           Admission 2025 Open
                         </div>
                       )}
                     </div>
 
-                    <div className="p-4">
+                    <div className="p-3">
                       {/* College Name and Location */}
                       <Link to={`/colleges/${college.id}`}>
-                        <h3 className="font-bold text-base mb-1 line-clamp-2 hover:text-orange-600">{college.name}</h3>
+                        <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600">{college.name}</h3>
                       </Link>
-                      <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
-                        <div className="flex items-center gap-1">
-                          <FiMapPin className="text-orange-600" />
-                          <span>{college.location?.city}, {college.location?.state}</span>
-                        </div>
+                      <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2">
+                        <FiMapPin className="text-orange-600 text-xs" />
+                        <span>{college.location?.city}, {college.location?.state}</span>
                       </div>
 
-                      {/* Stats Grid */}
-                      <div className="grid grid-cols-3 gap-2 mb-3 pb-3 border-b">
+                      {/* Stats Grid - Compact */}
+                      <div className="grid grid-cols-3 gap-1 mb-2 pb-2 border-b">
                         <div className="text-center">
-                          <div className="text-orange-600 font-bold text-base">₹{(college.average_fees / 100000).toFixed(1)}L</div>
-                          <div className="text-xs text-gray-500">First Year Fees</div>
+                          <div className="text-orange-600 font-bold text-sm">₹{(college.average_fees / 100000).toFixed(1)}L</div>
+                          <div className="text-[10px] text-gray-500">First Year</div>
                         </div>
                         <div className="text-center border-x">
-                          <div className="text-orange-600 font-bold text-base">JEE</div>
-                          <div className="text-xs text-gray-500">Exam Accepted</div>
+                          <div className="text-orange-600 font-bold text-sm">JEE</div>
+                          <div className="text-[10px] text-gray-500">Exam</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-orange-600 font-bold text-base flex items-center justify-center gap-1">
-                            <FiStar className="text-yellow-500" />
+                          <div className="text-orange-600 font-bold text-sm flex items-center justify-center gap-0.5">
+                            <FiStar className="text-yellow-500 text-xs" />
                             {college.rating || '4.5'}
                           </div>
-                          <div className="text-xs text-gray-500">User Reviews</div>
+                          <div className="text-[10px] text-gray-500">Rating</div>
                         </div>
                       </div>
 
-                      {/* Ranking */}
+                      {/* Ranking - Compact */}
                       {college.nirf_ranking && (
-                        <div className="text-xs text-gray-600 mb-3">
-                          <span className="font-semibold">Ranked {college.nirf_ranking}</span> out of 300 | NIRF Ranking
+                        <div className="text-[11px] text-gray-600 mb-2">
+                          <span className="font-semibold">Ranked {college.nirf_ranking}</span> / 300
                         </div>
                       )}
 
-                      {/* Action Buttons */}
-                      <div className="space-y-2">
-                        <div className="flex gap-2">
+                      {/* Action Buttons - Compact */}
+                      <div className="space-y-1.5">
+                        <div className="flex gap-1.5">
                           <Button 
                             onClick={(e) => {
                               e.preventDefault();
                               navigate(`/colleges/${college.id}/compare`);
                             }}
                             variant="outline"
-                            className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                            className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
                           >
                             Compare
                           </Button>
@@ -399,7 +397,7 @@ const CollegeDuniaHome = () => {
                               window.open(`/colleges/${college.id}/brochure`, '_blank');
                             }}
                             variant="outline"
-                            className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                            className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
                           >
                             Brochure
                           </Button>
@@ -409,7 +407,7 @@ const CollegeDuniaHome = () => {
                             e.preventDefault();
                             navigate(`/colleges/${college.id}/apply`);
                           }}
-                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-sm py-2.5 h-auto font-bold"
+                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold"
                         >
                           Apply Now
                         </Button>
