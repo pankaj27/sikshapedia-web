@@ -62,7 +62,7 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       {/* Main Header */}
-      <div className="container mx-auto px-4">
+      <div className="w-full px-6">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
@@ -208,7 +208,7 @@ const Header = () => {
 
       {/* Course Categories Bar - Desktop */}
       <div className="hidden lg:block border-t border-gray-200 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="w-full px-6">
           <div className="flex items-center gap-6 py-2 overflow-x-auto">
             <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">
               All Courses
