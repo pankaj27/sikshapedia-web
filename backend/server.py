@@ -735,11 +735,52 @@ async def create_review(review_data: ReviewCreate, current_user: User = Depends(
     if existing_review:
         raise HTTPException(status_code=400, detail="You have already reviewed this college")
     
-    review = Review(**review_data.model_dump(), user_id=current_user.id, user_name=current_user.name)
+    # Calculate review earnings based on review quality
+    review_earnings = 50.0  # Base earning for review
+    if review_data.review_text and len(review_data.review_text) > 200:
+        review_earnings = 100.0  # Higher earning for detailed reviews
+    
+    review = Review(
+        **review_data.model_dump(), 
+        user_id=current_user.id, 
+        user_name=current_user.name,
+        earnings=review_earnings,
+        status="approved"  # Auto-approve for now
+    )
     review_dict = review.model_dump()
     review_dict['created_at'] = review_dict['created_at'].isoformat()
     
     await db.reviews.insert_one(review_dict)
+    
+    # Add earnings transaction
+    earning_transaction = EarningTransaction(
+        user_id=current_user.id,
+        type="review",
+        amount=review_earnings,
+        description=f"Review for {college['name']}",
+        reference_id=review.id
+    )
+    earn_dict = earning_transaction.model_dump()
+    earn_dict['created_at'] = earn_dict['created_at'].isoformat()
+    await db.earnings.insert_one(earn_dict)
+    
+    # Update user total earnings
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$inc": {"total_earnings": review_earnings}}
+    )
+    
+    # Create notification
+    notification = Notification(
+        user_id=current_user.id,
+        type="review_earning",
+        title="Review Earnings Added!",
+        message=f"You earned ₹{review_earnings} for your review. Keep writing quality reviews to earn more!",
+        link="/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
     
     # Update college rating
     reviews = await db.reviews.find({"college_id": review_data.college_id}).to_list(1000)
