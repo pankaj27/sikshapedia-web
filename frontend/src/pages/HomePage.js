@@ -125,66 +125,45 @@ const CollegeDuniaHome = () => {
 
         {/* Search Overlay */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="text-center text-white max-w-4xl px-4">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">Find Your Dream College</h1>
-            <p className="text-xl mb-8">Explore 10,000+ Colleges, Courses & Exams</p>
+          <div className="text-center text-white max-w-4xl px-4 w-full">
+            <h1 className="text-3xl md:text-5xl font-bold mb-8">Find Over 250+ Exams in India</h1>
             
-            {/* Search Tabs */}
-            <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
-              <div className="flex flex-wrap border-b">
-                {['colleges', 'universities', 'schools', 'exams', 'courses'].map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`flex-1 min-w-[90px] py-3 font-semibold capitalize text-sm md:text-base ${
-                      activeTab === tab 
-                        ? 'bg-orange-600 text-white' 
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-              <form onSubmit={handleSearch} className="p-6">
-                <div className="flex gap-3 mb-3">
+            {/* Single Search Input */}
+            <div className="bg-white rounded-lg shadow-2xl overflow-hidden max-w-3xl mx-auto">
+              <form onSubmit={handleSearch} className="p-4">
+                <div className="flex gap-2">
                   <div className="flex-1 relative">
                     <Input
-                      placeholder={`Search ${activeTab}...`}
+                      placeholder="Search for colleges, exams, courses and more.."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-14 text-lg pl-12 pr-4 border-2 border-gray-300 focus:border-orange-500"
+                      className="h-14 text-base pl-12 pr-4 border-2 border-gray-300 focus:border-orange-500 rounded-lg"
                     />
                     <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
                   </div>
                   <Button 
                     type="submit" 
-                    className="bg-orange-600 hover:bg-orange-700 h-14 px-10 text-lg font-bold shadow-lg hover:shadow-xl transition-all"
+                    className="bg-orange-600 hover:bg-orange-700 h-14 px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
                   >
                     Search
                   </Button>
                 </div>
-                
-                {/* Counseling and Admission Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link to="/counseling" className="flex-1">
-                    <Button type="button" className="w-full bg-green-600 hover:bg-green-700 h-12 text-base font-bold shadow-md hover:shadow-lg transition-all">
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                      Get Free Counseling
-                    </Button>
-                  </Link>
-                  <Link to="/colleges" className="flex-1">
-                    <Button type="button" className="w-full bg-purple-600 hover:bg-purple-700 h-12 text-base font-bold shadow-md hover:shadow-lg transition-all">
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      Admission 2024 Open
-                    </Button>
-                  </Link>
-                </div>
               </form>
+            </div>
+            
+            {/* Need Counselling Button */}
+            <div className="mt-6">
+              <Link to="/counseling">
+                <Button 
+                  type="button" 
+                  className="bg-white text-orange-600 hover:bg-gray-100 h-12 px-8 text-base font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  Need Counselling
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
