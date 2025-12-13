@@ -276,6 +276,62 @@ class ApplicationCreate(BaseModel):
     preferred_course: str
     message: Optional[str] = None
 
+# Study Abroad Models
+class StudyAbroadUniversity(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    country: str
+    city: str
+    description: str
+    ranking: Dict
+    programs: List[str] = []
+    tuition_fees: Dict  # Currency, min, max
+    living_cost: Dict
+    application_deadline: Optional[str] = None
+    language_requirements: Dict  # IELTS, TOEFL scores
+    acceptance_rate: Optional[float] = None
+    images: List[str] = []
+    website: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Scholarship Models
+class ScholarshipProgram(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    provider: str
+    description: str
+    amount: str
+    type: str  # Merit-based, Need-based, Sports, Research
+    eligibility: str
+    level: str  # UG, PG, PhD
+    application_deadline: Optional[str] = None
+    fields_of_study: List[str] = []
+    countries: List[str] = []
+    requirements: List[str] = []
+    how_to_apply: str
+    website: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Loan Models
+class LoanProvider(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    type: str  # Bank, NBFC, Government
+    description: str
+    interest_rate: str
+    max_amount: str
+    loan_tenure: str
+    processing_fee: str
+    eligibility: str
+    documents_required: List[str] = []
+    special_features: List[str] = []
+    website: Optional[str] = None
+    contact: Dict
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 class College(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
