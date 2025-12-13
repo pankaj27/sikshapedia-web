@@ -181,7 +181,7 @@ const Header = () => {
             </div>
 
             {/* Notification Bell */}
-            <button className="p-2 text-gray-700 hover:text-orange-600 transition-colors relative">
+            <button className="p-2 text-white hover:text-orange-400 transition-colors relative">
               <FiBell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
@@ -190,7 +190,7 @@ const Header = () => {
             {user ? (
               <div className="flex items-center gap-3">
                 <Link to="/dashboard">
-                  <Button variant="ghost" className="flex items-center gap-2 text-gray-700 hover:text-orange-600">
+                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-orange-400">
                     <FiUser />
                     {user.name}
                   </Button>
@@ -199,7 +199,7 @@ const Header = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" className="text-gray-700 hover:text-orange-600 text-sm">
+                  <Button variant="ghost" className="text-white hover:text-orange-400 text-sm">
                     Login
                   </Button>
                 </Link>
@@ -212,7 +212,7 @@ const Header = () => {
             )}
 
             {/* Hamburger Menu Icon */}
-            <button className="p-2 text-gray-700 hover:text-orange-600 transition-colors">
+            <button className="p-2 text-white hover:text-orange-400 transition-colors">
               <FiMenu size={24} />
             </button>
           </div>
