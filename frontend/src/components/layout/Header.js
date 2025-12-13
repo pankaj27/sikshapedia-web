@@ -82,7 +82,7 @@ const Header = () => {
             onMouseEnter={() => setGoalDropdownOpen(true)}
             onMouseLeave={() => setGoalDropdownOpen(false)}
           >
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors">
               <span>🎓</span>
               <span>{selectedGoal}</span>
               <FiChevronDown className={`transition-transform ${goalDropdownOpen ? 'rotate-180' : ''}`} />
