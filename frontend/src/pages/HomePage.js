@@ -443,92 +443,90 @@ const CollegeDuniaHome = () => {
               { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
             ].map((school, idx) => (
               <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border">
-                {/* Header Image with Badges */}
-                <div className="relative h-32 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
-                  <FiBook className="text-white text-6xl opacity-20" />
+                {/* Header Image with Badges - Compact */}
+                <div className="relative h-24 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+                  <FiBook className="text-white text-5xl opacity-20" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <FiBook className="text-green-600 text-3xl" />
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <FiBook className="text-green-600 text-2xl" />
                     </div>
                   </div>
                   
                   {/* Top Right Badges */}
-                  <div className="absolute top-2 right-2 flex flex-col gap-1">
+                  <div className="absolute top-1 right-1 flex flex-col gap-1">
                     {idx < 3 && (
-                      <div className="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                        <FiCheckCircle className="text-xs" /> Verified
+                      <div className="bg-green-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
+                        <FiCheckCircle className="text-[10px]" /> Verified
                       </div>
                     )}
                     {idx < 2 && (
-                      <div className="bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                        <FiStar className="text-xs" /> Featured
+                      <div className="bg-purple-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
+                        <FiStar className="text-[10px]" /> Featured
                       </div>
                     )}
                   </div>
                   
                   {/* Admission Open Badge */}
                   {idx < 5 && (
-                    <div className="absolute bottom-2 left-2 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    <div className="absolute bottom-1 left-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
                       Admission 2025 Open
                     </div>
                   )}
                 </div>
 
-                <div className="p-4">
+                <div className="p-3">
                   {/* School Name and Location */}
-                  <h3 className="font-bold text-base mb-1 line-clamp-2 hover:text-orange-600 transition cursor-pointer">{school.name}</h3>
-                  <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
-                    <div className="flex items-center gap-1">
-                      <FiMapPin className="text-orange-600" />
-                      <span>{school.location}</span>
-                    </div>
+                  <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600 transition cursor-pointer">{school.name}</h3>
+                  <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2">
+                    <FiMapPin className="text-orange-600 text-xs" />
+                    <span>{school.location}</span>
                   </div>
 
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-3 gap-2 mb-3 pb-3 border-b">
+                  {/* Stats Grid - Compact */}
+                  <div className="grid grid-cols-3 gap-1 mb-2 pb-2 border-b">
                     <div className="text-center">
-                      <div className="text-orange-600 font-bold text-base">₹{school.fees}</div>
-                      <div className="text-xs text-gray-500">Annual Fees</div>
+                      <div className="text-orange-600 font-bold text-sm">₹{school.fees}</div>
+                      <div className="text-[10px] text-gray-500">Annual</div>
                     </div>
                     <div className="text-center border-x">
-                      <div className="text-orange-600 font-bold text-base">{school.board}</div>
-                      <div className="text-xs text-gray-500">Board</div>
+                      <div className="text-orange-600 font-bold text-sm">{school.board}</div>
+                      <div className="text-[10px] text-gray-500">Board</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-orange-600 font-bold text-base flex items-center justify-center gap-1">
-                        <FiStar className="text-yellow-500" />
+                      <div className="text-orange-600 font-bold text-sm flex items-center justify-center gap-0.5">
+                        <FiStar className="text-yellow-500 text-xs" />
                         {school.rating}
                       </div>
-                      <div className="text-xs text-gray-500">Rating</div>
+                      <div className="text-[10px] text-gray-500">Rating</div>
                     </div>
                   </div>
 
-                  {/* Ranking */}
-                  <div className="text-xs text-gray-600 mb-3">
-                    <span className="font-semibold">Ranked {school.rank}</span> out of 100 | Top Schools India
+                  {/* Ranking - Compact */}
+                  <div className="text-[11px] text-gray-600 mb-2">
+                    <span className="font-semibold">Ranked {school.rank}</span> / 100
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
+                  {/* Action Buttons - Compact */}
+                  <div className="space-y-1.5">
+                    <div className="flex gap-1.5">
                       <Button 
                         onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/compare`)}
                         variant="outline"
-                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
                       >
                         Compare
                       </Button>
                       <Button 
                         onClick={() => window.open(`/schools/${school.name}/brochure`, '_blank')}
                         variant="outline"
-                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-xs py-2 h-auto"
+                        className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50 text-[11px] py-1.5 h-auto"
                       >
                         Brochure
                       </Button>
                     </div>
                     <Button 
                       onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/apply`)}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-sm py-2.5 h-auto font-bold"
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-bold"
                     >
                       Apply Now
                     </Button>
