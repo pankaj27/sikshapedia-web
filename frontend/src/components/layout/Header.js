@@ -73,7 +73,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 gap-4 max-w-full relative">
           {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0">
-            <img src="/assets/footer-logo.png" alt="Admission Buddy" className="h-12" />
+            <img src="/assets/admission-buddy-logo.png" alt="Admission Buddy" className="h-12" />
           </Link>
 
           {/* Select Goal Dropdown - Desktop */}
@@ -82,7 +82,7 @@ const Header = () => {
             onMouseEnter={() => setGoalDropdownOpen(true)}
             onMouseLeave={() => setGoalDropdownOpen(false)}
           >
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
               <span>🎓</span>
               <span>{selectedGoal}</span>
               <FiChevronDown className={`transition-transform ${goalDropdownOpen ? 'rotate-180' : ''}`} />
@@ -142,7 +142,7 @@ const Header = () => {
             >
               <button 
                 ref={exploreButtonRef}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors border border-white/30 rounded-lg hover:border-orange-400"
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors border border-gray-300 rounded-lg hover:border-orange-500"
               >
                 <FiGrid size={16} />
                 <span>Explore</span>
@@ -220,47 +220,47 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2"
+            className="lg:hidden p-2 text-gray-700 hover:text-orange-600"
           >
             {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
 
       {/* Course Categories Bar - Desktop with Edge-to-Edge Border and Background */}
-      <div className="hidden lg:block w-screen border-t border-white/20 bg-black/20 -mx-6">
+      <div className="hidden lg:block w-screen border-t border-gray-200 bg-gray-50 -mx-6">
         <div>
           <div className="flex items-center gap-6 py-2 pl-6 pr-6 overflow-x-auto" spellCheck="false">
-            <Link to="/courses" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               All Courses
             </Link>
-            <Link to="/courses?type=btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=btech" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Tech
             </Link>
-            <Link to="/courses?type=mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=mba" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBA
             </Link>
-            <Link to="/courses?type=mtech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=mtech" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               M.Tech
             </Link>
-            <Link to="/courses?type=mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=mbbs" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBBS
             </Link>
-            <Link to="/courses?type=bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=bcom" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Com
             </Link>
-            <Link to="/courses?type=bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=bsc" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Sc
             </Link>
-            <Link to="/courses?type=bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=bsc-nursing" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Sc (Nursing)
             </Link>
-            <Link to="/courses?type=ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=ba" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               BA
             </Link>
-            <Link to="/courses?type=bba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=bba" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               BBA
             </Link>
-            <Link to="/courses?type=bca" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/courses?type=bca" className="text-sm font-medium text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               BCA
             </Link>
           </div>
