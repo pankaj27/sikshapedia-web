@@ -99,16 +99,16 @@ const CollegeListingPage = () => {
     <div className="min-h-screen bg-gray-50 pt-20">
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Top Colleges in India 2025</h1>
-          <div className="text-gray-700 text-base leading-relaxed mb-6">
-            <p className="mb-4">
+        <div className="container mx-auto px-6 py-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Top Colleges in India 2025</h1>
+          <div className="text-gray-700 text-sm leading-relaxed mb-3">
+            <p className="mb-2">
               India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
               Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
               The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
               while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
             </p>
-            <ul className="list-disc list-inside space-y-2">
+            <ul className="list-disc list-inside space-y-1 text-sm">
               <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
               <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
               <li><strong>IIT BHU has the best ROI of 239.52%</strong>.</li>
@@ -118,28 +118,28 @@ const CollegeListingPage = () => {
       </div>
 
       {/* ADVERTISEMENT BANNERS */}
-      <div className="bg-white border-b py-6">
+      <div className="bg-white border-b py-4">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Link to="/write-review" className="block">
-              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiEdit3 className="text-4xl mb-3" />
-                <h3 className="font-bold text-xl mb-2">Write a Review</h3>
-                <p className="text-sm">Get Upto ₹300*</p>
+              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-4 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiEdit3 className="text-3xl mb-2" />
+                <h3 className="font-bold text-base mb-1">Write a Review</h3>
+                <p className="text-xs">Get Upto ₹300*</p>
               </div>
             </Link>
             <Link to="/course-finder" className="block">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiGrid className="text-4xl mb-3" />
-                <h3 className="font-bold text-xl mb-2">Course Finder</h3>
-                <p className="text-sm">Find Your Perfect Course</p>
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiGrid className="text-3xl mb-2" />
+                <h3 className="font-bold text-base mb-1">Course Finder</h3>
+                <p className="text-xs">Find Your Perfect Course</p>
               </div>
             </Link>
             <Link to="/college-predictor" className="block">
-              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiTarget className="text-4xl mb-3" />
-                <h3 className="font-bold text-xl mb-2">College Predictor</h3>
-                <p className="text-sm">Know Your Admission Chances</p>
+              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-4 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiTarget className="text-3xl mb-2" />
+                <h3 className="font-bold text-base mb-1">College Predictor</h3>
+                <p className="text-xs">Know Your Admission Chances</p>
               </div>
             </Link>
           </div>
@@ -147,24 +147,24 @@ const CollegeListingPage = () => {
       </div>
 
       {/* AUTHOR INFO */}
-      <div className="bg-white py-4 border-b">
+      <div className="bg-white py-2 border-b">
         <div className="container mx-auto px-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
               <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                <FiUser size={20} />
+                <FiUser size={16} />
               </div>
             </div>
             <div>
-              <Link to="/author/content-team" className="font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
-              <p className="text-xs text-gray-600">Content Curator | Updated 3+ months ago</p>
+              <Link to="/author/content-team" className="text-sm font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
+              <p className="text-[10px] text-gray-600">Content Curator | Updated 3+ months ago</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* TABLE OF CONTENTS */}
-      <div className="bg-white py-6 border-b">
+      <div className="bg-white py-3 border-b">
         <div className="container mx-auto px-6">
           <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
             <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
