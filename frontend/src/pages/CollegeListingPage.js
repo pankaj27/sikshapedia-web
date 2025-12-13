@@ -614,13 +614,25 @@ const CollegeListingPage = () => {
                                 <td className="px-3 py-4 align-top">
                                   <div className="max-w-md">
                                     <div className="flex items-start gap-2 mb-1.5">
-                                      <Link to={`/colleges/${college.id}`} className="text-sm font-bold text-blue-600 hover:underline leading-tight">
-                                        {college.name}
-                                      </Link>
-                                      {college.featured && (
-                                        <span className="bg-yellow-100 text-yellow-800 text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
-                                      )}
-                                    </div>
+                                      {/* College Logo */}
+                                      <div className="w-11 h-11 rounded overflow-hidden border border-gray-200 flex-shrink-0">
+                                        {college.images?.[0] ? (
+                                          <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                          <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
+                                            {college.name.charAt(0)}
+                                          </div>
+                                        )}
+                                      </div>
+                                      <div className="flex-1">
+                                        <div className="flex items-start gap-2 mb-1">
+                                          <Link to={`/colleges/${college.id}`} className="text-sm font-bold text-blue-600 hover:underline leading-tight">
+                                            {college.name}
+                                          </Link>
+                                          {college.featured && (
+                                            <span className="bg-yellow-100 text-yellow-800 text-[10px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
+                                          )}
+                                        </div>
                                     <div className="flex items-center gap-1.5 text-[11px] text-gray-600 mb-1">
                                       <FiMapPin className="text-orange-600 flex-shrink-0" size={11} />
                                       <span>{college.location?.city}, {college.location?.state}</span>
@@ -649,6 +661,8 @@ const CollegeListingPage = () => {
                                     </div>
                                     <div className="text-[10px] text-gray-500 mt-1">
                                       <span className="font-semibold">CD Score:</span> {Math.floor(Math.random() * 500) + 1000}/2000
+                                    </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </td>
