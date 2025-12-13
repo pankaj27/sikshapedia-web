@@ -7,8 +7,11 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import MetaTags from '../components/SEO/MetaTags';
+import { OrganizationSchema } from '../components/SEO/StructuredData';
 import LocationSearch from '../components/LocationSearch';
 import LatestNews from '../components/LatestNews';
+import TopCollegesByStream from '../components/TopCollegesByStream';
+import TopExams from '../components/TopExams';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -391,6 +394,12 @@ const CollegeDuniaHome = () => {
           </form>
         </div>
       </section>
+
+      {/* Top Colleges by Stream */}
+      <TopCollegesByStream />
+
+      {/* Top Entrance Exams */}
+      <TopExams />
 
       {/* Location-based Search */}
       <LocationSearch />
