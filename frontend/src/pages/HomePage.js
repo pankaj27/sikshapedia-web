@@ -389,6 +389,12 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
+      {/* Location-based Search */}
+      <LocationSearch />
+
+      {/* Latest News & Alerts */}
+      <LatestNews />
+
     </div>
   );
 };
