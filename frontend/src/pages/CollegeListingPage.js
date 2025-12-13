@@ -303,7 +303,7 @@ const CollegeListingPage = () => {
                                 <div className="text-xs text-gray-500 mb-1">Ranking</div>
                                 <div className="text-lg font-bold text-orange-600 flex items-center gap-1">
                                   <FiAward />
-                                  #{typeof college.ranking === 'object' ? college.ranking.nirf : college.ranking || 'N/A'}
+                                  #{typeof college.ranking === 'object' ? (college.ranking?.nirf || 'N/A') : (college.ranking || 'N/A')}
                                 </div>
                                 <div className="text-xs text-gray-500">NIRF 2025</div>
                               </div>
