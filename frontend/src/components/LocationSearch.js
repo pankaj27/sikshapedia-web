@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiMapPin, FiGlobe } from 'react-icons/fi';
+import { FiMapPin, FiGlobe, FiHome, FiCpu, FiTrendingUp, FiStar, FiBookOpen } from 'react-icons/fi';
 import api from '../api/axios';
 
 const LocationSearch = () => {
@@ -52,14 +52,14 @@ const LocationSearch = () => {
   ];
 
   const topCities = [
-    { name: 'Mumbai', state: 'Maharashtra', icon: '🏙️' },
-    { name: 'Delhi', state: 'Delhi', icon: '🏛️' },
-    { name: 'Bangalore', state: 'Karnataka', icon: '💻' },
-    { name: 'Hyderabad', state: 'Telangana', icon: '🏢' },
-    { name: 'Chennai', state: 'Tamil Nadu', icon: '🌊' },
-    { name: 'Pune', state: 'Maharashtra', icon: '🎓' },
-    { name: 'Kolkata', state: 'West Bengal', icon: '🏛️' },
-    { name: 'Ahmedabad', state: 'Gujarat', icon: '🏭' }
+    { name: 'Mumbai', state: 'Maharashtra', icon: 'FiHome' },
+    { name: 'Delhi', state: 'Delhi', icon: 'FiMapPin' },
+    { name: 'Bangalore', state: 'Karnataka', icon: 'FiCpu' },
+    { name: 'Hyderabad', state: 'Telangana', icon: 'FiTrendingUp' },
+    { name: 'Chennai', state: 'Tamil Nadu', icon: 'FiStar' },
+    { name: 'Pune', state: 'Maharashtra', icon: 'FiBookOpen' },
+    { name: 'Kolkata', state: 'West Bengal', icon: 'FiMapPin' },
+    { name: 'Ahmedabad', state: 'Gujarat', icon: 'FiTrendingUp' }
   ];
 
   const topCountries = [
