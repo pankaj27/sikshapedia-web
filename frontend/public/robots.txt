@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://campusconnect-89.preview.emergentagent.com/sitemap.xml
+Sitemap: https://edusearch-hub-1.preview.emergentagent.com/sitemap.xml
