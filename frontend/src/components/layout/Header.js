@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid, FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone } from 'react-icons/fi';
 import { Button } from '../ui/button';
 
 const Header = () => {
@@ -62,14 +62,14 @@ const Header = () => {
   ];
 
   const exploreMenuItems = [
-    { title: 'Study Abroad', link: '/study-abroad', icon: '✈️' },
-    { title: 'Scholarships', link: '/scholarships', icon: '💰' },
-    { title: 'Education Loans', link: '/loans', icon: '🏦' },
-    { title: 'Compare Colleges', link: '/compare', icon: '⚖️' },
-    { title: 'College Predictor', link: '/eligibility-checker', icon: '🎯' },
-    { title: 'Blogs & Articles', link: '/blog', icon: '📝' },
-    { title: 'About Us', link: '/about', icon: 'ℹ️' },
-    { title: 'Contact', link: '/contact', icon: '📞' }
+    { title: 'Study Abroad', link: '/study-abroad', icon: 'FiGlobe' },
+    { title: 'Scholarships', link: '/scholarships', icon: 'FiAward' },
+    { title: 'Education Loans', link: '/loans', icon: 'FiDollarSign' },
+    { title: 'Compare Colleges', link: '/compare', icon: 'FiBarChart2' },
+    { title: 'College Predictor', link: '/eligibility-checker', icon: 'FiTarget' },
+    { title: 'Blogs & Articles', link: '/blog', icon: 'FiFileText' },
+    { title: 'About Us', link: '/about', icon: 'FiInfo' },
+    { title: 'Contact', link: '/contact', icon: 'FiPhone' }
   ];
 
   return (
