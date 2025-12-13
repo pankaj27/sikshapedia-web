@@ -364,9 +364,10 @@ class College(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    slug: str
+    slug: Optional[str] = None
     location: Dict
-    established_year: int
+    established: Optional[str] = None
+    established_year: Optional[int] = None
     type: str  # Government, Private, Deemed
     affiliation: Optional[str] = None
     
@@ -374,11 +375,12 @@ class College(BaseModel):
     nirf_ranking: Optional[int] = None
     india_today_ranking: Optional[int] = None
     outlook_ranking: Optional[int] = None
+    ranking: Optional[Dict] = None
     
     # Fees & Courses
     average_fees: float
-    total_courses: int
-    courses: List[Course] = []
+    total_courses: Optional[int] = None
+    courses: Optional[List] = []
     
     # Facilities & Infrastructure
     facilities: List[str] = []
@@ -386,7 +388,8 @@ class College(BaseModel):
     campus_size: Optional[str] = None
     
     # Contact & Media
-    contact_info: Dict
+    contact_info: Optional[Dict] = None
+    contact: Optional[Dict] = None
     images: List[str] = []
     videos: List[str] = []
     brochure_url: Optional[str] = None
@@ -400,23 +403,28 @@ class College(BaseModel):
     
     # Accreditations & Approvals
     accreditations: List[str] = []
+    accreditation: Optional[List[str]] = []
     approvals: List[str] = []
     
     # Placements
-    placement_stats: List[PlacementStats] = []
+    placement_stats: Optional[List] = []
+    placements: Optional[Dict] = None
     
     # Faculty
-    faculty: List[Faculty] = []
+    faculty: Optional[List] = []
     
     # Scholarships
-    scholarships: List[Scholarship] = []
+    scholarships: Optional[List] = []
+    
+    # Students
+    total_students: Optional[int] = None
     
     # Ratings & Reviews
     rating: float = 0.0
     total_reviews: int = 0
     rating_breakdown: Dict = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
     
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CollegeCreate(BaseModel):
     name: str
