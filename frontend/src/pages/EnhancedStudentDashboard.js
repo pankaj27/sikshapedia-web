@@ -75,26 +75,6 @@ const EnhancedStudentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link to="/" className="text-gray-700 hover:text-orange-600">Home</Link>
-              <Link to="/colleges" className="text-gray-700 hover:text-orange-600">Colleges</Link>
-              <Link to="/exams" className="text-gray-700 hover:text-orange-600">Exams</Link>
-              <span className="text-gray-700">Welcome, {user?.name}</span>
-              <Button onClick={handleLogout} variant="ghost" className="flex items-center gap-2">
-                <FiLogOut /> Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}

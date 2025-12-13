@@ -50,15 +50,6 @@ const CourseDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link to="/" className="flex items-center">
-            <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-          </Link>
-        </div>
-      </header>
-
       {/* Hero */}
       <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-12">
         <div className="container mx-auto px-4">

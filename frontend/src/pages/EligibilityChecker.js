@@ -98,22 +98,6 @@ const EligibilityChecker = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <div className="flex gap-4">
-              <Link to="/"><Button variant="ghost">Home</Button></Link>
-              <Link to="/colleges"><Button variant="ghost">Colleges</Button></Link>
-              <Link to="/exams"><Button variant="ghost">Exams</Button></Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">

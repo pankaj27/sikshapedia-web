@@ -56,22 +56,6 @@ const StudyAbroadPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <div className="flex gap-4">
-              <Link to="/"><Button variant="ghost">Home</Button></Link>
-              <Link to="/colleges"><Button variant="ghost">Colleges</Button></Link>
-              <Link to="/scholarships"><Button variant="ghost">Scholarships</Button></Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Hero */}
       <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16">
         <div className="container mx-auto px-4">
