@@ -9,6 +9,7 @@ const CollegeListingPage = () => {
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const [page, setPage] = useState(1);
   const itemsPerPage = 20;
 
@@ -104,8 +105,30 @@ const CollegeListingPage = () => {
       </div>
 
       {/* CONTENT SECTION FOR SEO/RANKING */}
-      <div className="bg-white py-12">
+      <div className="bg-white py-8">
         <div className="container mx-auto px-6">
+          {/* Read More Button */}
+          <div className="text-center mb-6">
+            <button
+              onClick={() => setShowContent(!showContent)}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              {showContent ? (
+                <>
+                  <span>Read Less</span>
+                  <FiChevronDown className="transform rotate-180" />
+                </>
+              ) : (
+                <>
+                  <span>Read More About Colleges</span>
+                  <FiChevronDown />
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Collapsible Content */}
+          <div className={`transition-all duration-300 overflow-hidden ${showContent ? 'max-h-full opacity-100' : 'max-h-0 opacity-0'}`}>
           {/* Introductory Content */}
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">About Colleges in India</h2>
@@ -326,6 +349,7 @@ const CollegeListingPage = () => {
                 ))}
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
