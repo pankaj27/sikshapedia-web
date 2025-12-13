@@ -113,8 +113,7 @@ const CollegeDuniaHome = () => {
       {/* Hero Section with Background Slider */}
       <section className="relative h-[500px] overflow-hidden">
         <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          navigation
+          modules={[Pagination, Autoplay]}
           pagination={{ clickable: true }}
           autoplay={{ delay: 4000 }}
           loop
