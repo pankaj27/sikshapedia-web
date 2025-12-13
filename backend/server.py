@@ -672,6 +672,98 @@ class ScholarshipApplicationCreate(BaseModel):
     achievements: Optional[str] = None
     why_deserve_scholarship: str
 
+# Study Materials Models
+class StudyMaterial(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    exam_name: str  # JEE, NEET, CAT, GATE, etc.
+    subject: str
+    topic: Optional[str] = None
+    material_type: str  # Notes, Sample Paper, Previous Year, Mock Test, Video
+    description: str
+    file_url: Optional[str] = None
+    external_link: Optional[str] = None
+    is_premium: bool = False
+    downloads: int = 0
+    rating: float = 0.0
+    total_ratings: int = 0
+    tags: List[str] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class StudyMaterialCreate(BaseModel):
+    title: str
+    exam_name: str
+    subject: str
+    topic: Optional[str] = None
+    material_type: str
+    description: str
+    file_url: Optional[str] = None
+    external_link: Optional[str] = None
+    is_premium: bool = False
+    tags: List[str] = []
+
+# Counseling Models
+class Counselor(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    phone: str
+    specialization: List[str] = []  # Career, Exam, Course Selection, Study Abroad
+    qualifications: str
+    experience_years: int
+    rating: float = 0.0
+    total_reviews: int = 0
+    bio: str
+    availability: Dict = {}  # day: time slots
+    session_fee: float = 0.0  # 0 for free sessions
+    total_sessions: int = 0
+    profile_image: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CounselingSession(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    counselor_id: str
+    counselor_name: str
+    session_type: str  # Career, Exam, Course, Study Abroad
+    session_date: str
+    session_time: str
+    duration: int = 30  # minutes
+    mode: str = "Video"  # Video, Phone, Chat
+    status: str = "scheduled"  # scheduled, completed, cancelled
+    
+    # Student Details
+    student_name: str
+    student_email: EmailStr
+    student_phone: str
+    current_education: str
+    
+    # Session Info
+    query_description: str
+    notes: Optional[str] = None
+    feedback: Optional[str] = None
+    rating: Optional[int] = None
+    
+    booking_number: str = Field(default_factory=lambda: f"COUN{str(uuid.uuid4())[:8].upper()}")
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CounselingSessionCreate(BaseModel):
+    counselor_id: str
+    session_type: str
+    session_date: str
+    session_time: str
+    mode: str
+    student_name: str
+    student_email: EmailStr
+    student_phone: str
+    current_education: str
+    query_description: str
+
 # Inquiry Models
 class Inquiry(BaseModel):
     model_config = ConfigDict(extra="ignore")
