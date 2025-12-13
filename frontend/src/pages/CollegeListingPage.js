@@ -202,28 +202,6 @@ const CollegeListingPage = () => {
       {/* ALL CONTENT SECTIONS */}
       <div className="bg-white py-8">
         <div className="container mx-auto px-6">
-          {/* Read More Button */}
-          <div className="text-center mb-6">
-            <button
-              onClick={() => setShowContent(!showContent)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors shadow-md"
-            >
-              {showContent ? (
-                <>
-                  <span>Read Less</span>
-                  <FiChevronDown className="transform rotate-180 transition-transform" />
-                </>
-              ) : (
-                <>
-                  <span>Read More</span>
-                  <FiChevronDown className="transition-transform" />
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Collapsible Content */}
-          {showContent && (
           <div className="space-y-12">
           
           {/* HIGHLIGHTS TABLE */}
@@ -350,7 +328,6 @@ const CollegeListingPage = () => {
             </div>
           </section>
           </div>
-          )}
         </div>
       </div>
 
