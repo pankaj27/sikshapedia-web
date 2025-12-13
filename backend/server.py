@@ -2082,18 +2082,91 @@ async def get_checkout_status(
         )
         
         # Create notification
-    notification = Notification(
-        user_id=current_user.id,
-        type="application_update",
-        title="Premium Subscription Activated!",
-        message=f"Your {plan['name']} subscription is now active. Enjoy premium features!",
-        link="/dashboard"
-    )
-    notif_dict = notification.model_dump()
-    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
-    await db.notifications.insert_one(notif_dict)
+        notification = Notification(
+            user_id=user_id,
+            type="application_update",
+            title="Premium Subscription Activated!",
+            message=f"Your {plan['name']} subscription is now active. Enjoy premium features!",
+            link="/dashboard"
+        )
+        notif_dict = notification.model_dump()
+        notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+        await db.notifications.insert_one(notif_dict)
     
-    return {"message": "Subscription activated successfully", "subscription": subscription}
+    return {
+        "status": checkout_status.status,
+        "payment_status": checkout_status.payment_status,
+        "amount_total": checkout_status.amount_total,
+        "currency": checkout_status.currency,
+        "metadata": checkout_status.metadata
+    }
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    # Initialize Stripe Checkout
+    host_url = str(request.base_url)
+    webhook_url = f"{host_url}api/webhook/stripe"
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+    
+    # Get webhook body and signature
+    body_bytes = await request.body()
+    signature = request.headers.get("Stripe-Signature", "")
+    
+    try:
+        webhook_response = await stripe_checkout.handle_webhook(body_bytes, signature)
+        
+        # Process the webhook event if payment was successful
+        if webhook_response.payment_status == "paid":
+            session_id = webhook_response.session_id
+            
+            # Check if already processed
+            existing = await db.payment_transactions.find_one(
+                {"payment_id": session_id, "status": "completed"}
+            )
+            
+            if not existing:
+                # Extract metadata
+                plan_id = webhook_response.metadata.get("plan_id")
+                user_id = webhook_response.metadata.get("user_id")
+                
+                if plan_id in SUBSCRIPTION_PACKAGES:
+                    plan = SUBSCRIPTION_PACKAGES[plan_id]
+                    
+                    # Create subscription
+                    subscription = Subscription(
+                        user_id=user_id,
+                        plan_type=plan["name"],
+                        amount=plan["amount"],
+                        start_date=datetime.now(timezone.utc),
+                        end_date=datetime.now(timezone.utc) + timedelta(days=plan["duration_days"]),
+                        status="active",
+                        payment_id=session_id,
+                        features=["premium_materials", "unlimited_downloads", "priority_support"]
+                    )
+                    
+                    sub_dict = subscription.model_dump()
+                    sub_dict['start_date'] = sub_dict['start_date'].isoformat()
+                    sub_dict['end_date'] = sub_dict['end_date'].isoformat()
+                    sub_dict['created_at'] = sub_dict['created_at'].isoformat()
+                    
+                    await db.subscriptions.insert_one(sub_dict)
+                    
+                    # Update transaction
+                    await db.payment_transactions.update_one(
+                        {"payment_id": session_id},
+                        {"$set": {"status": "completed"}}
+                    )
+                    
+                    # Update user
+                    await db.users.update_one(
+                        {"id": user_id},
+                        {"$set": {"subscription_status": "premium", "subscription_end": sub_dict['end_date']}}
+                    )
+        
+        return {"status": "success"}
+    except Exception as e:
+        logging.error(f"Webhook error: {str(e)}")
+        raise HTTPException(status_code=400, detail="Webhook processing failed")
 
 @api_router.get("/my-subscription")
 async def get_my_subscription(current_user: User = Depends(get_current_user)):
