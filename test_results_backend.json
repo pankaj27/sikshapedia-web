@@ -1,0 +1,128 @@
+[
+  {
+    "test": "API Root",
+    "status": "PASS",
+    "details": "API accessible, message: Sikshapedia API - College Discovery Platform",
+    "timestamp": "2025-12-13T04:08:56.854415",
+    "response_data": null
+  },
+  {
+    "test": "GET /colleges",
+    "status": "PASS",
+    "details": "Retrieved 10 colleges",
+    "timestamp": "2025-12-13T04:08:56.870254",
+    "response_data": null
+  },
+  {
+    "test": "College Structure",
+    "status": "PASS",
+    "details": "All required fields present in college data",
+    "timestamp": "2025-12-13T04:08:56.870282",
+    "response_data": null
+  },
+  {
+    "test": "Ranking Field",
+    "status": "PASS",
+    "details": "Ranking is properly structured as object: {'nirf': 3, 'world': 172}",
+    "timestamp": "2025-12-13T04:08:56.870293",
+    "response_data": null
+  },
+  {
+    "test": "Colleges Query - Search for IIT colleges",
+    "status": "PASS",
+    "details": "Retrieved 3 results",
+    "timestamp": "2025-12-13T04:08:56.882124",
+    "response_data": null
+  },
+  {
+    "test": "Colleges Query - Filter by Mumbai city",
+    "status": "PASS",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-13T04:08:56.891800",
+    "response_data": null
+  },
+  {
+    "test": "Colleges Query - Filter by Maharashtra state",
+    "status": "PASS",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-13T04:08:56.901456",
+    "response_data": null
+  },
+  {
+    "test": "Colleges Query - Filter by Government type",
+    "status": "PASS",
+    "details": "Retrieved 7 results",
+    "timestamp": "2025-12-13T04:08:56.910110",
+    "response_data": null
+  },
+  {
+    "test": "Colleges Query - Filter by fees range",
+    "status": "PASS",
+    "details": "Retrieved 7 results",
+    "timestamp": "2025-12-13T04:08:56.922142",
+    "response_data": null
+  },
+  {
+    "test": "Colleges Query - Sort by NIRF ranking",
+    "status": "PASS",
+    "details": "Retrieved 10 results",
+    "timestamp": "2025-12-13T04:08:56.932816",
+    "response_data": null
+  },
+  {
+    "test": "GET /colleges/featured",
+    "status": "PASS",
+    "details": "Retrieved 8 featured colleges",
+    "timestamp": "2025-12-13T04:08:56.942834",
+    "response_data": null
+  },
+  {
+    "test": "Featured College 1 Ranking",
+    "status": "PASS",
+    "details": "Proper ranking structure: {'nirf': 11, 'world': 400}",
+    "timestamp": "2025-12-13T04:08:56.942872",
+    "response_data": null
+  },
+  {
+    "test": "Featured College 2 Ranking",
+    "status": "PASS",
+    "details": "Proper ranking structure: {'nirf': 1, 'world': 150}",
+    "timestamp": "2025-12-13T04:08:56.942877",
+    "response_data": null
+  },
+  {
+    "test": "Featured College 3 Ranking",
+    "status": "PASS",
+    "details": "Proper ranking structure: {'nirf': 15, 'world': 600}",
+    "timestamp": "2025-12-13T04:08:56.942881",
+    "response_data": null
+  },
+  {
+    "test": "GET /colleges/iit-bombay-002",
+    "status": "PASS",
+    "details": "Retrieved college: IIT Bombay",
+    "timestamp": "2025-12-13T04:08:56.993625",
+    "response_data": null
+  },
+  {
+    "test": "College iit-bombay-002 Validation",
+    "status": "PASS",
+    "details": "\u2705 Ranking field is properly structured as object; \u26a0\ufe0f Slug field missing or null; \u26a0\ufe0f Established year field missing or null; \u26a0\ufe0f Total courses field missing or null; \u26a0\ufe0f Contact info field missing or null; \u2705 Courses field is properly structured list with 3 items",
+    "timestamp": "2025-12-13T04:08:56.993668",
+    "response_data": null
+  },
+  {
+    "test": "GET /reviews/college/iit-bombay-002",
+    "status": "PASS",
+    "details": "Retrieved 0 reviews",
+    "timestamp": "2025-12-13T04:08:57.003419",
+    "response_data": null
+  },
+  {
+    "test": "GET /questions/college/iit-bombay-002",
+    "status": "PASS",
+    "details": "Retrieved 0 questions",
+    "timestamp": "2025-12-13T04:08:57.052420",
+    "response_data": null
+  }
+]
