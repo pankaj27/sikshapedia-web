@@ -53,13 +53,22 @@
   border-color: #ea580c;
 }
 
-/* Remove default link underlines */
+/* Remove default link underlines and disable spell-check styling */
 a {
-  text-decoration: none;
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-color: transparent !important;
 }
 
 a:hover {
-  text-decoration: none;
+  text-decoration: none !important;
+}
+
+/* Disable browser spell-check red underlines */
+* {
+  -webkit-text-decoration-line: none;
+  -webkit-text-decoration-color: transparent;
 }
 
 /* Smooth transitions */
