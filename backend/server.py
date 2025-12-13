@@ -1965,32 +1965,61 @@ async def get_subscription_plans():
     ]
     return plans
 
-@api_router.post("/create-payment-intent")
-async def create_payment_intent(
+@api_router.post("/create-checkout-session")
+async def create_checkout_session(
+    request: Request,
     plan_id: str,
+    origin_url: str,
     current_user: User = Depends(get_current_user)
 ):
-    plans = {
-        "premium-monthly": {"amount": 299, "name": "Premium Monthly"},
-        "premium-yearly": {"amount": 2999, "name": "Premium Yearly"}
-    }
-    
-    if plan_id not in plans:
+    # Validate plan exists
+    if plan_id not in SUBSCRIPTION_PACKAGES:
         raise HTTPException(status_code=400, detail="Invalid plan")
     
-    plan = plans[plan_id]
+    # Get amount from server-side definition only (NEVER from frontend)
+    plan = SUBSCRIPTION_PACKAGES[plan_id]
     
-    # In production, create actual Stripe payment intent
-    # For now, return mock data
-    payment_intent = {
-        "id": f"pi_{str(uuid.uuid4())[:24]}",
-        "amount": plan["amount"] * 100,  # Convert to paise
-        "currency": "inr",
-        "status": "requires_payment_method",
-        "client_secret": f"pi_{str(uuid.uuid4())[:24]}_secret_{str(uuid.uuid4())[:24]}"
-    }
+    # Initialize Stripe Checkout
+    host_url = str(request.base_url)
+    webhook_url = f"{host_url}api/webhook/stripe"
+    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
     
-    return payment_intent
+    # Build URLs from provided origin
+    success_url = f"{origin_url}/premium/success?session_id={{CHECKOUT_SESSION_ID}}"
+    cancel_url = f"{origin_url}/premium"
+    
+    # Create checkout session request
+    checkout_request = CheckoutSessionRequest(
+        amount=plan["amount"],
+        currency="inr",
+        success_url=success_url,
+        cancel_url=cancel_url,
+        metadata={
+            "user_id": current_user.id,
+            "user_email": current_user.email,
+            "plan_id": plan_id,
+            "plan_name": plan["name"]
+        }
+    )
+    
+    # Create checkout session
+    session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
+    
+    # Create payment transaction record BEFORE redirecting user
+    transaction = PaymentTransaction(
+        user_id=current_user.id,
+        transaction_type="subscription",
+        amount=plan["amount"],
+        payment_method="stripe",
+        payment_id=session.session_id,
+        status="pending",
+        item_name=plan["name"]
+    )
+    trans_dict = transaction.model_dump()
+    trans_dict['created_at'] = trans_dict['created_at'].isoformat()
+    await db.payment_transactions.insert_one(trans_dict)
+    
+    return {"url": session.url, "session_id": session.session_id}
 
 @api_router.post("/confirm-subscription")
 async def confirm_subscription(
