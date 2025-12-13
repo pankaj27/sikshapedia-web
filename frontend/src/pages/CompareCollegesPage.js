@@ -142,32 +142,32 @@ const CompareCollegesPage = () => {
 
         {/* Comparison Table */}
         {selectedColleges.length === 0 ? (
-          <div className=\"bg-white rounded-lg shadow p-12 text-center\">
-            <p className=\"text-gray-600 text-lg mb-4\">No colleges selected for comparison</p>
-            <Button onClick={() => setShowSearch(true)} className=\"bg-orange-600 hover:bg-orange-700\">
-              <FiPlus className=\"mr-2\" /> Add Colleges
+          <div className="bg-white rounded-lg shadow p-12 text-center">
+            <p className="text-gray-600 text-lg mb-4">No colleges selected for comparison</p>
+            <Button onClick={() => setShowSearch(true)} className="bg-orange-600 hover:bg-orange-700">
+              <FiPlus className="mr-2" /> Add Colleges
             </Button>
           </div>
         ) : (
-          <div className=\"bg-white rounded-lg shadow overflow-x-auto\">
-            <table className=\"w-full\">
+          <div className="bg-white rounded-lg shadow overflow-x-auto">
+            <table className="w-full">
               <thead>
-                <tr className=\"border-b bg-gray-50\">
-                  <th className=\"px-4 py-3 text-left font-bold sticky left-0 z-20 bg-gray-50\">Criteria</th>
+                <tr className="border-b bg-gray-50">
+                  <th className="px-4 py-3 text-left font-bold sticky left-0 z-20 bg-gray-50">Criteria</th>
                   {selectedColleges.map(college => (
-                    <th key={college.id} className=\"px-4 py-3 text-center min-w-64\">
-                      <div className=\"relative\">
+                    <th key={college.id} className="px-4 py-3 text-center min-w-64">
+                      <div className="relative">
                         <button
                           onClick={() => removeCollege(college.id)}
-                          className=\"absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600\"
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                         >
                           <FiX />
                         </button>
-                        <div className=\"h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded mb-2\"></div>
-                        <Link to={`/colleges/${college.id}`} className=\"font-bold hover:text-orange-600\">
+                        <div className="h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded mb-2"></div>
+                        <Link to={`/colleges/${college.id}`} className="font-bold hover:text-orange-600">
                           {college.name}
                         </Link>
-                        <p className=\"text-sm text-gray-600\">{college.location.city}</p>
+                        <p className="text-sm text-gray-600">{college.location.city}</p>
                       </div>
                     </th>
                   ))}
