@@ -106,12 +106,11 @@ const CollegeDuniaHome = () => {
                   Explore More <FiChevronDown />
                 </button>
                 <div className="absolute top-full left-0 bg-white shadow-lg rounded-lg p-4 mt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                  <Link to="/search" className="block py-2 hover:text-orange-600">Global Search</Link>
-                  <Link to="/eligibility-checker" className="block py-2 hover:text-orange-600">Eligibility Checker</Link>
-                  <Link to="/rankings" className="block py-2 hover:text-orange-600">Rankings</Link>
-                  <Link to="/reviews" className="block py-2 hover:text-orange-600">Reviews</Link>
-                  <Link to="/compare" className="block py-2 hover:text-orange-600">Compare Colleges</Link>
-                  <Link to="/study-abroad" className="block py-2 hover:text-orange-600">Study Abroad</Link>
+                  <Link to="/search" className="block py-2 hover:text-orange-600">🔍 Global Search</Link>
+                  <Link to="/eligibility-checker" className="block py-2 hover:text-orange-600">✅ Eligibility Checker</Link>
+                  <Link to="/compare" className="block py-2 hover:text-orange-600">⚖️ Compare Colleges</Link>
+                  <Link to="/study-abroad" className="block py-2 hover:text-orange-600">✈️ Study Abroad</Link>
+                  <Link to="/scholarships" className="block py-2 hover:text-orange-600">💰 Scholarships & Loans</Link>
                 </div>
               </div>
             </nav>
