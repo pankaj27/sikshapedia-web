@@ -6,21 +6,6 @@ import { Button } from '../components/ui/button';
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <div className="flex gap-4">
-              <Link to="/"><Button variant="ghost">Home</Button></Link>
-              <Link to="/colleges"><Button variant="ghost">Colleges</Button></Link>
-              <Link to="/contact"><Button variant="ghost">Contact</Button></Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <section className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-4">About AdmissionBuddy</h1>
