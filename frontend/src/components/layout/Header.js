@@ -115,7 +115,7 @@ const Header = () => {
           </form>
 
           {/* Right Side Actions - Desktop */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3 relative">
             {/* Write Review Button */}
             <Link to="/colleges">
               <button className="flex items-center gap-2 px-3 py-1 border-2 border-orange-600 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors">
