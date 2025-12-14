@@ -101,19 +101,6 @@ const CollegeListingPage = () => {
       <div className="bg-white border-b">
         <div className="container mx-auto px-6 py-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Top Colleges in India 2025</h1>
-          <div className="text-gray-700 text-sm leading-relaxed mb-3">
-            <p className="mb-2">
-              India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
-              Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
-              The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
-              while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm">
-              <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
-              <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
-              <li><strong>IIT BHU has the best ROI of 239.52%</strong>.</li>
-            </ul>
-          </div>
         </div>
       </div>
 
