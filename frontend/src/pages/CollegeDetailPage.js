@@ -291,9 +291,9 @@ const CollegeDetailPage = () => {
           {/* LEFT CONTENT */}
           <div className="flex-1">
             {/* SEO CONTENT SECTION (Collapsible) */}
-            <div className="mb-8 pb-8 border-b">
+            <div className="mb-6 pb-6 border-b">
               {/* INTRO PREVIEW - 3 LINES */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
                   {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
                   As per the data, the college is one of the preferred institutions for students. 
