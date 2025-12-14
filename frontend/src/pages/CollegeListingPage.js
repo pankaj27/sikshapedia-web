@@ -99,8 +99,8 @@ const CollegeListingPage = () => {
     <div className="min-h-screen bg-gray-50 pt-20">
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-4">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Top Colleges in India 2025</h1>
+        <div className="container mx-auto px-6 py-2">
+          <h1 className="text-2xl font-bold text-gray-900">Top Colleges in India 2025</h1>
         </div>
       </div>
 
