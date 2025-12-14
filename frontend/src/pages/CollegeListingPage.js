@@ -591,7 +591,7 @@ const CollegeListingPage = () => {
       </div>
 
       {/* COLLEGE LISTING SECTION */}
-      <div className="bg-gray-50 py-12 border-t-4 border-orange-600">
+      <div className="bg-gray-50 py-6 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">
           <div className="flex gap-6">
             
