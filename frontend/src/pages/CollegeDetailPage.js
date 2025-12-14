@@ -274,12 +274,12 @@ const CollegeDetailPage = () => {
       <div className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 py-2">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
-              <FiUser size={18} />
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
+              <FiUser size={14} />
             </div>
             <div>
-              <Link to="#" className="text-sm font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
-              <p className="text-xs text-gray-600">Content Writer | Updated 3+ months ago</p>
+              <Link to="#" className="text-xs font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
+              <p className="text-[10px] text-gray-600">Content Writer | Updated 3+ months ago</p>
             </div>
           </div>
         </div>
