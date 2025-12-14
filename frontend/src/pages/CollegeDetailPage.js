@@ -150,8 +150,8 @@ const CollegeDetailPage = () => {
             <div className="flex-1">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-3">{college.name}</h1>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{college.name}</h1>
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
                     <div className="flex items-center gap-1">
                       <FiMapPin className="text-orange-600" size={14} />
                       <span>{college.location?.city}, {college.location?.state}</span>
@@ -160,6 +160,23 @@ const CollegeDetailPage = () => {
                     <span className="font-medium">{college.type}</span>
                     <span>|</span>
                     <span>Estd. {college.established || 'N/A'}</span>
+                  </div>
+                  
+                  {/* Recognized by & Affiliated to */}
+                  <div className="flex flex-wrap items-center gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-gray-700">Recognized by:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">UGC</span>
+                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">AICTE</span>
+                        <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">NBA</span>
+                      </div>
+                    </div>
+                    <span className="text-gray-400">|</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-gray-700">Affiliated to:</span>
+                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">Mumbai University</span>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-4">
