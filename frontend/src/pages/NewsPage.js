@@ -22,7 +22,8 @@ const NewsPage = () => {
     gradient: 'from-orange-400 to-red-500'
   };
 
-  const newsItems = [
+  const allNewsItems = [
+    // Exam News
     {
       title: 'SNAP 2025 Test 2 Question Paper with Solutions: Download SNAP 2025 Question Paper with Answer Key',
       description: 'The SNAP 2025 Question Paper, along with the Answer Key and detailed solutions, will be available for download in PDF format...',
@@ -40,6 +41,39 @@ const NewsPage = () => {
       gradient: 'from-blue-400 to-indigo-500'
     },
     {
+      title: 'CAT 2025 Results Declared',
+      description: 'IIM Calcutta has released CAT 2025 results. Candidates can check their scores on the official website...',
+      date: 'Dec 08, 2025',
+      tag: 'CAT',
+      category: 'exam',
+      gradient: 'from-cyan-400 to-blue-500'
+    },
+    {
+      title: 'JEE Main 2026 Registration Started',
+      description: 'JEE Main 2026 registration has commenced. Candidates can apply till January 10, 2026. The exam will be held in two sessions...',
+      date: 'Dec 14, 2025',
+      tag: 'JEE Main',
+      category: 'exam',
+      gradient: 'from-orange-400 to-red-500'
+    },
+    {
+      title: 'NEET 2025 Exam Date Announced',
+      description: 'NEET 2025 will be conducted on May 3, 2025. Application forms will be available from February 6, 2025...',
+      date: 'Dec 12, 2025',
+      tag: 'NEET',
+      category: 'exam',
+      gradient: 'from-green-400 to-emerald-500'
+    },
+    {
+      title: 'GATE 2026 Registration Extended',
+      description: 'IIT Delhi has extended the GATE 2026 registration deadline by one week. Last date to apply is now October 19, 2025...',
+      date: 'Dec 10, 2025',
+      tag: 'GATE',
+      category: 'exam',
+      gradient: 'from-indigo-400 to-purple-500'
+    },
+    // College News
+    {
       title: 'MGR University PhD/MS Research Admission 2026 Begins; Apply by January 31',
       description: 'The Dr. M.G.R. Educational and Research Institute in Chennai has begun accepting applications for its PhD/MS Research Admission program...',
       date: 'Dec 11, 2025',
@@ -56,6 +90,39 @@ const NewsPage = () => {
       gradient: 'from-yellow-400 to-orange-500'
     },
     {
+      title: 'IIT Delhi Announces New BTech Programs for 2026',
+      description: 'IIT Delhi has announced three new BTech programs in AI, Quantum Computing, and Sustainable Energy for the academic year 2026-27...',
+      date: 'Dec 13, 2025',
+      tag: 'IIT Delhi',
+      category: 'college',
+      gradient: 'from-blue-400 to-cyan-500'
+    },
+    {
+      title: 'DU Releases Semester Results for UG Courses',
+      description: 'Delhi University has declared semester examination results for undergraduate courses. Students can check their results on the official portal...',
+      date: 'Dec 09, 2025',
+      tag: 'Delhi University',
+      category: 'college',
+      gradient: 'from-pink-400 to-rose-500'
+    },
+    {
+      title: 'BITS Pilani Placements 2025: Highest Package Reaches ₹60 LPA',
+      description: 'BITS Pilani has concluded its placement season with remarkable results. The highest domestic package stood at ₹60 lakhs per annum...',
+      date: 'Dec 14, 2025',
+      tag: 'BITS Pilani',
+      category: 'college',
+      gradient: 'from-violet-400 to-purple-500'
+    },
+    {
+      title: 'Anna University Announces Revaluation Schedule',
+      description: 'Anna University has published the revaluation schedule for November/December 2025 examinations. Last date to apply is December 20...',
+      date: 'Dec 10, 2025',
+      tag: 'Anna University',
+      category: 'college',
+      gradient: 'from-amber-400 to-orange-500'
+    },
+    // Admission News
+    {
       title: 'IIM Visakhapatnam Admission 2026: Interview Shortlist Out',
       description: 'IIM Visakhapatnam offers admission to its various programs based on scores in national entrance exams...',
       date: 'Dec 12, 2025',
@@ -64,22 +131,113 @@ const NewsPage = () => {
       gradient: 'from-red-400 to-pink-500'
     },
     {
-      title: 'CAT 2025 Results Declared',
-      description: 'IIM Calcutta has released CAT 2025 results. Candidates can check their scores on the official website...',
-      date: 'Dec 08, 2025',
-      tag: 'CAT',
-      category: 'exam',
+      title: 'IIT Bombay Opens PhD Admissions for Winter 2026',
+      description: 'IIT Bombay has opened PhD admissions for various departments for the winter semester 2026. The last date to apply is January 15, 2026...',
+      date: 'Dec 13, 2025',
+      tag: 'IIT Bombay',
+      category: 'admission',
+      gradient: 'from-teal-400 to-green-500'
+    },
+    {
+      title: 'XLRI MBA Admissions 2026: Applications Open',
+      description: 'XLRI Jamshedpur has started accepting applications for MBA programs for the batch of 2026-28. XAT scores are mandatory...',
+      date: 'Dec 11, 2025',
+      tag: 'XLRI',
+      category: 'admission',
+      gradient: 'from-purple-400 to-indigo-500'
+    },
+    {
+      title: 'NIT Trichy BTech Admissions: JEE Main Cutoffs Released',
+      description: 'NIT Trichy has released the expected JEE Main cutoffs for BTech admissions 2026. Computer Science cutoff is around 98 percentile...',
+      date: 'Dec 10, 2025',
+      tag: 'NIT Trichy',
+      category: 'admission',
+      gradient: 'from-orange-400 to-red-500'
+    },
+    {
+      title: 'AIIMS Delhi PG Admissions: Important Dates Announced',
+      description: 'AIIMS Delhi has announced important dates for PG medical admissions. The entrance exam will be conducted in March 2026...',
+      date: 'Dec 09, 2025',
+      tag: 'AIIMS Delhi',
+      category: 'admission',
       gradient: 'from-cyan-400 to-blue-500'
+    },
+    {
+      title: 'Jadavpur University MCA Admissions Open',
+      description: 'Jadavpur University has opened MCA admissions for 2026. Candidates need to qualify NIMCET or JECA for admission...',
+      date: 'Dec 14, 2025',
+      tag: 'Jadavpur University',
+      category: 'admission',
+      gradient: 'from-lime-400 to-green-500'
+    },
+    // Latest Alerts
+    {
+      title: 'CBSE Date Sheet 2026 Released for Class 10 and 12',
+      description: 'CBSE has released the date sheet for Class 10 and 12 board examinations 2026. Exams will begin from February 15, 2026...',
+      date: 'Dec 14, 2025',
+      tag: 'CBSE',
+      category: 'latest',
+      gradient: 'from-rose-400 to-pink-500'
+    },
+    {
+      title: 'UGC NET December 2025 Admit Card Released',
+      description: 'NTA has released the admit card for UGC NET December 2025 exam. Candidates can download from the official website...',
+      date: 'Dec 13, 2025',
+      tag: 'UGC NET',
+      category: 'latest',
+      gradient: 'from-emerald-400 to-teal-500'
+    },
+    {
+      title: 'CUET 2026 Registration Starts from January 2026',
+      description: 'NTA has announced that CUET 2026 registration will commence in January 2026. The exam will be conducted in May 2026...',
+      date: 'Dec 12, 2025',
+      tag: 'CUET',
+      category: 'latest',
+      gradient: 'from-violet-400 to-purple-500'
+    },
+    {
+      title: 'NEET PG 2026 Exam Pattern Changed: NMC Announces',
+      description: 'National Medical Commission has announced changes in NEET PG exam pattern. The number of questions has been increased to 300...',
+      date: 'Dec 11, 2025',
+      tag: 'NEET PG',
+      category: 'latest',
+      gradient: 'from-fuchsia-400 to-pink-500'
+    },
+    {
+      title: 'Scholarship Alert: PM Scholarship 2026 Applications Open',
+      description: 'The Prime Minister Scholarship Scheme 2026 applications are now open. Students can apply until January 31, 2026...',
+      date: 'Dec 10, 2025',
+      tag: 'Scholarship',
+      category: 'latest',
+      gradient: 'from-sky-400 to-blue-500'
+    },
+    {
+      title: 'Maharashtra CET 2026 Dates Announced',
+      description: 'Maharashtra State CET Cell has announced MHT CET 2026 exam dates. The exam will be conducted in April-May 2026...',
+      date: 'Dec 09, 2025',
+      tag: 'MHT CET',
+      category: 'latest',
+      gradient: 'from-amber-400 to-yellow-500'
     }
   ];
 
-  const bigStories = [
-    { title: 'SNAP 2025 Test 2 Exam Analysis Live Updates', date: 'Dec 13, 2025' },
-    { title: 'SNAP 2025 Test 2 Question Paper with Solutions: Do...', date: 'Dec 12, 2025' },
-    { title: 'AILET LLM 2026 Question Paper (Available) Download...', date: 'Dec 12, 2025' },
-    { title: 'AILET PhD (Law) 2026 Question Paper (Available) Do...', date: 'Dec 12, 2025' },
-    { title: 'AILET BA LLB 2026 Question Paper (Available) Downl...', date: 'Dec 12, 2025' }
-  ];
+  const filteredNewsItems = activeCategory === 'all' 
+    ? allNewsItems 
+    : allNewsItems.filter(item => item.category === activeCategory);
+
+  const bigStories = activeCategory === 'all' 
+    ? [
+        { title: 'SNAP 2025 Test 2 Exam Analysis Live Updates', date: 'Dec 13, 2025', category: 'exam' },
+        { title: 'IIT Delhi Announces New BTech Programs for 2026', date: 'Dec 13, 2025', category: 'college' },
+        { title: 'IIT Bombay Opens PhD Admissions for Winter 2026', date: 'Dec 13, 2025', category: 'admission' },
+        { title: 'CBSE Date Sheet 2026 Released for Class 10 and 12', date: 'Dec 14, 2025', category: 'latest' },
+        { title: 'JEE Main 2026 Registration Started', date: 'Dec 14, 2025', category: 'exam' }
+      ]
+    : filteredNewsItems.slice(0, 5).map(item => ({ 
+        title: item.title.length > 50 ? item.title.substring(0, 50) + '...' : item.title, 
+        date: item.date,
+        category: item.category
+      }));
 
   const trendingTags = ['SNAP', 'MAT', 'AILET', 'NEET', 'JEE Main', 'CAT'];
 
@@ -147,9 +305,18 @@ const NewsPage = () => {
               </Link>
             </div>
 
+            {/* Category Title */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 capitalize">
+              {activeCategory === 'all' ? 'All News' : 
+               activeCategory === 'exam' ? 'Exam News' :
+               activeCategory === 'college' ? 'College News' :
+               activeCategory === 'admission' ? 'Admission Alerts' :
+               activeCategory === 'latest' ? 'Latest Alerts' : 'News'}
+            </h2>
+
             {/* News Grid */}
             <div className="grid grid-cols-3 gap-6 mb-8">
-              {newsItems.map((news, idx) => (
+              {filteredNewsItems.slice(0, 9).map((news, idx) => (
                 <Link
                   key={idx}
                   to="#"
