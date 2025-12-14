@@ -108,30 +108,30 @@ const ExamPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Page Title Section */}
-      <div className="bg-white py-6 px-8 border-b">
+      {/* Page Title Section - More Compact */}
+      <div className="bg-white py-4 px-8 border-b">
         <div className="container mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">Entrance Exams In India</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-3">Entrance Exams In India</h1>
           
           {/* Search Bar - Always Visible */}
-          <div className="relative max-w-2xl mb-6">
-            <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <div className="relative max-w-2xl mb-3">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
               placeholder="Search for exams..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
           
           {/* Popular Exams Links */}
-          <div className="flex items-center gap-6 overflow-x-auto pb-2">
+          <div className="flex items-center gap-4 overflow-x-auto pb-1">
             {popularExams.map((exam, idx) => (
               <Link
                 key={idx}
                 to={exam.url}
-                className="text-sm font-semibold text-blue-600 hover:text-orange-600 whitespace-nowrap transition-colors"
+                className="text-xs font-semibold text-blue-600 hover:text-orange-600 whitespace-nowrap transition-colors"
               >
                 {exam.name}
               </Link>
@@ -140,20 +140,20 @@ const ExamPage = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-8 py-8">
-        <div className="flex gap-6">
-          {/* Sidebar - Categories */}
-          <aside className="w-80 flex-shrink-0 space-y-5">
+      {/* Main Content - More Compact */}
+      <div className="container mx-auto px-8 py-5">
+        <div className="flex gap-4">
+          {/* Sidebar - Categories - More Compact */}
+          <aside className="w-64 flex-shrink-0 space-y-3">
             {/* Categories */}
-            <div className="bg-white rounded-lg shadow-sm p-5 sticky top-20">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Exams Category</h2>
-              <div className="space-y-1">
+            <div className="bg-white rounded-lg shadow-sm p-3 sticky top-20">
+              <h2 className="text-base font-bold text-gray-900 mb-2">Exams Category</h2>
+              <div className="space-y-0.5">
                 {visibleCategories.map((category, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedCategory(category)}
-                    className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                    className={`w-full text-left px-2 py-1.5 text-xs transition-colors ${
                       selectedCategory === category
                         ? 'text-orange-600 font-semibold'
                         : 'text-gray-700 hover:text-orange-600'
@@ -164,25 +164,25 @@ const ExamPage = () => {
                 ))}
                 <button
                   onClick={() => setShowAllCategories(!showAllCategories)}
-                  className="w-full text-left px-3 py-2 text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 mt-2"
+                  className="w-full text-left px-2 py-1.5 text-blue-600 hover:text-blue-700 font-semibold text-xs flex items-center gap-1 mt-1"
                 >
                   {showAllCategories ? (
                     <>
-                      View Less <FiChevronUp size={16} />
+                      View Less <FiChevronUp size={14} />
                     </>
                   ) : (
                     <>
-                      View More <FiChevronDown size={16} />
+                      View More <FiChevronDown size={14} />
                     </>
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Exam News Section */}
-            <div className="bg-white rounded-lg shadow-sm p-5">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Exam News</h2>
-              <div className="space-y-4">
+            {/* Exam News Section - More Compact */}
+            <div className="bg-white rounded-lg shadow-sm p-3">
+              <h2 className="text-base font-bold text-gray-900 mb-2">Exam News</h2>
+              <div className="space-y-2.5">
                 {[
                   {
                     title: 'JEE Main 2026 Registration Started',
@@ -205,13 +205,13 @@ const ExamPage = () => {
                     description: 'IIM Calcutta has released CAT 2025 results. Candidates can check their scores on the official website.'
                   }
                 ].map((news, idx) => (
-                  <div key={idx} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                  <div key={idx} className="border-b border-gray-100 pb-2.5 last:border-0 last:pb-0">
                     <Link to="#" className="block group">
-                      <h3 className="text-sm font-bold text-gray-900 group-hover:text-orange-600 mb-1 transition-colors">
+                      <h3 className="text-xs font-bold text-gray-900 group-hover:text-orange-600 mb-0.5 transition-colors">
                         {news.title}
                       </h3>
-                      <p className="text-xs text-gray-500 mb-2">{news.date}</p>
-                      <p className="text-xs text-gray-600 leading-relaxed">
+                      <p className="text-[10px] text-gray-500 mb-1">{news.date}</p>
+                      <p className="text-[10px] text-gray-600 leading-relaxed">
                         {news.description}
                       </p>
                     </Link>
@@ -220,82 +220,82 @@ const ExamPage = () => {
               </div>
               <Link 
                 to="/exam-news" 
-                className="block text-center mt-4 pt-4 border-t border-gray-200 text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                className="block text-center mt-2 pt-2 border-t border-gray-200 text-xs text-blue-600 hover:text-blue-700 font-semibold"
               >
                 View All News
               </Link>
             </div>
           </aside>
 
-          {/* Exam Cards Grid */}
+          {/* Exam Cards Grid - More Compact */}
           <main className="flex-1">
-            <div className="space-y-5">
+            <div className="space-y-3">
               {filteredExams.map((exam, idx) => (
                 <div
                   key={idx}
                   className="bg-white rounded shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="flex p-5 gap-4">
-                    {/* Logo with Initials */}
+                  <div className="flex p-3 gap-3">
+                    {/* Logo with Initials - Smaller */}
                     <div className="flex-shrink-0">
-                      <div className={`w-12 h-12 rounded bg-gradient-to-br ${exam.color} flex items-center justify-center shadow-sm`}>
-                        <span className="text-white font-bold text-sm">{exam.initials}</span>
+                      <div className={`w-10 h-10 rounded bg-gradient-to-br ${exam.color} flex items-center justify-center shadow-sm`}>
+                        <span className="text-white font-bold text-xs">{exam.initials}</span>
                       </div>
                     </div>
 
-                    {/* Exam Details */}
+                    {/* Exam Details - More Compact */}
                     <div className="flex-1 min-w-0">
-                      <div className="mb-3">
+                      <div className="mb-2">
                         <Link to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                          <h3 className="text-lg font-bold text-gray-900 hover:text-orange-600 mb-1">
+                          <h3 className="text-base font-bold text-gray-900 hover:text-orange-600 mb-0.5">
                             {exam.name}
                           </h3>
                         </Link>
-                        <p className="text-sm text-gray-600 mb-2">{exam.fullName}</p>
-                        <span className="inline-block px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
+                        <p className="text-xs text-gray-600 mb-1.5">{exam.fullName}</p>
+                        <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-semibold rounded">
                           {exam.examMode}
                         </span>
                       </div>
 
-                      <div className="border-t border-gray-100 pt-3 mb-3"></div>
+                      <div className="border-t border-gray-100 pt-2 mb-2"></div>
 
-                      {/* Important Dates */}
-                      <div className="grid grid-cols-3 gap-6 mb-4">
+                      {/* Important Dates - More Compact */}
+                      <div className="grid grid-cols-3 gap-4 mb-2.5">
                         <div>
-                          <h4 className="text-xs font-bold text-gray-900 mb-1">Exam Date</h4>
-                          <p className="text-sm text-gray-700">{exam.examDate}</p>
+                          <h4 className="text-[10px] font-bold text-gray-900 mb-0.5">Exam Date</h4>
+                          <p className="text-xs text-gray-700">{exam.examDate}</p>
                         </div>
                         <div>
-                          <h4 className="text-xs font-bold text-gray-900 mb-1">Application Form</h4>
-                          <p className="text-sm text-gray-700">{exam.applicationDate}</p>
+                          <h4 className="text-[10px] font-bold text-gray-900 mb-0.5">Application Form</h4>
+                          <p className="text-xs text-gray-700">{exam.applicationDate}</p>
                         </div>
                         <div>
-                          <h4 className="text-xs font-bold text-gray-900 mb-1">Result Announce</h4>
-                          <p className="text-sm text-gray-700">{exam.resultDate}</p>
+                          <h4 className="text-[10px] font-bold text-gray-900 mb-0.5">Result Announce</h4>
+                          <p className="text-xs text-gray-700">{exam.resultDate}</p>
                         </div>
                       </div>
 
-                      {/* Links & Button */}
-                      <div className="flex items-center flex-wrap gap-4">
+                      {/* Links & Button - Perfect Sizing */}
+                      <div className="flex items-center flex-wrap gap-3">
                         <Link
                           to="#"
-                          className="text-sm text-blue-600 hover:underline font-semibold"
+                          className="text-[11px] text-blue-600 hover:underline font-semibold"
                         >
                           Application Process
                         </Link>
                         <Link
                           to="#"
-                          className="text-sm text-blue-600 hover:underline font-semibold"
+                          className="text-[11px] text-blue-600 hover:underline font-semibold"
                         >
                           Exam Pattern
                         </Link>
                         <Link
                           to="#"
-                          className="text-sm text-blue-600 hover:underline font-semibold"
+                          className="text-[11px] text-blue-600 hover:underline font-semibold"
                         >
                           Previous Year Paper
                         </Link>
-                        <button className="ml-auto px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded transition-colors">
+                        <button className="ml-auto px-4 py-1.5 bg-orange-600 hover:bg-orange-700 text-white text-[11px] font-semibold rounded transition-colors">
                           Apply Now
                         </button>
                       </div>
@@ -307,8 +307,8 @@ const ExamPage = () => {
 
             {/* No Results */}
             {filteredExams.length === 0 && (
-              <div className="bg-white rounded shadow-sm p-12 text-center">
-                <p className="text-gray-500 text-lg">No exams found matching your criteria.</p>
+              <div className="bg-white rounded shadow-sm p-8 text-center">
+                <p className="text-gray-500 text-sm">No exams found matching your criteria.</p>
               </div>
             )}
           </main>
