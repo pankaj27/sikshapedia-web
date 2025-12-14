@@ -712,38 +712,78 @@ const CollegeDetailPage = () => {
 
           {/* RIGHT SIDEBAR */}
           <aside className="w-80 flex-shrink-0 hidden lg:block">
-            <div className="sticky top-24 space-y-6">
+            <div className="sticky top-24 space-y-4">
               {/* POPULAR COURSES */}
-              <div className="bg-white border rounded-lg p-4">
-                <h3 className="font-bold mb-4">Popular Full Time Courses</h3>
+              <div className="bg-white border rounded-lg shadow-sm p-5">
+                <h3 className="font-bold text-base mb-4 text-gray-900">Popular Full Time Courses</h3>
                 <div className="space-y-4">
-                  {['B.Tech', 'M.Tech', 'MBA'].map((course, i) => (
-                    <div key={course} className="pb-4 border-b last:border-0">
-                      <div className="flex justify-between mb-1">
-                        <Link to="#" className="text-sm font-semibold text-blue-600 hover:underline">{course}</Link>
-                        <span className="text-xs text-gray-500">(14.4K Views)</span>
+                  {[
+                    { name: 'B.Tech', views: '14.4K', fees: college.average_fees },
+                    { name: 'M.Tech', views: '14.4K', fees: 144000 },
+                    { name: 'MBA', views: '14.4K', fees: 768000 }
+                  ].map((course, i) => (
+                    <div key={course.name} className={`pb-4 ${i !== 2 ? 'border-b border-gray-200' : ''}`}>
+                      <div className="flex items-start justify-between mb-2">
+                        <Link to="#" className="text-sm font-bold text-blue-600 hover:underline">
+                          {course.name}
+                        </Link>
+                        <span className="text-[11px] text-gray-500">({course.views} Views)</span>
                       </div>
-                      <p className="text-xs text-gray-600 mb-2">₹{(college.average_fees / 100000).toFixed(2)} Lakhs</p>
-                      <Button size="sm" className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs">
+                      <p className="text-xs text-gray-700 mb-3 font-medium">
+                        ₹{(course.fees / 100000).toFixed(2)} Lakhs
+                      </p>
+                      <button className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold py-2.5 rounded transition-colors">
                         Apply Now
-                      </Button>
+                      </button>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* SIMILAR COLLEGES */}
-              <div className="bg-white border rounded-lg p-4">
-                <h3 className="font-bold mb-4">Similar Colleges</h3>
-                <div className="space-y-3">
-                  {[1, 2, 3].map((i) => (
-                    <Link key={i} to="#" className="flex gap-3 hover:bg-gray-50 p-2 rounded">
-                      <div className="w-14 h-14 bg-gray-200 rounded flex-shrink-0"></div>
-                      <div>
-                        <p className="text-sm font-semibold text-gray-900 mb-1">College Name {i}</p>
-                        <p className="text-xs text-gray-600">City, State</p>
-                      </div>
-                    </Link>
+              <div className="bg-white border rounded-lg shadow-sm p-5">
+                <h3 className="font-bold text-base mb-4 text-gray-900">Similar Colleges</h3>
+                <div className="space-y-4">
+                  {[
+                    { name: 'IIT Delhi', location: 'New Delhi, Delhi', fees: '2.54' },
+                    { name: 'IIT Madras', location: 'Chennai, Tamil Nadu', fees: '2.25' },
+                    { name: 'IIT Kanpur', location: 'Kanpur, Uttar Pradesh', fees: '2.18' }
+                  ].map((item, i) => (
+                    <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
+                      <Link to="#" className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
+                        <div className="flex gap-3">
+                          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded flex items-center justify-center flex-shrink-0">
+                            <span className="text-xl font-bold text-blue-700">{item.name.charAt(0)}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-gray-900 mb-1 truncate">{item.name}</p>
+                            <p className="text-[11px] text-gray-600 mb-1">{item.location}</p>
+                            <p className="text-xs font-semibold text-orange-600">₹{item.fees}L Fees</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* LATEST NEWS */}
+              <div className="bg-white border rounded-lg shadow-sm p-5">
+                <h3 className="font-bold text-base mb-4 text-gray-900">Latest News</h3>
+                <div className="space-y-4">
+                  {[
+                    { title: 'Admission 2026 Opens', date: 'Dec 12, 2025' },
+                    { title: 'Placement Results Announced', date: 'Dec 6, 2025' },
+                    { title: 'New Course Launch', date: 'Nov 28, 2025' }
+                  ].map((news, i) => (
+                    <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
+                      <Link to="#" className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
+                        <p className="text-sm text-blue-600 hover:underline font-medium mb-1 line-clamp-2">
+                          {college.name} {news.title}
+                        </p>
+                        <p className="text-[11px] text-gray-500">{news.date}</p>
+                      </Link>
+                    </div>
                   ))}
                 </div>
               </div>
