@@ -494,37 +494,34 @@ const CourseDetailPage = () => {
           </main>
 
           {/* Sidebar - 25% width */}
-          <aside className="w-3/12">
+          <aside className="w-3/12 sticky top-20">
             {/* College Cards */}
-            <div className="space-y-4">
+            <div className="space-y-5">
               {[
                 { name: 'IIT Roorkee - [IITR]', location: 'Roorkee, Uttarakhand', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.24 L', rating: '10.0' },
                 { name: 'IIT Guwahati - [IITG]', location: 'Guwahati, Assam', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.44 L', rating: '10.0' },
                 { name: 'IIT Hyderabad - [IITH]', location: 'Hyderabad, Telangana', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.5 L', rating: '10.0' }
               ].map((college, idx) => (
-                <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div key={idx} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                   {/* Top Image Section */}
-                  <div className="relative h-32 bg-gradient-to-r from-blue-500 to-purple-500">
-                    <div className="absolute top-2 left-2 right-2 flex justify-between">
-                      <button className="text-xs bg-white/90 hover:bg-white px-2 py-1 rounded text-gray-700 font-semibold">+ FOLLOW</button>
-                      <button className="text-white hover:text-red-400">
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
-                        </svg>
+                  <div className="relative h-36 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500">
+                    <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+                      <button className="text-xs bg-white hover:bg-gray-50 px-3 py-1.5 rounded-md text-gray-800 font-semibold shadow-sm">+ FOLLOW</button>
+                      <button className="text-white hover:text-red-400 transition-colors">
+                        <FaHeart className="w-5 h-5" />
                       </button>
                     </div>
                     {/* College Logo and Info */}
-                    <div className="absolute bottom-0 left-0 right-0 px-3 pb-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-8 h-8 bg-white rounded-full"></div>
-                        <div>
-                          <Link to={`/colleges/${idx + 1}`} className="text-white text-xs font-semibold hover:underline block">{college.name}</Link>
-                          <div className="text-xs text-white/90 flex items-center gap-1">
-                            <span>{college.location}</span>
-                            <span className="mx-1">|</span>
-                            <span className="flex items-center gap-1">
-                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l-4-4h8l-4 4z"/></svg>
-                              AICTE
+                    <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-10 h-10 bg-white rounded-full flex-shrink-0 shadow-md"></div>
+                        <div className="flex-1 min-w-0">
+                          <Link to={`/colleges/${idx + 1}`} className="text-white text-sm font-bold hover:underline block mb-0.5 leading-tight">{college.name}</Link>
+                          <div className="text-xs text-white/95 flex items-center flex-wrap gap-1">
+                            <span className="truncate">{college.location}</span>
+                            <span>|</span>
+                            <span className="flex items-center gap-0.5">
+                              <span>AICTE</span>
                             </span>
                           </div>
                         </div>
@@ -532,17 +529,21 @@ const CourseDetailPage = () => {
                     </div>
                   </div>
                   {/* Bottom Info Section */}
-                  <div className="p-3 bg-gradient-to-b from-orange-100 to-orange-50">
-                    <div className="flex justify-between items-center mb-2">
-                      <Link to={`/colleges/${idx + 1}/courses`} className="text-xs font-bold text-gray-900">{college.course} <span className="text-xs font-normal">({college.duration})</span></Link>
-                      <span className="bg-orange-600 text-white text-xs font-bold px-2 py-1 rounded">{college.rating}</span>
+                  <div className="p-4 bg-gradient-to-b from-orange-50 to-white">
+                    <div className="flex justify-between items-start mb-2.5">
+                      <div>
+                        <Link to={`/colleges/${idx + 1}/courses`} className="text-sm font-bold text-gray-900 hover:text-orange-600">{college.course}</Link>
+                        <span className="text-xs text-gray-600 ml-1">({college.duration})</span>
+                      </div>
+                      <span className="bg-orange-600 text-white text-sm font-bold px-2.5 py-1 rounded shadow-sm">{college.rating}</span>
                     </div>
-                    <div className="text-sm font-bold text-gray-900 mb-2">
-                      ₹ {college.fee} <span className="text-xs font-normal text-gray-600">first year fees</span>
+                    <div className="mb-3">
+                      <span className="text-base font-bold text-gray-900">₹ {college.fee}</span>
+                      <span className="text-xs text-gray-600 ml-1">first year fees</span>
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <Link to={`/colleges/${idx + 1}/courses`} className="text-xs text-blue-600 hover:underline font-semibold">VIEW ALL COURSES & FEES</Link>
-                      <button className="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold rounded">
+                    <div className="flex flex-col gap-2.5">
+                      <Link to={`/colleges/${idx + 1}/courses`} className="text-xs text-blue-600 hover:text-blue-700 font-bold uppercase tracking-wide">VIEW ALL COURSES & FEES</Link>
+                      <button className="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded shadow-sm transition-colors">
                         Download Brochure
                       </button>
                     </div>
