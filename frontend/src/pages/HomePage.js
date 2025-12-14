@@ -221,17 +221,17 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
-      {/* Study Goals Carousel */}
-      <section className="py-12 bg-gray-50">
+      {/* Study Goals Carousel - Compact */}
+      <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Select Your Study Goal</h2>
+          <div className="flex justify-between items-center mb-5">
+            <h2 className="text-2xl font-bold">Select Your Study Goal</h2>
             <div className="flex gap-2">
-              <button className="swiper-button-prev-goals w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
-                <FiChevronDown className="transform rotate-90 text-gray-600" />
+              <button className="swiper-button-prev-goals w-8 h-8 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
+                <FiChevronDown className="transform rotate-90 text-gray-600" size={16} />
               </button>
-              <button className="swiper-button-next-goals w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
-                <FiChevronDown className="transform -rotate-90 text-gray-600" />
+              <button className="swiper-button-next-goals w-8 h-8 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
+                <FiChevronDown className="transform -rotate-90 text-gray-600" size={16} />
               </button>
             </div>
           </div>
@@ -241,7 +241,7 @@ const CollegeDuniaHome = () => {
               nextEl: '.swiper-button-next-goals',
               prevEl: '.swiper-button-prev-goals',
             }}
-            spaceBetween={20}
+            spaceBetween={15}
             slidesPerView={2}
             breakpoints={{
               640: { slidesPerView: 3 },
@@ -253,13 +253,13 @@ const CollegeDuniaHome = () => {
               const IconComponent = getIconComponent(goal.icon);
               return (
                 <SwiperSlide key={idx}>
-                  <Link to={`/colleges?course=${goal.name}`} className="block bg-white rounded-lg p-6 text-center hover:shadow-lg transition border group">
-                    <div className="flex justify-center mb-3">
-                      <IconComponent className={`text-5xl ${goal.color} group-hover:scale-110 transition-transform`} />
+                  <Link to={`/colleges?course=${goal.name}`} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
+                    <div className="flex justify-center mb-2">
+                      <IconComponent className={`text-4xl ${goal.color} group-hover:scale-110 transition-transform`} />
                     </div>
-                    <h3 className="font-bold text-lg mb-1">{goal.name}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{goal.courses}</p>
-                    <span className="text-xs text-orange-600 font-semibold">{goal.count} Colleges</span>
+                    <h3 className="font-bold text-base mb-0.5">{goal.name}</h3>
+                    <p className="text-xs text-gray-600 mb-1.5">{goal.courses}</p>
+                    <span className="text-[10px] text-orange-600 font-semibold">{goal.count} Colleges</span>
                   </Link>
                 </SwiperSlide>
               );
@@ -268,20 +268,20 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
-      {/* Programs Exploration */}
-      <section className="py-12">
+      {/* Programs Exploration - Compact */}
+      <section className="py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Explore Programs</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <h2 className="text-2xl font-bold text-center mb-5">Explore Programs</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {programs.map((program, idx) => {
               const IconComponent = getIconComponent(program.icon);
               return (
-                <div key={idx} className={`${program.color} rounded-xl p-6 text-center hover:shadow-lg transition cursor-pointer group`}>
-                  <div className="flex justify-center mb-3">
-                    <IconComponent className={`text-5xl ${program.iconColor} group-hover:scale-110 transition-transform`} />
+                <div key={idx} className={`${program.color} rounded-xl p-4 text-center hover:shadow-lg transition cursor-pointer group`}>
+                  <div className="flex justify-center mb-2">
+                    <IconComponent className={`text-4xl ${program.iconColor} group-hover:scale-110 transition-transform`} />
                   </div>
-                  <h3 className="font-bold text-xl mb-2">{program.title}</h3>
-                  <p className="text-gray-600">{program.subtitle}</p>
+                  <h3 className="font-bold text-base mb-1">{program.title}</h3>
+                  <p className="text-gray-600 text-sm">{program.subtitle}</p>
                 </div>
               );
             })}
