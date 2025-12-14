@@ -70,7 +70,7 @@ const CoursesPage = () => {
     {
       title: 'Certification Courses',
       subtitle: 'Applicable for Certification courses',
-      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/diploma.jpg',
+      image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&h=400&fit=crop',
       link: '/courses/certification',
       categories: [
         { name: 'Arts', count: 12 },
