@@ -590,14 +590,14 @@ const CollegeListingPage = () => {
             </div>
           </section>
 
-          {/* Read Less Button - Show at the end when expanded */}
-          <div className="text-center mt-6">
+          {/* Read Less Button - Show at the end when expanded - Compact */}
+          <div className="text-center mt-4">
             <button
               onClick={() => setShowContent(false)}
-              className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-full transition-colors"
             >
               <span>Read Less</span>
-              <FiChevronUp size={18} />
+              <FiChevronUp size={14} />
             </button>
           </div>
           </div>
