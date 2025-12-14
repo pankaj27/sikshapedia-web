@@ -151,11 +151,11 @@ const CollegeListingPage = () => {
       </div>
 
       {/* ALL CONTENT SECTIONS */}
-      <div className="bg-white py-4">
+      <div className="bg-white py-2">
         <div className="container mx-auto px-6">
           
           {/* INTRO CONTENT - First 3 lines always visible */}
-          <section className="mb-4">
+          <section className="mb-2">
             <div className="text-gray-700 text-sm leading-relaxed">
               <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
                 India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
@@ -167,10 +167,10 @@ const CollegeListingPage = () => {
           </section>
 
           {/* Read More Button */}
-          <div className="text-center mb-4">
+          <div className="text-center mb-2">
             <button
               onClick={() => setShowContent(!showContent)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors shadow-md"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-md"
             >
               {showContent ? (
                 <>
