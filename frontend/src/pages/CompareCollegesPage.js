@@ -7,26 +7,32 @@ import { Input } from '../components/ui/input';
 
 const CompareCollegesPage = () => {
   const [searchParams] = useSearchParams();
-  const [selectedColleges, setSelectedColleges] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [compareType, setCompareType] = useState('colleges'); // colleges, schools, universities
 
   useEffect(() => {
-    const collegeIds = searchParams.get('colleges')?.split(',').filter(Boolean) || [];
-    if (collegeIds.length > 0) {
-      fetchColleges(collegeIds);
+    // Check URL params for type and IDs
+    const type = searchParams.get('type') || 'colleges';
+    const ids = searchParams.get('ids')?.split(',').filter(Boolean) || [];
+    
+    setCompareType(type);
+    if (ids.length > 0) {
+      fetchItems(type, ids);
     }
   }, [searchParams]);
 
-  const fetchColleges = async (ids) => {
+  const fetchItems = async (type, ids) => {
     try {
-      const colleges = await Promise.all(
-        ids.map(id => api.get(`/colleges/${id}`))
+      const endpoint = type === 'colleges' ? '/colleges' : type === 'schools' ? '/schools' : '/universities';
+      const items = await Promise.all(
+        ids.map(id => api.get(`${endpoint}/${id}`))
       );
-      setSelectedColleges(colleges.map(res => res.data));
+      setSelectedItems(items.map(res => res.data));
     } catch (error) {
-      console.error('Error fetching colleges:', error);
+      console.error(`Error fetching ${type}:`, error);
     }
   };
 
@@ -37,97 +43,133 @@ const CompareCollegesPage = () => {
       return;
     }
     try {
-      const response = await api.get(`/colleges?search=${encodeURIComponent(query)}&limit=5`);
+      const endpoint = compareType === 'colleges' ? '/colleges' : compareType === 'schools' ? '/schools' : '/universities';
+      const response = await api.get(`${endpoint}?search=${encodeURIComponent(query)}&limit=5`);
       setSearchResults(response.data);
     } catch (error) {
       console.error('Error searching:', error);
     }
   };
 
-  const addCollege = (college) => {
-    if (selectedColleges.length >= 4) {
-      alert('You can compare up to 4 colleges at a time');
+  const addItem = (item) => {
+    if (selectedItems.length >= 4) {
+      alert(`You can compare up to 4 ${compareType} at a time`);
       return;
     }
-    if (selectedColleges.find(c => c.id === college.id)) {
-      alert('College already added for comparison');
+    if (selectedItems.find(c => c.id === item.id)) {
+      alert(`${getTypeSingular()} already added for comparison`);
       return;
     }
-    setSelectedColleges([...selectedColleges, college]);
+    setSelectedItems([...selectedItems, item]);
     setSearchQuery('');
     setSearchResults([]);
     setShowSearch(false);
   };
 
-  const removeCollege = (collegeId) => {
-    setSelectedColleges(selectedColleges.filter(c => c.id !== collegeId));
+  const removeItem = (itemId) => {
+    setSelectedItems(selectedItems.filter(c => c.id !== itemId));
+  };
+
+  const getTypeSingular = () => {
+    return compareType === 'colleges' ? 'College' : compareType === 'schools' ? 'School' : 'University';
+  };
+
+  const getTypePlural = () => {
+    return compareType === 'colleges' ? 'Colleges' : compareType === 'schools' ? 'Schools' : 'Universities';
   };
 
   const ComparisonRow = ({ label, values, icon: Icon }) => (
     <tr className="border-b hover:bg-gray-50">
-      <td className="px-4 py-3 font-semibold bg-gray-50 sticky left-0 z-10">
-        <div className="flex items-center gap-2">
-          {Icon && <Icon className="text-orange-600" />}
+      <td className="px-3 py-2 text-xs font-semibold bg-gray-50 sticky left-0 z-10">
+        <div className="flex items-center gap-1.5">
+          {Icon && <Icon className="text-orange-600 text-sm" />}
           {label}
         </div>
       </td>
       {values.map((value, idx) => (
-        <td key={idx} className="px-4 py-3 text-center">{value || 'N/A'}</td>
+        <td key={idx} className="px-3 py-2 text-xs text-center">{value || 'N/A'}</td>
       ))}
     </tr>
   );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
-            </Link>
-            <div className="flex gap-4">
-              <Link to="/"><Button variant="ghost">Home</Button></Link>
-              <Link to="/colleges"><Button variant="ghost">Colleges</Button></Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12">
+      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-2 text-center">Compare Colleges</h1>
-          <p className="text-xl text-center">Side-by-side comparison of colleges</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 text-center">Compare {getTypePlural()}</h1>
+          <p className="text-sm md:text-base text-center mb-4">Side-by-side comparison</p>
+          
+          {/* Type Selector */}
+          <div className="flex justify-center gap-2">
+            <button
+              onClick={() => {
+                setCompareType('colleges');
+                setSelectedItems([]);
+                setSearchResults([]);
+              }}
+              className={`px-3 py-1.5 text-xs rounded-full transition ${
+                compareType === 'colleges' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
+              }`}
+            >
+              Colleges
+            </button>
+            <button
+              onClick={() => {
+                setCompareType('schools');
+                setSelectedItems([]);
+                setSearchResults([]);
+              }}
+              className={`px-3 py-1.5 text-xs rounded-full transition ${
+                compareType === 'schools' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
+              }`}
+            >
+              Schools
+            </button>
+            <button
+              onClick={() => {
+                setCompareType('universities');
+                setSelectedItems([]);
+                setSearchResults([]);
+              }}
+              className={`px-3 py-1.5 text-xs rounded-full transition ${
+                compareType === 'universities' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
+              }`}
+            >
+              Universities
+            </button>
+          </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8">
-        {selectedColleges.length < 4 && (
-          <div className="mb-6">
+      <div className="container mx-auto px-4 py-6">
+        {selectedItems.length < 4 && (
+          <div className="mb-4">
             {!showSearch ? (
-              <Button onClick={() => setShowSearch(true)} className="bg-orange-600 hover:bg-orange-700">
-                <FiPlus className="mr-2" /> Add College to Compare
+              <Button onClick={() => setShowSearch(true)} className="bg-orange-600 hover:bg-orange-700 h-8 text-xs">
+                <FiPlus className="mr-1.5 text-xs" /> Add {getTypeSingular()} to Compare
               </Button>
             ) : (
-              <div className="bg-white rounded-lg shadow p-4">
-                <div className="flex gap-2 mb-3">
+              <div className="bg-white rounded-lg shadow p-3">
+                <div className="flex gap-2 mb-2">
                   <Input
-                    placeholder="Search colleges..."
+                    placeholder={`Search ${compareType}...`}
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
                     autoFocus
+                    className="h-8 text-sm"
                   />
-                  <Button onClick={() => setShowSearch(false)} variant="outline">Cancel</Button>
+                  <Button onClick={() => setShowSearch(false)} variant="outline" className="h-8 text-xs">Cancel</Button>
                 </div>
                 {searchResults.length > 0 && (
-                  <div className="space-y-2">
-                    {searchResults.map(college => (
+                  <div className="space-y-1.5">
+                    {searchResults.map(item => (
                       <div
-                        key={college.id}
-                        onClick={() => addCollege(college)}
-                        className="p-3 hover:bg-gray-50 cursor-pointer rounded border"
+                        key={item.id}
+                        onClick={() => addItem(item)}
+                        className="p-2 hover:bg-gray-50 cursor-pointer rounded border"
                       >
-                        <p className="font-semibold">{college.name}</p>
-                        <p className="text-sm text-gray-600">{college.location.city}, {college.location.state}</p>
+                        <p className="text-sm font-semibold">{item.name}</p>
+                        <p className="text-xs text-gray-600">{item.location?.city}, {item.location?.state}</p>
                       </div>
                     ))}
                   </div>
@@ -137,11 +179,11 @@ const CompareCollegesPage = () => {
           </div>
         )}
 
-        {selectedColleges.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
-            <p className="text-gray-600 text-lg mb-4">No colleges selected for comparison</p>
-            <Button onClick={() => setShowSearch(true)} className="bg-orange-600 hover:bg-orange-700">
-              <FiPlus className="mr-2" /> Add Colleges
+        {selectedItems.length === 0 ? (
+          <div className="bg-white rounded-lg shadow p-8 text-center">
+            <p className="text-sm text-gray-600 mb-3">No {compareType} selected for comparison</p>
+            <Button onClick={() => setShowSearch(true)} className="bg-orange-600 hover:bg-orange-700 h-8 text-xs">
+              <FiPlus className="mr-1.5" /> Add {getTypePlural()}
             </Button>
           </div>
         ) : (
@@ -149,21 +191,24 @@ const CompareCollegesPage = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-gray-50">
-                  <th className="px-4 py-3 text-left font-bold sticky left-0 z-20 bg-gray-50">Criteria</th>
-                  {selectedColleges.map(college => (
-                    <th key={college.id} className="px-4 py-3 text-center min-w-64">
+                  <th className="px-3 py-2 text-left text-xs font-bold sticky left-0 z-20 bg-gray-50">Criteria</th>
+                  {selectedItems.map(item => (
+                    <th key={item.id} className="px-3 py-2 text-center min-w-48">
                       <div className="relative">
                         <button
-                          onClick={() => removeCollege(college.id)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          onClick={() => removeItem(item.id)}
+                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                         >
-                          <FiX />
+                          <FiX className="text-xs" />
                         </button>
-                        <div className="h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded mb-2"></div>
-                        <Link to={`/colleges/${college.id}`} className="font-bold hover:text-orange-600">
-                          {college.name}
+                        <div className="h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded mb-2"></div>
+                        <Link 
+                          to={`/${compareType}/${item.id}`} 
+                          className="text-sm font-bold hover:text-orange-600 line-clamp-2"
+                        >
+                          {item.name}
                         </Link>
-                        <p className="text-sm text-gray-600">{college.location.city}</p>
+                        <p className="text-xs text-gray-600 mt-1">{item.location?.city}</p>
                       </div>
                     </th>
                   ))}
@@ -173,54 +218,54 @@ const CompareCollegesPage = () => {
                 <ComparisonRow
                   label="Location"
                   icon={FiMapPin}
-                  values={selectedColleges.map(c => `${c.location.city}, ${c.location.state}`)}
+                  values={selectedItems.map(c => `${c.location?.city}, ${c.location?.state}`)}
                 />
                 <ComparisonRow
                   label="Rating"
                   icon={FiStar}
-                  values={selectedColleges.map(c => c.rating ? `${c.rating} ⭐` : 'N/A')}
+                  values={selectedItems.map(c => c.rating ? `${c.rating} ⭐` : 'N/A')}
                 />
                 <ComparisonRow
-                  label="College Type"
-                  values={selectedColleges.map(c => c.type)}
+                  label="Type"
+                  values={selectedItems.map(c => c.type || 'N/A')}
                 />
                 <ComparisonRow
                   label="Average Fees (Annual)"
                   icon={FiDollarSign}
-                  values={selectedColleges.map(c => `₹${(c.average_fees / 100000).toFixed(1)}L`)}
+                  values={selectedItems.map(c => c.average_fees ? `₹${(c.average_fees / 100000).toFixed(1)}L` : 'N/A')}
                 />
                 <ComparisonRow
                   label="Total Students"
                   icon={FiUsers}
-                  values={selectedColleges.map(c => c.total_students?.toLocaleString() || 'N/A')}
+                  values={selectedItems.map(c => c.total_students?.toLocaleString() || 'N/A')}
                 />
                 <ComparisonRow
                   label="NIRF Ranking"
                   icon={FiAward}
-                  values={selectedColleges.map(c => c.ranking?.nirf || 'N/A')}
+                  values={selectedItems.map(c => c.ranking?.nirf || 'N/A')}
                 />
                 <ComparisonRow
                   label="Accreditation"
-                  values={selectedColleges.map(c => c.accreditation?.join(', ') || 'N/A')}
+                  values={selectedItems.map(c => c.accreditation?.join(', ') || 'N/A')}
                 />
                 <ComparisonRow
                   label="Placements (Avg Package)"
-                  values={selectedColleges.map(c => c.placements?.average_package || 'N/A')}
+                  values={selectedItems.map(c => c.placements?.average_package || 'N/A')}
                 />
                 <ComparisonRow
                   label="Top Recruiters"
-                  values={selectedColleges.map(c => c.placements?.top_recruiters?.slice(0, 3).join(', ') || 'N/A')}
+                  values={selectedItems.map(c => c.placements?.top_recruiters?.slice(0, 3).join(', ') || 'N/A')}
                 />
                 <ComparisonRow
                   label="Established Year"
-                  values={selectedColleges.map(c => c.established || 'N/A')}
+                  values={selectedItems.map(c => c.established || 'N/A')}
                 />
                 <tr className="border-b">
-                  <td className="px-4 py-3 font-semibold bg-gray-50 sticky left-0 z-10">Actions</td>
-                  {selectedColleges.map(college => (
-                    <td key={college.id} className="px-4 py-3 text-center">
-                      <Link to={`/colleges/${college.id}`}>
-                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 w-full">
+                  <td className="px-3 py-2 text-xs font-semibold bg-gray-50 sticky left-0 z-10">Actions</td>
+                  {selectedItems.map(item => (
+                    <td key={item.id} className="px-3 py-2 text-center">
+                      <Link to={`/${compareType}/${item.id}`}>
+                        <Button className="bg-orange-600 hover:bg-orange-700 w-full h-7 text-xs">
                           View Details
                         </Button>
                       </Link>
