@@ -97,10 +97,10 @@ const SchoolsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-2">
-      {/* BREADCRUMB NAVIGATION */}
+      {/* BREADCRUMB NAVIGATION - Compact */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-2">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="container mx-auto px-6 py-1.5">
+          <div className="flex items-center gap-1.5 text-xs text-gray-600">
             <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
             <span>/</span>
             <span className="text-gray-900 font-medium">All Schools in India</span>
@@ -108,54 +108,54 @@ const SchoolsPage = () => {
         </div>
       </div>
 
-      {/* PAGE HEADING */}
+      {/* PAGE HEADING - Compact */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-2">
-          <h1 className="text-2xl font-bold text-gray-900">Top Schools in India 2025</h1>
+        <div className="container mx-auto px-6 py-1.5">
+          <h1 className="text-xl font-bold text-gray-900">Top Schools in India 2025</h1>
         </div>
       </div>
 
-      {/* ADVERTISEMENT BANNERS */}
-      <div className="bg-white border-b py-3">
+      {/* ADVERTISEMENT BANNERS - Compact */}
+      <div className="bg-white border-b py-2">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <Link to="/write-review" className="block">
-              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-5 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiEdit3 className="text-3xl mb-2" />
-                <h3 className="font-bold text-base mb-1">Write a Review</h3>
-                <p className="text-xs">Get Upto ₹300*</p>
+              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiEdit3 className="text-2xl mb-1" />
+                <h3 className="font-bold text-sm mb-0.5">Write a Review</h3>
+                <p className="text-[10px]">Get Upto ₹300*</p>
               </div>
             </Link>
             <Link to="/course-finder" className="block">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-5 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiGrid className="text-3xl mb-2" />
-                <h3 className="font-bold text-base mb-1">Course Finder</h3>
-                <p className="text-xs">Find Your Perfect Course</p>
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiGrid className="text-2xl mb-1" />
+                <h3 className="font-bold text-sm mb-0.5">Course Finder</h3>
+                <p className="text-[10px]">Find Your Perfect Course</p>
               </div>
             </Link>
             <Link to="/college-predictor" className="block">
-              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-5 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiTarget className="text-3xl mb-2" />
-                <h3 className="font-bold text-base mb-1">College Predictor</h3>
-                <p className="text-xs">Know Your Admission Chances</p>
+              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiTarget className="text-2xl mb-1" />
+                <h3 className="font-bold text-sm mb-0.5">College Predictor</h3>
+                <p className="text-[10px]">Know Your Admission Chances</p>
               </div>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* AUTHOR INFO */}
-      <div className="bg-white py-1.5 border-b">
+      {/* AUTHOR INFO - Compact */}
+      <div className="bg-white py-1 border-b">
         <div className="container mx-auto px-6">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-200">
+          <div className="flex items-center gap-1.5">
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-200">
               <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                <FiUser size={14} />
+                <FiUser size={12} />
               </div>
             </div>
             <div>
-              <Link to="/author/content-team" className="text-xs font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
-              <p className="text-[9px] text-gray-600">Content Curator | Updated 3+ months ago</p>
+              <Link to="/author/content-team" className="text-[10px] font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
+              <p className="text-[8px] text-gray-600">Content Curator | Updated 3+ months ago</p>
             </div>
           </div>
         </div>
