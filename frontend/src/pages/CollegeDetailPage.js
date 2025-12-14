@@ -980,6 +980,160 @@ const CollegeDetailPage = () => {
                     </div>
                   </div>
                 </section>
+
+                {/* LOCATION & MAP */}
+                <section id="location">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Location & Address</h2>
+                  <p className="text-gray-700 mb-6">
+                    Find {college.name} on the map and get complete address details:
+                  </p>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Address Details */}
+                    <div className="lg:col-span-1">
+                      <div className="bg-white border rounded-lg p-6 space-y-4">
+                        <div>
+                          <h3 className="font-bold text-lg mb-3 text-gray-900">Address</h3>
+                          <div className="space-y-3">
+                            <div className="flex gap-3">
+                              <FiMapPin className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                              <div>
+                                <p className="text-sm text-gray-700 font-medium">{college.name}</p>
+                                <p className="text-sm text-gray-600">
+                                  {college.location?.address || `${college.location?.city}, ${college.location?.state}`}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  {college.location?.city}, {college.location?.state}
+                                </p>
+                                <p className="text-sm text-gray-600">India - 400076</p>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                              <div>
+                                <p className="text-sm text-gray-700 font-medium">Phone</p>
+                                <p className="text-sm text-gray-600">+91 22-2576-7000</p>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                              <div>
+                                <p className="text-sm text-gray-700 font-medium">Email</p>
+                                <p className="text-sm text-gray-600">
+                                  info@{college.name.toLowerCase().replace(/\s+/g, '')}.edu
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                              <div>
+                                <p className="text-sm text-gray-700 font-medium">Website</p>
+                                <a href="#" className="text-sm text-blue-600 hover:underline">
+                                  www.{college.name.toLowerCase().replace(/\s+/g, '')}.ac.in
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t">
+                          <h4 className="font-bold text-sm mb-2 text-gray-900">How to Reach</h4>
+                          <div className="space-y-2 text-sm text-gray-600">
+                            <p>• <strong>By Metro:</strong> Nearest metro station is 2 km away</p>
+                            <p>• <strong>By Bus:</strong> Well connected by local buses</p>
+                            <p>• <strong>By Train:</strong> {college.location?.city} Railway Station - 5 km</p>
+                          </div>
+                        </div>
+
+                        <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                          <FiExternalLink className="mr-2" />
+                          Get Directions
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Google Map */}
+                    <div className="lg:col-span-2">
+                      <div className="bg-white border rounded-lg overflow-hidden h-full min-h-[500px]">
+                        {/* Google Maps Embed - Replace with actual Google Maps API */}
+                        <iframe
+                          title="College Location Map"
+                          src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.0!2d72.9!3d19.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA2JzAwLjAiTiA3MsKwNTQnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890`}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0, minHeight: '500px' }}
+                          allowFullScreen=""
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Nearby Places */}
+                  <div className="mt-6 bg-gray-50 border rounded-lg p-6">
+                    <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🏥</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Hospital</p>
+                          <p className="text-xs text-gray-600">City Hospital - 1.5 km</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🏦</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Bank</p>
+                          <p className="text-xs text-gray-600">SBI Bank - 800 m</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🏪</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Market</p>
+                          <p className="text-xs text-gray-600">Shopping Complex - 2 km</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🚉</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Metro Station</p>
+                          <p className="text-xs text-gray-600">Central Metro - 2 km</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">✈️</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Airport</p>
+                          <p className="text-xs text-gray-600">International Airport - 15 km</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🍽️</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">Restaurants</p>
+                          <p className="text-xs text-gray-600">Food Court - 500 m</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
             </div>
           </div>
 
