@@ -713,6 +713,18 @@ const CollegeDetailPage = () => {
           {/* RIGHT SIDEBAR */}
           <aside className="w-80 flex-shrink-0 hidden lg:block">
             <div className="sticky top-24 space-y-4">
+              {/* ADVERTISEMENT 1 */}
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+                <div className="text-center">
+                  <div className="text-4xl mb-3">🎓</div>
+                  <h3 className="font-bold text-lg mb-2">Get Expert Guidance</h3>
+                  <p className="text-sm text-orange-100 mb-4">Connect with our counselors for FREE admission guidance</p>
+                  <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors">
+                    Talk to Expert
+                  </button>
+                </div>
+              </div>
+
               {/* POPULAR COURSES */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Popular Full Time Courses</h3>
