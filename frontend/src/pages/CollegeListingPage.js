@@ -134,17 +134,17 @@ const CollegeListingPage = () => {
       </div>
 
       {/* AUTHOR INFO */}
-      <div className="bg-white py-2 border-b">
+      <div className="bg-white py-1.5 border-b">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+            <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-200">
               <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                <FiUser size={16} />
+                <FiUser size={14} />
               </div>
             </div>
             <div>
-              <Link to="/author/content-team" className="text-sm font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
-              <p className="text-[10px] text-gray-600">Content Curator | Updated 3+ months ago</p>
+              <Link to="/author/content-team" className="text-xs font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
+              <p className="text-[9px] text-gray-600">Content Curator | Updated 3+ months ago</p>
             </div>
           </div>
         </div>
