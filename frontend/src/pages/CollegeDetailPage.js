@@ -247,9 +247,9 @@ const CollegeDetailPage = () => {
 
       {/* LATEST UPDATES */}
       <div className="bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{college.name} Latest Updates and News</h2>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
+          <div className="grid grid-cols-2 gap-3">
             <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
               <div className="flex items-start gap-3">
                 <span className="text-xs font-bold text-blue-600 bg-blue-200 px-2 py-1 rounded flex-shrink-0">12 Dec, 2025</span>
