@@ -61,15 +61,22 @@ const SchoolsPage = () => {
   const totalPages = Math.ceil(schools.length / itemsPerPage);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 pt-2">
+      {/* BREADCRUMB NAVIGATION */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-6 py-2">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">All Schools in India</span>
+          </div>
+        </div>
+      </div>
+
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Top Schools in India 2025</h1>
-          <p className="text-gray-600 text-lg">
-            Discover the best schools in India with comprehensive rankings, fees structure, board results, 
-            and admission details. Find the perfect school for your child's future.
-          </p>
+        <div className="container mx-auto px-6 py-2">
+          <h1 className="text-2xl font-bold text-gray-900">Top Schools in India 2025</h1>
         </div>
       </div>
 
