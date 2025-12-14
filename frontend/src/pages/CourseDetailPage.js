@@ -61,17 +61,22 @@ const CourseDetailPage = () => {
             </div>
 
             {/* Latest Updates Box */}
-            <div className="bg-white rounded-lg p-6 mb-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">B.Tech Computer Science and Engineering Latest Updates</h2>
-              <div className={`text-sm text-gray-700 leading-relaxed ${!showFullContent ? 'line-clamp-3' : ''}`}>
-                <p className="mb-2"><strong className="text-red-600">12 Dec, 2025</strong> BITSAT 2026 Session-1 will be held from 15th to 17th April 2026. Application window will remain open from 15 December 2025 to 16 March 2026.</p>
-                <p className="mb-2"><strong className="text-red-600">10 Dec, 2025</strong> JEE Main 2026 Registration has started. Candidates can apply till January 10, 2026.</p>
+            <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">B.Tech Computer Science and Engineering Latest Updates</h2>
+              <div className={`text-sm text-gray-700 leading-relaxed space-y-2 ${!showFullUpdates ? 'line-clamp-3' : ''}`}>
+                <p><strong className="text-red-600 font-semibold">12 Dec, 2025</strong> BITSAT 2026 Session-1 will be held from 15th to 17th April 2026. Application window will remain open from 15 December 2025 to 16 March 2026.</p>
+                <p><strong className="text-red-600 font-semibold">10 Dec, 2025</strong> JEE Main 2026 Registration has started. Candidates can apply till January 10, 2026.</p>
+                {showFullUpdates && (
+                  <>
+                    <p><strong className="text-red-600 font-semibold">08 Dec, 2025</strong> VITEEE 2026 application process will start from January 2026.</p>
+                  </>
+                )}
               </div>
               <button 
-                onClick={() => setShowFullContent(!showFullContent)}
-                className="text-blue-600 text-sm font-medium mt-2 hover:underline"
+                onClick={() => setShowFullUpdates(!showFullUpdates)}
+                className="text-blue-600 text-sm font-semibold mt-2 hover:underline"
               >
-                {showFullContent ? 'Read Less' : '...Read More'}
+                {showFullUpdates ? 'Read Less' : '...Read More'}
               </button>
             </div>
 
