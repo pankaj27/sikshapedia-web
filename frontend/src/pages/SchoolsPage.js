@@ -806,7 +806,7 @@ const SchoolsPage = () => {
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
                   <p className="text-gray-600">Loading schools...</p>
                 </div>
-              ) : colleges.length === 0 ? (
+              ) : schools.length === 0 ? (
                 <div className="bg-white rounded-lg shadow-md p-12 text-center">
                   <FiSearch className="mx-auto text-gray-400 mb-4" size={48} />
                   <p className="text-gray-600 text-lg mb-2">No schools found</p>
