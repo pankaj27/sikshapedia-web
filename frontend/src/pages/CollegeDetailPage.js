@@ -423,7 +423,7 @@ const CollegeDetailPage = () => {
                     </section>
 
                     {/* FEES - FROM TOC #02 */}
-                    <section id="fees">
+                    <section id="seo-fees">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Fees 2026</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         The fee structure for various courses at {college.name}:
