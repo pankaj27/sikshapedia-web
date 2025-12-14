@@ -867,13 +867,27 @@ const UniversitiesPage = () => {
                                         )}
                                       </div>
                                       <div className="flex-1">
-                                        <div className="flex items-start gap-1.5 mb-0.5">
+                                        <div className="flex items-start gap-1.5 mb-1">
                                           <Link to={`/universities/${university.id}`} className="text-[13px] font-bold text-blue-600 hover:underline leading-tight">
                                             {university.name}
                                           </Link>
+                                          {/* Verified Badge */}
+                                          <span className="inline-flex items-center gap-0.5 bg-blue-50 text-blue-700 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-blue-200">
+                                            <FiCheckCircle size={9} />
+                                            Verified
+                                          </span>
                                           {university.featured && (
                                             <span className="bg-yellow-100 text-yellow-800 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
                                           )}
+                                        </div>
+                                        {/* Badges Row */}
+                                        <div className="flex items-center gap-1 mb-1">
+                                          <span className="inline-flex items-center bg-green-50 text-green-700 text-[9px] px-1.5 py-0.5 rounded-full font-semibold border border-green-200">
+                                            🎓 Admission Open
+                                          </span>
+                                          <span className="inline-flex items-center bg-purple-50 text-purple-700 text-[9px] px-1.5 py-0.5 rounded-full font-semibold border border-purple-200">
+                                            🏆 Top Ranked
+                                          </span>
                                         </div>
                                     <div className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5">
                                       <FiMapPin className="text-orange-600 flex-shrink-0" size={10} />
