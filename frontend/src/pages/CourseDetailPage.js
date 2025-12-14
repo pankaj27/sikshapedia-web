@@ -529,6 +529,75 @@ const CourseDetailPage = () => {
                 ))}
               </div>
 
+              {/* Ask a Question Button */}
+              <div className="text-center mb-8">
+                <button className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold rounded-lg shadow-md transition-colors">
+                  ASK A QUESTION
+                </button>
+              </div>
+
+              {/* Recommendation Section */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 mb-8 border border-gray-200">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">How likely are you to recommend admissionbuddy.co to a friend or a colleague?</h3>
+                <div className="flex justify-center items-center gap-2 mb-4">
+                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                    <button
+                      key={num}
+                      className="w-12 h-12 flex items-center justify-center bg-white hover:bg-orange-600 hover:text-white text-gray-700 font-bold rounded-lg border-2 border-gray-300 hover:border-orange-600 transition-all shadow-sm"
+                    >
+                      {num}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 px-2">
+                  <span className="font-semibold">Not Likely</span>
+                  <span className="font-semibold">Very Likely</span>
+                </div>
+              </div>
+
+              {/* Post a Comment Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Post a Comment</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Name*</label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter your name"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email*</label>
+                    <input 
+                      type="email" 
+                      placeholder="Enter your email"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Comment*</label>
+                    <textarea 
+                      rows="5"
+                      placeholder="Write your comment here..."
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                    ></textarea>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <input 
+                      type="checkbox" 
+                      id="terms"
+                      className="mt-1 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                    />
+                    <label htmlFor="terms" className="text-sm text-gray-600">
+                      I agree to the terms and conditions and privacy policy
+                    </label>
+                  </div>
+                  <button className="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold rounded-lg shadow-md transition-colors">
+                    SUBMIT COMMENT
+                  </button>
+                </div>
+              </div>
             </div>
           </main>
 
