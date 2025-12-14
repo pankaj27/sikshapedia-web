@@ -675,18 +675,18 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
-      {/* Newsletter Subscription */}
-      <section className="py-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
+      {/* Newsletter Subscription - Perfect Button Height */}
+      <section className="py-8 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated with Latest Admissions</h2>
-          <p className="text-xl mb-8 text-orange-100">Get alerts for admission dates, exams, and more</p>
-          <form className="max-w-2xl mx-auto flex gap-3">
+          <h2 className="text-2xl font-bold mb-2">Stay Updated with Latest Admissions</h2>
+          <p className="text-base mb-4 text-orange-100">Get alerts for admission dates, exams, and more</p>
+          <form className="max-w-2xl mx-auto flex gap-2">
             <Input
               type="email"
               placeholder="Enter your email"
-              className="h-12 bg-white text-gray-900"
+              className="h-10 bg-white text-gray-900 text-sm"
             />
-            <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100 px-8">
+            <Button variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100 px-4 h-10 text-sm font-semibold">
               Subscribe
             </Button>
           </form>
