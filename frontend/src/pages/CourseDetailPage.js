@@ -94,13 +94,15 @@ const CourseDetailPage = () => {
               </p>
 
               {/* Table of Contents */}
-              <div className="border border-gray-300 p-4 mb-8">
-                <strong className="text-gray-900 mb-3 block">Table of Contents</strong>
-                <ol className="list-decimal ml-6 space-y-1">
-                  <li><a href="#section-1" onClick={(e) => {e.preventDefault(); scrollToSection('section-1')}} className="text-blue-600 hover:underline text-sm font-semibold">BTech CSE: Course Details</a></li>
-                  <div className="ml-4 text-sm">1.1 <a href="#why-study" onClick={(e) => {e.preventDefault(); scrollToSection('why-study')}} className="text-blue-600 hover:underline font-semibold">Why Study?</a></div>
-                  <li><a href="#section-2" onClick={(e) => {e.preventDefault(); scrollToSection('section-2')}} className="text-blue-600 hover:underline text-sm font-semibold">BTech CSE: Admission Process</a></li>
-                  <div className="ml-4 text-sm space-y-1">
+              <div className="border border-gray-300 bg-gray-50 p-5 mb-8">
+                <strong className="text-gray-900 text-base mb-3 block font-bold">Table of Contents</strong>
+                <ol className="list-decimal ml-5 space-y-2 text-sm">
+                  <li className="font-semibold"><a href="#section-1" onClick={(e) => {e.preventDefault(); scrollToSection('section-1')}} className="text-blue-600 hover:underline">BTech CSE: Course Details</a></li>
+                  <div className="ml-4 space-y-1 font-normal">
+                    <div>1.1 <a href="#why-study" onClick={(e) => {e.preventDefault(); scrollToSection('why-study')}} className="text-blue-600 hover:underline font-semibold">Why Study?</a></div>
+                  </div>
+                  <li className="font-semibold"><a href="#section-2" onClick={(e) => {e.preventDefault(); scrollToSection('section-2')}} className="text-blue-600 hover:underline">BTech CSE: Admission Process</a></li>
+                  <div className="ml-4 space-y-1 font-normal">
                     <div>2.1 <a href="#eligibility" onClick={(e) => {e.preventDefault(); scrollToSection('eligibility')}} className="text-blue-600 hover:underline font-semibold">Eligibility</a></div>
                     <div>2.2 <a href="#admission-process" onClick={(e) => {e.preventDefault(); scrollToSection('admission-process')}} className="text-blue-600 hover:underline font-semibold">Admission Process</a></div>
                     <div className="ml-4 space-y-1">
@@ -113,11 +115,11 @@ const CourseDetailPage = () => {
                       <div>2.3.2 <a href="#cutoffs" onClick={(e) => {e.preventDefault(); scrollToSection('cutoffs')}} className="text-blue-600 hover:underline font-semibold">JEE Mains Cutoffs</a></div>
                     </div>
                   </div>
-                  <li><a href="#syllabus" onClick={(e) => {e.preventDefault(); scrollToSection('syllabus')}} className="text-blue-600 hover:underline text-sm font-semibold">BTech CSE Syllabus</a></li>
-                  <li><a href="#comparison" onClick={(e) => {e.preventDefault(); scrollToSection('comparison')}} className="text-blue-600 hover:underline text-sm font-semibold">BTech CSE Course Comparison</a></li>
-                  <li><a href="#colleges" onClick={(e) => {e.preventDefault(); scrollToSection('colleges')}} className="text-blue-600 hover:underline text-sm font-semibold">BTech CSE Colleges</a></li>
-                  <li><a href="#jobs" onClick={(e) => {e.preventDefault(); scrollToSection('jobs')}} className="text-blue-600 hover:underline text-sm font-semibold">BTech CSE Jobs</a></li>
-                  <li><a href="#faqs" onClick={(e) => {e.preventDefault(); scrollToSection('faqs')}} className="text-blue-600 hover:underline text-sm font-semibold">FAQs</a></li>
+                  <li className="font-semibold"><a href="#syllabus" onClick={(e) => {e.preventDefault(); scrollToSection('syllabus')}} className="text-blue-600 hover:underline">BTech CSE Syllabus</a></li>
+                  <li className="font-semibold"><a href="#comparison" onClick={(e) => {e.preventDefault(); scrollToSection('comparison')}} className="text-blue-600 hover:underline">BTech CSE Course Comparison</a></li>
+                  <li className="font-semibold"><a href="#colleges" onClick={(e) => {e.preventDefault(); scrollToSection('colleges')}} className="text-blue-600 hover:underline">BTech CSE Colleges</a></li>
+                  <li className="font-semibold"><a href="#jobs" onClick={(e) => {e.preventDefault(); scrollToSection('jobs')}} className="text-blue-600 hover:underline">BTech CSE Jobs</a></li>
+                  <li className="font-semibold"><a href="#faqs" onClick={(e) => {e.preventDefault(); scrollToSection('faqs')}} className="text-blue-600 hover:underline">FAQs</a></li>
                 </ol>
               </div>
 
