@@ -33,9 +33,9 @@ const CourseDetailPage = () => {
       </div>
 
       {/* Page Title */}
-      <div className="bg-white py-8 px-8">
-        <div className="container mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900">BTech CSE: Course Details, Admission, Fees, Eligibility, Syllabus, Jobs & Salary</h1>
+      <div className="bg-white py-6">
+        <div className="container mx-auto px-8">
+          <h1 className="text-3xl font-bold text-gray-900 leading-tight">BTech CSE: Course Details, Admission, Fees, Eligibility, Syllabus, Jobs & Salary</h1>
         </div>
       </div>
 
