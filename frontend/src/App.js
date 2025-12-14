@@ -50,8 +50,8 @@ function App() {
             <Route path="/exams" element={<ExamsPage />} />
             <Route path="/exams/:id" element={<ExamDetailPage />} />
             <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/courses/:category" element={<CourseListingPage />} />
-            <Route path="/courses/:id" element={<CourseDetailPage />} />
+            <Route path="/courses/listing/:category" element={<CourseListingPage />} />
+            <Route path="/courses/detail/:id" element={<CourseDetailPage />} />
             <Route path="/dashboard" element={<StudentDashboard />} />
             <Route path="/search" element={<GlobalSearchPage />} />
             <Route path="/eligibility-checker" element={<EligibilityChecker />} />
