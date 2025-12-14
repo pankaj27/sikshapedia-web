@@ -195,8 +195,8 @@ const EligibilityChecker = () => {
   const states = ['All', 'National', 'Maharashtra', 'West Bengal', 'Delhi NCR'];
 
   const filteredExams = examPredictors.filter(exam => {
-    const courseMatch = selectedCourse === 'all' || exam.category === selectedCourse;
-    const stateMatch = selectedState === 'all' || exam.level === selectedState;
+    const courseMatch = selectedCourse === 'all' || exam.category.toLowerCase() === selectedCourse.toLowerCase();
+    const stateMatch = selectedState === 'all' || exam.level.toLowerCase() === selectedState.toLowerCase();
     return courseMatch && stateMatch;
   });
 
