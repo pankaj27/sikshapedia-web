@@ -605,79 +605,79 @@ const CollegeListingPage = () => {
         </div>
       </div>
 
-      {/* COLLEGE LISTING SECTION */}
-      <div className="bg-gray-50 py-6 border-t-4 border-orange-600">
+      {/* COLLEGE LISTING SECTION - Compact */}
+      <div className="bg-gray-50 py-4 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">
-          {/* HORIZONTAL FILTER BAR */}
-          <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-            {/* Primary Filters Row */}
-            <div className="flex items-center gap-2 flex-wrap mb-3">
-              <button className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50">
-                <FiFilter size={14} />
+          {/* HORIZONTAL FILTER BAR - Compact */}
+          <div className="bg-white rounded-lg shadow-sm p-2.5 mb-4">
+            {/* Primary Filters Row - Compact */}
+            <div className="flex items-center gap-1.5 flex-wrap mb-2">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50">
+                <FiFilter size={12} />
                 All Filter
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                 Sub Stream
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-full text-sm font-medium hover:bg-orange-600">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-xs font-medium hover:bg-orange-600">
                 State
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                 Stream
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                 City
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-full text-sm font-medium hover:bg-orange-600">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-xs font-medium hover:bg-orange-600">
                 Degree
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                 Specialization
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                 Program Type
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
               
-              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                 Type Of College
-                <FiChevronDown size={14} />
+                <FiChevronDown size={12} />
               </button>
             </div>
             
             {/* Dotted Separator */}
-            <div className="border-t border-dashed border-gray-300 my-3"></div>
+            <div className="border-t border-dashed border-gray-300 my-2"></div>
             
-            {/* Applied Filters Row */}
-            <div className="flex items-center gap-2 flex-wrap">
+            {/* Applied Filters Row - Compact */}
+            <div className="flex items-center gap-1.5 flex-wrap">
               {/* Example Applied Filters */}
               {filters.type.length > 0 && filters.type.map(type => (
-                <span key={type} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-sm font-medium">
+                <span key={type} className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
                   {type}
                   <button onClick={() => toggleFilter(type)} className="hover:bg-orange-600 rounded-full">
-                    <FiX size={14} />
+                    <FiX size={12} />
                   </button>
                 </span>
               ))}
               
               {filters.state && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
                   {filters.state}
                   <button onClick={() => setFilters({...filters, state: ''})} className="hover:bg-orange-600 rounded-full">
-                    <FiX size={14} />
+                    <FiX size={12} />
                   </button>
                 </span>
               )}
@@ -685,7 +685,7 @@ const CollegeListingPage = () => {
               {(filters.type.length > 0 || filters.state || filters.city || filters.course) && (
                 <button 
                   onClick={clearFilters}
-                  className="text-sm text-gray-600 hover:text-gray-900 font-medium ml-2"
+                  className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1"
                 >
                   Clear All
                 </button>
