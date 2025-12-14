@@ -272,8 +272,8 @@ const CollegeDetailPage = () => {
 
       {/* AUTHOR INFO */}
       <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
               <FiUser size={18} />
             </div>
