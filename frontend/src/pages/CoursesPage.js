@@ -125,8 +125,12 @@ const CoursesPage = () => {
     {
       title: 'Engineering',
       icon: <FiCpu />,
-      courses: ['BE/B.Tech', 'ME/M.Tech', 'Polytechnic'],
-      link: '/courses/engineering'
+      courses: [
+        { name: 'BE/B.Tech', link: '/courses/btech-cse' },
+        { name: 'ME/M.Tech', link: '/courses/engineering-courses-after-12th' },
+        { name: 'Polytechnic', link: '/courses/engineering-courses-after-12th' }
+      ],
+      link: '/courses/engineering-courses-after-12th'
     },
     {
       title: 'Medical',
