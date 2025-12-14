@@ -38,6 +38,13 @@ const CollegeAdmissionPage = () => {
   }, [selectedType, selectedState, selectedCity]);
   
   useEffect(() => {
+    console.log('Admissions data updated:', admissions);
+    if (admissions.length > 0) {
+      console.log('First admission:', JSON.stringify(admissions[0], null, 2));
+    }
+  }, [admissions]);
+  
+  useEffect(() => {
     // Reset city when state changes
     setSelectedCity('all');
   }, [selectedState]);
