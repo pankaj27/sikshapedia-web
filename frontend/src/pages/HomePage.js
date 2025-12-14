@@ -179,31 +179,31 @@ const CollegeDuniaHome = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                   
-                  {/* Institution Info Overlay */}
-                  <div className="absolute bottom-8 left-8 text-white z-20 max-w-2xl">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="px-3 py-1 bg-orange-600 text-white text-xs font-semibold rounded-full uppercase">
+                  {/* Institution Info Overlay - Smaller */}
+                  <div className="absolute bottom-4 left-4 text-white z-20 max-w-xl">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="px-2 py-0.5 bg-orange-600 text-white text-[10px] font-semibold rounded-full uppercase">
                         {slide.type}
                       </span>
-                      <div className="flex items-center gap-1 bg-green-600 px-2 py-1 rounded">
-                        <FiStar className="text-white" size={14} />
-                        <span className="text-sm font-bold">{slide.rating}</span>
-                        <span className="text-xs">({slide.reviews} reviews)</span>
+                      <div className="flex items-center gap-0.5 bg-green-600 px-1.5 py-0.5 rounded">
+                        <FiStar className="text-white" size={10} />
+                        <span className="text-[10px] font-bold">{slide.rating}</span>
+                        <span className="text-[9px]">({slide.reviews})</span>
                       </div>
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg group-hover:text-orange-400 transition-colors">
+                    <h2 className="text-base md:text-lg font-bold mb-0.5 drop-shadow-lg group-hover:text-orange-400 transition-colors">
                       {slide.name}
                     </h2>
-                    <div className="flex items-center gap-2 text-sm text-white/90">
-                      <FiMapPin size={16} />
+                    <div className="flex items-center gap-1 text-[11px] text-white/90">
+                      <FiMapPin size={12} />
                       <span>{slide.location}</span>
                     </div>
                   </div>
                   
-                  {/* Click to View Indicator */}
-                  <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-white text-sm font-semibold flex items-center gap-2">
-                      View Details <FiArrowRight />
+                  {/* Click to View Indicator - Smaller */}
+                  <div className="absolute top-4 right-4 bg-white/10 backdrop-blur-sm px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white text-[11px] font-semibold flex items-center gap-1">
+                      View Details <FiArrowRight size={12} />
                     </span>
                   </div>
                 </div>
