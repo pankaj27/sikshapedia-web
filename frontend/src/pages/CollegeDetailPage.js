@@ -53,6 +53,40 @@ const CollegeDetailPage = () => {
     }
   };
 
+  const handleLike = () => {
+    if (userVote === 'like') {
+      // Remove like
+      setLikes(likes - 1);
+      setUserVote(null);
+    } else if (userVote === 'dislike') {
+      // Change from dislike to like
+      setLikes(likes + 1);
+      setDislikes(dislikes - 1);
+      setUserVote('like');
+    } else {
+      // Add like
+      setLikes(likes + 1);
+      setUserVote('like');
+    }
+  };
+
+  const handleDislike = () => {
+    if (userVote === 'dislike') {
+      // Remove dislike
+      setDislikes(dislikes - 1);
+      setUserVote(null);
+    } else if (userVote === 'like') {
+      // Change from like to dislike
+      setDislikes(dislikes + 1);
+      setLikes(likes - 1);
+      setUserVote('dislike');
+    } else {
+      // Add dislike
+      setDislikes(dislikes + 1);
+      setUserVote('dislike');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center pt-20">
