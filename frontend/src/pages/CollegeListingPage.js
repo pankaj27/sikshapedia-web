@@ -213,6 +213,23 @@ const CollegeListingPage = () => {
           {showContent && (
           <div className="space-y-12">
           
+          {/* INTRO CONTENT */}
+          <section>
+            <div className="text-gray-700 text-sm leading-relaxed">
+              <p className="mb-2">
+                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
+                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
+                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
+                while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
+              </p>
+              <ul className="list-disc list-inside space-y-1 text-sm">
+                <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
+                <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
+                <li><strong>IIT BHU has the best ROI of 239.52%</strong>.</li>
+              </ul>
+            </div>
+          </section>
+          
           {/* HIGHLIGHTS TABLE */}
           <section id="highlights">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Colleges in India Highlights</h2>
