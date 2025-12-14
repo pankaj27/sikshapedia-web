@@ -87,7 +87,7 @@ const CoursesPage = () => {
     {
       title: 'Masters Degree/Post Graduation Courses',
       subtitle: 'Applicable for Degree courses & Diploma courses',
-      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/post-graduation.jpg',
+      image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=400&fit=crop',
       link: '/courses/masters',
       categories: [
         { name: 'Management', count: 217 },
