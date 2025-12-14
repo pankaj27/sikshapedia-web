@@ -298,15 +298,69 @@ const CollegeDetailPage = () => {
             {/* DETAILED SECTIONS */}
             {showContent && (
               <div className="space-y-12 mt-8">
-                {/* ADMISSION DATES */}
-                <section id="admission-dates">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Admission 2026 Dates</h2>
+                {/* COURSES & FEES */}
+                <section id="courses">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Courses & Fees 2026</h2>
                   <p className="text-gray-700 mb-6">
-                    {college.name} offers admission to various programs through national-level entrance exams. 
-                    Here are the important dates:
+                    {college.name} offers various undergraduate and postgraduate programs. The fee structure for different courses is mentioned below:
                   </p>
 
-                  <h3 className="text-xl font-bold mb-3">B.Tech Admission Dates 2026</h3>
+                  <div className="overflow-x-auto mb-6">
+                    <table className="w-full border-collapse border">
+                      <thead>
+                        <tr className="bg-orange-50">
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3">
+                            <Link to="#" className="text-blue-600 hover:underline font-medium">B.Tech</Link>
+                          </td>
+                          <td className="border px-4 py-3 text-sm">4 Years</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">INR {(college.average_fees / 100000).toFixed(2)} Lakhs</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">INR {((college.average_fees * 4) / 100000).toFixed(2)} Lakhs</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3">
+                            <Link to="#" className="text-blue-600 hover:underline font-medium">M.Tech</Link>
+                          </td>
+                          <td className="border px-4 py-3 text-sm">2 Years</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">INR 72,000</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">INR 1.44 Lakhs</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3">
+                            <Link to="#" className="text-blue-600 hover:underline font-medium">MBA</Link>
+                          </td>
+                          <td className="border px-4 py-3 text-sm">2 Years</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">INR 7.68 Lakhs</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">INR 15.36 Lakhs</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Q&A */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                    <p className="text-sm font-bold mb-2">Ques. Is pursuing a degree at {college.name} worth the investment?</p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Ans.</strong> Yes, {college.name} offers quality education with excellent placement opportunities, experienced faculty, and state-of-the-art infrastructure. The ROI is quite competitive.
+                    </p>
+                  </div>
+                </section>
+
+                {/* ADMISSIONS */}
+                <section id="admission">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Admission 2026</h2>
+                  <p className="text-gray-700 mb-6">
+                    {college.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The eligibility criteria and selection process are mentioned below:
+                  </p>
+
+                  <h3 className="text-xl font-bold mb-3">Admission Dates 2026</h3>
                   <div className="overflow-x-auto mb-6">
                     <table className="w-full border-collapse border">
                       <thead>
@@ -328,115 +382,89 @@ const CollegeDetailPage = () => {
                           <td className="border px-4 py-3 text-sm">Exam Date</td>
                           <td className="border px-4 py-3 text-sm font-semibold">April-May 2026</td>
                         </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm">Result Announcement</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">June 2026</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
-                </section>
 
-                {/* COURSES & FEES */}
-                <section id="courses">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Fees 2026</h2>
-                  <p className="text-gray-700 mb-6">
-                    The fee structure for various courses is detailed below:
-                  </p>
-
+                  <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
                   <div className="overflow-x-auto mb-6">
                     <table className="w-full border-collapse border">
                       <thead>
                         <tr className="bg-gray-50">
                           <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3">
-                            <Link to="#" className="text-blue-600 hover:underline font-medium">B.Tech</Link>
-                          </td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR {(college.average_fees / 100000).toFixed(2)} Lakhs</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR {((college.average_fees * 4) / 100000).toFixed(2)} Lakhs</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">B.Tech</td>
+                          <td className="border px-4 py-3 text-sm">10+2 with 75% in PCM</td>
+                          <td className="border px-4 py-3 text-sm">JEE Advanced + JoSAA Counselling</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm font-semibold">M.Tech</td>
+                          <td className="border px-4 py-3 text-sm">BE/B.Tech with 60% marks</td>
+                          <td className="border px-4 py-3 text-sm">GATE + COAP Counselling</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm font-semibold">MBA</td>
+                          <td className="border px-4 py-3 text-sm">Bachelor's degree with 60%</td>
+                          <td className="border px-4 py-3 text-sm">CAT + GD/PI</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
 
                   {/* Q&A */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-                    <p className="text-sm font-bold mb-2">Ques. Is pursuing a degree at {college.name} a good investment?</p>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <p className="text-sm font-bold mb-2">Ques. What is the admission process for {college.name}?</p>
                     <p className="text-sm text-gray-700">
-                      <strong>Ans.</strong> Yes, {college.name} offers quality education with excellent placement opportunities and state-of-the-art infrastructure.
+                      <strong>Ans.</strong> Admission is primarily through entrance exams. The process includes application submission, entrance exam, cutoff determination, counselling, and document verification.
                     </p>
-                  </div>
-                </section>
-
-                {/* RANKING */}
-                <section id="ranking">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Ranking</h2>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">NIRF</td>
-                          <td className="border px-4 py-3 text-sm">2025</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 20) + 1}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-
-                {/* ADMISSION */}
-                <section id="admission">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Admission 2026</h2>
-                  <p className="text-gray-700 mb-6">
-                    {college.name} offers admission through national-level entrance exams.
-                  </p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Selection</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">B.Tech</td>
-                          <td className="border px-4 py-3 text-sm">10+2 with 75% in PCM</td>
-                          <td className="border px-4 py-3 text-sm">JEE Advanced + Counselling</td>
-                        </tr>
-                      </tbody>
-                    </table>
                   </div>
                 </section>
 
                 {/* CUTOFF */}
                 <section id="cutoff">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Cutoff</h2>
-                  <p className="text-gray-700 mb-6">Latest cutoff ranks for various programs:</p>
-                  <div className="overflow-x-auto">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Cutoff 2025</h2>
+                  <p className="text-gray-700 mb-6">
+                    The cutoff varies for different programs and categories. Below are the cutoff ranks for General Category:
+                  </p>
+
+                  <h3 className="text-xl font-bold mb-3">JEE Advanced Cutoff 2025</h3>
+                  <div className="overflow-x-auto mb-6">
                     <table className="w-full border-collapse border">
                       <thead>
                         <tr className="bg-gray-50">
                           <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">2025 Rank</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">2024 Rank</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Opening Rank 2025</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank 2025</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank 2024</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Computer Science</td>
+                          <td className="border px-4 py-3 text-sm">Computer Science Engineering</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-green-600">1</td>
                           <td className="border px-4 py-3 text-sm font-bold text-blue-600">66</td>
                           <td className="border px-4 py-3 text-sm">68</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm">Electrical Engineering</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-green-600">100</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-blue-600">418</td>
+                          <td className="border px-4 py-3 text-sm">464</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm">Mechanical Engineering</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-green-600">800</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-blue-600">1766</td>
+                          <td className="border px-4 py-3 text-sm">1685</td>
                         </tr>
                       </tbody>
                     </table>
@@ -445,71 +473,221 @@ const CollegeDetailPage = () => {
 
                 {/* PLACEMENT */}
                 <section id="placement">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Placement</h2>
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Placement 2024</h2>
                   <p className="text-gray-700 mb-6">
-                    Average package: <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>
+                    As per the {college.name} Placement report, the average package stood at <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA</strong>. 
+                    The institute secured offers from top recruiters across various sectors.
                   </p>
+
                   <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-green-600">₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L</div>
-                      <div className="text-sm text-gray-600">Highest</div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                      <div className="text-3xl font-bold text-green-600 mb-2">₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L</div>
+                      <div className="text-sm text-gray-600">Highest Package</div>
                     </div>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-blue-600">₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'}L</div>
-                      <div className="text-sm text-gray-600">Average</div>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'}L</div>
+                      <div className="text-sm text-gray-600">Average Package</div>
                     </div>
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-purple-600">95%</div>
-                      <div className="text-sm text-gray-600">Placed</div>
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
+                      <div className="text-3xl font-bold text-purple-600 mb-2">95%</div>
+                      <div className="text-sm text-gray-600">Placement Rate</div>
                     </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold mb-3">Placement Statistics</h3>
+                  <div className="overflow-x-auto mb-6">
+                    <table className="w-full border-collapse border">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">2024</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm">Students Participated</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">1979</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm">Companies Participated</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">364</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm">Total Offers</td>
+                          <td className="border px-4 py-3 text-sm font-semibold">1650</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <h3 className="text-xl font-bold mb-3">Top Recruiters</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['Google', 'Microsoft', 'Amazon', 'TCS', 'Infosys', 'Wipro', 'Accenture', 'Deloitte', 'Goldman Sachs', 'Intel', 'Oracle', 'Adobe'].map((company) => (
+                      <span key={company} className="px-4 py-2 bg-gray-100 border rounded-lg text-sm font-medium text-gray-700">
+                        {company}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+
+                {/* RANKING */}
+                <section id="ranking">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Ranking 2025</h2>
+                  <p className="text-gray-700 mb-6">
+                    {college.name} has been ranked by various agencies including NIRF, IIRF, India Today, and more. The ranking details are mentioned below:
+                  </p>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm font-semibold">Collegedunia</td>
+                          <td className="border px-4 py-3 text-sm">2025</td>
+                          <td className="border px-4 py-3 text-sm">B.Tech</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 5) + 1}</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm font-semibold">NIRF</td>
+                          <td className="border px-4 py-3 text-sm">2025</td>
+                          <td className="border px-4 py-3 text-sm">Engineering</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 10) + 1}</td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="border px-4 py-3 text-sm font-semibold">India Today</td>
+                          <td className="border px-4 py-3 text-sm">2025</td>
+                          <td className="border px-4 py-3 text-sm">B.Tech</td>
+                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 15) + 1}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </section>
 
                 {/* SCHOLARSHIP */}
                 <section id="scholarship">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Scholarships</h2>
-                  <p className="text-gray-700 mb-4">Various scholarships are available for deserving students:</p>
-                  <ul className="list-disc list-inside space-y-2 text-gray-700">
-                    <li>Merit Cum Means Scholarship</li>
-                    <li>SC/ST/OBC Scholarships</li>
-                    <li>Institute Specific Scholarships</li>
-                    <li>National Scholarships</li>
-                  </ul>
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Scholarships 2026</h2>
+                  <p className="text-gray-700 mb-6">
+                    {college.name} offers various scholarships to support students financially. The details are mentioned below:
+                  </p>
+
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                      <h3 className="font-bold text-lg mb-2">Merit Cum Means Scholarship</h3>
+                      <p className="text-sm text-gray-700">
+                        Offered to students with annual family income less than INR 4.5 lakhs. Free tuition fee and monthly stipend of INR 1000.
+                      </p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                      <h3 className="font-bold text-lg mb-2">SC/ST/OBC Scholarships</h3>
+                      <p className="text-sm text-gray-700">
+                        Government scholarships available for SC/ST/OBC students based on merit and income criteria.
+                      </p>
+                    </div>
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                      <h3 className="font-bold text-lg mb-2">Institute Scholarships</h3>
+                      <p className="text-sm text-gray-700">
+                        Various institute-specific scholarships including Aditya Birla Scholarship (INR 65,000 per annum) and INSPIRE Scholarship (INR 10,000 per year).
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Q&A */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
+                    <p className="text-sm font-bold mb-2">Ques. How to apply for scholarships at {college.name}?</p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Ans.</strong> Students can apply for scholarships through the institute's portal. Most scholarships are automatically considered based on JEE rank and family income.
+                    </p>
+                  </div>
                 </section>
 
                 {/* FACILITIES */}
                 <section id="facilities">
                   <h2 className="text-3xl font-bold mb-4">{college.name} Campus & Facilities</h2>
+                  <p className="text-gray-700 mb-6">
+                    {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
+                  </p>
+
                   <div className="space-y-4">
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                      <h3 className="font-bold mb-2">Library</h3>
+                      <h3 className="font-bold text-lg mb-2">📚 Library</h3>
                       <p className="text-sm text-gray-700">
-                        Extensive collection of books, journals, and digital resources available.
+                        The library has an extensive collection of over 4 lakh books, journals, and digital resources. Open from 9 AM to 11 PM on weekdays with Wi-Fi enabled reading areas.
                       </p>
                     </div>
                     <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                      <h3 className="font-bold mb-2">Sports</h3>
+                      <h3 className="font-bold text-lg mb-2">⚽ Sports Complex</h3>
                       <p className="text-sm text-gray-700">
-                        Multiple sports facilities including basketball, football, cricket, and more.
+                        Multiple sports facilities including badminton, table tennis, basketball, football, hockey, volleyball, cricket, swimming pool, and gymnasium.
                       </p>
                     </div>
                     <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
-                      <h3 className="font-bold mb-2">Hostel</h3>
+                      <h3 className="font-bold text-lg mb-2">🏠 Hostels</h3>
                       <p className="text-sm text-gray-700">
-                        Separate hostels for boys and girls with mess facilities.
+                        17 hostels with independent mess facilities, recreational areas, and 24/7 security. Hostel fee is approximately INR 17,250 per semester.
                       </p>
                     </div>
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                      <h3 className="font-bold text-lg mb-2">🔬 Laboratories</h3>
+                      <p className="text-sm text-gray-700">
+                        State-of-the-art laboratories with modern equipment for engineering, science, and research activities.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Campus Images */}
+                  <div className="grid grid-cols-3 gap-4 mt-6">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="bg-gray-200 rounded-lg aspect-video flex items-center justify-center border">
+                        <span className="text-gray-500 text-sm">Campus Image {i}</span>
+                      </div>
+                    ))}
                   </div>
                 </section>
 
                 {/* REVIEWS */}
                 <section id="reviews">
-                  <h2 className="text-3xl font-bold mb-4">{college.name} Reviews</h2>
-                  <div className="bg-gray-50 border rounded-lg p-8 text-center">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Student Reviews</h2>
+                  <p className="text-gray-700 mb-6">
+                    Read what students and alumni have to say about {college.name}:
+                  </p>
+
+                  <div className="bg-gray-50 border rounded-lg p-8 text-center mb-6">
+                    <div className="text-6xl mb-4">⭐</div>
                     <p className="text-gray-600 mb-4">Be the first to write a review!</p>
                     <Button className="bg-orange-600 hover:bg-orange-700 text-white">
                       Write a Review
                     </Button>
+                  </div>
+
+                  {/* Sample Review */}
+                  <div className="bg-white border rounded-lg p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
+                        A
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-bold">Anonymous</span>
+                          <div className="flex">
+                            {[...Array(5)].map((_, i) => (
+                              <FiStar key={i} className="fill-yellow-400 text-yellow-400" size={14} />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-700">
+                          Excellent infrastructure and experienced faculty. The placement opportunities are outstanding with top companies visiting the campus.
+                        </p>
+                        <p className="text-xs text-gray-500 mt-2">B.Tech CSE | Class of 2024</p>
+                      </div>
+                    </div>
                   </div>
                 </section>
               </div>
