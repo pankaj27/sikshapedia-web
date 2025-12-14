@@ -180,12 +180,6 @@ const Header = () => {
               )}
             </div>
 
-            {/* Notification Bell */}
-            <button className="p-2 text-white hover:text-orange-400 transition-colors relative">
-              <FiBell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-
             {/* Auth Buttons / User Profile */}
             {user ? (
               <div className="flex items-center gap-3">
