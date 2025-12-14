@@ -150,42 +150,6 @@ const CollegeListingPage = () => {
         </div>
       </div>
 
-      {/* TABLE OF CONTENTS */}
-      <div className="bg-white py-3 border-b">
-        <div className="container mx-auto px-6">
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {[
-                { num: '01', title: 'Colleges in India Highlights', id: 'highlights' },
-                { num: '02', title: 'Top Colleges in India 2025', id: 'top-colleges' },
-                { num: '03', title: 'Govt Colleges in India 2025', id: 'govt-colleges' },
-                { num: '04', title: 'Private Colleges in India 2025', id: 'private-colleges' },
-                { num: '05', title: 'Colleges in India ROI Wise 2025', id: 'roi-colleges' },
-                { num: '06', title: 'Colleges with the Lowest Fees', id: 'lowest-fees' },
-                { num: '07', title: 'Top-Ranked Colleges by Agencies', id: 'agencies' },
-                { num: '08', title: 'Top-Ranked Colleges by NIRF', id: 'nirf' },
-                { num: '09', title: 'Admission 2025', id: 'admission' },
-                { num: '10', title: 'Top Specialisations', id: 'specialisations' },
-                { num: '11', title: 'Top States', id: 'states' },
-                { num: '12', title: 'Top Cities', id: 'cities' },
-                { num: '13', title: 'Entrance Exams', id: 'exams' },
-                { num: '14', title: 'FAQs', id: 'faqs' },
-              ].map((item) => (
-                <a 
-                  key={item.id}
-                  href={`#${item.id}`} 
-                  className="text-sm text-blue-600 hover:underline flex items-start gap-2"
-                >
-                  <span className="font-semibold">{item.num}.</span>
-                  <span>{item.title}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* ALL CONTENT SECTIONS */}
       <div className="bg-white py-4">
         <div className="container mx-auto px-6">
@@ -227,6 +191,40 @@ const CollegeListingPage = () => {
                 <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
                 <li><strong>IIT BHU has the best ROI of 239.52%</strong>.</li>
               </ul>
+            </div>
+          </section>
+
+          {/* TABLE OF CONTENTS */}
+          <section>
+            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+              <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {[
+                  { num: '01', title: 'Colleges in India Highlights', id: 'highlights' },
+                  { num: '02', title: 'Top Colleges in India 2025', id: 'top-colleges' },
+                  { num: '03', title: 'Govt Colleges in India 2025', id: 'govt-colleges' },
+                  { num: '04', title: 'Private Colleges in India 2025', id: 'private-colleges' },
+                  { num: '05', title: 'Colleges in India ROI Wise 2025', id: 'roi-colleges' },
+                  { num: '06', title: 'Colleges with the Lowest Fees', id: 'lowest-fees' },
+                  { num: '07', title: 'Top-Ranked Colleges by Agencies', id: 'agencies' },
+                  { num: '08', title: 'Top-Ranked Colleges by NIRF', id: 'nirf' },
+                  { num: '09', title: 'Admission 2025', id: 'admission' },
+                  { num: '10', title: 'Top Specialisations', id: 'specialisations' },
+                  { num: '11', title: 'Top States', id: 'states' },
+                  { num: '12', title: 'Top Cities', id: 'cities' },
+                  { num: '13', title: 'Entrance Exams', id: 'exams' },
+                  { num: '14', title: 'FAQs', id: 'faqs' },
+                ].map((item) => (
+                  <a 
+                    key={item.id}
+                    href={`#${item.id}`} 
+                    className="text-sm text-blue-600 hover:underline flex items-start gap-2"
+                  >
+                    <span className="font-semibold">{item.num}.</span>
+                    <span>{item.title}</span>
+                  </a>
+                ))}
+              </div>
             </div>
           </section>
           
