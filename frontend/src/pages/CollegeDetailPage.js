@@ -295,9 +295,9 @@ const CollegeDetailPage = () => {
             )}
             </section>
 
-            {/* EXPANDABLE CONTENT */}
+            {/* DETAILED SECTIONS */}
             {showContent && (
-              <div className="space-y-12">
+              <div className="space-y-12 mt-8">
                 {/* ADMISSION DATES */}
                 <section id="admission-dates">
                   <h2 className="text-3xl font-bold mb-4">{college.name} Admission 2026 Dates</h2>
