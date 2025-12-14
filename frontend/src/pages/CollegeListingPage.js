@@ -96,7 +96,7 @@ const CollegeListingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 pt-2">
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-6 py-2">
