@@ -229,6 +229,18 @@ const CollegeAdmissionPage = () => {
     return gradients[index % gradients.length];
   };
 
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return 'TBA';
+      }
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+    } catch (error) {
+      return 'TBA';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
