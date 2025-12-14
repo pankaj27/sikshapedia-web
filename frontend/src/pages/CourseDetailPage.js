@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiChevronRight, FiChevronDown, FiChevronUp, FiMail, FiCheckCircle, FiClock } from 'react-icons/fi';
+import { FiChevronRight, FiChevronDown, FiChevronUp, FiMail, FiCheckCircle } from 'react-icons/fi';
+import { FaHeart } from 'react-icons/fa';
 
 const CourseDetailPage = () => {
   const { id } = useParams();
-  const [showFullContent, setShowFullContent] = useState(false);
+  const [showFullUpdates, setShowFullUpdates] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   const scrollToSection = (sectionId) => {
