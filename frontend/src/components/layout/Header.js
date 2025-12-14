@@ -123,16 +123,6 @@ const Header = () => {
 
           {/* Right Side Actions - Desktop */}
           <div className="hidden lg:flex items-center gap-3 relative">
-            {/* Compare Link */}
-            <Link to="/compare" className="text-sm font-medium text-white hover:text-orange-400 transition-colors px-2">
-              Compare
-            </Link>
-
-            {/* Study Abroad Link */}
-            <Link to="/study-abroad" className="text-sm font-medium text-white hover:text-orange-400 transition-colors px-2">
-              Study Abroad
-            </Link>
-
             {/* Write Review Button */}
             <Link to="/colleges">
               <button className="flex items-center gap-2 px-3 py-1 border-2 border-orange-500 text-orange-400 hover:bg-orange-500/20 rounded-lg transition-colors">
