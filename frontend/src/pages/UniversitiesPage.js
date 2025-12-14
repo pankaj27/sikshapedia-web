@@ -827,7 +827,7 @@ const UniversitiesPage = () => {
                       {/* TABLE HEADER */}
                       <thead className="bg-gray-100 border-b-2 border-gray-300">
                         <tr>
-                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-24">CD Rank</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-24">AB Ranking</th>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800">Colleges</th>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-32">Course Fees</th>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-40">Placement</th>
