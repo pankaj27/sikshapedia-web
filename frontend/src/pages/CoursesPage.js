@@ -185,18 +185,18 @@ const CoursesPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Background */}
-      <section className="relative h-[400px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop)' }}>
+      <section className="relative h-[300px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop)' }}>
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-900/70"></div>
-        <div className="relative container mx-auto px-6 h-full flex flex-col justify-center items-center text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">SEARCH FROM OVER 10000 COURSES IN INDIA</h1>
+        <div className="relative container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-4">SEARCH FROM OVER 10000 COURSES IN INDIA</h1>
           
           {/* Popular Course Pills */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 mb-4">
             {popularCourses.map((course, idx) => (
               <Link 
                 key={idx}
                 to={course.link}
-                className="px-4 py-2 bg-white/90 hover:bg-white rounded-full text-sm font-medium text-gray-800 hover:text-orange-600 transition-all shadow-md"
+                className="px-3 py-1.5 bg-white/90 hover:bg-white rounded-full text-xs font-medium text-gray-800 hover:text-orange-600 transition-all shadow-md"
               >
                 {course.name}
               </Link>
@@ -211,10 +211,10 @@ const CoursesPage = () => {
                 placeholder="Search for courses..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xl"
+                className="w-full px-4 py-2.5 rounded-full text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xl"
               />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-full">
-                <FiSearch size={20} />
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-700 text-white p-2 rounded-full">
+                <FiSearch size={16} />
               </button>
             </div>
           </div>
@@ -222,31 +222,31 @@ const CoursesPage = () => {
       </section>
 
       {/* Level-based Courses Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-3">DON'T KNOW WHAT TO CHOOSE?</h2>
-            <h3 className="text-2xl font-semibold text-orange-600 mb-2">CHOOSE BY YOUR LEVEL</h3>
-            <p className="text-gray-600">Collegedunia.com is an extensive search engine for the students, parents, and education industry players who are seeking information</p>
+      <section className="py-8 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-2">DON'T KNOW WHAT TO CHOOSE?</h2>
+            <h3 className="text-lg font-semibold text-orange-600 mb-1">CHOOSE BY YOUR LEVEL</h3>
+            <p className="text-sm text-gray-600">Extensive search engine for students, parents, and education industry players</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {levelCourses.map((level, idx) => (
-              <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+              <div key={idx} className="bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden">
                 <Link to={level.link}>
-                  <img src={level.image} alt={level.title} className="w-full h-48 object-cover" />
+                  <img src={level.image} alt={level.title} className="w-full h-32 object-cover" />
                 </Link>
-                <div className="p-5">
-                  <Link to={level.link} className="text-xl font-bold text-blue-600 hover:underline mb-2 block">
+                <div className="p-3">
+                  <Link to={level.link} className="text-base font-bold text-blue-600 hover:underline mb-1 block">
                     {level.title}
                   </Link>
-                  <p className="text-sm text-gray-600 mb-4">{level.subtitle}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-xs text-gray-600 mb-3">{level.subtitle}</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {level.categories.slice(0, 6).map((cat, catIdx) => (
                       <Link 
                         key={catIdx}
                         to={`${level.link}/${cat.name.toLowerCase()}`}
-                        className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-gray-100 hover:bg-orange-100 text-gray-700 hover:text-orange-700 rounded-full transition-colors"
+                        className="inline-flex items-center gap-1 text-xs px-2 py-0.5 bg-gray-100 hover:bg-orange-100 text-gray-700 hover:text-orange-700 rounded-full transition-colors"
                       >
                         <span className="font-semibold">{cat.count}</span>
                         <span>{cat.name}</span>
@@ -261,38 +261,38 @@ const CoursesPage = () => {
       </section>
 
       {/* Stream-based Courses Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">CHOOSE BY INTEREST</h2>
-            <p className="text-gray-600">Collegedunia.com is an extensive search engine for the students, parents, and education industry players who are seeking information</p>
+      <section className="py-8 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-1">CHOOSE BY INTEREST</h2>
+            <p className="text-sm text-gray-600">Extensive search engine for students, parents, and education industry players</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {streamCourses.map((stream, idx) => (
-              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <Link to={stream.link} className="flex items-center gap-3 mb-4">
-                  <div className="text-orange-600 text-3xl">
+              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <Link to={stream.link} className="flex items-center gap-2 mb-3">
+                  <div className="text-orange-600 text-xl">
                     {stream.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-blue-600 hover:underline">{stream.title}</h3>
+                  <h3 className="text-base font-bold text-blue-600 hover:underline">{stream.title}</h3>
                 </Link>
-                <hr className="my-4 border-gray-200" />
-                <ul className="space-y-2 mb-4">
+                <hr className="my-2 border-gray-200" />
+                <ul className="space-y-1.5 mb-3">
                   {stream.courses.map((course, courseIdx) => (
                     <li key={courseIdx}>
                       <Link 
                         to={typeof course === 'object' ? course.link : `${stream.link}/${course.toLowerCase().replace(/[\/\s()]/g, '-')}`} 
-                        className="text-sm text-gray-700 hover:text-orange-600 hover:underline"
+                        className="text-xs text-gray-700 hover:text-orange-600 hover:underline"
                       >
                         {typeof course === 'object' ? course.name : course}
                       </Link>
                     </li>
                   ))}
                 </ul>
-                <Link to={stream.link} className="inline-flex items-center gap-1 text-sm text-orange-600 hover:text-orange-700 font-medium">
+                <Link to={stream.link} className="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-700 font-medium">
                   Explore all courses
-                  <FiChevronRight size={16} />
+                  <FiChevronRight size={14} />
                 </Link>
               </div>
             ))}
@@ -301,17 +301,17 @@ const CoursesPage = () => {
       </section>
 
       {/* Trending Courses Section */}
-      <section className="py-16 bg-gradient-to-br from-orange-50 to-blue-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">#TRENDING COURSE SEARCH</h2>
+      <section className="py-6 bg-gradient-to-br from-orange-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-4">
+            <h2 className="text-lg font-bold text-gray-800">#TRENDING COURSE SEARCH</h2>
           </div>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2">
             {popularCourses.map((course, idx) => (
               <Link 
                 key={idx}
                 to={course.link}
-                className="px-5 py-2 bg-white hover:bg-orange-600 text-gray-800 hover:text-white rounded-full text-sm font-medium transition-all shadow-sm hover:shadow-md"
+                className="px-3 py-1.5 bg-white hover:bg-orange-600 text-gray-800 hover:text-white rounded-full text-xs font-medium transition-all shadow-sm hover:shadow-md"
               >
                 {course.name}
               </Link>
