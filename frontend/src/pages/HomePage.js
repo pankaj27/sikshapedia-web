@@ -143,10 +143,29 @@ const CollegeDuniaHome = () => {
           ))}
         </Swiper>
 
-        {/* Search Overlay - Compact */}
+        {/* Search Overlay - Compact with Animated Title */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-center text-white max-w-4xl px-4 w-full">
-            <h1 className="text-2xl md:text-4xl font-bold mb-6 drop-shadow-lg">Find Over 250+ Exams in India</h1>
+            {/* Animated Title */}
+            <div className="mb-2">
+              <h1 className="text-2xl md:text-4xl font-bold drop-shadow-lg">
+                Find Your Dream{' '}
+                <span 
+                  key={currentTextIndex}
+                  className="inline-block text-orange-400 animate-fade-in-up"
+                  style={{
+                    animation: 'fadeInUp 0.5s ease-in-out'
+                  }}
+                >
+                  {rotatingTexts[currentTextIndex]}
+                </span>
+              </h1>
+            </div>
+            
+            {/* Subtitle */}
+            <p className="text-base md:text-lg text-white/90 mb-5 drop-shadow">
+              Explore 250+ Exams, 5000+ Colleges & Universities across India
+            </p>
             
             {/* Single Search Input - Compact */}
             <div className="max-w-3xl mx-auto">
