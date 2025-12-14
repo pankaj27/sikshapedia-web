@@ -708,7 +708,7 @@ const CollegeDetailPage = () => {
                   </div>
                 </section>
               </div>
-            )}
+            </div>
           </div>
 
           {/* RIGHT SIDEBAR */}
