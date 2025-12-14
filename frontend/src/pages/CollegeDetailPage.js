@@ -931,6 +931,19 @@ const CollegeDetailPage = () => {
           {/* RIGHT SIDEBAR */}
           <aside className="w-80 flex-shrink-0 hidden lg:block">
             <div className="sticky top-24 space-y-4">
+              {/* APPLY NOW BUTTON */}
+              <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-lg p-6 text-white shadow-lg">
+                <div className="text-center">
+                  <h3 className="font-bold text-xl mb-2">Apply to {college.name}</h3>
+                  <p className="text-sm text-orange-100 mb-4">Start your admission process now</p>
+                  <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2">
+                    <FiCheckCircle size={18} />
+                    <span>Apply Now</span>
+                  </button>
+                  <p className="text-xs text-orange-100 mt-3">Application Deadline: March 2026</p>
+                </div>
+              </div>
+
               {/* ADVERTISEMENT 1 */}
               <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
                 <div className="text-center">
