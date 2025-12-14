@@ -245,17 +245,12 @@ const CollegeAdmissionPage = () => {
 
   const formatDate = (dateString) => {
     try {
-      console.log('Formatting date:', dateString, typeof dateString);
       const date = new Date(dateString);
-      console.log('Parsed date:', date, 'isNaN:', isNaN(date.getTime()));
       if (isNaN(date.getTime())) {
         return 'TBA';
       }
-      const formatted = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
-      console.log('Formatted:', formatted);
-      return formatted;
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
     } catch (error) {
-      console.error('Date formatting error:', error);
       return 'TBA';
     }
   };
