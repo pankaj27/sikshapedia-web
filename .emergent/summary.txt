@@ -1,146 +1,171 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to redesign their 'sikshapedia-web' project into a college portal exactly replicating . The project then pivoted to implementing a comprehensive set of features from a user-provided  document. This involved building out a full-stack application with a student dashboard, earnings/referral system, financial services, study materials, counseling, premium subscriptions, and an institution portal.
+The user's goal is to build a college portal that replicates . The initial focus was on the homepage and listing pages.
 
-After implementing the backend features, the user's focus shifted entirely to perfecting the homepage UI, requesting it to be an exact, pixel-perfect replica of . This has involved numerous iterative design changes to the search banner, header, footer, and content cards based on continuous user feedback via screenshots.
+In the current session, the user's primary focus has been to build a pixel-perfect replica of the  college/university detail page. This involved creating a new, highly detailed page from scratch with numerous features, including a sticky navigation menu, complex sidebars, multiple content sections, interactive elements, and an embedded map. This task has superseded all previous priorities, including the conversion of static HTML files.
 
 PRODUCT REQUIREMENTS:
-1.  Implement all features from the  (Phases 1-4).
-2.  Redesign the entire homepage UI to be a pixel-perfect replica of . This includes:
-    -   Header: Color, transparency, logo, and menu items.
-    -   Search Banner: Layout, input fields, and buttons.
-    -   Content Cards (Colleges, Schools): Layout, height, badges (Verified, Featured, Admission Open), logos, and action buttons (Apply Now, Download Brochure).
-    -   Carousel navigation arrows.
-    -   Quick Links: Icons and items.
-    -   Popular Places: Custom icons/images for cities.
-3.  Integrate a payment gateway (Stripe) for the premium subscription feature.
-4.  Use specific logos and icons provided by the user for the header, footer, and city landmarks.
+1.  Create a  that is a close replica of the  university detail page.
+2.  The detail page must include a sticky navigation menu that links to different content sections on the page (e.g., Info, Courses, Placement).
+3.  Implement two distinct content areas:
+    *   An SEO-focused content area, structured by a Table of Contents, which is hidden by default behind a Read More button.
+    *   A main College Information area, which is always visible and whose content corresponds to the sticky navigation menu tabs.
+4.  The detail page must have a complex sidebar containing advertisements, lists of popular courses, similar colleges, and latest news.
+5.  Implement interactive features such as a like/dislike button, a campus video player, a Q&A section, and an FAQ section.
+6.  Add a detailed location section at the bottom of the page with an embedded Google Map and address information.
+7.  Continuously refine all pages (listing and detail) to match user-provided screenshots and references, focusing on layout, spacing, and component styling.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The project is a full-stack college portal (React, FastAPI, MongoDB) with a rich feature set. The backend is complete, including all APIs from the  document and a fully functional Stripe payment integration for premium subscriptions.
-
-The frontend has undergone extensive and iterative UI development to mirror . The homepage features a redesigned search banner, professional icons across all sections, custom SVG images for city landmarks, and highly detailed college/school cards with badges and action buttons. The header and footer now use custom logos provided by the user. The application is functional, with all frontend pages connected to live backend data.
+The application is a full-stack portal with a React frontend and FastAPI backend.
+-   **Header:** Features icons for navigation links and a target icon for Admission Goal.
+-   **College Listing Page ():** The layout has been refined. It now includes breadcrumb navigation. The main content is hidden behind a Read More button, which is preceded by a 3-line preview. The height of advertisement sections and other components has been adjusted based on user feedback.
+-   **College Detail Page ():** A new, highly complex page has been built to replicate the  structure. It is the main focus of recent work. It features:
+    -   A header with college info, ratings, and affiliation/recognition badges.
+    -   A sticky navigation menu for different content sections.
+    -   Two separate content areas: a hidden SEO section (with Read More) and an always-visible main information section.
+    -   A detailed sidebar with advertisements, popular courses, similar colleges, and news.
+    -   Interactive elements: functional like/dislike buttons, a campus video placeholder, Q&A, and FAQ sections.
+    -   A comprehensive location section with an embedded Google Map at the bottom.
+-   **Schools Listing Page ():** Exists and has breadcrumb navigation but its core structure is outdated compared to the College Listing Page.
+-   **Universities Detail Page:** Does not exist.
 
 **Last working item**:
-- **Last item agent was working**: Replicating the header design of . After multiple user-guided iterations on transparency and color (black, transparent black), the agent analyzed the live  site and determined its header is solid white with dark text. The agent was about to implement this final design.
+- **Last item agent was working**: The user requested that after clicking the Read More button on the , the button should move to the end of the expanded content block and change its text to Read Less. The agent acknowledged the request and was about to implement this change.
 - **Status**: IN PROGRESS
 - **Agent Testing Done**: N
 - **Which testing method agent to use?**: screenshot tool
 - **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
-- **Issue 1: Header Design Does Not Match collegedunia.com (P0)**
-  - Description: The user is not satisfied with the current header's transparency and color. The last request was to make it identical to .
-  - Attempted fixes: The agent has tried a solid black header, a 40% transparent header, a 30% transparent header, and an 80% transparent header. The user rejected all of them, leading the agent to inspect the live site.
+- **Issue 1: Relocate Read Less Button on Detail Page (P0)**
+  - Description: On the , the Read Less button should appear at the very bottom of the SEO content block after it has been expanded, not at the top.
   - Next debug checklist:
-    1.  Edit .
-    2.  Change the header background class from  to a solid  and add a .
-    3.  Change all header text, links, and icons from  to a dark color like  or  for visibility.
-    4.  Update the header logo from the white version () back to the colored version ().
-    5.  Take a screenshot using the  to confirm the new design with the user.
-  - Why fix this issue and what will be achieved with the fix?: This is the current highest-priority task from the user to achieve the desired look and feel of the website.
+    1.  In , modify the JSX structure.
+    2.  Place the Read More/Read Less button component *after* the conditionally rendered content block, but still within the same parent container that controls the  state.
+    3.  Ensure the button's visibility and text change logic () remains correct.
+    4.  Verify with a screenshot.
+  - Why fix this issue and what will be achieved with the fix?: To match the user's required UI flow and improve user experience.
   - Status: IN PROGRESS
-  - Is recurring issue?: Y
+  - Is recurring issue?: N
   - Should Test frontend/backend/both after fix?: Frontend
-  - Blocked on other issue: None
+  - Blocked on other issue: None.
+
+- **Issue 2: Replicate  and  listing pages (P1)**
+  - Description: The  is outdated, and no  exists. Both should have the same structure as the latest .
+  - Next debug checklist:
+    1.  Copy the final code from .
+    2.  Overwrite  with the copied code.
+    3.  Create  with the same code.
+    4.  Update the data fetching logic and breadcrumbs in each new page for  and .
+    5.  Verify routes in .
+  - Why fix this issue and what will be achieved with the fix?: To create a consistent user experience across all listing pages.
+  - Status: NOT STARTED
+  - Is recurring issue?: N
+  - Should Test frontend/backend/both after fix?: Frontend
+  - Blocked on other issue: None, but priority has been shifted by the user to the detail page.
 
 **In progress Task List**:
 None.
 
 **Upcoming and Future Tasks**
+- **Upcoming Tasks:**
+  - (P0) **Replicate Detail Page for Schools/Universities:** Adapt the newly created  to create  and . This will require parameterizing the component to fetch and display data for different entity types.
 - **Future Tasks:**
-  - (P1) **Comprehensive Testing**: Perform a full-stack, end-to-end regression test of all implemented features (Phases 1-4 and Payments) using the testing agent to ensure application stability.
-  - (P2) **Deployment Preparation**: Clean up the codebase, remove unused files (e.g., old dashboard components like ), and prepare the application for a production deployment.
+  - (P1) **Convert HTML templates to React:** This major task from the previous session (converting 10 static HTML files from ) has been deprioritized by the user's focus on replicating the live site. It should be considered backlogged unless raised again by the user.
+  - (P2) **Comprehensive E2E Testing:** Once the UI is stable, perform a full end-to-end regression test of all application features.
+  - (P3) **Codebase Cleanup:** Remove any old, unused React components and pages.
 
 **Completed work in this session**
-- **Stripe Payment Gateway Integration (DONE)**:
-  - Integrated Stripe for premium subscriptions using the  library.
-  - Implemented backend endpoints (, , ).
-  - Created a new  and  to handle the frontend payment flow, including polling for success.
-  - Verified the entire flow with the frontend testing agent.
-- **Homepage UI Recreation (Pixel-Perfect Matching) (DONE)**:
-  - **Search Banner**: Redesigned to have a single search input and a Need Counselling button, with the background container removed.
-  - **Professional Icons**: Replaced all emoji icons project-wide with professional  for a modern look.
-  - **Content Cards**: Iteratively redesigned College and School cards to include logos, verified/featured/admission badges, and correctly styled Apply Now & Download Brochure buttons, matching the reference design after multiple user corrections.
-  - **Carousel Navigation**: Added and styled carousel navigation arrows for all relevant homepage sections.
-  - **Custom Assets**: Integrated user-provided SVG images for the Popular Places city landmarks and custom PNG logos for the header and footer.
-  - **Header/Menu Updates**: Removed banner navigation arrows, updated the Select Goal dropdown menu, and iterated through multiple header background styles (transparent, black) based on user feedback.
+- **College Detail Page () Creation:**
+  - Built a highly detailed page from scratch to mirror .
+  - Implemented a sticky navigation menu with smooth-scrolling links.
+  - **Crucially, structured the page into two distinct content areas:** one for SEO (hidden behind a Read More button) and one for always-visible college information.
+  - Added Recognized by and Affiliated to badges in the header and as a detailed section.
+  - Created a complex sidebar with multiple advertisement placeholders and sections for Popular Courses, Similar Colleges, and Latest News.
+  - Implemented interactive features: working Like/Dislike buttons, a campus video placeholder, Q&A section, and an expandable FAQ section.
+  - Added a full-featured location section with an embedded Google Map at the page bottom.
+- **College Listing Page () Refinements:**
+  - Added breadcrumb navigation.
+  - Re-structured the content to show a 3-line preview before the Read More button.
+  - Adjusted component heights and spacing for a more compact design.
+- **Header UI Tweaks:**
+  - Added icons to Compare and Study Abroad links.
+  - Replaced the Admission Goal emoji with a  icon.
 
 **Earlier issues found/mentioned but not fixed**
-None.
+- **Issue 1: Listing Page Content Ambiguity**
+  - The user's contradictory requests for the Read More button's default state on the *listing page* (sometimes wanting it expanded, sometimes collapsed) were never formally resolved by asking for a definitive choice. The agent implemented the last request (3-line preview), but the underlying ambiguity remains a risk for future rework.
+  - Why to solve this issue and what will be achieved with this?: To prevent future cycles of rework and user frustration.
+  - Should Test frontend/backend/both after fix: Frontend.
 
 **Known issue recurrence from previous fork**
-- **Issue recurrence in previous fork**: The z-index of the Explore dropdown was a recurring issue.
-- **Recurrence count**: 2+
-- **Status**: RESOLVED.
+- **Issue recurrence in previous fork:**
+  - **Critical Misunderstanding of Content Structure:** The agent repeatedly failed to understand the user's distinction between the hidden SEO Content Area and the always-visible College Information Area on the detail page. This required multiple clarification cycles and significant rework. This is a high-risk area for regression.
+  - **Pixel-Perfect Replication:** The agent required multiple attempts to replicate the  to the user's satisfaction, indicating a continued difficulty in matching the reference designs on the first try.
+- **Recurrence count:** The content structure confusion occurred at least twice in this session.
+- **Status:** RESOLVED (for now), but the new agent must be highly cautious.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Frontend**: React, Tailwind CSS, React Router, Axios, Swiper.js for carousels.
-- **Backend**: FastAPI, Pydantic.
+- **Frontend**: React, Tailwind CSS, React Router, Axios, .
+- **Backend**: FastAPI.
 - **Database**: MongoDB.
-- **Payments**: Stripe, integrated via the  library.
-- **Architecture**: Full-stack application with a focus on iterative, user-driven UI design.
+- **State Management**:  for managing UI state (e.g., Read More toggle, like/dislike counts).
+- **UI/UX**: Sticky navigation, smooth scrolling to element IDs, conditional rendering for complex layouts, CSS  for text truncation.
 
 **key DB schema**
-- **payment_transactions**:  (Implicitly created by the Stripe integration logic).
+- No changes in this session.
 
 **changes in tech stack**
-- Added  library for Stripe payment processing.
+- No changes in this session.
 
 **All files of reference**
-- **Key Modified Files**:
-  - : The central file for almost all recent UI changes.
-  - : The file for the current pending task.
-  - : Updated with complete Stripe payment logic.
-  - : Rewritten to support the new payment flow.
-- **New Files**:
-  - : Handles post-payment confirmation.
-  - All new logo and SVG files under .
+- **Key Modified/Created Files**:
+  - : Newly created and the primary focus of this session. It contains the entire structure and logic for the college detail page. It is over 1000 lines long.
+  - : Modified to include breadcrumbs and a new Read More preview format.
+  - : Modified to add new icons to menu items.
+  - : Modified to add breadcrumbs.
 
 **Areas that need refactoring**:
-- Obsolete components like  and  should be removed to avoid confusion, as they have been replaced by newer versions.
+- ** is critically in need of refactoring.** It is a monolithic component exceeding 1000 lines. It should be broken down into smaller, manageable components for the sidebar, sticky navigation, each content section (Courses, Placements, etc.), and interactive elements (Q&A, FAQ). Proposing this to the user after the current feature set is stable would significantly improve maintainability.
 
 **key api endpoints**
-- : (POST) Creates a new Stripe checkout session.
-- : (GET) Polls the status of a payment session.
-- : (POST) Handles asynchronous payment success events from Stripe.
+- : Now actively used by the new  to fetch data for a specific college.
 
 **Critical Info for New Agent**
-- **The user is extremely detail-oriented and demands a pixel-perfect replication of .** Expect multiple iterations on single UI elements. Do not mark a UI task as complete without explicit user approval.
-- **Your immediate task is to change the header to be solid white with dark text.** This is based on the agent's analysis of the live  site after previous attempts at transparency were rejected.
-- **The user often communicates with annotated screenshots.** Analyze these images carefully to understand the exact change being requested.
-- **Clarify ambiguity.** The previous agent was confused between different arrow buttons (Apply Now vs. Carousel). If a request is unclear, ask for clarification to avoid rework.
-- A frontend restart (frontend: ERROR (not running)
-frontend: started) was needed at one point to show button changes, which might indicate a hot-reloading or caching issue. Be mindful of this if your changes don't appear immediately.
+- **PRIORITY #1 IS THE DETAIL PAGE:** The user's entire focus is on perfecting the  to match . Do not switch to other tasks (like the old HTML conversion) unless explicitly told to.
+- **BEWARE THE TWO CONTENT AREAS:** The most critical and confusing part of the  is the separation between the hidden **SEO Content** (behind Read More) and the always-visible **College Information** (linked by the sticky nav). Double-check any changes against this logic, as the previous agent struggled with it repeatedly.
+- **REFACTOR :** This file is unsustainably large. After completing the current user request, you should propose a plan to break it down into smaller components.
+- **VERIFY WITH SCREENSHOTS:** The user demands a pixel-perfect replica and provides feedback based on visual discrepancies. Use the screenshot tool frequently to confirm changes.
 
 **documents created in this job**
 None.
 
 **Last 10 User Messages and any pending user messages**
-1.  **user**:  - (Completed) Agent implemented a 40% transparent header.
-2.  **user**:  - (Completed) Agent implemented a solid black header.
-3.  **user**:  - (Completed) Agent updated the black header to use the white version of the logo.
-4.  **user**:  - (Completed) Agent implemented a 30% transparent header.
-5.  **user**:  - (Completed) Agent implemented an 80% transparent header (20% opacity).
-6.  **user**:  - **(In Progress)** This is the current, active request. The agent has performed the check and is ready to implement the solid white design.
-7.  **user**:  - (Completed) Agent updated the footer with a new logo.
-8.  **user**:  - (Completed) User pointed out an accidental change; agent reverted it successfully.
-9.  **user**:  - (Completed) User requested changes to a header dropdown menu.
-10. **user**:  - (Completed) Agent removed the navigation arrows from the main hero banner carousel.
+1.  **user:** Clarifies that the SEO content area and the college information area are different and should be separate. (Completed, but was a recurring issue).
+2.  **user:** Asks for the Read More button to move to the end of the content after expansion. (In Progress - This is the current task).
+3.  **user**: Provides a screenshot to show how the sidebar should be styled. (Completed).
+4.  **user**: Points out that advertisement areas were missing from the sidebar. (Completed).
+5.  **user**: Requests the addition of like/dislike, campus video, Q&A, and FAQ sections. (Completed).
+6.  **user**: Requests an Apply Now button in the sidebar. (Completed).
+7.  **user**: Asks how the like/dislike functionality works, prompting the agent to implement the state logic. (Completed).
+8.  **user**: Requests a Google Maps location section at the end of the page. (Completed).
+9.  **user**: Asks to add Recognized by and Affiliated to information. (Completed).
+10. **user**: Requests the Table of Contents to be moved above the video in the SEO content area. (Completed).
 
 **Project Health Check:**
-- **Broken**: No. The application is fully functional.
-- **Mocked**: No. The Stripe integration is live with test keys, and all other features are connected to the backend.
+- **Broken**: No.
+- **Mocked**: The data on the  is currently hardcoded placeholder data. It is not fetched from the backend, except for the college name.
 
 **3rd Party Integrations**
-- **Stripe (Payments)** — Integrated via the  library, using a test key from the environment.
+- **Stripe (Payments)** — Previously integrated.
+- **Google Maps** — An  embed has been added to the .
 
 **Testing status**
-- **Testing agent used after significant changes**: YES, the frontend testing agent was used successfully to verify the Stripe payment flow.
+- **Testing agent used after significant changes**: NO
 - **Troubleshoot agent used after agent stuck in loop**: NO
 - **Test files created**: None.
 - **Known regressions**: None.
@@ -150,4 +175,6 @@ None.
 - **Password**: 
 
 **What agent forgot to execute**
-The agent initially misinterpreted several of the user's highly specific UI requests (e.g., confusing the 'Apply Now' button arrow with carousel navigation arrows), leading to multiple rounds of corrections and user frustration. The core issue was not reading the user's intent with pixel-perfect precision from the start.</analysis>
+- The agent repeatedly misunderstood the core architectural requirement of separating the two main content areas on the , leading to significant rework and user frustration.
+- The agent initially forgot to add advertisement areas to the sidebar after being asked to redesign it based on a screenshot.
+- The agent never explicitly resolved the ambiguity around the Read More button's default state on the , which was a carry-over issue. It simply implemented the latest user request.</analysis>
