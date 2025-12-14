@@ -857,7 +857,7 @@ const CollegeListingPage = () => {
                                   <div className="max-w-md">
                                     <div className="flex items-start gap-2 mb-1">
                                       {/* College Logo */}
-                                      <div className="w-10 h-10 rounded overflow-hidden border border-gray-200 flex-shrink-0">
+                                      <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-300 flex-shrink-0">
                                         {college.images?.[0] ? (
                                           <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
                                         ) : (
