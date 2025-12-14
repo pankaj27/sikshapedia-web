@@ -11,7 +11,7 @@ const Header = () => {
   const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
   const [goalDropdownOpen, setGoalDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGoal, setSelectedGoal] = useState('Select Admission Goal');
+  const [selectedGoal, setSelectedGoal] = useState('Admission Goal');
   const exploreButtonRef = useRef(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
 
