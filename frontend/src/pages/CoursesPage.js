@@ -53,7 +53,7 @@ const CoursesPage = () => {
     {
       title: 'Diploma Courses',
       subtitle: 'Applicable for Diploma courses',
-      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/diploma.jpg',
+      image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=400&fit=crop',
       link: '/courses/diploma',
       categories: [
         { name: 'Management', count: 79 },
