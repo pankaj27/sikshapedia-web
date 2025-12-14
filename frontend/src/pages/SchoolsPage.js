@@ -867,57 +867,41 @@ const SchoolsPage = () => {
                                         )}
                                       </div>
                                       <div className="flex-1">
-                                        <div className="flex items-start gap-1.5 mb-1">
-                                          <Link to={`/schools/${school.id}`} className="text-[13px] font-bold text-blue-600 hover:underline leading-tight">
-                                            {school.name}
-                                          </Link>
-                                          {/* Verified Badge */}
-                                          <span className="inline-flex items-center gap-0.5 bg-blue-50 text-blue-700 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-blue-200">
-                                            <FiCheckCircle size={9} />
-                                            Verified
-                                          </span>
-                                          {school.featured && (
-                                            <span className="bg-yellow-100 text-yellow-800 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
-                                          )}
-                                        </div>
-                                        {/* Top Ranked Badge */}
-                                        <div className="flex items-center gap-1 mb-1">
-                                          <span className="inline-flex items-center bg-purple-50 text-purple-700 text-[9px] px-1.5 py-0.5 rounded-full font-semibold border border-purple-200">
-                                            🏆 Top Ranked
-                                          </span>
-                                        </div>
-                                    <div className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5">
-                                      <FiMapPin className="text-orange-600 flex-shrink-0" size={10} />
+                                        <Link to={`/schools/${school.id}`} className="text-sm font-semibold text-blue-600 hover:underline leading-tight block mb-1">
+                                          {school.name}
+                                        </Link>
+                                    <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-1">
+                                      <FiMapPin className="text-orange-600 flex-shrink-0" size={11} />
                                       <span>{school.location?.city}, {school.location?.state}</span>
                                       <span className="text-gray-400">|</span>
-                                      <span className="text-blue-600 font-medium">{school.type}</span>
+                                      <span className="text-gray-700 font-medium">{school.type}</span>
                                     </div>
-                                    <div className="text-[9px] text-gray-600 mb-2">{school.accreditation || 'NAAC A+'} Approved</div>
-                                    {/* Buttons Row */}
-                                    <div className="flex items-center flex-wrap gap-2 mb-1">
-                                      <Link to={`/schools/${school.id}`}>
-                                        <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-xs font-semibold h-8 px-4 rounded-md shadow-sm">
-                                          Apply Now
-                                        </Button>
+                                    <div className="text-[10px] text-gray-600 mb-2">{school.accreditation || 'NAAC A+'}+UGC+AICTE Approved</div>
+                                    {/* Action Links Row */}
+                                    <div className="flex items-center flex-wrap gap-3 mb-1">
+                                      <Link to={`/schools/${school.id}`} className="inline-flex items-center gap-1 text-orange-600 hover:text-orange-700 text-xs font-medium">
+                                        <span>→</span>
+                                        <span>Apply Now</span>
                                       </Link>
-                                      <Button variant="outline" className="text-xs font-semibold h-8 px-4 rounded-md border-2 border-blue-600 text-blue-600 hover:bg-blue-50">
-                                        Download Brochure
-                                      </Button>
-                                      {/* Admission Open Badge beside buttons */}
-                                      <span className="inline-flex items-center bg-green-50 text-green-700 text-[9px] px-2 py-1 rounded-full font-semibold border border-green-200">
+                                      <Link to={`/schools/${school.id}`} className="inline-flex items-center gap-1 text-green-600 hover:text-green-700 text-xs font-medium">
+                                        <span>↓</span>
+                                        <span>Download Brochure</span>
+                                      </Link>
+                                      {/* Admission Open Badge */}
+                                      <span className="inline-flex items-center bg-green-50 text-green-700 text-[9px] px-1.5 py-0.5 rounded font-medium border border-green-300">
                                         🎓 Admission Open
                                       </span>
                                     </div>
                                     <div className="mt-1">
-                                      <Button 
-                                        size="sm" 
-                                        variant="ghost" 
-                                        className={`text-[10px] h-6 px-2 ${isInCompare ? 'bg-orange-100 text-orange-700' : 'text-gray-600'}`}
-                                        onClick={() => toggleCompare(school.id)}
-                                      >
-                                        {isInCompare ? <FiCheckCircle className="mr-1" size={10} /> : null}
-                                        {isInCompare ? 'Added' : 'Add To Compare'}
-                                      </Button>
+                                      <label className="inline-flex items-center gap-1.5 text-[11px] text-gray-600 cursor-pointer hover:text-gray-900">
+                                        <input
+                                          type="checkbox"
+                                          checked={isInCompare}
+                                          onChange={() => toggleCompare(school.id)}
+                                          className="w-3.5 h-3.5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                                        />
+                                        <span>Add To Compare</span>
+                                      </label>
                                     </div>
                                       </div>
                                     </div>
