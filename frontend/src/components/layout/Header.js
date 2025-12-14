@@ -335,54 +335,6 @@ const Header = () => {
       )}
     </div>
 
-    {/* Secondary Navigation Bar - Below Header */}
-    <div className="hidden lg:block w-screen border-t border-white/20 bg-black/40 -mx-6">
-      <div>
-        <div className="flex items-center gap-6 py-2 pl-6 pr-6 overflow-x-auto" spellCheck="false">
-          <Link to="/courses" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            All Courses
-          </Link>
-          <Link to="/courses?type=btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            B.Tech
-          </Link>
-          <Link to="/courses?type=mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            MBA
-          </Link>
-          <Link to="/courses?type=mtech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            M.Tech
-          </Link>
-          <Link to="/courses?type=mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            MBBS
-          </Link>
-          <Link to="/courses?type=bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            B.Com
-          </Link>
-          <Link to="/courses?type=bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            B.Sc
-          </Link>
-          <Link to="/courses?type=bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            B.Sc (Nursing)
-          </Link>
-          <Link to="/courses?type=ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            BA
-          </Link>
-          <Link to="/courses?type=bba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            BBA
-          </Link>
-          <Link to="/courses?type=bca" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            BCA
-          </Link>
-          <span className="text-gray-400 mx-2">|</span>
-          <Link to="/compare" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            Compare
-          </Link>
-          <Link to="/study-abroad" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-            Study Abroad
-          </Link>
-        </div>
-      </div>
-    </div>
-
   </header>
   );
 };
