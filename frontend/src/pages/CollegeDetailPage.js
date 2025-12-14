@@ -111,41 +111,57 @@ const CollegeDetailPage = () => {
             </div>
 
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-3">{college.name}</h1>
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                <div className="flex items-center gap-1">
-                  <FiMapPin className="text-orange-600" size={14} />
-                  <span>{college.location?.city}, {college.location?.state}</span>
-                </div>
-                <span>|</span>
-                <span className="font-medium">{college.type}</span>
-                <span>|</span>
-                <span>Estd. {college.established || 'N/A'}</span>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <FiStar 
-                        key={i} 
-                        className={`${i < Math.floor(college.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                        size={18}
-                      />
-                    ))}
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h1 className="text-3xl font-bold text-gray-900 mb-3">{college.name}</h1>
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                      <FiMapPin className="text-orange-600" size={14} />
+                      <span>{college.location?.city}, {college.location?.state}</span>
+                    </div>
+                    <span>|</span>
+                    <span className="font-medium">{college.type}</span>
+                    <span>|</span>
+                    <span>Estd. {college.established || 'N/A'}</span>
                   </div>
-                  <span className="font-bold text-lg">{college.rating || '4.5'}</span>
-                  <span className="text-gray-600 text-sm">({college.reviews || 344} Reviews)</span>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <FiStar 
+                            key={i} 
+                            className={`${i < Math.floor(college.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                            size={18}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-bold text-lg">{college.rating || '4.5'}</span>
+                      <span className="text-gray-600 text-sm">({college.reviews || 344} Reviews)</span>
+                    </div>
+                    
+                    <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                      <FiCheckCircle className="mr-2" size={16} />
+                      Apply Now
+                    </Button>
+                    <Button variant="outline">
+                      <FiDownload className="mr-2" size={16} />
+                      Download Brochure
+                    </Button>
+                  </div>
                 </div>
-                
-                <Button className="bg-orange-600 hover:bg-orange-700 text-white">
-                  <FiCheckCircle className="mr-2" size={16} />
-                  Apply Now
-                </Button>
-                <Button variant="outline">
-                  <FiDownload className="mr-2" size={16} />
-                  Download Brochure
-                </Button>
+
+                {/* LIKE/DISLIKE */}
+                <div className="flex items-center gap-2 ml-4">
+                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <span className="text-xl">👍</span>
+                    <span className="text-sm font-semibold text-gray-700">245</span>
+                  </button>
+                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <span className="text-xl">👎</span>
+                    <span className="text-sm font-semibold text-gray-700">12</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
