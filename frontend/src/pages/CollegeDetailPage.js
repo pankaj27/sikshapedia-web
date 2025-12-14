@@ -385,7 +385,7 @@ const CollegeDetailPage = () => {
                   {/* ALL DETAILED CONTENT SECTIONS - NOW INSIDE EXPANDABLE AREA */}
                   <div className="space-y-8">
                     {/* ADMISSION DATES */}
-                    <section id="admission-dates">
+                    <section id="seo-admission-dates">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026 Dates</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         {college.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The important dates are:
