@@ -304,15 +304,15 @@ const SchoolsPage = () => {
                     { name: 'BITS Pilani', seats: '-', fees: '₹23.9 Lakh', placement: '₹18.20 LPA', recruiters: 'Google, DE Shaw, Qualcomm, Adobe, Microsoft' },
                     { name: 'IIT BHU, Varanasi', seats: '1563', fees: '₹8.35 Lakh', placement: '₹20.00 LPA', recruiters: 'Oracle, Google, Flipkart, Sprinklr, Texas Instruments' },
                     { name: 'IIT Hyderabad', seats: '595', fees: '₹9.17 Lakh', placement: '₹21.00 LPA', recruiters: 'Microsoft, Nvidia, Qualcomm, TSMC, Amazon, Adobe' },
-                  ].map((college, idx) => (
+                  ].map((item, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
                       <td className="px-3 py-2">
-                        <Link to={`/schools/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{school.name}</Link>
+                        <Link to={`/schools/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{item.name}</Link>
                       </td>
-                      <td className="px-3 py-2 text-sm text-gray-700">{school.seats}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{school.fees}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{school.placement}</td>
-                      <td className="px-3 py-2 text-xs text-gray-600">{school.recruiters}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{item.seats}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{item.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{item.placement}</td>
+                      <td className="px-3 py-2 text-xs text-gray-600">{item.recruiters}</td>
                     </tr>
                   ))}
                 </tbody>
