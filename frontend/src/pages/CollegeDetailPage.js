@@ -219,81 +219,101 @@ const CollegeDetailPage = () => {
         <div className="flex gap-8">
           {/* LEFT CONTENT */}
           <div className="flex-1">
-            {/* INFO SECTION */}
-            <section id="info">
-            {/* INTRO PREVIEW - 3 LINES */}
-            <div className="mb-4">
-              <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
-                {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
-                As per the data, the college is one of the preferred institutions for students. 
-                {college.name} Ranking is <strong>#{Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies. 
-                {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>. 
-                Admission is based on national-level entrance exams followed by counselling. 
-                As per {college.name} Placements, the average package was <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>. 
-                The top recruiters included leading companies from various sectors.
-              </p>
-            </div>
-
-            {/* READ MORE BUTTON */}
-            <div className="text-center mb-6">
-              <button
-                onClick={() => setShowContent(!showContent)}
-                className="inline-flex items-center gap-2 px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium rounded-full"
-              >
-                <span>{showContent ? 'Read Less' : 'Read More'}</span>
-                {showContent ? <FiChevronUp size={18} /> : <FiChevronDown size={18} />}
-              </button>
-            </div>
-
-            {/* EXPANDABLE CONTENT */}
-            {showContent && (
-              <div className="space-y-8">
-                {/* FULL INTRO PARAGRAPHS */}
-                <div>
-                  <p className="text-gray-800 leading-relaxed mb-4">
-                    {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
-                    As per the data, the college is one of the preferred institutions for students. 
-                    {college.name} Ranking is <strong>#{Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies.
-                  </p>
-                  <p className="text-gray-800 leading-relaxed mb-4">
-                    {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>. 
-                    Admission is based on national-level entrance exams followed by counselling.
-                  </p>
-                  <p className="text-gray-800 leading-relaxed mb-4">
-                    As per {college.name} Placements, the average package was <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>. 
-                    The top recruiters included leading companies from various sectors.
-                  </p>
-                </div>
-
-                {/* VIDEO */}
-                <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center border">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-orange-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <div className="w-0 h-0 border-l-8 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
-                    </div>
-                    <p className="text-sm text-gray-600">Video: Complete Guide to {college.name}</p>
-                  </div>
-                </div>
-
-                {/* TABLE OF CONTENTS */}
-                <div className="bg-gray-50 rounded-lg p-6 border">
-                  <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
-                  <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                    {tableOfContents.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => scrollToSection(item.id)}
-                        className="text-left text-sm text-blue-600 hover:underline flex gap-2"
-                      >
-                        <span className="font-semibold flex-shrink-0">{item.num}.</span>
-                        <span>{item.title}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+            {/* SEO CONTENT SECTION (Collapsible) */}
+            <div className="mb-8 pb-8 border-b">
+              {/* INTRO PREVIEW - 3 LINES */}
+              <div className="mb-4">
+                <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
+                  {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
+                  As per the data, the college is one of the preferred institutions for students. 
+                  {college.name} Ranking is <strong>#{Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies. 
+                  {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>. 
+                  Admission is based on national-level entrance exams followed by counselling. 
+                  As per {college.name} Placements, the average package was <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>. 
+                  The top recruiters included leading companies from various sectors.
+                </p>
               </div>
-            )}
-            </section>
+
+              {/* READ MORE BUTTON */}
+              <div className="text-center mb-6">
+                <button
+                  onClick={() => setShowContent(!showContent)}
+                  className="inline-flex items-center gap-2 px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium rounded-full"
+                >
+                  <span>{showContent ? 'Read Less' : 'Read More'}</span>
+                  {showContent ? <FiChevronUp size={18} /> : <FiChevronDown size={18} />}
+                </button>
+              </div>
+
+              {/* SEO EXPANDABLE CONTENT */}
+              {showContent && (
+                <div className="space-y-8">
+                  {/* FULL INTRO PARAGRAPHS */}
+                  <div>
+                    <p className="text-gray-800 leading-relaxed mb-4">
+                      {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
+                      As per the data, the college is one of the preferred institutions for students. 
+                      {college.name} Ranking is <strong>#{Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies.
+                    </p>
+                    <p className="text-gray-800 leading-relaxed mb-4">
+                      {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>. 
+                      Admission is based on national-level entrance exams followed by counselling.
+                    </p>
+                    <p className="text-gray-800 leading-relaxed mb-4">
+                      As per {college.name} Placements, the average package was <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>. 
+                      The top recruiters included leading companies from various sectors.
+                    </p>
+                  </div>
+
+                  {/* VIDEO */}
+                  <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center border">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-orange-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <div className="w-0 h-0 border-l-8 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
+                      </div>
+                      <p className="text-sm text-gray-600">Video: Complete Guide to {college.name}</p>
+                    </div>
+                  </div>
+
+                  {/* TABLE OF CONTENTS */}
+                  <div className="bg-gray-50 rounded-lg p-6 border">
+                    <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+                    <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+                      {tableOfContents.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollToSection(item.id)}
+                          className="text-left text-sm text-blue-600 hover:underline flex gap-2"
+                        >
+                          <span className="font-semibold flex-shrink-0">{item.num}.</span>
+                          <span>{item.title}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* COLLEGE MENU INFORMATION (Always Visible) */}
+            <div className="space-y-12">
+              {/* INFO SECTION */}
+              <section id="info">
+                <h2 className="text-3xl font-bold mb-4">About {college.name}</h2>
+                <p className="text-gray-800 leading-relaxed mb-4">
+                  {college.name} is a premier {college.type} institution established in <strong>{college.established || 'N/A'}</strong> and located in {college.location?.city}, {college.location?.state}.
+                </p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <h3 className="font-bold mb-3">Key Highlights</h3>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li>• <strong>Type:</strong> {college.type}</li>
+                    <li>• <strong>Established:</strong> {college.established || 'N/A'}</li>
+                    <li>• <strong>Location:</strong> {college.location?.city}, {college.location?.state}</li>
+                    <li>• <strong>Average Fees:</strong> ₹{(college.average_fees / 100000).toFixed(2)} Lakhs per year</li>
+                    <li>• <strong>Rating:</strong> {college.rating || '4.5'}/5 ({college.reviews || 344} Reviews)</li>
+                  </ul>
+                </div>
+              </section>
 
             {/* DETAILED SECTIONS */}
             {showContent && (
