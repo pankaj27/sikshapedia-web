@@ -405,8 +405,68 @@ const CourseDetailPage = () => {
                 </table>
               </div>
 
+              {/* BTech CSE vs BCA */}
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">BTech CSE vs BCA</h3>
+              <div className="overflow-x-auto mb-8">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-blue-50">
+                      <th className="border border-gray-300 py-3 px-4 text-left font-bold text-gray-800 text-sm">Parameters</th>
+                      <th className="border border-gray-300 py-3 px-4 text-left font-bold text-gray-800 text-sm">BTech CSE</th>
+                      <th className="border border-gray-300 py-3 px-4 text-left font-bold text-gray-800 text-sm">BCA</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Full Form</td><td className="border border-gray-300 py-2 px-4 text-sm">Bachelor of Technology in Computer Science Engineering</td><td className="border border-gray-300 py-2 px-4 text-sm">Bachelor of Computer Applications</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Domain</td><td className="border border-gray-300 py-2 px-4 text-sm">Technological Science</td><td className="border border-gray-300 py-2 px-4 text-sm">Computer Application</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Examination Type</td><td className="border border-gray-300 py-2 px-4 text-sm">Semester Exam</td><td className="border border-gray-300 py-2 px-4 text-sm">Semester Exam</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Eligibility Criteria</td><td className="border border-gray-300 py-2 px-4 text-sm">10+2 with minimum 55% marks</td><td className="border border-gray-300 py-2 px-4 text-sm">50% marks in 10+2 in relevant stream</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Course Fees</td><td className="border border-gray-300 py-2 px-4 text-sm">INR 2 lakhs - INR 10 lakhs</td><td className="border border-gray-300 py-2 px-4 text-sm">INR 2 to INR 3 lakhs</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Average Salary</td><td className="border border-gray-300 py-2 px-4 text-sm">INR 1.5 lakhs – INR 4.5 lakhs</td><td className="border border-gray-300 py-2 px-4 text-sm">INR 4 lakhs</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* BTech CSE Colleges */}
+              <h2 id="colleges" className="text-2xl font-bold text-gray-900 mb-4 mt-8">BTech CSE Colleges</h2>
+              <p className="text-gray-700 text-sm mb-4 leading-relaxed">BTech cse is one of the most pursued courses in India. Check out the top btech cse colleges in the table below.</p>
+              <div className="overflow-x-auto mb-8">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-blue-50">
+                      <th className="border border-gray-300 py-3 px-4 text-left font-bold text-gray-800 text-sm">NIRF Ranking</th>
+                      <th className="border border-gray-300 py-3 px-4 text-left font-bold text-gray-800 text-sm">College Name</th>
+                      <th className="border border-gray-300 py-3 px-4 text-left font-bold text-gray-800 text-sm">Average Fees</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">1</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/1" className="text-blue-600 hover:underline">IIT Madras</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 75,116</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">2</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/2" className="text-blue-600 hover:underline">IIT New Delhi</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 220,300</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">3</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/3" className="text-blue-600 hover:underline">IIT Bombay</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 228,000</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">4</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/4" className="text-blue-600 hover:underline">IIT Kanpur</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 215,600</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">5</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/5" className="text-blue-600 hover:underline">IIT Kharagpur</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 82,070</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">6</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/6" className="text-blue-600 hover:underline">IIT Roorkee</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 221,700</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">7</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/7" className="text-blue-600 hover:underline">IIT Guwahati</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 219,350</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">8</td><td className="border border-gray-300 py-2 px-4 text-sm"><Link to="/colleges/8" className="text-blue-600 hover:underline">IIT Hyderabad</Link></td><td className="border border-gray-300 py-2 px-4 text-sm">INR 222,995</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* BTech CSE Jobs */}
+              <h2 id="jobs" className="text-2xl font-bold text-gray-900 mb-4 mt-8">BTech CSE Jobs</h2>
+              <p className="text-gray-700 text-sm mb-4 leading-relaxed">BTech CSE graduates have excellent job opportunities in the IT and software industry. The top job profiles include:</p>
+              <ul className="space-y-2 mb-6 list-disc ml-5">
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Software Developer</strong> - Design, develop and maintain software applications</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Data Analyst</strong> - Analyze and interpret complex data sets</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Game Developer</strong> - Create engaging video games and applications</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Networking Engineer</strong> - Design and maintain network infrastructure</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Database Administrator</strong> - Manage and secure database systems</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Testing Engineer</strong> - Test and ensure quality of software products</li>
+              </ul>
+              <p className="text-gray-700 text-sm mb-8 leading-relaxed">Top recruiting companies include TCS, Infosys, Wipro, Hexaware, Syntel, Microsoft, Amazon, Google, and many more leading tech companies.</p>
+
               {/* FAQs */}
-              <h2 id="faqs" className="text-2xl font-bold text-gray-900 mb-6">BTech CSE: FAQs</h2>
+              <h2 id="faqs" className="text-2xl font-bold text-gray-900 mb-6 mt-8">BTech CSE: FAQs</h2>
               <div className="space-y-3">
                 {[
                   { q: 'Is BTech CSE easy?', a: 'Students who have passion for programming languages and want to work in the related field, pursuing BTech in CSE will seemingly be easy for them.' },
