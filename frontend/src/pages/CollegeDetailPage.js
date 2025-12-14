@@ -286,8 +286,8 @@ const CollegeDetailPage = () => {
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex gap-6">
           {/* LEFT CONTENT */}
           <div className="flex-1">
             {/* SEO CONTENT SECTION (Collapsible) */}
