@@ -1080,9 +1080,9 @@ const UniversitiesPage = () => {
             <input 
               type="email" 
               placeholder="Enter your email" 
-              className="flex-1 px-3 py-2 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex-1 px-3 py-2 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-white h-10"
             />
-            <Button className="bg-white text-orange-600 hover:bg-gray-100 font-semibold px-4 py-2 text-sm">
+            <Button className="bg-white text-orange-600 hover:bg-gray-100 font-semibold px-4 text-sm h-10">
               Subscribe
             </Button>
           </div>
