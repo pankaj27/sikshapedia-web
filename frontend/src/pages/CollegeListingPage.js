@@ -97,6 +97,17 @@ const CollegeListingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-2">
+      {/* BREADCRUMB NAVIGATION */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-6 py-2">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">All Colleges in India</span>
+          </div>
+        </div>
+      </div>
+
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-6 py-2">
