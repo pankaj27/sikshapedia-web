@@ -9,7 +9,7 @@ const CoursesPage = () => {
 
   // Popular courses for hero section
   const popularCourses = [
-    { name: 'BE/B.TECH COURSES', link: '/courses/btech' },
+    { name: 'BE/B.TECH COURSES', link: '/courses/btech-cse' },
     { name: 'MBBS COURSES', link: '/courses/mbbs' },
     { name: 'B.SC COURSES', link: '/courses/bsc' },
     { name: 'B.COM COURSES', link: '/courses/bcom' },
