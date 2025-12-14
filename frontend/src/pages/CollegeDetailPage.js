@@ -444,7 +444,7 @@ const CollegeDetailPage = () => {
                 {/* ADMISSIONS */}
                 <section id="admission">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     {college.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The eligibility criteria and selection process are mentioned below:
                   </p>
 
@@ -520,7 +520,7 @@ const CollegeDetailPage = () => {
                 {/* CUTOFF */}
                 <section id="cutoff">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff 2025</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     The cutoff varies for different programs and categories. Below are the cutoff ranks for General Category:
                   </p>
 
@@ -562,7 +562,7 @@ const CollegeDetailPage = () => {
                 {/* PLACEMENT */}
                 <section id="placement">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Placement 2024</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     As per the {college.name} Placement report, the average package stood at <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA</strong>. 
                     The institute secured offers from top recruiters across various sectors.
                   </p>
@@ -621,7 +621,7 @@ const CollegeDetailPage = () => {
                 {/* RANKING */}
                 <section id="ranking">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Ranking 2025</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     {college.name} has been ranked by various agencies including NIRF, IIRF, India Today, and more. The ranking details are mentioned below:
                   </p>
 
@@ -662,7 +662,7 @@ const CollegeDetailPage = () => {
                 {/* SCHOLARSHIP */}
                 <section id="scholarship">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships 2026</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     {college.name} offers various scholarships to support students financially. The details are mentioned below:
                   </p>
 
@@ -699,7 +699,7 @@ const CollegeDetailPage = () => {
                 {/* FACILITIES */}
                 <section id="facilities">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
                   </p>
 
@@ -758,7 +758,7 @@ const CollegeDetailPage = () => {
                 {/* Q&A SECTION */}
                 <section id="qna">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Questions & Answers</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     Have questions about {college.name}? Ask here and get answers from students, alumni, and experts.
                   </p>
 
@@ -840,7 +840,7 @@ const CollegeDetailPage = () => {
                 {/* FAQ SECTION */}
                 <section id="faq">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Frequently Asked Questions (FAQs)</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     Find answers to commonly asked questions about {college.name}:
                   </p>
 
@@ -902,7 +902,7 @@ const CollegeDetailPage = () => {
                 {/* REVIEWS */}
                 <section id="reviews">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Student Reviews</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     Read what students and alumni have to say about {college.name}:
                   </p>
 
@@ -984,7 +984,7 @@ const CollegeDetailPage = () => {
                 {/* LOCATION & MAP */}
                 <section id="location">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Location & Address</h2>
-                  <p className="text-gray-700 mb-6">
+                  <p className="text-gray-700 text-sm mb-4">
                     Find {college.name} on the map and get complete address details:
                   </p>
 
