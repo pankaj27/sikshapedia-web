@@ -506,7 +506,7 @@ const CollegeDetailPage = () => {
                     </section>
 
                     {/* PLACEMENT - FROM TOC #06 */}
-                    <section id="placement-seo">
+                    <section id="seo-placement">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         As per {college.name} Placement report, the average package stood at INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA.
