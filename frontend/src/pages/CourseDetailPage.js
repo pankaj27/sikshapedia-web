@@ -593,6 +593,87 @@ const CourseDetailPage = () => {
           </aside>
         </div>
       </div>
+
+      {/* Advertisement Section - Full Width */}
+      <div className="bg-gray-100 py-8">
+        <div className="container mx-auto px-8">
+          <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-lg p-8 text-center">
+            <h3 className="text-2xl font-bold text-white mb-2">Write a Review and Win Upto ₹500*</h3>
+            <p className="text-white mb-4">Get Upto ₹500* as a gift voucher on Amazon</p>
+            <button className="bg-white text-orange-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+              WRITE A REVIEW
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Full-Width College Cards Section */}
+      <div className="bg-white py-12">
+        <div className="container mx-auto px-8">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">Bachelor of Technology [B.Tech] (Computer Science and Engineering) Colleges IN INDIA</h2>
+            <Link to="/colleges" className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-2">
+              View All
+              <FiChevronRight size={16} />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              { name: 'IIT Roorkee - Indian Institute of Technology - [IITR]', location: 'Roorkee, Uttarakhand', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.24 L', rating: '10.0' },
+              { name: 'IIT Guwahati - Indian Institute of Technology - [IITG]', location: 'Guwahati, Assam', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.44 L', rating: '10.0' },
+              { name: 'IIT Hyderabad - Indian Institute of Technology - [IITH]', location: 'Hyderabad, Telangana', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.5 L', rating: '10.0' },
+              { name: 'IIT Bombay - Indian Institute of Technology - [IITB]', location: 'Mumbai, Maharashtra', course: 'BE/B.Tech', duration: '4 Yrs', fee: '2.36 L', rating: '10.0' }
+            ].map((college, idx) => (
+              <div key={idx} className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                {/* Top Image Section */}
+                <div className="relative h-40 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500">
+                  <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+                    <button className="text-xs bg-white hover:bg-gray-50 px-3 py-1.5 rounded-md text-gray-800 font-semibold shadow-sm">+ FOLLOW</button>
+                    <button className="text-white hover:text-red-400 transition-colors">
+                      <FaHeart className="w-5 h-5" />
+                    </button>
+                  </div>
+                  {/* College Logo and Info */}
+                  <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-10 h-10 bg-white rounded-full flex-shrink-0 shadow-md"></div>
+                      <div className="flex-1 min-w-0">
+                        <Link to={`/colleges/${idx + 1}`} className="text-white text-sm font-bold hover:underline block mb-0.5 leading-tight">{college.name}</Link>
+                        <div className="text-xs text-white/95 flex items-center flex-wrap gap-1">
+                          <span className="truncate">{college.location}</span>
+                          <span>|</span>
+                          <span>AICTE</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Bottom Info Section */}
+                <div className="p-4 bg-gradient-to-b from-orange-50 to-white">
+                  <div className="flex justify-between items-start mb-2.5">
+                    <div>
+                      <Link to={`/colleges/${idx + 1}/courses`} className="text-sm font-bold text-gray-900 hover:text-orange-600">{college.course}</Link>
+                      <span className="text-xs text-gray-600 ml-1">({college.duration})</span>
+                    </div>
+                    <span className="bg-orange-600 text-white text-sm font-bold px-2.5 py-1 rounded shadow-sm">{college.rating}</span>
+                  </div>
+                  <div className="mb-3">
+                    <span className="text-base font-bold text-gray-900">₹ {college.fee}</span>
+                    <span className="text-xs text-gray-600 ml-1">first year fees</span>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <Link to={`/colleges/${idx + 1}/courses`} className="text-xs text-blue-600 hover:text-blue-700 font-bold uppercase tracking-wide">VIEW ALL COURSES & FEES</Link>
+                    <button className="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded shadow-sm transition-colors">
+                      Download Brochure
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
