@@ -104,7 +104,7 @@ const CoursesPage = () => {
     {
       title: 'Ph.D Research Courses',
       subtitle: 'Applicable for Degree courses',
-      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/doctoratemphil.jpg',
+      image: 'https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=600&h=400&fit=crop',
       link: '/courses/phd',
       categories: [
         { name: 'Science', count: 67 },
