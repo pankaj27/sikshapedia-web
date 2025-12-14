@@ -169,14 +169,25 @@ const CourseDetailPage = () => {
               </div>
 
               {/* Why Study Section */}
-              <h3 id="why-study" className="text-xl font-bold text-gray-900 mb-4">Why Study BTech CSE?</h3>
-              <p className="text-gray-700 text-sm mb-4">There are various advantages of studying BTech CSE. Check them in the points below.</p>
+              <h3 id="why-study" className="text-xl font-bold text-gray-900 mb-4 mt-6">Why Study BTech CSE?</h3>
+              <p className="text-gray-700 text-sm mb-3 leading-relaxed">There are various advantages of studying BTech CSE. Check them in the points below.</p>
               <ul className="space-y-3 mb-8">
-                <li className="text-gray-700 text-sm"><strong>Good Compensation</strong> - Candidates having a BTech CSE degree, earn a good amount of compensation. The average annual salary of a BTech CSE graduate is INR 3 lakhs.</li>
-                <li className="text-gray-700 text-sm"><strong>Multiple Opportunities</strong> - There are a lot of opportunities for BTech CSE graduates. Candidates can work in renowned job positions such as Game developer, Database administrator, Software and Testing engineers, etc.</li>
-                <li className="text-gray-700 text-sm"><strong>Learning of various necessary skills</strong> - the BTech CSE course trains candidates with multiple skills which are necessary to learn, including website and software development, programming languages, etc.</li>
-                <li className="text-gray-700 text-sm"><strong>Candidates are trained to work in various centers</strong> - Candidates pursuing the BTech cse course get trained to work in various centers including software firms, banking sector, MNCs, etc.</li>
-                <li className="text-gray-700 text-sm"><strong>Job Security</strong> - Candidates holding the BTech cse degree have great job security. In this digital world, the value of a computer expert who has a degree is extreme. Hence job security is assured here.</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Good Compensation</strong> - Candidates having a BTech CSE degree, earn a good amount of compensation. The average annual salary of a BTech CSE graduate is INR 3 lakhs.</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Multiple Opportunities</strong> - There are a lot of opportunities for BTech CSE graduates. Candidates can work in renowned job positions such as Game developer, Database administrator, Software and Testing engineers, etc.</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Learning of various necessary skills</strong> - the BTech CSE course trains candidates with multiple skills which are necessary to learn, including website and software development, programming languages, etc.</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Candidates are trained to work in various centers</strong> - Candidates pursuing the BTech cse course get trained to work in various centers including software firms, banking sector, MNCs, etc.</li>
+                <li className="text-gray-700 text-sm leading-relaxed"><strong className="font-semibold">Job Security</strong> - Candidates holding the BTech cse degree have great job security. In this digital world, the value of a computer expert who has a degree is extreme. Hence job security is assured here.</li>
+              </ul>
+
+              {/* Who Should Study Section */}
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Who Should Study BTech CSE?</h3>
+              <ul className="space-y-3 mb-8">
+                <li className="text-gray-700 text-sm leading-relaxed">Candidates who aspire to pursue a career in the Computer science field can pursue this program.</li>
+                <li className="text-gray-700 text-sm leading-relaxed">Students interested in software development, troubleshooting problems and creating software that can be used must surely go for this degree.</li>
+                <li className="text-gray-700 text-sm leading-relaxed">Candidates who aspire to explore the programming field and also desire expertise in computer science engineering can pursue this program.</li>
+                <li className="text-gray-700 text-sm leading-relaxed">Students interested in Maths and Formulas must go for BTech CSE.</li>
+                <li className="text-gray-700 text-sm leading-relaxed">Students must have attention to detail in order to study BTech CSE.</li>
+                <li className="text-gray-700 text-sm leading-relaxed">Individuals, a plan to be an engineer can pursue the BTech cse course. The demand for Computer Science Engineers is very high.</li>
               </ul>
 
               {/* Section 2: Admission Process */}
