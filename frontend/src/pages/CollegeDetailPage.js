@@ -791,6 +791,18 @@ const CollegeDetailPage = () => {
                 </div>
               </div>
 
+              {/* ADVERTISEMENT 3 */}
+              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+                <div className="text-center">
+                  <div className="text-4xl mb-3">💼</div>
+                  <h3 className="font-bold text-lg mb-2">Career Counseling</h3>
+                  <p className="text-sm text-green-100 mb-4">Get personalized career guidance from experts</p>
+                  <button className="w-full bg-white text-green-600 hover:bg-green-50 font-bold py-2.5 rounded transition-colors">
+                    Book Session
+                  </button>
+                </div>
+              </div>
+
               {/* LATEST NEWS */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Latest News</h3>
