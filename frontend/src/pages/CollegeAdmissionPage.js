@@ -342,7 +342,7 @@ const CollegeAdmissionPage = () => {
                   <div className={`h-40 bg-gradient-to-br ${getGradient(index)} relative`}>
                     <div className="absolute top-2 left-2">
                       <div className="bg-white/95 px-2 py-1 rounded text-xs font-semibold text-gray-700">
-                        {new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                        {formatDate(admission.admission_date)}
                       </div>
                     </div>
                     <div className="absolute bottom-2 left-2 right-2">
