@@ -9,12 +9,12 @@ const CoursesPage = () => {
 
   // Popular courses for hero section
   const popularCourses = [
-    { name: 'BE/B.TECH COURSES', link: '/courses/btech-cse' },
-    { name: 'MBBS COURSES', link: '/courses/mbbs' },
-    { name: 'B.SC COURSES', link: '/courses/bsc' },
-    { name: 'B.COM COURSES', link: '/courses/bcom' },
-    { name: 'BA COURSES', link: '/courses/ba' },
-    { name: 'MBA/PGDM COURSES', link: '/courses/mba' }
+    { name: 'BE/B.TECH COURSES', link: '/courses/detail/btech-cse' },
+    { name: 'MBBS COURSES', link: '/courses/detail/mbbs' },
+    { name: 'B.SC COURSES', link: '/courses/detail/bsc' },
+    { name: 'B.COM COURSES', link: '/courses/detail/bcom' },
+    { name: 'BA COURSES', link: '/courses/detail/ba' },
+    { name: 'MBA/PGDM COURSES', link: '/courses/detail/mba' }
   ];
 
   // Level-based courses
