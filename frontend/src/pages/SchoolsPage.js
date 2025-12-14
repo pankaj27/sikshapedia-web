@@ -880,11 +880,8 @@ const SchoolsPage = () => {
                                             <span className="bg-yellow-100 text-yellow-800 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
                                           )}
                                         </div>
-                                        {/* Badges Row */}
+                                        {/* Top Ranked Badge */}
                                         <div className="flex items-center gap-1 mb-1">
-                                          <span className="inline-flex items-center bg-green-50 text-green-700 text-[9px] px-1.5 py-0.5 rounded-full font-semibold border border-green-200">
-                                            🎓 Admission Open
-                                          </span>
                                           <span className="inline-flex items-center bg-purple-50 text-purple-700 text-[9px] px-1.5 py-0.5 rounded-full font-semibold border border-purple-200">
                                             🏆 Top Ranked
                                           </span>
@@ -896,7 +893,8 @@ const SchoolsPage = () => {
                                       <span className="text-blue-600 font-medium">{school.type}</span>
                                     </div>
                                     <div className="text-[9px] text-gray-600 mb-2">{school.accreditation || 'NAAC A+'} Approved</div>
-                                    <div className="flex flex-wrap gap-2 mb-1">
+                                    {/* Buttons Row */}
+                                    <div className="flex items-center flex-wrap gap-2 mb-1">
                                       <Link to={`/schools/${school.id}`}>
                                         <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-xs font-semibold h-8 px-4 rounded-md shadow-sm">
                                           Apply Now
@@ -905,6 +903,10 @@ const SchoolsPage = () => {
                                       <Button variant="outline" className="text-xs font-semibold h-8 px-4 rounded-md border-2 border-blue-600 text-blue-600 hover:bg-blue-50">
                                         Download Brochure
                                       </Button>
+                                      {/* Admission Open Badge beside buttons */}
+                                      <span className="inline-flex items-center bg-green-50 text-green-700 text-[9px] px-2 py-1 rounded-full font-semibold border border-green-200">
+                                        🎓 Admission Open
+                                      </span>
                                     </div>
                                     <div className="mt-1">
                                       <Button 
