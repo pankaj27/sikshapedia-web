@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight, FiSearch, FiChevronDown } from 'react-icons/fi';
+import { FiChevronRight, FiSearch, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 const ExamPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
 
   const categories = [
     'Engineering', 'Medical', 'Management', 'Science', 'Law', 'Pharmacy',
@@ -102,45 +103,42 @@ const ExamPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-8 py-3">
-          <div className="flex items-center text-sm text-gray-600">
-            <Link to="/" className="hover:text-orange-600">Home</Link>
-            <FiChevronRight className="mx-2" size={16} />
-            <span className="text-gray-900 font-semibold">Entrance Exams In India</span>
+      {/* Page Title with Search */}
+      <div className="bg-white py-8 px-8 border-b">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-4xl font-bold text-gray-900">Entrance Exams In India</h1>
+            <button 
+              onClick={() => setShowSearch(!showSearch)}
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-orange-600 border border-gray-300 rounded-lg"
+            >
+              <FiSearch size={20} />
+              <span className="text-sm font-semibold">Search</span>
+            </button>
           </div>
-        </div>
-      </div>
 
-      {/* Page Title */}
-      <div className="bg-white py-8 border-b">
-        <div className="container mx-auto px-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Entrance Exams In India</h1>
+          {/* Search Bar (Expandable) */}
+          {showSearch && (
+            <div className="relative max-w-2xl mb-4">
+              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search for exams..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                autoFocus
+              />
+            </div>
+          )}
           
-          {/* Search Bar */}
-          <div className="relative max-w-2xl">
-            <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Search for exams..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Popular Exams Bar */}
-      <div className="bg-white border-b py-4">
-        <div className="container mx-auto px-8">
-          <div className="flex items-center gap-6 overflow-x-auto">
+          {/* Popular Exams Links */}
+          <div className="flex items-center gap-6 overflow-x-auto pb-2">
             {popularExams.map((exam, idx) => (
               <Link
                 key={idx}
                 to={exam.url}
-                className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors"
+                className="text-sm font-semibold text-blue-600 hover:text-orange-600 whitespace-nowrap transition-colors"
               >
                 {exam.name}
               </Link>
@@ -151,30 +149,20 @@ const ExamPage = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-8 py-8">
-        <div className="flex gap-8">
+        <div className="flex gap-6">
           {/* Sidebar - Categories */}
-          <aside className="w-1/4">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-20">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Exams Category</h2>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setSelectedCategory('All')}
-                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedCategory === 'All'
-                      ? 'bg-orange-50 text-orange-600 font-bold'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  All Exams
-                </button>
+          <aside className="w-80 flex-shrink-0">
+            <div className="bg-white rounded-lg shadow-sm p-5 sticky top-20">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Exams Category</h2>
+              <div className="space-y-1">
                 {visibleCategories.map((category, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedCategory(category)}
-                    className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                       selectedCategory === category
-                        ? 'bg-orange-50 text-orange-600 font-bold'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? 'text-orange-600 font-semibold'
+                        : 'text-gray-700 hover:text-orange-600'
                     }`}
                   >
                     {category}
@@ -182,86 +170,93 @@ const ExamPage = () => {
                 ))}
                 <button
                   onClick={() => setShowAllCategories(!showAllCategories)}
-                  className="w-full text-left px-4 py-2 text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1 mt-2"
                 >
-                  {showAllCategories ? 'View Less' : 'View More'}
-                  <FiChevronDown className={`transition-transform ${showAllCategories ? 'rotate-180' : ''}`} />
+                  {showAllCategories ? (
+                    <>
+                      View Less <FiChevronUp size={16} />
+                    </>
+                  ) : (
+                    <>
+                      View More <FiChevronDown size={16} />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
           </aside>
 
           {/* Exam Cards Grid */}
-          <main className="w-3/4">
-            <div className="grid grid-cols-1 gap-6">
+          <main className="flex-1">
+            <div className="space-y-5">
               {filteredExams.map((exam, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden"
+                  className="bg-white rounded shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="flex p-6 gap-6">
+                  <div className="flex p-5 gap-4">
                     {/* Logo */}
                     <div className="flex-shrink-0">
                       <img
                         src={exam.logo}
                         alt={exam.name}
-                        className="w-16 h-16 rounded-lg object-cover border border-gray-200"
+                        className="w-12 h-12 rounded object-cover"
                       />
                     </div>
 
                     {/* Exam Details */}
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <Link to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                            <h3 className="text-xl font-bold text-gray-900 hover:text-orange-600 mb-1">
-                              {exam.name}
-                            </h3>
-                          </Link>
-                          <p className="text-sm text-gray-600 mb-2">{exam.fullName}</p>
-                          <span className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded">
-                            {exam.examMode}
-                          </span>
-                        </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="mb-3">
+                        <Link to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                          <h3 className="text-lg font-bold text-gray-900 hover:text-orange-600 mb-1">
+                            {exam.name}
+                          </h3>
+                        </Link>
+                        <p className="text-sm text-gray-600 mb-2">{exam.fullName}</p>
+                        <span className="inline-block px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
+                          {exam.examMode}
+                        </span>
                       </div>
+
+                      <div className="border-t border-gray-100 pt-3 mb-3"></div>
 
                       {/* Important Dates */}
-                      <div className="grid grid-cols-3 gap-4 mb-4">
+                      <div className="grid grid-cols-3 gap-6 mb-4">
                         <div>
-                          <p className="text-xs text-gray-500 font-semibold mb-1">Exam Date</p>
-                          <p className="text-sm text-gray-900 font-medium">{exam.examDate}</p>
+                          <h4 className="text-xs font-bold text-gray-900 mb-1">Exam Date</h4>
+                          <p className="text-sm text-gray-700">{exam.examDate}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 font-semibold mb-1">Application Form</p>
-                          <p className="text-sm text-gray-900 font-medium">{exam.applicationDate}</p>
+                          <h4 className="text-xs font-bold text-gray-900 mb-1">Application Form</h4>
+                          <p className="text-sm text-gray-700">{exam.applicationDate}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 font-semibold mb-1">Result Announce</p>
-                          <p className="text-sm text-gray-900 font-medium">{exam.resultDate}</p>
+                          <h4 className="text-xs font-bold text-gray-900 mb-1">Result Announce</h4>
+                          <p className="text-sm text-gray-700">{exam.resultDate}</p>
                         </div>
                       </div>
 
-                      {/* Links */}
-                      <div className="flex items-center gap-6">
+                      {/* Links & Button */}
+                      <div className="flex items-center flex-wrap gap-4">
                         <Link
                           to="#"
-                          className="text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                          className="text-sm text-blue-600 hover:underline font-semibold"
                         >
                           Application Process
                         </Link>
                         <Link
                           to="#"
-                          className="text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                          className="text-sm text-blue-600 hover:underline font-semibold"
                         >
                           Exam Pattern
                         </Link>
                         <Link
                           to="#"
-                          className="text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                          className="text-sm text-blue-600 hover:underline font-semibold"
                         >
                           Previous Year Paper
                         </Link>
-                        <button className="ml-auto px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold rounded shadow-sm transition-colors">
+                        <button className="ml-auto px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded transition-colors">
                           Apply Now
                         </button>
                       </div>
@@ -273,7 +268,7 @@ const ExamPage = () => {
 
             {/* No Results */}
             {filteredExams.length === 0 && (
-              <div className="text-center py-12">
+              <div className="bg-white rounded shadow-sm p-12 text-center">
                 <p className="text-gray-500 text-lg">No exams found matching your criteria.</p>
               </div>
             )}
