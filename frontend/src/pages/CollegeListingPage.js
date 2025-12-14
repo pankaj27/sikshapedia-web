@@ -845,10 +845,10 @@ const CollegeListingPage = () => {
                           return (
                             <React.Fragment key={college.id}>
                               <tr className="border-b border-gray-200 hover:bg-orange-50 transition-colors">
-                                {/* CD RANK */}
+                                {/* AB RANKING */}
                                 <td className="px-3 py-3 align-top">
                                   <div className="flex flex-col items-center">
-                                    <div className="text-xl font-bold text-gray-400">#{globalIndex + 1}</div>
+                                    <div className="text-xl font-bold text-orange-600">#{globalIndex + 1}</div>
                                   </div>
                                 </td>
 
