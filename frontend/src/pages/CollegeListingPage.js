@@ -170,17 +170,15 @@ const CollegeListingPage = () => {
           <div className="text-center mb-2">
             <button
               onClick={() => setShowContent(!showContent)}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-md"
+              className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full transition-colors"
             >
               {showContent ? (
                 <>
                   <span>Read Less</span>
-                  <FiChevronDown className="transform rotate-180 transition-transform" />
                 </>
               ) : (
                 <>
                   <span>Read More</span>
-                  <FiChevronDown className="transition-transform" />
                 </>
               )}
             </button>
