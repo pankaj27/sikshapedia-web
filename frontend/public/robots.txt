@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://campusguide-10.preview.emergentagent.com/sitemap.xml
+Sitemap: https://collegeportal-10.preview.emergentagent.com/sitemap.xml
