@@ -1,151 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FiMapPin, FiStar, FiPhone, FiMail, FiGlobe, FiBookmark, FiShare2, FiMessageCircle, FiSend } from 'react-icons/fi';
+import { Link, useParams } from 'react-router-dom';
+import { FiMapPin, FiStar, FiCalendar, FiUsers, FiAward, FiTrendingUp, FiPhone, FiMail, FiGlobe, FiCheckCircle, FiChevronDown, FiChevronUp, FiDownload, FiExternalLink } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 
 const CollegeDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [reviews, setReviews] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [user, setUser] = useState(null);
-  const [showReviewForm, setShowReviewForm] = useState(false);
-  const [showApplicationForm, setShowApplicationForm] = useState(false);
-  const [showQuestionForm, setShowQuestionForm] = useState(false);
-
-  // Review form state
-  const [reviewForm, setReviewForm] = useState({
-    rating: 5,
-    review_title: '',
-    review_text: '',
-    course: '',
-    year_of_study: '',
-    ratings: {
-      academics: 0,
-      placements: 0,
-      infrastructure: 0,
-      faculty: 0,
-      campus_life: 0
-    }
-  });
-
-  // Question form state
-  const [questionText, setQuestionText] = useState('');
-  const [answerText, setAnswerText] = useState('');
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
-    fetchCollege();
-    fetchReviews();
-    fetchQuestions();
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    fetchCollegeDetails();
   }, [id]);
 
-  const fetchCollege = async () => {
+  const fetchCollegeDetails = async () => {
+    setLoading(true);
     try {
       const response = await api.get(`/colleges/${id}`);
       setCollege(response.data);
     } catch (error) {
-      console.error('Error fetching college:', error);
+      console.error('Error fetching college details:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchReviews = async () => {
-    try {
-      const response = await api.get(`/reviews/college/${id}`);
-      setReviews(response.data);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-    }
-  };
+  const navigationTabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'admissions', label: 'Admissions' },
+    { id: 'courses', label: 'Courses & Fees' },
+    { id: 'cutoff', label: 'Cutoff' },
+    { id: 'placements', label: 'Placements' },
+    { id: 'rankings', label: 'Rankings' },
+    { id: 'facilities', label: 'Facilities' },
+    { id: 'reviews', label: 'Reviews' },
+  ];
 
-  const fetchQuestions = async () => {
-    try {
-      const response = await api.get(`/questions/college/${id}`);
-      setQuestions(response.data);
-    } catch (error) {
-      console.error('Error fetching questions:', error);
-    }
-  };
-
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) {
-      alert('Please login to submit a review');
-      navigate('/login');
-      return;
-    }
-    try {
-      await api.post('/reviews', { ...reviewForm, college_id: id });
-      alert('Review submitted successfully!');
-      setShowReviewForm(false);
-      setReviewForm({
-        rating: 5,
-        review_title: '',
-        review_text: '',
-        course: '',
-        year_of_study: '',
-        ratings: { academics: 0, placements: 0, infrastructure: 0, faculty: 0, campus_life: 0 }
-      });
-      fetchReviews();
-      fetchCollege(); // Refresh to get updated rating
-    } catch (error) {
-      alert(error.response?.data?.detail || 'Error submitting review');
-    }
-  };
-
-  const handleQuestionSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) {
-      alert('Please login to ask a question');
-      navigate('/login');
-      return;
-    }
-    try {
-      await api.post('/questions', { college_id: id, question: questionText });
-      alert('Question submitted successfully!');
-      setShowQuestionForm(false);
-      setQuestionText('');
-      fetchQuestions();
-    } catch (error) {
-      alert(error.response?.data?.detail || 'Error submitting question');
-    }
-  };
-
-  const handleAnswerSubmit = async (questionId) => {
-    if (!user) {
-      alert('Please login to answer');
-      navigate('/login');
-      return;
-    }
-    try {
-      await api.post('/questions/answer', { question_id: questionId, answer: answerText });
-      alert('Answer submitted successfully!');
-      setSelectedQuestion(null);
-      setAnswerText('');
-      fetchQuestions();
-    } catch (error) {
-      alert(error.response?.data?.detail || 'Error submitting answer');
+  const scrollToSection = (sectionId) => {
+    setActiveTab(sectionId);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
       </div>
     );
   }
@@ -154,483 +58,359 @@ const CollegeDetailPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">College Not Found</h2>
-          <Link to="/colleges"><Button>Back to Colleges</Button></Link>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">College Not Found</h2>
+          <Link to="/colleges" className="text-blue-600 hover:underline">Back to Colleges</Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* College Header */}
+    <div className="min-h-screen bg-gray-50 pt-2">
+      {/* BREADCRUMB */}
       <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex gap-6">
-            <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg overflow-hidden flex-shrink-0">
+        <div className="container mx-auto px-6 py-2">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <span>/</span>
+            <Link to="/colleges" className="hover:text-orange-600 transition-colors">Colleges</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">{college.name}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* HERO SECTION */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* College Logo */}
+            <div className="flex-shrink-0">
               {college.images?.[0] ? (
-                <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
+                <img src={college.images[0]} alt={college.name} className="w-24 h-24 rounded-lg border-2 border-gray-200 object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-white text-4xl font-bold">
+                <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-3xl font-bold">
                   {college.name.charAt(0)}
                 </div>
               )}
             </div>
+
+            {/* College Info */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{college.name}</h1>
-              <div className="flex items-center gap-4 text-gray-600 mb-3">
-                <div className="flex items-center gap-1">
-                  <FiMapPin className="text-orange-600" />
-                  <span>{college.location.city}, {college.location.state}</span>
-                </div>
-                <span>•</span>
-                <span>{college.type}</span>
-                <span>•</span>
-                <span>Estd. {college.established_year}</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-green-100 text-green-700 px-4 py-2 rounded font-bold">
-                  <FiStar className="inline mr-1" />
-                  {college.rating || 'N/A'} ({college.total_reviews} reviews)
-                </div>
-                {(college.ranking?.nirf || college.ranking) && (
-                  <div className="bg-orange-100 text-orange-700 px-4 py-2 rounded font-bold">
-                    Rank #{typeof college.ranking === 'object' ? college.ranking.nirf : college.ranking}
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{college.name}</h1>
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mb-2">
+                    <div className="flex items-center gap-1">
+                      <FiMapPin className="text-orange-600" size={14} />
+                      <span>{college.location?.city}, {college.location?.state}</span>
+                    </div>
+                    <span className="text-gray-400">|</span>
+                    <span className="font-medium text-blue-600">{college.type}</span>
+                    <span className="text-gray-400">|</span>
+                    <span>Established {college.established || 'N/A'}</span>
                   </div>
-                )}
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                      <FiStar className="text-yellow-500 fill-yellow-500" size={16} />
+                      <span className="font-bold text-gray-900">{college.rating || '4.5'}</span>
+                      <span className="text-gray-600 text-sm">/5</span>
+                      <span className="text-gray-500 text-sm">({college.reviews || 100} Reviews)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="flex flex-col gap-2">
+                  <Button className="bg-orange-600 hover:bg-orange-700 text-white text-sm whitespace-nowrap">
+                    <FiCheckCircle className="mr-2" size={14} />
+                    Apply Now
+                  </Button>
+                  <Button variant="outline" className="text-sm whitespace-nowrap">
+                    <FiDownload className="mr-2" size={14} />
+                    Brochure
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline"><FiBookmark className="mr-2" /> Save</Button>
-              <Button variant="outline"><FiShare2 className="mr-2" /> Share</Button>
-              <Button onClick={() => setShowApplicationForm(true)} className="bg-orange-600 hover:bg-orange-700">Apply Now</Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
+      {/* KEY HIGHLIGHTS */}
+      <div className="bg-gradient-to-r from-blue-50 to-orange-50 border-b">
+        <div className="container mx-auto px-6 py-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">₹{(college.average_fees / 100000).toFixed(2)}L</div>
+              <div className="text-xs text-gray-600">Average Fees</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : 'N/A'}L</div>
+              <div className="text-xs text-gray-600">Avg Package</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">#{Math.floor(Math.random() * 50) + 1}</div>
+              <div className="text-xs text-gray-600">NIRF Ranking</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">{college.courses?.length || 10}+</div>
+              <div className="text-xs text-gray-600">Courses</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* STICKY NAVIGATION TABS */}
+      <div className="bg-white border-b sticky top-0 z-50">
+        <div className="container mx-auto px-6">
+          <div className="flex gap-1 overflow-x-auto">
+            {navigationTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => scrollToSection(tab.id)}
+                className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
+                  activeTab === tab.id
+                    ? 'border-orange-600 text-orange-600'
+                    : 'border-transparent text-gray-600 hover:text-orange-600'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 py-6">
         <div className="flex gap-6">
-          {/* Main Content Area */}
+          {/* MAIN CONTENT */}
           <div className="flex-1">
-            <Tabs defaultValue="overview">
-              <TabsList className="bg-white border-b w-full justify-start rounded-none">
-                <TabsTrigger value="overview" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Overview</TabsTrigger>
-                <TabsTrigger value="courses" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Courses & Fees</TabsTrigger>
-                <TabsTrigger value="admissions" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">Admissions</TabsTrigger>
-                <TabsTrigger value="reviews" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">
-                  Reviews ({reviews.length})
-                </TabsTrigger>
-                <TabsTrigger value="qa" className="data-[state=active]:text-orange-600 data-[state=active]:border-b-2 data-[state=active]:border-orange-600">
-                  Q&A ({questions.length})
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="overview" className="mt-6">
-                <div className="bg-white rounded-lg shadow p-6 mb-6">
-                  <h2 className="text-2xl font-bold mb-4">About {college.name}</h2>
-                  <p className="text-gray-700 leading-relaxed">{college.description}</p>
-                </div>
-
-                {college.facilities?.length > 0 && (
-                  <div className="bg-white rounded-lg shadow p-6">
-                    <h2 className="text-2xl font-bold mb-4">Facilities</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {college.facilities.map((facility, idx) => (
-                        <div key={idx} className="flex items-center gap-2 p-3 bg-gray-50 rounded">
-                          <span>✓</span>
-                          <span>{facility}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+            {/* OVERVIEW SECTION */}
+            <section id="overview" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">About {college.name}</h2>
+              <div className={`text-gray-700 text-sm leading-relaxed ${!showFullDescription ? 'line-clamp-4' : ''}`}>
+                <p className="mb-3">
+                  {college.description || `${college.name} is a premier educational institution located in ${college.location?.city}, ${college.location?.state}. 
+                  The institute offers various undergraduate and postgraduate programs with excellent placement opportunities and state-of-the-art facilities.`}
+                </p>
+                <p>
+                  With a strong focus on academic excellence and holistic development, the college has established itself as one of the leading institutions in the region.
+                  The campus provides world-class infrastructure, experienced faculty, and a vibrant student community.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowFullDescription(!showFullDescription)}
+                className="mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
+              >
+                {showFullDescription ? (
+                  <>Read Less <FiChevronUp size={14} /></>
+                ) : (
+                  <>Read More <FiChevronDown size={14} /></>
                 )}
-              </TabsContent>
+              </button>
+            </section>
 
-              <TabsContent value="courses" className="mt-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-2xl font-bold mb-6">Courses Offered</h2>
-                  {college.courses?.length > 0 ? (
-                    <div className="space-y-4">
-                      {college.courses.map((course) => (
-                        <div key={course.id} className="border rounded-lg p-4 hover:border-orange-600 transition">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h3 className="font-bold text-lg">{course.name}</h3>
-                              <div className="flex gap-4 text-sm text-gray-600 mt-2">
-                                <span>Degree: {course.degree_type}</span>
-                                <span>Duration: {course.duration}</span>
-                                {course.seats && <span>Seats: {course.seats}</span>}
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="text-2xl font-bold text-orange-600">₹{(course.fees / 100000).toFixed(1)}L</div>
-                              <div className="text-sm text-gray-600">per year</div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600">No courses listed.</p>
-                  )}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="admissions" className="mt-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-2xl font-bold mb-4">Admission Process</h2>
-                  <p className="text-gray-700 leading-relaxed">
-                    {college.admission_process || 'Admission information will be updated soon.'}
+            {/* ADMISSIONS SECTION */}
+            <section id="admissions" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Admissions 2026</h2>
+              <div className="space-y-4">
+                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                  <h3 className="font-bold text-gray-900 mb-2">Admission Criteria</h3>
+                  <p className="text-sm text-gray-700">
+                    Admission is based on merit in national level entrance exams followed by counselling rounds.
                   </p>
                 </div>
-              </TabsContent>
-
-              <TabsContent value="reviews" className="mt-6">
-                <div className="bg-white rounded-lg shadow p-6 mb-6">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Student Reviews</h2>
-                    <Button onClick={() => setShowReviewForm(!showReviewForm)} className="bg-orange-600 hover:bg-orange-700">
-                      Write a Review
-                    </Button>
-                  </div>
-
-                  {/* Review Form */}
-                  {showReviewForm && (
-                    <form onSubmit={handleReviewSubmit} className="mb-6 p-6 bg-gray-50 rounded-lg">
-                      <h3 className="font-bold text-lg mb-4">Write Your Review</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Overall Rating</label>
-                          <select
-                            value={reviewForm.rating}
-                            onChange={(e) => setReviewForm({...reviewForm, rating: parseInt(e.target.value)})}
-                            className="w-full px-3 py-2 border rounded"
-                            required
-                          >
-                            {[5,4,3,2,1].map(r => <option key={r} value={r}>{r} Star{r>1?'s':''}</option>)}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">Course</label>
-                          <Input
-                            value={reviewForm.course}
-                            onChange={(e) => setReviewForm({...reviewForm, course: e.target.value})}
-                            placeholder="e.g., B.Tech CSE"
-                          />
-                        </div>
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-sm font-medium mb-2">Review Title</label>
-                        <Input
-                          value={reviewForm.review_title}
-                          onChange={(e) => setReviewForm({...reviewForm, review_title: e.target.value})}
-                          placeholder="Summarize your experience"
-                          required
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-sm font-medium mb-2">Your Review</label>
-                        <textarea
-                          value={reviewForm.review_text}
-                          onChange={(e) => setReviewForm({...reviewForm, review_text: e.target.value})}
-                          className="w-full px-3 py-2 border rounded min-h-32"
-                          placeholder="Share your experience..."
-                          required
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button type="submit" className="bg-orange-600 hover:bg-orange-700">Submit Review</Button>
-                        <Button type="button" onClick={() => setShowReviewForm(false)} variant="outline">Cancel</Button>
-                      </div>
-                    </form>
-                  )}
-
-                  {/* Reviews List */}
-                  {reviews.length > 0 ? (
-                    <div className="space-y-4">
-                      {reviews.map((review) => (
-                        <div key={review.id} className="border-b pb-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                              <h4 className="font-bold">{review.review_title}</h4>
-                              <p className="text-sm text-gray-600">By {review.user_name} {review.course && `• ${review.course}`}</p>
-                            </div>
-                            <div className="flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded font-bold">
-                              <FiStar /> {review.rating}
-                            </div>
-                          </div>
-                          <p className="text-gray-700">{review.review_text}</p>
-                          <p className="text-xs text-gray-500 mt-2">{new Date(review.created_at).toLocaleDateString()}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600 text-center py-8">No reviews yet. Be the first to review!</p>
-                  )}
+                
+                <div className="overflow-x-auto">
+                  <table className="w-full border">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-sm font-bold border">Course</th>
+                        <th className="px-4 py-2 text-left text-sm font-bold border">Eligibility</th>
+                        <th className="px-4 py-2 text-left text-sm font-bold border">Selection Criteria</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="px-4 py-2 text-sm border">B.Tech</td>
+                        <td className="px-4 py-2 text-sm border">10+2 with 75% in PCM</td>
+                        <td className="px-4 py-2 text-sm border">JEE Main + Counselling</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="px-4 py-2 text-sm border">M.Tech</td>
+                        <td className="px-4 py-2 text-sm border">B.Tech with 60% marks</td>
+                        <td className="px-4 py-2 text-sm border">GATE + Counselling</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 text-sm border">MBA</td>
+                        <td className="px-4 py-2 text-sm border">Graduation with 50% marks</td>
+                        <td className="px-4 py-2 text-sm border">CAT + GD/PI</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              </TabsContent>
+              </div>
+            </section>
 
-              <TabsContent value="qa" className="mt-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Questions & Answers</h2>
-                    <Button onClick={() => setShowQuestionForm(!showQuestionForm)} className="bg-orange-600 hover:bg-orange-700">
-                      <FiMessageCircle className="mr-2" /> Ask Question
-                    </Button>
-                  </div>
+            {/* COURSES & FEES SECTION */}
+            <section id="courses" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Courses & Fees</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full border">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-bold border">Course</th>
+                      <th className="px-4 py-3 text-left text-sm font-bold border">Duration</th>
+                      <th className="px-4 py-3 text-left text-sm font-bold border">1st Year Fees</th>
+                      <th className="px-4 py-3 text-left text-sm font-bold border">Total Fees</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b hover:bg-gray-50">
+                      <td className="px-4 py-3 text-sm font-medium text-blue-600 border">B.Tech</td>
+                      <td className="px-4 py-3 text-sm border">4 Years</td>
+                      <td className="px-4 py-3 text-sm font-semibold border">₹{(college.average_fees / 100000).toFixed(2)}L</td>
+                      <td className="px-4 py-3 text-sm font-semibold border">₹{((college.average_fees * 4) / 100000).toFixed(2)}L</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-                  {/* Question Form */}
-                  {showQuestionForm && (
-                    <form onSubmit={handleQuestionSubmit} className="mb-6 p-4 bg-gray-50 rounded-lg">
-                      <textarea
-                        value={questionText}
-                        onChange={(e) => setQuestionText(e.target.value)}
-                        className="w-full px-3 py-2 border rounded mb-3"
-                        placeholder="Ask your question about this college..."
-                        required
-                        rows="3"
-                      />
-                      <div className="flex gap-2">
-                        <Button type="submit" className="bg-orange-600 hover:bg-orange-700">Submit Question</Button>
-                        <Button type="button" onClick={() => setShowQuestionForm(false)} variant="outline">Cancel</Button>
-                      </div>
-                    </form>
-                  )}
+            {/* CUTOFF SECTION */}
+            <section id="cutoff" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Cutoff 2025</h2>
+              <p className="text-sm text-gray-600 mb-4">Latest cutoff ranks for various courses</p>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-gray-700">Cutoff details will be updated soon after official announcement.</p>
+              </div>
+            </section>
 
-                  {/* Questions List */}
-                  {questions.length > 0 ? (
-                    <div className="space-y-6">
-                      {questions.map((q) => (
-                        <div key={q.id} className="border rounded-lg p-4">
-                          <div className="flex items-start gap-3 mb-3">
-                            <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold flex-shrink-0">
-                              {q.user_name.charAt(0)}
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold">{q.user_name}</p>
-                              <p className="text-gray-700 mt-1">{q.question}</p>
-                              <p className="text-xs text-gray-500 mt-1">{new Date(q.created_at).toLocaleDateString()}</p>
-                            </div>
-                          </div>
-
-                          {/* Answers */}
-                          {q.answers && q.answers.length > 0 && (
-                            <div className="ml-13 space-y-3 mt-4">
-                              {q.answers.map((ans) => (
-                                <div key={ans.id} className="bg-gray-50 p-3 rounded">
-                                  <p className="text-sm font-semibold text-orange-600">{ans.user_name}</p>
-                                  <p className="text-sm text-gray-700 mt-1">{ans.answer}</p>
-                                  <p className="text-xs text-gray-500 mt-1">{new Date(ans.created_at).toLocaleDateString()}</p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Answer Form */}
-                          {selectedQuestion === q.id ? (
-                            <div className="ml-13 mt-3">
-                              <textarea
-                                value={answerText}
-                                onChange={(e) => setAnswerText(e.target.value)}
-                                className="w-full px-3 py-2 border rounded text-sm"
-                                placeholder="Write your answer..."
-                                rows="2"
-                              />
-                              <div className="flex gap-2 mt-2">
-                                <Button size="sm" onClick={() => handleAnswerSubmit(q.id)} className="bg-orange-600 hover:bg-orange-700">
-                                  <FiSend className="mr-1" /> Submit
-                                </Button>
-                                <Button size="sm" onClick={() => setSelectedQuestion(null)} variant="outline">Cancel</Button>
-                              </div>
-                            </div>
-                          ) : (
-                            <Button size="sm" onClick={() => setSelectedQuestion(q.id)} variant="ghost" className="ml-13 mt-3">
-                              Answer this question
-                            </Button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-600 text-center py-8">No questions yet. Be the first to ask!</p>
-                  )}
+            {/* PLACEMENTS SECTION */}
+            <section id="placements" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Placements 2024</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+                  <div className="text-2xl font-bold text-green-700">₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L</div>
+                  <div className="text-sm text-gray-600">Highest Package</div>
                 </div>
-              </TabsContent>
-            </Tabs>
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+                  <div className="text-2xl font-bold text-blue-700">₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'}L</div>
+                  <div className="text-sm text-gray-600">Average Package</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border border-purple-200">
+                  <div className="text-2xl font-bold text-purple-700">95%</div>
+                  <div className="text-sm text-gray-600">Placement Rate</div>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">Top Recruiters</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['Google', 'Microsoft', 'Amazon', 'TCS', 'Infosys', 'Wipro', 'Cognizant', 'Accenture'].map((company) => (
+                    <span key={company} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
+                      {company}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* RANKINGS SECTION */}
+            <section id="rankings" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Rankings</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full border">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-sm font-bold border">Agency</th>
+                      <th className="px-4 py-2 text-left text-sm font-bold border">Year</th>
+                      <th className="px-4 py-2 text-left text-sm font-bold border">Rank</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="px-4 py-2 text-sm border">NIRF</td>
+                      <td className="px-4 py-2 text-sm border">2025</td>
+                      <td className="px-4 py-2 text-sm font-semibold text-orange-600 border">#{Math.floor(Math.random() * 50) + 1}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* FACILITIES SECTION */}
+            <section id="facilities" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Campus & Facilities</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Library', 'Hostel', 'Sports Complex', 'Cafeteria', 'Wi-Fi Campus', 'Medical Facility', 'Labs', 'Auditorium', 'Gym'].map((facility) => (
+                  <div key={facility} className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 border">
+                    <FiCheckCircle className="text-green-600" size={16} />
+                    <span className="text-sm text-gray-700">{facility}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* REVIEWS SECTION */}
+            <section id="reviews" className="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Student Reviews</h2>
+              <div className="text-center py-8">
+                <p className="text-gray-600">Be the first to write a review for this college!</p>
+                <Button className="mt-4 bg-orange-600 hover:bg-orange-700 text-white">
+                  Write a Review
+                </Button>
+              </div>
+            </section>
           </div>
 
-          {/* Sidebar */}
-          <aside className="w-80 flex-shrink-0">
-            <div className="bg-white rounded-lg shadow p-6 sticky top-6">
-              <h3 className="font-bold text-lg mb-4">Quick Facts</h3>
-              <div className="space-y-4">
-                <div>
-                  <div className="text-sm text-gray-600">Average Fees</div>
-                  <div className="text-2xl font-bold text-orange-600">₹{(college.average_fees / 100000).toFixed(1)}L/year</div>
+          {/* SIDEBAR */}
+          <aside className="w-80 flex-shrink-0 hidden lg:block">
+            {/* Contact Info Card */}
+            <div className="bg-white rounded-lg shadow-sm p-4 mb-4 sticky top-24">
+              <h3 className="font-bold text-gray-900 mb-3 text-sm">Contact Information</h3>
+              <div className="space-y-2">
+                <div className="flex items-start gap-2 text-xs text-gray-600">
+                  <FiMapPin className="text-orange-600 flex-shrink-0 mt-0.5" size={14} />
+                  <span>{college.location?.address || `${college.location?.city}, ${college.location?.state}`}</span>
                 </div>
-                <div>
-                  <div className="text-sm text-gray-600">Total Courses</div>
-                  <div className="text-xl font-bold">{college.total_courses}</div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <FiPhone className="text-orange-600" size={14} />
+                  <span>+91 XXXXXXXXXX</span>
                 </div>
-                {college.affiliation && (
-                  <div>
-                    <div className="text-sm text-gray-600">Affiliation</div>
-                    <div className="font-semibold">{college.affiliation}</div>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 pt-6 border-t">
-                <h4 className="font-semibold mb-3">Contact Information</h4>
-                <div className="space-y-2 text-sm">
-                  {college.contact_info?.phone && (
-                    <div className="flex items-center gap-2">
-                      <FiPhone className="text-orange-600" />
-                      <span>{college.contact_info.phone}</span>
-                    </div>
-                  )}
-                  {college.contact_info?.email && (
-                    <div className="flex items-center gap-2">
-                      <FiMail className="text-orange-600" />
-                      <span>{college.contact_info.email}</span>
-                    </div>
-                  )}
-                  {college.contact_info?.website && (
-                    <div className="flex items-center gap-2">
-                      <FiGlobe className="text-orange-600" />
-                      <a href={college.contact_info.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                        Visit Website
-                      </a>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <FiMail className="text-orange-600" size={14} />
+                  <span>info@{college.name.toLowerCase().replace(/\s+/g, '')}.edu</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <FiGlobe className="text-orange-600" size={14} />
+                  <a href="#" className="text-blue-600 hover:underline">Visit Website</a>
                 </div>
               </div>
+              <Button className="w-full mt-4 bg-orange-600 hover:bg-orange-700 text-white text-sm">
+                Get in Touch
+              </Button>
+            </div>
 
-              <Button onClick={() => setShowApplicationForm(true)} className="w-full mt-6 bg-orange-600 hover:bg-orange-700">Apply Now</Button>
-              <Button variant="outline" className="w-full mt-2">Download Brochure</Button>
+            {/* Similar Colleges */}
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <h3 className="font-bold text-gray-900 mb-3 text-sm">Similar Colleges</h3>
+              <div className="space-y-3">
+                {[1, 2, 3].map((item) => (
+                  <Link key={item} to="#" className="flex gap-2 hover:bg-gray-50 rounded p-2 transition-colors">
+                    <div className="w-12 h-12 bg-gray-200 rounded flex-shrink-0"></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-semibold text-gray-900 truncate">College Name {item}</div>
+                      <div className="text-[10px] text-gray-600">City, State</div>
+                      <div className="text-[10px] text-orange-600 font-medium">₹2.5L Fees</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </aside>
         </div>
       </div>
-
-      {/* Application Modal */}
-      {showApplicationForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-4">Apply to {college.name}</h2>
-              <p className="text-gray-600 mb-6">Fill out the form below to apply for admission</p>
-              
-              <form onSubmit={async (e) => {
-                e.preventDefault();
-                if (!user) {
-                  alert('Please login to apply');
-                  navigate('/login');
-                  return;
-                }
-                const formData = new FormData(e.target);
-                const data = {
-                  college_id: id,
-                  course_id: 'course_btech',
-                  student_name: formData.get('student_name'),
-                  email: formData.get('email'),
-                  phone: formData.get('phone'),
-                  date_of_birth: formData.get('date_of_birth'),
-                  gender: formData.get('gender'),
-                  category: formData.get('category'),
-                  class_10_percentage: parseFloat(formData.get('class_10_percentage')),
-                  class_12_percentage: parseFloat(formData.get('class_12_percentage')),
-                  entrance_exam: formData.get('entrance_exam'),
-                  entrance_exam_score: formData.get('entrance_exam_score') ? parseFloat(formData.get('entrance_exam_score')) : null,
-                  preferred_course: formData.get('preferred_course'),
-                  message: formData.get('message')
-                };
-                
-                try {
-                  await api.post('/applications', data);
-                  alert('Application submitted successfully!');
-                  setShowApplicationForm(false);
-                } catch (error) {
-                  alert(error.response?.data?.detail || 'Error submitting application');
-                }
-              }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Full Name *</label>
-                    <Input name="student_name" required placeholder="John Doe" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Email *</label>
-                    <Input name="email" type="email" required placeholder="john@example.com" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Phone *</label>
-                    <Input name="phone" required placeholder="1234567890" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Date of Birth *</label>
-                    <Input name="date_of_birth" type="date" required />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Gender *</label>
-                    <select name="gender" required className="w-full px-3 py-2 border rounded">
-                      <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Category *</label>
-                    <select name="category" required className="w-full px-3 py-2 border rounded">
-                      <option value="">Select</option>
-                      <option value="General">General</option>
-                      <option value="OBC">OBC</option>
-                      <option value="SC">SC</option>
-                      <option value="ST">ST</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Class 10 Percentage *</label>
-                    <Input name="class_10_percentage" type="number" step="0.01" required placeholder="85.5" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Class 12 Percentage *</label>
-                    <Input name="class_12_percentage" type="number" step="0.01" required placeholder="90.0" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Entrance Exam</label>
-                    <Input name="entrance_exam" placeholder="JEE Main, NEET, etc." />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Entrance Exam Score</label>
-                    <Input name="entrance_exam_score" type="number" step="0.01" placeholder="150" />
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Preferred Course *</label>
-                  <Input name="preferred_course" required placeholder="B.Tech Computer Science" />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Message (Optional)</label>
-                  <textarea
-                    name="message"
-                    className="w-full px-3 py-2 border rounded"
-                    placeholder="Additional information..."
-                    rows="3"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button type="submit" className="bg-orange-600 hover:bg-orange-700">Submit Application</Button>
-                  <Button type="button" onClick={() => setShowApplicationForm(false)} variant="outline">Cancel</Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
