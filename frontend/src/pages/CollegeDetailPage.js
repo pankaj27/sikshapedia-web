@@ -454,7 +454,7 @@ const CollegeDetailPage = () => {
                     </section>
 
                     {/* RANKING - FROM TOC #03 */}
-                    <section id="ranking-seo">
+                    <section id="seo-ranking">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         {college.name} has been ranked by various agencies:
