@@ -177,45 +177,45 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
-      {/* Quick Links Section */}
-      <section className="py-8 border-b">
+      {/* Quick Links Section - Compact */}
+      <section className="py-5 border-b">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <Link to="/colleges" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-blue-200 transition">
-                <FiBookOpen className="text-blue-600 text-2xl" />
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <Link to="/colleges" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-blue-200 transition">
+                <FiBookOpen className="text-blue-600 text-xl" />
               </div>
-              <span className="text-sm font-semibold text-center">All Colleges</span>
+              <span className="text-xs font-semibold text-center">All Colleges</span>
             </Link>
-            <Link to="/colleges?type=school" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-red-200 transition">
-                <FiBook className="text-red-600 text-2xl" />
+            <Link to="/colleges?type=school" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-red-200 transition">
+                <FiBook className="text-red-600 text-xl" />
               </div>
-              <span className="text-sm font-semibold text-center">All Schools</span>
+              <span className="text-xs font-semibold text-center">All Schools</span>
             </Link>
-            <Link to="/exams" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 transition">
-                <FiFileText className="text-green-600 text-2xl" />
+            <Link to="/exams" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-green-200 transition">
+                <FiFileText className="text-green-600 text-xl" />
               </div>
-              <span className="text-sm font-semibold text-center">All Exams</span>
+              <span className="text-xs font-semibold text-center">All Exams</span>
             </Link>
-            <Link to="/courses" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-purple-200 transition">
-                <FiBookOpen className="text-purple-600 text-2xl" />
+            <Link to="/courses" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-purple-200 transition">
+                <FiBookOpen className="text-purple-600 text-xl" />
               </div>
-              <span className="text-sm font-semibold text-center">All Courses</span>
+              <span className="text-xs font-semibold text-center">All Courses</span>
             </Link>
-            <Link to="/loans" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
-                <FiTrendingUp className="text-pink-600 text-2xl" />
+            <Link to="/loans" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-pink-200 transition">
+                <FiTrendingUp className="text-pink-600 text-xl" />
               </div>
-              <span className="text-sm font-semibold text-center">Education Loans</span>
+              <span className="text-xs font-semibold text-center">Education Loans</span>
             </Link>
-            <Link to="/study-materials" className="flex flex-col items-center p-4 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-indigo-200 transition">
-                <FiZap className="text-indigo-600 text-2xl" />
+            <Link to="/study-materials" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-indigo-200 transition">
+                <FiZap className="text-indigo-600 text-xl" />
               </div>
-              <span className="text-sm font-semibold text-center">Study Materials</span>
+              <span className="text-xs font-semibold text-center">Study Materials</span>
             </Link>
           </div>
         </div>
