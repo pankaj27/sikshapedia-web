@@ -22,7 +22,7 @@ const CoursesPage = () => {
     {
       title: 'After 10th Courses',
       subtitle: 'Applicable for Diploma courses & Certification courses',
-      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/after10.jpg',
+      image: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&h=400&fit=crop',
       link: '/courses/after-10th',
       categories: [
         { name: 'ITI', count: 16 },
