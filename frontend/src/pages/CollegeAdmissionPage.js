@@ -11,12 +11,36 @@ const CollegeAdmissionPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('all');
+  const [selectedState, setSelectedState] = useState('all');
+  const [selectedCity, setSelectedCity] = useState('all');
 
   const collegeTypes = ['All', 'Engineering', 'Medical', 'Management', 'Law', 'Arts & Science'];
+  
+  const states = ['All States', 'Delhi', 'Maharashtra', 'Karnataka', 'Gujarat', 'Tamil Nadu', 'Uttar Pradesh', 'West Bengal', 'Rajasthan'];
+  
+  const citiesByState = {
+    'Delhi': ['All Cities', 'New Delhi', 'South Delhi', 'North Delhi'],
+    'Maharashtra': ['All Cities', 'Mumbai', 'Pune', 'Nagpur', 'Nashik'],
+    'Karnataka': ['All Cities', 'Bangalore', 'Mysore', 'Mangalore', 'Manipal'],
+    'Gujarat': ['All Cities', 'Ahmedabad', 'Surat', 'Vadodara', 'Rajkot'],
+    'Tamil Nadu': ['All Cities', 'Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli'],
+    'Uttar Pradesh': ['All Cities', 'Lucknow', 'Kanpur', 'Noida', 'Varanasi'],
+    'West Bengal': ['All Cities', 'Kolkata', 'Siliguri', 'Durgapur'],
+    'Rajasthan': ['All Cities', 'Jaipur', 'Jodhpur', 'Udaipur', 'Kota']
+  };
+  
+  const availableCities = selectedState === 'all' || selectedState === 'All States' 
+    ? ['All Cities'] 
+    : citiesByState[selectedState] || ['All Cities'];
 
   useEffect(() => {
     fetchAdmissions();
-  }, [selectedType]);
+  }, [selectedType, selectedState, selectedCity]);
+  
+  useEffect(() => {
+    // Reset city when state changes
+    setSelectedCity('all');
+  }, [selectedState]);
 
   const fetchAdmissions = async () => {
     try {
@@ -25,13 +49,31 @@ const CollegeAdmissionPage = () => {
       if (selectedType && selectedType !== 'all') {
         params.append('type', selectedType);
       }
+      if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
+        params.append('state', selectedState);
+      }
+      if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
+        params.append('city', selectedCity);
+      }
       
       const response = await api.get(`/colleges?${params.toString()}`);
       setAdmissions(response.data);
     } catch (error) {
       console.error('Error fetching admissions:', error);
-      // Fallback to mock data
-      setAdmissions(generateMockAdmissions());
+      // Fallback to mock data with filtering
+      let filteredData = generateMockAdmissions();
+      
+      if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
+        filteredData = filteredData.filter(a => a.location.state === selectedState);
+      }
+      if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
+        filteredData = filteredData.filter(a => a.location.city === selectedCity);
+      }
+      if (selectedType && selectedType !== 'all') {
+        filteredData = filteredData.filter(a => a.type.toLowerCase() === selectedType.toLowerCase());
+      }
+      
+      setAdmissions(filteredData);
     } finally {
       setLoading(false);
     }
@@ -204,17 +246,44 @@ const CollegeAdmissionPage = () => {
             Latest admission alerts and application deadlines
           </p>
           
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Search by college name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-9 text-sm bg-white text-gray-900"
-              />
-              <Button type="submit" className="bg-white text-blue-600 hover:bg-blue-50 h-9 px-4 text-sm">
-                <FiSearch className="mr-1.5" /> Search
-              </Button>
+          <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-2">
+              <div className="flex-1 flex gap-2">
+                <Input
+                  placeholder="Search by college name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-9 text-sm bg-white text-gray-900"
+                />
+                <Button type="submit" className="bg-white text-blue-600 hover:bg-blue-50 h-9 px-4 text-sm whitespace-nowrap">
+                  <FiSearch className="mr-1.5" /> Search
+                </Button>
+              </div>
+              <div className="flex gap-2">
+                <select
+                  value={selectedState}
+                  onChange={(e) => setSelectedState(e.target.value)}
+                  className="h-9 px-3 text-sm bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  {states.map(state => (
+                    <option key={state} value={state === 'All States' ? 'all' : state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  disabled={selectedState === 'all' || selectedState === 'All States'}
+                  className="h-9 px-3 text-sm bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  {availableCities.map(city => (
+                    <option key={city} value={city === 'All Cities' ? 'all' : city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </form>
         </div>
