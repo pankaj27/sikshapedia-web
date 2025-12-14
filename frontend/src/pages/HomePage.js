@@ -221,7 +221,7 @@ const CollegeDuniaHome = () => {
                 Find Your Dream{' '}
                 <span 
                   key={currentTextIndex}
-                  className="inline-block text-orange-600 animate-fade-in-up"
+                  className="inline-block text-white animate-fade-in-up"
                   style={{
                     animation: 'fadeInUp 0.5s ease-in-out'
                   }}
