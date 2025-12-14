@@ -336,6 +336,23 @@ const CollegeDetailPage = () => {
               {/* SEO EXPANDABLE CONTENT */}
               {showContent && (
                 <div className="space-y-8">
+                  {/* TABLE OF CONTENTS */}
+                  <div className="bg-gray-50 rounded-lg p-6 border">
+                    <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+                    <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+                      {tableOfContents.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollToSection(item.id)}
+                          className="text-left text-sm text-blue-600 hover:underline flex gap-2"
+                        >
+                          <span className="font-semibold flex-shrink-0">{item.num}.</span>
+                          <span>{item.title}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* FULL INTRO PARAGRAPHS */}
                   <div>
                     <p className="text-gray-800 leading-relaxed mb-4">
@@ -360,23 +377,6 @@ const CollegeDetailPage = () => {
                         <div className="w-0 h-0 border-l-8 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
                       </div>
                       <p className="text-sm text-gray-600">Video: Complete Guide to {college.name}</p>
-                    </div>
-                  </div>
-
-                  {/* TABLE OF CONTENTS */}
-                  <div className="bg-gray-50 rounded-lg p-6 border">
-                    <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
-                    <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                      {tableOfContents.map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => scrollToSection(item.id)}
-                          className="text-left text-sm text-blue-600 hover:underline flex gap-2"
-                        >
-                          <span className="font-semibold flex-shrink-0">{item.num}.</span>
-                          <span>{item.title}</span>
-                        </button>
-                      ))}
                     </div>
                   </div>
                 </div>
