@@ -322,16 +322,18 @@ const CollegeDetailPage = () => {
                 </p>
               </div>
 
-              {/* READ MORE BUTTON */}
-              <div className="text-center mb-4">
-                <button
-                  onClick={() => setShowContent(!showContent)}
-                  className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full"
-                >
-                  <span>{showContent ? 'Read Less' : 'Read More'}</span>
-                  {showContent ? <FiChevronUp size={18} /> : <FiChevronDown size={18} />}
-                </button>
-              </div>
+              {/* READ MORE BUTTON - Show when collapsed */}
+              {!showContent && (
+                <div className="text-center mb-4">
+                  <button
+                    onClick={() => setShowContent(true)}
+                    className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full"
+                  >
+                    <span>Read More</span>
+                    <FiChevronDown size={18} />
+                  </button>
+                </div>
+              )}
 
               {/* SEO EXPANDABLE CONTENT */}
               {showContent && (
