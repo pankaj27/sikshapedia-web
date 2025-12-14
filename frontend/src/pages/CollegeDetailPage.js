@@ -391,6 +391,87 @@ const CollegeDetailPage = () => {
                 <p className="text-gray-800 leading-relaxed mb-4">
                   {college.name} is a premier {college.type} institution established in <strong>{college.established || 'N/A'}</strong> and located in {college.location?.city}, {college.location?.state}.
                 </p>
+
+                {/* Recognized by & Affiliated to - Detailed Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-5">
+                    <h3 className="font-bold text-lg mb-3 text-blue-900 flex items-center gap-2">
+                      <span className="text-2xl">✅</span>
+                      Recognized by
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 bg-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🎓</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm text-gray-900">UGC</p>
+                          <p className="text-xs text-gray-600">University Grants Commission</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 bg-green-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">📚</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm text-gray-900">AICTE</p>
+                          <p className="text-xs text-gray-600">All India Council for Technical Education</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 bg-purple-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🏆</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm text-gray-900">NBA</p>
+                          <p className="text-xs text-gray-600">National Board of Accreditation</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 bg-yellow-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">⭐</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm text-gray-900">NAAC</p>
+                          <p className="text-xs text-gray-600">A+ Grade Accreditation</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-5">
+                    <h3 className="font-bold text-lg mb-3 text-orange-900 flex items-center gap-2">
+                      <span className="text-2xl">🔗</span>
+                      Affiliated to
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <span className="text-xl">🏛️</span>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm text-gray-900">Mumbai University</p>
+                          <p className="text-xs text-gray-600">Primary Affiliation</p>
+                        </div>
+                      </div>
+                      <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
+                        <p className="text-xs text-gray-700 leading-relaxed">
+                          The institute is affiliated to Mumbai University and follows its curriculum for undergraduate and postgraduate programs. All degrees are awarded by the university.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-orange-300">
+                      <h4 className="font-semibold text-sm text-gray-900 mb-2">Memberships</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">AIU</span>
+                        <span className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">ACU</span>
+                        <span className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">IUAC</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                   <h3 className="font-bold mb-3">Key Highlights</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
