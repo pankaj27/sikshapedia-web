@@ -780,13 +780,13 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-lg font-bold mb-2">Subscribe to Our Newsletter</h2>
           <p className="text-sm mb-3 text-white">Get the latest updates on college admissions, exams, and education news</p>
-          <form className="max-w-md mx-auto flex gap-2">
+          <form className="max-w-md mx-auto flex gap-2 items-center">
             <Input
               type="email"
               placeholder="Enter your email"
-              className="h-10 bg-white text-gray-900 text-sm px-3 py-2"
+              className="h-10 bg-white text-gray-900 text-sm px-3"
             />
-            <Button variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100 px-4 h-10 text-sm font-semibold">
+            <Button variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100 px-4 h-10 text-sm font-semibold whitespace-nowrap">
               Subscribe
             </Button>
           </form>
