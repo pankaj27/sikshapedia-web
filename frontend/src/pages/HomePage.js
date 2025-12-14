@@ -131,14 +131,83 @@ const CollegeDuniaHome = () => {
           loop
           className="h-full"
         >
-          {['/assets/slider1.jpg', '/assets/slider2.jpg', '/assets/slider3.jpg', '/assets/slider4.jpg'].map((img, idx) => (
+          {[
+            {
+              image: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop',
+              type: 'college',
+              name: 'IIT Bombay - Indian Institute of Technology',
+              rating: 4.8,
+              reviews: 2847,
+              location: 'Mumbai, Maharashtra',
+              slug: 'iit-bombay-002'
+            },
+            {
+              image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop',
+              type: 'school',
+              name: 'Delhi Public School, R.K. Puram',
+              rating: 4.6,
+              reviews: 1523,
+              location: 'New Delhi, Delhi',
+              slug: 'dps-rk-puram-001'
+            },
+            {
+              image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop',
+              type: 'university',
+              name: 'Delhi University',
+              rating: 4.5,
+              reviews: 3256,
+              location: 'New Delhi, Delhi',
+              slug: 'delhi-university-001'
+            },
+            {
+              image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop',
+              type: 'college',
+              name: 'AIIMS Delhi - All India Institute of Medical Sciences',
+              rating: 4.9,
+              reviews: 2134,
+              location: 'New Delhi, Delhi',
+              slug: 'aiims-delhi-001'
+            }
+          ].map((slide, idx) => (
             <SwiperSlide key={idx}>
-              <div className="relative h-full">
-                <img src={img} alt={`Slide ${idx + 1}`} className="w-full h-full object-cover" onError={(e) => {
-                  e.target.src = `/assets/banner${idx + 1}.jpg`;
-                }} />
-                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-              </div>
+              <Link to={`/${slide.type === 'school' ? 'schools' : slide.type === 'university' ? 'universities' : 'colleges'}/${slide.slug}`} className="block h-full">
+                <div className="relative h-full cursor-pointer group">
+                  <img 
+                    src={slide.image} 
+                    alt={slide.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+                  
+                  {/* Institution Info Overlay */}
+                  <div className="absolute bottom-8 left-8 text-white z-20 max-w-2xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-3 py-1 bg-orange-600 text-white text-xs font-semibold rounded-full uppercase">
+                        {slide.type}
+                      </span>
+                      <div className="flex items-center gap-1 bg-green-600 px-2 py-1 rounded">
+                        <FiStar className="text-white" size={14} />
+                        <span className="text-sm font-bold">{slide.rating}</span>
+                        <span className="text-xs">({slide.reviews} reviews)</span>
+                      </div>
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg group-hover:text-orange-400 transition-colors">
+                      {slide.name}
+                    </h2>
+                    <div className="flex items-center gap-2 text-sm text-white/90">
+                      <FiMapPin size={16} />
+                      <span>{slide.location}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Click to View Indicator */}
+                  <div className="absolute top-8 right-8 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white text-sm font-semibold flex items-center gap-2">
+                      View Details <FiArrowRight />
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
