@@ -219,6 +219,8 @@ const CollegeDetailPage = () => {
         <div className="flex gap-8">
           {/* LEFT CONTENT */}
           <div className="flex-1">
+            {/* INFO SECTION */}
+            <section id="info">
             {/* INTRO PARAGRAPHS */}
             <div className="mb-8">
               <p className="text-gray-800 leading-relaxed mb-4">
