@@ -58,6 +58,23 @@ const CourseDetailPage = () => {
         </div>
       </div>
 
+      {/* Sticky Course Menu */}
+      <div className="sticky top-16 z-40 bg-white border-y border-gray-200 shadow-sm">
+        <div className="container mx-auto px-8">
+          <div className="flex items-center gap-8 overflow-x-auto py-3">
+            <a href="#section-1" onClick={(e) => {e.preventDefault(); scrollToSection('section-1')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Course Details</a>
+            <a href="#section-2" onClick={(e) => {e.preventDefault(); scrollToSection('section-2')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Admission</a>
+            <a href="#eligibility" onClick={(e) => {e.preventDefault(); scrollToSection('eligibility')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Eligibility</a>
+            <a href="#entrance-exams" onClick={(e) => {e.preventDefault(); scrollToSection('entrance-exams')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Entrance Exams</a>
+            <a href="#syllabus" onClick={(e) => {e.preventDefault(); scrollToSection('syllabus')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Syllabus</a>
+            <a href="#comparison" onClick={(e) => {e.preventDefault(); scrollToSection('comparison')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Comparison</a>
+            <a href="#colleges" onClick={(e) => {e.preventDefault(); scrollToSection('colleges')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Colleges</a>
+            <a href="#jobs" onClick={(e) => {e.preventDefault(); scrollToSection('jobs')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">Jobs</a>
+            <a href="#faqs" onClick={(e) => {e.preventDefault(); scrollToSection('faqs')}} className="text-sm font-semibold text-gray-700 hover:text-orange-600 whitespace-nowrap transition-colors">FAQs</a>
+          </div>
+        </div>
+      </div>
+
       {/* Main Container */}
       <div className="container mx-auto px-8 py-6">
         <div className="flex gap-6">
