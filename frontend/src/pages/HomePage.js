@@ -213,7 +213,7 @@ const CollegeDuniaHome = () => {
         </Swiper>
 
         {/* Search Overlay - Compact with Animated Title */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div className="text-center text-white max-w-4xl px-4 w-full">
             {/* Animated Title */}
             <div className="mb-2">
