@@ -1,0 +1,259 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FiChevronRight } from 'react-icons/fi';
+
+const NewsPage = () => {
+  const [activeCategory, setActiveCategory] = useState('all');
+
+  const categories = [
+    { id: 'all', label: 'ALL NEWS', url: '/news' },
+    { id: 'admission', label: 'ADMISSION ALERT', url: '/news/admission' },
+    { id: 'college', label: 'COLLEGE NEWS', url: '/news/college' },
+    { id: 'exam', label: 'EXAM NEWS', url: '/news/exam' },
+    { id: 'latest', label: 'LATEST ALERTS', url: '/news/latest' }
+  ];
+
+  const featuredNews = {
+    image: 'https://via.placeholder.com/654x327',
+    title: 'SNAP 2025 Test 2 Exam Analysis Live Updates',
+    description: 'The SNAP 2025 Test 2 is scheduled on 14th December 2025 in CBT Mode in two slots: 2:00 PM to 3:00 PM and 4:30 PM to 5:30 PM. The SNAP 2025 Test 2 Exam Analysis Live Updates will be...',
+    date: 'Dec 13, 2025',
+    tag: 'SNAP',
+    url: '#'
+  };
+
+  const newsItems = [
+    {
+      image: 'https://via.placeholder.com/400x200',
+      title: 'SNAP 2025 Test 2 Question Paper with Solutions: Download SNAP 2025 Question Paper with Answer Key',
+      description: 'The SNAP 2025 Question Paper, along with the Answer Key and detailed solutions, will be available for download in PDF format...',
+      date: 'Dec 12, 2025',
+      tag: 'SNAP',
+      category: 'exam'
+    },
+    {
+      image: 'https://via.placeholder.com/400x200',
+      title: 'AILET LLM 2026 Question Paper (Available) Download Solutions and Answer Key pdf',
+      description: 'AILET 2026 LLM Question Paper with Answer Key PDF will be available for download. NLU Delhi will conduct AILET 2026 on December 13, 2025...',
+      date: 'Dec 12, 2025',
+      tag: 'AILET',
+      category: 'exam'
+    },
+    {
+      image: 'https://via.placeholder.com/400x200',
+      title: 'MGR University PhD/MS Research Admission 2026 Begins; Apply by January 31',
+      description: 'The Dr. M.G.R. Educational and Research Institute in Chennai has begun accepting applications for its PhD/MS Research Admission program...',
+      date: 'Dec 11, 2025',
+      tag: 'Dr. M.G.R. University',
+      category: 'college'
+    },
+    {
+      image: 'https://via.placeholder.com/400x200',
+      title: 'Bennett University Greater Noida Releases Fee Structure 2026',
+      description: 'Bennett University, Greater Noida, has released its 2026 fee structure for all major UG, PG, Dual Degree programs...',
+      date: 'Dec 11, 2025',
+      tag: 'Bennett University',
+      category: 'college'
+    },
+    {
+      image: 'https://via.placeholder.com/400x200',
+      title: 'IIM Visakhapatnam Admission 2026: Interview Shortlist Out',
+      description: 'IIM Visakhapatnam offers admission to its various programs based on scores in national entrance exams...',
+      date: 'Dec 12, 2025',
+      tag: 'IIM Visakhapatnam',
+      category: 'admission'
+    },
+    {
+      image: 'https://via.placeholder.com/400x200',
+      title: 'CAT 2025 Results Declared',
+      description: 'IIM Calcutta has released CAT 2025 results. Candidates can check their scores on the official website...',
+      date: 'Dec 08, 2025',
+      tag: 'CAT',
+      category: 'exam'
+    }
+  ];
+
+  const bigStories = [
+    { title: 'SNAP 2025 Test 2 Exam Analysis Live Updates', date: 'Dec 13, 2025' },
+    { title: 'SNAP 2025 Test 2 Question Paper with Solutions: Do...', date: 'Dec 12, 2025' },
+    { title: 'AILET LLM 2026 Question Paper (Available) Download...', date: 'Dec 12, 2025' },
+    { title: 'AILET PhD (Law) 2026 Question Paper (Available) Do...', date: 'Dec 12, 2025' },
+    { title: 'AILET BA LLB 2026 Question Paper (Available) Downl...', date: 'Dec 12, 2025' }
+  ];
+
+  const trendingTags = ['SNAP', 'MAT', 'AILET', 'NEET', 'JEE Main', 'CAT'];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Trending Bar */}
+      <div className="bg-orange-600 text-white py-2 px-8">
+        <div className="container mx-auto">
+          <span className="font-bold mr-3">Trending Now:</span>
+          <Link to="#" className="hover:underline">
+            SNAP 2025 Test 2 Exam Analysis Live Updates [Check Now]
+          </Link>
+        </div>
+      </div>
+
+      {/* Categories Navigation */}
+      <div className="bg-white border-b sticky top-16 z-30">
+        <div className="container mx-auto px-8">
+          <div className="flex items-center gap-8 overflow-x-auto py-4">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`text-sm font-bold whitespace-nowrap transition-colors ${
+                  activeCategory === cat.id
+                    ? 'text-orange-600 border-b-2 border-orange-600 pb-1'
+                    : 'text-gray-700 hover:text-orange-600'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-8 py-8">
+        <div className="flex gap-8">
+          {/* Main News Section */}
+          <main className="flex-1">
+            {/* Featured News */}
+            <div className="mb-8">
+              <Link to={featuredNews.url} className="block group">
+                <img
+                  src={featuredNews.image}
+                  alt={featuredNews.title}
+                  className="w-full h-80 object-cover rounded-lg mb-4"
+                />
+                <h1 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">
+                  {featuredNews.title}
+                </h1>
+                <p className="text-gray-700 text-sm mb-3 leading-relaxed">
+                  {featuredNews.description} <span className="text-blue-600 font-semibold">Read More</span>
+                </p>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="text-gray-500">{featuredNews.date}</span>
+                  <Link to="#" className="text-blue-600 hover:underline font-semibold">
+                    {featuredNews.tag}
+                  </Link>
+                </div>
+              </Link>
+            </div>
+
+            {/* News Grid */}
+            <div className="grid grid-cols-3 gap-6 mb-8">
+              {newsItems.map((news, idx) => (
+                <Link
+                  key={idx}
+                  to="#"
+                  className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group"
+                >
+                  <img
+                    src={news.image}
+                    alt={news.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                      {news.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                      {news.description} <span className="text-blue-600 font-semibold">Read More</span>
+                    </p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">{news.date}</span>
+                      <Link to="#" className="text-blue-600 hover:underline font-semibold">
+                        {news.tag}
+                      </Link>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center items-center gap-2">
+              {[1, 2, 3, 4].map((page) => (
+                <Link
+                  key={page}
+                  to="#"
+                  className={`px-3 py-2 rounded ${
+                    page === 1
+                      ? 'bg-orange-600 text-white'
+                      : 'bg-white text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {page}
+                </Link>
+              ))}
+              <span className="px-3 py-2">...</span>
+              <Link to="#" className="px-3 py-2 bg-white text-gray-700 hover:bg-gray-100 rounded">
+                334
+              </Link>
+              <Link to="#" className="px-3 py-2 bg-white text-gray-700 hover:bg-gray-100 rounded">
+                Next
+              </Link>
+            </div>
+          </main>
+
+          {/* Sidebar */}
+          <aside className="w-80 flex-shrink-0 space-y-6">
+            {/* The Big Stories */}
+            <div className="bg-white rounded-lg shadow-sm p-5">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">The Big Stories</h2>
+              <div className="space-y-3">
+                {bigStories.map((story, idx) => (
+                  <div key={idx} className="border-b border-gray-200 pb-3 last:border-0 last:pb-0">
+                    <Link to="#" className="block group">
+                      <h3 className="text-sm font-bold text-gray-900 group-hover:text-orange-600 mb-1">
+                        {story.title}
+                      </h3>
+                      <p className="text-xs text-gray-500">{story.date}</p>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Trending Search */}
+            <div className="bg-white rounded-lg shadow-sm p-5">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">#Trending search</h2>
+              <div className="flex flex-wrap gap-2">
+                {trendingTags.map((tag, idx) => (
+                  <Link
+                    key={idx}
+                    to="#"
+                    className="px-3 py-1.5 bg-gray-100 hover:bg-orange-50 text-blue-600 hover:text-orange-600 text-xs font-semibold rounded-full transition-colors"
+                  >
+                    {tag}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Newsletter Subscription */}
+            <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg shadow-sm p-6 text-white">
+              <h2 className="text-lg font-bold mb-3">Subscribe to our newsletter</h2>
+              <p className="text-sm mb-4 opacity-90">Get our latest news about exams, colleges and others</p>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full px-4 py-2.5 rounded-lg mb-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+              />
+              <button className="w-full bg-white text-orange-600 font-bold py-2.5 rounded-lg hover:bg-gray-100 transition-colors">
+                Subscribe
+              </button>
+              <p className="text-xs mt-3 opacity-75">*Terms & conditions apply</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NewsPage;
