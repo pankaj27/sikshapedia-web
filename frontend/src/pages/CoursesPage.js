@@ -36,7 +36,7 @@ const CoursesPage = () => {
     {
       title: 'After 10+2 Courses',
       subtitle: 'Applicable for Degree courses & Diploma courses & Certification courses',
-      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/10plus2.jpg',
+      image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop',
       link: '/courses/after-12th',
       categories: [
         { name: 'Engineering', count: 207 },
