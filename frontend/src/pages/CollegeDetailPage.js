@@ -481,7 +481,7 @@ const CollegeDetailPage = () => {
                     </section>
 
                     {/* ADMISSION - FROM TOC #04 */}
-                    <section id="admission-seo">
+                    <section id="seo-admission">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         Admission process and eligibility criteria for {college.name}:
