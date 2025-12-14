@@ -281,8 +281,11 @@ const CoursesPage = () => {
                 <ul className="space-y-2 mb-4">
                   {stream.courses.map((course, courseIdx) => (
                     <li key={courseIdx}>
-                      <Link to={`${stream.link}/${course.toLowerCase().replace(/[\/\s()]/g, '-')}`} className="text-sm text-gray-700 hover:text-orange-600 hover:underline">
-                        {course}
+                      <Link 
+                        to={typeof course === 'object' ? course.link : `${stream.link}/${course.toLowerCase().replace(/[\/\s()]/g, '-')}`} 
+                        className="text-sm text-gray-700 hover:text-orange-600 hover:underline"
+                      >
+                        {typeof course === 'object' ? course.name : course}
                       </Link>
                     </li>
                   ))}
