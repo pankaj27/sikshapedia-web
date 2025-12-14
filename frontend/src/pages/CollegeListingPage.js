@@ -608,22 +608,96 @@ const CollegeListingPage = () => {
       {/* COLLEGE LISTING SECTION */}
       <div className="bg-gray-50 py-6 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">
+          {/* HORIZONTAL FILTER BAR */}
+          <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+            {/* Primary Filters Row */}
+            <div className="flex items-center gap-2 flex-wrap mb-3">
+              <button className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <FiFilter size={14} />
+                All Filter
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+                Sub Stream
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-full text-sm font-medium hover:bg-orange-600">
+                State
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+                Stream
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+                City
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-full text-sm font-medium hover:bg-orange-600">
+                Degree
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+                Specialization
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+                Program Type
+                <FiChevronDown size={14} />
+              </button>
+              
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200">
+                Type Of College
+                <FiChevronDown size={14} />
+              </button>
+            </div>
+            
+            {/* Dotted Separator */}
+            <div className="border-t border-dashed border-gray-300 my-3"></div>
+            
+            {/* Applied Filters Row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Example Applied Filters */}
+              {filters.type.length > 0 && filters.type.map(type => (
+                <span key={type} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-sm font-medium">
+                  {type}
+                  <button onClick={() => toggleFilter(type)} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={14} />
+                  </button>
+                </span>
+              ))}
+              
+              {filters.state && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-sm font-medium">
+                  {filters.state}
+                  <button onClick={() => setFilters({...filters, state: ''})} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={14} />
+                  </button>
+                </span>
+              )}
+              
+              {(filters.type.length > 0 || filters.state || filters.city || filters.course) && (
+                <button 
+                  onClick={clearFilters}
+                  className="text-sm text-gray-600 hover:text-gray-900 font-medium ml-2"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
+          </div>
+          
           <div className="flex gap-6">
             
-            {/* FILTERS SIDEBAR */}
-            <aside className={`w-80 flex-shrink-0 transition-all ${showFilters ? '' : 'hidden'}`}>
+            {/* HIDDEN LEGACY FILTERS - Keep structure for functionality */}
+            <aside className="hidden">
               <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-bold text-lg flex items-center gap-2">
-                    <FiFilter className="text-orange-600" /> Filters
-                  </h3>
-                  <button 
-                    onClick={clearFilters}
-                    className="text-sm text-orange-600 hover:underline font-medium"
-                  >
-                    Clear All
-                  </button>
-                </div>
                 
                 <div className="space-y-6">
                   {/* College Type */}
