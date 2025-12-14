@@ -27,10 +27,23 @@ const CollegeDetailPage = () => {
     }
   };
 
+  const menuItems = [
+    { id: 'info', label: 'Info', icon: '📋' },
+    { id: 'courses', label: 'Courses & Fees', icon: '📚' },
+    { id: 'admission', label: 'Admissions', icon: '📝' },
+    { id: 'cutoff', label: 'Cutoff', icon: '📊' },
+    { id: 'placement', label: 'Placement', icon: '💼' },
+    { id: 'ranking', label: 'Ranking', icon: '🏆' },
+    { id: 'scholarship', label: 'Scholarship', icon: '💰' },
+    { id: 'facilities', label: 'Facilities', icon: '🏫' },
+    { id: 'reviews', label: 'Reviews', icon: '⭐' },
+  ];
+
   const scrollToSection = (sectionId) => {
+    setActiveTab(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 100;
+      const offset = 160;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
