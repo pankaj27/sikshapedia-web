@@ -181,7 +181,7 @@ const CoursesPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Background */}
-      <section className="relative h-[400px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.static-collegedunia.com/public/asset/img/course_assets/background.jpg)' }}>
+      <section className="relative h-[400px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop)' }}>
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-900/70"></div>
         <div className="relative container mx-auto px-6 h-full flex flex-col justify-center items-center text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">SEARCH FROM OVER 10000 COURSES IN INDIA</h1>
