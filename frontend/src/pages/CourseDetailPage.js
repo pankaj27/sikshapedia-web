@@ -56,29 +56,6 @@ const CourseDetailPage = () => {
         </div>
       </div>
 
-      {/* Author Section - Below Sticky Menu */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-8 py-4">
-          <div className="flex items-center gap-3">
-            <img 
-              src="https://image-static.collegedunia.com/public/image/26-Dec_18:12_Profile.jpg" 
-              alt="Author" 
-              className="w-9 h-9 rounded-full"
-            />
-            <div>
-              <div className="flex items-center gap-2">
-                <Link to="#" className="text-sm font-bold text-gray-900 hover:underline">Swatantra Khandelwal</Link>
-                <svg className="w-5 h-5" viewBox="0 0 22 22" fill="#67BC9F">
-                  <circle cx="11" cy="11" r="11" fill="#3eba9f"/>
-                  <path d="M9.35 15.007a.822.822 0 0 1-.584-.241L6.242 12.24a.823.823 0 1 1 1.165-1.165l1.942 1.942 4.776-4.776a.826.826 0 0 1 1.166 1.166l-5.36 5.36a.825.825 0 0 1-.582.24z" fill="#fff"/>
-                </svg>
-              </div>
-              <p className="text-xs font-semibold text-gray-500">Content Curator | Updated on - Nov 13, 2025</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Container */}
       <div className="container mx-auto px-8 py-6">
         <div className="flex gap-6">
@@ -98,6 +75,27 @@ const CourseDetailPage = () => {
                 <FiMail size={16} />
                 GET UPDATES
               </button>
+            </div>
+
+            {/* Author Section - Below Action Buttons */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+              <div className="flex items-center gap-3">
+                <img 
+                  src="https://image-static.collegedunia.com/public/image/26-Dec_18:12_Profile.jpg" 
+                  alt="Author" 
+                  className="w-9 h-9 rounded-full"
+                />
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Link to="#" className="text-sm font-bold text-gray-900 hover:underline">Swatantra Khandelwal</Link>
+                    <svg className="w-5 h-5" viewBox="0 0 22 22" fill="#67BC9F">
+                      <circle cx="11" cy="11" r="11" fill="#3eba9f"/>
+                      <path d="M9.35 15.007a.822.822 0 0 1-.584-.241L6.242 12.24a.823.823 0 1 1 1.165-1.165l1.942 1.942 4.776-4.776a.826.826 0 0 1 1.166 1.166l-5.36 5.36a.825.825 0 0 1-.582.24z" fill="#fff"/>
+                    </svg>
+                  </div>
+                  <p className="text-xs font-semibold text-gray-500">Content Curator | Updated on - Nov 13, 2025</p>
+                </div>
+              </div>
             </div>
 
             {/* Latest Updates Box */}
