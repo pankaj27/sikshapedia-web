@@ -306,10 +306,10 @@ const CollegeDetailPage = () => {
               </div>
 
               {/* READ MORE BUTTON */}
-              <div className="text-center mb-6">
+              <div className="text-center mb-4">
                 <button
                   onClick={() => setShowContent(!showContent)}
-                  className="inline-flex items-center gap-2 px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium rounded-full"
+                  className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full"
                 >
                   <span>{showContent ? 'Read Less' : 'Read More'}</span>
                   {showContent ? <FiChevronUp size={18} /> : <FiChevronDown size={18} />}
