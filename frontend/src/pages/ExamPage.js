@@ -151,7 +151,8 @@ const ExamPage = () => {
       <div className="container mx-auto px-8 py-8">
         <div className="flex gap-6">
           {/* Sidebar - Categories */}
-          <aside className="w-80 flex-shrink-0">
+          <aside className="w-80 flex-shrink-0 space-y-5">
+            {/* Categories */}
             <div className="bg-white rounded-lg shadow-sm p-5 sticky top-20">
               <h2 className="text-lg font-bold text-gray-900 mb-4">Exams Category</h2>
               <div className="space-y-1">
@@ -183,6 +184,53 @@ const ExamPage = () => {
                   )}
                 </button>
               </div>
+            </div>
+
+            {/* Exam News Section */}
+            <div className="bg-white rounded-lg shadow-sm p-5">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Exam News</h2>
+              <div className="space-y-4">
+                {[
+                  {
+                    title: 'JEE Main 2026 Registration Started',
+                    date: '14 Dec 2025',
+                    description: 'JEE Main 2026 registration has commenced. Candidates can apply till January 10, 2026.'
+                  },
+                  {
+                    title: 'NEET 2025 Exam Date Announced',
+                    date: '12 Dec 2025',
+                    description: 'NEET 2025 will be conducted on May 3, 2025. Application forms available from Feb 6, 2025.'
+                  },
+                  {
+                    title: 'CUET 2025 Registration Opens',
+                    date: '10 Dec 2025',
+                    description: 'Common Universities Entrance Test registration window is now open for session 2025.'
+                  },
+                  {
+                    title: 'CAT 2025 Results Declared',
+                    date: '08 Dec 2025',
+                    description: 'IIM Calcutta has released CAT 2025 results. Candidates can check their scores on the official website.'
+                  }
+                ].map((news, idx) => (
+                  <div key={idx} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                    <Link to="#" className="block group">
+                      <h3 className="text-sm font-bold text-gray-900 group-hover:text-orange-600 mb-1 transition-colors">
+                        {news.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 mb-2">{news.date}</p>
+                      <p className="text-xs text-gray-600 leading-relaxed">
+                        {news.description}
+                      </p>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+              <Link 
+                to="/exam-news" 
+                className="block text-center mt-4 pt-4 border-t border-gray-200 text-sm text-blue-600 hover:text-blue-700 font-semibold"
+              >
+                View All News
+              </Link>
             </div>
           </aside>
 
