@@ -367,10 +367,10 @@ const CollegeDetailPage = () => {
             </div>
 
             {/* COLLEGE MENU INFORMATION (Always Visible) */}
-            <div className="space-y-12">
+            <div className="space-y-8">
               {/* INFO SECTION */}
               <section id="info">
-                <h2 className="text-3xl font-bold mb-4">About {college.name}</h2>
+                <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
                 <p className="text-gray-800 leading-relaxed mb-4">
                   {college.name} is a premier {college.type} institution established in <strong>{college.established || 'N/A'}</strong> and located in {college.location?.city}, {college.location?.state}.
                 </p>
