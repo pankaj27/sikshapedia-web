@@ -6,7 +6,6 @@ const ExamPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
 
   const categories = [
     'Engineering', 'Medical', 'Management', 'Science', 'Law', 'Pharmacy',
@@ -103,34 +102,22 @@ const ExamPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Page Title with Search */}
-      <div className="bg-white py-8 px-8 border-b">
+      {/* Page Title Section */}
+      <div className="bg-white py-6 px-8 border-b">
         <div className="container mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gray-900">Entrance Exams In India</h1>
-            <button 
-              onClick={() => setShowSearch(!showSearch)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-orange-600 border border-gray-300 rounded-lg"
-            >
-              <FiSearch size={20} />
-              <span className="text-sm font-semibold">Search</span>
-            </button>
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">Entrance Exams In India</h1>
+          
+          {/* Search Bar - Always Visible */}
+          <div className="relative max-w-2xl mb-6">
+            <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search for exams..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            />
           </div>
-
-          {/* Search Bar (Expandable) */}
-          {showSearch && (
-            <div className="relative max-w-2xl mb-4">
-              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search for exams..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                autoFocus
-              />
-            </div>
-          )}
           
           {/* Popular Exams Links */}
           <div className="flex items-center gap-6 overflow-x-auto pb-2">
