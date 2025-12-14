@@ -124,9 +124,9 @@ const Header = () => {
 
           {/* Right Side Actions - Desktop */}
           <div className="hidden lg:flex items-center gap-3 relative">
-            {/* Write Review Button */}
+            {/* Write Review Button - White Color */}
             <Link to="/colleges">
-              <button className="flex items-center gap-2 px-3 py-1 border-2 border-orange-500 text-orange-400 hover:bg-orange-500/20 rounded-lg transition-colors">
+              <button className="flex items-center gap-2 px-3 py-1 border-2 border-white/30 text-white hover:bg-white/10 hover:border-white rounded-lg transition-colors">
                 <FiEdit3 size={16} />
                 <div className="text-left leading-tight">
                   <div className="text-xs font-semibold whitespace-nowrap">Write a Review</div>
