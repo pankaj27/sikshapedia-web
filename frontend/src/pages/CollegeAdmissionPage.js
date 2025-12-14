@@ -323,47 +323,44 @@ const CollegeAdmissionPage = () => {
               <p className="text-sm text-gray-500">No admissions found</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {admissions.map((admission, index) => (
-                <div key={admission.id} className="bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden">
-                  {/* Image at TOP */}
-                  <div className={`h-48 bg-gradient-to-br ${getGradient(index)} relative`}>
-                    <div className="absolute top-3 left-3">
-                      <div className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded">
-                        <div className="text-xs font-semibold text-gray-700">
-                          {new Date(admission.admission_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}, {new Date(admission.admission_date).getFullYear()}
+                <div key={admission.id} className="bg-white rounded shadow hover:shadow-md transition">
+                  <div className="flex">
+                    {/* Small Image LEFT */}
+                    <div className="relative flex-shrink-0">
+                      <div className={`w-40 h-32 bg-gradient-to-br ${getGradient(index)} relative`}>
+                        <div className="absolute top-2 left-2">
+                          <div className="bg-white/95 px-2 py-1 rounded text-xs font-semibold text-gray-700">
+                            {new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                          </div>
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <Link to={`/colleges/${admission.id}`}>
+                            <Button className="w-full bg-blue-600 hover:bg-blue-700 h-7 text-xs">
+                              Apply Now
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     </div>
-                    <div className="absolute top-3 right-3">
+
+                    {/* Content RIGHT */}
+                    <div className="flex-1 p-3">
+                      <div className="mb-1">
+                        <span className="text-xs font-semibold text-blue-600">
+                          {admission.courses.slice(0, 2).join(' | ')}
+                        </span>
+                      </div>
                       <Link to={`/colleges/${admission.id}`}>
-                        <Button className="bg-blue-600 hover:bg-blue-700 h-8 text-xs px-4">
-                          Apply Now
-                        </Button>
+                        <h3 className="text-base font-bold mb-1 hover:text-blue-600 transition">
+                          {admission.name} Admission 2026: Cutoff, Dates, Application
+                        </h3>
                       </Link>
+                      <p className="text-xs text-gray-600 line-clamp-2">
+                        {admission.description}
+                      </p>
                     </div>
-                  </div>
-
-                  {/* Content BELOW */}
-                  <div className="p-4">
-                    {/* Course Tags */}
-                    <div className="mb-2">
-                      <span className="text-sm font-semibold text-gray-600">
-                        {admission.courses.slice(0, 2).join(' | ')}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <Link to={`/colleges/${admission.id}`}>
-                      <h3 className="text-lg font-bold mb-2 hover:text-blue-600 transition">
-                        {admission.name} Admission 2026: Cutoff, Fees, Courses, Registration, Eligibility, Selection Criteria
-                      </h3>
-                    </Link>
-
-                    {/* Description */}
-                    <p className="text-sm text-gray-600 line-clamp-2">
-                      {admission.description}
-                    </p>
                   </div>
                 </div>
               ))}
