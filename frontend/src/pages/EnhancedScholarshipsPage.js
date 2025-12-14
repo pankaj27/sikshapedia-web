@@ -311,8 +311,8 @@ const ScholarshipsPage = () => {
         </div>
 
         {filteredScholarships.length === 0 && (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
-            <p className="text-gray-600">No scholarships match your filter criteria.</p>
+          <div className="bg-white rounded-lg shadow p-8 text-center">
+            <p className="text-sm text-gray-600">No scholarships match your filter criteria.</p>
           </div>
         )}
       </div>
@@ -320,36 +320,36 @@ const ScholarshipsPage = () => {
       {/* Eligibility Checker Modal */}
       {showEligibilityChecker && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold mb-4">Check Your Eligibility</h2>
-            <div className="space-y-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-5">
+            <h2 className="text-lg font-bold mb-3">Check Your Eligibility</h2>
+            <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium mb-1">CGPA/Percentage</label>
+                <label className="block text-xs font-medium mb-1">CGPA/Percentage</label>
                 <input
                   type="number"
                   step="0.1"
                   value={eligibilityData.cgpa}
                   onChange={(e) => setEligibilityData({...eligibilityData, cgpa: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   placeholder="e.g., 8.5"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Annual Family Income (₹)</label>
+                <label className="block text-xs font-medium mb-1">Annual Family Income (₹)</label>
                 <input
                   type="number"
                   value={eligibilityData.annual_income}
                   onChange={(e) => setEligibilityData({...eligibilityData, annual_income: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   placeholder="e.g., 500000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Category</label>
+                <label className="block text-xs font-medium mb-1">Category</label>
                 <select
                   value={eligibilityData.category}
                   onChange={(e) => setEligibilityData({...eligibilityData, category: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="General">General</option>
                   <option value="OBC">OBC</option>
@@ -357,17 +357,17 @@ const ScholarshipsPage = () => {
                   <option value="ST">ST</option>
                 </select>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <Button
                   onClick={checkEligibility}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700"
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 h-8 text-xs"
                 >
                   Check Eligibility
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setShowEligibilityChecker(false)}
-                  className="flex-1"
+                  className="flex-1 h-8 text-xs"
                 >
                   Cancel
                 </Button>
@@ -381,65 +381,65 @@ const ScholarshipsPage = () => {
       {showApplicationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
           <div className="bg-white rounded-lg max-w-2xl w-full my-8">
-            <div className="p-6 border-b">
-              <h2 className="text-2xl font-bold">Apply for Scholarship</h2>
-              <p className="text-gray-600 mt-1">{selectedScholarship?.name}</p>
+            <div className="p-4 border-b">
+              <h2 className="text-lg font-bold">Apply for Scholarship</h2>
+              <p className="text-xs text-gray-600 mt-1">{selectedScholarship?.name}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 max-h-[70vh] overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="p-4 max-h-[70vh] overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Full Name *</label>
+                  <label className="block text-xs font-medium mb-1">Full Name *</label>
                   <input
                     type="text"
                     name="full_name"
                     value={formData.full_name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Email *</label>
+                  <label className="block text-xs font-medium mb-1">Email *</label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Phone *</label>
+                  <label className="block text-xs font-medium mb-1">Phone *</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Date of Birth *</label>
+                  <label className="block text-xs font-medium mb-1">Date of Birth *</label>
                   <input
                     type="date"
                     name="date_of_birth"
                     value={formData.date_of_birth}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Gender *</label>
+                  <label className="block text-xs font-medium mb-1">Gender *</label>
                   <select
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -447,13 +447,13 @@ const ScholarshipsPage = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Category *</label>
+                  <label className="block text-xs font-medium mb-1">Category *</label>
                   <select
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="General">General</option>
                     <option value="OBC">OBC</option>
@@ -462,29 +462,29 @@ const ScholarshipsPage = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Current Course *</label>
+                  <label className="block text-xs font-medium mb-1">Current Course *</label>
                   <input
                     type="text"
                     name="current_course"
                     value={formData.current_course}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Current College *</label>
+                  <label className="block text-xs font-medium mb-1">Current College *</label>
                   <input
                     type="text"
                     name="current_college"
                     value={formData.current_college}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Current Year *</label>
+                  <label className="block text-xs font-medium mb-1">Current Year *</label>
                   <input
                     type="text"
                     name="current_year"
@@ -492,11 +492,11 @@ const ScholarshipsPage = () => {
                     onChange={handleInputChange}
                     required
                     placeholder="e.g., 2nd Year"
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">CGPA *</label>
+                  <label className="block text-xs font-medium mb-1">CGPA *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -504,11 +504,11 @@ const ScholarshipsPage = () => {
                     value={formData.cgpa}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Class 10 % *</label>
+                  <label className="block text-xs font-medium mb-1">Class 10 % *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -516,11 +516,11 @@ const ScholarshipsPage = () => {
                     value={formData.class_10_percentage}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Class 12 % *</label>
+                  <label className="block text-xs font-medium mb-1">Class 12 % *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -528,33 +528,33 @@ const ScholarshipsPage = () => {
                     value={formData.class_12_percentage}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Annual Family Income (₹) *</label>
+                  <label className="block text-xs font-medium mb-1">Annual Family Income (₹) *</label>
                   <input
                     type="number"
                     name="annual_family_income"
                     value={formData.annual_family_income}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Achievements</label>
+                  <label className="block text-xs font-medium mb-1">Achievements</label>
                   <textarea
                     name="achievements"
                     value={formData.achievements}
                     onChange={handleInputChange}
                     rows="2"
                     placeholder="Academic, sports, cultural achievements"
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Why do you deserve this scholarship? *</label>
+                  <label className="block text-xs font-medium mb-1">Why do you deserve this scholarship? *</label>
                   <textarea
                     name="why_deserve_scholarship"
                     value={formData.why_deserve_scholarship}
@@ -562,20 +562,20 @@ const ScholarshipsPage = () => {
                     required
                     rows="3"
                     placeholder="Explain your need and goals (max 500 words)"
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-6">
-                <Button type="submit" className="flex-1 bg-purple-600 hover:bg-purple-700">
+              <div className="flex gap-2 mt-4">
+                <Button type="submit" className="flex-1 bg-purple-600 hover:bg-purple-700 h-8 text-xs">
                   Submit Application
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setShowApplicationModal(false)}
-                  className="flex-1"
+                  className="flex-1 h-8 text-xs"
                 >
                   Cancel
                 </Button>
