@@ -833,13 +833,6 @@ const CollegeListingPage = () => {
               {/* Top Controls Bar */}
               <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-sm shadow-sm"
-                  >
-                    <FiFilter />
-                    {showFilters ? 'Hide' : 'Show'} Filters
-                  </button>
                   <h3 className="text-lg font-semibold text-gray-800">
                     {loading ? 'Loading...' : `${colleges.length} Colleges Found`}
                   </h3>
