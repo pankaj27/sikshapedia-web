@@ -1,237 +1,369 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiCheckCircle, FiXCircle, FiAlertCircle } from 'react-icons/fi';
+import { FiAward, FiUsers, FiCalendar, FiMapPin, FiTarget, FiBookOpen, FiTrendingUp } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
+import MetaTags from '../components/SEO/MetaTags';
 
 const EligibilityChecker = () => {
-  const [formData, setFormData] = useState({
-    class_10_percentage: '',
-    class_12_percentage: '',
-    stream: '',
-    entrance_exam: '',
-    entrance_score: '',
-    category: 'General'
+  const [selectedCourse, setSelectedCourse] = useState('all');
+  const [selectedState, setSelectedState] = useState('all');
+
+  const examPredictors = [
+    {
+      id: 1,
+      name: 'JEE Main 2026',
+      colleges: 1698,
+      examDate: '21 Jan 2026',
+      level: 'National',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/jee-main',
+        cutoff: '/exams/jee-main/cutoff',
+        practice: '/exams/jee-main/practice',
+        predict: '/eligibility-checker?exam=jee-main'
+      }
+    },
+    {
+      id: 2,
+      name: 'NEET 2025',
+      colleges: 1175,
+      examDate: '3 May 2025',
+      level: 'National',
+      category: 'Medical',
+      icon: '⚕️',
+      links: {
+        examInfo: '/exams/neet',
+        cutoff: '/exams/neet/cutoff',
+        practice: '/exams/neet/practice',
+        predict: '/eligibility-checker?exam=neet'
+      }
+    },
+    {
+      id: 3,
+      name: 'CAT 2025',
+      colleges: 1446,
+      examDate: '29 Nov 2025',
+      level: 'National',
+      category: 'Management',
+      icon: '💼',
+      links: {
+        examInfo: '/exams/cat',
+        cutoff: '/exams/cat/cutoff',
+        practice: '/exams/cat/practice',
+        predict: '/eligibility-checker?exam=cat'
+      }
+    },
+    {
+      id: 4,
+      name: 'CUET 2025',
+      colleges: 298,
+      examDate: '12 May 2025',
+      level: 'National',
+      category: 'University',
+      icon: '🏛️',
+      links: {
+        examInfo: '/exams/cuet',
+        cutoff: '/exams/cuet/cutoff',
+        practice: '/exams/cuet/practice',
+        predict: '/eligibility-checker?exam=cuet'
+      }
+    },
+    {
+      id: 5,
+      name: 'JEE Advanced 2025',
+      colleges: 69,
+      examDate: '17 May 2025',
+      level: 'National',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/jee-advanced',
+        cutoff: '/exams/jee-advanced/cutoff',
+        practice: '/exams/jee-advanced/practice',
+        predict: '/eligibility-checker?exam=jee-advanced'
+      }
+    },
+    {
+      id: 6,
+      name: 'GATE 2026',
+      colleges: 110,
+      examDate: '7 Feb 2026',
+      level: 'National',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/gate',
+        cutoff: '/exams/gate/cutoff',
+        practice: '/exams/gate/practice',
+        predict: '/eligibility-checker?exam=gate'
+      }
+    },
+    {
+      id: 7,
+      name: 'CLAT 2025',
+      colleges: 98,
+      examDate: '6 Dec 2025',
+      level: 'National',
+      category: 'Law',
+      icon: '⚖️',
+      links: {
+        examInfo: '/exams/clat',
+        cutoff: '/exams/clat/cutoff',
+        practice: '/exams/clat/practice',
+        predict: '/eligibility-checker?exam=clat'
+      }
+    },
+    {
+      id: 8,
+      name: 'MHT CET 2025',
+      colleges: 604,
+      examDate: '8 Apr 2025',
+      level: 'Maharashtra',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/mht-cet',
+        cutoff: '/exams/mht-cet/cutoff',
+        practice: '/exams/mht-cet/practice',
+        predict: '/eligibility-checker?exam=mht-cet'
+      }
+    },
+    {
+      id: 9,
+      name: 'BITSAT 2025',
+      colleges: 3,
+      examDate: '25 May 2025',
+      level: 'National',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/bitsat',
+        cutoff: '/exams/bitsat/cutoff',
+        practice: '/exams/bitsat/practice',
+        predict: '/eligibility-checker?exam=bitsat'
+      }
+    },
+    {
+      id: 10,
+      name: 'VITEEE 2025',
+      colleges: 5,
+      examDate: '19 Apr 2025',
+      level: 'National',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/viteee',
+        cutoff: '/exams/viteee/cutoff',
+        practice: '/exams/viteee/practice',
+        predict: '/eligibility-checker?exam=viteee'
+      }
+    },
+    {
+      id: 11,
+      name: 'NMAT 2025',
+      colleges: 110,
+      examDate: '4 Nov 2025',
+      level: 'National',
+      category: 'Management',
+      icon: '💼',
+      links: {
+        examInfo: '/exams/nmat',
+        cutoff: '/exams/nmat/cutoff',
+        practice: '/exams/nmat/practice',
+        predict: '/eligibility-checker?exam=nmat'
+      }
+    },
+    {
+      id: 12,
+      name: 'WBJEE 2025',
+      colleges: 121,
+      examDate: '26 Apr 2025',
+      level: 'West Bengal',
+      category: 'Engineering',
+      icon: '🎓',
+      links: {
+        examInfo: '/exams/wbjee',
+        cutoff: '/exams/wbjee/cutoff',
+        practice: '/exams/wbjee/practice',
+        predict: '/eligibility-checker?exam=wbjee'
+      }
+    }
+  ];
+
+  const courses = ['All', 'Engineering', 'Medical', 'Management', 'University', 'Law'];
+  const states = ['All', 'National', 'Maharashtra', 'West Bengal', 'Delhi NCR'];
+
+  const filteredExams = examPredictors.filter(exam => {
+    const courseMatch = selectedCourse === 'all' || exam.category === selectedCourse;
+    const stateMatch = selectedState === 'all' || exam.level === selectedState;
+    return courseMatch && stateMatch;
   });
-  const [results, setResults] = useState(null);
-  const [showResults, setShowResults] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    const eligibility = {
-      engineering: checkEngineering(),
-      medical: checkMedical(),
-      management: checkManagement(),
-      commerce: checkCommerce(),
-      arts: checkArts()
-    };
-
-    setResults(eligibility);
-    setShowResults(true);
-  };
-
-  const checkEngineering = () => {
-    const class12 = parseFloat(formData.class_12_percentage);
-    const stream = formData.stream;
-    const examScore = parseFloat(formData.entrance_score) || 0;
-    
-    if (stream !== 'Science') {
-      return { eligible: false, reason: 'Science stream in Class 12 is required', confidence: 0 };
-    }
-    if (class12 < 75) {
-      return { eligible: false, reason: 'Minimum 75% in Class 12 required (65% for SC/ST)', confidence: 0 };
-    }
-    if (examScore < 60) {
-      return { eligible: true, reason: 'Eligible but competitive score recommended (JEE Main 90+)', confidence: 50 };
-    }
-    return { eligible: true, reason: 'Fully eligible for top engineering colleges', confidence: 100 };
-  };
-
-  const checkMedical = () => {
-    const class12 = parseFloat(formData.class_12_percentage);
-    const stream = formData.stream;
-    const examScore = parseFloat(formData.entrance_score) || 0;
-    
-    if (stream !== 'Science') {
-      return { eligible: false, reason: 'Biology in Class 12 is required', confidence: 0 };
-    }
-    if (class12 < 50) {
-      return { eligible: false, reason: 'Minimum 50% in Class 12 required (40% for SC/ST/OBC)', confidence: 0 };
-    }
-    if (examScore < 500) {
-      return { eligible: true, reason: 'Eligible but NEET score above 600 recommended for top colleges', confidence: 60 };
-    }
-    return { eligible: true, reason: 'Excellent eligibility for medical colleges', confidence: 100 };
-  };
-
-  const checkManagement = () => {
-    const class12 = parseFloat(formData.class_12_percentage);
-    const graduation = true; // Assuming graduation for management
-    
-    if (class12 < 50) {
-      return { eligible: false, reason: 'Minimum 50% in graduation required', confidence: 0 };
-    }
-    return { eligible: true, reason: 'Eligible for MBA programs', confidence: 85 };
-  };
-
-  const checkCommerce = () => {
-    const class12 = parseFloat(formData.class_12_percentage);
-    return { eligible: true, reason: 'Eligible for B.Com, BBA, CA, CS programs', confidence: 100 };
-  };
-
-  const checkArts = () => {
-    return { eligible: true, reason: 'Eligible for BA, humanities, social sciences programs', confidence: 100 };
-  };
-
-  const getIcon = (result) => {
-    if (!result.eligible) return <FiXCircle className="text-red-500 text-3xl" />;
-    if (result.confidence < 70) return <FiAlertCircle className="text-yellow-500 text-3xl" />;
-    return <FiCheckCircle className="text-green-500 text-3xl" />;
-  };
-
-  const getColor = (result) => {
-    if (!result.eligible) return 'border-red-200 bg-red-50';
-    if (result.confidence < 70) return 'border-yellow-200 bg-yellow-50';
-    return 'border-green-200 bg-green-50';
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">Eligibility Checker</h1>
-            <p className="text-xl text-gray-600">Check your eligibility for different courses and colleges</p>
-          </div>
+      <MetaTags 
+        title="College Predictor 2026 - Find Best Colleges | AdmissionBuddy"
+        description="Find colleges based on your exam scores. College predictor for JEE Main, NEET, CAT, CUET and other exams."
+      />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Form */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-6">Your Academic Details</h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Class 10 Percentage *</label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.class_10_percentage}
-                    onChange={(e) => setFormData({...formData, class_10_percentage: e.target.value})}
-                    placeholder="85.5"
-                    required
-                  />
-                </div>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-8">
+        <div className="container mx-auto px-4">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 text-center">
+            College Predictor 2026
+          </h1>
+          <p className="text-sm md:text-base text-center text-purple-100 mb-4">
+            For JEE Main, NEET, CUET and other top Universities and Exams
+          </p>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">Class 12 Percentage *</label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.class_12_percentage}
-                    onChange={(e) => setFormData({...formData, class_12_percentage: e.target.value})}
-                    placeholder="90.0"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Class 12 Stream *</label>
-                  <select
-                    value={formData.stream}
-                    onChange={(e) => setFormData({...formData, stream: e.target.value})}
-                    className="w-full px-3 py-2 border rounded"
-                    required
-                  >
-                    <option value="">Select Stream</option>
-                    <option value="Science">Science</option>
-                    <option value="Commerce">Commerce</option>
-                    <option value="Arts">Arts</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Entrance Exam (Optional)</label>
-                  <Input
-                    value={formData.entrance_exam}
-                    onChange={(e) => setFormData({...formData, entrance_exam: e.target.value})}
-                    placeholder="JEE Main, NEET, CAT, etc."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Entrance Exam Score (Optional)</label>
-                  <Input
-                    type="number"
-                    value={formData.entrance_score}
-                    onChange={(e) => setFormData({...formData, entrance_score: e.target.value})}
-                    placeholder="150"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Category *</label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                    className="w-full px-3 py-2 border rounded"
-                    required
-                  >
-                    <option value="General">General</option>
-                    <option value="OBC">OBC</option>
-                    <option value="SC">SC</option>
-                    <option value="ST">ST</option>
-                  </select>
-                </div>
-
-                <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700">Check Eligibility</Button>
-              </form>
+          {/* Filters */}
+          <div className="flex flex-wrap justify-center gap-2 mb-4">
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium">Course:</label>
+              <select
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+                className="px-3 py-1.5 text-xs bg-white text-gray-900 rounded-lg border-0 focus:ring-2 focus:ring-white"
+              >
+                {courses.map((course) => (
+                  <option key={course} value={course.toLowerCase()}>
+                    {course}
+                  </option>
+                ))}
+              </select>
             </div>
-
-            {/* Results */}
-            <div>
-              {showResults && results ? (
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold mb-6">Eligibility Results</h2>
-                  
-                  {Object.entries(results).map(([key, result]) => (
-                    <div key={key} className={`border-2 rounded-lg p-4 ${getColor(result)}`}>
-                      <div className="flex items-start gap-4">
-                        {getIcon(result)}
-                        <div className="flex-1">
-                          <h3 className="font-bold text-lg capitalize mb-1">{key}</h3>
-                          <p className="text-sm text-gray-700">{result.reason}</p>
-                          {result.eligible && result.confidence < 100 && (
-                            <div className="mt-2">
-                              <div className="text-xs text-gray-600 mb-1">Confidence: {result.confidence}%</div>
-                              <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                  className="bg-orange-600 h-2 rounded-full"
-                                  style={{ width: `${result.confidence}%` }}
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-                    <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> This is an indicative eligibility check. Please verify specific requirements with individual colleges and universities.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-white rounded-lg shadow p-12 text-center">
-                  <FiAlertCircle className="text-6xl text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-600">Fill in your details to check eligibility</p>
-                </div>
-              )}
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium">State:</label>
+              <select
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                className="px-3 py-1.5 text-xs bg-white text-gray-900 rounded-lg border-0 focus:ring-2 focus:ring-white"
+              >
+                {states.map((state) => (
+                  <option key={state} value={state.toLowerCase()}>
+                    {state}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Top Exams Section */}
+      <section className="py-6">
+        <div className="container mx-auto px-4">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <FiAward className="text-orange-600" />
+            Top Exam Predictors
+          </h2>
+
+          {/* Exam Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredExams.map((exam) => (
+              <div
+                key={exam.id}
+                className="bg-white rounded-lg shadow hover:shadow-lg transition p-4"
+              >
+                {/* Exam Icon */}
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="text-3xl">{exam.icon}</div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-bold text-gray-900 mb-1">
+                      {exam.name}
+                    </h3>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <span className="flex items-center gap-1 text-gray-600">
+                        <FiUsers className="text-sm" />
+                        {exam.colleges} Colleges
+                      </span>
+                      {exam.examDate && (
+                        <span className="flex items-center gap-1 text-gray-600">
+                          <FiCalendar className="text-sm" />
+                          {exam.examDate}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1 text-gray-600">
+                        <FiMapPin className="text-sm" />
+                        {exam.level}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Links */}
+                <div className="grid grid-cols-2 gap-2">
+                  <Link to={exam.links.examInfo}>
+                    <button className="w-full px-2 py-1.5 text-xs text-gray-700 border border-gray-300 rounded hover:bg-gray-50 transition">
+                      Exam Info
+                    </button>
+                  </Link>
+                  <Link to={exam.links.cutoff}>
+                    <button className="w-full px-2 py-1.5 text-xs text-gray-700 border border-gray-300 rounded hover:bg-gray-50 transition">
+                      Cutoff
+                    </button>
+                  </Link>
+                  <Link to={exam.links.practice}>
+                    <button className="w-full px-2 py-1.5 text-xs text-gray-700 border border-gray-300 rounded hover:bg-gray-50 transition">
+                      Practice Tests
+                    </button>
+                  </Link>
+                  <Link to={exam.links.predict}>
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700 h-7 text-xs">
+                      Predict Now
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredExams.length === 0 && (
+            <div className="bg-white rounded-lg shadow p-8 text-center">
+              <p className="text-sm text-gray-600">No exams found for the selected filters</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* How to Use Section */}
+      <section className="py-6 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-xl font-bold mb-4 text-center">
+            How to use College Predictor?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiBookOpen className="text-orange-600 text-xl" />
+              </div>
+              <h3 className="font-bold text-sm mb-2">Step 1: Choose Your Exam</h3>
+              <p className="text-xs text-gray-600">
+                Select your exam from the list above
+              </p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiTarget className="text-purple-600 text-xl" />
+              </div>
+              <h3 className="font-bold text-sm mb-2">Step 2: Provide Your Details</h3>
+              <p className="text-xs text-gray-600">
+                Enter your expected marks and preferences
+              </p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiTrendingUp className="text-green-600 text-xl" />
+              </div>
+              <h3 className="font-bold text-sm mb-2">Step 3: Predict Your Rank</h3>
+              <p className="text-xs text-gray-600">
+                Get your rank and list of colleges you can get
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
