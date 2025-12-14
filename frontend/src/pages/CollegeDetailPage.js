@@ -581,7 +581,7 @@ const CollegeDetailPage = () => {
                     </section>
 
                     {/* FAQs - FROM TOC #09 */}
-                    <section id="faqs-seo">
+                    <section id="seo-faqs">
                       <h2 className="text-2xl font-bold mb-3">{college.name} FAQs</h2>
                       <div className="space-y-3">
                         <div className="bg-gray-50 rounded-lg p-4 border">
