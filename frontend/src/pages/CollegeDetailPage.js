@@ -707,7 +707,6 @@ const CollegeDetailPage = () => {
                     </div>
                   </div>
                 </section>
-              </div>
             </div>
           </div>
 
