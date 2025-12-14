@@ -56,6 +56,7 @@ const Header = () => {
   ];
 
   const exploreMenuItems = [
+    { title: 'News', link: '/news', icon: 'FiFileText' },
     { title: 'Study Abroad', link: '/study-abroad', icon: 'FiGlobe' },
     { title: 'Scholarships', link: '/scholarships', icon: 'FiAward' },
     { title: 'Education Loans', link: '/loans', icon: 'FiDollarSign' },
