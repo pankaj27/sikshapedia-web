@@ -45,6 +45,7 @@ function App() {
             <Route path="/colleges" element={<CollegeListingPage />} />
             <Route path="/colleges/:id" element={<CollegeDetailPage />} />
             <Route path="/schools" element={<SchoolsPage />} />
+            <Route path="/universities" element={<UniversitiesPage />} />
             <Route path="/exams" element={<ExamsPage />} />
             <Route path="/exams/:id" element={<ExamDetailPage />} />
             <Route path="/courses" element={<CoursesPage />} />
