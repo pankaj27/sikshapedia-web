@@ -110,8 +110,8 @@ const CollegeDuniaHome = () => {
       />
       <OrganizationSchema />
       <WebsiteSchema />
-      {/* Hero Section with Background Slider */}
-      <section className="relative h-[500px] overflow-hidden -mt-20">
+      {/* Hero Section with Background Slider - Compact */}
+      <section className="relative h-[400px] overflow-hidden -mt-20">
         <Swiper
           modules={[Pagination, Autoplay]}
           pagination={{ clickable: true }}
@@ -131,27 +131,27 @@ const CollegeDuniaHome = () => {
           ))}
         </Swiper>
 
-        {/* Search Overlay */}
+        {/* Search Overlay - Compact */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-center text-white max-w-4xl px-4 w-full">
-            <h1 className="text-3xl md:text-5xl font-bold mb-8 drop-shadow-lg">Find Over 250+ Exams in India</h1>
+            <h1 className="text-2xl md:text-4xl font-bold mb-6 drop-shadow-lg">Find Over 250+ Exams in India</h1>
             
-            {/* Single Search Input - No Background Container */}
+            {/* Single Search Input - Compact */}
             <div className="max-w-3xl mx-auto">
               <form onSubmit={handleSearch}>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <div className="flex-1 relative">
                     <Input
                       placeholder="Search for colleges, exams, courses and more.."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-14 text-base pl-12 pr-4 bg-white border-0 rounded-lg shadow-xl focus:ring-2 focus:ring-orange-500 transition-all"
+                      className="h-12 text-sm pl-10 pr-4 bg-white border-0 rounded-lg shadow-xl focus:ring-2 focus:ring-orange-500 transition-all"
                     />
-                    <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
+                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" />
                   </div>
                   <Button 
                     type="submit" 
-                    className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 h-14 px-10 text-base font-bold rounded-lg shadow-xl hover:shadow-2xl transition-all"
+                    className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 h-12 px-8 text-sm font-bold rounded-lg shadow-xl hover:shadow-2xl transition-all"
                   >
                     Search
                   </Button>
@@ -159,14 +159,14 @@ const CollegeDuniaHome = () => {
               </form>
             </div>
             
-            {/* Need Counselling Button */}
-            <div className="mt-6">
+            {/* Need Counselling Button - Compact */}
+            <div className="mt-4">
               <Link to="/counseling">
                 <Button 
                   type="button" 
-                  className="bg-white text-orange-600 hover:bg-gray-50 h-12 px-8 text-base font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all"
+                  className="bg-white text-orange-600 hover:bg-gray-50 h-10 px-6 text-sm font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   Need Counselling
