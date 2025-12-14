@@ -250,18 +250,18 @@ const CollegeDetailPage = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
-              <div className="flex items-start gap-3">
-                <span className="text-xs font-bold text-blue-600 bg-blue-200 px-2 py-1 rounded flex-shrink-0">12 Dec, 2025</span>
-                <p className="text-sm text-gray-800">
+            <div className="bg-blue-50 border-l-4 border-blue-600 p-3 rounded">
+              <div className="flex items-start gap-2">
+                <span className="text-[10px] font-bold text-blue-600 bg-blue-200 px-2 py-0.5 rounded flex-shrink-0">12 Dec, 2025</span>
+                <p className="text-xs text-gray-800">
                   <strong>Admission 2026</strong> applications are now open. Apply before the deadline.
                 </p>
               </div>
             </div>
-            <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded">
-              <div className="flex items-start gap-3">
-                <span className="text-xs font-bold text-green-600 bg-green-200 px-2 py-1 rounded flex-shrink-0">06 Dec, 2025</span>
-                <p className="text-sm text-gray-800">
+            <div className="bg-green-50 border-l-4 border-green-600 p-3 rounded">
+              <div className="flex items-start gap-2">
+                <span className="text-[10px] font-bold text-green-600 bg-green-200 px-2 py-0.5 rounded flex-shrink-0">06 Dec, 2025</span>
+                <p className="text-xs text-gray-800">
                   <strong>Placement Results 2024</strong> announced with highest package of ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L
                 </p>
               </div>
