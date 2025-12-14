@@ -101,7 +101,7 @@ const CollegeDuniaHome = () => {
   const rankingAgencies = ['India Today', 'NIRF', 'The Week', 'Outlook'];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white -mt-20 pt-20">
       <MetaTags 
         title="AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024"
         description="Find detailed information about 10,000+ colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details. Read reviews and make informed decisions."
@@ -111,7 +111,7 @@ const CollegeDuniaHome = () => {
       <OrganizationSchema />
       <WebsiteSchema />
       {/* Hero Section with Background Slider */}
-      <section className="relative h-[500px] overflow-hidden">
+      <section className="relative h-[500px] overflow-hidden -mt-20">
         <Swiper
           modules={[Pagination, Autoplay]}
           pagination={{ clickable: true }}
