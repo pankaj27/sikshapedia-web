@@ -782,6 +782,68 @@ const CollegeDetailPage = () => {
                   </div>
                 </section>
 
+                {/* FAQ SECTION */}
+                <section id="faq">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Frequently Asked Questions (FAQs)</h2>
+                  <p className="text-gray-700 mb-6">
+                    Find answers to commonly asked questions about {college.name}:
+                  </p>
+
+                  <div className="space-y-3">
+                    {[
+                      {
+                        question: 'What is the admission process for B.Tech?',
+                        answer: 'Admission to B.Tech is through JEE Advanced followed by JoSAA counselling. Candidates must have 75% marks in 10+2 with PCM.'
+                      },
+                      {
+                        question: 'What are the hostel facilities available?',
+                        answer: 'The institute has 17 hostels with separate facilities for boys and girls. Each hostel has mess, recreation room, and 24/7 security. Hostel fee is approximately INR 17,250 per semester.'
+                      },
+                      {
+                        question: 'What is the fee structure for different courses?',
+                        answer: 'B.Tech: ₹2.00 Lakhs per year, M.Tech: ₹72,000 per year, MBA: ₹7.68 Lakhs per year. Additional charges for hostel and mess are separate.'
+                      },
+                      {
+                        question: 'How are the placement opportunities?',
+                        answer: 'The institute has excellent placement record with average package of INR 23.5 LPA and highest package going up to INR 50+ LPA. Top companies like Google, Microsoft, Amazon visit regularly.'
+                      },
+                      {
+                        question: 'What scholarships are available?',
+                        answer: 'Various scholarships including Merit Cum Means Scholarship, SC/ST/OBC scholarships, Aditya Birla Scholarship, and INSPIRE Scholarship are available for deserving students.'
+                      },
+                      {
+                        question: 'Is there any entrance exam for MBA admission?',
+                        answer: 'Yes, admission to MBA program is through CAT exam followed by Group Discussion and Personal Interview rounds.'
+                      },
+                      {
+                        question: 'What is the student-faculty ratio?',
+                        answer: 'The institute maintains an excellent student-faculty ratio of approximately 10:1 ensuring personalized attention and quality education.'
+                      },
+                      {
+                        question: 'Are there research opportunities for students?',
+                        answer: 'Yes, the institute provides extensive research opportunities with state-of-the-art labs and funding support for innovative projects.'
+                      }
+                    ].map((faq, index) => (
+                      <details key={index} className="bg-white border rounded-lg">
+                        <summary className="font-semibold text-gray-900 p-5 cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-between">
+                          <span className="flex-1">Ques. {faq.question}</span>
+                          <FiChevronDown className="text-orange-600 flex-shrink-0" />
+                        </summary>
+                        <div className="px-5 pb-5 text-sm text-gray-700 border-t pt-4">
+                          <p><strong>Ans.</strong> {faq.answer}</p>
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 text-center">
+                    <p className="text-sm text-gray-600 mb-3">Didn't find your answer?</p>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      Ask a Question
+                    </Button>
+                  </div>
+                </section>
+
                 {/* REVIEWS */}
                 <section id="reviews">
                   <h2 className="text-3xl font-bold mb-4">{college.name} Student Reviews</h2>
@@ -791,32 +853,75 @@ const CollegeDetailPage = () => {
 
                   <div className="bg-gray-50 border rounded-lg p-8 text-center mb-6">
                     <div className="text-6xl mb-4">⭐</div>
-                    <p className="text-gray-600 mb-4">Be the first to write a review!</p>
+                    <p className="text-gray-600 mb-4">Share your experience and help others!</p>
                     <Button className="bg-orange-600 hover:bg-orange-700 text-white">
                       Write a Review
                     </Button>
                   </div>
 
-                  {/* Sample Review */}
-                  <div className="bg-white border rounded-lg p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
-                        A
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="font-bold">Anonymous</span>
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <FiStar key={i} className="fill-yellow-400 text-yellow-400" size={14} />
-                            ))}
-                          </div>
+                  {/* Sample Reviews */}
+                  <div className="space-y-4">
+                    <div className="bg-white border rounded-lg p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                          A
                         </div>
-                        <p className="text-sm text-gray-700">
-                          Excellent infrastructure and experienced faculty. The placement opportunities are outstanding with top companies visiting the campus.
-                        </p>
-                        <p className="text-xs text-gray-500 mt-2">B.Tech CSE | Class of 2024</p>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold">Amit Kumar</span>
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <FiStar key={i} className="fill-yellow-400 text-yellow-400" size={14} />
+                                ))}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button className="text-sm text-gray-600 hover:text-gray-800">👍 24</button>
+                              <button className="text-sm text-gray-600 hover:text-gray-800">👎 2</button>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-700 mb-3">
+                            Excellent infrastructure and experienced faculty. The placement opportunities are outstanding with top companies visiting the campus. Campus life is vibrant with various clubs and activities.
+                          </p>
+                          <p className="text-xs text-gray-500">B.Tech CSE | Class of 2024 | Posted 2 weeks ago</p>
+                        </div>
                       </div>
+                    </div>
+
+                    <div className="bg-white border rounded-lg p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                          P
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold">Priya Sharma</span>
+                              <div className="flex">
+                                {[...Array(4)].map((_, i) => (
+                                  <FiStar key={i} className="fill-yellow-400 text-yellow-400" size={14} />
+                                ))}
+                                <FiStar className="text-gray-300" size={14} />
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button className="text-sm text-gray-600 hover:text-gray-800">👍 18</button>
+                              <button className="text-sm text-gray-600 hover:text-gray-800">👎 1</button>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-700 mb-3">
+                            Great academic environment with focus on research. Library facilities are excellent. The only downside is the hostel food could be better.
+                          </p>
+                          <p className="text-xs text-gray-500">M.Tech EE | Class of 2025 | Posted 1 month ago</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-center mt-6">
+                      <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
+                        Load More Reviews
+                      </Button>
                     </div>
                   </div>
                 </section>
