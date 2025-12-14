@@ -261,7 +261,7 @@ const Header = () => {
             <span className="text-white/30 mx-2">|</span>
             <Link to="/compare" className="flex items-center gap-1.5 text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               <FiBarChart2 size={14} />
-              <span>Compare</span>
+              <span>Compare Institute</span>
             </Link>
             <Link to="/study-abroad" className="flex items-center gap-1.5 text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               <FiGlobe size={14} />
