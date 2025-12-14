@@ -676,12 +676,109 @@ const CollegeDetailPage = () => {
                   </div>
 
                   {/* Campus Images */}
-                  <div className="grid grid-cols-3 gap-4 mt-6">
+                  <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
                     {[1, 2, 3].map((i) => (
                       <div key={i} className="bg-gray-200 rounded-lg aspect-video flex items-center justify-center border">
                         <span className="text-gray-500 text-sm">Campus Image {i}</span>
                       </div>
                     ))}
+                  </div>
+
+                  {/* CAMPUS VIDEO */}
+                  <div className="mt-8">
+                    <h3 className="text-2xl font-bold mb-4">Campus Video Tour</h3>
+                    <div className="bg-gray-900 rounded-lg aspect-video flex items-center justify-center border relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50"></div>
+                      <div className="relative text-center text-white z-10">
+                        <div className="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 cursor-pointer hover:bg-orange-700 transition-colors shadow-lg">
+                          <div className="w-0 h-0 border-l-[20px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-2"></div>
+                        </div>
+                        <p className="text-lg font-semibold">Watch Campus Tour</p>
+                        <p className="text-sm text-gray-300 mt-1">Get a virtual tour of {college.name} campus</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Q&A SECTION */}
+                <section id="qna">
+                  <h2 className="text-3xl font-bold mb-4">{college.name} Questions & Answers</h2>
+                  <p className="text-gray-700 mb-6">
+                    Have questions about {college.name}? Ask here and get answers from students, alumni, and experts.
+                  </p>
+
+                  {/* Ask Question Form */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                    <h3 className="font-bold text-lg mb-4">Ask Your Question</h3>
+                    <textarea
+                      placeholder="Type your question here..."
+                      className="w-full border border-gray-300 rounded-lg p-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      rows="3"
+                    ></textarea>
+                    <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                      Submit Question
+                    </Button>
+                  </div>
+
+                  {/* Recent Q&A */}
+                  <div className="space-y-4">
+                    <h3 className="font-bold text-lg">Recent Questions</h3>
+                    
+                    <div className="bg-white border rounded-lg p-5">
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                            S
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900 mb-2">What is the hostel fee structure?</p>
+                          <p className="text-xs text-gray-500 mb-3">Asked by Student123 • 2 days ago</p>
+                          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                            <p className="text-sm text-gray-700 mb-2">
+                              <strong>Answer:</strong> The hostel fee is approximately INR 17,250 per semester which includes accommodation and basic facilities. Mess charges are separate and vary between INR 3,000-4,000 per month.
+                            </p>
+                            <p className="text-xs text-gray-500">Answered by Alumni • 1 day ago</p>
+                          </div>
+                          <div className="flex items-center gap-4 mt-3">
+                            <button className="text-sm text-blue-600 hover:underline">Reply</button>
+                            <button className="text-sm text-gray-600 hover:text-gray-800">👍 12</button>
+                            <button className="text-sm text-gray-600 hover:text-gray-800">Share</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white border rounded-lg p-5">
+                      <div className="flex gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+                            R
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900 mb-2">How is the placement scenario for CSE branch?</p>
+                          <p className="text-xs text-gray-500 mb-3">Asked by Rahul • 5 days ago</p>
+                          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                            <p className="text-sm text-gray-700 mb-2">
+                              <strong>Answer:</strong> CSE branch has excellent placements with average package of 25+ LPA. Top companies like Google, Microsoft, Amazon regularly visit for placements.
+                            </p>
+                            <p className="text-xs text-gray-500">Answered by Current Student • 4 days ago</p>
+                          </div>
+                          <div className="flex items-center gap-4 mt-3">
+                            <button className="text-sm text-blue-600 hover:underline">Reply</button>
+                            <button className="text-sm text-gray-600 hover:text-gray-800">👍 28</button>
+                            <button className="text-sm text-gray-600 hover:text-gray-800">Share</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-center">
+                      <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
+                        View All Questions
+                      </Button>
+                    </div>
                   </div>
                 </section>
 
