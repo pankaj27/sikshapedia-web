@@ -881,16 +881,18 @@ const SchoolsPage = () => {
                                       <span className="text-gray-400">|</span>
                                       <span className="text-blue-600 font-medium">{school.type}</span>
                                     </div>
-                                    <div className="text-[9px] text-gray-600 mb-1.5">{school.accreditation || 'NAAC A+'} Approved</div>
-                                    <div className="flex flex-wrap gap-1 mb-1">
+                                    <div className="text-[9px] text-gray-600 mb-2">{school.accreditation || 'NAAC A+'} Approved</div>
+                                    <div className="flex flex-wrap gap-2 mb-1">
                                       <Link to={`/schools/${school.id}`}>
-                                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-[10px] h-6 px-2">
+                                        <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-xs font-semibold h-8 px-4 rounded-md shadow-sm">
                                           Apply Now
                                         </Button>
                                       </Link>
-                                      <Button size="sm" variant="outline" className="text-[10px] h-6 px-2 border-gray-300">
+                                      <Button variant="outline" className="text-xs font-semibold h-8 px-4 rounded-md border-2 border-blue-600 text-blue-600 hover:bg-blue-50">
                                         Download Brochure
                                       </Button>
+                                    </div>
+                                    <div className="mt-1">
                                       <Button 
                                         size="sm" 
                                         variant="ghost" 
@@ -900,9 +902,6 @@ const SchoolsPage = () => {
                                         {isInCompare ? <FiCheckCircle className="mr-1" size={10} /> : null}
                                         {isInCompare ? 'Added' : 'Add To Compare'}
                                       </Button>
-                                    </div>
-                                    <div className="text-[9px] text-gray-500 mt-0.5">
-                                      <span className="font-semibold">CD Score:</span> {Math.floor(Math.random() * 500) + 1000}/2000
                                     </div>
                                       </div>
                                     </div>
