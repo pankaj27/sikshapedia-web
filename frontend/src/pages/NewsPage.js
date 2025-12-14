@@ -14,62 +14,62 @@ const NewsPage = () => {
   ];
 
   const featuredNews = {
-    image: 'https://via.placeholder.com/654x327',
     title: 'SNAP 2025 Test 2 Exam Analysis Live Updates',
     description: 'The SNAP 2025 Test 2 is scheduled on 14th December 2025 in CBT Mode in two slots: 2:00 PM to 3:00 PM and 4:30 PM to 5:30 PM. The SNAP 2025 Test 2 Exam Analysis Live Updates will be...',
     date: 'Dec 13, 2025',
     tag: 'SNAP',
-    url: '#'
+    url: '#',
+    gradient: 'from-orange-400 to-red-500'
   };
 
   const newsItems = [
     {
-      image: 'https://via.placeholder.com/400x200',
       title: 'SNAP 2025 Test 2 Question Paper with Solutions: Download SNAP 2025 Question Paper with Answer Key',
       description: 'The SNAP 2025 Question Paper, along with the Answer Key and detailed solutions, will be available for download in PDF format...',
       date: 'Dec 12, 2025',
       tag: 'SNAP',
-      category: 'exam'
+      category: 'exam',
+      gradient: 'from-purple-400 to-pink-500'
     },
     {
-      image: 'https://via.placeholder.com/400x200',
       title: 'AILET LLM 2026 Question Paper (Available) Download Solutions and Answer Key pdf',
       description: 'AILET 2026 LLM Question Paper with Answer Key PDF will be available for download. NLU Delhi will conduct AILET 2026 on December 13, 2025...',
       date: 'Dec 12, 2025',
       tag: 'AILET',
-      category: 'exam'
+      category: 'exam',
+      gradient: 'from-blue-400 to-indigo-500'
     },
     {
-      image: 'https://via.placeholder.com/400x200',
       title: 'MGR University PhD/MS Research Admission 2026 Begins; Apply by January 31',
       description: 'The Dr. M.G.R. Educational and Research Institute in Chennai has begun accepting applications for its PhD/MS Research Admission program...',
       date: 'Dec 11, 2025',
       tag: 'Dr. M.G.R. University',
-      category: 'college'
+      category: 'college',
+      gradient: 'from-green-400 to-teal-500'
     },
     {
-      image: 'https://via.placeholder.com/400x200',
       title: 'Bennett University Greater Noida Releases Fee Structure 2026',
       description: 'Bennett University, Greater Noida, has released its 2026 fee structure for all major UG, PG, Dual Degree programs...',
       date: 'Dec 11, 2025',
       tag: 'Bennett University',
-      category: 'college'
+      category: 'college',
+      gradient: 'from-yellow-400 to-orange-500'
     },
     {
-      image: 'https://via.placeholder.com/400x200',
       title: 'IIM Visakhapatnam Admission 2026: Interview Shortlist Out',
       description: 'IIM Visakhapatnam offers admission to its various programs based on scores in national entrance exams...',
       date: 'Dec 12, 2025',
       tag: 'IIM Visakhapatnam',
-      category: 'admission'
+      category: 'admission',
+      gradient: 'from-red-400 to-pink-500'
     },
     {
-      image: 'https://via.placeholder.com/400x200',
       title: 'CAT 2025 Results Declared',
       description: 'IIM Calcutta has released CAT 2025 results. Candidates can check their scores on the official website...',
       date: 'Dec 08, 2025',
       tag: 'CAT',
-      category: 'exam'
+      category: 'exam',
+      gradient: 'from-cyan-400 to-blue-500'
     }
   ];
 
@@ -124,11 +124,14 @@ const NewsPage = () => {
             {/* Featured News */}
             <div className="mb-8">
               <Link to={featuredNews.url} className="block group">
-                <img
-                  src={featuredNews.image}
-                  alt={featuredNews.title}
-                  className="w-full h-80 object-cover rounded-lg mb-4"
-                />
+                <div className={`w-full h-80 bg-gradient-to-br ${featuredNews.gradient} rounded-lg mb-4 flex items-center justify-center`}>
+                  <div className="text-white text-center p-8">
+                    <svg className="w-20 h-20 mx-auto mb-4 opacity-80" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                    </svg>
+                    <p className="text-sm font-semibold opacity-90">Featured News</p>
+                  </div>
+                </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">
                   {featuredNews.title}
                 </h1>
@@ -152,11 +155,11 @@ const NewsPage = () => {
                   to="#"
                   className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group"
                 >
-                  <img
-                    src={news.image}
-                    alt={news.title}
-                    className="w-full h-48 object-cover"
-                  />
+                  <div className={`w-full h-48 bg-gradient-to-br ${news.gradient} flex items-center justify-center`}>
+                    <svg className="w-16 h-16 text-white opacity-70" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd"></path>
+                    </svg>
+                  </div>
                   <div className="p-4">
                     <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
                       {news.title}
