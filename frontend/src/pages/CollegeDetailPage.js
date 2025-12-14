@@ -752,6 +752,18 @@ const CollegeDetailPage = () => {
                 </div>
               </div>
 
+              {/* ADVERTISEMENT 2 */}
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+                <div className="text-center">
+                  <div className="text-4xl mb-3">📚</div>
+                  <h3 className="font-bold text-lg mb-2">Download Brochure</h3>
+                  <p className="text-sm text-blue-100 mb-4">Get complete course details and admission information</p>
+                  <button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-bold py-2.5 rounded transition-colors">
+                    Download Now
+                  </button>
+                </div>
+              </div>
+
               {/* SIMILAR COLLEGES */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Similar Colleges</h3>
