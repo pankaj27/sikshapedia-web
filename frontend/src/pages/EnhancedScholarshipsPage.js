@@ -145,17 +145,16 @@ const ScholarshipsPage = () => {
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-16">
+      <section className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-10">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect Scholarship</h1>
-            <p className="text-xl text-purple-100 mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">Find Your Perfect Scholarship</h1>
+            <p className="text-base md:text-lg text-purple-100 mb-4">
               Browse 1000+ scholarships worth crores. Government, private, merit-based, and need-based opportunities.
             </p>
             <Button
               onClick={() => setShowEligibilityChecker(true)}
-              className="bg-white text-purple-600 hover:bg-gray-100"
-              size="lg"
+              className="bg-white text-purple-600 hover:bg-gray-100 h-9 px-4 text-sm"
             >
               <FiTarget className="mr-2" /> Check My Eligibility
             </Button>
@@ -163,40 +162,40 @@ const ScholarshipsPage = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <div className="text-3xl font-bold text-purple-600">{scholarships.length}</div>
-            <div className="text-gray-600 mt-1">Total Scholarships</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow p-4 text-center">
+            <div className="text-2xl font-bold text-purple-600">{scholarships.length}</div>
+            <div className="text-xs text-gray-600 mt-1">Total Scholarships</div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <div className="text-3xl font-bold text-green-600">₹500Cr+</div>
-            <div className="text-gray-600 mt-1">Worth Available</div>
+          <div className="bg-white rounded-lg shadow p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">₹500Cr+</div>
+            <div className="text-xs text-gray-600 mt-1">Worth Available</div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <div className="text-3xl font-bold text-blue-600">50+</div>
-            <div className="text-gray-600 mt-1">Partners</div>
+          <div className="bg-white rounded-lg shadow p-4 text-center">
+            <div className="text-2xl font-bold text-blue-600">50+</div>
+            <div className="text-xs text-gray-600 mt-1">Partners</div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <div className="text-3xl font-bold text-orange-600">10K+</div>
-            <div className="text-gray-600 mt-1">Students Helped</div>
+          <div className="bg-white rounded-lg shadow p-4 text-center">
+            <div className="text-2xl font-bold text-orange-600">10K+</div>
+            <div className="text-xs text-gray-600 mt-1">Students Helped</div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <FiFilter className="text-purple-600" />
-            <h2 className="text-xl font-bold">Filter Scholarships</h2>
+        <div className="bg-white rounded-lg shadow p-4 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <FiFilter className="text-purple-600 text-sm" />
+            <h2 className="text-base font-bold">Filter Scholarships</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Type</label>
               <select
                 value={scholarshipType}
                 onChange={(e) => setScholarshipType(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Types</option>
                 <option value="Merit-based">Merit-based</option>
@@ -205,11 +204,11 @@ const ScholarshipsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Provider</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Provider</label>
               <select
                 value={provider}
                 onChange={(e) => setProvider(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Providers</option>
                 <option value="Government">Government</option>
@@ -218,11 +217,11 @@ const ScholarshipsPage = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Education Level</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">Education Level</label>
               <select
                 value={educationLevel}
                 onChange={(e) => setEducationLevel(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Levels</option>
                 <option value="UG">Undergraduate</option>
@@ -231,67 +230,67 @@ const ScholarshipsPage = () => {
               </select>
             </div>
           </div>
-          <div className="mt-4 text-sm text-gray-600">
+          <div className="mt-3 text-xs text-gray-600">
             Showing {filteredScholarships.length} of {scholarships.length} scholarships
           </div>
         </div>
 
         {/* Scholarships Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {filteredScholarships.map((scholarship) => (
-            <div key={scholarship.id} className="bg-white rounded-lg shadow hover:shadow-xl transition">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
+            <div key={scholarship.id} className="bg-white rounded-lg shadow hover:shadow-lg transition">
+              <div className="p-4">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{scholarship.name}</h3>
-                    <div className="flex flex-wrap gap-2">
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    <h3 className="text-base font-bold text-gray-900 mb-2">{scholarship.name}</h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         scholarship.scholarship_type === 'Merit-based' ? 'bg-blue-100 text-blue-800' :
                         scholarship.scholarship_type === 'Need-based' ? 'bg-green-100 text-green-800' :
                         'bg-purple-100 text-purple-800'
                       }`}>
                         {scholarship.scholarship_type}
                       </span>
-                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                         {scholarship.provider}
                       </span>
                     </div>
                   </div>
-                  <div className="text-right ml-4">
-                    <div className="text-3xl font-bold text-purple-600">₹{(scholarship.amount / 1000).toFixed(0)}K</div>
-                    <div className="text-sm text-gray-600">Value</div>
+                  <div className="text-right ml-3">
+                    <div className="text-xl font-bold text-purple-600">₹{(scholarship.amount / 1000).toFixed(0)}K</div>
+                    <div className="text-xs text-gray-600">Value</div>
                   </div>
                 </div>
 
-                <p className="text-gray-700 mb-4 line-clamp-2">{scholarship.description}</p>
+                <p className="text-sm text-gray-700 mb-3 line-clamp-2">{scholarship.description}</p>
 
-                <div className="space-y-2 mb-4 text-sm">
+                <div className="space-y-1.5 mb-3 text-xs">
                   <div className="flex items-center gap-2">
-                    <FiAward className="text-purple-600" />
+                    <FiAward className="text-purple-600 text-sm" />
                     <span className="text-gray-700"><strong>For:</strong> {scholarship.education_level}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FiCalendar className="text-orange-600" />
+                    <FiCalendar className="text-orange-600 text-sm" />
                     <span className="text-gray-700"><strong>Deadline:</strong> {new Date(scholarship.deadline).toLocaleDateString()}</span>
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <h4 className="font-semibold text-sm mb-2">Benefits:</h4>
+                <div className="mb-3">
+                  <h4 className="font-semibold text-xs mb-1.5">Benefits:</h4>
                   <ul className="space-y-1">
                     {scholarship.benefits.slice(0, 2).map((benefit, idx) => (
-                      <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
-                        <FiCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
+                      <li key={idx} className="text-xs text-gray-700 flex items-start gap-1.5">
+                        <FiCheckCircle className="text-green-500 mt-0.5 flex-shrink-0 text-xs" />
                         <span>{benefit}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <Button
                     onClick={() => handleApplyClick(scholarship)}
-                    className="flex-1 bg-purple-600 hover:bg-purple-700"
+                    className="flex-1 bg-purple-600 hover:bg-purple-700 h-8 text-xs px-3"
                   >
                     Apply Now
                   </Button>
@@ -300,9 +299,9 @@ const ScholarshipsPage = () => {
                       href={scholarship.application_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition flex items-center gap-2"
+                      className="px-3 h-8 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition flex items-center gap-1.5 text-xs"
                     >
-                      <FiExternalLink /> Visit
+                      <FiExternalLink className="text-xs" /> Visit
                     </a>
                   )}
                 </div>
