@@ -60,7 +60,7 @@ const Header = () => {
     { title: 'Study Abroad', link: '/study-abroad', icon: 'FiGlobe' },
     { title: 'Scholarships', link: '/scholarships', icon: 'FiAward' },
     { title: 'Education Loans', link: '/loans', icon: 'FiDollarSign' },
-    { title: 'Compare Colleges', link: '/compare', icon: 'FiBarChart2' },
+    { title: 'Compare Institute', link: '/compare', icon: 'FiBarChart2' },
     { title: 'College Predictor', link: '/eligibility-checker', icon: 'FiTarget' },
     { title: 'Blogs & Articles', link: '/blog', icon: 'FiFileText' },
     { title: 'About Us', link: '/about', icon: 'FiInfo' },
