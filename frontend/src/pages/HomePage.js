@@ -191,7 +191,7 @@ const CollegeDuniaHome = () => {
                         <span className="text-[9px]">({slide.reviews})</span>
                       </div>
                     </div>
-                    <h2 className="text-base md:text-lg font-bold mb-0.5 drop-shadow-lg group-hover:text-orange-400 transition-colors">
+                    <h2 className="text-base md:text-lg font-medium mb-0.5 drop-shadow-lg group-hover:text-orange-400 transition-colors">
                       {slide.name}
                     </h2>
                     <div className="flex items-center gap-1 text-[11px] text-white/90">
