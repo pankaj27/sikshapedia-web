@@ -4,9 +4,9 @@ import { FiMapPin, FiStar, FiCheckCircle, FiAward, FiEdit3, FiGrid, FiTarget, Fi
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
-const schoolsListingPage = () => {
+const SchoolsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [schools, setschools] = useState([]);
+  const [schools, setSchools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
   const [showContent, setShowContent] = useState(false);
@@ -27,17 +27,17 @@ const schoolsListingPage = () => {
   });
 
   useEffect(() => {
-    fetchschools();
+    fetchSchools();
   }, [searchParams, sortBy]);
 
-  const fetchschools = async () => {
+  const fetchSchools = async () => {
     setLoading(true);
     try {
       const response = await api.get(`/schools?${searchParams.toString()}&sort=${sortBy}`);
-      setschools(response.data);
+      setSchools(response.data);
     } catch (error) {
-      console.error('Error fetching schools:', error);
-      setschools([]);
+      console.error('Error fetching colleges:', error);
+      setSchools([]);
     } finally {
       setLoading(false);
     }
@@ -66,11 +66,11 @@ const schoolsListingPage = () => {
     }));
   };
 
-  const toggleCompare = (schoolsId) => {
+  const toggleCompare = (schoolId) => {
     setCompareList(prev => 
-      prev.includes(schoolsId) 
-        ? prev.filter(id => id !== schoolsId)
-        : prev.length < 4 ? [...prev, schoolsId] : prev
+      prev.includes(schoolId) 
+        ? prev.filter(id => id !== schoolId)
+        : prev.length < 4 ? [...prev, schoolId] : prev
     );
   };
 
@@ -88,7 +88,7 @@ const schoolsListingPage = () => {
     setSearchParams(new URLSearchParams());
   };
 
-  const paginatedschools = schools.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedSchools = schools.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const totalPages = Math.ceil(schools.length / itemsPerPage);
 
   const scrollToTop = () => {
@@ -103,7 +103,7 @@ const schoolsListingPage = () => {
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">All schools in India</span>
+            <span className="text-gray-900 font-medium">All Schools in India</span>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@ const schoolsListingPage = () => {
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-6 py-2">
-          <h1 className="text-2xl font-bold text-gray-900">Top schools in India 2025</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Top Schools in India 2025</h1>
         </div>
       </div>
 
@@ -133,10 +133,10 @@ const schoolsListingPage = () => {
                 <p className="text-xs">Find Your Perfect Course</p>
               </div>
             </Link>
-            <Link to="/schools-predictor" className="block">
+            <Link to="/college-predictor" className="block">
               <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-5 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
                 <FiTarget className="text-3xl mb-2" />
-                <h3 className="font-bold text-base mb-1">schools Predictor</h3>
+                <h3 className="font-bold text-base mb-1">College Predictor</h3>
                 <p className="text-xs">Know Your Admission Chances</p>
               </div>
             </Link>
@@ -169,9 +169,9 @@ const schoolsListingPage = () => {
           <section className="mb-2">
             <div className="text-gray-700 text-sm leading-relaxed">
               <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
-                India has over <strong>4359 schools</strong>, including <strong>3623 private schools</strong> and <strong>676 government schools</strong>. 
-                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in schools in India depends on merit based on 12th-class marks. 
-                The fees of the schools vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
+                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
+                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
+                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
                 while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
               </p>
             </div>
@@ -203,8 +203,8 @@ const schoolsListingPage = () => {
           <section>
             <div className="text-gray-700 text-sm leading-relaxed">
               <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Some of the top schools in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
-                <li><strong>IIT Bombay</strong> is the best schools in India, as per the schoolsdunia and IIRF rankings.</li>
+                <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
+                <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
                 <li><strong>IIT BHU has the best ROI of 239.52%</strong>.</li>
               </ul>
             </div>
@@ -216,14 +216,14 @@ const schoolsListingPage = () => {
               <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {[
-                  { num: '01', title: 'schools in India Highlights', id: 'highlights' },
-                  { num: '02', title: 'Top schools in India 2025', id: 'top-schools' },
-                  { num: '03', title: 'Govt schools in India 2025', id: 'govt-schools' },
-                  { num: '04', title: 'Private schools in India 2025', id: 'private-schools' },
-                  { num: '05', title: 'schools in India ROI Wise 2025', id: 'roi-schools' },
-                  { num: '06', title: 'schools with the Lowest Fees', id: 'lowest-fees' },
-                  { num: '07', title: 'Top-Ranked schools by Agencies', id: 'agencies' },
-                  { num: '08', title: 'Top-Ranked schools by NIRF', id: 'nirf' },
+                  { num: '01', title: 'Colleges in India Highlights', id: 'highlights' },
+                  { num: '02', title: 'Top Schools in India 2025', id: 'top-colleges' },
+                  { num: '03', title: 'Govt Colleges in India 2025', id: 'govt-colleges' },
+                  { num: '04', title: 'Private Colleges in India 2025', id: 'private-colleges' },
+                  { num: '05', title: 'Colleges in India ROI Wise 2025', id: 'roi-colleges' },
+                  { num: '06', title: 'Colleges with the Lowest Fees', id: 'lowest-fees' },
+                  { num: '07', title: 'Top-Ranked Colleges by Agencies', id: 'agencies' },
+                  { num: '08', title: 'Top-Ranked Colleges by NIRF', id: 'nirf' },
                   { num: '09', title: 'Admission 2025', id: 'admission' },
                   { num: '10', title: 'Top Specialisations', id: 'specialisations' },
                   { num: '11', title: 'Top States', id: 'states' },
@@ -246,8 +246,8 @@ const schoolsListingPage = () => {
           
           {/* HIGHLIGHTS TABLE */}
           <section id="highlights">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">schools in India Highlights</h2>
-            <p className="text-gray-700 mb-6">Provided below are the highlights of schools in India:</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Colleges in India Highlights</h2>
+            <p className="text-gray-700 mb-6">Provided below are the highlights of colleges in India:</p>
             <div className="bg-white rounded-lg shadow-md overflow-hidden border">
               <table className="w-full">
                 <thead className="bg-gray-50">
@@ -258,10 +258,10 @@ const schoolsListingPage = () => {
                 </thead>
                 <tbody>
                   {[
-                    { label: 'Number of schools in India', value: '4,359' },
-                    { label: 'Number of Govt schools in India', value: '676' },
-                    { label: 'Number of Private schools in India', value: '3,623' },
-                    { label: 'Top schools', value: <Link to="/schools/iit-bombay" className="text-blue-600 hover:underline">IIT Bombay</Link> },
+                    { label: 'Number of Colleges in India', value: '4,359' },
+                    { label: 'Number of Govt Colleges in India', value: '676' },
+                    { label: 'Number of Private Colleges in India', value: '3,623' },
+                    { label: 'Top College', value: <Link to="/schools/iit-bombay" className="text-blue-600 hover:underline">IIT Bombay</Link> },
                     { label: 'Top Specialisations', value: 'Computer Science, Mechanical, Information Technology, Civil, Electronics & Communication' },
                     { label: 'Total Fees Range', value: '₹4,400 (AU Allahabad) - ₹37.8 Lakh (ICAS Manipal)' },
                     { label: 'Median Package', value: '₹14.35 LPA (NIT Trichy) - ₹21.60 LPA (IIT Guwahati)' },
@@ -277,20 +277,20 @@ const schoolsListingPage = () => {
             </div>
           </section>
 
-          {/* TOP schools TABLE */}
-          <section id="top-schools">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top schools in India 2025</h2>
+          {/* TOP COLLEGES TABLE */}
+          <section id="top-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top Schools in India 2025</h2>
             <p className="text-gray-700 text-sm mb-3">
-              There are 676 government and 3623 private schools in India, totaling 4359 institutions. 
+              There are 676 government and 3623 private colleges in India, totaling 4359 institutions. 
               The total number of seats varies from 595 at IIT Hyderabad to 1563 at IIT BHU, while the fees range from 
               ₹8.35 Lakh at IIT BHU to ₹23.9 Lakh at BITS Pilani. The rankings, total seats, and total course fees of 
-              India's top ten schools are listed below.
+              India's top ten colleges are listed below.
             </p>
             <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">schools</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Colleges</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Seats</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Total Course Fees</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Median Placement</th>
@@ -309,15 +309,15 @@ const schoolsListingPage = () => {
                     { name: 'BITS Pilani', seats: '-', fees: '₹23.9 Lakh', placement: '₹18.20 LPA', recruiters: 'Google, DE Shaw, Qualcomm, Adobe, Microsoft' },
                     { name: 'IIT BHU, Varanasi', seats: '1563', fees: '₹8.35 Lakh', placement: '₹20.00 LPA', recruiters: 'Oracle, Google, Flipkart, Sprinklr, Texas Instruments' },
                     { name: 'IIT Hyderabad', seats: '595', fees: '₹9.17 Lakh', placement: '₹21.00 LPA', recruiters: 'Microsoft, Nvidia, Qualcomm, TSMC, Amazon, Adobe' },
-                  ].map((schools, idx) => (
+                  ].map((college, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
                       <td className="px-3 py-2">
-                        <Link to={`/schools/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{schools.name}</Link>
+                        <Link to={`/schools/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{school.name}</Link>
                       </td>
-                      <td className="px-3 py-2 text-sm text-gray-700">{schools.seats}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{schools.fees}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{schools.placement}</td>
-                      <td className="px-3 py-2 text-xs text-gray-600">{schools.recruiters}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{school.seats}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{school.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{school.placement}</td>
+                      <td className="px-3 py-2 text-xs text-gray-600">{school.recruiters}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -328,24 +328,24 @@ const schoolsListingPage = () => {
           {/* Video Section */}
           <section className="my-6">
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Complete Guide to schools Admissions 2025</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Complete Guide to College Admissions 2025</h3>
               <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 <div className="text-center p-6">
                   <FiGrid className="text-6xl text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 font-medium">Video: How to Choose the Right schools</p>
-                  <p className="text-sm text-gray-500 mt-2">Watch our comprehensive guide on schools selection and admissions</p>
+                  <p className="text-gray-600 font-medium">Video: How to Choose the Right College</p>
+                  <p className="text-sm text-gray-500 mt-2">Watch our comprehensive guide on college selection and admissions</p>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Government schools Section */}
-          <section id="govt-schools">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Govt schools in India 2025</h2>
+          {/* Government Colleges Section */}
+          <section id="govt-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Govt Colleges in India 2025</h2>
             <p className="text-gray-700 text-sm mb-4">
               IIT Bombay, IIT Delhi, and IIT Madras are among the <strong>676 government universities</strong> in India 
               that offer programs. This list includes the highest package, median placement, average placement, and total 
-              course fees for Government schools in India.
+              course fees for Government colleges in India.
             </p>
             
             {/* Image Placeholder */}
@@ -353,7 +353,7 @@ const schoolsListingPage = () => {
               <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 border flex items-center justify-center">
                 <div className="text-center">
                   <FiAward className="text-6xl text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 font-medium">Top Government schools in India</p>
+                  <p className="text-gray-600 font-medium">Top Government Colleges in India</p>
                 </div>
               </div>
             </div>
@@ -362,7 +362,7 @@ const schoolsListingPage = () => {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">schools Name</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College Name</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Location</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Avg Package</th>
@@ -375,12 +375,12 @@ const schoolsListingPage = () => {
                     { name: 'IIT Madras', location: 'Chennai', fees: '₹9.39L', package: '₹17.50 LPA' },
                     { name: 'NIT Trichy', location: 'Trichy', fees: '₹5.6L', package: '₹14.35 LPA' },
                     { name: 'DTU Delhi', location: 'Delhi', fees: '₹7.8L', package: '₹12.4 LPA' },
-                  ].map((schools, idx) => (
+                  ].map((college, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
-                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{schools.name}</td>
-                      <td className="px-3 py-2 text-sm">{schools.location}</td>
-                      <td className="px-3 py-2 text-sm font-semibold">{schools.fees}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{schools.package}</td>
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{school.name}</td>
+                      <td className="px-3 py-2 text-sm">{school.location}</td>
+                      <td className="px-3 py-2 text-sm font-semibold">{school.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{school.package}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -388,11 +388,11 @@ const schoolsListingPage = () => {
             </div>
           </section>
 
-          {/* Private schools Section */}
-          <section id="private-schools">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Private schools in India 2025</h2>
+          {/* Private Colleges Section */}
+          <section id="private-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Private Colleges in India 2025</h2>
             <p className="text-gray-700 text-sm mb-4">
-              There are 4626 private schools in India, of which 3623 offer programs. The median package ranges from 
+              There are 4626 private colleges in India, of which 3623 offer programs. The median package ranges from 
               ₹8.99 LPA at VIT Vellore to ₹29.37 LPA at IIIT Bangalore.
             </p>
             
@@ -400,7 +400,7 @@ const schoolsListingPage = () => {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">schools Name</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College Name</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Location</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Avg Package</th>
@@ -413,12 +413,12 @@ const schoolsListingPage = () => {
                     { name: 'Manipal Institute', location: 'Manipal', fees: '₹18.2L', package: '₹11.5 LPA' },
                     { name: 'SRM Chennai', location: 'Chennai', fees: '₹10L', package: '₹9.2 LPA' },
                     { name: 'Amity Noida', location: 'Noida', fees: '₹8.5L', package: '₹7.8 LPA' },
-                  ].map((schools, idx) => (
+                  ].map((college, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
-                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{schools.name}</td>
-                      <td className="px-3 py-2 text-sm">{schools.location}</td>
-                      <td className="px-3 py-2 text-sm font-semibold">{schools.fees}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{schools.package}</td>
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{school.name}</td>
+                      <td className="px-3 py-2 text-sm">{school.location}</td>
+                      <td className="px-3 py-2 text-sm font-semibold">{school.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{school.package}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -427,17 +427,17 @@ const schoolsListingPage = () => {
           </section>
 
           {/* ROI Wise Section */}
-          <section id="roi-schools">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">schools in India ROI Wise 2025</h2>
+          <section id="roi-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India ROI Wise 2025</h2>
             <p className="text-gray-700 text-sm mb-3">
-              Return on Investment (ROI) is calculated based on course fees and placement packages. Here are the top schools with best ROI.
+              Return on Investment (ROI) is calculated based on course fees and placement packages. Here are the top colleges with best ROI.
             </p>
             <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Rank</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">schools</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Total Fees</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Avg Package</th>
                     <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">ROI %</th>
@@ -448,13 +448,13 @@ const schoolsListingPage = () => {
                     { rank: 1, name: 'IIT BHU', fees: '₹8.35L', package: '₹20 LPA', roi: '239.52%' },
                     { rank: 2, name: 'NIT Trichy', fees: '₹5.6L', package: '₹14.35 LPA', roi: '256.25%' },
                     { rank: 3, name: 'IIT Bombay', fees: '₹8.75L', package: '₹19.61 LPA', roi: '224.11%' },
-                  ].map((schools) => (
-                    <tr key={schools.rank} className="border-b hover:bg-gray-50">
-                      <td className="px-3 py-2 text-sm font-bold text-orange-600">{schools.rank}</td>
-                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{schools.name}</td>
-                      <td className="px-3 py-2 text-sm">{schools.fees}</td>
-                      <td className="px-3 py-2 text-sm text-green-600">{schools.package}</td>
-                      <td className="px-3 py-2 text-sm font-bold text-green-700">{schools.roi}</td>
+                  ].map((college) => (
+                    <tr key={school.rank} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-bold text-orange-600">{school.rank}</td>
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{school.name}</td>
+                      <td className="px-3 py-2 text-sm">{school.fees}</td>
+                      <td className="px-3 py-2 text-sm text-green-600">{school.package}</td>
+                      <td className="px-3 py-2 text-sm font-bold text-green-700">{school.roi}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -464,20 +464,20 @@ const schoolsListingPage = () => {
 
           {/* Lowest Fees Section */}
           <section id="lowest-fees">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">schools with the Lowest Fees</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges with the Lowest Fees</h2>
             <p className="text-gray-700 text-sm mb-3">
-              Looking for affordable education? Here are schools offering quality education at the lowest fees.
+              Looking for affordable education? Here are colleges offering quality education at the lowest fees.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               {[
                 { name: 'AU Allahabad', fees: '₹4,400', type: 'Government' },
                 { name: 'Jamia Millia', fees: '₹14,600', type: 'Government' },
                 { name: 'BHU Varanasi', fees: '₹48,000', type: 'Government' },
-              ].map((schools, idx) => (
+              ].map((college, idx) => (
                 <div key={idx} className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-4 border">
-                  <h3 className="font-bold text-base text-gray-900 mb-1">{schools.name}</h3>
-                  <p className="text-2xl font-bold text-green-600 mb-1">{schools.fees}</p>
-                  <p className="text-xs text-gray-600">{schools.type}</p>
+                  <h3 className="font-bold text-base text-gray-900 mb-1">{school.name}</h3>
+                  <p className="text-2xl font-bold text-green-600 mb-1">{school.fees}</p>
+                  <p className="text-xs text-gray-600">{school.type}</p>
                 </div>
               ))}
             </div>
@@ -485,7 +485,7 @@ const schoolsListingPage = () => {
 
           {/* Top Ranked by Agencies */}
           <section id="agencies">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top-Ranked schools by Agencies</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top-Ranked Colleges by Agencies</h2>
             <p className="text-gray-700 text-sm mb-3">
               Rankings from various agencies including NIRF, IIRF, India Today, and The Week.
             </p>
@@ -493,7 +493,7 @@ const schoolsListingPage = () => {
 
           {/* NIRF Rankings */}
           <section id="nirf">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top-Ranked schools by NIRF</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top-Ranked Colleges by NIRF</h2>
             <p className="text-gray-700 text-sm mb-3">
               National Institutional Ranking Framework (NIRF) rankings for 2025.
             </p>
@@ -501,10 +501,10 @@ const schoolsListingPage = () => {
 
           {/* Admission Section */}
           <section id="admission">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">schools in India: Admission 2025</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India: Admission 2025</h2>
             <p className="text-gray-700 text-sm mb-4">
-              schools in India offer admission mainly through entrance exams like JEE Main. Some schools also provide 
-              direct admission based on merit or schools entrance tests. Apart from this, most schools require a minimum 
+              Colleges in India offer admission mainly through entrance exams like JEE Main. Some colleges also provide 
+              direct admission based on merit or college entrance tests. Apart from this, most colleges require a minimum 
               of 45% in Class 12th.
             </p>
             
@@ -513,7 +513,7 @@ const schoolsListingPage = () => {
               <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-8 border flex items-center justify-center">
                 <div className="text-center">
                   <FiTarget className="text-6xl text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 font-medium">schools Admission Process 2025</p>
+                  <p className="text-gray-600 font-medium">College Admission Process 2025</p>
                 </div>
               </div>
             </div>
@@ -543,7 +543,7 @@ const schoolsListingPage = () => {
               ].map((item) => (
                 <div key={item.state} className="bg-white rounded-lg p-3 border flex justify-between items-center">
                   <span className="font-semibold text-sm">{item.state}</span>
-                  <span className="text-orange-600 font-bold">{item.count} schools</span>
+                  <span className="text-orange-600 font-bold">{item.count} Colleges</span>
                 </div>
               ))}
             </div>
@@ -561,7 +561,7 @@ const schoolsListingPage = () => {
               ].map((item) => (
                 <div key={item.city} className="bg-white rounded-lg p-3 border flex justify-between items-center">
                   <span className="font-semibold text-sm">{item.city}</span>
-                  <span className="text-orange-600 font-bold">{item.count} schools</span>
+                  <span className="text-orange-600 font-bold">{item.count} Colleges</span>
                 </div>
               ))}
             </div>
@@ -580,12 +580,12 @@ const schoolsListingPage = () => {
           </section>
 
           <section id="faqs">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">schools in India FAQs</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">Colleges in India FAQs</h2>
             <div className="space-y-3">
               {[
-                { q: 'How many schools are there in India?', a: 'There are approximately 4,359 schools in India, including 676 government and 3,623 private schools.' },
-                { q: 'What is the top schools in India?', a: 'IIT Bombay is ranked as the top schools in India as per various rankings including schoolsdunia 2025.' },
-                { q: 'What is the fee range for schools in India?', a: 'The fee range varies from ₹10,000 per year in some government schools to ₹40 Lakh in top private institutions.' },
+                { q: 'How many colleges are there in India?', a: 'There are approximately 4,359 colleges in India, including 676 government and 3,623 private colleges.' },
+                { q: 'What is the top college in India?', a: 'IIT Bombay is ranked as the top college in India as per various rankings including Collegedunia 2025.' },
+                { q: 'What is the fee range for colleges in India?', a: 'The fee range varies from ₹10,000 per year in some government colleges to ₹40 Lakh in top private institutions.' },
               ].map((faq, idx) => (
                 <div key={idx} className="bg-gray-50 rounded-lg p-3 border">
                   <h3 className="font-bold text-base text-gray-900 mb-1">{faq.q}</h3>
@@ -599,7 +599,7 @@ const schoolsListingPage = () => {
         </div>
       </div>
 
-      {/* schools LISTING SECTION */}
+      {/* COLLEGE LISTING SECTION */}
       <div className="bg-gray-50 py-6 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">
           <div className="flex gap-6">
@@ -620,9 +620,9 @@ const schoolsListingPage = () => {
                 </div>
                 
                 <div className="space-y-6">
-                  {/* schools Type */}
+                  {/* College Type */}
                   <div>
-                    <label className="font-semibold text-sm mb-3 block text-gray-700">schools Type</label>
+                    <label className="font-semibold text-sm mb-3 block text-gray-700">College Type</label>
                     <div className="space-y-2">
                       {['Government', 'Private', 'Deemed'].map(type => (
                         <label key={type} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
@@ -761,7 +761,7 @@ const schoolsListingPage = () => {
                     {showFilters ? 'Hide' : 'Show'} Filters
                   </button>
                   <h3 className="text-lg font-semibold text-gray-800">
-                    {loading ? 'Loading...' : `${schools.length} schools Found`}
+                    {loading ? 'Loading...' : `${schools.length} Schools Found`}
                   </h3>
                 </div>
                 <div className="flex items-center gap-3">
@@ -784,7 +784,7 @@ const schoolsListingPage = () => {
                 <div className="mb-6 bg-orange-50 border border-orange-200 rounded-lg p-4">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-900">{compareList.length} schools selected for comparison</span>
+                      <span className="font-semibold text-gray-900">{compareList.length} colleges selected for comparison</span>
                       <Button 
                         size="sm"
                         onClick={() => window.open(`/compare?ids=${compareList.join(',')}`, '_blank')}
@@ -800,13 +800,13 @@ const schoolsListingPage = () => {
                 </div>
               )}
 
-              {/* schools TABLE */}
+              {/* COLLEGE TABLE */}
               {loading ? (
                 <div className="bg-white rounded-lg shadow-md p-12 text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
                   <p className="text-gray-600">Loading schools...</p>
                 </div>
-              ) : schools.length === 0 ? (
+              ) : colleges.length === 0 ? (
                 <div className="bg-white rounded-lg shadow-md p-12 text-center">
                   <FiSearch className="mx-auto text-gray-400 mb-4" size={48} />
                   <p className="text-gray-600 text-lg mb-2">No schools found</p>
@@ -822,7 +822,7 @@ const schoolsListingPage = () => {
                       <thead className="bg-gray-100 border-b-2 border-gray-300">
                         <tr>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-24">CD Rank</th>
-                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-800">schools</th>
+                          <th className="px-4 py-4 text-left text-sm font-bold text-gray-800">Colleges</th>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-32">Course Fees</th>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-40">Placement</th>
                           <th className="px-4 py-4 text-left text-sm font-bold text-gray-800 w-32">User Reviews</th>
@@ -832,12 +832,12 @@ const schoolsListingPage = () => {
                       
                       {/* TABLE BODY */}
                       <tbody>
-                        {paginatedschools.map((schools, index) => {
+                        {paginatedSchools.map((school, index) => {
                           const globalIndex = (currentPage - 1) * itemsPerPage + index;
-                          const isInCompare = compareList.includes(schools.id);
+                          const isInCompare = compareList.includes(school.id);
                           
                           return (
-                            <React.Fragment key={schools.id}>
+                            <React.Fragment key={school.id}>
                               <tr className="border-b border-gray-200 hover:bg-orange-50 transition-colors">
                                 {/* CD RANK */}
                                 <td className="px-3 py-3 align-top">
@@ -846,38 +846,38 @@ const schoolsListingPage = () => {
                                   </div>
                                 </td>
 
-                                {/* schools */}
+                                {/* COLLEGES */}
                                 <td className="px-3 py-3 align-top">
                                   <div className="max-w-md">
                                     <div className="flex items-start gap-2 mb-1">
-                                      {/* schools Logo */}
+                                      {/* College Logo */}
                                       <div className="w-10 h-10 rounded overflow-hidden border border-gray-200 flex-shrink-0">
-                                        {schools.images?.[0] ? (
-                                          <img src={schools.images[0]} alt={schools.name} className="w-full h-full object-cover" />
+                                        {school.images?.[0] ? (
+                                          <img src={school.images[0]} alt={school.name} className="w-full h-full object-cover" />
                                         ) : (
                                           <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
-                                            {schools.name.charAt(0)}
+                                            {school.name.charAt(0)}
                                           </div>
                                         )}
                                       </div>
                                       <div className="flex-1">
                                         <div className="flex items-start gap-1.5 mb-0.5">
-                                          <Link to={`/schools/${schools.id}`} className="text-[13px] font-bold text-blue-600 hover:underline leading-tight">
-                                            {schools.name}
+                                          <Link to={`/schools/${school.id}`} className="text-[13px] font-bold text-blue-600 hover:underline leading-tight">
+                                            {school.name}
                                           </Link>
-                                          {schools.featured && (
+                                          {school.featured && (
                                             <span className="bg-yellow-100 text-yellow-800 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Featured</span>
                                           )}
                                         </div>
                                     <div className="flex items-center gap-1 text-[10px] text-gray-600 mb-0.5">
                                       <FiMapPin className="text-orange-600 flex-shrink-0" size={10} />
-                                      <span>{schools.location?.city}, {schools.location?.state}</span>
+                                      <span>{school.location?.city}, {school.location?.state}</span>
                                       <span className="text-gray-400">|</span>
-                                      <span className="text-blue-600 font-medium">{schools.type}</span>
+                                      <span className="text-blue-600 font-medium">{school.type}</span>
                                     </div>
-                                    <div className="text-[9px] text-gray-600 mb-1.5">{schools.accreditation || 'NAAC A+'} Approved</div>
+                                    <div className="text-[9px] text-gray-600 mb-1.5">{school.accreditation || 'NAAC A+'} Approved</div>
                                     <div className="flex flex-wrap gap-1 mb-1">
-                                      <Link to={`/schools/${schools.id}`}>
+                                      <Link to={`/schools/${school.id}`}>
                                         <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white text-[10px] h-6 px-2">
                                           Apply Now
                                         </Button>
@@ -889,7 +889,7 @@ const schoolsListingPage = () => {
                                         size="sm" 
                                         variant="ghost" 
                                         className={`text-[10px] h-6 px-2 ${isInCompare ? 'bg-orange-100 text-orange-700' : 'text-gray-600'}`}
-                                        onClick={() => toggleCompare(schools.id)}
+                                        onClick={() => toggleCompare(school.id)}
                                       >
                                         {isInCompare ? <FiCheckCircle className="mr-1" size={10} /> : null}
                                         {isInCompare ? 'Added' : 'Add To Compare'}
@@ -907,10 +907,10 @@ const schoolsListingPage = () => {
                                 <td className="px-3 py-3 align-top">
                                   <div>
                                     <div className="text-sm font-bold text-gray-900 mb-0.5">
-                                      ₹{(schools.average_fees / 100000).toFixed(2)}L
+                                      ₹{(school.average_fees / 100000).toFixed(2)}L
                                     </div>
                                     <div className="text-[9px] text-gray-500 mb-1">1st Year Fees</div>
-                                    <Link to={`/schools/${schools.id}#fees`} className="text-[10px] text-blue-600 hover:underline">
+                                    <Link to={`/schools/${school.id}#fees`} className="text-[10px] text-blue-600 hover:underline">
                                       Compare Fees
                                     </Link>
                                   </div>
@@ -921,13 +921,13 @@ const schoolsListingPage = () => {
                                   <div>
                                     <div className="text-[9px] text-gray-500 mb-0.5">Average Package</div>
                                     <div className="text-[13px] font-bold text-green-600 mb-1.5">
-                                      ₹{schools.placement?.average ? (schools.placement.average / 100000).toFixed(1) : 'N/A'}L
+                                      ₹{school.placement?.average ? (school.placement.average / 100000).toFixed(1) : 'N/A'}L
                                     </div>
                                     <div className="text-[9px] text-gray-500 mb-0.5">Highest Package</div>
                                     <div className="text-[13px] font-bold text-gray-900 mb-1">
-                                      ₹{schools.placement?.highest ? (schools.placement.highest / 100000).toFixed(1) : 'N/A'}L
+                                      ₹{school.placement?.highest ? (school.placement.highest / 100000).toFixed(1) : 'N/A'}L
                                     </div>
-                                    <Link to={`/schools/${schools.id}#placement`} className="text-[10px] text-blue-600 hover:underline">
+                                    <Link to={`/schools/${school.id}#placement`} className="text-[10px] text-blue-600 hover:underline">
                                       Compare Placement
                                     </Link>
                                   </div>
@@ -937,20 +937,20 @@ const schoolsListingPage = () => {
                                 <td className="px-3 py-3 align-top">
                                   <div>
                                     <div className="flex items-baseline gap-0.5 mb-0.5">
-                                      <span className="text-base font-bold text-gray-900">{schools.rating || '4.5'}</span>
+                                      <span className="text-base font-bold text-gray-900">{school.rating || '4.5'}</span>
                                       <span className="text-gray-500 text-[10px]">/5</span>
                                     </div>
                                     <div className="flex gap-0.5 mb-1">
                                       {[...Array(5)].map((_, i) => (
                                         <FiStar 
                                           key={i} 
-                                          className={`${i < Math.floor(schools.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                                          className={`${i < Math.floor(school.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
                                           size={10} 
                                         />
                                       ))}
                                     </div>
                                     <div className="text-[9px] text-gray-500 mb-1">
-                                      Based on {schools.reviews || Math.floor(Math.random() * 500) + 50} User<br />Reviews
+                                      Based on {school.reviews || Math.floor(Math.random() * 500) + 50} User<br />Reviews
                                     </div>
                                     <div className="text-[9px] text-gray-700 font-medium">
                                       Best in {['Infrastructure', 'Placements', 'Academics', 'Faculty', 'Campus Life'][index % 5]}
@@ -966,7 +966,7 @@ const schoolsListingPage = () => {
                                     </div>
                                     <div className="flex items-center gap-0.5 mb-1.5">
                                       <FiAward className="text-orange-600 flex-shrink-0" size={11} />
-                                      <span className="text-[9px] font-bold text-gray-700">schoolsdunia</span>
+                                      <span className="text-[9px] font-bold text-gray-700">Collegedunia</span>
                                     </div>
                                     <div className="flex flex-wrap gap-0.5 mb-1">
                                       {['NIRF', 'IIRF', 'IT'].map((agency) => (
@@ -975,7 +975,7 @@ const schoolsListingPage = () => {
                                         </div>
                                       ))}
                                     </div>
-                                    <Link to={`/schools/${schools.id}#ranking`} className="text-[10px] text-blue-600 hover:underline">
+                                    <Link to={`/schools/${school.id}#ranking`} className="text-[10px] text-blue-600 hover:underline">
                                       + 4 More
                                     </Link>
                                   </div>
@@ -983,13 +983,13 @@ const schoolsListingPage = () => {
                               </tr>
 
                               {/* FEATURED BANNER */}
-                              {(index + 1) % 3 === 0 && (index + 1) < paginatedschools.length && (
+                              {(index + 1) % 3 === 0 && (index + 1) < paginatedSchools.length && (
                                 <tr className="bg-orange-50 border-b border-orange-200">
                                   <td colSpan="6" className="px-4 py-2">
                                     <div className="flex items-center gap-2 text-xs">
                                       <span className="font-bold text-orange-700">Sponsored</span>
                                       <span className="text-gray-400">|</span>
-                                      <span className="text-gray-700">Featured schools</span>
+                                      <span className="text-gray-700">Featured College</span>
                                     </div>
                                   </td>
                                 </tr>
@@ -1070,7 +1070,7 @@ const schoolsListingPage = () => {
       <div className="bg-gradient-to-r from-orange-600 to-orange-700 py-12">
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-2xl font-bold text-white mb-4">Subscribe to Our Newsletter</h3>
-          <p className="text-white mb-6">Get the latest updates on schools admissions, exams, and education news</p>
+          <p className="text-white mb-6">Get the latest updates on college admissions, exams, and education news</p>
           <div className="max-w-md mx-auto flex gap-2">
             <input 
               type="email" 
@@ -1087,4 +1087,4 @@ const schoolsListingPage = () => {
   );
 };
 
-export default schoolsListingPage;
+export default SchoolsPage;
