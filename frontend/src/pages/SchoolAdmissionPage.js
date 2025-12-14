@@ -293,61 +293,53 @@ const SchoolAdmissionPage = () => {
               <p className="text-sm text-gray-500">No admissions found</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {admissions.map((admission, index) => (
-                <div key={admission.id} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
-                  <div className="md:flex">
-                    {/* Image */}
-                    <div className={`md:w-48 h-40 md:h-auto bg-gradient-to-br ${getGradient(index)} flex-shrink-0 relative`}>
-                      <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-semibold text-gray-700">
-                        <FiCalendar className="inline mr-1" />
-                        {new Date(admission.admission_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </div>
-                      <div className="absolute bottom-3 right-3">
-                        <Link to={`/schools/${admission.id}`}>
-                          <Button className="bg-pink-600 hover:bg-pink-700 h-7 text-xs">
-                            Apply Now
-                          </Button>
-                        </Link>
+                <div key={admission.id} className="bg-white rounded-lg shadow hover:shadow-md transition p-4">
+                  <div className="flex gap-4">
+                    {/* Small Square Image */}
+                    <div className="relative flex-shrink-0">
+                      <div className={`w-32 h-32 rounded bg-gradient-to-br ${getGradient(index)} relative`}>
+                        <div className="absolute top-2 left-2 right-2">
+                          <div className="bg-white/95 backdrop-blur-sm px-2 py-1 rounded text-center">
+                            <div className="text-xs font-semibold text-gray-700">
+                              {new Date(admission.admission_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                            </div>
+                            <div className="text-xs font-semibold text-gray-700">
+                              {new Date(admission.admission_date).getFullYear()}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <Link to={`/schools/${admission.id}`}>
+                            <Button className="w-full bg-pink-600 hover:bg-pink-700 h-7 text-xs">
+                              Apply Now
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1 p-4">
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <span className={`px-2 py-0.5 rounded text-xs font-semibold ${getBoardColor(admission.board)}`}>
+                    <div className="flex-1 min-w-0">
+                      {/* Board Tag */}
+                      <div className="mb-2">
+                        <span className="text-xs font-semibold text-gray-600">
                           {admission.board}
                         </span>
                       </div>
 
+                      {/* Title */}
                       <Link to={`/schools/${admission.id}`}>
-                        <h3 className="text-base font-bold mb-2 hover:text-pink-600 transition">
-                          {admission.name} Admission 2026: Courses, Fees, Eligibility, Dates
+                        <h3 className="text-lg font-bold mb-2 hover:text-pink-600 transition leading-tight">
+                          {admission.name} Admission 2026: Courses, Fees, Eligibility, Application Form, Last Date
                         </h3>
                       </Link>
 
-                      <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                      {/* Description */}
+                      <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
                         {admission.description}
                       </p>
-
-                      <div className="flex flex-wrap items-center gap-4 text-xs text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <FiMapPin className="text-sm" />
-                          {admission.location.city}, {admission.location.state}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <FiDollarSign className="text-sm" />
-                          ₹{(admission.average_fees / 100000).toFixed(1)}L/year
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <FiUsers className="text-sm" />
-                          {admission.students} students
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <FiAward className="text-sm text-yellow-500" />
-                          {admission.rating} ★
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
