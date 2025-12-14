@@ -153,6 +153,19 @@ const CollegeListingPage = () => {
       {/* ALL CONTENT SECTIONS */}
       <div className="bg-white py-4">
         <div className="container mx-auto px-6">
+          
+          {/* INTRO CONTENT - First 3 lines always visible */}
+          <section className="mb-4">
+            <div className="text-gray-700 text-sm leading-relaxed">
+              <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
+                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
+                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
+                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
+                while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
+              </p>
+            </div>
+          </section>
+
           {/* Read More Button */}
           <div className="text-center mb-4">
             <button
@@ -177,15 +190,9 @@ const CollegeListingPage = () => {
           {showContent && (
           <div className="space-y-12">
           
-          {/* INTRO CONTENT */}
+          {/* BULLET POINTS */}
           <section>
             <div className="text-gray-700 text-sm leading-relaxed">
-              <p className="mb-2">
-                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
-                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
-                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
-                while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
-              </p>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
                 <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
