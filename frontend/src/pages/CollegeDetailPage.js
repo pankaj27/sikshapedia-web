@@ -152,6 +152,28 @@ const CollegeDetailPage = () => {
         </div>
       </div>
 
+      {/* STICKY NAVIGATION MENU */}
+      <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                  activeTab === item.id
+                    ? 'border-orange-600 text-orange-600 bg-orange-50'
+                    : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
+                }`}
+              >
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* LATEST UPDATES */}
       <div className="bg-gray-50 border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -188,28 +210,6 @@ const CollegeDetailPage = () => {
               <Link to="#" className="text-sm font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
               <p className="text-xs text-gray-600">Content Writer | Updated 3+ months ago</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* STICKY NAVIGATION MENU */}
-      <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-                  activeTab === item.id
-                    ? 'border-orange-600 text-orange-600 bg-orange-50'
-                    : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
-                }`}
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
-            ))}
           </div>
         </div>
       </div>
