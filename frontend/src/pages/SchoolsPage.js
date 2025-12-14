@@ -177,15 +177,15 @@ const SchoolsPage = () => {
             </div>
           </section>
 
-          {/* Read More Button - Show when collapsed */}
+          {/* Read More Button - Show when collapsed - Compact */}
           {!showContent && (
             <div className="text-center mb-2">
               <button
                 onClick={() => setShowContent(true)}
-                className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-full transition-colors"
               >
                 <span>Read More</span>
-                <FiChevronDown size={18} />
+                <FiChevronDown size={14} />
               </button>
             </div>
           )}
@@ -590,14 +590,14 @@ const SchoolsPage = () => {
             </div>
           </section>
 
-          {/* Read Less Button - Show at the end when expanded */}
-          <div className="text-center mt-6">
+          {/* Read Less Button - Show at the end when expanded - Compact */}
+          <div className="text-center mt-4">
             <button
               onClick={() => setShowContent(false)}
-              className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-full transition-colors"
             >
               <span>Read Less</span>
-              <FiChevronUp size={18} />
+              <FiChevronUp size={14} />
             </button>
           </div>
           </div>
@@ -1071,18 +1071,18 @@ const SchoolsPage = () => {
         </div>
       </div>
 
-      {/* NEWSLETTER SUBSCRIPTION */}
-      <div className="bg-gradient-to-r from-orange-600 to-orange-700 py-12">
+      {/* NEWSLETTER SUBSCRIPTION - Compact */}
+      <div className="bg-gradient-to-r from-orange-600 to-orange-700 py-6">
         <div className="container mx-auto px-6 text-center">
-          <h3 className="text-2xl font-bold text-white mb-4">Subscribe to Our Newsletter</h3>
-          <p className="text-white mb-6">Get the latest updates on college admissions, exams, and education news</p>
+          <h3 className="text-lg font-bold text-white mb-2">Subscribe to Our Newsletter</h3>
+          <p className="text-white text-sm mb-3">Get the latest updates on college admissions, exams, and education news</p>
           <div className="max-w-md mx-auto flex gap-2">
             <input 
               type="email" 
               placeholder="Enter your email" 
-              className="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex-1 px-3 py-2 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
             />
-            <Button className="bg-white text-orange-600 hover:bg-gray-100 font-semibold px-6">
+            <Button className="bg-white text-orange-600 hover:bg-gray-100 font-semibold px-4 py-2 text-sm">
               Subscribe
             </Button>
           </div>
