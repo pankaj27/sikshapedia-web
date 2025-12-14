@@ -559,7 +559,7 @@ const CollegeDetailPage = () => {
                     </section>
 
                     {/* CAMPUS & FACILITIES - FROM TOC #08 */}
-                    <section id="facilities-seo">
+                    <section id="seo-facilities">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         {college.name} campus provides world-class facilities:
