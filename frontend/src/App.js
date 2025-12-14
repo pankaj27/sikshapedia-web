@@ -10,6 +10,7 @@ import SchoolsPage from './pages/SchoolsPage';
 import UniversitiesPage from './pages/UniversitiesPage';
 import ExamsPage from './pages/ExamsPage';
 import ExamPage from './pages/ExamPage';
+import NewsPage from './pages/NewsPage';
 import ExamDetailPage from './pages/ExamDetailPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseListingPage from './pages/CourseListingPage';
@@ -50,6 +51,7 @@ function App() {
             <Route path="/universities" element={<UniversitiesPage />} />
             <Route path="/exams" element={<ExamPage />} />
             <Route path="/exams-old" element={<ExamsPage />} />
+            <Route path="/news" element={<NewsPage />} />
             <Route path="/exams/:id" element={<ExamDetailPage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/listing/:category" element={<CourseListingPage />} />
