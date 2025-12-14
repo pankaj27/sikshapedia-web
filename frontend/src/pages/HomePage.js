@@ -214,7 +214,7 @@ const CollegeDuniaHome = () => {
 
         {/* Search Overlay - Compact with Animated Title */}
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <div className="text-center text-white max-w-4xl px-4 w-full">
+          <div className="text-center text-white max-w-4xl px-4 w-full pointer-events-auto">
             {/* Animated Title */}
             <div className="mb-2">
               <h1 className="text-2xl md:text-4xl font-bold drop-shadow-lg">
@@ -247,7 +247,7 @@ const CollegeDuniaHome = () => {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="h-12 text-sm pl-10 pr-4 bg-white border-0 rounded-lg shadow-xl focus:ring-2 focus:ring-orange-500 transition-all"
                     />
-                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" />
+                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg pointer-events-none" />
                   </div>
                   <Button 
                     type="submit" 
