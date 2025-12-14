@@ -1,175 +1,315 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSearch, FiBookOpen, FiBriefcase, FiDollarSign } from 'react-icons/fi';
+import { FiSearch, FiBookOpen, FiBriefcase, FiActivity, FiTrendingUp, FiAward, FiCpu, FiShield, FiBook, FiFileText, FiChevronRight } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
 
 const CoursesPage = () => {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStream, setSelectedStream] = useState('');
-  const [selectedDegree, setSelectedDegree] = useState('');
 
-  useEffect(() => {
-    fetchCourses();
-  }, [selectedStream, selectedDegree]);
+  // Popular courses for hero section
+  const popularCourses = [
+    { name: 'BE/B.TECH COURSES', link: '/courses/btech' },
+    { name: 'MBBS COURSES', link: '/courses/mbbs' },
+    { name: 'B.SC COURSES', link: '/courses/bsc' },
+    { name: 'B.COM COURSES', link: '/courses/bcom' },
+    { name: 'BA COURSES', link: '/courses/ba' },
+    { name: 'MBA/PGDM COURSES', link: '/courses/mba' }
+  ];
 
-  const fetchCourses = async () => {
-    try {
-      const params = new URLSearchParams();
-      if (selectedStream) params.append('stream', selectedStream);
-      if (selectedDegree) params.append('degree_type', selectedDegree);
-      
-      const response = await api.get(`/courses?${params.toString()}`);
-      setCourses(response.data);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-    } finally {
-      setLoading(false);
+  // Level-based courses
+  const levelCourses = [
+    {
+      title: 'After 10th Courses',
+      subtitle: 'Applicable for Diploma courses & Certification courses',
+      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/after10.jpg',
+      link: '/courses/after-10th',
+      categories: [
+        { name: 'ITI', count: 16 },
+        { name: 'Arts', count: 4 },
+        { name: 'Dental', count: 2 },
+        { name: 'Animation', count: 1 },
+        { name: 'Hotel Management', count: 1 },
+        { name: 'Vocational Courses', count: 1 }
+      ]
+    },
+    {
+      title: 'After 10+2 Courses',
+      subtitle: 'Applicable for Degree courses & Diploma courses & Certification courses',
+      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/10plus2.jpg',
+      link: '/courses/after-12th',
+      categories: [
+        { name: 'Engineering', count: 207 },
+        { name: 'Arts', count: 145 },
+        { name: 'Science', count: 135 },
+        { name: 'Management', count: 89 },
+        { name: 'Commerce', count: 53 },
+        { name: 'Education', count: 38 },
+        { name: 'Medical', count: 34 },
+        { name: 'Paramedical', count: 32 },
+        { name: 'Design', count: 30 }
+      ]
+    },
+    {
+      title: 'Diploma Courses',
+      subtitle: 'Applicable for Diploma courses',
+      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/diploma.jpg',
+      link: '/courses/diploma',
+      categories: [
+        { name: 'Management', count: 79 },
+        { name: 'Arts', count: 31 },
+        { name: 'Medical', count: 26 },
+        { name: 'Engineering', count: 23 },
+        { name: 'Law', count: 14 },
+        { name: 'Paramedical', count: 14 },
+        { name: 'Science', count: 13 },
+        { name: 'Hotel Management', count: 10 },
+        { name: 'Design', count: 9 }
+      ]
+    },
+    {
+      title: 'Certification Courses',
+      subtitle: 'Applicable for Certification courses',
+      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/diploma.jpg',
+      link: '/courses/certification',
+      categories: [
+        { name: 'Arts', count: 12 },
+        { name: 'Commerce', count: 9 },
+        { name: 'Management', count: 8 },
+        { name: 'Science', count: 6 },
+        { name: 'Design', count: 4 },
+        { name: 'Computer Applications', count: 4 },
+        { name: 'Education', count: 2 },
+        { name: 'Law', count: 2 },
+        { name: 'Agriculture', count: 2 }
+      ]
+    },
+    {
+      title: 'Masters Degree/Post Graduation Courses',
+      subtitle: 'Applicable for Degree courses & Diploma courses',
+      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/post-graduation.jpg',
+      link: '/courses/masters',
+      categories: [
+        { name: 'Management', count: 217 },
+        { name: 'Engineering', count: 170 },
+        { name: 'Medical', count: 126 },
+        { name: 'Science', count: 113 },
+        { name: 'Arts', count: 104 },
+        { name: 'Law', count: 25 },
+        { name: 'Commerce', count: 23 },
+        { name: 'Dental', count: 20 },
+        { name: 'Pharmacy', count: 15 }
+      ]
+    },
+    {
+      title: 'Ph.D Research Courses',
+      subtitle: 'Applicable for Degree courses',
+      image: 'https://image-static.collegedunia.com/public/asset/img/course_assets/doctoratemphil.jpg',
+      link: '/courses/phd',
+      categories: [
+        { name: 'Science', count: 67 },
+        { name: 'Arts', count: 64 },
+        { name: 'Medical', count: 35 },
+        { name: 'Engineering', count: 25 },
+        { name: 'Management', count: 22 },
+        { name: 'Pharmacy', count: 8 },
+        { name: 'Commerce', count: 7 },
+        { name: 'Agriculture', count: 6 },
+        { name: 'Law', count: 4 }
+      ]
     }
-  };
+  ];
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) {
-      fetchCourses();
-      return;
+  // Stream-based courses
+  const streamCourses = [
+    {
+      title: 'Engineering',
+      icon: <FiCpu />,
+      courses: ['BE/B.Tech', 'ME/M.Tech', 'Polytechnic'],
+      link: '/courses/engineering'
+    },
+    {
+      title: 'Medical',
+      icon: <FiActivity />,
+      courses: ['BAMS', 'B.Sc (Medicine)', 'BHMS', 'Bachelor of Physiotherapy(BPT)'],
+      link: '/courses/medical'
+    },
+    {
+      title: 'Science',
+      icon: <FiBook />,
+      courses: ['M.Sc', 'B.Sc', 'B.F.Sc', 'M.F.Sc'],
+      link: '/courses/science'
+    },
+    {
+      title: 'Commerce',
+      icon: <FiBriefcase />,
+      courses: ['M.Com', 'B.Com'],
+      link: '/courses/commerce'
+    },
+    {
+      title: 'Management',
+      icon: <FiTrendingUp />,
+      courses: ['BBA/BMS', 'MBA/PGDM', 'BHM (Hospital)', 'Executive MBA'],
+      link: '/courses/management'
+    },
+    {
+      title: 'Arts',
+      icon: <FiFileText />,
+      courses: ['BA', 'BFA', 'BSW', 'MA'],
+      link: '/courses/arts'
+    },
+    {
+      title: 'Computer Applications',
+      icon: <FiCpu />,
+      courses: ['BCA', 'MCA'],
+      link: '/courses/computer-applications'
+    },
+    {
+      title: 'Education',
+      icon: <FiBookOpen />,
+      courses: ['B.Ed', 'B.P.Ed', 'M.Ed', 'M.P.Ed'],
+      link: '/courses/education'
+    },
+    {
+      title: 'Law',
+      icon: <FiShield />,
+      courses: ['LLB', 'LLM', 'BA/BBA LLB'],
+      link: '/courses/law'
     }
-    try {
-      const response = await api.get(`/courses?search=${encodeURIComponent(searchQuery)}`);
-      setCourses(response.data);
-    } catch (error) {
-      console.error('Error searching courses:', error);
-    }
-  };
-
-  const streams = ['Engineering', 'Medical', 'Management', 'Science', 'Arts', 'Commerce', 'Law'];
-  const degreeTypes = ['UG', 'PG', 'Diploma', 'Certificate'];
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">Explore Courses</h1>
-          <p className="text-xl text-center mb-8">Find the perfect course for your career goals</p>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section with Background */}
+      <section className="relative h-[400px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.static-collegedunia.com/public/asset/img/course_assets/background.jpg)' }}>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-900/70"></div>
+        <div className="relative container mx-auto px-6 h-full flex flex-col justify-center items-center text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">SEARCH FROM OVER 10000 COURSES IN INDIA</h1>
           
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Search courses (B.Tech, MBA, MBBS, etc.)"
+          {/* Popular Course Pills */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {popularCourses.map((course, idx) => (
+              <Link 
+                key={idx}
+                to={course.link}
+                className="px-4 py-2 bg-white/90 hover:bg-white rounded-full text-sm font-medium text-gray-800 hover:text-orange-600 transition-all shadow-md"
+              >
+                {course.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Search Bar */}
+          <div className="w-full max-w-2xl">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search for courses..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 bg-white text-gray-900"
+                className="w-full px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-xl"
               />
-              <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700">
-                <FiSearch className="mr-2" /> Search
-              </Button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* Filters */}
-      <section className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-wrap gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Stream</label>
-              <select
-                value={selectedStream}
-                onChange={(e) => setSelectedStream(e.target.value)}
-                className="px-4 py-2 border rounded-lg"
-              >
-                <option value="">All Streams</option>
-                {streams.map(stream => (
-                  <option key={stream} value={stream}>{stream}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Degree Type</label>
-              <select
-                value={selectedDegree}
-                onChange={(e) => setSelectedDegree(e.target.value)}
-                className="px-4 py-2 border rounded-lg"
-              >
-                <option value="">All Degrees</option>
-                {degreeTypes.map(degree => (
-                  <option key={degree} value={degree}>{degree}</option>
-                ))}
-              </select>
+              <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-700 text-white p-3 rounded-full">
+                <FiSearch size={20} />
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Courses Grid */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-white rounded-lg p-6 shadow animate-pulse">
-                  <div className="h-6 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                </div>
-              ))}
-            </div>
-          ) : courses.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No courses found</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {courses.map((course) => (
-                <Link
-                  key={course.id}
-                  to={`/courses/${course.id}`}
-                  className="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden"
-                >
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-6 text-white">
-                    <h3 className="text-2xl font-bold mb-1">{course.name}</h3>
-                    <p className="text-purple-100 text-sm">{course.full_name}</p>
-                    <div className="mt-3 flex items-center gap-2">
-                      <span className="bg-white text-purple-600 px-3 py-1 rounded-full text-xs font-semibold">
-                        {course.degree_type}
-                      </span>
-                      <span className="bg-white text-purple-600 px-3 py-1 rounded-full text-xs font-semibold">
-                        {course.duration}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                      <FiBookOpen className="text-orange-600" />
-                      <span>{course.stream}</span>
-                    </div>
-                    <p className="text-gray-700 text-sm mb-4 line-clamp-2">{course.description}</p>
-                    <div className="space-y-2 mb-4">
-                      {course.average_salary && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <FiBriefcase className="text-green-600" />
-                          <span>Avg Salary: ₹{(course.average_salary / 100000).toFixed(1)}L</span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2 text-sm">
-                        <FiDollarSign className="text-blue-600" />
-                        <span>Avg Fees: ₹{(course.average_fees / 100000).toFixed(1)}L</span>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center pt-4 border-t">
-                      <span className="text-sm font-semibold text-gray-700">{course.total_colleges || 0} Colleges</span>
-                      <Button size="sm" className="bg-purple-600 hover:bg-purple-700">View Details</Button>
-                    </div>
-                  </div>
+      {/* Level-based Courses Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-3">DON'T KNOW WHAT TO CHOOSE?</h2>
+            <h3 className="text-2xl font-semibold text-orange-600 mb-2">CHOOSE BY YOUR LEVEL</h3>
+            <p className="text-gray-600">Collegedunia.com is an extensive search engine for the students, parents, and education industry players who are seeking information</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {levelCourses.map((level, idx) => (
+              <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <Link to={level.link}>
+                  <img src={level.image} alt={level.title} className="w-full h-48 object-cover" />
                 </Link>
-              ))}
-            </div>
-          )}
+                <div className="p-5">
+                  <Link to={level.link} className="text-xl font-bold text-blue-600 hover:underline mb-2 block">
+                    {level.title}
+                  </Link>
+                  <p className="text-sm text-gray-600 mb-4">{level.subtitle}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {level.categories.slice(0, 6).map((cat, catIdx) => (
+                      <Link 
+                        key={catIdx}
+                        to={`${level.link}/${cat.name.toLowerCase()}`}
+                        className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-gray-100 hover:bg-orange-100 text-gray-700 hover:text-orange-700 rounded-full transition-colors"
+                      >
+                        <span className="font-semibold">{cat.count}</span>
+                        <span>{cat.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stream-based Courses Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">CHOOSE BY INTEREST</h2>
+            <p className="text-gray-600">Collegedunia.com is an extensive search engine for the students, parents, and education industry players who are seeking information</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {streamCourses.map((stream, idx) => (
+              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                <Link to={stream.link} className="flex items-center gap-3 mb-4">
+                  <div className="text-orange-600 text-3xl">
+                    {stream.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-blue-600 hover:underline">{stream.title}</h3>
+                </Link>
+                <hr className="my-4 border-gray-200" />
+                <ul className="space-y-2 mb-4">
+                  {stream.courses.map((course, courseIdx) => (
+                    <li key={courseIdx}>
+                      <Link to={`${stream.link}/${course.toLowerCase().replace(/[\/\s()]/g, '-')}`} className="text-sm text-gray-700 hover:text-orange-600 hover:underline">
+                        {course}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link to={stream.link} className="inline-flex items-center gap-1 text-sm text-orange-600 hover:text-orange-700 font-medium">
+                  Explore all courses
+                  <FiChevronRight size={16} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trending Courses Section */}
+      <section className="py-16 bg-gradient-to-br from-orange-50 to-blue-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">#TRENDING COURSE SEARCH</h2>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            {popularCourses.map((course, idx) => (
+              <Link 
+                key={idx}
+                to={course.link}
+                className="px-5 py-2 bg-white hover:bg-orange-600 text-gray-800 hover:text-white rounded-full text-sm font-medium transition-all shadow-sm hover:shadow-md"
+              >
+                {course.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </div>
