@@ -73,6 +73,9 @@ function App() {
             <Route path="/compare" element={<CompareCollegesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:id" element={<BlogDetailPage />} />
+            <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
+            <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
+            <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
