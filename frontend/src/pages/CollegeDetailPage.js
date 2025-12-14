@@ -275,6 +275,7 @@ const CollegeDetailPage = () => {
                 {showContent ? <FiChevronUp size={18} /> : <FiChevronDown size={18} />}
               </button>
             </div>
+            </section>
 
             {/* EXPANDABLE CONTENT */}
             {showContent && (
