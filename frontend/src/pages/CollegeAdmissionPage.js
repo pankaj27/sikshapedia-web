@@ -52,19 +52,33 @@ const CollegeAdmissionPage = () => {
   const fetchAdmissions = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      if (selectedType && selectedType !== 'all') {
-        params.append('type', selectedType);
-      }
+      // For now, use mock data since backend doesn't have admission-specific fields
+      // const params = new URLSearchParams();
+      // if (selectedType && selectedType !== 'all') {
+      //   params.append('type', selectedType);
+      // }
+      // if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
+      //   params.append('state', selectedState);
+      // }
+      // if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
+      //   params.append('city', selectedCity);
+      // }
+      
+      // const response = await api.get(`/colleges?${params.toString()}`);
+      // Use mock data until backend has admission dates
+      let filteredData = generateMockAdmissions();
+      
       if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-        params.append('state', selectedState);
+        filteredData = filteredData.filter(a => a.location.state === selectedState);
       }
       if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-        params.append('city', selectedCity);
+        filteredData = filteredData.filter(a => a.location.city === selectedCity);
+      }
+      if (selectedType && selectedType !== 'all') {
+        filteredData = filteredData.filter(a => a.type.toLowerCase() === selectedType.toLowerCase());
       }
       
-      const response = await api.get(`/colleges?${params.toString()}`);
-      setAdmissions(response.data);
+      setAdmissions(filteredData);
     } catch (error) {
       console.error('Error fetching admissions:', error);
       // Fallback to mock data with filtering
