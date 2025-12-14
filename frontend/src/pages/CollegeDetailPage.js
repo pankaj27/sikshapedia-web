@@ -190,13 +190,31 @@ const CollegeDetailPage = () => {
 
                 {/* LIKE/DISLIKE */}
                 <div className="flex items-center gap-2 ml-4">
-                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <span className="text-xl">👍</span>
-                    <span className="text-sm font-semibold text-gray-700">245</span>
+                  <button 
+                    onClick={handleLike}
+                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${
+                      userVote === 'like' 
+                        ? 'border-green-500 bg-green-50 shadow-md' 
+                        : 'border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="text-xl">{userVote === 'like' ? '👍' : '👍'}</span>
+                    <span className={`text-sm font-semibold ${userVote === 'like' ? 'text-green-600' : 'text-gray-700'}`}>
+                      {likes}
+                    </span>
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <span className="text-xl">👎</span>
-                    <span className="text-sm font-semibold text-gray-700">12</span>
+                  <button 
+                    onClick={handleDislike}
+                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${
+                      userVote === 'dislike' 
+                        ? 'border-red-500 bg-red-50 shadow-md' 
+                        : 'border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="text-xl">{userVote === 'dislike' ? '👎' : '👎'}</span>
+                    <span className={`text-sm font-semibold ${userVote === 'dislike' ? 'text-red-600' : 'text-gray-700'}`}>
+                      {dislikes}
+                    </span>
                   </button>
                 </div>
               </div>
