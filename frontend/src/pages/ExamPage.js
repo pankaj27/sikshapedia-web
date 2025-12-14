@@ -30,64 +30,70 @@ const ExamPage = () => {
 
   const exams = [
     {
-      logo: 'https://via.placeholder.com/48',
       name: 'CUET 2025',
       fullName: 'Common Universities Entrance Test',
       examMode: 'Offline Exam',
       examDate: '12 May 25 - 02 Jun 25',
       applicationDate: '28 Feb 25 - 23 Mar 25',
       resultDate: '03 Jul 25',
-      category: 'Engineering'
+      category: 'Engineering',
+      initials: 'CUET',
+      color: 'from-blue-500 to-blue-600'
     },
     {
-      logo: 'https://via.placeholder.com/48',
       name: 'JEE Main 2026',
       fullName: 'Joint Entrance Exam Main',
       examMode: 'Online Exam',
       examDate: '21 Jan 26 - 29 Jan 26',
       applicationDate: '14 Oct 25 - 24 Nov 25',
       resultDate: '18 Feb 26',
-      category: 'Engineering'
+      category: 'Engineering',
+      initials: 'JEE',
+      color: 'from-orange-500 to-orange-600'
     },
     {
-      logo: 'https://via.placeholder.com/48',
       name: 'NEET 2025',
       fullName: 'National Eligibility Cum Entrance Test',
       examMode: 'Offline Exam',
       examDate: '03 May 25',
       applicationDate: '06 Feb 25 - 06 Mar 25',
       resultDate: '13 Jun 25',
-      category: 'Medical'
+      category: 'Medical',
+      initials: 'NEET',
+      color: 'from-green-500 to-green-600'
     },
     {
-      logo: 'https://via.placeholder.com/48',
       name: 'CAT 2025',
       fullName: 'Common Admission Test',
       examMode: 'Online Exam',
       examDate: '29 Nov 25',
       applicationDate: '31 Jul 25 - 19 Sept 25',
       resultDate: 'TBA',
-      category: 'Management'
+      category: 'Management',
+      initials: 'CAT',
+      color: 'from-purple-500 to-purple-600'
     },
     {
-      logo: 'https://via.placeholder.com/48',
       name: 'GATE 2026',
       fullName: 'Graduate Aptitude Test in Engineering',
       examMode: 'Online Exam',
       examDate: '06 Feb 26',
       applicationDate: '27 Aug 25 - 12 Oct 25',
       resultDate: '18 Mar 26',
-      category: 'Engineering'
+      category: 'Engineering',
+      initials: 'GATE',
+      color: 'from-red-500 to-red-600'
     },
     {
-      logo: 'https://via.placeholder.com/48',
       name: 'CLAT 2025',
       fullName: 'Common Law Admission Test',
       examMode: 'Online Exam',
       examDate: '06 Dec 25',
       applicationDate: '31 Jul 25 - 30 Oct 25',
       resultDate: '16 Dec 25',
-      category: 'Law'
+      category: 'Law',
+      initials: 'CLAT',
+      color: 'from-indigo-500 to-indigo-600'
     }
   ];
 
@@ -230,13 +236,11 @@ const ExamPage = () => {
                   className="bg-white rounded shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex p-5 gap-4">
-                    {/* Logo */}
+                    {/* Logo with Initials */}
                     <div className="flex-shrink-0">
-                      <img
-                        src={exam.logo}
-                        alt={exam.name}
-                        className="w-12 h-12 rounded object-cover"
-                      />
+                      <div className={`w-12 h-12 rounded bg-gradient-to-br ${exam.color} flex items-center justify-center shadow-sm`}>
+                        <span className="text-white font-bold text-sm">{exam.initials}</span>
+                      </div>
                     </div>
 
                     {/* Exam Details */}
