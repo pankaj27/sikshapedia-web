@@ -9,6 +9,7 @@ const CollegeDetailPage = () => {
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [activeTab, setActiveTab] = useState('info');
 
   useEffect(() => {
     fetchCollegeDetails();
