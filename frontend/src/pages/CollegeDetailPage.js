@@ -10,6 +10,9 @@ const CollegeDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const [activeTab, setActiveTab] = useState('info');
+  const [likes, setLikes] = useState(245);
+  const [dislikes, setDislikes] = useState(12);
+  const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
 
   useEffect(() => {
     fetchCollegeDetails();
