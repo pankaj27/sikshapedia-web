@@ -275,7 +275,7 @@ const CoursesPage = () => {
                   <div className="text-orange-600 text-lg">
                     {stream.icon}
                   </div>
-                  <h3 className="text-sm font-bold text-blue-600 hover:underline">{stream.title}</h3>
+                  <h3 className="text-base font-extrabold text-blue-600 hover:underline">{stream.title}</h3>
                 </Link>
                 <hr className="my-1.5 border-gray-200" />
                 <ul className="space-y-1 mb-2">
