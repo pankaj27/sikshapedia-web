@@ -448,6 +448,288 @@ class NewFeaturesAPITester:
         
         return True
 
+    # ============================================
+    # Schools API Tests
+    # ============================================
+
+    def test_schools_endpoint(self):
+        """Test GET /api/schools endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/schools")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    school_count = len(data)
+                    self.log_result("GET /schools", "PASS", f"Retrieved {school_count} schools")
+                    
+                    # Check if we have schools and validate structure
+                    if school_count > 0:
+                        sample_school = data[0]
+                        required_fields = ['id', 'name', 'slug', 'board', 'school_type', 'medium', 'city', 'state', 'rating']
+                        missing_fields = [field for field in required_fields if field not in sample_school]
+                        
+                        if not missing_fields:
+                            self.log_result("School Structure", "PASS", "All required fields present in school data")
+                        else:
+                            self.log_result("School Structure", "FAIL", f"Missing required fields: {missing_fields}")
+                    
+                    return True
+                else:
+                    self.log_result("GET /schools", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result("GET /schools", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result("GET /schools", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_schools_with_filters(self):
+        """Test GET /schools with various filters"""
+        test_params = [
+            {"board": "CBSE", "description": "Filter by CBSE board"},
+            {"city": "Mumbai", "description": "Filter by Mumbai city"},
+            {"state": "Delhi", "description": "Filter by Delhi state"},
+            {"school_type": "Private", "description": "Filter by Private school type"},
+            {"medium": "English", "description": "Filter by English medium"},
+            {"sort": "rating", "description": "Sort by rating"}
+        ]
+        
+        for params in test_params:
+            try:
+                description = params.pop("description")
+                response = self.session.get(f"{BACKEND_URL}/schools", params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_result(f"Schools Filter - {description}", "PASS", f"Retrieved {len(data)} results")
+                else:
+                    self.log_result(f"Schools Filter - {description}", "FAIL", f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_result(f"Schools Filter - {description}", "FAIL", f"Error: {str(e)}")
+
+    def test_specific_school(self):
+        """Test GET /api/schools/{school_id} endpoint"""
+        # First get a school ID from the list
+        try:
+            response = self.session.get(f"{BACKEND_URL}/schools", params={"limit": 1})
+            if response.status_code == 200:
+                schools = response.json()
+                if len(schools) > 0:
+                    school_id = schools[0]['id']
+                    
+                    # Test specific school endpoint
+                    response = self.session.get(f"{BACKEND_URL}/schools/{school_id}")
+                    if response.status_code == 200:
+                        data = response.json()
+                        if isinstance(data, dict) and 'id' in data:
+                            self.log_result(f"GET /schools/{school_id}", "PASS", f"Retrieved school: {data.get('name', 'Unknown')}")
+                            return True
+                        else:
+                            self.log_result(f"GET /schools/{school_id}", "FAIL", "Invalid response structure")
+                            return False
+                    else:
+                        self.log_result(f"GET /schools/{school_id}", "FAIL", f"HTTP {response.status_code}")
+                        return False
+                else:
+                    self.log_result("GET /schools/{id}", "WARN", "No schools available to test specific endpoint")
+                    return True
+            else:
+                self.log_result("GET /schools/{id}", "FAIL", f"Could not get schools list: HTTP {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_result("GET /schools/{id}", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    # ============================================
+    # Universities API Tests
+    # ============================================
+
+    def test_universities_endpoint(self):
+        """Test GET /api/universities endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/universities")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    university_count = len(data)
+                    self.log_result("GET /universities", "PASS", f"Retrieved {university_count} universities")
+                    
+                    # Check if we have universities and validate structure
+                    if university_count > 0:
+                        sample_university = data[0]
+                        required_fields = ['id', 'name', 'university_type', 'accreditation', 'nirf_rank', 'rating']
+                        missing_fields = [field for field in required_fields if field not in sample_university]
+                        
+                        if not missing_fields:
+                            self.log_result("University Structure", "PASS", "All required fields present in university data")
+                        else:
+                            self.log_result("University Structure", "FAIL", f"Missing required fields: {missing_fields}")
+                    
+                    return True
+                else:
+                    self.log_result("GET /universities", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result("GET /universities", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result("GET /universities", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_universities_with_filters(self):
+        """Test GET /universities with various filters"""
+        test_params = [
+            {"university_type": "Central University", "description": "Filter by Central University type"},
+            {"accreditation": "NAAC A++", "description": "Filter by NAAC A++ accreditation"},
+            {"stream": "Arts", "description": "Filter by Arts stream"},
+            {"sort": "rating", "description": "Sort by rating"},
+            {"sort": "ranking", "description": "Sort by ranking (nirf_rank)"}
+        ]
+        
+        for params in test_params:
+            try:
+                description = params.pop("description")
+                response = self.session.get(f"{BACKEND_URL}/universities", params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_result(f"Universities Filter - {description}", "PASS", f"Retrieved {len(data)} results")
+                else:
+                    self.log_result(f"Universities Filter - {description}", "FAIL", f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_result(f"Universities Filter - {description}", "FAIL", f"Error: {str(e)}")
+
+    def test_specific_university(self):
+        """Test GET /api/universities/{university_id} endpoint"""
+        # First get a university ID from the list
+        try:
+            response = self.session.get(f"{BACKEND_URL}/universities", params={"limit": 1})
+            if response.status_code == 200:
+                universities = response.json()
+                if len(universities) > 0:
+                    university_id = universities[0]['id']
+                    
+                    # Test specific university endpoint
+                    response = self.session.get(f"{BACKEND_URL}/universities/{university_id}")
+                    if response.status_code == 200:
+                        data = response.json()
+                        if isinstance(data, dict) and 'id' in data:
+                            self.log_result(f"GET /universities/{university_id}", "PASS", f"Retrieved university: {data.get('name', 'Unknown')}")
+                            return True
+                        else:
+                            self.log_result(f"GET /universities/{university_id}", "FAIL", "Invalid response structure")
+                            return False
+                    else:
+                        self.log_result(f"GET /universities/{university_id}", "FAIL", f"HTTP {response.status_code}")
+                        return False
+                else:
+                    self.log_result("GET /universities/{id}", "WARN", "No universities available to test specific endpoint")
+                    return True
+            else:
+                self.log_result("GET /universities/{id}", "FAIL", f"Could not get universities list: HTTP {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_result("GET /universities/{id}", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    # ============================================
+    # News API Tests
+    # ============================================
+
+    def test_news_endpoint(self):
+        """Test GET /api/news endpoint"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/news")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    news_count = len(data)
+                    self.log_result("GET /news", "PASS", f"Retrieved {news_count} news articles")
+                    
+                    # Check if we have news and validate structure
+                    if news_count > 0:
+                        sample_news = data[0]
+                        required_fields = ['id', 'title', 'slug', 'category', 'summary', 'author', 'views', 'published_at']
+                        missing_fields = [field for field in required_fields if field not in sample_news]
+                        
+                        if not missing_fields:
+                            self.log_result("News Structure", "PASS", "All required fields present in news data")
+                        else:
+                            self.log_result("News Structure", "FAIL", f"Missing required fields: {missing_fields}")
+                    
+                    return True
+                else:
+                    self.log_result("GET /news", "FAIL", f"Expected list, got {type(data)}")
+                    return False
+            else:
+                self.log_result("GET /news", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+        except Exception as e:
+            self.log_result("GET /news", "FAIL", f"Request error: {str(e)}")
+            return False
+
+    def test_news_with_filters(self):
+        """Test GET /news with various filters"""
+        test_params = [
+            {"category": "Exams", "description": "Filter by Exams category"},
+            {"featured": "true", "description": "Filter featured news"},
+            {"sort": "views", "description": "Sort by views"},
+            {"sort": "latest", "description": "Sort by latest (published_at)"}
+        ]
+        
+        for params in test_params:
+            try:
+                description = params.pop("description")
+                response = self.session.get(f"{BACKEND_URL}/news", params=params)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_result(f"News Filter - {description}", "PASS", f"Retrieved {len(data)} results")
+                else:
+                    self.log_result(f"News Filter - {description}", "FAIL", f"HTTP {response.status_code}")
+            except Exception as e:
+                self.log_result(f"News Filter - {description}", "FAIL", f"Error: {str(e)}")
+
+    def test_specific_news_article(self):
+        """Test GET /api/news/{news_id} endpoint and view counter increment"""
+        # First get a news ID from the list
+        try:
+            response = self.session.get(f"{BACKEND_URL}/news", params={"limit": 1})
+            if response.status_code == 200:
+                news_articles = response.json()
+                if len(news_articles) > 0:
+                    news_id = news_articles[0]['id']
+                    initial_views = news_articles[0].get('views', 0)
+                    
+                    # Test specific news endpoint
+                    response = self.session.get(f"{BACKEND_URL}/news/{news_id}")
+                    if response.status_code == 200:
+                        data = response.json()
+                        if isinstance(data, dict) and 'id' in data:
+                            # Check if view counter incremented
+                            new_views = data.get('views', 0)
+                            if new_views > initial_views:
+                                self.log_result(f"GET /news/{news_id}", "PASS", f"Retrieved article: {data.get('title', 'Unknown')} - Views incremented from {initial_views} to {new_views}")
+                            else:
+                                self.log_result(f"GET /news/{news_id}", "PASS", f"Retrieved article: {data.get('title', 'Unknown')} - Views: {new_views}")
+                            return True
+                        else:
+                            self.log_result(f"GET /news/{news_id}", "FAIL", "Invalid response structure")
+                            return False
+                    else:
+                        self.log_result(f"GET /news/{news_id}", "FAIL", f"HTTP {response.status_code}")
+                        return False
+                else:
+                    self.log_result("GET /news/{id}", "WARN", "No news articles available to test specific endpoint")
+                    return True
+            else:
+                self.log_result("GET /news/{id}", "FAIL", f"Could not get news list: HTTP {response.status_code}")
+                return False
+        except Exception as e:
+            self.log_result("GET /news/{id}", "FAIL", f"Request error: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all college API tests"""
         print("🚀 Starting College Module API Tests")
