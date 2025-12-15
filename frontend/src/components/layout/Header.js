@@ -52,6 +52,34 @@ const Header = () => {
     navigate('/');
   };
 
+  // Hover handlers with delay for Goal dropdown
+  const handleGoalMouseEnter = () => {
+    if (goalTimeoutRef.current) {
+      clearTimeout(goalTimeoutRef.current);
+    }
+    setGoalDropdownOpen(true);
+  };
+
+  const handleGoalMouseLeave = () => {
+    goalTimeoutRef.current = setTimeout(() => {
+      setGoalDropdownOpen(false);
+    }, 200);
+  };
+
+  // Hover handlers with delay for All Courses dropdown
+  const handleAllCoursesMouseEnter = () => {
+    if (allCoursesTimeoutRef.current) {
+      clearTimeout(allCoursesTimeoutRef.current);
+    }
+    setAllCoursesDropdownOpen(true);
+  };
+
+  const handleAllCoursesMouseLeave = () => {
+    allCoursesTimeoutRef.current = setTimeout(() => {
+      setAllCoursesDropdownOpen(false);
+    }, 200);
+  };
+
   const admissionGoals = [
     { name: 'School Admission', link: '/admission/schools' },
     { name: 'College Admission', link: '/admission/colleges' },
