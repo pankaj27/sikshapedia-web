@@ -40,11 +40,15 @@ const CollegesListManagement = () => {
     }
   };
 
-  const filteredColleges = colleges.filter(college =>
-    college.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    college.location?.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    college.location?.state?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredColleges = colleges.filter(college => {
+    const matchesSearch = college.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      college.location?.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      college.location?.state?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesType = filterType === 'All' || college.institution_type === filterType;
+    
+    return matchesSearch && matchesType;
+  });
 
   if (loading) {
     return (
@@ -57,24 +61,37 @@ const CollegesListManagement = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Colleges Management</h1>
+        <div>
+          <h1 className="text-3xl font-bold">Institutions Management</h1>
+          <p className="text-gray-600 mt-1">Manage Colleges, Schools & Universities</p>
+        </div>
         <Button onClick={() => navigate('/admin/colleges/add')} className="bg-orange-600 hover:bg-orange-700">
-          <FiPlus className="mr-2" /> Add New College
+          <FiPlus className="mr-2" /> Add New Institution
         </Button>
       </div>
 
-      {/* Search Bar */}
-      <div className="mb-6">
-        <div className="relative">
+      {/* Search and Filter Bar */}
+      <div className="mb-6 flex gap-4">
+        <div className="flex-1 relative">
           <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search colleges by name, city, or state..."
+            placeholder="Search institutions by name, city, or state..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+        >
+          <option value="All">All Types</option>
+          <option value="College">🎓 Colleges</option>
+          <option value="School">🏫 Schools</option>
+          <option value="University">🏛️ Universities</option>
+        </select>
       </div>
 
       {/* Colleges Table */}
@@ -83,13 +100,16 @@ const CollegesListManagement = () => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                College Name
+                Type
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Location
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Type
+                Category
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Established
