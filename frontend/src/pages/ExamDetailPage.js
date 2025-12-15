@@ -515,6 +515,155 @@ const ExamDetailPage = () => {
                 </Button>
               </div>
             </div>
+
+            {/* Comments Section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold mb-6">Comments ({3})</h2>
+              
+              {/* Add Comment Form */}
+              <div className="mb-8 pb-6 border-b">
+                <h3 className="font-semibold text-gray-800 mb-3">Leave a Comment</h3>
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <textarea
+                    placeholder="Write your comment here..."
+                    rows="4"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  ></textarea>
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    Post Comment
+                  </Button>
+                </div>
+              </div>
+
+              {/* Comments List */}
+              <div className="space-y-6">
+                {/* Comment 1 */}
+                <div className="border-b pb-6">
+                  <div className="flex gap-4">
+                    <img 
+                      src="https://via.placeholder.com/48" 
+                      alt="User" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
+                        <span className="text-xs text-gray-500">2 days ago</span>
+                      </div>
+                      <p className="text-gray-700 mb-3">
+                        These question papers are really helpful. The solutions are detailed and easy to understand. 
+                        Thanks for providing all years in one place!
+                      </p>
+                      <div className="flex items-center gap-4">
+                        <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-orange-600">
+                          <span>👍</span>
+                          <span>Helpful (24)</span>
+                        </button>
+                        <button className="text-sm text-blue-600 hover:text-blue-800">
+                          Reply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Comment 2 with Reply */}
+                <div className="border-b pb-6">
+                  <div className="flex gap-4">
+                    <img 
+                      src="https://via.placeholder.com/48" 
+                      alt="User" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
+                        <span className="text-xs text-gray-500">5 days ago</span>
+                      </div>
+                      <p className="text-gray-700 mb-3">
+                        Are the 2025 question papers available with solutions?
+                      </p>
+                      <div className="flex items-center gap-4">
+                        <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-orange-600">
+                          <span>👍</span>
+                          <span>Helpful (12)</span>
+                        </button>
+                        <button className="text-sm text-blue-600 hover:text-blue-800">
+                          Reply
+                        </button>
+                      </div>
+
+                      {/* Reply */}
+                      <div className="mt-4 ml-8 flex gap-3 bg-gray-50 p-4 rounded-lg">
+                        <img 
+                          src="https://via.placeholder.com/40" 
+                          alt="Admin" 
+                          className="w-10 h-10 rounded-full"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h5 className="font-semibold text-gray-800 text-sm">Admin</h5>
+                            <span className="text-xs bg-orange-500 text-white px-2 py-0.5 rounded">Team</span>
+                            <span className="text-xs text-gray-500">4 days ago</span>
+                          </div>
+                          <p className="text-gray-700 text-sm">
+                            Yes, 2025 question papers with detailed solutions are available. 
+                            You can download them from the table above. If you face any issues, please let us know.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Comment 3 */}
+                <div>
+                  <div className="flex gap-4">
+                    <img 
+                      src="https://via.placeholder.com/48" 
+                      alt="User" 
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-semibold text-gray-800">Amit Singh</h4>
+                        <span className="text-xs text-gray-500">1 week ago</span>
+                      </div>
+                      <p className="text-gray-700 mb-3">
+                        The chapterwise PYQs are excellent for targeted practice. 
+                        Helped me a lot in my preparation. Keep up the good work! 🙏
+                      </p>
+                      <div className="flex items-center gap-4">
+                        <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-orange-600">
+                          <span>👍</span>
+                          <span>Helpful (45)</span>
+                        </button>
+                        <button className="text-sm text-blue-600 hover:text-blue-800">
+                          Reply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Load More Comments */}
+              <div className="mt-6 text-center">
+                <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
+                  Load More Comments
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
