@@ -214,6 +214,35 @@ const ExamDetailPage = () => {
         </div>
       </div>
 
+      {/* Key Highlights */}
+      <div className="bg-blue-50 border-b border-blue-200 py-4">
+        <div className="container mx-auto px-6">
+          <h3 className="font-bold text-gray-800 mb-2">Key Summary</h3>
+          <ul className="space-y-1 text-sm text-gray-700">
+            {exam.keyHighlights.map((highlight, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-orange-600 mt-1">•</span>
+                <span>{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Top Advertisement Banner */}
+      <div className="bg-gray-100 border-b py-4">
+        <div className="container mx-auto px-6">
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-8 text-center text-white">
+            <p className="text-xs uppercase tracking-wide mb-2">Advertisement</p>
+            <h3 className="text-2xl font-bold mb-2">Get Expert Guidance for {exam.name}</h3>
+            <p className="mb-4">Join thousands of successful students</p>
+            <Button className="bg-white text-purple-600 hover:bg-gray-100">
+              Enroll Now
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
