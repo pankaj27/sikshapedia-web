@@ -977,34 +977,10 @@ const CollegeForm = () => {
           </div>
         </div>
 
-        {/* Recognition & Accreditation */}
+        {/* Accreditation */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Recognition & Accreditation</h2>
+          <h2 className="text-xl font-bold mb-4">Accreditation</h2>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Memberships</label>
-              {formData.memberships.map((membership, index) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    value={membership}
-                    onChange={(e) => handleArrayChange('memberships', index, e.target.value)}
-                    placeholder="e.g., AIU, ACU"
-                    className="flex-1 border rounded px-3 py-2"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeArrayItem('memberships', index)}
-                  >
-                    <FiTrash2 />
-                  </Button>
-                </div>
-              ))}
-              <Button type="button" onClick={() => addArrayItem('memberships', '')} size="sm">
-                <FiPlus className="mr-2" /> Add Membership
-              </Button>
-            </div>
             <div>
               <label className="block text-sm font-medium mb-2">Accreditations</label>
               {formData.accreditations.map((accr, index) => (
@@ -1013,6 +989,7 @@ const CollegeForm = () => {
                     type="text"
                     value={accr}
                     onChange={(e) => handleArrayChange('accreditations', index, e.target.value)}
+                    placeholder="e.g., NAAC A++, NBA"
                     className="flex-1 border rounded px-3 py-2"
                   />
                   <Button
