@@ -1965,6 +1965,143 @@ async def delete_course(course_id: str, current_user: User = Depends(get_current
     result = await db.courses.delete_one({"id": course_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Course not found")
+
+# ============================================
+# Courses Detail Routes (Separate Collection)
+# ============================================
+
+@api_router.get("/courses-detail", response_model=List[CourseDetail])
+async def get_courses_detail(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    courses = await db.courses_detailed.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for course in courses:
+        if isinstance(course.get('created_at'), str):
+            course['created_at'] = datetime.fromisoformat(course['created_at'])
+    
+    return courses
+
+@api_router.get("/courses-detail/{course_id}", response_model=CourseDetail)
+async def get_course_detail(course_id: str):
+    course = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    if isinstance(course.get('created_at'), str):
+        course['created_at'] = datetime.fromisoformat(course['created_at'])
+    
+    return CourseDetail(**course)
+
+@api_router.post("/courses-detail", response_model=CourseDetail)
+async def create_course_detail(course_data: CourseDetailCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can create courses")
+    
+    course = CourseDetail(**course_data.model_dump())
+    course_dict = course.model_dump()
+    course_dict['created_at'] = course_dict['created_at'].isoformat()
+    
+    await db.courses_detailed.insert_one(course_dict)
+    return course
+
+@api_router.put("/courses-detail/{course_id}", response_model=CourseDetail)
+async def update_course_detail(course_id: str, course_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update courses")
+    
+    existing_course = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    if not existing_course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    await db.courses_detailed.update_one({"id": course_id}, {"$set": course_data})
+    updated_course = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
+    
+    if isinstance(updated_course.get('created_at'), str):
+        updated_course['created_at'] = datetime.fromisoformat(updated_course['created_at'])
+    
+    return CourseDetail(**updated_course)
+
+@api_router.delete("/courses-detail/{course_id}")
+async def delete_course_detail(course_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can delete courses")
+    
+    result = await db.courses_detailed.delete_one({"id": course_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    return {"message": "Course deleted successfully"}
+
+# ============================================
+# Exams Detail Routes (Separate Collection)
+# ============================================
+
+@api_router.get("/exams-detail", response_model=List[ExamDetail])
+async def get_exams_detail(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    exams = await db.exams_detailed.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for exam in exams:
+        if isinstance(exam.get('created_at'), str):
+            exam['created_at'] = datetime.fromisoformat(exam['created_at'])
+    
+    return exams
+
+@api_router.get("/exams-detail/{exam_id}", response_model=ExamDetail)
+async def get_exam_detail(exam_id: str):
+    exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not exam:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    if isinstance(exam.get('created_at'), str):
+        exam['created_at'] = datetime.fromisoformat(exam['created_at'])
+    
+    return ExamDetail(**exam)
+
+@api_router.post("/exams-detail", response_model=ExamDetail)
+async def create_exam_detail(exam_data: ExamDetailCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can create exams")
+    
+    exam = ExamDetail(**exam_data.model_dump())
+    exam_dict = exam.model_dump()
+    exam_dict['created_at'] = exam_dict['created_at'].isoformat()
+    
+    await db.exams_detailed.insert_one(exam_dict)
+    return exam
+
+@api_router.put("/exams-detail/{exam_id}", response_model=ExamDetail)
+async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing_exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    if not existing_exam:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    await db.exams_detailed.update_one({"id": exam_id}, {"$set": exam_data})
+    updated_exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
+    
+    if isinstance(updated_exam.get('created_at'), str):
+        updated_exam['created_at'] = datetime.fromisoformat(updated_exam['created_at'])
+    
+    return ExamDetail(**updated_exam)
+
+@api_router.delete("/exams-detail/{exam_id}")
+async def delete_exam_detail(exam_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can delete exams")
+    
+    result = await db.exams_detailed.delete_one({"id": exam_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    return {"message": "Exam deleted successfully"}
+
     
     return {"message": "Course deleted successfully"}
 
