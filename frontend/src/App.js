@@ -12,6 +12,7 @@ import ExamsPage from './pages/ExamsPage';
 import ExamPage from './pages/ExamPage';
 import NewsPage from './pages/NewsPage';
 import ExamDetailPage from './pages/ExamDetailPage';
+import ExamSubPages from './pages/ExamSubPages';
 import CoursesPage from './pages/CoursesPage';
 import CourseListingPage from './pages/CourseListingPage';
 import CourseDetailPage from './pages/CourseDetailPage';
