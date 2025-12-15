@@ -3758,7 +3758,8 @@ async def delete_college_type(type_id: str):
 
 # Affiliations
 @api_router.get("/affiliations")
-async def get_affiliations(limit: int = 100):
+async def get_affiliations(limit: int = 500):
+    # Allow higher limit for affiliations since we have many entries (241+)
     affiliations = await db.affiliations.find({}, {"_id": 0}).limit(limit).to_list(limit)
     return affiliations
 
