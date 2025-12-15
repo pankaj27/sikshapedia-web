@@ -69,6 +69,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Affiliations', path: '/admin/affiliations', icon: FiGrid },
         { title: 'Recognitions', path: '/admin/recognitions', icon: FiGrid },
         { title: 'Accreditations', path: '/admin/accreditations', icon: FiGrid },
+        { title: 'Accreditation Levels', path: '/admin/accreditation-levels', icon: FiGrid },
         { title: 'Rankings', path: '/admin/rankings', icon: FiGrid },
       ]
     },
