@@ -12,6 +12,8 @@ const CollegeForm = () => {
   const [saving, setSaving] = useState(false);
   const [recognitions, setRecognitions] = useState([]);
   const [affiliations, setAffiliations] = useState([]);
+  const [accreditationsList, setAccreditationsList] = useState([]);
+  const [accreditationLevelsList, setAccreditationLevelsList] = useState([]);
   
   // Indian States and Cities
   const indianStates = [
