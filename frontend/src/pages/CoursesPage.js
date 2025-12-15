@@ -264,7 +264,7 @@ const CoursesPage = () => {
       <section className="py-6 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-4">
-            <h2 className="text-lg font-bold text-gray-800 mb-0.5">CHOOSE BY INTEREST</h2>
+            <h2 className="text-2xl font-extrabold text-gray-800 mb-0.5">CHOOSE BY INTEREST</h2>
             <p className="text-xs text-gray-600">Extensive search engine for students, parents, and education industry players</p>
           </div>
 
