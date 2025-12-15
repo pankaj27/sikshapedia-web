@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing Script for AdmissionBuddy College Module
-Tests the college-related endpoints after recent fixes
+Backend API Testing Script for AdmissionBuddy - Schools, Universities, and News APIs
+Tests the newly implemented features as requested in the review
 """
 
 import requests
