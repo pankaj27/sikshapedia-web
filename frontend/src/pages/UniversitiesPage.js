@@ -102,8 +102,43 @@ const UniversitiesPage = () => {
       course: '',
       exam: '',
       rating: '',
+      universityType: '',
+      accreditation: '',
+      stream: '',
     });
     setSearchParams(new URLSearchParams());
+  };
+
+  const filterOptions = {
+    universityType: ['Central University', 'State University', 'Private University', 'Deemed University', 'Institute of National Importance'],
+    accreditation: ['NAAC A++', 'NAAC A+', 'NAAC A', 'NAAC B++', 'NBA Accredited', 'UGC Approved'],
+    stream: ['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce', 'Agriculture'],
+    state: ['Maharashtra', 'Tamil Nadu', 'Delhi', 'Karnataka', 'Uttar Pradesh', 'West Bengal', 'Rajasthan', 'Gujarat'],
+    city: ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad'],
+  };
+
+  // Handle filter selection
+  const handleFilterSelect = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+    setActiveFilterDropdown(null);
+    // Trigger search with new filter
+    setTimeout(() => {
+      applyFilters();
+    }, 100);
+  };
+
+  // Remove a specific filter
+  const removeFilter = (filterType) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: ''
+    }));
+    setTimeout(() => {
+      applyFilters();
+    }, 100);
   };
 
   const paginatedUniversities = universities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
