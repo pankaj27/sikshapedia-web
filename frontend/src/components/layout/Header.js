@@ -212,8 +212,7 @@ const Header = () => {
                       );
                     })}
                   </div>
-                </div>,
-                document.body
+                </div>
               )}
             </div>
 
