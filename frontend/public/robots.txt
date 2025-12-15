@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://campusmate-91.preview.emergentagent.com/sitemap.xml
+Sitemap: https://campusdunia.preview.emergentagent.com/sitemap.xml
