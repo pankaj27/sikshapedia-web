@@ -174,27 +174,26 @@ const Header = () => {
 
             {/* Explore Dropdown */}
             <div 
-              className="relative"
+              className="relative explore-dropdown-container"
               onMouseEnter={() => setExploreDropdownOpen(true)}
-              onMouseLeave={() => setExploreDropdownOpen(false)}
+              onMouseLeave={() => {
+                setTimeout(() => setExploreDropdownOpen(false), 200);
+              }}
             >
               <button 
-                ref={exploreButtonRef}
                 className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors border border-white/30 rounded-lg hover:border-orange-400"
               >
                 <FiGrid size={16} />
                 <span>Explore</span>
               </button>
               
-              {exploreDropdownOpen && createPortal(
+              {exploreDropdownOpen && (
                 <div 
-                  className="fixed w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[99999]"
-                  style={{ 
-                    top: `${dropdownPosition.top}px`, 
-                    right: `${dropdownPosition.right}px` 
-                  }}
+                  className="absolute top-full right-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-3 z-[99999]"
                   onMouseEnter={() => setExploreDropdownOpen(true)}
-                  onMouseLeave={() => setExploreDropdownOpen(false)}
+                  onMouseLeave={() => {
+                    setTimeout(() => setExploreDropdownOpen(false), 200);
+                  }}
                 >
                   <div className="flex flex-col gap-1">
                     {exploreMenuItems.map((item, idx) => {
