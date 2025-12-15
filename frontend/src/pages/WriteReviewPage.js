@@ -458,6 +458,7 @@ const WriteReviewPage = () => {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
 
