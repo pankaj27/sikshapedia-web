@@ -270,6 +270,34 @@ const CollegeForm = () => {
     setFormData({ ...formData, [field]: newArray });
   };
 
+  // Helper functions for nested array (nearby_places)
+  const addNearbyPlace = () => {
+    const updatedLocation = {
+      ...formData.location,
+      nearby_places: [...(formData.location.nearby_places || []), '']
+    };
+    setFormData({ ...formData, location: updatedLocation });
+  };
+
+  const updateNearbyPlace = (index, value) => {
+    const newNearbyPlaces = [...(formData.location.nearby_places || [])];
+    newNearbyPlaces[index] = value;
+    const updatedLocation = {
+      ...formData.location,
+      nearby_places: newNearbyPlaces
+    };
+    setFormData({ ...formData, location: updatedLocation });
+  };
+
+  const removeNearbyPlace = (index) => {
+    const newNearbyPlaces = (formData.location.nearby_places || []).filter((_, i) => i !== index);
+    const updatedLocation = {
+      ...formData.location,
+      nearby_places: newNearbyPlaces
+    };
+    setFormData({ ...formData, location: updatedLocation });
+  };
+
   const addCourse = () => {
     setFormData({
       ...formData,
