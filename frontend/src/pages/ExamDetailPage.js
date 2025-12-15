@@ -159,45 +159,127 @@ const ExamDetailPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sidebar */}
+          <aside className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
+              <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Quick Navigation</h3>
+              <nav className="space-y-2">
+                <button
+                  onClick={() => setActiveTab('questionPapers')}
+                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                    activeTab === 'questionPapers' ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Question Papers
+                </button>
+                <button
+                  onClick={() => setActiveTab('examInfo')}
+                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                    activeTab === 'examInfo' ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Exam Information
+                </button>
+              </nav>
+            </div>
+          </aside>
+
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Overview */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-4">About {exam.name}</h2>
-              <p className="text-gray-700 leading-relaxed">{exam.description}</p>
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <div>
-                  <p className="text-sm text-gray-600">Conducting Body</p>
-                  <p className="font-semibold">{exam.conducting_body}</p>
+          <div className="lg:col-span-3">
+            {activeTab === 'questionPapers' && (
+              <div className="space-y-6">
+                {Object.keys(exam.questionPapers).map((year) => (
+                  <div key={year} className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-3">
+                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                        <FiBook />
+                        {exam.name} Question Paper {year}
+                      </h2>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-100">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-sm font-bold text-gray-700">
+                              {exam.name} Paper Name
+                            </th>
+                            <th className="px-6 py-3 text-center text-sm font-bold text-gray-700">
+                              Question Paper PDF
+                            </th>
+                            <th className="px-6 py-3 text-center text-sm font-bold text-gray-700">
+                              Solution PDF
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {exam.questionPapers[year].map((paper, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                              <td className="px-6 py-4 text-sm text-gray-800">
+                                {exam.name} {year} Question Paper {paper.date}
+                              </td>
+                              <td className="px-6 py-4 text-center">
+                                <Link
+                                  to={paper.downloadLink}
+                                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                >
+                                  <FiDownload size={16} />
+                                  Download PDF
+                                </Link>
+                              </td>
+                              <td className="px-6 py-4 text-center">
+                                <Link
+                                  to={paper.solutionLink}
+                                  className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-800 text-sm font-medium"
+                                >
+                                  <FiFileText size={16} />
+                                  View Solution
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'examInfo' && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <FiInfo className="text-orange-600" />
+                  {exam.name} Exam Information
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Object.entries(exam.examInfo).map(([key, value]) => (
+                    <div key={key} className="border-l-4 border-orange-500 pl-4">
+                      <p className="text-sm text-gray-600 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
+                      <p className="font-semibold text-gray-800">{value}</p>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Exam Mode</p>
-                  <p className="font-semibold">{exam.exam_mode}</p>
+
+                <div className="mt-8 bg-blue-50 rounded-lg p-4">
+                  <h3 className="font-bold text-gray-800 mb-3">About {exam.name}</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{exam.description}</p>
+                  <p className="text-gray-700 text-sm mt-2">
+                    <span className="font-semibold">Conducted by:</span> {exam.conductor}
+                  </p>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Duration</p>
-                  <p className="font-semibold">{exam.exam_duration}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Total Marks</p>
-                  <p className="font-semibold">{exam.total_marks}</p>
+
+                <div className="mt-6 text-center">
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                    Apply Now
+                  </Button>
                 </div>
               </div>
-            </div>
-
-            {/* Exam Pattern */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <FiFileText className="text-orange-600" /> Exam Pattern
-              </h2>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Number of Questions:</span>
-                  <span className="font-semibold">{exam.num_questions}</span>
-                </div>
-                <div className="flex justify-between">
+            )}
+          </div>
+        </div>
+      </div>
                   <span className="text-gray-600">Total Marks:</span>
                   <span className="font-semibold">{exam.total_marks}</span>
                 </div>
