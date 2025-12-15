@@ -63,6 +63,12 @@ import CommentsManagement from './pages/admin/CommentsManagement';
 import TagCoursesColleges from './pages/admin/TagCoursesColleges';
 import TagExamsCourses from './pages/admin/TagExamsCourses';
 import UsersManagement from './pages/admin/UsersManagement';
+import BlogsManagement from './pages/admin/BlogsManagement';
+import BannersManagement from './pages/admin/BannersManagement';
+import TestimonialsManagement from './pages/admin/TestimonialsManagement';
+import FAQsManagement from './pages/admin/FAQsManagement';
+import CitiesManagement from './pages/admin/CitiesManagement';
+import ContactInquiriesManagement from './pages/admin/ContactInquiriesManagement';
 import './App.css';
 
 function App() {
