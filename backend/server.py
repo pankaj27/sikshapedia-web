@@ -424,7 +424,7 @@ class College(BaseModel):
     description: str
     highlights: List[str] = []
     admission_process: Optional[str] = None
-    admission_dates: List = []  # Can be List[Dict] or empty
+    admission_dates: Optional[Any] = None  # Can be List[Dict], Dict, or None
     
     # Accreditations & Approvals
     accreditations: List[str] = []
