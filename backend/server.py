@@ -1354,9 +1354,30 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     token = credentials.credentials
     payload = verify_token(token)
     user_id = payload.get("sub")
+    role = payload.get("role", "student")
+    
     if user_id is None:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     
+    # Check if user is admin
+    if role == "admin":
+        admin = await db.admins.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+        if admin is None:
+            raise HTTPException(status_code=401, detail="Admin not found")
+        # Return a User object with admin properties
+        return User(
+            id=admin["id"],
+            email=admin["email"],
+            name=admin["name"],
+            role="admin",
+            saved_colleges=[],
+            total_earnings=0.0,
+            referral_code=admin.get("referral_code", ""),
+            referral_count=0,
+            created_at=admin.get("created_at", datetime.now(timezone.utc))
+        )
+    
+    # Regular user lookup
     user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
     if user is None:
         raise HTTPException(status_code=401, detail="User not found")
