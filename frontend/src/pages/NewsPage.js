@@ -243,6 +243,17 @@ const NewsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b py-2 px-8">
+        <div className="container mx-auto">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">News</span>
+          </div>
+        </div>
+      </div>
+
       {/* Trending Bar */}
       <div className="bg-orange-600 text-white py-2 px-8">
         <div className="container mx-auto">
