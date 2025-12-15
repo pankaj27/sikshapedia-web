@@ -1168,42 +1168,72 @@ const CollegeForm = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">Detailed Rankings</label>
-            {formData.rankings.map((ranking, index) => (
-              <div key={index} className="grid grid-cols-5 gap-2 mb-2">
-                <input
-                  type="text"
-                  placeholder="Agency"
-                  value={ranking.agency}
-                  onChange={(e) => updateRanking(index, 'agency', e.target.value)}
-                  className="border rounded px-3 py-2"
-                />
-                <input
-                  type="number"
-                  placeholder="Year"
-                  value={ranking.year}
-                  onChange={(e) => updateRanking(index, 'year', parseInt(e.target.value))}
-                  className="border rounded px-3 py-2"
-                />
-                <input
-                  type="text"
-                  placeholder="Category"
-                  value={ranking.category}
-                  onChange={(e) => updateRanking(index, 'category', e.target.value)}
-                  className="border rounded px-3 py-2"
-                />
-                <input
-                  type="number"
-                  placeholder="Rank"
-                  value={ranking.rank}
-                  onChange={(e) => updateRanking(index, 'rank', parseInt(e.target.value))}
-                  className="border rounded px-3 py-2"
-                />
-                <Button type="button" variant="outline" onClick={() => removeRanking(index)}>
-                  <FiTrash2 />
-                </Button>
+            {(formData.rankings || []).map((ranking, index) => (
+              <div key={index} className="border rounded-lg p-4 bg-gray-50 mb-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Agency *</label>
+                    <select
+                      value={ranking.agency || ''}
+                      onChange={(e) => updateRanking(index, 'agency', e.target.value)}
+                      required
+                      className="w-full border rounded px-3 py-2"
+                    >
+                      <option value="">Select Agency</option>
+                      {rankingsList.map((item) => (
+                        <option key={item.id} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Category *</label>
+                    <select
+                      value={ranking.category || ''}
+                      onChange={(e) => updateRanking(index, 'category', e.target.value)}
+                      required
+                      className="w-full border rounded px-3 py-2"
+                    >
+                      <option value="">Select Category</option>
+                      {rankCategoriesList.map((cat) => (
+                        <option key={cat.id} value={cat.name}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Rank *</label>
+                    <input
+                      type="number"
+                      value={ranking.rank || ''}
+                      onChange={(e) => updateRanking(index, 'rank', parseInt(e.target.value))}
+                      placeholder="e.g., 15"
+                      required
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Year *</label>
+                    <input
+                      type="number"
+                      value={ranking.year || new Date().getFullYear()}
+                      onChange={(e) => updateRanking(index, 'year', parseInt(e.target.value))}
+                      placeholder="2025"
+                      required
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <Button type="button" variant="outline" onClick={() => removeRanking(index)}>
+                    <FiTrash2 className="mr-2" /> Remove Ranking
+                  </Button>
+                </div>
               </div>
             ))}
-            <Button type="button" onClick={addRanking} size="sm">
+            <Button type="button" onClick={addRanking} size="sm" variant="outline">
               <FiPlus className="mr-2" /> Add Ranking
             </Button>
           </div>
