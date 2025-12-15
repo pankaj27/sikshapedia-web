@@ -38,6 +38,18 @@ const CollegeListingPage = () => {
     fetchColleges();
   }, [searchParams, sortBy]);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (activeFilterDropdown && !event.target.closest('.relative')) {
+        setActiveFilterDropdown(null);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeFilterDropdown]);
+
   const fetchColleges = async () => {
     setLoading(true);
     try {
