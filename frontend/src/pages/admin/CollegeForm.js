@@ -204,6 +204,12 @@ const CollegeForm = () => {
           longitude: '',
           nearby_places: []
         },
+        how_to_reach: collegeData.how_to_reach || {
+          by_air: '',
+          by_train: '',
+          by_road: '',
+          public_transport: ''
+        },
         contact_info: collegeData.contact_info || { phone: '', email: '', website: '' },
         placement: {
           highest: collegeData.placement?.highest || 0,
