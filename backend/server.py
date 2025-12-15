@@ -1110,6 +1110,16 @@ class AccreditationLevel(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Rank Category Model
+class RankCategory(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # Overall, Engineering, Medical, Management, etc.
+    slug: str
+    description: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Ranking Model
 class Ranking(BaseModel):
     model_config = ConfigDict(extra="ignore")
