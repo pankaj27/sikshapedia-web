@@ -666,30 +666,6 @@ const CollegeForm = () => {
           <h2 className="text-xl font-bold mb-4">Recognition & Accreditation</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Recognized By</label>
-              {formData.recognized_by.map((org, index) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    value={org}
-                    onChange={(e) => handleArrayChange('recognized_by', index, e.target.value)}
-                    placeholder="e.g., UGC, AICTE, NBA"
-                    className="flex-1 border rounded px-3 py-2"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeArrayItem('recognized_by', index)}
-                  >
-                    <FiTrash2 />
-                  </Button>
-                </div>
-              ))}
-              <Button type="button" onClick={() => addArrayItem('recognized_by', '')} size="sm">
-                <FiPlus className="mr-2" /> Add Recognition
-              </Button>
-            </div>
-            <div>
               <label className="block text-sm font-medium mb-2">Memberships</label>
               {formData.memberships.map((membership, index) => (
                 <div key={index} className="flex gap-2 mb-2">
