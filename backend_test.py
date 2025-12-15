@@ -13,7 +13,7 @@ from datetime import datetime
 BACKEND_URL = "https://campusdunia.preview.emergentagent.com/api"
 TEST_COLLEGE_ID = "iit-bombay-002"
 
-class CollegeAPITester:
+class NewFeaturesAPITester:
     def __init__(self):
         self.results = []
         self.session = requests.Session()
