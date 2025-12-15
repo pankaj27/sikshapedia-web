@@ -80,6 +80,12 @@ const CollegeForm = () => {
       longitude: '',
       nearby_places: []
     },
+    how_to_reach: {
+      by_air: '',
+      by_train: '',
+      by_road: '',
+      public_transport: ''
+    },
     established: '',
     established_year: new Date().getFullYear(),
     type: 'Government',
