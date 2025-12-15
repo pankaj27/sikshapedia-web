@@ -125,13 +125,24 @@ const CollegesListManagement = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredColleges.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
-                  No colleges found. Add your first college!
+                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                  No institutions found. Add your first institution!
                 </td>
               </tr>
             ) : (
               filteredColleges.map((college) => (
                 <tr key={college.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      college.institution_type === 'College' ? 'bg-orange-100 text-orange-800' :
+                      college.institution_type === 'School' ? 'bg-blue-100 text-blue-800' :
+                      'bg-purple-100 text-purple-800'
+                    }`}>
+                      {college.institution_type === 'College' ? '🎓 College' : 
+                       college.institution_type === 'School' ? '🏫 School' : 
+                       '🏛️ University'}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       {college.images?.[0] ? (
