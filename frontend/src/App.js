@@ -56,47 +56,8 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <BrowserRouter>
-          <Layout>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/colleges" element={<CollegeListingPage />} />
-            <Route path="/colleges/:id" element={<CollegeDetailPage />} />
-            <Route path="/schools" element={<SchoolsPage />} />
-            <Route path="/universities" element={<UniversitiesPage />} />
-            <Route path="/exams" element={<ExamPage />} />
-            <Route path="/exams-old" element={<ExamsPage />} />
-            <Route path="/news" element={<NewsPage />} />
-            <Route path="/news/:id" element={<NewsDetailPage />} />
-            <Route path="/write-review" element={<WriteReviewPage />} />
-            <Route path="/exams/:id" element={<ExamDetailPage />} />
-            <Route path="/exams/:id/:section" element={<ExamSubPages />} />
-            <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/course-finder" element={<CourseFinderPage />} />
-            <Route path="/courses/listing/:category" element={<CourseListingPage />} />
-            <Route path="/courses/detail/:id" element={<CourseDetailPage />} />
-            <Route path="/dashboard" element={<StudentDashboard />} />
-            <Route path="/search" element={<GlobalSearchPage />} />
-            <Route path="/eligibility-checker" element={<EligibilityChecker />} />
-            <Route path="/study-abroad" element={<StudyAbroadPage />} />
-            <Route path="/scholarships" element={<ScholarshipsPage />} />
-            <Route path="/loans" element={<EducationLoansPage />} />
-            <Route path="/study-materials" element={<StudyMaterialsPage />} />
-            <Route path="/counseling" element={<CounselingPage />} />
-            <Route path="/premium" element={<PremiumPage />} />
-            <Route path="/premium/success" element={<PremiumSuccess />} />
-            <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
-            <Route path="/compare" element={<CompareCollegesPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:id" element={<BlogDetailPage />} />
-            <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
-            <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
-            <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            
-            {/* Admin Routes */}
+            {/* Admin Routes - Without Layout */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/colleges" element={<AddCollege />} />
@@ -111,8 +72,52 @@ function App() {
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
             <Route path="/admin/reviews" element={<ReviewsModeration />} />
+
+            {/* Public Routes - With Layout */}
+            <Route path="/*" element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/colleges" element={<CollegeListingPage />} />
+                  <Route path="/colleges/:id" element={<CollegeDetailPage />} />
+                  <Route path="/schools" element={<SchoolsPage />} />
+                  <Route path="/universities" element={<UniversitiesPage />} />
+                  <Route path="/exams" element={<ExamPage />} />
+                  <Route path="/exams-old" element={<ExamsPage />} />
+                  <Route path="/news" element={<NewsPage />} />
+                  <Route path="/news/:id" element={<NewsDetailPage />} />
+                  <Route path="/write-review" element={<WriteReviewPage />} />
+                  <Route path="/exams/:id" element={<ExamDetailPage />} />
+                  <Route path="/exams/:id/:section" element={<ExamSubPages />} />
+                  <Route path="/courses" element={<CoursesPage />} />
+                  <Route path="/course-finder" element={<CourseFinderPage />} />
+                  <Route path="/courses/listing/:category" element={<CourseListingPage />} />
+                  <Route path="/courses/detail/:id" element={<CourseDetailPage />} />
+                  <Route path="/dashboard" element={<StudentDashboard />} />
+                  <Route path="/search" element={<GlobalSearchPage />} />
+                  <Route path="/eligibility-checker" element={<EligibilityChecker />} />
+                  <Route path="/study-abroad" element={<StudyAbroadPage />} />
+                  <Route path="/scholarships" element={<ScholarshipsPage />} />
+                  <Route path="/loans" element={<EducationLoansPage />} />
+                  <Route path="/study-materials" element={<StudyMaterialsPage />} />
+                  <Route path="/counseling" element={<CounselingPage />} />
+                  <Route path="/premium" element={<PremiumPage />} />
+                  <Route path="/premium/success" element={<PremiumSuccess />} />
+                  <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
+                  <Route path="/compare" element={<CompareCollegesPage />} />
+                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/blog/:id" element={<BlogDetailPage />} />
+                  <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
+                  <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
+                  <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                </Routes>
+              </Layout>
+            } />
           </Routes>
-          </Layout>
         </BrowserRouter>
       </AuthProvider>
     </HelmetProvider>
