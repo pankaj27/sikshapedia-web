@@ -880,26 +880,88 @@ const CollegeListingPage = () => {
             
             {/* Applied Filters Row - Compact */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              {/* Example Applied Filters */}
+              {/* College Type Filters */}
               {filters.type.length > 0 && filters.type.map(type => (
                 <span key={type} className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  {type}
+                  Type: {type}
                   <button onClick={() => toggleFilter(type)} className="hover:bg-orange-600 rounded-full">
                     <FiX size={12} />
                   </button>
                 </span>
               ))}
               
-              {filters.state && (
+              {/* Sub Stream Filter */}
+              {filters.subStream && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  {filters.state}
-                  <button onClick={() => setFilters({...filters, state: ''})} className="hover:bg-orange-600 rounded-full">
+                  {filters.subStream}
+                  <button onClick={() => removeFilter('subStream')} className="hover:bg-orange-600 rounded-full">
                     <FiX size={12} />
                   </button>
                 </span>
               )}
               
-              {(filters.type.length > 0 || filters.state || filters.city || filters.course) && (
+              {/* Stream Filter */}
+              {filters.stream && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.stream}
+                  <button onClick={() => removeFilter('stream')} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              )}
+              
+              {/* State Filter */}
+              {filters.state && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.state}
+                  <button onClick={() => removeFilter('state')} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              )}
+              
+              {/* City Filter */}
+              {filters.city && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.city}
+                  <button onClick={() => removeFilter('city')} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              )}
+              
+              {/* Degree Filter */}
+              {filters.degree && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.degree}
+                  <button onClick={() => removeFilter('degree')} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              )}
+              
+              {/* Specialization Filter */}
+              {filters.specialization && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.specialization}
+                  <button onClick={() => removeFilter('specialization')} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              )}
+              
+              {/* Program Type Filter */}
+              {filters.programType && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.programType}
+                  <button onClick={() => removeFilter('programType')} className="hover:bg-orange-600 rounded-full">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              )}
+              
+              {/* Clear All Button */}
+              {(filters.type.length > 0 || filters.state || filters.city || filters.subStream || filters.stream || filters.degree || filters.specialization || filters.programType) && (
                 <button 
                   onClick={clearFilters}
                   className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1"
