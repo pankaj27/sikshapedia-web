@@ -55,6 +55,7 @@ import CollegeTypesManagement from './pages/admin/CollegeTypesManagement';
 import AffiliationsManagement from './pages/admin/AffiliationsManagement';
 import RecognitionsManagement from './pages/admin/RecognitionsManagement';
 import AccreditationsManagement from './pages/admin/AccreditationsManagement';
+import AccreditationLevelsManagement from './pages/admin/AccreditationLevelsManagement';
 import RankingsManagement from './pages/admin/RankingsManagement';
 import ScholarshipsManagement from './pages/admin/ScholarshipsManagement';
 import LoansManagement from './pages/admin/LoansManagement';
