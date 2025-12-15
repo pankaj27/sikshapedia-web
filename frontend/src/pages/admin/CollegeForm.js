@@ -70,7 +70,7 @@ const CollegeForm = () => {
     name: '',
     slug: '',
     institution_type: 'College', // College, School, University
-    location: { city: '', state: '', address: '' },
+    location: { city: '', state: '', address: '', pincode: '' },
     established: '',
     established_year: new Date().getFullYear(),
     type: 'Government',
@@ -179,7 +179,7 @@ const CollegeForm = () => {
         seo_intro: collegeData.seo_intro || '',
         seo_full_content: collegeData.seo_full_content || '',
         seo_video_url: collegeData.seo_video_url || '',
-        location: collegeData.location || { city: '', state: '', address: '' },
+        location: collegeData.location || { city: '', state: '', address: '', pincode: '' },
         contact_info: collegeData.contact_info || { phone: '', email: '', website: '' },
         placement: {
           highest: collegeData.placement?.highest || 0,
