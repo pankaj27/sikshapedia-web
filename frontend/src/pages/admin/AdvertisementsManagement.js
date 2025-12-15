@@ -28,6 +28,7 @@ const AdvertisementsManagement = () => {
 
   const availablePages = [
     { value: 'home', label: 'Home Page' },
+    { value: 'home-banner', label: 'Home Page Banner' },
     { value: 'colleges', label: 'Colleges Listing' },
     { value: 'college-detail', label: 'College Detail' },
     { value: 'schools', label: 'Schools Listing' },
