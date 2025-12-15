@@ -144,6 +144,8 @@ const CollegeForm = () => {
   useEffect(() => {
     fetchRecognitions();
     fetchAffiliations();
+    fetchAccreditations();
+    fetchAccreditationLevels();
     if (id) {
       fetchCollege();
     }
