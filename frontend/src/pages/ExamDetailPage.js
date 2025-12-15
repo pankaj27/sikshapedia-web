@@ -123,22 +123,41 @@ const ExamDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Link to="/exams" className="text-blue-100 hover:text-white">Exams</Link>
+      {/* Breadcrumb */}
+      <div className="bg-white border-b py-2">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
             <span>/</span>
-            <span>{exam.name}</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2">{exam.name}</h1>
-          <p className="text-xl text-blue-100 mb-4">{exam.full_name}</p>
-          <div className="flex flex-wrap gap-4">
-            <span className="bg-white text-blue-600 px-4 py-2 rounded-full text-sm font-semibold">{exam.exam_level} Level</span>
-            <span className="bg-white text-blue-600 px-4 py-2 rounded-full text-sm font-semibold">{exam.streams.join(', ')}</span>
+            <Link to="/exams" className="hover:text-orange-600 transition-colors">Exams</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">{exam.name}</span>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
+        <div className="container mx-auto px-6">
+          <h1 className="text-3xl font-bold mb-2">{exam.name} Previous Years Question Paper with Solution PDF and Answer Key</h1>
+          <p className="text-lg">Download {exam.name} Question Papers from 2025-2022 with detailed solutions</p>
+        </div>
+      </div>
+
+      {/* Key Highlights */}
+      <div className="bg-blue-50 border-t border-b border-blue-200 py-4">
+        <div className="container mx-auto px-6">
+          <h3 className="font-bold text-gray-800 mb-2">Key Summary</h3>
+          <ul className="space-y-1 text-sm text-gray-700">
+            {exam.keyHighlights.map((highlight, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-orange-600 mt-1">•</span>
+                <span>{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
