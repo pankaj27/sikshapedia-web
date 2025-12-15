@@ -37,7 +37,7 @@ const CollegeForm = () => {
     campus_size: '',
     campus_images: [],
     campus_video_url: '',
-    contact_info: { phone: '', email: '', website: '' },
+    contact_info: { phone: '', mobile: '', whatsapp: '', email: '', website: '' },
     images: [],
     videos: [],
     brochure_url: '',
