@@ -222,37 +222,85 @@ const Header = () => {
       <div className="hidden lg:block w-screen border-t border-white/20 bg-black/40 -mx-6">
         <div>
           <div className="flex items-center gap-6 py-2 pl-6 pr-6 overflow-x-auto" spellCheck="false">
-            <Link to="/courses" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-              All Courses
+            {/* All Courses Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setAllCoursesDropdownOpen(true)}
+              onMouseLeave={() => setAllCoursesDropdownOpen(false)}
+            >
+              <button className="flex items-center gap-1 text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors">
+                All Courses
+                <FiChevronDown size={14} />
+              </button>
+              
+              {allCoursesDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50">
+                  <Link to="/courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    View All Courses
+                  </Link>
+                  <div className="border-t my-2"></div>
+                  <p className="px-4 py-1 text-xs font-semibold text-gray-500">POPULAR COURSES</p>
+                  <Link to="/colleges?course=btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Tech Colleges
+                  </Link>
+                  <Link to="/colleges?course=mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    MBA Colleges
+                  </Link>
+                  <Link to="/colleges?course=mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    MBBS Colleges
+                  </Link>
+                  <Link to="/colleges?course=mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    M.Tech Colleges
+                  </Link>
+                  <div className="border-t my-2"></div>
+                  <p className="px-4 py-1 text-xs font-semibold text-gray-500">UG COURSES</p>
+                  <Link to="/colleges?course=bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Com Colleges
+                  </Link>
+                  <Link to="/colleges?course=bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Sc Colleges
+                  </Link>
+                  <Link to="/colleges?course=ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    BA Colleges
+                  </Link>
+                  <Link to="/colleges?course=bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    BBA Colleges
+                  </Link>
+                  <Link to="/colleges?course=bca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    BCA Colleges
+                  </Link>
+                </div>
+              )}
+            </div>
+            
+            <Link to="/schools" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+              Schools
             </Link>
-            <Link to="/courses?type=btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Tech
             </Link>
-            <Link to="/courses?type=mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBA
             </Link>
-            <Link to="/courses?type=mtech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
-              M.Tech
-            </Link>
-            <Link to="/courses?type=mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBBS
             </Link>
-            <Link to="/courses?type=bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Com
             </Link>
-            <Link to="/courses?type=bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Sc
             </Link>
-            <Link to="/courses?type=bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Sc (Nursing)
             </Link>
-            <Link to="/courses?type=ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               BA
             </Link>
-            <Link to="/courses?type=bba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=bba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               BBA
             </Link>
-            <Link to="/courses?type=bca" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/colleges?course=bca" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               BCA
             </Link>
             <span className="text-white/30 mx-2">|</span>
