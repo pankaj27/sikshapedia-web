@@ -69,7 +69,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-black/80 backdrop-blur-sm sticky top-0 z-[100] w-full">
+    <header className="bg-black/80 backdrop-blur-sm sticky top-0 z-[1000] w-full">
       {/* Main Header */}
       <div className="px-6">
         <div className="flex items-center justify-between h-16 gap-4 max-w-full relative">
