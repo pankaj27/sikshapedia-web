@@ -442,6 +442,22 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
+            {/* Advertisement - Rectangular Banner */}
+            <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg shadow-md p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-wide mb-2 opacity-90">Featured</p>
+                  <h3 className="text-xl font-bold mb-2">Download {exam.name} Mobile App</h3>
+                  <p className="text-sm opacity-95">Practice anytime, anywhere with 10,000+ questions</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button className="bg-white text-blue-600 hover:bg-gray-100 text-sm">
+                    Download App
+                  </Button>
+                </div>
+              </div>
+            </div>
+
             {/* Video Section */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
