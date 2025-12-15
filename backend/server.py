@@ -3253,6 +3253,284 @@ async def reject_review(review_id: str):
     await db.reviews.update_one({"id": review_id}, {"$set": {"status": "rejected"}})
     return {"success": True, "status": "rejected"}
 
+# ============================================
+# Taxonomy & Master Data Routes
+# ============================================
+
+# Streams
+@api_router.get("/streams")
+async def get_streams(limit: int = 100):
+    streams = await db.streams.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return streams
+
+@api_router.post("/streams", response_model=Stream)
+async def create_stream(stream: Stream):
+    await db.streams.insert_one(stream.model_dump())
+    return stream
+
+@api_router.put("/streams/{stream_id}")
+async def update_stream(stream_id: str, stream: Stream):
+    await db.streams.update_one({"id": stream_id}, {"$set": stream.model_dump()})
+    return stream
+
+@api_router.delete("/streams/{stream_id}")
+async def delete_stream(stream_id: str):
+    await db.streams.delete_one({"id": stream_id})
+    return {"success": True}
+
+# Sub-Streams
+@api_router.get("/sub-streams")
+async def get_sub_streams(limit: int = 100):
+    sub_streams = await db.sub_streams.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return sub_streams
+
+@api_router.post("/sub-streams", response_model=SubStream)
+async def create_sub_stream(sub_stream: SubStream):
+    await db.sub_streams.insert_one(sub_stream.model_dump())
+    return sub_stream
+
+@api_router.put("/sub-streams/{sub_stream_id}")
+async def update_sub_stream(sub_stream_id: str, sub_stream: SubStream):
+    await db.sub_streams.update_one({"id": sub_stream_id}, {"$set": sub_stream.model_dump()})
+    return sub_stream
+
+@api_router.delete("/sub-streams/{sub_stream_id}")
+async def delete_sub_stream(sub_stream_id: str):
+    await db.sub_streams.delete_one({"id": sub_stream_id})
+    return {"success": True}
+
+# Boards
+@api_router.get("/boards")
+async def get_boards(limit: int = 100):
+    boards = await db.boards.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return boards
+
+@api_router.post("/boards", response_model=Board)
+async def create_board(board: Board):
+    await db.boards.insert_one(board.model_dump())
+    return board
+
+@api_router.put("/boards/{board_id}")
+async def update_board(board_id: str, board: Board):
+    await db.boards.update_one({"id": board_id}, {"$set": board.model_dump()})
+    return board
+
+@api_router.delete("/boards/{board_id}")
+async def delete_board(board_id: str):
+    await db.boards.delete_one({"id": board_id})
+    return {"success": True}
+
+# College Types
+@api_router.get("/college-types")
+async def get_college_types(limit: int = 100):
+    college_types = await db.college_types.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return college_types
+
+@api_router.post("/college-types", response_model=CollegeType)
+async def create_college_type(college_type: CollegeType):
+    await db.college_types.insert_one(college_type.model_dump())
+    return college_type
+
+@api_router.put("/college-types/{type_id}")
+async def update_college_type(type_id: str, college_type: CollegeType):
+    await db.college_types.update_one({"id": type_id}, {"$set": college_type.model_dump()})
+    return college_type
+
+@api_router.delete("/college-types/{type_id}")
+async def delete_college_type(type_id: str):
+    await db.college_types.delete_one({"id": type_id})
+    return {"success": True}
+
+# Affiliations
+@api_router.get("/affiliations")
+async def get_affiliations(limit: int = 100):
+    affiliations = await db.affiliations.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return affiliations
+
+@api_router.post("/affiliations", response_model=Affiliation)
+async def create_affiliation(affiliation: Affiliation):
+    await db.affiliations.insert_one(affiliation.model_dump())
+    return affiliation
+
+@api_router.put("/affiliations/{affiliation_id}")
+async def update_affiliation(affiliation_id: str, affiliation: Affiliation):
+    await db.affiliations.update_one({"id": affiliation_id}, {"$set": affiliation.model_dump()})
+    return affiliation
+
+@api_router.delete("/affiliations/{affiliation_id}")
+async def delete_affiliation(affiliation_id: str):
+    await db.affiliations.delete_one({"id": affiliation_id})
+    return {"success": True}
+
+# Recognitions
+@api_router.get("/recognitions")
+async def get_recognitions(limit: int = 100):
+    recognitions = await db.recognitions.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return recognitions
+
+@api_router.post("/recognitions", response_model=Recognition)
+async def create_recognition(recognition: Recognition):
+    await db.recognitions.insert_one(recognition.model_dump())
+    return recognition
+
+@api_router.put("/recognitions/{recognition_id}")
+async def update_recognition(recognition_id: str, recognition: Recognition):
+    await db.recognitions.update_one({"id": recognition_id}, {"$set": recognition.model_dump()})
+    return recognition
+
+@api_router.delete("/recognitions/{recognition_id}")
+async def delete_recognition(recognition_id: str):
+    await db.recognitions.delete_one({"id": recognition_id})
+    return {"success": True}
+
+# Accreditations
+@api_router.get("/accreditations")
+async def get_accreditations(limit: int = 100):
+    accreditations = await db.accreditations.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return accreditations
+
+@api_router.post("/accreditations", response_model=Accreditation)
+async def create_accreditation(accreditation: Accreditation):
+    await db.accreditations.insert_one(accreditation.model_dump())
+    return accreditation
+
+@api_router.put("/accreditations/{accreditation_id}")
+async def update_accreditation(accreditation_id: str, accreditation: Accreditation):
+    await db.accreditations.update_one({"id": accreditation_id}, {"$set": accreditation.model_dump()})
+    return accreditation
+
+@api_router.delete("/accreditations/{accreditation_id}")
+async def delete_accreditation(accreditation_id: str):
+    await db.accreditations.delete_one({"id": accreditation_id})
+    return {"success": True}
+
+# Rankings
+@api_router.get("/rankings")
+async def get_rankings(limit: int = 100):
+    rankings = await db.rankings.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return rankings
+
+@api_router.post("/rankings", response_model=Ranking)
+async def create_ranking(ranking: Ranking):
+    await db.rankings.insert_one(ranking.model_dump())
+    return ranking
+
+@api_router.put("/rankings/{ranking_id}")
+async def update_ranking(ranking_id: str, ranking: Ranking):
+    await db.rankings.update_one({"id": ranking_id}, {"$set": ranking.model_dump()})
+    return ranking
+
+@api_router.delete("/rankings/{ranking_id}")
+async def delete_ranking(ranking_id: str):
+    await db.rankings.delete_one({"id": ranking_id})
+    return {"success": True}
+
+# Scholarships
+@api_router.get("/scholarships")
+async def get_scholarships(limit: int = 100):
+    scholarships = await db.scholarships.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return scholarships
+
+@api_router.post("/scholarships", response_model=Scholarship)
+async def create_scholarship(scholarship: Scholarship):
+    await db.scholarships.insert_one(scholarship.model_dump())
+    return scholarship
+
+@api_router.put("/scholarships/{scholarship_id}")
+async def update_scholarship(scholarship_id: str, scholarship: Scholarship):
+    await db.scholarships.update_one({"id": scholarship_id}, {"$set": scholarship.model_dump()})
+    return scholarship
+
+@api_router.delete("/scholarships/{scholarship_id}")
+async def delete_scholarship(scholarship_id: str):
+    await db.scholarships.delete_one({"id": scholarship_id})
+    return {"success": True}
+
+# Loans
+@api_router.get("/loans")
+async def get_loans(limit: int = 100):
+    loans = await db.loans.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return loans
+
+@api_router.post("/loans", response_model=Loan)
+async def create_loan(loan: Loan):
+    await db.loans.insert_one(loan.model_dump())
+    return loan
+
+@api_router.put("/loans/{loan_id}")
+async def update_loan(loan_id: str, loan: Loan):
+    await db.loans.update_one({"id": loan_id}, {"$set": loan.model_dump()})
+    return loan
+
+@api_router.delete("/loans/{loan_id}")
+async def delete_loan(loan_id: str):
+    await db.loans.delete_one({"id": loan_id})
+    return {"success": True}
+
+# Comments
+@api_router.get("/comments")
+async def get_comments(limit: int = 100):
+    comments = await db.comments.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return comments
+
+@api_router.post("/comments", response_model=Comment)
+async def create_comment(comment: Comment):
+    await db.comments.insert_one(comment.model_dump())
+    return comment
+
+@api_router.put("/comments/{comment_id}")
+async def update_comment(comment_id: str, comment: Comment):
+    await db.comments.update_one({"id": comment_id}, {"$set": comment.model_dump()})
+    return comment
+
+@api_router.delete("/comments/{comment_id}")
+async def delete_comment(comment_id: str):
+    await db.comments.delete_one({"id": comment_id})
+    return {"success": True}
+
+# Course-College Tags
+@api_router.get("/course-college-tags")
+async def get_course_college_tags(limit: int = 1000):
+    tags = await db.course_college_tags.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return tags
+
+@api_router.post("/course-college-tags", response_model=CourseCollegeTag)
+async def create_course_college_tag(tag: CourseCollegeTag):
+    await db.course_college_tags.insert_one(tag.model_dump())
+    return tag
+
+@api_router.delete("/course-college-tags/{tag_id}")
+async def delete_course_college_tag(tag_id: str):
+    await db.course_college_tags.delete_one({"id": tag_id})
+    return {"success": True}
+
+# Exam-Course Tags
+@api_router.get("/exam-course-tags")
+async def get_exam_course_tags(limit: int = 1000):
+    tags = await db.exam_course_tags.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return tags
+
+@api_router.post("/exam-course-tags", response_model=ExamCourseTag)
+async def create_exam_course_tag(tag: ExamCourseTag):
+    await db.exam_course_tags.insert_one(tag.model_dump())
+    return tag
+
+@api_router.delete("/exam-course-tags/{tag_id}")
+async def delete_exam_course_tag(tag_id: str):
+    await db.exam_course_tags.delete_one({"id": tag_id})
+    return {"success": True}
+
+# Users Management
+@api_router.get("/users")
+async def get_all_users(limit: int = 100):
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).limit(limit).to_list(limit)
+    return users
+
+@api_router.delete("/users/{user_id}")
+async def delete_user(user_id: str):
+    await db.users.delete_one({"id": user_id})
+    return {"success": True}
+
 # Include the router in the main app
 app.include_router(api_router)
 
