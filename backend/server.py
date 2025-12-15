@@ -3980,6 +3980,227 @@ async def update_inquiry_status(inquiry_id: str, status: str):
     return {"success": True}
 
 # Include the router in the main app
+# ============================================
+# Advertisement Management Routes
+# ============================================
+
+@api_router.get("/advertisements", response_model=List[Advertisement])
+async def get_advertisements(current_user: User = Depends(get_current_user)):
+    """Get all advertisements (Admin only)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    ads = await db.advertisements.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    for ad in ads:
+        if isinstance(ad.get('created_at'), str):
+            ad['created_at'] = datetime.fromisoformat(ad['created_at'])
+        if isinstance(ad.get('updated_at'), str):
+            ad['updated_at'] = datetime.fromisoformat(ad['updated_at'])
+        if isinstance(ad.get('start_date'), str):
+            ad['start_date'] = datetime.fromisoformat(ad['start_date'])
+        if isinstance(ad.get('end_date'), str):
+            ad['end_date'] = datetime.fromisoformat(ad['end_date'])
+    return ads
+
+@api_router.get("/advertisements/active/{page_name}")
+async def get_active_advertisements(page_name: str):
+    """Get active advertisements for a specific page (Public)"""
+    now = datetime.now(timezone.utc)
+    
+    # Query for active ads
+    query = {
+        "is_active": True,
+        "pages": page_name,
+        "start_date": {"$lte": now},
+        "end_date": {"$gte": now}
+    }
+    
+    ads = await db.advertisements.find(query, {"_id": 0}).sort("priority", -1).to_list(100)
+    
+    for ad in ads:
+        if isinstance(ad.get('start_date'), str):
+            ad['start_date'] = datetime.fromisoformat(ad['start_date'])
+        if isinstance(ad.get('end_date'), str):
+            ad['end_date'] = datetime.fromisoformat(ad['end_date'])
+    
+    return ads
+
+@api_router.get("/advertisements/{ad_id}", response_model=Advertisement)
+async def get_advertisement(ad_id: str, current_user: User = Depends(get_current_user)):
+    """Get a single advertisement"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    ad = await db.advertisements.find_one({"id": ad_id}, {"_id": 0})
+    if not ad:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    if isinstance(ad.get('created_at'), str):
+        ad['created_at'] = datetime.fromisoformat(ad['created_at'])
+    if isinstance(ad.get('updated_at'), str):
+        ad['updated_at'] = datetime.fromisoformat(ad['updated_at'])
+    if isinstance(ad.get('start_date'), str):
+        ad['start_date'] = datetime.fromisoformat(ad['start_date'])
+    if isinstance(ad.get('end_date'), str):
+        ad['end_date'] = datetime.fromisoformat(ad['end_date'])
+    
+    return Advertisement(**ad)
+
+@api_router.post("/advertisements", response_model=Advertisement)
+async def create_advertisement(ad_data: dict, current_user: User = Depends(get_current_user)):
+    """Create a new advertisement"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # Convert date strings to datetime objects
+    if 'start_date' in ad_data and isinstance(ad_data['start_date'], str):
+        ad_data['start_date'] = datetime.fromisoformat(ad_data['start_date'].replace('Z', '+00:00'))
+    if 'end_date' in ad_data and isinstance(ad_data['end_date'], str):
+        ad_data['end_date'] = datetime.fromisoformat(ad_data['end_date'].replace('Z', '+00:00'))
+    
+    ad = Advertisement(**ad_data, created_by=current_user.id)
+    ad_dict = ad.model_dump()
+    ad_dict['created_at'] = ad_dict['created_at'].isoformat()
+    ad_dict['updated_at'] = ad_dict['updated_at'].isoformat()
+    ad_dict['start_date'] = ad_dict['start_date'].isoformat()
+    ad_dict['end_date'] = ad_dict['end_date'].isoformat()
+    
+    await db.advertisements.insert_one(ad_dict)
+    return ad
+
+@api_router.put("/advertisements/{ad_id}", response_model=Advertisement)
+async def update_advertisement(ad_id: str, ad_data: dict, current_user: User = Depends(get_current_user)):
+    """Update an advertisement"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    existing_ad = await db.advertisements.find_one({"id": ad_id}, {"_id": 0})
+    if not existing_ad:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    # Convert date strings to datetime objects
+    if 'start_date' in ad_data and isinstance(ad_data['start_date'], str):
+        ad_data['start_date'] = datetime.fromisoformat(ad_data['start_date'].replace('Z', '+00:00'))
+    if 'end_date' in ad_data and isinstance(ad_data['end_date'], str):
+        ad_data['end_date'] = datetime.fromisoformat(ad_data['end_date'].replace('Z', '+00:00'))
+    
+    ad_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.advertisements.update_one({"id": ad_id}, {"$set": ad_data})
+    updated_ad = await db.advertisements.find_one({"id": ad_id}, {"_id": 0})
+    
+    if isinstance(updated_ad.get('created_at'), str):
+        updated_ad['created_at'] = datetime.fromisoformat(updated_ad['created_at'])
+    if isinstance(updated_ad.get('updated_at'), str):
+        updated_ad['updated_at'] = datetime.fromisoformat(updated_ad['updated_at'])
+    if isinstance(updated_ad.get('start_date'), str):
+        updated_ad['start_date'] = datetime.fromisoformat(updated_ad['start_date'])
+    if isinstance(updated_ad.get('end_date'), str):
+        updated_ad['end_date'] = datetime.fromisoformat(updated_ad['end_date'])
+    
+    return Advertisement(**updated_ad)
+
+@api_router.delete("/advertisements/{ad_id}")
+async def delete_advertisement(ad_id: str, current_user: User = Depends(get_current_user)):
+    """Delete an advertisement"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    result = await db.advertisements.delete_one({"id": ad_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    return {"message": "Advertisement deleted successfully"}
+
+@api_router.post("/advertisements/{ad_id}/impression")
+async def track_impression(ad_id: str):
+    """Track an impression for an advertisement (Public)"""
+    result = await db.advertisements.update_one(
+        {"id": ad_id},
+        {"$inc": {"impressions": 1}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    return {"message": "Impression tracked"}
+
+@api_router.post("/advertisements/{ad_id}/click")
+async def track_click(ad_id: str):
+    """Track a click for an advertisement (Public)"""
+    result = await db.advertisements.update_one(
+        {"id": ad_id},
+        {"$inc": {"clicks": 1}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    return {"message": "Click tracked"}
+
+@api_router.get("/advertisements/reports/stats")
+async def get_advertisement_reports(current_user: User = Depends(get_current_user)):
+    """Get advertisement performance reports (Admin only)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    ads = await db.advertisements.find({}, {"_id": 0}).to_list(1000)
+    
+    # Calculate CTR and organize data
+    report_data = []
+    for ad in ads:
+        impressions = ad.get('impressions', 0)
+        clicks = ad.get('clicks', 0)
+        ctr = (clicks / impressions * 100) if impressions > 0 else 0
+        
+        # Check if ad is currently active
+        now = datetime.now(timezone.utc)
+        start_date = ad.get('start_date')
+        end_date = ad.get('end_date')
+        
+        if isinstance(start_date, str):
+            start_date = datetime.fromisoformat(start_date)
+        if isinstance(end_date, str):
+            end_date = datetime.fromisoformat(end_date)
+        
+        is_currently_active = (
+            ad.get('is_active', False) and 
+            start_date <= now <= end_date
+        )
+        
+        report_data.append({
+            "id": ad.get('id'),
+            "name": ad.get('name'),
+            "ad_type": ad.get('ad_type'),
+            "pages": ad.get('pages', []),
+            "impressions": impressions,
+            "clicks": clicks,
+            "ctr": round(ctr, 2),
+            "start_date": start_date.isoformat() if start_date else None,
+            "end_date": end_date.isoformat() if end_date else None,
+            "is_active": ad.get('is_active'),
+            "is_currently_active": is_currently_active,
+            "priority": ad.get('priority', 0)
+        })
+    
+    # Sort by impressions descending
+    report_data.sort(key=lambda x: x['impressions'], reverse=True)
+    
+    # Calculate summary stats
+    total_impressions = sum(ad['impressions'] for ad in report_data)
+    total_clicks = sum(ad['clicks'] for ad in report_data)
+    avg_ctr = (total_clicks / total_impressions * 100) if total_impressions > 0 else 0
+    active_count = sum(1 for ad in report_data if ad['is_currently_active'])
+    
+    return {
+        "summary": {
+            "total_ads": len(report_data),
+            "active_ads": active_count,
+            "total_impressions": total_impressions,
+            "total_clicks": total_clicks,
+            "average_ctr": round(avg_ctr, 2)
+        },
+        "advertisements": report_data
+    }
+
 app.include_router(api_router)
 
 app.add_middleware(
