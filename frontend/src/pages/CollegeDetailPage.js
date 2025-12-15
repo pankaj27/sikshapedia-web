@@ -1090,56 +1090,53 @@ const CollegeDetailPage = () => {
                     {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
                   </p>
 
-                  <div className="space-y-4">
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">📚 Library</h3>
-                      <p className="text-sm text-gray-700">
-                        The library has an extensive collection of over 4 lakh books, journals, and digital resources. Open from 9 AM to 11 PM on weekdays with Wi-Fi enabled reading areas.
-                      </p>
+                  {college.facilities && college.facilities.length > 0 ? (
+                    <div className="space-y-4">
+                      {college.facilities.map((facility, idx) => {
+                        const isObject = typeof facility === 'object';
+                        const facilityName = isObject ? facility.name : facility;
+                        const facilityDesc = isObject ? facility.description : '';
+                        const bgColors = ['bg-blue-50 border-blue-200', 'bg-green-50 border-green-200', 'bg-purple-50 border-purple-200', 'bg-orange-50 border-orange-200'];
+                        
+                        return (
+                          <div key={idx} className={`${bgColors[idx % 4]} border rounded-lg p-6`}>
+                            <h3 className="font-bold text-lg mb-2">{facilityName}</h3>
+                            {facilityDesc && <p className="text-sm text-gray-700">{facilityDesc}</p>}
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">⚽ Sports Complex</h3>
-                      <p className="text-sm text-gray-700">
-                        Multiple sports facilities including badminton, table tennis, basketball, football, hockey, volleyball, cricket, swimming pool, and gymnasium.
-                      </p>
+                  ) : (
+                    <div className="text-center text-gray-500 py-8">
+                      No facility information available
                     </div>
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">🏠 Hostels</h3>
-                      <p className="text-sm text-gray-700">
-                        17 hostels with independent mess facilities, recreational areas, and 24/7 security. Hostel fee is approximately INR 17,250 per semester.
-                      </p>
-                    </div>
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">🔬 Laboratories</h3>
-                      <p className="text-sm text-gray-700">
-                        State-of-the-art laboratories with modern equipment for engineering, science, and research activities.
-                      </p>
-                    </div>
-                  </div>
+                  )}
 
                   {/* Campus Images */}
-                  <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="bg-gray-200 rounded-lg aspect-video flex items-center justify-center border">
-                        <span className="text-gray-500 text-sm">Campus Image {i}</span>
-                      </div>
-                    ))}
-                  </div>
+                  {(college.campus_images?.length > 0 || college.images?.length > 1) && (
+                    <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
+                      {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
+                        <div key={i} className="rounded-lg aspect-video overflow-hidden border">
+                          <img src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   {/* CAMPUS VIDEO */}
-                  <div className="mt-8">
-                    <h3 className="text-2xl font-bold mb-4">Campus Video Tour</h3>
-                    <div className="bg-gray-900 rounded-lg aspect-video flex items-center justify-center border relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50"></div>
-                      <div className="relative text-center text-white z-10">
-                        <div className="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 cursor-pointer hover:bg-orange-700 transition-colors shadow-lg">
-                          <div className="w-0 h-0 border-l-[20px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-2"></div>
-                        </div>
-                        <p className="text-lg font-semibold">Watch Campus Tour</p>
-                        <p className="text-sm text-gray-300 mt-1">Get a virtual tour of {college.name} campus</p>
+                  {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
+                    <div className="mt-8">
+                      <h3 className="text-2xl font-bold mb-4">Campus Video Tour</h3>
+                      <div className="rounded-lg aspect-video overflow-hidden border">
+                        <iframe
+                          src={college.campus_video_url || college.seo_video_url || college.videos?.[0]}
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </section>
 
                 {/* Q&A SECTION */}
