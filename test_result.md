@@ -413,7 +413,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Premium Subscription & Stripe Payment Integration"
+    - "WriteReviewPage Multi-Step Form Testing (Frontend)"
+    - "Horizontal Filters Testing (Frontend)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
