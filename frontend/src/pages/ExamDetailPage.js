@@ -78,6 +78,27 @@ const ExamDetailPage = () => {
         'In JEE Main 2025, 20-25% questions were more higher-order thinking skills (HOTS) and application-based',
         'In JEE Main 2024, Maths was difficult with an increase in algebra based problems',
         'In JEE Main 2023, Calculus and Coordinate Geometry questions were tricky'
+      ],
+      
+      contentTeam: {
+        author: 'Shivam Yadav',
+        profileImage: 'https://via.placeholder.com/40',
+        updatedDate: 'Nov 18, 2025'
+      },
+      
+      tableOfContents: [
+        { id: 'overview', title: 'JEE Main Question Paper 2025' },
+        { id: '2024', title: 'JEE Main Question Paper 2024' },
+        { id: '2023', title: 'JEE Main Question Paper 2023' },
+        { id: '2022', title: 'JEE Main Question Paper 2022' },
+        { id: 'chapterwise', title: 'Download JEE Main PYQs ChapterWise' },
+        { id: 'pattern', title: 'JEE Main Paper Pattern' },
+        { id: 'studynotes', title: 'JEE Main Study Notes' }
+      ],
+      
+      videos: [
+        { title: 'JEE Main 2025 Strategy', thumbnail: 'https://via.placeholder.com/300x180', duration: '15:30' },
+        { title: 'How to Solve Previous Year Papers', thumbnail: 'https://via.placeholder.com/300x180', duration: '12:45' }
       ]
     },
     'neet': {
