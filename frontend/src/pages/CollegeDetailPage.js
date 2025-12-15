@@ -624,8 +624,13 @@ const CollegeDetailPage = () => {
               <section id="info">
                 <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
                 <p className="text-gray-800 leading-relaxed mb-4">
-                  {college.name} is a premier {college.type} institution established in <strong>{college.established || 'N/A'}</strong> and located in {college.location?.city}, {college.location?.state}.
+                  {college.seo_intro || `${college.name} is a premier ${college.type} institution established in ${college.established_year || college.established || 'N/A'} and located in ${college.location?.city}, ${college.location?.state}.`}
                 </p>
+                {college.seo_full_content && (
+                  <div className="text-gray-700 leading-relaxed prose max-w-none mb-4">
+                    <div dangerouslySetInnerHTML={{ __html: college.seo_full_content.replace(/\n/g, '<br/>') }} />
+                  </div>
+                )}
 
                 {/* Recognized by & Affiliated to - Detailed Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
