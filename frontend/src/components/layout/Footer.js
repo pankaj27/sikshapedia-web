@@ -74,16 +74,16 @@ const Footer = () => {
                 Get College Notifications, Exam Notifications and News Updates
               </p>
             </div>
-            <form onSubmit={handleSubscribe} className="flex gap-2 w-full md:w-auto">
+            <form onSubmit={handleSubscribe} className="flex gap-2 w-full md:w-auto items-center">
               <input
                 type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="px-4 py-2 rounded-lg w-full md:w-80 focus:outline-none focus:ring-2 focus:ring-white"
+                className="px-4 py-2.5 rounded-lg w-full md:w-80 focus:outline-none focus:ring-2 focus:ring-white h-11 text-sm"
               />
-              <Button type="submit" className="bg-white text-orange-600 hover:bg-gray-100 whitespace-nowrap">
+              <Button type="submit" className="bg-white text-orange-600 hover:bg-gray-100 whitespace-nowrap h-11 px-6 text-sm">
                 Subscribe
               </Button>
             </form>
