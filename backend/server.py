@@ -3869,6 +3869,27 @@ async def delete_accreditation_level(level_id: str):
     await db.accreditation_levels.delete_one({"id": level_id})
     return {"success": True}
 
+# Rank Categories
+@api_router.get("/rank-categories")
+async def get_rank_categories(limit: int = 100):
+    categories = await db.rank_categories.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return categories
+
+@api_router.post("/rank-categories", response_model=RankCategory)
+async def create_rank_category(category: RankCategory):
+    await db.rank_categories.insert_one(category.model_dump())
+    return category
+
+@api_router.put("/rank-categories/{category_id}")
+async def update_rank_category(category_id: str, category: RankCategory):
+    await db.rank_categories.update_one({"id": category_id}, {"$set": category.model_dump()})
+    return category
+
+@api_router.delete("/rank-categories/{category_id}")
+async def delete_rank_category(category_id: str):
+    await db.rank_categories.delete_one({"id": category_id})
+    return {"success": True}
+
 # Rankings
 @api_router.get("/rankings")
 async def get_rankings(limit: int = 100):
