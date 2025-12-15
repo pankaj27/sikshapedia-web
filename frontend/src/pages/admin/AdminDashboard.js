@@ -32,12 +32,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
-    navigate('/admin/login');
-  };
-
   const statCards = [
     { title: 'Total Colleges', value: stats.total_colleges, icon: FiHome, color: 'bg-blue-500', link: '/admin/colleges' },
     { title: 'Total Schools', value: stats.total_schools, icon: FiBookOpen, color: 'bg-green-500', link: '/admin/schools' },
