@@ -357,38 +357,66 @@ const ExamDetailPage = () => {
                   </div>
                 ))}
               </div>
-            )}
 
-            {activeTab === 'examInfo' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                  <FiInfo className="text-orange-600" />
-                  {exam.name} Exam Information
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {Object.entries(exam.examInfo).map(([key, value]) => (
-                    <div key={key} className="border-l-4 border-orange-500 pl-4">
-                      <p className="text-sm text-gray-600 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
-                      <p className="font-semibold text-gray-800">{value}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-8 bg-blue-50 rounded-lg p-4">
-                  <h3 className="font-bold text-gray-800 mb-3">About {exam.name}</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{exam.description}</p>
-                  <p className="text-gray-700 text-sm mt-2">
-                    <span className="font-semibold">Conducted by:</span> {exam.conductor}
-                  </p>
-                </div>
-
-                <div className="mt-6 text-center">
-                  <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8">
-                    Apply Now
-                  </Button>
-                </div>
+            {/* ChapterWise PYQs Section */}
+            <div id="chapterwise" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <FiBook className="text-orange-600" />
+                Download {exam.name} PYQs ChapterWise
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Mole Concept', 'Organic Chemistry', 'Friction', 'Projectile Motion', 'Vectors', 'Circular Motion', 'Determinants', 'Electrostatics'].map((chapter, idx) => (
+                  <Link key={idx} to="#" className="text-blue-600 hover:text-orange-600 text-sm hover:underline">
+                    {chapter} {exam.name} PYQs
+                  </Link>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* Paper Pattern Section */}
+            <div id="pattern" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <FiFileText className="text-orange-600" />
+                {exam.name} Paper Pattern
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {Object.entries(exam.examInfo).map(([key, value]) => (
+                  <div key={key} className="border-l-4 border-orange-500 pl-4">
+                    <p className="text-sm text-gray-600 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
+                    <p className="font-semibold text-gray-800">{value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Study Notes Section */}
+            <div id="studynotes" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <FiBook className="text-orange-600" />
+                {exam.name} Study Notes
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {['Trigonometry', 'Thermodynamics', 'Atomic Structure', 'Statistics', 'Elasticity', 'Rotational Motion'].map((topic, idx) => (
+                  <Link key={idx} to="#" className="text-blue-600 hover:text-orange-600 text-sm hover:underline">
+                    {topic} Study Notes
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Ask Question Section */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-md p-6 border-2 border-blue-200">
+              <h3 className="text-xl font-bold text-gray-800 mb-3">Have Questions About {exam.name}?</h3>
+              <p className="text-gray-600 mb-4">Get your doubts cleared by our expert counselors</p>
+              <div className="flex gap-3">
+                <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                  Ask a Question
+                </Button>
+                <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
+                  Talk to Counselor
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
