@@ -3011,6 +3011,73 @@ async def create_news(news: News):
     await db.news.insert_one(news_dict)
     return news
 
+@api_router.put("/news/{news_id}", response_model=News)
+async def update_news(news_id: str, news: News):
+    """Update a news article (admin only)"""
+    news_dict = news.model_dump()
+    await db.news.update_one({"id": news_id}, {"$set": news_dict})
+    return news
+
+@api_router.patch("/news/{news_id}")
+async def patch_news(news_id: str, updates: dict):
+    """Partially update news article (admin only)"""
+    await db.news.update_one({"id": news_id}, {"$set": updates})
+    return {"success": True}
+
+@api_router.delete("/news/{news_id}")
+async def delete_news(news_id: str):
+    """Delete a news article (admin only)"""
+    result = await db.news.delete_one({"id": news_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="News not found")
+    return {"success": True}
+
+# ============================================
+# Additional Admin CRUD Routes
+# ============================================
+
+@api_router.put("/schools/{school_id}", response_model=School)
+async def update_school(school_id: str, school: School):
+    """Update a school (admin only)"""
+    school_dict = school.model_dump()
+    await db.schools.update_one({"id": school_id}, {"$set": school_dict})
+    return school
+
+@api_router.delete("/schools/{school_id}")
+async def delete_school(school_id: str):
+    """Delete a school (admin only)"""
+    result = await db.schools.delete_one({"id": school_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="School not found")
+    return {"success": True}
+
+@api_router.put("/universities/{university_id}", response_model=University)
+async def update_university(university_id: str, university: University):
+    """Update a university (admin only)"""
+    university_dict = university.model_dump()
+    await db.universities.update_one({"id": university_id}, {"$set": university_dict})
+    return university
+
+@api_router.delete("/universities/{university_id}")
+async def delete_university(university_id: str):
+    """Delete a university (admin only)"""
+    result = await db.universities.delete_one({"id": university_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="University not found")
+    return {"success": True}
+
+@api_router.patch("/reviews/{review_id}/approve")
+async def approve_review(review_id: str):
+    """Approve a review (admin only)"""
+    await db.reviews.update_one({"id": review_id}, {"$set": {"status": "approved"}})
+    return {"success": True, "status": "approved"}
+
+@api_router.patch("/reviews/{review_id}/reject")
+async def reject_review(review_id: str):
+    """Reject a review (admin only)"""
+    await db.reviews.update_one({"id": review_id}, {"$set": {"status": "rejected"}})
+    return {"success": True, "status": "rejected"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
