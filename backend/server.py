@@ -6,8 +6,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict, EmailStr
-from typing import List, Optional, Dict, Any
+from pydantic import BaseModel, Field, ConfigDict, EmailStr, field_validator
+from typing import List, Optional, Dict, Any, Union
 import uuid
 from datetime import datetime, timezone, timedelta
 import bcrypt
@@ -437,8 +437,15 @@ class College(BaseModel):
     
     # Accreditations & Approvals
     accreditations: List[str] = []
-    accreditation: Optional[List[str]] = []
+    accreditation: Optional[Union[List[str], str]] = None
     approvals: List[str] = []
+    
+    @field_validator('accreditation', mode='before')
+    @classmethod
+    def convert_accreditation_to_list(cls, v):
+        if isinstance(v, str):
+            return [v] if v else []
+        return v if v is not None else []
     
     # Placements - Comprehensive
     placement_stats: Optional[List] = []
