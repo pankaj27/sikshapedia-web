@@ -15,6 +15,7 @@ import ExamDetailPage from './pages/ExamDetailPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseListingPage from './pages/CourseListingPage';
 import CourseDetailPage from './pages/CourseDetailPage';
+import CourseFinderPage from './pages/CourseFinderPage';
 import StudentDashboard from './pages/EnhancedStudentDashboardV2';
 import GlobalSearchPage from './pages/GlobalSearchPage';
 import EligibilityChecker from './pages/EligibilityChecker';
