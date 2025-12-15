@@ -275,32 +275,6 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
-            {/* Related Videos */}
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <FiBook />
-                Related Videos
-              </h3>
-              <div className="space-y-3">
-                {exam.videos.map((video, idx) => (
-                  <div key={idx} className="cursor-pointer group">
-                    <div className="relative rounded overflow-hidden">
-                      <img src={video.thumbnail} alt={video.title} className="w-full group-hover:scale-105 transition-transform" />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
-                          <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-orange-600 border-b-8 border-b-transparent ml-1"></div>
-                        </div>
-                      </div>
-                      <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
-                        {video.duration}
-                      </span>
-                    </div>
-                    <p className="text-sm font-medium text-gray-800 mt-2 line-clamp-2">{video.title}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* College Predictor Banner */}
             <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-md p-4 text-white text-center">
               <FiAward className="mx-auto mb-2" size={32} />
