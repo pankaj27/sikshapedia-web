@@ -384,11 +384,12 @@ class College(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     slug: Optional[str] = None
-    location: Dict
+    location: Optional[Dict] = None
     established: Optional[str] = None
     established_year: Optional[int] = None
-    type: str  # Government, Private, Deemed
+    type: Optional[str] = None  # Government, Private, Deemed
     affiliation: Optional[str] = None
+    institution_type: Optional[str] = None  # College, School, University
     
     # Recognition & Affiliations
     recognized_by: List[str] = []  # UGC, AICTE, NBA, NAAC
@@ -403,7 +404,7 @@ class College(BaseModel):
     rankings: List = []  # Can be List[Dict] or empty
     
     # Fees & Courses
-    average_fees: float
+    average_fees: Optional[float] = None
     total_courses: Optional[int] = None
     courses: List = []  # Can be List[str] (legacy) or List[Dict] (new format)
     
@@ -423,7 +424,7 @@ class College(BaseModel):
     virtual_tour_url: Optional[str] = None
     
     # Content
-    description: str
+    description: Optional[str] = None
     highlights: List[str] = []
     admission_process: Optional[str] = None
     admission_dates: Optional[Any] = None  # Can be List[Dict], Dict, or None
