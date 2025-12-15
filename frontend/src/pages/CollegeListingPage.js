@@ -103,6 +103,42 @@ const CollegeListingPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Filter options data
+  const filterOptions = {
+    subStream: ['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce'],
+    stream: ['Engineering & Technology', 'Medical & Health Sciences', 'Management & Business', 'Law & Legal Studies', 'Arts & Humanities', 'Science'],
+    state: ['Maharashtra', 'Tamil Nadu', 'Delhi', 'Karnataka', 'Uttar Pradesh', 'West Bengal', 'Rajasthan', 'Gujarat'],
+    city: ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad'],
+    degree: ['B.Tech', 'MBA', 'MBBS', 'B.Com', 'B.Sc', 'BA', 'BBA', 'BCA', 'M.Tech', 'M.Com'],
+    specialization: ['Computer Science', 'Mechanical', 'Civil', 'Electronics', 'Finance', 'Marketing', 'HR', 'Operations'],
+    programType: ['Full Time', 'Part Time', 'Distance Learning', 'Online'],
+    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous']
+  };
+
+  // Handle filter selection
+  const handleFilterSelect = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+    setActiveFilterDropdown(null);
+    // Trigger search with new filter
+    setTimeout(() => {
+      applyFilters();
+    }, 100);
+  };
+
+  // Remove a specific filter
+  const removeFilter = (filterType) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: ''
+    }));
+    setTimeout(() => {
+      applyFilters();
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pt-2">
       {/* BREADCRUMB NAVIGATION - Compact */}
