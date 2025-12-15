@@ -47,8 +47,8 @@ const AdminDashboard = () => {
   };
 
   const statCards = [
-    { title: 'Total Colleges', value: stats.total_colleges, icon: FiBuilding, color: 'bg-blue-500', link: '/admin/colleges' },
-    { title: 'Total Schools', value: stats.total_schools, icon: FiSchool, color: 'bg-green-500', link: '/admin/schools' },
+    { title: 'Total Colleges', value: stats.total_colleges, icon: FiHome, color: 'bg-blue-500', link: '/admin/colleges' },
+    { title: 'Total Schools', value: stats.total_schools, icon: FiBookOpen, color: 'bg-green-500', link: '/admin/schools' },
     { title: 'Total Universities', value: stats.total_universities, icon: FiAward, color: 'bg-purple-500', link: '/admin/universities' },
     { title: 'Total Users', value: stats.total_users, icon: FiUsers, color: 'bg-orange-500', link: '/admin/users' },
     { title: 'Total Reviews', value: stats.total_reviews, icon: FiEdit, color: 'bg-pink-500', link: '/admin/reviews' },
