@@ -413,7 +413,7 @@ const WriteReviewPage = () => {
           )}
 
           {step === 4 && (
-            <div className="bg-white rounded-lg shadow-md p-8 text-center">
+            <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <div className="mb-6">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FiCheckCircle className="text-green-600" size={48} />
