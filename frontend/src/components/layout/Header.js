@@ -234,40 +234,95 @@ const Header = () => {
               </button>
               
               {allCoursesDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-[9999]">
-                  <Link to="/courses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    View All Courses
+                <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-2xl py-3 z-[9999] border-2 border-orange-500">
+                  <Link to="/courses" className="block px-4 py-2.5 text-base font-bold text-orange-600 hover:bg-orange-50 transition-colors">
+                    📚 View All Courses
                   </Link>
-                  <div className="border-t my-2"></div>
-                  <p className="px-4 py-1 text-xs font-semibold text-gray-500">POPULAR COURSES</p>
+                  <div className="border-t-2 border-gray-200 my-2"></div>
+                  
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🎓 ENGINEERING COURSES</p>
                   <Link to="/colleges?course=btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    B.Tech Colleges
-                  </Link>
-                  <Link to="/colleges?course=mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    MBA Colleges
-                  </Link>
-                  <Link to="/colleges?course=mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    MBBS Colleges
+                    B.Tech - Bachelor of Technology
                   </Link>
                   <Link to="/colleges?course=mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    M.Tech Colleges
+                    M.Tech - Master of Technology
                   </Link>
-                  <div className="border-t my-2"></div>
-                  <p className="px-4 py-1 text-xs font-semibold text-gray-500">UG COURSES</p>
-                  <Link to="/colleges?course=bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    B.Com Colleges
+                  <Link to="/colleges?course=be" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    BE - Bachelor of Engineering
                   </Link>
-                  <Link to="/colleges?course=bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    B.Sc Colleges
+                  <Link to="/colleges?course=me" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    ME - Master of Engineering
                   </Link>
-                  <Link to="/colleges?course=ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    BA Colleges
+                  
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💼 MANAGEMENT COURSES</p>
+                  <Link to="/colleges?course=mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    MBA - Master of Business Administration
                   </Link>
                   <Link to="/colleges?course=bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    BBA Colleges
+                    BBA - Bachelor of Business Administration
                   </Link>
+                  <Link to="/colleges?course=pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    PGDM - Post Graduate Diploma in Management
+                  </Link>
+                  
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🏥 MEDICAL COURSES</p>
+                  <Link to="/colleges?course=mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    MBBS - Bachelor of Medicine & Surgery
+                  </Link>
+                  <Link to="/colleges?course=bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    BDS - Bachelor of Dental Surgery
+                  </Link>
+                  <Link to="/colleges?course=bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Sc Nursing - Bachelor of Science in Nursing
+                  </Link>
+                  <Link to="/colleges?course=bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Pharm - Bachelor of Pharmacy
+                  </Link>
+                  
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">📊 COMMERCE COURSES</p>
+                  <Link to="/colleges?course=bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Com - Bachelor of Commerce
+                  </Link>
+                  <Link to="/colleges?course=mcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    M.Com - Master of Commerce
+                  </Link>
+                  <Link to="/colleges?course=ca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    CA - Chartered Accountant
+                  </Link>
+                  
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🔬 SCIENCE COURSES</p>
+                  <Link to="/colleges?course=bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    B.Sc - Bachelor of Science
+                  </Link>
+                  <Link to="/colleges?course=msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    M.Sc - Master of Science
+                  </Link>
+                  
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🎨 ARTS COURSES</p>
+                  <Link to="/colleges?course=ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    BA - Bachelor of Arts
+                  </Link>
+                  <Link to="/colleges?course=ma" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    MA - Master of Arts
+                  </Link>
+                  
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💻 COMPUTER COURSES</p>
                   <Link to="/colleges?course=bca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                    BCA Colleges
+                    BCA - Bachelor of Computer Applications
+                  </Link>
+                  <Link to="/colleges?course=mca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                    MCA - Master of Computer Applications
+                  </Link>
+                  
+                  <div className="border-t-2 border-orange-200 mt-2"></div>
+                  <Link to="/courses" className="block px-4 py-2.5 text-center text-sm font-bold text-orange-600 hover:bg-orange-50 transition-colors">
+                    View All 250+ Courses →
                   </Link>
                 </div>
               )}
