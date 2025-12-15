@@ -95,8 +95,22 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/colleges" element={<AddCollege />} />
             <Route path="/admin/colleges/add" element={<AddCollege />} />
+            <Route path="/admin/schools" element={<SchoolsManagement />} />
+            <Route path="/admin/schools/new" element={<SchoolForm />} />
+            <Route path="/admin/schools/edit/:id" element={<SchoolForm />} />
+            <Route path="/admin/universities" element={<UniversitiesManagement />} />
+            <Route path="/admin/universities/new" element={<SchoolForm />} />
+            <Route path="/admin/universities/edit/:id" element={<SchoolForm />} />
+            <Route path="/admin/news" element={<NewsManagement />} />
+            <Route path="/admin/news/new" element={<NewsForm />} />
+            <Route path="/admin/news/edit/:id" element={<NewsForm />} />
+            <Route path="/admin/reviews" element={<ReviewsModeration />} />
           </Routes>
           </Layout>
         </BrowserRouter>
