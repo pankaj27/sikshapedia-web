@@ -403,10 +403,10 @@ class College(BaseModel):
     # Fees & Courses
     average_fees: float
     total_courses: Optional[int] = None
-    courses: List[Dict] = []  # [{ name, duration, first_year_fee, total_fee, eligibility, selection_criteria }]
+    courses: List = []  # Can be List[str] (legacy) or List[Dict] (new format)
     
     # Facilities & Infrastructure - Detailed
-    facilities: List[Dict] = []  # [{ name, description, icon }]
+    facilities: List = []  # Can be List[str] (legacy) or List[Dict] (new format)
     hostel_info: Optional[Dict] = None
     campus_size: Optional[str] = None
     campus_images: List[str] = []  # Gallery images
