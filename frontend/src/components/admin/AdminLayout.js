@@ -93,11 +93,13 @@ const AdminLayout = ({ children }) => {
     },
     {
       id: 'moderation',
-      title: 'Moderation',
+      title: 'Moderation & Inquiries',
       icon: FiMessageSquare,
       submenu: [
         { title: 'Reviews', path: '/admin/reviews', icon: FiMessageSquare },
         { title: 'Comments', path: '/admin/comments', icon: FiMessageSquare },
+        { title: 'Contact Inquiries', path: '/admin/contact-inquiries', icon: FiMessageSquare },
+        { title: 'Counseling Requests', path: '/admin/counseling-sessions', icon: FiMessageSquare },
       ]
     }
   ];
