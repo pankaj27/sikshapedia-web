@@ -15,6 +15,10 @@ const Header = () => {
   const [selectedGoal, setSelectedGoal] = useState('Admission Goal');
   const exploreButtonRef = useRef(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
+  
+  // Timeout refs for hover delay
+  const goalTimeoutRef = useRef(null);
+  const allCoursesTimeoutRef = useRef(null);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
