@@ -198,6 +198,17 @@ const BlogPage = () => {
         description="Expert advice, tips, and guides for students on admissions, exams, career, and study abroad."
       />
 
+      {/* Breadcrumb */}
+      <div className="bg-white border-b py-2">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">Blog</span>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 text-white py-8">
         <div className="container mx-auto px-4">
