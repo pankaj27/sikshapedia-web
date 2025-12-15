@@ -24,16 +24,6 @@ const Header = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (exploreDropdownOpen && exploreButtonRef.current) {
-      const rect = exploreButtonRef.current.getBoundingClientRect();
-      setDropdownPosition({
-        top: rect.bottom + window.scrollY + 8,
-        right: window.innerWidth - rect.right
-      });
-    }
-  }, [exploreDropdownOpen]);
-
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
