@@ -35,9 +35,7 @@ const AdminLayout = ({ children }) => {
       title: 'Content Management',
       icon: FiDatabase,
       submenu: [
-        { title: 'Colleges', path: '/admin/colleges', icon: FiHome },
-        { title: 'Schools', path: '/admin/schools', icon: FiBookOpen },
-        { title: 'Universities', path: '/admin/universities', icon: FiAward },
+        { title: 'Institutions (Colleges/Schools/Universities)', path: '/admin/colleges', icon: FiHome },
         { title: 'Courses (Quick Entry)', path: '/admin/courses', icon: FiBook },
         { title: 'Course Details', path: '/admin/courses-detail', icon: FiBook },
         { title: 'Exams (Quick Entry)', path: '/admin/exams', icon: FiFileText },
