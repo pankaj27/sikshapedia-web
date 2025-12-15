@@ -17,7 +17,7 @@ const CoursesDetailManagement = () => {
   const fetchCourses = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/courses');
+      const response = await api.get('/courses-detail');
       setCourses(response.data);
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -29,7 +29,7 @@ const CoursesDetailManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this course?')) {
       try {
-        await api.delete(`/courses/${id}`);
+        await api.delete(`/courses-detail/${id}`);
         alert('Course deleted successfully!');
         fetchCourses();
       } catch (error) {

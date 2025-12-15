@@ -17,7 +17,7 @@ const ExamsDetailManagement = () => {
   const fetchExams = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/exams');
+      const response = await api.get('/exams-detail');
       setExams(response.data);
     } catch (error) {
       console.error('Error fetching exams:', error);
@@ -29,7 +29,7 @@ const ExamsDetailManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this exam?')) {
       try {
-        await api.delete(`/exams/${id}`);
+        await api.delete(`/exams-detail/${id}`);
         alert('Exam deleted successfully!');
         fetchExams();
       } catch (error) {
