@@ -985,6 +985,177 @@ class AdminUser(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # ============================================
+# Taxonomy & Master Data Models
+# ============================================
+
+# Stream Model
+class Stream(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # Engineering, Medical, Management, etc.
+    slug: str
+    description: Optional[str] = None
+    icon: Optional[str] = None
+    display_order: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Sub-Stream Model
+class SubStream(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    stream_id: str  # Parent stream reference
+    name: str  # Computer Science, Mechanical, MBBS, etc.
+    slug: str
+    description: Optional[str] = None
+    display_order: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Board Model (for Schools)
+class Board(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # CBSE, ICSE, State Board, etc.
+    slug: str
+    description: Optional[str] = None
+    country: str = "India"
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# College Type Model
+class CollegeType(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # Government, Private, Deemed, Autonomous, etc.
+    slug: str
+    description: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Affiliation Model
+class Affiliation(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # University name or board name
+    slug: str
+    type: str  # University, Board, Council
+    description: Optional[str] = None
+    website: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Recognition Model
+class Recognition(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # UGC, AICTE, MCI, etc.
+    slug: str
+    full_name: Optional[str] = None
+    description: Optional[str] = None
+    website: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Accreditation Model
+class Accreditation(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # NAAC A++, NBA, etc.
+    slug: str
+    full_name: Optional[str] = None
+    grade: Optional[str] = None  # A++, A+, A, B++, etc.
+    description: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Ranking Model
+class Ranking(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # NIRF, QS World, Times Higher Education
+    slug: str
+    year: int
+    category: Optional[str] = None  # Overall, Engineering, Medical, etc.
+    description: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Scholarship Model
+class Scholarship(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: str
+    provider: str  # Government, Private, College
+    amount: Optional[float] = None
+    amount_type: str = "Fixed"  # Fixed, Variable, Percentage
+    eligibility: str
+    description: str
+    how_to_apply: str
+    deadline: Optional[datetime] = None
+    website: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Loan Model
+class Loan(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: str
+    provider: str  # Bank name or NBFC
+    loan_amount_min: Optional[float] = None
+    loan_amount_max: Optional[float] = None
+    interest_rate: Optional[float] = None
+    eligibility: str
+    description: str
+    features: List[str] = []
+    how_to_apply: str
+    website: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Comment Model
+class Comment(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    entity_type: str  # college, course, exam, news
+    entity_id: str
+    comment: str
+    parent_id: Optional[str] = None  # For nested comments
+    status: str = "pending"  # pending, approved, rejected
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# ============================================
+# Relationship/Tagging Models
+# ============================================
+
+# Course-College Tagging
+class CourseCollegeTag(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    course_id: str
+    college_id: str
+    fees: Optional[float] = None
+    duration: Optional[str] = None
+    seats: Optional[int] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Exam-Course Tagging
+class ExamCourseTag(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    exam_id: str
+    course_id: str
+    is_mandatory: bool = False
+    cutoff_score: Optional[float] = None
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# ============================================
 # Helper Functions
 # ============================================
 
