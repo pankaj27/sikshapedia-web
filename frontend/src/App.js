@@ -41,7 +41,14 @@ import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLogin from './pages/admin/AdminLogin';
 import AddCollege from './pages/admin/AddCollege';
+import SchoolsManagement from './pages/admin/SchoolsManagement';
+import SchoolForm from './pages/admin/SchoolForm';
+import UniversitiesManagement from './pages/admin/UniversitiesManagement';
+import NewsManagement from './pages/admin/NewsManagement';
+import NewsForm from './pages/admin/NewsForm';
+import ReviewsModeration from './pages/admin/ReviewsModeration';
 import './App.css';
 
 function App() {
