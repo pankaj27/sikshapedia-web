@@ -24,11 +24,29 @@ const SchoolsPage = () => {
     course: '',
     exam: '',
     rating: '',
+    board: '',
+    schoolType: '',
+    medium: '',
   });
+
+  // State for horizontal filter dropdowns
+  const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
 
   useEffect(() => {
     fetchSchools();
   }, [searchParams, sortBy]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (activeFilterDropdown && !event.target.closest('.relative')) {
+        setActiveFilterDropdown(null);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeFilterDropdown]);
 
   const fetchSchools = async () => {
     setLoading(true);
