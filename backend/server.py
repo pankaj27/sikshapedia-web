@@ -154,7 +154,7 @@ class Exam(BaseModel):
     age_limit: Optional[str] = None
     
     # Fees & Cutoffs
-    application_fee: Dict  # General, OBC, SC/ST
+    application_fee: Optional[Dict] = None  # General, OBC, SC/ST
     previous_year_cutoffs: List[Dict] = []
     
     # Study Materials
