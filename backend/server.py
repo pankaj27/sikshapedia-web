@@ -1128,6 +1128,123 @@ class Comment(BaseModel):
     status: str = "pending"  # pending, approved, rejected
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Blog Model
+class Blog(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    slug: str
+    category: str  # Tips, News, Guide, etc.
+    author: str
+    author_image: Optional[str] = None
+    featured_image: str
+    excerpt: str
+    content: str
+    tags: List[str] = []
+    views: int = 0
+    likes: int = 0
+    is_featured: bool = False
+    published_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Study Material Model
+class StudyMaterial(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    subject: str
+    exam: str  # JEE, NEET, CAT, etc.
+    class_level: Optional[str] = None  # Class 11, Class 12, etc.
+    topic: str
+    material_type: str  # PDF, Video, Notes, Question Paper
+    file_url: Optional[str] = None
+    description: str
+    downloads: int = 0
+    is_premium: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Counseling Session Model
+class CounselingSession(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    student_name: str
+    email: str
+    phone: str
+    preferred_stream: str
+    preferred_date: datetime
+    preferred_time: str
+    query: str
+    status: str = "pending"  # pending, scheduled, completed, cancelled
+    counselor_assigned: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Banner/Slider Model
+class Banner(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    subtitle: Optional[str] = None
+    image_url: str
+    link_url: Optional[str] = None
+    button_text: Optional[str] = None
+    position: str = "home"  # home, colleges, courses, etc.
+    display_order: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Testimonial Model
+class Testimonial(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    student_name: str
+    college_name: str
+    course: str
+    image_url: Optional[str] = None
+    testimonial: str
+    rating: float = 5.0
+    is_featured: bool = False
+    display_order: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# FAQ Model
+class FAQ(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    question: str
+    answer: str
+    category: str  # Admission, Fees, Courses, etc.
+    page: str = "general"  # general, college, course, exam
+    display_order: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# City Model
+class City(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    state: str
+    slug: str
+    description: Optional[str] = None
+    image_url: Optional[str] = None
+    total_colleges: int = 0
+    is_featured: bool = False
+    display_order: int = 0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Contact Inquiry Model
+class ContactInquiry(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: str
+    phone: str
+    subject: str
+    message: str
+    status: str = "new"  # new, in_progress, resolved
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============================================
 # Relationship/Tagging Models
 # ============================================
