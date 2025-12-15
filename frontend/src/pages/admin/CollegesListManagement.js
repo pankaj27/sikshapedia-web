@@ -57,14 +57,9 @@ const CollegesListManagement = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Colleges Management</h1>
-        <div className="flex gap-2">
-          <Button onClick={() => navigate('/admin/colleges/add')} variant="outline">
-            <FiPlus className="mr-2" /> Quick Add (Simple Form)
-          </Button>
-          <Button onClick={() => navigate('/admin/colleges/new')} className="bg-orange-600 hover:bg-orange-700">
-            <FiPlus className="mr-2" /> Add College (Full Form)
-          </Button>
-        </div>
+        <Button onClick={() => navigate('/admin/colleges/add')} className="bg-orange-600 hover:bg-orange-700">
+          <FiPlus className="mr-2" /> Add New College
+        </Button>
       </div>
 
       {/* Search Bar */}
