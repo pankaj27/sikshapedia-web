@@ -24,7 +24,15 @@ const CollegeListingPage = () => {
     course: '',
     exam: '',
     rating: '',
+    subStream: '',
+    stream: '',
+    degree: '',
+    specialization: '',
+    programType: '',
   });
+
+  // State for horizontal filter dropdowns
+  const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
 
   useEffect(() => {
     fetchColleges();
