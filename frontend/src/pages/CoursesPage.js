@@ -283,7 +283,7 @@ const CoursesPage = () => {
                     <li key={courseIdx}>
                       <Link 
                         to={typeof course === 'object' ? course.link : `${stream.link}/${course.toLowerCase().replace(/[\/\s()]/g, '-')}`} 
-                        className="text-[11px] text-gray-700 hover:text-orange-600 hover:underline"
+                        className="text-sm font-semibold text-gray-700 hover:text-orange-600 hover:underline"
                       >
                         {typeof course === 'object' ? course.name : course}
                       </Link>
