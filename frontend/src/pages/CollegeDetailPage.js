@@ -591,16 +591,20 @@ const CollegeDetailPage = () => {
                     {/* FAQs - FROM TOC #09 */}
                     <section id="seo-faqs">
                       <h2 className="text-2xl font-bold mb-3">{college.name} FAQs</h2>
-                      <div className="space-y-3">
-                        <div className="bg-gray-50 rounded-lg p-4 border">
-                          <p className="font-bold text-sm mb-2">Ques. What are the scholarships offered?</p>
-                          <p className="text-sm text-gray-700"><strong>Ans.</strong> Various merit and need-based scholarships are available.</p>
+                      {college.seo_faqs && college.seo_faqs.length > 0 ? (
+                        <div className="space-y-3">
+                          {college.seo_faqs.map((faq, idx) => (
+                            <div key={idx} className="bg-gray-50 rounded-lg p-4 border">
+                              <p className="font-bold text-sm mb-2">Ques. {faq.question}</p>
+                              <p className="text-sm text-gray-700"><strong>Ans.</strong> {faq.answer}</p>
+                            </div>
+                          ))}
                         </div>
-                        <div className="bg-gray-50 rounded-lg p-4 border">
-                          <p className="font-bold text-sm mb-2">Ques. How are the placements?</p>
-                          <p className="text-sm text-gray-700"><strong>Ans.</strong> Excellent placement record with top companies visiting campus.</p>
+                      ) : (
+                        <div className="text-center text-gray-500 py-4">
+                          No FAQs available
                         </div>
-                      </div>
+                      )}
                     </section>
                   </div>
 
