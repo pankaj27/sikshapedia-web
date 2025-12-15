@@ -73,16 +73,6 @@ const AdminLayout = ({ children }) => {
       ]
     },
     {
-      id: 'tagging',
-      title: 'Relationships & Tagging',
-      icon: FiLink,
-      submenu: [
-        { title: 'Tag Courses to Colleges', path: '/admin/tag-courses-colleges', icon: FiTag },
-        { title: 'Tag Exams to Courses', path: '/admin/tag-exams-courses', icon: FiTag },
-        { title: 'Tag Colleges to Courses', path: '/admin/tag-colleges-courses', icon: FiTag },
-      ]
-    },
-    {
       id: 'users',
       title: 'User Management',
       icon: FiUsers,
