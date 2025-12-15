@@ -413,6 +413,33 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
+            {/* Video Section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <FiBook className="text-orange-600" />
+                Related Videos
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {exam.videos.map((video, idx) => (
+                  <div key={idx} className="cursor-pointer group">
+                    <div className="relative rounded-lg overflow-hidden shadow-md">
+                      <img src={video.thumbnail} alt={video.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                        <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-orange-600 border-b-[12px] border-b-transparent ml-1"></div>
+                        </div>
+                      </div>
+                      <span className="absolute bottom-3 right-3 bg-black/80 text-white text-xs px-2 py-1 rounded font-medium">
+                        {video.duration}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-semibold text-gray-800 mt-3">{video.title}</h3>
+                    <p className="text-sm text-gray-600 mt-1">Watch expert analysis and preparation tips</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Ask Question Section */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-md p-6 border-2 border-blue-200">
               <h3 className="text-xl font-bold text-gray-800 mb-3">Have Questions About {exam.name}?</h3>
