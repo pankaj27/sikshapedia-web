@@ -167,6 +167,24 @@ const CollegeForm = () => {
     }
   };
 
+  const fetchAccreditations = async () => {
+    try {
+      const response = await api.get('/accreditations?limit=500');
+      setAccreditationsList(response.data);
+    } catch (error) {
+      console.error('Error fetching accreditations:', error);
+    }
+  };
+
+  const fetchAccreditationLevels = async () => {
+    try {
+      const response = await api.get('/accreditation-levels?limit=100');
+      setAccreditationLevelsList(response.data);
+    } catch (error) {
+      console.error('Error fetching accreditation levels:', error);
+    }
+  };
+
   const fetchCollege = async () => {
     setLoading(true);
     try {
