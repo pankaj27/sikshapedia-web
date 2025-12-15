@@ -1052,26 +1052,27 @@ const CollegeDetailPage = () => {
                     {college.name} offers various scholarships to support students financially. The details are mentioned below:
                   </p>
 
-                  <div className="space-y-4">
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">Merit Cum Means Scholarship</h3>
-                      <p className="text-sm text-gray-700">
-                        Offered to students with annual family income less than INR 4.5 lakhs. Free tuition fee and monthly stipend of INR 1000.
-                      </p>
+                  {college.scholarships && college.scholarships.length > 0 ? (
+                    <div className="space-y-4">
+                      {college.scholarships.map((scholarship, idx) => (
+                        <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                          <h3 className="font-bold text-lg mb-2">{scholarship.name || scholarship.title}</h3>
+                          <p className="text-sm text-gray-700">
+                            {scholarship.description || scholarship.details}
+                          </p>
+                          {scholarship.amount && (
+                            <p className="text-sm font-semibold text-blue-600 mt-2">
+                              Amount: ₹{scholarship.amount.toLocaleString()}
+                            </p>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">SC/ST/OBC Scholarships</h3>
-                      <p className="text-sm text-gray-700">
-                        Government scholarships available for SC/ST/OBC students based on merit and income criteria.
-                      </p>
+                  ) : (
+                    <div className="text-center text-gray-500 py-8">
+                      No scholarship information available
                     </div>
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-2">Institute Scholarships</h3>
-                      <p className="text-sm text-gray-700">
-                        Various institute-specific scholarships including Aditya Birla Scholarship (INR 65,000 per annum) and INSPIRE Scholarship (INR 10,000 per year).
-                      </p>
-                    </div>
-                  </div>
+                  )}
 
                   {/* Q&A */}
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
