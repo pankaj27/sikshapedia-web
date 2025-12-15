@@ -18,16 +18,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkAuth();
     fetchStats();
   }, []);
-
-  const checkAuth = () => {
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-      navigate('/admin/login');
-    }
-  };
 
   const fetchStats = async () => {
     try {
