@@ -344,12 +344,40 @@ const CollegeForm = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Institution Type Selector - FIRST SECTION */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg p-6 border-2 border-blue-300">
+          <h2 className="text-xl font-bold mb-4 text-blue-900">🏛️ Institution Type</h2>
+          <div className="grid grid-cols-1 gap-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Select Institution Type <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="institution_type"
+                value={formData.institution_type}
+                onChange={handleChange}
+                className="w-full px-4 py-3 text-lg border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                required
+              >
+                <option value="College">🎓 College</option>
+                <option value="School">🏫 School (K-12)</option>
+                <option value="University">🏛️ University</option>
+              </select>
+              <p className="mt-2 text-sm text-gray-600 italic">
+                💡 This determines what type of institution you're adding to the database
+              </p>
+            </div>
+          </div>
+        </div>
+        
         {/* Basic Information */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Basic Information</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">College Name *</label>
+              <label className="block text-sm font-medium mb-1">
+                {formData.institution_type === 'School' ? 'School Name' : formData.institution_type === 'University' ? 'University Name' : 'College Name'} *
+              </label>
               <input
                 type="text"
                 name="name"
