@@ -851,6 +851,125 @@ class InquiryCreate(BaseModel):
     course_interested: str
     message: str
 
+# School Models
+class School(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: str
+    board: str  # CBSE, ICSE, State Board, IB, IGCSE
+    school_type: str  # Government, Private, International
+    medium: str  # English, Hindi, Regional Language
+    city: str
+    state: str
+    address: Optional[str] = None
+    pincode: Optional[str] = None
+    established_year: Optional[int] = None
+    
+    # Academic Info
+    classes_offered: List[str] = []  # ["Nursery", "LKG", "UKG", "1-10", "11-12"]
+    streams_offered: List[str] = []  # ["Science", "Commerce", "Arts"]
+    
+    # Infrastructure
+    total_area: Optional[str] = None
+    total_students: Optional[int] = None
+    student_teacher_ratio: Optional[str] = None
+    facilities: List[str] = []
+    
+    # Fees
+    admission_fee: Optional[float] = None
+    annual_fee: Optional[float] = None
+    
+    # Ratings & Stats
+    rating: float = 0.0
+    total_reviews: int = 0
+    academic_excellence: float = 0.0
+    infrastructure_rating: float = 0.0
+    extracurricular_rating: float = 0.0
+    
+    # Contact
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    website: Optional[str] = None
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# University Models
+class University(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: str
+    university_type: str  # Central, State, Private, Deemed
+    accreditation: str  # NAAC A++, NAAC A+, etc.
+    city: str
+    state: str
+    address: Optional[str] = None
+    established_year: Optional[int] = None
+    
+    # Academic Info
+    streams: List[str] = []  # Engineering, Medical, Management, etc.
+    total_courses: int = 0
+    total_colleges: int = 0
+    
+    # Stats
+    total_students: Optional[int] = None
+    total_faculty: Optional[int] = None
+    
+    # Rankings & Ratings
+    nirf_rank: Optional[int] = None
+    rating: float = 0.0
+    total_reviews: int = 0
+    
+    # Placements
+    placement_percentage: Optional[float] = None
+    highest_package: Optional[float] = None
+    average_package: Optional[float] = None
+    
+    # Contact
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    website: Optional[str] = None
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# News Models
+class News(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    slug: str
+    category: str  # Admission, Exams, Results, Events, Policy
+    summary: str
+    content: str
+    featured_image: Optional[str] = None
+    
+    # Author Info
+    author: str
+    author_image: Optional[str] = None
+    
+    # Tags & Related
+    tags: List[str] = []
+    related_colleges: List[str] = []
+    related_exams: List[str] = []
+    
+    # Stats
+    views: int = 0
+    shares: int = 0
+    
+    # SEO
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    
+    # Status
+    published: bool = True
+    featured: bool = False
+    
+    # Timestamps
+    published_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============================================
 # Helper Functions
 # ============================================
