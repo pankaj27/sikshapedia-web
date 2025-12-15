@@ -6,17 +6,16 @@ const ExamsManagement = () => {
     { key: 'name', label: 'Exam Name', type: 'text', required: true },
     { key: 'slug', label: 'Slug (URL)', type: 'text', required: true },
     { key: 'full_name', label: 'Full Name', type: 'text', required: true, placeholder: 'e.g., Joint Entrance Examination' },
-    { key: 'exam_type', label: 'Exam Type', type: 'select', required: true, options: [
-      { value: 'National', label: 'National Level' },
-      { value: 'State', label: 'State Level' },
-      { value: 'University', label: 'University Level' },
-      { value: 'Institute', label: 'Institute Level' },
+    { key: 'type', label: 'Type', type: 'select', required: true, options: [
+      { value: 'Entrance', label: 'Entrance' },
+      { value: 'Eligibility', label: 'Eligibility' },
+      { value: 'Scholarship', label: 'Scholarship' },
     ]},
-    { key: 'exam_level', label: 'Exam Level', type: 'select', required: true, options: [
-      { value: 'UG', label: 'Undergraduate' },
-      { value: 'PG', label: 'Postgraduate' },
-      { value: 'PhD', label: 'PhD/Doctorate' },
-      { value: 'All', label: 'All Levels' },
+    { key: 'level', label: 'Level', type: 'select', required: true, options: [
+      { value: 'National', label: 'National' },
+      { value: 'State', label: 'State' },
+      { value: 'University', label: 'University' },
+      { value: 'International', label: 'International' },
     ]},
     { key: 'conducting_body', label: 'Conducting Body', type: 'text', required: true, placeholder: 'e.g., NTA, State Board' },
     { key: 'description', label: 'Description', type: 'textarea', rows: 4 },
@@ -34,8 +33,8 @@ const ExamsManagement = () => {
   const displayFields = [
     { key: 'name', label: 'Exam Name' },
     { key: 'full_name', label: 'Full Name' },
-    { key: 'exam_type', label: 'Type' },
-    { key: 'exam_level', label: 'Level' },
+    { key: 'type', label: 'Type' },
+    { key: 'level', label: 'Level' },
     { key: 'conducting_body', label: 'Conducting Body' },
   ];
 
