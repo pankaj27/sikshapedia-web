@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook } from 'react-icons/fi';
+import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 
 const ExamDetailPage = () => {
