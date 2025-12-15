@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiBuilding, FiTrendingUp, FiLogOut, FiEdit, FiEye, FiSchool } from 'react-icons/fi';
+import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiHome, FiTrendingUp, FiLogOut, FiEdit, FiEye, FiBookOpen } from 'react-icons/fi';
 import api from '../../api/axios';
 
 const AdminDashboard = () => {
