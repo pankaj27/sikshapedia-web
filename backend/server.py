@@ -205,10 +205,10 @@ class CourseDetail(BaseModel):
     # Duration & Fees
     duration: str
     average_fees: float
-    fee_range: Dict  # min, max
+    fee_range: Optional[Dict] = None  # min, max
     
     # Eligibility
-    eligibility: str
+    eligibility: Optional[str] = None
     entrance_exams: List[str] = []  # Exam IDs
     
     # Curriculum
