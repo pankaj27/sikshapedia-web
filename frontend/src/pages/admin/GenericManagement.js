@@ -26,7 +26,7 @@ const GenericManagement = ({
 
   const fetchItems = async () => {
     try {
-      const response = await api.get(`/${endpoint}?limit=1000`);
+      const response = await api.get(`/${endpoint}?limit=100`);
       setItems(response.data);
     } catch (error) {
       console.error(`Error fetching ${title}:`, error);
