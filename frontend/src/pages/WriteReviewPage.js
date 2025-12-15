@@ -159,15 +159,15 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 1: Select Your Institute</h2>
               
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Institute Type <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.instituteType}
                     onChange={(e) => handleInputChange('instituteType', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="">Select Institute Type</option>
                     <option value="college">College/University</option>
@@ -177,7 +177,7 @@ const WriteReviewPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Institute Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -185,13 +185,13 @@ const WriteReviewPage = () => {
                     placeholder="Search and select your institute"
                     value={formData.instituteName}
                     onChange={(e) => handleInputChange('instituteName', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Start typing to search from our database</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Start typing to search from our database</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Course <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -199,14 +199,14 @@ const WriteReviewPage = () => {
                     placeholder="e.g., B.Tech Computer Science"
                     value={formData.course}
                     onChange={(e) => handleInputChange('course', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
 
                 <Button
                   onClick={() => setStep(2)}
                   disabled={!formData.instituteType || !formData.instituteName || !formData.course}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 text-lg font-semibold disabled:bg-gray-300"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm font-semibold disabled:bg-gray-300"
                 >
                   Next: Write Review
                 </Button>
