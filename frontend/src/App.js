@@ -73,6 +73,8 @@ import CitiesManagement from './pages/admin/CitiesManagement';
 import ContactInquiriesManagement from './pages/admin/ContactInquiriesManagement';
 import CoursesManagement from './pages/admin/CoursesManagement';
 import ExamsManagement from './pages/admin/ExamsManagement';
+import AdvertisementsManagement from './pages/admin/AdvertisementsManagement';
+import AdvertisementReports from './pages/admin/AdvertisementReports';
 import './App.css';
 
 function App() {
