@@ -245,7 +245,7 @@ const Header = () => {
           <div className="flex items-center gap-6 py-2 pl-6 pr-6 overflow-x-auto" style={{overflowY: 'visible'}} spellCheck="false">
             {/* All Courses Dropdown */}
             <div 
-              className="relative z-[1001]"
+              className="relative z-[2000]"
               onMouseEnter={handleAllCoursesMouseEnter}
               onMouseLeave={handleAllCoursesMouseLeave}
             >
@@ -256,7 +256,7 @@ const Header = () => {
               
               {allCoursesDropdownOpen && (
                 <div 
-                  className="absolute top-full left-0 mt-0 w-80 bg-white rounded-lg shadow-2xl py-3 z-[9999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto"
+                  className="fixed top-[120px] left-6 w-80 bg-white rounded-lg shadow-2xl py-3 z-[99999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto"
                   onMouseEnter={handleAllCoursesMouseEnter}
                   onMouseLeave={handleAllCoursesMouseLeave}
                 >
