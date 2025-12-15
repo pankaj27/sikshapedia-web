@@ -11,6 +11,7 @@ const CollegeForm = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [recognitions, setRecognitions] = useState([]);
+  const [affiliations, setAffiliations] = useState([]);
 
   const getDefaultFormData = () => ({
     name: '',
@@ -72,6 +73,7 @@ const CollegeForm = () => {
 
   useEffect(() => {
     fetchRecognitions();
+    fetchAffiliations();
     if (id) {
       fetchCollege();
     }
@@ -83,6 +85,15 @@ const CollegeForm = () => {
       setRecognitions(response.data);
     } catch (error) {
       console.error('Error fetching recognitions:', error);
+    }
+  };
+
+  const fetchAffiliations = async () => {
+    try {
+      const response = await api.get('/affiliations?limit=500');
+      setAffiliations(response.data);
+    } catch (error) {
+      console.error('Error fetching affiliations:', error);
     }
   };
 
