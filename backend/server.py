@@ -130,16 +130,16 @@ class Exam(BaseModel):
     full_name: str
     description: str
     conducting_body: str
-    exam_level: str  # National, State, University
-    exam_type: str  # Entrance, Eligibility
+    exam_level: Optional[str] = None  # National, State, University
+    exam_type: Optional[str] = None  # Entrance, Eligibility
     streams: List[str] = []  # Engineering, Medical, Management, etc.
     
     # Exam Details
-    exam_mode: str  # Online, Offline, Both
-    exam_duration: str
-    total_marks: int
-    num_questions: int
-    exam_pattern: Dict
+    exam_mode: Optional[str] = None  # Online, Offline, Both
+    exam_duration: Optional[str] = None
+    total_marks: Optional[int] = None
+    num_questions: Optional[int] = None
+    exam_pattern: Optional[Dict] = None
     syllabus: Optional[str] = None
     
     # Important Dates
@@ -150,7 +150,7 @@ class Exam(BaseModel):
     counseling_date: Optional[str] = None
     
     # Eligibility
-    eligibility: Dict
+    eligibility: Optional[Dict] = None
     age_limit: Optional[str] = None
     
     # Fees & Cutoffs
