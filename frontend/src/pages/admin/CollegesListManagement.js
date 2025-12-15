@@ -62,8 +62,7 @@ const CollegesListManagement = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Institutions Management</h1>
-          <p className="text-gray-600 mt-1">Manage Colleges, Schools & Universities</p>
+          <h1 className="text-3xl font-bold">Institution Entry</h1>
         </div>
         <Button onClick={() => navigate('/admin/colleges/add')} className="bg-orange-600 hover:bg-orange-700">
           <FiPlus className="mr-2" /> Add New Institution
