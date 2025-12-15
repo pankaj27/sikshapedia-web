@@ -428,17 +428,6 @@ const CollegeForm = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Established (Text)</label>
-              <input
-                type="text"
-                name="established"
-                value={formData.established}
-                onChange={handleChange}
-                placeholder="e.g., 1961"
-                className="w-full border rounded px-3 py-2"
-              />
-            </div>
-            <div>
               <label className="block text-sm font-medium mb-1">Affiliated To</label>
               <input
                 type="text"
