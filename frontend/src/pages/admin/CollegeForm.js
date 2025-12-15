@@ -332,6 +332,27 @@ const CollegeForm = () => {
     setFormData({ ...formData, location: updatedLocation });
   };
 
+  // Helper functions for accreditations
+  const addAccreditation = () => {
+    setFormData({
+      ...formData,
+      accreditations: [...formData.accreditations, { name: '', level: '', description: '' }]
+    });
+  };
+
+  const updateAccreditation = (index, field, value) => {
+    const newAccreditations = [...formData.accreditations];
+    newAccreditations[index] = { ...newAccreditations[index], [field]: value };
+    setFormData({ ...formData, accreditations: newAccreditations });
+  };
+
+  const removeAccreditation = (index) => {
+    setFormData({
+      ...formData,
+      accreditations: formData.accreditations.filter((_, i) => i !== index)
+    });
+  };
+
   const addCourse = () => {
     setFormData({
       ...formData,
