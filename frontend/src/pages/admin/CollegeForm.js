@@ -791,6 +791,53 @@ const CollegeForm = () => {
           </div>
         </div>
 
+        {/* How to Reach */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">🚗 How to Reach?</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">✈️ By Air</label>
+              <textarea
+                value={formData.how_to_reach.by_air}
+                onChange={(e) => handleNestedChange('how_to_reach', 'by_air', e.target.value)}
+                placeholder="e.g., The nearest airport is Mumbai International Airport (Chhatrapati Shivaji Maharaj International Airport), located approximately 10 km from the institution. Regular taxi and app cab services are available from the airport."
+                rows="3"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">🚂 By Train</label>
+              <textarea
+                value={formData.how_to_reach.by_train}
+                onChange={(e) => handleNestedChange('how_to_reach', 'by_train', e.target.value)}
+                placeholder="e.g., The nearest railway station is Andheri Railway Station (Western Line), approximately 3 km away. Local trains connect to all parts of Mumbai. Auto-rickshaws and cabs are readily available from the station."
+                rows="3"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">🚌 By Road</label>
+              <textarea
+                value={formData.how_to_reach.by_road}
+                onChange={(e) => handleNestedChange('how_to_reach', 'by_road', e.target.value)}
+                placeholder="e.g., The institution is well-connected by road. State transport buses (BEST) operate regularly from major areas. Private vehicles can reach via the Western Express Highway. Parking facilities are available on campus."
+                rows="3"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">🚇 Public Transport</label>
+              <textarea
+                value={formData.how_to_reach.public_transport}
+                onChange={(e) => handleNestedChange('how_to_reach', 'public_transport', e.target.value)}
+                placeholder="e.g., Metro: Andheri Metro Station (Line 1) is 2 km away. Buses: BEST buses 249, 251, 258 stop directly in front of the institution. Auto-rickshaws and app-based cabs are easily available."
+                rows="3"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Description */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Description & Highlights</h2>
