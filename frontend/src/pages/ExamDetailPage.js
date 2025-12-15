@@ -289,6 +289,13 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
+            {/* Advertisement - Sidebar */}
+            <div className="bg-white rounded-lg shadow-md border-2 border-orange-300 p-4 text-center">
+              <p className="text-xs text-orange-600 uppercase tracking-wide mb-2 font-semibold">Advertisement</p>
+              <img src="https://via.placeholder.com/250x200?text=Ad+Space" alt="Advertisement" className="w-full rounded mb-3" />
+              <p className="text-xs text-gray-600">Your ad could be here</p>
+            </div>
+
             {/* College Predictor Banner */}
             <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-md p-4 text-white text-center">
               <FiAward className="mx-auto mb-2" size={32} />
@@ -296,6 +303,16 @@ const ExamDetailPage = () => {
               <p className="text-sm mb-3 opacity-90">Know your chances of admission</p>
               <Button className="w-full bg-white text-blue-600 hover:bg-gray-100 text-sm font-semibold">
                 Predict Now
+              </Button>
+            </div>
+
+            {/* Counseling Banner - Sidebar */}
+            <div className="bg-gradient-to-br from-green-500 to-teal-500 rounded-lg shadow-md p-4 text-white text-center">
+              <FiInfo className="mx-auto mb-2" size={28} />
+              <h3 className="font-bold mb-2 text-sm">Need Help?</h3>
+              <p className="text-xs mb-3 opacity-90">Talk to our expert counselors</p>
+              <Button className="w-full bg-white text-green-600 hover:bg-gray-100 text-xs font-semibold">
+                Get Free Counseling
               </Button>
             </div>
           </aside>
