@@ -98,6 +98,10 @@ const CollegeForm = () => {
         cutoff_data: Array.isArray(collegeData.cutoff_data) ? collegeData.cutoff_data : [],
         scholarships: Array.isArray(collegeData.scholarships) ? collegeData.scholarships : [],
         updates: Array.isArray(collegeData.updates) ? collegeData.updates : [],
+        seo_faqs: Array.isArray(collegeData.seo_faqs) ? collegeData.seo_faqs : [],
+        seo_intro: collegeData.seo_intro || '',
+        seo_full_content: collegeData.seo_full_content || '',
+        seo_video_url: collegeData.seo_video_url || '',
         location: collegeData.location || { city: '', state: '', address: '' },
         contact_info: collegeData.contact_info || { phone: '', email: '', website: '' },
         placement: {
