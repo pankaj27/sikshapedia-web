@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FiSave, FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
+import { generateSlug } from '../../utils/slugify';
 
 const CollegeForm = () => {
   const { id } = useParams();
