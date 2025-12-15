@@ -905,20 +905,34 @@ const CollegeDetailPage = () => {
                     The institute secured offers from top recruiters across various sectors.
                   </p>
 
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                      <div className="text-3xl font-bold text-green-600 mb-2">₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L</div>
-                      <div className="text-sm text-gray-600">Highest Package</div>
+                  {(college.placement || college.placements) && (
+                    <div className="grid grid-cols-3 gap-4 mb-6">
+                      {(college.placement?.highest || college.placements?.highest) && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                          <div className="text-3xl font-bold text-green-600 mb-2">
+                            ₹{((college.placement?.highest || college.placements?.highest) / 100000).toFixed(1)}L
+                          </div>
+                          <div className="text-sm text-gray-600">Highest Package</div>
+                        </div>
+                      )}
+                      {(college.placement?.average || college.placements?.average) && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                          <div className="text-3xl font-bold text-blue-600 mb-2">
+                            ₹{((college.placement?.average || college.placements?.average) / 100000).toFixed(1)}L
+                          </div>
+                          <div className="text-sm text-gray-600">Average Package</div>
+                        </div>
+                      )}
+                      {(college.placement?.percentage || college.placements?.percentage) && (
+                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
+                          <div className="text-3xl font-bold text-purple-600 mb-2">
+                            {college.placement?.percentage || college.placements?.percentage}%
+                          </div>
+                          <div className="text-sm text-gray-600">Placement Rate</div>
+                        </div>
+                      )}
                     </div>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'}L</div>
-                      <div className="text-sm text-gray-600">Average Package</div>
-                    </div>
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
-                      <div className="text-3xl font-bold text-purple-600 mb-2">95%</div>
-                      <div className="text-sm text-gray-600">Placement Rate</div>
-                    </div>
-                  </div>
+                  )}
 
                   <h3 className="text-xl font-bold mb-3">Placement Statistics</h3>
                   <div className="overflow-x-auto mb-6">
@@ -930,30 +944,46 @@ const CollegeDetailPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Students Participated</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">1979</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Companies Participated</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">364</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Total Offers</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">1650</td>
-                        </tr>
+                        {(college.placement?.students_participated || college.placements?.students_participated) && (
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm">Students Participated</td>
+                            <td className="border px-4 py-3 text-sm font-semibold">
+                              {college.placement?.students_participated || college.placements?.students_participated}
+                            </td>
+                          </tr>
+                        )}
+                        {(college.placement?.companies_participated || college.placements?.companies_participated) && (
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm">Companies Participated</td>
+                            <td className="border px-4 py-3 text-sm font-semibold">
+                              {college.placement?.companies_participated || college.placements?.companies_participated}
+                            </td>
+                          </tr>
+                        )}
+                        {(college.placement?.total_offers || college.placements?.total_offers) && (
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm">Total Offers</td>
+                            <td className="border px-4 py-3 text-sm font-semibold">
+                              {college.placement?.total_offers || college.placements?.total_offers}
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-3">Top Recruiters</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {['Google', 'Microsoft', 'Amazon', 'TCS', 'Infosys', 'Wipro', 'Accenture', 'Deloitte', 'Goldman Sachs', 'Intel', 'Oracle', 'Adobe'].map((company) => (
-                      <span key={company} className="px-4 py-2 bg-gray-100 border rounded-lg text-sm font-medium text-gray-700">
-                        {company}
-                      </span>
-                    ))}
-                  </div>
+                  {(college.placement?.top_recruiters || college.placements?.top_recruiters)?.length > 0 && (
+                    <>
+                      <h3 className="text-xl font-bold mb-3">Top Recruiters</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {(college.placement?.top_recruiters || college.placements?.top_recruiters).map((company, idx) => (
+                          <span key={idx} className="px-4 py-2 bg-gray-100 border rounded-lg text-sm font-medium text-gray-700">
+                            {company}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </section>
 
                 {/* RANKING */}
