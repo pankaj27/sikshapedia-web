@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://college-admin-hub-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://eduportalmaster.preview.emergentagent.com/api"
 TEST_COLLEGE_ID = "iit-bombay-002"
 
 class NewFeaturesAPITester:
