@@ -159,25 +159,33 @@ const CollegeDetailPage = () => {
                     <span>|</span>
                     <span className="font-medium">{college.type}</span>
                     <span>|</span>
-                    <span>Estd. {college.established || 'N/A'}</span>
+                    <span>Estd. {college.established_year || college.established || 'N/A'}</span>
                   </div>
                   
                   {/* Recognized by & Affiliated to */}
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-gray-700">Recognized by:</span>
-                      <div className="flex items-center gap-2">
-                        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">UGC</span>
-                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">AICTE</span>
-                        <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">NBA</span>
-                      </div>
+                  {(college.recognized_by?.length > 0 || college.affiliated_to) && (
+                    <div className="flex flex-wrap items-center gap-3 mb-3">
+                      {college.recognized_by?.length > 0 && (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-semibold text-gray-700">Recognized by:</span>
+                            <div className="flex items-center gap-2">
+                              {college.recognized_by.map((org, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">{org}</span>
+                              ))}
+                            </div>
+                          </div>
+                          {college.affiliated_to && <span className="text-gray-400">|</span>}
+                        </>
+                      )}
+                      {college.affiliated_to && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold text-gray-700">Affiliated to:</span>
+                          <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">{college.affiliated_to}</span>
+                        </div>
+                      )}
                     </div>
-                    <span className="text-gray-400">|</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-gray-700">Affiliated to:</span>
-                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">Mumbai University</span>
-                    </div>
-                  </div>
+                  )}
                   
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
