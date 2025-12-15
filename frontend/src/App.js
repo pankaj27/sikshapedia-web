@@ -57,6 +57,7 @@ import RecognitionsManagement from './pages/admin/RecognitionsManagement';
 import AccreditationsManagement from './pages/admin/AccreditationsManagement';
 import AccreditationLevelsManagement from './pages/admin/AccreditationLevelsManagement';
 import RankingsManagement from './pages/admin/RankingsManagement';
+import RankCategoriesManagement from './pages/admin/RankCategoriesManagement';
 import ScholarshipsManagement from './pages/admin/ScholarshipsManagement';
 import LoansManagement from './pages/admin/LoansManagement';
 import CommentsManagement from './pages/admin/CommentsManagement';
@@ -105,6 +106,7 @@ function App() {
             <Route path="/admin/accreditations" element={<AccreditationsManagement />} />
             <Route path="/admin/accreditation-levels" element={<AccreditationLevelsManagement />} />
             <Route path="/admin/rankings" element={<RankingsManagement />} />
+            <Route path="/admin/rank-categories" element={<RankCategoriesManagement />} />
             <Route path="/admin/scholarships" element={<ScholarshipsManagement />} />
             <Route path="/admin/loans" element={<LoansManagement />} />
             <Route path="/admin/courses" element={<CoursesManagement />} />

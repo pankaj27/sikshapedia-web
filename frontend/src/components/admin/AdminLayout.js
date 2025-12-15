@@ -71,6 +71,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Accreditations', path: '/admin/accreditations', icon: FiGrid },
         { title: 'Accreditation Levels', path: '/admin/accreditation-levels', icon: FiGrid },
         { title: 'Rankings', path: '/admin/rankings', icon: FiGrid },
+        { title: 'Rank Categories', path: '/admin/rank-categories', icon: FiGrid },
       ]
     },
     {
