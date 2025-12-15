@@ -86,6 +86,20 @@ function App() {
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
             <Route path="/admin/reviews" element={<ReviewsModeration />} />
+            <Route path="/admin/streams" element={<StreamsManagement />} />
+            <Route path="/admin/sub-streams" element={<SubStreamsManagement />} />
+            <Route path="/admin/boards" element={<BoardsManagement />} />
+            <Route path="/admin/college-types" element={<CollegeTypesManagement />} />
+            <Route path="/admin/affiliations" element={<AffiliationsManagement />} />
+            <Route path="/admin/recognitions" element={<RecognitionsManagement />} />
+            <Route path="/admin/accreditations" element={<AccreditationsManagement />} />
+            <Route path="/admin/rankings" element={<RankingsManagement />} />
+            <Route path="/admin/scholarships" element={<ScholarshipsManagement />} />
+            <Route path="/admin/loans" element={<LoansManagement />} />
+            <Route path="/admin/comments" element={<CommentsManagement />} />
+            <Route path="/admin/tag-courses-colleges" element={<TagCoursesColleges />} />
+            <Route path="/admin/tag-exams-courses" element={<TagExamsCourses />} />
+            <Route path="/admin/users" element={<UsersManagement />} />
 
             {/* Public Routes - With Layout */}
             <Route path="/*" element={
