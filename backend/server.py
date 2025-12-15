@@ -107,6 +107,7 @@ class Course(BaseModel):
     total_fees: Optional[float] = None
     average_fees: Optional[float] = None
     eligibility: Optional[str] = None
+    exams_accepted: List[str] = []  # List of exam names accepted for admission
     cutoffs: List[Cutoff] = []
 
 class Faculty(BaseModel):
