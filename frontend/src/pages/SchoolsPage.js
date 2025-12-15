@@ -809,6 +809,203 @@ const SchoolsPage = () => {
 
             {/* MAIN LISTING */}
             <main className="flex-1">
+              {/* HORIZONTAL FILTER BAR - Compact */}
+              <div className="bg-white rounded-lg shadow-sm p-2.5 mb-4 relative">
+                {/* Primary Filters Row - Compact */}
+                <div className="flex items-center gap-1.5 flex-wrap mb-2">
+                  <button 
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <FiFilter size={12} />
+                    All Filter
+                  </button>
+                  
+                  {/* Board Filter */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'board' ? null : 'board')}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                        filters.board ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {filters.board || 'Board'}
+                      <FiChevronDown size={12} />
+                    </button>
+                    {activeFilterDropdown === 'board' && (
+                      <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                        {filterOptions.board.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleFilterSelect('board', option)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* State Filter */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'state' ? null : 'state')}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                        filters.state ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {filters.state || 'State'}
+                      <FiChevronDown size={12} />
+                    </button>
+                    {activeFilterDropdown === 'state' && (
+                      <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                        {filterOptions.state.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleFilterSelect('state', option)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* School Type Filter */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'schoolType' ? null : 'schoolType')}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                        filters.schoolType ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {filters.schoolType || 'School Type'}
+                      <FiChevronDown size={12} />
+                    </button>
+                    {activeFilterDropdown === 'schoolType' && (
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                        {filterOptions.schoolType.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleFilterSelect('schoolType', option)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* City Filter */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'city' ? null : 'city')}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                        filters.city ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {filters.city || 'City'}
+                      <FiChevronDown size={12} />
+                    </button>
+                    {activeFilterDropdown === 'city' && (
+                      <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                        {filterOptions.city.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleFilterSelect('city', option)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Medium Filter */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'medium' ? null : 'medium')}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                        filters.medium ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {filters.medium || 'Medium'}
+                      <FiChevronDown size={12} />
+                    </button>
+                    {activeFilterDropdown === 'medium' && (
+                      <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                        {filterOptions.medium.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleFilterSelect('medium', option)}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Applied Filters Display */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {/* Board Filter */}
+                  {filters.board && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                      {filters.board}
+                      <button onClick={() => removeFilter('board')} className="hover:bg-orange-600 rounded-full">
+                        <FiX size={12} />
+                      </button>
+                    </span>
+                  )}
+                  
+                  {/* State Filter */}
+                  {filters.state && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                      {filters.state}
+                      <button onClick={() => removeFilter('state')} className="hover:bg-orange-600 rounded-full">
+                        <FiX size={12} />
+                      </button>
+                    </span>
+                  )}
+                  
+                  {/* City Filter */}
+                  {filters.city && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                      {filters.city}
+                      <button onClick={() => removeFilter('city')} className="hover:bg-orange-600 rounded-full">
+                        <FiX size={12} />
+                      </button>
+                    </span>
+                  )}
+                  
+                  {/* School Type Filter */}
+                  {filters.schoolType && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                      {filters.schoolType}
+                      <button onClick={() => removeFilter('schoolType')} className="hover:bg-orange-600 rounded-full">
+                        <FiX size={12} />
+                      </button>
+                    </span>
+                  )}
+                  
+                  {/* Medium Filter */}
+                  {filters.medium && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                      {filters.medium}
+                      <button onClick={() => removeFilter('medium')} className="hover:bg-orange-600 rounded-full">
+                        <FiX size={12} />
+                      </button>
+                    </span>
+                  )}
+                </div>
+              </div>
+
               {/* Top Controls Bar */}
               <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
