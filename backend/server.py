@@ -130,8 +130,10 @@ class Exam(BaseModel):
     full_name: str
     description: str
     conducting_body: str
-    exam_level: Optional[str] = None  # National, State, University
-    exam_type: Optional[str] = None  # Entrance, Eligibility
+    type: Optional[str] = None  # Entrance, Eligibility - Short field name
+    level: Optional[str] = None  # National, State, University - Short field name
+    exam_level: Optional[str] = None  # National, State, University - Alias for level
+    exam_type: Optional[str] = None  # Entrance, Eligibility - Alias for type
     streams: List[str] = []  # Engineering, Medical, Management, etc.
     
     # Exam Details
