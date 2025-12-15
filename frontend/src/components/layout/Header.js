@@ -224,7 +224,7 @@ const Header = () => {
           <div className="flex items-center gap-6 py-2 pl-6 pr-6 overflow-x-auto" spellCheck="false">
             {/* All Courses Dropdown */}
             <div 
-              className="relative"
+              className="relative z-[1001]"
               onMouseEnter={() => setAllCoursesDropdownOpen(true)}
               onMouseLeave={() => setAllCoursesDropdownOpen(false)}
             >
