@@ -1882,6 +1882,34 @@ async def create_course(course_data: CourseDetailCreate, current_user: User = De
     await db.courses.insert_one(course_dict)
     return course
 
+@api_router.put("/courses/{course_id}", response_model=CourseDetail)
+async def update_course(course_id: str, course_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update courses")
+    
+    existing_course = await db.courses.find_one({"id": course_id}, {"_id": 0})
+    if not existing_course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    await db.courses.update_one({"id": course_id}, {"$set": course_data})
+    updated_course = await db.courses.find_one({"id": course_id}, {"_id": 0})
+    
+    if isinstance(updated_course.get('created_at'), str):
+        updated_course['created_at'] = datetime.fromisoformat(updated_course['created_at'])
+    
+    return CourseDetail(**updated_course)
+
+@api_router.delete("/courses/{course_id}")
+async def delete_course(course_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can delete courses")
+    
+    result = await db.courses.delete_one({"id": course_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    return {"message": "Course deleted successfully"}
+
 # ============================================
 # Application Routes
 # ============================================
