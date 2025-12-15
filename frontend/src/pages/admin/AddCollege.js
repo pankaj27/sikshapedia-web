@@ -7,6 +7,7 @@ import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Textarea } from '../../components/ui/textarea';
 import { FiArrowLeft, FiPlus, FiX } from 'react-icons/fi';
+import { generateSlug } from '../../utils/slugify';
 
 const AddCollege = () => {
   const navigate = useNavigate();
