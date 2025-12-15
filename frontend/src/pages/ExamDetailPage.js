@@ -170,31 +170,31 @@ const ExamDetailPage = () => {
       <div className="bg-white border-b shadow-sm sticky top-16 z-30">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-6 overflow-x-auto py-3">
-            <Link to={`/exams/${id}`} className="text-sm font-semibold text-orange-600 border-b-2 border-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/question-paper`} className="text-sm font-semibold text-orange-600 border-b-2 border-orange-600 pb-3 whitespace-nowrap">
               Question Paper
             </Link>
-            <Link to={`/exams/${id}/admit-card`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/admit-card`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Admit Card
             </Link>
-            <Link to={`/exams/${id}/answer-key`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/answer-key`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Answer Key
             </Link>
-            <Link to={`/exams/${id}/result`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/result`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Result
             </Link>
-            <Link to={`/exams/${id}/cutoff`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/cutoff`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Cut Off
             </Link>
-            <Link to={`/exams/${id}/syllabus`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/syllabus`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Syllabus
             </Link>
-            <Link to={`/exams/${id}/exam-pattern`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/exam-pattern`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Exam Pattern
             </Link>
-            <Link to={`/exams/${id}/application-form`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/application-form`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Application Form
             </Link>
-            <Link to={`/exams/${id}/counseling`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap">
+            <Link to={`/exams/${id}/counseling`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">
               Counseling
             </Link>
           </div>
