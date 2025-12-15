@@ -426,6 +426,12 @@ class College(BaseModel):
     admission_process: Optional[str] = None
     admission_dates: Optional[Any] = None  # Can be List[Dict], Dict, or None
     
+    # SEO Content for Detail Page
+    seo_intro: Optional[str] = None  # Short intro text (3-4 lines)
+    seo_full_content: Optional[str] = None  # Full detailed content paragraphs
+    seo_video_url: Optional[str] = None  # Embedded video URL
+    seo_faqs: List = []  # [{ question, answer }]
+    
     # Accreditations & Approvals
     accreditations: List[str] = []
     accreditation: Optional[List[str]] = []
