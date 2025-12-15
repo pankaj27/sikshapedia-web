@@ -130,10 +130,10 @@ class Exam(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    slug: str
-    full_name: str
-    description: str
-    conducting_body: str
+    slug: Optional[str] = None
+    full_name: Optional[str] = None
+    description: Optional[str] = None
+    conducting_body: Optional[str] = None
     type: Optional[str] = None  # Entrance, Eligibility - Short field name
     level: Optional[str] = None  # National, State, University - Short field name
     exam_level: Optional[str] = None  # National, State, University - Alias for level
