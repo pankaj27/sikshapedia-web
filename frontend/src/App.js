@@ -45,9 +45,6 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AddCollege from './pages/admin/AddCollege';
 import CollegeForm from './pages/admin/CollegeForm';
 import CollegesListManagement from './pages/admin/CollegesListManagement';
-import SchoolsManagement from './pages/admin/SchoolsManagement';
-import SchoolForm from './pages/admin/SchoolForm';
-import UniversitiesManagement from './pages/admin/UniversitiesManagement';
 import NewsManagement from './pages/admin/NewsManagement';
 import NewsForm from './pages/admin/NewsForm';
 import ReviewsModeration from './pages/admin/ReviewsModeration';
@@ -94,12 +91,6 @@ function App() {
             <Route path="/admin/colleges/add" element={<CollegeForm />} />
             <Route path="/admin/colleges/new" element={<CollegeForm />} />
             <Route path="/admin/colleges/edit/:id" element={<CollegeForm />} />
-            <Route path="/admin/schools" element={<SchoolsManagement />} />
-            <Route path="/admin/schools/new" element={<SchoolForm />} />
-            <Route path="/admin/schools/edit/:id" element={<SchoolForm />} />
-            <Route path="/admin/universities" element={<UniversitiesManagement />} />
-            <Route path="/admin/universities/new" element={<SchoolForm />} />
-            <Route path="/admin/universities/edit/:id" element={<SchoolForm />} />
             <Route path="/admin/news" element={<NewsManagement />} />
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
