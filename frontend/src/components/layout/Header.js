@@ -206,16 +206,12 @@ const Header = () => {
               </div>
             )}
 
-            {/* Hamburger Menu Icon */}
-            <button className="p-2 text-white hover:text-orange-400 transition-colors">
-              <FiMenu size={24} />
-            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-white hover:text-orange-400"
+            className="lg:hidden p-2 text-white hover:text-orange-400 transition-colors"
           >
             {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
