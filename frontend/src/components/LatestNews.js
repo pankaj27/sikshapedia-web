@@ -52,9 +52,10 @@ const LatestNews = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {newsItems.map((news, idx) => (
-            <div
+            <Link
               key={idx}
-              className="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200"
+              to={`/news/${news.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
+              className="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 block"
             >
               <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold mb-4 ${news.color}`}>
                 {news.icon}
@@ -67,7 +68,7 @@ const LatestNews = () => {
                 <FiCalendar size={14} />
                 {news.date}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
 
