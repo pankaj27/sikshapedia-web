@@ -1833,7 +1833,7 @@ async def get_saved_colleges(current_user: User = Depends(get_current_user)):
 @api_router.get("/exams", response_model=List[Exam])
 async def get_exams(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     search: Optional[str] = None,
     stream: Optional[str] = None,
     exam_level: Optional[str] = None,
