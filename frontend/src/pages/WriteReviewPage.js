@@ -329,9 +329,9 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 3: Personal Details</h2>
               
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Your Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -339,12 +339,12 @@ const WriteReviewPage = () => {
                     placeholder="Enter your full name"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -352,19 +352,19 @@ const WriteReviewPage = () => {
                     placeholder="your.email@example.com"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">We'll send your reward details to this email</p>
+                  <p className="text-xs text-gray-500 mt-0.5">We'll send reward details to this email</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Year of Graduation <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.graduationYear}
                     onChange={(e) => handleInputChange('graduationYear', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="">Select Year</option>
                     {[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018].map(year => (
@@ -374,21 +374,21 @@ const WriteReviewPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Upload Verification Document (Optional)
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-orange-500 transition-colors cursor-pointer">
-                    <FiUpload className="mx-auto mb-2 text-gray-400" size={32} />
-                    <p className="text-sm text-gray-600 mb-1">Click to upload ID Card, Marksheet, or Degree Certificate</p>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-orange-500 transition-colors cursor-pointer">
+                    <FiUpload className="mx-auto mb-1 text-gray-400" size={24} />
+                    <p className="text-xs text-gray-600 mb-0.5">Click to upload ID Card, Marksheet, or Certificate</p>
                     <p className="text-xs text-gray-500">PDF, JPG, PNG up to 5MB</p>
                     <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-                  <p className="text-sm text-yellow-800">
+                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3">
+                  <p className="text-xs text-yellow-800">
                     <strong>Note:</strong> Your review will be published after verification. 
-                    Uploading a document helps in faster verification and reward processing.
+                    Document helps in faster processing.
                   </p>
                 </div>
 
@@ -396,14 +396,14 @@ const WriteReviewPage = () => {
                   <Button
                     onClick={() => setStep(2)}
                     variant="outline"
-                    className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 py-3"
+                    className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 h-10 text-sm"
                   >
                     Back
                   </Button>
                   <Button
                     onClick={() => setStep(4)}
                     disabled={!formData.name || !formData.email || !formData.graduationYear}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 disabled:bg-gray-300"
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm disabled:bg-gray-300"
                   >
                     Submit Review
                   </Button>
