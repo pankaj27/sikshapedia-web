@@ -41,8 +41,20 @@ const AdminLayout = ({ children }) => {
         { title: 'Courses', path: '/admin/courses', icon: FiBook },
         { title: 'Exams', path: '/admin/exams', icon: FiFileText },
         { title: 'News Articles', path: '/admin/news', icon: FiFileText },
+        { title: 'Blogs', path: '/admin/blogs', icon: FiFileText },
         { title: 'Scholarships', path: '/admin/scholarships', icon: FiDollarSign },
         { title: 'Loans', path: '/admin/loans', icon: FiDollarSign },
+      ]
+    },
+    {
+      id: 'frontend',
+      title: 'Frontend Elements',
+      icon: FiGrid,
+      submenu: [
+        { title: 'Banners & Sliders', path: '/admin/banners', icon: FiGrid },
+        { title: 'Testimonials', path: '/admin/testimonials', icon: FiUsers },
+        { title: 'FAQs', path: '/admin/faqs', icon: FiFileText },
+        { title: 'Cities', path: '/admin/cities', icon: FiGrid },
       ]
     },
     {
