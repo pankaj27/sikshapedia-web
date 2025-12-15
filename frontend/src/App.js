@@ -115,7 +115,13 @@ function App() {
             <Route path="/admin/scholarships" element={<ScholarshipsManagement />} />
             <Route path="/admin/loans" element={<LoansManagement />} />
             <Route path="/admin/courses" element={<CoursesManagement />} />
+            <Route path="/admin/courses-detail" element={<CoursesDetailManagement />} />
+            <Route path="/admin/courses-detail/new" element={<CourseDetailForm />} />
+            <Route path="/admin/courses-detail/edit/:id" element={<CourseDetailForm />} />
             <Route path="/admin/exams" element={<ExamsManagement />} />
+            <Route path="/admin/exams-detail" element={<ExamsDetailManagement />} />
+            <Route path="/admin/exams-detail/new" element={<ExamDetailForm />} />
+            <Route path="/admin/exams-detail/edit/:id" element={<ExamDetailForm />} />
             <Route path="/admin/advertisements" element={<AdvertisementsManagement />} />
             <Route path="/admin/advertisements/reports" element={<AdvertisementReports />} />
             <Route path="/admin/comments" element={<CommentsManagement />} />
