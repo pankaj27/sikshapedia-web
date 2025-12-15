@@ -10,6 +10,7 @@ const CollegeForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [recognitions, setRecognitions] = useState([]);
 
   const getDefaultFormData = () => ({
     name: '',
