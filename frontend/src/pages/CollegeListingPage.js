@@ -653,53 +653,226 @@ const CollegeListingPage = () => {
       <div className="bg-gray-50 py-4 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">
           {/* HORIZONTAL FILTER BAR - Compact */}
-          <div className="bg-white rounded-lg shadow-sm p-2.5 mb-4">
+          <div className="bg-white rounded-lg shadow-sm p-2.5 mb-4 relative">
             {/* Primary Filters Row - Compact */}
             <div className="flex items-center gap-1.5 flex-wrap mb-2">
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50">
+              <button 
+                onClick={() => setShowFilters(!showFilters)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50"
+              >
                 <FiFilter size={12} />
                 All Filter
               </button>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
-                Sub Stream
-                <FiChevronDown size={12} />
-              </button>
+              {/* Sub Stream Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'subStream' ? null : 'subStream')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.subStream ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.subStream || 'Sub Stream'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'subStream' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.subStream.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('subStream', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-xs font-medium hover:bg-orange-600">
-                State
-                <FiChevronDown size={12} />
-              </button>
+              {/* State Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'state' ? null : 'state')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.state ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.state || 'State'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'state' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.state.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('state', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
-                Stream
-                <FiChevronDown size={12} />
-              </button>
+              {/* Stream Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'stream' ? null : 'stream')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.stream ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.stream || 'Stream'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'stream' && (
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.stream.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('stream', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
-                City
-                <FiChevronDown size={12} />
-              </button>
+              {/* City Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'city' ? null : 'city')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.city ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.city || 'City'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'city' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.city.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('city', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white rounded-full text-xs font-medium hover:bg-orange-600">
-                Degree
-                <FiChevronDown size={12} />
-              </button>
+              {/* Degree Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'degree' ? null : 'degree')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.degree ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.degree || 'Degree'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'degree' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.degree.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('degree', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
-                Specialization
-                <FiChevronDown size={12} />
-              </button>
+              {/* Specialization Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'specialization' ? null : 'specialization')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.specialization ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.specialization || 'Specialization'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'specialization' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.specialization.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('specialization', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
-                Program Type
-                <FiChevronDown size={12} />
-              </button>
+              {/* Program Type Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'programType' ? null : 'programType')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.programType ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.programType || 'Program Type'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'programType' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.programType.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleFilterSelect('programType', option)}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               
-              <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
-                Type Of College
-                <FiChevronDown size={12} />
-              </button>
+              {/* College Type Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'collegeType' ? null : 'collegeType')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.type.length > 0 ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.type.length > 0 ? filters.type.join(', ') : 'Type Of College'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'collegeType' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.collegeType.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => toggleFilter(option)}
+                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 ${
+                          filters.type.includes(option) ? 'text-orange-600 font-medium' : 'text-gray-700'
+                        }`}
+                      >
+                        {option} {filters.type.includes(option) && '✓'}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             
             {/* Dotted Separator */}
