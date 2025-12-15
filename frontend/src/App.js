@@ -103,6 +103,7 @@ function App() {
             <Route path="/admin/affiliations" element={<AffiliationsManagement />} />
             <Route path="/admin/recognitions" element={<RecognitionsManagement />} />
             <Route path="/admin/accreditations" element={<AccreditationsManagement />} />
+            <Route path="/admin/accreditation-levels" element={<AccreditationLevelsManagement />} />
             <Route path="/admin/rankings" element={<RankingsManagement />} />
             <Route path="/admin/scholarships" element={<ScholarshipsManagement />} />
             <Route path="/admin/loans" element={<LoansManagement />} />
