@@ -410,14 +410,15 @@ const CollegeForm = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Slug *</label>
+              <label className="block text-sm font-medium mb-1">Slug (Auto-generated) *</label>
               <input
                 type="text"
                 name="slug"
                 value={formData.slug}
-                onChange={handleChange}
+                readOnly
                 required
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                placeholder="Auto-generated from name"
               />
             </div>
             <div>
