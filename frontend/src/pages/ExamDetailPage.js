@@ -381,6 +381,21 @@ const ExamDetailPage = () => {
                 ))}
               </div>
 
+            {/* Mid Content Advertisement */}
+            <div className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow-md p-8 text-center text-white">
+              <p className="text-xs uppercase tracking-wide mb-2 opacity-90">Sponsored</p>
+              <h3 className="text-xl font-bold mb-3">Master {exam.name} with Live Classes</h3>
+              <p className="mb-4 opacity-95">Join India's top educators and ace your exam</p>
+              <div className="flex gap-3 justify-center">
+                <Button className="bg-white text-orange-600 hover:bg-gray-100">
+                  Start Free Trial
+                </Button>
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white/10">
+                  Learn More
+                </Button>
+              </div>
+            </div>
+
             {/* ChapterWise PYQs Section */}
             <div id="chapterwise" className="bg-white rounded-lg shadow-md p-6 scroll-mt-20">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
