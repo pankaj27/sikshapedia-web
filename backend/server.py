@@ -2038,7 +2038,7 @@ async def delete_course_detail(course_id: str, current_user: User = Depends(get_
 # Exams Detail Routes (Separate Collection)
 # ============================================
 
-@api_router.get("/exams-detail", response_model=List[ExamDetail])
+@api_router.get("/exams-detail", response_model=List[Exam])
 async def get_exams_detail(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100)
@@ -2051,7 +2051,7 @@ async def get_exams_detail(
     
     return exams
 
-@api_router.get("/exams-detail/{exam_id}", response_model=ExamDetail)
+@api_router.get("/exams-detail/{exam_id}", response_model=Exam)
 async def get_exam_detail(exam_id: str):
     exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
     if not exam:
@@ -2060,21 +2060,21 @@ async def get_exam_detail(exam_id: str):
     if isinstance(exam.get('created_at'), str):
         exam['created_at'] = datetime.fromisoformat(exam['created_at'])
     
-    return ExamDetail(**exam)
+    return Exam(**exam)
 
-@api_router.post("/exams-detail", response_model=ExamDetail)
-async def create_exam_detail(exam_data: ExamDetailCreate, current_user: User = Depends(get_current_user)):
+@api_router.post("/exams-detail", response_model=Exam)
+async def create_exam_detail(exam_data: ExamCreate, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can create exams")
     
-    exam = ExamDetail(**exam_data.model_dump())
+    exam = Exam(**exam_data.model_dump())
     exam_dict = exam.model_dump()
     exam_dict['created_at'] = exam_dict['created_at'].isoformat()
     
     await db.exams_detailed.insert_one(exam_dict)
     return exam
 
-@api_router.put("/exams-detail/{exam_id}", response_model=ExamDetail)
+@api_router.put("/exams-detail/{exam_id}", response_model=Exam)
 async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can update exams")
@@ -2089,7 +2089,7 @@ async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User =
     if isinstance(updated_exam.get('created_at'), str):
         updated_exam['created_at'] = datetime.fromisoformat(updated_exam['created_at'])
     
-    return ExamDetail(**updated_exam)
+    return Exam(**updated_exam)
 
 @api_router.delete("/exams-detail/{exam_id}")
 async def delete_exam_detail(exam_id: str, current_user: User = Depends(get_current_user)):
