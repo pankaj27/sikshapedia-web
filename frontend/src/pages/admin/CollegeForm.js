@@ -721,6 +721,61 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-1">Google Maps URL</label>
+              <input
+                type="url"
+                value={formData.location.google_maps_url || ''}
+                onChange={(e) => handleNestedChange('location', 'google_maps_url', e.target.value)}
+                placeholder="e.g., https://maps.google.com/?q=..."
+                className="w-full border rounded px-3 py-2"
+              />
+              <p className="text-xs text-gray-500 mt-1">Paste the Google Maps share link for the institution</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Latitude</label>
+              <input
+                type="text"
+                value={formData.location.latitude || ''}
+                onChange={(e) => handleNestedChange('location', 'latitude', e.target.value)}
+                placeholder="e.g., 19.0760"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Longitude</label>
+              <input
+                type="text"
+                value={formData.location.longitude || ''}
+                onChange={(e) => handleNestedChange('location', 'longitude', e.target.value)}
+                placeholder="e.g., 72.8777"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-2">Nearby Places / Landmarks</label>
+              {(formData.location.nearby_places || []).map((place, index) => (
+                <div key={index} className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={place}
+                    onChange={(e) => updateNearbyPlace(index, e.target.value)}
+                    placeholder="e.g., Andheri Metro Station (2 km), Mumbai Airport (5 km)"
+                    className="flex-1 border rounded px-3 py-2"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => removeNearbyPlace(index)}
+                  >
+                    <FiTrash2 />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" onClick={addNearbyPlace} size="sm" variant="outline">
+                <FiPlus className="mr-2" /> Add Nearby Place
+              </Button>
+            </div>
           </div>
         </div>
 
