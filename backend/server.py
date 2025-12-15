@@ -1293,6 +1293,43 @@ class ExamCourseTag(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class Advertisement(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    
+    # Basic Info
+    name: str  # Ad campaign name
+    title: Optional[str] = None  # Display title
+    description: Optional[str] = None
+    
+    # Ad Content
+    ad_type: str  # banner, popup, sidebar, floating
+    image_url: str  # Ad image
+    link_url: str  # Redirect URL when clicked
+    open_in_new_tab: bool = True
+    
+    # Placement
+    pages: List[str] = []  # Page names where ad should show: home, colleges, college-detail, etc.
+    position: str = "top"  # top, bottom, sidebar, popup
+    
+    # Scheduling
+    start_date: datetime
+    end_date: datetime
+    is_active: bool = True  # Manual active/inactive toggle
+    
+    # Priority & Display
+    priority: int = 0  # Higher priority ads show first
+    max_impressions_per_user: Optional[int] = None  # Limit impressions per user
+    
+    # Analytics
+    impressions: int = 0  # Total times ad was shown
+    clicks: int = 0  # Total times ad was clicked
+    
+    # Metadata
+    created_by: Optional[str] = None  # Admin user ID
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============================================
 # Helper Functions
 # ============================================
