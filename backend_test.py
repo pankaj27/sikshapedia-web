@@ -731,8 +731,8 @@ class NewFeaturesAPITester:
             return False
 
     def run_all_tests(self):
-        """Run all college API tests"""
-        print("🚀 Starting College Module API Tests")
+        """Run all new features API tests"""
+        print("🚀 Starting New Features Backend API Tests")
         print("=" * 60)
         
         # Test API connectivity
@@ -740,44 +740,26 @@ class NewFeaturesAPITester:
             print("❌ API not accessible, stopping tests")
             return False
         
-        print("\n📋 Testing College Endpoints:")
+        # Test Schools API
+        print("\n🏫 Testing Schools API:")
         print("-" * 40)
+        self.test_schools_endpoint()
+        self.test_schools_with_filters()
+        self.test_specific_school()
         
-        # Test main college endpoints
-        self.test_colleges_endpoint()
-        self.test_colleges_with_params()
-        self.test_featured_colleges()
-        
-        # Test specific college (the one mentioned in the review request)
-        print(f"\n🎯 Testing Specific College ({TEST_COLLEGE_ID}):")
+        # Test Universities API
+        print("\n🎓 Testing Universities API:")
         print("-" * 40)
-        self.test_specific_college(TEST_COLLEGE_ID)
-        self.test_college_reviews_endpoint(TEST_COLLEGE_ID)
-        self.test_college_questions_endpoint(TEST_COLLEGE_ID)
+        self.test_universities_endpoint()
+        self.test_universities_with_filters()
+        self.test_specific_university()
         
-        # Test Review System APIs
-        print(f"\n📝 Testing Review System APIs:")
+        # Test News API
+        print("\n📰 Testing News API:")
         print("-" * 40)
-        self.test_review_submission_without_auth(TEST_COLLEGE_ID)
-        self.test_review_data_validation(TEST_COLLEGE_ID)
-        
-        # Test Q&A System APIs
-        print(f"\n❓ Testing Q&A System APIs:")
-        print("-" * 40)
-        self.test_question_submission_without_auth(TEST_COLLEGE_ID)
-        self.test_answer_submission_without_auth()
-        self.test_question_data_validation(TEST_COLLEGE_ID)
-        
-        # Test Application System APIs
-        print(f"\n📋 Testing Application System APIs:")
-        print("-" * 40)
-        self.test_application_submission_without_auth(TEST_COLLEGE_ID)
-        self.test_application_data_validation(TEST_COLLEGE_ID)
-        
-        # Test Edge Cases
-        print(f"\n🔍 Testing Edge Cases:")
-        print("-" * 40)
-        self.test_nonexistent_college_endpoints()
+        self.test_news_endpoint()
+        self.test_news_with_filters()
+        self.test_specific_news_article()
         
         # Summary
         print("\n📊 Test Summary:")
