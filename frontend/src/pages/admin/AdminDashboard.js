@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiBuilding, FiTrendingUp, FiEdit, FiEye, FiSchool } from 'react-icons/fi';
+import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiBuilding, FiTrendingUp, FiEdit, FiEye, FiSchool, FiHome } from 'react-icons/fi';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 
