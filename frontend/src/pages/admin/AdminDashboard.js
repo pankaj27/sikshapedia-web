@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiHome, FiTrendingUp, FiLogOut, FiEdit, FiEye, FiBookOpen } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiBuilding, FiTrendingUp, FiEdit, FiEye, FiSchool } from 'react-icons/fi';
+import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
   const [stats, setStats] = useState({
     total_colleges: 0,
     total_schools: 0,
