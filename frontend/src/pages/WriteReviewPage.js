@@ -1,0 +1,468 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FiStar, FiUpload, FiCheckCircle, FiAward } from 'react-icons/fi';
+import { Button } from '../components/ui/button';
+
+const WriteReviewPage = () => {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    instituteType: '',
+    instituteName: '',
+    course: '',
+    rating: 0,
+    reviewTitle: '',
+    likes: '',
+    dislikes: '',
+    detailedReview: '',
+    facilities: {
+      infrastructure: 0,
+      faculty: 0,
+      placement: 0,
+      hostel: 0,
+      campus: 0
+    },
+    name: '',
+    email: '',
+    graduationYear: '',
+    verificationDocument: null
+  });
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFacilityRating = (facility, rating) => {
+    setFormData(prev => ({
+      ...prev,
+      facilities: { ...prev.facilities, [facility]: rating }
+    }));
+  };
+
+  const renderStars = (rating, onRatingChange) => {
+    return (
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <FiStar
+            key={star}
+            size={24}
+            className={`cursor-pointer transition-colors ${
+              star <= rating ? 'fill-orange-500 text-orange-500' : 'text-gray-300'
+            }`}
+            onClick={() => onRatingChange(star)}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b py-2">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">Write a Review</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-8">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl font-bold mb-3">Write a Review & Earn ₹300*</h1>
+            <p className="text-lg mb-4">Share your college experience and help thousands of students make the right choice</p>
+            <div className="flex items-center justify-center gap-8 text-sm">
+              <div className="flex items-center gap-2">
+                <FiCheckCircle size={20} />
+                <span>100% Verified Reviews</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiAward size={20} />
+                <span>Earn Rewards</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiCheckCircle size={20} />
+                <span>Help Students</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Indicator */}
+      <div className="bg-white border-b py-4">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center justify-between">
+              {['Select Institute', 'Write Review', 'Personal Details', 'Submit'].map((label, idx) => (
+                <div key={idx} className="flex items-center flex-1">
+                  <div className={`flex items-center gap-3 ${idx > 0 ? 'flex-1' : ''}`}>
+                    {idx > 0 && (
+                      <div className={`flex-1 h-1 ${step > idx + 1 ? 'bg-orange-500' : 'bg-gray-300'}`}></div>
+                    )}
+                    <div className={`flex flex-col items-center ${idx > 0 ? 'flex-shrink-0' : ''}`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                        step > idx + 1 ? 'bg-orange-500 text-white' : 
+                        step === idx + 1 ? 'bg-orange-500 text-white' : 
+                        'bg-gray-300 text-gray-600'
+                      }`}>
+                        {step > idx + 1 ? '✓' : idx + 1}
+                      </div>
+                      <span className="text-xs mt-1 font-medium text-gray-700">{label}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Content */}
+      <div className="container mx-auto px-6 py-8">
+        <div className="max-w-4xl mx-auto">
+          {step === 1 && (
+            <div className="bg-white rounded-lg shadow-md p-8">
+              <h2 className="text-2xl font-bold mb-6">Step 1: Select Your Institute</h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Institute Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={formData.instituteType}
+                    onChange={(e) => handleInputChange('instituteType', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  >
+                    <option value="">Select Institute Type</option>
+                    <option value="college">College/University</option>
+                    <option value="school">School</option>
+                    <option value="coaching">Coaching Institute</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Institute Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search and select your institute"
+                    value={formData.instituteName}
+                    onChange={(e) => handleInputChange('instituteName', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Start typing to search from our database</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Course <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., B.Tech Computer Science"
+                    value={formData.course}
+                    onChange={(e) => handleInputChange('course', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                </div>
+
+                <Button
+                  onClick={() => setStep(2)}
+                  disabled={!formData.instituteType || !formData.instituteName || !formData.course}
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 text-lg font-semibold disabled:bg-gray-300"
+                >
+                  Next: Write Review
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="bg-white rounded-lg shadow-md p-8">
+              <h2 className="text-2xl font-bold mb-6">Step 2: Write Your Review</h2>
+              
+              <div className="space-y-6">
+                {/* Overall Rating */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Overall Rating <span className="text-red-500">*</span>
+                  </label>
+                  {renderStars(formData.rating, (rating) => handleInputChange('rating', rating))}
+                </div>
+
+                {/* Review Title */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Review Title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Summarize your experience in one line"
+                    value={formData.reviewTitle}
+                    onChange={(e) => handleInputChange('reviewTitle', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    maxLength="100"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">{formData.reviewTitle.length}/100 characters</p>
+                </div>
+
+                {/* What You Liked */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    What did you like? <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    placeholder="Highlight the positive aspects of your institute"
+                    value={formData.likes}
+                    onChange={(e) => handleInputChange('likes', e.target.value)}
+                    rows="4"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  ></textarea>
+                </div>
+
+                {/* What Needs Improvement */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    What needs improvement?
+                  </label>
+                  <textarea
+                    placeholder="Areas where the institute can improve"
+                    value={formData.dislikes}
+                    onChange={(e) => handleInputChange('dislikes', e.target.value)}
+                    rows="4"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  ></textarea>
+                </div>
+
+                {/* Detailed Review */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Detailed Review <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    placeholder="Share your complete experience - placements, faculty, infrastructure, etc."
+                    value={formData.detailedReview}
+                    onChange={(e) => handleInputChange('detailedReview', e.target.value)}
+                    rows="6"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  ></textarea>
+                  <p className="text-xs text-gray-500 mt-1">Minimum 200 characters required</p>
+                </div>
+
+                {/* Facility Ratings */}
+                <div className="border-t pt-6">
+                  <h3 className="font-bold text-lg mb-4">Rate Different Aspects</h3>
+                  <div className="space-y-4">
+                    {[
+                      { key: 'infrastructure', label: 'Infrastructure' },
+                      { key: 'faculty', label: 'Faculty' },
+                      { key: 'placement', label: 'Placements' },
+                      { key: 'hostel', label: 'Hostel Facilities' },
+                      { key: 'campus', label: 'Campus Life' }
+                    ].map((facility) => (
+                      <div key={facility.key} className="flex items-center justify-between">
+                        <span className="font-medium text-gray-700">{facility.label}</span>
+                        {renderStars(formData.facilities[facility.key], (rating) => handleFacilityRating(facility.key, rating))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setStep(1)}
+                    variant="outline"
+                    className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 py-3"
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    onClick={() => setStep(3)}
+                    disabled={!formData.rating || !formData.reviewTitle || !formData.likes || formData.detailedReview.length < 200}
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 disabled:bg-gray-300"
+                  >
+                    Next: Personal Details
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="bg-white rounded-lg shadow-md p-8">
+              <h2 className="text-2xl font-bold mb-6">Step 3: Personal Details</h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Your Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="your.email@example.com"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">We'll send your reward details to this email</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Year of Graduation <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={formData.graduationYear}
+                    onChange={(e) => handleInputChange('graduationYear', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  >
+                    <option value="">Select Year</option>
+                    {[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018].map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Upload Verification Document (Optional)
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-orange-500 transition-colors cursor-pointer">
+                    <FiUpload className="mx-auto mb-2 text-gray-400" size={32} />
+                    <p className="text-sm text-gray-600 mb-1">Click to upload ID Card, Marksheet, or Degree Certificate</p>
+                    <p className="text-xs text-gray-500">PDF, JPG, PNG up to 5MB</p>
+                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
+                  </div>
+                </div>
+
+                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Note:</strong> Your review will be published after verification. 
+                    Uploading a document helps in faster verification and reward processing.
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setStep(2)}
+                    variant="outline"
+                    className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 py-3"
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    onClick={() => setStep(4)}
+                    disabled={!formData.name || !formData.email || !formData.graduationYear}
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 disabled:bg-gray-300"
+                  >
+                    Submit Review
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="bg-white rounded-lg shadow-md p-8 text-center">
+              <div className="mb-6">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FiCheckCircle className="text-green-600" size={48} />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-3">Review Submitted Successfully!</h2>
+                <p className="text-gray-600 text-lg">
+                  Thank you for sharing your experience. Your review is being verified and will be published shortly.
+                </p>
+              </div>
+
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
+                <h3 className="font-bold text-lg mb-3">What Happens Next?</h3>
+                <div className="space-y-3 text-left">
+                  <div className="flex gap-3">
+                    <span className="text-orange-600 font-bold">1.</span>
+                    <span className="text-gray-700">Our team will verify your review within 48 hours</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="text-orange-600 font-bold">2.</span>
+                    <span className="text-gray-700">You'll receive a verification email once approved</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="text-orange-600 font-bold">3.</span>
+                    <span className="text-gray-700">Your reward of ₹300 will be processed within 7 days</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 justify-center">
+                <Button
+                  onClick={() => setStep(1)}
+                  variant="outline"
+                  className="border-orange-500 text-orange-600 hover:bg-orange-50"
+                >
+                  Write Another Review
+                </Button>
+                <Link to="/">
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    Back to Home
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Benefits Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-8">Why Write a Review?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FiAward size={32} />
+                </div>
+                <h3 className="font-bold mb-2">Earn Rewards</h3>
+                <p className="text-sm opacity-90">Get up to ₹300 for every verified review</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FiCheckCircle size={32} />
+                </div>
+                <h3 className="font-bold mb-2">Help Students</h3>
+                <p className="text-sm opacity-90">Guide future students in making informed decisions</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FiStar size={32} />
+                </div>
+                <h3 className="font-bold mb-2">Shape Education</h3>
+                <p className="text-sm opacity-90">Your feedback helps colleges improve</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WriteReviewPage;
