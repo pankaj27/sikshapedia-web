@@ -181,30 +181,99 @@ const ExamDetailPage = () => {
         </div>
       </div>
 
+      {/* Author Info */}
+      <div className="bg-white border-b py-3">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center gap-3">
+            <img src={exam.contentTeam.profileImage} alt={exam.contentTeam.author} className="w-10 h-10 rounded-full" />
+            <div>
+              <p className="text-sm font-semibold text-gray-800">{exam.contentTeam.author}</p>
+              <p className="text-xs text-gray-600">Updated on - {exam.contentTeam.updatedDate}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
-          <aside className="lg:col-span-1">
+          <aside className="lg:col-span-1 space-y-4">
+            {/* Table of Contents */}
             <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
-              <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Quick Navigation</h3>
-              <nav className="space-y-2">
-                <button
-                  onClick={() => setActiveTab('questionPapers')}
-                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                    activeTab === 'questionPapers' ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  Question Papers
-                </button>
-                <button
-                  onClick={() => setActiveTab('examInfo')}
-                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                    activeTab === 'examInfo' ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  Exam Information
-                </button>
+              <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Table of Contents</h3>
+              <nav className="space-y-1">
+                {exam.tableOfContents.map((item) => (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveSection(item.id);
+                      document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className={`block px-3 py-2 rounded text-sm transition-colors ${
+                      activeSection === item.id ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    {item.title}
+                  </a>
+                ))}
               </nav>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg shadow-md p-4 text-white">
+              <h3 className="font-bold mb-3">Quick Actions</h3>
+              <div className="space-y-2">
+                <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
+                  <FiDownload className="mr-2" size={16} />
+                  Download All Papers
+                </Button>
+                <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
+                  <FiFileText className="mr-2" size={16} />
+                  Ask a Question
+                </Button>
+                <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
+                  <FiInfo className="mr-2" size={16} />
+                  Get More Info
+                </Button>
+              </div>
+            </div>
+
+            {/* Related Videos */}
+            <div className="bg-white rounded-lg shadow-md p-4">
+              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <FiBook />
+                Related Videos
+              </h3>
+              <div className="space-y-3">
+                {exam.videos.map((video, idx) => (
+                  <div key={idx} className="cursor-pointer group">
+                    <div className="relative rounded overflow-hidden">
+                      <img src={video.thumbnail} alt={video.title} className="w-full group-hover:scale-105 transition-transform" />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
+                          <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-orange-600 border-b-8 border-b-transparent ml-1"></div>
+                        </div>
+                      </div>
+                      <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+                        {video.duration}
+                      </span>
+                    </div>
+                    <p className="text-sm font-medium text-gray-800 mt-2 line-clamp-2">{video.title}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* College Predictor Banner */}
+            <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-md p-4 text-white text-center">
+              <FiAward className="mx-auto mb-2" size={32} />
+              <h3 className="font-bold mb-2">College Predictor</h3>
+              <p className="text-sm mb-3 opacity-90">Know your chances of admission</p>
+              <Button className="w-full bg-white text-blue-600 hover:bg-gray-100 text-sm font-semibold">
+                Predict Now
+              </Button>
             </div>
           </aside>
 
