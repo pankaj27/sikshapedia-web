@@ -1509,6 +1509,34 @@ async def create_college(college_data: CollegeCreate, current_user: User = Depen
     await db.colleges.insert_one(college_dict)
     return college
 
+@api_router.put("/colleges/{college_id}", response_model=College)
+async def update_college(college_id: str, college_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update colleges")
+    
+    existing_college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not existing_college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Update the college
+    college_data['total_courses'] = len(college_data.get('courses', []))
+    await db.colleges.update_one({"id": college_id}, {"$set": college_data})
+    
+    # Fetch and return updated college
+    updated_college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    return College(**updated_college)
+
+@api_router.delete("/colleges/{college_id}")
+async def delete_college(college_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can delete colleges")
+    
+    result = await db.colleges.delete_one({"id": college_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    return {"message": "College deleted successfully"}
+
 # ============================================
 # Review Routes
 # ============================================
