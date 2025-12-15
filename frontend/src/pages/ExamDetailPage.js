@@ -1,52 +1,125 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiCalendar, FiClock, FiFileText, FiAward, FiBook, FiDollarSign } from 'react-icons/fi';
-import api from '../api/axios';
+import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 
 const ExamDetailPage = () => {
   const { id } = useParams();
-  const [exam, setExam] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('questionPapers');
 
-  useEffect(() => {
-    fetchExamDetails();
-  }, [id]);
-
-  const fetchExamDetails = async () => {
-    try {
-      const response = await api.get(`/exams/${id}`);
-      setExam(response.data);
-    } catch (error) {
-      console.error('Error fetching exam details:', error);
-    } finally {
-      setLoading(false);
+  // Mock exam data - replace with API call
+  const examData = {
+    'jee-main': {
+      name: 'JEE Main',
+      fullName: 'Joint Entrance Examination Main',
+      description: 'JEE Main is a national level entrance exam for admission to engineering colleges across India.',
+      conductor: 'NTA (National Testing Agency)',
+      
+      questionPapers: {
+        '2025': [
+          { date: '2 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '2 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '3 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '3 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '4 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '4 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '22 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '22 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '23 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '23 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
+        ],
+        '2024': [
+          { date: '4 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '4 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '5 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '5 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '6 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '6 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '27 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '27 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '29 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '29 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
+        ],
+        '2023': [
+          { date: '6 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '6 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '8 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '8 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '10 April Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '10 April Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '24 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '24 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '25 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '25 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
+        ],
+        '2022': [
+          { date: '24 June Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '24 June Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '25 June Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '25 June Shift 2', downloadLink: '#', solutionLink: '#' },
+          { date: '26 June Shift 1', downloadLink: '#', solutionLink: '#' },
+          { date: '26 June Shift 2', downloadLink: '#', solutionLink: '#' },
+        ],
+      },
+      
+      examInfo: {
+        examMode: 'Computer Based Test (CBT)',
+        examDuration: '3 Hours',
+        totalQuestions: '90 Questions',
+        totalMarks: '300 Marks',
+        examLevel: 'National Level',
+        examFrequency: 'Twice a Year (January & April)',
+        eligibility: '10+2 with Physics, Chemistry & Mathematics',
+        officialWebsite: 'jeemain.nta.nic.in'
+      },
+      
+      keyHighlights: [
+        'In JEE Main 2025, 20-25% questions were more higher-order thinking skills (HOTS) and application-based',
+        'In JEE Main 2024, Maths was difficult with an increase in algebra based problems',
+        'In JEE Main 2023, Calculus and Coordinate Geometry questions were tricky'
+      ]
+    },
+    'neet': {
+      name: 'NEET',
+      fullName: 'National Eligibility cum Entrance Test',
+      description: 'NEET is the single entrance exam for admission to medical colleges across India.',
+      conductor: 'NTA (National Testing Agency)',
+      
+      questionPapers: {
+        '2025': [
+          { date: '4 May 2025', downloadLink: '#', solutionLink: '#' },
+        ],
+        '2024': [
+          { date: '5 May 2024', downloadLink: '#', solutionLink: '#' },
+        ],
+        '2023': [
+          { date: '7 May 2023', downloadLink: '#', solutionLink: '#' },
+        ],
+        '2022': [
+          { date: '17 July 2022', downloadLink: '#', solutionLink: '#' },
+        ],
+      },
+      
+      examInfo: {
+        examMode: 'Pen & Paper Based (Offline)',
+        examDuration: '3 Hours 20 Minutes',
+        totalQuestions: '200 Questions',
+        totalMarks: '720 Marks',
+        examLevel: 'National Level',
+        examFrequency: 'Once a Year',
+        eligibility: '10+2 with Physics, Chemistry & Biology',
+        officialWebsite: 'neet.nta.nic.in'
+      },
+      
+      keyHighlights: [
+        'Physics section tends to be calculation-intensive',
+        'Chemistry has a good balance of organic, inorganic and physical chemistry',
+        'Biology questions are mostly NCERT-based'
+      ]
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading exam details...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!exam) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-xl text-gray-600">Exam not found</p>
-          <Link to="/exams">
-            <Button className="mt-4 bg-orange-600 hover:bg-orange-700">Back to Exams</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const exam = examData[id] || examData['jee-main'];
 
   return (
     <div className="min-h-screen bg-gray-50">
