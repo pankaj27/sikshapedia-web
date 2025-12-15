@@ -68,23 +68,23 @@ const WriteReviewPage = () => {
         </div>
       </div>
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-8">
+      {/* Header - Compact */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-6">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-3">Write a Review & Earn ₹300*</h1>
-            <p className="text-lg mb-4">Share your college experience and help thousands of students make the right choice</p>
-            <div className="flex items-center justify-center gap-8 text-sm">
-              <div className="flex items-center gap-2">
-                <FiCheckCircle size={20} />
-                <span>100% Verified Reviews</span>
+            <h1 className="text-3xl font-bold mb-2">Write a Review & Earn ₹300*</h1>
+            <p className="text-base mb-3">Share your experience and help thousands of students</p>
+            <div className="flex items-center justify-center gap-6 text-xs">
+              <div className="flex items-center gap-1.5">
+                <FiCheckCircle size={16} />
+                <span>Verified Reviews</span>
               </div>
-              <div className="flex items-center gap-2">
-                <FiAward size={20} />
+              <div className="flex items-center gap-1.5">
+                <FiAward size={16} />
                 <span>Earn Rewards</span>
               </div>
-              <div className="flex items-center gap-2">
-                <FiCheckCircle size={20} />
+              <div className="flex items-center gap-1.5">
+                <FiCheckCircle size={16} />
                 <span>Help Students</span>
               </div>
             </div>
