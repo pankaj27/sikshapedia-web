@@ -217,10 +217,19 @@ const CollegeForm = () => {
   };
 
   const handleNestedChange = (parent, field, value) => {
-    setFormData({
-      ...formData,
-      [parent]: { ...formData[parent], [field]: value }
-    });
+    // Special handling for state change to update available cities
+    if (parent === 'location' && field === 'state') {
+      setAvailableCities(citiesByState[value] || []);
+      setFormData({
+        ...formData,
+        [parent]: { ...formData[parent], [field]: value, city: '' } // Reset city when state changes
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [parent]: { ...formData[parent], [field]: value }
+      });
+    }
   };
 
   const handleArrayChange = (field, index, value) => {
