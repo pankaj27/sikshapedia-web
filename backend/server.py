@@ -388,26 +388,34 @@ class College(BaseModel):
     type: str  # Government, Private, Deemed
     affiliation: Optional[str] = None
     
-    # Rankings
+    # Recognition & Affiliations
+    recognized_by: List[str] = []  # UGC, AICTE, NBA, NAAC
+    affiliated_to: Optional[str] = None
+    memberships: List[str] = []  # AIU, ACU, IUAC
+    
+    # Rankings - Multiple agencies
     nirf_ranking: Optional[int] = None
     india_today_ranking: Optional[int] = None
     outlook_ranking: Optional[int] = None
     ranking: Optional[Dict] = None
+    rankings: List[Dict] = []  # [{ agency, year, category, rank }]
     
     # Fees & Courses
     average_fees: float
     total_courses: Optional[int] = None
-    courses: Optional[List] = []
+    courses: List[Dict] = []  # [{ name, duration, first_year_fee, total_fee, eligibility, selection_criteria }]
     
-    # Facilities & Infrastructure
-    facilities: List[str] = []
+    # Facilities & Infrastructure - Detailed
+    facilities: List[Dict] = []  # [{ name, description, icon }]
     hostel_info: Optional[Dict] = None
     campus_size: Optional[str] = None
+    campus_images: List[str] = []  # Gallery images
+    campus_video_url: Optional[str] = None
     
     # Contact & Media
     contact_info: Optional[Dict] = None
     contact: Optional[Dict] = None
-    images: List[str] = []
+    images: List[str] = []  # Logo/Banner images
     videos: List[str] = []
     brochure_url: Optional[str] = None
     virtual_tour_url: Optional[str] = None
@@ -416,22 +424,29 @@ class College(BaseModel):
     description: str
     highlights: List[str] = []
     admission_process: Optional[str] = None
-    admission_dates: Optional[Dict] = None
+    admission_dates: List[Dict] = []  # [{ event, date }]
     
     # Accreditations & Approvals
     accreditations: List[str] = []
     accreditation: Optional[List[str]] = []
     approvals: List[str] = []
     
-    # Placements
+    # Placements - Comprehensive
     placement_stats: Optional[List] = []
     placements: Optional[Dict] = None
+    placement: Optional[Dict] = None  # { highest, average, percentage, students_participated, companies_participated, total_offers, top_recruiters }
+    
+    # Cutoff Data
+    cutoff_data: List[Dict] = []  # [{ course, opening_rank, closing_rank_current, closing_rank_previous, year }]
     
     # Faculty
     faculty: Optional[List] = []
     
-    # Scholarships
-    scholarships: Optional[List] = []
+    # Scholarships - Detailed
+    scholarships: List[Dict] = []  # [{ name, description, amount }]
+    
+    # Updates & News
+    updates: List[Dict] = []  # [{ date, title, content }]
     
     # Students
     total_students: Optional[int] = None
