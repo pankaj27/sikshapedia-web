@@ -113,8 +113,8 @@ const Header = () => {
           {/* Select Goal Dropdown - Desktop */}
           <div 
             className="hidden lg:flex relative goal-dropdown"
-            onMouseEnter={() => setGoalDropdownOpen(true)}
-            onMouseLeave={() => setGoalDropdownOpen(false)}
+            onMouseEnter={handleGoalMouseEnter}
+            onMouseLeave={handleGoalMouseLeave}
           >
             <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:text-orange-400 transition-colors">
               <FiTarget size={16} />
@@ -124,9 +124,9 @@ const Header = () => {
             
             {goalDropdownOpen && (
               <div 
-                className="absolute top-full left-0 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-[9999]"
-                onMouseEnter={() => setGoalDropdownOpen(true)}
-                onMouseLeave={() => setGoalDropdownOpen(false)}
+                className="absolute top-full left-0 mt-0 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-[9999]"
+                onMouseEnter={handleGoalMouseEnter}
+                onMouseLeave={handleGoalMouseLeave}
               >
                 {admissionGoals.map((goal, idx) => (
                   <Link
