@@ -214,9 +214,22 @@ const GenericManagement = ({
                     <input
                       type={field.type || 'text'}
                       value={formData[field.key] || ''}
-                      onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Auto-generate slug if this is a name/title field and slug field exists
+                        if ((field.key === 'name' || field.key === 'title') && fields.some(f => f.key === 'slug')) {
+                          setFormData({ 
+                            ...formData, 
+                            [field.key]: value,
+                            slug: (!formData.slug || formData.slug === generateSlug(formData[field.key])) ? generateSlug(value) : formData.slug
+                          });
+                        } else {
+                          setFormData({ ...formData, [field.key]: value });
+                        }
+                      }}
+                      className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 ${field.key === 'slug' ? 'bg-gray-50' : ''}`}
                       required={field.required}
+                      placeholder={field.key === 'slug' ? 'Auto-generated from name/title' : ''}
                     />
                   )}
                 </div>
