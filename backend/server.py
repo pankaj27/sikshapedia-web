@@ -1800,6 +1800,30 @@ async def create_exam(exam_data: ExamCreate, current_user: User = Depends(get_cu
     await db.exams.insert_one(exam_dict)
     return exam
 
+@api_router.put("/exams/{exam_id}", response_model=Exam)
+async def update_exam(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update exams")
+    
+    existing_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+    if not existing_exam:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    await db.exams.update_one({"id": exam_id}, {"$set": exam_data})
+    updated_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+    return Exam(**updated_exam)
+
+@api_router.delete("/exams/{exam_id}")
+async def delete_exam(exam_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can delete exams")
+    
+    result = await db.exams.delete_one({"id": exam_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Exam not found")
+    
+    return {"message": "Exam deleted successfully"}
+
 # ============================================
 # Course Routes
 # ============================================
