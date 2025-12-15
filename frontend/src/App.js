@@ -112,6 +112,8 @@ function App() {
             <Route path="/admin/loans" element={<LoansManagement />} />
             <Route path="/admin/courses" element={<CoursesManagement />} />
             <Route path="/admin/exams" element={<ExamsManagement />} />
+            <Route path="/admin/advertisements" element={<AdvertisementsManagement />} />
+            <Route path="/admin/advertisements/reports" element={<AdvertisementReports />} />
             <Route path="/admin/comments" element={<CommentsManagement />} />
             <Route path="/admin/tag-courses-colleges" element={<TagCoursesColleges />} />
             <Route path="/admin/tag-exams-courses" element={<TagExamsCourses />} />
