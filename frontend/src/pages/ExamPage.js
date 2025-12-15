@@ -289,26 +289,29 @@ const ExamPage = () => {
                       {/* Links & Button - Perfect Sizing */}
                       <div className="flex items-center flex-wrap gap-3">
                         <Link
-                          to="#"
+                          to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}/application-form`}
                           className="text-[11px] text-blue-600 hover:underline font-semibold"
                         >
                           Application Process
                         </Link>
                         <Link
-                          to="#"
+                          to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}/exam-pattern`}
                           className="text-[11px] text-blue-600 hover:underline font-semibold"
                         >
                           Exam Pattern
                         </Link>
                         <Link
-                          to="#"
+                          to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}/question-paper`}
                           className="text-[11px] text-blue-600 hover:underline font-semibold"
                         >
                           Previous Year Paper
                         </Link>
-                        <button className="ml-auto px-4 py-1.5 bg-orange-600 hover:bg-orange-700 text-white text-[11px] font-semibold rounded transition-colors">
+                        <Link
+                          to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}/application-form`}
+                          className="ml-auto px-4 py-1.5 bg-orange-600 hover:bg-orange-700 text-white text-[11px] font-semibold rounded transition-colors"
+                        >
                           Apply Now
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
