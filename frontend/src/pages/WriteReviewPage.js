@@ -218,10 +218,10 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 2: Write Your Review</h2>
               
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Overall Rating */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Overall Rating <span className="text-red-500">*</span>
                   </label>
                   {renderStars(formData.rating, (rating) => handleInputChange('rating', rating))}
@@ -229,7 +229,7 @@ const WriteReviewPage = () => {
 
                 {/* Review Title */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Review Title <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -237,53 +237,53 @@ const WriteReviewPage = () => {
                     placeholder="Summarize your experience in one line"
                     value={formData.reviewTitle}
                     onChange={(e) => handleInputChange('reviewTitle', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                     maxLength="100"
                   />
-                  <p className="text-xs text-gray-500 mt-1">{formData.reviewTitle.length}/100 characters</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{formData.reviewTitle.length}/100 characters</p>
                 </div>
 
                 {/* What You Liked */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     What did you like? <span className="text-red-500">*</span>
                   </label>
                   <textarea
-                    placeholder="Highlight the positive aspects of your institute"
+                    placeholder="Highlight the positive aspects"
                     value={formData.likes}
                     onChange={(e) => handleInputChange('likes', e.target.value)}
-                    rows="4"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    rows="3"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   ></textarea>
                 </div>
 
                 {/* What Needs Improvement */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     What needs improvement?
                   </label>
                   <textarea
-                    placeholder="Areas where the institute can improve"
+                    placeholder="Areas for improvement"
                     value={formData.dislikes}
                     onChange={(e) => handleInputChange('dislikes', e.target.value)}
-                    rows="4"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    rows="3"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   ></textarea>
                 </div>
 
                 {/* Detailed Review */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Detailed Review <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     placeholder="Share your complete experience - placements, faculty, infrastructure, etc."
                     value={formData.detailedReview}
                     onChange={(e) => handleInputChange('detailedReview', e.target.value)}
-                    rows="6"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    rows="4"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   ></textarea>
-                  <p className="text-xs text-gray-500 mt-1">Minimum 200 characters required</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Minimum 200 characters required</p>
                 </div>
 
                 {/* Facility Ratings */}
