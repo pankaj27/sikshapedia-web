@@ -142,6 +142,11 @@ code {
     animation: fadeInUp 0.5s ease-in-out;
 }
 
+/* Hide Emergent Badge */
+#emergent-badge {
+    display: none !important;
+}
+
 /* Global Thin Scrollbar for Entire Website */
 * {
     scrollbar-width: thin;
