@@ -71,10 +71,20 @@ const CollegeForm = () => {
   const [formData, setFormData] = useState(getDefaultFormData());
 
   useEffect(() => {
+    fetchRecognitions();
     if (id) {
       fetchCollege();
     }
   }, [id]);
+
+  const fetchRecognitions = async () => {
+    try {
+      const response = await api.get('/recognitions');
+      setRecognitions(response.data);
+    } catch (error) {
+      console.error('Error fetching recognitions:', error);
+    }
+  };
 
   const fetchCollege = async () => {
     setLoading(true);
