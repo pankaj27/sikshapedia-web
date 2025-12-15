@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button';
 const ExamDetailPage = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('questionPapers');
+  const [activeSection, setActiveSection] = useState('overview');
 
   // Mock exam data - replace with API call
   const examData = {
