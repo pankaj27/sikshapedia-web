@@ -287,9 +287,9 @@ const WriteReviewPage = () => {
                 </div>
 
                 {/* Facility Ratings */}
-                <div className="border-t pt-6">
-                  <h3 className="font-bold text-lg mb-4">Rate Different Aspects</h3>
-                  <div className="space-y-4">
+                <div className="border-t pt-4">
+                  <h3 className="font-bold text-base mb-3">Rate Different Aspects</h3>
+                  <div className="space-y-2.5">
                     {[
                       { key: 'infrastructure', label: 'Infrastructure' },
                       { key: 'faculty', label: 'Faculty' },
@@ -298,25 +298,25 @@ const WriteReviewPage = () => {
                       { key: 'campus', label: 'Campus Life' }
                     ].map((facility) => (
                       <div key={facility.key} className="flex items-center justify-between">
-                        <span className="font-medium text-gray-700">{facility.label}</span>
+                        <span className="font-medium text-sm text-gray-700">{facility.label}</span>
                         {renderStars(formData.facilities[facility.key], (rating) => handleFacilityRating(facility.key, rating))}
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 pt-2">
                   <Button
                     onClick={() => setStep(1)}
                     variant="outline"
-                    className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 py-3"
+                    className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 h-10 text-sm"
                   >
                     Back
                   </Button>
                   <Button
                     onClick={() => setStep(3)}
                     disabled={!formData.rating || !formData.reviewTitle || !formData.likes || formData.detailedReview.length < 200}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 disabled:bg-gray-300"
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm disabled:bg-gray-300"
                   >
                     Next: Personal Details
                   </Button>
