@@ -261,8 +261,8 @@ const Header = () => {
             {/* All Courses Dropdown */}
             <div 
               className="relative z-[1001]"
-              onMouseEnter={() => setAllCoursesDropdownOpen(true)}
-              onMouseLeave={() => setAllCoursesDropdownOpen(false)}
+              onMouseEnter={handleAllCoursesMouseEnter}
+              onMouseLeave={handleAllCoursesMouseLeave}
             >
               <button className="flex items-center gap-1 text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors">
                 All Courses
@@ -271,9 +271,9 @@ const Header = () => {
               
               {allCoursesDropdownOpen && (
                 <div 
-                  className="absolute top-full left-0 w-80 bg-white rounded-lg shadow-2xl py-3 z-[9999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto"
-                  onMouseEnter={() => setAllCoursesDropdownOpen(true)}
-                  onMouseLeave={() => setAllCoursesDropdownOpen(false)}
+                  className="absolute top-full left-0 mt-0 w-80 bg-white rounded-lg shadow-2xl py-3 z-[9999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto"
+                  onMouseEnter={handleAllCoursesMouseEnter}
+                  onMouseLeave={handleAllCoursesMouseLeave}
                 >
                   <Link to="/courses" className="block px-4 py-2.5 text-base font-bold text-orange-600 hover:bg-orange-50 transition-colors">
                     📚 View All Courses
