@@ -110,19 +110,29 @@ const SchoolForm = () => {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => {
+                      const name = e.target.value;
+                      setFormData({ 
+                        ...formData, 
+                        name,
+                        slug: !formData.slug || formData.slug === generateSlug(formData.name) ? generateSlug(name) : formData.slug
+                      });
+                    }}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Slug (URL) *</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Slug (URL) *
+                    <span className="text-xs text-gray-500 ml-2">(Auto-generated, but editable)</span>
+                  </label>
                   <input
                     type="text"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-gray-50"
                     placeholder="school-name-city"
                     required
                   />
