@@ -337,7 +337,7 @@ const CollegeForm = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{id ? 'Edit College' : 'Add New College'}</h1>
+        <h1 className="text-3xl font-bold">{id ? 'Edit Institution' : 'Add New Institution'}</h1>
         <Button variant="outline" onClick={() => navigate('/admin/colleges')}>
           <FiX className="mr-2" /> Cancel
         </Button>
