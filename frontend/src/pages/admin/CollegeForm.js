@@ -42,6 +42,10 @@ const CollegeForm = () => {
     highlights: [],
     admission_process: '',
     admission_dates: [],
+    seo_intro: '',
+    seo_full_content: '',
+    seo_video_url: '',
+    seo_faqs: [],
     accreditations: [],
     approvals: [],
     placement: {
