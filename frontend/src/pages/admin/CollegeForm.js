@@ -621,24 +621,37 @@ const CollegeForm = () => {
           <h2 className="text-xl font-bold mb-4">Location</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">City *</label>
-              <input
-                type="text"
-                value={formData.location.city}
-                onChange={(e) => handleNestedChange('location', 'city', e.target.value)}
-                required
-                className="w-full border rounded px-3 py-2"
-              />
-            </div>
-            <div>
               <label className="block text-sm font-medium mb-1">State *</label>
-              <input
-                type="text"
+              <select
                 value={formData.location.state}
                 onChange={(e) => handleNestedChange('location', 'state', e.target.value)}
                 required
                 className="w-full border rounded px-3 py-2"
-              />
+              >
+                <option value="">Select State</option>
+                {indianStates.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">City *</label>
+              <select
+                value={formData.location.city}
+                onChange={(e) => handleNestedChange('location', 'city', e.target.value)}
+                required
+                disabled={!formData.location.state}
+                className="w-full border rounded px-3 py-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              >
+                <option value="">Select City</option>
+                {availableCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="col-span-2">
               <label className="block text-sm font-medium mb-1">Full Address</label>
