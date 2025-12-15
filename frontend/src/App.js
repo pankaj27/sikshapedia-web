@@ -106,6 +106,12 @@ function App() {
             <Route path="/admin/tag-courses-colleges" element={<TagCoursesColleges />} />
             <Route path="/admin/tag-exams-courses" element={<TagExamsCourses />} />
             <Route path="/admin/users" element={<UsersManagement />} />
+            <Route path="/admin/blogs" element={<BlogsManagement />} />
+            <Route path="/admin/banners" element={<BannersManagement />} />
+            <Route path="/admin/testimonials" element={<TestimonialsManagement />} />
+            <Route path="/admin/faqs" element={<FAQsManagement />} />
+            <Route path="/admin/cities" element={<CitiesManagement />} />
+            <Route path="/admin/contact-inquiries" element={<ContactInquiriesManagement />} />
 
             {/* Public Routes - With Layout */}
             <Route path="/*" element={
