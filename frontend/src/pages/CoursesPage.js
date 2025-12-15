@@ -184,6 +184,17 @@ const CoursesPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b py-2">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">Courses</span>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section with Background - More Compact */}
       <section className="relative h-[240px] bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop)' }}>
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-900/70"></div>
