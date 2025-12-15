@@ -2801,6 +2801,151 @@ async def get_stats():
         "total_study_abroad": total_study_abroad
     }
 
+# ============================================
+# Schools Routes
+# ============================================
+
+@api_router.get("/schools", response_model=List[School])
+async def get_schools(
+    city: Optional[str] = None,
+    state: Optional[str] = None,
+    board: Optional[str] = None,
+    school_type: Optional[str] = None,
+    medium: Optional[str] = None,
+    sort: str = "rating",
+    limit: int = Query(50, ge=1, le=100),
+    skip: int = Query(0, ge=0)
+):
+    """Get all schools with optional filters"""
+    query = {}
+    if city:
+        query["city"] = city
+    if state:
+        query["state"] = state
+    if board:
+        query["board"] = board
+    if school_type:
+        query["school_type"] = school_type
+    if medium:
+        query["medium"] = medium
+    
+    sort_field = "rating" if sort == "rating" else "name"
+    sort_order = -1 if sort == "rating" else 1
+    
+    schools = await db.schools.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
+    return schools
+
+@api_router.get("/schools/{school_id}", response_model=School)
+async def get_school(school_id: str):
+    """Get a specific school by ID"""
+    school = await db.schools.find_one({"id": school_id}, {"_id": 0})
+    if not school:
+        raise HTTPException(status_code=404, detail="School not found")
+    return School(**school)
+
+@api_router.post("/schools", response_model=School)
+async def create_school(school: School):
+    """Create a new school (admin only)"""
+    school_dict = school.model_dump()
+    await db.schools.insert_one(school_dict)
+    return school
+
+# ============================================
+# Universities Routes
+# ============================================
+
+@api_router.get("/universities", response_model=List[University])
+async def get_universities(
+    city: Optional[str] = None,
+    state: Optional[str] = None,
+    university_type: Optional[str] = None,
+    accreditation: Optional[str] = None,
+    stream: Optional[str] = None,
+    sort: str = "rating",
+    limit: int = Query(50, ge=1, le=100),
+    skip: int = Query(0, ge=0)
+):
+    """Get all universities with optional filters"""
+    query = {}
+    if city:
+        query["city"] = city
+    if state:
+        query["state"] = state
+    if university_type:
+        query["university_type"] = university_type
+    if accreditation:
+        query["accreditation"] = accreditation
+    if stream:
+        query["streams"] = stream
+    
+    sort_field = "rating" if sort == "rating" else "nirf_rank" if sort == "ranking" else "name"
+    sort_order = -1 if sort == "rating" else 1
+    
+    universities = await db.universities.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
+    return universities
+
+@api_router.get("/universities/{university_id}", response_model=University)
+async def get_university(university_id: str):
+    """Get a specific university by ID"""
+    university = await db.universities.find_one({"id": university_id}, {"_id": 0})
+    if not university:
+        raise HTTPException(status_code=404, detail="University not found")
+    return University(**university)
+
+@api_router.post("/universities", response_model=University)
+async def create_university(university: University):
+    """Create a new university (admin only)"""
+    university_dict = university.model_dump()
+    await db.universities.insert_one(university_dict)
+    return university
+
+# ============================================
+# News Routes
+# ============================================
+
+@api_router.get("/news", response_model=List[News])
+async def get_news(
+    category: Optional[str] = None,
+    featured: Optional[bool] = None,
+    tag: Optional[str] = None,
+    sort: str = "latest",
+    limit: int = Query(20, ge=1, le=50),
+    skip: int = Query(0, ge=0)
+):
+    """Get all news articles with optional filters"""
+    query = {"published": True}
+    if category:
+        query["category"] = category
+    if featured is not None:
+        query["featured"] = featured
+    if tag:
+        query["tags"] = tag
+    
+    sort_field = "published_at" if sort == "latest" else "views"
+    sort_order = -1
+    
+    news = await db.news.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
+    return news
+
+@api_router.get("/news/{news_id}", response_model=News)
+async def get_news_article(news_id: str):
+    """Get a specific news article by ID"""
+    news = await db.news.find_one({"id": news_id}, {"_id": 0})
+    if not news:
+        raise HTTPException(status_code=404, detail="News article not found")
+    
+    # Increment view count
+    await db.news.update_one({"id": news_id}, {"$inc": {"views": 1}})
+    
+    return News(**news)
+
+@api_router.post("/news", response_model=News)
+async def create_news(news: News):
+    """Create a new news article (admin only)"""
+    news_dict = news.model_dump()
+    await db.news.insert_one(news_dict)
+    return news
+
 # Include the router in the main app
 app.include_router(api_router)
 
