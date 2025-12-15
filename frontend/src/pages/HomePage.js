@@ -123,7 +123,7 @@ const CollegeDuniaHome = () => {
       <OrganizationSchema />
       <WebsiteSchema />
       {/* Hero Section with Background Slider - Compact */}
-      <section className="relative h-[400px] overflow-hidden -mt-20">
+      <section className="relative h-[460px] overflow-hidden -mt-20">
         <Swiper
           modules={[Pagination, Autoplay]}
           pagination={{ clickable: true }}
