@@ -398,7 +398,7 @@ class College(BaseModel):
     india_today_ranking: Optional[int] = None
     outlook_ranking: Optional[int] = None
     ranking: Optional[Dict] = None
-    rankings: List[Dict] = []  # [{ agency, year, category, rank }]
+    rankings: List = []  # Can be List[Dict] or empty
     
     # Fees & Courses
     average_fees: float
