@@ -14,6 +14,8 @@ const CollegeForm = () => {
   const [affiliations, setAffiliations] = useState([]);
   const [accreditationsList, setAccreditationsList] = useState([]);
   const [accreditationLevelsList, setAccreditationLevelsList] = useState([]);
+  const [rankingsList, setRankingsList] = useState([]);
+  const [rankCategoriesList, setRankCategoriesList] = useState([]);
   
   // Indian States and Cities
   const indianStates = [
@@ -146,6 +148,8 @@ const CollegeForm = () => {
     fetchAffiliations();
     fetchAccreditations();
     fetchAccreditationLevels();
+    fetchRankings();
+    fetchRankCategories();
     if (id) {
       fetchCollege();
     }
@@ -184,6 +188,24 @@ const CollegeForm = () => {
       setAccreditationLevelsList(response.data);
     } catch (error) {
       console.error('Error fetching accreditation levels:', error);
+    }
+  };
+
+  const fetchRankings = async () => {
+    try {
+      const response = await api.get('/rankings?limit=100');
+      setRankingsList(response.data);
+    } catch (error) {
+      console.error('Error fetching rankings:', error);
+    }
+  };
+
+  const fetchRankCategories = async () => {
+    try {
+      const response = await api.get('/rank-categories?limit=100');
+      setRankCategoriesList(response.data);
+    } catch (error) {
+      console.error('Error fetching rank categories:', error);
     }
   };
 
