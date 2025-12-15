@@ -3838,6 +3838,27 @@ async def delete_accreditation(accreditation_id: str):
     await db.accreditations.delete_one({"id": accreditation_id})
     return {"success": True}
 
+# Accreditation Levels
+@api_router.get("/accreditation-levels")
+async def get_accreditation_levels(limit: int = 100):
+    levels = await db.accreditation_levels.find({}, {"_id": 0}).limit(limit).to_list(limit)
+    return levels
+
+@api_router.post("/accreditation-levels", response_model=AccreditationLevel)
+async def create_accreditation_level(level: AccreditationLevel):
+    await db.accreditation_levels.insert_one(level.model_dump())
+    return level
+
+@api_router.put("/accreditation-levels/{level_id}")
+async def update_accreditation_level(level_id: str, level: AccreditationLevel):
+    await db.accreditation_levels.update_one({"id": level_id}, {"$set": level.model_dump()})
+    return level
+
+@api_router.delete("/accreditation-levels/{level_id}")
+async def delete_accreditation_level(level_id: str):
+    await db.accreditation_levels.delete_one({"id": level_id})
+    return {"success": True}
+
 # Rankings
 @api_router.get("/rankings")
 async def get_rankings(limit: int = 100):
