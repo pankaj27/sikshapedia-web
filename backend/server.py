@@ -1835,7 +1835,7 @@ async def get_saved_colleges(current_user: User = Depends(get_current_user)):
 # Exam Routes
 # ============================================
 
-@api_router.get("/exams")
+@api_router.get("/exams", response_model=List[Exam])
 async def get_exams(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
@@ -1867,8 +1867,6 @@ async def get_exams(
     for exam in exams:
         if isinstance(exam.get('created_at'), str):
             exam['created_at'] = datetime.fromisoformat(exam['created_at'])
-        elif isinstance(exam.get('created_at'), datetime):
-            exam['created_at'] = exam['created_at'].isoformat()
     
     return exams
 
