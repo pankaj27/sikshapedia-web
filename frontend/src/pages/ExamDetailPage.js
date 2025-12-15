@@ -280,24 +280,11 @@ const ExamDetailPage = () => {
           </div>
         </div>
       </div>
-                  <span className="text-gray-600">Total Marks:</span>
-                  <span className="font-semibold">{exam.total_marks}</span>
-                </div>
-                {exam.exam_pattern.sections && (
-                  <div>
-                    <p className="font-semibold mb-2">Sections:</p>
-                    <ul className="list-disc list-inside text-gray-700">
-                      {exam.exam_pattern.sections.map((section, idx) => (
-                        <li key={idx}>{section}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
+    </div>
+  );
+};
 
-            {/* Eligibility */}
-            <div className="bg-white rounded-lg shadow p-6">
+export default ExamDetailPage;
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                 <FiAward className="text-orange-600" /> Eligibility Criteria
               </h2>
