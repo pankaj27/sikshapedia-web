@@ -146,7 +146,7 @@ const AddCollege = () => {
     setFormData(prev => ({
       ...prev,
       name,
-      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      slug: generateSlug(name)
     }));
   };
 
