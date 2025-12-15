@@ -92,8 +92,14 @@ const CollegeListingPage = () => {
       course: '',
       exam: '',
       rating: '',
+      subStream: '',
+      stream: '',
+      degree: '',
+      specialization: '',
+      programType: '',
     });
     setSearchParams(new URLSearchParams());
+    setActiveFilterDropdown(null);
   };
 
   const paginatedColleges = colleges.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
