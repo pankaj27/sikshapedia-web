@@ -98,6 +98,7 @@ const AdminLayout = ({ children }) => {
       submenu: [
         { title: 'Reviews', path: '/admin/reviews', icon: FiMessageSquare },
         { title: 'Comments', path: '/admin/comments', icon: FiMessageSquare },
+    { title: 'Advertisements', path: '/admin/advertisements', icon: FiDollarSign },
         { title: 'Contact Inquiries', path: '/admin/contact-inquiries', icon: FiMessageSquare },
         { title: 'Counseling Requests', path: '/admin/counseling-sessions', icon: FiMessageSquare },
       ]
