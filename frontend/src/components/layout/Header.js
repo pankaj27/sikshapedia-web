@@ -219,7 +219,7 @@ const Header = () => {
         </div>
 
       {/* Course Categories Bar - Desktop with Edge-to-Edge Border and Background */}
-      <div className="hidden lg:block w-screen border-t border-white/20 bg-black/40 -mx-6">
+      <div className="hidden lg:block w-screen border-t border-white/20 bg-black/40 -mx-6 relative z-[1000]">
         <div>
           <div className="flex items-center gap-6 py-2 pl-6 pr-6 overflow-x-auto" spellCheck="false">
             {/* All Courses Dropdown */}
