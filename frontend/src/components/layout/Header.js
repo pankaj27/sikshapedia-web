@@ -12,8 +12,6 @@ const Header = () => {
   const [allCoursesDropdownOpen, setAllCoursesDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGoal, setSelectedGoal] = useState('Admission Goal');
-  const exploreButtonRef = useRef(null);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
   
   // Timeout refs for hover delay
   const goalTimeoutRef = useRef(null);
