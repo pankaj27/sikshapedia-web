@@ -127,7 +127,17 @@ const CollegeForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    
+    // Auto-generate slug when name changes (only if slug hasn't been manually edited)
+    if (name === 'name' && (!formData.slug || formData.slug === generateSlug(formData.name))) {
+      setFormData({ 
+        ...formData, 
+        [name]: value,
+        slug: generateSlug(value)
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleNestedChange = (parent, field, value) => {
