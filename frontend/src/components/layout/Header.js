@@ -149,7 +149,7 @@ const Header = () => {
           {/* Right Side Actions - Desktop */}
           <div className="hidden lg:flex items-center gap-3 relative">
             {/* Write Review Button - White Color */}
-            <Link to="/colleges">
+            <Link to="/write-review">
               <button className="flex items-center gap-2 px-3 py-1 border-2 border-white/30 text-white hover:bg-white/10 hover:border-white rounded-lg transition-colors">
                 <FiEdit3 size={16} />
                 <div className="text-left leading-tight">
