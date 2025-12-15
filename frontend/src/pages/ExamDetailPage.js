@@ -166,21 +166,6 @@ const ExamDetailPage = () => {
         </div>
       </div>
 
-      {/* Key Highlights */}
-      <div className="bg-blue-50 border-t border-b border-blue-200 py-4">
-        <div className="container mx-auto px-6">
-          <h3 className="font-bold text-gray-800 mb-2">Key Summary</h3>
-          <ul className="space-y-1 text-sm text-gray-700">
-            {exam.keyHighlights.map((highlight, idx) => (
-              <li key={idx} className="flex items-start gap-2">
-                <span className="text-orange-600 mt-1">•</span>
-                <span>{highlight}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
       {/* Exam Menu */}
       <div className="bg-white border-b shadow-sm sticky top-16 z-30">
         <div className="container mx-auto px-6">
