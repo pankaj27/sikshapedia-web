@@ -3,6 +3,7 @@ import { FiPlus, FiEdit, FiTrash2, FiSearch, FiCheck, FiX } from 'react-icons/fi
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
+import { generateSlug } from '../../utils/slugify';
 
 const GenericManagement = ({ 
   title, 
