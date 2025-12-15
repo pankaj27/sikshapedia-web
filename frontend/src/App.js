@@ -75,6 +75,10 @@ import CoursesManagement from './pages/admin/CoursesManagement';
 import ExamsManagement from './pages/admin/ExamsManagement';
 import AdvertisementsManagement from './pages/admin/AdvertisementsManagement';
 import AdvertisementReports from './pages/admin/AdvertisementReports';
+import CourseDetailForm from './pages/admin/CourseDetailForm';
+import CoursesDetailManagement from './pages/admin/CoursesDetailManagement';
+import ExamDetailForm from './pages/admin/ExamDetailForm';
+import ExamsDetailManagement from './pages/admin/ExamsDetailManagement';
 import './App.css';
 
 function App() {
