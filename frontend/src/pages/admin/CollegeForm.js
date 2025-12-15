@@ -502,6 +502,104 @@ const CollegeForm = () => {
           </div>
         </div>
 
+        {/* SEO Content Section */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">SEO Content (Detail Page Content)</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            This content appears in the expandable "Read More" section on the college detail page for better SEO.
+          </p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">SEO Intro (Short Preview)</label>
+              <p className="text-xs text-gray-500 mb-2">
+                This is the short introduction (3-4 lines) that appears before the "Read More" button
+              </p>
+              <textarea
+                name="seo_intro"
+                value={formData.seo_intro}
+                onChange={handleChange}
+                rows="3"
+                placeholder="e.g., [College Name] is a premier engineering institution established in [Year]. As per the data, the college is one of the preferred institutions for students..."
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">SEO Full Content</label>
+              <p className="text-xs text-gray-500 mb-2">
+                Detailed content that appears after clicking "Read More" (multiple paragraphs with HTML formatting)
+              </p>
+              <textarea
+                name="seo_full_content"
+                value={formData.seo_full_content}
+                onChange={handleChange}
+                rows="10"
+                placeholder="Add multiple paragraphs with detailed information about the college. You can include HTML tags like <strong>, <p>, <ul>, <li>, etc."
+                className="w-full border rounded px-3 py-2 font-mono text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">SEO Video URL</label>
+              <p className="text-xs text-gray-500 mb-2">
+                YouTube or video embed URL for the college overview video
+              </p>
+              <input
+                type="url"
+                name="seo_video_url"
+                value={formData.seo_video_url}
+                onChange={handleChange}
+                placeholder="https://youtube.com/embed/..."
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">SEO FAQs</label>
+              <p className="text-xs text-gray-500 mb-2">
+                Frequently asked questions that appear in the SEO content section
+              </p>
+              {formData.seo_faqs.map((faq, index) => (
+                <div key={index} className="border rounded p-4 mb-4 bg-gray-50">
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1">Question {index + 1}</label>
+                      <input
+                        type="text"
+                        placeholder="e.g., What are the scholarships offered?"
+                        value={faq.question}
+                        onChange={(e) => updateFAQ(index, 'question', e.target.value)}
+                        className="w-full border rounded px-3 py-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">Answer</label>
+                      <textarea
+                        placeholder="e.g., Various merit and need-based scholarships are available..."
+                        value={faq.answer}
+                        onChange={(e) => updateFAQ(index, 'answer', e.target.value)}
+                        className="w-full border rounded px-3 py-2"
+                        rows="3"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => removeFAQ(index)}
+                    className="mt-2"
+                  >
+                    <FiTrash2 className="mr-2" /> Remove FAQ
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" onClick={addFAQ} size="sm">
+                <FiPlus className="mr-2" /> Add FAQ
+              </Button>
+            </div>
+          </div>
+        </div>
+
         {/* Recognition & Accreditation */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Recognition & Accreditation</h2>
