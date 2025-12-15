@@ -151,8 +151,8 @@ const CollegeForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Auto-generate slug when name changes (only if slug hasn't been manually edited)
-    if (name === 'name' && (!formData.slug || formData.slug === generateSlug(formData.name))) {
+    // Auto-generate slug when name changes
+    if (name === 'name') {
       setFormData({ 
         ...formData, 
         [name]: value,
