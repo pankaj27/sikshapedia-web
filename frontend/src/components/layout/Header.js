@@ -256,7 +256,7 @@ const Header = () => {
               
               {allCoursesDropdownOpen && (
                 <div 
-                  className="fixed top-[120px] left-6 w-80 bg-white rounded-lg shadow-2xl py-3 z-[99999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto"
+                  className="fixed top-[120px] left-6 w-80 bg-white rounded-lg shadow-2xl py-3 z-[99999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto thin-scrollbar"
                   onMouseEnter={handleAllCoursesMouseEnter}
                   onMouseLeave={handleAllCoursesMouseLeave}
                 >
