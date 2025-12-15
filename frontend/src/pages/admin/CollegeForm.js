@@ -414,14 +414,18 @@ const CollegeForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Established Year *</label>
-              <input
-                type="number"
+              <select
                 name="established_year"
                 value={formData.established_year}
                 onChange={handleChange}
                 required
                 className="w-full border rounded px-3 py-2"
-              />
+              >
+                <option value="">Select Year</option>
+                {Array.from({ length: 201 }, (_, i) => 2100 - i).map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Established (Text)</label>
