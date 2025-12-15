@@ -3,189 +3,175 @@
     "test": "API Root",
     "status": "PASS",
     "details": "API accessible, message: Sikshapedia API - College Discovery Platform",
-    "timestamp": "2025-12-13T06:09:57.954466",
+    "timestamp": "2025-12-15T06:01:37.890029",
     "response_data": null
   },
   {
-    "test": "GET /colleges",
+    "test": "GET /schools",
     "status": "PASS",
-    "details": "Retrieved 10 colleges",
-    "timestamp": "2025-12-13T06:09:57.966523",
+    "details": "Retrieved 2 schools",
+    "timestamp": "2025-12-15T06:01:37.906320",
     "response_data": null
   },
   {
-    "test": "College Structure",
+    "test": "School Structure",
     "status": "PASS",
-    "details": "All required fields present in college data",
-    "timestamp": "2025-12-13T06:09:57.966546",
+    "details": "All required fields present in school data",
+    "timestamp": "2025-12-15T06:01:37.906344",
     "response_data": null
   },
   {
-    "test": "Ranking Field",
+    "test": "Schools Filter - Filter by CBSE board",
     "status": "PASS",
-    "details": "Ranking is properly structured as object: {'nirf': 3, 'world': 172}",
-    "timestamp": "2025-12-13T06:09:57.966553",
+    "details": "Retrieved 1 results",
+    "timestamp": "2025-12-15T06:01:37.919719",
     "response_data": null
   },
   {
-    "test": "Colleges Query - Search for IIT colleges",
+    "test": "Schools Filter - Filter by Mumbai city",
     "status": "PASS",
-    "details": "Retrieved 3 results",
-    "timestamp": "2025-12-13T06:09:57.975044",
+    "details": "Retrieved 1 results",
+    "timestamp": "2025-12-15T06:01:37.969658",
     "response_data": null
   },
   {
-    "test": "Colleges Query - Filter by Mumbai city",
+    "test": "Schools Filter - Filter by Delhi state",
+    "status": "PASS",
+    "details": "Retrieved 1 results",
+    "timestamp": "2025-12-15T06:01:37.978607",
+    "response_data": null
+  },
+  {
+    "test": "Schools Filter - Filter by Private school type",
     "status": "PASS",
     "details": "Retrieved 2 results",
-    "timestamp": "2025-12-13T06:09:57.985877",
+    "timestamp": "2025-12-15T06:01:37.987683",
     "response_data": null
   },
   {
-    "test": "Colleges Query - Filter by Maharashtra state",
+    "test": "Schools Filter - Filter by English medium",
     "status": "PASS",
     "details": "Retrieved 2 results",
-    "timestamp": "2025-12-13T06:09:57.994121",
+    "timestamp": "2025-12-15T06:01:37.997433",
     "response_data": null
   },
   {
-    "test": "Colleges Query - Filter by Government type",
+    "test": "Schools Filter - Sort by rating",
     "status": "PASS",
-    "details": "Retrieved 7 results",
-    "timestamp": "2025-12-13T06:09:58.002621",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.009057",
     "response_data": null
   },
   {
-    "test": "Colleges Query - Filter by fees range",
+    "test": "GET /schools/a94702cd-723e-4075-bca9-2f222f5e2009",
     "status": "PASS",
-    "details": "Retrieved 7 results",
-    "timestamp": "2025-12-13T06:09:58.010746",
+    "details": "Retrieved school: St. Xavier's School, Mumbai",
+    "timestamp": "2025-12-15T06:01:38.109640",
     "response_data": null
   },
   {
-    "test": "Colleges Query - Sort by NIRF ranking",
+    "test": "GET /universities",
     "status": "PASS",
-    "details": "Retrieved 10 results",
-    "timestamp": "2025-12-13T06:09:58.021367",
+    "details": "Retrieved 2 universities",
+    "timestamp": "2025-12-15T06:01:38.118182",
     "response_data": null
   },
   {
-    "test": "GET /colleges/featured",
+    "test": "University Structure",
     "status": "PASS",
-    "details": "Retrieved 8 featured colleges",
-    "timestamp": "2025-12-13T06:09:58.028531",
+    "details": "All required fields present in university data",
+    "timestamp": "2025-12-15T06:01:38.118206",
     "response_data": null
   },
   {
-    "test": "Featured College 1 Ranking",
+    "test": "Universities Filter - Filter by Central University type",
     "status": "PASS",
-    "details": "Proper ranking structure: {'nirf': 11, 'world': 400}",
-    "timestamp": "2025-12-13T06:09:58.028553",
+    "details": "Retrieved 1 results",
+    "timestamp": "2025-12-15T06:01:38.166726",
     "response_data": null
   },
   {
-    "test": "Featured College 2 Ranking",
+    "test": "Universities Filter - Filter by NAAC A++ accreditation",
     "status": "PASS",
-    "details": "Proper ranking structure: {'nirf': 1, 'world': 150}",
-    "timestamp": "2025-12-13T06:09:58.028559",
+    "details": "Retrieved 1 results",
+    "timestamp": "2025-12-15T06:01:38.216661",
     "response_data": null
   },
   {
-    "test": "Featured College 3 Ranking",
+    "test": "Universities Filter - Filter by Arts stream",
     "status": "PASS",
-    "details": "Proper ranking structure: {'nirf': 15, 'world': 600}",
-    "timestamp": "2025-12-13T06:09:58.028563",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.226016",
     "response_data": null
   },
   {
-    "test": "GET /colleges/iit-bombay-002",
+    "test": "Universities Filter - Sort by rating",
     "status": "PASS",
-    "details": "Retrieved college: IIT Bombay",
-    "timestamp": "2025-12-13T06:09:58.077436",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.235437",
     "response_data": null
   },
   {
-    "test": "College iit-bombay-002 Validation",
+    "test": "Universities Filter - Sort by ranking (nirf_rank)",
     "status": "PASS",
-    "details": "\u2705 Ranking field is properly structured as object; \u26a0\ufe0f Slug field missing or null; \u26a0\ufe0f Established year field missing or null; \u26a0\ufe0f Total courses field missing or null; \u26a0\ufe0f Contact info field missing or null; \u2705 Courses field is properly structured list with 3 items",
-    "timestamp": "2025-12-13T06:09:58.077466",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.285708",
     "response_data": null
   },
   {
-    "test": "GET /reviews/college/iit-bombay-002",
+    "test": "GET /universities/56731407-c5b5-4c7e-9c0f-11cfaf9193bd",
     "status": "PASS",
-    "details": "Retrieved 0 reviews",
-    "timestamp": "2025-12-13T06:09:58.085078",
+    "details": "Retrieved university: Jawaharlal Nehru University",
+    "timestamp": "2025-12-15T06:01:38.341585",
     "response_data": null
   },
   {
-    "test": "GET /questions/college/iit-bombay-002",
+    "test": "GET /news",
     "status": "PASS",
-    "details": "Retrieved 0 questions",
-    "timestamp": "2025-12-13T06:09:58.134387",
+    "details": "Retrieved 2 news articles",
+    "timestamp": "2025-12-15T06:01:38.354296",
     "response_data": null
   },
   {
-    "test": "POST /reviews (No Auth)",
+    "test": "News Structure",
     "status": "PASS",
-    "details": "Correctly rejected unauthorized request: HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.141607",
+    "details": "All required fields present in news data",
+    "timestamp": "2025-12-15T06:01:38.354325",
     "response_data": null
   },
   {
-    "test": "POST /reviews (Invalid Data)",
-    "status": "WARN",
-    "details": "Expected 400/422/401, got HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.148548",
-    "response_data": null
-  },
-  {
-    "test": "POST /questions (No Auth)",
+    "test": "News Filter - Filter by Exams category",
     "status": "PASS",
-    "details": "Correctly rejected unauthorized request: HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.196204",
+    "details": "Retrieved 1 results",
+    "timestamp": "2025-12-15T06:01:38.361790",
     "response_data": null
   },
   {
-    "test": "POST /questions/answer (No Auth)",
+    "test": "News Filter - Filter featured news",
     "status": "PASS",
-    "details": "Correctly rejected unauthorized request: HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.204055",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.369638",
     "response_data": null
   },
   {
-    "test": "POST /questions (Invalid Data)",
-    "status": "WARN",
-    "details": "Expected 400/422/401, got HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.251067",
-    "response_data": null
-  },
-  {
-    "test": "POST /applications (No Auth)",
+    "test": "News Filter - Sort by views",
     "status": "PASS",
-    "details": "Correctly rejected unauthorized request: HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.257872",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.377950",
     "response_data": null
   },
   {
-    "test": "POST /applications (Invalid Data)",
-    "status": "WARN",
-    "details": "Expected 400/422/401, got HTTP 403",
-    "timestamp": "2025-12-13T06:09:58.305209",
-    "response_data": null
-  },
-  {
-    "test": "GET /reviews (Non-existent College)",
+    "test": "News Filter - Sort by latest (published_at)",
     "status": "PASS",
-    "details": "Returns empty list for non-existent college",
-    "timestamp": "2025-12-13T06:09:58.312317",
+    "details": "Retrieved 2 results",
+    "timestamp": "2025-12-15T06:01:38.385135",
     "response_data": null
   },
   {
-    "test": "GET /questions (Non-existent College)",
+    "test": "GET /news/fa1a7d53-cd52-4d06-852e-3e53f2eff63d",
     "status": "PASS",
-    "details": "Returns empty list for non-existent college",
-    "timestamp": "2025-12-13T06:09:58.361266",
+    "details": "Retrieved article: CBSE Board Exams 2025: Date Sheet Released - Views: 12500",
+    "timestamp": "2025-12-15T06:01:38.401345",
     "response_data": null
   }
 ]
