@@ -451,14 +451,19 @@ const CollegeForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Affiliated To</label>
-              <input
-                type="text"
+              <select
                 name="affiliated_to"
                 value={formData.affiliated_to}
                 onChange={handleChange}
-                placeholder="e.g., Mumbai University"
                 className="w-full border rounded px-3 py-2"
-              />
+              >
+                <option value="">Select Affiliation</option>
+                {affiliations.map((affiliation) => (
+                  <option key={affiliation.id} value={affiliation.name}>
+                    {affiliation.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Campus Size</label>
