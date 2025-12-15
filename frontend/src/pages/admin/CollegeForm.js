@@ -375,6 +375,27 @@ const CollegeForm = () => {
     });
   };
 
+  // Helper functions for rankings
+  const addRanking = () => {
+    setFormData({
+      ...formData,
+      rankings: [...(formData.rankings || []), { agency: '', category: '', rank: '', year: new Date().getFullYear() }]
+    });
+  };
+
+  const updateRanking = (index, field, value) => {
+    const newRankings = [...(formData.rankings || [])];
+    newRankings[index] = { ...newRankings[index], [field]: value };
+    setFormData({ ...formData, rankings: newRankings });
+  };
+
+  const removeRanking = (index) => {
+    setFormData({
+      ...formData,
+      rankings: (formData.rankings || []).filter((_, i) => i !== index)
+    });
+  };
+
   const addCourse = () => {
     setFormData({
       ...formData,
