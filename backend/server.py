@@ -99,9 +99,13 @@ class Course(BaseModel):
     name: str
     degree_type: str
     duration: str
-    fees: float
-    total_fees: float
-    seats: Optional[int] = None
+    description: Optional[str] = None
+    stream: Optional[str] = None  # Engineering, Medical, Arts, etc.
+    full_name: Optional[str] = None
+    slug: Optional[str] = None
+    fees: Optional[float] = None
+    total_fees: Optional[float] = None
+    average_fees: Optional[float] = None
     eligibility: Optional[str] = None
     cutoffs: List[Cutoff] = []
 
