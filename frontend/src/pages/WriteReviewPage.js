@@ -92,26 +92,26 @@ const WriteReviewPage = () => {
         </div>
       </div>
 
-      {/* Progress Indicator */}
-      <div className="bg-white border-b py-4">
+      {/* Progress Indicator - Compact */}
+      <div className="bg-white border-b py-3">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center justify-between">
               {['Select Institute', 'Write Review', 'Personal Details', 'Submit'].map((label, idx) => (
                 <div key={idx} className="flex items-center flex-1">
-                  <div className={`flex items-center gap-3 ${idx > 0 ? 'flex-1' : ''}`}>
+                  <div className={`flex items-center gap-2 ${idx > 0 ? 'flex-1' : ''}`}>
                     {idx > 0 && (
-                      <div className={`flex-1 h-1 ${step > idx + 1 ? 'bg-orange-500' : 'bg-gray-300'}`}></div>
+                      <div className={`flex-1 h-0.5 ${step > idx + 1 ? 'bg-orange-500' : 'bg-gray-300'}`}></div>
                     )}
                     <div className={`flex flex-col items-center ${idx > 0 ? 'flex-shrink-0' : ''}`}>
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                         step > idx + 1 ? 'bg-orange-500 text-white' : 
                         step === idx + 1 ? 'bg-orange-500 text-white' : 
                         'bg-gray-300 text-gray-600'
                       }`}>
                         {step > idx + 1 ? '✓' : idx + 1}
                       </div>
-                      <span className="text-xs mt-1 font-medium text-gray-700">{label}</span>
+                      <span className="text-[10px] mt-0.5 font-medium text-gray-700">{label}</span>
                     </div>
                   </div>
                 </div>
