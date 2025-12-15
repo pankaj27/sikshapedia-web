@@ -437,16 +437,16 @@ class College(BaseModel):
     placement: Optional[Dict] = None  # { highest, average, percentage, students_participated, companies_participated, total_offers, top_recruiters }
     
     # Cutoff Data
-    cutoff_data: List[Dict] = []  # [{ course, opening_rank, closing_rank_current, closing_rank_previous, year }]
+    cutoff_data: List = []  # Can be List[Dict] or empty
     
     # Faculty
     faculty: Optional[List] = []
     
     # Scholarships - Detailed
-    scholarships: List[Dict] = []  # [{ name, description, amount }]
+    scholarships: List = []  # Can be List[Dict] or empty
     
     # Updates & News
-    updates: List[Dict] = []  # [{ date, title, content }]
+    updates: List = []  # Can be List[Dict] or empty
     
     # Students
     total_students: Optional[int] = None
