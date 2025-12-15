@@ -215,8 +215,8 @@ const WriteReviewPage = () => {
           )}
 
           {step === 2 && (
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-2xl font-bold mb-6">Step 2: Write Your Review</h2>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-bold mb-4">Step 2: Write Your Review</h2>
               
               <div className="space-y-6">
                 {/* Overall Rating */}
