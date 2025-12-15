@@ -10,7 +10,7 @@ const CollegeForm = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const getDefaultFormData = () => ({
     name: '',
     slug: '',
     location: { city: '', state: '', address: '' },
@@ -60,6 +60,8 @@ const CollegeForm = () => {
     rating: 0,
     total_reviews: 0
   });
+
+  const [formData, setFormData] = useState(getDefaultFormData());
 
   useEffect(() => {
     if (id) {
