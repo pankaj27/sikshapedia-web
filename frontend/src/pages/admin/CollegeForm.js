@@ -662,6 +662,19 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">PIN Code *</label>
+              <input
+                type="text"
+                value={formData.location.pincode || ''}
+                onChange={(e) => handleNestedChange('location', 'pincode', e.target.value)}
+                placeholder="e.g., 400001"
+                maxLength="6"
+                pattern="[0-9]{6}"
+                required
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
           </div>
         </div>
 
