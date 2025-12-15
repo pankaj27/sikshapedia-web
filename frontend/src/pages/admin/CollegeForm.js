@@ -193,6 +193,11 @@ const CollegeForm = () => {
       };
       
       setFormData(normalizedData);
+      
+      // Set available cities based on the state
+      if (normalizedData.location?.state) {
+        setAvailableCities(citiesByState[normalizedData.location.state] || []);
+      }
     } catch (error) {
       console.error('Error fetching college:', error);
       alert('Failed to fetch college details');
