@@ -974,24 +974,42 @@ const CollegeDetailPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm font-semibold">Collegedunia</td>
-                          <td className="border px-4 py-3 text-sm">2025</td>
-                          <td className="border px-4 py-3 text-sm">B.Tech</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 5) + 1}</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm font-semibold">NIRF</td>
-                          <td className="border px-4 py-3 text-sm">2025</td>
-                          <td className="border px-4 py-3 text-sm">Engineering</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 10) + 1}</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm font-semibold">India Today</td>
-                          <td className="border px-4 py-3 text-sm">2025</td>
-                          <td className="border px-4 py-3 text-sm">B.Tech</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 15) + 1}</td>
-                        </tr>
+                        {college.rankings && college.rankings.length > 0 ? (
+                          college.rankings.map((rank, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm font-semibold">{rank.agency || rank.source}</td>
+                              <td className="border px-4 py-3 text-sm">{rank.year}</td>
+                              <td className="border px-4 py-3 text-sm">{rank.category || 'Overall'}</td>
+                              <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{rank.rank}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <>
+                            {college.nirf_ranking && (
+                              <tr className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm font-semibold">NIRF</td>
+                                <td className="border px-4 py-3 text-sm">2025</td>
+                                <td className="border px-4 py-3 text-sm">Overall</td>
+                                <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
+                              </tr>
+                            )}
+                            {college.india_today_ranking && (
+                              <tr className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm font-semibold">India Today</td>
+                                <td className="border px-4 py-3 text-sm">2025</td>
+                                <td className="border px-4 py-3 text-sm">Overall</td>
+                                <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.india_today_ranking}</td>
+                              </tr>
+                            )}
+                            {!college.nirf_ranking && !college.india_today_ranking && (
+                              <tr>
+                                <td colSpan="4" className="border px-4 py-3 text-sm text-center text-gray-500">
+                                  No ranking data available
+                                </td>
+                              </tr>
+                            )}
+                          </>
+                        )}
                       </tbody>
                     </table>
                   </div>
