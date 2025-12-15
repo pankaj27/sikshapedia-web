@@ -26,7 +26,9 @@ const GenericManagement = ({
 
   const fetchItems = async () => {
     try {
-      const response = await api.get(`/${endpoint}?limit=100`);
+      // Fetch with a high limit to get all records (max backend allows is 100, so we need pagination or increase backend limit)
+      // For now, let's try to fetch more records by increasing the limit
+      const response = await api.get(`/${endpoint}?limit=500`);
       setItems(response.data);
     } catch (error) {
       console.error(`Error fetching ${title}:`, error);
