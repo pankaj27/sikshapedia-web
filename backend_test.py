@@ -784,7 +784,7 @@ class NewFeaturesAPITester:
         return failed == 0
 
 if __name__ == "__main__":
-    tester = CollegeAPITester()
+    tester = NewFeaturesAPITester()
     success = tester.run_all_tests()
     
     # Save detailed results
