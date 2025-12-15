@@ -330,7 +330,7 @@ const NewsPage = () => {
               {filteredNewsItems.slice(0, 9).map((news, idx) => (
                 <Link
                   key={idx}
-                  to="#"
+                  to={`/news/${news.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
                   className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group"
                 >
                   <div className={`w-full h-48 bg-gradient-to-br ${news.gradient} flex items-center justify-center`}>
