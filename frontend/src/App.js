@@ -11,6 +11,7 @@ import UniversitiesPage from './pages/UniversitiesPage';
 import ExamsPage from './pages/ExamsPage';
 import ExamPage from './pages/ExamPage';
 import NewsPage from './pages/NewsPage';
+import NewsDetailPage from './pages/NewsDetailPage';
 import ExamDetailPage from './pages/ExamDetailPage';
 import ExamSubPages from './pages/ExamSubPages';
 import CoursesPage from './pages/CoursesPage';
