@@ -269,7 +269,7 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden py-4 border-t">
+        <div className="lg:hidden py-4 border-t px-4 bg-white">
           <form onSubmit={handleSearch} className="mb-4">
             <div className="relative">
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
