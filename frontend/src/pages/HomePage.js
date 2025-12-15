@@ -376,13 +376,13 @@ const CollegeDuniaHome = () => {
             {programs.map((program, idx) => {
               const IconComponent = getIconComponent(program.icon);
               return (
-                <div key={idx} className={`${program.color} rounded-xl p-4 text-center hover:shadow-lg transition cursor-pointer group`}>
+                <Link key={idx} to={program.link} className={`${program.color} rounded-xl p-4 text-center hover:shadow-lg transition cursor-pointer group block`}>
                   <div className="flex justify-center mb-2">
                     <IconComponent className={`text-4xl ${program.iconColor} group-hover:scale-110 transition-transform`} />
                   </div>
                   <h3 className="font-bold text-base mb-1">{program.title}</h3>
                   <p className="text-gray-600 text-sm">{program.subtitle}</p>
-                </div>
+                </Link>
               );
             })}
           </div>
