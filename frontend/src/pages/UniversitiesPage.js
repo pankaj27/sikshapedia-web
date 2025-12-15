@@ -24,11 +24,29 @@ const UniversitiesPage = () => {
     course: '',
     exam: '',
     rating: '',
+    universityType: '',
+    accreditation: '',
+    stream: '',
   });
+
+  // State for horizontal filter dropdowns
+  const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
 
   useEffect(() => {
     fetchUniversities();
   }, [searchParams, sortBy]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (activeFilterDropdown && !event.target.closest('.relative')) {
+        setActiveFilterDropdown(null);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeFilterDropdown]);
 
   const fetchUniversities = async () => {
     setLoading(true);
