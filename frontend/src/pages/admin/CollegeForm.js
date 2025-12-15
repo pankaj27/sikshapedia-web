@@ -14,6 +14,7 @@ const CollegeForm = () => {
   const getDefaultFormData = () => ({
     name: '',
     slug: '',
+    institution_type: 'College', // College, School, University
     location: { city: '', state: '', address: '' },
     established: '',
     established_year: new Date().getFullYear(),
