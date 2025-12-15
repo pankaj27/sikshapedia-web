@@ -49,6 +49,20 @@ import UniversitiesManagement from './pages/admin/UniversitiesManagement';
 import NewsManagement from './pages/admin/NewsManagement';
 import NewsForm from './pages/admin/NewsForm';
 import ReviewsModeration from './pages/admin/ReviewsModeration';
+import StreamsManagement from './pages/admin/StreamsManagement';
+import SubStreamsManagement from './pages/admin/SubStreamsManagement';
+import BoardsManagement from './pages/admin/BoardsManagement';
+import CollegeTypesManagement from './pages/admin/CollegeTypesManagement';
+import AffiliationsManagement from './pages/admin/AffiliationsManagement';
+import RecognitionsManagement from './pages/admin/RecognitionsManagement';
+import AccreditationsManagement from './pages/admin/AccreditationsManagement';
+import RankingsManagement from './pages/admin/RankingsManagement';
+import ScholarshipsManagement from './pages/admin/ScholarshipsManagement';
+import LoansManagement from './pages/admin/LoansManagement';
+import CommentsManagement from './pages/admin/CommentsManagement';
+import TagCoursesColleges from './pages/admin/TagCoursesColleges';
+import TagExamsCourses from './pages/admin/TagExamsCourses';
+import UsersManagement from './pages/admin/UsersManagement';
 import './App.css';
 
 function App() {
