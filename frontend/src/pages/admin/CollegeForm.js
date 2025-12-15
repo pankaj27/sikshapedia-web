@@ -464,13 +464,18 @@ const CollegeForm = () => {
               <label className="block text-sm font-medium mb-2">Recognized By</label>
               {formData.recognized_by.map((org, index) => (
                 <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="text"
+                  <select
                     value={org}
                     onChange={(e) => handleArrayChange('recognized_by', index, e.target.value)}
-                    placeholder="e.g., UGC, AICTE, NBA, NAAC"
                     className="flex-1 border rounded px-3 py-2"
-                  />
+                  >
+                    <option value="">Select Recognition</option>
+                    {recognitions.map((recognition) => (
+                      <option key={recognition.id} value={recognition.name}>
+                        {recognition.name}
+                      </option>
+                    ))}
+                  </select>
                   <Button
                     type="button"
                     variant="outline"
