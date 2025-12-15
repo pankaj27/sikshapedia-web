@@ -3648,6 +3648,199 @@ async def delete_user(user_id: str):
     await db.users.delete_one({"id": user_id})
     return {"success": True}
 
+# ============================================
+# Frontend Content Management Routes
+# ============================================
+
+# Blogs
+@api_router.get("/blogs")
+async def get_blogs(category: Optional[str] = None, featured: Optional[bool] = None, limit: int = 20):
+    query = {}
+    if category:
+        query["category"] = category
+    if featured is not None:
+        query["is_featured"] = featured
+    blogs = await db.blogs.find(query, {"_id": 0}).sort("published_at", -1).limit(limit).to_list(limit)
+    return blogs
+
+@api_router.get("/blogs/{blog_id}")
+async def get_blog(blog_id: str):
+    blog = await db.blogs.find_one({"id": blog_id}, {"_id": 0})
+    if not blog:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    # Increment views
+    await db.blogs.update_one({"id": blog_id}, {"$inc": {"views": 1}})
+    return Blog(**blog)
+
+@api_router.post("/blogs", response_model=Blog)
+async def create_blog(blog: Blog):
+    await db.blogs.insert_one(blog.model_dump())
+    return blog
+
+@api_router.put("/blogs/{blog_id}")
+async def update_blog(blog_id: str, blog: Blog):
+    await db.blogs.update_one({"id": blog_id}, {"$set": blog.model_dump()})
+    return blog
+
+@api_router.delete("/blogs/{blog_id}")
+async def delete_blog(blog_id: str):
+    await db.blogs.delete_one({"id": blog_id})
+    return {"success": True}
+
+# Study Materials
+@api_router.get("/study-materials")
+async def get_study_materials(exam: Optional[str] = None, subject: Optional[str] = None, limit: int = 50):
+    query = {}
+    if exam:
+        query["exam"] = exam
+    if subject:
+        query["subject"] = subject
+    materials = await db.study_materials.find(query, {"_id": 0}).limit(limit).to_list(limit)
+    return materials
+
+@api_router.post("/study-materials", response_model=StudyMaterial)
+async def create_study_material(material: StudyMaterial):
+    await db.study_materials.insert_one(material.model_dump())
+    return material
+
+@api_router.delete("/study-materials/{material_id}")
+async def delete_study_material(material_id: str):
+    await db.study_materials.delete_one({"id": material_id})
+    return {"success": True}
+
+# Counseling Sessions
+@api_router.get("/counseling-sessions")
+async def get_counseling_sessions(limit: int = 100):
+    sessions = await db.counseling_sessions.find({}, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    return sessions
+
+@api_router.post("/counseling-sessions", response_model=CounselingSession)
+async def book_counseling_session(session: CounselingSession):
+    await db.counseling_sessions.insert_one(session.model_dump())
+    return session
+
+@api_router.patch("/counseling-sessions/{session_id}")
+async def update_counseling_session_status(session_id: str, status: str, counselor: Optional[str] = None):
+    update_data = {"status": status}
+    if counselor:
+        update_data["counselor_assigned"] = counselor
+    await db.counseling_sessions.update_one({"id": session_id}, {"$set": update_data})
+    return {"success": True}
+
+# Banners
+@api_router.get("/banners")
+async def get_banners(position: Optional[str] = None):
+    query = {"is_active": True}
+    if position:
+        query["position"] = position
+    banners = await db.banners.find(query, {"_id": 0}).sort("display_order", 1).to_list(100)
+    return banners
+
+@api_router.post("/banners", response_model=Banner)
+async def create_banner(banner: Banner):
+    await db.banners.insert_one(banner.model_dump())
+    return banner
+
+@api_router.put("/banners/{banner_id}")
+async def update_banner(banner_id: str, banner: Banner):
+    await db.banners.update_one({"id": banner_id}, {"$set": banner.model_dump()})
+    return banner
+
+@api_router.delete("/banners/{banner_id}")
+async def delete_banner(banner_id: str):
+    await db.banners.delete_one({"id": banner_id})
+    return {"success": True}
+
+# Testimonials
+@api_router.get("/testimonials")
+async def get_testimonials(featured: Optional[bool] = None):
+    query = {"is_active": True}
+    if featured is not None:
+        query["is_featured"] = featured
+    testimonials = await db.testimonials.find(query, {"_id": 0}).sort("display_order", 1).to_list(100)
+    return testimonials
+
+@api_router.post("/testimonials", response_model=Testimonial)
+async def create_testimonial(testimonial: Testimonial):
+    await db.testimonials.insert_one(testimonial.model_dump())
+    return testimonial
+
+@api_router.put("/testimonials/{testimonial_id}")
+async def update_testimonial(testimonial_id: str, testimonial: Testimonial):
+    await db.testimonials.update_one({"id": testimonial_id}, {"$set": testimonial.model_dump()})
+    return testimonial
+
+@api_router.delete("/testimonials/{testimonial_id}")
+async def delete_testimonial(testimonial_id: str):
+    await db.testimonials.delete_one({"id": testimonial_id})
+    return {"success": True}
+
+# FAQs
+@api_router.get("/faqs")
+async def get_faqs(category: Optional[str] = None, page: Optional[str] = None):
+    query = {"is_active": True}
+    if category:
+        query["category"] = category
+    if page:
+        query["page"] = page
+    faqs = await db.faqs.find(query, {"_id": 0}).sort("display_order", 1).to_list(100)
+    return faqs
+
+@api_router.post("/faqs", response_model=FAQ)
+async def create_faq(faq: FAQ):
+    await db.faqs.insert_one(faq.model_dump())
+    return faq
+
+@api_router.put("/faqs/{faq_id}")
+async def update_faq(faq_id: str, faq: FAQ):
+    await db.faqs.update_one({"id": faq_id}, {"$set": faq.model_dump()})
+    return faq
+
+@api_router.delete("/faqs/{faq_id}")
+async def delete_faq(faq_id: str):
+    await db.faqs.delete_one({"id": faq_id})
+    return {"success": True}
+
+# Cities
+@api_router.get("/cities")
+async def get_cities(featured: Optional[bool] = None):
+    query = {}
+    if featured is not None:
+        query["is_featured"] = featured
+    cities = await db.cities.find(query, {"_id": 0}).sort("display_order", 1).to_list(100)
+    return cities
+
+@api_router.post("/cities", response_model=City)
+async def create_city(city: City):
+    await db.cities.insert_one(city.model_dump())
+    return city
+
+@api_router.put("/cities/{city_id}")
+async def update_city(city_id: str, city: City):
+    await db.cities.update_one({"id": city_id}, {"$set": city.model_dump()})
+    return city
+
+@api_router.delete("/cities/{city_id}")
+async def delete_city(city_id: str):
+    await db.cities.delete_one({"id": city_id})
+    return {"success": True}
+
+# Contact Inquiries
+@api_router.get("/contact-inquiries")
+async def get_contact_inquiries(limit: int = 100):
+    inquiries = await db.contact_inquiries.find({}, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    return inquiries
+
+@api_router.post("/contact-inquiries", response_model=ContactInquiry)
+async def submit_contact_inquiry(inquiry: ContactInquiry):
+    await db.contact_inquiries.insert_one(inquiry.model_dump())
+    return inquiry
+
+@api_router.patch("/contact-inquiries/{inquiry_id}")
+async def update_inquiry_status(inquiry_id: str, status: str):
+    await db.contact_inquiries.update_one({"id": inquiry_id}, {"$set": {"status": status}})
+    return {"success": True}
+
 # Include the router in the main app
 app.include_router(api_router)
 
