@@ -58,6 +58,7 @@ function App() {
             <Route path="/exams-old" element={<ExamsPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/exams/:id" element={<ExamDetailPage />} />
+            <Route path="/exams/:id/:section" element={<ExamSubPages />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/course-finder" element={<CourseFinderPage />} />
             <Route path="/courses/listing/:category" element={<CourseListingPage />} />
