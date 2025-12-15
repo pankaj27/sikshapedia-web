@@ -1057,6 +1057,61 @@ async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 # ============================================
+# Admin Routes
+# ============================================
+
+@api_router.post("/auth/admin-login", response_model=Token)
+async def admin_login(credentials: UserLogin):
+    """Admin login endpoint"""
+    admin_doc = await db.admins.find_one({"email": credentials.email}, {"_id": 0})
+    if not admin_doc:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not pwd_context.verify(credentials.password, admin_doc['password_hash']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    admin = AdminUser(**admin_doc)
+    access_token = create_access_token(data={"sub": admin.id, "role": "admin"})
+    
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        user=User(
+            id=admin.id,
+            email=admin.email,
+            name=admin.name,
+            phone="",
+            enrolled_courses=[],
+            saved_colleges=[],
+            saved_courses=[],
+            is_premium=True
+        )
+    )
+
+@api_router.get("/admin/stats")
+async def get_admin_stats():
+    """Get platform statistics for admin dashboard"""
+    total_colleges = await db.colleges.count_documents({})
+    total_schools = await db.schools.count_documents({})
+    total_universities = await db.universities.count_documents({})
+    total_users = await db.users.count_documents({})
+    total_reviews = await db.reviews.count_documents({})
+    total_exams = await db.exams.count_documents({})
+    total_courses = await db.courses.count_documents({})
+    total_news = await db.news.count_documents({})
+    
+    return {
+        "total_colleges": total_colleges,
+        "total_schools": total_schools,
+        "total_universities": total_universities,
+        "total_users": total_users,
+        "total_reviews": total_reviews,
+        "total_exams": total_exams,
+        "total_courses": total_courses,
+        "total_news": total_news
+    }
+
+# ============================================
 # College Routes
 # ============================================
 
