@@ -279,16 +279,37 @@ const ExamDetailPage = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            {activeTab === 'questionPapers' && (
-              <div className="space-y-6">
-                {Object.keys(exam.questionPapers).map((year) => (
-                  <div key={year} className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-3">
-                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <FiBook />
-                        {exam.name} Question Paper {year}
-                      </h2>
-                    </div>
+            {/* Overview Section */}
+            <div id="overview" className="mb-8 scroll-mt-20">
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <p className="text-gray-700 leading-relaxed mb-4">{exam.description}</p>
+                <div className="flex gap-3">
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    <FiDownload className="mr-2" />
+                    Download All Question Papers
+                  </Button>
+                  <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+                    <FiInfo className="mr-2" />
+                    Get Counseling
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Question Paper Sections by Year */}
+            <div className="space-y-6">
+              {Object.keys(exam.questionPapers).map((year) => (
+                <div key={year} id={year} className="bg-white rounded-lg shadow-md overflow-hidden scroll-mt-20">
+                  <div className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-3 flex items-center justify-between">
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <FiBook />
+                      {exam.name} Question Paper {year}
+                    </h2>
+                    <Button className="bg-white text-orange-600 hover:bg-gray-100 text-sm">
+                      <FiDownload className="mr-2" size={14} />
+                      Download All {year}
+                    </Button>
+                  </div>
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead className="bg-gray-100">
