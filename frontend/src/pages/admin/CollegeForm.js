@@ -272,6 +272,23 @@ const CollegeForm = () => {
     setFormData({ ...formData, updates: formData.updates.filter((_, i) => i !== index) });
   };
 
+  const addFAQ = () => {
+    setFormData({
+      ...formData,
+      seo_faqs: [...formData.seo_faqs, { question: '', answer: '' }]
+    });
+  };
+
+  const updateFAQ = (index, field, value) => {
+    const newFAQs = [...formData.seo_faqs];
+    newFAQs[index][field] = value;
+    setFormData({ ...formData, seo_faqs: newFAQs });
+  };
+
+  const removeFAQ = (index) => {
+    setFormData({ ...formData, seo_faqs: formData.seo_faqs.filter((_, i) => i !== index) });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
