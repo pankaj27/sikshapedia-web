@@ -73,7 +73,41 @@ const CollegeForm = () => {
     setLoading(true);
     try {
       const response = await api.get(`/colleges/${id}`);
-      setFormData({ ...formData, ...response.data });
+      const collegeData = response.data;
+      
+      // Ensure all arrays are properly initialized
+      const normalizedData = {
+        ...getDefaultFormData(),
+        ...collegeData,
+        recognized_by: Array.isArray(collegeData.recognized_by) ? collegeData.recognized_by : [],
+        memberships: Array.isArray(collegeData.memberships) ? collegeData.memberships : [],
+        rankings: Array.isArray(collegeData.rankings) ? collegeData.rankings : [],
+        courses: Array.isArray(collegeData.courses) ? collegeData.courses : [],
+        facilities: Array.isArray(collegeData.facilities) ? collegeData.facilities : [],
+        campus_images: Array.isArray(collegeData.campus_images) ? collegeData.campus_images : [],
+        images: Array.isArray(collegeData.images) ? collegeData.images : [],
+        videos: Array.isArray(collegeData.videos) ? collegeData.videos : [],
+        highlights: Array.isArray(collegeData.highlights) ? collegeData.highlights : [],
+        admission_dates: Array.isArray(collegeData.admission_dates) ? collegeData.admission_dates : [],
+        accreditations: Array.isArray(collegeData.accreditations) ? collegeData.accreditations : [],
+        approvals: Array.isArray(collegeData.approvals) ? collegeData.approvals : [],
+        cutoff_data: Array.isArray(collegeData.cutoff_data) ? collegeData.cutoff_data : [],
+        scholarships: Array.isArray(collegeData.scholarships) ? collegeData.scholarships : [],
+        updates: Array.isArray(collegeData.updates) ? collegeData.updates : [],
+        location: collegeData.location || { city: '', state: '', address: '' },
+        contact_info: collegeData.contact_info || { phone: '', email: '', website: '' },
+        placement: {
+          highest: collegeData.placement?.highest || 0,
+          average: collegeData.placement?.average || 0,
+          percentage: collegeData.placement?.percentage || 0,
+          students_participated: collegeData.placement?.students_participated || 0,
+          companies_participated: collegeData.placement?.companies_participated || 0,
+          total_offers: collegeData.placement?.total_offers || 0,
+          top_recruiters: Array.isArray(collegeData.placement?.top_recruiters) ? collegeData.placement.top_recruiters : []
+        }
+      };
+      
+      setFormData(normalizedData);
     } catch (error) {
       console.error('Error fetching college:', error);
       alert('Failed to fetch college details');
