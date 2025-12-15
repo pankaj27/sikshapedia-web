@@ -433,23 +433,6 @@ const CollegeForm = () => {
     setFormData({ ...formData, facilities: formData.facilities.filter((_, i) => i !== index) });
   };
 
-  const addRanking = () => {
-    setFormData({
-      ...formData,
-      rankings: [...formData.rankings, { agency: '', year: new Date().getFullYear(), category: '', rank: null }]
-    });
-  };
-
-  const updateRanking = (index, field, value) => {
-    const newRankings = [...formData.rankings];
-    newRankings[index][field] = value;
-    setFormData({ ...formData, rankings: newRankings });
-  };
-
-  const removeRanking = (index) => {
-    setFormData({ ...formData, rankings: formData.rankings.filter((_, i) => i !== index) });
-  };
-
   const addScholarship = () => {
     setFormData({
       ...formData,
