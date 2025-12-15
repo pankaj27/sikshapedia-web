@@ -1024,30 +1024,67 @@ const CollegeForm = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Accreditation</h2>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Accreditations</label>
-              {formData.accreditations.map((accr, index) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    value={accr}
-                    onChange={(e) => handleArrayChange('accreditations', index, e.target.value)}
-                    placeholder="e.g., NAAC A++, NBA"
-                    className="flex-1 border rounded px-3 py-2"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeArrayItem('accreditations', index)}
-                  >
-                    <FiTrash2 />
-                  </Button>
+            {formData.accreditations.map((accr, index) => (
+              <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Accreditation Name *</label>
+                    <select
+                      value={typeof accr === 'string' ? '' : (accr.name || '')}
+                      onChange={(e) => updateAccreditation(index, 'name', e.target.value)}
+                      required
+                      className="w-full border rounded px-3 py-2"
+                    >
+                      <option value="">Select Accreditation</option>
+                      {accreditationsList.map((item) => (
+                        <option key={item.id} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Accreditation Level *</label>
+                    <select
+                      value={typeof accr === 'string' ? '' : (accr.level || '')}
+                      onChange={(e) => updateAccreditation(index, 'level', e.target.value)}
+                      required
+                      className="w-full border rounded px-3 py-2"
+                    >
+                      <option value="">Select Level</option>
+                      {accreditationLevelsList.map((level) => (
+                        <option key={level.id} value={level.name}>
+                          {level.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex items-end">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => removeAccreditation(index)}
+                      className="w-full"
+                    >
+                      <FiTrash2 className="mr-2" /> Remove
+                    </Button>
+                  </div>
                 </div>
-              ))}
-              <Button type="button" onClick={() => addArrayItem('accreditations', '')} size="sm">
-                <FiPlus className="mr-2" /> Add Accreditation
-              </Button>
-            </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Description</label>
+                  <textarea
+                    value={typeof accr === 'string' ? '' : (accr.description || '')}
+                    onChange={(e) => updateAccreditation(index, 'description', e.target.value)}
+                    placeholder="Additional details about this accreditation (optional)"
+                    rows="2"
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+              </div>
+            ))}
+            <Button type="button" onClick={addAccreditation} size="sm" variant="outline">
+              <FiPlus className="mr-2" /> Add Accreditation
+            </Button>
           </div>
         </div>
 
