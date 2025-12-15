@@ -238,7 +238,11 @@ const Header = () => {
               </button>
               
               {allCoursesDropdownOpen && (
-                <div className="fixed top-[140px] left-6 w-80 bg-white rounded-lg shadow-2xl py-3 z-[9999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto">
+                <div 
+                  className="absolute top-full left-0 w-80 bg-white rounded-lg shadow-2xl py-3 z-[9999] border-2 border-orange-500 max-h-[80vh] overflow-y-auto"
+                  onMouseEnter={() => setAllCoursesDropdownOpen(true)}
+                  onMouseLeave={() => setAllCoursesDropdownOpen(false)}
+                >
                   <Link to="/courses" className="block px-4 py-2.5 text-base font-bold text-orange-600 hover:bg-orange-50 transition-colors">
                     📚 View All Courses
                   </Link>
