@@ -122,11 +122,42 @@ const WriteReviewPage = () => {
       </div>
 
       {/* Form Content */}
-      <div className="container mx-auto px-6 py-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="container mx-auto px-6 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {/* Sidebar Advertisement */}
+          <aside className="lg:col-span-1 space-y-4">
+            {/* Top Ad */}
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg p-4 text-white text-center sticky top-20">
+              <p className="text-xs uppercase mb-2">Advertisement</p>
+              <h3 className="font-bold text-sm mb-2">Get Expert Counseling</h3>
+              <p className="text-xs mb-3 opacity-90">Free career guidance</p>
+              <Button className="w-full bg-white text-purple-600 hover:bg-gray-100 text-xs py-2">
+                Book Now
+              </Button>
+            </div>
+
+            {/* Middle Ad */}
+            <div className="bg-white rounded-lg border-2 border-orange-300 p-3 text-center">
+              <p className="text-xs text-orange-600 uppercase mb-2">Sponsored</p>
+              <img src="https://via.placeholder.com/200x150?text=Ad+Space" alt="Ad" className="w-full rounded mb-2" />
+              <p className="text-xs text-gray-600">Your ad here</p>
+            </div>
+
+            {/* Bottom Ad */}
+            <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg p-4 text-white text-center">
+              <h3 className="font-bold text-sm mb-2">College Predictor</h3>
+              <p className="text-xs mb-3 opacity-90">Know your admission chances</p>
+              <Button className="w-full bg-white text-blue-600 hover:bg-gray-100 text-xs py-2">
+                Predict Now
+              </Button>
+            </div>
+          </aside>
+
+          {/* Main Form */}
+          <div className="lg:col-span-3">
           {step === 1 && (
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-2xl font-bold mb-6">Step 1: Select Your Institute</h2>
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-bold mb-4">Step 1: Select Your Institute</h2>
               
               <div className="space-y-6">
                 <div>
