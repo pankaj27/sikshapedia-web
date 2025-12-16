@@ -4648,6 +4648,7 @@ const CollegeForm = () => {
                         tables: [],
                         images: [],
                         videos: [],
+                        faqs: [],
                         widgets: {
                           quick_facts: { enabled: true },
                           quick_nav: { enabled: true },
