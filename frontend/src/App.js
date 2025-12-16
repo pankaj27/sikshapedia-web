@@ -138,6 +138,7 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/colleges" element={<CollegeListingPage />} />
                   <Route path="/colleges/:id" element={<CollegeDetailPage />} />
+                  <Route path="/colleges/:id/:section" element={<CollegeSubPage />} />
                   <Route path="/schools" element={<SchoolsPage />} />
                   <Route path="/universities" element={<UniversitiesPage />} />
                   <Route path="/exams" element={<ExamPage />} />
