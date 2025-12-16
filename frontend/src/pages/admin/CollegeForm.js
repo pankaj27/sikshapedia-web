@@ -4434,8 +4434,9 @@ const CollegeForm = () => {
                     className="text-indigo-600"
                   />
                   <div>
-                    <p className="font-medium text-gray-800">✏️ Custom Menu</p>
-                    <p className="text-xs text-gray-500">Fully customize menu items, labels, and order</p>
+                    <p className="font-medium text-gray-800">✏️ Custom Menu (Separate Pages)</p>
+                    <p className="text-xs text-gray-500">Each menu item opens its own page with custom content</p>
+                    <p className="text-xs text-blue-600 mt-1">📄 URLs: /colleges/slug/section-id</p>
                   </div>
                 </label>
               </div>
