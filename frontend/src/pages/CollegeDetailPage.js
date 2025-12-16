@@ -699,12 +699,12 @@ const CollegeDetailPage = () => {
             <div className="space-y-8">
               
               {/* DYNAMIC TOC SECTIONS - Rendered when auto_from_toc is enabled */}
-              {college?.menu_config?.auto_from_toc && college?.seo_toc?.length > 0 && (
+              {college?.menu_config?.auto_from_toc && college?.detail_page_toc?.length > 0 && (
                 <div className="space-y-8">
-                  {college.seo_toc.map((tocItem, index) => (
+                  {college.detail_page_toc.map((tocItem, index) => (
                     <section key={index} id={tocItem.anchor || `toc-${index}`} className="scroll-mt-40">
                       <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-                        <span className="text-orange-500">📌</span>
+                        <span className="text-orange-500">{getMenuIcon(tocItem.icon || tocItem.anchor)}</span>
                         {tocItem.title}
                       </h2>
                       {tocItem.content && (
