@@ -2141,16 +2141,30 @@ const CollegeForm = () => {
                   </label>
                 </div>
               </div>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="logo_alt"
-                  value={formData.logo_alt}
-                  onChange={handleChange}
-                  placeholder="Alt text for logo (e.g., 'IIT Mumbai Logo')"
-                  className="w-full border rounded px-3 py-2 text-sm"
-                />
-                <p className="text-xs text-gray-500 mt-1">Alt text improves SEO and accessibility</p>
+              <div className="mt-2 space-y-2">
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-700">Image Title</label>
+                  <input
+                    type="text"
+                    value={formData.logo_title}
+                    onChange={(e) => handleTitleChange('logo_title', e.target.value)}
+                    placeholder="e.g., 'Official Logo'"
+                    className="w-full border-2 border-blue-200 rounded px-3 py-2 text-sm focus:border-blue-400"
+                  />
+                  <p className="text-xs text-blue-600 mt-1">⚡ Alt text auto-generated with Admissionbuddy branding</p>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-700">Alt Text (Auto-generated)</label>
+                  <input
+                    type="text"
+                    name="logo_alt"
+                    value={formData.logo_alt}
+                    onChange={handleChange}
+                    placeholder="Auto-generated from title"
+                    className="w-full border rounded px-3 py-2 text-sm bg-gray-50"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Editable if needed</p>
+                </div>
               </div>
               {formData.logo_url && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
