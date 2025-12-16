@@ -4647,7 +4647,12 @@ const CollegeForm = () => {
                         toc: [],
                         tables: [],
                         images: [],
-                        videos: []
+                        videos: [],
+                        widgets: {
+                          quick_facts: { enabled: true },
+                          quick_nav: { enabled: true },
+                          contact_cta: { enabled: true, title: 'Need Help?', subtitle: 'Get free counseling' }
+                        }
                       }];
                       setFormData({
                         ...formData,
