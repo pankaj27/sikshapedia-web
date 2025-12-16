@@ -233,6 +233,15 @@ const CollegeForm = () => {
     }
   };
 
+  const fetchAvailableFacilities = async () => {
+    try {
+      const response = await api.get('/facilities?limit=500');
+      setAvailableFacilities(response.data);
+    } catch (error) {
+      console.error('Error fetching facilities:', error);
+    }
+  };
+
   const fetchCollege = async () => {
     setLoading(true);
     try {
