@@ -1224,6 +1224,20 @@ const CollegeForm = () => {
       </div>
 
       <form id="institution-form" onSubmit={handleSubmit} className="p-4 space-y-3">
+        
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* STEP 1: COMMON INFORMATION (Always Required)                                    */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-lg shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white text-blue-600 rounded-full flex items-center justify-center font-bold text-lg">1</div>
+            <div>
+              <h2 className="text-lg font-bold">Step 1: Common Information</h2>
+              <p className="text-blue-100 text-sm">Basic details, contact, media - required for all menu types</p>
+            </div>
+          </div>
+        </div>
+        
         {/* Basic Information */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Basic Information</h2>
