@@ -734,6 +734,9 @@ const CollegeForm = () => {
       console.error('Upload error:', error);
       alert(`Failed to upload ${type}. Please try again.`);
     } finally {
+      setUploading(false);
+    }
+  };
 
   const handleCampusImageUpload = async (file, index) => {
     setUploadingCampus(prev => ({ ...prev, [index]: true }));
