@@ -679,6 +679,83 @@ const CollegeForm = () => {
       console.error('Upload error:', error);
       alert(`Failed to upload ${type}. Please try again.`);
     } finally {
+
+  const handleCampusImageUpload = async (file, index) => {
+    setUploadingCampus(prev => ({ ...prev, [index]: true }));
+    
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/image?type=campus', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const fullUrl = backendUrl + response.data.url;
+        
+        const newCampusImages = [...formData.campus_images];
+        newCampusImages[index] = fullUrl;
+        
+        setFormData(prev => ({
+          ...prev,
+          campus_images: newCampusImages
+        }));
+        
+        alert('Campus image uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload campus image. Please try again.');
+    } finally {
+      setUploadingCampus(prev => ({ ...prev, [index]: false }));
+    }
+  };
+
+  const handleBulkCampusUpload = async (files) => {
+    setUploadingCampusBulk(true);
+    
+    try {
+      const uploadFormData = new FormData();
+      Array.from(files).forEach(file => {
+        uploadFormData.append('files', file);
+      });
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/images/bulk?type=campus', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const uploadedUrls = response.data.files.map(f => backendUrl + f.url);
+        
+        setFormData(prev => ({
+          ...prev,
+          campus_images: [...prev.campus_images, ...uploadedUrls]
+        }));
+        
+        alert(`Successfully uploaded ${response.data.uploaded} image(s)!`);
+        if (response.data.failed > 0) {
+          alert(`${response.data.failed} file(s) failed to upload.`);
+        }
+      }
+    } catch (error) {
+      console.error('Bulk upload error:', error);
+      alert('Failed to upload images. Please try again.');
+    } finally {
+      setUploadingCampusBulk(false);
+    }
+  };
+
       setUploading(false);
     }
   };
