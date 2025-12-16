@@ -109,11 +109,26 @@ const CollegeSubPage = () => {
     ? (college.menu_config.items || []).filter(item => item.enabled).sort((a, b) => a.order - b.order)
     : [];
 
+  // Get SEO values with fallbacks
+  const pageTitle = currentSection?.meta_title || `${currentSection?.label || section} - ${college.name}`;
+  const pageDescription = currentSection?.meta_description || `${currentSection?.label || section} information for ${college.name}`;
+  const pageKeywords = currentSection?.meta_keywords || '';
+  const ogTitle = currentSection?.og_title || pageTitle;
+  const ogDescription = currentSection?.og_description || pageDescription;
+  const pageHeading = currentSection?.page_heading || currentSection?.label || section;
+
   return (
     <>
       <Helmet>
-        <title>{currentSection?.label || section} - {college.name} | Admissionbuddy</title>
-        <meta name="description" content={`${currentSection?.label || section} information for ${college.name}`} />
+        <title>{pageTitle} | Admissionbuddy</title>
+        <meta name="description" content={pageDescription} />
+        {pageKeywords && <meta name="keywords" content={pageKeywords} />}
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${window.location.origin}/colleges/${id}/${section}`} />
+        {college.logo_url && <meta property="og:image" content={college.logo_url.startsWith('/api') ? `${window.location.origin}${college.logo_url}` : `${window.location.origin}/api${college.logo_url}`} />}
+        <link rel="canonical" href={`${window.location.origin}/colleges/${id}/${section}`} />
       </Helmet>
 
       <div className="min-h-screen bg-gray-50">
