@@ -1,8 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiMapPin, FiStar, FiUser, FiChevronDown, FiChevronUp, FiDownload, FiCheckCircle, FiPhone, FiMail, FiGlobe, FiExternalLink } from 'react-icons/fi';
+import { FiMapPin, FiStar, FiUser, FiChevronDown, FiChevronUp, FiDownload, FiCheckCircle, FiPhone, FiMail, FiGlobe, FiExternalLink, FiHome, FiInfo, FiBook, FiFileText, FiBarChart2, FiBriefcase, FiAward, FiDollarSign, FiGrid, FiMessageSquare, FiBookmark, FiLayers, FiUsers, FiCalendar, FiMapPin as FiLocation, FiImage, FiHelpCircle } from 'react-icons/fi';
+import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineClipboardList, HiOutlineTrendingUp, HiOutlineUserGroup, HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+
+// Icon mapping for professional icons
+const iconMap = {
+  'info': <FiInfo size={16} />,
+  'courses': <FiBook size={16} />,
+  'admission': <FiFileText size={16} />,
+  'cutoff': <FiBarChart2 size={16} />,
+  'placement': <FiBriefcase size={16} />,
+  'ranking': <FiAward size={16} />,
+  'scholarship': <HiOutlineCurrencyRupee size={16} />,
+  'facilities': <HiOutlineOfficeBuilding size={16} />,
+  'reviews': <FiMessageSquare size={16} />,
+  'overview': <FiHome size={16} />,
+  'programs': <HiOutlineAcademicCap size={16} />,
+  'fees': <FiDollarSign size={16} />,
+  'campus': <HiOutlineLibrary size={16} />,
+  'gallery': <FiImage size={16} />,
+  'faculty': <FiUsers size={16} />,
+  'events': <FiCalendar size={16} />,
+  'location': <FiMapPin size={16} />,
+  'faq': <FiHelpCircle size={16} />,
+  'default': <FiBookmark size={16} />,
+};
+
+// Helper function to get icon component
+const getMenuIcon = (iconId, emojiIcon) => {
+  if (iconMap[iconId]) return iconMap[iconId];
+  // If no mapping found, return a default icon
+  return iconMap['default'];
+};
 
 const CollegeDetailPage = () => {
   const { id } = useParams();
