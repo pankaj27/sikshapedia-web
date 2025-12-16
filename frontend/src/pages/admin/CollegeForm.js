@@ -757,7 +757,9 @@ const CollegeForm = () => {
       
       if (response.data.success) {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const fullUrl = backendUrl + response.data.url;
+        // Add /api prefix for Kubernetes ingress routing
+        const apiUrl = response.data.url.replace('/static/', '/api/static/');
+        const fullUrl = backendUrl + apiUrl;
         
         // Update with object format including existing alt text
         updateCampusImage(index, 'url', fullUrl);
