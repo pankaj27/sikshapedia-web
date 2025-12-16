@@ -6456,7 +6456,6 @@ const CollegeForm = () => {
                   ))}
                 </div>
               </div>
-            )}
             
             {/* Menu Preview for Custom Menu */}
             <div className="bg-gray-100 rounded-lg p-4 mt-4">
