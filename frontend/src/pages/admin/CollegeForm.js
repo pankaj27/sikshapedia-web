@@ -199,6 +199,7 @@ const CollegeForm = () => {
     seo_intro: '',
     seo_full_content: '',
     seo_images: [],
+    seo_toc: [], // Table of Contents [{title, anchor, content}]
     seo_video_url: '',
     seo_video_title: '',
     seo_video_description: '',
