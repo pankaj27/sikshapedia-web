@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FiMapPin, FiStar, FiUser, FiChevronDown, FiChevronUp, FiDownload, FiCheckCircle, FiPhone, FiMail, FiGlobe, FiExternalLink, FiHome, FiInfo, FiBook, FiFileText, FiBarChart2, FiBriefcase, FiAward, FiDollarSign, FiGrid, FiMessageSquare, FiBookmark, FiLayers, FiUsers, FiCalendar, FiMapPin as FiLocation, FiImage, FiHelpCircle, FiWifi, FiCoffee, FiActivity, FiShield, FiTruck, FiDroplet, FiSun, FiMonitor, FiHeadphones, FiPackage, FiHeart, FiCpu, FiSettings, FiZap } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineClipboardList, HiOutlineTrendingUp, HiOutlineUserGroup, HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
@@ -6,6 +6,7 @@ import { MdOutlineSportsBasketball, MdOutlinePool, MdOutlineFitnessCenter, MdOut
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import AdBanner from '../components/AdBanner';
+import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 
 // Facility icon mapping for icon-based display
 const facilityIconMap = {
