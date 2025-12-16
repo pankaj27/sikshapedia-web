@@ -1814,7 +1814,7 @@ const CollegeForm = () => {
               <FiPlus className="mr-2" /> Add Course
             </Button>
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Admission Details */}
         <div className="bg-white rounded-lg shadow p-6">
