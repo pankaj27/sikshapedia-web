@@ -2276,8 +2276,7 @@ const CollegeForm = () => {
         </div>
 
         {/* Media & Resources */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Media & Resources</h2>
+        <CollapsibleSection title="Media & Resources" icon="📸" defaultOpen={true}>
           <div className="space-y-6">
             {/* Logo Upload */}
             <div>
