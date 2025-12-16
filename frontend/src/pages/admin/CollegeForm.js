@@ -1268,52 +1268,76 @@ const CollegeForm = () => {
           <div>
             <label className="block text-sm font-medium mb-2">Courses</label>
             {formData.courses.map((course, index) => (
-              <div key={index} className="border rounded p-4 mb-4">
+              <div key={index} className="border rounded p-4 mb-4 bg-gray-50">
                 <div className="grid grid-cols-2 gap-4 mb-2">
-                  <input
-                    type="text"
-                    placeholder="Course Name"
-                    value={course.name}
-                    onChange={(e) => updateCourse(index, 'name', e.target.value)}
-                    className="border rounded px-3 py-2"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Duration"
-                    value={course.duration}
-                    onChange={(e) => updateCourse(index, 'duration', e.target.value)}
-                    className="border rounded px-3 py-2"
-                  />
-                  <input
-                    type="number"
-                    placeholder="First Year Fee"
-                    value={course.first_year_fee}
-                    onChange={(e) => updateCourse(index, 'first_year_fee', parseFloat(e.target.value))}
-                    className="border rounded px-3 py-2"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Total Fee"
-                    value={course.total_fee}
-                    onChange={(e) => updateCourse(index, 'total_fee', parseFloat(e.target.value))}
-                    className="border rounded px-3 py-2"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Eligibility"
-                    value={course.eligibility}
-                    onChange={(e) => updateCourse(index, 'eligibility', e.target.value)}
-                    className="border rounded px-3 py-2"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Selection Criteria"
-                    value={course.selection_criteria}
-                    onChange={(e) => updateCourse(index, 'selection_criteria', e.target.value)}
-                    className="border rounded px-3 py-2"
-                  />
+                  <div className="col-span-2">
+                    <label className="block text-xs text-gray-600 mb-1">Course Name *</label>
+                    <select
+                      value={course.name}
+                      onChange={(e) => updateCourse(index, 'name', e.target.value)}
+                      className="w-full border rounded px-3 py-2 bg-white"
+                    >
+                      <option value="">Select Course</option>
+                      {availableCourses.map((c) => (
+                        <option key={c.id} value={c.name}>
+                          {c.name} - {c.degree_type} ({c.stream})
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">Select a course to auto-fill duration, eligibility, and selection criteria</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Duration</label>
+                    <input
+                      type="text"
+                      placeholder="e.g., 4 Years"
+                      value={course.duration}
+                      onChange={(e) => updateCourse(index, 'duration', e.target.value)}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">First Year Fee</label>
+                    <input
+                      type="number"
+                      placeholder="Amount in INR"
+                      value={course.first_year_fee}
+                      onChange={(e) => updateCourse(index, 'first_year_fee', parseFloat(e.target.value) || 0)}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Total Fee</label>
+                    <input
+                      type="number"
+                      placeholder="Total course fee"
+                      value={course.total_fee}
+                      onChange={(e) => updateCourse(index, 'total_fee', parseFloat(e.target.value) || 0)}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Eligibility</label>
+                    <input
+                      type="text"
+                      placeholder="Auto-filled from course"
+                      value={course.eligibility}
+                      onChange={(e) => updateCourse(index, 'eligibility', e.target.value)}
+                      className="w-full border rounded px-3 py-2 bg-yellow-50"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs text-gray-600 mb-1">Selection Criteria</label>
+                    <input
+                      type="text"
+                      placeholder="Auto-filled from course (exams accepted)"
+                      value={course.selection_criteria}
+                      onChange={(e) => updateCourse(index, 'selection_criteria', e.target.value)}
+                      className="w-full border rounded px-3 py-2 bg-yellow-50"
+                    />
+                  </div>
                 </div>
-                <Button type="button" variant="outline" onClick={() => removeCourse(index)}>
+                <Button type="button" variant="outline" onClick={() => removeCourse(index)} className="mt-2">
                   <FiTrash2 className="mr-2" /> Remove Course
                 </Button>
               </div>
