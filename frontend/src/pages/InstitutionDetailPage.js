@@ -20,12 +20,12 @@ const InstitutionDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Determine institution type from URL
+  // Determine institution type from URL (handles both singular and plural)
   const getInstitutionType = () => {
     const path = location.pathname;
-    if (path.startsWith('/college/')) return 'College';
-    if (path.startsWith('/university/')) return 'University';
-    if (path.startsWith('/school/')) return 'School';
+    if (path.startsWith('/colleges/') || path.startsWith('/college/')) return 'College';
+    if (path.startsWith('/universities/') || path.startsWith('/university/')) return 'University';
+    if (path.startsWith('/schools/') || path.startsWith('/school/')) return 'School';
     return 'College';
   };
   
