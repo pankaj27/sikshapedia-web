@@ -41,6 +41,9 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+// New SEO-friendly URL pages
+import DynamicListingPage from './pages/DynamicListingPage';
+import InstitutionDetailPage from './pages/InstitutionDetailPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import AddCollege from './pages/admin/AddCollege';
