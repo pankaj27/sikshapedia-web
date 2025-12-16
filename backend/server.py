@@ -509,7 +509,9 @@ class CollegeCreate(BaseModel):
     facilities: List[str] = []
     contact_info: Dict
     logo_url: Optional[str] = None
+    logo_alt: Optional[str] = None
     banner_url: Optional[str] = None
+    banner_alt: Optional[str] = None
     images: List[str] = []
     description: str
     highlights: List[str] = []
