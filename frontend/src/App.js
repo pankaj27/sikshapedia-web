@@ -153,13 +153,13 @@ function App() {
                   {/* State/City-wise Institution Listings: /{location}-{type} */}
                   <Route path="/:locationColleges" element={<DynamicListingPage />} />
                   
-                  {/* Institution Detail Pages: /colleges/{number}-{slug}, /universities/{number}-{slug}, /schools/{number}-{slug} */}
-                  <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
+                  {/* Institution Detail Pages: /college/{number}-{slug}, /university/{number}-{slug}, /school/{number}-{slug} */}
+                  <Route path="/college/:idSlug" element={<InstitutionDetailPage />} />
+                  <Route path="/college/:idSlug/:section" element={<CollegeSubPage />} />
+                  <Route path="/university/:idSlug" element={<InstitutionDetailPage />} />
+                  <Route path="/university/:idSlug/:section" element={<CollegeSubPage />} />
+                  <Route path="/school/:idSlug" element={<InstitutionDetailPage />} />
+                  <Route path="/school/:idSlug/:section" element={<CollegeSubPage />} />
                   
                   {/* Stream-based Listings */}
                   {/* /{stream} - e.g., /btech, /mba, /engineering */}
