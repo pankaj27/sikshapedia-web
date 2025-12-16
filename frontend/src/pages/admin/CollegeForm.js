@@ -978,7 +978,7 @@ const CollegeForm = () => {
                 <option value="University">🏛️ University</option>
               </select>
               <p className="mt-2 text-sm text-gray-600 italic">
-                💡 This determines what type of institution you're adding to the database
+                💡 This determines what type of institution you&apos;re adding to the database
               </p>
             </div>
           </div>
@@ -1350,13 +1350,13 @@ const CollegeForm = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">SEO Content (Detail Page Content)</h2>
           <p className="text-sm text-gray-600 mb-4">
-            This content appears in the expandable "Read More" section on the college detail page for better SEO.
+            This content appears in the expandable &quot;Read More&quot; section on the college detail page for better SEO.
           </p>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">SEO Intro (Short Preview)</label>
               <p className="text-xs text-gray-500 mb-2">
-                This is the short introduction (3-4 lines) that appears before the "Read More" button
+                This is the short introduction (3-4 lines) that appears before the &quot;Read More&quot; button
               </p>
               <textarea
                 name="seo_intro"
@@ -1371,7 +1371,7 @@ const CollegeForm = () => {
             <div>
               <label className="block text-sm font-medium mb-1">SEO Full Content</label>
               <p className="text-xs text-gray-500 mb-2">
-                Detailed content that appears after clicking "Read More" (multiple paragraphs with HTML formatting)
+                Detailed content that appears after clicking &quot;Read More&quot; (multiple paragraphs with HTML formatting)
               </p>
               <textarea
                 name="seo_full_content"
