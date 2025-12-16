@@ -646,10 +646,6 @@ const CollegeForm = () => {
     setFormData({ ...formData, updates: newUpdates });
   };
 
-  const removeUpdate = (index) => {
-    setFormData({ ...formData, updates: formData.updates.filter((_, i) => i !== index) });
-  };
-
   const addFAQ = () => {
     setFormData({
       ...formData,
