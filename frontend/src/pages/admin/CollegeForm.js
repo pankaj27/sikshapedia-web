@@ -2171,9 +2171,15 @@ const CollegeForm = () => {
                   <img 
                     src={formData.logo_url} 
                     alt={formData.logo_alt || "Logo Preview"} 
-                    className="h-20 object-contain"
-                    onError={(e) => e.target.style.display = 'none'}
+                    className="h-20 object-contain border border-gray-300 p-2 bg-white"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
                   />
+                  <div style={{display: 'none'}} className="text-xs text-red-600 p-2">
+                    Failed to load image. Please check the URL.
+                  </div>
                 </div>
               )}
             </div>
@@ -2252,9 +2258,15 @@ const CollegeForm = () => {
                   <img 
                     src={formData.banner_url} 
                     alt={formData.banner_alt || "Banner Preview"} 
-                    className="w-full max-h-40 object-cover rounded"
-                    onError={(e) => e.target.style.display = 'none'}
+                    className="w-full max-h-40 object-cover rounded border border-gray-300 bg-white"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
                   />
+                  <div style={{display: 'none'}} className="text-xs text-red-600 p-2">
+                    Failed to load image. Please check the URL.
+                  </div>
                 </div>
               )}
             </div>
@@ -2384,12 +2396,14 @@ const CollegeForm = () => {
                     {formData.campus_images.filter(img => typeof img === 'string' ? img : img.url).map((img, index) => {
                       const imgData = typeof img === 'string' ? { url: img, title: '', alt: '' } : img;
                       return (
-                        <div key={index} className="relative group">
+                        <div key={index} className="relative group bg-white border-2 border-gray-300 rounded overflow-hidden">
                           <img 
                             src={imgData.url} 
                             alt={imgData.alt || `Campus ${index + 1}`} 
-                            className="w-full h-24 object-cover rounded border-2 border-gray-300"
-                            onError={(e) => e.target.style.display = 'none'}
+                            className="w-full h-24 object-cover"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-family="Arial"%3ENo Image%3C/text%3E%3C/svg%3E';
+                            }}
                           />
                           {imgData.title && (
                             <div className="absolute top-0 left-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 font-semibold truncate">
