@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import CollegeListingPage from './pages/CollegeListingPage';
 import CollegeDetailPage from './pages/CollegeDetailPage';
+import CollegeSubPage from './pages/CollegeSubPage';
 import SchoolsPage from './pages/SchoolsPage';
 import UniversitiesPage from './pages/UniversitiesPage';
 import ExamsPage from './pages/ExamsPage';
