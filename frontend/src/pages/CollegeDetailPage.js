@@ -1654,6 +1654,9 @@ const CollegeDetailPage = () => {
           {/* RIGHT SIDEBAR */}
           <aside className="w-80 flex-shrink-0 hidden lg:block">
             <div className="sticky top-24 space-y-4">
+              {/* Sponsor Ad - Sidebar */}
+              <AdBanner pageName="college-detail" position="sidebar" />
+              
               {/* APPLY NOW BUTTON */}
               <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-lg p-6 text-white shadow-lg">
                 <div className="text-center">
