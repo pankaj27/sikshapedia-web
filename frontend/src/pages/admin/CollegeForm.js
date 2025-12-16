@@ -4491,101 +4491,125 @@ const CollegeForm = () => {
                   {(formData.menu_config?.items || [])
                     .sort((a, b) => a.order - b.order)
                     .map((item, index) => (
-                    <div key={item.id} className={`flex items-center gap-3 p-2 rounded border ${item.enabled ? 'bg-white border-gray-200' : 'bg-gray-100 border-gray-300 opacity-60'}`}>
-                      {/* Enable/Disable */}
-                      <input
-                        type="checkbox"
-                        checked={item.enabled}
-                        onChange={(e) => {
-                          const newItems = [...(formData.menu_config?.items || [])];
-                          const idx = newItems.findIndex(i => i.id === item.id);
-                          newItems[idx].enabled = e.target.checked;
-                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                        }}
-                        className="rounded"
-                      />
+                    <div key={item.id} className={`rounded-lg border-2 ${item.enabled ? 'bg-white border-gray-200' : 'bg-gray-100 border-gray-300 opacity-60'}`}>
+                      <div className="flex items-center gap-3 p-2">
+                        {/* Enable/Disable */}
+                        <input
+                          type="checkbox"
+                          checked={item.enabled}
+                          onChange={(e) => {
+                            const newItems = [...(formData.menu_config?.items || [])];
+                            const idx = newItems.findIndex(i => i.id === item.id);
+                            newItems[idx].enabled = e.target.checked;
+                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                          }}
+                          className="rounded"
+                        />
+                        
+                        {/* Order */}
+                        <input
+                          type="number"
+                          value={item.order}
+                          onChange={(e) => {
+                            const newItems = [...(formData.menu_config?.items || [])];
+                            const idx = newItems.findIndex(i => i.id === item.id);
+                            newItems[idx].order = parseInt(e.target.value) || 1;
+                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                          }}
+                          className="w-12 border rounded px-2 py-1 text-center text-sm"
+                          min="1"
+                        />
+                        
+                        {/* Icon */}
+                        <select
+                          value={item.icon}
+                          onChange={(e) => {
+                            const newItems = [...(formData.menu_config?.items || [])];
+                            const idx = newItems.findIndex(i => i.id === item.id);
+                            newItems[idx].icon = e.target.value;
+                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                          }}
+                          className="border rounded px-2 py-1 text-sm"
+                        >
+                          <option value="📋">📋</option>
+                          <option value="📚">📚</option>
+                          <option value="📝">📝</option>
+                          <option value="📊">📊</option>
+                          <option value="💼">💼</option>
+                          <option value="🏆">🏆</option>
+                          <option value="💰">💰</option>
+                          <option value="🏫">🏫</option>
+                          <option value="⭐">⭐</option>
+                          <option value="🎓">🎓</option>
+                          <option value="📍">📍</option>
+                          <option value="📞">📞</option>
+                          <option value="🖼️">🖼️</option>
+                          <option value="❓">❓</option>
+                          <option value="📌">📌</option>
+                        </select>
+                        
+                        {/* Label */}
+                        <input
+                          type="text"
+                          value={item.label}
+                          onChange={(e) => {
+                            const newItems = [...(formData.menu_config?.items || [])];
+                            const idx = newItems.findIndex(i => i.id === item.id);
+                            newItems[idx].label = e.target.value;
+                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                          }}
+                          className="flex-1 border rounded px-2 py-1 text-sm"
+                          placeholder="Menu Label"
+                        />
+                        
+                        {/* Section ID */}
+                        <input
+                          type="text"
+                          value={item.id}
+                          onChange={(e) => {
+                            const newItems = [...(formData.menu_config?.items || [])];
+                            const idx = newItems.findIndex(i => i.id === item.id);
+                            newItems[idx].id = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                          }}
+                          className="w-32 border rounded px-2 py-1 text-sm font-mono bg-gray-50"
+                          placeholder="section-id"
+                        />
+                        
+                        {/* Delete */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newItems = (formData.menu_config?.items || []).filter(i => i.id !== item.id);
+                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                          }}
+                          className="text-red-500 hover:bg-red-50 p-1 rounded"
+                        >
+                          <FiTrash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                       
-                      {/* Order */}
-                      <input
-                        type="number"
-                        value={item.order}
-                        onChange={(e) => {
-                          const newItems = [...(formData.menu_config?.items || [])];
-                          const idx = newItems.findIndex(i => i.id === item.id);
-                          newItems[idx].order = parseInt(e.target.value) || 1;
-                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                        }}
-                        className="w-12 border rounded px-2 py-1 text-center text-sm"
-                        min="1"
-                      />
-                      
-                      {/* Icon */}
-                      <select
-                        value={item.icon}
-                        onChange={(e) => {
-                          const newItems = [...(formData.menu_config?.items || [])];
-                          const idx = newItems.findIndex(i => i.id === item.id);
-                          newItems[idx].icon = e.target.value;
-                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                        }}
-                        className="border rounded px-2 py-1 text-sm"
-                      >
-                        <option value="📋">📋</option>
-                        <option value="📚">📚</option>
-                        <option value="📝">📝</option>
-                        <option value="📊">📊</option>
-                        <option value="💼">💼</option>
-                        <option value="🏆">🏆</option>
-                        <option value="💰">💰</option>
-                        <option value="🏫">🏫</option>
-                        <option value="⭐">⭐</option>
-                        <option value="🎓">🎓</option>
-                        <option value="📍">📍</option>
-                        <option value="📞">📞</option>
-                        <option value="🖼️">🖼️</option>
-                        <option value="❓">❓</option>
-                        <option value="📌">📌</option>
-                      </select>
-                      
-                      {/* Label */}
-                      <input
-                        type="text"
-                        value={item.label}
-                        onChange={(e) => {
-                          const newItems = [...(formData.menu_config?.items || [])];
-                          const idx = newItems.findIndex(i => i.id === item.id);
-                          newItems[idx].label = e.target.value;
-                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                        }}
-                        className="flex-1 border rounded px-2 py-1 text-sm"
-                        placeholder="Menu Label"
-                      />
-                      
-                      {/* Section ID */}
-                      <input
-                        type="text"
-                        value={item.id}
-                        onChange={(e) => {
-                          const newItems = [...(formData.menu_config?.items || [])];
-                          const idx = newItems.findIndex(i => i.id === item.id);
-                          newItems[idx].id = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
-                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                        }}
-                        className="w-32 border rounded px-2 py-1 text-sm font-mono bg-gray-50"
-                        placeholder="section-id"
-                      />
-                      
-                      {/* Delete */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newItems = (formData.menu_config?.items || []).filter(i => i.id !== item.id);
-                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                        }}
-                        className="text-red-500 hover:bg-red-50 p-1 rounded"
-                      >
-                        <FiTrash2 className="w-4 h-4" />
-                      </button>
+                      {/* Content Area for Custom Menu Item */}
+                      {formData.menu_config?.use_custom_menu && (
+                        <div className="px-3 pb-3 border-t bg-gray-50">
+                          <label className="block text-xs text-gray-600 mt-2 mb-1">
+                            📝 Section Content for &quot;{item.label}&quot;
+                          </label>
+                          <textarea
+                            value={item.content || ''}
+                            onChange={(e) => {
+                              const newItems = [...(formData.menu_config?.items || [])];
+                              const idx = newItems.findIndex(i => i.id === item.id);
+                              newItems[idx].content = e.target.value;
+                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                            }}
+                            placeholder="Enter content for this section... (supports HTML)"
+                            rows="3"
+                            className="w-full border rounded px-2 py-1 text-sm"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">This content will display when user clicks this menu item</p>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
