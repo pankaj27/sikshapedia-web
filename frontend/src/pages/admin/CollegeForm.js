@@ -26,6 +26,20 @@ const CollegeForm = () => {
   const [availableCourses, setAvailableCourses] = useState([]);
   const [availableScholarships, setAvailableScholarships] = useState([]);
   const [availableFacilities, setAvailableFacilities] = useState([]);
+
+  // Icon mapping for facilities
+  const iconComponents = {
+    FiBook, FiMonitor, FiActivity, FiSearch, FiUsers, FiCast, FiVideo, FiDatabase,
+    FiMic, FiZap, FiTarget, FiDroplet, FiGrid, FiSquare, FiSun, FiHome, FiMapPin,
+    FiHeart, FiMessageCircle, FiTruck, FiCoffee, FiShoppingBag, FiShoppingCart,
+    FiCreditCard, FiMail, FiWifi, FiBattery, FiShield, FiBriefcase, FiTrendingUp,
+    FiAward, FiMusic, FiBookOpen, FiPrinter, FiFilm, FiPackage, FiFeather, FiUnlock
+  };
+
+  const renderIcon = (iconName) => {
+    const IconComponent = iconComponents[iconName];
+    return IconComponent ? <IconComponent className="inline" /> : null;
+  };
   
   // Indian States and Cities
   const indianStates = [
