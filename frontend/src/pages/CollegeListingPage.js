@@ -158,13 +158,38 @@ const CollegeListingPage = () => {
     collegeType: ['Government', 'Private', 'Deemed', 'Autonomous']
   };
 
-  // Handle filter selection
+  // Handle filter selection - Navigate to SEO-friendly URLs
   const handleFilterSelect = (filterType, value) => {
+    setActiveFilterDropdown(null);
+    
+    // Navigate to SEO-friendly URL based on filter type
+    if (filterType === 'state' || filterType === 'city') {
+      // /delhi-colleges or /mumbai-colleges
+      const locationSlug = generateSlug(value);
+      navigate(`/${locationSlug}-colleges`);
+      return;
+    }
+    
+    if (filterType === 'stream') {
+      // /engineering or /mba
+      const streamSlug = generateSlug(value);
+      navigate(`/${streamSlug}`);
+      return;
+    }
+    
+    if (filterType === 'subStream' && filters.stream) {
+      // /engineering/computer-science
+      const streamSlug = generateSlug(filters.stream);
+      const subStreamSlug = generateSlug(value);
+      navigate(`/${streamSlug}/${subStreamSlug}`);
+      return;
+    }
+    
+    // For other filters, use query params (fallback)
     setFilters(prev => ({
       ...prev,
       [filterType]: value
     }));
-    setActiveFilterDropdown(null);
   };
 
   // Remove a specific filter
