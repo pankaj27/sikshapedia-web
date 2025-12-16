@@ -2831,6 +2831,670 @@ const CollegeForm = () => {
           </div>
         </CollapsibleSection>
 
+        {/* Sidebar Widgets Configuration */}
+        <CollapsibleSection title="Sidebar Widgets Configuration" icon="📱" defaultOpen={false}>
+          <p className="text-sm text-gray-600 mb-4">
+            Configure which widgets appear on the college detail page sidebar. Toggle widgets on/off and customize their settings.
+          </p>
+
+          <div className="space-y-6">
+            {/* Quick Actions Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🚀</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Quick Actions</h3>
+                    <p className="text-xs text-gray-500">Apply Now, Download Brochure, Compare buttons</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.quick_actions?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        quick_actions: { ...formData.sidebar_widgets?.quick_actions, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.quick_actions?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pl-8 border-t pt-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.sidebar_widgets?.quick_actions?.apply_now_btn ?? true}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sidebar_widgets: {
+                          ...formData.sidebar_widgets,
+                          quick_actions: { ...formData.sidebar_widgets?.quick_actions, apply_now_btn: e.target.checked }
+                        }
+                      })}
+                      className="rounded"
+                    />
+                    Apply Now Button
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.sidebar_widgets?.quick_actions?.download_brochure_btn ?? true}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sidebar_widgets: {
+                          ...formData.sidebar_widgets,
+                          quick_actions: { ...formData.sidebar_widgets?.quick_actions, download_brochure_btn: e.target.checked }
+                        }
+                      })}
+                      className="rounded"
+                    />
+                    Download Brochure
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.sidebar_widgets?.quick_actions?.compare_btn ?? true}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sidebar_widgets: {
+                          ...formData.sidebar_widgets,
+                          quick_actions: { ...formData.sidebar_widgets?.quick_actions, compare_btn: e.target.checked }
+                        }
+                      })}
+                      className="rounded"
+                    />
+                    Compare Button
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={formData.sidebar_widgets?.quick_actions?.enquiry_btn ?? true}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sidebar_widgets: {
+                          ...formData.sidebar_widgets,
+                          quick_actions: { ...formData.sidebar_widgets?.quick_actions, enquiry_btn: e.target.checked }
+                        }
+                      })}
+                      className="rounded"
+                    />
+                    Send Enquiry
+                  </label>
+                  <div className="col-span-2">
+                    <label className="block text-xs text-gray-600 mb-1">Custom Apply Now URL (optional)</label>
+                    <input
+                      type="url"
+                      value={formData.sidebar_widgets?.quick_actions?.apply_now_url || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        sidebar_widgets: {
+                          ...formData.sidebar_widgets,
+                          quick_actions: { ...formData.sidebar_widgets?.quick_actions, apply_now_url: e.target.value }
+                        }
+                      })}
+                      placeholder="Leave empty for default"
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Facts Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📊</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Quick Facts</h3>
+                    <p className="text-xs text-gray-500">Established year, Type, Student count, etc.</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.quick_facts?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        quick_facts: { ...formData.sidebar_widgets?.quick_facts, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.quick_facts?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pl-8 border-t pt-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.quick_facts?.show_established ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, show_established: e.target.checked}}})}
+                      className="rounded" />
+                    Established Year
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.quick_facts?.show_type ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, show_type: e.target.checked}}})}
+                      className="rounded" />
+                    Institution Type
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.quick_facts?.show_approval ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, show_approval: e.target.checked}}})}
+                      className="rounded" />
+                    Approvals
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.quick_facts?.show_student_count ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, show_student_count: e.target.checked}}})}
+                      className="rounded" />
+                    Student Count
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.quick_facts?.show_faculty_count ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, show_faculty_count: e.target.checked}}})}
+                      className="rounded" />
+                    Faculty Count
+                  </label>
+                </div>
+              )}
+            </div>
+
+            {/* Important Dates Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📅</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Important Dates</h3>
+                    <p className="text-xs text-gray-500">Application deadlines, Exam dates, Results</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.important_dates?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        important_dates: { ...formData.sidebar_widgets?.important_dates, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.important_dates?.enabled && (
+                <div className="pl-8 border-t pt-4 space-y-3">
+                  {(formData.sidebar_widgets?.important_dates?.dates || []).map((date, index) => (
+                    <div key={index} className="flex gap-2 items-start bg-gray-50 p-2 rounded">
+                      <div className="flex-1 grid grid-cols-3 gap-2">
+                        <input
+                          type="text"
+                          value={date.title}
+                          onChange={(e) => {
+                            const newDates = [...(formData.sidebar_widgets?.important_dates?.dates || [])];
+                            newDates[index].title = e.target.value;
+                            setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, important_dates: {...formData.sidebar_widgets?.important_dates, dates: newDates}}});
+                          }}
+                          placeholder="Event title"
+                          className="border rounded px-2 py-1 text-sm"
+                        />
+                        <input
+                          type="date"
+                          value={date.date}
+                          onChange={(e) => {
+                            const newDates = [...(formData.sidebar_widgets?.important_dates?.dates || [])];
+                            newDates[index].date = e.target.value;
+                            setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, important_dates: {...formData.sidebar_widgets?.important_dates, dates: newDates}}});
+                          }}
+                          className="border rounded px-2 py-1 text-sm"
+                        />
+                        <input
+                          type="text"
+                          value={date.description || ''}
+                          onChange={(e) => {
+                            const newDates = [...(formData.sidebar_widgets?.important_dates?.dates || [])];
+                            newDates[index].description = e.target.value;
+                            setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, important_dates: {...formData.sidebar_widgets?.important_dates, dates: newDates}}});
+                          }}
+                          placeholder="Description (optional)"
+                          className="border rounded px-2 py-1 text-sm"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newDates = (formData.sidebar_widgets?.important_dates?.dates || []).filter((_, i) => i !== index);
+                          setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, important_dates: {...formData.sidebar_widgets?.important_dates, dates: newDates}}});
+                        }}
+                        className="text-red-500 hover:bg-red-50 p-1 rounded"
+                      >
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newDates = [...(formData.sidebar_widgets?.important_dates?.dates || []), { title: '', date: '', description: '' }];
+                      setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, important_dates: {...formData.sidebar_widgets?.important_dates, dates: newDates}}});
+                    }}
+                    className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    <FiPlus /> Add Important Date
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Fee Summary Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">💰</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Fee Summary</h3>
+                    <p className="text-xs text-gray-500">Quick fee overview in sidebar</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.fee_summary?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        fee_summary: { ...formData.sidebar_widgets?.fee_summary, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.fee_summary?.enabled && (
+                <div className="pl-8 border-t pt-4 space-y-3">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.fee_summary?.show_range ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, fee_summary: {...formData.sidebar_widgets?.fee_summary, show_range: e.target.checked}}})}
+                      className="rounded" />
+                    Show Fee Range (auto from courses)
+                  </label>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Custom Fee Text (optional)</label>
+                    <input
+                      type="text"
+                      value={formData.sidebar_widgets?.fee_summary?.custom_text || ''}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, fee_summary: {...formData.sidebar_widgets?.fee_summary, custom_text: e.target.value}}})}
+                      placeholder="e.g., Starting from ₹50,000/year"
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Contact Card Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📞</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Contact Card</h3>
+                    <p className="text-xs text-gray-500">Phone, Email, Address quick access</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.contact_card?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        contact_card: { ...formData.sidebar_widgets?.contact_card, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.contact_card?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pl-8 border-t pt-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.contact_card?.show_phone ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_card: {...formData.sidebar_widgets?.contact_card, show_phone: e.target.checked}}})}
+                      className="rounded" />
+                    Show Phone
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.contact_card?.show_email ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_card: {...formData.sidebar_widgets?.contact_card, show_email: e.target.checked}}})}
+                      className="rounded" />
+                    Show Email
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.contact_card?.show_address ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_card: {...formData.sidebar_widgets?.contact_card, show_address: e.target.checked}}})}
+                      className="rounded" />
+                    Show Address
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.contact_card?.show_map_link ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_card: {...formData.sidebar_widgets?.contact_card, show_map_link: e.target.checked}}})}
+                      className="rounded" />
+                    Show Map Link
+                  </label>
+                </div>
+              )}
+            </div>
+
+            {/* Counselor CTA Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">👨‍💼</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Counselor CTA</h3>
+                    <p className="text-xs text-gray-500">&quot;Talk to Expert&quot; call-to-action</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.counselor_cta?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        counselor_cta: { ...formData.sidebar_widgets?.counselor_cta, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.counselor_cta?.enabled && (
+                <div className="pl-8 border-t pt-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-600 mb-1">Title</label>
+                      <input
+                        type="text"
+                        value={formData.sidebar_widgets?.counselor_cta?.title || 'Need Help?'}
+                        onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, counselor_cta: {...formData.sidebar_widgets?.counselor_cta, title: e.target.value}}})}
+                        className="w-full border rounded px-2 py-1 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-600 mb-1">Subtitle</label>
+                      <input
+                        type="text"
+                        value={formData.sidebar_widgets?.counselor_cta?.subtitle || 'Talk to our expert counselor'}
+                        onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, counselor_cta: {...formData.sidebar_widgets?.counselor_cta, subtitle: e.target.value}}})}
+                        className="w-full border rounded px-2 py-1 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Counselor Phone</label>
+                    <input
+                      type="tel"
+                      value={formData.sidebar_widgets?.counselor_cta?.phone || ''}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, counselor_cta: {...formData.sidebar_widgets?.counselor_cta, phone: e.target.value}}})}
+                      placeholder="+91 9999999999"
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </div>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.counselor_cta?.show_callback_form ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, counselor_cta: {...formData.sidebar_widgets?.counselor_cta, show_callback_form: e.target.checked}}})}
+                      className="rounded" />
+                    Show Request Callback Form
+                  </label>
+                </div>
+              )}
+            </div>
+
+            {/* Ad Banner Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📣</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Ad Banner</h3>
+                    <p className="text-xs text-gray-500">Advertisement placement in sidebar</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.ad_banner?.enabled ?? false}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        ad_banner: { ...formData.sidebar_widgets?.ad_banner, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.ad_banner?.enabled && (
+                <div className="pl-8 border-t pt-4 space-y-3">
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Position</label>
+                    <select
+                      value={formData.sidebar_widgets?.ad_banner?.position || 'top'}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, ad_banner: {...formData.sidebar_widgets?.ad_banner, position: e.target.value}}})}
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    >
+                      <option value="top">Top of Sidebar</option>
+                      <option value="middle">Middle of Sidebar</option>
+                      <option value="bottom">Bottom of Sidebar</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Ad Code / HTML</label>
+                    <textarea
+                      value={formData.sidebar_widgets?.ad_banner?.ad_code || ''}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, ad_banner: {...formData.sidebar_widgets?.ad_banner, ad_code: e.target.value}}})}
+                      placeholder="Paste your ad code here..."
+                      rows="3"
+                      className="w-full border rounded px-2 py-1 text-sm font-mono"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Social Share Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🔗</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Social Share</h3>
+                    <p className="text-xs text-gray-500">Share buttons for social media</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.social_share?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        social_share: { ...formData.sidebar_widgets?.social_share, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.social_share?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pl-8 border-t pt-4">
+                  {['facebook', 'twitter', 'whatsapp', 'linkedin', 'telegram', 'email'].map(platform => (
+                    <label key={platform} className="flex items-center gap-2 text-sm capitalize">
+                      <input
+                        type="checkbox"
+                        checked={(formData.sidebar_widgets?.social_share?.platforms || []).includes(platform)}
+                        onChange={(e) => {
+                          const platforms = formData.sidebar_widgets?.social_share?.platforms || [];
+                          const newPlatforms = e.target.checked 
+                            ? [...platforms, platform]
+                            : platforms.filter(p => p !== platform);
+                          setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, social_share: {...formData.sidebar_widgets?.social_share, platforms: newPlatforms}}});
+                        }}
+                        className="rounded"
+                      />
+                      {platform}
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Rating Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">⭐</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Rating Widget</h3>
+                    <p className="text-xs text-gray-500">Star rating with review count</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.rating_widget?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        rating_widget: { ...formData.sidebar_widgets?.rating_widget, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.rating_widget?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pl-8 border-t pt-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.rating_widget?.show_stars ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, rating_widget: {...formData.sidebar_widgets?.rating_widget, show_stars: e.target.checked}}})}
+                      className="rounded" />
+                    Show Star Rating
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={formData.sidebar_widgets?.rating_widget?.show_review_count ?? true}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, rating_widget: {...formData.sidebar_widgets?.rating_widget, show_review_count: e.target.checked}}})}
+                      className="rounded" />
+                    Show Review Count
+                  </label>
+                </div>
+              )}
+            </div>
+
+            {/* Related Colleges Widget */}
+            <div className="border-2 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🏫</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Related Colleges</h3>
+                    <p className="text-xs text-gray-500">Similar institutions suggestions</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.related_colleges?.enabled ?? true}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      sidebar_widgets: {
+                        ...formData.sidebar_widgets,
+                        related_colleges: { ...formData.sidebar_widgets?.related_colleges, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              {formData.sidebar_widgets?.related_colleges?.enabled && (
+                <div className="pl-8 border-t pt-4 space-y-3">
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Number to Show</label>
+                    <select
+                      value={formData.sidebar_widgets?.related_colleges?.show_count || 3}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_colleges: {...formData.sidebar_widgets?.related_colleges, show_count: parseInt(e.target.value)}}})}
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    >
+                      <option value={2}>2 colleges</option>
+                      <option value={3}>3 colleges</option>
+                      <option value={4}>4 colleges</option>
+                      <option value={5}>5 colleges</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Match Criteria</label>
+                    <select
+                      value={formData.sidebar_widgets?.related_colleges?.criteria || 'same_city'}
+                      onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_colleges: {...formData.sidebar_widgets?.related_colleges, criteria: e.target.value}}})}
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    >
+                      <option value="same_city">Same City</option>
+                      <option value="same_course">Same Courses</option>
+                      <option value="same_type">Same Institution Type</option>
+                      <option value="same_state">Same State</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
+
+          {/* Widget Preview */}
+          <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+            <h4 className="text-sm font-semibold text-gray-700 mb-3">👁️ Active Widgets Preview</h4>
+            <div className="flex flex-wrap gap-2">
+              {formData.sidebar_widgets?.quick_actions?.enabled && <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">🚀 Quick Actions</span>}
+              {formData.sidebar_widgets?.quick_facts?.enabled && <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">📊 Quick Facts</span>}
+              {formData.sidebar_widgets?.important_dates?.enabled && <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded">📅 Important Dates</span>}
+              {formData.sidebar_widgets?.fee_summary?.enabled && <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">💰 Fee Summary</span>}
+              {formData.sidebar_widgets?.contact_card?.enabled && <span className="px-2 py-1 bg-pink-100 text-pink-800 text-xs rounded">📞 Contact Card</span>}
+              {formData.sidebar_widgets?.counselor_cta?.enabled && <span className="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded">👨‍💼 Counselor CTA</span>}
+              {formData.sidebar_widgets?.ad_banner?.enabled && <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">📣 Ad Banner</span>}
+              {formData.sidebar_widgets?.social_share?.enabled && <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded">🔗 Social Share</span>}
+              {formData.sidebar_widgets?.rating_widget?.enabled && <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded">⭐ Rating</span>}
+              {formData.sidebar_widgets?.related_colleges?.enabled && <span className="px-2 py-1 bg-teal-100 text-teal-800 text-xs rounded">🏫 Related</span>}
+            </div>
+          </div>
+        </CollapsibleSection>
+
         {/* Contact Information */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Contact Information</h2>
