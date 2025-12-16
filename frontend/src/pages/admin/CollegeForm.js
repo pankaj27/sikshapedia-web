@@ -4210,17 +4210,21 @@ const CollegeForm = () => {
                       onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, ad_banner: {...formData.sidebar_widgets?.ad_banner, position: e.target.value}}})}
                       className="w-full border rounded px-2 py-1 text-sm"
                     >
-                      <option value="top">Top of Sidebar</option>
-                      <option value="middle">Middle of Sidebar</option>
-                      <option value="bottom">Bottom of Sidebar</option>
+                      <option value="top">Top Banner - Above page content</option>
+                      <option value="content-top">Content Top - Inside main content area (top)</option>
+                      <option value="content-bottom">Content Bottom - Inside main content area (bottom)</option>
+                      <option value="sidebar">Sidebar - Right sidebar area</option>
+                      <option value="popup">Popup - Overlay popup</option>
+                      <option value="floating">Floating - Fixed floating banner</option>
                     </select>
+                    <p className="text-xs text-gray-400 mt-1">Select where the ad should appear on this page</p>
                   </div>
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">Ad Code / HTML</label>
                     <textarea
                       value={formData.sidebar_widgets?.ad_banner?.ad_code || ''}
                       onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, ad_banner: {...formData.sidebar_widgets?.ad_banner, ad_code: e.target.value}}})}
-                      placeholder="Paste your ad code here..."
+                      placeholder="Paste your ad code here (Google AdSense, custom HTML, etc.)..."
                       rows="3"
                       className="w-full border rounded px-2 py-1 text-sm font-mono"
                     />
