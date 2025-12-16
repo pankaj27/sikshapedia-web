@@ -419,7 +419,25 @@ const CollegeForm = () => {
 
   const updateCourse = (index, field, value) => {
     const newCourses = [...formData.courses];
-    newCourses[index][field] = value;
+    
+    // If course name is being changed, auto-fill other fields
+    if (field === 'name') {
+      const selectedCourse = availableCourses.find(c => c.name === value);
+      if (selectedCourse) {
+        newCourses[index] = {
+          ...newCourses[index],
+          name: value,
+          duration: selectedCourse.duration || '',
+          eligibility: selectedCourse.eligibility || '',
+          selection_criteria: selectedCourse.exams_accepted?.join(', ') || ''
+        };
+      } else {
+        newCourses[index][field] = value;
+      }
+    } else {
+      newCourses[index][field] = value;
+    }
+    
     setFormData({ ...formData, courses: newCourses });
   };
 
