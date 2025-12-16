@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
-  FiSave, FiX, FiPlus, FiTrash2, FiEdit, FiUpload, FiLoader,
+  FiSave, FiX, FiPlus, FiTrash2, FiEdit, FiUpload, FiLoader, FiChevronDown, FiChevronRight,
   FiBook, FiMonitor, FiActivity, FiSearch, FiUsers, FiCast, FiVideo, FiDatabase,
   FiMic, FiZap, FiTarget, FiDroplet, FiGrid, FiSquare, FiSun, FiHome, FiMapPin,
   FiHeart, FiMessageCircle, FiTruck, FiCoffee, FiShoppingBag, FiShoppingCart,
@@ -11,6 +11,32 @@ import {
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
+
+// Collapsible Section Component for better UX
+const CollapsibleSection = ({ title, children, defaultOpen = true, icon = null }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  
+  return (
+    <div className="bg-white rounded-lg shadow">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors rounded-t-lg"
+      >
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          {icon && <span>{icon}</span>}
+          {title}
+        </h2>
+        {isOpen ? <FiChevronDown className="w-5 h-5" /> : <FiChevronRight className="w-5 h-5" />}
+      </button>
+      {isOpen && (
+        <div className="px-6 pb-6 pt-2 border-t">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CollegeForm = () => {
   const { id } = useParams();
