@@ -179,6 +179,17 @@ const CollegeForm = () => {
     highlights: [],
     admission_process: '',
     admission_dates: [],
+    // SEO Meta Tags
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    og_title: '',
+    og_description: '',
+    og_image_url: '',
+    canonical_url: '',
+    robots_meta: 'index, follow',
+    schema_type: 'EducationalOrganization',
+    // SEO Content
     seo_intro: '',
     seo_full_content: '',
     seo_video_url: '',
