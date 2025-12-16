@@ -1980,7 +1980,8 @@ async def get_colleges(
 
 @api_router.get("/colleges/featured", response_model=List[College])
 async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
-    colleges = await db.colleges.find({}, {"_id": 0}).sort("nirf_ranking", 1).limit(limit).to_list(limit)
+    # Only show published colleges
+    colleges = await db.colleges.find({"status": "published"}, {"_id": 0}).sort("nirf_ranking", 1).limit(limit).to_list(limit)
     
     for college in colleges:
         if isinstance(college.get('created_at'), str):
