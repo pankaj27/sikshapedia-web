@@ -686,23 +686,28 @@ const CollegeDetailPage = () => {
                 </div>
               )}
 
-              {/* DYNAMIC CUSTOM MENU SECTIONS - Rendered when use_custom_menu is enabled */}
+              {/* CUSTOM MENU INFO BOX - Show when use_custom_menu is enabled (content is on separate pages) */}
               {college?.menu_config?.use_custom_menu && college?.menu_config?.items?.length > 0 && (
-                <div className="space-y-8">
-                  {college.menu_config.items
-                    .filter(item => item.enabled && item.content)
-                    .sort((a, b) => a.order - b.order)
-                    .map((menuItem, index) => (
-                    <section key={index} id={menuItem.id} className="scroll-mt-40">
-                      <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
-                        <span className="text-orange-500">{menuItem.icon}</span>
-                        {menuItem.label}
-                      </h2>
-                      <div className="prose max-w-none text-gray-700 leading-relaxed bg-white rounded-lg p-6 shadow-sm border">
-                        <div dangerouslySetInnerHTML={{ __html: menuItem.content.replace(/\n/g, '<br/>') }} />
-                      </div>
-                    </section>
-                  ))}
+                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-xl p-6 mb-8">
+                  <h3 className="text-xl font-bold text-orange-800 mb-3 flex items-center gap-2">
+                    📑 Explore More About {college.name}
+                  </h3>
+                  <p className="text-gray-600 mb-4">Click on the sections below to learn more:</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {college.menu_config.items
+                      .filter(item => item.enabled)
+                      .sort((a, b) => a.order - b.order)
+                      .map((menuItem, index) => (
+                      <Link
+                        key={index}
+                        to={`/colleges/${id}/${menuItem.id}`}
+                        className="flex items-center gap-2 bg-white border-2 border-orange-200 rounded-lg px-4 py-3 hover:bg-orange-100 hover:border-orange-400 transition-all"
+                      >
+                        <span className="text-2xl">{menuItem.icon}</span>
+                        <span className="font-medium text-gray-800">{menuItem.label}</span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
 
