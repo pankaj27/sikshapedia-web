@@ -11,151 +11,340 @@ PRODUCT REQUIREMENTS:
 **User's preferred language**: English
 
 **what currently exists?**
-The full-stack application (React/FastAPI/MongoDB) has a significantly enhanced admin panel, with the  component being the primary focus of development. This form now supports a highly advanced media management system.
+The full-stack application has been significantly enhanced with a host of new, powerful features managed from the  admin page. The form itself has been made more user-friendly with collapsible sections.
 
-Key features implemented in this session include:
--   **File Uploads**: Dedicated file upload functionality for Logo, Banner, Campus Gallery (single & bulk), and Brochures (institute & course-wise).
--   **Image Optimization**: Automatic server-side image resizing and compression using  for all uploaded images to improve site performance.
--   **SEO & Accessibility**:
-    -   Fields for  and  tags for all images.
-    -   Automatic, branded alt tag generation (e.g., Title - College Name - Admissionbuddy).
-    -   Accessibility fields (title, description) for video URLs.
--   **UI/UX**: The form now displays recommended image dimensions for each upload type.
--   **Critical Bug Fix**: A major routing issue was resolved where uploaded images were inaccessible. The fix involved prefixing all static asset URLs with  and updating the backend to serve them from that path.
+Key new features include:
+-   **Advanced SEO & Meta Tags:** A dedicated section to manage meta titles, descriptions, keywords, and Open Graph data, complete with character counters and a live Google search result preview.
+-   **Badges & Status:** An admin section with toggle switches to assign badges like Verified, Preferred, and Admission Open to institutions, with a live preview.
+-   **Dynamic Content Tools:**
+    -   **Table of Contents (TOC) Builder:** Allows admins to create structured content for detail pages.
+    -   **Table Builder:** A visual tool to create and insert HTML tables into content areas like Description and SEO Content.
+-   **Rich Content Management:** Functionality has been added for a dedicated FAQ section, sidebar widget configuration, and image uploads directly within the SEO content area.
+-   **Fully Configurable Detail Page Menu:** A major new feature allowing the college detail page's navigation menu to be controlled from the admin panel. It supports three modes: a default menu, a menu auto-generated from the TOC builder, or a custom menu where each item can link to its own separate, dynamically generated sub-page.
 
 **Last working item**:
-- **Last item agent was working**: The user requested a way to add accessibility information to videos. The agent implemented this by adding  and  fields for the  and  in both the backend model () and the frontend form ().
+- **Last item agent was working**: Implementing the Separate Pages functionality for the custom menu. This involved creating a new sub-page component () and updating the routing and the main detail page () to link to these new pages instead of scrolling to sections on the same page.
 - **Status**: USER VERIFICATION PENDING
-- **Agent Testing Done**: N (The agent created a demo HTML but did not perform a live test or take a screenshot of the final UI.)
-- **Which testing method agent to use?**: screenshot tool. The agent should navigate to the  and verify that the Campus Video URL and SEO Video URL sections now have Video Title and Video Description input fields.
+- **Agent Testing Done**: Y (Verified with screenshots showing navigation to and rendering of separate sub-pages.)
+- **Which testing method agent to use?**: screenshot tool. The agent should create a college with a Custom Menu (separate pages option), save it, then navigate to the main college page and click the menu links to verify the sub-pages load correctly.
 - **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
-- **Issue 1: Multiple critical syntax errors introduced in  (P1)**
-  - **Description**: During the session, several compilation-blocking syntax errors were introduced in  due to misplaced closing braces and code blocks. This indicates the file's large size (~3000+ lines) is making it extremely fragile and difficult to maintain. The agent fixed the immediate errors, but the underlying risk remains.
-  - **Attempted fixes**: The agent fixed specific instances of syntax errors (e.g., , unexpected token errors) by correcting misplaced code.
-  - **Next debug checklist**: This is not a bug to be fixed but a high-priority refactoring task. See Upcoming and Future Tasks.
-  - **Why fix this issue and what will be achieved with the fix?**: Proactively addressing this will prevent future bugs, reduce development time, and improve application stability.
-  - **Status**: RESOLVED (for now, but high risk of recurrence)
-  - **Is recurring issue?**: Y
-  - **Should Test frontend/backend/both after fix?**: NA
-  - **Blocked on other issue**: None.
+- **Issue 1: SEO Content Image Upload May Still Be Broken (P0)**
+  - **Description**: The user reported that image uploads in the SEO Content Images section were failing. The agent applied a fix but did not verify it before the user moved on to other tasks. The status of this feature is unknown.
+  - **Attempted fixes**: The agent modified the frontend API call to send the  as a query parameter and removed the explicit  header to let the browser handle it for multipart data.
+  - **Next debug checklist**:
+    1.  Navigate to the College Form ().
+    2.  Expand the SEO Content section and try to upload an image in the SEO Content Images area.
+    3.  Check the browser's developer console (Network and Console tabs) for errors.
+    4.  Check backend logs: ==> /var/log/supervisor/backend.err.log <==
+  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/root/.venv/lib/python3.11/site-packages/fastapi/routing.py", line 296, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.venv/lib/python3.11/site-packages/fastapi/routing.py", line 155, in serialize_response
+    raise ResponseValidationError(
+fastapi.exceptions.ResponseValidationError: 9 validation errors:
+  {'type': 'missing', 'loc': ('response', 0, 'exam'), 'msg': 'Field required', 'input': {'id': 'jee-physics-waves-001', 'title': 'JEE Main Physics - Waves & Sound Complete Notes', 'exam_name': 'JEE Main', 'subject': 'Physics', 'topic': 'Waves and Sound', 'material_type': 'Notes', 'description': 'Comprehensive notes covering wave motion, sound waves, doppler effect, and resonance with solved examples and practice problems.', 'file_url': 'https://example.com/jee-physics-waves.pdf', 'external_link': None, 'is_premium': False, 'downloads': 1250, 'rating': 4.6, 'total_ratings': 89, 'tags': ['JEE', 'Physics', 'Waves', 'Sound', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955091, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'missing', 'loc': ('response', 1, 'exam'), 'msg': 'Field required', 'input': {'id': 'neet-biology-genetics-002', 'title': 'NEET Biology - Genetics and Evolution Sample Papers', 'exam_name': 'NEET', 'subject': 'Biology', 'topic': 'Genetics and Evolution', 'material_type': 'Sample Paper', 'description': '10 full-length sample papers with detailed solutions for Genetics and Evolution chapter. Based on latest NEET pattern.', 'file_url': 'https://example.com/neet-bio-genetics.pdf', 'external_link': None, 'is_premium': True, 'downloads': 892, 'rating': 4.8, 'total_ratings': 156, 'tags': ['NEET', 'Biology', 'Genetics', 'Premium', 'Sample Papers'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955100, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'missing', 'loc': ('response', 2, 'exam'), 'msg': 'Field required', 'input': {'id': 'cat-quant-arithmetic-003', 'title': 'CAT Quantitative Aptitude - Arithmetic Previous Year Questions', 'exam_name': 'CAT', 'subject': 'Quantitative Aptitude', 'topic': 'Arithmetic', 'material_type': 'Previous Year', 'description': 'Collection of all CAT previous year questions (2010-2024) on Arithmetic with detailed video solutions and shortcuts.', 'file_url': None, 'external_link': 'https://example.com/cat-quant-pyq', 'is_premium': False, 'downloads': 2340, 'rating': 4.9, 'total_ratings': 278, 'tags': ['CAT', 'Quant', 'Arithmetic', 'PYQ', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955103, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'missing', 'loc': ('response', 3, 'exam'), 'msg': 'Field required', 'input': {'id': 'gate-cs-algorithms-004', 'title': 'GATE CSE - Algorithms Mock Test Series', 'exam_name': 'GATE', 'subject': 'Computer Science', 'topic': 'Algorithms', 'material_type': 'Mock Test', 'description': '15 full-length mock tests for Algorithms section with instant evaluation and performance analysis. Covers all topics from GATE syllabus.', 'file_url': None, 'external_link': 'https://example.com/gate-cs-mock', 'is_premium': True, 'downloads': 567, 'rating': 4.7, 'total_ratings': 92, 'tags': ['GATE', 'CSE', 'Algorithms', 'Mock Test', 'Premium'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955105, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'missing', 'loc': ('response', 4, 'exam'), 'msg': 'Field required', 'input': {'id': 'jee-chemistry-organic-005', 'title': 'JEE Advanced Organic Chemistry Video Lectures', 'exam_name': 'JEE Advanced', 'subject': 'Chemistry', 'topic': 'Organic Chemistry', 'material_type': 'Video', 'description': '50+ hours of video lectures by IIT professors covering complete Organic Chemistry for JEE Advanced with reaction mechanisms and problem-solving techniques.', 'file_url': None, 'external_link': 'https://example.com/jee-org-chem-videos', 'is_premium': True, 'downloads': 1890, 'rating': 4.9, 'total_ratings': 412, 'tags': ['JEE Advanced', 'Chemistry', 'Organic', 'Video', 'Premium'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955107, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'missing', 'loc': ('response', 5, 'exam'), 'msg': 'Field required', 'input': {'id': 'upsc-polity-notes-006', 'title': 'UPSC Indian Polity Complete Notes with Current Affairs', 'exam_name': 'UPSC', 'subject': 'Indian Polity', 'topic': None, 'material_type': 'Notes', 'description': 'Comprehensive notes on Indian Constitution, governance, and political system with latest amendments and current affairs integration.', 'file_url': 'https://example.com/upsc-polity.pdf', 'external_link': None, 'is_premium': False, 'downloads': 3450, 'rating': 4.7, 'total_ratings': 567, 'tags': ['UPSC', 'Polity', 'Current Affairs', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955109, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'string_type', 'loc': ('response', 5, 'topic'), 'msg': 'Input should be a valid string', 'input': None, 'url': 'https://errors.pydantic.dev/2.12/v/string_type'}
+  {'type': 'missing', 'loc': ('response', 6, 'exam'), 'msg': 'Field required', 'input': {'id': 'neet-chemistry-pyq-007', 'title': 'NEET Chemistry - Physical Chemistry PYQ (2015-2024)', 'exam_name': 'NEET', 'subject': 'Chemistry', 'topic': 'Physical Chemistry', 'material_type': 'Previous Year', 'description': 'All NEET previous year questions from Physical Chemistry with detailed solutions, important formulas, and topic-wise analysis.', 'file_url': 'https://example.com/neet-chem-pyq.pdf', 'external_link': None, 'is_premium': False, 'downloads': 2100, 'rating': 4.8, 'total_ratings': 302, 'tags': ['NEET', 'Chemistry', 'Physical', 'PYQ', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955111, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+  {'type': 'missing', 'loc': ('response', 7, 'exam'), 'msg': 'Field required', 'input': {'id': 'cat-verbal-rc-008', 'title': 'CAT Verbal - Reading Comprehension Strategy Guide', 'exam_name': 'CAT', 'subject': 'Verbal Ability', 'topic': 'Reading Comprehension', 'material_type': 'Notes', 'description': 'Expert strategies and techniques for cracking RC passages in CAT with 100+ practice passages and detailed explanations.', 'file_url': 'https://example.com/cat-rc-guide.pdf', 'external_link': None, 'is_premium': True, 'downloads': 1560, 'rating': 4.6, 'total_ratings': 198, 'tags': ['CAT', 'Verbal', 'RC', 'Strategy', 'Premium'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955112, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
+
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3739]
+INFO:     Started server process [4580]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4580]
+INFO:     Started server process [5620]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5620]
+INFO:     Started server process [6155]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6155]
+INFO:     Started server process [7161]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7161]
+INFO:     Started server process [7846]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7846]
+INFO:     Started server process [8827]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8827]
+INFO:     Started server process [9742]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-12-16 08:38:02,681 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/root/.venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [30] using WatchFiles
+
+==> /var/log/supervisor/backend.out.log <==
+INFO:     10.64.201.223:44938 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:33228 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:45172 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
+INFO:     10.64.201.223:44942 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:45164 - "GET /api/recognitions HTTP/1.1" 200 OK
+INFO:     10.64.130.198:33236 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:33252 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:45186 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:33240 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.201.223:44938 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:45172 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:33252 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:33228 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33924 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:60234 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33926 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:45186 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:60248 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:60258 - "GET /api/recognitions HTTP/1.1" 200 OK
+INFO:     10.64.139.9:41568 - "GET /api/recognitions HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33926 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33924 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:41588 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:41584 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:41590 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:59350 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:59340 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33924 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:59360 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:60248 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:59358 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:41588 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:59350 - "GET /api/recognitions HTTP/1.1" 200 OK
+INFO:     10.64.128.44:60234 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:59360 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33924 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:33926 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:41588 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:60234 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:35808 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     10.64.129.7:53138 - "GET /api/colleges HTTP/1.1" 200 OK
+INFO:     10.64.139.9:58198 - "PUT /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:60748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:60748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:60748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:41568 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:43590 - "GET /api/locations/cities HTTP/1.1" 200 OK
+INFO:     10.64.128.44:53726 - "GET /api/colleges/featured?limit=12 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:47750 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     10.64.128.44:53726 - "GET /api/locations/states HTTP/1.1" 200 OK
+INFO:     10.64.162.242:43590 - "GET /api/locations/countries HTTP/1.1" 200 OK
+INFO:     10.64.128.44:53726 - "GET /api/locations/cities HTTP/1.1" 200 OK
+INFO:     10.64.139.9:60502 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     10.64.162.106:47750 - "GET /api/colleges/featured?limit=12 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:60502 - "GET /api/locations/states HTTP/1.1" 200 OK
+INFO:     10.64.162.106:47750 - "GET /api/locations/countries HTTP/1.1" 200 OK
+INFO:     10.64.162.106:47750 - "GET /api/colleges?&sort=ranking HTTP/1.1" 200 OK
+INFO:     10.64.162.106:47750 - "GET /api/colleges?&sort=ranking HTTP/1.1" 200 OK
+INFO:     10.64.162.242:43590 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:53726 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:57698 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:57698 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.129.7:58326 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.156.79:43748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.129.19:39670 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.156.79:43748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.129.7:45440 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.156.79:46248 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:42370 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:45678 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:47212 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:40632 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:35288 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.201.223:58502 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49802 - "GET /api/recognitions HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49818 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49774 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49760 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49802 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:43098 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49760 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:43098 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:49158 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49818 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49760 - "GET /api/recognitions HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49818 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:49158 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49760 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49760 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:43098 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.139.9:43098 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.106:49158 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49818 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:49760 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
+INFO:     10.64.156.79:39524 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.129.19:48852 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.130.198:34332 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.130.187:56674 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.128.44:55024 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
+INFO:     10.64.162.242:49774 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK.
+    5.  Review the upload logic in  (around the  call for ) and the  endpoint in .
+  - **Why fix this issue and what will be achieved with the fix?**: This is a core feature for creating rich content, and its failure blocks admins from adding images to articles.
+  - **Status**: USER VERIFICATION PENDING
+  - **Is recurring issue?**: N
+  - **Should Test frontend/backend/both after fix?**: Both
+  - **Blocked on other issue**: None
 
 **In progress Task List**:
 - None.
 
 **Upcoming and Future Tasks**
 - **Upcoming Tasks:**
-    - (P0) **Refactor **: Break down the monolithic  into smaller, manageable sub-components for each section (e.g., , , ). This is now the highest priority to mitigate the risk of introducing syntax errors.
+    - (P0) **Refactor **: The agent improved usability by adding collapsible sections, but the file has grown to over 5,000 lines and is extremely fragile. It MUST be broken down into smaller, manageable sub-components (e.g., , , ) to ensure stability and prevent future bugs. This remains the highest technical priority.
     - (P1) **Integrate AdBanner Component**: The  component exists but is not used. It needs to be added to frontend page layouts to display ads.
     - (P1) **Connect All Remaining Frontend Pages**: Systematically refactor all other public-facing pages (, , etc.) to fetch data from their respective backend APIs instead of using mock data.
-    - (P2) **End-to-End Admin Panel Testing**: Perform a comprehensive test of the Create, Read, Edit, and Delete functionality for every major entity in the admin panel to ensure stability.
 - **Future Tasks:**
+    - (P2) **End-to-End Admin Panel Testing**: Perform a comprehensive test of all the new features (CRUD for a college with all new fields).
     - (P2) **Refactor Monolithic **: Break down the massive  file into a more scalable structure (e.g., separate directories for routes, models, and services).
     - (P3) **Refactor Duplicate Frontend Listing Pages**: Consolidate , , and  into a single reusable  component.
 
 **Completed work in this session**
-- **Logo, Banner & Gallery Uploads**: Implemented full file upload functionality, replacing the previous URL-only inputs.
-- **Backend Image Optimization**: Integrated  to automatically resize and compress all uploaded images (logos, banners, campus gallery) on the server, significantly improving performance.
-- **Advanced SEO & Accessibility**:
-    - Added  and  text fields for all images (logo, banner, gallery).
-    - Implemented automatic alt-text generation with Admissionbuddy branding based on image titles.
-    - Added  and  fields for video URLs to improve video accessibility.
-- **Brochure Upload System**: Created functionality to upload PDF brochures at both the main institution level and for individual courses within the institution.
-- **Critical Static File Routing Fix**: Diagnosed and fixed a major issue where uploaded images returned a 404 error. The solution involved re-routing static file access through the  prefix, which required changes in both backend ( mount path) and frontend (URL construction).
-- **UI Enhancements**: Added text guidance in the UI indicating the recommended dimensions for each image upload type.
-- **Bug Fixes**: Resolved multiple frontend compilation errors in  caused by misplaced code blocks during rapid feature additions.
+- **Refactoring (Phase 1)**: Implemented collapsible sections in  to improve usability.
+- **Bug Fixes**: Resolved multiple JavaScript parsing and linting errors in .
+- **Advanced SEO Section**: Added a full suite of meta tag fields with a live search result preview.
+- **Badges & Status Section**: Implemented a UI for admins to add Verified, Preferred, and other badges.
+- **Dynamic Content Tools**: Created a **Table of Contents (TOC) Builder** and a **Table Builder** to help admins create structured content without writing HTML.
+- **New Admin Sections**: Added dedicated, user-friendly sections for managing **FAQs** and **Sidebar Widgets**.
+- **Configurable College Menu**: Implemented a powerful system to control the detail page menu from the admin panel, supporting a default menu, a menu auto-generated from the TOC, and a custom menu that links to **separate, dynamically-generated sub-pages**.
+- **Virtual Tour Accessibility**: Added  and  fields for the virtual tour URL.
 
 **Earlier issues found/mentioned but not fixed**
-- None.
+- The **SEO Content Image Upload** bug described in All Pending/In progress Issue list.
 
 **Known issue recurrence from previous fork**
-- None.
+- **Fragility of **: The previous summary warned about syntax errors due to the file's large size. This happened again, and the agent had to fix multiple parsing errors before proceeding. The risk remains critical until the file is refactored.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Backend**: FastAPI (, ),  for image manipulation (resizing, compression, format conversion),  and  for file path management. A key concept was fixing the ingress routing by mounting  under the  prefix.
-- **Frontend**: React (, ),  for handling file uploads, dynamic UI updates for image previews, and client-side logic for auto-generating alt text.
+- **Frontend**: Complex conditional rendering and state management in React to handle the numerous new UI sections and configuration options. Use of React Router for dynamic routing to sub-pages ().
+- **Backend**: Significant expansion of the Pydantic  model to store configuration data for all new features, including nested lists and dictionaries for menus, TOC, tables, and widgets.
 
 **key DB schema**
-- : The model has been significantly expanded to support rich media.
-    - , , : 
-    - , , : 
-    - :  where each dict is .
-    - : 
-    - , , : 
-    - , , : 
--  (nested within ): Course objects can now have an optional .
+- : Massively expanded to include:
+    - , , , : For status badges.
+    - , , etc.: For the new SEO section.
+    - , , , , , : For dynamic content tools.
+    - : A dictionary storing the menu mode (, , ) and an array of custom menu items with their content.
 
 **changes in tech stack**
-- **Pillow**: Now used on the backend for all image processing tasks.
+- None.
 
 **All files of reference**
--  (The primary file for all frontend changes)
--  (The monolithic backend file, heavily modified for new endpoints, models, image processing, and static file routing)
+-  (Primary file for all admin UI changes)
+-  (Primary file for all backend logic and model changes)
+-  (Handles dynamic rendering of the public-facing page)
+-  (For new routing)
+-  (New component for separate pages)
 
 **Areas that need refactoring**:
-- ****: **CRITICAL**. At over 3000 lines, this component is unmaintainable and a constant source of syntax errors. It MUST be broken down into smaller sub-components as the next priority task.
-- ****: This monolithic file is now even larger with the addition of file handling and image processing logic. It should be refactored into a proper project structure (routes, models, services/utils).
+- ****: **CRITICAL**. The file is unmaintainably large. A full refactor into smaller, focused components is the most important next step for project health.
+- ****: This monolithic file's complexity continues to grow, making it difficult to maintain and debug.
 
 **key api endpoints**
-- **New Endpoints**:
-    - : Handles single image uploads for , , and  types.
-    - : Handles bulk uploads for campus gallery images.
-    - : Handles PDF brochure uploads.
-- **New Static Route**:
-    - : Serves all uploaded content (images, brochures) from the  directory.
+- The  and  endpoints now handle a significantly larger and more complex JSON payload.
+- The call to  was modified on the frontend, but the endpoint itself remains the same.
 
 **Critical Info for New Agent**
-- **Top Priority is Refactoring**: The most urgent task is to refactor  into smaller components. The file's size and complexity led to multiple bugs in this session and will block future development if not addressed immediately.
-- **Static File URL Convention**: All uploaded media is served via the backend at the  path. The backend upload endpoints now return this full path (e.g., ). The frontend should use this URL directly for image  attributes. Do not prepend the .
-- **Image Optimization is Automatic**: All image uploads are automatically resized and compressed on the backend. No client-side optimization is needed.
+- **Verify SEO Image Upload First**: The very first task should be to test the SEO Content Image Upload feature to confirm if the previous agent's fix worked. If not, this is a P0 bug to resolve.
+- **Understand the New Menu System**: The college detail page's navigation is now highly dynamic and controlled by the  object in the database. Review how  renders the three different menu modes, especially the custom_separate_pages mode which uses the new  component.
+- **Prioritize Refactoring **: Do not add significant new features until the  component is broken down. The risk of introducing new bugs is too high.
 
 **documents created in this job**
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+- None.
 
 **Last 10 User Messages and any pending user messages**
-1.  **create logo banner gallery image alt tag option**: Completed.
-2.  **can you create alt tag with admissionbuddy branding automatically...**: Completed.
-3.  **errror**: Completed. Agent fixed a  error.
-4.  **priview section shows nothing**: Completed. Agent attempted a fix.
-5.  **see the error**: Completed. User provided a screenshot of broken previews.
-6.  **logo priview showing broken image**: Completed. Agent attempted another fix.
-7.  **same problem broken image showing in preview**: Completed.
-8.  **see**: Completed. User provided a screenshot which led to the final diagnosis of the static file routing issue. The agent then fixed it.
-9.  **solve the same problem for banner and gallery image...**: Completed. Agent confirmed the fix works for all image types.
-10. **how to add alt tag for multiple upload?**: Completed. Agent explained the workflow.
-11. **use image resizeer and compressor...**: Completed.
-12. **mention image size you required...**: Completed.
-13. **give Brochure upload option...**: Completed.
-14. **how to ad video alt tag**: Completed.
+1.  **Request**: Add an image upload feature to the SEO content area. (Implemented, but potentially buggy).
+2.  **Feedback**: User noted the alt tag function was missing for SEO images. (Agent clarified it was present).
+3.  **Bug Report**: User provided a screenshot of the image upload failing. (Agent attempted a fix).
+4.  **Request**: Add a Table of Contents builder to the SEO section. (Implemented).
+5.  **Request**: Add a Table Builder to the content areas. (Implemented for both Description and SEO Content).
+6.  **Question**: How does the college detail page menu work? (Agent explained and proposed a configurable solution).
+7.  **Confirmation**: User approved making the menu configurable from the admin panel.
+8.  **Question**: Does the custom menu open a separate page or scroll on the same page?
+9.  **Decision**: User chose to have custom menu items open separate pages.
+10. **Confirmation**: User instructed the agent to complete the implementation of the separate pages feature.
 
 **Project Health Check:**
-- **Broken**: No. The application is stable and the core features are working.
-- **Mocked**: Yes. Public-facing pages (, etc.) are still not connected to the backend APIs.
+- **Broken**: The SEO Content Image Upload feature is potentially broken and requires immediate verification.
+- **Mocked**: Yes, most public-facing listing pages (, , etc.) are still using mock data.
 
 **3rd Party Integrations**
-- **React Icons**: Used for icons in the admin panel.
-- **Pillow**: Used for server-side image processing.
+- React Icons
+- Pillow
 
 **Testing status**
-- **Testing agent used after significant changes**: NO. Per user request (dont use test agent every test . do your self), the agent relied on manual  commands and creating temporary files to test backend functionality.
+- **Testing agent used after significant changes**: NO. Agent performed manual testing using screenshots and direct API calls.
 - **Troubleshoot agent used after agent stuck in loop**: NO
 - **Test files created**: None.
-- **Known regressions**: None.
+- **Known regressions**: None, but the  file is highly prone to new regressions due to its complexity.
 
 **Credentials to test flow:**
 - **Admin Email**: 
 - **Admin Password**: 
 
 **What agent forgot to execute**
-- The agent was highly responsive to the user's rapid-fire requests and did not forget any explicit tasks. The only minor gap was the lack of a final visual test for the very last feature (video accessibility fields), which is why it is marked for user verification.</analysis>
+- The agent did not conclusively verify that the fix for the SEO Content Image Upload was successful. The user reported the bug, the agent applied a fix, but then the conversation immediately shifted to a new feature request without confirming the fix worked.</analysis>
