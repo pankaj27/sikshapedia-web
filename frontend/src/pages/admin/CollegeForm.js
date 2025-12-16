@@ -1693,21 +1693,29 @@ const CollegeForm = () => {
                     <option value="">Select Facility</option>
                     {availableFacilities.map((f) => (
                       <option key={f.id} value={f.name}>
-                        {f.icon} {f.name} ({f.category})
+                        {f.name} - {f.category}
                       </option>
                     ))}
                   </select>
                   <p className="text-xs text-gray-500 mt-1">Select a facility to auto-fill icon and description</p>
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs text-gray-600 mb-1">Icon</label>
-                  <input
-                    type="text"
-                    placeholder="Auto-filled (emoji)"
-                    value={facility.icon}
-                    onChange={(e) => updateFacility(index, 'icon', e.target.value)}
-                    className="w-full border rounded px-3 py-2 bg-yellow-50 text-2xl text-center"
-                  />
+                  <label className="block text-xs text-gray-600 mb-1">Icon Preview</label>
+                  <div className="flex items-center gap-3 p-3 border rounded bg-white">
+                    <div className="text-blue-600 text-2xl">
+                      {facility.icon && renderIcon(facility.icon)}
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        placeholder="Auto-filled icon name"
+                        value={facility.icon}
+                        onChange={(e) => updateFacility(index, 'icon', e.target.value)}
+                        className="w-full border rounded px-3 py-2 bg-yellow-50 text-sm"
+                        readOnly
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="col-span-2">
                   <label className="block text-xs text-gray-600 mb-1">Description</label>
