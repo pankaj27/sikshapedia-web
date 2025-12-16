@@ -1897,8 +1897,10 @@ async def upload_brochure(
     }
 
 @api_router.get("/admin/stats")
-async def get_admin_stats():
+async def get_admin_stats(current_user: User = Depends(get_current_user)):
     """Get platform statistics for admin dashboard"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
     total_colleges = await db.colleges.count_documents({})
     total_schools = await db.schools.count_documents({})
     total_universities = await db.universities.count_documents({})
