@@ -824,7 +824,8 @@ const CollegeForm = () => {
   const updateUpdateSimple = (index, field, value) => {
     const newUpdates = [...formData.updates];
     newUpdates[index][field] = value;
-
+    setFormData({ ...formData, updates: newUpdates });
+  };
 
   const handleBrochureUpload = async (file) => {
     setUploadingBrochure(true);
