@@ -1934,9 +1934,14 @@ async def get_colleges(
     min_fees: Optional[float] = None,
     max_fees: Optional[float] = None,
     course: Optional[str] = None,
-    sort_by: Optional[str] = Query("nirf_ranking", regex="^(name|nirf_ranking|average_fees|rating)$")
+    sort_by: Optional[str] = Query("nirf_ranking", regex="^(name|nirf_ranking|average_fees|rating)$"),
+    include_drafts: bool = Query(False)  # Admin can set to True to see drafts
 ):
     query = {}
+    
+    # Only show published colleges on frontend (unless admin requests drafts)
+    if not include_drafts:
+        query["status"] = "published"
     
     if search:
         query["$or"] = [
