@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import CollegeDetailPage from './CollegeDetailPage';
+import { generateSlug } from '../utils/slugify';
 
 /**
  * Wrapper component that handles the new URL structure:
@@ -27,6 +28,8 @@ const InstitutionDetailPage = () => {
     if (path.startsWith('/school/')) return 'School';
     return 'College';
   };
+  
+  const institutionType = getInstitutionType();
   
   // Parse URL to extract numeric ID and slug
   // Format: {number}{slug} e.g., "123mr-college-of-pharmacy" or "001indian-institute-of-technology-delhi"
@@ -74,21 +77,40 @@ const InstitutionDetailPage = () => {
           }
         }
         
-        // Strategy 2: Search by numeric ID suffix in the database
-        // Our IDs are like "iit-delhi-001" where "001" is the numeric part
-        if (numericId) {
+        // Strategy 2: Search by numeric ID AND slug AND institution type
+        if (numericId && slug) {
           try {
-            // Fetch all institutions and find by numeric suffix
-            const response = await api.get(`/colleges?limit=100`);
+            // Fetch institutions filtered by institution_type
+            const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
             if (response.data && response.data.length > 0) {
-              // Find institution where ID ends with the numeric part
+              // Find institution where:
+              // 1. ID ends with the numeric part
+              // 2. Slug matches the name
               const institution = response.data.find(inst => {
                 const idNumericMatch = inst.id?.match(/(\d+)$/);
-                return idNumericMatch && idNumericMatch[1] === numericId;
+                const nameSlug = generateSlug(inst.name);
+                
+                // Check both numeric match AND slug contains institution name
+                const numericMatches = idNumericMatch && idNumericMatch[1] === numericId;
+                const slugMatches = slug === nameSlug || nameSlug.includes(slug.replace(/^-/, '')) || slug.includes(nameSlug);
+                
+                return numericMatches && slugMatches;
               });
               
               if (institution) {
                 setInstitutionId(institution.id);
+                setLoading(false);
+                return;
+              }
+              
+              // If exact match not found, try matching by numeric ID only within same type
+              const numericOnlyMatch = response.data.find(inst => {
+                const idNumericMatch = inst.id?.match(/(\d+)$/);
+                return idNumericMatch && idNumericMatch[1] === numericId;
+              });
+              
+              if (numericOnlyMatch) {
+                setInstitutionId(numericOnlyMatch.id);
                 setLoading(false);
                 return;
               }
@@ -98,12 +120,12 @@ const InstitutionDetailPage = () => {
           }
         }
         
-        // Strategy 3: Search by slug/name
+        // Strategy 3: Search by slug/name only
         if (slug) {
           try {
             const searchTerm = slug.replace(/-/g, ' ').trim();
             if (searchTerm) {
-              const response = await api.get(`/colleges?search=${encodeURIComponent(searchTerm)}&limit=5`);
+              const response = await api.get(`/colleges?search=${encodeURIComponent(searchTerm)}&institution_type=${institutionType}&limit=5`);
               if (response.data && response.data.length > 0) {
                 setInstitutionId(response.data[0].id);
                 setLoading(false);
@@ -127,7 +149,7 @@ const InstitutionDetailPage = () => {
     };
     
     resolveInstitution();
-  }, [idSlug, location.pathname]);
+  }, [idSlug, location.pathname, institutionType]);
   
   if (loading) {
     return (
