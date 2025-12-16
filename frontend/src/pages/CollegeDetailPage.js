@@ -674,7 +674,7 @@ const CollegeDetailPage = () => {
               )}
 
               {/* INFO SECTION - Show when NOT using auto_from_toc */}
-              <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>>
+              <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                 <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
                 <p className="text-gray-800 leading-relaxed mb-4">
                   {college.seo_intro || `${college.name} is a premier ${college.type} institution established in ${college.established_year || college.established || 'N/A'} and located in ${college.location?.city}, ${college.location?.state}.`}
@@ -778,7 +778,7 @@ const CollegeDetailPage = () => {
               </section>
 
               {/* COURSES & FEES - Hide when using TOC menu */}
-                <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>>
+                <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                   <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees 2026</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} offers various undergraduate and postgraduate programs. The fee structure for different courses is mentioned below:
