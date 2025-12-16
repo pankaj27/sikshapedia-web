@@ -721,9 +721,7 @@ const CollegeForm = () => {
       
       if (response.data.success) {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        // Add /api prefix for Kubernetes ingress routing
-        const apiUrl = response.data.url.replace('/static/', '/api/static/');
-        const fullUrl = backendUrl + apiUrl;
+        const fullUrl = backendUrl + response.data.url;
         
         setFormData(prev => ({
           ...prev,
@@ -757,9 +755,7 @@ const CollegeForm = () => {
       
       if (response.data.success) {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        // Add /api prefix for Kubernetes ingress routing
-        const apiUrl = response.data.url.replace('/static/', '/api/static/');
-        const fullUrl = backendUrl + apiUrl;
+        const fullUrl = backendUrl + response.data.url;
         
         // Update with object format including existing alt text
         updateCampusImage(index, 'url', fullUrl);
@@ -793,15 +789,11 @@ const CollegeForm = () => {
       
       if (response.data.success) {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const uploadedImages = response.data.files.map(f => {
-          // Add /api prefix for Kubernetes ingress routing
-          const apiUrl = f.url.replace('/static/', '/api/static/');
-          return {
-            url: backendUrl + apiUrl,
-            title: '',
-            alt: ''
-          };
-        });
+        const uploadedImages = response.data.files.map(f => ({
+          url: backendUrl + f.url,
+          title: '',
+          alt: ''
+        }));
         
         setFormData(prev => ({
           ...prev,
