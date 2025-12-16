@@ -66,7 +66,7 @@ export const getInstitutionDetailUrl = (type, id, name, city = null, serialNumbe
   }
   
   // Format: /colleges/{number}-{slug} or /colleges/{number}-{slug}-{city}
-  return `/${typeSlug}/${numericId}-${finalSlug}`;
+  return `/${typeSuffix}/${numericId}-${finalSlug}`;
 };
 
 // Generate stream-based listing URL
