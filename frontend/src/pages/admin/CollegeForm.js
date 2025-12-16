@@ -1677,8 +1677,7 @@ const CollegeForm = () => {
         </div>
 
         {/* Courses & Fees */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Courses & Fees</h2>
+        <CollapsibleSection title="Courses & Fees" icon="📚" defaultOpen={true}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Average Fees (Annual) *</label>
             <input
