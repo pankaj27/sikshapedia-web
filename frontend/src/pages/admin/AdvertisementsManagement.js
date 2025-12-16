@@ -41,6 +41,7 @@ const AdvertisementsManagement = () => {
   const availablePositions = [
     { value: 'top', label: 'Top Banner', description: 'Above page content' },
     { value: 'content-top', label: 'Content Top', description: 'Inside main content area (top)' },
+    { value: 'content-middle', label: 'Content Middle', description: 'Middle of main content area' },
     { value: 'content-bottom', label: 'Content Bottom', description: 'Inside main content area (bottom)' },
     { value: 'sidebar', label: 'Sidebar', description: 'Right sidebar area' },
     { value: 'popup', label: 'Popup', description: 'Overlay popup' },

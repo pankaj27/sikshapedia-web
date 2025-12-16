@@ -4212,6 +4212,7 @@ const CollegeForm = () => {
                     >
                       <option value="top">Top Banner - Above page content</option>
                       <option value="content-top">Content Top - Inside main content area (top)</option>
+                      <option value="content-middle">Content Middle - Middle of main content area</option>
                       <option value="content-bottom">Content Bottom - Inside main content area (bottom)</option>
                       <option value="sidebar">Sidebar - Right sidebar area</option>
                       <option value="popup">Popup - Overlay popup</option>
@@ -5955,6 +5956,7 @@ const CollegeForm = () => {
                                       >
                                         <option value="top">Top Banner - Above page content</option>
                                         <option value="content-top">Content Top - Inside main content (top)</option>
+                                        <option value="content-middle">Content Middle - Middle of main content</option>
                                         <option value="content-bottom">Content Bottom - Inside main content (bottom)</option>
                                         <option value="sidebar">Sidebar - Right sidebar area</option>
                                         <option value="popup">Popup - Overlay popup</option>
