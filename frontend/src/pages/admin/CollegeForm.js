@@ -251,9 +251,11 @@ const CollegeForm = () => {
     seo_intro: '',
     seo_full_content: '',
     seo_images: [],
-    seo_toc: [], // Table of Contents [{title, anchor, content}]
+    seo_toc: [], // Table of Contents for SEO Content [{title, anchor, content}]
     seo_tables: [], // [{title, headers: [], rows: [[]]}] Tables for content
     seo_video_url: '',
+    // Detail Page TOC - Used for Auto Menu from TOC
+    detail_page_toc: [], // [{title, anchor, content, icon}]
     // Menu Configuration
     menu_config: {
       use_custom_menu: false,
