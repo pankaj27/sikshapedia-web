@@ -204,8 +204,9 @@ const CollegeSubPage = () => {
   const ogDescription = currentSection?.og_description || pageDescription;
   const pageHeading = currentSection?.page_heading || currentSection?.label || section;
   
-  // Determine the base URL path for links (use singular form)
-  const typePath = institutionType.toLowerCase(); // college, university, school
+  // Determine the base URL path for links (use plural form)
+  const typePathMap = { 'College': 'colleges', 'University': 'universities', 'School': 'schools' };
+  const typePath = typePathMap[institutionType] || 'colleges';
   const currentSlug = idSlug || id; // Use idSlug if available, fallback to id
   const basePath = `/${typePath}/${currentSlug}`;
 
