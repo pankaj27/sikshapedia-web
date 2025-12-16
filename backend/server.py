@@ -1446,10 +1446,17 @@ async def login(credentials: UserLogin):
     if not user_doc:
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
-    if not bcrypt.checkpw(credentials.password.encode('utf-8'), user_doc['password_hash'].encode('utf-8')):
+    # Handle both 'password' and 'password_hash' field names
+    password_hash = user_doc.get('password_hash') or user_doc.get('password')
+    if not password_hash:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    # Verify password using pwd_context
+    if not pwd_context.verify(credentials.password, password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
     user_doc.pop('password_hash', None)
+    user_doc.pop('password', None)
     user_doc.pop('_id', None)
     if isinstance(user_doc.get('created_at'), str):
         user_doc['created_at'] = datetime.fromisoformat(user_doc['created_at'])
