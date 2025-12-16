@@ -644,6 +644,44 @@ const CollegeForm = () => {
     setFormData({ ...formData, cutoff_data: formData.cutoff_data.filter((_, i) => i !== index) });
   };
 
+  const handleFileUpload = async (file, type) => {
+    const setUploading = type === 'logo' ? setUploadingLogo : setUploadingBanner;
+    const fieldName = type === 'logo' ? 'logo_url' : 'banner_url';
+    
+    setUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post(`/upload/image?type=${type}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const fullUrl = backendUrl + response.data.url;
+        
+        setFormData(prev => ({
+          ...prev,
+          [fieldName]: fullUrl
+        }));
+        
+        alert(`${type === 'logo' ? 'Logo' : 'Banner'} uploaded successfully!`);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert(`Failed to upload ${type}. Please try again.`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+
   const updateUpdateSimple = (index, field, value) => {
     const newUpdates = [...formData.updates];
     newUpdates[index][field] = value;
