@@ -2129,8 +2129,7 @@ const CollegeForm = () => {
         </div>
 
         {/* Updates & News */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Updates & News</h2>
+        <CollapsibleSection title="Updates & News" icon="📰" defaultOpen={false}>
           <p className="text-sm text-gray-600 mb-4">Add custom news/updates or tag existing news articles from the News page</p>
           
           {formData.updates.map((update, index) => (
@@ -2236,7 +2235,7 @@ const CollegeForm = () => {
           <Button type="button" onClick={addUpdate} size="sm">
             <FiPlus className="mr-2" /> Add Update/News
           </Button>
-        </div>
+        </CollapsibleSection>
 
         {/* Contact Information */}
         <div className="bg-white rounded-lg shadow p-6">
