@@ -833,7 +833,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* ADMISSIONS */}
-                <section id="admission">
+                <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The eligibility criteria and selection process are mentioned below:
@@ -909,7 +909,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* CUTOFF */}
-                <section id="cutoff">
+                <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff 2025</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     The cutoff varies for different programs and categories. Below are the cutoff ranks for General Category:
@@ -951,7 +951,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* PLACEMENT */}
-                <section id="placement">
+                <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Placement 2024</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     As per the {college.name} Placement report, the average package stood at <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA</strong>. 
@@ -1040,7 +1040,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* RANKING */}
-                <section id="ranking">
+                <section id="ranking" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Ranking 2025</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} has been ranked by various agencies including NIRF, IIRF, India Today, and more. The ranking details are mentioned below:
@@ -1099,7 +1099,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* SCHOLARSHIP */}
-                <section id="scholarship">
+                <section id="scholarship" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships 2026</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} offers various scholarships to support students financially. The details are mentioned below:
@@ -1137,7 +1137,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* FACILITIES */}
-                <section id="facilities">
+                <section id="facilities" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
@@ -1337,7 +1337,7 @@ const CollegeDetailPage = () => {
                 </section>
 
                 {/* REVIEWS */}
-                <section id="reviews">
+                <section id="reviews" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                   <h2 className="text-2xl font-bold mb-3">{college.name} Student Reviews</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     Read what students and alumni have to say about {college.name}:
