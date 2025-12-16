@@ -1519,6 +1519,60 @@ async def admin_login(credentials: UserLogin):
         )
     )
 
+# ============================================
+# File Upload Routes
+# ============================================
+
+@api_router.post("/upload/image")
+async def upload_image(
+    file: UploadFile = File(...),
+    type: str = Query(..., description="Type: logo or banner"),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Upload an image file (logo or banner) - Admin only"""
+    # Verify admin token
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    # Validate file type
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Only image files are allowed")
+    
+    # Validate type parameter
+    if type not in ["logo", "banner"]:
+        raise HTTPException(status_code=400, detail="Type must be 'logo' or 'banner'")
+    
+    # Generate unique filename
+    file_ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
+    unique_filename = f"{uuid.uuid4()}.{file_ext}"
+    
+    # Determine upload directory
+    upload_subdir = "logos" if type == "logo" else "banners"
+    file_path = UPLOAD_DIR / upload_subdir / unique_filename
+    
+    # Save file
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+    
+    # Return the URL
+    file_url = f"/static/uploads/{upload_subdir}/{unique_filename}"
+    
+    return {
+        "success": True,
+        "url": file_url,
+        "filename": unique_filename,
+        "type": type
+    }
+
+
 @api_router.get("/admin/stats")
 async def get_admin_stats():
     """Get platform statistics for admin dashboard"""
