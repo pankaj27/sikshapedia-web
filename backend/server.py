@@ -2548,6 +2548,41 @@ async def create_scholarship_application(app_data: ScholarshipApplicationCreate,
     
     await db.scholarship_applications.insert_one(app_dict)
     
+
+# ============================================
+# Facilities Routes
+# ============================================
+
+@api_router.get("/facilities", response_model=List[Facility])
+async def get_facilities(
+    category: Optional[str] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=1000)
+):
+    query = {}
+    
+    if category:
+        query["category"] = category
+    
+    facilities = await db.facilities.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    
+    for facility in facilities:
+        if isinstance(facility.get('created_at'), str):
+            facility['created_at'] = datetime.fromisoformat(facility['created_at'])
+    
+    return facilities
+
+@api_router.get("/facilities/{facility_id}", response_model=Facility)
+async def get_facility(facility_id: str):
+    facility = await db.facilities.find_one({"id": facility_id}, {"_id": 0})
+    if not facility:
+        raise HTTPException(status_code=404, detail="Facility not found")
+    
+    if isinstance(facility.get('created_at'), str):
+        facility['created_at'] = datetime.fromisoformat(facility['created_at'])
+    
+    return facility
+
     # Create notification
     notification = Notification(
         user_id=current_user.id,
