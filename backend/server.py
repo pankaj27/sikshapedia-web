@@ -1611,18 +1611,26 @@ async def upload_image(
     if type not in ["logo", "banner", "campus"]:
         raise HTTPException(status_code=400, detail="Type must be 'logo', 'banner', or 'campus'")
     
-    # Generate unique filename
-    file_ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
-    unique_filename = f"{uuid.uuid4()}.{file_ext}"
+    # Read file content
+    file_content = await file.read()
+    
+    # Optimize image (resize and compress)
+    try:
+        optimized_content = optimize_image(file_content, type)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to process image: {str(e)}")
+    
+    # Generate unique filename (always use .jpg for optimized images)
+    unique_filename = f"{uuid.uuid4()}.jpg"
     
     # Determine upload directory
     upload_subdir = "logos" if type == "logo" else ("banners" if type == "banner" else "campus")
     file_path = UPLOAD_DIR / upload_subdir / unique_filename
     
-    # Save file
+    # Save optimized file
     try:
         with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+            buffer.write(optimized_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
