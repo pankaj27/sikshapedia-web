@@ -176,7 +176,7 @@ const CollegeSubPage = () => {
               {currentSection ? (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <span className="text-orange-500 text-4xl">{currentSection.icon}</span>
+                    <span className="text-orange-500">{getMenuIconLarge(currentSection.id)}</span>
                     {currentSection.label}
                   </h2>
                   
@@ -197,7 +197,7 @@ const CollegeSubPage = () => {
                     to={`/colleges/${id}`}
                     className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600"
                   >
-                    ← Back to {college.name}
+                    <FiHome size={16} /> Back to {college.name}
                   </Link>
                 </div>
               )}
@@ -207,19 +207,22 @@ const CollegeSubPage = () => {
             <div className="lg:col-span-1 space-y-6">
               {/* Quick Navigation */}
               <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="font-bold text-gray-800 mb-4">📑 Quick Navigation</h3>
+                <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <FiBookmark className="text-orange-500" size={18} /> Quick Navigation
+                </h3>
                 <div className="space-y-2">
                   {menuItems.map((item, index) => (
                     <Link
                       key={index}
                       to={`/colleges/${id}/${item.id}`}
-                      className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                         section === item.id
                           ? 'bg-orange-100 text-orange-700 font-semibold'
                           : 'hover:bg-gray-100 text-gray-600'
                       }`}
                     >
-                      {item.icon} {item.label}
+                      <span className={section === item.id ? 'text-orange-600' : 'text-gray-400'}>{getMenuIcon(item.id)}</span>
+                      {item.label}
                     </Link>
                   ))}
                 </div>
@@ -227,7 +230,9 @@ const CollegeSubPage = () => {
 
               {/* College Quick Facts */}
               <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="font-bold text-gray-800 mb-4">🏫 Quick Facts</h3>
+                <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <HiOutlineOfficeBuilding className="text-orange-500" size={18} /> Quick Facts
+                </h3>
                 <div className="space-y-3 text-sm">
                   {college.established && (
                     <div className="flex justify-between">
