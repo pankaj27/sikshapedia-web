@@ -1569,8 +1569,8 @@ async def upload_image(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
-    # Return the URL
-    file_url = f"/static/uploads/{upload_subdir}/{unique_filename}"
+    # Return the URL with /api prefix for Kubernetes ingress routing
+    file_url = f"/api/static/uploads/{upload_subdir}/{unique_filename}"
     
     return {
         "success": True,
@@ -1621,7 +1621,8 @@ async def upload_multiple_images(
             with open(file_path, "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
             
-            file_url = f"/static/uploads/{upload_subdir}/{unique_filename}"
+            # Use /api prefix for Kubernetes ingress routing
+            file_url = f"/api/static/uploads/{upload_subdir}/{unique_filename}"
             uploaded_files.append({
                 "original_name": file.filename,
                 "url": file_url,
