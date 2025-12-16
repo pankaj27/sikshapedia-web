@@ -4471,7 +4471,7 @@ const CollegeForm = () => {
                   />
                   <div>
                     <p className="font-medium text-gray-800">🔗 Auto from TOC</p>
-                    <p className="text-xs text-gray-500">Automatically generate menu from your Table of Contents sections</p>
+                    <p className="text-xs text-gray-500">Generate menu from Detail Page TOC sections (defined below)</p>
                   </div>
                 </label>
                 
