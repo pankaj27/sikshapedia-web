@@ -1522,6 +1522,11 @@ async def admin_login(credentials: UserLogin):
             name=admin.name,
             phone="",
             enrolled_courses=[],
+            saved_colleges=[],
+            saved_courses=[],
+            is_premium=True
+        )
+    )
 
 # ============================================
 # Image Optimization Helper
