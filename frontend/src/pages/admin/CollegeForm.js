@@ -203,6 +203,22 @@ const CollegeForm = () => {
     seo_toc: [], // Table of Contents [{title, anchor, content}]
     seo_tables: [], // [{title, headers: [], rows: [[]]}] Tables for content
     seo_video_url: '',
+    // Menu Configuration
+    menu_config: {
+      use_custom_menu: false,
+      auto_from_toc: true,
+      items: [
+        { id: 'info', label: 'Info', icon: '📋', enabled: true, order: 1 },
+        { id: 'courses', label: 'Courses & Fees', icon: '📚', enabled: true, order: 2 },
+        { id: 'admission', label: 'Admissions', icon: '📝', enabled: true, order: 3 },
+        { id: 'cutoff', label: 'Cutoff', icon: '📊', enabled: true, order: 4 },
+        { id: 'placement', label: 'Placement', icon: '💼', enabled: true, order: 5 },
+        { id: 'ranking', label: 'Ranking', icon: '🏆', enabled: true, order: 6 },
+        { id: 'scholarship', label: 'Scholarship', icon: '💰', enabled: true, order: 7 },
+        { id: 'facilities', label: 'Facilities', icon: '🏫', enabled: true, order: 8 },
+        { id: 'reviews', label: 'Reviews', icon: '⭐', enabled: true, order: 9 },
+      ]
+    },
     seo_video_title: '',
     seo_video_description: '',
     seo_faqs: [],
