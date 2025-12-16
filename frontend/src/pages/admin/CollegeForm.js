@@ -4498,14 +4498,16 @@ const CollegeForm = () => {
             {(formData.menu_config?.use_custom_menu || (!formData.menu_config?.auto_from_toc && !formData.menu_config?.use_custom_menu)) && (
               <div className="bg-white border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-semibold text-gray-800">📋 Menu Items</h4>
+                  <h4 className="font-semibold text-gray-800 flex items-center gap-2">
+                    <FiLayers className="text-gray-600" /> Menu Items
+                  </h4>
                   <button
                     type="button"
                     onClick={() => {
                       const newItems = [...(formData.menu_config?.items || []), {
                         id: `custom-${Date.now()}`,
                         label: 'New Item',
-                        icon: '📌',
+                        icon: 'default',
                         enabled: true,
                         order: (formData.menu_config?.items?.length || 0) + 1
                       }];
@@ -4514,9 +4516,9 @@ const CollegeForm = () => {
                         menu_config: { ...formData.menu_config, items: newItems }
                       });
                     }}
-                    className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200"
+                    className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200 flex items-center gap-1"
                   >
-                    + Add Item
+                    <FiPlus size={12} /> Add Item
                   </button>
                 </div>
 
