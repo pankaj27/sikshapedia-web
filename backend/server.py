@@ -2041,7 +2041,15 @@ async def create_college(college_data: CollegeCreate, current_user: User = Depen
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can create colleges")
     
-    college = College(**college_data.model_dump(), total_courses=len(college_data.courses))
+    # Auto-assign serial number (find max and increment)
+    max_serial = await db.colleges.find_one(
+        {"serial_number": {"$exists": True}},
+        {"serial_number": 1},
+        sort=[("serial_number", -1)]
+    )
+    next_serial = (max_serial.get("serial_number", 0) if max_serial else 0) + 1
+    
+    college = College(**college_data.model_dump(), total_courses=len(college_data.courses), serial_number=next_serial)
     college_dict = college.model_dump()
     college_dict['created_at'] = college_dict['created_at'].isoformat()
     
