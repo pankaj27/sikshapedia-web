@@ -4,6 +4,7 @@ import { FiMapPin, FiStar, FiUser, FiChevronDown, FiChevronUp, FiDownload, FiChe
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineClipboardList, HiOutlineTrendingUp, HiOutlineUserGroup, HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+import AdBanner from '../components/AdBanner';
 
 // Icon mapping for professional icons
 const iconMap = {
