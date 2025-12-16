@@ -135,6 +135,8 @@ const CollegeForm = () => {
     campus_images: [],
     campus_video_url: '',
     contact_info: { phone: '', mobile: '', whatsapp: '', email: '', website: '' },
+    logo_url: '',
+    banner_url: '',
     images: [],
     videos: [],
     brochure_url: '',

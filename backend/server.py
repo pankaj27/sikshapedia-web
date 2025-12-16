@@ -434,7 +434,9 @@ class College(BaseModel):
     # Contact & Media
     contact_info: Optional[Dict] = None
     contact: Optional[Dict] = None
-    images: List[str] = []  # Logo/Banner images
+    logo_url: Optional[str] = None  # Institution logo
+    banner_url: Optional[str] = None  # Institution banner
+    images: List[str] = []  # Additional images (legacy support)
     videos: List[str] = []
     brochure_url: Optional[str] = None
     virtual_tour_url: Optional[str] = None
