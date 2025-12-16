@@ -2244,48 +2244,60 @@ const CollegeForm = () => {
               </div>
 
               {/* Individual Image Rows */}
-              {formData.campus_images.map((img, index) => (
-                <div key={index} className="flex gap-2 mb-3">
-                  <input
-                    type="url"
-                    value={img}
-                    onChange={(e) => handleArrayChange('campus_images', index, e.target.value)}
-                    placeholder="https://example.com/image.jpg or upload file"
-                    className="flex-1 border rounded px-3 py-2"
-                  />
-                  <div className="relative">
+              {formData.campus_images.map((img, index) => {
+                const imgData = typeof img === 'string' ? { url: img, alt: '' } : img;
+                return (
+                  <div key={index} className="mb-4 p-3 border rounded bg-white">
+                    <div className="flex gap-2 mb-2">
+                      <input
+                        type="url"
+                        value={imgData.url}
+                        onChange={(e) => updateCampusImage(index, 'url', e.target.value)}
+                        placeholder="https://example.com/image.jpg or upload file"
+                        className="flex-1 border rounded px-3 py-2"
+                      />
+                      <div className="relative">
+                        <input
+                          type="file"
+                          id={`campus-upload-${index}`}
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) handleCampusImageUpload(file, index);
+                          }}
+                          className="hidden"
+                        />
+                        <label
+                          htmlFor={`campus-upload-${index}`}
+                          className={`inline-flex items-center px-3 py-2 border rounded cursor-pointer ${
+                            uploadingCampus[index] ? 'bg-gray-100 cursor-not-allowed' : 'bg-white hover:bg-gray-50'
+                          }`}
+                        >
+                          {uploadingCampus[index] ? (
+                            <FiLoader className="animate-spin" />
+                          ) : (
+                            <FiUpload />
+                          )}
+                        </label>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => removeCampusImage(index)}
+                      >
+                        <FiTrash2 />
+                      </Button>
+                    </div>
                     <input
-                      type="file"
-                      id={`campus-upload-${index}`}
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) handleCampusImageUpload(file, index);
-                      }}
-                      className="hidden"
+                      type="text"
+                      value={imgData.alt}
+                      onChange={(e) => updateCampusImage(index, 'alt', e.target.value)}
+                      placeholder="Alt text (e.g., 'Library Building Front View')"
+                      className="w-full border rounded px-3 py-2 text-sm"
                     />
-                    <label
-                      htmlFor={`campus-upload-${index}`}
-                      className={`inline-flex items-center px-3 py-2 border rounded cursor-pointer ${
-                        uploadingCampus[index] ? 'bg-gray-100 cursor-not-allowed' : 'bg-white hover:bg-gray-50'
-                      }`}
-                    >
-                      {uploadingCampus[index] ? (
-                        <FiLoader className="animate-spin" />
-                      ) : (
-                        <FiUpload />
-                      )}
-                    </label>
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeArrayItem('campus_images', index)}
-                  >
-                    <FiTrash2 />
-                  </Button>
-                </div>
-              ))}
+                );
+              })}
               
               {/* Preview Grid */}
               {formData.campus_images.length > 0 && formData.campus_images.some(img => img) && (
