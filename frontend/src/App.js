@@ -44,6 +44,7 @@ import RegisterPage from './pages/RegisterPage';
 // New SEO-friendly URL pages
 import DynamicListingPage from './pages/DynamicListingPage';
 import InstitutionDetailPage from './pages/InstitutionDetailPage';
+import LegacyCollegeRedirect from './components/LegacyCollegeRedirect';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import AddCollege from './pages/admin/AddCollege';
