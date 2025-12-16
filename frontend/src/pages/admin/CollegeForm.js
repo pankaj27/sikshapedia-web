@@ -178,6 +178,7 @@ const CollegeForm = () => {
     fetchAvailableCourses();
     fetchAvailableScholarships();
     fetchAvailableFacilities();
+    fetchAvailableNews();
     if (id) {
       fetchCollege();
     }
