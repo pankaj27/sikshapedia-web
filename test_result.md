@@ -533,8 +533,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Facilities Dropdown with Icons testing completed successfully"
-    - "All auto-fill functionality testing completed and working"
+    - "Professional React Icons in Facilities Dropdown testing completed successfully"
+    - "All facilities now use Feather Icons instead of emojis"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
