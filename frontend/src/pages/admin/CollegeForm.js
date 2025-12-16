@@ -2709,15 +2709,47 @@ const CollegeForm = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Virtual Tour URL</label>
-              <input
-                type="url"
-                name="virtual_tour_url"
-                value={formData.virtual_tour_url}
-                onChange={handleChange}
-                placeholder="https://example.com/virtual-tour"
-                className="w-full border rounded px-3 py-2"
-              />
+              <label className="block text-sm font-medium mb-1">🌐 Virtual Tour</label>
+              <p className="text-xs text-gray-600 mb-2">📹 360° tour URL • Add title & description for accessibility</p>
+              
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Virtual Tour URL</label>
+                  <input
+                    type="url"
+                    name="virtual_tour_url"
+                    value={formData.virtual_tour_url}
+                    onChange={handleChange}
+                    placeholder="https://example.com/virtual-tour"
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Tour Title (For Accessibility)</label>
+                  <input
+                    type="text"
+                    name="virtual_tour_title"
+                    value={formData.virtual_tour_title || ''}
+                    onChange={handleChange}
+                    placeholder="e.g., '360° Campus Virtual Tour - Admissionbuddy'"
+                    className="w-full border-2 border-blue-200 rounded px-3 py-2 text-sm"
+                  />
+                  <p className="text-xs text-blue-600 mt-1">Used for screen readers and tour embed title</p>
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Tour Description (Optional)</label>
+                  <textarea
+                    name="virtual_tour_description"
+                    value={formData.virtual_tour_description || ''}
+                    onChange={handleChange}
+                    placeholder="Brief description of the virtual tour experience..."
+                    rows="2"
+                    className="w-full border rounded px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </CollapsibleSection>
