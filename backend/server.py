@@ -485,6 +485,13 @@ class College(BaseModel):
     seo_toc: List = []  # [{title, anchor, content}] Table of Contents with linked content
     seo_tables: List = []  # [{title, headers: [], rows: [[]]}] Tables for SEO content
     seo_video_url: Optional[str] = None  # Embedded video URL
+    
+    # Menu Configuration for Detail Page
+    menu_config: Optional[Dict] = {
+        "use_custom_menu": False,  # If false, use default menu
+        "auto_from_toc": True,  # Auto-generate from seo_toc
+        "items": []  # [{id, label, icon, enabled, order}]
+    }
     seo_video_title: Optional[str] = None  # Video title for accessibility
     seo_video_description: Optional[str] = None  # Video description for accessibility
     seo_faqs: List = []  # [{ question, answer }]
