@@ -1215,6 +1215,14 @@ const CollegeListingPage = () => {
                           
                           return (
                             <React.Fragment key={college.id}>
+                              {/* Content Middle Ad - Show after 5th item */}
+                              {index === 5 && (
+                                <tr>
+                                  <td colSpan="6" className="py-3">
+                                    <AdBanner pageName="colleges" position="content-middle" />
+                                  </td>
+                                </tr>
+                              )}
                               <tr className="border-b border-gray-200 hover:bg-orange-50 transition-colors">
                                 {/* AB RANKING */}
                                 <td className="px-3 py-3 align-top">
