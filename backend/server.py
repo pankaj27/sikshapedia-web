@@ -1667,10 +1667,20 @@ def optimize_image(file_content: bytes, image_type: str, max_size_kb: int = 500)
         img = background
     
     # Define max dimensions based on type
+    # Recommended sizes:
+    # - logo: 400x400 (square, ~50KB)
+    # - banner: 1600x400 (wide, ~200KB)
+    # - campus: 1200x900 (gallery, ~300KB)
+    # - content: 800x600 (article images, ~150KB)
+    # - seo: 1200x630 (OG images, ~200KB)
     if image_type == "logo":
         max_width, max_height = 400, 400  # Square logos
     elif image_type == "banner":
         max_width, max_height = 1600, 400  # Wide banners
+    elif image_type == "content":
+        max_width, max_height = 800, 600  # Article/content images
+    elif image_type == "seo":
+        max_width, max_height = 1200, 630  # OG images (social sharing)
     else:  # campus
         max_width, max_height = 1200, 900  # Standard gallery images
     
