@@ -1701,6 +1701,50 @@ const CollegeForm = () => {
                       className="w-full border rounded px-3 py-2 bg-yellow-50"
                     />
                   </div>
+                  
+                  {/* Course Brochure Upload */}
+                  <div className="col-span-2">
+                    <label className="block text-xs text-gray-600 mb-1">📄 Course Brochure (Optional)</label>
+                    <p className="text-xs text-gray-500 mb-2">Upload specific brochure for this course</p>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        placeholder="Brochure URL or upload PDF"
+                        value={course.brochure_url || ''}
+                        onChange={(e) => updateCourse(index, 'brochure_url', e.target.value)}
+                        className="flex-1 border rounded px-3 py-2 text-sm"
+                      />
+                      <div className="relative">
+                        <input
+                          type="file"
+                          id={`course-brochure-${index}`}
+                          accept=".pdf,.doc,.docx"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) handleCourseBrochureUpload(file, index);
+                          }}
+                          className="hidden"
+                        />
+                        <label
+                          htmlFor={`course-brochure-${index}`}
+                          className={`inline-flex items-center px-3 py-2 border rounded cursor-pointer text-sm ${
+                            uploadingCourseBrochure[index] ? 'bg-gray-100 cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600'
+                          }`}
+                        >
+                          {uploadingCourseBrochure[index] ? (
+                            <FiLoader className="animate-spin" />
+                          ) : (
+                            <FiUpload />
+                          )}
+                        </label>
+                      </div>
+                    </div>
+                    {course.brochure_url && (
+                      <a href={course.brochure_url} target="_blank" rel="noopener noreferrer" className="text-xs text-green-600 hover:underline mt-1 inline-block">
+                        📄 View Course Brochure
+                      </a>
+                    )}
+                  </div>
                 </div>
                 <Button type="button" variant="outline" onClick={() => removeCourse(index)} className="mt-2">
                   <FiTrash2 className="mr-2" /> Remove Course
