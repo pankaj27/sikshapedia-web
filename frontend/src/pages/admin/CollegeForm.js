@@ -1925,27 +1925,46 @@ const CollegeForm = () => {
           <h2 className="text-xl font-bold mb-4">Media & Resources</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Logo/Banner Images (URLs)</label>
-              {formData.images.map((img, index) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="url"
-                    value={img}
-                    onChange={(e) => handleArrayChange('images', index, e.target.value)}
-                    className="flex-1 border rounded px-3 py-2"
+              <label className="block text-sm font-medium mb-1">Logo URL</label>
+              <input
+                type="url"
+                name="logo_url"
+                value={formData.logo_url}
+                onChange={handleChange}
+                placeholder="https://example.com/logo.png"
+                className="w-full border rounded px-3 py-2"
+              />
+              {formData.logo_url && (
+                <div className="mt-2">
+                  <img 
+                    src={formData.logo_url} 
+                    alt="Logo Preview" 
+                    className="h-16 object-contain border rounded p-2"
+                    onError={(e) => e.target.style.display = 'none'}
                   />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeArrayItem('images', index)}
-                  >
-                    <FiTrash2 />
-                  </Button>
                 </div>
-              ))}
-              <Button type="button" onClick={() => addArrayItem('images', '')} size="sm">
-                <FiPlus className="mr-2" /> Add Image
-              </Button>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Banner URL</label>
+              <input
+                type="url"
+                name="banner_url"
+                value={formData.banner_url}
+                onChange={handleChange}
+                placeholder="https://example.com/banner.jpg"
+                className="w-full border rounded px-3 py-2"
+              />
+              {formData.banner_url && (
+                <div className="mt-2">
+                  <img 
+                    src={formData.banner_url} 
+                    alt="Banner Preview" 
+                    className="w-full max-h-32 object-cover border rounded"
+                    onError={(e) => e.target.style.display = 'none'}
+                  />
+                </div>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Campus Gallery Images (URLs)</label>
