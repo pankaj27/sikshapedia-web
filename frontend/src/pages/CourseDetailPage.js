@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FiChevronRight, FiChevronDown, FiChevronUp, FiMail, FiCheckCircle } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
+import AdBanner from '../components/AdBanner';
 
 const CourseDetailPage = () => {
   const { id } = useParams();
