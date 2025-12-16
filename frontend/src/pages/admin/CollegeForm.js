@@ -4553,33 +4553,26 @@ const CollegeForm = () => {
                           min="1"
                         />
                         
-                        {/* Icon */}
-                        <select
-                          value={item.icon}
-                          onChange={(e) => {
-                            const newItems = [...(formData.menu_config?.items || [])];
-                            const idx = newItems.findIndex(i => i.id === item.id);
-                            newItems[idx].icon = e.target.value;
-                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                          }}
-                          className="border rounded px-2 py-1 text-sm"
-                        >
-                          <option value="📋">📋</option>
-                          <option value="📚">📚</option>
-                          <option value="📝">📝</option>
-                          <option value="📊">📊</option>
-                          <option value="💼">💼</option>
-                          <option value="🏆">🏆</option>
-                          <option value="💰">💰</option>
-                          <option value="🏫">🏫</option>
-                          <option value="⭐">⭐</option>
-                          <option value="🎓">🎓</option>
-                          <option value="📍">📍</option>
-                          <option value="📞">📞</option>
-                          <option value="🖼️">🖼️</option>
-                          <option value="❓">❓</option>
-                          <option value="📌">📌</option>
-                        </select>
+                        {/* Icon Selector */}
+                        <div className="relative">
+                          <div className="flex items-center gap-1 border rounded px-2 py-1 bg-white">
+                            <span className="text-orange-500">{getMenuIconById(item.icon)}</span>
+                            <select
+                              value={item.icon}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                const idx = newItems.findIndex(i => i.id === item.id);
+                                newItems[idx].icon = e.target.value;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              className="text-sm bg-transparent border-0 focus:ring-0 pr-6 cursor-pointer"
+                            >
+                              {menuIconOptions.map(opt => (
+                                <option key={opt.id} value={opt.id}>{opt.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
                         
                         {/* Label */}
                         <input
