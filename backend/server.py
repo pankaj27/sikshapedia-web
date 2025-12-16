@@ -1708,6 +1708,56 @@ async def upload_multiple_images(
 
 
 
+
+
+@api_router.post("/upload/brochure")
+async def upload_brochure(
+    file: UploadFile = File(...),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Upload a brochure file (PDF, DOC, DOCX) - Admin only"""
+    # Verify admin token
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    # Validate file type (PDF, DOC, DOCX)
+    allowed_types = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
+    if not file.content_type or file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Only PDF, DOC, or DOCX files are allowed")
+    
+    # Read file content
+    file_content = await file.read()
+    
+    # Generate unique filename
+    file_ext = file.filename.split(".")[-1] if "." in file.filename else "pdf"
+    unique_filename = f"{uuid.uuid4()}.{file_ext}"
+    
+    # Save to brochures directory
+    file_path = UPLOAD_DIR / "brochures" / unique_filename
+    
+    # Save file
+    try:
+        with open(file_path, "wb") as buffer:
+            buffer.write(file_content)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+    
+    # Return the URL with /api prefix for Kubernetes ingress routing
+    file_url = f"/api/static/uploads/brochures/{unique_filename}"
+    
+    return {
+        "success": True,
+        "url": file_url,
+        "filename": unique_filename,
+        "original_name": file.filename,
+        "file_type": file_ext
+    }
+
 @api_router.get("/admin/stats")
 async def get_admin_stats():
     """Get platform statistics for admin dashboard"""
