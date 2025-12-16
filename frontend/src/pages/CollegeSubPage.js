@@ -1,7 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { FiHome, FiInfo, FiBook, FiFileText, FiBarChart2, FiBriefcase, FiAward, FiDollarSign, FiMessageSquare, FiBookmark, FiImage, FiUsers, FiCalendar, FiMapPin, FiHelpCircle, FiPhone } from 'react-icons/fi';
+import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../api/axios';
+
+// Icon mapping for professional icons
+const iconMap = {
+  'info': <FiInfo size={16} />,
+  'courses': <FiBook size={16} />,
+  'admission': <FiFileText size={16} />,
+  'cutoff': <FiBarChart2 size={16} />,
+  'placement': <FiBriefcase size={16} />,
+  'ranking': <FiAward size={16} />,
+  'scholarship': <HiOutlineCurrencyRupee size={16} />,
+  'facilities': <HiOutlineOfficeBuilding size={16} />,
+  'reviews': <FiMessageSquare size={16} />,
+  'overview': <FiHome size={16} />,
+  'programs': <HiOutlineAcademicCap size={16} />,
+  'fees': <FiDollarSign size={16} />,
+  'campus': <HiOutlineLibrary size={16} />,
+  'gallery': <FiImage size={16} />,
+  'faculty': <FiUsers size={16} />,
+  'events': <FiCalendar size={16} />,
+  'location': <FiMapPin size={16} />,
+  'faq': <FiHelpCircle size={16} />,
+  'default': <FiBookmark size={16} />,
+};
+
+// Icon mapping for larger icons (headers)
+const iconMapLarge = {
+  'info': <FiInfo size={28} />,
+  'courses': <FiBook size={28} />,
+  'admission': <FiFileText size={28} />,
+  'cutoff': <FiBarChart2 size={28} />,
+  'placement': <FiBriefcase size={28} />,
+  'ranking': <FiAward size={28} />,
+  'scholarship': <HiOutlineCurrencyRupee size={28} />,
+  'facilities': <HiOutlineOfficeBuilding size={28} />,
+  'reviews': <FiMessageSquare size={28} />,
+  'overview': <FiHome size={28} />,
+  'programs': <HiOutlineAcademicCap size={28} />,
+  'fees': <FiDollarSign size={28} />,
+  'campus': <HiOutlineLibrary size={28} />,
+  'gallery': <FiImage size={28} />,
+  'faculty': <FiUsers size={28} />,
+  'events': <FiCalendar size={28} />,
+  'location': <FiMapPin size={28} />,
+  'faq': <FiHelpCircle size={28} />,
+  'default': <FiBookmark size={28} />,
+};
+
+// Helper function to get icon component
+const getMenuIcon = (iconId) => iconMap[iconId] || iconMap['default'];
+const getMenuIconLarge = (iconId) => iconMapLarge[iconId] || iconMapLarge['default'];
 
 const CollegeSubPage = () => {
   const { id, section } = useParams();
