@@ -485,6 +485,79 @@ class College(BaseModel):
     seo_video_description: Optional[str] = None  # Video description for accessibility
     seo_faqs: List = []  # [{ question, answer }]
     
+    # Sidebar Widgets Configuration
+    sidebar_widgets: Optional[Dict] = {
+        # Quick Actions Widget
+        "quick_actions": {
+            "enabled": True,
+            "apply_now_btn": True,
+            "apply_now_url": "",
+            "download_brochure_btn": True,
+            "compare_btn": True,
+            "enquiry_btn": True
+        },
+        # Quick Facts Widget
+        "quick_facts": {
+            "enabled": True,
+            "show_established": True,
+            "show_type": True,
+            "show_approval": True,
+            "show_student_count": True,
+            "show_faculty_count": True,
+            "custom_facts": []  # [{label, value}]
+        },
+        # Important Dates Widget
+        "important_dates": {
+            "enabled": True,
+            "dates": []  # [{title, date, description}]
+        },
+        # Fee Summary Widget
+        "fee_summary": {
+            "enabled": True,
+            "show_range": True,
+            "custom_text": ""
+        },
+        # Contact Card Widget
+        "contact_card": {
+            "enabled": True,
+            "show_phone": True,
+            "show_email": True,
+            "show_address": True,
+            "show_map_link": True
+        },
+        # Counselor CTA Widget
+        "counselor_cta": {
+            "enabled": True,
+            "title": "Need Help?",
+            "subtitle": "Talk to our expert counselor",
+            "phone": "",
+            "show_callback_form": True
+        },
+        # Ad Banner Widget
+        "ad_banner": {
+            "enabled": False,
+            "position": "top",  # top, middle, bottom
+            "ad_code": ""
+        },
+        # Social Share Widget
+        "social_share": {
+            "enabled": True,
+            "platforms": ["facebook", "twitter", "whatsapp", "linkedin"]
+        },
+        # Rating Widget
+        "rating_widget": {
+            "enabled": True,
+            "show_stars": True,
+            "show_review_count": True
+        },
+        # Related Colleges Widget
+        "related_colleges": {
+            "enabled": True,
+            "show_count": 3,
+            "criteria": "same_city"  # same_city, same_course, manual
+        }
+    }
+    
     # Accreditations & Approvals
     accreditations: List[str] = []
     accreditation: Optional[Union[List[str], str]] = None
