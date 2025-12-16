@@ -4666,10 +4666,10 @@ async def get_advertisement_reports(current_user: User = Depends(get_current_use
 
 app.include_router(api_router)
 
-# Mount static files for uploads
+# Mount static files for uploads - accessible at /api/static/ for Kubernetes ingress
 UPLOAD_DIR = Path(__file__).parent / "static" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
+app.mount("/api/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
 
 app.add_middleware(
     CORSMiddleware,
