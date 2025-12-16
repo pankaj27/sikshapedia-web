@@ -6,9 +6,41 @@ import {
   FiMic, FiZap, FiTarget, FiDroplet, FiGrid, FiSquare, FiSun, FiHome, FiMapPin,
   FiHeart, FiMessageCircle, FiTruck, FiCoffee, FiShoppingBag, FiShoppingCart,
   FiCreditCard, FiMail, FiWifi, FiBattery, FiShield, FiBriefcase, FiTrendingUp,
-  FiAward, FiMusic, FiBookOpen, FiPrinter, FiFilm, FiPackage, FiFeather, FiUnlock
+  FiAward, FiMusic, FiBookOpen, FiPrinter, FiFilm, FiPackage, FiFeather, FiUnlock,
+  FiInfo, FiFileText, FiBarChart2, FiDollarSign, FiMessageSquare, FiBookmark, FiImage, FiCalendar, FiHelpCircle, FiStar, FiLayers
 } from 'react-icons/fi';
+import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
+
+// Menu icon options with professional icons
+const menuIconOptions = [
+  { id: 'info', label: 'Info', icon: <FiInfo size={16} /> },
+  { id: 'overview', label: 'Overview', icon: <FiHome size={16} /> },
+  { id: 'courses', label: 'Courses', icon: <FiBook size={16} /> },
+  { id: 'programs', label: 'Programs', icon: <HiOutlineAcademicCap size={16} /> },
+  { id: 'admission', label: 'Admission', icon: <FiFileText size={16} /> },
+  { id: 'cutoff', label: 'Cutoff', icon: <FiBarChart2 size={16} /> },
+  { id: 'placement', label: 'Placement', icon: <FiBriefcase size={16} /> },
+  { id: 'ranking', label: 'Ranking', icon: <FiAward size={16} /> },
+  { id: 'scholarship', label: 'Scholarship', icon: <HiOutlineCurrencyRupee size={16} /> },
+  { id: 'fees', label: 'Fees', icon: <FiDollarSign size={16} /> },
+  { id: 'facilities', label: 'Facilities', icon: <HiOutlineOfficeBuilding size={16} /> },
+  { id: 'campus', label: 'Campus', icon: <HiOutlineLibrary size={16} /> },
+  { id: 'reviews', label: 'Reviews', icon: <FiMessageSquare size={16} /> },
+  { id: 'gallery', label: 'Gallery', icon: <FiImage size={16} /> },
+  { id: 'faculty', label: 'Faculty', icon: <FiUsers size={16} /> },
+  { id: 'events', label: 'Events', icon: <FiCalendar size={16} /> },
+  { id: 'location', label: 'Location', icon: <FiMapPin size={16} /> },
+  { id: 'faq', label: 'FAQ', icon: <FiHelpCircle size={16} /> },
+  { id: 'contact', label: 'Contact', icon: <FiMail size={16} /> },
+  { id: 'default', label: 'Default', icon: <FiBookmark size={16} /> },
+];
+
+// Helper to get icon by ID
+const getMenuIconById = (iconId) => {
+  const found = menuIconOptions.find(opt => opt.id === iconId);
+  return found ? found.icon : <FiBookmark size={16} />;
+};
 import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
 
