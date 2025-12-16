@@ -533,6 +533,42 @@ const CollegeForm = () => {
     setFormData({ ...formData, facilities: formData.facilities.filter((_, i) => i !== index) });
   };
 
+
+  // Updates & News management
+  const addUpdate = () => {
+    setFormData({
+      ...formData,
+      updates: [...formData.updates, { title: '', content: '', date: '', type: 'custom', newsId: '' }]
+    });
+  };
+
+  const updateUpdate = (index, field, value) => {
+    const newUpdates = [...formData.updates];
+    
+    // If type is being changed to 'tagged' and a news is selected
+    if (field === 'newsId' && value) {
+      const selectedNews = availableNews.find(n => n.id === value);
+      if (selectedNews) {
+        newUpdates[index] = {
+          ...newUpdates[index],
+          newsId: value,
+          title: selectedNews.title,
+          content: selectedNews.summary || selectedNews.content,
+          date: selectedNews.published_date || new Date().toISOString().split('T')[0],
+          type: 'tagged'
+        };
+      }
+    } else {
+      newUpdates[index][field] = value;
+    }
+    
+    setFormData({ ...formData, updates: newUpdates });
+  };
+
+  const removeUpdate = (index) => {
+    setFormData({ ...formData, updates: formData.updates.filter((_, i) => i !== index) });
+  };
+
   const addScholarship = () => {
     setFormData({
       ...formData,
