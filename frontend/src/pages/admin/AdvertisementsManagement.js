@@ -27,16 +27,24 @@ const AdvertisementsManagement = () => {
   });
 
   const availablePages = [
-    { value: 'home', label: 'Home Page' },
-    { value: 'home-banner', label: 'Home Page Banner' },
     { value: 'colleges', label: 'Colleges Listing' },
     { value: 'college-detail', label: 'College Detail' },
+    { value: 'course-detail', label: 'Course Detail' },
+    { value: 'exams', label: 'Exams Listing' },
+    { value: 'news', label: 'News' },
     { value: 'schools', label: 'Schools Listing' },
     { value: 'universities', label: 'Universities Listing' },
-    { value: 'courses', label: 'Courses' },
-    { value: 'exams', label: 'Exams' },
-    { value: 'news', label: 'News' },
+    { value: 'courses', label: 'Courses Listing' },
     { value: 'compare', label: 'Compare' },
+  ];
+
+  const availablePositions = [
+    { value: 'top', label: 'Top Banner', description: 'Above page content' },
+    { value: 'content-top', label: 'Content Top', description: 'Inside main content area (top)' },
+    { value: 'content-bottom', label: 'Content Bottom', description: 'Inside main content area (bottom)' },
+    { value: 'sidebar', label: 'Sidebar', description: 'Right sidebar area' },
+    { value: 'popup', label: 'Popup', description: 'Overlay popup' },
+    { value: 'floating', label: 'Floating', description: 'Fixed floating banner' },
   ];
 
   useEffect(() => {
