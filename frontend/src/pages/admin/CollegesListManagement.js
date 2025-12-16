@@ -41,14 +41,20 @@ const CollegesListManagement = () => {
     }
   };
 
+  // Count stats
+  const draftCount = colleges.filter(c => c.status === 'draft').length;
+  const publishedCount = colleges.filter(c => c.status === 'published').length;
+  const totalCount = colleges.length;
+
   const filteredColleges = colleges.filter(college => {
     const matchesSearch = college.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       college.location?.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       college.location?.state?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesType = filterType === 'All' || college.institution_type === filterType;
+    const matchesStatus = filterStatus === 'All' || college.status === filterStatus;
     
-    return matchesSearch && matchesType;
+    return matchesSearch && matchesType && matchesStatus;
   });
 
   if (loading) {
