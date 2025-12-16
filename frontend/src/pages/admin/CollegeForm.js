@@ -4900,6 +4900,98 @@ const CollegeForm = () => {
                               </div>
                             </div>
                           </div>
+                          
+                          {/* Table of Contents Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <FiLayers size={12} /> Table of Contents for this Page
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newItems = [...(formData.menu_config?.items || [])];
+                                  const idx = newItems.findIndex(i => i.id === item.id);
+                                  if (!newItems[idx].toc) newItems[idx].toc = [];
+                                  newItems[idx].toc.push({
+                                    title: 'New Section',
+                                    anchor: `section-${Date.now()}`,
+                                    content: ''
+                                  });
+                                  setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                }}
+                                className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 flex items-center gap-1"
+                              >
+                                <FiPlus size={10} /> Add TOC Section
+                              </button>
+                            </div>
+                            
+                            {item.toc && item.toc.length > 0 ? (
+                              <div className="space-y-2">
+                                {item.toc.map((tocItem, tocIndex) => (
+                                  <div key={tocIndex} className="bg-white border rounded p-2">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <span className="text-xs text-gray-400 w-4">{tocIndex + 1}.</span>
+                                      <input
+                                        type="text"
+                                        value={tocItem.title}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].toc[tocIndex].title = e.target.value;
+                                          newItems[idx].toc[tocIndex].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        placeholder="Section Title"
+                                        className="flex-1 border rounded px-2 py-1 text-xs"
+                                      />
+                                      <span className="text-xs text-gray-400 font-mono">#{tocItem.anchor}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].toc = newItems[idx].toc.filter((_, i) => i !== tocIndex);
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="text-red-400 hover:text-red-600 p-1"
+                                      >
+                                        <FiTrash2 size={12} />
+                                      </button>
+                                    </div>
+                                    <textarea
+                                      value={tocItem.content || ''}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].toc[tocIndex].content = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Section content (HTML supported)..."
+                                      rows="2"
+                                      className="w-full border rounded px-2 py-1 text-xs mt-1"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-400 italic">No TOC sections. Click &quot;+ Add TOC Section&quot; to add.</p>
+                            )}
+                            
+                            {/* TOC Preview */}
+                            {item.toc && item.toc.length > 0 && (
+                              <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
+                                <p className="text-xs text-blue-700 mb-1">TOC Preview:</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {item.toc.map((t, ti) => (
+                                    <span key={ti} className="text-xs bg-white px-2 py-0.5 rounded border text-blue-800">
+                                      {t.title}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
