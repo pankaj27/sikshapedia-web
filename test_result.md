@@ -530,8 +530,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Scholarship Auto-Fill Functionality testing completed successfully"
-    - "All major CRUD operations completed and working"
+    - "Facilities Dropdown with Icons testing completed successfully"
+    - "All auto-fill functionality testing completed and working"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
