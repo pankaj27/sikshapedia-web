@@ -389,6 +389,9 @@ const CollegeDetailPage = () => {
 
       {/* MAIN CONTENT */}
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Sponsor Ad - Content Top */}
+        <AdBanner pageName="college-detail" position="content-top" />
+        
         <div className="flex gap-6">
           {/* LEFT CONTENT */}
           <div className="flex-1">
