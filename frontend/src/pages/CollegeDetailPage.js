@@ -745,20 +745,56 @@ const CollegeDetailPage = () => {
                       <p className="text-gray-700 text-sm mb-4">
                         {college.name} campus provides world-class facilities:
                       </p>
-                      <div className="space-y-3">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                          <h3 className="font-bold mb-1">Library</h3>
-                          <p className="text-sm text-gray-700">Extensive collection of books and digital resources.</p>
+                      {college.facilities && college.facilities.length > 0 ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                          {college.facilities.map((facility, idx) => {
+                            const isObject = typeof facility === 'object';
+                            const facilityName = isObject ? facility.name : facility;
+                            const facilityData = getFacilityIcon(facilityName);
+                            const IconComponent = facilityData.icon;
+                            
+                            return (
+                              <div 
+                                key={idx} 
+                                className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                              >
+                                <div className={`w-14 h-14 ${facilityData.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
+                                  <IconComponent className="text-white" size={26} />
+                                </div>
+                                <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
+                                  {facilityData.label}
+                                </span>
+                              </div>
+                            );
+                          })}
                         </div>
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                          <h3 className="font-bold mb-1">Sports</h3>
-                          <p className="text-sm text-gray-700">Multiple sports facilities available.</p>
+                      ) : (
+                        /* Default facilities when no data */
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                          {[
+                            { name: 'Library', icon: HiOutlineLibrary, color: 'bg-blue-500' },
+                            { name: 'Sports Complex', icon: MdOutlineSportsBasketball, color: 'bg-orange-500' },
+                            { name: 'Hostel', icon: MdOutlineBed, color: 'bg-teal-500' },
+                            { name: 'Cafeteria', icon: MdOutlineLocalCafe, color: 'bg-amber-500' },
+                            { name: 'WiFi Campus', icon: MdOutlineWifi, color: 'bg-blue-400' },
+                            { name: 'Medical', icon: MdOutlineLocalHospital, color: 'bg-red-500' },
+                            { name: 'Gymnasium', icon: MdOutlineFitnessCenter, color: 'bg-red-600' },
+                            { name: 'Auditorium', icon: MdOutlineTheaters, color: 'bg-purple-500' }
+                          ].map((item, idx) => (
+                            <div 
+                              key={idx} 
+                              className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                            >
+                              <div className={`w-14 h-14 ${item.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
+                                <item.icon className="text-white" size={26} />
+                              </div>
+                              <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
+                                {item.name}
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                          <h3 className="font-bold mb-1">Hostels</h3>
-                          <p className="text-sm text-gray-700">Separate hostels for boys and girls with mess facilities.</p>
-                        </div>
-                      </div>
+                      )}
                     </section>
 
                     {/* FAQs - FROM TOC #09 */}
