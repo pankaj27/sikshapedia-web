@@ -623,6 +623,11 @@ const CourseDetailPage = () => {
 
           {/* Sidebar - 25% width */}
           <aside className="w-3/12 sticky top-20">
+            {/* Sponsor Ad - Sidebar */}
+            <div className="mb-5">
+              <AdBanner pageName="course-detail" position="sidebar" />
+            </div>
+            
             {/* College Cards */}
             <div className="space-y-5">
               {[
