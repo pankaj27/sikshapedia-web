@@ -2174,12 +2174,23 @@ const CollegeForm = () => {
                   </label>
                 </div>
               </div>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="banner_alt"
+                  value={formData.banner_alt}
+                  onChange={handleChange}
+                  placeholder="Alt text for banner (e.g., 'IIT Mumbai Campus Building')"
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+                <p className="text-xs text-gray-500 mt-1">Alt text improves SEO and accessibility</p>
+              </div>
               {formData.banner_url && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
                   <p className="text-xs text-gray-600 mb-2">Preview:</p>
                   <img 
                     src={formData.banner_url} 
-                    alt="Banner Preview" 
+                    alt={formData.banner_alt || "Banner Preview"} 
                     className="w-full max-h-40 object-cover rounded"
                     onError={(e) => e.target.style.display = 'none'}
                   />
