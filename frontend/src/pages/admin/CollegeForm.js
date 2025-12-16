@@ -2300,24 +2300,33 @@ const CollegeForm = () => {
               })}
               
               {/* Preview Grid */}
-              {formData.campus_images.length > 0 && formData.campus_images.some(img => img) && (
+              {formData.campus_images.length > 0 && formData.campus_images.some(img => typeof img === 'string' ? img : img.url) && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
                   <p className="text-xs text-gray-600 mb-2">Gallery Preview:</p>
                   <div className="grid grid-cols-4 gap-2">
-                    {formData.campus_images.filter(img => img).map((img, index) => (
-                      <img 
-                        key={index}
-                        src={img} 
-                        alt={`Campus ${index + 1}`} 
-                        className="w-full h-24 object-cover rounded border"
-                        onError={(e) => e.target.style.display = 'none'}
-                      />
-                    ))}
+                    {formData.campus_images.filter(img => typeof img === 'string' ? img : img.url).map((img, index) => {
+                      const imgData = typeof img === 'string' ? { url: img, alt: '' } : img;
+                      return (
+                        <div key={index} className="relative">
+                          <img 
+                            src={imgData.url} 
+                            alt={imgData.alt || `Campus ${index + 1}`} 
+                            className="w-full h-24 object-cover rounded border"
+                            onError={(e) => e.target.style.display = 'none'}
+                          />
+                          {imgData.alt && (
+                            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs p-1 truncate">
+                              {imgData.alt}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
               
-              <Button type="button" onClick={() => addArrayItem('campus_images', '')} size="sm" className="mt-2">
+              <Button type="button" onClick={addCampusImage} size="sm" className="mt-2">
                 <FiPlus className="mr-2" /> Add Image Row
               </Button>
             </div>
