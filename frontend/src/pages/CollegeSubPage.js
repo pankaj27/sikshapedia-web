@@ -257,10 +257,12 @@ const CollegeSubPage = () => {
 
               {/* Contact CTA */}
               <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
-                <h3 className="font-bold mb-2">Need Help?</h3>
+                <h3 className="font-bold mb-2 flex items-center gap-2">
+                  <FiHelpCircle size={18} /> Need Help?
+                </h3>
                 <p className="text-sm text-orange-100 mb-4">Get free counseling from our experts</p>
-                <button className="w-full bg-white text-orange-600 py-2 rounded-lg font-semibold hover:bg-orange-50">
-                  Contact Us
+                <button className="w-full bg-white text-orange-600 py-2 rounded-lg font-semibold hover:bg-orange-50 flex items-center justify-center gap-2">
+                  <FiPhone size={16} /> Contact Us
                 </button>
               </div>
             </div>
