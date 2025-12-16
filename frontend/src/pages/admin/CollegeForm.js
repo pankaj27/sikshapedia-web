@@ -202,6 +202,68 @@ const CollegeForm = () => {
     seo_video_title: '',
     seo_video_description: '',
     seo_faqs: [],
+    // Sidebar Widgets Configuration
+    sidebar_widgets: {
+      quick_actions: {
+        enabled: true,
+        apply_now_btn: true,
+        apply_now_url: '',
+        download_brochure_btn: true,
+        compare_btn: true,
+        enquiry_btn: true
+      },
+      quick_facts: {
+        enabled: true,
+        show_established: true,
+        show_type: true,
+        show_approval: true,
+        show_student_count: true,
+        show_faculty_count: true,
+        custom_facts: []
+      },
+      important_dates: {
+        enabled: true,
+        dates: []
+      },
+      fee_summary: {
+        enabled: true,
+        show_range: true,
+        custom_text: ''
+      },
+      contact_card: {
+        enabled: true,
+        show_phone: true,
+        show_email: true,
+        show_address: true,
+        show_map_link: true
+      },
+      counselor_cta: {
+        enabled: true,
+        title: 'Need Help?',
+        subtitle: 'Talk to our expert counselor',
+        phone: '',
+        show_callback_form: true
+      },
+      ad_banner: {
+        enabled: false,
+        position: 'top',
+        ad_code: ''
+      },
+      social_share: {
+        enabled: true,
+        platforms: ['facebook', 'twitter', 'whatsapp', 'linkedin']
+      },
+      rating_widget: {
+        enabled: true,
+        show_stars: true,
+        show_review_count: true
+      },
+      related_colleges: {
+        enabled: true,
+        show_count: 3,
+        criteria: 'same_city'
+      }
+    },
     accreditations: [],
     approvals: [],
     placement: {
