@@ -4484,14 +4484,11 @@ const CollegeForm = () => {
         {/* Show TOC Builder for Auto from TOC mode */}
         {formData.menu_config?.auto_from_toc && (
           <CollapsibleSection title="📗 TOC Section Builder (Auto from TOC Mode)" icon="🔗" defaultOpen={true}>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            {/* Auto from TOC - Detail Page TOC Builder */}
-            {formData.menu_config?.auto_from_toc && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="text-sm text-gray-600 mb-4 bg-green-50 border border-green-200 rounded-lg p-3">
+              💡 <strong>Auto from TOC Mode:</strong> Each section you add here becomes a menu item. 
+              The menu will automatically scroll to that section on the detail page.
+            </p>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold text-green-800 flex items-center gap-2">
                     <FiLayers className="text-green-600" /> Detail Page TOC Sections
