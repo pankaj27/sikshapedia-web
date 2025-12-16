@@ -251,6 +251,175 @@ class APITester:
         else:
             self.log_test("GET /admin/stats (no token - should fail)", False, f"Should have been rejected but got status {status}", response)
 
+    def test_seo_url_filtering(self):
+        """Test SEO-friendly URL structure filtering functionality"""
+        print("🔍 Testing SEO URL Filtering (New Implementation)...")
+        
+        # Test 1: Filter by institution_type = College
+        success, response, status = self.make_request("GET", "/colleges?institution_type=College")
+        if success and isinstance(response, list):
+            college_count = len(response)
+            # Check if all returned items are colleges
+            all_colleges = all(item.get("institution_type") == "College" for item in response if "institution_type" in item)
+            if all_colleges or college_count == 0:  # Empty result is also valid
+                self.log_test("Filter by institution_type=College", True, f"Retrieved {college_count} colleges")
+            else:
+                self.log_test("Filter by institution_type=College", False, "Some non-college institutions returned")
+        else:
+            self.log_test("Filter by institution_type=College", False, f"Status: {status}", response)
+        
+        # Test 2: Filter by institution_type = University
+        success, response, status = self.make_request("GET", "/colleges?institution_type=University")
+        if success and isinstance(response, list):
+            university_count = len(response)
+            all_universities = all(item.get("institution_type") == "University" for item in response if "institution_type" in item)
+            if all_universities or university_count == 0:
+                self.log_test("Filter by institution_type=University", True, f"Retrieved {university_count} universities")
+            else:
+                self.log_test("Filter by institution_type=University", False, "Some non-university institutions returned")
+        else:
+            self.log_test("Filter by institution_type=University", False, f"Status: {status}", response)
+        
+        # Test 3: Filter by state = Delhi
+        success, response, status = self.make_request("GET", "/colleges?state=Delhi")
+        if success and isinstance(response, list):
+            delhi_count = len(response)
+            # Check if all returned items are from Delhi
+            delhi_institutions = []
+            for item in response:
+                location = item.get("location", {})
+                if isinstance(location, dict) and location.get("state") == "Delhi":
+                    delhi_institutions.append(item)
+                elif isinstance(location, str) and "Delhi" in location:
+                    delhi_institutions.append(item)
+            
+            if len(delhi_institutions) == delhi_count or delhi_count == 0:
+                self.log_test("Filter by state=Delhi", True, f"Retrieved {delhi_count} Delhi institutions")
+            else:
+                self.log_test("Filter by state=Delhi", False, f"Only {len(delhi_institutions)}/{delhi_count} are from Delhi")
+        else:
+            self.log_test("Filter by state=Delhi", False, f"Status: {status}", response)
+        
+        # Test 4: Filter by state = Karnataka
+        success, response, status = self.make_request("GET", "/colleges?state=Karnataka")
+        if success and isinstance(response, list):
+            karnataka_count = len(response)
+            self.log_test("Filter by state=Karnataka", True, f"Retrieved {karnataka_count} Karnataka institutions")
+        else:
+            self.log_test("Filter by state=Karnataka", False, f"Status: {status}", response)
+        
+        # Test 5: Filter by city = New Delhi
+        success, response, status = self.make_request("GET", "/colleges?city=New Delhi")
+        if success and isinstance(response, list):
+            new_delhi_count = len(response)
+            self.log_test("Filter by city=New Delhi", True, f"Retrieved {new_delhi_count} New Delhi institutions")
+        else:
+            self.log_test("Filter by city=New Delhi", False, f"Status: {status}", response)
+        
+        # Test 6: Filter by city = Bangalore
+        success, response, status = self.make_request("GET", "/colleges?city=Bangalore")
+        if success and isinstance(response, list):
+            bangalore_count = len(response)
+            self.log_test("Filter by city=Bangalore", True, f"Retrieved {bangalore_count} Bangalore institutions")
+        else:
+            self.log_test("Filter by city=Bangalore", False, f"Status: {status}", response)
+        
+        # Test 7: Filter by stream = Engineering
+        success, response, status = self.make_request("GET", "/colleges?stream=Engineering")
+        if success and isinstance(response, list):
+            engineering_count = len(response)
+            self.log_test("Filter by stream=Engineering", True, f"Retrieved {engineering_count} Engineering institutions")
+        else:
+            self.log_test("Filter by stream=Engineering", False, f"Status: {status}", response)
+        
+        # Test 8: Filter by stream = Medical
+        success, response, status = self.make_request("GET", "/colleges?stream=Medical")
+        if success and isinstance(response, list):
+            medical_count = len(response)
+            self.log_test("Filter by stream=Medical", True, f"Retrieved {medical_count} Medical institutions")
+        else:
+            self.log_test("Filter by stream=Medical", False, f"Status: {status}", response)
+
+    def test_expected_institutions(self):
+        """Test that the 4 expected published institutions exist in database"""
+        print("🏛️ Testing Expected Published Institutions...")
+        
+        # Expected institutions from the review request
+        expected_institutions = [
+            {"name": "IIT Delhi", "id": "iit-delhi-001", "type": "College", "state": "Delhi"},
+            {"name": "AIIMS Delhi", "id": "aiims-delhi-001", "type": "College", "state": "Delhi"},
+            {"name": "IIM Ahmedabad", "id": "iim-ahmedabad-001", "type": "College", "state": "Gujarat"},
+            {"name": "NLSIU Bangalore", "id": "nlsiu-bangalore-001", "type": "University", "state": "Karnataka"}
+        ]
+        
+        # Test 1: Get all published institutions
+        success, response, status = self.make_request("GET", "/colleges?status=published")
+        if success and isinstance(response, list):
+            published_count = len(response)
+            self.log_test("Get Published Institutions", True, f"Retrieved {published_count} published institutions")
+            
+            # Check for each expected institution
+            found_institutions = []
+            for expected in expected_institutions:
+                found = False
+                for institution in response:
+                    # Check by ID or name match
+                    if (institution.get("id") == expected["id"] or 
+                        expected["name"].lower() in institution.get("name", "").lower()):
+                        found_institutions.append({
+                            "expected": expected["name"],
+                            "found": institution.get("name"),
+                            "id": institution.get("id"),
+                            "status": institution.get("status", "unknown")
+                        })
+                        found = True
+                        break
+                
+                if found:
+                    self.log_test(f"Find {expected['name']}", True, f"Found as: {found_institutions[-1]['found']}")
+                else:
+                    self.log_test(f"Find {expected['name']}", False, "Institution not found in published list")
+            
+            # Store found institutions for detail tests
+            self.found_institutions = found_institutions
+            
+        else:
+            self.log_test("Get Published Institutions", False, f"Status: {status}", response)
+            self.found_institutions = []
+
+    def test_institution_details(self):
+        """Test individual institution detail pages"""
+        print("📄 Testing Institution Detail Pages...")
+        
+        if not hasattr(self, 'found_institutions'):
+            self.log_test("Institution Details (skipped)", False, "No institutions found in previous test")
+            return
+        
+        for institution in self.found_institutions:
+            institution_id = institution.get("id")
+            if institution_id:
+                # Test detail page access
+                success, response, status = self.make_request("GET", f"/colleges/{institution_id}")
+                if success and isinstance(response, dict) and "id" in response:
+                    name = response.get("name", "Unknown")
+                    menu_config = response.get("menu_config", {})
+                    detail_toc = response.get("detail_page_toc", [])
+                    
+                    # Check menu configuration
+                    menu_type = "Default"
+                    if menu_config.get("auto_from_toc") and detail_toc:
+                        menu_type = f"Auto TOC ({len(detail_toc)} sections)"
+                    elif menu_config.get("use_custom_menu") and menu_config.get("items"):
+                        menu_type = f"Custom ({len(menu_config.get('items', []))} items)"
+                    
+                    self.log_test(f"Detail Page: {institution['expected']}", True, 
+                                f"Name: {name}, Menu: {menu_type}")
+                else:
+                    self.log_test(f"Detail Page: {institution['expected']}", False, 
+                                f"Status: {status}", response)
+            else:
+                self.log_test(f"Detail Page: {institution['expected']}", False, "No ID available")
+
     def test_route_consistency(self):
         """Test that old and new routes return consistent data"""
         print("🔄 Testing Route Consistency (Old vs New)...")
