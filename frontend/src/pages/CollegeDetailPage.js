@@ -889,7 +889,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                       .map((menuItem, index) => (
                       <Link
                         key={index}
-                        to={`/colleges/${id}/${menuItem.id}`}
+                        to={getSectionUrl(menuItem.id)}
                         className="flex items-center gap-3 bg-white border-2 border-orange-200 rounded-lg px-4 py-3 hover:bg-orange-100 hover:border-orange-400 transition-all group"
                       >
                         <span className="text-orange-500 group-hover:text-orange-600">{getMenuIcon(menuItem.id)}</span>
