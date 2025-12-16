@@ -251,6 +251,13 @@ const ExamPage = () => {
           <main className="flex-1">
             <div className="space-y-3">
               {filteredExams.map((exam, idx) => (
+                <React.Fragment key={`exam-${idx}`}>
+                  {/* Content Middle Ad - Show after 5th item */}
+                  {idx === 5 && (
+                    <div className="py-3">
+                      <AdBanner pageName="exams" position="content-middle" />
+                    </div>
+                  )}
                 <div
                   key={idx}
                   className="bg-white rounded shadow-sm hover:shadow-md transition-shadow"
