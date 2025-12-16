@@ -115,6 +115,9 @@ const CollegeDuniaHome = () => {
 
   return (
     <div className="min-h-screen bg-white -mt-20 pt-20">
+      {/* Top Ad Banner */}
+      <AdBanner pageName="home" position="top" />
+      
       <MetaTags 
         title="AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024"
         description="Find detailed information about 10,000+ colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details. Read reviews and make informed decisions."
