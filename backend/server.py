@@ -3987,7 +3987,7 @@ async def get_schools(
     school_type: Optional[str] = None,
     medium: Optional[str] = None,
     sort: str = "rating",
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=1000),
     skip: int = Query(0, ge=0)
 ):
     """Get all schools with optional filters"""
@@ -4036,7 +4036,7 @@ async def get_universities(
     accreditation: Optional[str] = None,
     stream: Optional[str] = None,
     sort: str = "rating",
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=1000),
     skip: int = Query(0, ge=0)
 ):
     """Get all universities with optional filters"""
