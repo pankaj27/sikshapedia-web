@@ -504,6 +504,8 @@ class CollegeCreate(BaseModel):
     courses: List[Course] = []
     facilities: List[str] = []
     contact_info: Dict
+    logo_url: Optional[str] = None
+    banner_url: Optional[str] = None
     images: List[str] = []
     description: str
     highlights: List[str] = []
