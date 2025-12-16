@@ -163,28 +163,35 @@ const NewsPage = () => {
               {/* News Grid */}
               <div className="grid grid-cols-3 gap-4">
                 {filteredNews.map((item, idx) => (
-                  <Link
-                    key={item.id || idx}
-                    to={`/news/${item.slug || item.id}`}
-                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group overflow-hidden"
-                  >
-                    <div className={`h-2 bg-gradient-to-r ${item.gradient}`}></div>
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">{item.tag || item.category}</span>
+                  <React.Fragment key={item.id || idx}>
+                    {/* Content Middle Ad - Show after 6th item */}
+                    {idx === 6 && (
+                      <div className="col-span-3 py-2">
+                        <AdBanner pageName="news" position="content-middle" />
                       </div>
-                      <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-gray-600 mb-3 line-clamp-2">
-                        {item.description || item.excerpt} <span className="text-blue-600 font-semibold">Read More</span>
-                      </p>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-500">{item.published_date || item.date}</span>
-                        {item.views && <span className="text-gray-400">{item.views} views</span>}
+                    )}
+                    <Link
+                      to={`/news/${item.slug || item.id}`}
+                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group overflow-hidden"
+                    >
+                      <div className={`h-2 bg-gradient-to-r ${item.gradient}`}></div>
+                      <div className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">{item.tag || item.category}</span>
+                        </div>
+                        <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                          {item.description || item.excerpt} <span className="text-blue-600 font-semibold">Read More</span>
+                        </p>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-gray-500">{item.published_date || item.date}</span>
+                          {item.views && <span className="text-gray-400">{item.views} views</span>}
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </React.Fragment>
                 ))}
               </div>
 
