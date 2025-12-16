@@ -44,7 +44,7 @@ const emojiToIconId = {
   '💼': 'placement', '🏆': 'ranking', '💰': 'scholarship', '🏫': 'facilities',
   '⭐': 'reviews', '🎓': 'programs', '📍': 'location', '📞': 'contact',
   '🖼️': 'gallery', '❓': 'faq', '📌': 'default', '🏠': 'overview',
-  '💵': 'fees', '🏢': 'campus'
+  '💵': 'fees', '🏢': 'campus', '$': 'fees', '💲': 'fees'
 };
 
 // Helper to normalize icon value (convert emoji to ID if needed)
