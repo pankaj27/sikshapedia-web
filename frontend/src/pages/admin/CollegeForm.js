@@ -789,6 +789,7 @@ const CollegeForm = () => {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
         const uploadedImages = response.data.files.map(f => ({
           url: backendUrl + f.url,
+          title: '',
           alt: ''
         }));
         
