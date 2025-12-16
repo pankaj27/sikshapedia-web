@@ -319,6 +319,8 @@ const CollegeForm = () => {
         seo_intro: collegeData.seo_intro || '',
         seo_full_content: collegeData.seo_full_content || '',
         seo_video_url: collegeData.seo_video_url || '',
+        seo_video_title: collegeData.seo_video_title || '',
+        seo_video_description: collegeData.seo_video_description || '',
         location: collegeData.location || { 
           city: '', 
           state: '', 
