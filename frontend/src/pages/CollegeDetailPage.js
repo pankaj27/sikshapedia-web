@@ -582,6 +582,11 @@ const CollegeDetailPage = () => {
                       </div>
                     </section>
 
+                    {/* Content Middle Ad */}
+                    <div className="my-6">
+                      <AdBanner pageName="college-detail" position="content-middle" />
+                    </div>
+
                     {/* CUTOFF - FROM TOC #05 */}
                     <section id="seo-cutoff">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff</h2>
