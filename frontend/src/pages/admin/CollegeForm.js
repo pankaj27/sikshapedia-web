@@ -1498,7 +1498,7 @@ const CollegeForm = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Accreditation */}
         <div className="bg-white rounded-lg shadow p-6">
