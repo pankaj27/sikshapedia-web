@@ -1,14 +1,17 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 from datetime import datetime, timezone
 from uuid import uuid4
 from core.database import db
-from .models import College, CollegeCreate
 
 class InstitutionService:
+    """
+    Service layer for Institution (College/School/University) operations.
+    Returns raw dictionaries to maintain compatibility with legacy data.
+    """
     collection = db.colleges
     
     @classmethod
-    async def get_all(cls, skip: int = 0, limit: int = 20, include_drafts: bool = False, **filters) -> List[College]:
+    async def get_all(cls, skip: int = 0, limit: int = 20, include_drafts: bool = False, **filters) -> List[dict]:
         query = {}
         
         if not include_drafts:
@@ -36,20 +39,21 @@ class InstitutionService:
         sort_order = 1 if sort_by in ['name', 'nirf_ranking'] else -1
         
         colleges = await cls.collection.find(query, {'_id': 0}).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
-        return [College(**c) for c in colleges]
+        # Return raw dicts - frontend handles the data
+        return colleges
     
     @classmethod
-    async def get_by_id(cls, college_id: str) -> Optional[College]:
+    async def get_by_id(cls, college_id: str) -> Optional[dict]:
         college = await cls.collection.find_one({'id': college_id}, {'_id': 0})
-        return College(**college) if college else None
+        return college
     
     @classmethod
-    async def get_by_slug(cls, slug: str) -> Optional[College]:
+    async def get_by_slug(cls, slug: str) -> Optional[dict]:
         college = await cls.collection.find_one({'slug': slug}, {'_id': 0})
-        return College(**college) if college else None
+        return college
     
     @classmethod
-    async def create(cls, data: dict) -> College:
+    async def create(cls, data: dict) -> dict:
         data['id'] = str(uuid4())
         data['created_at'] = datetime.now(timezone.utc).isoformat()
         data['updated_at'] = data['created_at']
@@ -59,7 +63,7 @@ class InstitutionService:
         return await cls.get_by_id(data['id'])
     
     @classmethod
-    async def update(cls, college_id: str, data: dict) -> Optional[College]:
+    async def update(cls, college_id: str, data: dict) -> Optional[dict]:
         data['updated_at'] = datetime.now(timezone.utc).isoformat()
         await cls.collection.update_one({'id': college_id}, {'$set': data})
         return await cls.get_by_id(college_id)
@@ -70,9 +74,9 @@ class InstitutionService:
         return result.deleted_count > 0
     
     @classmethod
-    async def get_featured(cls, limit: int = 8) -> List[College]:
+    async def get_featured(cls, limit: int = 8) -> List[dict]:
         colleges = await cls.collection.find({'status': 'published'}, {'_id': 0}).sort('nirf_ranking', 1).limit(limit).to_list(limit)
-        return [College(**c) for c in colleges]
+        return colleges
     
     @classmethod
     async def get_stats(cls) -> dict:
