@@ -4743,11 +4743,12 @@ const CollegeForm = () => {
                         </button>
                       </div>
                       
-                      {/* Content Area for Custom Menu Item */}
+                      {/* Content & SEO Area for Custom Menu Item */}
                       {formData.menu_config?.use_custom_menu && (
                         <div className="px-3 pb-3 border-t bg-gray-50">
-                          <label className="block text-xs text-gray-600 mt-2 mb-1">
-                            📝 Section Content for &quot;{item.label}&quot;
+                          {/* Page Content */}
+                          <label className="block text-xs text-gray-600 mt-2 mb-1 font-semibold">
+                            📝 Page Content
                           </label>
                           <textarea
                             value={item.content || ''}
@@ -4761,7 +4762,136 @@ const CollegeForm = () => {
                             rows="3"
                             className="w-full border rounded px-2 py-1 text-sm"
                           />
-                          <p className="text-xs text-gray-500 mt-1">This content will display when user clicks this menu item</p>
+                          
+                          {/* SEO & Meta Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <p className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                              <FiSearch size={12} /> SEO & Meta Tags for this Page
+                            </p>
+                            
+                            <div className="grid grid-cols-2 gap-2">
+                              {/* Page Heading */}
+                              <div>
+                                <label className="block text-xs text-gray-500 mb-1">Page Heading (H1)</label>
+                                <input
+                                  type="text"
+                                  value={item.page_heading || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].page_heading = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder={item.label || 'Page Heading'}
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                              </div>
+                              
+                              {/* Search Heading */}
+                              <div>
+                                <label className="block text-xs text-gray-500 mb-1">Search Heading</label>
+                                <input
+                                  type="text"
+                                  value={item.search_heading || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].search_heading = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="Search result heading"
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                              </div>
+                              
+                              {/* Meta Title */}
+                              <div className="col-span-2">
+                                <label className="block text-xs text-gray-500 mb-1">Meta Title <span className="text-gray-400">(50-60 chars)</span></label>
+                                <input
+                                  type="text"
+                                  value={item.meta_title || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].meta_title = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder={`${item.label} - ${formData.name || 'College Name'}`}
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                                <p className="text-xs text-gray-400 mt-0.5">{(item.meta_title || '').length}/60</p>
+                              </div>
+                              
+                              {/* Meta Description */}
+                              <div className="col-span-2">
+                                <label className="block text-xs text-gray-500 mb-1">Meta Description <span className="text-gray-400">(150-160 chars)</span></label>
+                                <textarea
+                                  value={item.meta_description || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].meta_description = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="Brief description of this page for search engines..."
+                                  rows="2"
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                                <p className="text-xs text-gray-400 mt-0.5">{(item.meta_description || '').length}/160</p>
+                              </div>
+                              
+                              {/* Meta Keywords */}
+                              <div className="col-span-2">
+                                <label className="block text-xs text-gray-500 mb-1">Meta Keywords <span className="text-gray-400">(comma separated)</span></label>
+                                <input
+                                  type="text"
+                                  value={item.meta_keywords || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].meta_keywords = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="keyword1, keyword2, keyword3"
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                              </div>
+                              
+                              {/* OG Title */}
+                              <div>
+                                <label className="block text-xs text-gray-500 mb-1">OG Title</label>
+                                <input
+                                  type="text"
+                                  value={item.og_title || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].og_title = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="Social media title"
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                              </div>
+                              
+                              {/* OG Description */}
+                              <div>
+                                <label className="block text-xs text-gray-500 mb-1">OG Description</label>
+                                <input
+                                  type="text"
+                                  value={item.og_description || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    newItems[idx].og_description = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="Social media description"
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
