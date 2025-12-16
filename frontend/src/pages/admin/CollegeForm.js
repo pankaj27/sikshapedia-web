@@ -6897,14 +6897,44 @@ const CollegeForm = () => {
         </CollapsibleSection>
 
         {/* Bottom Save Button (Duplicate for convenience) */}
-        <div className="sticky bottom-0 bg-white border-t py-3 px-4 flex justify-end gap-3 -mx-4 -mb-4">
-          <Button type="button" variant="outline" size="sm" onClick={() => navigate('/admin/colleges')}>
-            <FiX className="w-4 h-4 mr-1" /> Cancel
-          </Button>
-          <Button type="submit" size="sm" disabled={saving} className="bg-orange-600 hover:bg-orange-700 text-white">
-            {saving ? <FiLoader className="w-4 h-4 animate-spin mr-1" /> : <FiSave className="w-4 h-4 mr-1" />}
-            {saving ? 'Saving...' : 'Save Institution'}
-          </Button>
+        <div className="sticky bottom-0 bg-white border-t py-3 px-4 flex justify-between items-center -mx-4 -mb-4">
+          <div className="flex items-center gap-2 text-xs">
+            <span className={`px-2 py-1 rounded ${formData.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+              {formData.status === 'published' ? '📢 Published' : '📝 Draft'}
+            </span>
+            {formData.name && <span className="text-gray-500">— {formData.name}</span>}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={() => navigate('/admin/colleges')}>
+              <FiX className="w-4 h-4 mr-1" /> Cancel
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="sm" 
+              disabled={saving}
+              onClick={() => {
+                setFormData(prev => ({...prev, status: 'draft'}));
+                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+              }}
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
+              <FiFileText className="w-4 h-4 mr-1" /> Save Draft
+            </Button>
+            <Button 
+              type="button" 
+              size="sm" 
+              disabled={saving} 
+              onClick={() => {
+                setFormData(prev => ({...prev, status: 'published'}));
+                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+              }}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+            >
+              {saving ? <FiLoader className="w-4 h-4 animate-spin mr-1" /> : <FiSave className="w-4 h-4 mr-1" />}
+              {saving ? 'Publishing...' : 'Publish'}
+            </Button>
+          </div>
         </div>
       </form>
     </AdminLayout>
