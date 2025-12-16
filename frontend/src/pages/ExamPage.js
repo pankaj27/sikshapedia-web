@@ -109,6 +109,9 @@ const ExamPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Top Ad Banner */}
+      <AdBanner pageName="exams" position="top" />
+      
       {/* Breadcrumb */}
       <div className="bg-white border-b py-2 px-8">
         <div className="container mx-auto">
