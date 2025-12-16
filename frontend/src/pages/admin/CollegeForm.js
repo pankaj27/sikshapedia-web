@@ -4609,14 +4609,20 @@ const CollegeForm = () => {
                   </div>
                 )}
               </div>
-            )}
+          </CollapsibleSection>
+        )}
 
-            {/* Custom Menu Configuration */}
-            {(formData.menu_config?.use_custom_menu || (!formData.menu_config?.auto_from_toc && !formData.menu_config?.use_custom_menu)) && (
-              <div className="bg-white border rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-semibold text-gray-800 flex items-center gap-2">
-                    <FiLayers className="text-gray-600" /> Menu Items
+        {/* Show Custom Menu Builder for Custom Menu mode */}
+        {formData.menu_config?.use_custom_menu && (
+          <CollapsibleSection title="📙 Custom Page Builder (Custom Menu Mode)" icon="✏️" defaultOpen={true}>
+            <p className="text-sm text-gray-600 mb-4 bg-orange-50 border border-orange-200 rounded-lg p-3">
+              💡 <strong>Custom Menu Mode:</strong> Each menu item you add opens as a separate page. 
+              Add content, SEO tags, images, videos, and FAQs for each page.
+            </p>
+            <div className="bg-white border rounded-lg p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-semibold text-gray-800 flex items-center gap-2">
+                  <FiLayers className="text-gray-600" /> Menu Items (Custom Pages)
                   </h4>
                   <button
                     type="button"
