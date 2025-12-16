@@ -408,6 +408,7 @@ class College(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     slug: Optional[str] = None
+    serial_number: Optional[int] = None  # Unique sequential number for URL (001, 002, etc.)
     location: Optional[Dict] = None
     established: Optional[str] = None
     established_year: Optional[int] = None
