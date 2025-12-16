@@ -2520,16 +2520,59 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
+            {/* Institute Brochure */}
             <div>
-              <label className="block text-sm font-medium mb-1">Brochure URL</label>
-              <input
-                type="url"
-                name="brochure_url"
-                value={formData.brochure_url}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
-              />
+              <label className="block text-sm font-medium mb-2">📄 Institute Brochure</label>
+              <p className="text-xs text-gray-600 mb-2">📋 Accepted: PDF, DOC, DOCX • Max: 10MB • One brochure for entire institution</p>
+              <div className="flex gap-2 items-start">
+                <input
+                  type="url"
+                  name="brochure_url"
+                  value={formData.brochure_url}
+                  onChange={handleChange}
+                  placeholder="https://example.com/brochure.pdf or upload file"
+                  className="flex-1 border rounded px-3 py-2"
+                />
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="brochure-upload"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) handleBrochureUpload(file);
+                    }}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="brochure-upload"
+                    className={`inline-flex items-center px-4 py-2 border rounded cursor-pointer ${
+                      uploadingBrochure ? 'bg-gray-100 cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600'
+                    }`}
+                  >
+                    {uploadingBrochure ? (
+                      <>
+                        <FiLoader className="animate-spin mr-2" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <FiUpload className="mr-2" />
+                        Upload
+                      </>
+                    )}
+                  </label>
+                </div>
+              </div>
+              {formData.brochure_url && (
+                <div className="mt-2">
+                  <a href={formData.brochure_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline break-all">
+                    📄 View Brochure: {formData.brochure_url}
+                  </a>
+                </div>
+              )}
             </div>
+
             <div>
               <label className="block text-sm font-medium mb-1">Virtual Tour URL</label>
               <input
@@ -2537,6 +2580,7 @@ const CollegeForm = () => {
                 name="virtual_tour_url"
                 value={formData.virtual_tour_url}
                 onChange={handleChange}
+                placeholder="https://example.com/virtual-tour"
                 className="w-full border rounded px-3 py-2"
               />
             </div>
