@@ -2168,17 +2168,20 @@ const CollegeForm = () => {
               {formData.logo_url && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
                   <p className="text-xs text-gray-600 mb-2">Preview:</p>
-                  <img 
-                    src={formData.logo_url} 
-                    alt={formData.logo_alt || "Logo Preview"} 
-                    className="h-20 object-contain border border-gray-300 p-2 bg-white"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'block';
-                    }}
-                  />
-                  <div style={{display: 'none'}} className="text-xs text-red-600 p-2">
-                    Failed to load image. Please check the URL.
+                  <div className="relative">
+                    <img 
+                      src={formData.logo_url} 
+                      alt={formData.logo_alt || "Logo Preview"} 
+                      className="h-20 object-contain border border-gray-300 p-2 bg-white"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const errorDiv = e.target.parentElement.querySelector('.error-message');
+                        if (errorDiv) errorDiv.style.display = 'block';
+                      }}
+                    />
+                    <div className="error-message text-xs text-red-600 p-2" style={{display: 'none'}}>
+                      Failed to load image. Please check the URL.
+                    </div>
                   </div>
                 </div>
               )}
@@ -2255,17 +2258,20 @@ const CollegeForm = () => {
               {formData.banner_url && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
                   <p className="text-xs text-gray-600 mb-2">Preview:</p>
-                  <img 
-                    src={formData.banner_url} 
-                    alt={formData.banner_alt || "Banner Preview"} 
-                    className="w-full max-h-40 object-cover rounded border border-gray-300 bg-white"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'block';
-                    }}
-                  />
-                  <div style={{display: 'none'}} className="text-xs text-red-600 p-2">
-                    Failed to load image. Please check the URL.
+                  <div className="relative">
+                    <img 
+                      src={formData.banner_url} 
+                      alt={formData.banner_alt || "Banner Preview"} 
+                      className="w-full max-h-40 object-cover rounded border border-gray-300 bg-white"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const errorDiv = e.target.parentElement.querySelector('.error-message');
+                        if (errorDiv) errorDiv.style.display = 'block';
+                      }}
+                    />
+                    <div className="error-message text-xs text-red-600 p-2" style={{display: 'none'}}>
+                      Failed to load image. Please check the URL.
+                    </div>
                   </div>
                 </div>
               )}
