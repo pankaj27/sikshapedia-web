@@ -282,18 +282,31 @@ const CollegeDetailPage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-1 overflow-x-auto scrollbar-hide">
             {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-                  activeTab === item.id
-                    ? 'border-orange-600 text-orange-600 bg-orange-50'
-                    : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
-                }`}
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
+              college?.menu_config?.use_custom_menu ? (
+                // Custom Menu: Link to separate pages
+                <Link
+                  key={item.id}
+                  to={`/colleges/${id}/${item.id}`}
+                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50`}
+                >
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              ) : (
+                // Default/TOC Menu: Scroll on same page
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === item.id
+                      ? 'border-orange-600 text-orange-600 bg-orange-50'
+                      : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              )
             ))}
           </div>
         </div>
