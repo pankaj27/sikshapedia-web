@@ -4993,6 +4993,268 @@ const CollegeForm = () => {
                               </div>
                             )}
                           </div>
+                          
+                          {/* Table Builder Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <FiGrid size={12} /> Tables for this Page
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newItems = [...(formData.menu_config?.items || [])];
+                                  const idx = newItems.findIndex(i => i.id === item.id);
+                                  if (!newItems[idx].tables) newItems[idx].tables = [];
+                                  newItems[idx].tables.push({
+                                    title: 'New Table',
+                                    headers: ['Column 1', 'Column 2', 'Column 3'],
+                                    rows: [['', '', ''], ['', '', '']]
+                                  });
+                                  setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                }}
+                                className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200 flex items-center gap-1"
+                              >
+                                <FiPlus size={10} /> Add Table
+                              </button>
+                            </div>
+                            
+                            {item.tables && item.tables.length > 0 ? (
+                              <div className="space-y-3">
+                                {item.tables.map((table, tableIndex) => (
+                                  <div key={tableIndex} className="bg-white border border-teal-200 rounded p-2">
+                                    <div className="flex items-center justify-between mb-2">
+                                      <div className="flex items-center gap-2">
+                                        <span className="bg-teal-100 text-teal-800 text-xs font-bold px-1.5 py-0.5 rounded">T{tableIndex + 1}</span>
+                                        <input
+                                          type="text"
+                                          value={table.title || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].tables[tableIndex].title = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Table Title"
+                                          className="border rounded px-2 py-0.5 text-xs w-40"
+                                        />
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].tables[tableIndex].headers.push('New Col');
+                                            newItems[idx].tables[tableIndex].rows.forEach(row => row.push(''));
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded hover:bg-teal-100"
+                                        >
+                                          +Col
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].tables[tableIndex].rows.push(new Array(newItems[idx].tables[tableIndex].headers.length).fill(''));
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded hover:bg-teal-100"
+                                        >
+                                          +Row
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].tables = newItems[idx].tables.filter((_, ti) => ti !== tableIndex);
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          className="text-xs text-red-500 hover:text-red-700 px-1"
+                                        >
+                                          <FiTrash2 size={12} />
+                                        </button>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Table Editor */}
+                                    <div className="overflow-x-auto max-h-48">
+                                      <table className="w-full border-collapse text-xs">
+                                        <thead>
+                                          <tr>
+                                            {(table.headers || []).map((header, colIndex) => (
+                                              <th key={colIndex} className="border border-teal-200 bg-teal-50 p-0.5">
+                                                <div className="flex items-center">
+                                                  <input
+                                                    type="text"
+                                                    value={header}
+                                                    onChange={(e) => {
+                                                      const newItems = [...(formData.menu_config?.items || [])];
+                                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                                      newItems[idx].tables[tableIndex].headers[colIndex] = e.target.value;
+                                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                                    }}
+                                                    className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 text-xs px-1"
+                                                    placeholder="Header"
+                                                  />
+                                                  {table.headers.length > 1 && (
+                                                    <button
+                                                      type="button"
+                                                      onClick={() => {
+                                                        const newItems = [...(formData.menu_config?.items || [])];
+                                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                                        newItems[idx].tables[tableIndex].headers.splice(colIndex, 1);
+                                                        newItems[idx].tables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                                      }}
+                                                      className="text-red-400 hover:text-red-600 text-xs"
+                                                    >
+                                                      ×
+                                                    </button>
+                                                  )}
+                                                </div>
+                                              </th>
+                                            ))}
+                                            <th className="w-6"></th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {(table.rows || []).map((row, rowIndex) => (
+                                            <tr key={rowIndex}>
+                                              {row.map((cell, cellIndex) => (
+                                                <td key={cellIndex} className="border border-teal-200 p-0.5">
+                                                  <input
+                                                    type="text"
+                                                    value={cell}
+                                                    onChange={(e) => {
+                                                      const newItems = [...(formData.menu_config?.items || [])];
+                                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                                      newItems[idx].tables[tableIndex].rows[rowIndex][cellIndex] = e.target.value;
+                                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                                    }}
+                                                    className="w-full border-0 text-center text-xs px-1"
+                                                    placeholder="-"
+                                                  />
+                                                </td>
+                                              ))}
+                                              <td className="border border-teal-200 p-0.5 text-center">
+                                                {table.rows.length > 1 && (
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                      const newItems = [...(formData.menu_config?.items || [])];
+                                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                                      newItems[idx].tables[tableIndex].rows = newItems[idx].tables[tableIndex].rows.filter((_, ri) => ri !== rowIndex);
+                                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                                    }}
+                                                    className="text-red-400 hover:text-red-600 text-xs"
+                                                  >
+                                                    ×
+                                                  </button>
+                                                )}
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    
+                                    {/* Insert to Content Button */}
+                                    <div className="mt-2 flex gap-1">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const tableHtml = `<table class="data-table">\n  <caption>${table.title || 'Table'}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].content = (newItems[idx].content || '') + '\n\n' + tableHtml;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          alert('Table inserted into Page Content!');
+                                        }}
+                                        className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 flex items-center gap-1"
+                                      >
+                                        <FiEdit size={10} /> Insert to Content
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const tableHtml = `<table class="data-table">\n  <caption>${table.title || 'Table'}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                                          navigator.clipboard.writeText(tableHtml);
+                                          alert('Table HTML copied!');
+                                        }}
+                                        className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200 flex items-center gap-1"
+                                      >
+                                        📋 Copy HTML
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-400 italic">No tables. Click &quot;+ Add Table&quot; to create.</p>
+                            )}
+                            
+                            {/* Quick Table Templates */}
+                            {item.tables && item.tables.length === 0 && (
+                              <div className="mt-2 flex flex-wrap gap-1">
+                                <span className="text-xs text-gray-500">Quick add:</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    if (!newItems[idx].tables) newItems[idx].tables = [];
+                                    newItems[idx].tables.push({
+                                      title: 'Fee Structure',
+                                      headers: ['Course', 'Duration', 'Annual Fee', 'Total Fee'],
+                                      rows: [['B.Tech', '4 Years', '₹1,50,000', '₹6,00,000'], ['M.Tech', '2 Years', '₹1,00,000', '₹2,00,000']]
+                                    });
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-xs text-teal-600 hover:underline"
+                                >
+                                  Fee Structure
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    if (!newItems[idx].tables) newItems[idx].tables = [];
+                                    newItems[idx].tables.push({
+                                      title: 'Placement Statistics',
+                                      headers: ['Year', 'Students Placed', 'Highest Package', 'Average Package'],
+                                      rows: [['2024', '95%', '₹45 LPA', '₹12 LPA'], ['2023', '92%', '₹40 LPA', '₹10 LPA']]
+                                    });
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-xs text-teal-600 hover:underline"
+                                >
+                                  Placements
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    if (!newItems[idx].tables) newItems[idx].tables = [];
+                                    newItems[idx].tables.push({
+                                      title: 'Eligibility Criteria',
+                                      headers: ['Course', 'Qualification', 'Minimum %', 'Entrance Exam'],
+                                      rows: [['B.Tech', '12th PCM', '75%', 'JEE Main'], ['MBA', 'Graduation', '60%', 'CAT/MAT']]
+                                    });
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-xs text-teal-600 hover:underline"
+                                >
+                                  Eligibility
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
