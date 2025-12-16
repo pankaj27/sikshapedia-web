@@ -1907,8 +1907,7 @@ const CollegeForm = () => {
         </div>
 
         {/* Placement Details */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Placement Details</h2>
+        <CollapsibleSection title="Placement Details" icon="💼" defaultOpen={false}>
           <div className="grid grid-cols-3 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium mb-1">Highest Package (INR)</label>
@@ -2013,7 +2012,7 @@ const CollegeForm = () => {
               <FiPlus className="mr-2" /> Add Recruiter
             </Button>
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Scholarships */}
         <div className="bg-white rounded-lg shadow p-6">
