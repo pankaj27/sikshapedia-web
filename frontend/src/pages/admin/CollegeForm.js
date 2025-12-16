@@ -2380,20 +2380,25 @@ const CollegeForm = () => {
               {/* Preview Grid */}
               {formData.campus_images.length > 0 && formData.campus_images.some(img => typeof img === 'string' ? img : img.url) && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
-                  <p className="text-xs text-gray-600 mb-2">Gallery Preview:</p>
-                  <div className="grid grid-cols-4 gap-2">
+                  <p className="text-xs text-gray-600 mb-2">Gallery Preview with Admissionbuddy Branding:</p>
+                  <div className="grid grid-cols-4 gap-3">
                     {formData.campus_images.filter(img => typeof img === 'string' ? img : img.url).map((img, index) => {
-                      const imgData = typeof img === 'string' ? { url: img, alt: '' } : img;
+                      const imgData = typeof img === 'string' ? { url: img, title: '', alt: '' } : img;
                       return (
-                        <div key={index} className="relative">
+                        <div key={index} className="relative group">
                           <img 
                             src={imgData.url} 
                             alt={imgData.alt || `Campus ${index + 1}`} 
-                            className="w-full h-24 object-cover rounded border"
+                            className="w-full h-24 object-cover rounded border-2 border-gray-300"
                             onError={(e) => e.target.style.display = 'none'}
                           />
+                          {imgData.title && (
+                            <div className="absolute top-0 left-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 font-semibold truncate">
+                              {imgData.title}
+                            </div>
+                          )}
                           {imgData.alt && (
-                            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs p-1 truncate">
+                            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-xs p-1 truncate">
                               {imgData.alt}
                             </div>
                           )}
