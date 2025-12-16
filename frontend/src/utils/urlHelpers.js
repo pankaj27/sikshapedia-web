@@ -32,13 +32,21 @@ export const getInstitutionListingUrl = (type, location = null) => {
 // Generate institution detail URL
 // Format: /college/{number}-{slug}-{city} e.g., /college/001-mr-college-of-pharmacy-barasat
 // If city is already in name, it won't be duplicated
-export const getInstitutionDetailUrl = (type, id, name, city = null) => {
+// serialNumber is the unique sequential number from the database
+export const getInstitutionDetailUrl = (type, id, name, city = null, serialNumber = null) => {
   const typeSlug = type?.toLowerCase() || 'college';
   const nameSlug = generateSlug(name);
   
-  // Extract numeric part from ID if it exists (e.g., "001" from "iit-delhi-001")
-  const idMatch = id?.match(/(\d+)$/);
-  const numericId = idMatch ? idMatch[1] : id?.replace(/-/g, '') || '';
+  // Use serial_number if provided, otherwise fallback to extracting from ID
+  let numericId;
+  if (serialNumber) {
+    // Pad to 3 digits: 1 -> "001", 12 -> "012", 123 -> "123"
+    numericId = String(serialNumber).padStart(3, '0');
+  } else {
+    // Fallback: extract numeric part from ID (e.g., "001" from "iit-delhi-001")
+    const idMatch = id?.match(/(\d+)$/);
+    numericId = idMatch ? idMatch[1] : '000';
+  }
   
   // Check if city needs to be appended
   let finalSlug = nameSlug;
