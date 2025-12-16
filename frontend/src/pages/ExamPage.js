@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronRight, FiSearch, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import AdBanner from '../components/AdBanner';
 
 const ExamPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
