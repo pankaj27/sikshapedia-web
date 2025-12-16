@@ -382,17 +382,20 @@ const AdvertisementsManagement = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">Position</label>
+                    <label className="block text-sm font-medium mb-1">Position *</label>
                     <select
                       value={formData.position}
                       onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                       className="w-full border rounded px-3 py-2"
+                      required
                     >
-                      <option value="top">Top</option>
-                      <option value="bottom">Bottom</option>
-                      <option value="sidebar">Sidebar</option>
-                      <option value="popup">Popup</option>
+                      {availablePositions.map(pos => (
+                        <option key={pos.value} value={pos.value}>
+                          {pos.label} - {pos.description}
+                        </option>
+                      ))}
                     </select>
+                    <p className="text-xs text-gray-500 mt-1">Select where the ad should appear on the page</p>
                   </div>
 
                   <div>
