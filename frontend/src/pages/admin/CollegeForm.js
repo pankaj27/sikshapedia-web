@@ -1592,6 +1592,162 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
+
+            {/* Table Builder for Description */}
+            <div className="border-2 border-orange-300 rounded-lg p-4 bg-orange-50">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <label className="block text-sm font-medium text-orange-800">📊 Add Table to Description</label>
+                  <p className="text-xs text-orange-600">Create tables and insert them into description above</p>
+                </div>
+                <span className="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded">
+                  {formData.description_tables?.length || 0} tables
+                </span>
+              </div>
+
+              {/* Tables List */}
+              {(formData.description_tables || []).map((table, tableIndex) => (
+                <div key={tableIndex} className="bg-white rounded-lg border border-orange-200 p-3 mb-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-0.5 rounded">Table {tableIndex + 1}</span>
+                      <input
+                        type="text"
+                        value={table.title || ''}
+                        onChange={(e) => {
+                          const newTables = [...(formData.description_tables || [])];
+                          newTables[tableIndex].title = e.target.value;
+                          setFormData({...formData, description_tables: newTables});
+                        }}
+                        placeholder="Table Title"
+                        className="border rounded px-2 py-1 text-sm w-48"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button type="button" onClick={() => {
+                        const newTables = [...(formData.description_tables || [])];
+                        newTables[tableIndex].headers.push('Column');
+                        newTables[tableIndex].rows.forEach(row => row.push(''));
+                        setFormData({...formData, description_tables: newTables});
+                      }} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">+ Col</button>
+                      <button type="button" onClick={() => {
+                        const newTables = [...(formData.description_tables || [])];
+                        newTables[tableIndex].rows.push(new Array(newTables[tableIndex].headers.length).fill(''));
+                        setFormData({...formData, description_tables: newTables});
+                      }} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">+ Row</button>
+                      <button type="button" onClick={() => {
+                        setFormData({...formData, description_tables: (formData.description_tables || []).filter((_, i) => i !== tableIndex)});
+                      }} className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">Delete</button>
+                    </div>
+                  </div>
+                  
+                  {/* Table Editor */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-sm">
+                      <thead>
+                        <tr>
+                          {(table.headers || []).map((header, colIndex) => (
+                            <th key={colIndex} className="border border-orange-200 bg-orange-100 p-1">
+                              <div className="flex items-center gap-1">
+                                <input type="text" value={header}
+                                  onChange={(e) => {
+                                    const newTables = [...(formData.description_tables || [])];
+                                    newTables[tableIndex].headers[colIndex] = e.target.value;
+                                    setFormData({...formData, description_tables: newTables});
+                                  }}
+                                  className="w-full border-0 bg-transparent font-semibold text-center text-orange-800 focus:outline-none px-1"
+                                  placeholder="Header"
+                                />
+                                {table.headers.length > 1 && (
+                                  <button type="button" onClick={() => {
+                                    const newTables = [...(formData.description_tables || [])];
+                                    newTables[tableIndex].headers.splice(colIndex, 1);
+                                    newTables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                    setFormData({...formData, description_tables: newTables});
+                                  }} className="text-red-500 text-xs">×</button>
+                                )}
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(table.rows || []).map((row, rowIndex) => (
+                          <tr key={rowIndex}>
+                            {row.map((cell, colIndex) => (
+                              <td key={colIndex} className="border border-orange-200 p-1">
+                                <input type="text" value={cell}
+                                  onChange={(e) => {
+                                    const newTables = [...(formData.description_tables || [])];
+                                    newTables[tableIndex].rows[rowIndex][colIndex] = e.target.value;
+                                    setFormData({...formData, description_tables: newTables});
+                                  }}
+                                  className="w-full border-0 bg-transparent focus:outline-none px-1"
+                                  placeholder=""
+                                />
+                              </td>
+                            ))}
+                            {table.rows.length > 1 && (
+                              <td className="w-6">
+                                <button type="button" onClick={() => {
+                                  const newTables = [...(formData.description_tables || [])];
+                                  newTables[tableIndex].rows.splice(rowIndex, 1);
+                                  setFormData({...formData, description_tables: newTables});
+                                }} className="text-red-500 text-xs">×</button>
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  {/* Insert Button */}
+                  <div className="mt-2 flex gap-2">
+                    <button type="button" onClick={() => {
+                      const tableHtml = `\n\n<table class="info-table">\n  <caption>${table.title || ''}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>\n`;
+                      setFormData({...formData, description: (formData.description || '') + tableHtml});
+                      alert('Table inserted into Description!');
+                    }} className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded hover:bg-green-200">
+                      ⚡ Insert into Description
+                    </button>
+                    <button type="button" onClick={() => {
+                      const tableHtml = `<table class="info-table">\n  <caption>${table.title || ''}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                      navigator.clipboard.writeText(tableHtml);
+                      alert('Table HTML copied!');
+                    }} className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-200">
+                      📋 Copy HTML
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {/* Add Table Buttons */}
+              <div className="flex flex-wrap gap-2">
+                <button type="button" onClick={() => {
+                  setFormData({...formData, description_tables: [...(formData.description_tables || []), {
+                    title: '', headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['', '', ''], ['', '', '']]
+                  }]});
+                }} className="text-sm text-orange-700 hover:bg-orange-100 px-3 py-1.5 rounded border border-orange-300 flex items-center gap-1">
+                  <FiPlus /> Add Table
+                </button>
+                <button type="button" onClick={() => {
+                  setFormData({...formData, description_tables: [...(formData.description_tables || []), {
+                    title: 'Quick Facts', headers: ['Parameter', 'Details'], rows: [['Established', ''], ['Type', ''], ['Approved By', ''], ['Location', '']]
+                  }]});
+                }} className="text-xs bg-orange-50 border border-orange-200 text-orange-700 px-2 py-1 rounded hover:bg-orange-100">
+                  + Quick Facts
+                </button>
+                <button type="button" onClick={() => {
+                  setFormData({...formData, description_tables: [...(formData.description_tables || []), {
+                    title: 'Key Statistics', headers: ['Metric', 'Value'], rows: [['Total Students', ''], ['Faculty', ''], ['Courses', ''], ['Campus Size', '']]
+                  }]});
+                }} className="text-xs bg-orange-50 border border-orange-200 text-orange-700 px-2 py-1 rounded hover:bg-orange-100">
+                  + Key Statistics
+                </button>
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium mb-2">Highlights</label>
               {formData.highlights.map((highlight, index) => (
