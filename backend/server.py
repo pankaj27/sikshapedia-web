@@ -430,7 +430,7 @@ class College(BaseModel):
     facilities: List = []  # Can be List[str] (legacy) or List[Dict] (new format)
     hostel_info: Optional[Dict] = None
     campus_size: Optional[str] = None
-    campus_images: List[str] = []  # Gallery images
+    campus_images: List = []  # Can be List[str] (legacy) or List[Dict] with {url, alt} (new format)
     campus_video_url: Optional[str] = None
     
     # Contact & Media
