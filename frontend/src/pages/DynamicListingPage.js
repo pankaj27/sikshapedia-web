@@ -413,7 +413,7 @@ const DynamicListingPage = () => {
                 {institutions.map((inst, idx) => (
                   <Link 
                     key={inst.id || idx}
-                    to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name)}
+                    to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city)}
                     className="bg-white rounded-xl border hover:shadow-lg transition-all duration-200 p-4 flex gap-4 group"
                   >
                     {/* Logo */}
