@@ -2307,10 +2307,10 @@ const CollegeForm = () => {
 
               {/* Individual Image Rows */}
               {formData.campus_images.map((img, index) => {
-                const imgData = typeof img === 'string' ? { url: img, alt: '' } : img;
+                const imgData = typeof img === 'string' ? { url: img, title: '', alt: '' } : img;
                 return (
-                  <div key={index} className="mb-4 p-3 border rounded bg-white">
-                    <div className="flex gap-2 mb-2">
+                  <div key={index} className="mb-4 p-4 border-2 border-gray-200 rounded-lg bg-white">
+                    <div className="flex gap-2 mb-3">
                       <input
                         type="url"
                         value={imgData.url}
@@ -2350,13 +2350,29 @@ const CollegeForm = () => {
                         <FiTrash2 />
                       </Button>
                     </div>
-                    <input
-                      type="text"
-                      value={imgData.alt}
-                      onChange={(e) => updateCampusImage(index, 'alt', e.target.value)}
-                      placeholder="Alt text (e.g., 'Library Building Front View')"
-                      className="w-full border rounded px-3 py-2 text-sm"
-                    />
+                    <div className="space-y-2">
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-700">Image Title</label>
+                        <input
+                          type="text"
+                          value={imgData.title || ''}
+                          onChange={(e) => updateCampusImage(index, 'title', e.target.value)}
+                          placeholder="e.g., 'Library Building' (Alt auto-generated)"
+                          className="w-full border-2 border-blue-200 rounded px-3 py-2 text-sm focus:border-blue-400"
+                        />
+                        <p className="text-xs text-blue-600 mt-1">⚡ Enter title to auto-generate alt text with Admissionbuddy branding</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1 text-gray-700">Alt Text (Auto-generated)</label>
+                        <input
+                          type="text"
+                          value={imgData.alt || ''}
+                          onChange={(e) => updateCampusImage(index, 'alt', e.target.value)}
+                          placeholder="Auto-generated from title"
+                          className="w-full border rounded px-3 py-2 text-sm bg-gray-50"
+                        />
+                      </div>
+                    </div>
                   </div>
                 );
               })}
