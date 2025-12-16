@@ -818,6 +818,83 @@ const CollegeForm = () => {
   const updateUpdateSimple = (index, field, value) => {
     const newUpdates = [...formData.updates];
     newUpdates[index][field] = value;
+
+
+  const handleBrochureUpload = async (file) => {
+    setUploadingBrochure(true);
+    
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/brochure', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const fullUrl = backendUrl + response.data.url;
+        
+        setFormData(prev => ({
+          ...prev,
+          brochure_url: fullUrl
+        }));
+        
+        alert('Brochure uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload brochure. Please try again.');
+    } finally {
+      setUploadingBrochure(false);
+    }
+  };
+
+  const handleCourseBrochureUpload = async (file, courseIndex) => {
+    setUploadingCourseBrochure(prev => ({ ...prev, [courseIndex]: true }));
+    
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/brochure', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const fullUrl = backendUrl + response.data.url;
+        
+        const newCourses = [...formData.courses];
+        if (!newCourses[courseIndex].brochure_url) {
+          newCourses[courseIndex] = { ...newCourses[courseIndex], brochure_url: fullUrl };
+        } else {
+          newCourses[courseIndex].brochure_url = fullUrl;
+        }
+        
+        setFormData(prev => ({
+          ...prev,
+          courses: newCourses
+        }));
+        
+        alert('Course brochure uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload course brochure. Please try again.');
+    } finally {
+      setUploadingCourseBrochure(prev => ({ ...prev, [courseIndex]: false }));
+    }
+  };
+
     setFormData({ ...formData, updates: newUpdates });
   };
 
