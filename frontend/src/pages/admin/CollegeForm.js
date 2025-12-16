@@ -5261,7 +5261,7 @@ const CollegeForm = () => {
                           
                           {/* Images Section */}
                           <div className="mt-3 pt-3 border-t border-gray-200">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center justify-between mb-1">
                               <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
                                 <FiImage size={12} /> Images for this Page
                               </p>
@@ -5302,17 +5302,18 @@ const CollegeForm = () => {
                                           align: 'center'
                                         });
                                         setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                                        alert('Image uploaded!');
+                                        alert('Image uploaded successfully!');
                                       }
                                     } catch (error) {
                                       console.error('Upload error:', error);
-                                      alert('Failed to upload image');
+                                      alert('Failed to upload image. Please try again.');
                                     }
                                     e.target.value = '';
                                   }}
                                 />
                               </label>
                             </div>
+                            <p className="text-xs text-gray-400 mb-2">📐 Recommended: 800×600px, Max 2MB. Auto-compressed to ~150KB</p>
                             
                             {item.images && item.images.length > 0 ? (
                               <div className="space-y-2">
