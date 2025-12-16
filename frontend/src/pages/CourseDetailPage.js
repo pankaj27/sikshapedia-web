@@ -62,6 +62,9 @@ const CourseDetailPage = () => {
 
       {/* Main Container */}
       <div className="container mx-auto px-8 py-6">
+        {/* Sponsor Ad - Content Top */}
+        <AdBanner pageName="course-detail" position="content-top" />
+        
         <div className="flex gap-6">
           {/* Main Content - 75% width */}
           <main className="w-9/12">
