@@ -4377,6 +4377,262 @@ const CollegeForm = () => {
           </div>
         </CollapsibleSection>
 
+        {/* Menu Configuration */}
+        <CollapsibleSection title="Detail Page Menu Configuration" icon="🧭" defaultOpen={false}>
+          <p className="text-sm text-gray-600 mb-4">
+            Configure the navigation menu that appears on the college detail page. You can enable/disable items, reorder them, or auto-generate from your TOC sections.
+          </p>
+
+          <div className="space-y-4">
+            {/* Menu Mode Selection */}
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4 border border-indigo-200">
+              <h4 className="font-semibold text-indigo-800 mb-3">📌 Menu Mode</h4>
+              <div className="space-y-2">
+                <label className="flex items-center gap-3 p-2 bg-white rounded border cursor-pointer hover:bg-indigo-50">
+                  <input
+                    type="radio"
+                    name="menu_mode"
+                    checked={!formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc}
+                    onChange={() => setFormData({
+                      ...formData,
+                      menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: false }
+                    })}
+                    className="text-indigo-600"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-800">🔧 Default Menu</p>
+                    <p className="text-xs text-gray-500">Use standard menu items (Info, Courses, Admissions, etc.)</p>
+                  </div>
+                </label>
+                
+                <label className="flex items-center gap-3 p-2 bg-white rounded border cursor-pointer hover:bg-indigo-50">
+                  <input
+                    type="radio"
+                    name="menu_mode"
+                    checked={formData.menu_config?.auto_from_toc}
+                    onChange={() => setFormData({
+                      ...formData,
+                      menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: true }
+                    })}
+                    className="text-indigo-600"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-800">🔗 Auto from TOC</p>
+                    <p className="text-xs text-gray-500">Automatically generate menu from your Table of Contents sections</p>
+                  </div>
+                </label>
+                
+                <label className="flex items-center gap-3 p-2 bg-white rounded border cursor-pointer hover:bg-indigo-50">
+                  <input
+                    type="radio"
+                    name="menu_mode"
+                    checked={formData.menu_config?.use_custom_menu}
+                    onChange={() => setFormData({
+                      ...formData,
+                      menu_config: { ...formData.menu_config, use_custom_menu: true, auto_from_toc: false }
+                    })}
+                    className="text-indigo-600"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-800">✏️ Custom Menu</p>
+                    <p className="text-xs text-gray-500">Fully customize menu items, labels, and order</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Auto from TOC Preview */}
+            {formData.menu_config?.auto_from_toc && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h4 className="font-semibold text-green-800 mb-2">🔗 Menu from TOC Sections</h4>
+                {formData.seo_toc?.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {formData.seo_toc.map((item, index) => (
+                      <span key={index} className="px-3 py-1.5 bg-white border border-green-300 rounded-full text-sm text-green-800">
+                        {item.title}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-green-700">
+                    ⚠️ No TOC sections found. Go to <strong>SEO Content</strong> → <strong>Table of Contents</strong> to add sections.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Custom Menu Configuration */}
+            {(formData.menu_config?.use_custom_menu || (!formData.menu_config?.auto_from_toc && !formData.menu_config?.use_custom_menu)) && (
+              <div className="bg-white border rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-semibold text-gray-800">📋 Menu Items</h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newItems = [...(formData.menu_config?.items || []), {
+                        id: `custom-${Date.now()}`,
+                        label: 'New Item',
+                        icon: '📌',
+                        enabled: true,
+                        order: (formData.menu_config?.items?.length || 0) + 1
+                      }];
+                      setFormData({
+                        ...formData,
+                        menu_config: { ...formData.menu_config, items: newItems }
+                      });
+                    }}
+                    className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200"
+                  >
+                    + Add Item
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {(formData.menu_config?.items || [])
+                    .sort((a, b) => a.order - b.order)
+                    .map((item, index) => (
+                    <div key={item.id} className={`flex items-center gap-3 p-2 rounded border ${item.enabled ? 'bg-white border-gray-200' : 'bg-gray-100 border-gray-300 opacity-60'}`}>
+                      {/* Enable/Disable */}
+                      <input
+                        type="checkbox"
+                        checked={item.enabled}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          const idx = newItems.findIndex(i => i.id === item.id);
+                          newItems[idx].enabled = e.target.checked;
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="rounded"
+                      />
+                      
+                      {/* Order */}
+                      <input
+                        type="number"
+                        value={item.order}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          const idx = newItems.findIndex(i => i.id === item.id);
+                          newItems[idx].order = parseInt(e.target.value) || 1;
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="w-12 border rounded px-2 py-1 text-center text-sm"
+                        min="1"
+                      />
+                      
+                      {/* Icon */}
+                      <select
+                        value={item.icon}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          const idx = newItems.findIndex(i => i.id === item.id);
+                          newItems[idx].icon = e.target.value;
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="border rounded px-2 py-1 text-sm"
+                      >
+                        <option value="📋">📋</option>
+                        <option value="📚">📚</option>
+                        <option value="📝">📝</option>
+                        <option value="📊">📊</option>
+                        <option value="💼">💼</option>
+                        <option value="🏆">🏆</option>
+                        <option value="💰">💰</option>
+                        <option value="🏫">🏫</option>
+                        <option value="⭐">⭐</option>
+                        <option value="🎓">🎓</option>
+                        <option value="📍">📍</option>
+                        <option value="📞">📞</option>
+                        <option value="🖼️">🖼️</option>
+                        <option value="❓">❓</option>
+                        <option value="📌">📌</option>
+                      </select>
+                      
+                      {/* Label */}
+                      <input
+                        type="text"
+                        value={item.label}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          const idx = newItems.findIndex(i => i.id === item.id);
+                          newItems[idx].label = e.target.value;
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="flex-1 border rounded px-2 py-1 text-sm"
+                        placeholder="Menu Label"
+                      />
+                      
+                      {/* Section ID */}
+                      <input
+                        type="text"
+                        value={item.id}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          const idx = newItems.findIndex(i => i.id === item.id);
+                          newItems[idx].id = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="w-32 border rounded px-2 py-1 text-sm font-mono bg-gray-50"
+                        placeholder="section-id"
+                      />
+                      
+                      {/* Delete */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newItems = (formData.menu_config?.items || []).filter(i => i.id !== item.id);
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="text-red-500 hover:bg-red-50 p-1 rounded"
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Menu Preview */}
+            <div className="bg-gray-100 rounded-lg p-4">
+              <h4 className="font-semibold text-gray-700 mb-3">👁️ Menu Preview</h4>
+              <div className="bg-white rounded-lg border p-3">
+                <div className="flex gap-2 overflow-x-auto">
+                  {formData.menu_config?.auto_from_toc ? (
+                    // Show TOC items
+                    formData.seo_toc?.length > 0 ? (
+                      formData.seo_toc.map((item, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className="px-3 py-2 bg-orange-100 text-orange-800 rounded-lg text-sm whitespace-nowrap flex items-center gap-1"
+                        >
+                          📌 {item.title}
+                        </button>
+                      ))
+                    ) : (
+                      <span className="text-gray-500 text-sm">No TOC sections</span>
+                    )
+                  ) : (
+                    // Show menu items
+                    (formData.menu_config?.items || [])
+                      .filter(item => item.enabled)
+                      .sort((a, b) => a.order - b.order)
+                      .map((item, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className={`px-3 py-2 rounded-lg text-sm whitespace-nowrap flex items-center gap-1 ${index === 0 ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700'}`}
+                        >
+                          {item.icon} {item.label}
+                        </button>
+                      ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </CollapsibleSection>
+
         {/* Contact Information */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Contact Information</h2>
