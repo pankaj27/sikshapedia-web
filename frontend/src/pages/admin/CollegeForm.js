@@ -155,6 +155,7 @@ const CollegeForm = () => {
     fetchRankCategories();
     fetchAvailableCourses();
     fetchAvailableScholarships();
+    fetchAvailableFacilities();
     if (id) {
       fetchCollege();
     }
