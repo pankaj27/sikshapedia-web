@@ -201,13 +201,55 @@ const CollegeSubPage = () => {
                     <h2 className="text-xl text-gray-600 mb-4 -mt-4">{currentSection.search_heading}</h2>
                   )}
                   
+                  {/* Table of Contents Navigation */}
+                  {currentSection.toc && currentSection.toc.length > 0 && (
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+                      <h3 className="font-semibold text-orange-800 mb-3 flex items-center gap-2">
+                        <FiBookmark size={16} /> Table of Contents
+                      </h3>
+                      <nav className="space-y-1">
+                        {currentSection.toc.map((tocItem, tocIndex) => (
+                          <a
+                            key={tocIndex}
+                            href={`#${tocItem.anchor}`}
+                            className="block text-sm text-orange-700 hover:text-orange-900 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors"
+                          >
+                            {tocIndex + 1}. {tocItem.title}
+                          </a>
+                        ))}
+                      </nav>
+                    </div>
+                  )}
+                  
+                  {/* Main Content */}
                   {currentSection.content ? (
                     <div 
-                      className="prose prose-lg max-w-none text-gray-700"
+                      className="prose prose-lg max-w-none text-gray-700 mb-8"
                       dangerouslySetInnerHTML={{ __html: currentSection.content.replace(/\n/g, '<br/>') }}
                     />
                   ) : (
-                    <p className="text-gray-500 italic">No content available for this section.</p>
+                    !currentSection.toc?.length && <p className="text-gray-500 italic">No content available for this section.</p>
+                  )}
+                  
+                  {/* TOC Sections Content */}
+                  {currentSection.toc && currentSection.toc.length > 0 && (
+                    <div className="space-y-8">
+                      {currentSection.toc.map((tocItem, tocIndex) => (
+                        <section key={tocIndex} id={tocItem.anchor} className="scroll-mt-24">
+                          <h2 className="text-2xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                            {tocItem.title}
+                          </h2>
+                          {tocItem.content ? (
+                            <div 
+                              className="prose max-w-none text-gray-700"
+                              dangerouslySetInnerHTML={{ __html: tocItem.content.replace(/\n/g, '<br/>') }}
+                            />
+                          ) : (
+                            <p className="text-gray-400 italic">Content coming soon...</p>
+                          )}
+                        </section>
+                      ))}
+                    </div>
                   )}
                 </div>
               ) : (
