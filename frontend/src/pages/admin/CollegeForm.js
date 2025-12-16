@@ -222,6 +222,15 @@ const CollegeForm = () => {
     }
   };
 
+  const fetchAvailableScholarships = async () => {
+    try {
+      const response = await api.get('/scholarships?limit=500');
+      setAvailableScholarships(response.data);
+    } catch (error) {
+      console.error('Error fetching scholarships:', error);
+    }
+  };
+
   const fetchCollege = async () => {
     setLoading(true);
     try {
