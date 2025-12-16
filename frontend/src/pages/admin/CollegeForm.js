@@ -12,6 +12,8 @@ import {
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
 
+import { Button } from '../../components/ui/button';
+
 // Menu icon options with professional icons
 const menuIconOptions = [
   { id: 'info', label: 'Info', icon: <FiInfo size={16} /> },
@@ -36,12 +38,29 @@ const menuIconOptions = [
   { id: 'default', label: 'Default', icon: <FiBookmark size={16} /> },
 ];
 
+// Emoji to icon ID mapping for backward compatibility
+const emojiToIconId = {
+  '📋': 'info', '📚': 'courses', '📝': 'admission', '📊': 'cutoff',
+  '💼': 'placement', '🏆': 'ranking', '💰': 'scholarship', '🏫': 'facilities',
+  '⭐': 'reviews', '🎓': 'programs', '📍': 'location', '📞': 'contact',
+  '🖼️': 'gallery', '❓': 'faq', '📌': 'default', '🏠': 'overview',
+  '💵': 'fees', '🏢': 'campus'
+};
+
+// Helper to normalize icon value (convert emoji to ID if needed)
+const normalizeIconValue = (iconValue) => {
+  if (!iconValue) return 'default';
+  if (emojiToIconId[iconValue]) return emojiToIconId[iconValue];
+  if (menuIconOptions.find(opt => opt.id === iconValue)) return iconValue;
+  return 'default';
+};
+
 // Helper to get icon by ID
 const getMenuIconById = (iconId) => {
-  const found = menuIconOptions.find(opt => opt.id === iconId);
+  const normalizedId = normalizeIconValue(iconId);
+  const found = menuIconOptions.find(opt => opt.id === normalizedId);
   return found ? found.icon : <FiBookmark size={16} />;
 };
-import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
 
 // Collapsible Section Component for better UX
