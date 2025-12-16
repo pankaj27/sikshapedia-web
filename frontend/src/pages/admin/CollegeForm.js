@@ -902,9 +902,6 @@ const CollegeForm = () => {
     }
   };
 
-    setFormData({ ...formData, updates: newUpdates });
-  };
-
   const addFAQ = () => {
     setFormData({
       ...formData,
