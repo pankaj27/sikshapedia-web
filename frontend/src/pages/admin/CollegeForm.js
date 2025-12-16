@@ -1887,6 +1887,191 @@ const CollegeForm = () => {
               />
             </div>
 
+            {/* SEO Content Images */}
+            <div className="border-2 border-dashed border-blue-300 rounded-lg p-4 bg-blue-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-blue-800">🖼️ SEO Content Images</label>
+                  <p className="text-xs text-blue-600">Add images to enhance your SEO content. Include alt tags for accessibility.</p>
+                </div>
+                <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
+                  {formData.seo_images?.length || 0} images
+                </span>
+              </div>
+
+              {/* Image Upload Area */}
+              <div className="mb-4">
+                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-blue-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-blue-50 transition-colors">
+                  <div className="flex flex-col items-center justify-center py-4">
+                    <FiUpload className="w-6 h-6 text-blue-500 mb-1" />
+                    <p className="text-sm text-blue-600">Click to upload SEO image</p>
+                    <p className="text-xs text-gray-500">PNG, JPG, WebP (Recommended: 800x600px)</p>
+                  </div>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      
+                      const uploadFormData = new FormData();
+                      uploadFormData.append('file', file);
+                      uploadFormData.append('type', 'campus');
+                      
+                      try {
+                        const response = await api.post('/upload/image', uploadFormData);
+                        const newImage = {
+                          url: response.data.url,
+                          title: '',
+                          alt: `${formData.name || 'College'} - Admissionbuddy`,
+                          caption: ''
+                        };
+                        setFormData({
+                          ...formData,
+                          seo_images: [...(formData.seo_images || []), newImage]
+                        });
+                      } catch (error) {
+                        console.error('Upload failed:', error);
+                        alert('Failed to upload image');
+                      }
+                      e.target.value = '';
+                    }}
+                  />
+                </label>
+              </div>
+
+              {/* Uploaded Images Grid */}
+              {formData.seo_images?.length > 0 && (
+                <div className="space-y-3">
+                  {formData.seo_images.map((image, index) => (
+                    <div key={index} className="bg-white rounded-lg border p-3">
+                      <div className="flex gap-4">
+                        {/* Image Preview */}
+                        <div className="w-32 h-24 flex-shrink-0">
+                          <img
+                            src={image.url?.startsWith('/api') ? image.url : `/api${image.url}`}
+                            alt={image.alt || 'SEO Image'}
+                            className="w-full h-full object-cover rounded border"
+                            onError={(e) => { e.target.src = 'https://via.placeholder.com/128x96?text=Image'; }}
+                          />
+                        </div>
+                        
+                        {/* Image Details */}
+                        <div className="flex-1 space-y-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-xs text-gray-600 mb-1">Image Title</label>
+                              <input
+                                type="text"
+                                value={image.title || ''}
+                                onChange={(e) => {
+                                  const newImages = [...formData.seo_images];
+                                  newImages[index].title = e.target.value;
+                                  // Auto-generate alt if empty
+                                  if (!newImages[index].alt && e.target.value) {
+                                    newImages[index].alt = `${e.target.value} - ${formData.name || 'College'} - Admissionbuddy`;
+                                  }
+                                  setFormData({...formData, seo_images: newImages});
+                                }}
+                                placeholder="e.g., Campus Library"
+                                className="w-full border rounded px-2 py-1 text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-gray-600 mb-1">Alt Tag (SEO) *</label>
+                              <input
+                                type="text"
+                                value={image.alt || ''}
+                                onChange={(e) => {
+                                  const newImages = [...formData.seo_images];
+                                  newImages[index].alt = e.target.value;
+                                  setFormData({...formData, seo_images: newImages});
+                                }}
+                                placeholder="Descriptive alt text"
+                                className="w-full border-2 border-blue-200 rounded px-2 py-1 text-sm"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Caption (Optional)</label>
+                            <input
+                              type="text"
+                              value={image.caption || ''}
+                              onChange={(e) => {
+                                const newImages = [...formData.seo_images];
+                                newImages[index].caption = e.target.value;
+                                setFormData({...formData, seo_images: newImages});
+                              }}
+                              placeholder="Caption displayed below the image"
+                              className="w-full border rounded px-2 py-1 text-sm"
+                            />
+                          </div>
+                          
+                          {/* Copy HTML Code */}
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const imgUrl = image.url?.startsWith('/api') ? image.url : `/api${image.url}`;
+                                const htmlCode = `<figure><img src="${imgUrl}" alt="${image.alt || ''}" title="${image.title || ''}" />${image.caption ? `<figcaption>${image.caption}</figcaption>` : ''}</figure>`;
+                                navigator.clipboard.writeText(htmlCode);
+                                alert('HTML code copied! Paste it in SEO Full Content above.');
+                              }}
+                              className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200"
+                            >
+                              📋 Copy HTML Code
+                            </button>
+                            <span className="text-xs text-gray-500">Insert into content above</span>
+                          </div>
+                        </div>
+                        
+                        {/* Delete Button */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              seo_images: formData.seo_images.filter((_, i) => i !== index)
+                            });
+                          }}
+                          className="text-red-500 hover:bg-red-50 p-2 rounded self-start"
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Quick Insert All */}
+              {formData.seo_images?.length > 0 && (
+                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-yellow-800">💡 Quick Insert All Images</p>
+                      <p className="text-xs text-yellow-600">Copy HTML for all images to paste in content</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const allHtml = formData.seo_images.map(img => {
+                          const imgUrl = img.url?.startsWith('/api') ? img.url : `/api${img.url}`;
+                          return `<figure><img src="${imgUrl}" alt="${img.alt || ''}" title="${img.title || ''}" />${img.caption ? `<figcaption>${img.caption}</figcaption>` : ''}</figure>`;
+                        }).join('\n\n');
+                        navigator.clipboard.writeText(allHtml);
+                        alert('All image HTML copied!');
+                      }}
+                      className="text-sm bg-yellow-200 text-yellow-800 px-3 py-1.5 rounded hover:bg-yellow-300"
+                    >
+                      📋 Copy All HTML
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div>
               <label className="block text-sm font-medium mb-1">🎥 SEO Video</label>
               <p className="text-xs text-gray-500 mb-2">
