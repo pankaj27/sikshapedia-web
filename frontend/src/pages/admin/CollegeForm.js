@@ -1872,6 +1872,231 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
+
+            {/* Table of Contents Builder */}
+            <div className="border-2 border-purple-300 rounded-lg p-4 bg-purple-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-purple-800">📑 Table of Contents</label>
+                  <p className="text-xs text-purple-600">Build a clickable TOC that links to content sections below</p>
+                </div>
+                <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                  {formData.seo_toc?.length || 0} sections
+                </span>
+              </div>
+
+              {/* TOC Items */}
+              <div className="space-y-3 mb-4">
+                {(formData.seo_toc || []).map((item, index) => (
+                  <div key={index} className="bg-white rounded-lg border-2 border-purple-200 p-3">
+                    <div className="flex items-start gap-3">
+                      <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-800 rounded-full font-bold text-sm flex-shrink-0">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Section Title *</label>
+                            <input
+                              type="text"
+                              value={item.title || ''}
+                              onChange={(e) => {
+                                const newToc = [...(formData.seo_toc || [])];
+                                newToc[index].title = e.target.value;
+                                // Auto-generate anchor from title
+                                newToc[index].anchor = e.target.value
+                                  .toLowerCase()
+                                  .replace(/[^a-z0-9\s]/g, '')
+                                  .replace(/\s+/g, '-')
+                                  .substring(0, 50);
+                                setFormData({...formData, seo_toc: newToc});
+                              }}
+                              placeholder="e.g., Admission Process"
+                              className="w-full border-2 border-purple-200 rounded px-2 py-1.5 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Anchor ID (auto)</label>
+                            <input
+                              type="text"
+                              value={item.anchor || ''}
+                              onChange={(e) => {
+                                const newToc = [...(formData.seo_toc || [])];
+                                newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                                setFormData({...formData, seo_toc: newToc});
+                              }}
+                              placeholder="admission-process"
+                              className="w-full border rounded px-2 py-1.5 text-sm font-mono bg-gray-50"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Section Content *</label>
+                          <textarea
+                            value={item.content || ''}
+                            onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = e.target.value;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            placeholder="Write the content for this section... You can use HTML tags."
+                            rows="4"
+                            className="w-full border rounded px-2 py-1.5 text-sm"
+                          />
+                        </div>
+                        {/* Copy HTML for this section */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const html = `<h2 id="${item.anchor}">${item.title}</h2>\n<div class="toc-section">\n${item.content}\n</div>`;
+                            navigator.clipboard.writeText(html);
+                            alert('Section HTML copied!');
+                          }}
+                          className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200"
+                        >
+                          📋 Copy Section HTML
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            seo_toc: (formData.seo_toc || []).filter((_, i) => i !== index)
+                          });
+                        }}
+                        className="text-red-500 hover:bg-red-50 p-1.5 rounded"
+                      >
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Section Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]
+                  });
+                }}
+                className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"
+              >
+                <FiPlus /> Add TOC Section
+              </button>
+
+              {/* Quick Add Templates */}
+              <div className="mt-4 p-3 bg-white border border-purple-200 rounded-lg">
+                <p className="text-xs font-medium text-purple-800 mb-2">💡 Quick Add Common Sections:</p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { title: 'About', anchor: 'about' },
+                    { title: 'Admission Process', anchor: 'admission-process' },
+                    { title: 'Courses Offered', anchor: 'courses-offered' },
+                    { title: 'Fee Structure', anchor: 'fee-structure' },
+                    { title: 'Placement', anchor: 'placement' },
+                    { title: 'Facilities', anchor: 'facilities' },
+                    { title: 'Scholarship', anchor: 'scholarship' },
+                    { title: 'Hostel', anchor: 'hostel' },
+                    { title: 'Ranking', anchor: 'ranking' },
+                    { title: 'Contact', anchor: 'contact' },
+                  ].map((template, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        const exists = (formData.seo_toc || []).some(t => t.anchor === template.anchor);
+                        if (!exists) {
+                          setFormData({
+                            ...formData,
+                            seo_toc: [...(formData.seo_toc || []), { ...template, content: '' }]
+                          });
+                        }
+                      }}
+                      className="text-xs bg-purple-50 border border-purple-200 text-purple-700 px-2 py-1 rounded hover:bg-purple-100"
+                    >
+                      + {template.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* TOC Preview & Copy */}
+              {formData.seo_toc?.length > 0 && (
+                <div className="mt-4 p-4 bg-gray-50 border rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-sm font-semibold text-gray-700">👁️ TOC Preview</h4>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          // Generate TOC HTML
+                          const tocHtml = `<nav class="table-of-contents">\n  <h3>Table of Contents</h3>\n  <ul>\n${formData.seo_toc.map(item => `    <li><a href="#${item.anchor}">${item.title}</a></li>`).join('\n')}\n  </ul>\n</nav>`;
+                          navigator.clipboard.writeText(tocHtml);
+                          alert('TOC HTML copied! Paste at the beginning of SEO Full Content.');
+                        }}
+                        className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
+                      >
+                        📋 Copy TOC HTML
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          // Generate full content with TOC and all sections
+                          const tocHtml = `<nav class="table-of-contents">\n  <h3>Table of Contents</h3>\n  <ul>\n${formData.seo_toc.map(item => `    <li><a href="#${item.anchor}">${item.title}</a></li>`).join('\n')}\n  </ul>\n</nav>\n\n`;
+                          const sectionsHtml = formData.seo_toc.map(item => 
+                            `<section id="${item.anchor}">\n  <h2>${item.title}</h2>\n  <div class="section-content">\n    ${item.content || '[Content here]'}\n  </div>\n</section>`
+                          ).join('\n\n');
+                          const fullHtml = tocHtml + sectionsHtml;
+                          navigator.clipboard.writeText(fullHtml);
+                          alert('Full content with TOC copied!');
+                        }}
+                        className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200"
+                      >
+                        📋 Copy Full Content
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Visual TOC Preview */}
+                  <div className="bg-white border rounded p-3">
+                    <p className="text-sm font-semibold text-gray-700 mb-2">Table of Contents</p>
+                    <ul className="space-y-1">
+                      {formData.seo_toc.map((item, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <span className="w-5 h-5 bg-purple-100 text-purple-700 rounded-full text-xs flex items-center justify-center">{index + 1}</span>
+                          <a href={`#${item.anchor}`} className="text-sm text-blue-600 hover:underline">
+                            {item.title || 'Untitled Section'}
+                          </a>
+                          <span className="text-xs text-gray-400">#{item.anchor}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Auto-fill SEO Full Content */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Generate full content with TOC and all sections
+                      const tocHtml = `<nav class="table-of-contents">\n  <h3>Table of Contents</h3>\n  <ul>\n${formData.seo_toc.map(item => `    <li><a href="#${item.anchor}">${item.title}</a></li>`).join('\n')}\n  </ul>\n</nav>\n\n`;
+                      const sectionsHtml = formData.seo_toc.map(item => 
+                        `<section id="${item.anchor}">\n  <h2>${item.title}</h2>\n  <div class="section-content">\n    ${item.content || ''}\n  </div>\n</section>`
+                      ).join('\n\n');
+                      const fullHtml = tocHtml + sectionsHtml;
+                      setFormData({...formData, seo_full_content: fullHtml});
+                      alert('SEO Full Content has been auto-filled with TOC and sections!');
+                    }}
+                    className="mt-3 w-full text-sm bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-blue-600 flex items-center justify-center gap-2"
+                  >
+                    ⚡ Auto-Fill SEO Content with TOC & Sections
+                  </button>
+                </div>
+              )}
+            </div>
             
             <div>
               <label className="block text-sm font-medium mb-1">SEO Full Content</label>
