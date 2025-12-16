@@ -813,11 +813,6 @@ const CollegeForm = () => {
     }
   };
 
-      setUploading(false);
-    }
-  };
-
-
   const updateUpdateSimple = (index, field, value) => {
     const newUpdates = [...formData.updates];
     newUpdates[index][field] = value;
