@@ -1373,8 +1373,7 @@ const CollegeForm = () => {
         </div>
 
         {/* SEO Content Section */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">SEO Content (Detail Page Content)</h2>
+        <CollapsibleSection title="SEO Content (Detail Page Content)" icon="🔍" defaultOpen={false}>
           <p className="text-sm text-gray-600 mb-4">
             This content appears in the expandable &quot;Read More&quot; section on the college detail page for better SEO.
           </p>
