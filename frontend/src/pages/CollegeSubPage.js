@@ -261,7 +261,7 @@ const CollegeSubPage = () => {
               {menuItems.map((item, index) => (
                 <Link
                   key={index}
-                  to={`/colleges/${id}/${item.id}`}
+                  to={`${basePath}/${item.id}`}
                   className={`px-4 py-2 rounded-lg text-sm whitespace-nowrap flex items-center gap-2 transition-colors ${
                     section === item.id 
                       ? 'bg-orange-500 text-white' 
