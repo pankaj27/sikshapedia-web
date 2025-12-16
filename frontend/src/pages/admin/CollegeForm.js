@@ -4643,7 +4643,8 @@ const CollegeForm = () => {
                         meta_description: '',
                         meta_keywords: '',
                         og_title: '',
-                        og_description: ''
+                        og_description: '',
+                        toc: []
                       }];
                       setFormData({
                         ...formData,
