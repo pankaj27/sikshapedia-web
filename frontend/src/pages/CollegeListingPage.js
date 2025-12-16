@@ -1131,6 +1131,9 @@ const CollegeListingPage = () => {
 
             {/* MAIN LISTING */}
             <main className="flex-1">
+              {/* Sponsor Ad - Main Content Top */}
+              <AdBanner pageName="colleges" position="content-top" />
+              
               {/* Top Controls Bar */}
               <div className="mb-6 flex flex-wrap justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
