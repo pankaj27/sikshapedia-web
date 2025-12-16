@@ -1581,13 +1581,6 @@ def optimize_image(file_content: bytes, image_type: str, max_size_kb: int = 500)
     
     return output.getvalue()
 
-
-            saved_colleges=[],
-            saved_courses=[],
-            is_premium=True
-        )
-    )
-
 # ============================================
 # File Upload Routes
 # ============================================
