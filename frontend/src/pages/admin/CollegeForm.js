@@ -1920,7 +1920,12 @@ const CollegeForm = () => {
                       
                       try {
                         // type is a query param, not form data
-                        const response = await api.post('/upload/image?type=campus', uploadFormData);
+                        // Use headers config to let browser set Content-Type for FormData
+                        const response = await api.post('/upload/image?type=campus', uploadFormData, {
+                          headers: {
+                            'Content-Type': 'multipart/form-data',
+                          },
+                        });
                         const newImage = {
                           url: response.data.url,
                           title: '',
