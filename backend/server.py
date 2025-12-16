@@ -1675,16 +1675,19 @@ async def upload_multiple_images(
                 failed_files.append({"filename": file.filename, "error": "Not an image file"})
                 continue
             
-            # Generate unique filename
-            file_ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
-            unique_filename = f"{uuid.uuid4()}.{file_ext}"
+            # Read and optimize image
+            file_content = await file.read()
+            optimized_content = optimize_image(file_content, "campus")
             
-            # Save file
+            # Generate unique filename (always .jpg for optimized)
+            unique_filename = f"{uuid.uuid4()}.jpg"
+            
+            # Save optimized file
             upload_subdir = "campus"
             file_path = UPLOAD_DIR / upload_subdir / unique_filename
             
             with open(file_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
+                buffer.write(optimized_content)
             
             # Use /api prefix for Kubernetes ingress routing
             file_url = f"/api/static/uploads/{upload_subdir}/{unique_filename}"
