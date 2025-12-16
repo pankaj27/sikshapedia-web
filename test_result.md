@@ -6,6 +6,33 @@
 - Institution Entry Form (CollegeForm.js) was restructured into 3 clear steps
 - Menu mode selection now shows relevant content sections based on choice
 
+---
+
+## Latest Test: Test Data Entry Verification (2024-12-16)
+
+### Test Objective
+Verify that 3 comprehensive institution entries have been created with different menu configurations, and that they render correctly on the frontend.
+
+### Test Institutions Created
+
+| Institution | ID | Menu Type | Status |
+|-------------|-----|-----------|--------|
+| IIT Delhi | iit-delhi-001 | Default Menu | ✅ Created |
+| IIM Ahmedabad | iim-ahmedabad-001 | Auto from TOC (6 sections) | ✅ Created |
+| NLSIU Bangalore | nlsiu-bangalore-001 | Custom Menu (8 items) | ✅ Created |
+
+### Tests to Run
+1. Admin panel - verify all 3 institutions appear in the list
+2. IIT Delhi detail page - verify default menu renders correctly
+3. IIM Ahmedabad detail page - verify auto TOC menu renders with 6 sections
+4. NLSIU Bangalore detail page - verify custom menu renders with 8 menu items
+
+### Admin Credentials
+- Email: admin@admissionbuddy.co
+- Password: admin123
+
+---
+
 ## Priority Tests
 
 ### 1. Form Structure Validation ✅ PASSED
