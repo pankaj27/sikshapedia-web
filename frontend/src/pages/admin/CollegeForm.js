@@ -383,6 +383,28 @@ const CollegeForm = () => {
         ...formData,
         [parent]: { ...formData[parent], [field]: value }
       });
+
+  // Auto-generate alt text with Admissionbuddy branding
+  const generateAltText = (title, collegeName = '') => {
+    if (!title) return '';
+    const parts = [title];
+    if (collegeName) parts.push(collegeName);
+    parts.push('Admissionbuddy');
+    return parts.join(' - ');
+  };
+
+  const handleTitleChange = (field, value) => {
+    const altField = field.replace('_title', '_alt');
+    const collegeName = formData.name || '';
+    const autoAlt = generateAltText(value, collegeName);
+    
+    setFormData({
+      ...formData,
+      [field]: value,
+      [altField]: autoAlt
+    });
+  };
+
     }
   };
 
