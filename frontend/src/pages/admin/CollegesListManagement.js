@@ -76,6 +76,35 @@ const CollegesListManagement = () => {
         </Button>
       </div>
 
+      {/* Stats Cards */}
+      <div className="mb-6 grid grid-cols-4 gap-4">
+        <button
+          onClick={() => setFilterStatus('All')}
+          className={`p-4 rounded-lg border-2 text-left transition-all ${filterStatus === 'All' ? 'border-orange-500 bg-orange-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+        >
+          <p className="text-2xl font-bold text-gray-900">{totalCount}</p>
+          <p className="text-sm text-gray-600">📊 Total Institutions</p>
+        </button>
+        <button
+          onClick={() => setFilterStatus('draft')}
+          className={`p-4 rounded-lg border-2 text-left transition-all ${filterStatus === 'draft' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+        >
+          <p className="text-2xl font-bold text-yellow-600">{draftCount}</p>
+          <p className="text-sm text-gray-600">📝 Drafts</p>
+        </button>
+        <button
+          onClick={() => setFilterStatus('published')}
+          className={`p-4 rounded-lg border-2 text-left transition-all ${filterStatus === 'published' ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+        >
+          <p className="text-2xl font-bold text-green-600">{publishedCount}</p>
+          <p className="text-sm text-gray-600">📢 Published</p>
+        </button>
+        <div className="p-4 rounded-lg border-2 border-gray-200 bg-white">
+          <p className="text-2xl font-bold text-blue-600">{filteredColleges.length}</p>
+          <p className="text-sm text-gray-600">🔍 Filtered Results</p>
+        </div>
+      </div>
+
       {/* Search and Filter Bar */}
       <div className="mb-6 flex gap-4">
         <div className="flex-1 relative">
@@ -97,6 +126,15 @@ const CollegesListManagement = () => {
           <option value="College">🎓 Colleges</option>
           <option value="School">🏫 Schools</option>
           <option value="University">🏛️ Universities</option>
+        </select>
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+        >
+          <option value="All">All Status</option>
+          <option value="draft">📝 Drafts Only</option>
+          <option value="published">📢 Published Only</option>
         </select>
       </div>
 
