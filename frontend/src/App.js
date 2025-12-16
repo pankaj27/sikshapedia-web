@@ -174,11 +174,11 @@ function App() {
                   <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
                   
                   {/* ============================================ */}
-                  {/* LEGACY ROUTES (keeping for backward compatibility) */}
+                  {/* LEGACY ROUTES - Redirect to new SEO-friendly URLs */}
                   {/* ============================================ */}
                   <Route path="/colleges" element={<CollegeListingPage />} />
-                  <Route path="/colleges/:id" element={<CollegeDetailPage />} />
-                  <Route path="/colleges/:id/:section" element={<CollegeSubPage />} />
+                  <Route path="/colleges/:id" element={<LegacyCollegeRedirect />} />
+                  <Route path="/colleges/:id/:section" element={<LegacyCollegeRedirect />} />
                   <Route path="/schools" element={<SchoolsPage />} />
                   <Route path="/universities" element={<UniversitiesPage />} />
                   
