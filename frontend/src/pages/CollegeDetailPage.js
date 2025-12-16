@@ -30,17 +30,46 @@ const CollegeDetailPage = () => {
     }
   };
 
-  const menuItems = [
-    { id: 'info', label: 'Info', icon: '📋' },
-    { id: 'courses', label: 'Courses & Fees', icon: '📚' },
-    { id: 'admission', label: 'Admissions', icon: '📝' },
-    { id: 'cutoff', label: 'Cutoff', icon: '📊' },
-    { id: 'placement', label: 'Placement', icon: '💼' },
-    { id: 'ranking', label: 'Ranking', icon: '🏆' },
-    { id: 'scholarship', label: 'Scholarship', icon: '💰' },
-    { id: 'facilities', label: 'Facilities', icon: '🏫' },
-    { id: 'reviews', label: 'Reviews', icon: '⭐' },
+  // Default menu items
+  const defaultMenuItems = [
+    { id: 'info', label: 'Info', icon: '📋', enabled: true, order: 1 },
+    { id: 'courses', label: 'Courses & Fees', icon: '📚', enabled: true, order: 2 },
+    { id: 'admission', label: 'Admissions', icon: '📝', enabled: true, order: 3 },
+    { id: 'cutoff', label: 'Cutoff', icon: '📊', enabled: true, order: 4 },
+    { id: 'placement', label: 'Placement', icon: '💼', enabled: true, order: 5 },
+    { id: 'ranking', label: 'Ranking', icon: '🏆', enabled: true, order: 6 },
+    { id: 'scholarship', label: 'Scholarship', icon: '💰', enabled: true, order: 7 },
+    { id: 'facilities', label: 'Facilities', icon: '🏫', enabled: true, order: 8 },
+    { id: 'reviews', label: 'Reviews', icon: '⭐', enabled: true, order: 9 },
   ];
+
+  // Dynamic menu items based on college configuration
+  const getMenuItems = () => {
+    const menuConfig = college?.menu_config;
+    
+    // If auto from TOC is enabled and TOC exists
+    if (menuConfig?.auto_from_toc && college?.seo_toc?.length > 0) {
+      return college.seo_toc.map((item, index) => ({
+        id: item.anchor || `toc-${index}`,
+        label: item.title,
+        icon: '📌',
+        enabled: true,
+        order: index + 1
+      }));
+    }
+    
+    // If custom menu is enabled
+    if (menuConfig?.use_custom_menu && menuConfig?.items?.length > 0) {
+      return menuConfig.items
+        .filter(item => item.enabled)
+        .sort((a, b) => a.order - b.order);
+    }
+    
+    // Default menu
+    return defaultMenuItems;
+  };
+
+  const menuItems = getMenuItems();
 
   const scrollToSection = (sectionId) => {
     setActiveTab(sectionId);
