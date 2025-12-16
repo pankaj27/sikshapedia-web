@@ -1,350 +1,132 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to build a college portal replicating . The scope has expanded to creating a comprehensive backend-driven system with a full-featured admin panel. The primary objective is to ensure every piece of data displayed on the frontend can be managed (Create, Read, Update, Delete) from this admin panel. Recent requests have included building a comprehensive college entry form with an SEO section, automatic slug generation, course and exam management, an advertisement system, populating the database with extensive master data (courses, exams, affiliations, recognitions, facilities, scholarships), and unifying the management of Colleges, Schools, and Universities.
+The user's initial goal was to build a college portal replicating . The scope has expanded to creating a comprehensive backend-driven system with a full-featured admin panel. The primary objective is to ensure every piece of data displayed on the frontend can be managed (Create, Read, Update, Delete) from this admin panel. The user has been iteratively adding a very large number of features to the institution entry form, turning it into a complex, all-in-one content management system.
 
 PRODUCT REQUIREMENTS:
 1.  **Full Backend Control:** Every frontend page and component should be powered by backend APIs.
-2.  **Comprehensive Admin Panel:** A secure admin panel to manage all data entities.
+2.  **Comprehensive Admin Panel:** A secure admin panel to manage all data entities, which has now grown to include per-page content management for dynamic sub-pages.
 3.  **Unified Institution Management:** A single form and management page for Colleges, Schools, and Universities.
 4.  **Master Data Population:** The database must be seeded with comprehensive data for all relevant entities.
-5.  **Dynamic Data Entry:** The institution form should use dropdowns populated from master data to auto-fill related information, simplifying data entry.
+5.  **Modular Backend Architecture**: The user requested to refactor the monolithic backend into a modular, microservice-like architecture.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The full-stack application has been significantly enhanced with a host of new, powerful features managed from the  admin page. The form itself has been made more user-friendly with collapsible sections.
-
-Key new features include:
--   **Advanced SEO & Meta Tags:** A dedicated section to manage meta titles, descriptions, keywords, and Open Graph data, complete with character counters and a live Google search result preview.
--   **Badges & Status:** An admin section with toggle switches to assign badges like Verified, Preferred, and Admission Open to institutions, with a live preview.
--   **Dynamic Content Tools:**
-    -   **Table of Contents (TOC) Builder:** Allows admins to create structured content for detail pages.
-    -   **Table Builder:** A visual tool to create and insert HTML tables into content areas like Description and SEO Content.
--   **Rich Content Management:** Functionality has been added for a dedicated FAQ section, sidebar widget configuration, and image uploads directly within the SEO content area.
--   **Fully Configurable Detail Page Menu:** A major new feature allowing the college detail page's navigation menu to be controlled from the admin panel. It supports three modes: a default menu, a menu auto-generated from the TOC builder, or a custom menu where each item can link to its own separate, dynamically generated sub-page.
+A full-stack application (React frontend, FastAPI backend, MongoDB) featuring an admin panel.
+- **Backend Architecture**: A new modular backend architecture has been implemented and stabilized. It runs in parallel with the old monolithic code in  to ensure the frontend, which still depends on the old API routes, remains functional.
+- **Admin Form UI/UX**: The institution entry form () has been significantly restructured into a dynamic, three-step process:
+    1.  **Step 1: Common Information**
+    2.  **Step 2: Choose Menu Mode** (Default, Auto from TOC, Custom)
+    3.  **Step 3: Add Content** (The UI dynamically changes based on the selected menu mode).
+- **Fixed Info Page**: A Info page, common to all menu types, is now automatically generated from the Common Information section of the form, simplifying content entry.
 
 **Last working item**:
-- **Last item agent was working**: Implementing the Separate Pages functionality for the custom menu. This involved creating a new sub-page component () and updating the routing and the main detail page () to link to these new pages instead of scrolling to sections on the same page.
-- **Status**: USER VERIFICATION PENDING
-- **Agent Testing Done**: Y (Verified with screenshots showing navigation to and rendering of separate sub-pages.)
-- **Which testing method agent to use?**: screenshot tool. The agent should create a college with a Custom Menu (separate pages option), save it, then navigate to the main college page and click the menu links to verify the sub-pages load correctly.
-- **User Testing Done**: N
+-   **Last item agent was working**: The user requested the agent to act as a data entry operator and create three complete institution entries to thoroughly test the new form. Each entry must use a different menu type (Default, Auto from TOC, Custom) and have all fields filled out. The agent successfully created the first institution (IIT Delhi with Default Menu) and was about to create the second.
+-   **Status**: IN PROGRESS
+-   **Agent Testing Done**: N
+-   **Which testing method agent to use?**: manual testing by curl. The data entry via API calls is the primary test. After creation, the  should be used to verify the new institution pages render correctly on the website.
+-   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
-- **Issue 1: SEO Content Image Upload May Still Be Broken (P0)**
-  - **Description**: The user reported that image uploads in the SEO Content Images section were failing. The agent applied a fix but did not verify it before the user moved on to other tasks. The status of this feature is unknown.
-  - **Attempted fixes**: The agent modified the frontend API call to send the  as a query parameter and removed the explicit  header to let the browser handle it for multipart data.
-  - **Next debug checklist**:
-    1.  Navigate to the College Form ().
-    2.  Expand the SEO Content section and try to upload an image in the SEO Content Images area.
-    3.  Check the browser's developer console (Network and Console tabs) for errors.
-    4.  Check backend logs: ==> /var/log/supervisor/backend.err.log <==
-  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 756, in __call__
-    await self.middleware_stack(scope, receive, send)
-  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 776, in app
-    await route.handle(scope, receive, send)
-  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 297, in handle
-    await self.app(scope, receive, send)
-  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 77, in app
-    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
-    raise exc
-  File "/root/.venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    await app(scope, receive, sender)
-  File "/root/.venv/lib/python3.11/site-packages/starlette/routing.py", line 72, in app
-    response = await func(request)
-               ^^^^^^^^^^^^^^^^^^^
-  File "/root/.venv/lib/python3.11/site-packages/fastapi/routing.py", line 296, in app
-    content = await serialize_response(
-              ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/.venv/lib/python3.11/site-packages/fastapi/routing.py", line 155, in serialize_response
-    raise ResponseValidationError(
-fastapi.exceptions.ResponseValidationError: 9 validation errors:
-  {'type': 'missing', 'loc': ('response', 0, 'exam'), 'msg': 'Field required', 'input': {'id': 'jee-physics-waves-001', 'title': 'JEE Main Physics - Waves & Sound Complete Notes', 'exam_name': 'JEE Main', 'subject': 'Physics', 'topic': 'Waves and Sound', 'material_type': 'Notes', 'description': 'Comprehensive notes covering wave motion, sound waves, doppler effect, and resonance with solved examples and practice problems.', 'file_url': 'https://example.com/jee-physics-waves.pdf', 'external_link': None, 'is_premium': False, 'downloads': 1250, 'rating': 4.6, 'total_ratings': 89, 'tags': ['JEE', 'Physics', 'Waves', 'Sound', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955091, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'missing', 'loc': ('response', 1, 'exam'), 'msg': 'Field required', 'input': {'id': 'neet-biology-genetics-002', 'title': 'NEET Biology - Genetics and Evolution Sample Papers', 'exam_name': 'NEET', 'subject': 'Biology', 'topic': 'Genetics and Evolution', 'material_type': 'Sample Paper', 'description': '10 full-length sample papers with detailed solutions for Genetics and Evolution chapter. Based on latest NEET pattern.', 'file_url': 'https://example.com/neet-bio-genetics.pdf', 'external_link': None, 'is_premium': True, 'downloads': 892, 'rating': 4.8, 'total_ratings': 156, 'tags': ['NEET', 'Biology', 'Genetics', 'Premium', 'Sample Papers'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955100, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'missing', 'loc': ('response', 2, 'exam'), 'msg': 'Field required', 'input': {'id': 'cat-quant-arithmetic-003', 'title': 'CAT Quantitative Aptitude - Arithmetic Previous Year Questions', 'exam_name': 'CAT', 'subject': 'Quantitative Aptitude', 'topic': 'Arithmetic', 'material_type': 'Previous Year', 'description': 'Collection of all CAT previous year questions (2010-2024) on Arithmetic with detailed video solutions and shortcuts.', 'file_url': None, 'external_link': 'https://example.com/cat-quant-pyq', 'is_premium': False, 'downloads': 2340, 'rating': 4.9, 'total_ratings': 278, 'tags': ['CAT', 'Quant', 'Arithmetic', 'PYQ', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955103, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'missing', 'loc': ('response', 3, 'exam'), 'msg': 'Field required', 'input': {'id': 'gate-cs-algorithms-004', 'title': 'GATE CSE - Algorithms Mock Test Series', 'exam_name': 'GATE', 'subject': 'Computer Science', 'topic': 'Algorithms', 'material_type': 'Mock Test', 'description': '15 full-length mock tests for Algorithms section with instant evaluation and performance analysis. Covers all topics from GATE syllabus.', 'file_url': None, 'external_link': 'https://example.com/gate-cs-mock', 'is_premium': True, 'downloads': 567, 'rating': 4.7, 'total_ratings': 92, 'tags': ['GATE', 'CSE', 'Algorithms', 'Mock Test', 'Premium'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955105, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'missing', 'loc': ('response', 4, 'exam'), 'msg': 'Field required', 'input': {'id': 'jee-chemistry-organic-005', 'title': 'JEE Advanced Organic Chemistry Video Lectures', 'exam_name': 'JEE Advanced', 'subject': 'Chemistry', 'topic': 'Organic Chemistry', 'material_type': 'Video', 'description': '50+ hours of video lectures by IIT professors covering complete Organic Chemistry for JEE Advanced with reaction mechanisms and problem-solving techniques.', 'file_url': None, 'external_link': 'https://example.com/jee-org-chem-videos', 'is_premium': True, 'downloads': 1890, 'rating': 4.9, 'total_ratings': 412, 'tags': ['JEE Advanced', 'Chemistry', 'Organic', 'Video', 'Premium'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955107, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'missing', 'loc': ('response', 5, 'exam'), 'msg': 'Field required', 'input': {'id': 'upsc-polity-notes-006', 'title': 'UPSC Indian Polity Complete Notes with Current Affairs', 'exam_name': 'UPSC', 'subject': 'Indian Polity', 'topic': None, 'material_type': 'Notes', 'description': 'Comprehensive notes on Indian Constitution, governance, and political system with latest amendments and current affairs integration.', 'file_url': 'https://example.com/upsc-polity.pdf', 'external_link': None, 'is_premium': False, 'downloads': 3450, 'rating': 4.7, 'total_ratings': 567, 'tags': ['UPSC', 'Polity', 'Current Affairs', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955109, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'string_type', 'loc': ('response', 5, 'topic'), 'msg': 'Input should be a valid string', 'input': None, 'url': 'https://errors.pydantic.dev/2.12/v/string_type'}
-  {'type': 'missing', 'loc': ('response', 6, 'exam'), 'msg': 'Field required', 'input': {'id': 'neet-chemistry-pyq-007', 'title': 'NEET Chemistry - Physical Chemistry PYQ (2015-2024)', 'exam_name': 'NEET', 'subject': 'Chemistry', 'topic': 'Physical Chemistry', 'material_type': 'Previous Year', 'description': 'All NEET previous year questions from Physical Chemistry with detailed solutions, important formulas, and topic-wise analysis.', 'file_url': 'https://example.com/neet-chem-pyq.pdf', 'external_link': None, 'is_premium': False, 'downloads': 2100, 'rating': 4.8, 'total_ratings': 302, 'tags': ['NEET', 'Chemistry', 'Physical', 'PYQ', 'Free'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955111, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-  {'type': 'missing', 'loc': ('response', 7, 'exam'), 'msg': 'Field required', 'input': {'id': 'cat-verbal-rc-008', 'title': 'CAT Verbal - Reading Comprehension Strategy Guide', 'exam_name': 'CAT', 'subject': 'Verbal Ability', 'topic': 'Reading Comprehension', 'material_type': 'Notes', 'description': 'Expert strategies and techniques for cracking RC passages in CAT with 100+ practice passages and detailed explanations.', 'file_url': 'https://example.com/cat-rc-guide.pdf', 'external_link': None, 'is_premium': True, 'downloads': 1560, 'rating': 4.6, 'total_ratings': 198, 'tags': ['CAT', 'Verbal', 'RC', 'Strategy', 'Premium'], 'created_at': datetime.datetime(2025, 12, 13, 7, 30, 10, 955112, tzinfo=datetime.timezone.utc)}, 'url': 'https://errors.pydantic.dev/2.12/v/missing'}
-
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [3739]
-INFO:     Started server process [4580]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [4580]
-INFO:     Started server process [5620]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [5620]
-INFO:     Started server process [6155]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [6155]
-INFO:     Started server process [7161]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [7161]
-INFO:     Started server process [7846]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [7846]
-INFO:     Started server process [8827]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'server.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [8827]
-INFO:     Started server process [9742]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-2025-12-16 08:38:02,681 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "/root/.venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-              ^^^^^^^^^^^^^^^^^
-AttributeError: module 'bcrypt' has no attribute '__about__'
-INFO:     Will watch for changes in these directories: ['/app/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [30] using WatchFiles
-
-==> /var/log/supervisor/backend.out.log <==
-INFO:     10.64.201.223:44938 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:33228 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:45172 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
-INFO:     10.64.201.223:44942 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:45164 - "GET /api/recognitions HTTP/1.1" 200 OK
-INFO:     10.64.130.198:33236 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:33252 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:45186 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:33240 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.201.223:44938 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:45172 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:33252 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:33228 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33924 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:60234 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33926 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:45186 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:60248 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:60258 - "GET /api/recognitions HTTP/1.1" 200 OK
-INFO:     10.64.139.9:41568 - "GET /api/recognitions HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33926 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33924 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:41588 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:41584 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:41590 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:59350 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:59340 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33924 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:59360 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:60248 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:59358 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:41588 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:59350 - "GET /api/recognitions HTTP/1.1" 200 OK
-INFO:     10.64.128.44:60234 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:59360 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33924 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:33926 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:41588 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:60234 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:35808 - "POST /api/auth/login HTTP/1.1" 200 OK
-INFO:     10.64.129.7:53138 - "GET /api/colleges HTTP/1.1" 200 OK
-INFO:     10.64.139.9:58198 - "PUT /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:60748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:60748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:60748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:41568 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:43590 - "GET /api/locations/cities HTTP/1.1" 200 OK
-INFO:     10.64.128.44:53726 - "GET /api/colleges/featured?limit=12 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:47750 - "GET /api/stats HTTP/1.1" 200 OK
-INFO:     10.64.128.44:53726 - "GET /api/locations/states HTTP/1.1" 200 OK
-INFO:     10.64.162.242:43590 - "GET /api/locations/countries HTTP/1.1" 200 OK
-INFO:     10.64.128.44:53726 - "GET /api/locations/cities HTTP/1.1" 200 OK
-INFO:     10.64.139.9:60502 - "GET /api/stats HTTP/1.1" 200 OK
-INFO:     10.64.162.106:47750 - "GET /api/colleges/featured?limit=12 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:60502 - "GET /api/locations/states HTTP/1.1" 200 OK
-INFO:     10.64.162.106:47750 - "GET /api/locations/countries HTTP/1.1" 200 OK
-INFO:     10.64.162.106:47750 - "GET /api/colleges?&sort=ranking HTTP/1.1" 200 OK
-INFO:     10.64.162.106:47750 - "GET /api/colleges?&sort=ranking HTTP/1.1" 200 OK
-INFO:     10.64.162.242:43590 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:53726 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:57698 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:57698 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.129.7:58326 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.156.79:43748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.129.19:39670 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.156.79:43748 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.129.7:45440 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.156.79:46248 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:42370 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:45678 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:47212 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:40632 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:35288 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.201.223:58502 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49802 - "GET /api/recognitions HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49818 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49774 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49760 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49802 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:43098 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49760 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:43098 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:49158 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49818 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49760 - "GET /api/recognitions HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49818 - "GET /api/accreditation-levels?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:49158 - "GET /api/courses?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49760 - "GET /api/news?limit=50 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49760 - "GET /api/affiliations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:43098 - "GET /api/facilities?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.139.9:43098 - "GET /api/scholarships?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.106:49158 - "GET /api/accreditations?limit=500 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49818 - "GET /api/rankings?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:49760 - "GET /api/rank-categories?limit=100 HTTP/1.1" 200 OK
-INFO:     10.64.156.79:39524 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.129.19:48852 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.130.198:34332 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.130.187:56674 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.128.44:55024 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK
-INFO:     10.64.162.242:49774 - "GET /api/colleges/aiims-delhi-001 HTTP/1.1" 200 OK.
-    5.  Review the upload logic in  (around the  call for ) and the  endpoint in .
-  - **Why fix this issue and what will be achieved with the fix?**: This is a core feature for creating rich content, and its failure blocks admins from adding images to articles.
-  - **Status**: USER VERIFICATION PENDING
-  - **Is recurring issue?**: N
-  - **Should Test frontend/backend/both after fix?**: Both
-  - **Blocked on other issue**: None
+-   **Issue 1: Complete Creation of Test Data (P0)**
+    -   **Description**: The user mandated the creation of three comprehensive institution entries to validate the new form structure. Only one of the three has been created.
+    -   **Next debug checklist**:
+        1.  Create the second institution entry using the Auto from TOC menu configuration. Ensure the payload is complete, including nested content like TOC sections.
+        2.  Create the third institution entry using the Custom Menu configuration, with complete custom page content.
+        3.  After creation, verify all three entries can be fetched via API.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is a direct user request to perform a full end-to-end test of the recent major form restructuring and menu logic.
+    -   **Status**: IN PROGRESS
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: Both. Backend is tested via the creation process; the frontend must be tested to ensure correct rendering of the different page layouts.
+    -   **Blocked on other issue**: None
 
 **In progress Task List**:
-- None.
+-   None.
 
 **Upcoming and Future Tasks**
-- **Upcoming Tasks:**
-    - (P0) **Refactor **: The agent improved usability by adding collapsible sections, but the file has grown to over 5,000 lines and is extremely fragile. It MUST be broken down into smaller, manageable sub-components (e.g., , , ) to ensure stability and prevent future bugs. This remains the highest technical priority.
-    - (P1) **Integrate AdBanner Component**: The  component exists but is not used. It needs to be added to frontend page layouts to display ads.
-    - (P1) **Connect All Remaining Frontend Pages**: Systematically refactor all other public-facing pages (, , etc.) to fetch data from their respective backend APIs instead of using mock data.
-- **Future Tasks:**
-    - (P2) **End-to-End Admin Panel Testing**: Perform a comprehensive test of all the new features (CRUD for a college with all new fields).
-    - (P2) **Refactor Monolithic **: Break down the massive  file into a more scalable structure (e.g., separate directories for routes, models, and services).
-    - (P3) **Refactor Duplicate Frontend Listing Pages**: Consolidate , , and  into a single reusable  component.
+-   **Upcoming Tasks:**
+    -   (P0) **Verify Data on Frontend**: After creating the 3 institutions, use the  to check that the admin list shows all three, and that their public-facing detail pages render correctly based on their respective menu configurations.
+    -   (P1) **Complete the  Refactor**: Integrate the previously created reusable components (, , etc.) into  to address its massive file size and complexity.
+    -   (P1) **Connect Remaining Frontend Pages**: Refactor pages still using mock data (, , etc.) to fetch data from backend APIs.
+    -   (P2) **Consolidate Listing Pages**: Refactor , , and  into a single reusable  component.
+-   **Future Tasks:**
+    -   (P2) **Migrate Frontend to New Modular API Routes**: Update the frontend to use the new module routes (e.g., ) and remove the legacy routes from .
+    -   (P3) **Create Test Files**: Create Playwright or other automated test files for the new features.
 
 **Completed work in this session**
-- **Refactoring (Phase 1)**: Implemented collapsible sections in  to improve usability.
-- **Bug Fixes**: Resolved multiple JavaScript parsing and linting errors in .
-- **Advanced SEO Section**: Added a full suite of meta tag fields with a live search result preview.
-- **Badges & Status Section**: Implemented a UI for admins to add Verified, Preferred, and other badges.
-- **Dynamic Content Tools**: Created a **Table of Contents (TOC) Builder** and a **Table Builder** to help admins create structured content without writing HTML.
-- **New Admin Sections**: Added dedicated, user-friendly sections for managing **FAQs** and **Sidebar Widgets**.
-- **Configurable College Menu**: Implemented a powerful system to control the detail page menu from the admin panel, supporting a default menu, a menu auto-generated from the TOC, and a custom menu that links to **separate, dynamically-generated sub-pages**.
-- **Virtual Tour Accessibility**: Added  and  fields for the virtual tour URL.
+-   **Backend Modularization Finalized**: Stabilized the new modular backend architecture, fixed dependency and validation errors, and successfully ran it in parallel with the old system.
+-   ** UI/UX Overhaul**: Completely restructured the massive form into a dynamic and user-friendly three-step process with conditional UI based on the selected menu mode.
+-   **Fixed Info Page Feature Implemented**: Implemented the user's idea to make the Info page a fixed, common element for all menu types, auto-generated from common data.
+-   **Initial Data Entry Begun**: Successfully created the first of three requested test institutions (IIT Delhi with Default Menu), resolving a Pydantic validation error in the process.
 
 **Earlier issues found/mentioned but not fixed**
-- The **SEO Content Image Upload** bug described in All Pending/In progress Issue list.
+-   None.
 
 **Known issue recurrence from previous fork**
-- **Fragility of **: The previous summary warned about syntax errors due to the file's large size. This happened again, and the agent had to fix multiple parsing errors before proceeding. The risk remains critical until the file is refactored.
+-   ** Complexity**: The file is now over 7,000 lines. While the UI/UX has been vastly improved, the underlying technical debt of its size remains. The plan to refactor it using reusable components is still pending and listed in Upcoming Tasks.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Frontend**: Complex conditional rendering and state management in React to handle the numerous new UI sections and configuration options. Use of React Router for dynamic routing to sub-pages ().
-- **Backend**: Significant expansion of the Pydantic  model to store configuration data for all new features, including nested lists and dictionaries for menus, TOC, tables, and widgets.
+-   **Parallel Backend Architectures**: Running a legacy monolithic API alongside a new modular API to allow for gradual migration without breaking the frontend.
+-   **Dynamic Conditional UI (React)**: Using React state () to dynamically change UI elements, colors, text, and rendered components based on user selections.
+-   **Complex State Management in React**: Managing a very large and nested state object () for a complex form.
 
 **key DB schema**
-- : Massively expanded to include:
-    - , , , : For status badges.
-    - , , etc.: For the new SEO section.
-    - , , , , , : For dynamic content tools.
-    - : A dictionary storing the menu mode (, , ) and an array of custom menu items with their content.
+-   **colleges**: No schema changes, but the data structure within fields like  and  is now more complex to support the new menu modes.
 
 **changes in tech stack**
-- None.
+-   Added  to the backend dependencies.
 
 **All files of reference**
--  (Primary file for all admin UI changes)
--  (Primary file for all backend logic and model changes)
--  (Handles dynamic rendering of the public-facing page)
--  (For new routing)
--  (New component for separate pages)
+-    (The primary file that was heavily restructured).
+-    (The legacy monolithic file, left untouched to support the frontend).
+-    (The new, functional modular backend structure).
+-    (Contains results from the backend and frontend testing agents).
 
 **Areas that need refactoring**:
-- ****: **CRITICAL**. The file is unmaintainably large. A full refactor into smaller, focused components is the most important next step for project health.
-- ****: This monolithic file's complexity continues to grow, making it difficult to maintain and debug.
+-   ****: **CRITICAL**. The file's size is a significant liability. The reusable components that were created in a previous session MUST be integrated to reduce its size and improve maintainability.
+-   ****: This file contains legacy code that should be removed once the frontend is fully migrated to the new modular API endpoints.
 
 **key api endpoints**
-- The  and  endpoints now handle a significantly larger and more complex JSON payload.
-- The call to  was modified on the frontend, but the endpoint itself remains the same.
+-   : The endpoint being used to create the comprehensive institution entries for testing.
 
 **Critical Info for New Agent**
-- **Verify SEO Image Upload First**: The very first task should be to test the SEO Content Image Upload feature to confirm if the previous agent's fix worked. If not, this is a P0 bug to resolve.
-- **Understand the New Menu System**: The college detail page's navigation is now highly dynamic and controlled by the  object in the database. Review how  renders the three different menu modes, especially the custom_separate_pages mode which uses the new  component.
-- **Prioritize Refactoring **: Do not add significant new features until the  component is broken down. The risk of introducing new bugs is too high.
-
-**documents created in this job**
-- None.
+-   **Resume Data Entry**: Your immediate task is to continue the data entry process. Create two more complete institution entries: one for Auto from TOC and one for Custom Menu. The payloads must be comprehensive to be a valid test.
+-   **Test After Data Entry**: After creating all three institutions, you must use the  to verify they render correctly on the public website. Each will have a different detail page structure corresponding to its menu type.
+-   **Do Not Remove Old Backend Code**: The old API routes in  are still actively used by the frontend. Do not remove them. The new modular backend runs in parallel.
+-   **Next Major Task is  Refactor**: After the data entry and verification are complete, the next priority is to address the critical technical debt in  by integrating the existing reusable components.
 
 **Last 10 User Messages and any pending user messages**
-1.  **Request**: Add an image upload feature to the SEO content area. (Implemented, but potentially buggy).
-2.  **Feedback**: User noted the alt tag function was missing for SEO images. (Agent clarified it was present).
-3.  **Bug Report**: User provided a screenshot of the image upload failing. (Agent attempted a fix).
-4.  **Request**: Add a Table of Contents builder to the SEO section. (Implemented).
-5.  **Request**: Add a Table Builder to the content areas. (Implemented for both Description and SEO Content).
-6.  **Question**: How does the college detail page menu work? (Agent explained and proposed a configurable solution).
-7.  **Confirmation**: User approved making the menu configurable from the admin panel.
-8.  **Question**: Does the custom menu open a separate page or scroll on the same page?
-9.  **Decision**: User chose to have custom menu items open separate pages.
-10. **Confirmation**: User instructed the agent to complete the implementation of the separate pages feature.
+1.  **User Confirmation**: proceed (Approved the form restructuring plan).
+2.  **User Suggestion**: Suggested making the Info menu a fixed, common item for all menu types.
+3.  **Agent Agreement**: Agent confirmed it was an excellent idea.
+4.  **User Confirmation**: what you recomend ? (Asked for a plan).
+5.  **Agent Plan**: Agent proposed the implementation plan for the fixed Info page.
+6.  **User Confirmation**: proceed (Approved the fixed Info page implementation).
+7.  **User Request**: Critically, requested the agent to act as a data entry operator and create 3 complete institution entries, one for each menu type, filling all fields to test the system end-to-end.
+8.  **Agent Action**: Began creating the first institution.
+9.  **Agent Finding**: Encountered and logged a validation error from the backend.
+10. **Agent Progress**: Fixed the payload and successfully created the first institution, and was preparing to create the second.
 
 **Project Health Check:**
-- **Broken**: The SEO Content Image Upload feature is potentially broken and requires immediate verification.
-- **Mocked**: Yes, most public-facing listing pages (, , etc.) are still using mock data.
+-   **Broken**: None. The backend is stable, and the frontend is functional.
+-   **Mocked**: Yes, several public-facing pages (, , etc.) still use mock data and need to be connected to the backend.
 
 **3rd Party Integrations**
-- React Icons
-- Pillow
+-   React Icons
+-   Pillow
 
 **Testing status**
-- **Testing agent used after significant changes**: NO. Agent performed manual testing using screenshots and direct API calls.
-- **Troubleshoot agent used after agent stuck in loop**: NO
-- **Test files created**: None.
-- **Known regressions**: None, but the  file is highly prone to new regressions due to its complexity.
+-   **Testing agent used after significant changes**: YES. The backend modularization was validated by the . The form restructuring was checked with the .
+-   **Troubleshoot agent used after agent stuck in loop**: NO
+-   **Test files created**: None.
+-   **Known regressions**: None.
 
 **Credentials to test flow:**
-- **Admin Email**: 
-- **Admin Password**: 
+-   **Admin Email**: 
+-   **Admin Password**: 
 
 **What agent forgot to execute**
-- The agent did not conclusively verify that the fix for the SEO Content Image Upload was successful. The user reported the bug, the agent applied a fix, but then the conversation immediately shifted to a new feature request without confirming the fix worked.</analysis>
+-   The agent did not forget but is in the middle of executing the user's explicit request to create three comprehensive institution entries. This task is incomplete.
+-   The long-standing task to refactor  by integrating reusable components remains pending.</analysis>
