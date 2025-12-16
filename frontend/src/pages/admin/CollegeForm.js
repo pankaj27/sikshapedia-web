@@ -482,7 +482,24 @@ const CollegeForm = () => {
 
   const updateScholarship = (index, field, value) => {
     const newScholarships = [...formData.scholarships];
-    newScholarships[index][field] = value;
+    
+    // If scholarship name is being changed, auto-fill other fields
+    if (field === 'name') {
+      const selectedScholarship = availableScholarships.find(s => s.name === value);
+      if (selectedScholarship) {
+        newScholarships[index] = {
+          ...newScholarships[index],
+          name: value,
+          amount: selectedScholarship.amount || '',
+          description: selectedScholarship.description || ''
+        };
+      } else {
+        newScholarships[index][field] = value;
+      }
+    } else {
+      newScholarships[index][field] = value;
+    }
+    
     setFormData({ ...formData, scholarships: newScholarships });
   };
 
