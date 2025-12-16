@@ -6477,7 +6477,6 @@ const CollegeForm = () => {
                 </div>
               </div>
             </div>
-            </div>
           </CollapsibleSection>
         )}
 
