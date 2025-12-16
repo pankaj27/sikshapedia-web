@@ -56,16 +56,102 @@ const getMenuIcon = (iconId) => iconMap[iconId] || iconMap['default'];
 const getMenuIconLarge = (iconId) => iconMapLarge[iconId] || iconMapLarge['default'];
 
 const CollegeSubPage = () => {
-  const { id, section } = useParams();
+  // Support both old format (:id/:section) and new format (:idSlug/:section)
+  const { id, idSlug, section } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(null);
+  const [resolvedId, setResolvedId] = useState(null);
+  
+  // Determine institution type from URL
+  const getInstitutionType = () => {
+    const path = location.pathname;
+    if (path.startsWith('/college/')) return 'College';
+    if (path.startsWith('/university/')) return 'University';
+    if (path.startsWith('/school/')) return 'School';
+    return 'College';
+  };
+  
+  const institutionType = getInstitutionType();
+  
+  // Parse the idSlug to extract numeric ID (e.g., "012-aiims-delhi" -> 12)
+  const parseIdSlug = (slug) => {
+    if (!slug) return { numericId: null, slugPart: null };
+    const match = slug.match(/^(\d+)-(.+)$/);
+    if (match) {
+      return { numericId: parseInt(match[1], 10), slugPart: match[2] };
+    }
+    return { numericId: null, slugPart: slug };
+  };
 
+  // First, resolve the idSlug to actual college ID
   useEffect(() => {
-    const fetchCollege = async () => {
+    const resolveInstitution = async () => {
+      // If we have the old-style id, use it directly
+      if (id && !idSlug) {
+        setResolvedId(id);
+        return;
+      }
+      
+      // Parse the new idSlug format
+      const { numericId, slugPart } = parseIdSlug(idSlug);
+      
       try {
-        const response = await api.get(`/colleges/${id}`);
+        // Strategy 1: Search by serial_number
+        if (numericId) {
+          const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
+          if (response.data && response.data.length > 0) {
+            const institution = response.data.find(inst => inst.serial_number === numericId);
+            if (institution) {
+              setResolvedId(institution.id);
+              return;
+            }
+          }
+        }
+        
+        // Strategy 2: Search by slug/name
+        if (slugPart) {
+          const searchTerm = slugPart.replace(/-/g, ' ').trim();
+          const response = await api.get(`/colleges?search=${encodeURIComponent(searchTerm)}&institution_type=${institutionType}&limit=5`);
+          if (response.data && response.data.length > 0) {
+            setResolvedId(response.data[0].id);
+            return;
+          }
+        }
+        
+        // If nothing found, try legacy format (idSlug as the actual id)
+        if (idSlug) {
+          try {
+            const response = await api.get(`/colleges/${idSlug}`);
+            if (response.data) {
+              setResolvedId(idSlug);
+              return;
+            }
+          } catch (e) {
+            // Not found with legacy format
+          }
+        }
+        
+        setResolvedId(null);
+      } catch (error) {
+        console.error('Error resolving institution:', error);
+        setResolvedId(null);
+      }
+    };
+    
+    resolveInstitution();
+  }, [id, idSlug, institutionType]);
+
+  // Then fetch the college data once we have the resolved ID
+  useEffect(() => {
+    if (!resolvedId) return;
+    
+    const fetchCollege = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(`/colleges/${resolvedId}`);
         setCollege(response.data);
         
         // Find the current section from menu_config
@@ -81,7 +167,7 @@ const CollegeSubPage = () => {
       }
     };
     fetchCollege();
-  }, [id, section]);
+  }, [resolvedId, section]);
 
   if (loading) {
     return (
