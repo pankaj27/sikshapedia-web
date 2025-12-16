@@ -1935,12 +1935,14 @@ async def get_colleges(
     max_fees: Optional[float] = None,
     course: Optional[str] = None,
     sort_by: Optional[str] = Query("nirf_ranking", regex="^(name|nirf_ranking|average_fees|rating)$"),
-    include_drafts: bool = Query(False)  # Admin can set to True to see drafts
+    include_drafts: Optional[str] = Query(None)  # Admin can set to "true" to see drafts
 ):
     query = {}
     
     # Only show published colleges on frontend (unless admin requests drafts)
-    if not include_drafts:
+    # Handle both string "true" and boolean True
+    show_drafts = include_drafts and include_drafts.lower() == "true"
+    if not show_drafts:
         query["status"] = "published"
     
     if search:
