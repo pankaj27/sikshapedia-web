@@ -356,6 +356,11 @@ const CourseDetailPage = () => {
                 </table>
               </div>
 
+              {/* Content Middle Ad */}
+              <div className="my-6">
+                <AdBanner pageName="course-detail" position="content-middle" />
+              </div>
+
               {/* Syllabus Section */}
               <h2 id="syllabus" className="text-2xl font-bold text-gray-900 mb-4">BTech CSE Syllabus</h2>
               <p className="text-gray-700 text-sm mb-4">Check out the semester-wise syllabus for the BTech cse course in the table below.</p>
