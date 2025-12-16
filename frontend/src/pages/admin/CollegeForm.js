@@ -476,7 +476,24 @@ const CollegeForm = () => {
 
   const updateFacility = (index, field, value) => {
     const newFacilities = [...formData.facilities];
-    newFacilities[index][field] = value;
+    
+    // If facility name is being changed, auto-fill icon and description
+    if (field === 'name') {
+      const selectedFacility = availableFacilities.find(f => f.name === value);
+      if (selectedFacility) {
+        newFacilities[index] = {
+          ...newFacilities[index],
+          name: value,
+          icon: selectedFacility.icon || '',
+          description: selectedFacility.description || ''
+        };
+      } else {
+        newFacilities[index][field] = value;
+      }
+    } else {
+      newFacilities[index][field] = value;
+    }
+    
     setFormData({ ...formData, facilities: newFacilities });
   };
 
