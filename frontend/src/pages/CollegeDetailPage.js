@@ -83,7 +83,6 @@ const CollegeDetailPage = () => {
       return college.seo_toc.map((item, index) => ({
         id: item.anchor || `toc-${index}`,
         label: item.title,
-        icon: '📌',
         enabled: true,
         order: index + 1
       }));
