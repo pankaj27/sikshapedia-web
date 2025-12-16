@@ -24,7 +24,8 @@ const LegacyCollegeRedirect = () => {
             institution.institution_type || 'college',
             institution.id,
             institution.name,
-            institution.location?.city
+            institution.location?.city,
+            institution.serial_number
           );
           // Redirect to new URL (replace history to avoid back button issues)
           navigate(newUrl, { replace: true });
