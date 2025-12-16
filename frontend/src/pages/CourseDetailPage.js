@@ -20,6 +20,9 @@ const CourseDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Top Ad Banner */}
+      <AdBanner pageName="course-detail" position="top" />
+      
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-8 py-3">
