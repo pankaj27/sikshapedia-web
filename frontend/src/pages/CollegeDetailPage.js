@@ -124,8 +124,10 @@ const getMenuIcon = (iconId, emojiIcon) => {
   return iconMap['default'];
 };
 
-const CollegeDetailPage = () => {
-  const { id } = useParams();
+const CollegeDetailPage = ({ overrideId }) => {
+  const { id: paramId } = useParams();
+  // Use overrideId if provided (from InstitutionDetailPage), otherwise use URL param
+  const id = overrideId || paramId;
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
@@ -135,7 +137,9 @@ const CollegeDetailPage = () => {
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
 
   useEffect(() => {
-    fetchCollegeDetails();
+    if (id) {
+      fetchCollegeDetails();
+    }
   }, [id]);
 
   const fetchCollegeDetails = async () => {
