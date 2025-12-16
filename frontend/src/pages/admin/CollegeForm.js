@@ -2114,6 +2114,297 @@ const CollegeForm = () => {
               />
             </div>
 
+            {/* Table Builder */}
+            <div className="border-2 border-teal-300 rounded-lg p-4 bg-teal-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-teal-800">📊 Table Builder</label>
+                  <p className="text-xs text-teal-600">Create tables for fee structure, placement data, course comparison, etc.</p>
+                </div>
+                <span className="text-xs bg-teal-200 text-teal-800 px-2 py-1 rounded">
+                  {formData.seo_tables?.length || 0} tables
+                </span>
+              </div>
+
+              {/* Existing Tables */}
+              <div className="space-y-4 mb-4">
+                {(formData.seo_tables || []).map((table, tableIndex) => (
+                  <div key={tableIndex} className="bg-white rounded-lg border-2 border-teal-200 p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded">Table {tableIndex + 1}</span>
+                        <input
+                          type="text"
+                          value={table.title || ''}
+                          onChange={(e) => {
+                            const newTables = [...(formData.seo_tables || [])];
+                            newTables[tableIndex].title = e.target.value;
+                            setFormData({...formData, seo_tables: newTables});
+                          }}
+                          placeholder="Table Title (e.g., Fee Structure)"
+                          className="border rounded px-2 py-1 text-sm w-64"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(formData.seo_tables || [])];
+                            newTables[tableIndex].headers.push('New Column');
+                            newTables[tableIndex].rows.forEach(row => row.push(''));
+                            setFormData({...formData, seo_tables: newTables});
+                          }}
+                          className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200"
+                        >
+                          + Column
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(formData.seo_tables || [])];
+                            newTables[tableIndex].rows.push(new Array(newTables[tableIndex].headers.length).fill(''));
+                            setFormData({...formData, seo_tables: newTables});
+                          }}
+                          className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200"
+                        >
+                          + Row
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              seo_tables: (formData.seo_tables || []).filter((_, i) => i !== tableIndex)
+                            });
+                          }}
+                          className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200"
+                        >
+                          Delete Table
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Table Editor */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr>
+                            {(table.headers || []).map((header, colIndex) => (
+                              <th key={colIndex} className="border border-teal-200 bg-teal-100 p-1">
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="text"
+                                    value={header}
+                                    onChange={(e) => {
+                                      const newTables = [...(formData.seo_tables || [])];
+                                      newTables[tableIndex].headers[colIndex] = e.target.value;
+                                      setFormData({...formData, seo_tables: newTables});
+                                    }}
+                                    className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 focus:outline-none focus:bg-white focus:border rounded px-1"
+                                    placeholder="Header"
+                                  />
+                                  {table.headers.length > 1 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const newTables = [...(formData.seo_tables || [])];
+                                        newTables[tableIndex].headers.splice(colIndex, 1);
+                                        newTables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                        setFormData({...formData, seo_tables: newTables});
+                                      }}
+                                      className="text-red-500 hover:text-red-700 text-xs"
+                                      title="Remove column"
+                                    >
+                                      ×
+                                    </button>
+                                  )}
+                                </div>
+                              </th>
+                            ))}
+                            <th className="w-8"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(table.rows || []).map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                              {row.map((cell, colIndex) => (
+                                <td key={colIndex} className="border border-teal-200 p-1">
+                                  <input
+                                    type="text"
+                                    value={cell}
+                                    onChange={(e) => {
+                                      const newTables = [...(formData.seo_tables || [])];
+                                      newTables[tableIndex].rows[rowIndex][colIndex] = e.target.value;
+                                      setFormData({...formData, seo_tables: newTables});
+                                    }}
+                                    className="w-full border-0 bg-transparent focus:outline-none focus:bg-gray-50 px-1"
+                                    placeholder="Cell data"
+                                  />
+                                </td>
+                              ))}
+                              <td className="w-8">
+                                {table.rows.length > 1 && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newTables = [...(formData.seo_tables || [])];
+                                      newTables[tableIndex].rows.splice(rowIndex, 1);
+                                      setFormData({...formData, seo_tables: newTables});
+                                    }}
+                                    className="text-red-500 hover:text-red-700 text-xs p-1"
+                                    title="Remove row"
+                                  >
+                                    ×
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Copy Table HTML */}
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const tableHtml = `<table class="data-table">\n  <caption>${table.title || 'Table'}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                          navigator.clipboard.writeText(tableHtml);
+                          alert('Table HTML copied! Paste it in SEO Full Content above.');
+                        }}
+                        className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded hover:bg-green-200"
+                      >
+                        📋 Copy Table HTML
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const tableHtml = `<table class="data-table">\n  <caption>${table.title || 'Table'}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                          setFormData({
+                            ...formData,
+                            seo_full_content: (formData.seo_full_content || '') + '\n\n' + tableHtml
+                          });
+                          alert('Table added to SEO Full Content!');
+                        }}
+                        className="text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded hover:bg-blue-200"
+                      >
+                        ⚡ Insert into Content
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add New Table Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    seo_tables: [
+                      ...(formData.seo_tables || []),
+                      {
+                        title: '',
+                        headers: ['Column 1', 'Column 2', 'Column 3'],
+                        rows: [['', '', ''], ['', '', '']]
+                      }
+                    ]
+                  });
+                }}
+                className="text-sm text-teal-700 hover:bg-teal-100 px-3 py-1.5 rounded border border-teal-300 flex items-center gap-1"
+              >
+                <FiPlus /> Add New Table
+              </button>
+
+              {/* Quick Table Templates */}
+              <div className="mt-4 p-3 bg-white border border-teal-200 rounded-lg">
+                <p className="text-xs font-medium text-teal-800 mb-2">💡 Quick Add Table Templates:</p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        seo_tables: [...(formData.seo_tables || []), {
+                          title: 'Fee Structure',
+                          headers: ['Course', 'Duration', 'Annual Fee', 'Total Fee'],
+                          rows: [['B.Tech', '4 Years', '₹1,50,000', '₹6,00,000'], ['M.Tech', '2 Years', '₹1,00,000', '₹2,00,000']]
+                        }]
+                      });
+                    }}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100"
+                  >
+                    + Fee Structure
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        seo_tables: [...(formData.seo_tables || []), {
+                          title: 'Placement Statistics',
+                          headers: ['Year', 'Students Placed', 'Highest Package', 'Average Package'],
+                          rows: [['2024', '450', '₹45 LPA', '₹8.5 LPA'], ['2023', '420', '₹42 LPA', '₹7.8 LPA']]
+                        }]
+                      });
+                    }}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100"
+                  >
+                    + Placement Stats
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        seo_tables: [...(formData.seo_tables || []), {
+                          title: 'Admission Cutoff',
+                          headers: ['Category', 'Opening Rank', 'Closing Rank'],
+                          rows: [['General', '1000', '5000'], ['OBC', '5001', '10000'], ['SC/ST', '10001', '15000']]
+                        }]
+                      });
+                    }}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100"
+                  >
+                    + Admission Cutoff
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        seo_tables: [...(formData.seo_tables || []), {
+                          title: 'Course Comparison',
+                          headers: ['Feature', 'Course A', 'Course B'],
+                          rows: [['Duration', '', ''], ['Eligibility', '', ''], ['Fees', '', ''], ['Career Options', '', '']]
+                        }]
+                      });
+                    }}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100"
+                  >
+                    + Course Comparison
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        seo_tables: [...(formData.seo_tables || []), {
+                          title: 'Hostel Fee Structure',
+                          headers: ['Room Type', 'Monthly Fee', 'Annual Fee', 'Facilities'],
+                          rows: [['Single Room', '₹8,000', '₹96,000', 'AC, Attached Bath'], ['Double Sharing', '₹5,000', '₹60,000', 'Non-AC'], ['Triple Sharing', '₹3,500', '₹42,000', 'Non-AC']]
+                        }]
+                      });
+                    }}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100"
+                  >
+                    + Hostel Fees
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* SEO Content Images */}
             <div className="border-2 border-dashed border-blue-300 rounded-lg p-4 bg-blue-50">
               <div className="flex items-center justify-between mb-4">
