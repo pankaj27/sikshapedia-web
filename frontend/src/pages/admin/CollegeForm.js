@@ -2154,16 +2154,86 @@ const CollegeForm = () => {
                 </div>
               )}
             </div>
+            {/* Campus Gallery Images */}
             <div>
-              <label className="block text-sm font-medium mb-2">Campus Gallery Images (URLs)</label>
+              <label className="block text-sm font-medium mb-2">Campus Gallery Images</label>
+              
+              {/* Bulk Upload Option */}
+              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-blue-900">Upload Multiple Images</p>
+                    <p className="text-xs text-blue-700">Select multiple files to upload at once</p>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="campus-bulk-upload"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => {
+                        if (e.target.files.length > 0) {
+                          handleBulkCampusUpload(e.target.files);
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="campus-bulk-upload"
+                      className={`inline-flex items-center px-4 py-2 border rounded cursor-pointer ${
+                        uploadingCampusBulk ? 'bg-gray-100 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`}
+                    >
+                      {uploadingCampusBulk ? (
+                        <>
+                          <FiLoader className="animate-spin mr-2" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <FiUpload className="mr-2" />
+                          Upload Multiple
+                        </>
+                      )}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Individual Image Rows */}
               {formData.campus_images.map((img, index) => (
-                <div key={index} className="flex gap-2 mb-2">
+                <div key={index} className="flex gap-2 mb-3">
                   <input
                     type="url"
                     value={img}
                     onChange={(e) => handleArrayChange('campus_images', index, e.target.value)}
+                    placeholder="https://example.com/image.jpg or upload file"
                     className="flex-1 border rounded px-3 py-2"
                   />
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id={`campus-upload-${index}`}
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) handleCampusImageUpload(file, index);
+                      }}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor={`campus-upload-${index}`}
+                      className={`inline-flex items-center px-3 py-2 border rounded cursor-pointer ${
+                        uploadingCampus[index] ? 'bg-gray-100 cursor-not-allowed' : 'bg-white hover:bg-gray-50'
+                      }`}
+                    >
+                      {uploadingCampus[index] ? (
+                        <FiLoader className="animate-spin" />
+                      ) : (
+                        <FiUpload />
+                      )}
+                    </label>
+                  </div>
                   <Button
                     type="button"
                     variant="outline"
@@ -2173,8 +2243,27 @@ const CollegeForm = () => {
                   </Button>
                 </div>
               ))}
-              <Button type="button" onClick={() => addArrayItem('campus_images', '')} size="sm">
-                <FiPlus className="mr-2" /> Add Campus Image
+              
+              {/* Preview Grid */}
+              {formData.campus_images.length > 0 && formData.campus_images.some(img => img) && (
+                <div className="mt-3 p-3 bg-gray-50 border rounded">
+                  <p className="text-xs text-gray-600 mb-2">Gallery Preview:</p>
+                  <div className="grid grid-cols-4 gap-2">
+                    {formData.campus_images.filter(img => img).map((img, index) => (
+                      <img 
+                        key={index}
+                        src={img} 
+                        alt={`Campus ${index + 1}`} 
+                        className="w-full h-24 object-cover rounded border"
+                        onError={(e) => e.target.style.display = 'none'}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <Button type="button" onClick={() => addArrayItem('campus_images', '')} size="sm" className="mt-2">
+                <FiPlus className="mr-2" /> Add Image Row
               </Button>
             </div>
             <div>
