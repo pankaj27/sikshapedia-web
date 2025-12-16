@@ -182,6 +182,7 @@ const CollegeForm = () => {
     virtual_tour_title: '',
     virtual_tour_description: '',
     description: '',
+    description_tables: [], // Tables for description section
     highlights: [],
     admission_process: '',
     admission_dates: [],
