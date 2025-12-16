@@ -437,8 +437,10 @@ class College(BaseModel):
     contact_info: Optional[Dict] = None
     contact: Optional[Dict] = None
     logo_url: Optional[str] = None  # Institution logo
+    logo_title: Optional[str] = None  # Logo title for auto-generating alt text
     logo_alt: Optional[str] = None  # Logo alt text for SEO/accessibility
     banner_url: Optional[str] = None  # Institution banner
+    banner_title: Optional[str] = None  # Banner title for auto-generating alt text
     banner_alt: Optional[str] = None  # Banner alt text for SEO/accessibility
     images: List[str] = []  # Additional images (legacy support)
     videos: List[str] = []
@@ -509,8 +511,10 @@ class CollegeCreate(BaseModel):
     facilities: List[str] = []
     contact_info: Dict
     logo_url: Optional[str] = None
+    logo_title: Optional[str] = None
     logo_alt: Optional[str] = None
     banner_url: Optional[str] = None
+    banner_title: Optional[str] = None
     banner_alt: Optional[str] = None
     images: List[str] = []
     description: str
