@@ -181,6 +181,9 @@ const CollegeDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-white pt-2">
+      {/* Top Ad Banner */}
+      <AdBanner pageName="college-detail" position="top" />
+      
       {/* BREADCRUMB */}
       <div className="border-b">
         <div className="max-w-7xl mx-auto px-4 py-2">
