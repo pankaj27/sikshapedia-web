@@ -4523,6 +4523,17 @@ const CollegeForm = () => {
               💡 <strong>Auto from TOC Mode:</strong> Each section you add here becomes a menu item. 
               The menu will automatically scroll to that section on the detail page.
             </p>
+            
+            {/* Fixed Info Tab Indicator */}
+            <div className="mb-4 flex items-center gap-3 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+              <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm">ℹ️</div>
+              <div className="flex-1">
+                <span className="font-medium text-indigo-800">Info</span>
+                <span className="ml-2 text-xs text-indigo-600">(Fixed - from Common Information)</span>
+              </div>
+              <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs">Always First</span>
+            </div>
+            
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold text-green-800 flex items-center gap-2">
