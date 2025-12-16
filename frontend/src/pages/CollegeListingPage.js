@@ -39,6 +39,27 @@ const CollegeListingPage = () => {
     fetchColleges();
   }, [searchParams, sortBy]);
 
+  // Watch for filter changes and apply them
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filters.city) params.append('city', filters.city);
+    if (filters.state) params.append('state', filters.state);
+    if (filters.type.length > 0) params.append('type', filters.type.join(','));
+    if (filters.minFees) params.append('min_fees', filters.minFees);
+    if (filters.maxFees) params.append('max_fees', filters.maxFees);
+    if (filters.course) params.append('course', filters.course);
+    if (filters.stream) params.append('stream', filters.stream);
+    if (filters.subStream) params.append('sub_stream', filters.subStream);
+    
+    // Only update if params actually changed
+    const newParamsString = params.toString();
+    const currentParamsString = searchParams.toString();
+    if (newParamsString !== currentParamsString) {
+      setSearchParams(params);
+      setCurrentPage(1);
+    }
+  }, [filters]);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
