@@ -2166,11 +2166,20 @@ const CollegeForm = () => {
               {formData.logo_url && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
                   <p className="text-xs text-gray-600 mb-2">Preview:</p>
-                  <img 
-                    src={formData.logo_url} 
-                    alt={formData.logo_alt || "Logo Preview"} 
-                    className="h-20 object-contain border border-gray-300 p-2 bg-white"
-                  />
+                  <div className="relative">
+                    <img 
+                      key={formData.logo_url}
+                      src={formData.logo_url} 
+                      alt={formData.logo_alt || "Logo Preview"} 
+                      className="h-20 object-contain border border-gray-300 p-2 bg-white rounded"
+                      onLoad={(e) => console.log('Logo loaded:', formData.logo_url)}
+                      onError={(e) => {
+                        console.error('Logo failed to load:', formData.logo_url);
+                        e.target.style.border = '2px solid red';
+                      }}
+                    />
+                    <p className="text-xs text-gray-500 mt-1 break-all">URL: {formData.logo_url}</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -2246,11 +2255,20 @@ const CollegeForm = () => {
               {formData.banner_url && (
                 <div className="mt-3 p-3 bg-gray-50 border rounded">
                   <p className="text-xs text-gray-600 mb-2">Preview:</p>
-                  <img 
-                    src={formData.banner_url} 
-                    alt={formData.banner_alt || "Banner Preview"} 
-                    className="w-full max-h-40 object-cover rounded border border-gray-300 bg-white"
-                  />
+                  <div className="relative">
+                    <img 
+                      key={formData.banner_url}
+                      src={formData.banner_url} 
+                      alt={formData.banner_alt || "Banner Preview"} 
+                      className="w-full max-h-40 object-cover rounded border border-gray-300 bg-white"
+                      onLoad={(e) => console.log('Banner loaded:', formData.banner_url)}
+                      onError={(e) => {
+                        console.error('Banner failed to load:', formData.banner_url);
+                        e.target.style.border = '2px solid red';
+                      }}
+                    />
+                    <p className="text-xs text-gray-500 mt-1 break-all">URL: {formData.banner_url}</p>
+                  </div>
                 </div>
               )}
             </div>
