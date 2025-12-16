@@ -5928,7 +5928,7 @@ const CollegeForm = () => {
                                         const newItems = [...(formData.menu_config?.items || [])];
                                         const idx = newItems.findIndex(i => i.id === item.id);
                                         if (!newItems[idx].widgets) newItems[idx].widgets = {};
-                                        if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: false, code: '' };
+                                        if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: false, code: '', position: 'sidebar' };
                                         newItems[idx].widgets.ad_banner.enabled = e.target.checked;
                                         setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
                                       }}
@@ -5939,20 +5939,44 @@ const CollegeForm = () => {
                                   <span className="text-xs text-gray-400">Advertisement slot</span>
                                 </div>
                                 {item.widgets?.ad_banner?.enabled && (
-                                  <div className="ml-5 mt-1">
-                                    <textarea
-                                      value={item.widgets?.ad_banner?.code || ''}
-                                      onChange={(e) => {
-                                        const newItems = [...(formData.menu_config?.items || [])];
-                                        const idx = newItems.findIndex(i => i.id === item.id);
-                                        if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: true };
-                                        newItems[idx].widgets.ad_banner.code = e.target.value;
-                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
-                                      }}
-                                      placeholder="Ad code (Google Ads, etc.)..."
-                                      rows="2"
-                                      className="w-full border rounded px-2 py-1 text-xs font-mono"
-                                    />
+                                  <div className="ml-5 mt-2 space-y-2">
+                                    <div>
+                                      <label className="block text-xs text-gray-600 mb-1">Position</label>
+                                      <select
+                                        value={item.widgets?.ad_banner?.position || 'sidebar'}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: true, position: 'sidebar' };
+                                          newItems[idx].widgets.ad_banner.position = e.target.value;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="w-full border rounded px-2 py-1 text-xs"
+                                      >
+                                        <option value="top">Top Banner - Above page content</option>
+                                        <option value="content-top">Content Top - Inside main content (top)</option>
+                                        <option value="content-bottom">Content Bottom - Inside main content (bottom)</option>
+                                        <option value="sidebar">Sidebar - Right sidebar area</option>
+                                        <option value="popup">Popup - Overlay popup</option>
+                                        <option value="floating">Floating - Fixed floating banner</option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label className="block text-xs text-gray-600 mb-1">Ad Code / HTML</label>
+                                      <textarea
+                                        value={item.widgets?.ad_banner?.code || ''}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: true };
+                                          newItems[idx].widgets.ad_banner.code = e.target.value;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        placeholder="Ad code (Google AdSense, custom HTML, etc.)..."
+                                        rows="2"
+                                        className="w-full border rounded px-2 py-1 text-xs font-mono"
+                                      />
+                                    </div>
                                   </div>
                                 )}
                               </div>
