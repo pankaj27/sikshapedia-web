@@ -482,14 +482,17 @@ class College(BaseModel):
     seo_intro: Optional[str] = None  # Short intro text (3-4 lines)
     seo_full_content: Optional[str] = None  # Full detailed content paragraphs
     seo_images: List = []  # [{url, title, alt, caption}] Images for SEO content
-    seo_toc: List = []  # [{title, anchor, content}] Table of Contents with linked content
+    seo_toc: List = []  # [{title, anchor, content}] Table of Contents for SEO content
     seo_tables: List = []  # [{title, headers: [], rows: [[]]}] Tables for SEO content
     seo_video_url: Optional[str] = None  # Embedded video URL
+    
+    # Detail Page TOC - Used for Auto Menu from TOC
+    detail_page_toc: List = []  # [{title, anchor, content, icon}] TOC sections for detail page menu
     
     # Menu Configuration for Detail Page
     menu_config: Optional[Dict] = {
         "use_custom_menu": False,  # If false, use default menu
-        "auto_from_toc": True,  # Auto-generate from seo_toc
+        "auto_from_toc": True,  # Auto-generate from detail_page_toc
         "items": []  # [{id, label, icon, enabled, order}]
     }
     seo_video_title: Optional[str] = None  # Video title for accessibility
