@@ -4635,7 +4635,15 @@ const CollegeForm = () => {
                         label: 'New Item',
                         icon: 'default',
                         enabled: true,
-                        order: (formData.menu_config?.items?.length || 0) + 1
+                        order: (formData.menu_config?.items?.length || 0) + 1,
+                        content: '',
+                        page_heading: '',
+                        search_heading: '',
+                        meta_title: '',
+                        meta_description: '',
+                        meta_keywords: '',
+                        og_title: '',
+                        og_description: ''
                       }];
                       setFormData({
                         ...formData,
