@@ -461,6 +461,8 @@ class College(BaseModel):
     seo_intro: Optional[str] = None  # Short intro text (3-4 lines)
     seo_full_content: Optional[str] = None  # Full detailed content paragraphs
     seo_video_url: Optional[str] = None  # Embedded video URL
+    seo_video_title: Optional[str] = None  # Video title for accessibility
+    seo_video_description: Optional[str] = None  # Video description for accessibility
     seo_faqs: List = []  # [{ question, answer }]
     
     # Accreditations & Approvals
