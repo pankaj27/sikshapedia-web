@@ -1937,6 +1937,9 @@ async def get_colleges(
     city: Optional[str] = None,
     state: Optional[str] = None,
     type: Optional[str] = None,
+    institution_type: Optional[str] = None,  # College, School, University
+    stream: Optional[str] = None,  # Engineering, Medical, etc.
+    sub_stream: Optional[str] = None,  # Computer Science, Mechanical, etc.
     min_fees: Optional[float] = None,
     max_fees: Optional[float] = None,
     course: Optional[str] = None,
@@ -1965,6 +1968,30 @@ async def get_colleges(
     
     if type:
         query["type"] = type
+    
+    # Filter by institution type (College, School, University)
+    if institution_type:
+        query["institution_type"] = {"$regex": f"^{institution_type}$", "$options": "i"}
+    
+    # Filter by stream (searches in courses array)
+    if stream:
+        # Match stream in courses array or description
+        query["$or"] = query.get("$or", []) + [
+            {"courses": {"$regex": stream, "$options": "i"}},
+            {"description": {"$regex": stream, "$options": "i"}}
+        ]
+    
+    # Filter by sub-stream
+    if sub_stream:
+        sub_stream_conditions = [
+            {"courses": {"$regex": sub_stream, "$options": "i"}},
+            {"description": {"$regex": sub_stream, "$options": "i"}}
+        ]
+        if "$or" in query:
+            # Combine with AND logic
+            query["$and"] = [{"$or": query.pop("$or")}, {"$or": sub_stream_conditions}]
+        else:
+            query["$or"] = sub_stream_conditions
     
     if min_fees is not None or max_fees is not None:
         query["average_fees"] = {}
