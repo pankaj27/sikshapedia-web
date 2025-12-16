@@ -445,7 +445,7 @@ class College(BaseModel):
     banner_title: Optional[str] = None  # Banner title for auto-generating alt text
     banner_alt: Optional[str] = None  # Banner alt text for SEO/accessibility
     images: List[str] = []  # Additional images (legacy support)
-    videos: List[str] = []
+    videos: List = []  # Can be List[str] (legacy) or List[Dict] with {url, title, description}
     brochure_url: Optional[str] = None
     virtual_tour_url: Optional[str] = None
     
