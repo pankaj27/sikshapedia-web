@@ -754,11 +754,14 @@ const CollegeForm = () => {
       
       if (response.data.success) {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const uploadedUrls = response.data.files.map(f => backendUrl + f.url);
+        const uploadedImages = response.data.files.map(f => ({
+          url: backendUrl + f.url,
+          alt: ''
+        }));
         
         setFormData(prev => ({
           ...prev,
-          campus_images: [...prev.campus_images, ...uploadedUrls]
+          campus_images: [...prev.campus_images, ...uploadedImages]
         }));
         
         alert(`Successfully uploaded ${response.data.uploaded} image(s)!`);
