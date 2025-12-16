@@ -266,7 +266,7 @@ Comprehensive testing of the SEO-friendly URL structure implementation on the fr
 - **Button interactions**: All buttons and links are clickable and responsive
 
 ### Test Environment
-- **Frontend URL**: https://collegeportal-11.preview.emergentagent.com
+- **Frontend URL**: https://eduadmin-34.preview.emergentagent.com
 - **Browser**: Chromium (Playwright automation)
 - **Viewport**: 1920x1080 (Desktop)
 - **Test Method**: Automated UI testing with Playwright
