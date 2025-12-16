@@ -30,12 +30,12 @@ export const getInstitutionListingUrl = (type, location = null) => {
 };
 
 // Generate institution detail URL
-// Format: /college/{number}-{slug}-{city} e.g., /college/017-mr-college-of-pharmacy-barasat
+// Format: /colleges/{number}-{slug}-{city} e.g., /colleges/017-mr-college-of-pharmacy-barasat
 // If city is already in name, it won't be duplicated
 // serialNumber is the unique sequential number from the database
 export const getInstitutionDetailUrl = (type, id, name, city = null, serialNumber = null) => {
-  // Use singular form for detail pages: college, university, school
-  const typeSlug = type?.toLowerCase() || 'college';
+  // Use plural form for detail pages: colleges, universities, schools
+  const typeSuffix = INSTITUTION_TYPES[type?.toUpperCase()] || 'colleges';
   const nameSlug = generateSlug(name);
   
   // Use serial_number if provided, otherwise fallback to extracting from ID
