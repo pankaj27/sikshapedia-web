@@ -1314,17 +1314,24 @@ const CollegeDetailPage = () => {
                   </p>
 
                   {college.facilities && college.facilities.length > 0 ? (
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                       {college.facilities.map((facility, idx) => {
                         const isObject = typeof facility === 'object';
                         const facilityName = isObject ? facility.name : facility;
-                        const facilityDesc = isObject ? facility.description : '';
-                        const bgColors = ['bg-blue-50 border-blue-200', 'bg-green-50 border-green-200', 'bg-purple-50 border-purple-200', 'bg-orange-50 border-orange-200'];
+                        const facilityData = getFacilityIcon(facilityName);
+                        const IconComponent = facilityData.icon;
                         
                         return (
-                          <div key={idx} className={`${bgColors[idx % 4]} border rounded-lg p-6`}>
-                            <h3 className="font-bold text-lg mb-2">{facilityName}</h3>
-                            {facilityDesc && <p className="text-sm text-gray-700">{facilityDesc}</p>}
+                          <div 
+                            key={idx} 
+                            className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                          >
+                            <div className={`w-14 h-14 ${facilityData.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
+                              <IconComponent className="text-white" size={26} />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
+                              {facilityData.label}
+                            </span>
                           </div>
                         );
                       })}
