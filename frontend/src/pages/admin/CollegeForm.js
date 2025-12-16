@@ -2722,7 +2722,7 @@ const CollegeForm = () => {
               />
             </div>
           </div>
-        </div>
+        </CollapsibleSection>
 
         {/* Submit Button */}
         <div className="flex justify-end gap-4">
