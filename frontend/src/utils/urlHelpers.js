@@ -30,16 +30,15 @@ export const getInstitutionListingUrl = (type, location = null) => {
 };
 
 // Generate institution detail URL
-// Format: /college/{number}{slug} e.g., /college/123mr-college-of-pharmacy
+// Format: /college/{number}-{slug} e.g., /college/001-mr-college-of-pharmacy
 export const getInstitutionDetailUrl = (type, id, name) => {
   const typeSlug = type?.toLowerCase() || 'college';
   const nameSlug = generateSlug(name);
   // Extract numeric part from ID if it exists (e.g., "001" from "iit-delhi-001")
-  // Or use the full ID if no numeric part
   const idMatch = id?.match(/(\d+)$/);
   const numericId = idMatch ? idMatch[1] : id?.replace(/-/g, '') || '';
-  // Concatenate number directly with slug (no dash between)
-  return `/${typeSlug}/${numericId}${nameSlug}`;
+  // Format: {number}-{slug} with dash between
+  return `/${typeSlug}/${numericId}-${nameSlug}`;
 };
 
 // Generate stream-based listing URL
