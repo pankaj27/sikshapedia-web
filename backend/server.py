@@ -1525,10 +1525,10 @@ async def admin_login(credentials: UserLogin):
 @api_router.post("/upload/image")
 async def upload_image(
     file: UploadFile = File(...),
-    type: str = Query(..., description="Type: logo or banner"),
+    type: str = Query(..., description="Type: logo, banner, or campus"),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
-    """Upload an image file (logo or banner) - Admin only"""
+    """Upload an image file (logo, banner, or campus gallery) - Admin only"""
     # Verify admin token
     token = credentials.credentials
     try:
@@ -1543,15 +1543,15 @@ async def upload_image(
         raise HTTPException(status_code=400, detail="Only image files are allowed")
     
     # Validate type parameter
-    if type not in ["logo", "banner"]:
-        raise HTTPException(status_code=400, detail="Type must be 'logo' or 'banner'")
+    if type not in ["logo", "banner", "campus"]:
+        raise HTTPException(status_code=400, detail="Type must be 'logo', 'banner', or 'campus'")
     
     # Generate unique filename
     file_ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
     unique_filename = f"{uuid.uuid4()}.{file_ext}"
     
     # Determine upload directory
-    upload_subdir = "logos" if type == "logo" else "banners"
+    upload_subdir = "logos" if type == "logo" else ("banners" if type == "banner" else "campus")
     file_path = UPLOAD_DIR / upload_subdir / unique_filename
     
     # Save file
@@ -1570,6 +1570,67 @@ async def upload_image(
         "filename": unique_filename,
         "type": type
     }
+
+
+@api_router.post("/upload/images/bulk")
+async def upload_multiple_images(
+    files: List[UploadFile] = File(...),
+    type: str = Query(..., description="Type: campus"),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Upload multiple image files for campus gallery - Admin only"""
+    # Verify admin token
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    # Validate type parameter
+    if type not in ["campus"]:
+        raise HTTPException(status_code=400, detail="Bulk upload only supported for 'campus' type")
+    
+    uploaded_files = []
+    failed_files = []
+    
+    for file in files:
+        try:
+            # Validate file type
+            if not file.content_type or not file.content_type.startswith("image/"):
+                failed_files.append({"filename": file.filename, "error": "Not an image file"})
+                continue
+            
+            # Generate unique filename
+            file_ext = file.filename.split(".")[-1] if "." in file.filename else "jpg"
+            unique_filename = f"{uuid.uuid4()}.{file_ext}"
+            
+            # Save file
+            upload_subdir = "campus"
+            file_path = UPLOAD_DIR / upload_subdir / unique_filename
+            
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            
+            file_url = f"/static/uploads/{upload_subdir}/{unique_filename}"
+            uploaded_files.append({
+                "original_name": file.filename,
+                "url": file_url,
+                "filename": unique_filename
+            })
+            
+        except Exception as e:
+            failed_files.append({"filename": file.filename, "error": str(e)})
+    
+    return {
+        "success": True,
+        "uploaded": len(uploaded_files),
+        "failed": len(failed_files),
+        "files": uploaded_files,
+        "errors": failed_files
+    }
+
 
 
 @api_router.get("/admin/stats")
