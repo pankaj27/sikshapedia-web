@@ -6877,18 +6877,18 @@ const CollegeForm = () => {
           </div>
         </CollapsibleSection>
 
-        {/* Submit Button */}
-        <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline" onClick={() => navigate('/admin/colleges')}>
-            Cancel
+        {/* Bottom Save Button (Duplicate for convenience) */}
+        <div className="sticky bottom-0 bg-white border-t py-3 px-4 flex justify-end gap-3 -mx-4 -mb-4">
+          <Button type="button" variant="outline" size="sm" onClick={() => navigate('/admin/colleges')}>
+            <FiX className="w-4 h-4 mr-1" /> Cancel
           </Button>
-          <Button type="submit" disabled={saving}>
-            <FiSave className="mr-2" />
-            {saving ? 'Saving...' : id ? 'Update College' : 'Create College'}
+          <Button type="submit" size="sm" disabled={saving} className="bg-orange-600 hover:bg-orange-700 text-white">
+            {saving ? <FiLoader className="w-4 h-4 animate-spin mr-1" /> : <FiSave className="w-4 h-4 mr-1" />}
+            {saving ? 'Saving...' : 'Save Institution'}
           </Button>
         </div>
       </form>
-    </div>
+    </AdminLayout>
   );
 };
 
