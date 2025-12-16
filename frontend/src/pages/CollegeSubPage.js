@@ -236,7 +236,7 @@ const CollegeSubPage = () => {
                 />
               )}
               <div>
-                <Link to={`/colleges/${id}`} className="hover:underline">
+                <Link to={basePath} className="hover:underline">
                   <h1 className="text-2xl font-bold">{college.name}</h1>
                 </Link>
                 <p className="text-orange-100">{college.location?.city}, {college.location?.state}</p>
