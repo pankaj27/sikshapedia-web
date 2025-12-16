@@ -1449,36 +1449,6 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Phone Number</label>
-              <input
-                type="tel"
-                value={formData.contact_info.phone}
-                onChange={(e) => handleNestedChange('contact_info', 'phone', e.target.value)}
-                placeholder="e.g., 022-12345678"
-                className="w-full border rounded px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Mobile Number</label>
-              <input
-                type="tel"
-                value={formData.contact_info.mobile}
-                onChange={(e) => handleNestedChange('contact_info', 'mobile', e.target.value)}
-                placeholder="e.g., +91 9876543210"
-                className="w-full border rounded px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">WhatsApp Number</label>
-              <input
-                type="tel"
-                value={formData.contact_info.whatsapp}
-                onChange={(e) => handleNestedChange('contact_info', 'whatsapp', e.target.value)}
-                placeholder="e.g., +91 9876543210"
-                className="w-full border rounded px-3 py-2"
-              />
-            </div>
           </div>
         </div>
 
