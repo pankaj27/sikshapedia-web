@@ -44,8 +44,14 @@ export const getInstitutionDetailUrl = (type, id, name, city = null) => {
   let finalSlug = nameSlug;
   if (city) {
     const citySlug = generateSlug(city);
-    // Only append city if it's not already in the name slug
-    if (!nameSlug.toLowerCase().includes(citySlug.toLowerCase())) {
+    // Get the main city name (handle "New Delhi" -> "delhi", "Mumbai" -> "mumbai")
+    const mainCityPart = citySlug.split('-').pop(); // Get last part: "new-delhi" -> "delhi"
+    
+    // Only append city if city name (or main part) is not already in the name slug
+    const nameHasCity = nameSlug.toLowerCase().includes(citySlug.toLowerCase()) || 
+                        nameSlug.toLowerCase().includes(mainCityPart.toLowerCase());
+    
+    if (!nameHasCity) {
       finalSlug = `${nameSlug}-${citySlug}`;
     }
   }
