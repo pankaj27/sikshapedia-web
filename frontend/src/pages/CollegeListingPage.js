@@ -8,6 +8,7 @@ import { getInstitutionListingUrl, getStreamListingUrl } from '../utils/urlHelpe
 import { generateSlug } from '../utils/slugify';
 
 const CollegeListingPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(true);
