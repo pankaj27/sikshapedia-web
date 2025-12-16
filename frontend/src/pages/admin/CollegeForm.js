@@ -5877,7 +5877,285 @@ const CollegeForm = () => {
                                   </div>
                                 )}
                               </div>
+                              
+                              {/* Reviews Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.reviews?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.reviews) newItems[idx].widgets.reviews = { enabled: false, show_count: 3 };
+                                        newItems[idx].widgets.reviews.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">⭐ Reviews Widget</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">User reviews & ratings</span>
+                                </div>
+                                {item.widgets?.reviews?.enabled && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <label className="text-xs text-gray-500">Show reviews:</label>
+                                      <input
+                                        type="number"
+                                        value={item.widgets?.reviews?.show_count || 3}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.reviews.show_count = parseInt(e.target.value) || 3;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="w-16 border rounded px-2 py-0.5 text-xs"
+                                        min="1"
+                                        max="10"
+                                      />
+                                    </div>
+                                    <label className="flex items-center gap-2 text-xs">
+                                      <input
+                                        type="checkbox"
+                                        checked={item.widgets?.reviews?.show_form ?? true}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.reviews.show_form = e.target.checked;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="rounded"
+                                      />
+                                      <span>Show "Write Review" button</span>
+                                    </label>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Ask a Question Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.ask_question?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.ask_question) newItems[idx].widgets.ask_question = { enabled: false };
+                                        newItems[idx].widgets.ask_question.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">❓ Ask a Question</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Q&A submission form</span>
+                                </div>
+                                {item.widgets?.ask_question?.enabled && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.ask_question?.title || 'Have a Question?'}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].widgets.ask_question.title = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Widget Title"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.ask_question?.placeholder || 'Type your question here...'}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].widgets.ask_question.placeholder = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Input Placeholder"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Comments Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.comments?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.comments) newItems[idx].widgets.comments = { enabled: false };
+                                        newItems[idx].widgets.comments.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">💬 Comments Section</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">User comments</span>
+                                </div>
+                                {item.widgets?.comments?.enabled && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    <label className="flex items-center gap-2 text-xs">
+                                      <input
+                                        type="checkbox"
+                                        checked={item.widgets?.comments?.require_approval ?? true}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.comments.require_approval = e.target.checked;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="rounded"
+                                      />
+                                      <span>Require approval before showing</span>
+                                    </label>
+                                    <label className="flex items-center gap-2 text-xs">
+                                      <input
+                                        type="checkbox"
+                                        checked={item.widgets?.comments?.allow_replies ?? true}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.comments.allow_replies = e.target.checked;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="rounded"
+                                      />
+                                      <span>Allow replies to comments</span>
+                                    </label>
+                                  </div>
+                                )}
+                              </div>
                             </div>
+                          </div>
+                          
+                          {/* FAQ Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <FiHelpCircle size={12} /> FAQs for this Page
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newItems = [...(formData.menu_config?.items || [])];
+                                  const idx = newItems.findIndex(i => i.id === item.id);
+                                  if (!newItems[idx].faqs) newItems[idx].faqs = [];
+                                  newItems[idx].faqs.push({ question: '', answer: '' });
+                                  setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                }}
+                                className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded hover:bg-amber-200 flex items-center gap-1"
+                              >
+                                <FiPlus size={10} /> Add FAQ
+                              </button>
+                            </div>
+                            
+                            {item.faqs && item.faqs.length > 0 ? (
+                              <div className="space-y-2">
+                                {item.faqs.map((faq, faqIndex) => (
+                                  <div key={faqIndex} className="bg-white border border-amber-200 rounded p-2">
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-xs text-amber-600 font-bold mt-1">Q{faqIndex + 1}</span>
+                                      <div className="flex-1 space-y-1">
+                                        <input
+                                          type="text"
+                                          value={faq.question || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].faqs[faqIndex].question = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Question"
+                                          className="w-full border rounded px-2 py-1 text-xs font-medium"
+                                        />
+                                        <textarea
+                                          value={faq.answer || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].faqs[faqIndex].answer = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Answer (HTML supported)"
+                                          rows="2"
+                                          className="w-full border rounded px-2 py-1 text-xs"
+                                        />
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].faqs = newItems[idx].faqs.filter((_, fi) => fi !== faqIndex);
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="text-red-400 hover:text-red-600 mt-1"
+                                      >
+                                        <FiTrash2 size={12} />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-400 italic">No FAQs. Click &quot;+ Add FAQ&quot; to add.</p>
+                            )}
+                            
+                            {/* Quick FAQ Templates */}
+                            {(!item.faqs || item.faqs.length === 0) && (
+                              <div className="mt-2 flex flex-wrap gap-1">
+                                <span className="text-xs text-gray-500">Quick add:</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    if (!newItems[idx].faqs) newItems[idx].faqs = [];
+                                    newItems[idx].faqs.push(
+                                      { question: 'What are the admission requirements?', answer: '' },
+                                      { question: 'What is the fee structure?', answer: '' },
+                                      { question: 'What are the placement statistics?', answer: '' }
+                                    );
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-xs text-amber-600 hover:underline"
+                                >
+                                  Common FAQs
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    if (!newItems[idx].faqs) newItems[idx].faqs = [];
+                                    newItems[idx].faqs.push(
+                                      { question: 'How to apply for admission?', answer: '' },
+                                      { question: 'What documents are required?', answer: '' },
+                                      { question: 'What is the application deadline?', answer: '' }
+                                    );
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-xs text-amber-600 hover:underline"
+                                >
+                                  Admission FAQs
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
