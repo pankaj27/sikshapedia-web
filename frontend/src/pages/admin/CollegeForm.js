@@ -1386,18 +1386,49 @@ const CollegeForm = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">SEO Video URL</label>
+              <label className="block text-sm font-medium mb-1">🎥 SEO Video</label>
               <p className="text-xs text-gray-500 mb-2">
-                YouTube or video embed URL for the college overview video
+                📹 YouTube or video embed URL • Add title & description for accessibility
               </p>
-              <input
-                type="url"
-                name="seo_video_url"
-                value={formData.seo_video_url}
-                onChange={handleChange}
-                placeholder="https://youtube.com/embed/..."
-                className="w-full border rounded px-3 py-2"
-              />
+              
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Video URL</label>
+                  <input
+                    type="url"
+                    name="seo_video_url"
+                    value={formData.seo_video_url}
+                    onChange={handleChange}
+                    placeholder="https://youtube.com/embed/..."
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Video Title (For Accessibility)</label>
+                  <input
+                    type="text"
+                    name="seo_video_title"
+                    value={formData.seo_video_title || ''}
+                    onChange={handleChange}
+                    placeholder="e.g., 'College Overview - Admissionbuddy'"
+                    className="w-full border-2 border-blue-200 rounded px-3 py-2 text-sm"
+                  />
+                  <p className="text-xs text-blue-600 mt-1">Used for screen readers and video player title</p>
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Video Description (Optional)</label>
+                  <textarea
+                    name="seo_video_description"
+                    value={formData.seo_video_description || ''}
+                    onChange={handleChange}
+                    placeholder="Brief description of the SEO video content..."
+                    rows="2"
+                    className="w-full border rounded px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
             </div>
 
             <div>
