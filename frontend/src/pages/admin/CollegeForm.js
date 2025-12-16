@@ -2972,6 +2972,22 @@ const CollegeForm = () => {
           </div>
         </div>
 
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* DEFAULT MENU CONTENT SECTIONS                                                   */}
+        {/* These sections are used when Default Menu mode is selected                      */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        
+        {/* Show indicator for Default Menu mode */}
+        {!formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-3">
+            <span className="text-2xl">🔧</span>
+            <div>
+              <p className="font-semibold text-blue-800">Default Menu Content Sections</p>
+              <p className="text-sm text-blue-600">Fill these sections to populate your default menu items</p>
+            </div>
+          </div>
+        )}
+        
         {/* Courses & Fees */}
         <CollapsibleSection title="Courses & Fees" icon="📚" defaultOpen={true}>
           <div className="mb-4">
