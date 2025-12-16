@@ -125,6 +125,12 @@ const CollegeForm = () => {
     name: '',
     slug: '',
     institution_type: 'College', // College, School, University
+    // Badges & Status
+    is_verified: false,
+    is_preferred: false,
+    is_admission_open: false,
+    admission_deadline: '',
+    badge_text: '',
     location: { 
       city: '', 
       state: '', 
