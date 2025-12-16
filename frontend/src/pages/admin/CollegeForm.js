@@ -4318,66 +4318,172 @@ const CollegeForm = () => {
           </div>
         </CollapsibleSection>
 
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* STEP 2: CHOOSE MENU MODE                                                        */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 rounded-lg shadow-md mt-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white text-purple-600 rounded-full flex items-center justify-center font-bold text-lg">2</div>
+            <div>
+              <h2 className="text-lg font-bold">Step 2: Choose Menu Mode</h2>
+              <p className="text-purple-100 text-sm">Select how the detail page navigation will work</p>
+            </div>
+          </div>
+        </div>
+
         {/* Menu Configuration */}
-        <CollapsibleSection title="Detail Page Menu Configuration" icon="🧭" defaultOpen={false}>
-          <p className="text-sm text-gray-600 mb-4">
-            Configure the navigation menu that appears on the college detail page. You can enable/disable items, reorder them, or auto-generate from your TOC sections.
+        <div className="bg-white rounded-lg shadow-lg border-2 border-purple-200 p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-2xl">🧭</span>
+            <h3 className="text-xl font-bold text-gray-800">Menu Mode Selection</h3>
+          </div>
+          
+          <p className="text-sm text-gray-600 mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            💡 <strong>Important:</strong> Your menu mode choice determines which content sections to fill below. 
+            Select your preferred mode first, then scroll down to fill the relevant content.
           </p>
 
           <div className="space-y-4">
             {/* Menu Mode Selection */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4 border border-indigo-200">
-              <h4 className="font-semibold text-indigo-800 mb-3">📌 Menu Mode</h4>
-              <div className="space-y-2">
-                <label className="flex items-center gap-3 p-2 bg-white rounded border cursor-pointer hover:bg-indigo-50">
-                  <input
-                    type="radio"
-                    name="menu_mode"
-                    checked={!formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc}
-                    onChange={() => setFormData({
-                      ...formData,
-                      menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: false }
-                    })}
-                    className="text-indigo-600"
-                  />
-                  <div>
-                    <p className="font-medium text-gray-800">🔧 Default Menu</p>
-                    <p className="text-xs text-gray-500">Use standard menu items (Info, Courses, Admissions, etc.)</p>
-                  </div>
-                </label>
-                
-                <label className="flex items-center gap-3 p-2 bg-white rounded border cursor-pointer hover:bg-indigo-50">
-                  <input
-                    type="radio"
-                    name="menu_mode"
-                    checked={formData.menu_config?.auto_from_toc}
-                    onChange={() => setFormData({
-                      ...formData,
-                      menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: true }
-                    })}
-                    className="text-indigo-600"
-                  />
-                  <div>
-                    <p className="font-medium text-gray-800">🔗 Auto from TOC</p>
-                    <p className="text-xs text-gray-500">Generate menu from Detail Page TOC sections (defined below)</p>
-                  </div>
-                </label>
-                
-                <label className="flex items-center gap-3 p-2 bg-white rounded border cursor-pointer hover:bg-indigo-50">
-                  <input
-                    type="radio"
-                    name="menu_mode"
-                    checked={formData.menu_config?.use_custom_menu}
-                    onChange={() => setFormData({
-                      ...formData,
-                      menu_config: { ...formData.menu_config, use_custom_menu: true, auto_from_toc: false }
-                    })}
-                    className="text-indigo-600"
-                  />
-                  <div>
-                    <p className="font-medium text-gray-800">✏️ Custom Menu (Separate Pages)</p>
-                    <p className="text-xs text-gray-500">Each menu item opens its own page with custom content</p>
-                    <p className="text-xs text-blue-600 mt-1">📄 URLs: /colleges/slug/section-id</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Default Menu Option */}
+              <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                !formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc 
+                  ? 'border-blue-500 bg-blue-50 shadow-lg' 
+                  : 'border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/50'
+              }`}>
+                <input
+                  type="radio"
+                  name="menu_mode"
+                  checked={!formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc}
+                  onChange={() => setFormData({
+                    ...formData,
+                    menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: false }
+                  })}
+                  className="absolute top-4 right-4 text-blue-600 w-5 h-5"
+                />
+                <div className="text-3xl mb-2">🔧</div>
+                <p className="font-bold text-gray-800 text-lg">Default Menu</p>
+                <p className="text-sm text-gray-600 mt-1">Standard menu items based on form sections</p>
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <p className="text-xs text-gray-500">Content from:</p>
+                  <p className="text-xs font-medium text-blue-700">Courses, Placements, Admissions, FAQs sections</p>
+                </div>
+              </label>
+              
+              {/* Auto from TOC Option */}
+              <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                formData.menu_config?.auto_from_toc 
+                  ? 'border-green-500 bg-green-50 shadow-lg' 
+                  : 'border-gray-200 bg-white hover:border-green-300 hover:bg-green-50/50'
+              }`}>
+                <input
+                  type="radio"
+                  name="menu_mode"
+                  checked={formData.menu_config?.auto_from_toc}
+                  onChange={() => setFormData({
+                    ...formData,
+                    menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: true }
+                  })}
+                  className="absolute top-4 right-4 text-green-600 w-5 h-5"
+                />
+                <div className="text-3xl mb-2">🔗</div>
+                <p className="font-bold text-gray-800 text-lg">Auto from TOC</p>
+                <p className="text-sm text-gray-600 mt-1">Menu from TOC sections you define</p>
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <p className="text-xs text-gray-500">Content from:</p>
+                  <p className="text-xs font-medium text-green-700">TOC Section Builder below (single page scroll)</p>
+                </div>
+              </label>
+              
+              {/* Custom Menu Option */}
+              <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                formData.menu_config?.use_custom_menu 
+                  ? 'border-orange-500 bg-orange-50 shadow-lg' 
+                  : 'border-gray-200 bg-white hover:border-orange-300 hover:bg-orange-50/50'
+              }`}>
+                <input
+                  type="radio"
+                  name="menu_mode"
+                  checked={formData.menu_config?.use_custom_menu}
+                  onChange={() => setFormData({
+                    ...formData,
+                    menu_config: { ...formData.menu_config, use_custom_menu: true, auto_from_toc: false }
+                  })}
+                  className="absolute top-4 right-4 text-orange-600 w-5 h-5"
+                />
+                <div className="text-3xl mb-2">✏️</div>
+                <p className="font-bold text-gray-800 text-lg">Custom Menu</p>
+                <p className="text-sm text-gray-600 mt-1">Each item opens separate page</p>
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <p className="text-xs text-gray-500">Content from:</p>
+                  <p className="text-xs font-medium text-orange-700">Custom Page Builder per menu item</p>
+                  <p className="text-xs text-orange-600 mt-1">📄 /colleges/slug/section-id</p>
+                </div>
+              </label>
+            </div>
+            
+            {/* Selected Mode Indicator */}
+            <div className={`rounded-lg p-4 flex items-center gap-3 ${
+              formData.menu_config?.use_custom_menu 
+                ? 'bg-orange-100 border border-orange-300' 
+                : formData.menu_config?.auto_from_toc 
+                  ? 'bg-green-100 border border-green-300' 
+                  : 'bg-blue-100 border border-blue-300'
+            }`}>
+              <span className="text-2xl">
+                {formData.menu_config?.use_custom_menu ? '✏️' : formData.menu_config?.auto_from_toc ? '🔗' : '🔧'}
+              </span>
+              <div>
+                <p className="font-bold">
+                  {formData.menu_config?.use_custom_menu 
+                    ? 'Custom Menu Selected' 
+                    : formData.menu_config?.auto_from_toc 
+                      ? 'Auto from TOC Selected' 
+                      : 'Default Menu Selected'}
+                </p>
+                <p className="text-sm">
+                  {formData.menu_config?.use_custom_menu 
+                    ? '↓ Scroll down to build custom pages in Step 3' 
+                    : formData.menu_config?.auto_from_toc 
+                      ? '↓ Scroll down to build TOC sections in Step 3' 
+                      : '↓ Fill Courses, Placements, FAQs sections in Step 3'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* STEP 3: CONTENT BASED ON MENU MODE                                              */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <div className={`text-white px-4 py-3 rounded-lg shadow-md mt-6 ${
+          formData.menu_config?.use_custom_menu 
+            ? 'bg-gradient-to-r from-orange-600 to-red-600' 
+            : formData.menu_config?.auto_from_toc 
+              ? 'bg-gradient-to-r from-green-600 to-teal-600' 
+              : 'bg-gradient-to-r from-gray-700 to-gray-800'
+        }`}>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-lg" style={{
+              color: formData.menu_config?.use_custom_menu ? '#ea580c' : formData.menu_config?.auto_from_toc ? '#059669' : '#374151'
+            }}>3</div>
+            <div>
+              <h2 className="text-lg font-bold">Step 3: Add Content</h2>
+              <p className="text-sm opacity-90">
+                {formData.menu_config?.use_custom_menu 
+                  ? 'Build custom pages for each menu item' 
+                  : formData.menu_config?.auto_from_toc 
+                    ? 'Define TOC sections with content' 
+                    : 'Fill standard sections (Courses, Placements, FAQs, etc.)'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Show TOC Builder for Auto from TOC mode */}
+        {formData.menu_config?.auto_from_toc && (
+          <CollapsibleSection title="📗 TOC Section Builder (Auto from TOC Mode)" icon="🔗" defaultOpen={true}>
                   </div>
                 </label>
               </div>
