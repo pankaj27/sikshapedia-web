@@ -1963,19 +1963,27 @@ async def get_course(course_id: str):
     
     return CourseDetail(**course)
 
-@api_router.post("/courses", response_model=CourseDetail)
-async def create_course(course_data: CourseDetailCreate, current_user: User = Depends(get_current_user)):
+@api_router.post("/courses", response_model=Course)
+async def create_course(course_data: dict, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can create courses")
     
-    course = CourseDetail(**course_data.model_dump())
-    course_dict = course.model_dump()
-    course_dict['created_at'] = course_dict['created_at'].isoformat()
+    # Generate ID if not provided
+    if 'id' not in course_data:
+        course_data['id'] = str(uuid.uuid4())
     
-    await db.courses.insert_one(course_dict)
-    return course
+    # Set cutoffs to empty array if not provided
+    if 'cutoffs' not in course_data:
+        course_data['cutoffs'] = []
+    
+    # Insert into database
+    await db.courses.insert_one(course_data)
+    
+    # Return the created course
+    created_course = await db.courses.find_one({"id": course_data['id']}, {"_id": 0})
+    return Course(**created_course)
 
-@api_router.put("/courses/{course_id}", response_model=CourseDetail)
+@api_router.put("/courses/{course_id}", response_model=Course)
 async def update_course(course_id: str, course_data: dict, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can update courses")
@@ -1984,13 +1992,13 @@ async def update_course(course_id: str, course_data: dict, current_user: User = 
     if not existing_course:
         raise HTTPException(status_code=404, detail="Course not found")
     
+    # Remove id from update data if present
+    course_data.pop('id', None)
+    
     await db.courses.update_one({"id": course_id}, {"$set": course_data})
     updated_course = await db.courses.find_one({"id": course_id}, {"_id": 0})
     
-    if isinstance(updated_course.get('created_at'), str):
-        updated_course['created_at'] = datetime.fromisoformat(updated_course['created_at'])
-    
-    return CourseDetail(**updated_course)
+    return Course(**updated_course)
 
 @api_router.delete("/courses/{course_id}")
 async def delete_course(course_id: str, current_user: User = Depends(get_current_user)):
@@ -2000,6 +2008,8 @@ async def delete_course(course_id: str, current_user: User = Depends(get_current
     result = await db.courses.delete_one({"id": course_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Course not found")
+    
+    return {"message": "Course deleted successfully"}
 
 # ============================================
 # Courses Detail Routes (Separate Collection)
