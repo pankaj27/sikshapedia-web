@@ -20,7 +20,8 @@ const CollegesListManagement = () => {
   const fetchColleges = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/colleges');
+      // Admin needs to see all colleges including drafts
+      const response = await api.get('/colleges?include_drafts=true&limit=500');
       setColleges(response.data);
     } catch (error) {
       console.error('Error fetching colleges:', error);
