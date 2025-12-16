@@ -722,13 +722,8 @@ const CollegeForm = () => {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
         const fullUrl = backendUrl + response.data.url;
         
-        const newCampusImages = [...formData.campus_images];
-        newCampusImages[index] = fullUrl;
-        
-        setFormData(prev => ({
-          ...prev,
-          campus_images: newCampusImages
-        }));
+        // Update with object format including existing alt text
+        updateCampusImage(index, 'url', fullUrl);
         
         alert('Campus image uploaded successfully!');
       }
