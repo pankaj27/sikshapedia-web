@@ -4495,22 +4495,127 @@ const CollegeForm = () => {
               </div>
             </div>
 
-            {/* Auto from TOC Preview */}
+            {/* Auto from TOC - Detail Page TOC Builder */}
             {formData.menu_config?.auto_from_toc && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h4 className="font-semibold text-green-800 mb-2">🔗 Menu from TOC Sections</h4>
-                {formData.seo_toc?.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {formData.seo_toc.map((item, index) => (
-                      <span key={index} className="px-3 py-1.5 bg-white border border-green-300 rounded-full text-sm text-green-800">
-                        {item.title}
-                      </span>
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-semibold text-green-800 flex items-center gap-2">
+                    <FiLayers className="text-green-600" /> Detail Page TOC Sections
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData({
+                        ...formData,
+                        detail_page_toc: [...(formData.detail_page_toc || []), {
+                          title: 'New Section',
+                          anchor: `section-${Date.now()}`,
+                          content: '',
+                          icon: 'default'
+                        }]
+                      });
+                    }}
+                    className="text-xs bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 flex items-center gap-1"
+                  >
+                    <FiPlus size={12} /> Add Section
+                  </button>
+                </div>
+                
+                {formData.detail_page_toc?.length > 0 ? (
+                  <div className="space-y-3">
+                    {formData.detail_page_toc.map((item, index) => (
+                      <div key={index} className="bg-white border border-green-200 rounded-lg p-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          {/* Order */}
+                          <span className="text-xs text-gray-500 w-6">{index + 1}.</span>
+                          
+                          {/* Icon Selector */}
+                          <div className="flex items-center gap-1 border rounded px-2 py-1 bg-white min-w-[120px]">
+                            <span className="text-green-600">{getMenuIconById(item.icon)}</span>
+                            <select
+                              value={normalizeIconValue(item.icon)}
+                              onChange={(e) => {
+                                const newToc = [...(formData.detail_page_toc || [])];
+                                newToc[index].icon = e.target.value;
+                                setFormData({...formData, detail_page_toc: newToc});
+                              }}
+                              className="text-xs bg-transparent border-0 focus:ring-0 cursor-pointer flex-1"
+                            >
+                              {menuIconOptions.map(opt => (
+                                <option key={opt.id} value={opt.id}>{opt.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                          
+                          {/* Title */}
+                          <input
+                            type="text"
+                            value={item.title}
+                            onChange={(e) => {
+                              const newToc = [...(formData.detail_page_toc || [])];
+                              newToc[index].title = e.target.value;
+                              // Auto-generate anchor from title
+                              newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                              setFormData({...formData, detail_page_toc: newToc});
+                            }}
+                            className="flex-1 border rounded px-2 py-1 text-sm"
+                            placeholder="Section Title"
+                          />
+                          
+                          {/* Anchor (read-only) */}
+                          <span className="text-xs text-gray-400 font-mono bg-gray-100 px-2 py-1 rounded">
+                            #{item.anchor}
+                          </span>
+                          
+                          {/* Delete */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData({
+                                ...formData,
+                                detail_page_toc: formData.detail_page_toc.filter((_, i) => i !== index)
+                              });
+                            }}
+                            className="text-red-500 hover:bg-red-50 p-1 rounded"
+                          >
+                            <FiTrash2 size={14} />
+                          </button>
+                        </div>
+                        
+                        {/* Content */}
+                        <textarea
+                          value={item.content || ''}
+                          onChange={(e) => {
+                            const newToc = [...(formData.detail_page_toc || [])];
+                            newToc[index].content = e.target.value;
+                            setFormData({...formData, detail_page_toc: newToc});
+                          }}
+                          className="w-full border rounded px-3 py-2 text-sm"
+                          rows={3}
+                          placeholder="Section content (HTML supported)..."
+                        />
+                      </div>
                     ))}
                   </div>
                 ) : (
                   <p className="text-sm text-green-700">
-                    ⚠️ No TOC sections found. Go to <strong>SEO Content</strong> → <strong>Table of Contents</strong> to add sections.
+                    ⚠️ No TOC sections added yet. Click <strong>+ Add Section</strong> above to create menu items.
                   </p>
+                )}
+                
+                {/* Preview */}
+                {formData.detail_page_toc?.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-green-200">
+                    <p className="text-xs text-green-700 mb-2">Preview - Menu will show:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.detail_page_toc.map((item, index) => (
+                        <span key={index} className="px-3 py-1.5 bg-white border border-green-300 rounded-full text-sm text-green-800 flex items-center gap-1">
+                          <span className="text-green-600">{getMenuIconById(item.icon)}</span>
+                          {item.title}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             )}
