@@ -411,6 +411,13 @@ class College(BaseModel):
     affiliation: Optional[str] = None
     institution_type: Optional[str] = None  # College, School, University
     
+    # Badges & Status
+    is_verified: bool = False  # Verified institution badge
+    is_preferred: bool = False  # Preferred/Featured badge
+    is_admission_open: bool = False  # Admission open badge
+    admission_deadline: Optional[str] = None  # Admission deadline date
+    badge_text: Optional[str] = None  # Custom badge text (e.g., "Top Ranked", "New")
+    
     # Recognition & Affiliations
     recognized_by: List[str] = []  # UGC, AICTE, NBA, NAAC
     affiliated_to: Optional[str] = None
