@@ -356,6 +356,17 @@ class LoanProvider(BaseModel):
     contact: Dict
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Facility Models
+class Facility(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    icon: str
+    description: str
+    category: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
 # Blog/Article Models
 class Article(BaseModel):
     model_config = ConfigDict(extra="ignore")
