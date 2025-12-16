@@ -1926,7 +1926,7 @@ async def root():
 @api_router.get("/colleges", response_model=List[College])
 async def get_colleges(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     search: Optional[str] = None,
     city: Optional[str] = None,
     state: Optional[str] = None,
@@ -3714,7 +3714,7 @@ async def get_institution_dashboard(current_user: User = Depends(get_current_use
 @api_router.get("/study-abroad", response_model=List[StudyAbroadUniversity])
 async def get_study_abroad_universities(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     country: Optional[str] = None,
     search: Optional[str] = None
 ):
@@ -3761,7 +3761,7 @@ async def get_countries():
 @api_router.get("/scholarships", response_model=List[ScholarshipProgram])
 async def get_scholarships(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     type: Optional[str] = None,
     level: Optional[str] = None,
     search: Optional[str] = None
@@ -3807,7 +3807,7 @@ async def get_scholarship(scholarship_id: str):
 @api_router.get("/loans", response_model=List[LoanProvider])
 async def get_loan_providers(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     type: Optional[str] = None
 ):
     query = {}
@@ -3841,7 +3841,7 @@ async def get_loan_provider(loan_id: str):
 @api_router.get("/articles", response_model=List[Article])
 async def get_articles(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     category: Optional[str] = None,
     search: Optional[str] = None
 ):
