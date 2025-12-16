@@ -78,11 +78,12 @@ const CollegeDetailPage = () => {
   const getMenuItems = () => {
     const menuConfig = college?.menu_config;
     
-    // If auto from TOC is enabled and TOC exists
-    if (menuConfig?.auto_from_toc && college?.seo_toc?.length > 0) {
-      return college.seo_toc.map((item, index) => ({
+    // If auto from TOC is enabled and Detail Page TOC exists
+    if (menuConfig?.auto_from_toc && college?.detail_page_toc?.length > 0) {
+      return college.detail_page_toc.map((item, index) => ({
         id: item.anchor || `toc-${index}`,
         label: item.title,
+        icon: item.icon || 'default',
         enabled: true,
         order: index + 1
       }));
