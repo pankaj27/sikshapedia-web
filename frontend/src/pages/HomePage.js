@@ -12,6 +12,7 @@ import LocationSearch from '../components/LocationSearch';
 import LatestNews from '../components/LatestNews';
 import TopCollegesByStream from '../components/TopCollegesByStream';
 import TopExams from '../components/TopExams';
+import AdBanner from '../components/AdBanner';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
