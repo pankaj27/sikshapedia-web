@@ -383,6 +383,8 @@ const CollegeForm = () => {
         ...formData,
         [parent]: { ...formData[parent], [field]: value }
       });
+    }
+  };
 
   // Auto-generate alt text with Admissionbuddy branding
   const generateAltText = (title, collegeName = '') => {
@@ -403,9 +405,6 @@ const CollegeForm = () => {
       [field]: value,
       [altField]: autoAlt
     });
-  };
-
-    }
   };
 
   const handleArrayChange = (field, index, value) => {
