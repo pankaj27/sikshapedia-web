@@ -155,6 +155,22 @@ const CollegeDetailPage = ({ overrideId }) => {
     }
   };
 
+  // Generate SEO-friendly URL for menu sections
+  // Format: /colleges/012-aiims-delhi/admissions
+  const getSectionUrl = useMemo(() => {
+    if (!college) return (sectionId) => `#${sectionId}`;
+    
+    const baseUrl = getInstitutionDetailUrl(
+      college.institution_type || 'college',
+      college.id,
+      college.name,
+      college.location?.city,
+      college.serial_number
+    );
+    
+    return (sectionId) => `${baseUrl}/${sectionId}`;
+  }, [college]);
+
   // Default menu items with professional icons
   const defaultMenuItems = [
     { id: 'info', label: 'Info', enabled: true, order: 1 },
