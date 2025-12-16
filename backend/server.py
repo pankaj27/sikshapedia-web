@@ -462,6 +462,7 @@ class College(BaseModel):
     
     # Content
     description: Optional[str] = None
+    description_tables: List = []  # [{title, headers: [], rows: [[]]}] Tables for description
     highlights: List[str] = []
     admission_process: Optional[str] = None
     admission_dates: Optional[Any] = None  # Can be List[Dict], Dict, or None
