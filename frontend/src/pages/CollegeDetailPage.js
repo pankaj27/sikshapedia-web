@@ -653,8 +653,28 @@ const CollegeDetailPage = () => {
 
             {/* COLLEGE MENU INFORMATION (Always Visible) */}
             <div className="space-y-8">
-              {/* INFO SECTION */}
-              <section id="info">
+              
+              {/* DYNAMIC TOC SECTIONS - Rendered when auto_from_toc is enabled */}
+              {college?.menu_config?.auto_from_toc && college?.seo_toc?.length > 0 && (
+                <div className="space-y-8">
+                  {college.seo_toc.map((tocItem, index) => (
+                    <section key={index} id={tocItem.anchor || `toc-${index}`} className="scroll-mt-40">
+                      <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+                        <span className="text-orange-500">📌</span>
+                        {tocItem.title}
+                      </h2>
+                      {tocItem.content && (
+                        <div className="prose max-w-none text-gray-700 leading-relaxed">
+                          <div dangerouslySetInnerHTML={{ __html: tocItem.content.replace(/\n/g, '<br/>') }} />
+                        </div>
+                      )}
+                    </section>
+                  ))}
+                </div>
+              )}
+
+              {/* INFO SECTION - Show when NOT using auto_from_toc */}
+              <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}
                 <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
                 <p className="text-gray-800 leading-relaxed mb-4">
                   {college.seo_intro || `${college.name} is a premier ${college.type} institution established in ${college.established_year || college.established || 'N/A'} and located in ${college.location?.city}, ${college.location?.state}.`}
