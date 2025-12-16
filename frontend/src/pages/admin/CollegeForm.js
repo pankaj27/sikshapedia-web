@@ -1131,40 +1131,80 @@ const CollegeForm = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{id ? 'Edit Institution' : 'Add New Institution'}</h1>
-        <Button variant="outline" onClick={() => navigate('/admin/colleges')}>
-          <FiX className="mr-2" /> Cancel
-        </Button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Institution Type Selector - FIRST SECTION */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg p-6 border-2 border-blue-300">
-          <h2 className="text-xl font-bold mb-4 text-blue-900">🏛️ Institution Type</h2>
-          <div className="grid grid-cols-1 gap-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
-                Select Institution Type <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="institution_type"
-                value={formData.institution_type}
-                onChange={handleChange}
-                className="w-full px-4 py-3 text-lg border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-                required
-              >
-                <option value="College">🎓 College</option>
-                <option value="School">🏫 School (K-12)</option>
-                <option value="University">🏛️ University</option>
-              </select>
-              <p className="mt-2 text-sm text-gray-600 italic">
-                💡 This determines what type of institution you&apos;re adding to the database
-              </p>
-            </div>
+    <AdminLayout>
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-20 bg-white border-b shadow-sm">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-bold text-gray-900">
+              {id ? 'Edit Institution' : 'Add New Institution'}
+            </h1>
+            <select
+              name="institution_type"
+              value={formData.institution_type}
+              onChange={handleChange}
+              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
+            >
+              <option value="College">🎓 College</option>
+              <option value="School">🏫 School</option>
+              <option value="University">🏛️ University</option>
+            </select>
+            {formData.name && (
+              <span className="text-sm text-gray-500">— {formData.name}</span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              type="button"
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate('/admin/colleges')}
+            >
+              <FiX className="w-4 h-4" />
+            </Button>
+            <Button 
+              type="submit"
+              form="institution-form"
+              disabled={saving}
+              size="sm"
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+            >
+              {saving ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiSave className="w-4 h-4" />}
+              <span className="ml-1">{saving ? 'Saving...' : 'Save'}</span>
+            </Button>
           </div>
         </div>
+        
+        {/* Quick Badges */}
+        <div className="px-4 py-2 bg-gray-50 border-t flex items-center gap-4 text-xs">
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_verified} onChange={(e) => setFormData({...formData, is_verified: e.target.checked})} className="rounded text-blue-600" />
+            <span>✅ Verified</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_featured} onChange={(e) => setFormData({...formData, is_featured: e.target.checked})} className="rounded text-orange-600" />
+            <span>⭐ Featured</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_trending} onChange={(e) => setFormData({...formData, is_trending: e.target.checked})} className="rounded text-red-600" />
+            <span>🔥 Trending</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_top_rated} onChange={(e) => setFormData({...formData, is_top_rated: e.target.checked})} className="rounded text-yellow-600" />
+            <span>🏆 Top Rated</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_sponsored} onChange={(e) => setFormData({...formData, is_sponsored: e.target.checked})} className="rounded text-purple-600" />
+            <span>💎 Sponsored</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.status === 'published'} onChange={(e) => setFormData({...formData, status: e.target.checked ? 'published' : 'draft'})} className="rounded text-green-600" />
+            <span>📢 Published</span>
+          </label>
+        </div>
+      </div>
+
+      <form id="institution-form" onSubmit={handleSubmit} className="p-4 space-y-3">
 
         {/* Badges & Status Section */}
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg shadow-lg p-6 border-2 border-yellow-300">
