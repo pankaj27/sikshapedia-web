@@ -434,6 +434,8 @@ class College(BaseModel):
     campus_size: Optional[str] = None
     campus_images: List = []  # Can be List[str] (legacy) or List[Dict] with {url, alt} (new format)
     campus_video_url: Optional[str] = None
+    campus_video_title: Optional[str] = None  # Video title for accessibility
+    campus_video_description: Optional[str] = None  # Video description for accessibility
     
     # Contact & Media
     contact_info: Optional[Dict] = None
