@@ -6041,6 +6041,156 @@ const CollegeForm = () => {
                                   </div>
                                 )}
                               </div>
+                              
+                              {/* Apply Now Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.apply_now?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.apply_now) newItems[idx].widgets.apply_now = { enabled: false, button_text: 'Apply Now', url: '', style: 'primary' };
+                                        newItems[idx].widgets.apply_now.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">🎯 Apply Now</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Application CTA</span>
+                                </div>
+                                {item.widgets?.apply_now?.enabled && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    <div className="flex gap-1">
+                                      <input
+                                        type="text"
+                                        value={item.widgets?.apply_now?.button_text || 'Apply Now'}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.apply_now.button_text = e.target.value;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        placeholder="Button Text"
+                                        className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                      />
+                                      <select
+                                        value={item.widgets?.apply_now?.style || 'primary'}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.apply_now.style = e.target.value;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="border rounded px-1 py-0.5 text-xs"
+                                      >
+                                        <option value="primary">Orange</option>
+                                        <option value="secondary">Blue</option>
+                                        <option value="success">Green</option>
+                                        <option value="danger">Red</option>
+                                      </select>
+                                    </div>
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.apply_now?.url || ''}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].widgets.apply_now.url = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Application URL (leave empty for default)"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.apply_now?.subtitle || ''}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].widgets.apply_now.subtitle = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Subtitle (e.g., 'Limited seats available!')"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Download Brochure Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.download_brochure?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.download_brochure) newItems[idx].widgets.download_brochure = { enabled: false, button_text: 'Download Brochure', file_url: '', require_form: false };
+                                        newItems[idx].widgets.download_brochure.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">📥 Download Brochure</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">PDF download</span>
+                                </div>
+                                {item.widgets?.download_brochure?.enabled && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.download_brochure?.button_text || 'Download Brochure'}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].widgets.download_brochure.button_text = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Button Text"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.download_brochure?.file_url || ''}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        newItems[idx].widgets.download_brochure.file_url = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Brochure PDF URL"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                    <label className="flex items-center gap-2 text-xs">
+                                      <input
+                                        type="checkbox"
+                                        checked={item.widgets?.download_brochure?.require_form ?? false}
+                                        onChange={(e) => {
+                                          const newItems = [...(formData.menu_config?.items || [])];
+                                          const idx = newItems.findIndex(i => i.id === item.id);
+                                          newItems[idx].widgets.download_brochure.require_form = e.target.checked;
+                                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        }}
+                                        className="rounded"
+                                      />
+                                      <span>Require form before download (lead capture)</span>
+                                    </label>
+                                    {item.widgets?.download_brochure?.require_form && (
+                                      <div className="bg-gray-50 rounded p-1.5 text-xs text-gray-500">
+                                        Form fields: Name, Email, Phone, Course Interest
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                           
