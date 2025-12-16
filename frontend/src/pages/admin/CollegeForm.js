@@ -5199,7 +5199,7 @@ const CollegeForm = () => {
                             )}
                             
                             {/* Quick Table Templates */}
-                            {item.tables && item.tables.length === 0 && (
+                            {(!item.tables || item.tables.length === 0) && (
                               <div className="mt-2 flex flex-wrap gap-1">
                                 <span className="text-xs text-gray-500">Quick add:</span>
                                 <button
@@ -5254,6 +5254,349 @@ const CollegeForm = () => {
                                   Eligibility
                                 </button>
                               </div>
+                            )}
+                          </div>
+                          
+                          {/* Images Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <FiImage size={12} /> Images for this Page
+                              </p>
+                              <label className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200 cursor-pointer flex items-center gap-1">
+                                <FiUpload size={10} /> Upload Image
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={async (e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+                                    
+                                    try {
+                                      const uploadFormData = new FormData();
+                                      uploadFormData.append('file', file);
+                                      
+                                      const token = localStorage.getItem('adminToken');
+                                      const response = await api.post('/upload/image?type=content', uploadFormData, {
+                                        headers: {
+                                          'Authorization': `Bearer ${token}`
+                                        }
+                                      });
+                                      
+                                      if (response.data.success) {
+                                        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+                                        const fullUrl = backendUrl + response.data.url;
+                                        
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].images) newItems[idx].images = [];
+                                        newItems[idx].images.push({
+                                          url: fullUrl,
+                                          alt: '',
+                                          title: '',
+                                          width: 'auto',
+                                          height: 'auto',
+                                          align: 'center'
+                                        });
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                        alert('Image uploaded!');
+                                      }
+                                    } catch (error) {
+                                      console.error('Upload error:', error);
+                                      alert('Failed to upload image');
+                                    }
+                                    e.target.value = '';
+                                  }}
+                                />
+                              </label>
+                            </div>
+                            
+                            {item.images && item.images.length > 0 ? (
+                              <div className="space-y-2">
+                                {item.images.map((img, imgIndex) => (
+                                  <div key={imgIndex} className="bg-white border border-purple-200 rounded p-2">
+                                    <div className="flex gap-2">
+                                      {/* Image Preview */}
+                                      <div className="w-20 h-20 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                                        <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
+                                      </div>
+                                      
+                                      {/* Image Settings */}
+                                      <div className="flex-1 space-y-1">
+                                        <div className="flex gap-1">
+                                          <input
+                                            type="text"
+                                            value={img.alt || ''}
+                                            onChange={(e) => {
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].images[imgIndex].alt = e.target.value;
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            }}
+                                            placeholder="Alt text (SEO)"
+                                            className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={img.title || ''}
+                                            onChange={(e) => {
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].images[imgIndex].title = e.target.value;
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            }}
+                                            placeholder="Title/Caption"
+                                            className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                          />
+                                        </div>
+                                        
+                                        {/* Resize Options */}
+                                        <div className="flex gap-1 items-center">
+                                          <span className="text-xs text-gray-500">Size:</span>
+                                          <input
+                                            type="text"
+                                            value={img.width || 'auto'}
+                                            onChange={(e) => {
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].images[imgIndex].width = e.target.value;
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            }}
+                                            placeholder="Width"
+                                            className="w-16 border rounded px-1 py-0.5 text-xs text-center"
+                                          />
+                                          <span className="text-xs text-gray-400">×</span>
+                                          <input
+                                            type="text"
+                                            value={img.height || 'auto'}
+                                            onChange={(e) => {
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].images[imgIndex].height = e.target.value;
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            }}
+                                            placeholder="Height"
+                                            className="w-16 border rounded px-1 py-0.5 text-xs text-center"
+                                          />
+                                          <select
+                                            value={img.align || 'center'}
+                                            onChange={(e) => {
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].images[imgIndex].align = e.target.value;
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            }}
+                                            className="border rounded px-1 py-0.5 text-xs"
+                                          >
+                                            <option value="left">Left</option>
+                                            <option value="center">Center</option>
+                                            <option value="right">Right</option>
+                                          </select>
+                                        </div>
+                                        
+                                        {/* Action Buttons */}
+                                        <div className="flex gap-1">
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const imgHtml = `<figure style="text-align: ${img.align || 'center'};">\n  <img src="${img.url}" alt="${img.alt || ''}" title="${img.title || ''}" style="width: ${img.width || 'auto'}; height: ${img.height || 'auto'}; max-width: 100%;" />\n  ${img.title ? `<figcaption>${img.title}</figcaption>` : ''}\n</figure>`;
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].content = (newItems[idx].content || '') + '\n\n' + imgHtml;
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                              alert('Image inserted into content!');
+                                            }}
+                                            className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded hover:bg-blue-200"
+                                          >
+                                            Insert to Content
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const imgHtml = `<img src="${img.url}" alt="${img.alt || ''}" title="${img.title || ''}" style="width: ${img.width || 'auto'}; height: ${img.height || 'auto'};" />`;
+                                              navigator.clipboard.writeText(imgHtml);
+                                              alert('Image HTML copied!');
+                                            }}
+                                            className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded hover:bg-gray-200"
+                                          >
+                                            Copy HTML
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newItems = [...(formData.menu_config?.items || [])];
+                                              const idx = newItems.findIndex(i => i.id === item.id);
+                                              newItems[idx].images = newItems[idx].images.filter((_, ii) => ii !== imgIndex);
+                                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            }}
+                                            className="text-xs text-red-500 hover:text-red-700 px-1"
+                                          >
+                                            <FiTrash2 size={12} />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-400 italic">No images. Click &quot;Upload Image&quot; to add.</p>
+                            )}
+                          </div>
+                          
+                          {/* Videos Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <FiVideo size={12} /> Videos for this Page
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newItems = [...(formData.menu_config?.items || [])];
+                                  const idx = newItems.findIndex(i => i.id === item.id);
+                                  if (!newItems[idx].videos) newItems[idx].videos = [];
+                                  newItems[idx].videos.push({
+                                    url: '',
+                                    title: '',
+                                    description: '',
+                                    thumbnail: '',
+                                    type: 'youtube'
+                                  });
+                                  setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                }}
+                                className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200 flex items-center gap-1"
+                              >
+                                <FiPlus size={10} /> Add Video
+                              </button>
+                            </div>
+                            
+                            {item.videos && item.videos.length > 0 ? (
+                              <div className="space-y-2">
+                                {item.videos.map((video, vidIndex) => (
+                                  <div key={vidIndex} className="bg-white border border-red-200 rounded p-2">
+                                    <div className="space-y-1">
+                                      <div className="flex gap-1">
+                                        <select
+                                          value={video.type || 'youtube'}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].videos[vidIndex].type = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          className="border rounded px-1 py-0.5 text-xs w-24"
+                                        >
+                                          <option value="youtube">YouTube</option>
+                                          <option value="vimeo">Vimeo</option>
+                                          <option value="embed">Embed</option>
+                                        </select>
+                                        <input
+                                          type="text"
+                                          value={video.url || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].videos[vidIndex].url = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Video URL or Embed Code"
+                                          className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                        />
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].videos = newItems[idx].videos.filter((_, vi) => vi !== vidIndex);
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          className="text-red-500 hover:text-red-700 px-1"
+                                        >
+                                          <FiTrash2 size={12} />
+                                        </button>
+                                      </div>
+                                      
+                                      <div className="flex gap-1">
+                                        <input
+                                          type="text"
+                                          value={video.title || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].videos[vidIndex].title = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Video Title (Alt)"
+                                          className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                        />
+                                        <input
+                                          type="text"
+                                          value={video.description || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].videos[vidIndex].description = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Description"
+                                          className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                        />
+                                      </div>
+                                      
+                                      {/* Action Buttons */}
+                                      <div className="flex gap-1">
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            let videoHtml = '';
+                                            if (video.type === 'youtube') {
+                                              const videoId = video.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)?.[1] || video.url;
+                                              videoHtml = `<div class="video-container" style="text-align: center;">\n  <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" title="${video.title || 'Video'}" frameborder="0" allowfullscreen></iframe>\n  ${video.title ? `<p class="video-title">${video.title}</p>` : ''}\n  ${video.description ? `<p class="video-desc">${video.description}</p>` : ''}\n</div>`;
+                                            } else if (video.type === 'vimeo') {
+                                              const videoId = video.url.match(/vimeo\.com\/(\d+)/)?.[1] || video.url;
+                                              videoHtml = `<div class="video-container" style="text-align: center;">\n  <iframe width="560" height="315" src="https://player.vimeo.com/video/${videoId}" title="${video.title || 'Video'}" frameborder="0" allowfullscreen></iframe>\n  ${video.title ? `<p class="video-title">${video.title}</p>` : ''}\n</div>`;
+                                            } else {
+                                              videoHtml = `<div class="video-container" style="text-align: center;">\n  ${video.url}\n  ${video.title ? `<p class="video-title">${video.title}</p>` : ''}\n</div>`;
+                                            }
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].content = (newItems[idx].content || '') + '\n\n' + videoHtml;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                            alert('Video inserted into content!');
+                                          }}
+                                          className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded hover:bg-blue-200"
+                                        >
+                                          Insert to Content
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            let videoHtml = '';
+                                            if (video.type === 'youtube') {
+                                              const videoId = video.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)?.[1] || video.url;
+                                              videoHtml = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" title="${video.title || 'Video'}" frameborder="0" allowfullscreen></iframe>`;
+                                            } else if (video.type === 'vimeo') {
+                                              const videoId = video.url.match(/vimeo\.com\/(\d+)/)?.[1] || video.url;
+                                              videoHtml = `<iframe width="560" height="315" src="https://player.vimeo.com/video/${videoId}" title="${video.title || 'Video'}" frameborder="0" allowfullscreen></iframe>`;
+                                            } else {
+                                              videoHtml = video.url;
+                                            }
+                                            navigator.clipboard.writeText(videoHtml);
+                                            alert('Video HTML copied!');
+                                          }}
+                                          className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded hover:bg-gray-200"
+                                        >
+                                          Copy HTML
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-400 italic">No videos. Click &quot;+ Add Video&quot; to add.</p>
                             )}
                           </div>
                         </div>
