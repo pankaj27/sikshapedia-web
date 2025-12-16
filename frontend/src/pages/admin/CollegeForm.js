@@ -26,6 +26,7 @@ const CollegeForm = () => {
   const [availableCourses, setAvailableCourses] = useState([]);
   const [availableScholarships, setAvailableScholarships] = useState([]);
   const [availableFacilities, setAvailableFacilities] = useState([]);
+  const [availableNews, setAvailableNews] = useState([]);
 
   // Icon mapping for facilities
   const iconComponents = {
