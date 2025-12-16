@@ -5602,6 +5602,278 @@ const CollegeForm = () => {
                               <p className="text-xs text-gray-400 italic">No videos. Click &quot;+ Add Video&quot; to add.</p>
                             )}
                           </div>
+                          
+                          {/* Sidebar Widgets Section */}
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <FiGrid size={12} /> Sidebar Widgets for this Page
+                              </p>
+                            </div>
+                            <p className="text-xs text-gray-400 mb-2">Configure which widgets appear in the sidebar of this page</p>
+                            
+                            <div className="space-y-2">
+                              {/* Quick Facts Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.quick_facts?.enabled ?? true}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.quick_facts) newItems[idx].widgets.quick_facts = {};
+                                        newItems[idx].widgets.quick_facts.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">📊 Quick Facts</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Shows institution stats</span>
+                                </div>
+                              </div>
+                              
+                              {/* Quick Navigation Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.quick_nav?.enabled ?? true}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.quick_nav) newItems[idx].widgets.quick_nav = {};
+                                        newItems[idx].widgets.quick_nav.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">📑 Quick Navigation</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Menu links sidebar</span>
+                                </div>
+                              </div>
+                              
+                              {/* Contact CTA Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.contact_cta?.enabled ?? true}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.contact_cta) newItems[idx].widgets.contact_cta = {};
+                                        newItems[idx].widgets.contact_cta.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">📞 Contact CTA</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Need Help? box</span>
+                                </div>
+                                {item.widgets?.contact_cta?.enabled && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.contact_cta?.title || 'Need Help?'}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.contact_cta) newItems[idx].widgets.contact_cta = { enabled: true };
+                                        newItems[idx].widgets.contact_cta.title = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="CTA Title"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={item.widgets?.contact_cta?.subtitle || 'Get free counseling'}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets.contact_cta) newItems[idx].widgets.contact_cta = { enabled: true };
+                                        newItems[idx].widgets.contact_cta.subtitle = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="CTA Subtitle"
+                                      className="w-full border rounded px-2 py-0.5 text-xs"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Related Links Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.related_links?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.related_links) newItems[idx].widgets.related_links = { enabled: false, links: [] };
+                                        newItems[idx].widgets.related_links.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">🔗 Related Links</span>
+                                  </label>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newItems = [...(formData.menu_config?.items || [])];
+                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                      if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                      if (!newItems[idx].widgets.related_links) newItems[idx].widgets.related_links = { enabled: true, links: [] };
+                                      newItems[idx].widgets.related_links.links.push({ title: '', url: '' });
+                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                  >
+                                    + Add Link
+                                  </button>
+                                </div>
+                                {item.widgets?.related_links?.enabled && item.widgets?.related_links?.links?.length > 0 && (
+                                  <div className="ml-5 mt-1 space-y-1">
+                                    {item.widgets.related_links.links.map((link, linkIndex) => (
+                                      <div key={linkIndex} className="flex gap-1">
+                                        <input
+                                          type="text"
+                                          value={link.title || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].widgets.related_links.links[linkIndex].title = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="Link Title"
+                                          className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                        />
+                                        <input
+                                          type="text"
+                                          value={link.url || ''}
+                                          onChange={(e) => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].widgets.related_links.links[linkIndex].url = e.target.value;
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          placeholder="URL"
+                                          className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                        />
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const newItems = [...(formData.menu_config?.items || [])];
+                                            const idx = newItems.findIndex(i => i.id === item.id);
+                                            newItems[idx].widgets.related_links.links = newItems[idx].widgets.related_links.links.filter((_, li) => li !== linkIndex);
+                                            setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                          }}
+                                          className="text-red-400 hover:text-red-600"
+                                        >
+                                          <FiTrash2 size={12} />
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Custom HTML Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.custom_html?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.custom_html) newItems[idx].widgets.custom_html = { enabled: false, content: '' };
+                                        newItems[idx].widgets.custom_html.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">🧩 Custom Widget</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Custom HTML/Embed</span>
+                                </div>
+                                {item.widgets?.custom_html?.enabled && (
+                                  <div className="ml-5 mt-1">
+                                    <textarea
+                                      value={item.widgets?.custom_html?.content || ''}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets.custom_html) newItems[idx].widgets.custom_html = { enabled: true };
+                                        newItems[idx].widgets.custom_html.content = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Custom HTML/embed code..."
+                                      rows="2"
+                                      className="w-full border rounded px-2 py-1 text-xs font-mono"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Ad Banner Widget */}
+                              <div className="bg-white border rounded p-2">
+                                <div className="flex items-center justify-between mb-1">
+                                  <label className="flex items-center gap-2 text-xs">
+                                    <input
+                                      type="checkbox"
+                                      checked={item.widgets?.ad_banner?.enabled ?? false}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets) newItems[idx].widgets = {};
+                                        if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: false, code: '' };
+                                        newItems[idx].widgets.ad_banner.enabled = e.target.checked;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      className="rounded text-orange-500"
+                                    />
+                                    <span className="font-medium">📢 Ad Banner</span>
+                                  </label>
+                                  <span className="text-xs text-gray-400">Advertisement slot</span>
+                                </div>
+                                {item.widgets?.ad_banner?.enabled && (
+                                  <div className="ml-5 mt-1">
+                                    <textarea
+                                      value={item.widgets?.ad_banner?.code || ''}
+                                      onChange={(e) => {
+                                        const newItems = [...(formData.menu_config?.items || [])];
+                                        const idx = newItems.findIndex(i => i.id === item.id);
+                                        if (!newItems[idx].widgets.ad_banner) newItems[idx].widgets.ad_banner = { enabled: true };
+                                        newItems[idx].widgets.ad_banner.code = e.target.value;
+                                        setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                      }}
+                                      placeholder="Ad code (Google Ads, etc.)..."
+                                      rows="2"
+                                      className="w-full border rounded px-2 py-1 text-xs font-mono"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
