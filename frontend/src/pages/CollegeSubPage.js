@@ -190,10 +190,16 @@ const CollegeSubPage = () => {
             <div className="lg:col-span-3">
               {currentSection ? (
                 <div className="bg-white rounded-xl shadow-lg p-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  {/* Page Heading (H1) */}
+                  <h1 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                     <span className="text-orange-500">{getMenuIconLarge(currentSection.id)}</span>
-                    {currentSection.label}
-                  </h2>
+                    {pageHeading}
+                  </h1>
+                  
+                  {/* Search Heading (if different from page heading) */}
+                  {currentSection.search_heading && currentSection.search_heading !== pageHeading && (
+                    <h2 className="text-xl text-gray-600 mb-4 -mt-4">{currentSection.search_heading}</h2>
+                  )}
                   
                   {currentSection.content ? (
                     <div 
