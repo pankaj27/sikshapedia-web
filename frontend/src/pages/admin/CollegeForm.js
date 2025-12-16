@@ -4576,17 +4576,17 @@ const CollegeForm = () => {
                         
                         {/* Icon Selector */}
                         <div className="relative">
-                          <div className="flex items-center gap-1 border rounded px-2 py-1 bg-white">
+                          <div className="flex items-center gap-2 border rounded px-2 py-1 bg-white min-w-[140px]">
                             <span className="text-orange-500">{getMenuIconById(item.icon)}</span>
                             <select
-                              value={item.icon}
+                              value={normalizeIconValue(item.icon)}
                               onChange={(e) => {
                                 const newItems = [...(formData.menu_config?.items || [])];
                                 const idx = newItems.findIndex(i => i.id === item.id);
                                 newItems[idx].icon = e.target.value;
                                 setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
                               }}
-                              className="text-sm bg-transparent border-0 focus:ring-0 pr-6 cursor-pointer"
+                              className="text-sm bg-transparent border-0 focus:ring-0 cursor-pointer flex-1"
                             >
                               {menuIconOptions.map(opt => (
                                 <option key={opt.id} value={opt.id}>{opt.label}</option>
