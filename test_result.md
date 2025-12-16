@@ -491,9 +491,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "College Detail Page Comprehensive Testing (Completed)"
-    - "Admin Panel CRUD Operations (Completed)"
-  stuck_tasks: []
+    - "Admin Panel - Courses & Exams CRUD Operations (Backend Issues Found)"
+  stuck_tasks:
+    - "Admin Panel - Courses & Exams CRUD Operations"
   test_all: false
   test_priority: "high_first"
 
