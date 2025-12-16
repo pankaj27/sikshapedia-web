@@ -169,7 +169,8 @@ const CollegeSubPage = () => {
     fetchCollege();
   }, [resolvedId, section]);
 
-  if (loading) {
+  // Show loading while resolving ID or fetching college
+  if (loading || (!resolvedId && (id || idSlug))) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
@@ -182,7 +183,7 @@ const CollegeSubPage = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800">College not found</h1>
-          <Link to="/colleges" className="text-orange-600 hover:underline mt-4 block">
+          <Link to="/india-colleges" className="text-orange-600 hover:underline mt-4 block">
             Back to Colleges
           </Link>
         </div>
@@ -202,6 +203,11 @@ const CollegeSubPage = () => {
   const ogTitle = currentSection?.og_title || pageTitle;
   const ogDescription = currentSection?.og_description || pageDescription;
   const pageHeading = currentSection?.page_heading || currentSection?.label || section;
+  
+  // Determine the base URL path for links (use singular form)
+  const typePath = institutionType.toLowerCase(); // college, university, school
+  const currentSlug = idSlug || id; // Use idSlug if available, fallback to id
+  const basePath = `/${typePath}/${currentSlug}`;
 
   return (
     <>
