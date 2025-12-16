@@ -1522,6 +1522,61 @@ async def admin_login(credentials: UserLogin):
             name=admin.name,
             phone="",
             enrolled_courses=[],
+
+# ============================================
+# Image Optimization Helper
+# ============================================
+
+def optimize_image(file_content: bytes, image_type: str, max_size_kb: int = 500) -> bytes:
+    """
+    Resize and compress image to optimize for web
+    
+    Args:
+        file_content: Original image bytes
+        image_type: Type of image (logo, banner, campus)
+        max_size_kb: Maximum file size in KB (default 500KB)
+    
+    Returns:
+        Optimized image bytes
+    """
+    # Open image from bytes
+    img = Image.open(io.BytesIO(file_content))
+    
+    # Convert RGBA to RGB if needed (for JPEG)
+    if img.mode in ('RGBA', 'LA', 'P'):
+        background = Image.new('RGB', img.size, (255, 255, 255))
+        if img.mode == 'P':
+            img = img.convert('RGBA')
+        background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+        img = background
+    
+    # Define max dimensions based on type
+    if image_type == "logo":
+        max_width, max_height = 400, 400  # Square logos
+    elif image_type == "banner":
+        max_width, max_height = 1600, 400  # Wide banners
+    else:  # campus
+        max_width, max_height = 1200, 900  # Standard gallery images
+    
+    # Resize image maintaining aspect ratio
+    img.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
+    
+    # Compress and save to bytes
+    output = io.BytesIO()
+    
+    # Try different quality levels to meet size target
+    for quality in [85, 75, 65, 55]:
+        output.seek(0)
+        output.truncate()
+        img.save(output, format='JPEG', quality=quality, optimize=True)
+        
+        size_kb = output.tell() / 1024
+        if size_kb <= max_size_kb or quality == 55:
+            break
+    
+    return output.getvalue()
+
+
             saved_colleges=[],
             saved_courses=[],
             is_premium=True
