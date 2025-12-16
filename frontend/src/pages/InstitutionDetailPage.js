@@ -77,25 +77,15 @@ const InstitutionDetailPage = () => {
           }
         }
         
-        // Strategy 2: Search by numeric ID AND slug AND institution type
-        if (numericId && slug) {
+        // Strategy 2: Search by serial_number (unique for each institution)
+        if (numericId) {
           try {
             // Fetch institutions filtered by institution_type
             const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
             if (response.data && response.data.length > 0) {
-              // Find institution where:
-              // 1. ID ends with the numeric part
-              // 2. Slug matches the name
-              const institution = response.data.find(inst => {
-                const idNumericMatch = inst.id?.match(/(\d+)$/);
-                const nameSlug = generateSlug(inst.name);
-                
-                // Check both numeric match AND slug contains institution name
-                const numericMatches = idNumericMatch && idNumericMatch[1] === numericId;
-                const slugMatches = slug === nameSlug || nameSlug.includes(slug.replace(/^-/, '')) || slug.includes(nameSlug);
-                
-                return numericMatches && slugMatches;
-              });
+              // Find institution by serial_number (padded numeric ID)
+              const serialNum = parseInt(numericId, 10);
+              const institution = response.data.find(inst => inst.serial_number === serialNum);
               
               if (institution) {
                 setInstitutionId(institution.id);
