@@ -1930,6 +1930,38 @@ async def get_admin_stats(current_user: User = Depends(get_current_user)):
 async def root():
     return {"message": "Sikshapedia API - College Discovery Platform"}
 
+@api_router.post("/colleges/assign-serial-numbers")
+async def assign_serial_numbers():
+    """Assign unique serial numbers to all colleges that don't have one"""
+    # Get all colleges without serial_number, sorted by created_at
+    colleges = await db.colleges.find(
+        {"$or": [{"serial_number": {"$exists": False}}, {"serial_number": None}]},
+        {"_id": 0, "id": 1}
+    ).sort("created_at", 1).to_list(1000)
+    
+    if not colleges:
+        return {"message": "All colleges already have serial numbers", "updated": 0}
+    
+    # Get current max serial number
+    max_doc = await db.colleges.find_one(
+        {"serial_number": {"$exists": True, "$ne": None}},
+        {"serial_number": 1},
+        sort=[("serial_number", -1)]
+    )
+    current_max = max_doc.get("serial_number", 0) if max_doc else 0
+    
+    # Assign serial numbers
+    updated_count = 0
+    for college in colleges:
+        current_max += 1
+        await db.colleges.update_one(
+            {"id": college["id"]},
+            {"$set": {"serial_number": current_max}}
+        )
+        updated_count += 1
+    
+    return {"message": f"Assigned serial numbers to {updated_count} colleges", "updated": updated_count}
+
 @api_router.get("/colleges", response_model=List[College])
 async def get_colleges(
     skip: int = Query(0, ge=0),
