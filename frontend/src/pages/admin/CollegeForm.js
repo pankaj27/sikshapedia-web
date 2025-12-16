@@ -2098,6 +2098,7 @@ const CollegeForm = () => {
             {/* Logo Upload */}
             <div>
               <label className="block text-sm font-medium mb-2">Institution Logo</label>
+              <p className="text-xs text-gray-600 mb-2">📐 Recommended: 400x400 px (Square) • Max: Any size • Auto-optimized to 400x400 px</p>
               <div className="flex gap-2 items-start">
                 <input
                   type="url"
@@ -2187,6 +2188,7 @@ const CollegeForm = () => {
             {/* Banner Upload */}
             <div>
               <label className="block text-sm font-medium mb-2">Institution Banner</label>
+              <p className="text-xs text-gray-600 mb-2">📐 Recommended: 1600x400 px (Wide) • Max: Any size • Auto-optimized to 1600x400 px</p>
               <div className="flex gap-2 items-start">
                 <input
                   type="url"
@@ -2275,13 +2277,14 @@ const CollegeForm = () => {
             {/* Campus Gallery Images */}
             <div>
               <label className="block text-sm font-medium mb-2">Campus Gallery Images</label>
+              <p className="text-xs text-gray-600 mb-3">📐 Recommended: 1200x900 px (4:3) • Max: Any size • Auto-optimized to 1200x900 px</p>
               
               {/* Bulk Upload Option */}
               <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-blue-900">Upload Multiple Images</p>
-                    <p className="text-xs text-blue-700">Select multiple files to upload at once</p>
+                    <p className="text-xs text-blue-700">Select multiple files • All images auto-optimized</p>
                   </div>
                   <div className="relative">
                     <input
