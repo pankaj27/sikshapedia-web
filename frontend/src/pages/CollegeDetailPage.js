@@ -427,10 +427,10 @@ const CollegeDetailPage = ({ overrideId }) => {
           <div className="flex gap-1 overflow-x-auto scrollbar-hide">
             {menuItems.map((item) => (
               college?.menu_config?.use_custom_menu ? (
-                // Custom Menu: Link to separate pages
+                // Custom Menu: Link to separate pages with SEO-friendly URLs
                 <Link
                   key={item.id}
-                  to={`/colleges/${id}/${item.id}`}
+                  to={getSectionUrl(item.id)}
                   className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50`}
                 >
                   <span className="text-orange-500">{getMenuIcon(item.id)}</span>
