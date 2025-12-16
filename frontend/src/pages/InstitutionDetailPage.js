@@ -5,11 +5,11 @@ import CollegeDetailPage from './CollegeDetailPage';
 
 /**
  * Wrapper component that handles the new URL structure:
- * /college/{id}-{slug} or /college/{slug-with-id}
- * /university/{id}-{slug} or /university/{slug-with-id}
- * /school/{id}-{slug} or /school/{slug-with-id}
+ * /college/{number}{slug} e.g., /college/123mr-college-of-pharmacy
+ * /university/{number}{slug} e.g., /university/456mumbai-university
+ * /school/{number}{slug} e.g., /school/789dps-rampurhat
  * 
- * Extracts the ID and passes it to CollegeDetailPage
+ * Extracts the numeric ID and finds the institution
  */
 const InstitutionDetailPage = () => {
   const { idSlug } = useParams();
@@ -28,19 +28,28 @@ const InstitutionDetailPage = () => {
     return 'College';
   };
   
-  // Extract ID from the id-slug pattern
-  const extractId = () => {
-    if (!idSlug) return null;
+  // Parse URL to extract numeric ID and slug
+  // Format: {number}{slug} e.g., "123mr-college-of-pharmacy" or "001indian-institute-of-technology-delhi"
+  const parseIdSlug = () => {
+    if (!idSlug) return { numericId: null, slug: null };
     
-    // Pattern 1: {numeric-id}-{slug} (e.g., "123-iit-delhi")
-    const numericMatch = idSlug.match(/^(\d+)-(.+)$/);
-    if (numericMatch) {
-      return numericMatch[1];
+    // Pattern 1: Starts with digits followed by slug
+    // e.g., "123mr-college-of-pharmacy" -> numericId: "123", slug: "mr-college-of-pharmacy"
+    const numericStartMatch = idSlug.match(/^(\d+)(.*)$/);
+    if (numericStartMatch) {
+      return {
+        numericId: numericStartMatch[1],
+        slug: numericStartMatch[2]
+      };
     }
     
-    // Pattern 2: Full ID with dashes (e.g., "iit-delhi-001", "aiims-delhi-001")
-    // This is the most common pattern in the current data
-    return idSlug;
+    // Pattern 2: Legacy format - full ID like "iit-delhi-001"
+    // Try to find institution by this ID directly
+    return {
+      numericId: null,
+      slug: idSlug,
+      legacyId: idSlug
+    };
   };
   
   useEffect(() => {
@@ -48,44 +57,77 @@ const InstitutionDetailPage = () => {
       setLoading(true);
       setError(null);
       
-      const extractedId = extractId();
-      
-      if (!extractedId) {
-        setError('Invalid institution URL');
-        setLoading(false);
-        return;
-      }
+      const { numericId, slug, legacyId } = parseIdSlug();
       
       try {
-        // Try to fetch the institution directly by ID
-        const response = await api.get(`/colleges/${extractedId}`);
-        if (response.data) {
-          setInstitutionId(extractedId);
-          setLoading(false);
-          return;
-        }
-      } catch (err) {
-        // If direct ID fetch fails, try to find by slug
-        try {
-          // Search for institution by slug pattern
-          const searchResponse = await api.get(`/colleges?search=${extractedId.replace(/-/g, ' ')}&limit=1`);
-          if (searchResponse.data && searchResponse.data.length > 0) {
-            setInstitutionId(searchResponse.data[0].id);
-            setLoading(false);
-            return;
+        // Strategy 1: If we have a legacy ID (like "iit-delhi-001"), try it directly
+        if (legacyId) {
+          try {
+            const response = await api.get(`/colleges/${legacyId}`);
+            if (response.data) {
+              setInstitutionId(legacyId);
+              setLoading(false);
+              return;
+            }
+          } catch (err) {
+            // Continue to other strategies
           }
-        } catch (searchErr) {
-          console.error('Search failed:', searchErr);
         }
+        
+        // Strategy 2: Search by numeric ID suffix in the database
+        // Our IDs are like "iit-delhi-001" where "001" is the numeric part
+        if (numericId) {
+          try {
+            // Fetch all institutions and find by numeric suffix
+            const response = await api.get(`/colleges?limit=100`);
+            if (response.data && response.data.length > 0) {
+              // Find institution where ID ends with the numeric part
+              const institution = response.data.find(inst => {
+                const idNumericMatch = inst.id?.match(/(\d+)$/);
+                return idNumericMatch && idNumericMatch[1] === numericId;
+              });
+              
+              if (institution) {
+                setInstitutionId(institution.id);
+                setLoading(false);
+                return;
+              }
+            }
+          } catch (err) {
+            console.error('Search by numeric ID failed:', err);
+          }
+        }
+        
+        // Strategy 3: Search by slug/name
+        if (slug) {
+          try {
+            const searchTerm = slug.replace(/-/g, ' ').trim();
+            if (searchTerm) {
+              const response = await api.get(`/colleges?search=${encodeURIComponent(searchTerm)}&limit=5`);
+              if (response.data && response.data.length > 0) {
+                setInstitutionId(response.data[0].id);
+                setLoading(false);
+                return;
+              }
+            }
+          } catch (err) {
+            console.error('Search by slug failed:', err);
+          }
+        }
+        
+        // If all strategies fail
+        setError('Institution not found');
+        setLoading(false);
+        
+      } catch (err) {
+        console.error('Error resolving institution:', err);
+        setError('Failed to load institution');
+        setLoading(false);
       }
-      
-      // If all attempts fail
-      setError('Institution not found');
-      setLoading(false);
     };
     
     resolveInstitution();
-  }, [idSlug]);
+  }, [idSlug, location.pathname]);
   
   if (loading) {
     return (
@@ -99,13 +141,14 @@ const InstitutionDetailPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
+          <div className="text-6xl mb-4">🎓</div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">{error}</h1>
-          <p className="text-gray-600 mb-4">The institution you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-4">The institution you're looking for doesn't exist or may have been moved.</p>
           <button
             onClick={() => navigate('/india-colleges')}
-            className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+            className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
           >
-            Browse Colleges
+            Browse All Colleges
           </button>
         </div>
       </div>
@@ -113,7 +156,6 @@ const InstitutionDetailPage = () => {
   }
   
   // Pass the ID to CollegeDetailPage (which handles the actual data fetching)
-  // We're reusing CollegeDetailPage since it already handles all institution types
   return <CollegeDetailPage overrideId={institutionId} />;
 };
 
