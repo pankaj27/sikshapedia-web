@@ -2279,6 +2279,14 @@ async def get_exams(
     for exam in exams:
         if isinstance(exam.get('created_at'), str):
             exam['created_at'] = datetime.fromisoformat(exam['created_at'])
+        
+        # Fix data validation issues - convert invalid types to None
+        if exam.get('exam_pattern') is not None and not isinstance(exam.get('exam_pattern'), dict):
+            exam['exam_pattern'] = None
+        if exam.get('eligibility') is not None and not isinstance(exam.get('eligibility'), dict):
+            exam['eligibility'] = None
+        if exam.get('application_fee') is not None and not isinstance(exam.get('application_fee'), dict):
+            exam['application_fee'] = None
     
     return exams
 
