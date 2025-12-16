@@ -720,7 +720,8 @@ const CollegeDetailPage = () => {
               {college?.menu_config?.use_custom_menu && college?.menu_config?.items?.length > 0 && (
                 <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-xl p-6 mb-8">
                   <h3 className="text-xl font-bold text-orange-800 mb-3 flex items-center gap-2">
-                    📑 Explore More About {college.name}
+                    <FiLayers className="text-orange-600" size={22} />
+                    Explore More About {college.name}
                   </h3>
                   <p className="text-gray-600 mb-4">Click on the sections below to learn more:</p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -731,9 +732,9 @@ const CollegeDetailPage = () => {
                       <Link
                         key={index}
                         to={`/colleges/${id}/${menuItem.id}`}
-                        className="flex items-center gap-2 bg-white border-2 border-orange-200 rounded-lg px-4 py-3 hover:bg-orange-100 hover:border-orange-400 transition-all"
+                        className="flex items-center gap-3 bg-white border-2 border-orange-200 rounded-lg px-4 py-3 hover:bg-orange-100 hover:border-orange-400 transition-all group"
                       >
-                        <span className="text-2xl">{menuItem.icon}</span>
+                        <span className="text-orange-500 group-hover:text-orange-600">{getMenuIcon(menuItem.id)}</span>
                         <span className="font-medium text-gray-800">{menuItem.label}</span>
                       </Link>
                     ))}
