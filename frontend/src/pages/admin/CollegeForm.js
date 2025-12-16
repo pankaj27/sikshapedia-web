@@ -177,6 +177,8 @@ const CollegeForm = () => {
   const [uploadingBanner, setUploadingBanner] = useState(false);
   const [uploadingCampus, setUploadingCampus] = useState({});
   const [uploadingCampusBulk, setUploadingCampusBulk] = useState(false);
+  const [uploadingBrochure, setUploadingBrochure] = useState(false);
+  const [uploadingCourseBrochure, setUploadingCourseBrochure] = useState({});
 
   useEffect(() => {
     fetchRecognitions();
