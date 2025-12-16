@@ -10,6 +10,7 @@ const CollegesListManagement = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All'); // All, College, School, University
+  const [filterStatus, setFilterStatus] = useState('All'); // All, draft, published
 
   useEffect(() => {
     fetchColleges();
