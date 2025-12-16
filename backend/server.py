@@ -1921,10 +1921,10 @@ async def delete_exam(exam_id: str, current_user: User = Depends(get_current_use
 # Course Routes
 # ============================================
 
-@api_router.get("/courses", response_model=List[CourseDetail])
+@api_router.get("/courses", response_model=List[Course])
 async def get_courses(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000),
+    limit: int = Query(100, ge=1, le=1000),
     search: Optional[str] = None,
     stream: Optional[str] = None,
     degree_type: Optional[str] = None
