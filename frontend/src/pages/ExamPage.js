@@ -332,6 +332,7 @@ const ExamPage = () => {
                     </div>
                   </div>
                 </div>
+                </React.Fragment>
               ))}
             </div>
 
