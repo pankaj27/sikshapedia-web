@@ -793,11 +793,15 @@ const CollegeForm = () => {
       
       if (response.data.success) {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const uploadedImages = response.data.files.map(f => ({
-          url: backendUrl + f.url,
-          title: '',
-          alt: ''
-        }));
+        const uploadedImages = response.data.files.map(f => {
+          // Add /api prefix for Kubernetes ingress routing
+          const apiUrl = f.url.replace('/static/', '/api/static/');
+          return {
+            url: backendUrl + apiUrl,
+            title: '',
+            alt: ''
+          };
+        });
         
         setFormData(prev => ({
           ...prev,
