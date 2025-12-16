@@ -162,10 +162,6 @@ const CollegeListingPage = () => {
       [filterType]: value
     }));
     setActiveFilterDropdown(null);
-    // Trigger search with new filter
-    setTimeout(() => {
-      applyFilters();
-    }, 100);
   };
 
   // Remove a specific filter
@@ -174,9 +170,6 @@ const CollegeListingPage = () => {
       ...prev,
       [filterType]: ''
     }));
-    setTimeout(() => {
-      applyFilters();
-    }, 100);
   };
 
   return (
