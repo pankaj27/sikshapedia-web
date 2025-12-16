@@ -459,6 +459,17 @@ class College(BaseModel):
     admission_process: Optional[str] = None
     admission_dates: Optional[Any] = None  # Can be List[Dict], Dict, or None
     
+    # SEO Meta Tags for Search Visibility
+    meta_title: Optional[str] = None  # Browser tab & search results (60 chars)
+    meta_description: Optional[str] = None  # Search snippet (150-160 chars)
+    meta_keywords: Optional[str] = None  # Comma-separated keywords
+    og_title: Optional[str] = None  # Social media share title
+    og_description: Optional[str] = None  # Social media share description
+    og_image_url: Optional[str] = None  # Social share thumbnail
+    canonical_url: Optional[str] = None  # Prevent duplicate content
+    robots_meta: Optional[str] = "index, follow"  # Index control
+    schema_type: Optional[str] = "EducationalOrganization"  # Rich snippets
+    
     # SEO Content for Detail Page
     seo_intro: Optional[str] = None  # Short intro text (3-4 lines)
     seo_full_content: Optional[str] = None  # Full detailed content paragraphs
