@@ -640,14 +640,7 @@ const CollegeForm = () => {
     setFormData({ ...formData, cutoff_data: formData.cutoff_data.filter((_, i) => i !== index) });
   };
 
-  const addUpdate = () => {
-    setFormData({
-      ...formData,
-      updates: [...formData.updates, { date: '', title: '', content: '' }]
-    });
-  };
-
-  const updateUpdate = (index, field, value) => {
+  const updateUpdateSimple = (index, field, value) => {
     const newUpdates = [...formData.updates];
     newUpdates[index][field] = value;
     setFormData({ ...formData, updates: newUpdates });
