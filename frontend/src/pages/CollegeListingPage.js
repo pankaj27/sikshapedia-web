@@ -1437,6 +1437,11 @@ const CollegeListingPage = () => {
                   )}
                 </>
               )}
+              
+              {/* Sponsor Ad - Main Content Bottom */}
+              <div className="mt-6">
+                <AdBanner pageName="colleges" position="content-bottom" />
+              </div>
             </main>
           </div>
         </div>
