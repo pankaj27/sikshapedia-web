@@ -450,6 +450,8 @@ class College(BaseModel):
     videos: List = []  # Can be List[str] (legacy) or List[Dict] with {url, title, description}
     brochure_url: Optional[str] = None
     virtual_tour_url: Optional[str] = None
+    virtual_tour_title: Optional[str] = None  # Title for accessibility
+    virtual_tour_description: Optional[str] = None  # Description for accessibility
     
     # Content
     description: Optional[str] = None

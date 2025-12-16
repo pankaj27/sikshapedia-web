@@ -173,6 +173,8 @@ const CollegeForm = () => {
     videos: [],
     brochure_url: '',
     virtual_tour_url: '',
+    virtual_tour_title: '',
+    virtual_tour_description: '',
     description: '',
     highlights: [],
     admission_process: '',
