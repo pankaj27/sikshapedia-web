@@ -1882,16 +1882,43 @@ async def get_exam(exam_id: str):
     return Exam(**exam)
 
 @api_router.post("/exams", response_model=Exam)
-async def create_exam(exam_data: ExamCreate, current_user: User = Depends(get_current_user)):
+async def create_exam(exam_data: dict, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can create exams")
     
-    exam = Exam(**exam_data.model_dump())
-    exam_dict = exam.model_dump()
-    exam_dict['created_at'] = exam_dict['created_at'].isoformat()
+    # Generate ID if not provided
+    if 'id' not in exam_data:
+        exam_data['id'] = str(uuid.uuid4())
     
-    await db.exams.insert_one(exam_dict)
-    return exam
+    # Set default values for required arrays
+    if 'streams' not in exam_data:
+        exam_data['streams'] = []
+    if 'previous_year_cutoffs' not in exam_data:
+        exam_data['previous_year_cutoffs'] = []
+    if 'study_materials' not in exam_data:
+        exam_data['study_materials'] = []
+    if 'sample_papers' not in exam_data:
+        exam_data['sample_papers'] = []
+    if 'important_topics' not in exam_data:
+        exam_data['important_topics'] = []
+    if 'accepting_colleges' not in exam_data:
+        exam_data['accepting_colleges'] = []
+    
+    # Set created_at if not provided
+    if 'created_at' not in exam_data:
+        exam_data['created_at'] = datetime.now(timezone.utc)
+    
+    # Insert into database
+    await db.exams.insert_one(exam_data)
+    
+    # Return the created exam
+    created_exam = await db.exams.find_one({"id": exam_data['id']}, {"_id": 0})
+    
+    # Convert datetime to ISO format for response
+    if isinstance(created_exam.get('created_at'), datetime):
+        created_exam['created_at'] = created_exam['created_at'].isoformat()
+    
+    return Exam(**created_exam)
 
 @api_router.put("/exams/{exam_id}", response_model=Exam)
 async def update_exam(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
@@ -1902,8 +1929,16 @@ async def update_exam(exam_id: str, exam_data: dict, current_user: User = Depend
     if not existing_exam:
         raise HTTPException(status_code=404, detail="Exam not found")
     
+    # Remove id from update data if present
+    exam_data.pop('id', None)
+    
     await db.exams.update_one({"id": exam_id}, {"$set": exam_data})
     updated_exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
+    
+    # Convert datetime for response
+    if isinstance(updated_exam.get('created_at'), datetime):
+        updated_exam['created_at'] = updated_exam['created_at'].isoformat()
+    
     return Exam(**updated_exam)
 
 @api_router.delete("/exams/{exam_id}")
