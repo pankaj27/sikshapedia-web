@@ -172,8 +172,10 @@ const CollegesListManagement = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredColleges.length === 0 ? (
               <tr>
-                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
-                  No institutions found. Add your first institution!
+                <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
+                  {filterStatus === 'draft' ? '📝 No draft institutions found.' : 
+                   filterStatus === 'published' ? '📢 No published institutions found.' :
+                   'No institutions found. Add your first institution!'}
                 </td>
               </tr>
             ) : (
