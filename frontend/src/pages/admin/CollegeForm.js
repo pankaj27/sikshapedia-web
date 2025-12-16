@@ -18,6 +18,7 @@ const CollegeForm = () => {
   const [rankCategoriesList, setRankCategoriesList] = useState([]);
   const [availableCourses, setAvailableCourses] = useState([]);
   const [availableScholarships, setAvailableScholarships] = useState([]);
+  const [availableFacilities, setAvailableFacilities] = useState([]);
   
   // Indian States and Cities
   const indianStates = [
