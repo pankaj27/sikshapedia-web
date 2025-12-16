@@ -82,7 +82,7 @@ const TocBuilder = ({
 
       {/* Items */}
       {items.length === 0 ? (
-        <p className="text-xs text-gray-500 italic">No sections added. Click "+ Add Section" to add.</p>
+        <p className="text-xs text-gray-500 italic">No sections added. Click &quot;+ Add Section&quot; to add.</p>
       ) : (
         <div className="space-y-2">
           {items.map((item, index) => (

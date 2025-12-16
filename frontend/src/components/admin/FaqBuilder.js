@@ -85,7 +85,7 @@ const FaqBuilder = ({
 
       {/* FAQ Items */}
       {faqs.length === 0 ? (
-        <p className="text-xs text-gray-500 italic">No FAQs added yet. Click "+ Add FAQ" to add.</p>
+        <p className="text-xs text-gray-500 italic">No FAQs added yet. Click &quot;+ Add FAQ&quot; to add.</p>
       ) : (
         <div className="space-y-3">
           {faqs.map((faq, index) => (
