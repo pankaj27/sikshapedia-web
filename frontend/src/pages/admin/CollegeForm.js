@@ -6457,47 +6457,30 @@ const CollegeForm = () => {
                 </div>
               </div>
             )}
-
-            {/* Menu Preview */}
-            <div className="bg-gray-100 rounded-lg p-4">
-              <h4 className="font-semibold text-gray-700 mb-3">👁️ Menu Preview</h4>
+            
+            {/* Menu Preview for Custom Menu */}
+            <div className="bg-gray-100 rounded-lg p-4 mt-4">
+              <h4 className="font-semibold text-gray-700 mb-3">👁️ Custom Menu Preview</h4>
               <div className="bg-white rounded-lg border p-3">
                 <div className="flex gap-2 overflow-x-auto">
-                  {formData.menu_config?.auto_from_toc ? (
-                    // Show TOC items
-                    formData.seo_toc?.length > 0 ? (
-                      formData.seo_toc.map((item, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className="px-3 py-2 bg-orange-100 text-orange-800 rounded-lg text-sm whitespace-nowrap flex items-center gap-1"
-                        >
-                          📌 {item.title}
-                        </button>
-                      ))
-                    ) : (
-                      <span className="text-gray-500 text-sm">No TOC sections</span>
-                    )
-                  ) : (
-                    // Show menu items
-                    (formData.menu_config?.items || [])
-                      .filter(item => item.enabled)
-                      .sort((a, b) => a.order - b.order)
-                      .map((item, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className={`px-3 py-2 rounded-lg text-sm whitespace-nowrap flex items-center gap-1 ${index === 0 ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700'}`}
-                        >
-                          {item.icon} {item.label}
-                        </button>
-                      ))
-                  )}
+                  {(formData.menu_config?.items || [])
+                    .filter(item => item.enabled)
+                    .sort((a, b) => a.order - b.order)
+                    .map((item, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`px-3 py-2 rounded-lg text-sm whitespace-nowrap flex items-center gap-1 ${index === 0 ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700'}`}
+                      >
+                        {getMenuIconById(item.icon)} {item.label}
+                      </button>
+                    ))}
                 </div>
               </div>
             </div>
-          </div>
-        </CollapsibleSection>
+            </div>
+          </CollapsibleSection>
+        )}
 
         {/* Contact Information */}
         <div className="bg-white rounded-lg shadow p-6">
