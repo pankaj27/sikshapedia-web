@@ -466,6 +466,9 @@ class APITester:
         self.test_new_module_routes()
         self.test_other_critical_routes()
         self.test_admin_protected_routes()
+        self.test_seo_url_filtering()
+        self.test_expected_institutions()
+        self.test_institution_details()
         self.test_route_consistency()
         
         # Summary
