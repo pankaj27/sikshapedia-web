@@ -32,17 +32,17 @@ const InstitutionDetailPage = () => {
   const institutionType = getInstitutionType();
   
   // Parse URL to extract numeric ID and slug
-  // Format: {number}{slug} e.g., "123mr-college-of-pharmacy" or "001indian-institute-of-technology-delhi"
+  // Format: {number}-{slug} e.g., "001-mr-college-of-pharmacy" or "001-indian-institute-of-technology-delhi"
   const parseIdSlug = () => {
     if (!idSlug) return { numericId: null, slug: null };
     
-    // Pattern 1: Starts with digits followed by slug
-    // e.g., "123mr-college-of-pharmacy" -> numericId: "123", slug: "mr-college-of-pharmacy"
-    const numericStartMatch = idSlug.match(/^(\d+)(.*)$/);
-    if (numericStartMatch) {
+    // Pattern 1: {number}-{slug} with dash separator
+    // e.g., "001-mr-college-of-pharmacy" -> numericId: "001", slug: "mr-college-of-pharmacy"
+    const numericDashMatch = idSlug.match(/^(\d+)-(.+)$/);
+    if (numericDashMatch) {
       return {
-        numericId: numericStartMatch[1],
-        slug: numericStartMatch[2]
+        numericId: numericDashMatch[1],
+        slug: numericDashMatch[2]
       };
     }
     
