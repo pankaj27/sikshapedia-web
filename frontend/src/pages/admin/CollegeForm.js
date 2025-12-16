@@ -423,19 +423,28 @@ const CollegeForm = () => {
     setFormData({ ...formData, [field]: newArray });
   };
 
-  // Helper functions for campus images with alt text
+  // Helper functions for campus images with title and alt text
   const updateCampusImage = (index, field, value) => {
     const newImages = [...formData.campus_images];
     // Convert to object format if it's a string
     if (typeof newImages[index] === 'string') {
-      newImages[index] = { url: newImages[index], alt: '' };
+      newImages[index] = { url: newImages[index], title: '', alt: '' };
     }
-    newImages[index][field] = value;
+    
+    // If updating title, auto-generate alt text
+    if (field === 'title') {
+      const collegeName = formData.name || '';
+      newImages[index].title = value;
+      newImages[index].alt = generateAltText(value, collegeName);
+    } else {
+      newImages[index][field] = value;
+    }
+    
     setFormData({ ...formData, campus_images: newImages });
   };
 
   const addCampusImage = () => {
-    setFormData({ ...formData, campus_images: [...formData.campus_images, { url: '', alt: '' }] });
+    setFormData({ ...formData, campus_images: [...formData.campus_images, { url: '', title: '', alt: '' }] });
   };
 
   const removeCampusImage = (index) => {
