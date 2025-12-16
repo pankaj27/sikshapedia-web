@@ -2459,7 +2459,7 @@ async def delete_course(course_id: str, current_user: User = Depends(get_current
 @api_router.get("/courses-detail", response_model=List[CourseDetail])
 async def get_courses_detail(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100)
+    limit: int = Query(20, ge=1, le=1000)
 ):
     courses = await db.courses_detailed.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     
@@ -2527,7 +2527,7 @@ async def delete_course_detail(course_id: str, current_user: User = Depends(get_
 @api_router.get("/exams-detail", response_model=List[Exam])
 async def get_exams_detail(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100)
+    limit: int = Query(20, ge=1, le=1000)
 ):
     exams = await db.exams_detailed.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     
@@ -2794,7 +2794,7 @@ async def get_education_loans(
     loan_type: Optional[str] = None,
     max_interest_rate: Optional[float] = None,
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100)
+    limit: int = Query(20, ge=1, le=1000)
 ):
     query = {}
     
@@ -3048,7 +3048,7 @@ async def get_study_materials(
     subject: Optional[str] = None,
     material_type: Optional[str] = None,
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100)
+    limit: int = Query(20, ge=1, le=1000)
 ):
     query = {}
     
@@ -3106,7 +3106,7 @@ async def create_study_material(material_data: StudyMaterialCreate, current_user
 async def get_counselors(
     specialization: Optional[str] = None,
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100)
+    limit: int = Query(20, ge=1, le=1000)
 ):
     query = {}
     
