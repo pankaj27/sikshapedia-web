@@ -4360,6 +4360,24 @@ const CollegeForm = () => {
             Select your preferred mode first, then scroll down to fill the relevant content.
           </p>
 
+          {/* Fixed Info Page Indicator */}
+          <div className="mb-4 bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center text-lg font-bold">ℹ️</div>
+              <div className="flex-1">
+                <p className="font-semibold text-indigo-800">Info Page (Fixed - Always First)</p>
+                <p className="text-sm text-indigo-600">Automatically created from Step 1: Common Information</p>
+              </div>
+              <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">Auto-Generated</span>
+            </div>
+            <div className="mt-3 pt-3 border-t border-indigo-200 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-indigo-700">
+              <span>📍 Location</span>
+              <span>📞 Contact</span>
+              <span>🏆 Rankings</span>
+              <span>🎓 Affiliations</span>
+            </div>
+          </div>
+
           <div className="space-y-4">
             {/* Menu Mode Selection */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
