@@ -157,9 +157,14 @@ const ExamPage = () => {
 
       {/* Main Content - More Compact */}
       <div className="container mx-auto px-8 py-5">
+        {/* Sponsor Ad - Content Top */}
+        <AdBanner pageName="exams" position="content-top" />
+        
         <div className="flex gap-4">
           {/* Sidebar - Categories - More Compact */}
           <aside className="w-64 flex-shrink-0 space-y-3">
+            {/* Sponsor Ad - Sidebar */}
+            <AdBanner pageName="exams" position="sidebar" />
             {/* Categories */}
             <div className="bg-white rounded-lg shadow-sm p-3 sticky top-20">
               <h2 className="text-base font-bold text-gray-900 mb-2">Exams Category</h2>
