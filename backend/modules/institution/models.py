@@ -1,13 +1,17 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 from typing import Optional, List, Dict, Any, Union
 from datetime import datetime
 
 class College(BaseModel):
+    """
+    Flexible College model that handles both legacy and new data formats.
+    Uses 'extra=allow' to accept any additional fields from the database.
+    """
     model_config = ConfigDict(extra='allow')
     
     id: str
     name: str
-    slug: str
+    slug: Optional[str] = None  # Made optional for legacy data
     institution_type: str = 'College'  # College, School, University
     type: Optional[str] = None
     description: Optional[str] = None
@@ -36,14 +40,14 @@ class College(BaseModel):
     rating: float = 0.0
     total_reviews: int = 0
     
-    # Fees & Courses
+    # Fees & Courses - flexible type to handle both List[str] and List[Dict]
     average_fees: Optional[float] = None
-    courses: List[Dict[str, Any]] = []
+    courses: Optional[List[Any]] = []  # Accept any list format
     
     # Media
     logo: Optional[str] = None
     banner_image: Optional[str] = None
-    gallery: List[str] = []
+    gallery: Optional[List[str]] = []
     
     # SEO
     meta_title: Optional[str] = None
@@ -51,8 +55,16 @@ class College(BaseModel):
     meta_keywords: Optional[str] = None
     
     # Timestamps
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    created_at: Optional[Any] = None  # Accept both datetime and string
+    updated_at: Optional[Any] = None
+    
+    @field_validator('courses', mode='before')
+    @classmethod
+    def convert_courses(cls, v):
+        """Handle both List[str] and List[Dict] formats"""
+        if v is None:
+            return []
+        return v
 
 class CollegeCreate(BaseModel):
     model_config = ConfigDict(extra='allow')
