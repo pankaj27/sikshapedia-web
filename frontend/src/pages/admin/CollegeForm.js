@@ -2555,14 +2555,47 @@ const CollegeForm = () => {
               </Button>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Campus Video URL</label>
-              <input
-                type="url"
-                name="campus_video_url"
-                value={formData.campus_video_url}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
-              />
+              <label className="block text-sm font-medium mb-2">🎥 Campus Video</label>
+              <p className="text-xs text-gray-600 mb-2">📹 YouTube/Vimeo URL • Add title & description for accessibility</p>
+              
+              <div className="space-y-2">
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Video URL</label>
+                  <input
+                    type="url"
+                    name="campus_video_url"
+                    value={formData.campus_video_url}
+                    onChange={handleChange}
+                    placeholder="https://youtube.com/watch?v=..."
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Video Title (For Accessibility)</label>
+                  <input
+                    type="text"
+                    name="campus_video_title"
+                    value={formData.campus_video_title || ''}
+                    onChange={handleChange}
+                    placeholder="e.g., 'Campus Tour - IIT Mumbai'"
+                    className="w-full border-2 border-blue-200 rounded px-3 py-2 text-sm"
+                  />
+                  <p className="text-xs text-blue-600 mt-1">Used for screen readers and video player title</p>
+                </div>
+                
+                <div>
+                  <label className="block text-xs text-gray-700 mb-1">Video Description (Optional)</label>
+                  <textarea
+                    name="campus_video_description"
+                    value={formData.campus_video_description || ''}
+                    onChange={handleChange}
+                    placeholder="Brief description of video content..."
+                    rows="2"
+                    className="w-full border rounded px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
             </div>
             {/* Institute Brochure */}
             <div>
