@@ -4544,6 +4544,11 @@ async def get_advertisement_reports(current_user: User = Depends(get_current_use
 
 app.include_router(api_router)
 
+# Mount static files for uploads
+UPLOAD_DIR = Path(__file__).parent / "static" / "uploads"
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
