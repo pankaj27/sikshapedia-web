@@ -151,6 +151,7 @@ const CollegeForm = () => {
     fetchAccreditationLevels();
     fetchRankings();
     fetchRankCategories();
+    fetchAvailableCourses();
     if (id) {
       fetchCollege();
     }
