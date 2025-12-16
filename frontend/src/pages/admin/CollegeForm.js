@@ -211,6 +211,15 @@ const CollegeForm = () => {
     }
   };
 
+  const fetchAvailableCourses = async () => {
+    try {
+      const response = await api.get('/courses?limit=500');
+      setAvailableCourses(response.data);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  };
+
   const fetchCollege = async () => {
     setLoading(true);
     try {
