@@ -1726,8 +1726,8 @@ const CollegeForm = () => {
           </div>
         </div>
 
-        {/* SEO Meta Tags Section */}
-        <CollapsibleSection title="SEO & Meta Tags" icon="🏷️" defaultOpen={false}>
+        {/* SEO Meta Tags Section - Part of Common Info */}
+        <CollapsibleSection title="SEO & Meta Tags (Main Page)" icon="🏷️" defaultOpen={false}>
           <p className="text-sm text-gray-600 mb-4">
             Configure meta tags for search engines and social media sharing. These improve search visibility and click-through rates.
           </p>
