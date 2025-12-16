@@ -319,7 +319,7 @@ const CollegeDetailPage = () => {
                   to={`/colleges/${id}/${item.id}`}
                   className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50`}
                 >
-                  <span>{item.icon}</span>
+                  <span className="text-orange-500">{getMenuIcon(item.id)}</span>
                   <span>{item.label}</span>
                 </Link>
               ) : (
@@ -333,7 +333,7 @@ const CollegeDetailPage = () => {
                       : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
                   }`}
                 >
-                  <span>{item.icon}</span>
+                  <span className={activeTab === item.id ? 'text-orange-600' : 'text-gray-500'}>{getMenuIcon(item.id)}</span>
                   <span>{item.label}</span>
                 </button>
               )
