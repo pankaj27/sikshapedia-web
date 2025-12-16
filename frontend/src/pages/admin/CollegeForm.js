@@ -169,6 +169,8 @@ const CollegeForm = () => {
   });
 
   const [formData, setFormData] = useState(getDefaultFormData());
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingBanner, setUploadingBanner] = useState(false);
 
   useEffect(() => {
     fetchRecognitions();
