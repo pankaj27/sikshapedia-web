@@ -4929,6 +4929,14 @@ async def get_advertisement_reports(current_user: User = Depends(get_current_use
 
 app.include_router(api_router)
 
+# Include modular architecture routers
+try:
+    from modules.router import api_router as modules_router
+    app.include_router(modules_router, prefix="/api")
+    logging.info("✅ Modular architecture loaded successfully")
+except ImportError as e:
+    logging.warning(f"⚠️ Modular architecture not loaded: {e}")
+
 # Mount static files for uploads - accessible at /api/static/ for Kubernetes ingress
 UPLOAD_DIR = Path(__file__).parent / "static" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
