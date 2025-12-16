@@ -258,10 +258,7 @@ const ExamPage = () => {
                       <AdBanner pageName="exams" position="content-middle" />
                     </div>
                   )}
-                <div
-                  key={idx}
-                  className="bg-white rounded shadow-sm hover:shadow-md transition-shadow"
-                >
+                  <div className="bg-white rounded shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex p-3 gap-3">
                     {/* Logo with Initials - Smaller */}
                     <div className="flex-shrink-0">
