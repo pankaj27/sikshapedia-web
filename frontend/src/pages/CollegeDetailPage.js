@@ -673,6 +673,26 @@ const CollegeDetailPage = () => {
                 </div>
               )}
 
+              {/* DYNAMIC CUSTOM MENU SECTIONS - Rendered when use_custom_menu is enabled */}
+              {college?.menu_config?.use_custom_menu && college?.menu_config?.items?.length > 0 && (
+                <div className="space-y-8">
+                  {college.menu_config.items
+                    .filter(item => item.enabled && item.content)
+                    .sort((a, b) => a.order - b.order)
+                    .map((menuItem, index) => (
+                    <section key={index} id={menuItem.id} className="scroll-mt-40">
+                      <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+                        <span className="text-orange-500">{menuItem.icon}</span>
+                        {menuItem.label}
+                      </h2>
+                      <div className="prose max-w-none text-gray-700 leading-relaxed bg-white rounded-lg p-6 shadow-sm border">
+                        <div dangerouslySetInnerHTML={{ __html: menuItem.content.replace(/\n/g, '<br/>') }} />
+                      </div>
+                    </section>
+                  ))}
+                </div>
+              )}
+
               {/* INFO SECTION - Show when NOT using auto_from_toc */}
               <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                 <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
