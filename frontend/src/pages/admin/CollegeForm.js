@@ -4807,7 +4807,22 @@ const CollegeForm = () => {
                                   placeholder={`${item.label} - ${formData.name || 'College Name'}`}
                                   className="w-full border rounded px-2 py-1 text-xs"
                                 />
-                                <p className="text-xs text-gray-400 mt-0.5">{(item.meta_title || '').length}/60</p>
+                                <div className="flex justify-between items-center mt-0.5">
+                                  <p className="text-xs text-gray-400">{(item.meta_title || '').length}/60</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newItems = [...(formData.menu_config?.items || [])];
+                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                      const autoTitle = `${item.label} - ${formData.name || 'College'}${formData.location?.city ? `, ${formData.location.city}` : ''} | Admissionbuddy`.substring(0, 60);
+                                      newItems[idx].meta_title = autoTitle;
+                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                  >
+                                    ⚡ Auto-generate
+                                  </button>
+                                </div>
                               </div>
                               
                               {/* Meta Description */}
@@ -4825,7 +4840,22 @@ const CollegeForm = () => {
                                   rows="2"
                                   className="w-full border rounded px-2 py-1 text-xs"
                                 />
-                                <p className="text-xs text-gray-400 mt-0.5">{(item.meta_description || '').length}/160</p>
+                                <div className="flex justify-between items-center mt-0.5">
+                                  <p className="text-xs text-gray-400">{(item.meta_description || '').length}/160</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newItems = [...(formData.menu_config?.items || [])];
+                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                      const autoDesc = `Explore ${item.label} at ${formData.name || 'this institution'}. Get complete details on ${item.label.toLowerCase()}, eligibility, requirements and more. Apply now through Admissionbuddy.`.substring(0, 160);
+                                      newItems[idx].meta_description = autoDesc;
+                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                  >
+                                    ⚡ Auto-generate
+                                  </button>
+                                </div>
                               </div>
                               
                               {/* Meta Keywords */}
@@ -4843,6 +4873,27 @@ const CollegeForm = () => {
                                   placeholder="keyword1, keyword2, keyword3"
                                   className="w-full border rounded px-2 py-1 text-xs"
                                 />
+                                <div className="flex justify-end mt-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newItems = [...(formData.menu_config?.items || [])];
+                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                      const keywords = [
+                                        formData.name,
+                                        item.label,
+                                        formData.location?.city,
+                                        item.label.toLowerCase() + ' ' + new Date().getFullYear(),
+                                        'admissionbuddy'
+                                      ].filter(Boolean).join(', ');
+                                      newItems[idx].meta_keywords = keywords;
+                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                  >
+                                    ⚡ Auto-generate
+                                  </button>
+                                </div>
                               </div>
                               
                               {/* OG Title */}
@@ -4860,6 +4911,20 @@ const CollegeForm = () => {
                                   placeholder="Social media title"
                                   className="w-full border rounded px-2 py-1 text-xs"
                                 />
+                                <div className="flex justify-end mt-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newItems = [...(formData.menu_config?.items || [])];
+                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                      newItems[idx].og_title = item.meta_title || `${item.label} - ${formData.name || 'College'}`;
+                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                  >
+                                    ⚡ Copy from Meta Title
+                                  </button>
+                                </div>
                               </div>
                               
                               {/* OG Description */}
@@ -4877,6 +4942,45 @@ const CollegeForm = () => {
                                   placeholder="Social media description"
                                   className="w-full border rounded px-2 py-1 text-xs"
                                 />
+                                <div className="flex justify-end mt-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newItems = [...(formData.menu_config?.items || [])];
+                                      const idx = newItems.findIndex(i => i.id === item.id);
+                                      newItems[idx].og_description = item.meta_description || '';
+                                      setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                    }}
+                                    className="text-xs text-blue-600 hover:underline"
+                                  >
+                                    ⚡ Copy from Meta Description
+                                  </button>
+                                </div>
+                              </div>
+                              
+                              {/* Auto-fill All SEO Button */}
+                              <div className="col-span-2 pt-2 border-t border-gray-100">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    const idx = newItems.findIndex(i => i.id === item.id);
+                                    const collegeName = formData.name || 'College';
+                                    const city = formData.location?.city || '';
+                                    
+                                    // Auto-generate all SEO fields
+                                    newItems[idx].meta_title = `${item.label} - ${collegeName}${city ? `, ${city}` : ''} | Admissionbuddy`.substring(0, 60);
+                                    newItems[idx].meta_description = `Explore ${item.label} at ${collegeName}. Get complete details on ${item.label.toLowerCase()}, eligibility, requirements and more. Apply now through Admissionbuddy.`.substring(0, 160);
+                                    newItems[idx].meta_keywords = [collegeName, item.label, city, `${item.label.toLowerCase()} ${new Date().getFullYear()}`, 'admissionbuddy'].filter(Boolean).join(', ');
+                                    newItems[idx].og_title = newItems[idx].meta_title;
+                                    newItems[idx].og_description = newItems[idx].meta_description;
+                                    
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="w-full py-1.5 px-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-medium rounded hover:from-blue-600 hover:to-purple-600 transition-all flex items-center justify-center gap-1"
+                                >
+                                  ⚡ Auto-fill All SEO Fields
+                                </button>
                               </div>
                             </div>
                           </div>
