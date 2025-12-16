@@ -1917,10 +1917,10 @@ const CollegeForm = () => {
                       
                       const uploadFormData = new FormData();
                       uploadFormData.append('file', file);
-                      uploadFormData.append('type', 'campus');
                       
                       try {
-                        const response = await api.post('/upload/image', uploadFormData);
+                        // type is a query param, not form data
+                        const response = await api.post('/upload/image?type=campus', uploadFormData);
                         const newImage = {
                           url: response.data.url,
                           title: '',
@@ -1933,7 +1933,7 @@ const CollegeForm = () => {
                         });
                       } catch (error) {
                         console.error('Upload failed:', error);
-                        alert('Failed to upload image');
+                        alert('Failed to upload image. Please try again.');
                       }
                       e.target.value = '';
                     }}
