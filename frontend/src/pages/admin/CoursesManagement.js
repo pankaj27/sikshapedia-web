@@ -137,15 +137,16 @@ const CoursesManagement = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Degree Type</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stream</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Eligibility</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Exams</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
-                <tr><td colSpan="6" className="px-6 py-4 text-center">Loading...</td></tr>
+                <tr><td colSpan="7" className="px-6 py-4 text-center">Loading...</td></tr>
               ) : filteredItems.length === 0 ? (
-                <tr><td colSpan="6" className="px-6 py-4 text-center">No items found</td></tr>
+                <tr><td colSpan="7" className="px-6 py-4 text-center">No items found</td></tr>
               ) : (
                 filteredItems.map((item) => (
                   <tr key={item.id}>
@@ -153,6 +154,9 @@ const CoursesManagement = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.degree_type}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.duration}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.stream}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title={item.eligibility}>
+                      {item.eligibility || '-'}
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {item.exams_accepted && item.exams_accepted.length > 0 
                         ? item.exams_accepted.slice(0, 2).join(', ') + (item.exams_accepted.length > 2 ? '...' : '')
