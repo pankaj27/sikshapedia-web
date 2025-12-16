@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://edumgmt-1.preview.emergentagent.com/sitemap.xml
+Sitemap: https://eduportal-272.preview.emergentagent.com/sitemap.xml
