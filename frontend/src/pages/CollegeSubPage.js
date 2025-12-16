@@ -251,7 +251,7 @@ const CollegeSubPage = () => {
             <div className="flex gap-1 overflow-x-auto py-2">
               {/* Main Page Link */}
               <Link
-                to={`/colleges/${id}`}
+                to={basePath}
                 className="px-4 py-2 rounded-lg text-sm whitespace-nowrap bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center gap-2"
               >
                 <FiHome size={14} /> Main
