@@ -1165,14 +1165,31 @@ const CollegeForm = () => {
               <FiX className="w-4 h-4" />
             </Button>
             <Button 
-              type="submit"
-              form="institution-form"
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={saving}
+              onClick={() => {
+                setFormData(prev => ({...prev, status: 'draft'}));
+                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+              }}
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
+              {saving && formData.status === 'draft' ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiFileText className="w-4 h-4" />}
+              <span className="ml-1">Save Draft</span>
+            </Button>
+            <Button 
+              type="button"
               disabled={saving}
               size="sm"
+              onClick={() => {
+                setFormData(prev => ({...prev, status: 'published'}));
+                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+              }}
               className="bg-orange-600 hover:bg-orange-700 text-white"
             >
-              {saving ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiSave className="w-4 h-4" />}
-              <span className="ml-1">{saving ? 'Saving...' : 'Save'}</span>
+              {saving && formData.status === 'published' ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiSave className="w-4 h-4" />}
+              <span className="ml-1">{saving ? 'Saving...' : 'Publish'}</span>
             </Button>
           </div>
         </div>
