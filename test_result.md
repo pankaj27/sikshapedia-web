@@ -531,10 +531,22 @@ metadata:
         agent: "testing"
         comment: "✅ PROFESSIONAL REACT ICONS IN FACILITIES DROPDOWN TESTING COMPLETE - ALL REQUIREMENTS VERIFIED SUCCESSFULLY! COMPREHENSIVE TESTING RESULTS: ✅ Navigation: Successfully accessed /admin/colleges/new with admin@admissionbuddy.co credentials. ✅ Dropdown Count: Confirmed exactly 49 options (1 placeholder + 48 facilities) as required. ✅ Format Verification: All dropdown options follow correct 'FacilityName - Category' format WITHOUT emojis (e.g., 'Library - Academic', 'Computer Lab - Academic', 'Sports Complex - Sports'). ✅ Professional React Icons Implementation: Library selection shows FiBook icon, Sports Complex shows FiTarget icon, Medical Facilities shows FiHeart icon, Wi-Fi Campus shows FiWifi icon - all professional Feather Icons from react-icons/fi. ✅ Icon Preview Section: All icons display correctly with medium size (text-2xl class) and blue color (text-blue-600 class) as specified. ✅ Icon Name Display: Icon name field correctly shows React Icon names (FiBook, FiTarget, FiHeart, FiWifi) instead of emojis. ✅ Auto-Fill Functionality: Icon and description fields auto-populate correctly when facility is selected from dropdown. ✅ Professional Appearance: Clean, modern interface with professional React Icons replacing emojis throughout the system. All test scenarios passed perfectly - the facilities dropdown now uses professional React Icons (Feather Icons) with proper styling and functionality as requested!"
 
+  - task: "Updates & News Section with Custom and Tagged News"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/admin/CollegeForm.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE UPDATES & NEWS SECTION TESTING COMPLETE - ALL TEST SCENARIOS PASSED PERFECTLY! RESULTS: ✅ Custom News Entry: Successfully added custom news with date (2024-12-20), title ('New Campus Facility Opening'), and content. All fields editable with white background as expected. ✅ Tagged News from News Page: Dropdown populated with 8 news articles including all expected articles (IIT Delhi AI programs, NEET UG 2025, CAT 2024 Results). Dropdown format correct: 'Title (Category)'. ✅ Auto-Fill Functionality: NEET article selection auto-filled Date (2025-12-16), Title ('NEET UG 2025 Exam Dates Announced by NTA'), and Content with proper summary. All tagged fields have yellow background (rgb(254, 243, 199)) and are read-only as designed. ✅ Mixed Types Coexistence: Successfully tested both custom (1 entry) and tagged (2 entries) news types together. Custom fields remain editable with white background, tagged fields remain read-only with yellow background. ✅ Remove Functionality: Remove buttons working correctly, successfully removed entries (3→2 entries). ✅ API Fix Applied: Fixed backend API limit issue (500→50) to properly populate news dropdown. All requested functionality working perfectly and ready for production use!"
+
 test_plan:
   current_focus:
-    - "Professional React Icons in Facilities Dropdown testing completed successfully"
-    - "All facilities now use Feather Icons instead of emojis"
+    - "Updates & News Section with Custom and Tagged News testing completed successfully"
+    - "All functionality working perfectly with 8 news articles available"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
