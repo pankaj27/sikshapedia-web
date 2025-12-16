@@ -267,7 +267,7 @@ const CollegeForm = () => {
 
   const fetchAvailableNews = async () => {
     try {
-      const response = await api.get('/news?limit=500');
+      const response = await api.get('/news?limit=50');
       setAvailableNews(response.data);
     } catch (error) {
       console.error('Error fetching news:', error);
