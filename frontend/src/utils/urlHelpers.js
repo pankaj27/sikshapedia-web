@@ -30,15 +30,28 @@ export const getInstitutionListingUrl = (type, location = null) => {
 };
 
 // Generate institution detail URL
-// Format: /college/{number}-{slug} e.g., /college/001-mr-college-of-pharmacy
-export const getInstitutionDetailUrl = (type, id, name) => {
+// Format: /college/{number}-{slug}-{city} e.g., /college/001-mr-college-of-pharmacy-barasat
+// If city is already in name, it won't be duplicated
+export const getInstitutionDetailUrl = (type, id, name, city = null) => {
   const typeSlug = type?.toLowerCase() || 'college';
   const nameSlug = generateSlug(name);
+  
   // Extract numeric part from ID if it exists (e.g., "001" from "iit-delhi-001")
   const idMatch = id?.match(/(\d+)$/);
   const numericId = idMatch ? idMatch[1] : id?.replace(/-/g, '') || '';
-  // Format: {number}-{slug} with dash between
-  return `/${typeSlug}/${numericId}-${nameSlug}`;
+  
+  // Check if city needs to be appended
+  let finalSlug = nameSlug;
+  if (city) {
+    const citySlug = generateSlug(city);
+    // Only append city if it's not already in the name slug
+    if (!nameSlug.toLowerCase().includes(citySlug.toLowerCase())) {
+      finalSlug = `${nameSlug}-${citySlug}`;
+    }
+  }
+  
+  // Format: {number}-{slug} or {number}-{slug}-{city}
+  return `/${typeSlug}/${numericId}-${finalSlug}`;
 };
 
 // Generate stream-based listing URL
