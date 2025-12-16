@@ -1717,8 +1717,9 @@ async def upload_image(
         raise HTTPException(status_code=400, detail="Only image files are allowed")
     
     # Validate type parameter
-    if type not in ["logo", "banner", "campus"]:
-        raise HTTPException(status_code=400, detail="Type must be 'logo', 'banner', or 'campus'")
+    valid_types = ["logo", "banner", "campus", "content", "seo"]
+    if type not in valid_types:
+        raise HTTPException(status_code=400, detail=f"Type must be one of: {', '.join(valid_types)}")
     
     # Read file content
     file_content = await file.read()
@@ -1733,7 +1734,14 @@ async def upload_image(
     unique_filename = f"{uuid.uuid4()}.jpg"
     
     # Determine upload directory
-    upload_subdir = "logos" if type == "logo" else ("banners" if type == "banner" else "campus")
+    type_to_dir = {
+        "logo": "logos",
+        "banner": "banners", 
+        "campus": "campus",
+        "content": "content",
+        "seo": "seo"
+    }
+    upload_subdir = type_to_dir.get(type, "content")
     file_path = UPLOAD_DIR / upload_subdir / unique_filename
     
     # Save optimized file
