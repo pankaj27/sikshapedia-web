@@ -266,7 +266,7 @@ Comprehensive testing of the SEO-friendly URL structure implementation on the fr
 - **Button interactions**: All buttons and links are clickable and responsive
 
 ### Test Environment
-- **Frontend URL**: https://edulist-manager.preview.emergentagent.com
+- **Frontend URL**: https://edumanage-cms.preview.emergentagent.com
 - **Browser**: Chromium (Playwright automation)
 - **Viewport**: 1920x1080 (Desktop)
 - **Test Method**: Automated UI testing with Playwright
@@ -526,7 +526,7 @@ Comprehensive testing of the new Profile Edit Page functionality as requested in
 - ✅ **No Console Errors**: No JavaScript errors detected during testing
 
 ### Test Environment
-- **Frontend URL**: https://edulist-manager.preview.emergentagent.com
+- **Frontend URL**: https://edumanage-cms.preview.emergentagent.com
 - **Test User**: testuser@test.com / test123
 - **Browser**: Chromium (Playwright automation)
 - **Viewport**: 1920x1080 (Desktop)
