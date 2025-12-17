@@ -328,7 +328,7 @@ class ApprovalSystemTester:
                 pending_items.append({"type": "news", "id": news_id, "name": "Pending News Article"})
         
         # Get pending approvals
-        success, response, status = self.make_request("GET", "/pending-approvals", token=self.admin_token)
+        success, response, status = self.make_request("GET", "/admin/pending-approvals", token=self.admin_token)
         if success and "items" in response:
             total_pending = response.get("total", 0)
             items = response.get("items", [])
