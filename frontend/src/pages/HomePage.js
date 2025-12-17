@@ -404,7 +404,7 @@ const CollegeDuniaHome = () => {
                   <FiChevronDown className="transform -rotate-90 text-gray-600" />
                 </button>
               </div>
-              <Link to="/colleges">
+              <Link to="/india-colleges">
                 <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All</Button>
               </Link>
             </div>
