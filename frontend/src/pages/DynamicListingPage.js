@@ -73,6 +73,7 @@ const DynamicListingPage = () => {
     examAccepted: '',
     affiliation: '',
     recognition: '',
+    accreditation: '',
     programType: '',
   });
   
