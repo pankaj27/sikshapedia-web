@@ -784,13 +784,16 @@ const DynamicListingPage = () => {
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
 
+  // Toggle filter for Type - now navigates to URL
   const toggleFilter = (type) => {
-    setFilters(prev => ({
-      ...prev,
-      type: prev.type.includes(type)
-        ? prev.type.filter(t => t !== type)
-        : [...prev.type, type]
-    }));
+    // If type is already selected (from URL), remove it by going back to base URL
+    if (activeFilters.collegeType === type) {
+      const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
+      navigate(`/india-${suffix}`);
+      return;
+    }
+    // Otherwise, navigate to the type URL
+    handleFilterSelect('collegeType', type);
   };
 
   const toggleCompare = (collegeId) => {
