@@ -2149,7 +2149,7 @@ async def get_pending_approvals(current_user: User = Depends(get_current_user)):
         })
     
     # Get pending exams
-    exams = await db.exams_detail.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    exams = await db.exams_detailed.find({"status": "pending"}, {"_id": 0}).to_list(100)
     for e in exams:
         pending_items.append({
             "id": e.get("id"),
