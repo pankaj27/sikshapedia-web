@@ -5746,7 +5746,7 @@ const CollegeForm = () => {
                                         }}
                                         className="rounded"
                                       />
-                                      <span>Show "Write Review" button</span>
+                                      <span>Show &quot;Write Review&quot; button</span>
                                     </label>
                                   </div>
                                 )}
