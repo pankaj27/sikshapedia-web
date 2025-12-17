@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FiMapPin, FiFilter, FiSearch, FiChevronDown, FiStar, FiBookmark, FiArrowRight, FiX } from 'react-icons/fi';
+import { FiMapPin, FiFilter, FiSearch, FiChevronDown, FiChevronUp, FiStar, FiBookmark, FiArrowRight, FiX, FiEdit3, FiGrid, FiTarget, FiUser, FiCheckCircle, FiAward } from 'react-icons/fi';
 import api from '../api/axios';
 import { parseListingUrl, isState, isCity, INDIAN_STATES, INDIAN_CITIES, getInstitutionDetailUrl, getInstitutionListingUrl } from '../utils/urlHelpers';
 import { generateSlug } from '../utils/slugify';
+import { Button } from '../components/ui/button';
+import AdBanner from '../components/AdBanner';
 
 // Mapping of URL slugs to display names
 const STREAM_DISPLAY_NAMES = {
@@ -48,18 +50,29 @@ const toDisplayName = (slug) => {
 
 const DynamicListingPage = () => {
   const location = useLocation();
-  const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [institutions, setInstitutions] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [showContent, setShowContent] = useState(false);
+  const [compareList, setCompareList] = useState([]);
+  const [sortBy, setSortBy] = useState('ranking');
+  const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
+  
   const [filters, setFilters] = useState({
     search: '',
-    type: '',
+    type: [],
+    city: '',
+    state: '',
     minFees: '',
-    maxFees: ''
+    maxFees: '',
+    stream: '',
+    subStream: '',
+    degree: '',
+    specialization: '',
+    programType: '',
   });
-  const [showFilters, setShowFilters] = useState(false);
+  
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
   
   // Parse URL to determine what to show
@@ -72,32 +85,30 @@ const DynamicListingPage = () => {
         ? toDisplayName(urlInfo.location)
         : 'India';
       
-      // Colleges and Universities are combined under "colleges" URL
-      // Schools have separate "schools" URL
       const isSchools = urlInfo.institutionType === 'schools';
-      const typeName = isSchools ? 'Schools' : 'Colleges & Universities';
+      const typeName = isSchools ? 'Schools' : 'Colleges';
       
       return {
-        title: `Top ${typeName} in ${locationName}`,
+        title: `Top ${typeName} in ${locationName} 2025`,
         description: `Explore top ${typeName.toLowerCase()} in ${locationName}. Find courses, fees, placements, rankings and more.`,
-        // For "colleges" URL, we fetch both College and University types
-        // For "schools" URL, we only fetch School type
         institutionTypes: isSchools ? ['School'] : ['College', 'University'],
         location: urlInfo.location,
-        locationType: urlInfo.location ? (isState(urlInfo.location) ? 'state' : 'city') : null
+        locationType: urlInfo.location ? (isState(urlInfo.location) ? 'state' : 'city') : null,
+        isSchools
       };
     }
     
     if (urlInfo.type === 'institution-location-listing') {
       const locationName = toDisplayName(urlInfo.location);
       const isSchools = urlInfo.institutionType === 'school';
-      const typeName = isSchools ? 'Schools' : 'Colleges & Universities';
+      const typeName = isSchools ? 'Schools' : 'Colleges';
       return {
-        title: `Top ${typeName} in ${locationName}`,
+        title: `Top ${typeName} in ${locationName} 2025`,
         description: `Explore top ${typeName.toLowerCase()} in ${locationName}. Find admissions, fees, and more.`,
         institutionTypes: isSchools ? ['School'] : ['College', 'University'],
         location: urlInfo.location,
-        locationType: isState(urlInfo.location) ? 'state' : 'city'
+        locationType: isState(urlInfo.location) ? 'state' : 'city',
+        isSchools
       };
     }
     
@@ -110,12 +121,10 @@ const DynamicListingPage = () => {
       if (subStreamName && !isState(urlInfo.subStream) && !isCity(urlInfo.subStream)) {
         title = `Top ${streamName} - ${subStreamName} Colleges`;
       } else if (subStreamName) {
-        // subStream is actually a location
         title = `Top ${streamName} Colleges in ${subStreamName}`;
       }
       if (locationName) title = `Top ${streamName}${subStreamName && !isState(urlInfo.subStream) && !isCity(urlInfo.subStream) ? ` - ${subStreamName}` : ''} Colleges in ${locationName}`;
       
-      // Determine if second param is location or sub-stream
       let actualSubStream = urlInfo.subStream;
       let actualLocation = urlInfo.location;
       
@@ -125,39 +134,61 @@ const DynamicListingPage = () => {
       }
       
       return {
-        title,
+        title: `${title} 2025`,
         description: `Explore top colleges for ${streamName}${actualSubStream ? ` - ${toDisplayName(actualSubStream)}` : ''}${actualLocation ? ` in ${toDisplayName(actualLocation)}` : ''}.`,
         stream: urlInfo.stream,
         subStream: actualSubStream,
         location: actualLocation,
-        locationType: actualLocation ? (isState(actualLocation) ? 'state' : 'city') : null
+        locationType: actualLocation ? (isState(actualLocation) ? 'state' : 'city') : null,
+        isSchools: false
       };
     }
     
     return {
-      title: 'Institutions',
-      description: 'Explore top institutions in India'
+      title: 'Top Colleges in India 2025',
+      description: 'Explore top institutions in India',
+      isSchools: false
     };
   }, [urlInfo]);
   
+  // Filter options
+  const filterOptions = {
+    subStream: ['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce'],
+    stream: ['Engineering & Technology', 'Medical & Health Sciences', 'Management & Business', 'Law & Legal Studies', 'Arts & Humanities', 'Science'],
+    state: ['Maharashtra', 'Tamil Nadu', 'Delhi', 'Karnataka', 'Uttar Pradesh', 'West Bengal', 'Rajasthan', 'Gujarat'],
+    city: ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad', 'Kolkata', 'Ahmedabad'],
+    degree: ['B.Tech', 'MBA', 'MBBS', 'B.Com', 'B.Sc', 'BA', 'BBA', 'BCA', 'M.Tech', 'M.Com'],
+    specialization: ['Computer Science', 'Mechanical', 'Civil', 'Electronics', 'Finance', 'Marketing', 'HR', 'Operations'],
+    programType: ['Full Time', 'Part Time', 'Distance Learning', 'Online'],
+    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous']
+  };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (activeFilterDropdown && !event.target.closest('.relative')) {
+        setActiveFilterDropdown(null);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeFilterDropdown]);
+
   useEffect(() => {
     fetchInstitutions();
-  }, [location.pathname, pagination.page, filters.search]);
+  }, [location.pathname, pagination.page, filters.search, sortBy]);
   
   const fetchInstitutions = async () => {
     setLoading(true);
     try {
-      // Build common query params
       const buildQueryParams = (institutionType = null) => {
         let queryParams = new URLSearchParams();
-        queryParams.append('limit', 100); // Fetch more to combine
+        queryParams.append('limit', 100);
         
-        // Add institution type filter if specified
         if (institutionType) {
           queryParams.append('institution_type', institutionType);
         }
         
-        // Add location filter (state or city)
         if (pageInfo.location) {
           const locationDisplay = toDisplayName(pageInfo.location);
           if (pageInfo.locationType === 'state') {
@@ -167,32 +198,20 @@ const DynamicListingPage = () => {
           }
         }
         
-        // Add stream filter
         if (pageInfo.stream) {
           queryParams.append('stream', toDisplayName(pageInfo.stream));
         }
         
-        // Add sub-stream filter
         if (pageInfo.subStream) {
           queryParams.append('sub_stream', toDisplayName(pageInfo.subStream));
         }
         
-        // Add search filter
         if (filters.search) {
           queryParams.append('search', filters.search);
         }
         
-        // Add type filter (Government/Private)
-        if (filters.type) {
-          queryParams.append('type', filters.type);
-        }
-        
-        // Add fee filters
-        if (filters.minFees) {
-          queryParams.append('min_fees', filters.minFees);
-        }
-        if (filters.maxFees) {
-          queryParams.append('max_fees', filters.maxFees);
+        if (filters.type.length > 0) {
+          queryParams.append('type', filters.type[0]);
         }
         
         return queryParams;
@@ -200,7 +219,6 @@ const DynamicListingPage = () => {
       
       let allData = [];
       
-      // If we have multiple institution types (colleges + universities), fetch both
       if (pageInfo.institutionTypes && pageInfo.institutionTypes.length > 0) {
         const fetchPromises = pageInfo.institutionTypes.map(async (type) => {
           const queryParams = buildQueryParams(type);
@@ -211,16 +229,22 @@ const DynamicListingPage = () => {
         const results = await Promise.all(fetchPromises);
         allData = results.flat();
       } else {
-        // Fallback to fetching without type filter
         const queryParams = buildQueryParams();
         const response = await api.get(`/colleges?${queryParams.toString()}`);
         allData = response.data || [];
       }
       
-      // Sort by rating or name
-      allData.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      // Sort
+      if (sortBy === 'rating') {
+        allData.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      } else if (sortBy === 'fees-low') {
+        allData.sort((a, b) => (a.average_fees || 0) - (b.average_fees || 0));
+      } else if (sortBy === 'fees-high') {
+        allData.sort((a, b) => (b.average_fees || 0) - (a.average_fees || 0));
+      } else {
+        allData.sort((a, b) => (a.nirf_ranking || 999) - (b.nirf_ranking || 999));
+      }
       
-      // Apply pagination
       const start = (pagination.page - 1) * pagination.limit;
       const paginatedData = allData.slice(start, start + pagination.limit);
       
@@ -235,11 +259,64 @@ const DynamicListingPage = () => {
     }
   };
   
-  // Handle search with debounce
-  const handleSearchChange = (e) => {
-    setFilters(prev => ({ ...prev, search: e.target.value }));
-    setPagination(prev => ({ ...prev, page: 1 }));
+  // Handle filter selection - Navigate to SEO-friendly URLs
+  const handleFilterSelect = (filterType, value) => {
+    setActiveFilterDropdown(null);
+    
+    if (filterType === 'state' || filterType === 'city') {
+      const locationSlug = generateSlug(value);
+      navigate(`/${locationSlug}-colleges`);
+      return;
+    }
+    
+    if (filterType === 'stream') {
+      const streamSlug = generateSlug(value);
+      navigate(`/${streamSlug}`);
+      return;
+    }
+    
+    setFilters(prev => ({ ...prev, [filterType]: value }));
   };
+
+  const toggleFilter = (type) => {
+    setFilters(prev => ({
+      ...prev,
+      type: prev.type.includes(type)
+        ? prev.type.filter(t => t !== type)
+        : [...prev.type, type]
+    }));
+  };
+
+  const toggleCompare = (collegeId) => {
+    setCompareList(prev => 
+      prev.includes(collegeId) 
+        ? prev.filter(id => id !== collegeId)
+        : prev.length < 4 ? [...prev, collegeId] : prev
+    );
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      search: '',
+      type: [],
+      city: '',
+      state: '',
+      minFees: '',
+      maxFees: '',
+      stream: '',
+      subStream: '',
+      degree: '',
+      specialization: '',
+      programType: '',
+    });
+    setActiveFilterDropdown(null);
+  };
+
+  const removeFilter = (filterType) => {
+    setFilters(prev => ({ ...prev, [filterType]: '' }));
+  };
+
+  const totalPages = Math.ceil(totalCount / pagination.limit);
   
   // Breadcrumb generation
   const breadcrumbs = useMemo(() => {
@@ -250,388 +327,644 @@ const DynamicListingPage = () => {
       const typeName = isSchools ? 'Schools' : 'Colleges';
       
       if (urlInfo.location) {
-        crumbs.push({ 
-          label: `India ${typeName}`, 
-          path: `/india-${urlInfo.institutionType}` 
-        });
-        crumbs.push({ 
-          label: `${toDisplayName(urlInfo.location)} ${typeName}`, 
-          path: location.pathname 
-        });
+        crumbs.push({ label: `All ${typeName} in India`, path: `/india-${urlInfo.institutionType}` });
+        crumbs.push({ label: `${toDisplayName(urlInfo.location)} ${typeName}`, path: location.pathname });
       } else {
-        crumbs.push({ label: pageInfo.title, path: location.pathname });
+        crumbs.push({ label: `All ${typeName} in India`, path: location.pathname });
       }
     } else if (urlInfo.type === 'stream-listing') {
-      crumbs.push({ label: 'Colleges', path: '/india-colleges' });
+      crumbs.push({ label: 'All Colleges in India', path: '/india-colleges' });
       if (pageInfo.stream) {
         crumbs.push({ label: `${toDisplayName(pageInfo.stream)} Colleges`, path: `/${pageInfo.stream}` });
       }
-      if (pageInfo.subStream && !isState(pageInfo.subStream) && !isCity(pageInfo.subStream)) {
-        crumbs.push({ label: toDisplayName(pageInfo.subStream), path: `/${pageInfo.stream}/${pageInfo.subStream}` });
-      }
-      if (pageInfo.location) {
-        crumbs.push({ label: toDisplayName(pageInfo.location), path: location.pathname });
-      }
-    } else if (urlInfo.type === 'institution-location-listing') {
-      crumbs.push({ label: pageInfo.title, path: location.pathname });
     }
     
     return crumbs;
   }, [urlInfo, pageInfo, location.pathname]);
-  
-  // Quick location links for sidebar
-  const quickLocationLinks = useMemo(() => {
-    const type = urlInfo.institutionType || 'colleges';
-    return [
-      { label: 'Delhi', path: getInstitutionListingUrl(type.replace(/s$/, ''), 'Delhi') },
-      { label: 'Mumbai', path: getInstitutionListingUrl(type.replace(/s$/, ''), 'Mumbai') },
-      { label: 'Bangalore', path: getInstitutionListingUrl(type.replace(/s$/, ''), 'Bangalore') },
-      { label: 'Chennai', path: getInstitutionListingUrl(type.replace(/s$/, ''), 'Chennai') },
-      { label: 'Pune', path: getInstitutionListingUrl(type.replace(/s$/, ''), 'Pune') },
-      { label: 'Hyderabad', path: getInstitutionListingUrl(type.replace(/s$/, ''), 'Hyderabad') },
-    ];
-  }, [urlInfo.institutionType]);
-  
+
   return (
-    <>
+    <div className="min-h-screen bg-gray-50 pt-2">
       <Helmet>
         <title>{pageInfo.title} | AdmissionBuddy</title>
         <meta name="description" content={pageInfo.description} />
         <link rel="canonical" href={`https://admissionbuddy.co${location.pathname}`} />
       </Helmet>
       
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-orange-600 to-orange-500 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Breadcrumbs */}
-          <nav className="flex items-center space-x-2 text-sm mb-4 text-orange-100 flex-wrap">
+      {/* Top Ad Banner */}
+      <AdBanner pageName="colleges" position="top" />
+      
+      {/* BREADCRUMB NAVIGATION */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-6 py-1.5">
+          <div className="flex items-center gap-1.5 text-xs text-gray-600 flex-wrap">
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={idx}>
                 {idx > 0 && <span>/</span>}
                 {idx === breadcrumbs.length - 1 ? (
-                  <span className="text-white">{crumb.label}</span>
+                  <span className="text-gray-900 font-medium">{crumb.label}</span>
                 ) : (
-                  <Link to={crumb.path} className="hover:text-white">{crumb.label}</Link>
+                  <Link to={crumb.path} className="hover:text-orange-600 transition-colors">{crumb.label}</Link>
                 )}
               </React.Fragment>
             ))}
-          </nav>
-          
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">{pageInfo.title}</h1>
-          <p className="text-orange-100 max-w-2xl">{pageInfo.description}</p>
-          
-          {/* Quick Stats */}
-          <div className="flex items-center gap-4 mt-4 text-sm flex-wrap">
-            <span className="bg-white/20 px-3 py-1 rounded-full">
-              {totalCount}+ Institutions Found
-            </span>
-            {pageInfo.stream && (
-              <span className="bg-white/20 px-3 py-1 rounded-full">
-                Stream: {toDisplayName(pageInfo.stream)}
-              </span>
-            )}
-            {pageInfo.location && (
-              <span className="bg-white/20 px-3 py-1 rounded-full">
-                Location: {toDisplayName(pageInfo.location)}
-              </span>
-            )}
           </div>
         </div>
       </div>
-      
-      {/* Filters Bar */}
-      <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex flex-wrap gap-3 items-center">
-            <div className="relative flex-1 min-w-[200px] max-w-md">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search institutions..."
-                value={filters.search}
-                onChange={handleSearchChange}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-              />
+
+      {/* PAGE HEADING */}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-6 py-1.5">
+          <h1 className="text-xl font-bold text-gray-900">{pageInfo.title}</h1>
+        </div>
+      </div>
+
+      {/* ADVERTISEMENT BANNERS */}
+      <div className="bg-white border-b py-2">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <Link to="/write-review" className="block">
+              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiEdit3 className="text-2xl mb-1" />
+                <h3 className="font-bold text-sm mb-0.5">Write a Review</h3>
+                <p className="text-[10px]">Get Upto ₹300*</p>
+              </div>
+            </Link>
+            <Link to="/course-finder" className="block">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiGrid className="text-2xl mb-1" />
+                <h3 className="font-bold text-sm mb-0.5">Course Finder</h3>
+                <p className="text-[10px]">Find Your Perfect Course</p>
+              </div>
+            </Link>
+            <Link to="/college-predictor" className="block">
+              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
+                <FiTarget className="text-2xl mb-1" />
+                <h3 className="font-bold text-sm mb-0.5">College Predictor</h3>
+                <p className="text-[10px]">Know Your Admission Chances</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* AUTHOR INFO */}
+      <div className="bg-white py-1 border-b">
+        <div className="container mx-auto px-6">
+          <div className="flex items-center gap-1.5">
+            <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-200">
+              <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
+                <FiUser size={12} />
+              </div>
             </div>
-            
-            <button 
-              onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors ${showFilters ? 'bg-orange-50 border-orange-300 text-orange-600' : 'hover:bg-gray-50'}`}
-            >
-              <FiFilter size={16} />
-              <span>Filters</span>
-              <FiChevronDown size={16} className={`transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {/* Quick Links */}
-            <div className="hidden md:flex items-center gap-2 text-sm">
-              {quickLocationLinks.slice(0, 4).map((link, idx) => (
-                <Link 
-                  key={idx}
-                  to={link.path}
-                  className="px-3 py-1 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div>
+              <Link to="/author/content-team" className="text-[10px] font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
+              <p className="text-[8px] text-gray-600">Content Curator | Updated 3+ months ago</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* CONTENT SECTIONS */}
+      <div className="bg-white py-2">
+        <div className="container mx-auto px-6">
           
-          {/* Expanded Filters */}
-          {showFilters && (
-            <div className="mt-3 pt-3 border-t grid grid-cols-2 md:grid-cols-4 gap-3">
-              <select
-                value={filters.type}
-                onChange={(e) => {
-                  setFilters(prev => ({ ...prev, type: e.target.value }));
-                  setPagination(prev => ({ ...prev, page: 1 }));
-                }}
-                className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="">All Types</option>
-                <option value="Government">Government</option>
-                <option value="Private">Private</option>
-                <option value="Deemed">Deemed</option>
-              </select>
-              
-              <input
-                type="number"
-                placeholder="Min Fees (₹)"
-                value={filters.minFees}
-                onChange={(e) => setFilters(prev => ({ ...prev, minFees: e.target.value }))}
-                className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
-              />
-              
-              <input
-                type="number"
-                placeholder="Max Fees (₹)"
-                value={filters.maxFees}
-                onChange={(e) => setFilters(prev => ({ ...prev, maxFees: e.target.value }))}
-                className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
-              />
-              
+          {/* INTRO CONTENT */}
+          <section className="mb-2">
+            <div className="text-gray-700 text-sm leading-relaxed">
+              <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
+                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
+                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
+                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
+                while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
+              </p>
+            </div>
+          </section>
+
+          {/* Read More Button */}
+          {!showContent && (
+            <div className="text-center mb-2">
               <button
-                onClick={() => {
-                  fetchInstitutions();
-                  setShowFilters(false);
-                }}
-                className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                onClick={() => setShowContent(true)}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-full transition-colors"
               >
-                Apply Filters
+                <span>Read More</span>
+                <FiChevronDown size={14} />
               </button>
             </div>
           )}
+
+          {/* Collapsible Content */}
+          {showContent && (
+          <div className="space-y-8">
+          
+          {/* BULLET POINTS */}
+          <section>
+            <div className="text-gray-700 text-sm leading-relaxed">
+              <ul className="list-disc list-inside space-y-1 text-sm">
+                <li>Some of the top colleges in India are <strong>IIT Bombay, IIT Delhi, IIT Madras, IIT Kanpur and IIT Kharagpur</strong>.</li>
+                <li><strong>IIT Bombay</strong> is the best college in India, as per the Collegedunia and IIRF rankings.</li>
+                <li><strong>IIT BHU has the best ROI of 239.52%</strong>.</li>
+              </ul>
+            </div>
+          </section>
+
+          {/* TABLE OF CONTENTS */}
+          <section>
+            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+              <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {[
+                  { num: '01', title: 'Colleges in India Highlights', id: 'highlights' },
+                  { num: '02', title: 'Top Colleges in India 2025', id: 'top-colleges' },
+                  { num: '03', title: 'Govt Colleges in India 2025', id: 'govt-colleges' },
+                  { num: '04', title: 'Private Colleges in India 2025', id: 'private-colleges' },
+                  { num: '05', title: 'Colleges in India ROI Wise 2025', id: 'roi-colleges' },
+                  { num: '06', title: 'Colleges with the Lowest Fees', id: 'lowest-fees' },
+                  { num: '07', title: 'Entrance Exams', id: 'exams' },
+                  { num: '08', title: 'FAQs', id: 'faqs' },
+                ].map((item) => (
+                  <a 
+                    key={item.id}
+                    href={`#${item.id}`} 
+                    className="text-sm text-blue-600 hover:underline flex items-start gap-2"
+                  >
+                    <span className="font-semibold">{item.num}.</span>
+                    <span>{item.title}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+          
+          {/* HIGHLIGHTS TABLE */}
+          <section id="highlights">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Colleges in India Highlights</h2>
+            <div className="bg-white rounded-lg shadow-md overflow-hidden border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-sm font-bold text-gray-700 border-b">Details</th>
+                    <th className="px-4 py-2 text-left text-sm font-bold text-gray-700 border-b">Statistics</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: 'Number of Colleges in India', value: '4,359' },
+                    { label: 'Number of Govt Colleges in India', value: '676' },
+                    { label: 'Number of Private Colleges in India', value: '3,623' },
+                    { label: 'Top College', value: 'IIT Bombay' },
+                    { label: 'Top Specialisations', value: 'Computer Science, Mechanical, IT, Civil, Electronics' },
+                    { label: 'Total Fees Range', value: '₹4,400 - ₹37.8 Lakh' },
+                    { label: 'Median Package', value: '₹14.35 LPA - ₹21.60 LPA' },
+                    { label: 'Accepted Entrance Exam', value: 'JEE Main, NEET, CAT, GATE' },
+                  ].map((row, idx) => (
+                    <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <td className="px-4 py-2 text-sm font-semibold text-gray-900 border-b">{row.label}</td>
+                      <td className="px-4 py-2 text-sm text-gray-700 border-b">{row.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* TOP COLLEGES TABLE */}
+          <section id="top-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top Colleges in India 2025</h2>
+            <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Colleges</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Placement</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'IIT Bombay', fees: '₹8.75 Lakh', placement: '₹19.61 LPA' },
+                    { name: 'IIT Delhi', fees: '₹8.66 Lakh', placement: '₹19.08 LPA' },
+                    { name: 'IIT Madras', fees: '₹9.39 Lakh', placement: '₹17.50 LPA' },
+                    { name: 'IIT Kanpur', fees: '₹8.6 Lakh', placement: '₹19.40 LPA' },
+                    { name: 'IIT Kharagpur', fees: '₹10.29 Lakh', placement: '₹19.76 LPA' },
+                  ].map((college, idx) => (
+                    <tr key={idx} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{college.name}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{college.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{college.placement}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Government Colleges */}
+          <section id="govt-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Govt Colleges in India 2025</h2>
+            <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College Name</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Location</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'IIT Bombay', location: 'Mumbai', fees: '₹8.75L' },
+                    { name: 'IIT Delhi', location: 'Delhi', fees: '₹8.66L' },
+                    { name: 'NIT Trichy', location: 'Trichy', fees: '₹5.6L' },
+                  ].map((college, idx) => (
+                    <tr key={idx} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{college.name}</td>
+                      <td className="px-3 py-2 text-sm">{college.location}</td>
+                      <td className="px-3 py-2 text-sm font-semibold">{college.fees}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Private Colleges */}
+          <section id="private-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Private Colleges in India 2025</h2>
+            <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">College Name</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Location</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 border-b">Fees</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'BITS Pilani', location: 'Pilani', fees: '₹23.9L' },
+                    { name: 'VIT Vellore', location: 'Vellore', fees: '₹7.83L' },
+                    { name: 'Manipal Institute', location: 'Manipal', fees: '₹18.2L' },
+                  ].map((college, idx) => (
+                    <tr key={idx} className="border-b hover:bg-gray-50">
+                      <td className="px-3 py-2 text-sm font-medium text-blue-600">{college.name}</td>
+                      <td className="px-3 py-2 text-sm">{college.location}</td>
+                      <td className="px-3 py-2 text-sm font-semibold">{college.fees}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* ROI Section */}
+          <section id="roi-colleges">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India ROI Wise 2025</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { rank: 1, name: 'IIT BHU', roi: '239.52%' },
+                { rank: 2, name: 'NIT Trichy', roi: '256.25%' },
+                { rank: 3, name: 'IIT Bombay', roi: '224.11%' },
+              ].map((college) => (
+                <div key={college.rank} className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-4 border">
+                  <span className="text-xs text-gray-500">Rank #{college.rank}</span>
+                  <h3 className="font-bold text-base text-gray-900">{college.name}</h3>
+                  <p className="text-2xl font-bold text-green-600">{college.roi}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Lowest Fees */}
+          <section id="lowest-fees">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges with the Lowest Fees</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { name: 'AU Allahabad', fees: '₹4,400', type: 'Government' },
+                { name: 'Jamia Millia', fees: '₹14,600', type: 'Government' },
+                { name: 'BHU Varanasi', fees: '₹48,000', type: 'Government' },
+              ].map((college, idx) => (
+                <div key={idx} className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-4 border">
+                  <h3 className="font-bold text-base text-gray-900 mb-1">{college.name}</h3>
+                  <p className="text-2xl font-bold text-green-600 mb-1">{college.fees}</p>
+                  <p className="text-xs text-gray-600">{college.type}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Entrance Exams */}
+          <section id="exams">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Entrance Exams</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['JEE Main', 'NEET', 'CAT', 'GATE', 'CLAT', 'CMAT', 'XAT', 'MAT'].map((exam) => (
+                <div key={exam} className="bg-green-50 rounded-lg p-3 border text-center">
+                  <p className="font-bold text-sm text-gray-900">{exam}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FAQs */}
+          <section id="faqs">
+            <h2 className="text-xl font-bold text-gray-900 mb-3">Colleges in India FAQs</h2>
+            <div className="space-y-3">
+              {[
+                { q: 'How many colleges are there in India?', a: 'There are approximately 4,359 colleges in India, including 676 government and 3,623 private colleges.' },
+                { q: 'What is the top college in India?', a: 'IIT Bombay is ranked as the top college in India as per various rankings.' },
+                { q: 'What is the fee range for colleges in India?', a: 'The fee range varies from ₹10,000 per year in some government colleges to ₹40 Lakh in top private institutions.' },
+              ].map((faq, idx) => (
+                <div key={idx} className="bg-gray-50 rounded-lg p-3 border">
+                  <h3 className="font-bold text-base text-gray-900 mb-1">{faq.q}</h3>
+                  <p className="text-sm text-gray-700">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Read Less Button */}
+          <div className="text-center mt-4">
+            <button
+              onClick={() => setShowContent(false)}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-full transition-colors"
+            >
+              <span>Read Less</span>
+              <FiChevronUp size={14} />
+            </button>
+          </div>
+          </div>
+          )}
         </div>
       </div>
-      
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
-          {/* Results */}
-          <div className="flex-1">
+
+      {/* COLLEGE LISTING SECTION */}
+      <div className="bg-gray-50 py-4 border-t-4 border-orange-600">
+        <div className="container mx-auto px-6">
+          {/* HORIZONTAL FILTER BAR */}
+          <div className="bg-white rounded-lg shadow-sm p-2.5 mb-4 relative">
+            {/* Primary Filters Row */}
+            <div className="flex items-center gap-1.5 flex-wrap mb-2">
+              <button 
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <FiFilter size={12} />
+                All Filter
+              </button>
+              
+              {/* Sub Stream Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'subStream' ? null : 'subStream')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.subStream ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.subStream || 'Sub Stream'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'subStream' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.subStream.map((option) => (
+                      <button key={option} onClick={() => handleFilterSelect('subStream', option)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">{option}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* State Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'state' ? null : 'state')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.state ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.state || 'State'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'state' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.state.map((option) => (
+                      <button key={option} onClick={() => handleFilterSelect('state', option)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">{option}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* City Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'city' ? null : 'city')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.city ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.city || 'City'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'city' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.city.map((option) => (
+                      <button key={option} onClick={() => handleFilterSelect('city', option)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">{option}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* College Type Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'collegeType' ? null : 'collegeType')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.type.length > 0 ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.type.length > 0 ? filters.type.join(', ') : 'Type Of College'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'collegeType' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.collegeType.map((option) => (
+                      <button key={option} onClick={() => toggleFilter(option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 ${filters.type.includes(option) ? 'text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.type.includes(option) && '✓'}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Dotted Separator */}
+            <div className="border-t border-dashed border-gray-300 my-2"></div>
+            
+            {/* Applied Filters Row */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {filters.type.map(type => (
+                <span key={type} className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {type}
+                  <button onClick={() => toggleFilter(type)} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+                </span>
+              ))}
+              
+              {filters.subStream && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  {filters.subStream}
+                  <button onClick={() => removeFilter('subStream')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+                </span>
+              )}
+              
+              {(filters.type.length > 0 || filters.subStream) && (
+                <button onClick={clearFilters} className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1">Clear All</button>
+              )}
+            </div>
+          </div>
+          
+          {/* MAIN LISTING */}
+          <main>
+            {/* Top Controls Bar */}
+            <div className="mb-4 flex flex-wrap justify-between items-center gap-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                {loading ? 'Loading...' : `${totalCount} Colleges Found`}
+              </h3>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm bg-white"
+              >
+                <option value="ranking">Sort by: Ranking</option>
+                <option value="fees-low">Fees: Low to High</option>
+                <option value="fees-high">Fees: High to Low</option>
+                <option value="rating">Rating: High to Low</option>
+              </select>
+            </div>
+
+            {/* Compare Bar */}
+            {compareList.length > 0 && (
+              <div className="mb-4 bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-gray-900">{compareList.length} colleges selected</span>
+                    <Button size="sm" onClick={() => window.open(`/compare?ids=${compareList.join(',')}`, '_blank')} className="bg-orange-600 hover:bg-orange-700 text-white">Compare Now</Button>
+                  </div>
+                  <button onClick={() => setCompareList([])} className="text-sm text-gray-600 hover:text-gray-900">Clear All</button>
+                </div>
+              </div>
+            )}
+
+            {/* COLLEGE LIST */}
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+              <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading colleges...</p>
               </div>
             ) : institutions.length === 0 ? (
-              <div className="text-center py-20 bg-gray-50 rounded-xl">
-                <div className="text-6xl mb-4">🎓</div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">No institutions found</h3>
-                <p className="text-gray-500 mb-4">Try adjusting your filters or search criteria</p>
-                <Link to="/india-colleges" className="text-orange-600 hover:underline">
-                  Browse all colleges →
-                </Link>
+              <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                <FiSearch className="mx-auto text-gray-400 mb-4" size={48} />
+                <p className="text-gray-600 text-lg mb-2">No colleges found</p>
+                <p className="text-gray-500 text-sm mb-4">Try adjusting your filters</p>
+                <Button onClick={clearFilters} variant="outline">Clear All Filters</Button>
               </div>
             ) : (
-              <div className="grid gap-4">
+              <div className="space-y-4">
                 {institutions.map((inst, idx) => (
-                  <Link 
-                    key={inst.id || idx}
-                    to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                    className="bg-white rounded-xl border hover:shadow-lg transition-all duration-200 p-4 flex gap-4 group"
-                  >
-                    {/* Logo */}
-                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                      {inst.logo_url ? (
-                        <img src={inst.logo_url} alt={inst.name} className="w-full h-full object-contain" />
-                      ) : (
-                        <span className="text-2xl font-bold text-gray-400">
-                          {inst.name?.charAt(0)}
-                        </span>
-                      )}
-                    </div>
-                    
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <h3 className="font-semibold text-lg text-gray-900 group-hover:text-orange-600 line-clamp-1 transition-colors">
-                            {inst.name}
-                          </h3>
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mt-1 flex-wrap">
-                            <span className="flex items-center gap-1">
-                              <FiMapPin size={14} />
-                              {inst.location?.city}{inst.location?.state ? `, ${inst.location.state}` : ''}
-                            </span>
-                            {inst.type && (
-                              <span className="px-2 py-0.5 bg-gray-100 rounded text-xs">
-                                {inst.type}
+                  <div key={inst.id || idx} className="bg-white rounded-lg shadow-md border border-gray-200 p-4 hover:shadow-lg transition-shadow">
+                    <div className="flex gap-4">
+                      {/* Logo */}
+                      <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        {inst.logo_url ? (
+                          <img src={inst.logo_url} alt={inst.name} className="w-full h-full object-contain" />
+                        ) : (
+                          <span className="text-2xl font-bold text-gray-400">{inst.name?.charAt(0)}</span>
+                        )}
+                      </div>
+                      
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <Link 
+                              to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
+                              className="font-semibold text-lg text-gray-900 hover:text-orange-600 line-clamp-1 transition-colors"
+                            >
+                              {inst.name}
+                            </Link>
+                            <div className="flex items-center gap-2 text-sm text-gray-500 mt-1 flex-wrap">
+                              <span className="flex items-center gap-1">
+                                <FiMapPin size={14} />
+                                {inst.location?.city}{inst.location?.state ? `, ${inst.location.state}` : ''}
                               </span>
-                            )}
-                            {inst.institution_type && (
-                              <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">
-                                {inst.institution_type}
-                              </span>
-                            )}
+                              {inst.type && <span className="px-2 py-0.5 bg-gray-100 rounded text-xs">{inst.type}</span>}
+                              {inst.institution_type && <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">{inst.institution_type}</span>}
+                            </div>
                           </div>
+                          
+                          {inst.rating > 0 && (
+                            <div className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
+                              <FiStar size={14} className="fill-current" />
+                              <span className="font-semibold">{inst.rating.toFixed(1)}</span>
+                            </div>
+                          )}
                         </div>
                         
-                        {/* Rating */}
-                        {inst.rating > 0 && (
-                          <div className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
-                            <FiStar size={14} className="fill-current" />
-                            <span className="font-semibold">{inst.rating.toFixed(1)}</span>
-                          </div>
-                        )}
+                        {/* Quick Info */}
+                        <div className="flex flex-wrap gap-4 mt-3 text-sm">
+                          {inst.nirf_ranking && <span className="text-gray-600"><strong>NIRF:</strong> #{inst.nirf_ranking}</span>}
+                          {inst.average_fees > 0 && <span className="text-gray-600"><strong>Fees:</strong> ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}/yr</span>}
+                        </div>
+                        
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {inst.is_verified && <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-xs rounded-full">✓ Verified</span>}
+                          {inst.is_featured && <span className="px-2 py-0.5 bg-orange-50 text-orange-600 text-xs rounded-full">★ Featured</span>}
+                          {inst.is_admission_open && <span className="px-2 py-0.5 bg-green-50 text-green-600 text-xs rounded-full">Admissions Open</span>}
+                        </div>
                       </div>
                       
-                      {/* Quick Info */}
-                      <div className="flex flex-wrap gap-4 mt-3 text-sm">
-                        {inst.nirf_ranking && (
-                          <span className="text-gray-600">
-                            <strong>NIRF:</strong> #{inst.nirf_ranking}
-                          </span>
-                        )}
-                        {inst.average_fees > 0 && (
-                          <span className="text-gray-600">
-                            <strong>Fees:</strong> ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}/yr
-                          </span>
-                        )}
-                        {inst.courses?.length > 0 && (
-                          <span className="text-gray-600">
-                            <strong>Courses:</strong> {Array.isArray(inst.courses) ? inst.courses.length : 0}
-                          </span>
-                        )}
-                        {inst.total_students > 0 && (
-                          <span className="text-gray-600">
-                            <strong>Students:</strong> {inst.total_students.toLocaleString()}
-                          </span>
-                        )}
-                      </div>
-                      
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-2 mt-3">
-                        {inst.is_verified && (
-                          <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-xs rounded-full">✓ Verified</span>
-                        )}
-                        {inst.is_featured && (
-                          <span className="px-2 py-0.5 bg-orange-50 text-orange-600 text-xs rounded-full">★ Featured</span>
-                        )}
-                        {inst.is_admission_open && (
-                          <span className="px-2 py-0.5 bg-green-50 text-green-600 text-xs rounded-full">Admissions Open</span>
-                        )}
-                        {inst.accreditation && inst.accreditation.length > 0 && (
-                          <span className="px-2 py-0.5 bg-purple-50 text-purple-600 text-xs rounded-full">
-                            {Array.isArray(inst.accreditation) ? inst.accreditation[0] : inst.accreditation}
-                          </span>
-                        )}
+                      {/* Actions */}
+                      <div className="flex flex-col items-end justify-between">
+                        <button 
+                          onClick={() => toggleCompare(inst.id)}
+                          className={`p-2 rounded ${compareList.includes(inst.id) ? 'text-orange-600' : 'text-gray-400 hover:text-orange-600'}`}
+                        >
+                          <FiBookmark size={20} />
+                        </button>
+                        <Link 
+                          to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
+                          className="text-orange-600 flex items-center gap-1 text-sm font-medium hover:underline"
+                        >
+                          View Details <FiArrowRight size={14} />
+                        </Link>
                       </div>
                     </div>
-                    
-                    {/* Action */}
-                    <div className="flex flex-col items-end justify-between">
-                      <button 
-                        onClick={(e) => { e.preventDefault(); }}
-                        className="text-gray-400 hover:text-orange-600 transition-colors"
-                      >
-                        <FiBookmark size={20} />
-                      </button>
-                      <span className="text-orange-600 flex items-center gap-1 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                        View Details <FiArrowRight size={14} />
-                      </span>
-                    </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             )}
-            
+
             {/* Pagination */}
-            {!loading && institutions.length > 0 && (
+            {!loading && institutions.length > 0 && totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-8">
                 <button
                   onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
                   disabled={pagination.page === 1}
-                  className="px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50"
                 >
                   Previous
                 </button>
                 <span className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg font-medium">
-                  Page {pagination.page}
+                  Page {pagination.page} of {totalPages}
                 </span>
                 <button
                   onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-                  disabled={institutions.length < pagination.limit}
-                  className="px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                  disabled={pagination.page >= totalPages}
+                  className="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50"
                 >
                   Next
                 </button>
               </div>
             )}
-          </div>
-          
-          {/* Sidebar - Desktop Only */}
-          <div className="hidden lg:block w-72 flex-shrink-0">
-            <div className="sticky top-20 space-y-4">
-              {/* Quick Location Links */}
-              <div className="bg-white rounded-xl border p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Browse by City</h3>
-                <div className="space-y-2">
-                  {quickLocationLinks.map((link, idx) => (
-                    <Link
-                      key={idx}
-                      to={link.path}
-                      className="block px-3 py-2 text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors"
-                    >
-                      {link.label} →
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Popular Streams */}
-              <div className="bg-white rounded-xl border p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Popular Streams</h3>
-                <div className="flex flex-wrap gap-2">
-                  {['engineering', 'mba', 'medical', 'law', 'arts', 'commerce'].map((stream) => (
-                    <Link
-                      key={stream}
-                      to={`/${stream}`}
-                      className="px-3 py-1 text-sm bg-gray-100 hover:bg-orange-50 hover:text-orange-600 rounded-full transition-colors"
-                    >
-                      {toDisplayName(stream)}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Need Help CTA */}
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white">
-                <h3 className="font-semibold mb-2">Need Help?</h3>
-                <p className="text-sm text-orange-100 mb-3">
-                  Talk to our expert counselors for personalized guidance.
-                </p>
-                <Link
-                  to="/counseling"
-                  className="block w-full text-center px-4 py-2 bg-white text-orange-600 rounded-lg font-medium hover:bg-orange-50 transition-colors"
-                >
-                  Book Free Session
-                </Link>
-              </div>
-            </div>
-          </div>
+          </main>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
