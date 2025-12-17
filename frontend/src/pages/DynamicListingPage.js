@@ -271,7 +271,16 @@ const DynamicListingPage = () => {
           queryParams.append('institution_type', institutionType);
         }
         
-        if (pageInfo.location) {
+        // Handle combined filters (state + city from URL)
+        if (pageInfo.state) {
+          queryParams.append('state', toDisplayName(pageInfo.state));
+        }
+        if (pageInfo.city) {
+          queryParams.append('city', toDisplayName(pageInfo.city));
+        }
+        
+        // Handle single location filter
+        if (pageInfo.location && !pageInfo.state && !pageInfo.city) {
           const locationDisplay = toDisplayName(pageInfo.location);
           if (pageInfo.locationType === 'state') {
             queryParams.append('state', locationDisplay);
