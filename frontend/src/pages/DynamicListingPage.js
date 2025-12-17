@@ -967,18 +967,27 @@ const DynamicListingPage = () => {
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'city' && (
-                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
-                    {filterOptions.city.map((option) => (
-                      <button 
-                        key={option} 
-                        onClick={() => handleFilterSelect('city', option)} 
-                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
-                          activeFilters.city === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
-                        }`}
-                      >
-                        {option} {activeFilters.city === option && '✓'}
-                      </button>
-                    ))}
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {activeFilters.state && (
+                      <div className="px-4 py-2 text-xs text-gray-500 border-b bg-gray-50">
+                        Cities in {activeFilters.state}
+                      </div>
+                    )}
+                    {filterOptions.city.length > 0 ? (
+                      filterOptions.city.map((option) => (
+                        <button 
+                          key={option} 
+                          onClick={() => handleFilterSelect('city', option)} 
+                          className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
+                            activeFilters.city === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
+                          }`}
+                        >
+                          {option} {activeFilters.city === option && '✓'}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-2 text-sm text-gray-500">No cities available</div>
+                    )}
                   </div>
                 )}
               </div>
