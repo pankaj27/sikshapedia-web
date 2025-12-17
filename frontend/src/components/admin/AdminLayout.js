@@ -53,6 +53,14 @@ const AdminLayout = ({ children }) => {
       path: '/admin/dashboard'
     },
     {
+      id: 'approvals',
+      title: 'Pending Approvals',
+      icon: FiClock,
+      path: '/admin/pending-approvals',
+      permission: 'manage_reviews',
+      highlight: true
+    },
+    {
       id: 'content',
       title: 'Content Management',
       icon: FiDatabase,
