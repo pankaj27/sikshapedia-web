@@ -2058,6 +2058,237 @@ async def get_my_permissions(current_user: User = Depends(get_current_user)):
     }
 
 # ============================================
+# Content Approval APIs
+# ============================================
+
+@api_router.get("/admin/pending-approvals")
+async def get_pending_approvals(current_user: User = Depends(get_current_user)):
+    """Get all content pending approval"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not can_approve_content(admin.get("role", "data_entry")):
+        raise HTTPException(status_code=403, detail="You don't have permission to approve content")
+    
+    pending_items = []
+    
+    # Get pending colleges
+    colleges = await db.colleges.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    for c in colleges:
+        pending_items.append({
+            "id": c.get("id"),
+            "type": "college",
+            "type_label": c.get("institution_type", "College"),
+            "name": c.get("name"),
+            "submitted_by": c.get("created_by_name"),
+            "submitted_at": c.get("submitted_at") or c.get("created_at"),
+            "url": f"/admin/colleges?edit={c.get('id')}"
+        })
+    
+    # Get pending listing pages
+    listings = await db.listing_pages.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    for l in listings:
+        pending_items.append({
+            "id": l.get("id"),
+            "type": "listing_page",
+            "type_label": "Listing Page",
+            "name": l.get("page_title") or l.get("url_slug"),
+            "submitted_by": l.get("created_by_name"),
+            "submitted_at": l.get("submitted_at") or l.get("created_at"),
+            "url": f"/admin/listing-pages?edit={l.get('id')}"
+        })
+    
+    # Get pending news
+    news = await db.news.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    for n in news:
+        pending_items.append({
+            "id": n.get("id"),
+            "type": "news",
+            "type_label": "News Article",
+            "name": n.get("title"),
+            "submitted_by": n.get("created_by_name"),
+            "submitted_at": n.get("submitted_at") or n.get("created_at"),
+            "url": f"/admin/news?edit={n.get('id')}"
+        })
+    
+    # Get pending courses
+    courses = await db.courses_detail.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    for c in courses:
+        pending_items.append({
+            "id": c.get("id"),
+            "type": "course",
+            "type_label": "Course",
+            "name": c.get("name"),
+            "submitted_by": c.get("created_by_name"),
+            "submitted_at": c.get("submitted_at") or c.get("created_at"),
+            "url": f"/admin/courses-detail?edit={c.get('id')}"
+        })
+    
+    # Get pending exams
+    exams = await db.exams_detail.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    for e in exams:
+        pending_items.append({
+            "id": e.get("id"),
+            "type": "exam",
+            "type_label": "Exam",
+            "name": e.get("name"),
+            "submitted_by": e.get("created_by_name"),
+            "submitted_at": e.get("submitted_at") or e.get("created_at"),
+            "url": f"/admin/exams-detail?edit={e.get('id')}"
+        })
+    
+    # Sort by submitted_at descending
+    pending_items.sort(key=lambda x: x.get("submitted_at") or "", reverse=True)
+    
+    return {
+        "total": len(pending_items),
+        "items": pending_items
+    }
+
+@api_router.post("/admin/approve/{content_type}/{content_id}")
+async def approve_content(content_type: str, content_id: str, approval: ContentApproval, current_user: User = Depends(get_current_user)):
+    """Approve or reject content"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not can_approve_content(admin.get("role", "data_entry")):
+        raise HTTPException(status_code=403, detail="You don't have permission to approve content")
+    
+    # Map content type to collection
+    collection_map = {
+        "college": "colleges",
+        "listing_page": "listing_pages",
+        "news": "news",
+        "course": "courses_detail",
+        "exam": "exams_detail",
+        "blog": "blogs"
+    }
+    
+    collection_name = collection_map.get(content_type)
+    if not collection_name:
+        raise HTTPException(status_code=400, detail="Invalid content type")
+    
+    collection = db[collection_name]
+    
+    # Check if content exists
+    content = await collection.find_one({"id": content_id})
+    if not content:
+        raise HTTPException(status_code=404, detail="Content not found")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    if approval.action == "approve":
+        update_data = {
+            "status": "published",
+            "is_published": True,
+            "reviewed_by": current_user.id,
+            "reviewed_by_name": current_user.name,
+            "reviewed_at": now,
+            "rejection_reason": None
+        }
+        message = "Content approved and published"
+    elif approval.action == "reject":
+        update_data = {
+            "status": "rejected",
+            "is_published": False,
+            "reviewed_by": current_user.id,
+            "reviewed_by_name": current_user.name,
+            "reviewed_at": now,
+            "rejection_reason": approval.comment or "No reason provided"
+        }
+        message = "Content rejected"
+    else:
+        raise HTTPException(status_code=400, detail="Invalid action. Use 'approve' or 'reject'")
+    
+    await collection.update_one({"id": content_id}, {"$set": update_data})
+    
+    return {"message": message, "status": update_data["status"]}
+
+@api_router.post("/admin/submit-for-review/{content_type}/{content_id}")
+async def submit_for_review(content_type: str, content_id: str, current_user: User = Depends(get_current_user)):
+    """Submit content for review"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    collection_map = {
+        "college": "colleges",
+        "listing_page": "listing_pages",
+        "news": "news",
+        "course": "courses_detail",
+        "exam": "exams_detail",
+        "blog": "blogs"
+    }
+    
+    collection_name = collection_map.get(content_type)
+    if not collection_name:
+        raise HTTPException(status_code=400, detail="Invalid content type")
+    
+    collection = db[collection_name]
+    
+    content = await collection.find_one({"id": content_id})
+    if not content:
+        raise HTTPException(status_code=404, detail="Content not found")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    await collection.update_one(
+        {"id": content_id},
+        {"$set": {
+            "status": "pending",
+            "submitted_at": now,
+            "rejection_reason": None
+        }}
+    )
+    
+    return {"message": "Content submitted for review", "status": "pending"}
+
+@api_router.post("/admin/direct-publish/{content_type}/{content_id}")
+async def direct_publish(content_type: str, content_id: str, current_user: User = Depends(get_current_user)):
+    """Directly publish content (Super Admin only)"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not can_direct_publish(admin.get("role", "data_entry")):
+        raise HTTPException(status_code=403, detail="Only Super Admins can directly publish content")
+    
+    collection_map = {
+        "college": "colleges",
+        "listing_page": "listing_pages",
+        "news": "news",
+        "course": "courses_detail",
+        "exam": "exams_detail",
+        "blog": "blogs"
+    }
+    
+    collection_name = collection_map.get(content_type)
+    if not collection_name:
+        raise HTTPException(status_code=400, detail="Invalid content type")
+    
+    collection = db[collection_name]
+    
+    content = await collection.find_one({"id": content_id})
+    if not content:
+        raise HTTPException(status_code=404, detail="Content not found")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    await collection.update_one(
+        {"id": content_id},
+        {"$set": {
+            "status": "published",
+            "is_published": True,
+            "reviewed_by": current_user.id,
+            "reviewed_by_name": current_user.name,
+            "reviewed_at": now
+        }}
+    )
+    
+    return {"message": "Content published", "status": "published"}
+
+# ============================================
 # Image Optimization Helper
 # ============================================
 
