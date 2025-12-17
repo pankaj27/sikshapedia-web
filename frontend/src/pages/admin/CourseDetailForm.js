@@ -806,7 +806,7 @@ const CourseDetailForm = () => {
                                       if (file) {
                                         const fd = new FormData();
                                         fd.append('file', file);
-                                        const res = await api.post('/upload/image', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                        const res = await api.post('/upload/image?type=content', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
                                         const newToc = [...(formData.description_toc || [])];
                                         newToc[index].image = res.data.url;
                                         newToc[index].imageAlt = generateAltTag(formData.name, item.title || 'description', index);
@@ -1024,7 +1024,7 @@ const CourseDetailForm = () => {
                       if (file) {
                         const fd = new FormData();
                         fd.append('file', file);
-                        const res = await api.post('/upload/image', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                        const res = await api.post('/upload/image?type=content', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
                         const autoAlt = generateAltTag(formData.name, 'description image', formData.description_images?.length || 0);
                         setFormData({...formData, description_images: [...(formData.description_images || []), { url: res.data.url, caption: '', alt: autoAlt }]});
                       }
@@ -1696,7 +1696,7 @@ const CourseDetailForm = () => {
                                     try {
                                       const fd = new FormData();
                                       fd.append('file', file);
-                                      const res = await api.post('/upload/image', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                      const res = await api.post('/upload/image?type=content', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
                                       const newToc = [...(formData.seo_toc || [])];
                                       newToc[index].image = res.data.url;
                                       newToc[index].imageAlt = generateAltTag(formData.name, item.title || 'section', index);
@@ -2130,7 +2130,7 @@ const CourseDetailForm = () => {
                     try {
                       const fd = new FormData();
                       fd.append('file', file);
-                      const res = await api.post('/upload/image', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                      const res = await api.post('/upload/image?type=content', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
                       const autoAlt = generateAltTag(formData.name, 'SEO image', formData.seo_images?.length || 0);
                       setFormData({...formData, seo_images: [...(formData.seo_images || []), { url: res.data.url, caption: '', alt: autoAlt }]});
                     } finally {
