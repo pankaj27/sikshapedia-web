@@ -1190,16 +1190,16 @@ const CourseDetailForm = () => {
                             )}
                           </div>
 
-                          {/* Video Upload */}
+                          {/* Video URL */}
                           <div>
                             <label className="block text-xs text-gray-600 mb-1">
                               <FiVideo className="inline mr-1" /> Section Video
                             </label>
                             {item.video ? (
-                              <div className="relative">
-                                <video src={item.video} className="w-full h-24 object-cover rounded border" />
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded">
-                                  <FiVideo className="text-white" size={24} />
+                              <div className="relative bg-gray-900 rounded p-3">
+                                <div className="flex items-center gap-2 text-white">
+                                  <FiVideo size={20} />
+                                  <span className="text-xs truncate flex-1">{item.video}</span>
                                 </div>
                                 <button
                                   type="button"
@@ -1214,36 +1214,17 @@ const CourseDetailForm = () => {
                                 </button>
                               </div>
                             ) : (
-                              <div className="space-y-2">
-                                <label className={`flex flex-col items-center justify-center w-full h-16 border-2 border-dashed border-purple-300 rounded cursor-pointer hover:bg-purple-50 transition-colors ${uploadingVideo === index ? 'opacity-50' : ''}`}>
-                                  {uploadingVideo === index ? (
-                                    <FiLoader className="animate-spin text-purple-500" size={20} />
-                                  ) : (
-                                    <>
-                                      <FiUpload className="text-purple-400 mb-1" size={16} />
-                                      <span className="text-xs text-purple-600">Upload Video</span>
-                                    </>
-                                  )}
-                                  <input
-                                    type="file"
-                                    accept="video/*"
-                                    className="hidden"
-                                    onChange={(e) => handleTocVideoUpload(e.target.files[0], index)}
-                                    disabled={uploadingVideo === index}
-                                  />
-                                </label>
-                                <input
-                                  type="text"
-                                  value={item.video || ''}
-                                  onChange={(e) => {
-                                    const newToc = [...(formData.seo_toc || [])];
-                                    newToc[index].video = e.target.value;
-                                    setFormData({...formData, seo_toc: newToc});
-                                  }}
-                                  placeholder="Or paste YouTube/video URL"
-                                  className="w-full border rounded px-2 py-1 text-xs"
-                                />
-                              </div>
+                              <input
+                                type="text"
+                                value={item.video || ''}
+                                onChange={(e) => {
+                                  const newToc = [...(formData.seo_toc || [])];
+                                  newToc[index].video = e.target.value;
+                                  setFormData({...formData, seo_toc: newToc});
+                                }}
+                                placeholder="Paste YouTube/video URL"
+                                className="w-full border-2 border-purple-200 rounded px-2 py-2 text-sm"
+                              />
                             )}
                           </div>
                         </div>
