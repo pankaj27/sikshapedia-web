@@ -323,7 +323,7 @@ class ApprovalSystemTester:
             self.created_items["news"].append(news_id)
             
             # Submit for review to make it pending
-            success, response, status = self.make_request("POST", f"/submit-for-review/news/{news_id}", token=self.admin_token)
+            success, response, status = self.make_request("POST", f"/admin/submit-for-review/news/{news_id}", token=self.admin_token)
             if success:
                 pending_items.append({"type": "news", "id": news_id, "name": "Pending News Article"})
         
