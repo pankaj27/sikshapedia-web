@@ -1983,45 +1983,40 @@ const CourseDetailForm = () => {
                   {(formData.seo_videos || []).map((vid, index) => (
                     <div key={index} className="bg-white rounded-lg border-2 border-rose-200 p-3">
                       <div className="flex items-start gap-3">
-                        <div className="flex items-center justify-center w-12 h-12 bg-gray-900 rounded-lg flex-shrink-0">
-                          <FiVideo className="text-white" size={20} />
+                        <div className="flex items-center justify-center w-16 h-14 bg-gray-900 rounded-lg flex-shrink-0">
+                          <FiVideo className="text-white" size={22} />
                         </div>
                         <div className="flex-1 space-y-2">
-                          <input
-                            type="text"
-                            value={vid.title || ''}
-                            onChange={(e) => {
-                              const newVideos = [...(formData.seo_videos || [])];
-                              newVideos[index].title = e.target.value;
-                              setFormData({...formData, seo_videos: newVideos});
-                            }}
-                            placeholder="Video Title"
-                            className="w-full border rounded px-3 py-1.5 text-sm"
-                          />
-                          <input
-                            type="text"
-                            value={vid.url || ''}
-                            onChange={(e) => {
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="block text-xs text-gray-500 mb-1">Title</label>
+                              <input type="text" value={vid.title || ''} onChange={(e) => {
+                                const newVideos = [...(formData.seo_videos || [])];
+                                newVideos[index].title = e.target.value;
+                                setFormData({...formData, seo_videos: newVideos});
+                              }} placeholder="Video title" className="w-full border rounded px-2 py-1.5 text-sm" />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">✓ Auto</span></label>
+                              <input type="text" value={vid.alt || ''} onChange={(e) => {
+                                const newVideos = [...(formData.seo_videos || [])];
+                                newVideos[index].alt = e.target.value;
+                                setFormData({...formData, seo_videos: newVideos});
+                              }} placeholder="Auto-generated" className="w-full border rounded px-2 py-1.5 text-sm bg-green-50" />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">Video URL</label>
+                            <input type="text" value={vid.url || ''} onChange={(e) => {
                               const newVideos = [...(formData.seo_videos || [])];
                               newVideos[index].url = e.target.value;
                               setFormData({...formData, seo_videos: newVideos});
-                            }}
-                            placeholder="Video URL"
-                            className="w-full border rounded px-3 py-1.5 text-xs font-mono text-gray-500"
-                          />
+                            }} placeholder="YouTube/Video URL" className="w-full border rounded px-2 py-1.5 text-sm font-mono" />
+                          </div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData({
-                              ...formData,
-                              seo_videos: (formData.seo_videos || []).filter((_, i) => i !== index)
-                            });
-                          }}
-                          className="text-red-500 hover:bg-red-50 p-1.5 rounded"
-                        >
-                          <FiTrash2 size={16} />
-                        </button>
+                        <button type="button" onClick={() => {
+                          setFormData({...formData, seo_videos: (formData.seo_videos || []).filter((_, i) => i !== index)});
+                        }} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 size={16} /></button>
                       </div>
                     </div>
                   ))}
@@ -2030,26 +2025,15 @@ const CourseDetailForm = () => {
 
               {/* Add Video URL */}
               <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Paste YouTube or video URL"
-                  className="flex-1 border-2 border-rose-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
-                  id="seo-video-url-input"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const input = document.getElementById('seo-video-url-input');
-                    if (input.value) {
-                      setFormData({
-                        ...formData,
-                        seo_videos: [...(formData.seo_videos || []), { url: input.value, title: '' }]
-                      });
-                      input.value = '';
-                    }
-                  }}
-                  className="px-4 py-2 bg-rose-600 text-white text-sm rounded-lg hover:bg-rose-700 flex items-center gap-2"
-                >
+                <input type="text" placeholder="Paste YouTube or video URL" className="flex-1 border-2 border-rose-200 rounded-lg px-3 py-2 text-sm" id="seo-video-url-input" />
+                <button type="button" onClick={() => {
+                  const input = document.getElementById('seo-video-url-input');
+                  if (input.value) {
+                    const autoAlt = generateVideoAlt(formData.name, 'SEO', formData.seo_videos?.length || 0);
+                    setFormData({...formData, seo_videos: [...(formData.seo_videos || []), { url: input.value, title: '', alt: autoAlt }]});
+                    input.value = '';
+                  }
+                }} className="px-4 py-2 bg-rose-600 text-white text-sm rounded-lg hover:bg-rose-700 flex items-center gap-2">
                   <FiPlus size={16} /> Add Video
                 </button>
               </div>
