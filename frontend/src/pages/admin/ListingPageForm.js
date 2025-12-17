@@ -32,6 +32,8 @@ const ListingPageForm = () => {
   const isEditing = !!id;
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState({});
+  const fileInputRefs = useRef({});
 
   const [formData, setFormData] = useState({
     url_slug: '',
