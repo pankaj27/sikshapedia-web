@@ -2407,14 +2407,19 @@ async def upload_image(
     type: str = Query(..., description="Type: logo, banner, or campus"),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
-    """Upload an image file (logo, banner, or campus gallery) - Admin only"""
-    # Verify admin token
+    """Upload an image file (logo, banner, or campus gallery) - Admin/Content Manager access"""
+    # Verify token and role
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        if payload.get("role") != "admin":
-            raise HTTPException(status_code=403, detail="Admin access required")
-    except:
+        role = payload.get("role", "")
+        # Allow admin, content_manager, data_entry, and super_admin roles
+        allowed_roles = ["admin", "super_admin", "content_manager", "data_entry"]
+        if role not in allowed_roles:
+            raise HTTPException(status_code=403, detail="Access denied. Required roles: admin, content_manager, or data_entry")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Invalid token")
     
     # Validate file type
