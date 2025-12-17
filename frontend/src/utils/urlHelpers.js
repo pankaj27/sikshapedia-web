@@ -355,7 +355,11 @@ export default {
   parseListingUrl,
   isState,
   isCity,
+  isCollegeType,
+  isAccreditation,
   INSTITUTION_TYPES,
   INDIAN_STATES,
-  INDIAN_CITIES
+  INDIAN_CITIES,
+  COLLEGE_TYPES,
+  ACCREDITATION_GRADES
 };
