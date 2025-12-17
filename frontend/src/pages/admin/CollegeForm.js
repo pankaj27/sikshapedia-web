@@ -1317,20 +1317,43 @@ const CollegeForm = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Affiliated To</label>
-              <select
-                name="affiliated_to"
-                value={formData.affiliated_to}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
-              >
-                <option value="">Select Affiliation</option>
-                {affiliations.map((affiliation) => (
-                  <option key={affiliation.id} value={affiliation.name}>
-                    {affiliation.name}
-                  </option>
-                ))}
-              </select>
+              {isSchool ? (
+                <>
+                  <label className="block text-sm font-medium mb-1">Board *</label>
+                  <select
+                    name="board"
+                    value={formData.board}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2"
+                    required
+                  >
+                    <option value="">Select Board</option>
+                    {boards.map((board) => (
+                      <option key={board.id} value={board.name}>
+                        {board.name} {board.full_name ? `- ${board.full_name}` : ''}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">Select the education board (CBSE, ICSE, State Board, etc.)</p>
+                </>
+              ) : (
+                <>
+                  <label className="block text-sm font-medium mb-1">Affiliated To</label>
+                  <select
+                    name="affiliated_to"
+                    value={formData.affiliated_to}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select Affiliation</option>
+                    {affiliations.map((affiliation) => (
+                      <option key={affiliation.id} value={affiliation.name}>
+                        {affiliation.name}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Campus Size</label>
