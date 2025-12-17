@@ -44,6 +44,40 @@ const generateVideoAlt = (courseName, context, index) => {
   return `${name} - ${ctx} video ${index + 1}`.trim();
 };
 
+// Auto-generate SEO Meta Tags
+const generateSeoMetaTags = (courseData) => {
+  const name = courseData.name || 'Course';
+  const fullName = courseData.full_name || name;
+  const degreeType = courseData.degree_type || '';
+  const duration = courseData.duration || '';
+  const eligibility = courseData.eligibility || '';
+  const stream = courseData.stream || '';
+  
+  // Generate Meta Title (max 60 chars)
+  const metaTitle = `${name} Course ${new Date().getFullYear()} - Eligibility, Fees, Syllabus, Top Colleges`.substring(0, 60);
+  
+  // Generate Meta Description (max 160 chars)
+  const metaDesc = `${fullName} (${name}) is a ${degreeType} course${duration ? ` of ${duration}` : ''}. Check eligibility, fees, syllabus, admission process, career scope & top colleges offering ${name} in India.`.substring(0, 160);
+  
+  // Generate Meta Keywords
+  const keywords = [
+    name.toLowerCase(),
+    fullName.toLowerCase(),
+    `${name.toLowerCase()} course`,
+    `${name.toLowerCase()} eligibility`,
+    `${name.toLowerCase()} fees`,
+    `${name.toLowerCase()} syllabus`,
+    `${name.toLowerCase()} admission`,
+    `${name.toLowerCase()} colleges`,
+    `${name.toLowerCase()} career`,
+    stream ? stream.toLowerCase() : '',
+    degreeType ? `${degreeType.toLowerCase()} courses` : '',
+    `${name.toLowerCase()} ${new Date().getFullYear()}`
+  ].filter(Boolean).join(', ');
+  
+  return { metaTitle, metaDesc, keywords };
+};
+
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
