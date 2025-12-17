@@ -105,8 +105,10 @@ const CourseDetailForm = () => {
     meta_keywords: '',
     seo_intro: '',
     seo_full_content: '',
-    seo_toc: [], // Table of Contents [{title, anchor, content}]
+    seo_toc: [], // Table of Contents [{title, anchor, content, image, video}]
     seo_tables: [], // [{title, headers: [], rows: [[]]}]
+    seo_images: [], // [{url, caption}]
+    seo_videos: [], // [{url, title}]
     // Menu Configuration
     menu_config: {
       use_custom_menu: false,
