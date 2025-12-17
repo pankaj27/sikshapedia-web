@@ -102,6 +102,72 @@ const AdminDashboard = () => {
           </div>
         </div>
 
+        {/* Frontend Widgets Management */}
+        <div className="mt-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Frontend Widgets</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Apply Now Widget Card */}
+            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-md">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <FiSend size={20} />
+                </div>
+                <span className="px-2 py-1 bg-green-400/20 text-green-100 text-xs rounded-full">Active</span>
+              </div>
+              <h3 className="font-bold">Apply Now</h3>
+              <p className="text-xs text-white/80 mb-3">Quick admission form widget</p>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">124 Submissions</span>
+              </div>
+            </div>
+
+            {/* Ask Question Widget Card */}
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-5 text-white shadow-md">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <FiMessageCircle size={20} />
+                </div>
+                <span className="px-2 py-1 bg-green-400/20 text-green-100 text-xs rounded-full">Active</span>
+              </div>
+              <h3 className="font-bold">Ask Question</h3>
+              <p className="text-xs text-white/80 mb-3">Q&A support widget</p>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">89 Questions</span>
+              </div>
+            </div>
+
+            {/* Counselling Widget Card */}
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-5 text-white shadow-md">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <FiPhone size={20} />
+                </div>
+                <span className="px-2 py-1 bg-green-400/20 text-green-100 text-xs rounded-full">Active</span>
+              </div>
+              <h3 className="font-bold">Counselling</h3>
+              <p className="text-xs text-white/80 mb-3">Free career guidance</p>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">56 Requests</span>
+              </div>
+            </div>
+
+            {/* Sponsor Ads Widget Card */}
+            <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl p-5 text-white shadow-md">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                  <HiOutlineSparkles size={20} className="text-yellow-400" />
+                </div>
+                <span className="px-2 py-1 bg-yellow-400/20 text-yellow-200 text-xs rounded-full">3 Active</span>
+              </div>
+              <h3 className="font-bold">Sponsor Ads</h3>
+              <p className="text-xs text-white/80 mb-3">Sponsored advertisements</p>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">₹45,000 Revenue</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Recent Activity */}
         <div className="mt-8 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Recent Activity</h2>
@@ -113,6 +179,14 @@ const AdminDashboard = () => {
             <div className="flex items-center gap-3 text-sm">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="text-gray-600">All services operational</span>
+            </div>
+            <div className="flex items-center gap-3 text-sm">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              <span className="text-gray-600">New Apply Now submission received</span>
+            </div>
+            <div className="flex items-center gap-3 text-sm">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span className="text-gray-600">Counselling request from Delhi</span>
             </div>
           </div>
         </div>
