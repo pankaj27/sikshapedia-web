@@ -246,9 +246,10 @@ const DynamicListingPage = () => {
     const crumbs = [{ label: 'Home', path: '/' }];
     
     if (urlInfo.type === 'institution-listing') {
+      const isSchools = urlInfo.institutionType === 'schools';
+      const typeName = isSchools ? 'Schools' : 'Colleges';
+      
       if (urlInfo.location) {
-        const typeName = urlInfo.institutionType === 'colleges' ? 'Colleges' 
-          : urlInfo.institutionType === 'schools' ? 'Schools' : 'Universities';
         crumbs.push({ 
           label: `India ${typeName}`, 
           path: `/india-${urlInfo.institutionType}` 
