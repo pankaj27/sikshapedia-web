@@ -125,6 +125,21 @@ const getMenuIcon = (iconId, emojiIcon) => {
   return iconMap['default'];
 };
 
+// Helper function to format time ago
+const formatTimeAgo = (dateString) => {
+  if (!dateString) return 'recently';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+  
+  if (diffInSeconds < 60) return 'just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+  return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+};
+
 const CollegeDetailPage = ({ overrideId }) => {
   const { id: paramId } = useParams();
   // Use overrideId if provided (from InstitutionDetailPage), otherwise use URL param
