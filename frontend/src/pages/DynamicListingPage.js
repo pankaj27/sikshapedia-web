@@ -1408,7 +1408,7 @@ const DynamicListingPage = () => {
                 {activeFilterDropdown === 'degreeType' && (
                   <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.degreeType.map((option) => (
-                      <button key={option} onClick={() => { setFilters(prev => ({ ...prev, degreeType: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.degreeType === option && '✓'}</button>
+                      <button key={option} onClick={() => handleFilterSelect('degreeType', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.degreeType === option && '✓'}</button>
                     ))}
                   </div>
                 )}
