@@ -500,8 +500,18 @@ const CollegeDetailPage = ({ overrideId }) => {
       <div className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
-              <FiUser size={18} />
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+              {college?.updated_by_photo || college?.created_by_photo ? (
+                <img 
+                  src={college?.updated_by_photo || college?.created_by_photo} 
+                  alt={college?.updated_by_name || 'Author'} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
+                  <FiUser size={18} />
+                </div>
+              )}
             </div>
             <div>
               <Link to={`/author/${college?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-sm font-semibold text-gray-900 hover:text-orange-600">
