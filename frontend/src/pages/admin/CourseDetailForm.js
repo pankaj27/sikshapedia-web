@@ -994,8 +994,8 @@ const CourseDetailForm = () => {
                               <input type="text" value={img.caption || ''} onChange={(e) => {
                                 const newImages = [...(formData.description_images || [])];
                                 newImages[index].caption = e.target.value;
-                                // Auto-generate alt tag from title
-                                newImages[index].alt = e.target.value ? `${formData.name || 'Course'} - ${e.target.value}` : '';
+                                // Auto-generate alt tag from title with AdmissionBuddy branding
+                                newImages[index].alt = generateAltFromCaption(formData.name, e.target.value);
                                 setFormData({...formData, description_images: newImages});
                               }} placeholder="Enter image title (alt tag auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
                             </div>
@@ -1053,8 +1053,8 @@ const CourseDetailForm = () => {
                                   <input type="text" value={vid.title || ''} onChange={(e) => {
                                     const newVideos = [...(formData.description_videos || [])];
                                     newVideos[index].title = e.target.value;
-                                    // Auto-generate alt tag from title
-                                    newVideos[index].alt = e.target.value ? `${formData.name || 'Course'} - ${e.target.value}` : '';
+                                    // Auto-generate alt tag from title with AdmissionBuddy branding
+                                    newVideos[index].alt = generateAltFromCaption(formData.name, e.target.value);
                                     setFormData({...formData, description_videos: newVideos});
                                   }} placeholder="Enter title (alt auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
                                 </div>
@@ -2058,8 +2058,8 @@ const CourseDetailForm = () => {
                           <input type="text" value={img.caption || ''} onChange={(e) => {
                             const newImages = [...(formData.seo_images || [])];
                             newImages[index].caption = e.target.value;
-                            // Auto-generate alt tag from caption
-                            newImages[index].alt = e.target.value ? `${formData.name || 'Course'} - ${e.target.value}` : '';
+                            // Auto-generate alt tag from caption with AdmissionBuddy branding
+                            newImages[index].alt = generateAltFromCaption(formData.name, e.target.value);
                             setFormData({...formData, seo_images: newImages});
                           }} placeholder="Enter caption (alt tag auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
                         </div>
@@ -2145,8 +2145,8 @@ const CourseDetailForm = () => {
                               <input type="text" value={vid.title || ''} onChange={(e) => {
                                 const newVideos = [...(formData.seo_videos || [])];
                                 newVideos[index].title = e.target.value;
-                                // Auto-generate alt tag from title
-                                newVideos[index].alt = e.target.value ? `${formData.name || 'Course'} - ${e.target.value}` : '';
+                                // Auto-generate alt tag from title with AdmissionBuddy branding
+                                newVideos[index].alt = generateAltFromCaption(formData.name, e.target.value);
                                 setFormData({...formData, seo_videos: newVideos});
                               }} placeholder="Enter title (alt auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
                             </div>
