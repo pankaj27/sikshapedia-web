@@ -80,6 +80,35 @@ const DynamicListingPage = () => {
   
   // Determine page title and type from URL
   const pageInfo = useMemo(() => {
+    // Handle combined filters from URL (e.g., /engineering/maharashtra-colleges or /maharashtra/mumbai-colleges)
+    if (urlInfo.combinedFilters) {
+      const cf = urlInfo.combinedFilters;
+      const isSchools = urlInfo.institutionType === 'schools';
+      const typeName = isSchools ? 'Schools' : 'Colleges';
+      
+      // Build title based on combined filters
+      let titleParts = [];
+      if (cf.stream) titleParts.push(toDisplayName(cf.stream));
+      titleParts.push(typeName);
+      if (cf.state) titleParts.push(`in ${toDisplayName(cf.state)}`);
+      if (cf.city) titleParts.push(`in ${toDisplayName(cf.city)}`);
+      if (cf.location && !cf.state && !cf.city) {
+        titleParts.push(`in ${toDisplayName(cf.location)}`);
+      }
+      
+      return {
+        title: `Top ${titleParts.join(' ')} 2025`,
+        description: `Explore top ${typeName.toLowerCase()} with applied filters.`,
+        institutionTypes: isSchools ? ['School'] : ['College', 'University'],
+        stream: cf.stream || null,
+        state: cf.state || null,
+        city: cf.city || null,
+        location: cf.location || cf.city || null,
+        locationType: cf.state ? 'state' : (cf.city || cf.location) ? 'city' : null,
+        isSchools
+      };
+    }
+    
     if (urlInfo.type === 'institution-listing') {
       const locationName = urlInfo.location 
         ? toDisplayName(urlInfo.location)
