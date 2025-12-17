@@ -172,7 +172,18 @@ const AdminLayout = ({ children }) => {
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-gray-700 space-y-2">
+          <Link
+            to="/admin/profile"
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+              location.pathname === '/admin/profile'
+                ? 'bg-orange-500 text-white'
+                : 'hover:bg-gray-700 text-gray-300'
+            }`}
+          >
+            <FiUsers size={18} />
+            <span className="text-sm font-medium">My Profile</span>
+          </Link>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-600 text-gray-300 hover:text-white transition-colors"
