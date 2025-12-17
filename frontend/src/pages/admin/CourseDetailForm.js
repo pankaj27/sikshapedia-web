@@ -209,11 +209,55 @@ const CourseDetailForm = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{id ? 'Edit Course Details' : 'Add New Course (Detailed)'}</h1>
-        <Button variant="outline" onClick={() => navigate('/admin/courses-detail')}>
-          <FiX className="mr-2" /> Cancel
-        </Button>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold">{id ? 'Edit Course Details' : 'Add New Course (Detailed)'}</h1>
+          {id && formData.status && <StatusBadge status={formData.status} />}
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Approval Actions */}
+          {id && formData.status === 'draft' && (
+            <Button 
+              type="button" 
+              onClick={handleSubmitForReview}
+              disabled={actionLoading}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <FiSend className="mr-2" /> Submit for Review
+            </Button>
+          )}
+          {id && formData.status === 'pending' && canApprove && (
+            <>
+              <Button 
+                type="button" 
+                onClick={handleApprove}
+                disabled={actionLoading}
+                className="bg-green-500 hover:bg-green-600 text-white"
+              >
+                <FiCheck className="mr-2" /> Approve
+              </Button>
+              <Button 
+                type="button" 
+                onClick={handleReject}
+                disabled={actionLoading}
+                variant="outline"
+                className="text-red-600 border-red-600 hover:bg-red-50"
+              >
+                <FiX className="mr-2" /> Reject
+              </Button>
+            </>
+          )}
+          <Button variant="outline" onClick={() => navigate('/admin/courses-detail')}>
+            <FiX className="mr-2" /> Cancel
+          </Button>
+        </div>
       </div>
+
+      {/* Rejection Reason Alert */}
+      {formData.status === 'rejected' && formData.rejection_reason && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          <strong>Rejection Reason:</strong> {formData.rejection_reason}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
