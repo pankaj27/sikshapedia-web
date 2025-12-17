@@ -291,34 +291,52 @@ const DynamicListingPage = () => {
     }
   };
   
-  // Handle filter selection - Navigate to SEO-friendly URLs
+  // Handle filter selection - Navigate to SEO-friendly URLs with combined filters
   const handleFilterSelect = (filterType, value) => {
     setActiveFilterDropdown(null);
     
-    // State or City filter - navigate to location-based URL
-    if (filterType === 'state' || filterType === 'city') {
-      const locationSlug = generateSlug(value);
-      const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
-      navigate(`/${locationSlug}-${suffix}`);
-      return;
-    }
+    const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
+    const currentStream = activeFilters.stream || activeFilters.subStream;
+    const currentState = activeFilters.state;
+    const currentCity = activeFilters.city;
     
-    // Stream filter - navigate to stream-based URL
-    if (filterType === 'stream') {
-      const streamSlug = generateSlug(value);
-      navigate(`/${streamSlug}`);
-      return;
-    }
-    
-    // SubStream filter - navigate to stream/substream URL
-    if (filterType === 'subStream') {
-      const subStreamSlug = generateSlug(value);
-      // If we already have a stream, append substream
-      if (pageInfo.stream) {
-        navigate(`/${pageInfo.stream}/${subStreamSlug}`);
+    // Build combined URL based on selected filter and existing filters
+    if (filterType === 'state') {
+      const stateSlug = generateSlug(value);
+      // If stream is selected, combine: /engineering/maharashtra-colleges
+      if (currentStream) {
+        navigate(`/${generateSlug(currentStream)}/${stateSlug}-${suffix}`);
       } else {
-        // Otherwise just use substream as stream
-        navigate(`/${subStreamSlug}`);
+        navigate(`/${stateSlug}-${suffix}`);
+      }
+      return;
+    }
+    
+    if (filterType === 'city') {
+      const citySlug = generateSlug(value);
+      // If stream is selected, combine: /engineering/mumbai-colleges
+      if (currentStream) {
+        navigate(`/${generateSlug(currentStream)}/${citySlug}-${suffix}`);
+      } 
+      // If state is selected, combine: /maharashtra/mumbai-colleges
+      else if (currentState) {
+        navigate(`/${generateSlug(currentState)}/${citySlug}-${suffix}`);
+      } else {
+        navigate(`/${citySlug}-${suffix}`);
+      }
+      return;
+    }
+    
+    // Stream filter
+    if (filterType === 'stream' || filterType === 'subStream') {
+      const streamSlug = generateSlug(value);
+      // If state or city is selected, combine: /engineering/maharashtra-colleges
+      if (currentState) {
+        navigate(`/${streamSlug}/${generateSlug(currentState)}-${suffix}`);
+      } else if (currentCity) {
+        navigate(`/${streamSlug}/${generateSlug(currentCity)}-${suffix}`);
+      } else {
+        navigate(`/${streamSlug}`);
       }
       return;
     }
