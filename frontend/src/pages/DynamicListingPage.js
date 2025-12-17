@@ -1201,22 +1201,54 @@ const DynamicListingPage = () => {
             </div>
           </section>
 
-          {/* FAQs */}
+          {/* Admin Content Sections */}
+          {pageContent?.content_sections?.length > 0 && (
+            <section id="content-sections">
+              {pageContent.content_sections.map((section, idx) => (
+                <div key={idx} className="mb-4">
+                  {section.title && <h2 className="text-xl font-bold text-gray-900 mb-2">{section.title}</h2>}
+                  <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                </div>
+              ))}
+            </section>
+          )}
+
+          {/* FAQs - Use admin content if available, otherwise show default */}
           <section id="faqs">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">Colleges in India FAQs</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-3">
+              {pageContent?.page_title ? `${pageContent.page_title} FAQs` : 'Colleges in India FAQs'}
+            </h2>
             <div className="space-y-3">
-              {[
-                { q: 'How many colleges are there in India?', a: 'There are approximately 4,359 colleges in India, including 676 government and 3,623 private colleges.' },
-                { q: 'What is the top college in India?', a: 'IIT Bombay is ranked as the top college in India as per various rankings.' },
-                { q: 'What is the fee range for colleges in India?', a: 'The fee range varies from ₹10,000 per year in some government colleges to ₹40 Lakh in top private institutions.' },
-              ].map((faq, idx) => (
+              {(pageContent?.faqs?.length > 0 ? pageContent.faqs : [
+                { question: 'How many colleges are there in India?', answer: 'There are approximately 4,359 colleges in India, including 676 government and 3,623 private colleges.' },
+                { question: 'What is the top college in India?', answer: 'IIT Bombay is ranked as the top college in India as per various rankings.' },
+                { question: 'What is the fee range for colleges in India?', answer: 'The fee range varies from ₹10,000 per year in some government colleges to ₹40 Lakh in top private institutions.' },
+              ]).map((faq, idx) => (
                 <div key={idx} className="bg-gray-50 rounded-lg p-3 border">
-                  <h3 className="font-bold text-base text-gray-900 mb-1">{faq.q}</h3>
-                  <p className="text-sm text-gray-700">{faq.a}</p>
+                  <h3 className="font-bold text-base text-gray-900 mb-1">{faq.question || faq.q}</h3>
+                  <p className="text-sm text-gray-700">{faq.answer || faq.a}</p>
                 </div>
               ))}
             </div>
           </section>
+
+          {/* Related Pages from Admin */}
+          {pageContent?.related_pages?.length > 0 && (
+            <section id="related-pages" className="mt-4">
+              <h2 className="text-lg font-bold text-gray-900 mb-2">Related Pages</h2>
+              <div className="flex flex-wrap gap-2">
+                {pageContent.related_pages.map((link, idx) => (
+                  <Link 
+                    key={idx} 
+                    to={link.url} 
+                    className="text-sm text-blue-600 hover:underline bg-blue-50 px-3 py-1 rounded-full"
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Read Less Button */}
           <div className="text-center mt-4">
