@@ -1654,14 +1654,6 @@ const DynamicListingPage = () => {
                 </span>
               )}
               
-              {/* Accreditation filter */}
-              {filters.accreditation && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Accreditation: {filters.accreditation.split(' ')[0]}
-                  <button onClick={() => setFilters(prev => ({ ...prev, accreditation: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
               {/* Clear All button */}
               {(activeFilters.stream || activeFilters.state || activeFilters.city || filters.type.length > 0 || filters.course || filters.degreeType || filters.examAccepted || filters.affiliation || filters.recognition || filters.accreditation) && (
                 <button 
