@@ -2136,7 +2136,7 @@ async def get_pending_approvals(current_user: User = Depends(get_current_user)):
         })
     
     # Get pending courses
-    courses = await db.courses_detail.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    courses = await db.courses_detailed.find({"status": "pending"}, {"_id": 0}).to_list(100)
     for c in courses:
         pending_items.append({
             "id": c.get("id"),
