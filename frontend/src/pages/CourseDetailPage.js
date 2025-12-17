@@ -240,16 +240,26 @@ const CourseDetailPage = () => {
 
             {/* Main Content Article */}
             <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-              {/* Course Description */}
-              <p className="text-gray-700 text-sm leading-relaxed mb-4">
-                BTech CSE is a 4 year UG course that studies practical and theoretical knowledge of computer hardware and software. This course lays emphasis on the basics of computer programming and networking while also comprising a plethora of topics. The admission process for the B.tech CSE is to clear entrance exams such as JEE at a national or state level.
-              </p>
-              <p className="text-gray-700 text-sm leading-relaxed mb-4">
-                BTech CSE Entrance Exams are JEE Mains, SRMJEEE, etc. The eligibility criteria for the course B.tech CSE is students have to qualify 10+2 with a minimum of 55% marks from the science stream. The average fee for the course B.tech CSE is INR 2 lakhs to INR 10 lakhs. BTech CSE Syllabus deals with Operating System, Data Structures, Computer Networks etc. If the student wants to do higher studies then MTech, MS and MBA are the popular destinations.
-              </p>
-              <p className="text-gray-700 text-sm leading-relaxed mb-6">
-                The average CTC from IIT Delhi is INR 16 Lakhs while that of IIT Bombay is INR 17.5 Lakhs. The job profiles after the course B.tech CSE are Data Analyst, Software developer, Game developer, networking engineer, testing engineer, database administrator, etc. The top recruiting companies are TCS, Infosys, Hexaware, Syntel, Wipro, etc.
-              </p>
+              {/* Course Description - Dynamic */}
+              {course.description ? (
+                <div className="text-gray-700 text-sm leading-relaxed mb-6 whitespace-pre-line">
+                  {course.description}
+                </div>
+              ) : (
+                <>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                    {fullName} is a {course.duration || '4 year'} {course.degree_type || 'UG'} course. The admission process typically involves clearing entrance exams at national or state level.
+                  </p>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                    {course.entrance_exams?.length > 0 && `Entrance Exams include ${course.entrance_exams.join(', ')}. `}
+                    {course.eligibility && `Eligibility: ${course.eligibility}. `}
+                    The average fee for this course is ₹{(course.average_fees || 0).toLocaleString()}.
+                  </p>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-6">
+                    {course.career_options?.length > 0 && `Career options include: ${course.career_options.join(', ')}.`}
+                  </p>
+                </>
+              )}
 
               {/* Table of Contents */}
               <div className="border border-gray-300 bg-gray-50 p-5 mb-8">
