@@ -1221,35 +1221,31 @@ const DynamicListingPage = () => {
                 <div key={idx} className="mb-6 bg-white rounded-lg p-4 border" id={section.title?.toLowerCase().replace(/\s+/g, '-')}>
                   {section.title && <h2 className="text-lg font-bold text-gray-900 mb-3">{section.title}</h2>}
                   
-                  {/* Text + Image Layout */}
+                  {/* Text + Image Layout - Full Width */}
                   {section.type === 'text_image' && section.media_url ? (
-                    <div className="flex flex-col md:flex-row gap-4">
-                      <div className="flex-1">
-                        <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
-                      </div>
-                      <div className="md:w-1/3">
+                    <div>
+                      <div className="text-sm text-gray-700 prose max-w-none mb-4" dangerouslySetInnerHTML={{ __html: section.content }} />
+                      <div className="w-full">
                         <img 
                           src={section.media_url} 
                           alt={section.media_alt || section.title || 'Image'} 
-                          className="w-full h-48 object-cover rounded-lg shadow"
+                          className="w-full h-64 md:h-80 object-cover rounded-lg shadow-md"
                         />
-                        {section.media_alt && <p className="text-xs text-gray-500 mt-1 text-center">{section.media_alt}</p>}
+                        {section.media_alt && <p className="text-xs text-gray-500 mt-2 text-center italic">{section.media_alt}</p>}
                       </div>
                     </div>
                   ) : section.type === 'text_video' && section.media_url ? (
-                    /* Text + Video Layout */
-                    <div className="flex flex-col md:flex-row gap-4">
-                      <div className="flex-1">
-                        <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
-                      </div>
-                      <div className="md:w-1/3">
+                    /* Text + Video Layout - Full Width */
+                    <div>
+                      <div className="text-sm text-gray-700 prose max-w-none mb-4" dangerouslySetInnerHTML={{ __html: section.content }} />
+                      <div className="w-full">
                         <iframe 
                           src={section.media_url} 
                           title={section.media_alt || section.title || 'Video'}
-                          className="w-full h-48 rounded-lg shadow"
+                          className="w-full h-64 md:h-96 rounded-lg shadow-md"
                           allowFullScreen
                         />
-                        {section.media_alt && <p className="text-xs text-gray-500 mt-1 text-center">{section.media_alt}</p>}
+                        {section.media_alt && <p className="text-xs text-gray-500 mt-2 text-center italic">{section.media_alt}</p>}
                       </div>
                     </div>
                   ) : section.type === 'text_table' && section.table_data ? (
