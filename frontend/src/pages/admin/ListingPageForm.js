@@ -882,14 +882,39 @@ const ListingPageForm = () => {
           </CollapsibleSection>
 
           {/* Submit */}
-          <div className="flex justify-end gap-4 mt-6 sticky bottom-4 bg-white p-4 rounded-lg shadow-lg border">
-            <Button type="button" variant="outline" onClick={() => navigate('/admin/listing-pages')}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={saving} className="bg-orange-600 hover:bg-orange-700">
-              <FiSave className="mr-2" />
-              {saving ? 'Saving...' : (isEditing ? 'Update Page' : 'Create Page')}
-            </Button>
+          <div className="flex justify-between items-center mt-6 sticky bottom-4 bg-white p-4 rounded-lg shadow-lg border">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              {formData.is_published ? (
+                <span className="flex items-center gap-1 text-green-600">
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  Will be Published
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-yellow-600">
+                  <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                  Draft
+                </span>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <Button type="button" variant="outline" onClick={() => navigate('/admin/listing-pages')}>
+                Cancel
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                disabled={saving}
+                onClick={handleSaveDraft}
+                className="border-yellow-500 text-yellow-700 hover:bg-yellow-50"
+              >
+                <FiSave className="mr-2" />
+                Save as Draft
+              </Button>
+              <Button type="submit" disabled={saving} className="bg-orange-600 hover:bg-orange-700">
+                <FiSave className="mr-2" />
+                {saving ? 'Saving...' : (isEditing ? 'Update & Publish' : 'Create & Publish')}
+              </Button>
+            </div>
           </div>
         </form>
       </div>
