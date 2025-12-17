@@ -3067,20 +3067,67 @@ const CollegeForm = () => {
           </div>
         )}
         
-        {/* Courses & Fees - Extracted Component */}
-        <CoursesSection 
-          formData={formData}
-          setFormData={setFormData}
-          handleChange={handleChange}
-          availableCourses={availableCourses}
-          updateCourse={updateCourse}
-          addCourse={addCourse}
-          removeCourse={removeCourse}
-          uploadingCourseBrochure={uploadingCourseBrochure}
-          handleCourseBrochureUpload={handleCourseBrochureUpload}
-        />
+        {/* For Schools: Simple Fee Section */}
+        {isSchool ? (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold mb-4">📚 School Fees</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Average Annual Fee (₹) *</label>
+                <input
+                  type="number"
+                  name="average_fees"
+                  value={formData.average_fees}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter annual fee"
+                  className="w-full border rounded px-3 py-2"
+                />
+                <p className="text-xs text-gray-500 mt-1">Annual tuition fee for the school</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Fee Range</label>
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="Min Fee"
+                    value={formData.fee_range?.min || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      fee_range: { ...formData.fee_range, min: parseFloat(e.target.value) || 0 }
+                    })}
+                    className="w-1/2 border rounded px-3 py-2"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max Fee"
+                    value={formData.fee_range?.max || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      fee_range: { ...formData.fee_range, max: parseFloat(e.target.value) || 0 }
+                    })}
+                    className="w-1/2 border rounded px-3 py-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* For Colleges/Universities: Full Courses & Fees Section */
+          <CoursesSection 
+            formData={formData}
+            setFormData={setFormData}
+            handleChange={handleChange}
+            availableCourses={availableCourses}
+            updateCourse={updateCourse}
+            addCourse={addCourse}
+            removeCourse={removeCourse}
+            uploadingCourseBrochure={uploadingCourseBrochure}
+            handleCourseBrochureUpload={handleCourseBrochureUpload}
+          />
+        )}
 
-        {/* Admission Details - Extracted Component */}
+        {/* Admission Details - Shown for all */}
         <AdmissionSection 
           formData={formData}
           handleChange={handleChange}
@@ -3089,20 +3136,24 @@ const CollegeForm = () => {
           removeAdmissionDate={removeAdmissionDate}
         />
 
-        {/* Cutoff Data - Extracted Component */}
-        <CutoffSection 
-          formData={formData}
-          updateCutoff={updateCutoff}
-          addCutoff={addCutoff}
-          removeCutoff={removeCutoff}
-        />
+        {/* Cutoff Data - Hidden for Schools */}
+        {!isSchool && (
+          <CutoffSection 
+            formData={formData}
+            updateCutoff={updateCutoff}
+            addCutoff={addCutoff}
+            removeCutoff={removeCutoff}
+          />
+        )}
 
-        {/* Placement Details - Extracted Component */}
-        <PlacementSection 
-          formData={formData} 
-          setFormData={setFormData} 
-          handleNestedChange={handleNestedChange} 
-        />
+        {/* Placement Details - Hidden for Schools */}
+        {!isSchool && (
+          <PlacementSection 
+            formData={formData} 
+            setFormData={setFormData} 
+            handleNestedChange={handleNestedChange} 
+          />
+        )}
 
         {/* Scholarships - Extracted Component */}
         <ScholarshipsSection 
