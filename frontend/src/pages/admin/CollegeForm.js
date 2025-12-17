@@ -1160,6 +1160,8 @@ const CollegeForm = () => {
             {formData.name && (
               <span className="text-sm text-gray-500">— {formData.name}</span>
             )}
+            {/* Status Badge */}
+            {id && <StatusBadge status={formData.status || 'draft'} size="sm" />}
           </div>
           <div className="flex items-center gap-2">
             <Button 
@@ -1183,19 +1185,6 @@ const CollegeForm = () => {
             >
               {saving && formData.status === 'draft' ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiFileText className="w-4 h-4" />}
               <span className="ml-1">Save Draft</span>
-            </Button>
-            <Button 
-              type="button"
-              disabled={saving}
-              size="sm"
-              onClick={() => {
-                setFormData(prev => ({...prev, status: 'published'}));
-                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
-              }}
-              className="bg-orange-600 hover:bg-orange-700 text-white"
-            >
-              {saving && formData.status === 'published' ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiSave className="w-4 h-4" />}
-              <span className="ml-1">{saving ? 'Saving...' : 'Publish'}</span>
             </Button>
           </div>
         </div>
