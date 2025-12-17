@@ -22,7 +22,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     // Wait for auth context to load
-    if (authContext?.loading) return;
+    if (loading) return;
     
     if (!user) {
       navigate('/login');
@@ -39,7 +39,7 @@ const ProfilePage = () => {
       });
       setInitialized(true);
     }
-  }, [user, navigate, authContext?.loading, initialized]);
+  }, [user, navigate, loading, initialized]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
