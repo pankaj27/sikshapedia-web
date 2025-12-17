@@ -263,18 +263,35 @@ const DynamicListingPage = () => {
   const handleFilterSelect = (filterType, value) => {
     setActiveFilterDropdown(null);
     
+    // State or City filter - navigate to location-based URL
     if (filterType === 'state' || filterType === 'city') {
       const locationSlug = generateSlug(value);
-      navigate(`/${locationSlug}-colleges`);
+      const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
+      navigate(`/${locationSlug}-${suffix}`);
       return;
     }
     
+    // Stream filter - navigate to stream-based URL
     if (filterType === 'stream') {
       const streamSlug = generateSlug(value);
       navigate(`/${streamSlug}`);
       return;
     }
     
+    // SubStream filter - navigate to stream/substream URL
+    if (filterType === 'subStream') {
+      const subStreamSlug = generateSlug(value);
+      // If we already have a stream, append substream
+      if (pageInfo.stream) {
+        navigate(`/${pageInfo.stream}/${subStreamSlug}`);
+      } else {
+        // Otherwise just use substream as stream
+        navigate(`/${subStreamSlug}`);
+      }
+      return;
+    }
+    
+    // For other filters (type, degree, etc.) - apply as local filter
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
 
