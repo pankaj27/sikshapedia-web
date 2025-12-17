@@ -60,16 +60,51 @@ const CourseDetailForm = () => {
 
   const fetchDropdownData = async () => {
     try {
-      const [streamsRes, subStreamsRes, examsRes] = await Promise.all([
+      const [streamsRes, subStreamsRes, examsRes, coursesRes] = await Promise.all([
         api.get('/streams'),
         api.get('/sub-streams'),
-        api.get('/exams')
+        api.get('/exams'),
+        api.get('/courses?limit=500') // Fetch all courses from Quick Entry
       ]);
       setStreams(streamsRes.data);
       setSubStreams(subStreamsRes.data);
       setExams(examsRes.data);
+      setCoursesList(coursesRes.data);
     } catch (error) {
       console.error('Error fetching dropdown data:', error);
+    }
+  };
+
+  // Handle course selection from dropdown
+  const handleCourseSelect = (e) => {
+    const selectedCourseId = e.target.value;
+    if (!selectedCourseId) {
+      // Reset to empty if no course selected
+      setFormData({
+        ...formData,
+        name: '',
+        slug: '',
+        full_name: '',
+        degree_type: 'UG',
+        duration: '',
+        eligibility: '',
+        base_course_id: ''
+      });
+      return;
+    }
+    
+    const selectedCourse = coursesList.find(c => c.id === selectedCourseId);
+    if (selectedCourse) {
+      setFormData({
+        ...formData,
+        name: selectedCourse.name,
+        slug: selectedCourse.slug || generateSlug(selectedCourse.name),
+        full_name: selectedCourse.full_name || '',
+        degree_type: selectedCourse.degree_type || 'UG',
+        duration: selectedCourse.duration || '',
+        eligibility: selectedCourse.eligibility || '',
+        base_course_id: selectedCourse.id // Store reference to the base course
+      });
     }
   };
 
