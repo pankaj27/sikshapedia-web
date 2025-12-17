@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiUser, FiCamera, FiSave, FiArrowLeft, FiMail, FiBriefcase, FiFileText } from 'react-icons/fi';
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
