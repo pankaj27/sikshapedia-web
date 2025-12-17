@@ -6,3 +6,4 @@ export { default as FAQsSection } from './FAQsSection';
 export { default as CoursesSection } from './CoursesSection';
 export { default as AdmissionSection } from './AdmissionSection';
 export { default as CutoffSection } from './CutoffSection';
+export { default as SidebarWidgetsSection } from './SidebarWidgetsSection';
