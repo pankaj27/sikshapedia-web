@@ -115,12 +115,103 @@ const CourseDetailForm = () => {
     }
   });
 
+  const [uploadingImage, setUploadingImage] = useState(null); // Track which TOC index is uploading image
+  const [uploadingVideo, setUploadingVideo] = useState(null); // Track which TOC index is uploading video
+  const [uploadingSeoImage, setUploadingSeoImage] = useState(false);
+  const [uploadingSeoVideo, setUploadingSeoVideo] = useState(false);
+
   useEffect(() => {
     fetchDropdownData();
     if (id) {
       fetchCourse();
     }
   }, [id]);
+
+  // Handle image upload for TOC section
+  const handleTocImageUpload = async (file, tocIndex) => {
+    if (!file) return;
+    setUploadingImage(tocIndex);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      const response = await api.post('/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const newToc = [...(formData.seo_toc || [])];
+      newToc[tocIndex].image = response.data.url;
+      setFormData({ ...formData, seo_toc: newToc });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image');
+    } finally {
+      setUploadingImage(null);
+    }
+  };
+
+  // Handle video upload for TOC section
+  const handleTocVideoUpload = async (file, tocIndex) => {
+    if (!file) return;
+    setUploadingVideo(tocIndex);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      const response = await api.post('/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const newToc = [...(formData.seo_toc || [])];
+      newToc[tocIndex].video = response.data.url;
+      setFormData({ ...formData, seo_toc: newToc });
+    } catch (error) {
+      console.error('Error uploading video:', error);
+      alert('Failed to upload video');
+    } finally {
+      setUploadingVideo(null);
+    }
+  };
+
+  // Handle SEO content image upload
+  const handleSeoImageUpload = async (file) => {
+    if (!file) return;
+    setUploadingSeoImage(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      const response = await api.post('/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setFormData({ 
+        ...formData, 
+        seo_images: [...(formData.seo_images || []), { url: response.data.url, caption: '' }]
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image');
+    } finally {
+      setUploadingSeoImage(false);
+    }
+  };
+
+  // Handle SEO content video upload
+  const handleSeoVideoUpload = async (file) => {
+    if (!file) return;
+    setUploadingSeoVideo(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      const response = await api.post('/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setFormData({ 
+        ...formData, 
+        seo_videos: [...(formData.seo_videos || []), { url: response.data.url, title: '' }]
+      });
+    } catch (error) {
+      console.error('Error uploading video:', error);
+      alert('Failed to upload video');
+    } finally {
+      setUploadingSeoVideo(false);
+    }
+  };
 
   const fetchDropdownData = async () => {
     try {
