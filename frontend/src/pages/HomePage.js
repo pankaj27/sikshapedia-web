@@ -323,6 +323,80 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
+      {/* Quick Action Widgets */}
+      <section className="py-6 bg-gradient-to-r from-gray-50 to-gray-100">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Apply Now */}
+            <button
+              onClick={() => setActiveWidget('apply')}
+              className="flex items-center gap-3 p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <FiSend size={20} />
+              </div>
+              <div className="text-left">
+                <h3 className="font-bold text-sm">Apply Now</h3>
+                <p className="text-xs text-white/80">Quick admission</p>
+              </div>
+            </button>
+
+            {/* Ask Question */}
+            <button
+              onClick={() => setActiveWidget('question')}
+              className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <FiMessageCircle size={20} />
+              </div>
+              <div className="text-left">
+                <h3 className="font-bold text-sm">Ask Question</h3>
+                <p className="text-xs text-white/80">Get expert help</p>
+              </div>
+            </button>
+
+            {/* Need Counselling */}
+            <button
+              onClick={() => setActiveWidget('counselling')}
+              className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <FiPhone size={20} />
+              </div>
+              <div className="text-left">
+                <h3 className="font-bold text-sm">Counselling</h3>
+                <p className="text-xs text-white/80">Free guidance</p>
+              </div>
+            </button>
+
+            {/* Sponsor Ad Card */}
+            <div className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden">
+              <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                  <HiOutlineSparkles size={20} className="text-yellow-400" />
+                </div>
+                <div className="text-left">
+                  <h3 className="font-bold text-sm">IIM Programs</h3>
+                  <p className="text-xs text-gray-400">50% scholarship</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Widget Modals */}
+      {activeWidget && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setActiveWidget(null)}>
+          <div className="max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            {activeWidget === 'apply' && <ApplyNowWidget onClose={() => setActiveWidget(null)} />}
+            {activeWidget === 'question' && <AskQuestionWidget onClose={() => setActiveWidget(null)} />}
+            {activeWidget === 'counselling' && <CounsellingWidget onClose={() => setActiveWidget(null)} />}
+          </div>
+        </div>
+      )}
+
       {/* Study Goals Carousel - Compact */}
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
