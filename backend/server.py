@@ -1753,11 +1753,17 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     if user_id is None:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     
-    # Check if user is admin
+    # Check if user is admin - check both admins collection and users collection
     if role == "admin":
+        # First try admins collection
         admin = await db.admins.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
         if admin is None:
+            # Fallback: Check users collection for users with admin role
+            admin = await db.users.find_one({"id": user_id, "role": "admin"}, {"_id": 0, "password_hash": 0})
+        
+        if admin is None:
             raise HTTPException(status_code=401, detail="Admin not found")
+        
         # Return a User object with admin properties
         return User(
             id=admin["id"],
