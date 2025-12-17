@@ -870,22 +870,47 @@ const DynamicListingPage = () => {
             
             {/* Applied Filters Row */}
             <div className="flex items-center gap-1.5 flex-wrap">
+              {/* Show active URL-based filters */}
+              {activeFilters.stream && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  Stream: {activeFilters.stream}
+                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+                </span>
+              )}
+              
+              {activeFilters.state && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  State: {activeFilters.state}
+                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+                </span>
+              )}
+              
+              {activeFilters.city && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  City: {activeFilters.city}
+                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+                </span>
+              )}
+              
+              {/* Show local type filters */}
               {filters.type.map(type => (
                 <span key={type} className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  {type}
+                  Type: {type}
                   <button onClick={() => toggleFilter(type)} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
                 </span>
               ))}
               
-              {filters.subStream && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  {filters.subStream}
-                  <button onClick={() => removeFilter('subStream')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {(filters.type.length > 0 || filters.subStream) && (
-                <button onClick={clearFilters} className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1">Clear All</button>
+              {/* Clear All button */}
+              {(activeFilters.stream || activeFilters.state || activeFilters.city || filters.type.length > 0) && (
+                <button 
+                  onClick={() => {
+                    clearFilters();
+                    navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges');
+                  }} 
+                  className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1"
+                >
+                  Clear All
+                </button>
               )}
             </div>
           </div>
