@@ -1,18 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { FiPlus, FiEdit, FiTrash2, FiSearch, FiX } from 'react-icons/fi';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FiPlus, FiEdit, FiTrash2, FiSearch, FiX, FiFilter } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 import { generateSlug } from '../../utils/slugify';
+
+// Badge color mapping for degree types
+const degreeColors = {
+  'UG': 'bg-blue-100 text-blue-700',
+  'PG': 'bg-purple-100 text-purple-700',
+  'Diploma': 'bg-amber-100 text-amber-700',
+  'Professional': 'bg-emerald-100 text-emerald-700',
+  'PG Diploma': 'bg-indigo-100 text-indigo-700',
+  'Doctorate': 'bg-red-100 text-red-700',
+  'Integrated': 'bg-cyan-100 text-cyan-700',
+  'Super Specialty': 'bg-pink-100 text-pink-700',
+};
+
+// Stream color mapping
+const streamColors = {
+  'Engineering': 'bg-slate-100 text-slate-700',
+  'Medical': 'bg-rose-100 text-rose-700',
+  'Management': 'bg-violet-100 text-violet-700',
+  'Science': 'bg-teal-100 text-teal-700',
+  'Commerce': 'bg-orange-100 text-orange-700',
+  'Arts': 'bg-fuchsia-100 text-fuchsia-700',
+  'Law': 'bg-yellow-100 text-yellow-800',
+};
 
 const CoursesManagement = () => {
   const [items, setItems] = useState([]);
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterStream, setFilterStream] = useState('');
+  const [filterDegree, setFilterDegree] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({});
+
+  // Get unique streams and degree types for filters
+  const { streams, degreeTypes } = useMemo(() => {
+    const s = [...new Set(items.map(i => i.stream).filter(Boolean))].sort();
+    const d = [...new Set(items.map(i => i.degree_type).filter(Boolean))].sort();
+    return { streams: s, degreeTypes: d };
+  }, [items]);
 
   useEffect(() => {
     fetchItems();
