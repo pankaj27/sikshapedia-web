@@ -1656,15 +1656,23 @@ class ListingPageContent(BaseModel):
         "comments": {"enabled": False, "title": "Comments"}
     }
     
-    # Status
-    is_published: bool = True
+    # Status & Approval
+    status: str = "draft"  # draft, pending, published, rejected
+    is_published: bool = False
+    rejection_reason: Optional[str] = None
+    reviewed_by: Optional[str] = None
+    reviewed_by_name: Optional[str] = None
+    reviewed_at: Optional[datetime] = None
+    submitted_at: Optional[datetime] = None
     
     # Content Team / Author Info
     created_by: Optional[str] = None  # User ID
     created_by_name: Optional[str] = None  # User Name
     created_by_email: Optional[str] = None  # User Email
+    created_by_photo: Optional[str] = None  # Profile photo
     updated_by: Optional[str] = None  # Last updated by User ID
     updated_by_name: Optional[str] = None  # Last updated by User Name
+    updated_by_photo: Optional[str] = None  # Profile photo
     
     # Metadata
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
