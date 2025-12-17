@@ -1,140 +1,146 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to build a college portal replicating . The scope has expanded to creating a comprehensive backend-driven system with a full-featured admin panel. The primary objective is to ensure every piece of data displayed on the frontend can be managed (Create, Read, Update, Delete) from this admin panel. The user has been iteratively adding a very large number of features to the institution entry form and listing pages, turning it into a complex, all-in-one content management system with a highly specific, SEO-friendly URL and filtering structure.
+The user's initial goal was to build a college portal replicating . This has evolved into creating a comprehensive, backend-driven system where every piece of data on the frontend is manageable through a full-featured admin panel. The project now focuses on creating a powerful Content Management System (CMS) for dynamically generated listing pages (based on states, cities, streams, etc.) and implementing a highly specific, SEO-friendly URL structure.
 
 PRODUCT REQUIREMENTS:
-1.  **Full Backend Control:** Every frontend page and component should be powered by backend APIs.
-2.  **Comprehensive Admin Panel:** A secure admin panel to manage all data entities.
-3.  **Unified Institution Management:** A single form and management page for Colleges, Schools, and Universities.
-4.  **SEO-Friendly URL Structure:** The entire application's routing must follow a detailed, hierarchical pattern specified by the user for different content types and filters.
+1.  **Full Backend Control:** Every frontend page and component must be powered by backend APIs.
+2.  **Comprehensive Admin Panel:** A secure admin panel to manage all data entities, including a new, advanced CMS for dynamic landing pages.
+3.  **Unified Institution Management:** A single, large form to manage Colleges, Schools, and Universities, which is now undergoing refactoring.
+4.  **SEO-Friendly URL Structure:** The application's routing must follow a hybrid model: SEO-friendly slugs for primary filters (State, City, Stream) and query parameters for secondary ones.
 5.  **Advanced Filtering**: The main listing page must have a comprehensive set of interdependent filters that update the URL.
+6.  **Rich Content Management**: The admin panel must allow creating rich content for listing pages, including text, images, videos, tables, FAQs, and widgets.
 
 **User's preferred language**: English
 
 **what currently exists?**
-A full-stack application (React/FastAPI/MongoDB) with a heavily customized front end. The agent has just completed a major overhaul of the primary listing page () to implement a complex, multi-filter system. This included redesigning the page, adding extensive test data via a script, fixing backend JWT errors, and implementing logic for combined, URL-driven filters (e.g., state + city). The page now supports filtering by Stream, State, City, Type, Course, Degree, Exam, Affiliation, and Recognition.
+A full-stack application (React/FastAPI/MongoDB) featuring an advanced, URL-driven filtering system on the main institution listing page (). A significant new feature, a Listing Pages Content Management system, has just been built. This system allows an admin to create custom content (SEO tags, titles, rich content sections with images/videos/tables, FAQs) for any dynamic URL (e.g., , , ). The  has been enhanced with a Streams field to improve filtering, and a refactoring effort for this large form has begun. Key pages like  and  have been connected to the backend, removing mock data.
 
 **Last working item**:
--   **Last item agent was working**: The user requested to add a new  filter, populate it and other filters (, ) with comprehensive data from the system, and fix a bug where filter dropdowns were not closing automatically after a selection was made. The agent has edited the code in  to add the new filter and modify the selection handlers to close the dropdowns.
+-   **Last item agent was working**: The user requested two final changes for the new Listing Pages Content Management feature: 1) Connect content creation to user details for tracking. 2) Make images and videos in content sections full-width. The agent has implemented both: user tracking is complete and verified, but the full-width layout fix needs confirmation.
 -   **Status**: IN PROGRESS
--   **Agent Testing Done**: N
--   **Which testing method agent to use?**: . The next step is to restart the frontend and test that (1) the new  filter appears, (2) the filter dropdowns are populated correctly, and (3) all filter dropdowns close automatically after selecting an option.
+-   **Agent Testing Done**: N (The admin-side user tracking was verified, but the frontend layout change was not).
+-   **Which testing method agent to use?**: . The agent needs to navigate to a page with rich content (e.g., ), expand the content area, and verify that images and videos are now full-width.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Finalize Filter Implementation and Fix Dropdown Behavior (P0)**
-    -   **Description**: The agent was in the middle of adding a new  filter and fixing a UI bug where filter dropdowns do not disappear after making a selection. The code has been written but not tested.
-    -   **Attempted fixes**: The agent edited  to:
-        1.  Add  to the filter state and UI.
-        2.  Populate , , and  filter options with comprehensive lists.
-        3.  Modify  and  to call  to close the dropdown post-selection.
+-   **Issue 1: Verify Full-Width Image/Video Layout (P0)**
+    -   **Description**: The user reported that images and videos in the custom content sections were not displaying as full-width. The agent implemented a fix in , but this has not been visually confirmed.
+    -   **Attempted fixes**: The agent modified the rendering logic and CSS classes for  within .
     -   **Next debug checklist**:
-        1.  Restart the frontend service using frontend: ERROR (not running)
-frontend: ERROR (abnormal termination).
-        2.  Use the  to navigate to  and verify the new  filter button is visible in the filter bar.
-        3.  Use the  to click on the , , and  filters to confirm they are populated with the correct, extensive data lists.
-        4.  Use the  to test selecting an item from a single-select filter (e.g., State) and a multi-select filter (e.g., Type Of College) to confirm the dropdown closes automatically.
-    -   **Why fix this issue and what will be achieved with the fix?**: This will complete the advanced filtering feature as requested by the user and resolve a key usability bug.
+        1.  Use the  to navigate to .
+        2.  Use the tool to click the Read More button to expand the content area.
+        3.  Take a screenshot focusing on the content sections containing an image and a video.
+        4.  Confirm they span the full width of the content container. If not, review the CSS classes in  again.
+    -   **Why fix this issue and what will be achieved with the fix?**: This will correct the visual layout of the rich content to match the user's design expectations.
     -   **Status**: IN PROGRESS
     -   **Is recurring issue?**: N
     -   **Should Test frontend/backend/both after fix?**: Frontend
     -   **Blocked on other issue**: None
 
 **In progress Task List**:
--   None.
+-   **Task 1: Refactor  (P1)**
+    -   **Description**: The agent started refactoring the massive  (7105 lines) by extracting logic into smaller components.
+    -   **Where to resume**: The agent created  and , but has not yet imported and used them within  to replace the original code. The next step is to perform this replacement and continue extracting other sections.
+    -   **What will be achieved with this?**: It will significantly reduce the complexity of , making it more maintainable and easier to work with.
+    -   **Status**: IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?**: Frontend (Admin panel form)
+    -   **Blocked on something**: No
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   (P1) **Refactor **: Integrate reusable components (, ) to reduce the file's size and complexity.
-    -   (P1) **Connect Remaining Frontend Pages**: Refactor pages still using mock data (, , etc.) to fetch data from backend APIs.
-    -   (P2) **Deprecate Old Listing Page**: Phase out the legacy , as its design has now been merged into .
+    -   (P1) **Complete  Refactoring**: Continue extracting large sections (e.g., Scholarships, Rankings, Facilities, How to Reach) from  into their own reusable components.
+    -   (P2) **Deprecate Old Listing Page**: Safely remove the legacy  and any routes or links pointing to it, as its functionality is now fully handled by .
 -   **Future Tasks:**
-    -   (P2) **Modular Backend Migration**: Update the frontend to use new modular API routes (e.g., ) and refactor the backend .
-    -   (P3) **Create Test Files**: Create Playwright or other automated test files for the new features.
+    -   (P2) **Modular Backend Migration**: Refactor the monolithic  by splitting routes, models, and services into separate files for better organization and scalability.
+    -   (P3) **Create Automated Tests**: Develop a suite of automated tests (e.g., using Playwright) for the advanced filtering and the new Listing Pages Content Management system.
 
 **Completed work in this session**
--   **URL Structure Finalized (Plural)**: Corrected the URL structure to use plural paths (e.g., ) for detail pages, as per the user's final instruction.
--   **Old URL Format Deletion**: Removed fallback logic that supported the old URL format, ensuring only the new serial-number-based format works.
--   **Route Ordering Fix**: Resolved a critical bug where dynamic routes were overriding specific routes (e.g.,  was catching ) by reordering routes in .
--   **Combined Listings**: Modified  to combine Colleges and Universities under shared URLs (e.g., ), while keeping Schools separate.
--   **Listing Page Redesign**: Replaced the simple design of  with the full, complex layout from the legacy .
--   **Navigation Links Update**: Updated all major navigation links (Header, Footer, HomePage) to point to the new primary listing page ().
--   **Bulk Data Seeding**: Created and executed a Python script to populate the database with extensive test data for colleges, schools, and universities, which was crucial for testing the complex filters.
--   **Advanced Filtering Implementation**:
-    - Implemented combined filtering allowing users to stack filters (e.g., State + City), generating new URLs like .
-    - Made the City filter dynamic, populating it based on the selected State.
-    - Added a search bar to the State filter dropdown.
-    - Added multiple new filter categories: Course, Degree Type, Exam Accepted, Affiliation, and Recognition.
-    - Implemented UI to display currently applied filters as removable badges.
+-   **Filter Implementation Finalized**: Successfully added the 'Accreditation' filter and fixed the dropdown auto-close bug.
+-   **Hybrid URL Strategy Implemented**: Reworked the URL structure to use SEO-friendly slugs for primary filters (e.g., ) and query parameters for secondary ones (e.g., ).
+-   **Listing Pages Content Management System**:
+    -   Built a complete CMS from scratch, allowing admins to add rich content (SEO tags, titles, text, images, videos, tables, FAQs) for any dynamic URL.
+    -   The admin form includes image uploads, a table editor, and a Draft/Publish system.
+    -    was updated to fetch and render this content.
+-   **User Tracking for Content**: Implemented a system to track which admin creates/updates content, displaying this information in the admin panel.
+-   **Connected Pages to Backend**: Removed mock data from  and  by connecting them to backend APIs.
+-   ** Enhancement**: Added a Streams Offered field to the institution form to enable stream-based filtering.
+-   **UI Text Update**: Changed menu names on the homepage as requested (e.g., All Colleges to Top Colleges).
 
 **Earlier issues found/mentioned but not fixed**
 -   None.
 
 **Known issue recurrence from previous fork**
--   ** Complexity**: The file remains extremely large. The plan to refactor it is still pending in Upcoming Tasks.
+-   ** Complexity**: This is a known, recurring issue. While refactoring has started, the file remains extremely large and requires significant work to become manageable.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **URL-Driven State Management**: The filtering system relies on parsing the URL to determine the active filters, making the UI a reflection of the URL state.
--   **Dynamic React Routing**: Complex route ordering in  was required to manage specific vs. dynamic catch-all paths, preventing incorrect page renders.
--   **Conditional UI Rendering**: The listing page dynamically changes its title, breadcrumbs, and filter display based on the parsed URL and active filters.
--   **Bulk Data Seeding**: A Python script was used to programmatically create a large volume of test data via API calls, which was essential for developing and testing the filter functionality.
--   **Backend Debugging**: Identified and fixed a backend  by changing the exception handling to use  from the  library.
+-   **Hybrid URL State Management**: Combining SEO-friendly slugs for primary filters and query parameters for secondary filters to drive the UI.
+-   **Dynamic Content Injection**: The main listing page now functions like a CMS template, fetching and rendering rich content from an API based on the URL.
+-   **Component-Based Admin Forms**: The new  uses collapsible sections and dynamic form elements to manage a large number of fields for the CMS.
+-   **Rich Content Schema**: A new  model was created on the backend to store complex, structured content including nested arrays for sections, FAQs, and widgets.
 
 **key DB schema**
--   **colleges**: 
+-   **colleges**:  (updated)
+-   **listing_pages**:  (New collection)
 
 **changes in tech stack**
 -   None.
 
 **All files of reference**
--   : The central file for all recent and ongoing filter development.
--   : Handles parsing and generating complex filter URLs.
--   : Defines the application's core routing structure.
--   : Contains the API logic.
--   : Script used for seeding test data.
+-   : The new advanced CMS form.
+-   : The core frontend page that renders all dynamic content.
+-   : The backend logic for the new CMS.
+-   : The large form being refactored.
+-   : The management list for the CMS.
 
 **Areas that need refactoring**:
--   ****: Critically needs to be broken down into smaller components.
--   ****: Has become very large and monolithic. The filter bar, applied filter display, and institution list could be extracted into separate, more manageable components.
+-   ****: Critically needs to be broken down into smaller components. Refactoring is in progress.
+-   ****: Has become a monolithic god component. The filtering logic, institution list, and dynamic page content rendering should be extracted into separate, manageable components.
+-   ****: Is becoming very large. The new  API endpoints should be moved to a dedicated router file.
 
 **key api endpoints**
--   : Used by the  script.
--   : The primary endpoint for fetching listings, supporting filtering by multiple combined criteria from the URL.
+-   : CRUD endpoints for the new listing page CMS.
+-   : Fetches content for a specific dynamic page.
+-   : Endpoint for uploading images.
 
 **Critical Info for New Agent**
--   Your immediate task is to **test the latest changes** made to . The previous agent added a new Accreditation filter and implemented a fix for dropdowns not closing on selection. This has **not been tested**.
--   You must start by restarting the frontend and using the  to verify that the fix and the new filter are working as expected.
--   The user is highly engaged and provides very specific, iterative feedback on the filtering functionality. Be prepared for further refinement requests on this feature.
--   The application now contains a large amount of test data across many states and categories, which should be used to thoroughly test all filter combinations.
+-   Your immediate task is to verify the layout fix for images and videos on the  page. The previous agent implemented a fix to make them full-width but did not visually confirm it worked.
+-   After verification, the next priority is to continue the refactoring of . The component files have been created but are not yet used in the main form.
+-   A major new feature, the Listing Pages Content Management system, is now live. The user is actively engaged with it and may have follow-up requests.
+-   The user's goal is to create a feature-rich portal similar to , so a deep understanding of that site's structure and functionality is beneficial.
 
 **documents created in this job**
 -   
+-   
+-   
+-   
 
 **Last 10 User Messages and any pending user messages**
-1.  **User:** When I select a filter (state/city), it doesn't show as selected. (COMPLETED)
-2.  **User:** If I filter state then city, the state filter gets deselected. (COMPLETED - Implemented combined filters)
-3.  **User:** Update state filter with all states, and make the city filter dynamic based on state. (COMPLETED)
-4.  **User:** Add more filters: sub stream, course, degree type, exam, affiliation, recognition. (COMPLETED)
-5.  **User:**  and  filters should show all-India bodies. Add an  filter. (IN PROGRESS)
-6.  **User:** After selection, the dropdown not disappearing for some filters. (IN PROGRESS - Fix implemented but not tested)
-7.  **(Pending User Expectation)**: Verify the fix for the dropdown closing issue.
-8.  **(Pending User Expectation)**: Verify the new  filter and its data.
+1.  **User:** How do I create a city-wise listing page URL? (COMPLETED - Agent explained the new form)
+2.  **User:** The listing page content form needs more features: image, video, table, ToC, FAQs, widgets. (COMPLETED - Agent implemented)
+3.  **User:** Add a Save to Draft option to the form. (COMPLETED - Agent implemented)
+4.  **User:** Auto-generate alt tags for images. (COMPLETED - Agent implemented)
+5.  **User:** Where is the image upload option? (COMPLETED - Agent added an upload button)
+6.  **User:** Create a test page for a city with all fields filled out. (COMPLETED - Agent created a Mumbai page)
+7.  **User:** Connect content to the user who created it and make images/videos full-width. (IN PROGRESS - User tracking is done, layout fix needs verification)
+8.  **User:** How do stream/course pages work and how are colleges tagged? (COMPLETED - Agent explained the system)
+9.  **User:** Is there a stream option in the institution form? (COMPLETED - Agent discovered it was missing and added it)
+10. **User:** How do I add city-wise listing URLs now? (COMPLETED - Agent explained the workflow in the new form)
 
 **Project Health Check:**
--   **Broken**: No. The application is functional, but the latest changes are untested.
--   **Mocked**: Yes, several pages outside the core institution listing/details flow (e.g., , ) still use mock data.
+-   **Broken**: No. The application is functional, but the last layout change is unverified.
+-   **Mocked**: No. The most prominent pages using mock data (, ) have been connected to the backend.
 
 **3rd Party Integrations**
 -   React Icons
--   Pillow
 -   PyJWT
+-   Pillow (Python Image Library)
 
 **Testing status**
--   **Testing agent used after significant changes**: No (Not since the recent major filter changes).
--   **Troubleshoot agent used after agent stuck in loop**: No
--   **Test files created**:  (a helper script, not a formal test file).
+-   **Testing agent used after significant changes**: NO
+-   **Troubleshoot agent used after agent stuck in loop**: NO
+-   **Test files created**: None.
 -   **Known regressions**: None.
 
 **Credentials to test flow:**
@@ -142,4 +148,5 @@ frontend: ERROR (abnormal termination).
 -   **Admin Password**: 
 
 **What agent forgot to execute**
-The agent implemented the code changes for the last user request (add accreditation filter, fix dropdown closing) but did not restart the services or test the changes. The next immediate step is to test this implementation.</analysis>
+-   The agent did not visually verify that the fix for making images/videos full-width in  worked correctly.
+-   The agent created refactoring component files (, ) but did not update  to actually import and use them. The refactoring task is only half-complete.</analysis>
