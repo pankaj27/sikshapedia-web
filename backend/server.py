@@ -248,6 +248,14 @@ class CourseDetail(BaseModel):
     popularity_score: int = 0
     difficulty_level: Optional[str] = None
     
+    # Approval Status
+    status: str = "draft"  # draft, pending, published, rejected
+    rejection_reason: Optional[str] = None
+    submitted_by: Optional[dict] = None
+    submitted_at: Optional[datetime] = None
+    approved_by: Optional[dict] = None
+    approved_at: Optional[datetime] = None
+    
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CourseDetailCreate(BaseModel):
