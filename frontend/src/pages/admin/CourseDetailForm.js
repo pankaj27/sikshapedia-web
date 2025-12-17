@@ -638,17 +638,320 @@ const CourseDetailForm = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Course Details</h2>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Description *</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-                rows="3"
-                className="w-full border rounded px-3 py-2"
-              />
-            </div>
+            {/* Description with Rich Content */}
+            <CollapsibleSection title="Description *" icon="📝" defaultOpen={true} badge={`${formData.description_toc?.length || 0} sections`}>
+              <div className="space-y-4">
+                {/* Main Description Text */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Short Description</label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    placeholder="Brief description of the course..."
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+
+                {/* Description TOC Builder */}
+                <div className="border-2 border-indigo-300 rounded-lg p-4 bg-indigo-50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-indigo-800">📑 Table of Contents</label>
+                      <p className="text-xs text-indigo-600">Build content sections for description</p>
+                    </div>
+                    <span className="text-xs bg-indigo-200 text-indigo-800 px-2 py-1 rounded">
+                      {formData.description_toc?.length || 0} sections
+                    </span>
+                  </div>
+
+                  {/* TOC Items */}
+                  <div className="space-y-3 mb-4">
+                    {(formData.description_toc || []).map((item, index) => (
+                      <div key={index} className="bg-white rounded-lg border-2 border-indigo-200 p-3">
+                        <div className="flex items-start gap-3">
+                          <div className="flex items-center justify-center w-8 h-8 bg-indigo-100 text-indigo-800 rounded-full font-bold text-sm flex-shrink-0">
+                            {index + 1}
+                          </div>
+                          <div className="flex-1 space-y-3">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="block text-xs text-gray-600 mb-1">Section Title *</label>
+                                <input
+                                  type="text"
+                                  value={item.title || ''}
+                                  onChange={(e) => {
+                                    const newToc = [...(formData.description_toc || [])];
+                                    newToc[index].title = e.target.value;
+                                    newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-').substring(0, 50);
+                                    setFormData({...formData, description_toc: newToc});
+                                  }}
+                                  placeholder="e.g., What is this course?"
+                                  className="w-full border-2 border-indigo-200 rounded px-2 py-1.5 text-sm"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs text-gray-600 mb-1">Anchor ID</label>
+                                <input
+                                  type="text"
+                                  value={item.anchor || ''}
+                                  onChange={(e) => {
+                                    const newToc = [...(formData.description_toc || [])];
+                                    newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                                    setFormData({...formData, description_toc: newToc});
+                                  }}
+                                  placeholder="auto-generated"
+                                  className="w-full border rounded px-2 py-1.5 text-sm font-mono bg-gray-50"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-xs text-gray-600 mb-1">Content *</label>
+                              <textarea
+                                value={item.content || ''}
+                                onChange={(e) => {
+                                  const newToc = [...(formData.description_toc || [])];
+                                  newToc[index].content = e.target.value;
+                                  setFormData({...formData, description_toc: newToc});
+                                }}
+                                placeholder="Write content... HTML supported."
+                                rows="3"
+                                className="w-full border rounded px-2 py-1.5 text-sm"
+                              />
+                            </div>
+                            {/* Image & Video for this section */}
+                            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-indigo-100">
+                              {/* Image */}
+                              <div>
+                                <label className="block text-xs text-gray-600 mb-1"><FiImage className="inline mr-1" /> Image</label>
+                                {item.image ? (
+                                  <div className="relative">
+                                    <img src={item.image} alt="" className="w-full h-20 object-cover rounded border" />
+                                    <button type="button" onClick={() => {
+                                      const newToc = [...(formData.description_toc || [])];
+                                      newToc[index].image = '';
+                                      setFormData({...formData, description_toc: newToc});
+                                    }} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"><FiX size={10} /></button>
+                                  </div>
+                                ) : (
+                                  <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-indigo-300 rounded cursor-pointer hover:bg-indigo-100">
+                                    <FiUpload className="text-indigo-400" size={16} />
+                                    <span className="text-xs text-indigo-600">Upload</span>
+                                    <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                                      const file = e.target.files[0];
+                                      if (file) {
+                                        const fd = new FormData();
+                                        fd.append('file', file);
+                                        const res = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                        const newToc = [...(formData.description_toc || [])];
+                                        newToc[index].image = res.data.url;
+                                        setFormData({...formData, description_toc: newToc});
+                                      }
+                                    }} />
+                                  </label>
+                                )}
+                              </div>
+                              {/* Video URL */}
+                              <div>
+                                <label className="block text-xs text-gray-600 mb-1"><FiVideo className="inline mr-1" /> Video URL</label>
+                                <input
+                                  type="text"
+                                  value={item.video || ''}
+                                  onChange={(e) => {
+                                    const newToc = [...(formData.description_toc || [])];
+                                    newToc[index].video = e.target.value;
+                                    setFormData({...formData, description_toc: newToc});
+                                  }}
+                                  placeholder="YouTube/Video URL"
+                                  className="w-full border-2 border-indigo-200 rounded px-2 py-1.5 text-sm"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <button type="button" onClick={() => {
+                            setFormData({...formData, description_toc: (formData.description_toc || []).filter((_, i) => i !== index)});
+                          }} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 /></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button type="button" onClick={() => {
+                    setFormData({...formData, description_toc: [...(formData.description_toc || []), { title: '', anchor: '', content: '', image: '', video: '' }]});
+                  }} className="text-sm text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded border border-indigo-300 flex items-center gap-1">
+                    <FiPlus /> Add Section
+                  </button>
+                </div>
+
+                {/* Description Table Builder */}
+                <div className="border-2 border-teal-300 rounded-lg p-4 bg-teal-50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-teal-800">📊 Tables</label>
+                      <p className="text-xs text-teal-600">Add data tables</p>
+                    </div>
+                    <span className="text-xs bg-teal-200 text-teal-800 px-2 py-1 rounded">
+                      {formData.description_tables?.length || 0} tables
+                    </span>
+                  </div>
+                  <div className="space-y-4 mb-4">
+                    {(formData.description_tables || []).map((table, tableIndex) => (
+                      <div key={tableIndex} className="bg-white rounded-lg border-2 border-teal-200 p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <input type="text" value={table.title || ''} onChange={(e) => {
+                            const newTables = [...(formData.description_tables || [])];
+                            newTables[tableIndex].title = e.target.value;
+                            setFormData({...formData, description_tables: newTables});
+                          }} placeholder="Table Title" className="border rounded px-2 py-1 text-sm w-48" />
+                          <div className="flex gap-1">
+                            <button type="button" onClick={() => {
+                              const newTables = [...(formData.description_tables || [])];
+                              newTables[tableIndex].headers.push('Column');
+                              newTables[tableIndex].rows.forEach(row => row.push(''));
+                              setFormData({...formData, description_tables: newTables});
+                            }} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded">+ Col</button>
+                            <button type="button" onClick={() => {
+                              const newTables = [...(formData.description_tables || [])];
+                              newTables[tableIndex].rows.push(new Array(newTables[tableIndex].headers.length).fill(''));
+                              setFormData({...formData, description_tables: newTables});
+                            }} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded">+ Row</button>
+                            <button type="button" onClick={() => {
+                              setFormData({...formData, description_tables: (formData.description_tables || []).filter((_, i) => i !== tableIndex)});
+                            }} className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">Delete</button>
+                          </div>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse text-sm">
+                            <thead>
+                              <tr>
+                                {(table.headers || []).map((header, colIndex) => (
+                                  <th key={colIndex} className="border border-teal-200 bg-teal-100 p-1">
+                                    <input type="text" value={header} onChange={(e) => {
+                                      const newTables = [...(formData.description_tables || [])];
+                                      newTables[tableIndex].headers[colIndex] = e.target.value;
+                                      setFormData({...formData, description_tables: newTables});
+                                    }} className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 text-xs" placeholder="Header" />
+                                  </th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {(table.rows || []).map((row, rowIndex) => (
+                                <tr key={rowIndex}>
+                                  {row.map((cell, colIndex) => (
+                                    <td key={colIndex} className="border border-teal-200 p-1">
+                                      <input type="text" value={cell} onChange={(e) => {
+                                        const newTables = [...(formData.description_tables || [])];
+                                        newTables[tableIndex].rows[rowIndex][colIndex] = e.target.value;
+                                        setFormData({...formData, description_tables: newTables});
+                                      }} className="w-full border-0 text-xs" />
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button type="button" onClick={() => {
+                    setFormData({...formData, description_tables: [...(formData.description_tables || []), { title: '', headers: ['Column 1', 'Column 2'], rows: [['', '']] }]});
+                  }} className="text-sm text-teal-700 hover:bg-teal-100 px-3 py-1.5 rounded border border-teal-300 flex items-center gap-1">
+                    <FiPlus /> Add Table
+                  </button>
+                </div>
+
+                {/* Description Images */}
+                <div className="border-2 border-blue-300 rounded-lg p-4 bg-blue-50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-blue-800">🖼️ Images</label>
+                      <p className="text-xs text-blue-600">Add images for description</p>
+                    </div>
+                    <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
+                      {formData.description_images?.length || 0} images
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-3 mb-4">
+                    {(formData.description_images || []).map((img, index) => (
+                      <div key={index} className="relative group">
+                        <img src={img.url} alt="" className="w-full h-20 object-cover rounded-lg border-2 border-blue-200" />
+                        <button type="button" onClick={() => {
+                          setFormData({...formData, description_images: (formData.description_images || []).filter((_, i) => i !== index)});
+                        }} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100"><FiX size={10} /></button>
+                        <input type="text" value={img.caption || ''} onChange={(e) => {
+                          const newImages = [...(formData.description_images || [])];
+                          newImages[index].caption = e.target.value;
+                          setFormData({...formData, description_images: newImages});
+                        }} placeholder="Caption" className="w-full mt-1 text-xs border rounded px-2 py-1" />
+                      </div>
+                    ))}
+                    <label className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100">
+                      <FiUpload className="text-blue-400" size={18} />
+                      <span className="text-xs text-blue-600">Add Image</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const fd = new FormData();
+                          fd.append('file', file);
+                          const res = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                          setFormData({...formData, description_images: [...(formData.description_images || []), { url: res.data.url, caption: '' }]});
+                        }
+                      }} />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Description Videos (URL only) */}
+                <div className="border-2 border-rose-300 rounded-lg p-4 bg-rose-50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-rose-800">🎬 Videos</label>
+                      <p className="text-xs text-rose-600">Add video URLs</p>
+                    </div>
+                    <span className="text-xs bg-rose-200 text-rose-800 px-2 py-1 rounded">
+                      {formData.description_videos?.length || 0} videos
+                    </span>
+                  </div>
+                  {(formData.description_videos || []).length > 0 && (
+                    <div className="space-y-2 mb-4">
+                      {(formData.description_videos || []).map((vid, index) => (
+                        <div key={index} className="flex items-center gap-2 bg-white rounded border-2 border-rose-200 p-2">
+                          <FiVideo className="text-rose-500" size={18} />
+                          <input type="text" value={vid.title || ''} onChange={(e) => {
+                            const newVideos = [...(formData.description_videos || [])];
+                            newVideos[index].title = e.target.value;
+                            setFormData({...formData, description_videos: newVideos});
+                          }} placeholder="Title" className="border rounded px-2 py-1 text-sm w-32" />
+                          <input type="text" value={vid.url || ''} onChange={(e) => {
+                            const newVideos = [...(formData.description_videos || [])];
+                            newVideos[index].url = e.target.value;
+                            setFormData({...formData, description_videos: newVideos});
+                          }} placeholder="Video URL" className="flex-1 border rounded px-2 py-1 text-sm font-mono" />
+                          <button type="button" onClick={() => {
+                            setFormData({...formData, description_videos: (formData.description_videos || []).filter((_, i) => i !== index)});
+                          }} className="text-red-500 p-1"><FiTrash2 size={14} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <input type="text" placeholder="Paste YouTube/Video URL" className="flex-1 border-2 border-rose-200 rounded px-3 py-2 text-sm" id="desc-video-url-input" />
+                    <button type="button" onClick={() => {
+                      const input = document.getElementById('desc-video-url-input');
+                      if (input.value) {
+                        setFormData({...formData, description_videos: [...(formData.description_videos || []), { url: input.value, title: '' }]});
+                        input.value = '';
+                      }
+                    }} className="px-3 py-2 bg-rose-600 text-white text-sm rounded hover:bg-rose-700 flex items-center gap-1">
+                      <FiPlus size={14} /> Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CollapsibleSection>
 
             <div>
               <label className="block text-sm font-medium mb-1">Overview</label>
