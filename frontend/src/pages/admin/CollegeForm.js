@@ -210,6 +210,7 @@ const CollegeForm = () => {
     affiliation: '',
     recognized_by: [],
     affiliated_to: '',
+    board: '', // For schools - CBSE, ICSE, State Board, etc.
     memberships: [],
     nirf_ranking: null,
     india_today_ranking: null,
