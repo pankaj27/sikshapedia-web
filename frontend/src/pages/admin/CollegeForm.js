@@ -487,6 +487,7 @@ const CollegeForm = () => {
         recognized_by: Array.isArray(collegeData.recognized_by) ? collegeData.recognized_by : [],
         memberships: Array.isArray(collegeData.memberships) ? collegeData.memberships : [],
         rankings: Array.isArray(collegeData.rankings) ? collegeData.rankings : [],
+        streams: Array.isArray(collegeData.streams) ? collegeData.streams : [],
         courses: Array.isArray(collegeData.courses) ? collegeData.courses : [],
         facilities: Array.isArray(collegeData.facilities) ? collegeData.facilities : [],
         campus_images: Array.isArray(collegeData.campus_images) ? collegeData.campus_images : [],
