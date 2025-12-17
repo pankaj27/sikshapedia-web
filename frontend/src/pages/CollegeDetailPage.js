@@ -504,8 +504,12 @@ const CollegeDetailPage = ({ overrideId }) => {
               <FiUser size={14} />
             </div>
             <div>
-              <Link to="#" className="text-xs font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
-              <p className="text-[10px] text-gray-600">Content Writer | Updated 3+ months ago</p>
+              <Link to={`/author/${college?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-xs font-semibold text-gray-900 hover:text-orange-600">
+                {college?.updated_by_name || college?.created_by_name || 'Content Team'}
+              </Link>
+              <p className="text-[10px] text-gray-600">
+                Content Writer | {college?.updated_at ? `Updated ${formatTimeAgo(college.updated_at)}` : (college?.created_at ? `Added ${formatTimeAgo(college.created_at)}` : 'Updated recently')}
+              </p>
             </div>
           </div>
         </div>
