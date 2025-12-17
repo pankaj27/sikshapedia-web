@@ -760,21 +760,29 @@ const DynamicListingPage = () => {
                 All Filter
               </button>
               
-              {/* Sub Stream Filter */}
+              {/* Stream Filter */}
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'subStream' ? null : 'subStream')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
-                    filters.subStream ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    activeFilters.stream || activeFilters.subStream ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.subStream || 'Sub Stream'}
+                  {activeFilters.stream || activeFilters.subStream || 'Stream'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'subStream' && (
                   <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.subStream.map((option) => (
-                      <button key={option} onClick={() => handleFilterSelect('subStream', option)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">{option}</button>
+                      <button 
+                        key={option} 
+                        onClick={() => handleFilterSelect('subStream', option)} 
+                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
+                          activeFilters.stream === option || activeFilters.subStream === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
+                        }`}
+                      >
+                        {option} {(activeFilters.stream === option || activeFilters.subStream === option) && '✓'}
+                      </button>
                     ))}
                   </div>
                 )}
@@ -785,16 +793,24 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'state' ? null : 'state')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
-                    filters.state ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    activeFilters.state ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.state || 'State'}
+                  {activeFilters.state || 'State'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'state' && (
                   <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.state.map((option) => (
-                      <button key={option} onClick={() => handleFilterSelect('state', option)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">{option}</button>
+                      <button 
+                        key={option} 
+                        onClick={() => handleFilterSelect('state', option)} 
+                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
+                          activeFilters.state === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
+                        }`}
+                      >
+                        {option} {activeFilters.state === option && '✓'}
+                      </button>
                     ))}
                   </div>
                 )}
@@ -805,16 +821,24 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'city' ? null : 'city')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
-                    filters.city ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    activeFilters.city ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.city || 'City'}
+                  {activeFilters.city || 'City'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'city' && (
                   <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.city.map((option) => (
-                      <button key={option} onClick={() => handleFilterSelect('city', option)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">{option}</button>
+                      <button 
+                        key={option} 
+                        onClick={() => handleFilterSelect('city', option)} 
+                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
+                          activeFilters.city === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
+                        }`}
+                      >
+                        {option} {activeFilters.city === option && '✓'}
+                      </button>
                     ))}
                   </div>
                 )}
