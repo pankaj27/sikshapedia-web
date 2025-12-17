@@ -970,15 +970,22 @@ const DynamicListingPage = () => {
       <div className="bg-white py-2">
         <div className="container mx-auto px-6">
           
-          {/* INTRO CONTENT */}
+          {/* INTRO CONTENT - Use admin content if available */}
           <section className="mb-2">
             <div className="text-gray-700 text-sm leading-relaxed">
-              <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
-                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
-                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
-                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
-                while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
-              </p>
+              {pageContent?.introduction ? (
+                <div 
+                  className={`prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
+                  dangerouslySetInnerHTML={{ __html: pageContent.introduction }}
+                />
+              ) : (
+                <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
+                  India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
+                  Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
+                  The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
+                  while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
+                </p>
+              )}
             </div>
           </section>
 
