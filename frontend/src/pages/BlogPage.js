@@ -26,12 +26,47 @@ const BlogPage = () => {
       if (selectedCategory && selectedCategory !== 'All') {
         params.append('category', selectedCategory);
       }
+      params.append('status', 'published');
+      params.append('limit', '50');
       
-      const response = await api.get(`/articles?${params.toString()}`);
-      setArticles(response.data);
+      // Try blogs endpoint first (admin-managed blogs)
+      let articlesData = [];
+      try {
+        const blogsResponse = await api.get(`/blogs?${params.toString()}`);
+        if (blogsResponse.data && blogsResponse.data.length > 0) {
+          // Transform blog data to article format
+          articlesData = blogsResponse.data.map(blog => ({
+            id: blog.id,
+            title: blog.title,
+            excerpt: blog.excerpt || blog.content?.substring(0, 150) + '...',
+            category: blog.category || 'General',
+            author_name: blog.author || 'AdmissionBuddy',
+            views: blog.views || 0,
+            likes: blog.likes || 0,
+            published_date: blog.published_date || blog.created_at,
+            read_time: blog.read_time || Math.ceil((blog.content?.length || 500) / 1000),
+            image: blog.image || blog.category?.toLowerCase() || 'default'
+          }));
+        }
+      } catch (blogError) {
+        console.log('Blogs endpoint not available, trying articles...');
+      }
       
-      // Set featured articles (top 3)
-      setFeaturedArticles(response.data.slice(0, 3));
+      // If no blogs, try articles endpoint
+      if (articlesData.length === 0) {
+        const response = await api.get(`/articles?${params.toString()}`);
+        articlesData = response.data || [];
+      }
+      
+      if (articlesData.length > 0) {
+        setArticles(articlesData);
+        setFeaturedArticles(articlesData.slice(0, 3));
+      } else {
+        // Fallback to mock data if no data from API
+        const mockArticles = generateMockArticles();
+        setArticles(mockArticles);
+        setFeaturedArticles(mockArticles.slice(0, 3));
+      }
     } catch (error) {
       console.error('Error fetching articles:', error);
       // Fallback to mock data
