@@ -1510,81 +1510,83 @@ const CourseDetailForm = () => {
                         {/* Image & Video Upload for this TOC Section */}
                         <div className="grid grid-cols-2 gap-3 pt-2 border-t border-purple-100">
                           {/* Image Upload */}
-                          <div>
-                            <label className="block text-xs text-gray-600 mb-1">
+                          <div className="space-y-2">
+                            <label className="block text-xs text-gray-600">
                               <FiImage className="inline mr-1" /> Section Image
                             </label>
                             {item.image ? (
-                              <div className="relative">
-                                <img src={item.image} alt="Section" className="w-full h-24 object-cover rounded border" />
-                                <button
-                                  type="button"
-                                  onClick={() => {
+                              <div className="space-y-2">
+                                <div className="relative">
+                                  <img src={item.image} alt={item.imageAlt || ''} className="w-full h-20 object-cover rounded border" />
+                                  <button type="button" onClick={() => {
                                     const newToc = [...(formData.seo_toc || [])];
                                     newToc[index].image = '';
+                                    newToc[index].imageAlt = '';
                                     setFormData({...formData, seo_toc: newToc});
-                                  }}
-                                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                                >
-                                  <FiX size={12} />
-                                </button>
+                                  }} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"><FiX size={10} /></button>
+                                </div>
+                                <div>
+                                  <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">✓ Auto</span></label>
+                                  <input type="text" value={item.imageAlt || ''} onChange={(e) => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    newToc[index].imageAlt = e.target.value;
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }} placeholder="Auto-generated" className="w-full border rounded px-2 py-1 text-xs bg-green-50" />
+                                </div>
                               </div>
                             ) : (
-                              <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-purple-300 rounded cursor-pointer hover:bg-purple-50 transition-colors ${uploadingImage === index ? 'opacity-50' : ''}`}>
+                              <label className={`flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-purple-300 rounded cursor-pointer hover:bg-purple-50 ${uploadingImage === index ? 'opacity-50' : ''}`}>
                                 {uploadingImage === index ? (
-                                  <FiLoader className="animate-spin text-purple-500" size={20} />
+                                  <FiLoader className="animate-spin text-purple-500" size={18} />
                                 ) : (
                                   <>
-                                    <FiUpload className="text-purple-400 mb-1" size={18} />
-                                    <span className="text-xs text-purple-600">Upload Image</span>
+                                    <FiUpload className="text-purple-400 mb-1" size={16} />
+                                    <span className="text-xs text-purple-600">Upload</span>
                                   </>
                                 )}
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  className="hidden"
-                                  onChange={(e) => handleTocImageUpload(e.target.files[0], index)}
-                                  disabled={uploadingImage === index}
-                                />
+                                <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                                  const file = e.target.files[0];
+                                  if (file) {
+                                    setUploadingImage(index);
+                                    try {
+                                      const fd = new FormData();
+                                      fd.append('file', file);
+                                      const res = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                      const newToc = [...(formData.seo_toc || [])];
+                                      newToc[index].image = res.data.url;
+                                      newToc[index].imageAlt = generateAltTag(formData.name, item.title || 'section', index);
+                                      setFormData({...formData, seo_toc: newToc});
+                                    } finally {
+                                      setUploadingImage(null);
+                                    }
+                                  }
+                                }} disabled={uploadingImage === index} />
                               </label>
                             )}
                           </div>
 
                           {/* Video URL */}
-                          <div>
-                            <label className="block text-xs text-gray-600 mb-1">
+                          <div className="space-y-2">
+                            <label className="block text-xs text-gray-600">
                               <FiVideo className="inline mr-1" /> Section Video
                             </label>
-                            {item.video ? (
-                              <div className="relative bg-gray-900 rounded p-3">
-                                <div className="flex items-center gap-2 text-white">
-                                  <FiVideo size={20} />
-                                  <span className="text-xs truncate flex-1">{item.video}</span>
-                                </div>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const newToc = [...(formData.seo_toc || [])];
-                                    newToc[index].video = '';
-                                    setFormData({...formData, seo_toc: newToc});
-                                  }}
-                                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                                >
-                                  <FiX size={12} />
-                                </button>
-                              </div>
-                            ) : (
-                              <input
-                                type="text"
-                                value={item.video || ''}
-                                onChange={(e) => {
+                            <input type="text" value={item.video || ''} onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].video = e.target.value;
+                              if (e.target.value && !newToc[index].videoAlt) {
+                                newToc[index].videoAlt = generateVideoAlt(formData.name, item.title || 'section', index);
+                              }
+                              setFormData({...formData, seo_toc: newToc});
+                            }} placeholder="YouTube/Video URL" className="w-full border-2 border-purple-200 rounded px-2 py-1.5 text-sm" />
+                            {item.video && (
+                              <div>
+                                <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">✓ Auto</span></label>
+                                <input type="text" value={item.videoAlt || ''} onChange={(e) => {
                                   const newToc = [...(formData.seo_toc || [])];
-                                  newToc[index].video = e.target.value;
+                                  newToc[index].videoAlt = e.target.value;
                                   setFormData({...formData, seo_toc: newToc});
-                                }}
-                                placeholder="Paste YouTube/video URL"
-                                className="w-full border-2 border-purple-200 rounded px-2 py-2 text-sm"
-                              />
+                                }} placeholder="Auto-generated" className="w-full border rounded px-2 py-1 text-xs bg-green-50" />
+                              </div>
                             )}
                           </div>
                         </div>
