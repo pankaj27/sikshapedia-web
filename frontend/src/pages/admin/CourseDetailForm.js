@@ -939,30 +939,52 @@ const CourseDetailForm = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <label className="block text-sm font-medium text-rose-800">🎬 Videos</label>
-                      <p className="text-xs text-rose-600">Add video URLs</p>
+                      <p className="text-xs text-rose-600">Add video URLs (alt tags auto-generated)</p>
                     </div>
                     <span className="text-xs bg-rose-200 text-rose-800 px-2 py-1 rounded">
                       {formData.description_videos?.length || 0} videos
                     </span>
                   </div>
                   {(formData.description_videos || []).length > 0 && (
-                    <div className="space-y-2 mb-4">
+                    <div className="space-y-3 mb-4">
                       {(formData.description_videos || []).map((vid, index) => (
-                        <div key={index} className="flex items-center gap-2 bg-white rounded border-2 border-rose-200 p-2">
-                          <FiVideo className="text-rose-500" size={18} />
-                          <input type="text" value={vid.title || ''} onChange={(e) => {
-                            const newVideos = [...(formData.description_videos || [])];
-                            newVideos[index].title = e.target.value;
-                            setFormData({...formData, description_videos: newVideos});
-                          }} placeholder="Title" className="border rounded px-2 py-1 text-sm w-32" />
-                          <input type="text" value={vid.url || ''} onChange={(e) => {
-                            const newVideos = [...(formData.description_videos || [])];
-                            newVideos[index].url = e.target.value;
-                            setFormData({...formData, description_videos: newVideos});
-                          }} placeholder="Video URL" className="flex-1 border rounded px-2 py-1 text-sm font-mono" />
-                          <button type="button" onClick={() => {
-                            setFormData({...formData, description_videos: (formData.description_videos || []).filter((_, i) => i !== index)});
-                          }} className="text-red-500 p-1"><FiTrash2 size={14} /></button>
+                        <div key={index} className="bg-white rounded-lg border-2 border-rose-200 p-3">
+                          <div className="flex items-start gap-3">
+                            <div className="w-16 h-12 bg-gray-900 rounded flex items-center justify-center flex-shrink-0">
+                              <FiVideo className="text-white" size={20} />
+                            </div>
+                            <div className="flex-1 space-y-2">
+                              <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                  <label className="block text-xs text-gray-500 mb-1">Title</label>
+                                  <input type="text" value={vid.title || ''} onChange={(e) => {
+                                    const newVideos = [...(formData.description_videos || [])];
+                                    newVideos[index].title = e.target.value;
+                                    setFormData({...formData, description_videos: newVideos});
+                                  }} placeholder="Video title" className="w-full border rounded px-2 py-1.5 text-sm" />
+                                </div>
+                                <div>
+                                  <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">✓ Auto</span></label>
+                                  <input type="text" value={vid.alt || ''} onChange={(e) => {
+                                    const newVideos = [...(formData.description_videos || [])];
+                                    newVideos[index].alt = e.target.value;
+                                    setFormData({...formData, description_videos: newVideos});
+                                  }} placeholder="Auto-generated" className="w-full border rounded px-2 py-1.5 text-sm bg-green-50" />
+                                </div>
+                              </div>
+                              <div>
+                                <label className="block text-xs text-gray-500 mb-1">Video URL</label>
+                                <input type="text" value={vid.url || ''} onChange={(e) => {
+                                  const newVideos = [...(formData.description_videos || [])];
+                                  newVideos[index].url = e.target.value;
+                                  setFormData({...formData, description_videos: newVideos});
+                                }} placeholder="YouTube/Video URL" className="w-full border rounded px-2 py-1.5 text-sm font-mono" />
+                              </div>
+                            </div>
+                            <button type="button" onClick={() => {
+                              setFormData({...formData, description_videos: (formData.description_videos || []).filter((_, i) => i !== index)});
+                            }} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 size={16} /></button>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -972,7 +994,8 @@ const CourseDetailForm = () => {
                     <button type="button" onClick={() => {
                       const input = document.getElementById('desc-video-url-input');
                       if (input.value) {
-                        setFormData({...formData, description_videos: [...(formData.description_videos || []), { url: input.value, title: '' }]});
+                        const autoAlt = generateVideoAlt(formData.name, 'description', formData.description_videos?.length || 0);
+                        setFormData({...formData, description_videos: [...(formData.description_videos || []), { url: input.value, title: '', alt: autoAlt }]});
                         input.value = '';
                       }
                     }} className="px-3 py-2 bg-rose-600 text-white text-sm rounded hover:bg-rose-700 flex items-center gap-1">
