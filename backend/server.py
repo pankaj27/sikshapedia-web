@@ -1803,13 +1803,34 @@ async def update_admin_profile(profile_data: AdminProfileUpdate, current_user: U
         # Also sync to users collection if admin exists there (for content team display)
         admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
         if admin:
+            new_name = update_data.get('name', admin.get('name'))
+            new_photo = update_data.get('profile_photo', admin.get('profile_photo'))
+            
             await db.users.update_one(
                 {"email": admin.get("email")},
                 {"$set": {
-                    "name": update_data.get('name', admin.get('name')),
-                    "profile_photo": update_data.get('profile_photo', admin.get('profile_photo')),
+                    "name": new_name,
+                    "profile_photo": new_photo,
                     "job_title": update_data.get('job_title', admin.get('job_title')),
                     "bio": update_data.get('bio', admin.get('bio')),
+                }}
+            )
+            
+            # Also update listing pages where this admin is the creator/updater
+            await db.listing_pages.update_many(
+                {"$or": [{"created_by": current_user.id}, {"updated_by": current_user.id}]},
+                {"$set": {
+                    "updated_by_name": new_name,
+                    "updated_by_photo": new_photo,
+                }}
+            )
+            
+            # Update colleges where this admin is the creator/updater
+            await db.colleges.update_many(
+                {"$or": [{"created_by": current_user.id}, {"updated_by": current_user.id}]},
+                {"$set": {
+                    "updated_by_name": new_name,
+                    "updated_by_photo": new_photo,
                 }}
             )
     
