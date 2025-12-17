@@ -2043,20 +2043,18 @@ const CourseDetailForm = () => {
                       <img src={img.url} alt={img.alt || ''} className="w-24 h-20 object-cover rounded border flex-shrink-0" />
                       <div className="flex-1 space-y-2">
                         <div>
-                          <label className="block text-xs text-gray-500 mb-1">Alt Tag (SEO) <span className="text-green-600">✓ Auto</span></label>
-                          <input type="text" value={img.alt || ''} onChange={(e) => {
-                            const newImages = [...(formData.seo_images || [])];
-                            newImages[index].alt = e.target.value;
-                            setFormData({...formData, seo_images: newImages});
-                          }} placeholder="Auto-generated alt text" className="w-full border rounded px-2 py-1.5 text-sm bg-green-50" />
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-500 mb-1">Caption</label>
+                          <label className="block text-xs text-gray-500 mb-1">Title / Caption</label>
                           <input type="text" value={img.caption || ''} onChange={(e) => {
                             const newImages = [...(formData.seo_images || [])];
                             newImages[index].caption = e.target.value;
+                            // Auto-generate alt tag from caption
+                            newImages[index].alt = e.target.value ? `${formData.name || 'Course'} - ${e.target.value}` : '';
                             setFormData({...formData, seo_images: newImages});
-                          }} placeholder="Image caption" className="w-full border rounded px-2 py-1.5 text-sm" />
+                          }} placeholder="Enter caption (alt tag auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">(auto from caption)</span></label>
+                          <input type="text" value={img.alt || ''} readOnly className="w-full border rounded px-2 py-1.5 text-sm bg-gray-100 text-gray-600" />
                         </div>
                       </div>
                       <button type="button" onClick={() => {
@@ -2132,20 +2130,18 @@ const CourseDetailForm = () => {
                         <div className="flex-1 space-y-2">
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-xs text-gray-500 mb-1">Title</label>
+                              <label className="block text-xs text-gray-500 mb-1">Video Title</label>
                               <input type="text" value={vid.title || ''} onChange={(e) => {
                                 const newVideos = [...(formData.seo_videos || [])];
                                 newVideos[index].title = e.target.value;
+                                // Auto-generate alt tag from title
+                                newVideos[index].alt = e.target.value ? `${formData.name || 'Course'} - ${e.target.value}` : '';
                                 setFormData({...formData, seo_videos: newVideos});
-                              }} placeholder="Video title" className="w-full border rounded px-2 py-1.5 text-sm" />
+                              }} placeholder="Enter title (alt auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
                             </div>
                             <div>
-                              <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">✓ Auto</span></label>
-                              <input type="text" value={vid.alt || ''} onChange={(e) => {
-                                const newVideos = [...(formData.seo_videos || [])];
-                                newVideos[index].alt = e.target.value;
-                                setFormData({...formData, seo_videos: newVideos});
-                              }} placeholder="Auto-generated" className="w-full border rounded px-2 py-1.5 text-sm bg-green-50" />
+                              <label className="block text-xs text-gray-500 mb-1">Alt Tag <span className="text-green-600">(auto from title)</span></label>
+                              <input type="text" value={vid.alt || ''} readOnly className="w-full border rounded px-2 py-1.5 text-sm bg-gray-100 text-gray-600" />
                             </div>
                           </div>
                           <div>
