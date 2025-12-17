@@ -281,13 +281,13 @@ const CollegeDuniaHome = () => {
       <section className="py-5 border-b">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            <Link to="/colleges" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+            <Link to="/india-colleges" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-blue-200 transition">
                 <FiBookOpen className="text-blue-600 text-xl" />
               </div>
               <span className="text-xs font-semibold text-center">All Colleges</span>
             </Link>
-            <Link to="/colleges?type=school" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+            <Link to="/india-schools" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-red-200 transition">
                 <FiBook className="text-red-600 text-xl" />
               </div>
