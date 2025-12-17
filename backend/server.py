@@ -1749,6 +1749,9 @@ async def admin_login(credentials: UserLogin):
             id=admin.id,
             email=admin.email,
             name=admin.name,
+            profile_photo=admin.profile_photo,
+            job_title=admin.job_title,
+            bio=admin.bio,
             phone="",
             enrolled_courses=[],
             saved_colleges=[],
@@ -1756,6 +1759,49 @@ async def admin_login(credentials: UserLogin):
             is_premium=True
         )
     )
+
+@api_router.get("/admin/profile")
+async def get_admin_profile(current_user: User = Depends(get_current_user)):
+    """Get admin profile"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    admin_doc = await db.admins.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    if not admin_doc:
+        raise HTTPException(status_code=404, detail="Admin not found")
+    
+    return admin_doc
+
+class AdminProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    profile_photo: Optional[str] = None
+    job_title: Optional[str] = None
+    bio: Optional[str] = None
+
+@api_router.put("/admin/profile")
+async def update_admin_profile(profile_data: AdminProfileUpdate, current_user: User = Depends(get_current_user)):
+    """Update admin profile - name, photo, job title, bio"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    update_data = {}
+    
+    if profile_data.name is not None:
+        update_data['name'] = profile_data.name
+    if profile_data.profile_photo is not None:
+        update_data['profile_photo'] = profile_data.profile_photo
+    if profile_data.job_title is not None:
+        update_data['job_title'] = profile_data.job_title
+    if profile_data.bio is not None:
+        update_data['bio'] = profile_data.bio
+    
+    if update_data:
+        update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+        await db.admins.update_one({"id": current_user.id}, {"$set": update_data})
+    
+    # Fetch and return updated admin
+    updated_admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    return updated_admin
 
 # ============================================
 # Image Optimization Helper
