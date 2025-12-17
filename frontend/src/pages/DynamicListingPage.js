@@ -1531,15 +1531,15 @@ const DynamicListingPage = () => {
                 )}
               </div>
               
-              {/* Accreditation Filter */}
+              {/* Accreditation Filter - SEO URL */}
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'accreditation' ? null : 'accreditation')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
-                    filters.accreditation ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    activeFilters.accreditation ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.accreditation ? filters.accreditation.split(' ')[0] : 'Accreditation'}
+                  {activeFilters.accreditation || 'Accreditation'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'accreditation' && (
@@ -1563,7 +1563,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.accreditation.map((option) => (
-                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, accreditation: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.accreditation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.accreditation === option && '✓'}</button>
+                        <button key={option} onClick={() => handleFilterSelect('accreditation', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${activeFilters.accreditation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {activeFilters.accreditation === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
