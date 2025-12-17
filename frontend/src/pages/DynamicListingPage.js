@@ -1485,7 +1485,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.affiliation.map((option) => (
-                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, affiliation: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.affiliation === option && '✓'}</button>
+                        <button key={option} onClick={() => handleFilterSelect('affiliation', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.affiliation === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
