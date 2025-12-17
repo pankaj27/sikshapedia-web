@@ -1364,6 +1364,37 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
+            
+            {/* Streams Selection - Important for filtering */}
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-2">
+                Streams Offered <span className="text-xs text-gray-500">(Used for filtering on listing pages)</span>
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce', 'Education', 'Pharmacy', 'Architecture', 'Design', 'Agriculture', 'Nursing', 'Dental', 'Hotel Management', 'Mass Communication', 'Computer Applications'].map((stream) => (
+                  <button
+                    key={stream}
+                    type="button"
+                    onClick={() => {
+                      const currentStreams = formData.streams || [];
+                      if (currentStreams.includes(stream)) {
+                        setFormData({ ...formData, streams: currentStreams.filter(s => s !== stream) });
+                      } else {
+                        setFormData({ ...formData, streams: [...currentStreams, stream] });
+                      }
+                    }}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      (formData.streams || []).includes(stream)
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {stream} {(formData.streams || []).includes(stream) && '✓'}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500">Selected: {(formData.streams || []).join(', ') || 'None'}</p>
+            </div>
           </div>
         </div>
 
