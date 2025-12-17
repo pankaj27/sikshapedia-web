@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX, FiBook } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX, FiBook, FiChevronDown } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
@@ -16,7 +16,6 @@ const CoursesManagement = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({});
 
-  // Get unique streams and degree types for filters
   const { streams, degreeTypes } = useMemo(() => {
     const s = [...new Set(items.map(i => i.stream).filter(Boolean))].sort();
     const d = [...new Set(items.map(i => i.degree_type).filter(Boolean))].sort();
@@ -80,10 +79,7 @@ const CoursesManagement = () => {
 
   const handleEdit = (item) => {
     setEditingItem(item);
-    setFormData({
-      ...item,
-      exams_accepted: item.exams_accepted || []
-    });
+    setFormData({ ...item, exams_accepted: item.exams_accepted || [] });
     setShowModal(true);
   };
 
@@ -96,15 +92,9 @@ const CoursesManagement = () => {
   const toggleExam = (examName) => {
     const currentExams = formData.exams_accepted || [];
     if (currentExams.includes(examName)) {
-      setFormData({
-        ...formData,
-        exams_accepted: currentExams.filter(e => e !== examName)
-      });
+      setFormData({ ...formData, exams_accepted: currentExams.filter(e => e !== examName) });
     } else {
-      setFormData({
-        ...formData,
-        exams_accepted: [...currentExams, examName]
-      });
+      setFormData({ ...formData, exams_accepted: [...currentExams, examName] });
     }
   };
 
@@ -124,56 +114,57 @@ const CoursesManagement = () => {
 
   const hasActiveFilters = searchTerm || filterStream || filterDegree;
 
-  // Degree type badge styling
   const getDegreeStyle = (type) => {
     const styles = {
-      'UG': 'bg-blue-50 text-blue-700 border-blue-200',
-      'PG': 'bg-purple-50 text-purple-700 border-purple-200',
-      'Diploma': 'bg-orange-50 text-orange-700 border-orange-200',
-      'Professional': 'bg-green-50 text-green-700 border-green-200',
-      'PG Diploma': 'bg-indigo-50 text-indigo-700 border-indigo-200',
-      'Doctorate': 'bg-red-50 text-red-700 border-red-200',
-      'Integrated': 'bg-cyan-50 text-cyan-700 border-cyan-200',
-      'Super Specialty': 'bg-pink-50 text-pink-700 border-pink-200',
+      'UG': 'bg-blue-500 text-white',
+      'PG': 'bg-purple-500 text-white',
+      'Diploma': 'bg-amber-500 text-white',
+      'Professional': 'bg-emerald-500 text-white',
+      'PG Diploma': 'bg-indigo-500 text-white',
+      'Doctorate': 'bg-red-500 text-white',
+      'Integrated': 'bg-cyan-500 text-white',
+      'Super Specialty': 'bg-pink-500 text-white',
     };
-    return styles[type] || 'bg-gray-50 text-gray-700 border-gray-200';
+    return styles[type] || 'bg-gray-500 text-white';
   };
 
   return (
     <AdminLayout>
-      <div className="space-y-4">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Courses</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {filteredItems.length} {filteredItems.length === 1 ? 'course' : 'courses'} 
-              {hasActiveFilters && ` (filtered from ${items.length})`}
-            </p>
+      {/* Main Container Card */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        {/* Header Section */}
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900">Courses</h1>
+              <p className="text-sm text-gray-500 mt-0.5">
+                Manage all courses • {filteredItems.length} {hasActiveFilters ? `of ${items.length}` : 'total'}
+              </p>
+            </div>
+            <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+              <FiPlus className="mr-2 h-4 w-4" /> Add Course
+            </Button>
           </div>
-          <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700 text-white">
-            <FiPlus className="mr-2 h-4 w-4" /> Add Course
-          </Button>
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="px-6 py-4 border-b border-gray-100 bg-white">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type="text"
-                placeholder="Search by course name..."
+                placeholder="Search courses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap sm:flex-nowrap">
               <select
                 value={filterStream}
                 onChange={(e) => setFilterStream(e.target.value)}
-                className="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[140px]"
+                className="text-sm border border-gray-300 rounded-lg px-3 py-2.5 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[150px]"
               >
                 <option value="">All Streams</option>
                 {streams.map(s => <option key={s} value={s}>{s}</option>)}
@@ -181,7 +172,7 @@ const CoursesManagement = () => {
               <select
                 value={filterDegree}
                 onChange={(e) => setFilterDegree(e.target.value)}
-                className="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[130px]"
+                className="text-sm border border-gray-300 rounded-lg px-3 py-2.5 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[130px]"
               >
                 <option value="">All Types</option>
                 {degreeTypes.map(d => <option key={d} value={d}>{d}</option>)}
@@ -189,7 +180,7 @@ const CoursesManagement = () => {
               {hasActiveFilters && (
                 <button 
                   onClick={clearFilters} 
-                  className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg flex items-center gap-1 transition-colors"
+                  className="px-4 py-2.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 rounded-lg flex items-center gap-1.5 transition-colors"
                 >
                   <FiX className="h-4 w-4" /> Clear
                 </button>
@@ -199,88 +190,96 @@ const CoursesManagement = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Name</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stream</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Eligibility</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exams</th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Course Name</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Stream</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Duration</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Eligibility</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Exams</th>
+                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider w-24">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
+            <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="px-4 py-12 text-center">
+                  <td colSpan="7" className="px-6 py-16 text-center">
                     <div className="flex flex-col items-center text-gray-400">
-                      <div className="animate-spin h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full mb-2"></div>
+                      <div className="animate-spin h-8 w-8 border-3 border-blue-500 border-t-transparent rounded-full mb-3"></div>
                       <span className="text-sm">Loading courses...</span>
                     </div>
                   </td>
                 </tr>
               ) : filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-4 py-12 text-center">
+                  <td colSpan="7" className="px-6 py-16 text-center">
                     <div className="flex flex-col items-center text-gray-400">
-                      <FiBook className="h-8 w-8 mb-2" />
-                      <span className="text-sm">No courses found</span>
+                      <FiBook className="h-12 w-12 mb-3 text-gray-300" />
+                      <span className="text-sm font-medium text-gray-500">No courses found</span>
+                      <span className="text-xs text-gray-400 mt-1">Try adjusting your search or filters</span>
                       {hasActiveFilters && (
-                        <button onClick={clearFilters} className="mt-2 text-blue-600 hover:text-blue-700 text-sm">
-                          Clear filters
+                        <button onClick={clearFilters} className="mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium">
+                          Clear all filters
                         </button>
                       )}
                     </div>
                   </td>
                 </tr>
               ) : (
-                filteredItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3">
+                filteredItems.map((item, index) => (
+                  <tr 
+                    key={item.id} 
+                    className={`border-b border-gray-100 hover:bg-blue-50/30 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}
+                  >
+                    <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">{item.name}</div>
                       {item.full_name && item.full_name !== item.name && (
-                        <div className="text-xs text-gray-500 mt-0.5 max-w-[200px] truncate" title={item.full_name}>
+                        <div className="text-xs text-gray-400 mt-0.5 max-w-[220px] truncate" title={item.full_name}>
                           {item.full_name}
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex text-xs px-2 py-1 rounded-md border font-medium ${getDegreeStyle(item.degree_type)}`}>
+                    <td className="px-4 py-4">
+                      <span className={`inline-flex text-xs px-2.5 py-1 rounded-full font-medium ${getDegreeStyle(item.degree_type)}`}>
                         {item.degree_type}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{item.stream || '-'}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{item.duration || '-'}</td>
-                    <td className="px-4 py-3">
-                      <span className="text-sm text-gray-600 max-w-[150px] truncate block" title={item.eligibility}>
+                    <td className="px-4 py-4">
+                      <span className="text-sm text-gray-700">{item.stream || '-'}</span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className="text-sm text-gray-600">{item.duration || '-'}</span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className="text-sm text-gray-600 block max-w-[140px] truncate" title={item.eligibility}>
                         {item.eligibility || '-'}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-4">
                       {item.exams_accepted && item.exams_accepted.length > 0 ? (
                         <span className="text-sm text-gray-600" title={item.exams_accepted.join(', ')}>
                           {item.exams_accepted.slice(0, 2).join(', ')}
-                          {item.exams_accepted.length > 2 && ` +${item.exams_accepted.length - 2}`}
+                          {item.exams_accepted.length > 2 && <span className="text-gray-400"> +{item.exams_accepted.length - 2}</span>}
                         </span>
                       ) : (
                         <span className="text-sm text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-4 py-4">
+                      <div className="flex items-center justify-center gap-1">
                         <button 
                           onClick={() => handleEdit(item)} 
-                          className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                          className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
                           title="Edit"
                         >
                           <FiEdit2 size={16} />
                         </button>
                         <button 
                           onClick={() => handleDelete(item.id)} 
-                          className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                          className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-100 rounded-lg transition-all"
                           title="Delete"
                         >
                           <FiTrash2 size={16} />
@@ -293,46 +292,52 @@ const CoursesManagement = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Footer */}
+        {!loading && filteredItems.length > 0 && (
+          <div className="px-6 py-3 border-t border-gray-200 bg-gray-50/50">
+            <p className="text-xs text-gray-500">
+              Showing {filteredItems.length} course{filteredItems.length !== 1 ? 's' : ''}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-50">
               <h3 className="text-lg font-semibold text-gray-900">
                 {editingItem ? 'Edit Course' : 'Add New Course'}
               </h3>
               <button 
                 onClick={() => setShowModal(false)} 
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <FiX size={20} />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[calc(90vh-130px)]">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Course Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Course Name *</label>
                   <input
                     type="text"
                     value={formData.name || ''}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
-                      name: e.target.value,
-                      slug: generateSlug(e.target.value)
-                    })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value, slug: generateSlug(e.target.value) })}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="e.g., B.Tech, MBA, MBBS"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Degree Type *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Degree Type *</label>
                   <select
                     value={formData.degree_type || ''}
                     onChange={(e) => setFormData({ ...formData, degree_type: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   >
                     <option value="">Select Type</option>
@@ -348,60 +353,60 @@ const CoursesManagement = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Duration *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Duration *</label>
                   <input
                     type="text"
                     value={formData.duration || ''}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                     placeholder="e.g., 4 Years"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Stream *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Stream *</label>
                   <input
                     type="text"
                     value={formData.stream || ''}
                     onChange={(e) => setFormData({ ...formData, stream: e.target.value })}
                     placeholder="e.g., Engineering, Medical"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Average Fees (Annual)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Average Fees (Annual)</label>
                   <input
                     type="number"
                     value={formData.average_fees || ''}
                     onChange={(e) => setFormData({ ...formData, average_fees: parseFloat(e.target.value) })}
                     placeholder="e.g., 200000"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Eligibility</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Eligibility</label>
                   <input
                     type="text"
                     value={formData.eligibility || ''}
                     onChange={(e) => setFormData({ ...formData, eligibility: e.target.value })}
                     placeholder="e.g., 10+2 with PCM"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Exams Accepted</label>
-                  <div className="border border-gray-300 rounded-lg p-3 max-h-40 overflow-y-auto bg-gray-50">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Exams Accepted</label>
+                  <div className="border border-gray-300 rounded-lg p-4 max-h-44 overflow-y-auto bg-gray-50">
                     {exams.length === 0 ? (
-                      <p className="text-sm text-gray-500">No exams available</p>
+                      <p className="text-sm text-gray-500 text-center py-4">No exams available</p>
                     ) : (
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {exams.map((exam) => (
-                          <label key={exam.id} className="flex items-center gap-2 cursor-pointer">
+                          <label key={exam.id} className="flex items-center gap-2 cursor-pointer hover:bg-white p-1.5 rounded transition-colors">
                             <input
                               type="checkbox"
                               checked={(formData.exams_accepted || []).includes(exam.name)}
@@ -414,28 +419,28 @@ const CoursesManagement = () => {
                       </div>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 mt-1.5">
                     {(formData.exams_accepted || []).length} exam(s) selected
                   </p>
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
                   <textarea
                     value={formData.description || ''}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     rows="3"
                     placeholder="Brief description of the course..."
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
-                <Button type="button" variant="outline" onClick={() => setShowModal(false)}>
+              <div className="flex justify-end gap-3 mt-6 pt-5 border-t border-gray-200">
+                <Button type="button" variant="outline" onClick={() => setShowModal(false)} className="px-5">
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-5">
                   {editingItem ? 'Update Course' : 'Create Course'}
                 </Button>
               </div>
