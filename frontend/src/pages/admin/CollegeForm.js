@@ -1366,35 +1366,38 @@ const CollegeForm = () => {
                 className="w-full border rounded px-3 py-2"
               />
             </div>
-            <div className="col-span-2">
-              <label className="block text-sm font-medium mb-2">Recognized By</label>
-              {formData.recognized_by.map((org, index) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <select
-                    value={org}
-                    onChange={(e) => handleArrayChange('recognized_by', index, e.target.value)}
-                    className="flex-1 border rounded px-3 py-2"
-                  >
-                    <option value="">Select Recognition</option>
-                    {recognitions.map((recognition) => (
-                      <option key={recognition.id} value={recognition.name}>
-                        {recognition.name}
-                      </option>
-                    ))}
-                  </select>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => removeArrayItem('recognized_by', index)}
-                  >
-                    <FiTrash2 />
-                  </Button>
-                </div>
-              ))}
-              <Button type="button" onClick={() => addArrayItem('recognized_by', '')} size="sm" variant="outline">
-                <FiPlus className="mr-2" /> Add Recognition
-              </Button>
-            </div>
+            {/* Recognized By - Hidden for Schools */}
+            {!isSchool && (
+              <div className="col-span-2">
+                <label className="block text-sm font-medium mb-2">Recognized By</label>
+                {formData.recognized_by.map((org, index) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <select
+                      value={org}
+                      onChange={(e) => handleArrayChange('recognized_by', index, e.target.value)}
+                      className="flex-1 border rounded px-3 py-2"
+                    >
+                      <option value="">Select Recognition</option>
+                      {recognitions.map((recognition) => (
+                        <option key={recognition.id} value={recognition.name}>
+                          {recognition.name}
+                        </option>
+                      ))}
+                    </select>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => removeArrayItem('recognized_by', index)}
+                    >
+                      <FiTrash2 />
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" onClick={() => addArrayItem('recognized_by', '')} size="sm" variant="outline">
+                  <FiPlus className="mr-2" /> Add Recognition
+                </Button>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium mb-1">Total Students</label>
               <input
