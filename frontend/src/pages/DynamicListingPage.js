@@ -1655,12 +1655,9 @@ const DynamicListingPage = () => {
               )}
               
               {/* Clear All button */}
-              {(activeFilters.stream || activeFilters.state || activeFilters.city || filters.type.length > 0 || filters.course || filters.degreeType || filters.examAccepted || filters.affiliation || filters.recognition || filters.accreditation) && (
+              {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation || filters.course || filters.degreeType || filters.examAccepted || filters.affiliation || filters.recognition) && (
                 <button 
-                  onClick={() => {
-                    clearFilters();
-                    navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges');
-                  }} 
+                  onClick={() => clearFilters()} 
                   className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1"
                 >
                   Clear All
