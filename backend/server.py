@@ -1176,12 +1176,61 @@ class AdminUser(BaseModel):
     email: str
     password_hash: str
     name: str
-    role: str = "admin"
+    role: str = "super_admin"  # super_admin, content_manager, data_entry
     profile_photo: Optional[str] = None  # URL to profile photo
     job_title: Optional[str] = None  # Job title/designation
     bio: Optional[str] = None  # Short bio
+    is_active: bool = True  # Can disable team members
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime] = None
+
+# Role permissions mapping
+ROLE_PERMISSIONS = {
+    "super_admin": {
+        "manage_team": True,
+        "manage_colleges": True,
+        "delete_colleges": True,
+        "manage_listing_pages": True,
+        "manage_news": True,
+        "manage_reviews": True,
+        "manage_ads": True,
+        "manage_settings": True,
+        "view_analytics": True,
+    },
+    "content_manager": {
+        "manage_team": False,
+        "manage_colleges": True,
+        "delete_colleges": True,
+        "manage_listing_pages": True,
+        "manage_news": True,
+        "manage_reviews": True,
+        "manage_ads": False,
+        "manage_settings": False,
+        "view_analytics": True,
+    },
+    "data_entry": {
+        "manage_team": False,
+        "manage_colleges": True,
+        "delete_colleges": False,
+        "manage_listing_pages": False,
+        "manage_news": False,
+        "manage_reviews": False,
+        "manage_ads": False,
+        "manage_settings": False,
+        "view_analytics": False,
+    },
+}
+
+def has_permission(role: str, permission: str) -> bool:
+    """Check if a role has a specific permission"""
+    return ROLE_PERMISSIONS.get(role, {}).get(permission, False)
+
+class TeamMemberCreate(BaseModel):
+    email: str
+    name: str
+    password: str
+    role: str = "data_entry"
+    job_title: Optional[str] = None
 
 # ============================================
 # Taxonomy & Master Data Models
