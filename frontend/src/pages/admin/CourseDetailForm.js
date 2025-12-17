@@ -966,25 +966,11 @@ const CourseDetailForm = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <label className="block text-sm font-medium text-blue-800">🖼️ Images</label>
-                      <p className="text-xs text-blue-600">Add images for description</p>
+                      <p className="text-xs text-blue-600">Add images for description (alt tags auto-generated)</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {(formData.description_images || []).length > 0 && (
-                        <button type="button" onClick={() => {
-                          const newImages = formData.description_images.map((img, i) => ({
-                            ...img,
-                            alt: img.alt || generateAltTag(formData.name, 'description image', i)
-                          }));
-                          setFormData({...formData, description_images: newImages});
-                          alert('Alt tags generated for all images!');
-                        }} className="text-xs text-green-700 hover:bg-green-100 px-2 py-1 rounded border border-green-300">
-                          ✨ Generate Alt Tags
-                        </button>
-                      )}
-                      <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
-                        {formData.description_images?.length || 0} images
-                      </span>
-                    </div>
+                    <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
+                      {formData.description_images?.length || 0} images
+                    </span>
                   </div>
                   <div className="space-y-3 mb-4">
                     {(formData.description_images || []).map((img, index) => (
