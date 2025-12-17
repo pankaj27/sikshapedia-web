@@ -181,6 +181,39 @@ const CourseDetailForm = () => {
       use_custom_menu: false,
       auto_from_toc: false,
       items: []
+    },
+    // Page Widgets Configuration
+    widgets_config: {
+      apply_now: {
+        enabled: true,
+        title: 'Apply Now',
+        subtitle: 'Start your admission journey',
+        button_text: 'Submit Application',
+        position: 'sidebar' // sidebar, floating, inline
+      },
+      ask_question: {
+        enabled: true,
+        title: 'Have Questions?',
+        subtitle: 'Our experts are here to help',
+        button_text: 'Ask Now',
+        position: 'sidebar'
+      },
+      counselling: {
+        enabled: true,
+        title: 'Need Counselling?',
+        subtitle: 'Get free career guidance',
+        button_text: 'Request Callback',
+        position: 'sidebar'
+      },
+      sponsor_ad: {
+        enabled: false,
+        title: '',
+        description: '',
+        image_url: '',
+        link_url: '',
+        sponsor_name: '',
+        position: 'sidebar'
+      }
     }
   });
 
