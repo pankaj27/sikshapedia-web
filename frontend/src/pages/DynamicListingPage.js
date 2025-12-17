@@ -539,7 +539,30 @@ const DynamicListingPage = () => {
 
   useEffect(() => {
     fetchInstitutions();
+    fetchPageContent();
   }, [location.pathname, pagination.page, filters.search, sortBy]);
+  
+  // Fetch page content from admin panel
+  const fetchPageContent = async () => {
+    try {
+      // Build the URL slug to look up
+      const pathParts = location.pathname.split('/').filter(Boolean);
+      let slug = pathParts.join('/') || 'india-colleges';
+      
+      // Also try without trailing path
+      if (pathParts.length === 1) {
+        slug = pathParts[0];
+      }
+      
+      const response = await api.get(`/listing-pages/by-slug/${slug}`);
+      if (response.data) {
+        setPageContent(response.data);
+      }
+    } catch (error) {
+      // No content found for this page - that's okay
+      setPageContent(null);
+    }
+  };
   
   const fetchInstitutions = async () => {
     setLoading(true);
