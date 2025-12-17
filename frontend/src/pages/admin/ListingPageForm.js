@@ -5,6 +5,8 @@ import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import AdminLayout from '../../components/admin/AdminLayout';
+import ContentApprovalActions from '../../components/admin/ContentApprovalActions';
+import StatusBadge from '../../components/admin/StatusBadge';
 
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
