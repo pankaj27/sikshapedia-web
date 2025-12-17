@@ -2153,9 +2153,18 @@ async def create_college(college_data: CollegeCreate, current_user: User = Depen
     )
     next_serial = (max_serial.get("serial_number", 0) if max_serial else 0) + 1
     
-    college = College(**college_data.model_dump(), total_courses=len(college_data.courses), serial_number=next_serial)
+    college = College(
+        **college_data.model_dump(), 
+        total_courses=len(college_data.courses), 
+        serial_number=next_serial,
+        created_by=current_user.id,
+        created_by_name=current_user.name,
+        updated_by=current_user.id,
+        updated_by_name=current_user.name
+    )
     college_dict = college.model_dump()
     college_dict['created_at'] = college_dict['created_at'].isoformat()
+    college_dict['updated_at'] = college_dict['updated_at'].isoformat()
     
     await db.colleges.insert_one(college_dict)
     return college
