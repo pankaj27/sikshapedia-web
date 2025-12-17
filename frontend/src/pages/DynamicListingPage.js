@@ -1598,13 +1598,21 @@ const DynamicListingPage = () => {
                 </span>
               )}
               
-              {/* Show local type filters */}
-              {filters.type.map(type => (
-                <span key={type} className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Type: {type}
-                  <button onClick={() => toggleFilter(type)} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+              {/* Show Type from URL */}
+              {activeFilters.collegeType && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  Type: {activeFilters.collegeType}
+                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
                 </span>
-              ))}
+              )}
+              
+              {/* Show Accreditation from URL */}
+              {activeFilters.accreditation && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
+                  Accreditation: {activeFilters.accreditation}
+                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+                </span>
+              )}
               
               {/* Course filter */}
               {filters.course && (
