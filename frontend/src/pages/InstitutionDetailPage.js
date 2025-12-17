@@ -32,26 +32,27 @@ const InstitutionDetailPage = () => {
   const institutionType = getInstitutionType();
   
   // Parse URL to extract numeric ID and slug
-  // Format: {number}-{slug} e.g., "001-mr-college-of-pharmacy" or "001-indian-institute-of-technology-delhi"
+  // ONLY accepts new format: {number}-{slug} e.g., "012-aiims-delhi"
+  // Old format like "aiims-delhi-001" is NOT supported
   const parseIdSlug = () => {
-    if (!idSlug) return { numericId: null, slug: null };
+    if (!idSlug) return { numericId: null, slug: null, isValidFormat: false };
     
-    // Pattern 1: {number}-{slug} with dash separator
-    // e.g., "001-mr-college-of-pharmacy" -> numericId: "001", slug: "mr-college-of-pharmacy"
+    // ONLY accept format: {number}-{slug} with dash separator
+    // e.g., "012-aiims-delhi" -> numericId: "012", slug: "aiims-delhi"
     const numericDashMatch = idSlug.match(/^(\d+)-(.+)$/);
     if (numericDashMatch) {
       return {
         numericId: numericDashMatch[1],
-        slug: numericDashMatch[2]
+        slug: numericDashMatch[2],
+        isValidFormat: true
       };
     }
     
-    // Pattern 2: Legacy format - full ID like "iit-delhi-001"
-    // Try to find institution by this ID directly
+    // Invalid format - old URLs like "aiims-delhi-001" are no longer supported
     return {
       numericId: null,
-      slug: idSlug,
-      legacyId: idSlug
+      slug: null,
+      isValidFormat: false
     };
   };
   
