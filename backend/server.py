@@ -1317,8 +1317,20 @@ class Board(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str  # CBSE, ICSE, State Board, etc.
+    full_name: Optional[str] = None
     slug: str
+    type: str = "State"  # National, State, International
+    state: Optional[str] = None  # For state boards
     description: Optional[str] = None
+    headquarters: Optional[str] = None
+    established: Optional[int] = None
+    website: Optional[str] = None
+    recognition: Optional[str] = None
+    medium_of_instruction: List[str] = []
+    exam_pattern: Optional[str] = None
+    grading_system: Optional[str] = None
+    key_features: List[str] = []
+    total_schools: int = 0
     country: str = "India"
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
