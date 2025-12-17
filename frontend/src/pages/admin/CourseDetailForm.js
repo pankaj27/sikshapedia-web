@@ -82,6 +82,10 @@ const CourseDetailForm = () => {
     sub_stream_ids: [],
     exam_ids: [],
     description: '',
+    description_toc: [], // [{title, anchor, content, image, video}]
+    description_tables: [], // [{title, headers: [], rows: [[]]}]
+    description_images: [], // [{url, caption}]
+    description_videos: [], // [{url, title}]
     overview: '',
     eligibility: '',
     admission_process: '',
