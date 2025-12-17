@@ -79,8 +79,8 @@ const DynamicListingPage = () => {
   
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
   
-  // Parse URL to determine what to show
-  const urlInfo = useMemo(() => parseListingUrl(location.pathname), [location.pathname]);
+  // Parse URL to determine what to show (including query params)
+  const urlInfo = useMemo(() => parseListingUrl(location.pathname, location.search), [location.pathname, location.search]);
   
   // Determine page title and type from URL
   const pageInfo = useMemo(() => {
