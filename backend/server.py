@@ -1977,8 +1977,9 @@ async def create_team_member(member: TeamMemberCreate, current_user: User = Depe
     member_dict['created_at'] = member_dict['created_at'].isoformat()
     await db.admins.insert_one(member_dict)
     
-    # Return without password
-    del member_dict['password_hash']
+    # Return without password and _id (MongoDB adds _id during insert)
+    member_dict.pop('password_hash', None)
+    member_dict.pop('_id', None)
     return member_dict
 
 @api_router.put("/admin/team/{member_id}")
