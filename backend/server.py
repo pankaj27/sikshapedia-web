@@ -456,6 +456,7 @@ class College(BaseModel):
     # Recognition & Affiliations
     recognized_by: List[str] = []  # UGC, AICTE, NBA, NAAC
     affiliated_to: Optional[str] = None
+    board: Optional[str] = None  # For Schools: CBSE, ICSE, State Board, etc.
     memberships: List[str] = []  # AIU, ACU, IUAC
     
     # Rankings - Multiple agencies
