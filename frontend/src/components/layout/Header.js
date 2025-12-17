@@ -281,7 +281,7 @@ const Header = () => {
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💼 MANAGEMENT COURSES</p>
-                  <Link to="/colleges?course=mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBA - Master of Business Administration
                   </Link>
                   <Link to="/colleges?course=bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
@@ -354,7 +354,7 @@ const Header = () => {
             <Link to="/btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Tech
             </Link>
-            <Link to="/colleges?course=mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBA
             </Link>
             <Link to="/colleges?course=mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
