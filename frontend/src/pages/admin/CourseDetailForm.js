@@ -882,40 +882,56 @@ const CourseDetailForm = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <label className="block text-sm font-medium text-blue-800">🖼️ Images</label>
-                      <p className="text-xs text-blue-600">Add images for description</p>
+                      <p className="text-xs text-blue-600">Add images for description (alt tags auto-generated)</p>
                     </div>
                     <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
                       {formData.description_images?.length || 0} images
                     </span>
                   </div>
-                  <div className="grid grid-cols-4 gap-3 mb-4">
+                  <div className="space-y-3 mb-4">
                     {(formData.description_images || []).map((img, index) => (
-                      <div key={index} className="relative group">
-                        <img src={img.url} alt="" className="w-full h-20 object-cover rounded-lg border-2 border-blue-200" />
-                        <button type="button" onClick={() => {
-                          setFormData({...formData, description_images: (formData.description_images || []).filter((_, i) => i !== index)});
-                        }} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100"><FiX size={10} /></button>
-                        <input type="text" value={img.caption || ''} onChange={(e) => {
-                          const newImages = [...(formData.description_images || [])];
-                          newImages[index].caption = e.target.value;
-                          setFormData({...formData, description_images: newImages});
-                        }} placeholder="Caption" className="w-full mt-1 text-xs border rounded px-2 py-1" />
+                      <div key={index} className="bg-white rounded-lg border-2 border-blue-200 p-3">
+                        <div className="flex items-start gap-3">
+                          <img src={img.url} alt={img.alt || ''} className="w-24 h-20 object-cover rounded border flex-shrink-0" />
+                          <div className="flex-1 space-y-2">
+                            <div>
+                              <label className="block text-xs text-gray-500 mb-1">Alt Tag (SEO) <span className="text-green-600">✓ Auto</span></label>
+                              <input type="text" value={img.alt || ''} onChange={(e) => {
+                                const newImages = [...(formData.description_images || [])];
+                                newImages[index].alt = e.target.value;
+                                setFormData({...formData, description_images: newImages});
+                              }} placeholder="Auto-generated alt text" className="w-full border rounded px-2 py-1.5 text-sm bg-green-50" />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-gray-500 mb-1">Caption</label>
+                              <input type="text" value={img.caption || ''} onChange={(e) => {
+                                const newImages = [...(formData.description_images || [])];
+                                newImages[index].caption = e.target.value;
+                                setFormData({...formData, description_images: newImages});
+                              }} placeholder="Image caption" className="w-full border rounded px-2 py-1.5 text-sm" />
+                            </div>
+                          </div>
+                          <button type="button" onClick={() => {
+                            setFormData({...formData, description_images: (formData.description_images || []).filter((_, i) => i !== index)});
+                          }} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 size={16} /></button>
+                        </div>
                       </div>
                     ))}
-                    <label className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100">
-                      <FiUpload className="text-blue-400" size={18} />
-                      <span className="text-xs text-blue-600">Add Image</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          const fd = new FormData();
-                          fd.append('file', file);
-                          const res = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
-                          setFormData({...formData, description_images: [...(formData.description_images || []), { url: res.data.url, caption: '' }]});
-                        }
-                      }} />
-                    </label>
                   </div>
+                  <label className="flex items-center justify-center gap-2 h-12 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100">
+                    <FiUpload className="text-blue-400" size={18} />
+                    <span className="text-sm text-blue-600">Add Image</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const fd = new FormData();
+                        fd.append('file', file);
+                        const res = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                        const autoAlt = generateAltTag(formData.name, 'description image', formData.description_images?.length || 0);
+                        setFormData({...formData, description_images: [...(formData.description_images || []), { url: res.data.url, caption: '', alt: autoAlt }]});
+                      }
+                    }} />
+                  </label>
                 </div>
 
                 {/* Description Videos (URL only) */}
