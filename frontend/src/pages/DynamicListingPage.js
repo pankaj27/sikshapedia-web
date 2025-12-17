@@ -568,6 +568,8 @@ const DynamicListingPage = () => {
       programType: '',
     });
     setActiveFilterDropdown(null);
+    // Also close dropdown when clearing
+    setTimeout(() => setActiveFilterDropdown(null), 100);
   };
 
   const removeFilter = (filterType) => {
