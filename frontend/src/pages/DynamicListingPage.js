@@ -1524,7 +1524,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.recognition.map((option) => (
-                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, recognition: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.recognition === option && '✓'}</button>
+                        <button key={option} onClick={() => handleFilterSelect('recognition', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.recognition === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
