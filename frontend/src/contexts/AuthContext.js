@@ -12,7 +12,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUserState] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,10 +20,18 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     
     if (token && savedUser) {
-      setUser(JSON.parse(savedUser));
+      setUserState(JSON.parse(savedUser));
     }
     setLoading(false);
   }, []);
+
+  // Wrapper to update both state and localStorage
+  const setUser = (userData) => {
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
+    setUserState(userData);
+  };
 
   const login = async (email, password) => {
     try {
