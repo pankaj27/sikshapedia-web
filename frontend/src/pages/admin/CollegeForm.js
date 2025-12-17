@@ -213,6 +213,7 @@ const CollegeForm = () => {
     rankings: [],
     average_fees: 0,
     total_courses: 0,
+    streams: [], // Engineering, Medical, Management, Law, Arts, Science, Commerce, etc.
     courses: [],
     facilities: [],
     hostel_info: { available: false, fee_per_semester: 0, description: '' },
