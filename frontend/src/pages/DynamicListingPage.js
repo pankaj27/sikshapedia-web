@@ -965,19 +965,19 @@ const DynamicListingPage = () => {
       </div>
 
       {/* AUTHOR INFO */}
-      <div className="bg-white py-1 border-b">
+      <div className="bg-white py-2 border-b">
         <div className="container mx-auto px-6">
-          <div className="flex items-center gap-1.5">
-            <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-200">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
               <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                <FiUser size={12} />
+                <FiUser size={16} />
               </div>
             </div>
             <div>
-              <Link to={`/author/${pageContent?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-[10px] font-semibold text-gray-900 hover:text-orange-600">
+              <Link to={`/author/${pageContent?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-[13px] font-semibold text-gray-900 hover:text-orange-600">
                 {pageContent?.updated_by_name || pageContent?.created_by_name || 'Content Team'}
               </Link>
-              <p className="text-[8px] text-gray-600">
+              <p className="text-[11px] text-gray-600">
                 Content Curator | {pageContent?.updated_at ? `Updated ${formatTimeAgo(pageContent.updated_at)}` : 'Updated recently'}
               </p>
             </div>

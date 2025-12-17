@@ -498,16 +498,16 @@ const CollegeDetailPage = ({ overrideId }) => {
 
       {/* AUTHOR INFO */}
       <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-2">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
-              <FiUser size={14} />
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
+              <FiUser size={18} />
             </div>
             <div>
-              <Link to={`/author/${college?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-xs font-semibold text-gray-900 hover:text-orange-600">
+              <Link to={`/author/${college?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-sm font-semibold text-gray-900 hover:text-orange-600">
                 {college?.updated_by_name || college?.created_by_name || 'Content Team'}
               </Link>
-              <p className="text-[10px] text-gray-600">
+              <p className="text-[13px] text-gray-600">
                 Content Writer | {college?.updated_at ? `Updated ${formatTimeAgo(college.updated_at)}` : (college?.created_at ? `Added ${formatTimeAgo(college.created_at)}` : 'Updated recently')}
               </p>
             </div>
