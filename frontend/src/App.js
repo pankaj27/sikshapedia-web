@@ -184,6 +184,7 @@ function App() {
                   
                   {/* User & Dashboard */}
                   <Route path="/dashboard" element={<StudentDashboard />} />
+                  <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/search" element={<GlobalSearchPage />} />
                   <Route path="/write-review" element={<WriteReviewPage />} />
                   
