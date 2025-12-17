@@ -433,14 +433,14 @@ const CourseDetailForm = () => {
     setFormData({ ...formData, [field]: newValues });
   };
 
-  const handleSubmit = async (e, saveAsDraft = false) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
 
     try {
       const dataToSave = {
         ...formData,
-        status: saveAsDraft ? 'draft' : formData.status
+        status: formData.status || 'draft'
       };
       
       if (id) {
@@ -456,6 +456,34 @@ const CourseDetailForm = () => {
       alert(`Failed to save course: ${error.response?.data?.detail || error.message}`);
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Save as Draft handler
+  const handleSaveDraft = async () => {
+    setSavingDraft(true);
+    try {
+      const dataToSave = {
+        ...formData,
+        status: 'draft'
+      };
+      
+      if (id) {
+        await api.put(`/courses/${id}`, dataToSave);
+        alert('Draft saved successfully!');
+      } else {
+        const response = await api.post('/courses', dataToSave);
+        alert('Draft saved successfully!');
+        // Navigate to edit the newly created draft
+        navigate(`/admin/courses-detail/${response.data.id}`);
+        return;
+      }
+      setLastAutoSave(new Date());
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      alert(`Failed to save draft: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSavingDraft(false);
     }
   };
 
