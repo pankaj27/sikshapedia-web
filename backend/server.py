@@ -2720,14 +2720,24 @@ async def create_college(college_data: CollegeCreate, current_user: User = Depen
     )
     next_serial = (max_serial.get("serial_number", 0) if max_serial else 0) + 1
     
+    # Get admin role to determine initial status
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    admin_role = admin.get("role", "data_entry") if admin else "data_entry"
+    
+    # Super admin can publish directly, others create as draft
+    initial_status = "draft"
+    
     college = College(
         **college_data.model_dump(), 
         total_courses=len(college_data.courses), 
         serial_number=next_serial,
+        status=initial_status,
         created_by=current_user.id,
         created_by_name=current_user.name,
+        created_by_photo=current_user.profile_photo,
         updated_by=current_user.id,
-        updated_by_name=current_user.name
+        updated_by_name=current_user.name,
+        updated_by_photo=current_user.profile_photo
     )
     college_dict = college.model_dump()
     college_dict['created_at'] = college_dict['created_at'].isoformat()
