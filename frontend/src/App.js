@@ -136,6 +136,9 @@ function App() {
             <Route path="/admin/faqs" element={<FAQsManagement />} />
             <Route path="/admin/cities" element={<CitiesManagement />} />
             <Route path="/admin/contact-inquiries" element={<ContactInquiriesManagement />} />
+            <Route path="/admin/listing-pages" element={<ListingPagesManagement />} />
+            <Route path="/admin/listing-pages/new" element={<ListingPageForm />} />
+            <Route path="/admin/listing-pages/edit/:id" element={<ListingPageForm />} />
 
             {/* Public Routes - With Layout */}
             <Route path="/*" element={
