@@ -296,7 +296,7 @@ const Header = () => {
                   <Link to="/mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBBS - Bachelor of Medicine & Surgery
                   </Link>
-                  <Link to="/colleges?course=bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BDS - Bachelor of Dental Surgery
                   </Link>
                   <Link to="/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
