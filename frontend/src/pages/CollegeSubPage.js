@@ -152,8 +152,24 @@ const CollegeSubPage = () => {
     fetchCollege();
   }, [resolvedId, section]);
 
+  // Show error for invalid URL format
+  if (invalidFormat) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🔗</div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Invalid URL format</h1>
+          <p className="text-gray-600 mb-4">The URL format is not valid. Please use the correct format.</p>
+          <Link to="/india-colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
+            Browse All Colleges
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   // Show loading while resolving ID or fetching college
-  if (loading || (!resolvedId && (id || idSlug))) {
+  if (loading || (!resolvedId && idSlug)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
@@ -165,9 +181,11 @@ const CollegeSubPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">College not found</h1>
-          <Link to="/india-colleges" className="text-orange-600 hover:underline mt-4 block">
-            Back to Colleges
+          <div className="text-6xl mb-4">🎓</div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">College not found</h1>
+          <p className="text-gray-600 mb-4">The institution you're looking for doesn't exist.</p>
+          <Link to="/india-colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
+            Browse All Colleges
           </Link>
         </div>
       </div>
