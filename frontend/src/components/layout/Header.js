@@ -293,7 +293,7 @@ const Header = () => {
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🏥 MEDICAL COURSES</p>
-                  <Link to="/colleges?course=mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBBS - Bachelor of Medicine & Surgery
                   </Link>
                   <Link to="/colleges?course=bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
@@ -357,7 +357,7 @@ const Header = () => {
             <Link to="/mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBA
             </Link>
-            <Link to="/colleges?course=mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               MBBS
             </Link>
             <Link to="/colleges?course=bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
