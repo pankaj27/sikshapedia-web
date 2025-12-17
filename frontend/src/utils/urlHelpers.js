@@ -134,9 +134,9 @@ export const getNewsDetailUrl = (id, title) => {
 export const parseListingUrl = (pathname) => {
   const parts = pathname.split('/').filter(Boolean);
   
-  // Check for institution listing patterns
+  // Check for institution listing patterns: /{location}-colleges
   const institutionMatch = parts[0]?.match(/^(.+)-(colleges|schools|universities)$/);
-  if (institutionMatch) {
+  if (institutionMatch && parts.length === 1) {
     return {
       type: 'institution-listing',
       location: institutionMatch[1] === 'india' ? null : institutionMatch[1],
@@ -144,8 +144,39 @@ export const parseListingUrl = (pathname) => {
     };
   }
   
-  // Check for institution detail patterns: /college/{id}-{slug}
-  if (['college', 'university', 'school'].includes(parts[0])) {
+  // Check for combined stream + location patterns: /engineering/maharashtra-colleges
+  // or state + city patterns: /maharashtra/mumbai-colleges
+  if (parts.length === 2) {
+    const secondPartMatch = parts[1]?.match(/^(.+)-(colleges|schools|universities)$/);
+    if (secondPartMatch) {
+      const firstPart = parts[0];
+      const location = secondPartMatch[1];
+      const institutionType = secondPartMatch[2];
+      
+      // Check if first part is a state (for state/city combination)
+      if (isState(firstPart)) {
+        return {
+          type: 'institution-listing',
+          state: firstPart,
+          location: location, // city
+          institutionType: institutionType,
+          combinedFilters: { state: firstPart, city: location }
+        };
+      }
+      
+      // Otherwise it's stream/location combination
+      return {
+        type: 'stream-listing',
+        stream: firstPart,
+        location: location,
+        institutionType: institutionType,
+        combinedFilters: { stream: firstPart, location: location }
+      };
+    }
+  }
+  
+  // Check for institution detail patterns: /colleges/{id}-{slug}
+  if (['colleges', 'universities', 'schools'].includes(parts[0])) {
     const idMatch = parts[1]?.match(/^(\d+)-(.+)$/);
     if (idMatch) {
       return {
@@ -155,15 +186,15 @@ export const parseListingUrl = (pathname) => {
         slug: idMatch[2]
       };
     }
-    // Location-based school listing: /school/west-bengal
+    // Location-based listing: /colleges/west-bengal (shouldn't happen with new structure)
     return {
       type: 'institution-location-listing',
-      institutionType: parts[0],
+      institutionType: parts[0].replace(/s$/, ''), // Remove trailing 's'
       location: parts[1]
     };
   }
   
-  // Check for stream-based patterns
+  // Check for stream-based patterns: /engineering, /engineering/computer-science
   if (parts.length >= 1 && !['courses', 'exams', 'news'].includes(parts[0])) {
     return {
       type: 'stream-listing',
