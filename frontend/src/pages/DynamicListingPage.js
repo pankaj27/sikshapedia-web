@@ -90,11 +90,12 @@ const DynamicListingPage = () => {
     
     if (urlInfo.type === 'institution-location-listing') {
       const locationName = toDisplayName(urlInfo.location);
-      const typeName = urlInfo.institutionType.charAt(0).toUpperCase() + urlInfo.institutionType.slice(1) + 's';
+      const isSchools = urlInfo.institutionType === 'school';
+      const typeName = isSchools ? 'Schools' : 'Colleges & Universities';
       return {
         title: `Top ${typeName} in ${locationName}`,
         description: `Explore top ${typeName.toLowerCase()} in ${locationName}. Find admissions, fees, and more.`,
-        institutionType: urlInfo.institutionType.charAt(0).toUpperCase() + urlInfo.institutionType.slice(1),
+        institutionTypes: isSchools ? ['School'] : ['College', 'University'],
         location: urlInfo.location,
         locationType: isState(urlInfo.location) ? 'state' : 'city'
       };
