@@ -100,6 +100,7 @@ function App() {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/profile" element={<AdminProfile />} />
+            <Route path="/admin/team" element={<TeamManagement />} />
             <Route path="/admin/colleges" element={<CollegesListManagement />} />
             <Route path="/admin/colleges/add" element={<CollegeForm />} />
             <Route path="/admin/colleges/new" element={<CollegeForm />} />
