@@ -48,7 +48,8 @@ const CourseDetailForm = () => {
     popular_specializations: [],
     is_popular: false,
     total_colleges_offering: 0,
-    status: 'draft'
+    status: 'draft',
+    base_course_id: '' // Reference to the course from Quick Entry
   });
 
   useEffect(() => {
