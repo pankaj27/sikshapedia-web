@@ -307,9 +307,6 @@ const CourseDetailForm = () => {
     
     const selectedCourse = coursesList.find(c => c.id === selectedCourseId);
     if (selectedCourse) {
-      // Auto-generate SEO Meta Tags
-      const seoTags = generateSeoMetaTags(selectedCourse);
-      
       setFormData({
         ...formData,
         name: selectedCourse.name,
@@ -318,11 +315,7 @@ const CourseDetailForm = () => {
         degree_type: selectedCourse.degree_type || 'UG',
         duration: selectedCourse.duration || '',
         eligibility: selectedCourse.eligibility || '',
-        base_course_id: selectedCourse.id,
-        // Auto-generated SEO Meta Tags
-        meta_title: seoTags.metaTitle,
-        meta_description: seoTags.metaDesc,
-        meta_keywords: seoTags.keywords
+        base_course_id: selectedCourse.id
       });
     }
   };
