@@ -58,6 +58,7 @@ const DynamicListingPage = () => {
   const [compareList, setCompareList] = useState([]);
   const [sortBy, setSortBy] = useState('ranking');
   const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
+  const [pageContent, setPageContent] = useState(null); // Content from admin
   
   const [filters, setFilters] = useState({
     search: '',
