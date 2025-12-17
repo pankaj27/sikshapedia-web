@@ -314,9 +314,23 @@ const NewsForm = () => {
               <Link to="/admin/news" className="flex-1">
                 <Button variant="outline" className="w-full">Cancel</Button>
               </Link>
-              <Button type="submit" disabled={loading} className="flex-1 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2">
+              <Button 
+                type="button" 
+                onClick={(e) => handleSubmit(e, true)} 
+                disabled={loading} 
+                variant="outline"
+                className="flex-1 flex items-center justify-center gap-2"
+              >
                 <FiSave size={18} />
-                {loading ? 'Saving...' : isEdit ? 'Update News' : 'Publish News'}
+                {loading ? 'Saving...' : 'Save Draft'}
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={loading || (isDataEntry && formData.status === 'pending')} 
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2"
+              >
+                <FiSave size={18} />
+                {loading ? 'Saving...' : isEdit ? 'Update News' : 'Save News'}
               </Button>
             </div>
           </div>
