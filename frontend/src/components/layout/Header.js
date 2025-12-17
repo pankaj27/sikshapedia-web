@@ -287,7 +287,7 @@ const Header = () => {
                   <Link to="/bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BBA - Bachelor of Business Administration
                   </Link>
-                  <Link to="/colleges?course=pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     PGDM - Post Graduate Diploma in Management
                   </Link>
                   
