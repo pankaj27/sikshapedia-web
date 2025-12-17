@@ -30,21 +30,30 @@ const getMenuIconById = (iconId) => {
   return found ? found.icon : <FiBookmark size={16} />;
 };
 
-// Auto-generate alt tag based on context
+// Brand name constant
+const BRAND_NAME = 'AdmissionBuddy';
+
+// Auto-generate alt tag based on context with AdmissionBuddy branding
 const generateAltTag = (courseName, context, index) => {
   const name = courseName || 'Course';
   const ctx = context || 'content';
-  return `${name} - ${ctx} ${index + 1}`.trim();
+  return `${name} - ${ctx} ${index + 1} | ${BRAND_NAME}`.trim();
 };
 
-// Auto-generate video alt tag
+// Auto-generate video alt tag with AdmissionBuddy branding
 const generateVideoAlt = (courseName, context, index) => {
   const name = courseName || 'Course';
   const ctx = context || 'video';
-  return `${name} - ${ctx} video ${index + 1}`.trim();
+  return `${name} - ${ctx} video ${index + 1} | ${BRAND_NAME}`.trim();
 };
 
-// Auto-generate SEO Meta Tags
+// Auto-generate alt tag from caption/title with AdmissionBuddy branding
+const generateAltFromCaption = (courseName, caption) => {
+  const name = courseName || 'Course';
+  return caption ? `${name} - ${caption} | ${BRAND_NAME}` : '';
+};
+
+// Auto-generate SEO Meta Tags with AdmissionBuddy branding
 const generateSeoMetaTags = (courseData) => {
   const name = courseData.name || 'Course';
   const fullName = courseData.full_name || name;
@@ -53,13 +62,13 @@ const generateSeoMetaTags = (courseData) => {
   const eligibility = courseData.eligibility || '';
   const stream = courseData.stream || '';
   
-  // Generate Meta Title (max 60 chars)
-  const metaTitle = `${name} Course ${new Date().getFullYear()} - Eligibility, Fees, Syllabus, Top Colleges`.substring(0, 60);
+  // Generate Meta Title with branding (max 60 chars)
+  const metaTitle = `${name} Course ${new Date().getFullYear()} - Fees, Eligibility | ${BRAND_NAME}`.substring(0, 60);
   
-  // Generate Meta Description (max 160 chars)
-  const metaDesc = `${fullName} (${name}) is a ${degreeType} course${duration ? ` of ${duration}` : ''}. Check eligibility, fees, syllabus, admission process, career scope & top colleges offering ${name} in India.`.substring(0, 160);
+  // Generate Meta Description with branding (max 160 chars)
+  const metaDesc = `${fullName} (${name}) is a ${degreeType} course${duration ? ` of ${duration}` : ''}. Check eligibility, fees, syllabus, admission process & top colleges on ${BRAND_NAME}.`.substring(0, 160);
   
-  // Generate Meta Keywords
+  // Generate Meta Keywords with branding
   const keywords = [
     name.toLowerCase(),
     fullName.toLowerCase(),
@@ -72,7 +81,9 @@ const generateSeoMetaTags = (courseData) => {
     `${name.toLowerCase()} career`,
     stream ? stream.toLowerCase() : '',
     degreeType ? `${degreeType.toLowerCase()} courses` : '',
-    `${name.toLowerCase()} ${new Date().getFullYear()}`
+    `${name.toLowerCase()} ${new Date().getFullYear()}`,
+    'admissionbuddy',
+    `${name.toLowerCase()} admissionbuddy`
   ].filter(Boolean).join(', ');
   
   return { metaTitle, metaDesc, keywords };
