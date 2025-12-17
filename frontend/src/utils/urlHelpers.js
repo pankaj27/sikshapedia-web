@@ -130,17 +130,70 @@ export const getNewsDetailUrl = (id, title) => {
   return `/news/${id}-${titleSlug}`;
 };
 
+// College Types for URL parsing
+export const COLLEGE_TYPES = ['government', 'private', 'deemed', 'autonomous', 'public-private', 'aided'];
+
+// Accreditation grades for URL parsing
+export const ACCREDITATION_GRADES = [
+  'naac-a-plus-plus', 'naac-a-plus', 'naac-a', 'naac-b-plus-plus', 'naac-b-plus', 'naac-b', 'naac-c',
+  'nba-accredited', 'nirf-ranked'
+];
+
+// Check if slug is a college type
+export const isCollegeType = (slug) => COLLEGE_TYPES.includes(slug?.toLowerCase());
+
+// Check if slug is an accreditation grade
+export const isAccreditation = (slug) => ACCREDITATION_GRADES.includes(slug?.toLowerCase());
+
 // Parse URL to extract parameters
-export const parseListingUrl = (pathname) => {
+export const parseListingUrl = (pathname, searchParams = '') => {
   const parts = pathname.split('/').filter(Boolean);
   
-  // Check for institution listing patterns: /{location}-colleges
+  // Parse query parameters
+  const queryParams = new URLSearchParams(searchParams);
+  const queryFilters = {
+    course: queryParams.get('course') || null,
+    degreeType: queryParams.get('degree') || null,
+    examAccepted: queryParams.get('exam') || null,
+    affiliation: queryParams.get('affiliation') || null,
+    recognition: queryParams.get('recognition') || null,
+  };
+  
+  // Check for institution listing patterns: /{location}-colleges or /{type}-colleges or /{accreditation}-colleges
   const institutionMatch = parts[0]?.match(/^(.+)-(colleges|schools|universities)$/);
   if (institutionMatch && parts.length === 1) {
+    const prefix = institutionMatch[1];
+    const institutionType = institutionMatch[2];
+    
+    // Check if it's a college type filter (e.g., government-colleges)
+    if (isCollegeType(prefix)) {
+      return {
+        type: 'institution-listing',
+        location: null,
+        institutionType: institutionType,
+        collegeType: prefix,
+        combinedFilters: { collegeType: prefix },
+        queryFilters
+      };
+    }
+    
+    // Check if it's an accreditation filter (e.g., naac-a-plus-colleges)
+    if (isAccreditation(prefix)) {
+      return {
+        type: 'institution-listing',
+        location: null,
+        institutionType: institutionType,
+        accreditation: prefix,
+        combinedFilters: { accreditation: prefix },
+        queryFilters
+      };
+    }
+    
     return {
       type: 'institution-listing',
-      location: institutionMatch[1] === 'india' ? null : institutionMatch[1],
-      institutionType: institutionMatch[2]
+      location: prefix === 'india' ? null : prefix,
+      institutionType: institutionType,
+      queryFilters
     };
   }
   
