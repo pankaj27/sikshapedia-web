@@ -1541,10 +1541,13 @@ class ListingPageContent(BaseModel):
     page_subtitle: Optional[str] = None
     introduction: Optional[str] = None  # Rich text introduction
     
-    # Main Content Sections (Rich Text)
-    content_sections: List[Dict[str, Any]] = []  # [{title, content, order}]
+    # Table of Contents
+    table_of_contents: List[Dict[str, str]] = []  # [{title, anchor}]
     
-    # Tables
+    # Main Content Sections (Rich Text with media)
+    content_sections: List[Dict[str, Any]] = []  # [{title, content, type, media_url, media_alt, table_data, order}]
+    
+    # Standalone Tables
     tables: List[Dict[str, Any]] = []  # [{title, headers, rows}]
     
     # FAQs
@@ -1552,6 +1555,12 @@ class ListingPageContent(BaseModel):
     
     # Related Links
     related_pages: List[Dict[str, str]] = []  # [{title, url}]
+    
+    # Widgets Configuration
+    widgets: Dict[str, Any] = {
+        "ask_question": {"enabled": False, "title": "Have a Question?"},
+        "comments": {"enabled": False, "title": "Comments"}
+    }
     
     # Status
     is_published: bool = True
