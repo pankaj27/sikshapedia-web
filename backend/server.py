@@ -1406,10 +1406,19 @@ class Ranking(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str  # NIRF, QS World, Times Higher Education
+    full_name: Optional[str] = None
     slug: str
+    type: str = "National"  # National, International, School
+    institution_type: str = "Higher Education"  # Higher Education, School, Both
     year: int
     category: Optional[str] = None  # Overall, Engineering, Medical, etc.
     description: Optional[str] = None
+    methodology: Optional[str] = None
+    website: Optional[str] = None
+    headquarters: Optional[str] = None
+    established: Optional[int] = None
+    key_parameters: List[str] = []
+    coverage: Optional[str] = None  # India, Global, Asia, etc.
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
