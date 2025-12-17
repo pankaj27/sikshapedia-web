@@ -403,6 +403,29 @@ const CollegeForm = () => {
     }
   };
 
+  // School-specific default menu items
+  const schoolMenuItems = [
+    { id: 'info', label: 'Info', icon: 'info', enabled: true, order: 0, content: '', page_heading: '', search_heading: '', meta_title: '', meta_description: '', meta_keywords: '', og_title: '', og_description: '', toc: [], tables: [], images: [], videos: [], faqs: [], widgets: { quick_facts: { enabled: true }, quick_nav: { enabled: true }, contact_cta: { enabled: true } } },
+    { id: 'admission', label: 'Admission', icon: 'admission', enabled: true, order: 1, content: '', page_heading: '', search_heading: '', meta_title: '', meta_description: '', meta_keywords: '', og_title: '', og_description: '', toc: [], tables: [], images: [], videos: [], faqs: [], widgets: { quick_facts: { enabled: true }, quick_nav: { enabled: true }, contact_cta: { enabled: true } } },
+    { id: 'fees', label: 'Fees', icon: 'fees', enabled: true, order: 2, content: '', page_heading: '', search_heading: '', meta_title: '', meta_description: '', meta_keywords: '', og_title: '', og_description: '', toc: [], tables: [], images: [], videos: [], faqs: [], widgets: { quick_facts: { enabled: true }, quick_nav: { enabled: true }, contact_cta: { enabled: true } } },
+    { id: 'facilities', label: 'Facilities', icon: 'facilities', enabled: true, order: 3, content: '', page_heading: '', search_heading: '', meta_title: '', meta_description: '', meta_keywords: '', og_title: '', og_description: '', toc: [], tables: [], images: [], videos: [], faqs: [], widgets: { quick_facts: { enabled: true }, quick_nav: { enabled: true }, contact_cta: { enabled: true } } },
+    { id: 'hostel', label: 'Hostel', icon: 'hostel', enabled: true, order: 4, content: '', page_heading: '', search_heading: '', meta_title: '', meta_description: '', meta_keywords: '', og_title: '', og_description: '', toc: [], tables: [], images: [], videos: [], faqs: [], widgets: { quick_facts: { enabled: true }, quick_nav: { enabled: true }, contact_cta: { enabled: true } } },
+  ];
+
+  // Update menu config when institution type changes to School
+  useEffect(() => {
+    if (formData.institution_type === 'School' && !id) {
+      // Only update for new entries, not when editing
+      setFormData(prev => ({
+        ...prev,
+        menu_config: {
+          ...prev.menu_config,
+          items: schoolMenuItems
+        }
+      }));
+    }
+  }, [formData.institution_type]);
+
   const fetchRecognitions = async () => {
     try {
       const response = await api.get('/recognitions');
