@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiChevronDown, FiChevronRight, FiBook, FiInfo, FiFileText, FiDollarSign, FiBriefcase, FiAward, FiUsers, FiMapPin, FiMail, FiHelpCircle, FiBookmark, FiHome, FiBarChart2, FiImage, FiCalendar, FiMessageSquare } from 'react-icons/fi';
+import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiChevronDown, FiChevronRight, FiBook, FiInfo, FiFileText, FiDollarSign, FiBriefcase, FiAward, FiUsers, FiMapPin, FiMail, FiHelpCircle, FiBookmark, FiHome, FiBarChart2, FiImage, FiCalendar, FiMessageSquare, FiVideo, FiUpload, FiLoader } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
