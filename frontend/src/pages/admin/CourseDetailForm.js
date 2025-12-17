@@ -1,11 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck } from 'react-icons/fi';
+import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiChevronDown, FiChevronRight, FiBook, FiInfo, FiFileText, FiDollarSign, FiBriefcase, FiAward, FiUsers, FiMapPin, FiMail, FiHelpCircle, FiBookmark, FiHome, FiBarChart2, FiImage, FiCalendar, FiMessageSquare } from 'react-icons/fi';
+import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
 import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
+
+// Menu icon options
+const menuIconOptions = [
+  { id: 'info', label: 'Info', icon: <FiInfo size={16} /> },
+  { id: 'overview', label: 'Overview', icon: <FiHome size={16} /> },
+  { id: 'syllabus', label: 'Syllabus', icon: <FiBook size={16} /> },
+  { id: 'eligibility', label: 'Eligibility', icon: <FiFileText size={16} /> },
+  { id: 'admission', label: 'Admission', icon: <HiOutlineAcademicCap size={16} /> },
+  { id: 'fees', label: 'Fees', icon: <FiDollarSign size={16} /> },
+  { id: 'career', label: 'Career', icon: <FiBriefcase size={16} /> },
+  { id: 'colleges', label: 'Colleges', icon: <HiOutlineLibrary size={16} /> },
+  { id: 'salary', label: 'Salary', icon: <HiOutlineCurrencyRupee size={16} /> },
+  { id: 'comparison', label: 'Comparison', icon: <FiBarChart2 size={16} /> },
+  { id: 'faq', label: 'FAQ', icon: <FiHelpCircle size={16} /> },
+  { id: 'reviews', label: 'Reviews', icon: <FiMessageSquare size={16} /> },
+  { id: 'default', label: 'Default', icon: <FiBookmark size={16} /> },
+];
+
+const getMenuIconById = (iconId) => {
+  const found = menuIconOptions.find(opt => opt.id === iconId);
+  return found ? found.icon : <FiBookmark size={16} />;
+};
+
+// Collapsible Section Component
+const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  return (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          {icon && <span className="text-lg">{icon}</span>}
+          <h2 className="text-base font-semibold text-gray-800">{title}</h2>
+          {badge && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{badge}</span>}
+        </div>
+        {isOpen ? <FiChevronDown className="w-4 h-4 text-gray-500" /> : <FiChevronRight className="w-4 h-4 text-gray-500" />}
+      </button>
+      {isOpen && (
+        <div className="px-4 pb-4 pt-2 border-t border-gray-100">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CourseDetailForm = () => {
   const { id } = useParams();
