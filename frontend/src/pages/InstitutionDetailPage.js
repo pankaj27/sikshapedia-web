@@ -61,74 +61,34 @@ const InstitutionDetailPage = () => {
       setLoading(true);
       setError(null);
       
-      const { numericId, slug, legacyId } = parseIdSlug();
+      const { numericId, isValidFormat } = parseIdSlug();
+      
+      // Reject invalid URL format (old URLs like "aiims-delhi-001")
+      if (!isValidFormat) {
+        setError('Invalid URL format');
+        setLoading(false);
+        return;
+      }
       
       try {
-        // Strategy 1: If we have a legacy ID (like "iit-delhi-001"), try it directly
-        if (legacyId) {
-          try {
-            const response = await api.get(`/colleges/${legacyId}`);
-            if (response.data) {
-              setInstitutionId(legacyId);
+        // Search by serial_number (unique for each institution)
+        if (numericId) {
+          // Fetch institutions filtered by institution_type
+          const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
+          if (response.data && response.data.length > 0) {
+            // Find institution by serial_number (padded numeric ID)
+            const serialNum = parseInt(numericId, 10);
+            const institution = response.data.find(inst => inst.serial_number === serialNum);
+            
+            if (institution) {
+              setInstitutionId(institution.id);
               setLoading(false);
               return;
             }
-          } catch (err) {
-            // Continue to other strategies
           }
         }
         
-        // Strategy 2: Search by serial_number (unique for each institution)
-        if (numericId) {
-          try {
-            // Fetch institutions filtered by institution_type
-            const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
-            if (response.data && response.data.length > 0) {
-              // Find institution by serial_number (padded numeric ID)
-              const serialNum = parseInt(numericId, 10);
-              const institution = response.data.find(inst => inst.serial_number === serialNum);
-              
-              if (institution) {
-                setInstitutionId(institution.id);
-                setLoading(false);
-                return;
-              }
-              
-              // If exact match not found, try matching by numeric ID only within same type
-              const numericOnlyMatch = response.data.find(inst => {
-                const idNumericMatch = inst.id?.match(/(\d+)$/);
-                return idNumericMatch && idNumericMatch[1] === numericId;
-              });
-              
-              if (numericOnlyMatch) {
-                setInstitutionId(numericOnlyMatch.id);
-                setLoading(false);
-                return;
-              }
-            }
-          } catch (err) {
-            console.error('Search by numeric ID failed:', err);
-          }
-        }
-        
-        // Strategy 3: Search by slug/name only
-        if (slug) {
-          try {
-            const searchTerm = slug.replace(/-/g, ' ').trim();
-            if (searchTerm) {
-              const response = await api.get(`/colleges?search=${encodeURIComponent(searchTerm)}&institution_type=${institutionType}&limit=5`);
-              if (response.data && response.data.length > 0) {
-                setInstitutionId(response.data[0].id);
-                setLoading(false);
-                return;
-              }
-            }
-          } catch (err) {
-            console.error('Search by slug failed:', err);
-          }
-        }
-        
-        // If all strategies fail
+        // If not found
         setError('Institution not found');
         setLoading(false);
         
