@@ -17,6 +17,7 @@ const CourseDetailForm = () => {
   const [streams, setStreams] = useState([]);
   const [subStreams, setSubStreams] = useState([]);
   const [exams, setExams] = useState([]);
+  const [coursesList, setCoursesList] = useState([]); // List of courses from Quick Entry
 
   // Role checks
   const isDataEntry = user?.role === 'data_entry';
