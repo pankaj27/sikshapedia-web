@@ -421,7 +421,12 @@ class College(BaseModel):
     institution_type: Optional[str] = None  # College, School, University
     
     # Badges & Status
-    status: str = "draft"  # draft, published
+    status: str = "draft"  # draft, pending, published, rejected
+    rejection_reason: Optional[str] = None  # Reason for rejection
+    reviewed_by: Optional[str] = None  # ID of reviewer
+    reviewed_by_name: Optional[str] = None  # Name of reviewer
+    reviewed_at: Optional[datetime] = None  # When reviewed
+    submitted_at: Optional[datetime] = None  # When submitted for review
     is_verified: bool = False  # Verified institution badge
     is_preferred: bool = False  # Preferred/Featured badge
     is_featured: bool = False  # Featured badge
