@@ -153,8 +153,8 @@ const CourseDetailForm = () => {
   const handleSubmitForReview = async () => {
     setActionLoading(true);
     try {
-      await api.post(`/submit-for-review/course/${id}`);
-      const response = await api.get(`/courses/${id}`);
+      await api.post(`/admin/submit-for-review/course/${id}`);
+      const response = await api.get(`/courses-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Course submitted for review!');
     } catch (error) {
@@ -168,8 +168,8 @@ const CourseDetailForm = () => {
   const handleApprove = async () => {
     setActionLoading(true);
     try {
-      await api.post(`/approve/course/${id}`);
-      const response = await api.get(`/courses/${id}`);
+      await api.post(`/admin/approve/course/${id}`, { action: 'approve', comment: 'Approved' });
+      const response = await api.get(`/courses-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Course approved and published!');
     } catch (error) {
@@ -186,8 +186,8 @@ const CourseDetailForm = () => {
     
     setActionLoading(true);
     try {
-      await api.post(`/reject/course/${id}`, { reason });
-      const response = await api.get(`/courses/${id}`);
+      await api.post(`/admin/approve/course/${id}`, { action: 'reject', comment: reason });
+      const response = await api.get(`/courses-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Course rejected');
     } catch (error) {
