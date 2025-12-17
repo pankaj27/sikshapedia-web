@@ -1177,7 +1177,11 @@ class AdminUser(BaseModel):
     password_hash: str
     name: str
     role: str = "admin"
+    profile_photo: Optional[str] = None  # URL to profile photo
+    job_title: Optional[str] = None  # Job title/designation
+    bio: Optional[str] = None  # Short bio
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
 
 # ============================================
 # Taxonomy & Master Data Models
