@@ -1218,9 +1218,69 @@ const DynamicListingPage = () => {
           {pageContent?.content_sections?.length > 0 && (
             <section id="content-sections">
               {pageContent.content_sections.map((section, idx) => (
-                <div key={idx} className="mb-4">
-                  {section.title && <h2 className="text-xl font-bold text-gray-900 mb-2">{section.title}</h2>}
-                  <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                <div key={idx} className="mb-6 bg-white rounded-lg p-4 border" id={section.title?.toLowerCase().replace(/\s+/g, '-')}>
+                  {section.title && <h2 className="text-lg font-bold text-gray-900 mb-3">{section.title}</h2>}
+                  
+                  {/* Text + Image Layout */}
+                  {section.type === 'text_image' && section.media_url ? (
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <div className="flex-1">
+                        <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                      </div>
+                      <div className="md:w-1/3">
+                        <img 
+                          src={section.media_url} 
+                          alt={section.media_alt || section.title || 'Image'} 
+                          className="w-full h-48 object-cover rounded-lg shadow"
+                        />
+                        {section.media_alt && <p className="text-xs text-gray-500 mt-1 text-center">{section.media_alt}</p>}
+                      </div>
+                    </div>
+                  ) : section.type === 'text_video' && section.media_url ? (
+                    /* Text + Video Layout */
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <div className="flex-1">
+                        <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                      </div>
+                      <div className="md:w-1/3">
+                        <iframe 
+                          src={section.media_url} 
+                          title={section.media_alt || section.title || 'Video'}
+                          className="w-full h-48 rounded-lg shadow"
+                          allowFullScreen
+                        />
+                        {section.media_alt && <p className="text-xs text-gray-500 mt-1 text-center">{section.media_alt}</p>}
+                      </div>
+                    </div>
+                  ) : section.type === 'text_table' && section.table_data ? (
+                    /* Text + Table Layout */
+                    <div>
+                      <div className="text-sm text-gray-700 prose max-w-none mb-3" dangerouslySetInnerHTML={{ __html: section.content }} />
+                      <div className="overflow-x-auto">
+                        <table className="w-full border-collapse border border-gray-200 text-sm">
+                          <thead>
+                            <tr className="bg-orange-50">
+                              {section.table_data.headers?.map((header, hIdx) => (
+                                <th key={hIdx} className="border border-gray-200 px-3 py-2 text-left font-semibold text-gray-800">{header}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {section.table_data.rows?.map((row, rIdx) => (
+                              <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                {row.map((cell, cIdx) => (
+                                  <td key={cIdx} className="border border-gray-200 px-3 py-2 text-gray-700">{cell}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Text Only */
+                    <div className="text-sm text-gray-700 prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                  )}
                 </div>
               ))}
             </section>
