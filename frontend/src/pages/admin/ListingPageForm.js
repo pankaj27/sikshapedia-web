@@ -691,11 +691,33 @@ const ListingPageForm = () => {
                     </div>
                     <div>
                       <label className="block text-xs font-medium mb-1">Alt Text / Caption</label>
-                      <Input
-                        value={section.media_alt}
-                        onChange={(e) => updateContentSection(index, 'media_alt', e.target.value)}
-                        placeholder="Description"
-                      />
+                      <div className="flex gap-2">
+                        <Input
+                          value={section.media_alt}
+                          onChange={(e) => updateContentSection(index, 'media_alt', e.target.value)}
+                          placeholder="Description for SEO"
+                          className="flex-1"
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            // Auto-generate alt text based on section title, page title, and media type
+                            const mediaType = section.type === 'text_image' ? 'Image' : 'Video';
+                            const sectionTitle = section.title || 'Content';
+                            const pageTitle = formData.page_title || formData.url_slug || 'Page';
+                            const altText = `${sectionTitle} - ${pageTitle} | ${mediaType}`;
+                            updateContentSection(index, 'media_alt', altText);
+                          }}
+                          title="Auto-generate alt text from section title"
+                        >
+                          Auto
+                        </Button>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {section.type === 'text_image' ? 'SEO: Describe the image content' : 'Caption shown below video'}
+                      </p>
                     </div>
                   </div>
                 )}
