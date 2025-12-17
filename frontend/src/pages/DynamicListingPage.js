@@ -630,6 +630,57 @@ const DynamicListingPage = () => {
     }
   };
   
+  // Slug mappings for Type and Accreditation
+  const TYPE_TO_SLUG = {
+    'Government': 'government',
+    'Private': 'private',
+    'Deemed': 'deemed',
+    'Autonomous': 'autonomous',
+    'Public-Private': 'public-private',
+    'Aided': 'aided'
+  };
+
+  const ACCREDITATION_TO_SLUG = {
+    'NAAC A++ (Highest)': 'naac-a-plus-plus',
+    'NAAC A+': 'naac-a-plus',
+    'NAAC A': 'naac-a',
+    'NAAC B++': 'naac-b-plus-plus',
+    'NAAC B+': 'naac-b-plus',
+    'NAAC B': 'naac-b',
+    'NAAC C': 'naac-c',
+    'NBA Accredited': 'nba-accredited',
+    'NIRF Ranked': 'nirf-ranked'
+  };
+
+  // Build URL with query parameters for secondary filters
+  const buildUrlWithQueryParams = (basePath, newFilter = null) => {
+    const queryParams = new URLSearchParams();
+    
+    // Preserve existing query filters from URL
+    const existingQueryFilters = urlInfo.queryFilters || {};
+    
+    // Add existing query filters
+    if (existingQueryFilters.course) queryParams.set('course', existingQueryFilters.course);
+    if (existingQueryFilters.degreeType) queryParams.set('degree', existingQueryFilters.degreeType);
+    if (existingQueryFilters.examAccepted) queryParams.set('exam', existingQueryFilters.examAccepted);
+    if (existingQueryFilters.affiliation) queryParams.set('affiliation', existingQueryFilters.affiliation);
+    if (existingQueryFilters.recognition) queryParams.set('recognition', existingQueryFilters.recognition);
+    
+    // Add new filter if provided
+    if (newFilter) {
+      const { type, value } = newFilter;
+      const slug = generateSlug(value);
+      if (type === 'course') queryParams.set('course', slug);
+      else if (type === 'degreeType') queryParams.set('degree', slug);
+      else if (type === 'examAccepted') queryParams.set('exam', slug);
+      else if (type === 'affiliation') queryParams.set('affiliation', slug);
+      else if (type === 'recognition') queryParams.set('recognition', slug);
+    }
+    
+    const queryString = queryParams.toString();
+    return queryString ? `${basePath}?${queryString}` : basePath;
+  };
+
   // Handle filter selection - Navigate to SEO-friendly URLs with combined filters
   const handleFilterSelect = (filterType, value) => {
     setActiveFilterDropdown(null);
@@ -638,49 +689,98 @@ const DynamicListingPage = () => {
     const currentStream = activeFilters.stream || activeFilters.subStream;
     const currentState = activeFilters.state;
     const currentCity = activeFilters.city;
+    const currentCollegeType = activeFilters.collegeType;
+    const currentAccreditation = activeFilters.accreditation;
     
     // Build combined URL based on selected filter and existing filters
     if (filterType === 'state') {
       const stateSlug = generateSlug(value);
+      let basePath;
       // If stream is selected, combine: /engineering/maharashtra-colleges
       if (currentStream) {
-        navigate(`/${generateSlug(currentStream)}/${stateSlug}-${suffix}`);
+        basePath = `/${generateSlug(currentStream)}/${stateSlug}-${suffix}`;
+      } else if (currentCollegeType) {
+        basePath = `/${TYPE_TO_SLUG[currentCollegeType] || generateSlug(currentCollegeType)}/${stateSlug}-${suffix}`;
+      } else if (currentAccreditation) {
+        basePath = `/${ACCREDITATION_TO_SLUG[currentAccreditation] || generateSlug(currentAccreditation)}/${stateSlug}-${suffix}`;
       } else {
-        navigate(`/${stateSlug}-${suffix}`);
+        basePath = `/${stateSlug}-${suffix}`;
       }
+      navigate(buildUrlWithQueryParams(basePath));
       return;
     }
     
     if (filterType === 'city') {
       const citySlug = generateSlug(value);
+      let basePath;
       // If stream is selected, combine: /engineering/mumbai-colleges
       if (currentStream) {
-        navigate(`/${generateSlug(currentStream)}/${citySlug}-${suffix}`);
+        basePath = `/${generateSlug(currentStream)}/${citySlug}-${suffix}`;
       } 
       // If state is selected, combine: /maharashtra/mumbai-colleges
       else if (currentState) {
-        navigate(`/${generateSlug(currentState)}/${citySlug}-${suffix}`);
+        basePath = `/${generateSlug(currentState)}/${citySlug}-${suffix}`;
       } else {
-        navigate(`/${citySlug}-${suffix}`);
+        basePath = `/${citySlug}-${suffix}`;
       }
+      navigate(buildUrlWithQueryParams(basePath));
       return;
     }
     
     // Stream filter
     if (filterType === 'stream' || filterType === 'subStream') {
       const streamSlug = generateSlug(value);
+      let basePath;
       // If state or city is selected, combine: /engineering/maharashtra-colleges
       if (currentState) {
-        navigate(`/${streamSlug}/${generateSlug(currentState)}-${suffix}`);
+        basePath = `/${streamSlug}/${generateSlug(currentState)}-${suffix}`;
       } else if (currentCity) {
-        navigate(`/${streamSlug}/${generateSlug(currentCity)}-${suffix}`);
+        basePath = `/${streamSlug}/${generateSlug(currentCity)}-${suffix}`;
       } else {
-        navigate(`/${streamSlug}`);
+        basePath = `/${streamSlug}`;
       }
+      navigate(buildUrlWithQueryParams(basePath));
       return;
     }
     
-    // For other filters (type, degree, etc.) - apply as local filter
+    // Type filter - SEO URL (e.g., /government-colleges)
+    if (filterType === 'collegeType') {
+      const typeSlug = TYPE_TO_SLUG[value] || generateSlug(value);
+      let basePath;
+      if (currentState) {
+        basePath = `/${typeSlug}/${generateSlug(currentState)}-${suffix}`;
+      } else if (currentCity) {
+        basePath = `/${typeSlug}/${generateSlug(currentCity)}-${suffix}`;
+      } else {
+        basePath = `/${typeSlug}-${suffix}`;
+      }
+      navigate(buildUrlWithQueryParams(basePath));
+      return;
+    }
+    
+    // Accreditation filter - SEO URL (e.g., /naac-a-plus-colleges)
+    if (filterType === 'accreditation') {
+      const accredSlug = ACCREDITATION_TO_SLUG[value] || generateSlug(value);
+      let basePath;
+      if (currentState) {
+        basePath = `/${accredSlug}/${generateSlug(currentState)}-${suffix}`;
+      } else if (currentCity) {
+        basePath = `/${accredSlug}/${generateSlug(currentCity)}-${suffix}`;
+      } else {
+        basePath = `/${accredSlug}-${suffix}`;
+      }
+      navigate(buildUrlWithQueryParams(basePath));
+      return;
+    }
+    
+    // Secondary filters - Query parameters (course, degreeType, examAccepted, affiliation, recognition)
+    if (['course', 'degreeType', 'examAccepted', 'affiliation', 'recognition'].includes(filterType)) {
+      const currentPath = location.pathname;
+      navigate(buildUrlWithQueryParams(currentPath, { type: filterType, value }));
+      return;
+    }
+    
+    // For other filters - apply as local filter
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
 
