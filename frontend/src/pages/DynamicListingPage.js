@@ -913,7 +913,10 @@ const DynamicListingPage = () => {
       {/* PAGE HEADING */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-6 py-1.5">
-          <h1 className="text-xl font-bold text-gray-900">{pageInfo.title}</h1>
+          <h1 className="text-xl font-bold text-gray-900">{pageContent?.page_title || pageInfo.title}</h1>
+          {pageContent?.page_subtitle && (
+            <p className="text-sm text-gray-600 mt-0.5">{pageContent.page_subtitle}</p>
+          )}
         </div>
       </div>
 
