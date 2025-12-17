@@ -131,82 +131,158 @@ const CoursesManagement = () => {
     }
   };
 
-  const filteredItems = items.filter(item =>
-    item.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          item.full_name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStream = !filterStream || item.stream === filterStream;
+    const matchesDegree = !filterDegree || item.degree_type === filterDegree;
+    return matchesSearch && matchesStream && matchesDegree;
+  });
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setFilterStream('');
+    setFilterDegree('');
+  };
+
+  const hasActiveFilters = searchTerm || filterStream || filterDegree;
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-3">
+        {/* Compact Header */}
         <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Courses (Quick Entry)</h1>
-            <p className="text-gray-600 mt-1">Manage courses</p>
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold text-gray-900">Courses</h1>
+            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+              {filteredItems.length} of {items.length}
+            </span>
           </div>
-          <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700 text-white">
-            <FiPlus className="mr-2" /> Add New
+          <Button onClick={handleAdd} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white h-8 text-xs">
+            <FiPlus className="mr-1 h-3 w-3" /> Add New
           </Button>
         </div>
 
-        {/* Search */}
-        <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search courses..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
+        {/* Compact Filters Row */}
+        <div className="flex flex-wrap items-center gap-2 bg-gray-50 p-2 rounded-lg">
+          <div className="relative flex-1 min-w-[200px]">
+            <FiSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-3.5 w-3.5" />
+            <input
+              type="text"
+              placeholder="Search courses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-7 pr-3 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <select
+            value={filterStream}
+            onChange={(e) => setFilterStream(e.target.value)}
+            className="text-xs border border-gray-200 rounded px-2 py-1.5 bg-white focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="">All Streams</option>
+            {streams.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <select
+            value={filterDegree}
+            onChange={(e) => setFilterDegree(e.target.value)}
+            className="text-xs border border-gray-200 rounded px-2 py-1.5 bg-white focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="">All Degrees</option>
+            {degreeTypes.map(d => <option key={d} value={d}>{d}</option>)}
+          </select>
+          {hasActiveFilters && (
+            <button onClick={clearFilters} className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1">
+              <FiX className="h-3 w-3" /> Clear
+            </button>
+          )}
         </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Degree Type</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stream</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Eligibility</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Exams</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {loading ? (
-                <tr><td colSpan="7" className="px-6 py-4 text-center">Loading...</td></tr>
-              ) : filteredItems.length === 0 ? (
-                <tr><td colSpan="7" className="px-6 py-4 text-center">No items found</td></tr>
-              ) : (
-                filteredItems.map((item) => (
-                  <tr key={item.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.degree_type}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.duration}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.stream}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title={item.eligibility}>
-                      {item.eligibility || '-'}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {item.exams_accepted && item.exams_accepted.length > 0 
-                        ? item.exams_accepted.slice(0, 2).join(', ') + (item.exams_accepted.length > 2 ? '...' : '')
-                        : '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <button onClick={() => handleEdit(item)} className="text-blue-600 hover:text-blue-900 mr-3">
-                        <FiEdit size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900">
-                        <FiTrash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        {/* Compact Table */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-3 py-2 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Course</th>
+                  <th className="px-3 py-2 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-3 py-2 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider w-16">Duration</th>
+                  <th className="px-3 py-2 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Stream</th>
+                  <th className="px-3 py-2 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Eligibility</th>
+                  <th className="px-3 py-2 text-left text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Exams</th>
+                  <th className="px-3 py-2 text-center text-[10px] font-semibold text-gray-500 uppercase tracking-wider w-16">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {loading ? (
+                  <tr><td colSpan="7" className="px-3 py-8 text-center text-xs text-gray-500">Loading...</td></tr>
+                ) : filteredItems.length === 0 ? (
+                  <tr><td colSpan="7" className="px-3 py-8 text-center text-xs text-gray-500">No courses found</td></tr>
+                ) : (
+                  filteredItems.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-3 py-1.5">
+                        <div className="text-xs font-medium text-gray-900">{item.name}</div>
+                        {item.full_name && item.full_name !== item.name && (
+                          <div className="text-[10px] text-gray-400 truncate max-w-[180px]" title={item.full_name}>
+                            {item.full_name}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-3 py-1.5">
+                        <span className={`inline-flex text-[10px] px-1.5 py-0.5 rounded font-medium ${degreeColors[item.degree_type] || 'bg-gray-100 text-gray-600'}`}>
+                          {item.degree_type}
+                        </span>
+                      </td>
+                      <td className="px-3 py-1.5 text-[11px] text-gray-600">{item.duration}</td>
+                      <td className="px-3 py-1.5">
+                        <span className={`inline-flex text-[10px] px-1.5 py-0.5 rounded ${streamColors[item.stream] || 'bg-gray-100 text-gray-600'}`}>
+                          {item.stream}
+                        </span>
+                      </td>
+                      <td className="px-3 py-1.5 text-[11px] text-gray-500 max-w-[120px] truncate" title={item.eligibility}>
+                        {item.eligibility || '-'}
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {item.exams_accepted && item.exams_accepted.length > 0 ? (
+                          <div className="flex flex-wrap gap-0.5">
+                            {item.exams_accepted.slice(0, 2).map((exam, i) => (
+                              <span key={i} className="text-[9px] bg-gray-100 text-gray-600 px-1 py-0.5 rounded">
+                                {exam}
+                              </span>
+                            ))}
+                            {item.exams_accepted.length > 2 && (
+                              <span className="text-[9px] text-gray-400">+{item.exams_accepted.length - 2}</span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-[11px] text-gray-300">-</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-1.5 text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <button 
+                            onClick={() => handleEdit(item)} 
+                            className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                            title="Edit"
+                          >
+                            <FiEdit size={13} />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(item.id)} 
+                            className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                            title="Delete"
+                          >
+                            <FiTrash2 size={13} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
