@@ -1693,6 +1693,34 @@ async def login(credentials: UserLogin):
 async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
+class ProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    profile_photo: Optional[str] = None
+    job_title: Optional[str] = None
+    bio: Optional[str] = None
+
+@api_router.put("/auth/profile", response_model=User)
+async def update_profile(profile_data: ProfileUpdate, current_user: User = Depends(get_current_user)):
+    """Update user profile - name, photo, job title, bio"""
+    update_data = {}
+    
+    if profile_data.name is not None:
+        update_data['name'] = profile_data.name
+    if profile_data.profile_photo is not None:
+        update_data['profile_photo'] = profile_data.profile_photo
+    if profile_data.job_title is not None:
+        update_data['job_title'] = profile_data.job_title
+    if profile_data.bio is not None:
+        update_data['bio'] = profile_data.bio
+    
+    if update_data:
+        update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+        await db.users.update_one({"id": current_user.id}, {"$set": update_data})
+    
+    # Fetch and return updated user
+    updated_user = await db.users.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    return User(**updated_user)
+
 # ============================================
 # Admin Routes
 # ============================================
