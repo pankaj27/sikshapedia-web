@@ -394,7 +394,7 @@ const CollegeAdmissionPage = () => {
                       </div>
                     </div>
                     <div className="absolute bottom-2 left-2 right-2">
-                      <Link to={`/colleges/${admission.id}`}>
+                      <Link to={admission.serial_number ? `/colleges/${String(admission.serial_number).padStart(3, '0')}-${admission.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : `/colleges/${admission.id}`}>
                         <Button className="w-full bg-blue-600 hover:bg-blue-700 h-7 text-xs">
                           Apply Now
                         </Button>
