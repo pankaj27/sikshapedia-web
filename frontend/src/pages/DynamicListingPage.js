@@ -352,19 +352,110 @@ const DynamicListingPage = () => {
       'CUET', 'GATE', 'UGC NET', 'GPAT', 'NATA', 'State CET'
     ],
     
-    // Affiliation
+    // Affiliation - Indian Affiliation Bodies
     affiliation: [
-      'UGC', 'AICTE', 'NBA', 'NAAC A++', 'NAAC A+', 'NAAC A', 'NAAC B++', 'NAAC B+', 'NAAC B',
-      'State University', 'Central University', 'Deemed University', 'Autonomous',
-      'IIT', 'IIM', 'NIT', 'IIIT', 'AIIMS', 'IISER'
+      // Central Bodies
+      'UGC (University Grants Commission)',
+      'AICTE (All India Council for Technical Education)',
+      'MCI (Medical Council of India)',
+      'NMC (National Medical Commission)',
+      'BCI (Bar Council of India)',
+      'PCI (Pharmacy Council of India)',
+      'DCI (Dental Council of India)',
+      'INC (Indian Nursing Council)',
+      'NCTE (National Council for Teacher Education)',
+      'COA (Council of Architecture)',
+      'ICAR (Indian Council of Agricultural Research)',
+      'VCI (Veterinary Council of India)',
+      'CCH (Central Council of Homoeopathy)',
+      'CCIM (Central Council of Indian Medicine)',
+      // University Types
+      'Central University',
+      'State University',
+      'Deemed University',
+      'Private University',
+      'Autonomous Institution',
+      // Premier Institutes
+      'IIT (Indian Institute of Technology)',
+      'IIM (Indian Institute of Management)',
+      'NIT (National Institute of Technology)',
+      'IIIT (Indian Institute of Information Technology)',
+      'AIIMS (All India Institute of Medical Sciences)',
+      'IISER (Indian Institute of Science Education and Research)',
+      'IISc (Indian Institute of Science)',
+      'NIFT (National Institute of Fashion Technology)',
+      'NID (National Institute of Design)',
+      'NLSIU (National Law School)'
     ],
     
-    // Recognition
+    // Recognition - Indian Recognition Bodies
     recognition: [
-      'NIRF Top 100', 'NIRF Top 50', 'NIRF Top 25', 'NIRF Top 10',
-      'QS World Ranking', 'Times Higher Education', 'AACSB Accredited',
-      'AMBA Accredited', 'EQUIS Accredited', 'NBA Accredited',
-      'ISO Certified', 'NAAC Accredited', 'UGC Recognized'
+      // Government Recognition
+      'UGC Recognized',
+      'AICTE Approved',
+      'Government of India Recognized',
+      'State Government Recognized',
+      'Ministry of Education Recognized',
+      'MHRD Approved',
+      // Rankings
+      'NIRF Ranked',
+      'NIRF Top 10',
+      'NIRF Top 25',
+      'NIRF Top 50',
+      'NIRF Top 100',
+      'NIRF Top 200',
+      // International Rankings
+      'QS World University Ranking',
+      'Times Higher Education Ranking',
+      'ARWU (Shanghai Ranking)',
+      'US News Global Ranking',
+      // Special Recognition
+      'Institute of National Importance',
+      'Institute of Eminence (IoE)',
+      'Category I University',
+      'Category II University',
+      '12B Status',
+      '2(f) Status',
+      'EQUIS Accredited',
+      'AACSB Accredited',
+      'AMBA Accredited'
+    ],
+    
+    // Accreditation - Indian Accreditation Bodies
+    accreditation: [
+      // NAAC Grades
+      'NAAC A++ (Highest)',
+      'NAAC A+',
+      'NAAC A',
+      'NAAC B++',
+      'NAAC B+',
+      'NAAC B',
+      'NAAC C',
+      // NBA Accreditation
+      'NBA Accredited (Tier 1)',
+      'NBA Accredited (Tier 2)',
+      'NBA Accredited',
+      // Other Accreditations
+      'NABH (National Accreditation Board for Hospitals)',
+      'NABL (National Accreditation Board for Laboratories)',
+      'QCI (Quality Council of India)',
+      // International Accreditations
+      'ABET Accredited',
+      'AACSB Accredited',
+      'EQUIS Accredited',
+      'AMBA Accredited',
+      'ACBSP Accredited',
+      'EFMD Accredited',
+      // ISO Certifications
+      'ISO 9001:2015',
+      'ISO 14001:2015',
+      'ISO 21001:2018 (Education)',
+      // Medical Accreditations
+      'WFME Recognized',
+      'MCI/NMC Approved',
+      // Other
+      'Washington Accord Signatory',
+      'IACBE Accredited'
     ],
     
     state: allStates,
