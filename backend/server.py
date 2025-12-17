@@ -5055,6 +5055,97 @@ async def get_advertisement_reports(current_user: User = Depends(get_current_use
         "advertisements": report_data
     }
 
+# ============================================
+# Listing Page Content API - Manage content for listing pages
+# ============================================
+
+@api_router.get("/listing-pages")
+async def get_listing_pages(
+    page_type: Optional[str] = None,
+    institution_type: Optional[str] = None,
+    is_published: Optional[bool] = None,
+    limit: int = 100
+):
+    """Get all listing page content with optional filters"""
+    query = {}
+    if page_type:
+        query["page_type"] = page_type
+    if institution_type:
+        query["institution_type"] = institution_type
+    if is_published is not None:
+        query["is_published"] = is_published
+    
+    pages = await db.listing_pages.find(query, {"_id": 0}).limit(limit).to_list(limit)
+    return pages
+
+@api_router.get("/listing-pages/by-slug/{url_slug:path}")
+async def get_listing_page_by_slug(url_slug: str):
+    """Get listing page content by URL slug"""
+    page = await db.listing_pages.find_one({"url_slug": url_slug}, {"_id": 0})
+    if not page:
+        raise HTTPException(status_code=404, detail="Page content not found")
+    return page
+
+@api_router.get("/listing-pages/{page_id}")
+async def get_listing_page(page_id: str):
+    """Get listing page content by ID"""
+    page = await db.listing_pages.find_one({"id": page_id}, {"_id": 0})
+    if not page:
+        raise HTTPException(status_code=404, detail="Page content not found")
+    return page
+
+@api_router.post("/listing-pages", response_model=ListingPageContent)
+async def create_listing_page(page: ListingPageContent):
+    """Create new listing page content"""
+    # Check if slug already exists
+    existing = await db.listing_pages.find_one({"url_slug": page.url_slug})
+    if existing:
+        raise HTTPException(status_code=400, detail="Page with this URL slug already exists")
+    
+    page_dict = page.model_dump()
+    page_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+    page_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.listing_pages.insert_one(page_dict)
+    return page
+
+@api_router.put("/listing-pages/{page_id}")
+async def update_listing_page(page_id: str, page_data: dict):
+    """Update listing page content"""
+    page_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    result = await db.listing_pages.update_one(
+        {"id": page_id},
+        {"$set": page_data}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return {"message": "Page updated successfully"}
+
+@api_router.delete("/listing-pages/{page_id}")
+async def delete_listing_page(page_id: str):
+    """Delete listing page content"""
+    result = await db.listing_pages.delete_one({"id": page_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return {"message": "Page deleted successfully"}
+
+@api_router.post("/listing-pages/bulk-create")
+async def bulk_create_listing_pages(pages: List[dict]):
+    """Bulk create listing pages for states/cities/streams"""
+    created = 0
+    skipped = 0
+    for page_data in pages:
+        existing = await db.listing_pages.find_one({"url_slug": page_data.get("url_slug")})
+        if not existing:
+            page = ListingPageContent(**page_data)
+            page_dict = page.model_dump()
+            page_dict["created_at"] = datetime.now(timezone.utc).isoformat()
+            page_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+            await db.listing_pages.insert_one(page_dict)
+            created += 1
+        else:
+            skipped += 1
+    return {"message": f"Created {created} pages, skipped {skipped} existing"}
+
 app.include_router(api_router)
 
 # Include modular architecture routers
