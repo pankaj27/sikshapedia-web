@@ -1227,7 +1227,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.course.map((option) => (
-                        <button key={option} onClick={() => setFilters(prev => ({ ...prev, course: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.course === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.course === option && '✓'}</button>
+                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, course: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.course === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.course === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
@@ -1246,9 +1246,9 @@ const DynamicListingPage = () => {
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'degreeType' && (
-                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                  <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.degreeType.map((option) => (
-                      <button key={option} onClick={() => setFilters(prev => ({ ...prev, degreeType: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.degreeType === option && '✓'}</button>
+                      <button key={option} onClick={() => { setFilters(prev => ({ ...prev, degreeType: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.degreeType === option && '✓'}</button>
                     ))}
                   </div>
                 )}
@@ -1286,7 +1286,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.examAccepted.map((option) => (
-                        <button key={option} onClick={() => setFilters(prev => ({ ...prev, examAccepted: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.examAccepted === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.examAccepted === option && '✓'}</button>
+                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, examAccepted: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.examAccepted === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.examAccepted === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
@@ -1301,14 +1301,33 @@ const DynamicListingPage = () => {
                     filters.affiliation ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.affiliation || 'Affiliation'}
+                  {filters.affiliation ? filters.affiliation.split(' ')[0] : 'Affiliation'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'affiliation' && (
-                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
-                    {filterOptions.affiliation.map((option) => (
-                      <button key={option} onClick={() => setFilters(prev => ({ ...prev, affiliation: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.affiliation === option && '✓'}</button>
-                    ))}
+                  <div className="absolute top-full left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border z-50">
+                    <div className="p-2 border-b sticky top-0 bg-white">
+                      <input 
+                        type="text"
+                        placeholder="Search affiliation..."
+                        className="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const searchVal = e.target.value.toLowerCase();
+                          const dropdown = e.target.closest('.relative').querySelector('.filter-options');
+                          if (dropdown) {
+                            dropdown.querySelectorAll('button').forEach(btn => {
+                              btn.style.display = btn.textContent.toLowerCase().includes(searchVal) ? 'block' : 'none';
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="filter-options max-h-48 overflow-y-auto py-1">
+                      {filterOptions.affiliation.map((option) => (
+                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, affiliation: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.affiliation === option && '✓'}</button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -1321,14 +1340,72 @@ const DynamicListingPage = () => {
                     filters.recognition ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.recognition || 'Recognition'}
+                  {filters.recognition ? filters.recognition.split(' ')[0] : 'Recognition'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'recognition' && (
-                  <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
-                    {filterOptions.recognition.map((option) => (
-                      <button key={option} onClick={() => setFilters(prev => ({ ...prev, recognition: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.recognition === option && '✓'}</button>
-                    ))}
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border z-50">
+                    <div className="p-2 border-b sticky top-0 bg-white">
+                      <input 
+                        type="text"
+                        placeholder="Search recognition..."
+                        className="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const searchVal = e.target.value.toLowerCase();
+                          const dropdown = e.target.closest('.relative').querySelector('.filter-options');
+                          if (dropdown) {
+                            dropdown.querySelectorAll('button').forEach(btn => {
+                              btn.style.display = btn.textContent.toLowerCase().includes(searchVal) ? 'block' : 'none';
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="filter-options max-h-48 overflow-y-auto py-1">
+                      {filterOptions.recognition.map((option) => (
+                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, recognition: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.recognition === option && '✓'}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Accreditation Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'accreditation' ? null : 'accreditation')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.accreditation ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.accreditation ? filters.accreditation.split(' ')[0] : 'Accreditation'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'accreditation' && (
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border z-50">
+                    <div className="p-2 border-b sticky top-0 bg-white">
+                      <input 
+                        type="text"
+                        placeholder="Search accreditation..."
+                        className="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const searchVal = e.target.value.toLowerCase();
+                          const dropdown = e.target.closest('.relative').querySelector('.filter-options');
+                          if (dropdown) {
+                            dropdown.querySelectorAll('button').forEach(btn => {
+                              btn.style.display = btn.textContent.toLowerCase().includes(searchVal) ? 'block' : 'none';
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="filter-options max-h-48 overflow-y-auto py-1">
+                      {filterOptions.accreditation.map((option) => (
+                        <button key={option} onClick={() => { setFilters(prev => ({ ...prev, accreditation: option })); setActiveFilterDropdown(null); }} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.accreditation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.accreditation === option && '✓'}</button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
