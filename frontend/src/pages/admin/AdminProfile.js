@@ -74,7 +74,7 @@ const AdminProfile = () => {
       const uploadFormData = new FormData();
       uploadFormData.append('file', file);
 
-      const response = await api.post('/upload/image', uploadFormData, {
+      const response = await api.post('/upload/image?type=profile', uploadFormData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
