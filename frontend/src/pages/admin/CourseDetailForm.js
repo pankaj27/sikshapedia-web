@@ -1754,18 +1754,31 @@ const CourseDetailForm = () => {
               </div>
 
               {/* Add Section Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData({
-                    ...formData,
-                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '', image: '', video: '' }]
-                  });
-                }}
-                className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"
-              >
-                <FiPlus /> Add TOC Section
-              </button>
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData({
+                      ...formData,
+                      seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '', image: '', video: '' }]
+                    });
+                  }}
+                  className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"
+                >
+                  <FiPlus /> Add TOC Section
+                </button>
+                {(formData.seo_toc || []).length > 0 && (
+                  <button type="button" onClick={() => {
+                    const tocHtml = formData.seo_toc.map(item => 
+                      `<section id="${item.anchor}">\n  <h2>${item.title}</h2>\n  ${item.image ? `<img src="${item.image}" alt="${item.imageAlt || item.title}" />\n  ` : ''}${item.video ? `<div class="video-embed" data-url="${item.video}" data-alt="${item.videoAlt || ''}"></div>\n  ` : ''}<div class="content">${item.content || ''}</div>\n</section>`
+                    ).join('\n\n');
+                    setFormData({...formData, seo_full_content: (formData.seo_full_content || '') + '\n\n' + tocHtml});
+                    alert('TOC sections inserted to SEO Full Content!');
+                  }} className="text-sm text-green-700 hover:bg-green-100 px-3 py-1.5 rounded border border-green-300 flex items-center gap-1">
+                    📥 Insert to Content
+                  </button>
+                )}
+              </div>
 
               {/* Quick Add Templates */}
               <div className="mt-4 p-3 bg-white border border-purple-200 rounded-lg">
