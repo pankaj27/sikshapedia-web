@@ -495,6 +495,19 @@ const ListingPageForm = () => {
             </div>
           )}
 
+          {/* Approval Status & Actions - Show only when editing */}
+          {isEditing && (
+            <div className="mb-4">
+              <ContentApprovalActions
+                contentType="listing_page"
+                contentId={id}
+                currentStatus={formData.status || 'draft'}
+                rejectionReason={formData.rejection_reason}
+                onStatusChange={(newStatus) => setFormData(prev => ({...prev, status: newStatus}))}
+              />
+            </div>
+          )}
+
           <CollapsibleSection title="Page Configuration" icon="⚙️" defaultOpen={true}>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
