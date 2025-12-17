@@ -619,7 +619,14 @@ class College(BaseModel):
     total_reviews: int = 0
     rating_breakdown: Dict = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
     
+    # User tracking
+    created_by: Optional[str] = None  # User ID who created
+    created_by_name: Optional[str] = None  # User name who created
+    updated_by: Optional[str] = None  # User ID who last updated
+    updated_by_name: Optional[str] = None  # User name who last updated
+    
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CollegeCreate(BaseModel):
     name: str
