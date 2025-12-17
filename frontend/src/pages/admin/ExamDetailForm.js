@@ -136,8 +136,8 @@ const ExamDetailForm = () => {
   const handleSubmitForReview = async () => {
     setActionLoading(true);
     try {
-      await api.post(`/submit-for-review/exam/${id}`);
-      const response = await api.get(`/exams/${id}`);
+      await api.post(`/admin/submit-for-review/exam/${id}`);
+      const response = await api.get(`/exams-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Exam submitted for review!');
     } catch (error) {
@@ -151,8 +151,8 @@ const ExamDetailForm = () => {
   const handleApprove = async () => {
     setActionLoading(true);
     try {
-      await api.post(`/approve/exam/${id}`);
-      const response = await api.get(`/exams/${id}`);
+      await api.post(`/admin/approve/exam/${id}`, { action: 'approve', comment: 'Approved' });
+      const response = await api.get(`/exams-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Exam approved and published!');
     } catch (error) {
@@ -169,8 +169,8 @@ const ExamDetailForm = () => {
     
     setActionLoading(true);
     try {
-      await api.post(`/reject/exam/${id}`, { reason });
-      const response = await api.get(`/exams/${id}`);
+      await api.post(`/admin/approve/exam/${id}`, { action: 'reject', comment: reason });
+      const response = await api.get(`/exams-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Exam rejected');
     } catch (error) {
