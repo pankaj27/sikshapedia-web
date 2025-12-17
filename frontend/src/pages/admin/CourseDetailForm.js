@@ -2269,15 +2269,57 @@ const CourseDetailForm = () => {
           </div>
         </CollapsibleSection>
 
-        {/* Submit Button */}
-        <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline" onClick={() => navigate('/admin/courses-detail')}>
-            Cancel
-          </Button>
-          <Button type="submit" disabled={saving} className="bg-orange-600 hover:bg-orange-700">
-            <FiSave className="mr-2" />
-            {saving ? 'Saving...' : id ? 'Update Course' : 'Create Course'}
-          </Button>
+        {/* Submit Buttons with Auto-save Status */}
+        <div className="bg-white rounded-lg shadow p-4 sticky bottom-4 border border-gray-200">
+          <div className="flex items-center justify-between">
+            {/* Auto-save Status */}
+            <div className="flex items-center gap-2 text-sm">
+              {autoSaveStatus === 'saving' && (
+                <span className="flex items-center gap-1 text-blue-600">
+                  <FiLoader className="animate-spin" size={14} />
+                  Auto-saving...
+                </span>
+              )}
+              {autoSaveStatus === 'saved' && (
+                <span className="flex items-center gap-1 text-green-600">
+                  <FiCheck size={14} />
+                  Auto-saved
+                </span>
+              )}
+              {autoSaveStatus === 'error' && (
+                <span className="flex items-center gap-1 text-red-600">
+                  <FiX size={14} />
+                  Auto-save failed
+                </span>
+              )}
+              {lastAutoSave && !autoSaveStatus && (
+                <span className="text-gray-500 text-xs">
+                  Last saved: {lastAutoSave.toLocaleTimeString()}
+                </span>
+              )}
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3">
+              <Button type="button" variant="outline" onClick={() => navigate('/admin/courses-detail')}>
+                Cancel
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline"
+                onClick={handleSaveDraft}
+                disabled={savingDraft || saving}
+                className="border-blue-500 text-blue-600 hover:bg-blue-50"
+              >
+                <FiSave className="mr-2" />
+                {savingDraft ? 'Saving Draft...' : 'Save as Draft'}
+              </Button>
+              <Button type="submit" disabled={saving || savingDraft} className="bg-orange-600 hover:bg-orange-700">
+                <FiSave className="mr-2" />
+                {saving ? 'Saving...' : id ? 'Update Course' : 'Create Course'}
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
     </div>
