@@ -107,16 +107,21 @@ const ExamDetailForm = () => {
     setFormData({ ...formData, [field]: newArray });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, saveAsDraft = false) => {
     e.preventDefault();
     setSaving(true);
 
     try {
+      const dataToSave = {
+        ...formData,
+        status: saveAsDraft ? 'draft' : formData.status
+      };
+      
       if (id) {
-        await api.put(`/exams/${id}`, formData);
+        await api.put(`/exams/${id}`, dataToSave);
         alert('Exam updated successfully!');
       } else {
-        await api.post('/exams', formData);
+        await api.post('/exams', dataToSave);
         alert('Exam created successfully!');
       }
       navigate('/admin/exams-detail');
@@ -125,6 +130,54 @@ const ExamDetailForm = () => {
       alert(`Failed to save exam: ${error.response?.data?.detail || error.message}`);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSubmitForReview = async () => {
+    setActionLoading(true);
+    try {
+      await api.post(`/submit-for-review/exam/${id}`);
+      const response = await api.get(`/exams/${id}`);
+      setFormData({ ...formData, ...response.data });
+      alert('Exam submitted for review!');
+    } catch (error) {
+      console.error('Error submitting for review:', error);
+      alert('Error submitting for review');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    setActionLoading(true);
+    try {
+      await api.post(`/approve/exam/${id}`);
+      const response = await api.get(`/exams/${id}`);
+      setFormData({ ...formData, ...response.data });
+      alert('Exam approved and published!');
+    } catch (error) {
+      console.error('Error approving:', error);
+      alert('Error approving exam');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    const reason = prompt('Please provide a reason for rejection:');
+    if (!reason) return;
+    
+    setActionLoading(true);
+    try {
+      await api.post(`/reject/exam/${id}`, { reason });
+      const response = await api.get(`/exams/${id}`);
+      setFormData({ ...formData, ...response.data });
+      alert('Exam rejected');
+    } catch (error) {
+      console.error('Error rejecting:', error);
+      alert('Error rejecting exam');
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -139,11 +192,55 @@ const ExamDetailForm = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{id ? 'Edit Exam Details' : 'Add New Exam (Detailed)'}</h1>
-        <Button variant="outline" onClick={() => navigate('/admin/exams-detail')}>
-          <FiX className="mr-2" /> Cancel
-        </Button>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold">{id ? 'Edit Exam Details' : 'Add New Exam (Detailed)'}</h1>
+          {id && formData.status && <StatusBadge status={formData.status} />}
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Approval Actions */}
+          {id && formData.status === 'draft' && (
+            <Button 
+              type="button" 
+              onClick={handleSubmitForReview}
+              disabled={actionLoading}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <FiSend className="mr-2" /> Submit for Review
+            </Button>
+          )}
+          {id && formData.status === 'pending' && canApprove && (
+            <>
+              <Button 
+                type="button" 
+                onClick={handleApprove}
+                disabled={actionLoading}
+                className="bg-green-500 hover:bg-green-600 text-white"
+              >
+                <FiCheck className="mr-2" /> Approve
+              </Button>
+              <Button 
+                type="button" 
+                onClick={handleReject}
+                disabled={actionLoading}
+                variant="outline"
+                className="text-red-600 border-red-600 hover:bg-red-50"
+              >
+                <FiX className="mr-2" /> Reject
+              </Button>
+            </>
+          )}
+          <Button variant="outline" onClick={() => navigate('/admin/exams-detail')}>
+            <FiX className="mr-2" /> Cancel
+          </Button>
+        </div>
       </div>
+
+      {/* Rejection Reason Alert */}
+      {formData.status === 'rejected' && formData.rejection_reason && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          <strong>Rejection Reason:</strong> {formData.rejection_reason}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
