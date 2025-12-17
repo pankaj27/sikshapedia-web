@@ -939,18 +939,37 @@ const DynamicListingPage = () => {
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'state' && (
-                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
-                    {filterOptions.state.map((option) => (
-                      <button 
-                        key={option} 
-                        onClick={() => handleFilterSelect('state', option)} 
-                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
-                          activeFilters.state === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
-                        }`}
-                      >
-                        {option} {activeFilters.state === option && '✓'}
-                      </button>
-                    ))}
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border z-50">
+                    <div className="p-2 border-b sticky top-0 bg-white">
+                      <input 
+                        type="text"
+                        placeholder="Search state..."
+                        className="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const searchVal = e.target.value.toLowerCase();
+                          const dropdown = e.target.closest('.relative').querySelector('.state-options');
+                          if (dropdown) {
+                            dropdown.querySelectorAll('button').forEach(btn => {
+                              btn.style.display = btn.textContent.toLowerCase().includes(searchVal) ? 'block' : 'none';
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="state-options max-h-48 overflow-y-auto py-1">
+                      {filterOptions.state.map((option) => (
+                        <button 
+                          key={option} 
+                          onClick={() => handleFilterSelect('state', option)} 
+                          className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${
+                            activeFilters.state === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'
+                          }`}
+                        >
+                          {option} {activeFilters.state === option && '✓'}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
