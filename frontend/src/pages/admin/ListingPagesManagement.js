@@ -177,6 +177,7 @@ const ListingPagesManagement = () => {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Type</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Institution</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Page Title</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Created By</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Status</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">Actions</th>
                 </tr>
