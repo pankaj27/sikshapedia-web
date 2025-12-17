@@ -323,7 +323,7 @@ const Header = () => {
                   <Link to="/bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc - Bachelor of Science
                   </Link>
-                  <Link to="/colleges?course=msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Sc - Master of Science
                   </Link>
                   
