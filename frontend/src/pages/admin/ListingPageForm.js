@@ -60,8 +60,35 @@ const ListingPageForm = () => {
       ask_question: { enabled: false, title: 'Have a Question?' },
       comments: { enabled: false, title: 'Comments' }
     },
-    is_published: true
+    is_published: true,
+    // Content Team Info
+    created_by: '',
+    created_by_name: '',
+    created_by_email: '',
+    updated_by: '',
+    updated_by_name: '',
+    created_at: '',
+    updated_at: ''
   });
+
+  // Get current user from localStorage
+  const getCurrentUser = () => {
+    try {
+      const adminData = localStorage.getItem('adminUser');
+      if (adminData) {
+        return JSON.parse(adminData);
+      }
+      // Fallback to token-based info
+      const token = localStorage.getItem('adminToken');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return { id: payload.sub, name: payload.name || 'Admin', email: payload.email || '' };
+      }
+    } catch (e) {
+      console.log('Could not get user info');
+    }
+    return { id: 'admin', name: 'Admin User', email: 'admin@admissionbuddy.co' };
+  };
 
   const pageTypes = [
     { value: 'india', label: 'India Page', example: 'india-colleges' },
