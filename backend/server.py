@@ -64,11 +64,15 @@ class User(BaseModel):
     email: EmailStr
     name: str
     role: str = "student"
+    profile_photo: Optional[str] = None  # URL to profile photo
+    job_title: Optional[str] = None  # User's job title/designation
+    bio: Optional[str] = None  # Short bio/description
     saved_colleges: List[str] = []
     total_earnings: float = 0.0  # Total earnings from reviews and referrals
     referral_code: str = Field(default_factory=lambda: str(uuid.uuid4())[:8].upper())
     referral_count: int = 0
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
 
 class UserCreate(BaseModel):
     email: EmailStr
