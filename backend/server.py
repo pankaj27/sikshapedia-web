@@ -1894,7 +1894,7 @@ async def upload_image(
         raise HTTPException(status_code=400, detail="Only image files are allowed")
     
     # Validate type parameter
-    valid_types = ["logo", "banner", "campus", "content", "seo"]
+    valid_types = ["logo", "banner", "campus", "content", "seo", "profile"]
     if type not in valid_types:
         raise HTTPException(status_code=400, detail=f"Type must be one of: {', '.join(valid_types)}")
     
