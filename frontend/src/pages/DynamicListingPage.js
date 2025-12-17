@@ -147,59 +147,86 @@ const DynamicListingPage = () => {
   const fetchInstitutions = async () => {
     setLoading(true);
     try {
-      let queryParams = new URLSearchParams();
-      queryParams.append('limit', pagination.limit);
-      queryParams.append('skip', (pagination.page - 1) * pagination.limit);
-      
-      // Add institution type filter
-      if (pageInfo.institutionType) {
-        queryParams.append('institution_type', pageInfo.institutionType);
-      }
-      
-      // Add location filter (state or city)
-      if (pageInfo.location) {
-        const locationDisplay = toDisplayName(pageInfo.location);
-        if (pageInfo.locationType === 'state') {
-          queryParams.append('state', locationDisplay);
-        } else if (pageInfo.locationType === 'city') {
-          queryParams.append('city', locationDisplay);
+      // Build common query params
+      const buildQueryParams = (institutionType = null) => {
+        let queryParams = new URLSearchParams();
+        queryParams.append('limit', 100); // Fetch more to combine
+        
+        // Add institution type filter if specified
+        if (institutionType) {
+          queryParams.append('institution_type', institutionType);
         }
+        
+        // Add location filter (state or city)
+        if (pageInfo.location) {
+          const locationDisplay = toDisplayName(pageInfo.location);
+          if (pageInfo.locationType === 'state') {
+            queryParams.append('state', locationDisplay);
+          } else if (pageInfo.locationType === 'city') {
+            queryParams.append('city', locationDisplay);
+          }
+        }
+        
+        // Add stream filter
+        if (pageInfo.stream) {
+          queryParams.append('stream', toDisplayName(pageInfo.stream));
+        }
+        
+        // Add sub-stream filter
+        if (pageInfo.subStream) {
+          queryParams.append('sub_stream', toDisplayName(pageInfo.subStream));
+        }
+        
+        // Add search filter
+        if (filters.search) {
+          queryParams.append('search', filters.search);
+        }
+        
+        // Add type filter (Government/Private)
+        if (filters.type) {
+          queryParams.append('type', filters.type);
+        }
+        
+        // Add fee filters
+        if (filters.minFees) {
+          queryParams.append('min_fees', filters.minFees);
+        }
+        if (filters.maxFees) {
+          queryParams.append('max_fees', filters.maxFees);
+        }
+        
+        return queryParams;
+      };
+      
+      let allData = [];
+      
+      // If we have multiple institution types (colleges + universities), fetch both
+      if (pageInfo.institutionTypes && pageInfo.institutionTypes.length > 0) {
+        const fetchPromises = pageInfo.institutionTypes.map(async (type) => {
+          const queryParams = buildQueryParams(type);
+          const response = await api.get(`/colleges?${queryParams.toString()}`);
+          return response.data || [];
+        });
+        
+        const results = await Promise.all(fetchPromises);
+        allData = results.flat();
+      } else {
+        // Fallback to fetching without type filter
+        const queryParams = buildQueryParams();
+        const response = await api.get(`/colleges?${queryParams.toString()}`);
+        allData = response.data || [];
       }
       
-      // Add stream filter
-      if (pageInfo.stream) {
-        queryParams.append('stream', toDisplayName(pageInfo.stream));
-      }
+      // Sort by rating or name
+      allData.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       
-      // Add sub-stream filter
-      if (pageInfo.subStream) {
-        queryParams.append('sub_stream', toDisplayName(pageInfo.subStream));
-      }
+      // Apply pagination
+      const start = (pagination.page - 1) * pagination.limit;
+      const paginatedData = allData.slice(start, start + pagination.limit);
       
-      // Add search filter
-      if (filters.search) {
-        queryParams.append('search', filters.search);
-      }
-      
-      // Add type filter (Government/Private)
-      if (filters.type) {
-        queryParams.append('type', filters.type);
-      }
-      
-      // Add fee filters
-      if (filters.minFees) {
-        queryParams.append('min_fees', filters.minFees);
-      }
-      if (filters.maxFees) {
-        queryParams.append('max_fees', filters.maxFees);
-      }
-      
-      const response = await api.get(`/colleges?${queryParams.toString()}`);
-      let data = response.data || [];
-      
-      setInstitutions(data);
-      setTotalCount(data.length);
-      setPagination(prev => ({ ...prev, total: data.length }));
+      setInstitutions(paginatedData);
+      setTotalCount(allData.length);
+      setPagination(prev => ({ ...prev, total: allData.length }));
     } catch (error) {
       console.error('Error fetching institutions:', error);
       setInstitutions([]);
