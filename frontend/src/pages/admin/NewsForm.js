@@ -77,7 +77,7 @@ const NewsForm = () => {
   const handleSubmitForReview = async () => {
     setActionLoading(true);
     try {
-      await api.post(`/submit-for-review/news/${id}`);
+      await api.post(`/admin/submit-for-review/news/${id}`);
       await fetchNews();
       alert('News submitted for review!');
     } catch (error) {
@@ -91,7 +91,7 @@ const NewsForm = () => {
   const handleApprove = async () => {
     setActionLoading(true);
     try {
-      await api.post(`/approve/news/${id}`);
+      await api.post(`/admin/approve/news/${id}`, { action: 'approve', comment: 'Approved' });
       await fetchNews();
       alert('News approved and published!');
     } catch (error) {
@@ -108,7 +108,7 @@ const NewsForm = () => {
     
     setActionLoading(true);
     try {
-      await api.post(`/reject/news/${id}`, { reason });
+      await api.post(`/admin/approve/news/${id}`, { action: 'reject', comment: reason });
       await fetchNews();
       alert('News rejected');
     } catch (error) {
