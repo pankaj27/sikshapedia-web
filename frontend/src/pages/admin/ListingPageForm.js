@@ -199,6 +199,51 @@ const ListingPageForm = () => {
     handleSubmit(e, true);
   };
 
+  // Image Upload handler
+  const handleImageUpload = async (sectionIndex, file) => {
+    if (!file) return;
+    
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploading(prev => ({ ...prev, [sectionIndex]: true }));
+      
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+      formDataUpload.append('type', 'content');
+      
+      const response = await api.post('/upload/image', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      if (response.data?.url) {
+        updateContentSection(sectionIndex, 'media_url', response.data.url);
+        // Auto-generate alt text if empty
+        const section = formData.content_sections[sectionIndex];
+        if (!section.media_alt) {
+          const altText = `${section.title || 'Image'} - ${formData.page_title || formData.url_slug || 'Page'}`;
+          updateContentSection(sectionIndex, 'media_alt', altText);
+        }
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(prev => ({ ...prev, [sectionIndex]: false }));
+    }
+  };
+
   // Content Sections handlers
   const addContentSection = (type = 'text') => {
     setFormData(prev => ({
