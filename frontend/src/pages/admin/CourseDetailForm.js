@@ -49,7 +49,21 @@ const CourseDetailForm = () => {
     is_popular: false,
     total_colleges_offering: 0,
     status: 'draft',
-    base_course_id: '' // Reference to the course from Quick Entry
+    base_course_id: '', // Reference to the course from Quick Entry
+    // SEO Fields
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    seo_intro: '',
+    seo_full_content: '',
+    seo_toc: [], // Table of Contents [{title, anchor, content}]
+    seo_tables: [], // [{title, headers: [], rows: [[]]}]
+    // Menu Configuration
+    menu_config: {
+      use_custom_menu: false,
+      auto_from_toc: false,
+      items: []
+    }
   });
 
   useEffect(() => {
