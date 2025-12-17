@@ -83,6 +83,8 @@ import CourseDetailForm from './pages/admin/CourseDetailForm';
 import CoursesDetailManagement from './pages/admin/CoursesDetailManagement';
 import ExamDetailForm from './pages/admin/ExamDetailForm';
 import ExamsDetailManagement from './pages/admin/ExamsDetailManagement';
+import ListingPagesManagement from './pages/admin/ListingPagesManagement';
+import ListingPageForm from './pages/admin/ListingPageForm';
 import './App.css';
 
 function App() {
