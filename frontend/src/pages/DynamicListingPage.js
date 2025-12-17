@@ -82,6 +82,29 @@ const DynamicListingPage = () => {
   // Parse URL to determine what to show (including query params)
   const urlInfo = useMemo(() => parseListingUrl(location.pathname, location.search), [location.pathname, location.search]);
   
+  // Accreditation display names mapping
+  const ACCREDITATION_DISPLAY = {
+    'naac-a-plus-plus': 'NAAC A++',
+    'naac-a-plus': 'NAAC A+',
+    'naac-a': 'NAAC A',
+    'naac-b-plus-plus': 'NAAC B++',
+    'naac-b-plus': 'NAAC B+',
+    'naac-b': 'NAAC B',
+    'naac-c': 'NAAC C',
+    'nba-accredited': 'NBA Accredited',
+    'nirf-ranked': 'NIRF Ranked'
+  };
+
+  // College type display names
+  const TYPE_DISPLAY = {
+    'government': 'Government',
+    'private': 'Private',
+    'deemed': 'Deemed',
+    'autonomous': 'Autonomous',
+    'public-private': 'Public-Private',
+    'aided': 'Aided'
+  };
+
   // Determine page title and type from URL
   const pageInfo = useMemo(() => {
     // Handle combined filters from URL (e.g., /engineering/maharashtra-colleges or /maharashtra/mumbai-colleges)
@@ -92,8 +115,18 @@ const DynamicListingPage = () => {
       
       // Build title based on combined filters
       let titleParts = [];
+      
+      // Add college type if present (e.g., "Government")
+      if (cf.collegeType) titleParts.push(TYPE_DISPLAY[cf.collegeType] || toDisplayName(cf.collegeType));
+      
+      // Add accreditation if present (e.g., "NAAC A+")
+      if (cf.accreditation) titleParts.push(ACCREDITATION_DISPLAY[cf.accreditation] || toDisplayName(cf.accreditation));
+      
+      // Add stream if present
       if (cf.stream) titleParts.push(toDisplayName(cf.stream));
+      
       titleParts.push(typeName);
+      
       if (cf.state) titleParts.push(`in ${toDisplayName(cf.state)}`);
       if (cf.city) titleParts.push(`in ${toDisplayName(cf.city)}`);
       if (cf.location && !cf.state && !cf.city) {
@@ -109,6 +142,9 @@ const DynamicListingPage = () => {
         city: cf.city || null,
         location: cf.location || cf.city || null,
         locationType: cf.state ? 'state' : (cf.city || cf.location) ? 'city' : null,
+        collegeType: cf.collegeType || null,
+        accreditation: cf.accreditation || null,
+        queryFilters: urlInfo.queryFilters || {},
         isSchools
       };
     }
