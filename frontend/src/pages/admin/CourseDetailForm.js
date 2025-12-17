@@ -1576,6 +1576,487 @@ const CourseDetailForm = () => {
         </CollapsibleSection>
 
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* PAGE WIDGETS CONFIGURATION                                                       */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <CollapsibleSection title="Page Widgets" icon="🧩" defaultOpen={false} badge={`${[formData.widgets_config?.apply_now?.enabled, formData.widgets_config?.ask_question?.enabled, formData.widgets_config?.counselling?.enabled, formData.widgets_config?.sponsor_ad?.enabled].filter(Boolean).length} active`}>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-3">
+              💡 Configure widgets that will appear on this course's detail page. Enable/disable and customize each widget.
+            </p>
+
+            {/* Apply Now Widget */}
+            <div className={`border-2 rounded-xl p-4 transition-all ${formData.widgets_config?.apply_now?.enabled ? 'border-orange-300 bg-orange-50' : 'border-gray-200 bg-gray-50'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${formData.widgets_config?.apply_now?.enabled ? 'bg-orange-500' : 'bg-gray-400'}`}>
+                    <FiSend className="text-white" size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Apply Now Widget</h4>
+                    <p className="text-xs text-gray-500">Quick admission form for students</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.widgets_config?.apply_now?.enabled || false}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      widgets_config: {
+                        ...formData.widgets_config,
+                        apply_now: { ...formData.widgets_config?.apply_now, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                </label>
+              </div>
+              {formData.widgets_config?.apply_now?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-orange-200">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Widget Title</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.apply_now?.title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          apply_now: { ...formData.widgets_config?.apply_now, title: e.target.value }
+                        }
+                      })}
+                      placeholder="Apply Now"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Button Text</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.apply_now?.button_text || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          apply_now: { ...formData.widgets_config?.apply_now, button_text: e.target.value }
+                        }
+                      })}
+                      placeholder="Submit Application"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.apply_now?.subtitle || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          apply_now: { ...formData.widgets_config?.apply_now, subtitle: e.target.value }
+                        }
+                      })}
+                      placeholder="Start your admission journey"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Position</label>
+                    <select
+                      value={formData.widgets_config?.apply_now?.position || 'sidebar'}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          apply_now: { ...formData.widgets_config?.apply_now, position: e.target.value }
+                        }
+                      })}
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    >
+                      <option value="sidebar">Sidebar</option>
+                      <option value="floating">Floating Button</option>
+                      <option value="inline">Inline (in content)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Ask Question Widget */}
+            <div className={`border-2 rounded-xl p-4 transition-all ${formData.widgets_config?.ask_question?.enabled ? 'border-blue-300 bg-blue-50' : 'border-gray-200 bg-gray-50'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${formData.widgets_config?.ask_question?.enabled ? 'bg-blue-500' : 'bg-gray-400'}`}>
+                    <FiMessageSquare className="text-white" size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Ask Question Widget</h4>
+                    <p className="text-xs text-gray-500">Q&A support for students</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.widgets_config?.ask_question?.enabled || false}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      widgets_config: {
+                        ...formData.widgets_config,
+                        ask_question: { ...formData.widgets_config?.ask_question, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                </label>
+              </div>
+              {formData.widgets_config?.ask_question?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-blue-200">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Widget Title</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.ask_question?.title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          ask_question: { ...formData.widgets_config?.ask_question, title: e.target.value }
+                        }
+                      })}
+                      placeholder="Have Questions?"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Button Text</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.ask_question?.button_text || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          ask_question: { ...formData.widgets_config?.ask_question, button_text: e.target.value }
+                        }
+                      })}
+                      placeholder="Ask Now"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.ask_question?.subtitle || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          ask_question: { ...formData.widgets_config?.ask_question, subtitle: e.target.value }
+                        }
+                      })}
+                      placeholder="Our experts are here to help"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Position</label>
+                    <select
+                      value={formData.widgets_config?.ask_question?.position || 'sidebar'}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          ask_question: { ...formData.widgets_config?.ask_question, position: e.target.value }
+                        }
+                      })}
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    >
+                      <option value="sidebar">Sidebar</option>
+                      <option value="floating">Floating Button</option>
+                      <option value="inline">Inline (in content)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Counselling Widget */}
+            <div className={`border-2 rounded-xl p-4 transition-all ${formData.widgets_config?.counselling?.enabled ? 'border-purple-300 bg-purple-50' : 'border-gray-200 bg-gray-50'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${formData.widgets_config?.counselling?.enabled ? 'bg-purple-500' : 'bg-gray-400'}`}>
+                    <FiUsers className="text-white" size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Counselling Widget</h4>
+                    <p className="text-xs text-gray-500">Free career guidance callback</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.widgets_config?.counselling?.enabled || false}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      widgets_config: {
+                        ...formData.widgets_config,
+                        counselling: { ...formData.widgets_config?.counselling, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                </label>
+              </div>
+              {formData.widgets_config?.counselling?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-purple-200">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Widget Title</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.counselling?.title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          counselling: { ...formData.widgets_config?.counselling, title: e.target.value }
+                        }
+                      })}
+                      placeholder="Need Counselling?"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Button Text</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.counselling?.button_text || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          counselling: { ...formData.widgets_config?.counselling, button_text: e.target.value }
+                        }
+                      })}
+                      placeholder="Request Callback"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.counselling?.subtitle || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          counselling: { ...formData.widgets_config?.counselling, subtitle: e.target.value }
+                        }
+                      })}
+                      placeholder="Get free career guidance"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Position</label>
+                    <select
+                      value={formData.widgets_config?.counselling?.position || 'sidebar'}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          counselling: { ...formData.widgets_config?.counselling, position: e.target.value }
+                        }
+                      })}
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    >
+                      <option value="sidebar">Sidebar</option>
+                      <option value="floating">Floating Button</option>
+                      <option value="inline">Inline (in content)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sponsor Ad Widget */}
+            <div className={`border-2 rounded-xl p-4 transition-all ${formData.widgets_config?.sponsor_ad?.enabled ? 'border-yellow-400 bg-yellow-50' : 'border-gray-200 bg-gray-50'}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${formData.widgets_config?.sponsor_ad?.enabled ? 'bg-yellow-500' : 'bg-gray-400'}`}>
+                    <FiDollarSign className="text-white" size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Sponsor Ad Widget</h4>
+                    <p className="text-xs text-gray-500">Display sponsored advertisement</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.widgets_config?.sponsor_ad?.enabled || false}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      widgets_config: {
+                        ...formData.widgets_config,
+                        sponsor_ad: { ...formData.widgets_config?.sponsor_ad, enabled: e.target.checked }
+                      }
+                    })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+                </label>
+              </div>
+              {formData.widgets_config?.sponsor_ad?.enabled && (
+                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-yellow-300">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Ad Title</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.sponsor_ad?.title || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          sponsor_ad: { ...formData.widgets_config?.sponsor_ad, title: e.target.value }
+                        }
+                      })}
+                      placeholder="Featured Program"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Sponsor Name</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.sponsor_ad?.sponsor_name || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          sponsor_ad: { ...formData.widgets_config?.sponsor_ad, sponsor_name: e.target.value }
+                        }
+                      })}
+                      placeholder="IIM Bangalore"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.sponsor_ad?.description || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          sponsor_ad: { ...formData.widgets_config?.sponsor_ad, description: e.target.value }
+                        }
+                      })}
+                      placeholder="Get 50% scholarship on early applications"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Image URL</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.sponsor_ad?.image_url || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          sponsor_ad: { ...formData.widgets_config?.sponsor_ad, image_url: e.target.value }
+                        }
+                      })}
+                      placeholder="https://example.com/ad-image.jpg"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Link URL</label>
+                    <input
+                      type="text"
+                      value={formData.widgets_config?.sponsor_ad?.link_url || ''}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          sponsor_ad: { ...formData.widgets_config?.sponsor_ad, link_url: e.target.value }
+                        }
+                      })}
+                      placeholder="https://sponsor-website.com"
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Position</label>
+                    <select
+                      value={formData.widgets_config?.sponsor_ad?.position || 'sidebar'}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        widgets_config: {
+                          ...formData.widgets_config,
+                          sponsor_ad: { ...formData.widgets_config?.sponsor_ad, position: e.target.value }
+                        }
+                      })}
+                      className="w-full border rounded px-2 py-1.5 text-sm"
+                    >
+                      <option value="sidebar">Sidebar</option>
+                      <option value="banner">Banner (Top of page)</option>
+                      <option value="inline">Inline (in content)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Enable All */}
+            <div className="flex justify-between items-center pt-3 border-t border-gray-200">
+              <span className="text-sm text-gray-600">Quick actions:</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormData({
+                    ...formData,
+                    widgets_config: {
+                      ...formData.widgets_config,
+                      apply_now: { ...formData.widgets_config?.apply_now, enabled: true },
+                      ask_question: { ...formData.widgets_config?.ask_question, enabled: true },
+                      counselling: { ...formData.widgets_config?.counselling, enabled: true }
+                    }
+                  })}
+                  className="text-xs px-3 py-1.5 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  Enable All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({
+                    ...formData,
+                    widgets_config: {
+                      ...formData.widgets_config,
+                      apply_now: { ...formData.widgets_config?.apply_now, enabled: false },
+                      ask_question: { ...formData.widgets_config?.ask_question, enabled: false },
+                      counselling: { ...formData.widgets_config?.counselling, enabled: false },
+                      sponsor_ad: { ...formData.widgets_config?.sponsor_ad, enabled: false }
+                    }
+                  })}
+                  className="text-xs px-3 py-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200"
+                >
+                  Disable All
+                </button>
+              </div>
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         {/* SEO & META TAGS SECTION                                                         */}
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         <CollapsibleSection title="SEO & Meta Tags" icon="🏷️" defaultOpen={false} badge="Auto Generate">
