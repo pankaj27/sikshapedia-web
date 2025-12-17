@@ -1885,7 +1885,7 @@ const CourseDetailForm = () => {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <label className="block text-sm font-medium text-blue-800">🖼️ Image Gallery</label>
-                  <p className="text-xs text-blue-600">Add images for this course page</p>
+                  <p className="text-xs text-blue-600">Add images (alt tags auto-generated for SEO)</p>
                 </div>
                 <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
                   {formData.seo_images?.length || 0} images
@@ -1893,84 +1893,75 @@ const CourseDetailForm = () => {
               </div>
 
               {/* Existing Images */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+              <div className="space-y-3 mb-4">
                 {(formData.seo_images || []).map((img, index) => (
-                  <div key={index} className="relative group">
-                    <img 
-                      src={img.url} 
-                      alt={img.caption || `Image ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border-2 border-blue-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFormData({
-                          ...formData,
-                          seo_images: (formData.seo_images || []).filter((_, i) => i !== index)
-                        });
-                      }}
-                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <FiX size={12} />
-                    </button>
-                    <input
-                      type="text"
-                      value={img.caption || ''}
-                      onChange={(e) => {
-                        const newImages = [...(formData.seo_images || [])];
-                        newImages[index].caption = e.target.value;
-                        setFormData({...formData, seo_images: newImages});
-                      }}
-                      placeholder="Caption"
-                      className="w-full mt-1 text-xs border rounded px-2 py-1"
-                    />
+                  <div key={index} className="bg-white rounded-lg border-2 border-blue-200 p-3">
+                    <div className="flex items-start gap-3">
+                      <img src={img.url} alt={img.alt || ''} className="w-24 h-20 object-cover rounded border flex-shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">Alt Tag (SEO) <span className="text-green-600">✓ Auto</span></label>
+                          <input type="text" value={img.alt || ''} onChange={(e) => {
+                            const newImages = [...(formData.seo_images || [])];
+                            newImages[index].alt = e.target.value;
+                            setFormData({...formData, seo_images: newImages});
+                          }} placeholder="Auto-generated alt text" className="w-full border rounded px-2 py-1.5 text-sm bg-green-50" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">Caption</label>
+                          <input type="text" value={img.caption || ''} onChange={(e) => {
+                            const newImages = [...(formData.seo_images || [])];
+                            newImages[index].caption = e.target.value;
+                            setFormData({...formData, seo_images: newImages});
+                          }} placeholder="Image caption" className="w-full border rounded px-2 py-1.5 text-sm" />
+                        </div>
+                      </div>
+                      <button type="button" onClick={() => {
+                        setFormData({...formData, seo_images: (formData.seo_images || []).filter((_, i) => i !== index)});
+                      }} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 size={16} /></button>
+                    </div>
                   </div>
                 ))}
-
-                {/* Upload New Image */}
-                <label className={`flex flex-col items-center justify-center h-24 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors ${uploadingSeoImage ? 'opacity-50' : ''}`}>
-                  {uploadingSeoImage ? (
-                    <FiLoader className="animate-spin text-blue-500" size={24} />
-                  ) : (
-                    <>
-                      <FiUpload className="text-blue-400 mb-1" size={20} />
-                      <span className="text-xs text-blue-600">Add Image</span>
-                    </>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handleSeoImageUpload(e.target.files[0])}
-                    disabled={uploadingSeoImage}
-                  />
-                </label>
               </div>
+
+              {/* Upload New Image */}
+              <label className={`flex items-center justify-center gap-2 h-12 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors mb-3 ${uploadingSeoImage ? 'opacity-50' : ''}`}>
+                {uploadingSeoImage ? (
+                  <FiLoader className="animate-spin text-blue-500" size={20} />
+                ) : (
+                  <>
+                    <FiUpload className="text-blue-400" size={18} />
+                    <span className="text-sm text-blue-600">Upload Image</span>
+                  </>
+                )}
+                <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setUploadingSeoImage(true);
+                    try {
+                      const fd = new FormData();
+                      fd.append('file', file);
+                      const res = await api.post('/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' }});
+                      const autoAlt = generateAltTag(formData.name, 'SEO image', formData.seo_images?.length || 0);
+                      setFormData({...formData, seo_images: [...(formData.seo_images || []), { url: res.data.url, caption: '', alt: autoAlt }]});
+                    } finally {
+                      setUploadingSeoImage(false);
+                    }
+                  }
+                }} disabled={uploadingSeoImage} />
+              </label>
 
               {/* URL Input for Image */}
               <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Or paste image URL and click Add"
-                  className="flex-1 border rounded px-3 py-2 text-sm"
-                  id="seo-image-url-input"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const input = document.getElementById('seo-image-url-input');
-                    if (input.value) {
-                      setFormData({
-                        ...formData,
-                        seo_images: [...(formData.seo_images || []), { url: input.value, caption: '' }]
-                      });
-                      input.value = '';
-                    }
-                  }}
-                  className="px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                >
-                  Add
-                </button>
+                <input type="text" placeholder="Or paste image URL" className="flex-1 border rounded px-3 py-2 text-sm" id="seo-image-url-input" />
+                <button type="button" onClick={() => {
+                  const input = document.getElementById('seo-image-url-input');
+                  if (input.value) {
+                    const autoAlt = generateAltTag(formData.name, 'SEO image', formData.seo_images?.length || 0);
+                    setFormData({...formData, seo_images: [...(formData.seo_images || []), { url: input.value, caption: '', alt: autoAlt }]});
+                    input.value = '';
+                  }
+                }} className="px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">Add</button>
               </div>
             </div>
 
