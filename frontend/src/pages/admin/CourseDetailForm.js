@@ -1619,7 +1619,7 @@ const CourseDetailForm = () => {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <label className="block text-sm font-medium text-rose-800">🎬 Video Gallery</label>
-                  <p className="text-xs text-rose-600">Add videos (upload or YouTube/embed URL)</p>
+                  <p className="text-xs text-rose-600">Add YouTube or video embed URLs</p>
                 </div>
                 <span className="text-xs bg-rose-200 text-rose-800 px-2 py-1 rounded">
                   {formData.seo_videos?.length || 0} videos
@@ -1627,86 +1627,62 @@ const CourseDetailForm = () => {
               </div>
 
               {/* Existing Videos */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                {(formData.seo_videos || []).map((vid, index) => (
-                  <div key={index} className="relative group bg-white rounded-lg border-2 border-rose-200 p-2">
-                    <div className="relative h-20 bg-gray-900 rounded flex items-center justify-center">
-                      {vid.url.includes('youtube') || vid.url.includes('youtu.be') ? (
-                        <div className="text-white text-center">
-                          <FiVideo size={24} />
-                          <span className="text-xs block mt-1">YouTube</span>
+              {(formData.seo_videos || []).length > 0 && (
+                <div className="space-y-3 mb-4">
+                  {(formData.seo_videos || []).map((vid, index) => (
+                    <div key={index} className="bg-white rounded-lg border-2 border-rose-200 p-3">
+                      <div className="flex items-start gap-3">
+                        <div className="flex items-center justify-center w-12 h-12 bg-gray-900 rounded-lg flex-shrink-0">
+                          <FiVideo className="text-white" size={20} />
                         </div>
-                      ) : (
-                        <video src={vid.url} className="w-full h-full object-cover rounded" />
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setFormData({
-                            ...formData,
-                            seo_videos: (formData.seo_videos || []).filter((_, i) => i !== index)
-                          });
-                        }}
-                        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <FiX size={12} />
-                      </button>
+                        <div className="flex-1 space-y-2">
+                          <input
+                            type="text"
+                            value={vid.title || ''}
+                            onChange={(e) => {
+                              const newVideos = [...(formData.seo_videos || [])];
+                              newVideos[index].title = e.target.value;
+                              setFormData({...formData, seo_videos: newVideos});
+                            }}
+                            placeholder="Video Title"
+                            className="w-full border rounded px-3 py-1.5 text-sm"
+                          />
+                          <input
+                            type="text"
+                            value={vid.url || ''}
+                            onChange={(e) => {
+                              const newVideos = [...(formData.seo_videos || [])];
+                              newVideos[index].url = e.target.value;
+                              setFormData({...formData, seo_videos: newVideos});
+                            }}
+                            placeholder="Video URL"
+                            className="w-full border rounded px-3 py-1.5 text-xs font-mono text-gray-500"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              seo_videos: (formData.seo_videos || []).filter((_, i) => i !== index)
+                            });
+                          }}
+                          className="text-red-500 hover:bg-red-50 p-1.5 rounded"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
                     </div>
-                    <input
-                      type="text"
-                      value={vid.title || ''}
-                      onChange={(e) => {
-                        const newVideos = [...(formData.seo_videos || [])];
-                        newVideos[index].title = e.target.value;
-                        setFormData({...formData, seo_videos: newVideos});
-                      }}
-                      placeholder="Video Title"
-                      className="w-full mt-2 text-xs border rounded px-2 py-1"
-                    />
-                    <input
-                      type="text"
-                      value={vid.url || ''}
-                      onChange={(e) => {
-                        const newVideos = [...(formData.seo_videos || [])];
-                        newVideos[index].url = e.target.value;
-                        setFormData({...formData, seo_videos: newVideos});
-                      }}
-                      placeholder="Video URL"
-                      className="w-full mt-1 text-xs border rounded px-2 py-1 font-mono text-gray-500"
-                    />
-                  </div>
-                ))}
+                  ))}
+                </div>
+              )}
 
-                {/* Upload New Video */}
-                <label className={`flex flex-col items-center justify-center h-32 border-2 border-dashed border-rose-300 rounded-lg cursor-pointer hover:bg-rose-100 transition-colors ${uploadingSeoVideo ? 'opacity-50' : ''}`}>
-                  {uploadingSeoVideo ? (
-                    <>
-                      <FiLoader className="animate-spin text-rose-500" size={24} />
-                      <span className="text-xs text-rose-600 mt-1">Uploading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <FiUpload className="text-rose-400 mb-1" size={20} />
-                      <span className="text-xs text-rose-600">Upload Video</span>
-                      <span className="text-xs text-rose-400">Max 50MB</span>
-                    </>
-                  )}
-                  <input
-                    type="file"
-                    accept="video/*"
-                    className="hidden"
-                    onChange={(e) => handleSeoVideoUpload(e.target.files[0])}
-                    disabled={uploadingSeoVideo}
-                  />
-                </label>
-              </div>
-
-              {/* URL Input for Video */}
+              {/* Add Video URL */}
               <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Paste YouTube or video URL and click Add"
-                  className="flex-1 border rounded px-3 py-2 text-sm"
+                  placeholder="Paste YouTube or video URL"
+                  className="flex-1 border-2 border-rose-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
                   id="seo-video-url-input"
                 />
                 <button
@@ -1721,9 +1697,9 @@ const CourseDetailForm = () => {
                       input.value = '';
                     }
                   }}
-                  className="px-3 py-2 bg-rose-600 text-white text-sm rounded hover:bg-rose-700"
+                  className="px-4 py-2 bg-rose-600 text-white text-sm rounded-lg hover:bg-rose-700 flex items-center gap-2"
                 >
-                  Add
+                  <FiPlus size={16} /> Add Video
                 </button>
               </div>
             </div>
