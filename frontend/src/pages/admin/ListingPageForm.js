@@ -725,46 +725,120 @@ const ListingPageForm = () => {
 
                 {/* Image/Video URL */}
                 {(section.type === 'text_image' || section.type === 'text_video') && (
-                  <div className="grid grid-cols-2 gap-4 mb-3">
-                    <div>
-                      <label className="block text-xs font-medium mb-1">
-                        {section.type === 'text_image' ? 'Image URL' : 'Video URL (YouTube/Embed)'}
-                      </label>
-                      <Input
-                        value={section.media_url}
-                        onChange={(e) => updateContentSection(index, 'media_url', e.target.value)}
-                        placeholder={section.type === 'text_image' ? 'https://example.com/image.jpg' : 'https://youtube.com/embed/...'}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium mb-1">Alt Text / Caption</label>
-                      <div className="flex gap-2">
-                        <Input
-                          value={section.media_alt}
-                          onChange={(e) => updateContentSection(index, 'media_alt', e.target.value)}
-                          placeholder="Description for SEO"
-                          className="flex-1"
-                        />
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => {
-                            // Auto-generate alt text based on section title, page title, and media type
-                            const mediaType = section.type === 'text_image' ? 'Image' : 'Video';
-                            const sectionTitle = section.title || 'Content';
-                            const pageTitle = formData.page_title || formData.url_slug || 'Page';
-                            const altText = `${sectionTitle} - ${pageTitle} | ${mediaType}`;
-                            updateContentSection(index, 'media_alt', altText);
-                          }}
-                          title="Auto-generate alt text from section title"
-                        >
-                          Auto
-                        </Button>
+                  <div className="bg-white border rounded-lg p-3 mb-3">
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Left: Media URL / Upload */}
+                      <div>
+                        <label className="block text-xs font-medium mb-1">
+                          {section.type === 'text_image' ? 'Image' : 'Video URL (YouTube/Embed)'}
+                        </label>
+                        
+                        {section.type === 'text_image' ? (
+                          <>
+                            {/* Upload or URL toggle */}
+                            <div className="flex gap-2 mb-2">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                ref={el => fileInputRefs.current[index] = el}
+                                className="hidden"
+                                onChange={(e) => handleImageUpload(index, e.target.files[0])}
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                disabled={uploading[index]}
+                                onClick={() => fileInputRefs.current[index]?.click()}
+                                className="flex-1"
+                              >
+                                <FiUpload className="mr-1" />
+                                {uploading[index] ? 'Uploading...' : 'Upload Image'}
+                              </Button>
+                              <span className="text-xs text-gray-400 flex items-center">or</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <Input
+                                value={section.media_url}
+                                onChange={(e) => updateContentSection(index, 'media_url', e.target.value)}
+                                placeholder="Paste image URL"
+                                className="flex-1"
+                              />
+                              <Button type="button" variant="outline" size="sm" title="Paste URL">
+                                <FiLink size={14} />
+                              </Button>
+                            </div>
+                            {/* Image Preview */}
+                            {section.media_url && (
+                              <div className="mt-2 relative">
+                                <img 
+                                  src={section.media_url.startsWith('/') ? `${process.env.REACT_APP_BACKEND_URL}${section.media_url}` : section.media_url} 
+                                  alt={section.media_alt || 'Preview'} 
+                                  className="w-full h-32 object-cover rounded border"
+                                  onError={(e) => e.target.style.display = 'none'}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => updateContentSection(index, 'media_url', '')}
+                                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                  title="Remove image"
+                                >
+                                  <FiTrash2 size={12} />
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <Input
+                            value={section.media_url}
+                            onChange={(e) => updateContentSection(index, 'media_url', e.target.value)}
+                            placeholder="https://youtube.com/embed/VIDEO_ID or embed URL"
+                          />
+                        )}
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">
-                        {section.type === 'text_image' ? 'SEO: Describe the image content' : 'Caption shown below video'}
-                      </p>
+
+                      {/* Right: Alt Text */}
+                      <div>
+                        <label className="block text-xs font-medium mb-1">Alt Text / Caption</label>
+                        <div className="flex gap-2">
+                          <Input
+                            value={section.media_alt}
+                            onChange={(e) => updateContentSection(index, 'media_alt', e.target.value)}
+                            placeholder="Description for SEO"
+                            className="flex-1"
+                          />
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              const mediaType = section.type === 'text_image' ? 'Image' : 'Video';
+                              const sectionTitle = section.title || 'Content';
+                              const pageTitle = formData.page_title || formData.url_slug || 'Page';
+                              const altText = `${sectionTitle} - ${pageTitle} | ${mediaType}`;
+                              updateContentSection(index, 'media_alt', altText);
+                            }}
+                            title="Auto-generate alt text"
+                          >
+                            Auto
+                          </Button>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {section.type === 'text_image' ? 'SEO: Describe the image content' : 'Caption shown below video'}
+                        </p>
+                        
+                        {/* Video Preview */}
+                        {section.type === 'text_video' && section.media_url && (
+                          <div className="mt-2">
+                            <iframe
+                              src={section.media_url}
+                              title={section.media_alt || 'Video preview'}
+                              className="w-full h-32 rounded border"
+                              allowFullScreen
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
