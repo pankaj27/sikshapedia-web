@@ -1581,7 +1581,7 @@ const CourseDetailForm = () => {
         <CollapsibleSection title="Page Widgets" icon="🧩" defaultOpen={false} badge={`${[formData.widgets_config?.apply_now?.enabled, formData.widgets_config?.ask_question?.enabled, formData.widgets_config?.counselling?.enabled, formData.widgets_config?.sponsor_ad?.enabled].filter(Boolean).length} active`}>
           <div className="space-y-4">
             <p className="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-3">
-              💡 Configure widgets that will appear on this course's detail page. Enable/disable and customize each widget.
+              💡 Configure widgets that will appear on this course detail page. Enable/disable and customize each widget.
             </p>
 
             {/* Apply Now Widget */}
