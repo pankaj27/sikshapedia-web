@@ -6,12 +6,12 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
 const ProfilePage = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -20,19 +20,29 @@ const ProfilePage = () => {
     profile_photo: ''
   });
 
+  const user = authContext?.user;
+  const setUser = authContext?.setUser;
+
   useEffect(() => {
+    // Wait for auth context to load
+    if (authContext?.loading) return;
+    
     if (!user) {
       navigate('/login');
       return;
     }
+    
     // Initialize form with user data
-    setFormData({
-      name: user.name || '',
-      job_title: user.job_title || '',
-      bio: user.bio || '',
-      profile_photo: user.profile_photo || ''
-    });
-  }, [user, navigate]);
+    if (!initialized) {
+      setFormData({
+        name: user.name || '',
+        job_title: user.job_title || '',
+        bio: user.bio || '',
+        profile_photo: user.profile_photo || ''
+      });
+      setInitialized(true);
+    }
+  }, [user, navigate, authContext?.loading, initialized]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
