@@ -110,15 +110,37 @@ const AdminLayout = ({ children }) => {
       id: 'moderation',
       title: 'Moderation & Inquiries',
       icon: FiMessageSquare,
+      permission: 'manage_reviews',
       submenu: [
         { title: 'Reviews', path: '/admin/reviews', icon: FiMessageSquare },
         { title: 'Comments', path: '/admin/comments', icon: FiMessageSquare },
-    { title: 'Advertisements', path: '/admin/advertisements', icon: FiDollarSign },
+        { title: 'Advertisements', path: '/admin/advertisements', icon: FiDollarSign, permission: 'manage_ads' },
         { title: 'Contact Inquiries', path: '/admin/contact-inquiries', icon: FiMessageSquare },
         { title: 'Counseling Requests', path: '/admin/counseling-sessions', icon: FiMessageSquare },
       ]
+    },
+    {
+      id: 'team',
+      title: 'Team Management',
+      icon: FiShield,
+      path: '/admin/team',
+      permission: 'manage_team'
     }
   ];
+
+  // Filter menu items based on permissions
+  const filteredMenuItems = menuItems.filter(item => {
+    if (item.permission && !canAccess(item.permission)) return false;
+    return true;
+  }).map(item => {
+    if (item.submenu) {
+      return {
+        ...item,
+        submenu: item.submenu.filter(sub => !sub.permission || canAccess(sub.permission))
+      };
+    }
+    return item;
+  });
 
   const isActive = (path) => location.pathname === path;
   const isParentActive = (submenu) => submenu?.some(item => location.pathname === item.path);
