@@ -197,13 +197,13 @@ export const parseListingUrl = (pathname, searchParams = '') => {
     };
   }
   
-  // Check for combined stream + location patterns: /engineering/maharashtra-colleges
-  // or state + city patterns: /maharashtra/mumbai-colleges
+  // Check for combined patterns with 2 parts: /engineering/maharashtra-colleges, /maharashtra/mumbai-colleges
+  // or /government/maharashtra-colleges, /naac-a-plus/engineering-colleges
   if (parts.length === 2) {
     const secondPartMatch = parts[1]?.match(/^(.+)-(colleges|schools|universities)$/);
     if (secondPartMatch) {
       const firstPart = parts[0];
-      const location = secondPartMatch[1];
+      const secondPart = secondPartMatch[1];
       const institutionType = secondPartMatch[2];
       
       // Check if first part is a state (for state/city combination)
@@ -211,9 +211,55 @@ export const parseListingUrl = (pathname, searchParams = '') => {
         return {
           type: 'institution-listing',
           state: firstPart,
-          location: location, // city
+          location: secondPart, // city
           institutionType: institutionType,
-          combinedFilters: { state: firstPart, city: location }
+          combinedFilters: { state: firstPart, city: secondPart },
+          queryFilters
+        };
+      }
+      
+      // Check if first part is a college type (e.g., /government/maharashtra-colleges)
+      if (isCollegeType(firstPart)) {
+        // Second part could be state, city, or stream
+        if (isState(secondPart)) {
+          return {
+            type: 'institution-listing',
+            state: secondPart,
+            institutionType: institutionType,
+            collegeType: firstPart,
+            combinedFilters: { collegeType: firstPart, state: secondPart },
+            queryFilters
+          };
+        }
+        return {
+          type: 'institution-listing',
+          location: secondPart,
+          institutionType: institutionType,
+          collegeType: firstPart,
+          combinedFilters: { collegeType: firstPart, location: secondPart },
+          queryFilters
+        };
+      }
+      
+      // Check if first part is accreditation (e.g., /naac-a-plus/maharashtra-colleges)
+      if (isAccreditation(firstPart)) {
+        if (isState(secondPart)) {
+          return {
+            type: 'institution-listing',
+            state: secondPart,
+            institutionType: institutionType,
+            accreditation: firstPart,
+            combinedFilters: { accreditation: firstPart, state: secondPart },
+            queryFilters
+          };
+        }
+        return {
+          type: 'institution-listing',
+          location: secondPart,
+          institutionType: institutionType,
+          accreditation: firstPart,
+          combinedFilters: { accreditation: firstPart, location: secondPart },
+          queryFilters
         };
       }
       
@@ -221,9 +267,10 @@ export const parseListingUrl = (pathname, searchParams = '') => {
       return {
         type: 'stream-listing',
         stream: firstPart,
-        location: location,
+        location: secondPart,
         institutionType: institutionType,
-        combinedFilters: { stream: firstPart, location: location }
+        combinedFilters: { stream: firstPart, location: secondPart },
+        queryFilters
       };
     }
   }
