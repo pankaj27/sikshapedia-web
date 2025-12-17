@@ -1211,11 +1211,20 @@ const CollegeForm = () => {
             <input type="checkbox" checked={formData.is_sponsored} onChange={(e) => setFormData({...formData, is_sponsored: e.target.checked})} className="rounded text-purple-600" />
             <span>💎 Sponsored</span>
           </label>
-          <label className="flex items-center gap-1.5 cursor-pointer">
-            <input type="checkbox" checked={formData.status === 'published'} onChange={(e) => setFormData({...formData, status: e.target.checked ? 'published' : 'draft'})} className="rounded text-green-600" />
-            <span>📢 Published</span>
-          </label>
         </div>
+        
+        {/* Approval Actions - Only show for existing content */}
+        {id && (
+          <div className="px-4 py-3 bg-blue-50 border-t">
+            <ContentApprovalActions
+              contentType="college"
+              contentId={id}
+              currentStatus={formData.status || 'draft'}
+              rejectionReason={formData.rejection_reason}
+              onStatusChange={(newStatus) => setFormData(prev => ({...prev, status: newStatus}))}
+            />
+          </div>
+        )}
       </div>
 
       <form id="institution-form" onSubmit={handleSubmit} className="p-4 space-y-3">
