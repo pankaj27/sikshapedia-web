@@ -84,8 +84,8 @@ const CourseDetailForm = () => {
     description: '',
     description_toc: [], // [{title, anchor, content, image, video}]
     description_tables: [], // [{title, headers: [], rows: [[]]}]
-    description_images: [], // [{url, caption}]
-    description_videos: [], // [{url, title}]
+    description_images: [], // [{url, caption, alt}]
+    description_videos: [], // [{url, title, alt}]
     overview: '',
     eligibility: '',
     admission_process: '',
