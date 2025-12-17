@@ -5241,8 +5241,10 @@ async def create_listing_page(page: ListingPageContent, current_user: User = Dep
     page_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
     page_dict["created_by"] = current_user.id
     page_dict["created_by_name"] = current_user.name
+    page_dict["created_by_photo"] = current_user.profile_photo
     page_dict["updated_by"] = current_user.id
     page_dict["updated_by_name"] = current_user.name
+    page_dict["updated_by_photo"] = current_user.profile_photo
     await db.listing_pages.insert_one(page_dict)
     return page
 
@@ -5255,6 +5257,7 @@ async def update_listing_page(page_id: str, page_data: dict, current_user: User 
     page_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     page_data["updated_by"] = current_user.id
     page_data["updated_by_name"] = current_user.name
+    page_data["updated_by_photo"] = current_user.profile_photo
     result = await db.listing_pages.update_one(
         {"id": page_id},
         {"$set": page_data}
