@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { FiArrowLeft, FiSave } from 'react-icons/fi';
+import { FiArrowLeft, FiSave, FiSend, FiCheck, FiX } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 import { generateSlug } from '../../utils/slugify';
+import StatusBadge from '../../components/admin/StatusBadge';
+import ContentApprovalActions from '../../components/admin/ContentApprovalActions';
+import { useAuth } from '../../contexts/AuthContext';
 
 const NewsForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = Boolean(id);
+  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -20,10 +24,16 @@ const NewsForm = () => {
     author: '',
     tags: [],
     published: true,
-    featured: false
+    featured: false,
+    status: 'draft'
   });
 
   const [loading, setLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  // Check user role
+  const isDataEntry = user?.role === 'data_entry';
+  const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager';
 
   useEffect(() => {
     if (isEdit) {
@@ -40,15 +50,20 @@ const NewsForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, saveAsDraft = false) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const dataToSave = { 
+        ...formData,
+        status: saveAsDraft ? 'draft' : formData.status
+      };
+      
       if (isEdit) {
-        await api.put(`/news/${id}`, formData);
+        await api.put(`/news/${id}`, dataToSave);
       } else {
-        await api.post('/news', formData);
+        await api.post('/news', dataToSave);
       }
       navigate('/admin/news');
     } catch (error) {
@@ -56,6 +71,51 @@ const NewsForm = () => {
       alert('Error saving news');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSubmitForReview = async () => {
+    setActionLoading(true);
+    try {
+      await api.post(`/submit-for-review/news/${id}`);
+      await fetchNews();
+      alert('News submitted for review!');
+    } catch (error) {
+      console.error('Error submitting for review:', error);
+      alert('Error submitting for review');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    setActionLoading(true);
+    try {
+      await api.post(`/approve/news/${id}`);
+      await fetchNews();
+      alert('News approved and published!');
+    } catch (error) {
+      console.error('Error approving:', error);
+      alert('Error approving news');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    const reason = prompt('Please provide a reason for rejection:');
+    if (!reason) return;
+    
+    setActionLoading(true);
+    try {
+      await api.post(`/reject/news/${id}`, { reason });
+      await fetchNews();
+      alert('News rejected');
+    } catch (error) {
+      console.error('Error rejecting:', error);
+      alert('Error rejecting news');
+    } finally {
+      setActionLoading(false);
     }
   };
 
