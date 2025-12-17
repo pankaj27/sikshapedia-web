@@ -467,6 +467,32 @@ const ListingPageForm = () => {
 
         <form onSubmit={handleSubmit}>
           {/* Page Configuration */}
+          {/* Content Team Info - Show only when editing */}
+          {isEditing && (formData.created_by_name || formData.updated_by_name) && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h3 className="text-sm font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                👤 Content Team Info
+              </h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                {formData.created_by_name && (
+                  <div>
+                    <span className="text-gray-500">Created by:</span>
+                    <p className="font-medium text-gray-800">{formData.created_by_name}</p>
+                    {formData.created_by_email && <p className="text-xs text-gray-500">{formData.created_by_email}</p>}
+                    {formData.created_at && <p className="text-xs text-gray-400">on {new Date(formData.created_at).toLocaleString()}</p>}
+                  </div>
+                )}
+                {formData.updated_by_name && (
+                  <div>
+                    <span className="text-gray-500">Last updated by:</span>
+                    <p className="font-medium text-gray-800">{formData.updated_by_name}</p>
+                    {formData.updated_at && <p className="text-xs text-gray-400">on {new Date(formData.updated_at).toLocaleString()}</p>}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <CollapsibleSection title="Page Configuration" icon="⚙️" defaultOpen={true}>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
