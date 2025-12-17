@@ -1538,6 +1538,214 @@ const CourseDetailForm = () => {
                 <FiPlus /> Add Table
               </button>
             </div>
+
+            {/* SEO Images Gallery */}
+            <div className="border-2 border-blue-300 rounded-lg p-4 bg-blue-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-blue-800">🖼️ Image Gallery</label>
+                  <p className="text-xs text-blue-600">Add images for this course page</p>
+                </div>
+                <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
+                  {formData.seo_images?.length || 0} images
+                </span>
+              </div>
+
+              {/* Existing Images */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                {(formData.seo_images || []).map((img, index) => (
+                  <div key={index} className="relative group">
+                    <img 
+                      src={img.url} 
+                      alt={img.caption || `Image ${index + 1}`}
+                      className="w-full h-24 object-cover rounded-lg border-2 border-blue-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData({
+                          ...formData,
+                          seo_images: (formData.seo_images || []).filter((_, i) => i !== index)
+                        });
+                      }}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <FiX size={12} />
+                    </button>
+                    <input
+                      type="text"
+                      value={img.caption || ''}
+                      onChange={(e) => {
+                        const newImages = [...(formData.seo_images || [])];
+                        newImages[index].caption = e.target.value;
+                        setFormData({...formData, seo_images: newImages});
+                      }}
+                      placeholder="Caption"
+                      className="w-full mt-1 text-xs border rounded px-2 py-1"
+                    />
+                  </div>
+                ))}
+
+                {/* Upload New Image */}
+                <label className={`flex flex-col items-center justify-center h-24 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors ${uploadingSeoImage ? 'opacity-50' : ''}`}>
+                  {uploadingSeoImage ? (
+                    <FiLoader className="animate-spin text-blue-500" size={24} />
+                  ) : (
+                    <>
+                      <FiUpload className="text-blue-400 mb-1" size={20} />
+                      <span className="text-xs text-blue-600">Add Image</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleSeoImageUpload(e.target.files[0])}
+                    disabled={uploadingSeoImage}
+                  />
+                </label>
+              </div>
+
+              {/* URL Input for Image */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Or paste image URL and click Add"
+                  className="flex-1 border rounded px-3 py-2 text-sm"
+                  id="seo-image-url-input"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const input = document.getElementById('seo-image-url-input');
+                    if (input.value) {
+                      setFormData({
+                        ...formData,
+                        seo_images: [...(formData.seo_images || []), { url: input.value, caption: '' }]
+                      });
+                      input.value = '';
+                    }
+                  }}
+                  className="px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+
+            {/* SEO Videos Gallery */}
+            <div className="border-2 border-rose-300 rounded-lg p-4 bg-rose-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-rose-800">🎬 Video Gallery</label>
+                  <p className="text-xs text-rose-600">Add videos (upload or YouTube/embed URL)</p>
+                </div>
+                <span className="text-xs bg-rose-200 text-rose-800 px-2 py-1 rounded">
+                  {formData.seo_videos?.length || 0} videos
+                </span>
+              </div>
+
+              {/* Existing Videos */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                {(formData.seo_videos || []).map((vid, index) => (
+                  <div key={index} className="relative group bg-white rounded-lg border-2 border-rose-200 p-2">
+                    <div className="relative h-20 bg-gray-900 rounded flex items-center justify-center">
+                      {vid.url.includes('youtube') || vid.url.includes('youtu.be') ? (
+                        <div className="text-white text-center">
+                          <FiVideo size={24} />
+                          <span className="text-xs block mt-1">YouTube</span>
+                        </div>
+                      ) : (
+                        <video src={vid.url} className="w-full h-full object-cover rounded" />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            seo_videos: (formData.seo_videos || []).filter((_, i) => i !== index)
+                          });
+                        }}
+                        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <FiX size={12} />
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={vid.title || ''}
+                      onChange={(e) => {
+                        const newVideos = [...(formData.seo_videos || [])];
+                        newVideos[index].title = e.target.value;
+                        setFormData({...formData, seo_videos: newVideos});
+                      }}
+                      placeholder="Video Title"
+                      className="w-full mt-2 text-xs border rounded px-2 py-1"
+                    />
+                    <input
+                      type="text"
+                      value={vid.url || ''}
+                      onChange={(e) => {
+                        const newVideos = [...(formData.seo_videos || [])];
+                        newVideos[index].url = e.target.value;
+                        setFormData({...formData, seo_videos: newVideos});
+                      }}
+                      placeholder="Video URL"
+                      className="w-full mt-1 text-xs border rounded px-2 py-1 font-mono text-gray-500"
+                    />
+                  </div>
+                ))}
+
+                {/* Upload New Video */}
+                <label className={`flex flex-col items-center justify-center h-32 border-2 border-dashed border-rose-300 rounded-lg cursor-pointer hover:bg-rose-100 transition-colors ${uploadingSeoVideo ? 'opacity-50' : ''}`}>
+                  {uploadingSeoVideo ? (
+                    <>
+                      <FiLoader className="animate-spin text-rose-500" size={24} />
+                      <span className="text-xs text-rose-600 mt-1">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload className="text-rose-400 mb-1" size={20} />
+                      <span className="text-xs text-rose-600">Upload Video</span>
+                      <span className="text-xs text-rose-400">Max 50MB</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    className="hidden"
+                    onChange={(e) => handleSeoVideoUpload(e.target.files[0])}
+                    disabled={uploadingSeoVideo}
+                  />
+                </label>
+              </div>
+
+              {/* URL Input for Video */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Paste YouTube or video URL and click Add"
+                  className="flex-1 border rounded px-3 py-2 text-sm"
+                  id="seo-video-url-input"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const input = document.getElementById('seo-video-url-input');
+                    if (input.value) {
+                      setFormData({
+                        ...formData,
+                        seo_videos: [...(formData.seo_videos || []), { url: input.value, title: '' }]
+                      });
+                      input.value = '';
+                    }
+                  }}
+                  className="px-3 py-2 bg-rose-600 text-white text-sm rounded hover:bg-rose-700"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
           </div>
         </CollapsibleSection>
 
