@@ -1100,7 +1100,7 @@ const CourseDetailForm = () => {
                       <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-800 rounded-full font-bold text-sm flex-shrink-0">
                         {index + 1}
                       </div>
-                      <div className="flex-1 space-y-2">
+                      <div className="flex-1 space-y-3">
                         <div className="grid grid-cols-2 gap-2">
                           <div>
                             <label className="block text-xs text-gray-600 mb-1">Section Title *</label>
@@ -1145,6 +1145,107 @@ const CourseDetailForm = () => {
                             rows="4"
                             className="w-full border rounded px-2 py-1.5 text-sm"
                           />
+                        </div>
+
+                        {/* Image & Video Upload for this TOC Section */}
+                        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-purple-100">
+                          {/* Image Upload */}
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">
+                              <FiImage className="inline mr-1" /> Section Image
+                            </label>
+                            {item.image ? (
+                              <div className="relative">
+                                <img src={item.image} alt="Section" className="w-full h-24 object-cover rounded border" />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    newToc[index].image = '';
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }}
+                                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                                >
+                                  <FiX size={12} />
+                                </button>
+                              </div>
+                            ) : (
+                              <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-purple-300 rounded cursor-pointer hover:bg-purple-50 transition-colors ${uploadingImage === index ? 'opacity-50' : ''}`}>
+                                {uploadingImage === index ? (
+                                  <FiLoader className="animate-spin text-purple-500" size={20} />
+                                ) : (
+                                  <>
+                                    <FiUpload className="text-purple-400 mb-1" size={18} />
+                                    <span className="text-xs text-purple-600">Upload Image</span>
+                                  </>
+                                )}
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={(e) => handleTocImageUpload(e.target.files[0], index)}
+                                  disabled={uploadingImage === index}
+                                />
+                              </label>
+                            )}
+                          </div>
+
+                          {/* Video Upload */}
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">
+                              <FiVideo className="inline mr-1" /> Section Video
+                            </label>
+                            {item.video ? (
+                              <div className="relative">
+                                <video src={item.video} className="w-full h-24 object-cover rounded border" />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded">
+                                  <FiVideo className="text-white" size={24} />
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    newToc[index].video = '';
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }}
+                                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                                >
+                                  <FiX size={12} />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="space-y-2">
+                                <label className={`flex flex-col items-center justify-center w-full h-16 border-2 border-dashed border-purple-300 rounded cursor-pointer hover:bg-purple-50 transition-colors ${uploadingVideo === index ? 'opacity-50' : ''}`}>
+                                  {uploadingVideo === index ? (
+                                    <FiLoader className="animate-spin text-purple-500" size={20} />
+                                  ) : (
+                                    <>
+                                      <FiUpload className="text-purple-400 mb-1" size={16} />
+                                      <span className="text-xs text-purple-600">Upload Video</span>
+                                    </>
+                                  )}
+                                  <input
+                                    type="file"
+                                    accept="video/*"
+                                    className="hidden"
+                                    onChange={(e) => handleTocVideoUpload(e.target.files[0], index)}
+                                    disabled={uploadingVideo === index}
+                                  />
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.video || ''}
+                                  onChange={(e) => {
+                                    const newToc = [...(formData.seo_toc || [])];
+                                    newToc[index].video = e.target.value;
+                                    setFormData({...formData, seo_toc: newToc});
+                                  }}
+                                  placeholder="Or paste YouTube/video URL"
+                                  className="w-full border rounded px-2 py-1 text-xs"
+                                />
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                       <button
