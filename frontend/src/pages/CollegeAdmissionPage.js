@@ -45,33 +45,67 @@ const CollegeAdmissionPage = () => {
   const fetchAdmissions = async () => {
     try {
       setLoading(true);
-      // For now, use mock data since backend doesn't have admission-specific fields
-      // const params = new URLSearchParams();
-      // if (selectedType && selectedType !== 'all') {
-      //   params.append('type', selectedType);
-      // }
-      // if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-      //   params.append('state', selectedState);
-      // }
-      // if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-      //   params.append('city', selectedCity);
-      // }
+      const params = new URLSearchParams();
+      params.append('limit', '50');
       
-      // const response = await api.get(`/colleges?${params.toString()}`);
-      // Use mock data until backend has admission dates
-      let filteredData = generateMockAdmissions();
-      
+      // Filter by state
       if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-        filteredData = filteredData.filter(a => a.location.state === selectedState);
+        params.append('state', selectedState);
       }
+      // Filter by city
       if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-        filteredData = filteredData.filter(a => a.location.city === selectedCity);
-      }
-      if (selectedType && selectedType !== 'all') {
-        filteredData = filteredData.filter(a => a.type.toLowerCase() === selectedType.toLowerCase());
+        params.append('city', selectedCity);
       }
       
-      setAdmissions(filteredData);
+      const response = await api.get(`/colleges?${params.toString()}`);
+      let collegesData = response.data || [];
+      
+      if (collegesData.length > 0) {
+        // Transform college data to admission format
+        let admissionsData = collegesData.map(college => ({
+          id: college.id,
+          name: college.name,
+          location: { 
+            city: college.city || 'Unknown', 
+            state: college.state || 'Unknown' 
+          },
+          type: college.streams?.[0] || college.institution_type || 'General',
+          courses: college.courses?.slice(0, 3).map(c => c.name || c) || ['Various Courses'],
+          average_fees: college.average_fees || 100000,
+          admission_date: college.admission_deadline || new Date().toISOString().split('T')[0],
+          deadline: college.admission_deadline || '2025-03-31',
+          seats: college.total_seats || 500,
+          rating: college.rating || 4.0,
+          description: college.short_description || college.description?.substring(0, 150) || `${college.name} offers quality education with excellent facilities.`,
+          is_admission_open: college.is_admission_open || false,
+          serial_number: college.serial_number
+        }));
+        
+        // Filter by type if selected
+        if (selectedType && selectedType !== 'all') {
+          admissionsData = admissionsData.filter(a => 
+            a.type.toLowerCase().includes(selectedType.toLowerCase())
+          );
+        }
+        
+        // Prioritize colleges with admissions open
+        admissionsData.sort((a, b) => (b.is_admission_open ? 1 : 0) - (a.is_admission_open ? 1 : 0));
+        
+        setAdmissions(admissionsData);
+      } else {
+        // Fallback to mock data if no data from API
+        let filteredData = generateMockAdmissions();
+        if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
+          filteredData = filteredData.filter(a => a.location.state === selectedState);
+        }
+        if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
+          filteredData = filteredData.filter(a => a.location.city === selectedCity);
+        }
+        if (selectedType && selectedType !== 'all') {
+          filteredData = filteredData.filter(a => a.type.toLowerCase() === selectedType.toLowerCase());
+        }
+        setAdmissions(filteredData);
+      }
     } catch (error) {
       console.error('Error fetching admissions:', error);
       // Fallback to mock data with filtering
