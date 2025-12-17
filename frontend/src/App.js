@@ -50,6 +50,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminProfile from './pages/admin/AdminProfile';
 import TeamManagement from './pages/admin/TeamManagement';
+import PendingApprovals from './pages/admin/PendingApprovals';
 import AddCollege from './pages/admin/AddCollege';
 import CollegeForm from './pages/admin/CollegeForm';
 import CollegesListManagement from './pages/admin/CollegesListManagement';
