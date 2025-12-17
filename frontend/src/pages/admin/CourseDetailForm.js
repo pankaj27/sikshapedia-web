@@ -124,16 +124,21 @@ const CourseDetailForm = () => {
     setFormData({ ...formData, [field]: newValues });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, saveAsDraft = false) => {
     e.preventDefault();
     setSaving(true);
 
     try {
+      const dataToSave = {
+        ...formData,
+        status: saveAsDraft ? 'draft' : formData.status
+      };
+      
       if (id) {
-        await api.put(`/courses/${id}`, formData);
+        await api.put(`/courses/${id}`, dataToSave);
         alert('Course updated successfully!');
       } else {
-        await api.post('/courses', formData);
+        await api.post('/courses', dataToSave);
         alert('Course created successfully!');
       }
       navigate('/admin/courses-detail');
@@ -142,6 +147,54 @@ const CourseDetailForm = () => {
       alert(`Failed to save course: ${error.response?.data?.detail || error.message}`);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSubmitForReview = async () => {
+    setActionLoading(true);
+    try {
+      await api.post(`/submit-for-review/course/${id}`);
+      const response = await api.get(`/courses/${id}`);
+      setFormData({ ...formData, ...response.data });
+      alert('Course submitted for review!');
+    } catch (error) {
+      console.error('Error submitting for review:', error);
+      alert('Error submitting for review');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    setActionLoading(true);
+    try {
+      await api.post(`/approve/course/${id}`);
+      const response = await api.get(`/courses/${id}`);
+      setFormData({ ...formData, ...response.data });
+      alert('Course approved and published!');
+    } catch (error) {
+      console.error('Error approving:', error);
+      alert('Error approving course');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    const reason = prompt('Please provide a reason for rejection:');
+    if (!reason) return;
+    
+    setActionLoading(true);
+    try {
+      await api.post(`/reject/course/${id}`, { reason });
+      const response = await api.get(`/courses/${id}`);
+      setFormData({ ...formData, ...response.data });
+      alert('Course rejected');
+    } catch (error) {
+      console.error('Error rejecting:', error);
+      alert('Error rejecting course');
+    } finally {
+      setActionLoading(false);
     }
   };
 
