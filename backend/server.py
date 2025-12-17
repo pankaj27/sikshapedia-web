@@ -1513,6 +1513,54 @@ class Advertisement(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Listing Page Content - For managing content on listing pages (india, state, city, stream, course)
+class ListingPageContent(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    
+    # URL Configuration
+    url_slug: str  # e.g., "india-colleges", "maharashtra-colleges", "engineering"
+    page_type: str  # "india", "state", "city", "stream", "course", "type", "accreditation"
+    institution_type: str = "colleges"  # "colleges", "schools", "universities"
+    
+    # Location/Filter Info (for reference)
+    state: Optional[str] = None
+    city: Optional[str] = None
+    stream: Optional[str] = None
+    course: Optional[str] = None
+    college_type: Optional[str] = None  # government, private, etc.
+    
+    # SEO Meta Tags
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    meta_keywords: List[str] = []
+    canonical_url: Optional[str] = None
+    
+    # Page Content
+    page_title: Optional[str] = None  # H1 heading
+    page_subtitle: Optional[str] = None
+    introduction: Optional[str] = None  # Rich text introduction
+    
+    # Main Content Sections (Rich Text)
+    content_sections: List[Dict[str, Any]] = []  # [{title, content, order}]
+    
+    # Tables
+    tables: List[Dict[str, Any]] = []  # [{title, headers, rows}]
+    
+    # FAQs
+    faqs: List[Dict[str, str]] = []  # [{question, answer}]
+    
+    # Related Links
+    related_pages: List[Dict[str, str]] = []  # [{title, url}]
+    
+    # Status
+    is_published: bool = True
+    
+    # Metadata
+    created_by: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============================================
 # Helper Functions
 # ============================================
