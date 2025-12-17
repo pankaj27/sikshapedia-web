@@ -1,13 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiChevronRight, FiChevronDown, FiChevronUp, FiMail, FiCheckCircle } from 'react-icons/fi';
+import { FiChevronRight, FiChevronDown, FiChevronUp, FiMail, FiCheckCircle, FiClock, FiDollarSign, FiBook, FiUsers, FiSend, FiMessageCircle, FiPhone } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
 import AdBanner from '../components/AdBanner';
+import api from '../api/axios';
+import { ApplyNowWidget, AskQuestionWidget, CounsellingWidget, SponsorAdWidget } from '../components/widgets/ActionWidgets';
 
 const CourseDetailPage = () => {
   const { id } = useParams();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showFullUpdates, setShowFullUpdates] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const [activeWidget, setActiveWidget] = useState(null);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        // Try to fetch by slug first, then by ID
+        const response = await api.get(`/courses-detail`);
+        const courses = response.data;
+        const foundCourse = courses.find(c => c.slug === id || c.id === id);
+        if (foundCourse) {
+          setCourse(foundCourse);
+        }
+      } catch (error) {
+        console.error('Error fetching course:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourse();
+  }, [id]);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -17,6 +41,33 @@ const CourseDetailPage = () => {
       window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading course details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Course Not Found</h2>
+          <p className="text-gray-600 mb-4">The course you are looking for does not exist.</p>
+          <Link to="/courses" className="text-orange-600 hover:underline">Browse All Courses</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const courseName = course.name || 'Course';
+  const fullName = course.full_name || courseName;
+  const widgetsConfig = course.widgets_config || {};
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -31,17 +82,79 @@ const CourseDetailPage = () => {
             <FiChevronRight size={12} className="mx-2" />
             <Link to="/courses" className="hover:text-orange-600">Courses</Link>
             <FiChevronRight size={12} className="mx-2" />
-            <span className="text-gray-900">BTech CSE</span>
+            <span className="text-gray-900">{courseName}</span>
           </div>
         </div>
       </div>
 
-      {/* Page Title */}
+      {/* Page Title with Quick Info */}
       <div className="bg-white py-6 border-b">
         <div className="container mx-auto px-8">
-          <h1 className="text-3xl font-bold text-gray-900 leading-tight">BTech CSE: Course Details, Admission, Fees, Eligibility, Syllabus, Jobs & Salary</h1>
+          <h1 className="text-3xl font-bold text-gray-900 leading-tight">{fullName}: Course Details, Admission, Fees, Eligibility, Syllabus, Jobs & Salary</h1>
+          
+          {/* Quick Info Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div className="bg-orange-50 rounded-lg p-4 flex items-center gap-3">
+              <FiClock className="text-orange-600" size={24} />
+              <div>
+                <p className="text-xs text-gray-500">Duration</p>
+                <p className="font-semibold text-gray-900">{course.duration || 'N/A'}</p>
+              </div>
+            </div>
+            <div className="bg-green-50 rounded-lg p-4 flex items-center gap-3">
+              <FiDollarSign className="text-green-600" size={24} />
+              <div>
+                <p className="text-xs text-gray-500">Avg. Fees</p>
+                <p className="font-semibold text-gray-900">₹{(course.average_fees || 0).toLocaleString()}</p>
+              </div>
+            </div>
+            <div className="bg-blue-50 rounded-lg p-4 flex items-center gap-3">
+              <FiBook className="text-blue-600" size={24} />
+              <div>
+                <p className="text-xs text-gray-500">Degree Type</p>
+                <p className="font-semibold text-gray-900">{course.degree_type || 'N/A'}</p>
+              </div>
+            </div>
+            <div className="bg-purple-50 rounded-lg p-4 flex items-center gap-3">
+              <FiUsers className="text-purple-600" size={24} />
+              <div>
+                <p className="text-xs text-gray-500">Total Colleges</p>
+                <p className="font-semibold text-gray-900">{course.total_colleges || 0}+</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Widget Action Buttons */}
+          <div className="flex gap-3 mt-6">
+            {widgetsConfig.apply_now?.enabled !== false && (
+              <button onClick={() => setActiveWidget('apply')} className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
+                <FiSend size={16} /> Apply Now
+              </button>
+            )}
+            {widgetsConfig.ask_question?.enabled !== false && (
+              <button onClick={() => setActiveWidget('question')} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <FiMessageCircle size={16} /> Ask Question
+              </button>
+            )}
+            {widgetsConfig.counselling?.enabled !== false && (
+              <button onClick={() => setActiveWidget('counselling')} className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                <FiPhone size={16} /> Free Counselling
+              </button>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Widget Modals */}
+      {activeWidget && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setActiveWidget(null)}>
+          <div className="max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            {activeWidget === 'apply' && <ApplyNowWidget courseName={courseName} onClose={() => setActiveWidget(null)} />}
+            {activeWidget === 'question' && <AskQuestionWidget context={courseName} onClose={() => setActiveWidget(null)} />}
+            {activeWidget === 'counselling' && <CounsellingWidget onClose={() => setActiveWidget(null)} />}
+          </div>
+        </div>
+      )}
 
       {/* Sticky Course Menu */}
       <div className="sticky top-16 z-40 bg-white border-b border-gray-200 shadow-sm">
