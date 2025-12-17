@@ -56,14 +56,15 @@ const getMenuIcon = (iconId) => iconMap[iconId] || iconMap['default'];
 const getMenuIconLarge = (iconId) => iconMapLarge[iconId] || iconMapLarge['default'];
 
 const CollegeSubPage = () => {
-  // Support both old format (:id/:section) and new format (:idSlug/:section)
-  const { id, idSlug, section } = useParams();
+  // ONLY support new format: /colleges/{number}-{slug}/{section}
+  const { idSlug, section } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(null);
   const [resolvedId, setResolvedId] = useState(null);
+  const [invalidFormat, setInvalidFormat] = useState(false);
   
   // Determine institution type from URL (plural paths)
   const getInstitutionType = () => {
@@ -76,30 +77,35 @@ const CollegeSubPage = () => {
   
   const institutionType = getInstitutionType();
   
-  // Parse the idSlug to extract numeric ID (e.g., "012-aiims-delhi" -> 12)
+  // Parse the idSlug - ONLY accepts new format: {number}-{slug}
+  // Old format like "aiims-delhi-001" is NOT supported
   const parseIdSlug = (slug) => {
-    if (!slug) return { numericId: null, slugPart: null };
+    if (!slug) return { numericId: null, slugPart: null, isValidFormat: false };
     const match = slug.match(/^(\d+)-(.+)$/);
     if (match) {
-      return { numericId: parseInt(match[1], 10), slugPart: match[2] };
+      return { numericId: parseInt(match[1], 10), slugPart: match[2], isValidFormat: true };
     }
-    return { numericId: null, slugPart: slug };
+    // Invalid format - old URLs are no longer supported
+    return { numericId: null, slugPart: null, isValidFormat: false };
   };
 
-  // First, resolve the idSlug to actual college ID
+  // Resolve the idSlug to actual college ID
   useEffect(() => {
     const resolveInstitution = async () => {
-      // If we have the old-style id, use it directly
-      if (id && !idSlug) {
-        setResolvedId(id);
+      // Parse the new idSlug format
+      const { numericId, isValidFormat } = parseIdSlug(idSlug);
+      
+      // Reject invalid URL format (old URLs like "aiims-delhi-001")
+      if (!isValidFormat) {
+        setInvalidFormat(true);
+        setResolvedId(null);
         return;
       }
       
-      // Parse the new idSlug format
-      const { numericId, slugPart } = parseIdSlug(idSlug);
+      setInvalidFormat(false);
       
       try {
-        // Strategy 1: Search by serial_number
+        // Search by serial_number only
         if (numericId) {
           const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
           if (response.data && response.data.length > 0) {
@@ -111,29 +117,6 @@ const CollegeSubPage = () => {
           }
         }
         
-        // Strategy 2: Search by slug/name
-        if (slugPart) {
-          const searchTerm = slugPart.replace(/-/g, ' ').trim();
-          const response = await api.get(`/colleges?search=${encodeURIComponent(searchTerm)}&institution_type=${institutionType}&limit=5`);
-          if (response.data && response.data.length > 0) {
-            setResolvedId(response.data[0].id);
-            return;
-          }
-        }
-        
-        // If nothing found, try legacy format (idSlug as the actual id)
-        if (idSlug) {
-          try {
-            const response = await api.get(`/colleges/${idSlug}`);
-            if (response.data) {
-              setResolvedId(idSlug);
-              return;
-            }
-          } catch (e) {
-            // Not found with legacy format
-          }
-        }
-        
         setResolvedId(null);
       } catch (error) {
         console.error('Error resolving institution:', error);
@@ -142,7 +125,7 @@ const CollegeSubPage = () => {
     };
     
     resolveInstitution();
-  }, [id, idSlug, institutionType]);
+  }, [idSlug, institutionType]);
 
   // Then fetch the college data once we have the resolved ID
   useEffect(() => {
