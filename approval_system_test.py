@@ -281,7 +281,7 @@ class ApprovalSystemTester:
             return
         
         # Step 2: Submit for review
-        success, response, status = self.make_request("POST", f"/submit-for-review/exam/{exam_id}", token=self.admin_token)
+        success, response, status = self.make_request("POST", f"/admin/submit-for-review/exam/{exam_id}", token=self.admin_token)
         if success and response.get("status") == "pending":
             self.log_test("Submit Exam for Review", True, "Status changed to pending")
         else:
@@ -289,7 +289,7 @@ class ApprovalSystemTester:
         
         # Step 3: Approve the exam
         approval_data = {"action": "approve", "comment": "Exam approved for testing"}
-        success, response, status = self.make_request("POST", f"/approve/exam/{exam_id}", approval_data, token=self.admin_token)
+        success, response, status = self.make_request("POST", f"/admin/approve/exam/{exam_id}", approval_data, token=self.admin_token)
         if success and response.get("status") == "published":
             self.log_test("Approve Exam", True, "Status changed to published")
         else:
