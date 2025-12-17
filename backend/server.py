@@ -1225,12 +1225,37 @@ def has_permission(role: str, permission: str) -> bool:
     """Check if a role has a specific permission"""
     return ROLE_PERMISSIONS.get(role, {}).get(permission, False)
 
+# ============================================
+# Content Approval System
+# ============================================
+
+# Approval statuses
+APPROVAL_STATUS = {
+    "draft": "Draft",
+    "pending": "Pending Review",
+    "published": "Published",
+    "rejected": "Rejected"
+}
+
+def can_approve_content(role: str) -> bool:
+    """Check if role can approve content"""
+    return role in ["super_admin", "content_manager"]
+
+def can_direct_publish(role: str) -> bool:
+    """Check if role can publish without approval"""
+    return role == "super_admin"
+
 class TeamMemberCreate(BaseModel):
     email: str
     name: str
     password: str
     role: str = "data_entry"
     job_title: Optional[str] = None
+
+class ContentApproval(BaseModel):
+    """Model for approval action"""
+    action: str  # approve, reject
+    comment: Optional[str] = None
 
 # ============================================
 # Taxonomy & Master Data Models
