@@ -1752,14 +1752,11 @@ async def admin_login(credentials: UserLogin):
             id=admin.id,
             email=admin.email,
             name=admin.name,
+            role="admin",
             profile_photo=admin.profile_photo,
             job_title=admin.job_title,
             bio=admin.bio,
-            phone="",
-            enrolled_courses=[],
             saved_colleges=[],
-            saved_courses=[],
-            is_premium=True
         )
     )
 
