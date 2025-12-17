@@ -2178,8 +2178,12 @@ async def update_college(college_id: str, college_data: dict, current_user: User
     if not existing_college:
         raise HTTPException(status_code=404, detail="College not found")
     
-    # Update the college
+    # Update the college with user tracking
     college_data['total_courses'] = len(college_data.get('courses', []))
+    college_data['updated_by'] = current_user.id
+    college_data['updated_by_name'] = current_user.name
+    college_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
     await db.colleges.update_one({"id": college_id}, {"$set": college_data})
     
     # Fetch and return updated college
