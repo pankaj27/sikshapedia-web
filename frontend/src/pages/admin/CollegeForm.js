@@ -16,7 +16,7 @@ import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import ContentApprovalActions from '../../components/admin/ContentApprovalActions';
 import StatusBadge from '../../components/admin/StatusBadge';
-import { PlacementSection, ScholarshipsSection, FacilitiesSection, UpdatesSection, FAQsSection } from '../../components/admin/college-form';
+import { PlacementSection, ScholarshipsSection, FacilitiesSection, UpdatesSection, FAQsSection, CoursesSection, AdmissionSection, CutoffSection } from '../../components/admin/college-form';
 
 // Menu icon options with professional icons
 const menuIconOptions = [
