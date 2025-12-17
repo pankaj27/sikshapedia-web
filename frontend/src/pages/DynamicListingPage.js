@@ -297,14 +297,81 @@ const DynamicListingPage = () => {
 
   // Filter options
   const filterOptions = {
-    subStream: ['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce'],
-    stream: ['Engineering & Technology', 'Medical & Health Sciences', 'Management & Business', 'Law & Legal Studies', 'Arts & Humanities', 'Science'],
+    // Stream/Sub Stream
+    subStream: [
+      'Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce',
+      'Pharmacy', 'Architecture', 'Design', 'Agriculture', 'Education', 'Nursing',
+      'Dental', 'Hotel Management', 'Mass Communication', 'Computer Applications',
+      'Aviation', 'Animation', 'Fashion Design', 'Interior Design'
+    ],
+    
+    // Courses
+    course: [
+      // Engineering
+      'B.Tech', 'B.E', 'M.Tech', 'M.E', 'Diploma in Engineering',
+      // Medical
+      'MBBS', 'BDS', 'BAMS', 'BHMS', 'B.Pharm', 'D.Pharm', 'M.Pharm', 'Pharm.D',
+      // Management
+      'MBA', 'BBA', 'PGDM', 'BMS', 'BBM', 'Executive MBA',
+      // Commerce
+      'B.Com', 'M.Com', 'CA', 'CS', 'CMA', 'BBA LLB',
+      // Science
+      'B.Sc', 'M.Sc', 'B.Sc Nursing', 'B.Sc Agriculture',
+      // Arts
+      'BA', 'MA', 'BA LLB', 'BFA', 'MFA',
+      // Computer
+      'BCA', 'MCA', 'B.Sc IT', 'B.Sc Computer Science',
+      // Law
+      'LLB', 'LLM', 'BA LLB', 'BBA LLB', 'B.Com LLB',
+      // Others
+      'B.Arch', 'M.Arch', 'B.Des', 'M.Des', 'BJMC', 'MJMC', 'BHM', 'B.Ed', 'M.Ed'
+    ],
+    
+    // Degree Type
+    degreeType: [
+      'Undergraduate (UG)', 'Postgraduate (PG)', 'Doctorate (PhD)', 
+      'Diploma', 'Certificate', 'Integrated', 'Executive'
+    ],
+    
+    // Exams Accepted
+    examAccepted: [
+      // Engineering
+      'JEE Main', 'JEE Advanced', 'BITSAT', 'VITEEE', 'SRMJEEE', 'MET', 'COMEDK',
+      // Medical
+      'NEET UG', 'NEET PG', 'AIIMS', 'JIPMER', 'PGIMER',
+      // Management
+      'CAT', 'MAT', 'XAT', 'CMAT', 'GMAT', 'NMAT', 'SNAP', 'ATMA',
+      // Law
+      'CLAT', 'AILET', 'LSAT', 'MH CET Law',
+      // Design
+      'NID DAT', 'NIFT', 'UCEED', 'CEED',
+      // Others
+      'CUET', 'GATE', 'UGC NET', 'GPAT', 'NATA', 'State CET'
+    ],
+    
+    // Affiliation
+    affiliation: [
+      'UGC', 'AICTE', 'NBA', 'NAAC A++', 'NAAC A+', 'NAAC A', 'NAAC B++', 'NAAC B+', 'NAAC B',
+      'State University', 'Central University', 'Deemed University', 'Autonomous',
+      'IIT', 'IIM', 'NIT', 'IIIT', 'AIIMS', 'IISER'
+    ],
+    
+    // Recognition
+    recognition: [
+      'NIRF Top 100', 'NIRF Top 50', 'NIRF Top 25', 'NIRF Top 10',
+      'QS World Ranking', 'Times Higher Education', 'AACSB Accredited',
+      'AMBA Accredited', 'EQUIS Accredited', 'NBA Accredited',
+      'ISO Certified', 'NAAC Accredited', 'UGC Recognized'
+    ],
+    
     state: allStates,
     city: getAvailableCities(),
-    degree: ['B.Tech', 'MBA', 'MBBS', 'B.Com', 'B.Sc', 'BA', 'BBA', 'BCA', 'M.Tech', 'M.Com'],
-    specialization: ['Computer Science', 'Mechanical', 'Civil', 'Electronics', 'Finance', 'Marketing', 'HR', 'Operations'],
-    programType: ['Full Time', 'Part Time', 'Distance Learning', 'Online'],
-    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous']
+    
+    // College Type
+    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous', 'Public-Private', 'Aided'],
+    
+    // Program Type
+    programType: ['Full Time', 'Part Time', 'Distance Learning', 'Online', 'Weekend', 'Evening']
   };
 
   // Close dropdowns when clicking outside
