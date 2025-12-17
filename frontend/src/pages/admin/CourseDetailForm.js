@@ -121,11 +121,15 @@ const CourseDetailForm = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [streams, setStreams] = useState([]);
   const [subStreams, setSubStreams] = useState([]);
   const [exams, setExams] = useState([]);
   const [coursesList, setCoursesList] = useState([]); // List of courses from Quick Entry
+  const [autoSaveStatus, setAutoSaveStatus] = useState(''); // 'saving', 'saved', 'error', ''
+  const [lastAutoSave, setLastAutoSave] = useState(null);
+  const autoSaveTimerRef = useRef(null);
 
   // Role checks
   const isDataEntry = user?.role === 'data_entry';
