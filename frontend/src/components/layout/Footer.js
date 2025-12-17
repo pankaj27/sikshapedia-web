@@ -23,10 +23,10 @@ const Footer = () => {
   ];
 
   const topColleges = [
-    { name: 'Engineering Colleges', link: '/colleges?type=Engineering' },
-    { name: 'Medical Colleges', link: '/colleges?type=Medical' },
-    { name: 'MBA Colleges', link: '/colleges?type=Management' },
-    { name: 'Law Colleges', link: '/colleges?type=Law' }
+    { name: 'Engineering Colleges', link: '/engineering' },
+    { name: 'Medical Colleges', link: '/medical' },
+    { name: 'MBA Colleges', link: '/mba' },
+    { name: 'Law Colleges', link: '/law' }
   ];
 
   const topCourses = [
