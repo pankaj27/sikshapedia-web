@@ -881,9 +881,12 @@ const DynamicListingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-2">
       <Helmet>
-        <title>{pageInfo.title} | AdmissionBuddy</title>
-        <meta name="description" content={pageInfo.description} />
-        <link rel="canonical" href={`https://admissionbuddy.co${location.pathname}`} />
+        <title>{pageContent?.meta_title || pageInfo.title} | AdmissionBuddy</title>
+        <meta name="description" content={pageContent?.meta_description || pageInfo.description} />
+        <link rel="canonical" href={pageContent?.canonical_url || `https://admissionbuddy.co${location.pathname}`} />
+        {pageContent?.meta_keywords?.length > 0 && (
+          <meta name="keywords" content={pageContent.meta_keywords.join(', ')} />
+        )}
       </Helmet>
       
       {/* Top Ad Banner */}
