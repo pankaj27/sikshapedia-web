@@ -111,8 +111,8 @@ const CourseDetailForm = () => {
     seo_full_content: '',
     seo_toc: [], // Table of Contents [{title, anchor, content, image, video}]
     seo_tables: [], // [{title, headers: [], rows: [[]]}]
-    seo_images: [], // [{url, caption}]
-    seo_videos: [], // [{url, title}]
+    seo_images: [], // [{url, caption, alt}]
+    seo_videos: [], // [{url, title, alt}]
     // Menu Configuration
     menu_config: {
       use_custom_menu: false,
