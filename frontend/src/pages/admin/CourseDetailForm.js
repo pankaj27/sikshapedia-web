@@ -939,11 +939,26 @@ const CourseDetailForm = () => {
                       </div>
                     ))}
                   </div>
-                  <button type="button" onClick={() => {
-                    setFormData({...formData, description_tables: [...(formData.description_tables || []), { title: '', headers: ['Column 1', 'Column 2'], rows: [['', '']] }]});
-                  }} className="text-sm text-teal-700 hover:bg-teal-100 px-3 py-1.5 rounded border border-teal-300 flex items-center gap-1">
-                    <FiPlus /> Add Table
-                  </button>
+                  <div className="flex gap-2 flex-wrap">
+                    <button type="button" onClick={() => {
+                      setFormData({...formData, description_tables: [...(formData.description_tables || []), { title: '', headers: ['Column 1', 'Column 2'], rows: [['', '']] }]});
+                    }} className="text-sm text-teal-700 hover:bg-teal-100 px-3 py-1.5 rounded border border-teal-300 flex items-center gap-1">
+                      <FiPlus /> Add Table
+                    </button>
+                    {(formData.description_tables || []).length > 0 && (
+                      <button type="button" onClick={() => {
+                        const tablesHtml = formData.description_tables.map(table => {
+                          const headerRow = table.headers.map(h => `<th>${h}</th>`).join('');
+                          const bodyRows = table.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('\n');
+                          return `<table class="data-table">\n  ${table.title ? `<caption>${table.title}</caption>\n  ` : ''}<thead><tr>${headerRow}</tr></thead>\n  <tbody>\n${bodyRows}\n  </tbody>\n</table>`;
+                        }).join('\n\n');
+                        setFormData({...formData, description: (formData.description || '') + '\n\n' + tablesHtml});
+                        alert('Tables inserted to Description content!');
+                      }} className="text-sm text-green-700 hover:bg-green-100 px-3 py-1.5 rounded border border-green-300 flex items-center gap-1">
+                        📥 Insert to Content
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Description Images */}
@@ -951,11 +966,25 @@ const CourseDetailForm = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <label className="block text-sm font-medium text-blue-800">🖼️ Images</label>
-                      <p className="text-xs text-blue-600">Add images for description (alt tags auto-generated)</p>
+                      <p className="text-xs text-blue-600">Add images for description</p>
                     </div>
-                    <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
-                      {formData.description_images?.length || 0} images
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {(formData.description_images || []).length > 0 && (
+                        <button type="button" onClick={() => {
+                          const newImages = formData.description_images.map((img, i) => ({
+                            ...img,
+                            alt: img.alt || generateAltTag(formData.name, 'description image', i)
+                          }));
+                          setFormData({...formData, description_images: newImages});
+                          alert('Alt tags generated for all images!');
+                        }} className="text-xs text-green-700 hover:bg-green-100 px-2 py-1 rounded border border-green-300">
+                          ✨ Generate Alt Tags
+                        </button>
+                      )}
+                      <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">
+                        {formData.description_images?.length || 0} images
+                      </span>
+                    </div>
                   </div>
                   <div className="space-y-3 mb-4">
                     {(formData.description_images || []).map((img, index) => (
