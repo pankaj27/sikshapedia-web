@@ -1271,7 +1271,7 @@ const CourseDetailForm = () => {
                 onClick={() => {
                   setFormData({
                     ...formData,
-                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]
+                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '', image: '', video: '' }]
                   });
                 }}
                 className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"
