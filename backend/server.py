@@ -1165,9 +1165,15 @@ class News(BaseModel):
     meta_title: Optional[str] = None
     meta_description: Optional[str] = None
     
-    # Status
+    # Status & Approval
     published: bool = True
     featured: bool = False
+    status: str = "draft"  # draft, pending, published, rejected
+    rejection_reason: Optional[str] = None
+    submitted_by: Optional[dict] = None  # {id, name, email}
+    submitted_at: Optional[datetime] = None
+    approved_by: Optional[dict] = None  # {id, name, email}
+    approved_at: Optional[datetime] = None
     
     # Timestamps
     published_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
