@@ -299,7 +299,7 @@ const Header = () => {
                   <Link to="/colleges?course=bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BDS - Bachelor of Dental Surgery
                   </Link>
-                  <Link to="/colleges?course=bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc Nursing - Bachelor of Science in Nursing
                   </Link>
                   <Link to="/colleges?course=bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
@@ -366,7 +366,7 @@ const Header = () => {
             <Link to="/bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Sc
             </Link>
-            <Link to="/colleges?course=bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Sc (Nursing)
             </Link>
             <Link to="/colleges?course=ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
