@@ -959,8 +959,12 @@ const DynamicListingPage = () => {
               </div>
             </div>
             <div>
-              <Link to="/author/content-team" className="text-[10px] font-semibold text-gray-900 hover:text-orange-600">Content Team</Link>
-              <p className="text-[8px] text-gray-600">Content Curator | Updated 3+ months ago</p>
+              <Link to={`/author/${pageContent?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-[10px] font-semibold text-gray-900 hover:text-orange-600">
+                {pageContent?.updated_by_name || pageContent?.created_by_name || 'Content Team'}
+              </Link>
+              <p className="text-[8px] text-gray-600">
+                Content Curator | {pageContent?.updated_at ? `Updated ${formatTimeAgo(pageContent.updated_at)}` : 'Updated recently'}
+              </p>
             </div>
           </div>
         </div>
