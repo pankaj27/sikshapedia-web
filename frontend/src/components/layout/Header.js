@@ -269,7 +269,7 @@ const Header = () => {
                   <Link to="/btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Tech - Bachelor of Technology
                   </Link>
-                  <Link to="/colleges?course=mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Tech - Master of Technology
                   </Link>
                   <Link to="/colleges?course=be" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
