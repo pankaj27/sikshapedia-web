@@ -196,6 +196,52 @@ const CourseDetailForm = () => {
     }
   }, [id]);
 
+  // Auto-save to draft every 30 seconds when there are changes
+  useEffect(() => {
+    // Only auto-save if we have a course selected and form has content
+    if (!formData.name || !formData.base_course_id) return;
+    
+    // Clear previous timer
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+    
+    // Set new timer for auto-save
+    autoSaveTimerRef.current = setTimeout(async () => {
+      try {
+        setAutoSaveStatus('saving');
+        const dataToSave = {
+          ...formData,
+          status: 'draft'
+        };
+        
+        if (id) {
+          await api.put(`/courses/${id}`, dataToSave);
+        } else {
+          // For new courses, create as draft
+          const response = await api.post('/courses', dataToSave);
+          // Update URL to include the new ID (optional - can navigate)
+        }
+        
+        setAutoSaveStatus('saved');
+        setLastAutoSave(new Date());
+        
+        // Clear status after 3 seconds
+        setTimeout(() => setAutoSaveStatus(''), 3000);
+      } catch (error) {
+        console.error('Auto-save error:', error);
+        setAutoSaveStatus('error');
+        setTimeout(() => setAutoSaveStatus(''), 5000);
+      }
+    }, 30000); // Auto-save every 30 seconds
+    
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [formData, id]);
+
   // Handle image upload for TOC section
   const handleTocImageUpload = async (file, tocIndex) => {
     if (!file) return;
