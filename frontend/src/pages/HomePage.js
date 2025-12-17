@@ -34,6 +34,7 @@ const CollegeDuniaHome = () => {
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeRankingYear, setActiveRankingYear] = useState('2024');
+  const [activeWidget, setActiveWidget] = useState(null); // For widget modals
   
   // Animated text rotation
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
