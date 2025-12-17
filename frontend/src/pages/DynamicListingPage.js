@@ -227,6 +227,8 @@ const DynamicListingPage = () => {
       subStream: null,
       state: null,
       city: null,
+      collegeType: null,
+      accreditation: null,
     };
     
     // Check for combined filters from URL (e.g., /engineering/maharashtra-colleges)
@@ -248,6 +250,24 @@ const DynamicListingPage = () => {
           active.city = toDisplayName(loc);
         }
       }
+      // Handle college type from URL (e.g., /government-colleges)
+      if (urlInfo.combinedFilters.collegeType) {
+        active.collegeType = TYPE_DISPLAY[urlInfo.combinedFilters.collegeType] || toDisplayName(urlInfo.combinedFilters.collegeType);
+      }
+      // Handle accreditation from URL (e.g., /naac-a-plus-colleges)
+      if (urlInfo.combinedFilters.accreditation) {
+        active.accreditation = ACCREDITATION_DISPLAY[urlInfo.combinedFilters.accreditation] || toDisplayName(urlInfo.combinedFilters.accreditation);
+      }
+    }
+    
+    // Check for college type from URL
+    if (pageInfo.collegeType && !active.collegeType) {
+      active.collegeType = TYPE_DISPLAY[pageInfo.collegeType] || toDisplayName(pageInfo.collegeType);
+    }
+    
+    // Check for accreditation from URL
+    if (pageInfo.accreditation && !active.accreditation) {
+      active.accreditation = ACCREDITATION_DISPLAY[pageInfo.accreditation] || toDisplayName(pageInfo.accreditation);
     }
     
     // Check for stream from URL (e.g., /engineering, /medical)
