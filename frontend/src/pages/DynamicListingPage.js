@@ -1340,16 +1340,16 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'collegeType' ? null : 'collegeType')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
-                    filters.type.length > 0 ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    activeFilters.collegeType ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {filters.type.length > 0 ? filters.type.join(', ') : 'Type Of College'}
+                  {activeFilters.collegeType || 'Type Of College'}
                   <FiChevronDown size={12} />
                 </button>
                 {activeFilterDropdown === 'collegeType' && (
                   <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.collegeType.map((option) => (
-                      <button key={option} onClick={() => toggleFilter(option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 ${filters.type.includes(option) ? 'text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.type.includes(option) && '✓'}</button>
+                      <button key={option} onClick={() => toggleFilter(option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 ${activeFilters.collegeType === option ? 'text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {activeFilters.collegeType === option && '✓'}</button>
                     ))}
                   </div>
                 )}
