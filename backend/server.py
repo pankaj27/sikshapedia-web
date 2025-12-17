@@ -1824,7 +1824,8 @@ async def login(credentials: UserLogin):
         user_doc['created_at'] = datetime.fromisoformat(user_doc['created_at'])
     user = User(**user_doc)
     
-    access_token = create_access_token(data={"sub": user.id})
+    # Include role in token for authorization
+    access_token = create_access_token(data={"sub": user.id, "role": user.role})
     return Token(access_token=access_token, token_type="bearer", user=user)
 
 @api_router.get("/auth/me", response_model=User)
