@@ -1565,8 +1565,14 @@ class ListingPageContent(BaseModel):
     # Status
     is_published: bool = True
     
+    # Content Team / Author Info
+    created_by: Optional[str] = None  # User ID
+    created_by_name: Optional[str] = None  # User Name
+    created_by_email: Optional[str] = None  # User Email
+    updated_by: Optional[str] = None  # Last updated by User ID
+    updated_by_name: Optional[str] = None  # Last updated by User Name
+    
     # Metadata
-    created_by: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
