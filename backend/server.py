@@ -2184,8 +2184,8 @@ async def approve_content(content_type: str, content_id: str, approval: ContentA
         "college": "colleges",
         "listing_page": "listing_pages",
         "news": "news",
-        "course": "courses_detail",
-        "exam": "exams_detail",
+        "course": "courses_detailed",
+        "exam": "exams_detailed",
         "blog": "blogs"
     }
     
@@ -2239,8 +2239,8 @@ async def submit_for_review(content_type: str, content_id: str, current_user: Us
         "college": "colleges",
         "listing_page": "listing_pages",
         "news": "news",
-        "course": "courses_detail",
-        "exam": "exams_detail",
+        "course": "courses_detailed",
+        "exam": "exams_detailed",
         "blog": "blogs"
     }
     
@@ -2281,8 +2281,8 @@ async def direct_publish(content_type: str, content_id: str, current_user: User 
         "college": "colleges",
         "listing_page": "listing_pages",
         "news": "news",
-        "course": "courses_detail",
-        "exam": "exams_detail",
+        "course": "courses_detailed",
+        "exam": "exams_detailed",
         "blog": "blogs"
     }
     
