@@ -123,14 +123,61 @@ const NewsForm = () => {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link to="/admin/news" className="text-gray-600 hover:text-gray-900">
-              <FiArrowLeft size={24} />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{isEdit ? 'Edit News' : 'Publish News'}</h1>
-              <p className="text-sm text-gray-600 mt-1">Fill in the news article details</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link to="/admin/news" className="text-gray-600 hover:text-gray-900">
+                <FiArrowLeft size={24} />
+              </Link>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-bold text-gray-900">{isEdit ? 'Edit News' : 'Publish News'}</h1>
+                  {isEdit && formData.status && <StatusBadge status={formData.status} />}
+                </div>
+                <p className="text-sm text-gray-600 mt-1">Fill in the news article details</p>
+              </div>
             </div>
+            
+            {/* Approval Actions */}
+            {isEdit && (
+              <div className="flex items-center gap-2">
+                {formData.status === 'draft' && (
+                  <Button 
+                    type="button" 
+                    onClick={handleSubmitForReview}
+                    disabled={actionLoading}
+                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                  >
+                    <FiSend className="mr-2" /> Submit for Review
+                  </Button>
+                )}
+                {formData.status === 'pending' && canApprove && (
+                  <>
+                    <Button 
+                      type="button" 
+                      onClick={handleApprove}
+                      disabled={actionLoading}
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                    >
+                      <FiCheck className="mr-2" /> Approve
+                    </Button>
+                    <Button 
+                      type="button" 
+                      onClick={handleReject}
+                      disabled={actionLoading}
+                      variant="outline"
+                      className="text-red-600 border-red-600 hover:bg-red-50"
+                    >
+                      <FiX className="mr-2" /> Reject
+                    </Button>
+                  </>
+                )}
+                {formData.status === 'rejected' && formData.rejection_reason && (
+                  <div className="bg-red-50 border border-red-200 rounded px-3 py-2 text-sm text-red-700">
+                    <strong>Rejection reason:</strong> {formData.rejection_reason}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
