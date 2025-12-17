@@ -215,6 +215,20 @@ const ListingPagesManagement = () => {
                       </div>
                     </td>
                     <td className="px-4 py-3">
+                      <div className="text-xs">
+                        {page.created_by_name ? (
+                          <>
+                            <span className="font-medium text-gray-700">{page.created_by_name}</span>
+                            {page.updated_by_name && page.updated_by_name !== page.created_by_name && (
+                              <div className="text-gray-400">Updated: {page.updated_by_name}</div>
+                            )}
+                          </>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
                       <button
                         onClick={() => handleTogglePublish(page)}
                         className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
