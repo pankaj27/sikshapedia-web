@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FiHome, FiUsers, FiBook, FiFileText, FiAward, FiGrid, 
   FiLogOut, FiChevronDown, FiChevronRight, FiBookOpen, FiTag,
-  FiSettings, FiDatabase, FiLink, FiDollarSign, FiMessageSquare, FiGlobe
+  FiSettings, FiDatabase, FiLink, FiDollarSign, FiMessageSquare, FiGlobe, FiShield
 } from 'react-icons/fi';
+import api from '../../api/axios';
 
 const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState(['content', 'tagging']);
+  const [permissions, setPermissions] = useState(null);
+  const [userRole, setUserRole] = useState('data_entry');
+
+  useEffect(() => {
+    fetchPermissions();
+  }, []);
+
+  const fetchPermissions = async () => {
+    try {
+      const response = await api.get('/admin/permissions');
+      setPermissions(response.data.permissions);
+      setUserRole(response.data.role);
+    } catch (error) {
+      console.error('Error fetching permissions:', error);
+    }
+  };
+
+  const canAccess = (permission) => {
+    if (!permissions) return true; // Show all while loading
+    return permissions[permission] === true;
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
