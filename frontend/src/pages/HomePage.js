@@ -285,25 +285,25 @@ const CollegeDuniaHome = () => {
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-blue-200 transition">
                 <FiBookOpen className="text-blue-600 text-xl" />
               </div>
-              <span className="text-xs font-semibold text-center">All Colleges</span>
+              <span className="text-xs font-semibold text-center">Top Colleges</span>
             </Link>
             <Link to="/india-schools" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-red-200 transition">
                 <FiBook className="text-red-600 text-xl" />
               </div>
-              <span className="text-xs font-semibold text-center">All Schools</span>
+              <span className="text-xs font-semibold text-center">Top Schools</span>
             </Link>
             <Link to="/exams" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-green-200 transition">
                 <FiFileText className="text-green-600 text-xl" />
               </div>
-              <span className="text-xs font-semibold text-center">All Exams</span>
+              <span className="text-xs font-semibold text-center">Top Exams</span>
             </Link>
             <Link to="/courses" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-purple-200 transition">
                 <FiBookOpen className="text-purple-600 text-xl" />
               </div>
-              <span className="text-xs font-semibold text-center">All Courses</span>
+              <span className="text-xs font-semibold text-center">Top Courses</span>
             </Link>
             <Link to="/loans" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
               <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-pink-200 transition">
