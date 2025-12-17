@@ -969,9 +969,17 @@ const DynamicListingPage = () => {
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-              <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                <FiUser size={16} />
-              </div>
+              {pageContent?.updated_by_photo || pageContent?.created_by_photo ? (
+                <img 
+                  src={pageContent?.updated_by_photo || pageContent?.created_by_photo} 
+                  alt={pageContent?.updated_by_name || 'Author'} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
+                  <FiUser size={16} />
+                </div>
+              )}
             </div>
             <div>
               <Link to={`/author/${pageContent?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-[13px] font-semibold text-gray-900 hover:text-orange-600">
