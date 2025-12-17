@@ -1797,7 +1797,21 @@ async def update_admin_profile(profile_data: AdminProfileUpdate, current_user: U
     
     if update_data:
         update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+        # Update admins collection
         await db.admins.update_one({"id": current_user.id}, {"$set": update_data})
+        
+        # Also sync to users collection if admin exists there (for content team display)
+        admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+        if admin:
+            await db.users.update_one(
+                {"email": admin.get("email")},
+                {"$set": {
+                    "name": update_data.get('name', admin.get('name')),
+                    "profile_photo": update_data.get('profile_photo', admin.get('profile_photo')),
+                    "job_title": update_data.get('job_title', admin.get('job_title')),
+                    "bio": update_data.get('bio', admin.get('bio')),
+                }}
+            )
     
     # Fetch and return updated admin
     updated_admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
