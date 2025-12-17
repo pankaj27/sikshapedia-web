@@ -30,6 +30,20 @@ const getMenuIconById = (iconId) => {
   return found ? found.icon : <FiBookmark size={16} />;
 };
 
+// Auto-generate alt tag based on context
+const generateAltTag = (courseName, context, index) => {
+  const name = courseName || 'Course';
+  const ctx = context || 'content';
+  return `${name} - ${ctx} ${index + 1}`.trim();
+};
+
+// Auto-generate video alt tag
+const generateVideoAlt = (courseName, context, index) => {
+  const name = courseName || 'Course';
+  const ctx = context || 'video';
+  return `${name} - ${ctx} video ${index + 1}`.trim();
+};
+
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
