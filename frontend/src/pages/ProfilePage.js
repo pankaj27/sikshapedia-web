@@ -6,7 +6,7 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
 const ProfilePage = () => {
-  const authContext = useContext(AuthContext);
+  const { user, setUser, loading } = useAuth();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -19,9 +19,6 @@ const ProfilePage = () => {
     bio: '',
     profile_photo: ''
   });
-
-  const user = authContext?.user;
-  const setUser = authContext?.setUser;
 
   useEffect(() => {
     // Wait for auth context to load
