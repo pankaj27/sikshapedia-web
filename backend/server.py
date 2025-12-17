@@ -1888,6 +1888,138 @@ async def update_admin_profile(profile_data: AdminProfileUpdate, current_user: U
     return updated_admin
 
 # ============================================
+# Team Management APIs
+# ============================================
+
+@api_router.get("/admin/team")
+async def get_team_members(current_user: User = Depends(get_current_user)):
+    """Get all team members (super_admin only)"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # Check permission
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not has_permission(admin.get("role", "data_entry"), "manage_team"):
+        raise HTTPException(status_code=403, detail="You don't have permission to manage team")
+    
+    team = await db.admins.find({}, {"_id": 0, "password_hash": 0}).to_list(100)
+    return team
+
+@api_router.post("/admin/team")
+async def create_team_member(member: TeamMemberCreate, current_user: User = Depends(get_current_user)):
+    """Create a new team member (super_admin only)"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # Check permission
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not has_permission(admin.get("role", "data_entry"), "manage_team"):
+        raise HTTPException(status_code=403, detail="You don't have permission to manage team")
+    
+    # Check if email already exists
+    existing = await db.admins.find_one({"email": member.email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already exists")
+    
+    # Validate role
+    if member.role not in ["super_admin", "content_manager", "data_entry"]:
+        raise HTTPException(status_code=400, detail="Invalid role")
+    
+    # Create team member
+    new_member = AdminUser(
+        email=member.email,
+        name=member.name,
+        password_hash=pwd_context.hash(member.password),
+        role=member.role,
+        job_title=member.job_title,
+        is_active=True
+    )
+    
+    member_dict = new_member.model_dump()
+    member_dict['created_at'] = member_dict['created_at'].isoformat()
+    await db.admins.insert_one(member_dict)
+    
+    # Return without password
+    del member_dict['password_hash']
+    return member_dict
+
+@api_router.put("/admin/team/{member_id}")
+async def update_team_member(member_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    """Update a team member (super_admin only)"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # Check permission
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not has_permission(admin.get("role", "data_entry"), "manage_team"):
+        raise HTTPException(status_code=403, detail="You don't have permission to manage team")
+    
+    # Check if member exists
+    member = await db.admins.find_one({"id": member_id})
+    if not member:
+        raise HTTPException(status_code=404, detail="Team member not found")
+    
+    # Prevent modifying own role
+    if member_id == current_user.id and "role" in update_data:
+        raise HTTPException(status_code=400, detail="Cannot modify your own role")
+    
+    # Hash password if being updated
+    if "password" in update_data and update_data["password"]:
+        update_data["password_hash"] = pwd_context.hash(update_data["password"])
+        del update_data["password"]
+    
+    # Remove password_hash if empty
+    if "password" in update_data:
+        del update_data["password"]
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.admins.update_one({"id": member_id}, {"$set": update_data})
+    
+    updated = await db.admins.find_one({"id": member_id}, {"_id": 0, "password_hash": 0})
+    return updated
+
+@api_router.delete("/admin/team/{member_id}")
+async def delete_team_member(member_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a team member (super_admin only)"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # Check permission
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    if not admin or not has_permission(admin.get("role", "data_entry"), "manage_team"):
+        raise HTTPException(status_code=403, detail="You don't have permission to manage team")
+    
+    # Prevent self-deletion
+    if member_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Cannot delete yourself")
+    
+    result = await db.admins.delete_one({"id": member_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Team member not found")
+    
+    return {"message": "Team member deleted successfully"}
+
+@api_router.get("/admin/permissions")
+async def get_my_permissions(current_user: User = Depends(get_current_user)):
+    """Get current user's permissions"""
+    if current_user.role != "admin" and current_user.role != "super_admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    if not admin:
+        raise HTTPException(status_code=404, detail="Admin not found")
+    
+    role = admin.get("role", "data_entry")
+    permissions = ROLE_PERMISSIONS.get(role, ROLE_PERMISSIONS["data_entry"])
+    
+    return {
+        "role": role,
+        "role_display": role.replace("_", " ").title(),
+        "permissions": permissions
+    }
+
+# ============================================
 # Image Optimization Helper
 # ============================================
 
