@@ -55,6 +55,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Testimonials', path: '/admin/testimonials', icon: FiUsers },
         { title: 'FAQs', path: '/admin/faqs', icon: FiFileText },
         { title: 'Cities', path: '/admin/cities', icon: FiGrid },
+        { title: 'Listing Pages', path: '/admin/listing-pages', icon: FiGlobe },
       ]
     },
     {
