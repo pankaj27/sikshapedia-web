@@ -41,6 +41,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
 // New SEO-friendly URL pages
 import DynamicListingPage from './pages/DynamicListingPage';
 import InstitutionDetailPage from './pages/InstitutionDetailPage';
