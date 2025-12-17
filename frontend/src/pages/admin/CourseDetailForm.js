@@ -768,6 +768,585 @@ const CourseDetailForm = () => {
           </label>
         </div>
 
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* MENU CONFIGURATION SECTION                                                      */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <CollapsibleSection title="Menu Configuration" icon="🧭" defaultOpen={false}>
+          <p className="text-sm text-gray-600 mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            💡 Choose how the course detail page menu will be structured. This affects navigation on the frontend.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            {/* Default Menu */}
+            <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
+              !formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc 
+                ? 'border-blue-500 bg-blue-50 shadow-lg' 
+                : 'border-gray-200 bg-white hover:border-blue-300'
+            }`}>
+              <input
+                type="radio"
+                name="menu_mode"
+                checked={!formData.menu_config?.use_custom_menu && !formData.menu_config?.auto_from_toc}
+                onChange={() => setFormData({
+                  ...formData,
+                  menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: false }
+                })}
+                className="absolute top-4 right-4"
+              />
+              <div className="text-2xl mb-2">🔧</div>
+              <p className="font-bold text-gray-800">Default Menu</p>
+              <p className="text-xs text-gray-600 mt-1">Standard menu from form sections</p>
+            </label>
+            
+            {/* Auto from TOC */}
+            <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
+              formData.menu_config?.auto_from_toc 
+                ? 'border-green-500 bg-green-50 shadow-lg' 
+                : 'border-gray-200 bg-white hover:border-green-300'
+            }`}>
+              <input
+                type="radio"
+                name="menu_mode"
+                checked={formData.menu_config?.auto_from_toc}
+                onChange={() => setFormData({
+                  ...formData,
+                  menu_config: { ...formData.menu_config, use_custom_menu: false, auto_from_toc: true }
+                })}
+                className="absolute top-4 right-4"
+              />
+              <div className="text-2xl mb-2">🔗</div>
+              <p className="font-bold text-gray-800">Auto from TOC</p>
+              <p className="text-xs text-gray-600 mt-1">Menu from TOC sections</p>
+            </label>
+            
+            {/* Custom Menu */}
+            <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
+              formData.menu_config?.use_custom_menu 
+                ? 'border-orange-500 bg-orange-50 shadow-lg' 
+                : 'border-gray-200 bg-white hover:border-orange-300'
+            }`}>
+              <input
+                type="radio"
+                name="menu_mode"
+                checked={formData.menu_config?.use_custom_menu}
+                onChange={() => setFormData({
+                  ...formData,
+                  menu_config: { ...formData.menu_config, use_custom_menu: true, auto_from_toc: false }
+                })}
+                className="absolute top-4 right-4"
+              />
+              <div className="text-2xl mb-2">✏️</div>
+              <p className="font-bold text-gray-800">Custom Menu</p>
+              <p className="text-xs text-gray-600 mt-1">Define custom menu items</p>
+            </label>
+          </div>
+
+          {/* Custom Menu Items Builder */}
+          {formData.menu_config?.use_custom_menu && (
+            <div className="border-2 border-orange-200 rounded-lg p-4 bg-orange-50 mt-4">
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-sm font-medium text-orange-800">📋 Custom Menu Items</label>
+                <span className="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded">
+                  {formData.menu_config?.items?.length || 0} items
+                </span>
+              </div>
+              
+              <div className="space-y-3 mb-4">
+                {(formData.menu_config?.items || []).map((item, index) => (
+                  <div key={index} className="bg-white rounded-lg border border-orange-200 p-3">
+                    <div className="flex items-center gap-3">
+                      <select
+                        value={item.icon || 'default'}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          newItems[index].icon = e.target.value;
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="border rounded px-2 py-1.5 text-sm w-32"
+                      >
+                        {menuIconOptions.map(opt => (
+                          <option key={opt.id} value={opt.id}>{opt.label}</option>
+                        ))}
+                      </select>
+                      <input
+                        type="text"
+                        value={item.label || ''}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          newItems[index].label = e.target.value;
+                          newItems[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        placeholder="Menu Label"
+                        className="flex-1 border rounded px-2 py-1.5 text-sm"
+                      />
+                      <input
+                        type="text"
+                        value={item.anchor || ''}
+                        onChange={(e) => {
+                          const newItems = [...(formData.menu_config?.items || [])];
+                          newItems[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        placeholder="anchor-id"
+                        className="w-32 border rounded px-2 py-1.5 text-sm font-mono bg-gray-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newItems = (formData.menu_config?.items || []).filter((_, i) => i !== index);
+                          setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                        }}
+                        className="text-red-500 hover:bg-red-50 p-1.5 rounded"
+                      >
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  const newItems = [...(formData.menu_config?.items || []), { label: '', anchor: '', icon: 'default' }];
+                  setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                }}
+                className="text-sm text-orange-700 hover:bg-orange-100 px-3 py-1.5 rounded border border-orange-300 flex items-center gap-1"
+              >
+                <FiPlus /> Add Menu Item
+              </button>
+            </div>
+          )}
+        </CollapsibleSection>
+
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* SEO & META TAGS SECTION                                                         */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <CollapsibleSection title="SEO & Meta Tags" icon="🏷️" defaultOpen={false}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Meta Title</label>
+              <input
+                type="text"
+                name="meta_title"
+                value={formData.meta_title || ''}
+                onChange={handleChange}
+                placeholder="e.g., B.Tech Course 2024 - Eligibility, Fees, Top Colleges, Syllabus"
+                className="w-full border rounded px-3 py-2"
+                maxLength={60}
+              />
+              <p className="text-xs text-gray-500 mt-1">{(formData.meta_title || '').length}/60 characters</p>
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Meta Description</label>
+              <textarea
+                name="meta_description"
+                value={formData.meta_description || ''}
+                onChange={handleChange}
+                placeholder="Brief description for search engines (150-160 characters recommended)"
+                className="w-full border rounded px-3 py-2"
+                rows="2"
+                maxLength={160}
+              />
+              <p className="text-xs text-gray-500 mt-1">{(formData.meta_description || '').length}/160 characters</p>
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Meta Keywords</label>
+              <input
+                type="text"
+                name="meta_keywords"
+                value={formData.meta_keywords || ''}
+                onChange={handleChange}
+                placeholder="e.g., btech, engineering, computer science, admission 2024"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        {/* SEO CONTENT SECTION WITH TOC & TABLES                                           */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <CollapsibleSection title="SEO Content (Detail Page)" icon="🔍" defaultOpen={false} badge={`${formData.seo_toc?.length || 0} sections`}>
+          <p className="text-sm text-gray-600 mb-4">
+            This content appears on the course detail page for better SEO and user engagement.
+          </p>
+          
+          <div className="space-y-6">
+            {/* SEO Intro */}
+            <div>
+              <label className="block text-sm font-medium mb-1">SEO Intro (Short Preview)</label>
+              <textarea
+                name="seo_intro"
+                value={formData.seo_intro || ''}
+                onChange={handleChange}
+                rows="3"
+                placeholder="Brief introduction about this course (3-4 lines visible before 'Read More')"
+                className="w-full border rounded px-3 py-2"
+              />
+            </div>
+
+            {/* Table of Contents Builder */}
+            <div className="border-2 border-purple-300 rounded-lg p-4 bg-purple-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-purple-800">📑 Table of Contents</label>
+                  <p className="text-xs text-purple-600">Build clickable TOC sections for the course page</p>
+                </div>
+                <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                  {formData.seo_toc?.length || 0} sections
+                </span>
+              </div>
+
+              {/* TOC Items */}
+              <div className="space-y-3 mb-4">
+                {(formData.seo_toc || []).map((item, index) => (
+                  <div key={index} className="bg-white rounded-lg border-2 border-purple-200 p-3">
+                    <div className="flex items-start gap-3">
+                      <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-800 rounded-full font-bold text-sm flex-shrink-0">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Section Title *</label>
+                            <input
+                              type="text"
+                              value={item.title || ''}
+                              onChange={(e) => {
+                                const newToc = [...(formData.seo_toc || [])];
+                                newToc[index].title = e.target.value;
+                                newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-').substring(0, 50);
+                                setFormData({...formData, seo_toc: newToc});
+                              }}
+                              placeholder="e.g., Course Overview"
+                              className="w-full border-2 border-purple-200 rounded px-2 py-1.5 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">Anchor ID (auto)</label>
+                            <input
+                              type="text"
+                              value={item.anchor || ''}
+                              onChange={(e) => {
+                                const newToc = [...(formData.seo_toc || [])];
+                                newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                                setFormData({...formData, seo_toc: newToc});
+                              }}
+                              placeholder="course-overview"
+                              className="w-full border rounded px-2 py-1.5 text-sm font-mono bg-gray-50"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Section Content *</label>
+                          <textarea
+                            value={item.content || ''}
+                            onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = e.target.value;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            placeholder="Write detailed content for this section... HTML tags supported."
+                            rows="4"
+                            className="w-full border rounded px-2 py-1.5 text-sm"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            seo_toc: (formData.seo_toc || []).filter((_, i) => i !== index)
+                          });
+                        }}
+                        className="text-red-500 hover:bg-red-50 p-1.5 rounded"
+                      >
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Section Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]
+                  });
+                }}
+                className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"
+              >
+                <FiPlus /> Add TOC Section
+              </button>
+
+              {/* Quick Add Templates */}
+              <div className="mt-4 p-3 bg-white border border-purple-200 rounded-lg">
+                <p className="text-xs font-medium text-purple-800 mb-2">💡 Quick Add Common Sections:</p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { title: 'Course Overview', anchor: 'course-overview' },
+                    { title: 'Eligibility Criteria', anchor: 'eligibility-criteria' },
+                    { title: 'Admission Process', anchor: 'admission-process' },
+                    { title: 'Fee Structure', anchor: 'fee-structure' },
+                    { title: 'Syllabus', anchor: 'syllabus' },
+                    { title: 'Career Prospects', anchor: 'career-prospects' },
+                    { title: 'Top Colleges', anchor: 'top-colleges' },
+                    { title: 'Salary Trends', anchor: 'salary-trends' },
+                    { title: 'Course Comparison', anchor: 'course-comparison' },
+                    { title: 'FAQs', anchor: 'faqs' },
+                  ].map((template, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        const exists = (formData.seo_toc || []).some(t => t.anchor === template.anchor);
+                        if (!exists) {
+                          setFormData({
+                            ...formData,
+                            seo_toc: [...(formData.seo_toc || []), { ...template, content: '' }]
+                          });
+                        }
+                      }}
+                      className="text-xs bg-purple-50 border border-purple-200 text-purple-700 px-2 py-1 rounded hover:bg-purple-100"
+                    >
+                      + {template.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* TOC Preview */}
+              {formData.seo_toc?.length > 0 && (
+                <div className="mt-4 p-4 bg-gray-50 border rounded-lg">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">👁️ TOC Preview</h4>
+                  <div className="bg-white border rounded p-3">
+                    <p className="text-sm font-semibold text-gray-700 mb-2">Table of Contents</p>
+                    <ul className="space-y-1">
+                      {formData.seo_toc.map((item, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <span className="w-5 h-5 bg-purple-100 text-purple-700 rounded-full text-xs flex items-center justify-center">{index + 1}</span>
+                          <span className="text-sm text-blue-600">{item.title || 'Untitled'}</span>
+                          <span className="text-xs text-gray-400">#{item.anchor}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const tocHtml = `<nav class="table-of-contents">\n  <h3>Table of Contents</h3>\n  <ul>\n${formData.seo_toc.map(item => `    <li><a href="#${item.anchor}">${item.title}</a></li>`).join('\n')}\n  </ul>\n</nav>\n\n`;
+                      const sectionsHtml = formData.seo_toc.map(item => 
+                        `<section id="${item.anchor}">\n  <h2>${item.title}</h2>\n  <div class="section-content">\n    ${item.content || ''}\n  </div>\n</section>`
+                      ).join('\n\n');
+                      setFormData({...formData, seo_full_content: tocHtml + sectionsHtml});
+                      alert('SEO Full Content auto-filled with TOC and sections!');
+                    }}
+                    className="mt-3 w-full text-sm bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-blue-600 flex items-center justify-center gap-2"
+                  >
+                    ⚡ Auto-Fill SEO Content with TOC & Sections
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* SEO Full Content */}
+            <div>
+              <label className="block text-sm font-medium mb-1">SEO Full Content</label>
+              <textarea
+                name="seo_full_content"
+                value={formData.seo_full_content || ''}
+                onChange={handleChange}
+                rows="8"
+                placeholder="Detailed SEO content with HTML formatting..."
+                className="w-full border rounded px-3 py-2 font-mono text-sm"
+              />
+            </div>
+
+            {/* Table Builder */}
+            <div className="border-2 border-teal-300 rounded-lg p-4 bg-teal-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-teal-800">📊 Table Builder</label>
+                  <p className="text-xs text-teal-600">Create tables for fees, comparison, syllabus, etc.</p>
+                </div>
+                <span className="text-xs bg-teal-200 text-teal-800 px-2 py-1 rounded">
+                  {formData.seo_tables?.length || 0} tables
+                </span>
+              </div>
+
+              {/* Existing Tables */}
+              <div className="space-y-4 mb-4">
+                {(formData.seo_tables || []).map((table, tableIndex) => (
+                  <div key={tableIndex} className="bg-white rounded-lg border-2 border-teal-200 p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded">Table {tableIndex + 1}</span>
+                        <input
+                          type="text"
+                          value={table.title || ''}
+                          onChange={(e) => {
+                            const newTables = [...(formData.seo_tables || [])];
+                            newTables[tableIndex].title = e.target.value;
+                            setFormData({...formData, seo_tables: newTables});
+                          }}
+                          placeholder="Table Title"
+                          className="border rounded px-2 py-1 text-sm w-48"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(formData.seo_tables || [])];
+                            newTables[tableIndex].headers.push('Column');
+                            newTables[tableIndex].rows.forEach(row => row.push(''));
+                            setFormData({...formData, seo_tables: newTables});
+                          }}
+                          className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200"
+                        >
+                          + Column
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(formData.seo_tables || [])];
+                            newTables[tableIndex].rows.push(new Array(newTables[tableIndex].headers.length).fill(''));
+                            setFormData({...formData, seo_tables: newTables});
+                          }}
+                          className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200"
+                        >
+                          + Row
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              seo_tables: (formData.seo_tables || []).filter((_, i) => i !== tableIndex)
+                            });
+                          }}
+                          className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Table Editor */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr>
+                            {(table.headers || []).map((header, colIndex) => (
+                              <th key={colIndex} className="border border-teal-200 bg-teal-100 p-1">
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="text"
+                                    value={header}
+                                    onChange={(e) => {
+                                      const newTables = [...(formData.seo_tables || [])];
+                                      newTables[tableIndex].headers[colIndex] = e.target.value;
+                                      setFormData({...formData, seo_tables: newTables});
+                                    }}
+                                    className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 focus:outline-none"
+                                    placeholder="Header"
+                                  />
+                                  {table.headers.length > 1 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const newTables = [...(formData.seo_tables || [])];
+                                        newTables[tableIndex].headers.splice(colIndex, 1);
+                                        newTables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                        setFormData({...formData, seo_tables: newTables});
+                                      }}
+                                      className="text-red-500 text-xs"
+                                    >
+                                      ×
+                                    </button>
+                                  )}
+                                </div>
+                              </th>
+                            ))}
+                            <th className="w-8"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(table.rows || []).map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                              {row.map((cell, colIndex) => (
+                                <td key={colIndex} className="border border-teal-200 p-1">
+                                  <input
+                                    type="text"
+                                    value={cell}
+                                    onChange={(e) => {
+                                      const newTables = [...(formData.seo_tables || [])];
+                                      newTables[tableIndex].rows[rowIndex][colIndex] = e.target.value;
+                                      setFormData({...formData, seo_tables: newTables});
+                                    }}
+                                    className="w-full border-0 text-sm focus:outline-none px-1"
+                                    placeholder="-"
+                                  />
+                                </td>
+                              ))}
+                              <td className="border border-teal-200 p-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newTables = [...(formData.seo_tables || [])];
+                                    newTables[tableIndex].rows.splice(rowIndex, 1);
+                                    setFormData({...formData, seo_tables: newTables});
+                                  }}
+                                  className="text-red-500 hover:text-red-700 text-xs"
+                                >
+                                  ×
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Copy Table HTML */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const html = `<table class="data-table">\n  <caption>${table.title || ''}</caption>\n  <thead>\n    <tr>${table.headers.map(h => `<th>${h}</th>`).join('')}</tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('\n')}\n  </tbody>\n</table>`;
+                        navigator.clipboard.writeText(html);
+                        alert('Table HTML copied!');
+                      }}
+                      className="mt-2 text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200"
+                    >
+                      📋 Copy Table HTML
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Table Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    seo_tables: [...(formData.seo_tables || []), { title: '', headers: ['Column 1', 'Column 2'], rows: [['', '']] }]
+                  });
+                }}
+                className="text-sm text-teal-700 hover:bg-teal-100 px-3 py-1.5 rounded border border-teal-300 flex items-center gap-1"
+              >
+                <FiPlus /> Add Table
+              </button>
+            </div>
+          </div>
+        </CollapsibleSection>
+
         {/* Submit Button */}
         <div className="flex justify-end gap-4">
           <Button type="button" variant="outline" onClick={() => navigate('/admin/courses-detail')}>
