@@ -188,7 +188,7 @@ const CourseDetailForm = () => {
     try {
       const formDataUpload = new FormData();
       formDataUpload.append('file', file);
-      const response = await api.post('/upload', formDataUpload, {
+      const response = await api.post('/upload/image', formDataUpload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       const newToc = [...(formData.seo_toc || [])];
@@ -209,7 +209,7 @@ const CourseDetailForm = () => {
     try {
       const formDataUpload = new FormData();
       formDataUpload.append('file', file);
-      const response = await api.post('/upload', formDataUpload, {
+      const response = await api.post('/upload/image', formDataUpload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       const newToc = [...(formData.seo_toc || [])];
@@ -230,7 +230,7 @@ const CourseDetailForm = () => {
     try {
       const formDataUpload = new FormData();
       formDataUpload.append('file', file);
-      const response = await api.post('/upload', formDataUpload, {
+      const response = await api.post('/upload/image', formDataUpload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setFormData({ 
@@ -252,7 +252,7 @@ const CourseDetailForm = () => {
     try {
       const formDataUpload = new FormData();
       formDataUpload.append('file', file);
-      const response = await api.post('/upload', formDataUpload, {
+      const response = await api.post('/upload/image', formDataUpload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setFormData({ 
