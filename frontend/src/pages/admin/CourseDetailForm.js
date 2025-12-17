@@ -2161,9 +2161,23 @@ const CourseDetailForm = () => {
                   <label className="block text-sm font-medium text-rose-800">🎬 Video Gallery</label>
                   <p className="text-xs text-rose-600">Add YouTube or video embed URLs</p>
                 </div>
-                <span className="text-xs bg-rose-200 text-rose-800 px-2 py-1 rounded">
-                  {formData.seo_videos?.length || 0} videos
-                </span>
+                <div className="flex items-center gap-2">
+                  {(formData.seo_videos || []).length > 0 && (
+                    <button type="button" onClick={() => {
+                      const newVideos = formData.seo_videos.map((vid, i) => ({
+                        ...vid,
+                        alt: vid.alt || generateVideoAlt(formData.name, 'SEO', i)
+                      }));
+                      setFormData({...formData, seo_videos: newVideos});
+                      alert('Alt tags generated for all videos!');
+                    }} className="text-xs text-green-700 hover:bg-green-100 px-2 py-1 rounded border border-green-300">
+                      ✨ Generate Alt Tags
+                    </button>
+                  )}
+                  <span className="text-xs bg-rose-200 text-rose-800 px-2 py-1 rounded">
+                    {formData.seo_videos?.length || 0} videos
+                  </span>
+                </div>
               </div>
 
               {/* Existing Videos */}
