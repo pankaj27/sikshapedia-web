@@ -409,7 +409,7 @@ const CollegeAdmissionPage = () => {
                         {admission.courses.slice(0, 2).join(' | ')}
                       </span>
                     </div>
-                    <Link to={`/colleges/${admission.id}`}>
+                    <Link to={admission.serial_number ? `/colleges/${String(admission.serial_number).padStart(3, '0')}-${admission.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` : `/colleges/${admission.id}`}>
                       <h3 className="text-sm font-bold mb-1 hover:text-blue-600 transition line-clamp-2">
                         {admission.name} Admission 2026
                       </h3>
