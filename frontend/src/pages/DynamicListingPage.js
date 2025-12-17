@@ -68,8 +68,11 @@ const DynamicListingPage = () => {
     maxFees: '',
     stream: '',
     subStream: '',
-    degree: '',
-    specialization: '',
+    course: '',
+    degreeType: '',
+    examAccepted: '',
+    affiliation: '',
+    recognition: '',
     programType: '',
   });
   
