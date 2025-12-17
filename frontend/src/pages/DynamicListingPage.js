@@ -71,13 +71,18 @@ const DynamicListingPage = () => {
       const locationName = urlInfo.location 
         ? toDisplayName(urlInfo.location)
         : 'India';
-      const typeName = urlInfo.institutionType === 'colleges' ? 'Colleges' 
-        : urlInfo.institutionType === 'schools' ? 'Schools' : 'Universities';
+      
+      // Colleges and Universities are combined under "colleges" URL
+      // Schools have separate "schools" URL
+      const isSchools = urlInfo.institutionType === 'schools';
+      const typeName = isSchools ? 'Schools' : 'Colleges & Universities';
+      
       return {
         title: `Top ${typeName} in ${locationName}`,
         description: `Explore top ${typeName.toLowerCase()} in ${locationName}. Find courses, fees, placements, rankings and more.`,
-        institutionType: urlInfo.institutionType === 'colleges' ? 'College' 
-          : urlInfo.institutionType === 'schools' ? 'School' : 'University',
+        // For "colleges" URL, we fetch both College and University types
+        // For "schools" URL, we only fetch School type
+        institutionTypes: isSchools ? ['School'] : ['College', 'University'],
         location: urlInfo.location,
         locationType: urlInfo.location ? (isState(urlInfo.location) ? 'state' : 'city') : null
       };
