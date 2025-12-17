@@ -164,7 +164,7 @@ const ListingPageForm = () => {
     handleChange('url_slug', slug);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, saveAsDraft = false) => {
     e.preventDefault();
     if (!formData.url_slug) {
       alert('URL Slug is required');
@@ -173,10 +173,15 @@ const ListingPageForm = () => {
 
     try {
       setSaving(true);
+      const dataToSave = {
+        ...formData,
+        is_published: saveAsDraft ? false : formData.is_published
+      };
+      
       if (isEditing) {
-        await api.put(`/listing-pages/${id}`, formData);
+        await api.put(`/listing-pages/${id}`, dataToSave);
       } else {
-        await api.post('/listing-pages', formData);
+        await api.post('/listing-pages', dataToSave);
       }
       navigate('/admin/listing-pages');
     } catch (error) {
@@ -185,6 +190,11 @@ const ListingPageForm = () => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleSaveDraft = (e) => {
+    e.preventDefault();
+    handleSubmit(e, true);
   };
 
   // Content Sections handlers
