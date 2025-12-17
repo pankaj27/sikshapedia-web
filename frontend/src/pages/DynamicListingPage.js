@@ -151,6 +151,38 @@ const DynamicListingPage = () => {
     };
   }, [urlInfo]);
   
+  // Active filters based on URL
+  const activeFilters = useMemo(() => {
+    const active = {
+      stream: null,
+      subStream: null,
+      state: null,
+      city: null,
+    };
+    
+    // Check for stream from URL (e.g., /engineering, /medical)
+    if (pageInfo.stream) {
+      active.stream = toDisplayName(pageInfo.stream);
+    }
+    
+    // Check for subStream
+    if (pageInfo.subStream) {
+      active.subStream = toDisplayName(pageInfo.subStream);
+    }
+    
+    // Check for location (state or city)
+    if (pageInfo.location) {
+      const locationName = toDisplayName(pageInfo.location);
+      if (pageInfo.locationType === 'state') {
+        active.state = locationName;
+      } else if (pageInfo.locationType === 'city') {
+        active.city = locationName;
+      }
+    }
+    
+    return active;
+  }, [pageInfo]);
+  
   // Filter options
   const filterOptions = {
     subStream: ['Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce'],
