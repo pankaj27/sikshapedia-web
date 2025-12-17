@@ -142,46 +142,27 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   
                   {/* ============================================ */}
-                  {/* NEW SEO-FRIENDLY URL STRUCTURE */}
+                  {/* SPECIFIC ROUTES - Must come BEFORE dynamic routes */}
                   {/* ============================================ */}
                   
-                  {/* India-wide Institution Listings */}
-                  <Route path="/india-colleges" element={<DynamicListingPage />} />
-                  <Route path="/india-schools" element={<DynamicListingPage />} />
-                  <Route path="/india-universities" element={<DynamicListingPage />} />
-                  
-                  {/* State/City-wise Institution Listings: /{location}-{type} */}
-                  <Route path="/:locationColleges" element={<DynamicListingPage />} />
-                  
-                  {/* Institution Detail Pages: /colleges/{number}-{slug}, /universities/{number}-{slug}, /schools/{number}-{slug} */}
-                  <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
-                  
-                  {/* Stream-based Listings */}
-                  {/* /{stream} - e.g., /btech, /mba, /engineering */}
-                  {/* /{stream}/{sub-stream} - e.g., /btech/computer-science */}
-                  {/* /{stream}/{location} - e.g., /btech/west-bengal */}
-                  {/* /{stream}/{sub-stream}/{location} - e.g., /btech/computer-science/west-bengal */}
-                  <Route path="/:stream" element={<DynamicListingPage />} />
-                  <Route path="/:stream/:subStreamOrLocation" element={<DynamicListingPage />} />
-                  <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
-                  
-                  {/* ============================================ */}
-                  {/* LISTING PAGES */}
-                  {/* ============================================ */}
+                  {/* Institution Listing Pages */}
                   <Route path="/colleges" element={<CollegeListingPage />} />
                   <Route path="/schools" element={<SchoolsPage />} />
                   <Route path="/universities" element={<UniversitiesPage />} />
                   
+                  {/* Institution Detail Pages: /colleges/{number}-{slug} */}
+                  <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
+                  <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
+                  <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
+                  <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
+                  <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
+                  <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
+                  
                   {/* Exams */}
                   <Route path="/exams" element={<ExamPage />} />
                   <Route path="/exams-old" element={<ExamsPage />} />
-                  <Route path="/exams/:id" element={<ExamDetailPage />} />
                   <Route path="/exams/:id/:section" element={<ExamSubPages />} />
+                  <Route path="/exams/:id" element={<ExamDetailPage />} />
                   
                   {/* News */}
                   <Route path="/news" element={<NewsPage />} />
@@ -189,11 +170,11 @@ function App() {
                   
                   {/* Courses */}
                   <Route path="/courses" element={<CoursesPage />} />
-                  <Route path="/courses/:stream" element={<CourseListingPage />} />
-                  <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
                   <Route path="/course-finder" element={<CourseFinderPage />} />
                   <Route path="/courses/listing/:category" element={<CourseListingPage />} />
                   <Route path="/courses/detail/:id" element={<CourseDetailPage />} />
+                  <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
+                  <Route path="/courses/:stream" element={<CourseListingPage />} />
                   
                   {/* User & Dashboard */}
                   <Route path="/dashboard" element={<StudentDashboard />} />
@@ -226,6 +207,25 @@ function App() {
                   <Route path="/contact" element={<ContactPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  
+                  {/* ============================================ */}
+                  {/* SEO-FRIENDLY DYNAMIC ROUTES - Must come LAST */}
+                  {/* These are catch-all routes that match patterns */}
+                  {/* ============================================ */}
+                  
+                  {/* India-wide Institution Listings */}
+                  <Route path="/india-colleges" element={<DynamicListingPage />} />
+                  <Route path="/india-schools" element={<DynamicListingPage />} />
+                  <Route path="/india-universities" element={<DynamicListingPage />} />
+                  
+                  {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
+                  <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
+                  
+                  {/* Stream-based Listings (2 segments) - e.g., /btech/computer-science or /btech/west-bengal */}
+                  <Route path="/:stream/:subStreamOrLocation" element={<DynamicListingPage />} />
+                  
+                  {/* Single segment dynamic routes - e.g., /delhi-colleges, /btech, /engineering */}
+                  <Route path="/:locationOrStream" element={<DynamicListingPage />} />
                 </Routes>
               </Layout>
             } />
