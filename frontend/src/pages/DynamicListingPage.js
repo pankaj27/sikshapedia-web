@@ -160,18 +160,39 @@ const DynamicListingPage = () => {
       city: null,
     };
     
+    // Check for combined filters from URL (e.g., /engineering/maharashtra-colleges)
+    if (urlInfo.combinedFilters) {
+      if (urlInfo.combinedFilters.stream) {
+        active.stream = toDisplayName(urlInfo.combinedFilters.stream);
+      }
+      if (urlInfo.combinedFilters.state) {
+        active.state = toDisplayName(urlInfo.combinedFilters.state);
+      }
+      if (urlInfo.combinedFilters.city) {
+        active.city = toDisplayName(urlInfo.combinedFilters.city);
+      }
+      if (urlInfo.combinedFilters.location) {
+        const loc = urlInfo.combinedFilters.location;
+        if (isState(loc)) {
+          active.state = toDisplayName(loc);
+        } else if (isCity(loc)) {
+          active.city = toDisplayName(loc);
+        }
+      }
+    }
+    
     // Check for stream from URL (e.g., /engineering, /medical)
-    if (pageInfo.stream) {
+    if (pageInfo.stream && !active.stream) {
       active.stream = toDisplayName(pageInfo.stream);
     }
     
     // Check for subStream
-    if (pageInfo.subStream) {
+    if (pageInfo.subStream && !active.subStream) {
       active.subStream = toDisplayName(pageInfo.subStream);
     }
     
     // Check for location (state or city)
-    if (pageInfo.location) {
+    if (pageInfo.location && !active.state && !active.city) {
       const locationName = toDisplayName(pageInfo.location);
       if (pageInfo.locationType === 'state') {
         active.state = locationName;
@@ -181,7 +202,7 @@ const DynamicListingPage = () => {
     }
     
     return active;
-  }, [pageInfo]);
+  }, [pageInfo, urlInfo]);
   
   // Filter options
   const filterOptions = {
