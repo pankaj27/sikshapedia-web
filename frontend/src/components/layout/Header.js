@@ -302,7 +302,7 @@ const Header = () => {
                   <Link to="/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc Nursing - Bachelor of Science in Nursing
                   </Link>
-                  <Link to="/colleges?course=bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <Link to="/bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Pharm - Bachelor of Pharmacy
                   </Link>
                   
