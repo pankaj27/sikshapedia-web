@@ -158,7 +158,8 @@ function App() {
                   {/* ============================================ */}
                   
                   {/* Institution Listing Pages */}
-                  <Route path="/colleges" element={<CollegeListingPage />} />
+                  {/* DEPRECATED: Old /colleges route now redirects to /india-colleges */}
+                  <Route path="/colleges" element={<Navigate to="/india-colleges" replace />} />
                   <Route path="/schools" element={<SchoolsPage />} />
                   <Route path="/universities" element={<UniversitiesPage />} />
                   
