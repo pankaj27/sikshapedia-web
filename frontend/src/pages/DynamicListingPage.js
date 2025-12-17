@@ -1100,6 +1100,144 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              
+              {/* Course Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'course' ? null : 'course')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.course ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.course || 'Course'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'course' && (
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border z-50">
+                    <div className="p-2 border-b sticky top-0 bg-white">
+                      <input 
+                        type="text"
+                        placeholder="Search course..."
+                        className="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const searchVal = e.target.value.toLowerCase();
+                          const dropdown = e.target.closest('.relative').querySelector('.filter-options');
+                          if (dropdown) {
+                            dropdown.querySelectorAll('button').forEach(btn => {
+                              btn.style.display = btn.textContent.toLowerCase().includes(searchVal) ? 'block' : 'none';
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="filter-options max-h-48 overflow-y-auto py-1">
+                      {filterOptions.course.map((option) => (
+                        <button key={option} onClick={() => setFilters(prev => ({ ...prev, course: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.course === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.course === option && '✓'}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Degree Type Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'degreeType' ? null : 'degreeType')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.degreeType ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.degreeType || 'Degree Type'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'degreeType' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.degreeType.map((option) => (
+                      <button key={option} onClick={() => setFilters(prev => ({ ...prev, degreeType: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.degreeType === option && '✓'}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* Exam Accepted Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'examAccepted' ? null : 'examAccepted')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.examAccepted ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.examAccepted || 'Exam Accepted'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'examAccepted' && (
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border z-50">
+                    <div className="p-2 border-b sticky top-0 bg-white">
+                      <input 
+                        type="text"
+                        placeholder="Search exam..."
+                        className="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const searchVal = e.target.value.toLowerCase();
+                          const dropdown = e.target.closest('.relative').querySelector('.filter-options');
+                          if (dropdown) {
+                            dropdown.querySelectorAll('button').forEach(btn => {
+                              btn.style.display = btn.textContent.toLowerCase().includes(searchVal) ? 'block' : 'none';
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="filter-options max-h-48 overflow-y-auto py-1">
+                      {filterOptions.examAccepted.map((option) => (
+                        <button key={option} onClick={() => setFilters(prev => ({ ...prev, examAccepted: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.examAccepted === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.examAccepted === option && '✓'}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Affiliation Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'affiliation' ? null : 'affiliation')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.affiliation ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.affiliation || 'Affiliation'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'affiliation' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.affiliation.map((option) => (
+                      <button key={option} onClick={() => setFilters(prev => ({ ...prev, affiliation: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.affiliation === option && '✓'}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* Recognition Filter */}
+              <div className="relative">
+                <button 
+                  onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'recognition' ? null : 'recognition')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+                    filters.recognition ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filters.recognition || 'Recognition'}
+                  <FiChevronDown size={12} />
+                </button>
+                {activeFilterDropdown === 'recognition' && (
+                  <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
+                    {filterOptions.recognition.map((option) => (
+                      <button key={option} onClick={() => setFilters(prev => ({ ...prev, recognition: option }))} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.recognition === option && '✓'}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             
             {/* Dotted Separator */}
