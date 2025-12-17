@@ -40,9 +40,17 @@ const AdminProfile = () => {
         bio: admin.bio || '',
         profile_photo: admin.profile_photo || ''
       });
+      setMessage({ type: '', text: '' });
     } catch (error) {
       console.error('Error fetching admin profile:', error);
-      setMessage({ type: 'error', text: 'Failed to load profile' });
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        // Token expired or invalid, redirect to login
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        navigate('/admin/login');
+      } else {
+        setMessage({ type: 'error', text: 'Failed to load profile. Please try logging in again.' });
+      }
     } finally {
       setLoading(false);
     }
