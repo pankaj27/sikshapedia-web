@@ -169,11 +169,11 @@ class ApprovalSystemTester:
             self.created_items["news"].append(news_id_2)
             
             # Submit for review
-            success, response, status = self.make_request("POST", f"/submit-for-review/news/{news_id_2}", token=self.admin_token)
+            success, response, status = self.make_request("POST", f"/admin/submit-for-review/news/{news_id_2}", token=self.admin_token)
             if success:
                 # Reject the news
                 rejection_data = {"action": "reject", "comment": "Rejected for testing purposes"}
-                success, response, status = self.make_request("POST", f"/reject/news/{news_id_2}", rejection_data, token=self.admin_token)
+                success, response, status = self.make_request("POST", f"/admin/approve/news/{news_id_2}", rejection_data, token=self.admin_token)
                 if success and response.get("status") == "rejected":
                     self.log_test("Reject News Article", True, "Status changed to rejected with reason")
                 else:
