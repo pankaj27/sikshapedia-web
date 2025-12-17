@@ -202,10 +202,21 @@ const ListingPageForm = () => {
 
     try {
       setSaving(true);
+      const currentUser = getCurrentUser();
+      
       const dataToSave = {
         ...formData,
-        is_published: saveAsDraft ? false : formData.is_published
+        is_published: saveAsDraft ? false : formData.is_published,
+        updated_by: currentUser.id,
+        updated_by_name: currentUser.name
       };
+      
+      // Add created_by info for new pages
+      if (!isEditing) {
+        dataToSave.created_by = currentUser.id;
+        dataToSave.created_by_name = currentUser.name;
+        dataToSave.created_by_email = currentUser.email;
+      }
       
       if (isEditing) {
         await api.put(`/listing-pages/${id}`, dataToSave);
