@@ -371,6 +371,10 @@ const CollegeForm = () => {
   const [uploadingCampusBulk, setUploadingCampusBulk] = useState(false);
   const [uploadingBrochure, setUploadingBrochure] = useState(false);
   const [uploadingCourseBrochure, setUploadingCourseBrochure] = useState({});
+  const [boards, setBoards] = useState([]);
+
+  // Check if institution type is School
+  const isSchool = formData.institution_type === 'School';
 
   useEffect(() => {
     fetchRecognitions();
@@ -383,10 +387,20 @@ const CollegeForm = () => {
     fetchAvailableScholarships();
     fetchAvailableFacilities();
     fetchAvailableNews();
+    fetchBoards();
     if (id) {
       fetchCollege();
     }
   }, [id]);
+
+  const fetchBoards = async () => {
+    try {
+      const response = await api.get('/boards?limit=100');
+      setBoards(response.data);
+    } catch (error) {
+      console.error('Error fetching boards:', error);
+    }
+  };
 
   const fetchRecognitions = async () => {
     try {
