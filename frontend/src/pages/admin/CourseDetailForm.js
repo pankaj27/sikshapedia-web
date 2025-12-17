@@ -847,11 +847,24 @@ const CourseDetailForm = () => {
                       </div>
                     ))}
                   </div>
-                  <button type="button" onClick={() => {
-                    setFormData({...formData, description_toc: [...(formData.description_toc || []), { title: '', anchor: '', content: '', image: '', video: '' }]});
-                  }} className="text-sm text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded border border-indigo-300 flex items-center gap-1">
-                    <FiPlus /> Add Section
-                  </button>
+                  <div className="flex gap-2 flex-wrap">
+                    <button type="button" onClick={() => {
+                      setFormData({...formData, description_toc: [...(formData.description_toc || []), { title: '', anchor: '', content: '', image: '', video: '' }]});
+                    }} className="text-sm text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded border border-indigo-300 flex items-center gap-1">
+                      <FiPlus /> Add Section
+                    </button>
+                    {(formData.description_toc || []).length > 0 && (
+                      <button type="button" onClick={() => {
+                        const tocHtml = formData.description_toc.map(item => 
+                          `<section id="${item.anchor}">\n  <h2>${item.title}</h2>\n  ${item.image ? `<img src="${item.image}" alt="${item.imageAlt || item.title}" />\n  ` : ''}${item.video ? `<div class="video-embed" data-url="${item.video}" data-alt="${item.videoAlt || ''}"></div>\n  ` : ''}<div class="content">${item.content || ''}</div>\n</section>`
+                        ).join('\n\n');
+                        setFormData({...formData, description: (formData.description || '') + '\n\n' + tocHtml});
+                        alert('TOC sections inserted to Description content!');
+                      }} className="text-sm text-green-700 hover:bg-green-100 px-3 py-1.5 rounded border border-green-300 flex items-center gap-1">
+                        📥 Insert to Content
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Description Table Builder */}
