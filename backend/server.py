@@ -5226,8 +5226,11 @@ async def get_listing_page(page_id: str):
     return page
 
 @api_router.post("/listing-pages", response_model=ListingPageContent)
-async def create_listing_page(page: ListingPageContent):
+async def create_listing_page(page: ListingPageContent, current_user: User = Depends(get_current_user)):
     """Create new listing page content"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
     # Check if slug already exists
     existing = await db.listing_pages.find_one({"url_slug": page.url_slug})
     if existing:
@@ -5236,13 +5239,22 @@ async def create_listing_page(page: ListingPageContent):
     page_dict = page.model_dump()
     page_dict["created_at"] = datetime.now(timezone.utc).isoformat()
     page_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    page_dict["created_by"] = current_user.id
+    page_dict["created_by_name"] = current_user.name
+    page_dict["updated_by"] = current_user.id
+    page_dict["updated_by_name"] = current_user.name
     await db.listing_pages.insert_one(page_dict)
     return page
 
 @api_router.put("/listing-pages/{page_id}")
-async def update_listing_page(page_id: str, page_data: dict):
+async def update_listing_page(page_id: str, page_data: dict, current_user: User = Depends(get_current_user)):
     """Update listing page content"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
     page_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    page_data["updated_by"] = current_user.id
+    page_data["updated_by_name"] = current_user.name
     result = await db.listing_pages.update_one(
         {"id": page_id},
         {"$set": page_data}
