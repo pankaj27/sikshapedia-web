@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiSave, FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
+import StatusBadge from '../../components/admin/StatusBadge';
+import { useAuth } from '../../contexts/AuthContext';
 
 const CourseDetailForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const [streams, setStreams] = useState([]);
   const [subStreams, setSubStreams] = useState([]);
   const [exams, setExams] = useState([]);
+
+  // Role checks
+  const isDataEntry = user?.role === 'data_entry';
+  const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -39,6 +47,7 @@ const CourseDetailForm = () => {
     popular_specializations: [],
     is_popular: false,
     total_colleges_offering: 0,
+    status: 'draft'
   });
 
   useEffect(() => {
