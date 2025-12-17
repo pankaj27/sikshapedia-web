@@ -220,7 +220,7 @@ const CourseDetailPage = () => {
 
             {/* Latest Updates Box */}
             <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">B.Tech Computer Science and Engineering Latest Updates</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">{courseName} Latest Updates</h2>
               <div className={`text-sm text-gray-700 leading-relaxed space-y-2 ${!showFullUpdates ? 'line-clamp-3' : ''}`}>
                 <p><strong className="text-red-600 font-semibold">12 Dec, 2025</strong> BITSAT 2026 Session-1 will be held from 15th to 17th April 2026. Application window will remain open from 15 December 2025 to 16 March 2026.</p>
                 <p><strong className="text-red-600 font-semibold">10 Dec, 2025</strong> JEE Main 2026 Registration has started. Candidates can apply till January 10, 2026.</p>
