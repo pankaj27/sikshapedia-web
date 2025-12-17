@@ -839,7 +839,7 @@ const DynamicListingPage = () => {
             {/* Top Controls Bar */}
             <div className="mb-4 flex flex-wrap justify-between items-center gap-4">
               <h3 className="text-lg font-semibold text-gray-800">
-                {loading ? 'Loading...' : `${totalCount} Colleges Found`}
+                {loading ? 'Loading...' : `${totalCount} ${pageInfo.isSchools ? 'Schools' : 'Colleges'} Found`}
               </h3>
               <select
                 value={sortBy}
