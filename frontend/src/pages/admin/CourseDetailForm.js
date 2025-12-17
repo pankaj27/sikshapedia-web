@@ -302,16 +302,34 @@ const CourseDetailForm = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="block text-sm font-medium mb-1">Course Name *</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
+              <select
+                value={formData.base_course_id || ''}
+                onChange={handleCourseSelect}
                 required
-                placeholder="e.g., B.Tech Computer Science Engineering"
-                className="w-full border rounded px-3 py-2"
-              />
+                className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">-- Select a Course --</option>
+                {coursesList.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.name} {course.full_name ? `(${course.full_name})` : ''} - {course.degree_type}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-500 mt-1">
+                Select from courses created in Quick Entry. {coursesList.length} courses available.
+              </p>
             </div>
+
+            {formData.name && (
+              <div className="col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-sm text-blue-800">
+                  <strong>Selected:</strong> {formData.name} 
+                  {formData.full_name && ` • ${formData.full_name}`}
+                  {formData.degree_type && ` • ${formData.degree_type}`}
+                  {formData.duration && ` • ${formData.duration}`}
+                </p>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium mb-1">Slug (URL) *</label>
@@ -351,6 +369,10 @@ const CourseDetailForm = () => {
                 <option value="Diploma">Diploma</option>
                 <option value="Certificate">Certificate</option>
                 <option value="PhD">PhD/Doctorate</option>
+                <option value="PG Diploma">PG Diploma</option>
+                <option value="Professional">Professional</option>
+                <option value="Integrated">Integrated</option>
+                <option value="Super Specialty">Super Specialty</option>
               </select>
             </div>
 
