@@ -819,8 +819,9 @@ const DynamicListingPage = () => {
       programType: '',
     });
     setActiveFilterDropdown(null);
-    // Also close dropdown when clearing
-    setTimeout(() => setActiveFilterDropdown(null), 100);
+    // Navigate to base URL to clear all URL-based filters
+    const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
+    navigate(`/india-${suffix}`);
   };
 
   const removeFilter = (filterType) => {
