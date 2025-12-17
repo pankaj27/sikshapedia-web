@@ -28,7 +28,7 @@ export const ApplyNowWidget = ({ collegeName, courseName, onClose }) => {
       <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
         <FiCheckCircle className="mx-auto text-green-600 mb-2" size={40} />
         <h3 className="font-semibold text-green-800">Application Submitted!</h3>
-        <p className="text-sm text-green-600">We'll contact you soon.</p>
+        <p className="text-sm text-green-600">We will contact you soon.</p>
       </div>
     );
   }
