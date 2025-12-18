@@ -118,3 +118,27 @@ agent_communication:
     message: "✅ BACKEND TESTING COMPLETE: All Course Detail dynamic fields (Age Limit & Top Colleges) are working correctly in the backend API. The CourseDetail model includes both fields, GET/PUT endpoints handle them properly, and data persists correctly. ⚠️ FRONTEND TESTING REQUIRED: Cannot test frontend components due to system limitations. Main agent needs to verify admin form fields and course display page show the dynamic content correctly."
   - agent: "testing"
     message: "🎉 FRONTEND TESTING COMPLETE - ALL TESTS PASSED: Successfully tested both admin form and course detail page using Playwright automation. ✅ Admin Form: Age Limit input field and Top Colleges section with Add College functionality working correctly at /admin/courses-detail/new. ✅ Course Display: Dynamic content showing correctly - Age Limit displays 'Candidates must be between 17-25 years for government colleges' (not default), Top Colleges shows 3 IITs (Delhi, Bombay, Madras) with ratings/locations (not default BITS/NIT). All requirements from test scenarios met successfully."
+
+---
+
+## Test Session: News Listing Page Dynamic Settings
+
+### Features Implemented:
+1. Backend Model: `NewsListingPageSettings` with hero section, stats, categories, sidebar config, SEO settings
+2. Backend Endpoints: GET/PUT `/api/news-listing-settings`
+3. Admin Page: `/admin/news-listing-settings` for managing news page content
+4. Frontend: `NewsPage.js` updated to fetch and use settings from API
+
+### Test Cases:
+1. GET /api/news-listing-settings - Returns default or saved settings
+2. PUT /api/news-listing-settings - Updates settings (admin auth required)
+3. Admin page loads with current settings
+4. Frontend news page displays dynamic:
+   - Categories (configurable)
+   - Big Stories section title
+   - Trending tags title and list
+   - Newsletter section content
+
+### Admin Credentials:
+- Email: admin@admissionbuddy.co
+- Password: admin123
