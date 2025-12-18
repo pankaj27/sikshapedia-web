@@ -426,13 +426,13 @@ const ExamDetailForm = () => {
     setSaving(true);
 
     try {
-      const dataToSave = { ...formData, status: saveAsDraft ? 'draft' : formData.status };
+      const dataToSave = { ...formData, status: saveAsDraft ? 'draft' : 'pending' };
       
       if (id) {
-        await api.put(`/exams/${id}`, dataToSave);
+        await api.put(`/exams-detail/${id}`, dataToSave);
         alert('Exam updated successfully!');
       } else {
-        await api.post('/exams', dataToSave);
+        await api.post('/exams-detail', dataToSave);
         alert('Exam created successfully!');
       }
       navigate('/admin/exams-detail');
