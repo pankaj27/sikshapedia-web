@@ -275,6 +275,7 @@ const ScholarshipsPage = () => {
                   </div>
                 </div>
 
+                {scholarship.benefits && scholarship.benefits.length > 0 && (
                 <div className="mb-3">
                   <h4 className="font-semibold text-xs mb-1.5">Benefits:</h4>
                   <ul className="space-y-1">
@@ -286,6 +287,7 @@ const ScholarshipsPage = () => {
                     ))}
                   </ul>
                 </div>
+                )}
 
                 <div className="flex gap-2">
                   <Button
