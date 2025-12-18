@@ -415,7 +415,7 @@ const ExamDetailPage = () => {
           <div className="lg:col-span-3">
             {/* Dynamic Content from Backend Menu Config */}
             {exam.menuConfig?.items && exam.menuConfig.items.length > 0 && (
-              <div className="mb-8">
+              <div id="exam-content-section" className="mb-8 scroll-mt-32">
                 {exam.menuConfig.items
                   .filter(item => {
                     // If activeSection is set, match by id
