@@ -748,8 +748,8 @@ const SponsoredAdsManagement = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
             <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-3 flex items-center justify-between">
-              <h3 className="text-white font-bold">Create Custom URL Placement</h3>
-              <button onClick={() => setShowCustomPlacementModal(false)} className="text-white/80 hover:text-white">
+              <h3 className="text-white font-bold">{editingPlacement ? 'Edit Custom URL Placement' : 'Create Custom URL Placement'}</h3>
+              <button onClick={() => { setShowCustomPlacementModal(false); setEditingPlacement(null); setNewCustomPlacement({ url: '', sectionType: 'featured', name: '' }); }} className="text-white/80 hover:text-white">
                 <FiX size={20} />
               </button>
             </div>
@@ -805,7 +805,7 @@ const SponsoredAdsManagement = () => {
               <div className="flex gap-2 pt-2">
                 <Button 
                   variant="outline" 
-                  onClick={() => setShowCustomPlacementModal(false)}
+                  onClick={() => { setShowCustomPlacementModal(false); setEditingPlacement(null); setNewCustomPlacement({ url: '', sectionType: 'featured', name: '' }); }}
                   className="flex-1"
                 >
                   Cancel
@@ -814,7 +814,11 @@ const SponsoredAdsManagement = () => {
                   onClick={addCustomPlacement}
                   className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
                 >
-                  <FiPlus className="mr-1" /> Create Placement
+                  {editingPlacement ? (
+                    <><FiEdit2 className="mr-1" /> Update Placement</>
+                  ) : (
+                    <><FiPlus className="mr-1" /> Create Placement</>
+                  )}
                 </Button>
               </div>
             </div>
