@@ -6,7 +6,7 @@ Focused test for the two issues found
 import requests
 import json
 
-BASE_URL = "https://collportal.preview.emergentagent.com/api"
+BASE_URL = "https://eduadmin-dash.preview.emergentagent.com/api"
 ADMIN_CREDENTIALS = {"email": "admin@admissionbuddy.co", "password": "admin123"}
 
 def test_admin_stats_protection():
