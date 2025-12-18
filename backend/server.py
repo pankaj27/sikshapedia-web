@@ -6017,25 +6017,45 @@ async def get_advertisements(current_user: User = Depends(get_current_user)):
 @api_router.get("/advertisements/active/{page_name}")
 async def get_active_advertisements(page_name: str):
     """Get active advertisements for a specific page (Public)"""
-    now = datetime.now(timezone.utc)
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
-    # Query for active ads
+    # Query for active ads - pages is an array, so use $in
     query = {
         "is_active": True,
-        "pages": page_name,
-        "start_date": {"$lte": now},
-        "end_date": {"$gte": now}
+        "$or": [
+            {"pages": page_name},  # Exact match in array
+            {"pages": {"$in": [page_name]}},  # In array
+        ]
     }
     
     ads = await db.advertisements.find(query, {"_id": 0}).sort("priority", -1).to_list(100)
     
+    # Filter by date (handle string dates)
+    filtered_ads = []
     for ad in ads:
-        if isinstance(ad.get('start_date'), str):
-            ad['start_date'] = datetime.fromisoformat(ad['start_date'])
-        if isinstance(ad.get('end_date'), str):
-            ad['end_date'] = datetime.fromisoformat(ad['end_date'])
+        start = ad.get('start_date', '')
+        end = ad.get('end_date', '')
+        
+        # Handle datetime objects
+        if hasattr(start, 'strftime'):
+            start = start.strftime("%Y-%m-%d")
+        if hasattr(end, 'strftime'):
+            end = end.strftime("%Y-%m-%d")
+        
+        # Convert ISO format strings
+        if start and 'T' in str(start):
+            start = str(start).split('T')[0]
+        if end and 'T' in str(end):
+            end = str(end).split('T')[0]
+        
+        # Check if within date range
+        if start and end and start <= today <= end:
+            filtered_ads.append(ad)
+        elif not start or not end:
+            # If no dates set, include ad
+            filtered_ads.append(ad)
     
-    return ads
+    return filtered_ads
 
 @api_router.get("/advertisements/{ad_id}", response_model=Advertisement)
 async def get_advertisement(ad_id: str, current_user: User = Depends(get_current_user)):
