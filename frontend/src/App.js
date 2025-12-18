@@ -196,6 +196,19 @@ function App() {
                   <Route path="/courses/after-10th" element={<CoursesAfter10thPage />} />
                   <Route path="/courses/after-12th" element={<CoursesAfter12thPage />} />
                   <Route path="/courses/diploma" element={<DiplomaCoursesPage />} />
+                  {/* Dynamic course listing pages */}
+                  <Route path="/courses/pg" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/phd" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/certificate" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/engineering" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/medical" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/management" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/science" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/commerce" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/arts" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/computer" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/law" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/education" element={<DynamicCourseListingPage />} />
                   <Route path="/course-finder" element={<CourseFinderPage />} />
                   <Route path="/courses/listing/:category" element={<CourseListingPage />} />
                   <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
