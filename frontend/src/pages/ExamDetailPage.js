@@ -339,7 +339,7 @@ const ExamDetailPage = () => {
             <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
               <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Table of Contents</h3>
               <nav className="space-y-1">
-                {exam.tableOfContents.map((item) => (
+                {(exam.tableOfContents || exam.menuConfig?.items || []).map((item) => (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
@@ -352,7 +352,7 @@ const ExamDetailPage = () => {
                       activeSection === item.id ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
-                    {item.title}
+                    {item.title || item.label}
                   </a>
                 ))}
               </nav>
