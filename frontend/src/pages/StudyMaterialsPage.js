@@ -114,6 +114,17 @@ const StudyMaterialsPage = () => {
       </section>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Featured Colleges for Study Materials */}
+        <FeaturedSponsoredSection 
+          placementId="study_materials_featured"
+          title="Top Colleges for Study Resources"
+          subtitle="Explore institutions with excellent academic resources"
+          bgColor="from-cyan-50 via-blue-50 to-indigo-50"
+          headerColor="from-cyan-500 to-blue-500"
+          linkColor="text-cyan-600"
+          viewAllLink="/india-colleges"
+        />
+
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-lg shadow p-4 text-center">
