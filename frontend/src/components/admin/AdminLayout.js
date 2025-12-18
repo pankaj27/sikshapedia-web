@@ -72,6 +72,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Exam Details', path: '/admin/exams-detail', icon: FiFileText },
         { title: 'Exam Listing Page', path: '/admin/exam-listing-settings', icon: FiSettings },
         { title: 'Course Listing Page', path: '/admin/course-listing-settings', icon: FiSettings },
+        { title: 'Course Pages (15)', path: '/admin/course-pages', icon: FiGrid },
         { title: 'News Articles', path: '/admin/news', icon: FiFileText },
         { title: 'Blogs', path: '/admin/blogs', icon: FiFileText },
         { title: 'Scholarships', path: '/admin/scholarships', icon: FiDollarSign },
