@@ -1,15 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiChevronRight, FiClock, FiBookOpen } from 'react-icons/fi';
+import { FiChevronRight, FiClock, FiBookOpen, FiUsers, FiSearch, FiFilter, FiSend } from 'react-icons/fi';
+import api from '../api/axios';
+import { ApplyNowWidget } from '../components/widgets/ActionWidgets';
 
 const CourseListingPage = () => {
-  const { category } = useParams();
+  const { stream } = useParams();
   const [courses, setCourses] = useState([]);
+  const [apiCourses, setApiCourses] = useState([]); // Courses from API
   const [filteredCourses, setFilteredCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeWidget, setActiveWidget] = useState(null);
   const [filters, setFilters] = useState({
     level: 'All',
     type: 'Full Time'
   });
+
+  // Fetch courses from API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        // Fetch from both quick entry and detailed courses
+        const [quickResponse, detailResponse] = await Promise.all([
+          api.get('/courses'),
+          api.get('/courses-detail')
+        ]);
+        
+        // Merge and format courses
+        const quickCourses = quickResponse.data || [];
+        const detailCourses = detailResponse.data || [];
+        
+        // Filter by stream if provided
+        let filtered = [...quickCourses];
+        if (stream) {
+          const streamLower = stream.toLowerCase();
+          filtered = quickCourses.filter(c => 
+            c.stream?.toLowerCase().includes(streamLower) ||
+            c.name?.toLowerCase().includes(streamLower) ||
+            c.sub_stream?.toLowerCase().includes(streamLower)
+          );
+        }
+        
+        setApiCourses(detailCourses);
+        setCourses(filtered.length > 0 ? filtered : quickCourses.slice(0, 20));
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, [stream]);
 
   // Sample engineering courses data
   const engineeringCourses = [
