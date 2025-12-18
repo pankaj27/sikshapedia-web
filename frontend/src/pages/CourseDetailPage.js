@@ -7,7 +7,7 @@ import api from '../api/axios';
 import { ApplyNowWidget, AskQuestionWidget, CounsellingWidget, SponsorAdWidget } from '../components/widgets/ActionWidgets';
 
 const CourseDetailPage = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showFullUpdates, setShowFullUpdates] = useState(false);
@@ -17,10 +17,27 @@ const CourseDetailPage = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        // Try to fetch by slug first, then by ID
-        const response = await api.get(`/courses-detail`);
-        const courses = response.data;
-        const foundCourse = courses.find(c => c.slug === id || c.id === id);
+        // First try detailed courses
+        const detailResponse = await api.get(`/courses-detail`);
+        const detailCourses = detailResponse.data || [];
+        let foundCourse = detailCourses.find(c => 
+          c.slug === slug || 
+          c.id === slug ||
+          c.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
+        );
+        
+        // If not found in detailed, try quick entry courses
+        if (!foundCourse) {
+          const quickResponse = await api.get(`/courses`);
+          const quickCourses = quickResponse.data || [];
+          foundCourse = quickCourses.find(c => 
+            c.slug === slug ||
+            c.id === slug ||
+            c.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug ||
+            c.name?.toLowerCase() === slug.toLowerCase()
+          );
+        }
+        
         if (foundCourse) {
           setCourse(foundCourse);
         }
@@ -31,7 +48,7 @@ const CourseDetailPage = () => {
       }
     };
     fetchCourse();
-  }, [id]);
+  }, [slug]);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
