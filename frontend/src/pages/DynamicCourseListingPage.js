@@ -310,6 +310,8 @@ const DynamicCourseListingPage = () => {
             sidebarCtaTitle: apiConfig.sidebar_cta_title,
             sidebarCtaText: apiConfig.sidebar_cta_text,
             sidebarCtaButton: apiConfig.sidebar_cta_button,
+            introContent: apiConfig.intro_content || '',
+            bottomContent: apiConfig.bottom_content || '',
           });
         }
       } catch (error) {
