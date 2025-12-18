@@ -370,6 +370,8 @@ class CourseDetail(BaseModel):
     
     # Eligibility
     eligibility: Optional[str] = None
+    eligibility_level: str = "after-12th"  # after-10th, after-12th, after-graduation, professional
+    course_mode: str = "Full Time"  # Full Time, Part Time, Distance, Online
     entrance_exams: List[str] = []  # Exam IDs
     
     # Curriculum
