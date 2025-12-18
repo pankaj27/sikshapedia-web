@@ -13,9 +13,10 @@ export const SidebarSponsoredAd = ({ placementId, title = "Sponsored" }) => {
     const fetchAds = async () => {
       try {
         const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=3`);
-        setAds(response.data || []);
+        setAds(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching sidebar ads:', error);
+        setAds([]); // Ensure ads is always an array on error
       } finally {
         setLoading(false);
       }
@@ -23,7 +24,7 @@ export const SidebarSponsoredAd = ({ placementId, title = "Sponsored" }) => {
     fetchAds();
   }, [placementId]);
 
-  if (loading || ads.length === 0) return null;
+  if (loading || !Array.isArray(ads) || ads.length === 0) return null;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
