@@ -2575,34 +2575,16 @@ class APITester:
             self.log_test("Filter News by Category", False, f"Status: {category_status}", category_response)
 
     def run_all_tests(self):
-        """Run all test suites"""
-        print("🚀 Starting Comprehensive Backend API Testing...")
+        """Run all test suites focusing on server refactoring"""
+        print("🚀 TESTING SERVER REFACTORING & MODULAR ROUTES")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
-        # Run test suites in order - PRIORITY: Course Listing Settings and Course Pages
+        # Server refactoring specific tests
+        self.test_server_health()
         self.test_authentication()
-        
-        # PRIORITY TESTS (as requested in review)
-        self.test_enhanced_news_system()  # NEW: Test Enhanced News Article System with all new features
-        self.test_news_listing_settings()  # NEW: Test News Listing Page Dynamic Settings
-        self.test_course_detail_dynamic_fields()  # NEW: Test Top Colleges & Age Limit dynamic fields
-        self.test_course_listing_pages_content_fields()  # NEW: Test intro_content and bottom_content fields
-        self.test_course_listing_settings_comprehensive()  # Comprehensive Course Listing Settings
-        self.test_course_pages_comprehensive()  # Comprehensive Course Pages Management
-        
-        # Other existing tests
-        self.test_course_pages_management()  # Original course pages tests
-        self.test_course_listing_settings()  # Original course listing tests
-        self.test_advertisement_system()  # Advertisement tests
-        self.test_old_college_routes()
-        self.test_new_module_routes()
-        self.test_other_critical_routes()
-        self.test_admin_protected_routes()
-        self.test_seo_url_filtering()
-        self.test_expected_institutions()
-        self.test_institution_details()
-        self.test_route_consistency()
+        self.test_blog_routes()
+        self.test_news_routes()
         
         # Summary
         print("=" * 60)
