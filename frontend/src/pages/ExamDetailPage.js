@@ -261,7 +261,16 @@ const ExamDetailPage = () => {
               return (
                 <button 
                   key={item.id} 
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    // Scroll to content section
+                    setTimeout(() => {
+                      const contentSection = document.getElementById('exam-content-section');
+                      if (contentSection) {
+                        contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 100);
+                  }}
                   className={`text-sm font-medium pb-3 whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
                       ? 'font-semibold text-orange-600 border-b-2 border-orange-600' 
