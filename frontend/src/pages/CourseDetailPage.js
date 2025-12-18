@@ -4,6 +4,7 @@ import { FiChevronRight, FiChevronDown, FiChevronUp, FiClock, FiDollarSign, FiBo
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineLightBulb, HiOutlineDocumentText } from 'react-icons/hi';
 import api from '../api/axios';
 import { ApplyNowWidget, AskQuestionWidget, CounsellingWidget } from '../components/widgets/ActionWidgets';
+import { SidebarSponsoredAd } from '../components/SponsoredAds';
 
 const CourseDetailPage = () => {
   const { slug } = useParams();
