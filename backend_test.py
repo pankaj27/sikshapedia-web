@@ -201,33 +201,75 @@ class APITester:
         else:
             self.log_test("GET /institutions/featured", False, f"Status: {status}", response)
 
-    def test_other_critical_routes(self):
-        """Test other critical routes"""
-        print("📚 Testing Other Critical Routes...")
+    def test_blog_routes(self):
+        """Test blog routes from modular system"""
+        print("📝 Testing Blog Routes (Modular System)...")
         
-        # Test 1: Exams
-        success, response, status = self.make_request("GET", "/exams")
+        # Test 1: GET /api/blogs - should return list of blogs
+        success, response, status = self.make_request("GET", "/blogs")
         if success and isinstance(response, list):
-            exam_count = len(response)
-            self.log_test("GET /exams", True, f"Retrieved {exam_count} exams")
+            blog_count = len(response)
+            self.log_test("GET /blogs", True, f"Retrieved {blog_count} blogs")
+            
+            # Store first blog ID for detail test
+            self.test_blog_id = response[0].get("id") if response else None
         else:
-            self.log_test("GET /exams", False, f"Status: {status}", response)
+            self.log_test("GET /blogs", False, f"Status: {status}", response)
+            self.test_blog_id = None
         
-        # Test 2: Courses
-        success, response, status = self.make_request("GET", "/courses")
-        if success and isinstance(response, list):
-            course_count = len(response)
-            self.log_test("GET /courses", True, f"Retrieved {course_count} courses")
+        # Test 2: GET /api/blogs/{id} - should return single blog
+        if self.test_blog_id:
+            success, response, status = self.make_request("GET", f"/blogs/{self.test_blog_id}")
+            if success and isinstance(response, dict) and "id" in response:
+                blog_title = response.get('title', 'N/A')
+                self.log_test(f"GET /blogs/{self.test_blog_id}", True, f"Blog retrieved: {blog_title}")
+            else:
+                self.log_test(f"GET /blogs/{self.test_blog_id}", False, f"Status: {status}", response)
         else:
-            self.log_test("GET /courses", False, f"Status: {status}", response)
+            self.log_test("GET /blogs/{id} (skipped)", False, "No blog ID available from list")
         
-        # Test 3: News
+        # Test 3: GET /api/blog-listing-settings - should return settings
+        success, response, status = self.make_request("GET", "/blog-listing-settings")
+        if success and isinstance(response, dict):
+            hero_title = response.get('hero_title', 'N/A')
+            self.log_test("GET /blog-listing-settings", True, f"Settings retrieved, hero_title: {hero_title}")
+        else:
+            self.log_test("GET /blog-listing-settings", False, f"Status: {status}", response)
+
+    def test_news_routes(self):
+        """Test news routes from modular system"""
+        print("📰 Testing News Routes (Modular System)...")
+        
+        # Test 1: GET /api/news - should return list of news articles
         success, response, status = self.make_request("GET", "/news")
         if success and isinstance(response, list):
             news_count = len(response)
             self.log_test("GET /news", True, f"Retrieved {news_count} news articles")
+            
+            # Store first news ID for detail test
+            self.test_news_id = response[0].get("id") if response else None
         else:
             self.log_test("GET /news", False, f"Status: {status}", response)
+            self.test_news_id = None
+        
+        # Test 2: GET /api/news/{id} - should return single article
+        if self.test_news_id:
+            success, response, status = self.make_request("GET", f"/news/{self.test_news_id}")
+            if success and isinstance(response, dict) and "id" in response:
+                news_title = response.get('title', 'N/A')
+                self.log_test(f"GET /news/{self.test_news_id}", True, f"News article retrieved: {news_title}")
+            else:
+                self.log_test(f"GET /news/{self.test_news_id}", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /news/{id} (skipped)", False, "No news ID available from list")
+        
+        # Test 3: GET /api/news-listing-settings - should return settings
+        success, response, status = self.make_request("GET", "/news-listing-settings")
+        if success and isinstance(response, dict):
+            hero_title = response.get('hero_title', 'N/A')
+            self.log_test("GET /news-listing-settings", True, f"Settings retrieved, hero_title: {hero_title}")
+        else:
+            self.log_test("GET /news-listing-settings", False, f"Status: {status}", response)
 
     def test_admin_protected_routes(self):
         """Test admin-protected routes"""
