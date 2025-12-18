@@ -9,12 +9,12 @@ const CoursesPage = () => {
 
   // Popular courses for hero section
   const popularCourses = [
-    { name: 'BE/B.TECH COURSES', link: '/courses/course/btech-cse' },
-    { name: 'MBBS COURSES', link: '/courses/course/mbbs' },
-    { name: 'B.SC COURSES', link: '/courses/course/bsc' },
-    { name: 'B.COM COURSES', link: '/courses/course/bcom' },
-    { name: 'BA COURSES', link: '/courses/course/ba' },
-    { name: 'MBA/PGDM COURSES', link: '/courses/course/mba' }
+    { name: 'BE/B.TECH COURSES', link: '/course/btech-cse' },
+    { name: 'MBBS COURSES', link: '/course/mbbs' },
+    { name: 'B.SC COURSES', link: '/course/bsc' },
+    { name: 'B.COM COURSES', link: '/course/bcom' },
+    { name: 'BA COURSES', link: '/course/ba' },
+    { name: 'MBA/PGDM COURSES', link: '/course/mba' }
   ];
 
   // Level-based courses
@@ -126,7 +126,7 @@ const CoursesPage = () => {
       title: 'Engineering',
       icon: <FiCpu />,
       courses: [
-        { name: 'BE/B.Tech', link: '/courses/course/btech-cse' },
+        { name: 'BE/B.Tech', link: '/course/btech-cse' },
         { name: 'ME/M.Tech', link: '/courses/listing/engineering-courses-after-12th' },
         { name: 'Polytechnic', link: '/courses/listing/engineering-courses-after-12th' }
       ],
