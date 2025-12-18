@@ -107,8 +107,9 @@ const CoursesAfter10thPage = () => {
            courses.some(c => c.name.toLowerCase().includes(query));
   });
 
-  // Count total courses
-  const totalCourses = Object.values(coursesByCategory).flat().length;
+  // Count total courses from actual data
+  const totalCourses = allCourses.length;
+  const totalCategories = Object.keys(coursesByCategory).length;
 
   if (loading) {
     return (
