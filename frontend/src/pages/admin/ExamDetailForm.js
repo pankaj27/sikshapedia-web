@@ -2079,6 +2079,287 @@ const ExamDetailForm = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Sidebar Widgets Section */}
+                  <div className="border border-indigo-200 rounded-lg p-3 bg-indigo-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-semibold text-indigo-800">🧩 Sidebar Widgets</label>
+                    </div>
+                    <p className="text-xs text-gray-500 mb-2">Configure which widgets appear in the sidebar of this page</p>
+                    
+                    <div className="space-y-2">
+                      {/* Quick Facts Widget */}
+                      <div className="bg-white border rounded p-2">
+                        <div className="flex items-center justify-between">
+                          <label className="flex items-center gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={item.widgets?.quick_facts?.enabled ?? true}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets) newItems[index].widgets = {};
+                                if (!newItems[index].widgets.quick_facts) newItems[index].widgets.quick_facts = {};
+                                newItems[index].widgets.quick_facts.enabled = e.target.checked;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              className="rounded text-indigo-500"
+                            />
+                            <span className="font-medium">📊 Quick Facts</span>
+                          </label>
+                          <span className="text-xs text-gray-400">Shows exam stats</span>
+                        </div>
+                      </div>
+                      
+                      {/* Quick Navigation Widget */}
+                      <div className="bg-white border rounded p-2">
+                        <div className="flex items-center justify-between">
+                          <label className="flex items-center gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={item.widgets?.quick_nav?.enabled ?? true}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets) newItems[index].widgets = {};
+                                if (!newItems[index].widgets.quick_nav) newItems[index].widgets.quick_nav = {};
+                                newItems[index].widgets.quick_nav.enabled = e.target.checked;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              className="rounded text-indigo-500"
+                            />
+                            <span className="font-medium">📑 Quick Navigation</span>
+                          </label>
+                          <span className="text-xs text-gray-400">Menu links sidebar</span>
+                        </div>
+                      </div>
+                      
+                      {/* Contact CTA Widget */}
+                      <div className="bg-white border rounded p-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="flex items-center gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={item.widgets?.contact_cta?.enabled ?? true}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets) newItems[index].widgets = {};
+                                if (!newItems[index].widgets.contact_cta) newItems[index].widgets.contact_cta = {};
+                                newItems[index].widgets.contact_cta.enabled = e.target.checked;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              className="rounded text-indigo-500"
+                            />
+                            <span className="font-medium">📞 Contact CTA</span>
+                          </label>
+                          <span className="text-xs text-gray-400">Need Help? box</span>
+                        </div>
+                        {item.widgets?.contact_cta?.enabled && (
+                          <div className="ml-5 mt-1 space-y-1">
+                            <input
+                              type="text"
+                              value={item.widgets?.contact_cta?.title || 'Need Help?'}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets) newItems[index].widgets = {};
+                                if (!newItems[index].widgets.contact_cta) newItems[index].widgets.contact_cta = { enabled: true };
+                                newItems[index].widgets.contact_cta.title = e.target.value;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              placeholder="CTA Title"
+                              className="w-full border rounded px-2 py-0.5 text-xs"
+                            />
+                            <input
+                              type="text"
+                              value={item.widgets?.contact_cta?.subtitle || 'Get expert guidance'}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets.contact_cta) newItems[index].widgets.contact_cta = { enabled: true };
+                                newItems[index].widgets.contact_cta.subtitle = e.target.value;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              placeholder="CTA Subtitle"
+                              className="w-full border rounded px-2 py-0.5 text-xs"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Related Exams Widget */}
+                      <div className="bg-white border rounded p-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="flex items-center gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={item.widgets?.related_exams?.enabled ?? false}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets) newItems[index].widgets = {};
+                                if (!newItems[index].widgets.related_exams) newItems[index].widgets.related_exams = { enabled: false, exams: [] };
+                                newItems[index].widgets.related_exams.enabled = e.target.checked;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              className="rounded text-indigo-500"
+                            />
+                            <span className="font-medium">🔗 Related Exams</span>
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newItems = [...(formData.menu_config?.items || [])];
+                              if (!newItems[index].widgets) newItems[index].widgets = {};
+                              if (!newItems[index].widgets.related_exams) newItems[index].widgets.related_exams = { enabled: true, exams: [] };
+                              newItems[index].widgets.related_exams.exams.push({ name: '', url: '' });
+                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                            }}
+                            className="text-xs text-indigo-600 hover:underline"
+                          >
+                            + Add Exam
+                          </button>
+                        </div>
+                        {item.widgets?.related_exams?.enabled && item.widgets?.related_exams?.exams?.length > 0 && (
+                          <div className="ml-5 mt-1 space-y-1">
+                            {item.widgets.related_exams.exams.map((exam, examIndex) => (
+                              <div key={examIndex} className="flex gap-1">
+                                <input
+                                  type="text"
+                                  value={exam.name || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.related_exams.exams[examIndex].name = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="Exam Name"
+                                  className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                />
+                                <input
+                                  type="text"
+                                  value={exam.url || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.related_exams.exams[examIndex].url = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="/exams/jee-main"
+                                  className="flex-1 border rounded px-2 py-0.5 text-xs font-mono"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.related_exams.exams = newItems[index].widgets.related_exams.exams.filter((_, i) => i !== examIndex);
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-red-400 hover:text-red-600 px-1"
+                                >
+                                  <FiTrash2 size={12} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Download Widget */}
+                      <div className="bg-white border rounded p-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="flex items-center gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={item.widgets?.download_widget?.enabled ?? false}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets) newItems[index].widgets = {};
+                                if (!newItems[index].widgets.download_widget) newItems[index].widgets.download_widget = { enabled: false, title: 'Download Resources', files: [] };
+                                newItems[index].widgets.download_widget.enabled = e.target.checked;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              className="rounded text-indigo-500"
+                            />
+                            <span className="font-medium">📥 Download Widget</span>
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newItems = [...(formData.menu_config?.items || [])];
+                              if (!newItems[index].widgets) newItems[index].widgets = {};
+                              if (!newItems[index].widgets.download_widget) newItems[index].widgets.download_widget = { enabled: true, title: 'Download Resources', files: [] };
+                              newItems[index].widgets.download_widget.files.push({ name: '', url: '', type: 'pdf' });
+                              setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                            }}
+                            className="text-xs text-indigo-600 hover:underline"
+                          >
+                            + Add File
+                          </button>
+                        </div>
+                        {item.widgets?.download_widget?.enabled && (
+                          <div className="ml-5 mt-1 space-y-1">
+                            <input
+                              type="text"
+                              value={item.widgets?.download_widget?.title || 'Download Resources'}
+                              onChange={(e) => {
+                                const newItems = [...(formData.menu_config?.items || [])];
+                                if (!newItems[index].widgets.download_widget) newItems[index].widgets.download_widget = { enabled: true, title: '', files: [] };
+                                newItems[index].widgets.download_widget.title = e.target.value;
+                                setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                              }}
+                              placeholder="Widget Title"
+                              className="w-full border rounded px-2 py-0.5 text-xs mb-1"
+                            />
+                            {(item.widgets?.download_widget?.files || []).map((file, fileIndex) => (
+                              <div key={fileIndex} className="flex gap-1">
+                                <input
+                                  type="text"
+                                  value={file.name || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.download_widget.files[fileIndex].name = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="File Name"
+                                  className="flex-1 border rounded px-2 py-0.5 text-xs"
+                                />
+                                <input
+                                  type="text"
+                                  value={file.url || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.download_widget.files[fileIndex].url = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  placeholder="File URL"
+                                  className="flex-1 border rounded px-2 py-0.5 text-xs font-mono"
+                                />
+                                <select
+                                  value={file.type || 'pdf'}
+                                  onChange={(e) => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.download_widget.files[fileIndex].type = e.target.value;
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="border rounded px-1 py-0.5 text-xs"
+                                >
+                                  <option value="pdf">PDF</option>
+                                  <option value="doc">DOC</option>
+                                  <option value="zip">ZIP</option>
+                                  <option value="other">Other</option>
+                                </select>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newItems = [...(formData.menu_config?.items || [])];
+                                    newItems[index].widgets.download_widget.files = newItems[index].widgets.download_widget.files.filter((_, i) => i !== fileIndex);
+                                    setFormData({...formData, menu_config: {...formData.menu_config, items: newItems}});
+                                  }}
+                                  className="text-red-400 hover:text-red-600 px-1"
+                                >
+                                  <FiTrash2 size={12} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
