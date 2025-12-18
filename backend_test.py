@@ -454,6 +454,208 @@ class APITester:
         else:
             self.log_test("Route Consistency Check", False, "One or both routes failed")
 
+    def test_advertisement_system(self):
+        """Test Advanced Advertisement Management System"""
+        print("📢 Testing Advanced Advertisement Management System...")
+        
+        # Store created ad IDs for cleanup and tracking tests
+        self.created_ad_ids = []
+        
+        # Test 1: Create Banner Ad with Custom URL Targeting
+        banner_ad_data = {
+            "name": "Test Banner Ad - Maharashtra",
+            "title": "Top Engineering Colleges",
+            "description": "Explore top colleges in Maharashtra",
+            "ad_type": "banner",
+            "image_url": "https://via.placeholder.com/728x90?text=Banner+Ad",
+            "click_url": "https://example.com/colleges",
+            "banner_size": "728x90",
+            "target_urls": ["/maharashtra-colleges", "/mumbai-colleges"],
+            "placement_position": "top",
+            "start_date": "2025-01-01",
+            "end_date": "2025-12-31",
+            "is_active": True,
+            "priority": 5,
+            "budget": {
+                "total_budget": 10000,
+                "daily_budget": 500,
+                "cost_per_click": 2.5,
+                "cost_per_impression": 0.5
+            }
+        }
+        
+        success, response, status = self.make_request("POST", "/advertisements", banner_ad_data, token=self.admin_token)
+        if success and response.get("success"):
+            banner_ad_id = response.get("id")
+            self.created_ad_ids.append(banner_ad_id)
+            self.log_test("Create Banner Ad with Custom URL Targeting", True, f"Created ad ID: {banner_ad_id}")
+        else:
+            self.log_test("Create Banner Ad with Custom URL Targeting", False, f"Status: {status}", response)
+            banner_ad_id = None
+        
+        # Test 2: Create Video Ad with Rotation Settings
+        video_ad_data = {
+            "name": "Test Video Ad - IIT Promo",
+            "ad_type": "video",
+            "video_url": "https://example.com/promo.mp4",
+            "video_thumbnail": "https://via.placeholder.com/300x250?text=Video+Thumb",
+            "click_url": "https://example.com/iit",
+            "target_urls": ["/college-detail"],
+            "placement_position": "middle",
+            "start_date": "2025-01-01",
+            "end_date": "2025-06-30",
+            "is_active": True,
+            "rotation": {
+                "enabled": True,
+                "max_impressions": 10000,
+                "max_clicks": 500,
+                "rotation_type": "weighted",
+                "weight": 2
+            }
+        }
+        
+        success, response, status = self.make_request("POST", "/advertisements", video_ad_data, token=self.admin_token)
+        if success and response.get("success"):
+            video_ad_id = response.get("id")
+            self.created_ad_ids.append(video_ad_id)
+            self.log_test("Create Video Ad with Rotation Settings", True, f"Created ad ID: {video_ad_id}")
+        else:
+            self.log_test("Create Video Ad with Rotation Settings", False, f"Status: {status}", response)
+            video_ad_id = None
+        
+        # Test 3: Create HTML/Native Ad
+        html_ad_data = {
+            "name": "Test HTML Ad - Scholarship",
+            "ad_type": "html",
+            "html_content": "<div style='background: linear-gradient(to right, #f59e0b, #ef4444); padding: 20px; border-radius: 10px; text-align: center;'><h3 style='color: white; margin: 0;'>Get 50% Scholarship!</h3><p style='color: white;'>Apply Now</p></div>",
+            "click_url": "https://example.com/scholarship",
+            "target_urls": ["/scholarships", "/home"],
+            "placement_position": "sidebar",
+            "start_date": "2025-01-01",
+            "end_date": "2025-12-31",
+            "is_active": True,
+            "budget": {
+                "total_budget": 5000,
+                "daily_budget": 200,
+                "cost_per_click": 1.0
+            }
+        }
+        
+        success, response, status = self.make_request("POST", "/advertisements", html_ad_data, token=self.admin_token)
+        if success and response.get("success"):
+            html_ad_id = response.get("id")
+            self.created_ad_ids.append(html_ad_id)
+            self.log_test("Create HTML/Native Ad", True, f"Created ad ID: {html_ad_id}")
+        else:
+            self.log_test("Create HTML/Native Ad", False, f"Status: {status}", response)
+            html_ad_id = None
+        
+        # Test 4: Get All Advertisements
+        success, response, status = self.make_request("GET", "/advertisements", token=self.admin_token)
+        if success and isinstance(response, list):
+            ads_count = len(response)
+            # Check if our created ads are in the list
+            created_ads_found = 0
+            for ad_id in self.created_ad_ids:
+                if any(ad.get("id") == ad_id for ad in response):
+                    created_ads_found += 1
+            
+            if created_ads_found == len(self.created_ad_ids):
+                self.log_test("Get All Advertisements", True, f"Retrieved {ads_count} ads, all {created_ads_found} created ads found")
+            else:
+                self.log_test("Get All Advertisements", False, f"Only {created_ads_found}/{len(self.created_ad_ids)} created ads found")
+        else:
+            self.log_test("Get All Advertisements", False, f"Status: {status}", response)
+        
+        # Test 5: Track Impression (using first created ad)
+        if banner_ad_id:
+            success, response, status = self.make_request("POST", f"/advertisements/{banner_ad_id}/track?event_type=impression")
+            if success and response.get("success"):
+                self.log_test("Track Impression", True, f"Impression tracked for ad {banner_ad_id}")
+            else:
+                self.log_test("Track Impression", False, f"Status: {status}", response)
+        else:
+            self.log_test("Track Impression", False, "No banner ad ID available")
+        
+        # Test 6: Track Click (using first created ad)
+        if banner_ad_id:
+            success, response, status = self.make_request("POST", f"/advertisements/{banner_ad_id}/track?event_type=click")
+            if success and response.get("success"):
+                self.log_test("Track Click", True, f"Click tracked for ad {banner_ad_id}")
+            else:
+                self.log_test("Track Click", False, f"Status: {status}", response)
+        else:
+            self.log_test("Track Click", False, "No banner ad ID available")
+        
+        # Test 7: Get Analytics Summary
+        success, response, status = self.make_request("GET", "/advertisements/analytics/summary", token=self.admin_token)
+        if success and isinstance(response, dict):
+            summary = response.get("summary", {})
+            total_ads = summary.get("total_ads", 0)
+            total_impressions = summary.get("total_impressions", 0)
+            total_clicks = summary.get("total_clicks", 0)
+            avg_ctr = summary.get("avg_ctr", 0)
+            
+            self.log_test("Get Analytics Summary", True, 
+                         f"Total ads: {total_ads}, Impressions: {total_impressions}, Clicks: {total_clicks}, CTR: {avg_ctr}%")
+        else:
+            self.log_test("Get Analytics Summary", False, f"Status: {status}", response)
+        
+        # Test 8: Get Single Ad with Updated Stats
+        if banner_ad_id:
+            success, response, status = self.make_request("GET", f"/advertisements/{banner_ad_id}", token=self.admin_token)
+            if success and isinstance(response, dict):
+                stats = response.get("stats", {})
+                impressions = stats.get("impressions", 0)
+                clicks = stats.get("clicks", 0)
+                budget = response.get("budget", {})
+                
+                # Verify that stats were updated from tracking
+                if impressions >= 1 and clicks >= 1:
+                    self.log_test("Get Single Ad with Updated Stats", True, 
+                                 f"Ad stats updated - Impressions: {impressions}, Clicks: {clicks}")
+                else:
+                    self.log_test("Get Single Ad with Updated Stats", False, 
+                                 f"Stats not updated properly - Impressions: {impressions}, Clicks: {clicks}")
+            else:
+                self.log_test("Get Single Ad with Updated Stats", False, f"Status: {status}", response)
+        else:
+            self.log_test("Get Single Ad with Updated Stats", False, "No banner ad ID available")
+        
+        # Test 9: Verify Budget Fields Storage
+        if banner_ad_id:
+            success, response, status = self.make_request("GET", f"/advertisements/{banner_ad_id}", token=self.admin_token)
+            if success and isinstance(response, dict):
+                budget = response.get("budget", {})
+                required_budget_fields = ["total_budget", "daily_budget", "cost_per_click", "cost_per_impression"]
+                
+                budget_fields_present = all(field in budget for field in required_budget_fields)
+                if budget_fields_present:
+                    self.log_test("Verify Budget Fields Storage", True, 
+                                 f"All budget fields present: {list(budget.keys())}")
+                else:
+                    missing_fields = [field for field in required_budget_fields if field not in budget]
+                    self.log_test("Verify Budget Fields Storage", False, 
+                                 f"Missing budget fields: {missing_fields}")
+            else:
+                self.log_test("Verify Budget Fields Storage", False, f"Status: {status}", response)
+        
+        # Test 10: Verify Custom URLs Storage
+        if banner_ad_id:
+            success, response, status = self.make_request("GET", f"/advertisements/{banner_ad_id}", token=self.admin_token)
+            if success and isinstance(response, dict):
+                target_urls = response.get("target_urls", [])
+                expected_urls = ["/maharashtra-colleges", "/mumbai-colleges"]
+                
+                if isinstance(target_urls, list) and all(url in target_urls for url in expected_urls):
+                    self.log_test("Verify Custom URLs Storage", True, 
+                                 f"Custom URLs stored correctly: {target_urls}")
+                else:
+                    self.log_test("Verify Custom URLs Storage", False, 
+                                 f"Custom URLs not stored correctly. Expected: {expected_urls}, Got: {target_urls}")
+            else:
+                self.log_test("Verify Custom URLs Storage", False, f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
@@ -462,6 +664,7 @@ class APITester:
         
         # Run test suites in order
         self.test_authentication()
+        self.test_advertisement_system()  # Add advertisement tests
         self.test_old_college_routes()
         self.test_new_module_routes()
         self.test_other_critical_routes()
