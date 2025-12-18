@@ -94,6 +94,7 @@ import ExamDetailForm from './pages/admin/ExamDetailForm';
 import ExamsDetailManagement from './pages/admin/ExamsDetailManagement';
 import ExamListingSettings from './pages/admin/ExamListingSettings';
 import CourseListingSettings from './pages/admin/CourseListingSettings';
+import NewsListingSettings from './pages/admin/NewsListingSettings';
 import CoursePagesManagement from './pages/admin/CoursePagesManagement';
 import CoursePageForm from './pages/admin/CoursePageForm';
 import ListingPagesManagement from './pages/admin/ListingPagesManagement';
