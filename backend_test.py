@@ -1856,6 +1856,7 @@ class APITester:
         self.test_authentication()
         
         # PRIORITY TESTS (as requested in review)
+        self.test_course_listing_pages_content_fields()  # NEW: Test intro_content and bottom_content fields
         self.test_course_listing_settings_comprehensive()  # Comprehensive Course Listing Settings
         self.test_course_pages_comprehensive()  # Comprehensive Course Pages Management
         
