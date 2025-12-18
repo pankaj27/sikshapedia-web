@@ -61,180 +61,50 @@ const CoursesPage = () => {
     }
   };
 
-  // Popular course tags
-  const popularTags = [
-    { name: 'B.Tech', link: '/courses/btech', color: 'bg-blue-500' },
-    { name: 'MBA', link: '/courses/mba', color: 'bg-purple-500' },
-    { name: 'MBBS', link: '/courses/mbbs', color: 'bg-red-500' },
-    { name: 'B.Sc', link: '/courses/bsc', color: 'bg-green-500' },
-    { name: 'B.Com', link: '/courses/bcom', color: 'bg-yellow-500' },
-    { name: 'BA', link: '/courses/ba', color: 'bg-pink-500' },
-    { name: 'BCA', link: '/courses/bca', color: 'bg-indigo-500' },
-    { name: 'LLB', link: '/courses/llb', color: 'bg-gray-600' },
+  // Default values (used when API hasn't loaded yet or returns empty)
+  const defaultPopularTags = [
+    { name: 'B.Tech', link: '/courses/engineering', color: 'bg-blue-500' },
+    { name: 'MBA', link: '/courses/management', color: 'bg-purple-500' },
+    { name: 'MBBS', link: '/courses/medical', color: 'bg-red-500' },
+    { name: 'B.Sc', link: '/courses/science', color: 'bg-green-500' },
+    { name: 'B.Com', link: '/courses/commerce', color: 'bg-yellow-500' },
+    { name: 'BA', link: '/courses/arts', color: 'bg-pink-500' },
+    { name: 'BCA', link: '/courses/computer', color: 'bg-indigo-500' },
+    { name: 'LLB', link: '/courses/law', color: 'bg-gray-600' },
   ];
 
-  // Level-based courses with gradient colors
-  const levelCourses = [
-    {
-      title: 'After 10th',
-      subtitle: 'Diploma & Vocational',
-      icon: '🎓',
-      gradient: 'from-emerald-400 to-cyan-500',
-      link: '/courses/after-10th',
-      stats: '200+ Courses',
-      popular: ['ITI', 'Polytechnic', 'Vocational']
-    },
-    {
-      title: 'After 12th',
-      subtitle: 'Undergraduate Programs',
-      icon: '📚',
-      gradient: 'from-blue-500 to-purple-600',
-      link: '/courses/after-12th',
-      stats: '500+ Courses',
-      popular: ['B.Tech', 'MBBS', 'B.Com', 'BA']
-    },
-    {
-      title: 'Diploma',
-      subtitle: 'Professional Certifications',
-      icon: '📜',
-      gradient: 'from-orange-400 to-pink-500',
-      link: '/courses/diploma',
-      stats: '150+ Courses',
-      popular: ['Engineering', 'Pharmacy', 'Nursing']
-    },
-    {
-      title: 'Postgraduate',
-      subtitle: 'Masters & PG Programs',
-      icon: '🎯',
-      gradient: 'from-purple-500 to-indigo-600',
-      link: '/courses/pg',
-      stats: '400+ Courses',
-      popular: ['MBA', 'M.Tech', 'M.Sc', 'MA']
-    },
-    {
-      title: 'PhD & Research',
-      subtitle: 'Doctoral Programs',
-      icon: '🔬',
-      gradient: 'from-rose-400 to-red-500',
-      link: '/courses/phd',
-      stats: '100+ Programs',
-      popular: ['Science', 'Engineering', 'Arts']
-    },
-    {
-      title: 'Certificate',
-      subtitle: 'Short-term Courses',
-      icon: '✨',
-      gradient: 'from-amber-400 to-orange-500',
-      link: '/courses/certificate',
-      stats: '300+ Courses',
-      popular: ['IT', 'Management', 'Design']
-    },
+  const defaultLevelCourses = [
+    { title: 'After 10th', subtitle: 'Diploma & Vocational', icon: '🎓', gradient: 'from-emerald-400 to-cyan-500', link: '/courses/after-10th', stats: '200+ Courses', popular: ['ITI', 'Polytechnic', 'Vocational'] },
+    { title: 'After 12th', subtitle: 'Undergraduate Programs', icon: '📚', gradient: 'from-blue-500 to-purple-600', link: '/courses/after-12th', stats: '500+ Courses', popular: ['B.Tech', 'MBBS', 'B.Com', 'BA'] },
+    { title: 'Diploma', subtitle: 'Professional Certifications', icon: '📜', gradient: 'from-orange-400 to-pink-500', link: '/courses/diploma', stats: '150+ Courses', popular: ['Engineering', 'Pharmacy', 'Nursing'] },
+    { title: 'Postgraduate', subtitle: 'Masters & PG Programs', icon: '🎯', gradient: 'from-purple-500 to-indigo-600', link: '/courses/pg', stats: '400+ Courses', popular: ['MBA', 'M.Tech', 'M.Sc', 'MA'] },
+    { title: 'PhD & Research', subtitle: 'Doctoral Programs', icon: '🔬', gradient: 'from-rose-400 to-red-500', link: '/courses/phd', stats: '100+ Programs', popular: ['Science', 'Engineering', 'Arts'] },
+    { title: 'Certificate', subtitle: 'Short-term Courses', icon: '✨', gradient: 'from-amber-400 to-orange-500', link: '/courses/certificate', stats: '300+ Courses', popular: ['IT', 'Management', 'Design'] },
   ];
 
-  // Stream categories with icons and colors
-  const streamCategories = [
-    { 
-      name: 'Engineering', 
-      icon: HiOutlineDesktopComputer, 
-      color: 'text-blue-600', 
-      bgColor: 'bg-blue-50',
-      hoverBg: 'hover:bg-blue-100',
-      borderColor: 'border-blue-200',
-      link: '/courses/engineering',
-      courses: ['B.Tech', 'B.E', 'M.Tech', 'Polytechnic'],
-      count: '250+'
-    },
-    { 
-      name: 'Medical', 
-      icon: HiOutlineHeart, 
-      color: 'text-red-600', 
-      bgColor: 'bg-red-50',
-      hoverBg: 'hover:bg-red-100',
-      borderColor: 'border-red-200',
-      link: '/courses/medical',
-      courses: ['MBBS', 'BDS', 'BAMS', 'Nursing'],
-      count: '120+'
-    },
-    { 
-      name: 'Management', 
-      icon: HiOutlineOfficeBuilding, 
-      color: 'text-purple-600', 
-      bgColor: 'bg-purple-50',
-      hoverBg: 'hover:bg-purple-100',
-      borderColor: 'border-purple-200',
-      link: '/courses/management',
-      courses: ['MBA', 'BBA', 'PGDM', 'Executive MBA'],
-      count: '180+'
-    },
-    { 
-      name: 'Science', 
-      icon: HiOutlineBeaker, 
-      color: 'text-green-600', 
-      bgColor: 'bg-green-50',
-      hoverBg: 'hover:bg-green-100',
-      borderColor: 'border-green-200',
-      link: '/courses/science',
-      courses: ['B.Sc', 'M.Sc', 'B.Sc (Hons)', 'Integrated'],
-      count: '200+'
-    },
-    { 
-      name: 'Commerce', 
-      icon: HiOutlineCurrencyRupee, 
-      color: 'text-amber-600', 
-      bgColor: 'bg-amber-50',
-      hoverBg: 'hover:bg-amber-100',
-      borderColor: 'border-amber-200',
-      link: '/courses/commerce',
-      courses: ['B.Com', 'M.Com', 'CA', 'CS'],
-      count: '80+'
-    },
-    { 
-      name: 'Arts & Humanities', 
-      icon: HiOutlinePencilAlt, 
-      color: 'text-pink-600', 
-      bgColor: 'bg-pink-50',
-      hoverBg: 'hover:bg-pink-100',
-      borderColor: 'border-pink-200',
-      link: '/courses/arts',
-      courses: ['BA', 'MA', 'BFA', 'Journalism'],
-      count: '150+'
-    },
-    { 
-      name: 'Computer Applications', 
-      icon: HiOutlineDesktopComputer, 
-      color: 'text-indigo-600', 
-      bgColor: 'bg-indigo-50',
-      hoverBg: 'hover:bg-indigo-100',
-      borderColor: 'border-indigo-200',
-      link: '/courses/computer',
-      courses: ['BCA', 'MCA', 'B.Sc IT', 'Data Science'],
-      count: '100+'
-    },
-    { 
-      name: 'Law', 
-      icon: HiOutlineScale, 
-      color: 'text-gray-700', 
-      bgColor: 'bg-gray-50',
-      hoverBg: 'hover:bg-gray-100',
-      borderColor: 'border-gray-200',
-      link: '/courses/law',
-      courses: ['LLB', 'LLM', 'BA LLB', 'BBA LLB'],
-      count: '60+'
-    },
-    { 
-      name: 'Education', 
-      icon: HiOutlineAcademicCap, 
-      color: 'text-teal-600', 
-      bgColor: 'bg-teal-50',
-      hoverBg: 'hover:bg-teal-100',
-      borderColor: 'border-teal-200',
-      link: '/courses/education',
-      courses: ['B.Ed', 'M.Ed', 'D.El.Ed', 'B.P.Ed'],
-      count: '50+'
-    },
+  const defaultStreamCategories = [
+    { name: 'Engineering', icon: 'HiOutlineDesktopComputer', link: '/courses/engineering', courses: ['B.Tech', 'B.E', 'M.Tech', 'Polytechnic'], count: '250+' },
+    { name: 'Medical', icon: 'HiOutlineHeart', link: '/courses/medical', courses: ['MBBS', 'BDS', 'BAMS', 'Nursing'], count: '120+' },
+    { name: 'Management', icon: 'HiOutlineOfficeBuilding', link: '/courses/management', courses: ['MBA', 'BBA', 'PGDM', 'Executive MBA'], count: '180+' },
+    { name: 'Science', icon: 'HiOutlineBeaker', link: '/courses/science', courses: ['B.Sc', 'M.Sc', 'B.Sc (Hons)', 'Integrated'], count: '200+' },
+    { name: 'Commerce', icon: 'HiOutlineCurrencyRupee', link: '/courses/commerce', courses: ['B.Com', 'M.Com', 'CA', 'CS'], count: '80+' },
+    { name: 'Arts & Humanities', icon: 'HiOutlinePencilAlt', link: '/courses/arts', courses: ['BA', 'MA', 'BFA', 'Journalism'], count: '150+' },
+    { name: 'Computer Applications', icon: 'HiOutlineDesktopComputer', link: '/courses/computer', courses: ['BCA', 'MCA', 'B.Sc IT', 'Data Science'], count: '100+' },
+    { name: 'Law', icon: 'HiOutlineScale', link: '/courses/law', courses: ['LLB', 'LLM', 'BA LLB', 'BBA LLB'], count: '60+' },
+    { name: 'Education', icon: 'HiOutlineAcademicCap', link: '/courses/education', courses: ['B.Ed', 'M.Ed', 'D.El.Ed', 'B.P.Ed'], count: '50+' },
   ];
 
-  // Trending courses
+  // Use API settings or defaults
+  const heroTitle = settings?.hero_title || 'Discover Your Perfect Course Journey';
+  const heroSubtitle = settings?.hero_subtitle || 'Explore 10,000+ courses across 50+ streams. Find the right path for your career.';
+  const heroSearchPlaceholder = settings?.hero_search_placeholder || 'Search for courses, streams, or colleges...';
+  const popularTags = settings?.popular_tags?.length ? settings.popular_tags : defaultPopularTags;
+  const levelCourses = settings?.level_courses?.length ? settings.level_courses : defaultLevelCourses;
+  const streamCategories = settings?.stream_categories?.length ? settings.stream_categories : defaultStreamCategories;
+  const metaTitle = settings?.meta_title || 'Courses in India 2025 - UG, PG, Diploma, PhD Programs';
+  const metaDescription = settings?.meta_description || 'Explore 1000+ courses in India across Engineering, Medical, Management, Science, Commerce, Arts, Law and more.';
+
+  // Trending courses (static for now - can be made dynamic later)
   const trendingCourses = [
     { name: 'Data Science', growth: '+45%', icon: '📊' },
     { name: 'Artificial Intelligence', growth: '+62%', icon: '🤖' },
@@ -243,6 +113,14 @@ const CoursesPage = () => {
     { name: 'Cloud Computing', growth: '+41%', icon: '☁️' },
     { name: 'Machine Learning', growth: '+58%', icon: '🧠' },
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <FiLoader className="w-8 h-8 animate-spin text-orange-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
