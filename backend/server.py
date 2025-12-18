@@ -4392,6 +4392,49 @@ async def update_exam_listing_settings(
     
     return settings_dict
 
+
+# ============================================
+# News Listing Page Settings Routes
+# ============================================
+
+@api_router.get("/news-listing-settings")
+async def get_news_listing_settings():
+    """Get news listing page settings (public)"""
+    settings = await db.news_listing_settings.find_one({"id": "news-listing-page"}, {"_id": 0})
+    if not settings:
+        # Return default settings if none exist
+        default_settings = NewsListingPageSettings()
+        return default_settings.model_dump()
+    return settings
+
+
+@api_router.put("/news-listing-settings")
+async def update_news_listing_settings(
+    settings: NewsListingPageSettings,
+    current_user: User = Depends(get_current_user)
+):
+    """Update news listing page settings (admin only)"""
+    # Check if user is admin
+    admin = await db.admins.find_one({"email": current_user.email})
+    if not admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    settings.id = "news-listing-page"  # Ensure singleton ID
+    settings.updated_at = datetime.now(timezone.utc)
+    settings.updated_by = current_user.email
+    
+    settings_dict = settings.model_dump()
+    
+    # Upsert - create if not exists, update if exists
+    await db.news_listing_settings.update_one(
+        {"id": "news-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    
+    return settings_dict
+
+
 # ============================================
 # Exam Routes
 # ============================================
