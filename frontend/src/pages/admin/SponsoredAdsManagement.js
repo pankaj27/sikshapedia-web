@@ -335,36 +335,29 @@ const SponsoredAdsManagement = () => {
 
   // Custom URL Placement functions
   const addCustomPlacement = () => {
-    if (!newCustomPlacement.url || !newCustomPlacement.sectionType) {
-      alert('Please enter URL path and section type');
+    if (!newCustomPlacement.url) {
+      alert('Please enter URL path');
       return;
     }
-    const placementId = `custom_${newCustomPlacement.url.replace(/\//g, '_')}_${newCustomPlacement.sectionType}`;
-    const placementName = newCustomPlacement.name || `${newCustomPlacement.url} - ${SECTION_TYPES.find(s => s.id === newCustomPlacement.sectionType)?.name}`;
-    
-    // Check if already exists (only for new placements, not edits)
-    if (!editingPlacement && customPlacements.find(p => p.id === placementId)) {
-      alert('This placement already exists!');
-      return;
-    }
-    
-    const newPlacement = {
-      id: placementId,
-      url: newCustomPlacement.url,
-      sectionType: newCustomPlacement.sectionType,
-      name: placementName,
-      contentType: 'college'
-    };
     
     if (editingPlacement) {
-      // Editing existing placement
+      // Editing existing placement - single section type
+      const placementId = `custom_${newCustomPlacement.url.replace(/\//g, '_')}_${newCustomPlacement.sectionType}`;
+      const placementName = newCustomPlacement.name || `${newCustomPlacement.url} - ${SECTION_TYPES.find(s => s.id === newCustomPlacement.sectionType)?.name}`;
+      
+      const updatedPlacement = {
+        id: placementId,
+        url: newCustomPlacement.url,
+        sectionType: newCustomPlacement.sectionType,
+        name: placementName,
+        contentType: 'college'
+      };
+      
       const oldId = editingPlacement.id;
       const existingAds = adsConfig[oldId] || [];
       
-      // Remove old placement and add updated one
-      setCustomPlacements(customPlacements.map(p => p.id === oldId ? newPlacement : p));
+      setCustomPlacements(customPlacements.map(p => p.id === oldId ? updatedPlacement : p));
       
-      // Update ads config - transfer ads to new key if ID changed
       const newConfig = { ...adsConfig };
       if (oldId !== placementId) {
         delete newConfig[oldId];
@@ -375,14 +368,54 @@ const SponsoredAdsManagement = () => {
       setAdsConfig(newConfig);
       setActiveTab(placementId);
     } else {
-      // Adding new placement
-      setCustomPlacements([...customPlacements, newPlacement]);
-      setAdsConfig({ ...adsConfig, [placementId]: [] });
-      setActiveTab(placementId);
+      // Adding new placement(s) - can be multiple section types
+      if (selectedSectionTypes.length === 0) {
+        alert('Please select at least one section type');
+        return;
+      }
+      
+      const newPlacements = [];
+      const newAdsConfig = { ...adsConfig };
+      let firstNewId = null;
+      
+      for (const sectionType of selectedSectionTypes) {
+        const placementId = `custom_${newCustomPlacement.url.replace(/\//g, '_')}_${sectionType}`;
+        
+        // Skip if already exists
+        if (customPlacements.find(p => p.id === placementId)) {
+          continue;
+        }
+        
+        const sectionName = SECTION_TYPES.find(s => s.id === sectionType)?.name;
+        const placementName = newCustomPlacement.name 
+          ? `${newCustomPlacement.name} - ${sectionName}`
+          : `${newCustomPlacement.url} - ${sectionName}`;
+        
+        newPlacements.push({
+          id: placementId,
+          url: newCustomPlacement.url,
+          sectionType: sectionType,
+          name: placementName,
+          contentType: 'college'
+        });
+        
+        newAdsConfig[placementId] = [];
+        if (!firstNewId) firstNewId = placementId;
+      }
+      
+      if (newPlacements.length === 0) {
+        alert('All selected section types already exist for this URL!');
+        return;
+      }
+      
+      setCustomPlacements([...customPlacements, ...newPlacements]);
+      setAdsConfig(newAdsConfig);
+      if (firstNewId) setActiveTab(firstNewId);
     }
     
     setShowCustomPlacementModal(false);
     setNewCustomPlacement({ url: '', sectionType: 'featured', name: '' });
+    setSelectedSectionTypes(['featured']);
     setEditingPlacement(null);
   };
 
