@@ -513,7 +513,7 @@ class APITester:
         }
         
         success, response, status = self.make_request("POST", "/advertisements", video_ad_data, token=self.admin_token)
-        if success and response.get("success"):
+        if success and response.get("id"):
             video_ad_id = response.get("id")
             self.created_ad_ids.append(video_ad_id)
             self.log_test("Create Video Ad with Rotation Settings", True, f"Created ad ID: {video_ad_id}")
