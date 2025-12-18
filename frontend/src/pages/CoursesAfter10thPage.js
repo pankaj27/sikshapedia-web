@@ -164,20 +164,22 @@ const CoursesAfter10thPage = () => {
               </div>
 
               {/* Quick Stats */}
-              <div className="flex flex-wrap gap-6">
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                  <FiGrid className="w-5 h-5" />
-                  <span className="font-medium">{Object.keys(coursesByCategory).length} Categories</span>
+              {totalCourses > 0 && (
+                <div className="flex flex-wrap gap-6">
+                  <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                    <FiGrid className="w-5 h-5" />
+                    <span className="font-medium">{totalCategories} Categories</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                    <FiBookOpen className="w-5 h-5" />
+                    <span className="font-medium">{totalCourses} Courses</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                    <FiClock className="w-5 h-5" />
+                    <span className="font-medium">6 Months - 3 Years</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                  <FiBookOpen className="w-5 h-5" />
-                  <span className="font-medium">{totalCourses}+ Courses</span>
-                </div>
-                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                  <FiClock className="w-5 h-5" />
-                  <span className="font-medium">6 Months - 3 Years</span>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </section>
