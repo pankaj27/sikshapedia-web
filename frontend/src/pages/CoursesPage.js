@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiSearch, FiChevronRight, FiArrowRight, FiBookOpen, FiBriefcase, FiActivity, FiTrendingUp, FiAward, FiCpu, FiHeart, FiUsers, FiLayers, FiTarget, FiCompass } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineBeaker, HiOutlineScale, HiOutlineCurrencyRupee, HiOutlineDesktopComputer, HiOutlinePencilAlt, HiOutlineOfficeBuilding, HiOutlineHeart } from 'react-icons/hi';
+import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 
 const CoursesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
