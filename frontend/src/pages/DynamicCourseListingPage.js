@@ -667,6 +667,20 @@ const DynamicCourseListingPage = () => {
           </div>
         </div>
 
+        {/* Intro Content Section (from Admin) */}
+        {config.introContent && (
+          <section className="bg-gray-50 border-t py-8">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl">
+                <div 
+                  className="prose prose-gray max-w-none text-gray-600"
+                  dangerouslySetInnerHTML={{ __html: config.introContent }}
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* FAQ Section */}
         {(config.faqs || []).length > 0 && (
           <section className="bg-white border-t py-12">
@@ -679,6 +693,20 @@ const DynamicCourseListingPage = () => {
                     <p className="text-gray-600 text-sm">A: {faq.a || faq.answer}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Bottom Content Section (from Admin) */}
+        {config.bottomContent && (
+          <section className="bg-white border-t py-12">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl">
+                <div 
+                  className="prose prose-gray max-w-none text-gray-600"
+                  dangerouslySetInnerHTML={{ __html: config.bottomContent }}
+                />
               </div>
             </div>
           </section>
