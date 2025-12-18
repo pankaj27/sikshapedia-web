@@ -335,19 +335,19 @@ const CoursesPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             <div>
-              <div className="text-4xl md:text-5xl font-extrabold mb-2">10,000+</div>
+              <div className="text-4xl md:text-5xl font-extrabold mb-2">{statsCourses}</div>
               <div className="text-orange-200">Courses</div>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-extrabold mb-2">5,000+</div>
+              <div className="text-4xl md:text-5xl font-extrabold mb-2">{statsColleges}</div>
               <div className="text-orange-200">Colleges</div>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-extrabold mb-2">50+</div>
+              <div className="text-4xl md:text-5xl font-extrabold mb-2">{statsStreams}</div>
               <div className="text-orange-200">Streams</div>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-extrabold mb-2">2M+</div>
+              <div className="text-4xl md:text-5xl font-extrabold mb-2">{statsStudents}</div>
               <div className="text-orange-200">Students Helped</div>
             </div>
           </div>
