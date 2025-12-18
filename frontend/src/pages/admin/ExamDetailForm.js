@@ -11,6 +11,7 @@ import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
 import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
+import { SeoMetaSection } from '../../components/admin/college-form';
 
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null, color = 'indigo' }) => {
