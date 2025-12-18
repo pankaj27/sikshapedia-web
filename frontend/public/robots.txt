@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://learnhub-647.preview.emergentagent.com/sitemap.xml
+Sitemap: https://collegeflow-3.preview.emergentagent.com/sitemap.xml

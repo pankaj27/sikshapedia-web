@@ -613,8 +613,8 @@ agent_communication:
 ### Credentials Used
 - Admin Email: admin@admissionbuddy.co
 - Admin Password: admin123
-- Admin URL: https://learnhub-647.preview.emergentagent.com/admin/
-- Public URL: https://learnhub-647.preview.emergentagent.com/courses
+- Admin URL: https://collegeflow-3.preview.emergentagent.com/admin/
+- Public URL: https://collegeflow-3.preview.emergentagent.com/courses
 
 ---
 
