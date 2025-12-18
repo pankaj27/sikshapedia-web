@@ -2972,6 +2972,97 @@ async def get_active_admission_open_colleges(limit: int = Query(6, ge=1, le=20))
     
     return [College(**college) for college in active_colleges[:limit]]
 
+# ========== MULTI-PLACEMENT SPONSORED ADS ==========
+
+class SponsoredAdItem(BaseModel):
+    item_id: str
+    item_name: str
+    item_image: Optional[str] = None
+    item_location: Optional[str] = None
+    item_type: Optional[str] = None
+    item_rating: Optional[float] = None
+    item_fees: Optional[float] = None
+    content_type: str = "college"  # college, school, course, exam, banner
+    serial_order: int = 1
+    start_date: str  # ISO date string
+    end_date: str    # ISO date string
+    is_active: bool = True
+
+class MultiSponsoredAdsConfig(BaseModel):
+    id: str = "multi_sponsored_ads_config"
+    placements: dict = {}  # placement_id -> List[SponsoredAdItem]
+    updated_at: Optional[datetime] = None
+    updated_by: Optional[str] = None
+
+@api_router.get("/sponsored-ads-multi")
+async def get_multi_sponsored_ads():
+    """Get the multi-placement sponsored ads configuration"""
+    config = await db.sponsored_ads_multi.find_one({"id": "multi_sponsored_ads_config"}, {"_id": 0})
+    if not config:
+        return {"placements": {}}
+    return config
+
+@api_router.post("/sponsored-ads-multi")
+async def save_multi_sponsored_ads(config: MultiSponsoredAdsConfig, current_user: dict = Depends(get_current_user)):
+    """Save the multi-placement sponsored ads configuration (admin only)"""
+    config.id = "multi_sponsored_ads_config"
+    config.updated_at = datetime.now(timezone.utc)
+    config.updated_by = current_user.get("email", "admin")
+    
+    await db.sponsored_ads_multi.update_one(
+        {"id": "multi_sponsored_ads_config"},
+        {"$set": config.dict()},
+        upsert=True
+    )
+    return {"success": True, "message": "Sponsored ads saved successfully"}
+
+@api_router.get("/sponsored-ads-multi/{placement_id}")
+async def get_sponsored_ads_by_placement(placement_id: str, limit: int = Query(6, ge=1, le=20)):
+    """Get active sponsored ads for a specific placement"""
+    config = await db.sponsored_ads_multi.find_one({"id": "multi_sponsored_ads_config"}, {"_id": 0})
+    if not config or placement_id not in config.get("placements", {}):
+        return []
+    
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    active_items = []
+    
+    for entry in config["placements"].get(placement_id, []):
+        if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
+            # Fetch full data based on content type
+            content_type = entry.get("content_type", "college")
+            item_id = entry.get("item_id")
+            
+            if content_type == "college":
+                item = await db.colleges.find_one({"id": item_id}, {"_id": 0})
+            elif content_type == "school":
+                item = await db.schools.find_one({"id": item_id}, {"_id": 0})
+            elif content_type == "university":
+                item = await db.colleges.find_one({"id": item_id, "institution_type": "University"}, {"_id": 0})
+            elif content_type == "course":
+                item = await db.courses_detailed.find_one({"id": item_id}, {"_id": 0})
+            elif content_type == "exam":
+                item = await db.exams_detailed.find_one({"id": item_id}, {"_id": 0})
+            else:
+                item = None
+            
+            if item:
+                if isinstance(item.get('created_at'), str):
+                    try:
+                        item['created_at'] = datetime.fromisoformat(item['created_at'])
+                    except:
+                        pass
+                item['_sponsored_order'] = entry.get("serial_order", 999)
+                active_items.append(item)
+    
+    # Sort by serial order
+    active_items.sort(key=lambda x: x.get('_sponsored_order', 999))
+    
+    # Remove temp field
+    for item in active_items:
+        item.pop('_sponsored_order', None)
+    
+    return active_items[:limit]
+
 @api_router.get("/colleges/{college_id}", response_model=College)
 async def get_college(college_id: str):
     college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
