@@ -182,10 +182,10 @@ const ExamPage = () => {
 
           <div className="max-w-4xl">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Entrance Exams in India 2025-26
+              {pageSettings.hero_title}
             </h1>
             <p className="text-lg text-indigo-100 mb-8 max-w-2xl">
-              Complete guide to 200+ entrance exams for Engineering, Medical, Management, Law & more
+              {pageSettings.hero_subtitle}
             </p>
 
             {/* Search Box */}
@@ -195,19 +195,21 @@ const ExamPage = () => {
               </div>
               <input
                 type="text"
-                placeholder="Search exams (JEE, NEET, CAT, GATE...)"
+                placeholder={pageSettings.hero_search_placeholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/15 transition-all"
               />
             </div>
 
-            {/* Quick Stats */}
+            {/* Quick Stats - Dynamic from settings */}
             <div className="grid grid-cols-4 gap-4 max-w-xl">
-              <div className="text-center">
-                <div className="text-2xl font-bold">200+</div>
-                <div className="text-indigo-200 text-xs">Total Exams</div>
-              </div>
+              {(pageSettings.stats || []).slice(0, 4).map((stat, idx) => (
+                <div key={idx} className="text-center">
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="text-indigo-200 text-xs">{stat.label}</div>
+                </div>
+              ))}
               <div className="text-center">
                 <div className="text-2xl font-bold">50L+</div>
                 <div className="text-indigo-200 text-xs">Aspirants</div>
