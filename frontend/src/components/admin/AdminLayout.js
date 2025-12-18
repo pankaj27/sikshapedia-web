@@ -73,6 +73,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Exam Listing Page', path: '/admin/exam-listing-settings', icon: FiSettings },
         { title: 'Course Listing Page', path: '/admin/course-listing-settings', icon: FiSettings },
         { title: 'News Listing Page', path: '/admin/news-listing-settings', icon: FiSettings },
+        { title: 'Blog Listing Page', path: '/admin/blog-listing-settings', icon: FiSettings },
         { title: 'Course Pages (15)', path: '/admin/course-pages', icon: FiGrid },
         { title: 'News Articles', path: '/admin/news', icon: FiFileText },
         { title: 'Blogs', path: '/admin/blogs', icon: FiFileText },
