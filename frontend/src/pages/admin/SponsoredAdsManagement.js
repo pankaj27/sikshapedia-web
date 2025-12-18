@@ -421,7 +421,7 @@ const SponsoredAdsManagement = () => {
               <h3 className="font-semibold text-gray-900">Ad Placements</h3>
               <p className="text-xs text-gray-500">Select a page to manage</p>
             </div>
-            <div className="max-h-[calc(100vh-250px)] overflow-y-auto">
+            <div className="max-h-[calc(100vh-350px)] overflow-y-auto">
               {AD_PLACEMENTS.map(placement => {
                 const Icon = placement.icon;
                 const count = (adsConfig[placement.id] || []).length;
@@ -447,6 +447,69 @@ const SponsoredAdsManagement = () => {
                   </button>
                 );
               })}
+            </div>
+
+            {/* Custom URL Placements Section */}
+            <div className="border-t border-gray-200">
+              <div className="px-4 py-3 bg-gradient-to-r from-purple-50 to-indigo-50 flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-sm">🔗 Custom URL Placements</h3>
+                  <p className="text-xs text-gray-500">Link-specific ads</p>
+                </div>
+                <button 
+                  onClick={() => setShowCustomPlacementModal(true)}
+                  className="text-purple-600 hover:text-purple-800 p-1"
+                  title="Add custom placement"
+                >
+                  <FiPlus size={18} />
+                </button>
+              </div>
+              <div className="max-h-48 overflow-y-auto">
+                {customPlacements.length === 0 ? (
+                  <div className="px-4 py-3 text-center text-gray-400 text-xs">
+                    No custom placements yet.<br/>Click + to add one.
+                  </div>
+                ) : (
+                  customPlacements.map(placement => {
+                    const sectionType = SECTION_TYPES.find(s => s.id === placement.sectionType);
+                    const Icon = sectionType?.icon || FiLink;
+                    const count = (adsConfig[placement.id] || []).length;
+                    const activeCount = (adsConfig[placement.id] || []).filter(a => isActive(a)).length;
+                    
+                    return (
+                      <div
+                        key={placement.id}
+                        className={`w-full px-4 py-3 flex items-center gap-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                          activeTab === placement.id ? 'bg-purple-50 border-l-4 border-l-purple-600' : ''
+                        }`}
+                      >
+                        <button
+                          onClick={() => setActiveTab(placement.id)}
+                          className="flex items-center gap-3 flex-1 text-left"
+                        >
+                          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${sectionType?.color || 'from-gray-500 to-gray-600'} flex items-center justify-center`}>
+                            <Icon className="text-white" size={16} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm text-gray-900 truncate">{placement.name}</h4>
+                            <p className="text-xs text-purple-600 truncate">/{placement.url}</p>
+                            <p className="text-xs text-gray-500">
+                              {count} items {activeCount > 0 && <span className="text-green-600">({activeCount} live)</span>}
+                            </p>
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => deleteCustomPlacement(placement.id)}
+                          className="text-red-400 hover:text-red-600 p-1"
+                          title="Delete placement"
+                        >
+                          <FiTrash2 size={14} />
+                        </button>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
           </div>
         </div>
