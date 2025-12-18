@@ -426,17 +426,48 @@ const BlogPage = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
-      {!loading && articles.length > 0 && (
-        <section className="py-6 bg-gradient-to-r from-teal-50 to-cyan-50">
+      {/* Call to Action / Newsletter */}
+      {settings?.show_newsletter !== false && (
+        <section className="py-6 bg-gradient-to-r from-teal-500 to-cyan-500 text-white">
           <div className="container mx-auto px-4 text-center">
-            <h3 className="text-lg font-bold mb-2">Want to contribute?</h3>
-            <p className="text-sm text-gray-600 mb-4">Share your knowledge and help students make better decisions</p>
-            <Link to="/contact">
-              <Button className="bg-teal-600 hover:bg-teal-700 h-8 text-xs">
-                Contact Us
+            <h3 className="text-lg font-bold mb-2">{settings?.newsletter_title || 'Subscribe to our Blog'}</h3>
+            <p className="text-sm text-white/90 mb-4">{settings?.newsletter_subtitle || 'Get the latest articles delivered to your inbox'}</p>
+            <div className="max-w-md mx-auto flex gap-2">
+              <Input placeholder="Enter your email" className="bg-white text-gray-900 h-9" />
+              <Button className="bg-white text-teal-600 hover:bg-teal-50 h-9 px-4 text-sm">
+                {settings?.newsletter_button_text || 'Subscribe'}
               </Button>
-            </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Bottom Content */}
+      {settings?.bottom_content && (
+        <section className="bg-white border-t">
+          <div className="container mx-auto px-4 py-8">
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: settings.bottom_content }} />
+          </div>
+        </section>
+      )}
+
+      {/* FAQs */}
+      {settings?.faqs && settings.faqs.length > 0 && (
+        <section className="bg-gray-50 border-t">
+          <div className="max-w-4xl mx-auto px-4 py-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {settings.faqs.map((faq, idx) => (
+                <details key={idx} className="bg-white rounded-lg shadow-sm border">
+                  <summary className="px-6 py-4 cursor-pointer font-semibold text-gray-800 hover:text-teal-600">
+                    {faq.question}
+                  </summary>
+                  <div className="px-6 pb-4 text-gray-600">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
       )}
