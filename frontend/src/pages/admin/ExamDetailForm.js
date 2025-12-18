@@ -1528,25 +1528,72 @@ const ExamDetailForm = () => {
                     <div className="flex items-center justify-between mb-2">
                       <label className="text-xs font-semibold text-purple-800">📑 Table of Contents</label>
                       <button type="button" onClick={() => {
-                        const newToc = [...(item.toc || []), { title: '', anchor: '', content: '' }];
+                        const newToc = [...(item.toc || []), { title: 'New Section', anchor: `section-${Date.now()}`, content: '' }];
                         updateMenuItem(index, 'toc', newToc);
                       }} className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200">+ Add Section</button>
                     </div>
-                    {(item.toc || []).map((tocItem, tocIndex) => (
-                      <div key={tocIndex} className="flex gap-2 mb-2 items-start">
-                        <input type="text" value={tocItem.title || ''} onChange={(e) => {
-                          const newToc = [...(item.toc || [])];
-                          newToc[tocIndex].title = e.target.value;
-                          newToc[tocIndex].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
-                          updateMenuItem(index, 'toc', newToc);
-                        }} placeholder="Section Title" className="flex-1 border rounded px-2 py-1 text-xs" />
-                        <input type="text" value={tocItem.anchor || ''} className="w-24 border rounded px-2 py-1 text-xs bg-gray-50 font-mono" readOnly />
-                        <button type="button" onClick={() => {
-                          const newToc = (item.toc || []).filter((_, i) => i !== tocIndex);
-                          updateMenuItem(index, 'toc', newToc);
-                        }} className="text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                    
+                    {(item.toc || []).length > 0 ? (
+                      <div className="space-y-2">
+                        {(item.toc || []).map((tocItem, tocIndex) => (
+                          <div key={tocIndex} className="bg-white border rounded p-2">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-xs text-gray-400 w-4">{tocIndex + 1}.</span>
+                              <input
+                                type="text"
+                                value={tocItem.title || ''}
+                                onChange={(e) => {
+                                  const newToc = [...(item.toc || [])];
+                                  newToc[tocIndex].title = e.target.value;
+                                  newToc[tocIndex].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                                  updateMenuItem(index, 'toc', newToc);
+                                }}
+                                placeholder="Section Title"
+                                className="flex-1 border rounded px-2 py-1 text-xs"
+                              />
+                              <span className="text-xs text-gray-400 font-mono">#{tocItem.anchor}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newToc = (item.toc || []).filter((_, i) => i !== tocIndex);
+                                  updateMenuItem(index, 'toc', newToc);
+                                }}
+                                className="text-red-400 hover:text-red-600 p-1"
+                              >
+                                <FiTrash2 size={12} />
+                              </button>
+                            </div>
+                            <textarea
+                              value={tocItem.content || ''}
+                              onChange={(e) => {
+                                const newToc = [...(item.toc || [])];
+                                newToc[tocIndex].content = e.target.value;
+                                updateMenuItem(index, 'toc', newToc);
+                              }}
+                              placeholder="Section content (HTML supported)..."
+                              rows="2"
+                              className="w-full border rounded px-2 py-1 text-xs mt-1"
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <p className="text-xs text-gray-400 italic">No TOC sections. Click &quot;+ Add Section&quot; to add.</p>
+                    )}
+                    
+                    {/* TOC Preview */}
+                    {(item.toc || []).length > 0 && (
+                      <div className="mt-2 p-2 bg-purple-100 rounded border border-purple-200">
+                        <p className="text-xs text-purple-700 mb-1">TOC Preview:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {(item.toc || []).map((t, ti) => (
+                            <span key={ti} className="text-xs bg-white px-2 py-0.5 rounded border text-purple-800">
+                              {t.title}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Tables for this page */}
