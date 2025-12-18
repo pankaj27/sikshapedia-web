@@ -2520,6 +2520,7 @@ class APITester:
         self.test_authentication()
         
         # PRIORITY TESTS (as requested in review)
+        self.test_enhanced_news_system()  # NEW: Test Enhanced News Article System with all new features
         self.test_news_listing_settings()  # NEW: Test News Listing Page Dynamic Settings
         self.test_course_detail_dynamic_fields()  # NEW: Test Top Colleges & Age Limit dynamic fields
         self.test_course_listing_pages_content_fields()  # NEW: Test intro_content and bottom_content fields
