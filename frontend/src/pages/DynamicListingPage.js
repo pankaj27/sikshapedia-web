@@ -569,6 +569,7 @@ const DynamicListingPage = () => {
     fetchInstitutions();
     fetchPageContent();
     fetchFeaturedColleges();
+    fetchAdmissionOpenColleges();
   }, [location.pathname, filters.search, sortBy]);
   
   // Fetch featured/sponsored colleges
