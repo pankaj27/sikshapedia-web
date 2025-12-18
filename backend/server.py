@@ -4303,7 +4303,7 @@ async def update_exam_listing_settings(
 ):
     """Update exam listing page settings (admin only)"""
     # Check if user is admin
-    admin = await db.admin_users.find_one({"email": current_user.email})
+    admin = await db.admins.find_one({"email": current_user.email})
     if not admin:
         raise HTTPException(status_code=403, detail="Admin access required")
     
