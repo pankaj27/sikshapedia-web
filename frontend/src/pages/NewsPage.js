@@ -357,6 +357,36 @@ const NewsPage = () => {
           </div>
         )}
       </div>
+
+      {/* Bottom Content (from admin) */}
+      {settings?.bottom_content && (
+        <div className="bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: settings.bottom_content }} />
+          </div>
+        </div>
+      )}
+
+      {/* FAQs Section */}
+      {settings?.faqs && settings.faqs.length > 0 && (
+        <div className="bg-gray-50 border-t">
+          <div className="max-w-4xl mx-auto px-4 py-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {settings.faqs.map((faq, idx) => (
+                <details key={idx} className="bg-white rounded-lg shadow-sm border">
+                  <summary className="px-6 py-4 cursor-pointer font-semibold text-gray-800 hover:text-orange-600">
+                    {faq.question}
+                  </summary>
+                  <div className="px-6 pb-4 text-gray-600">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
