@@ -1056,9 +1056,6 @@ const DynamicListingPage = () => {
         )}
       </Helmet>
       
-      {/* Top Ad Banner */}
-      <AdBanner pageName="colleges" position="top" />
-      
       {/* HERO SECTION - Modern Design */}
       <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white">
         <div className="container mx-auto px-4 md:px-6 py-6 md:py-10">
