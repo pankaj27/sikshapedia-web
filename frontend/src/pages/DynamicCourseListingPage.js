@@ -254,7 +254,9 @@ const pageConfigs = {
 };
 
 const DynamicCourseListingPage = () => {
-  const { category } = useParams();
+  // Get category from URL path (e.g., /courses/engineering -> engineering)
+  const path = window.location.pathname;
+  const category = path.split('/').pop() || 'engineering';
   const config = pageConfigs[category] || pageConfigs['engineering'];
   
   const [loading, setLoading] = useState(true);
