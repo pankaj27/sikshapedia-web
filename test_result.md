@@ -197,3 +197,28 @@ agent_communication:
 ### Admin Credentials:
 - Email: admin@admissionbuddy.co
 - Password: admin123
+
+---
+
+## Test Session: Server Refactoring & bcrypt Fix (Dec 18, 2025)
+
+### Features Implemented:
+1. **Modular Route Architecture**
+   - Created `/app/backend/routes/auth.py` - Authentication routes (5 endpoints)
+   - Created `/app/backend/routes/blogs.py` - Blog CRUD + listing settings
+   - Created `/app/backend/routes/news.py` - News CRUD + listing settings  
+   - Created `/app/backend/routes/admin_settings.py` - Listing page settings
+   - Updated `server.py` to include modular routers
+
+2. **bcrypt/passlib Compatibility Fix**
+   - Fixed `AttributeError: module 'bcrypt' has no attribute '__about__'`
+   - Added monkey-patch to server.py and routes/auth.py
+
+### Test Cases:
+1. ✅ Auth Routes: POST /api/auth/login - Returns token
+2. ✅ Blog Routes: GET /api/blogs - Returns blog list
+3. ✅ News Routes: GET /api/news - Returns news list  
+4. ✅ Blog Settings: GET /api/blog-listing-settings - Returns settings
+5. ✅ Frontend: /blog page loads with dynamic content
+6. ✅ Frontend: /news page loads with dynamic content
+7. ✅ bcrypt warning resolved in server logs
