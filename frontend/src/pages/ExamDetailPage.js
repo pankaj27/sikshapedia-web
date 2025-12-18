@@ -236,8 +236,23 @@ const ExamDetailPage = () => {
     );
   }
 
+  // Get current active menu item for SEO
+  const activeMenuItem = exam.menuConfig?.items?.find(item => 
+    activeSection ? item.id === activeSection : item.enabled !== false
+  ) || exam.menuConfig?.items?.[0];
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* SEO Meta Tags */}
+      <Helmet>
+        <title>{activeMenuItem?.meta_title || exam.metaTitle || `${exam.name} - Admissionbuddy`}</title>
+        <meta name="description" content={activeMenuItem?.meta_description || exam.metaDescription || exam.description} />
+        <meta property="og:title" content={activeMenuItem?.meta_title || exam.metaTitle || exam.name} />
+        <meta property="og:description" content={activeMenuItem?.meta_description || exam.metaDescription || exam.description} />
+        <meta property="og:type" content="article" />
+        <link rel="canonical" href={`https://admissionbuddy.com/exams/${id}`} />
+      </Helmet>
+
       {/* Breadcrumb */}
       <div className="bg-white border-b py-2">
         <div className="container mx-auto px-6">
