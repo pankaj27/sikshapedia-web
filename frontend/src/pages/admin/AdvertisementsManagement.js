@@ -520,6 +520,211 @@ const AdvertisementsManagement = () => {
                       <span className="text-sm font-medium">Active</span>
                     </label>
                   </div>
+
+                  {/* Custom URL Targeting */}
+                  <div className="col-span-2 bg-purple-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-purple-800 mb-2">🔗 Link-wise Targeting (Custom URLs)</h3>
+                    <p className="text-xs text-gray-600 mb-2">Add specific URLs where this ad should appear (in addition to page types selected above)</p>
+                    <div className="flex gap-2 mb-2">
+                      <input
+                        type="text"
+                        value={newCustomUrl}
+                        onChange={(e) => setNewCustomUrl(e.target.value)}
+                        className="flex-1 border rounded px-3 py-2 text-sm"
+                        placeholder="/maharashtra-colleges or /india-colleges?city=Mumbai"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          if (newCustomUrl && !formData.custom_urls?.includes(newCustomUrl)) {
+                            setFormData({ ...formData, custom_urls: [...(formData.custom_urls || []), newCustomUrl] });
+                            setNewCustomUrl('');
+                          }
+                        }}
+                      >
+                        Add URL
+                      </Button>
+                    </div>
+                    {formData.custom_urls?.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {formData.custom_urls.map((url, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-sm flex items-center gap-1">
+                            {url}
+                            <button
+                              type="button"
+                              onClick={() => setFormData({ ...formData, custom_urls: formData.custom_urls.filter(u => u !== url) })}
+                              className="text-purple-500 hover:text-red-500"
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Budget & Billing */}
+                  <div className="col-span-2 bg-orange-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-orange-800 mb-2">💰 Budget & Billing</h3>
+                    <div className="grid grid-cols-4 gap-4">
+                      <div>
+                        <label className="block text-xs font-medium mb-1">Total Budget (₹)</label>
+                        <input
+                          type="number"
+                          value={formData.budget?.total_budget || 0}
+                          onChange={(e) => setFormData({ ...formData, budget: { ...formData.budget, total_budget: parseFloat(e.target.value) || 0 } })}
+                          className="w-full border rounded px-2 py-1 text-sm"
+                          min="0"
+                          placeholder="0 = unlimited"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1">Daily Budget (₹)</label>
+                        <input
+                          type="number"
+                          value={formData.budget?.daily_budget || 0}
+                          onChange={(e) => setFormData({ ...formData, budget: { ...formData.budget, daily_budget: parseFloat(e.target.value) || 0 } })}
+                          className="w-full border rounded px-2 py-1 text-sm"
+                          min="0"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1">CPC (₹ per click)</label>
+                        <input
+                          type="number"
+                          value={formData.budget?.cost_per_click || 0}
+                          onChange={(e) => setFormData({ ...formData, budget: { ...formData.budget, cost_per_click: parseFloat(e.target.value) || 0 } })}
+                          className="w-full border rounded px-2 py-1 text-sm"
+                          min="0"
+                          step="0.01"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium mb-1">CPM (₹ per 1000 views)</label>
+                        <input
+                          type="number"
+                          value={formData.budget?.cost_per_impression || 0}
+                          onChange={(e) => setFormData({ ...formData, budget: { ...formData.budget, cost_per_impression: parseFloat(e.target.value) || 0 } })}
+                          className="w-full border rounded px-2 py-1 text-sm"
+                          min="0"
+                          step="0.01"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Ad Rotation */}
+                  <div className="col-span-2 bg-cyan-50 p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-semibold text-cyan-800">🔄 Ad Rotation</h3>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.rotation?.enabled || false}
+                          onChange={(e) => setFormData({ ...formData, rotation: { ...formData.rotation, enabled: e.target.checked } })}
+                          className="rounded"
+                        />
+                        <span className="text-sm">Enable Rotation</span>
+                      </label>
+                    </div>
+                    {formData.rotation?.enabled && (
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Max Impressions</label>
+                          <input
+                            type="number"
+                            value={formData.rotation?.max_impressions || 0}
+                            onChange={(e) => setFormData({ ...formData, rotation: { ...formData.rotation, max_impressions: parseInt(e.target.value) || 0 } })}
+                            className="w-full border rounded px-2 py-1 text-sm"
+                            min="0"
+                            placeholder="0 = unlimited"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Max Clicks</label>
+                          <input
+                            type="number"
+                            value={formData.rotation?.max_clicks || 0}
+                            onChange={(e) => setFormData({ ...formData, rotation: { ...formData.rotation, max_clicks: parseInt(e.target.value) || 0 } })}
+                            className="w-full border rounded px-2 py-1 text-sm"
+                            min="0"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Rotation Type</label>
+                          <select
+                            value={formData.rotation?.rotation_type || 'sequential'}
+                            onChange={(e) => setFormData({ ...formData, rotation: { ...formData.rotation, rotation_type: e.target.value } })}
+                            className="w-full border rounded px-2 py-1 text-sm"
+                          >
+                            <option value="sequential">Sequential</option>
+                            <option value="random">Random</option>
+                            <option value="weighted">Weighted</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Video Ad Fields */}
+                  {formData.ad_type === 'video' && (
+                    <div className="col-span-2 bg-red-50 p-4 rounded-lg">
+                      <h3 className="font-semibold text-red-800 mb-2">🎬 Video Ad Settings</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Video URL *</label>
+                          <input
+                            type="url"
+                            value={formData.video_url || ''}
+                            onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+                            className="w-full border rounded px-2 py-1 text-sm"
+                            placeholder="https://example.com/video.mp4"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium mb-1">Thumbnail URL</label>
+                          <input
+                            type="url"
+                            value={formData.video_thumbnail || ''}
+                            onChange={(e) => setFormData({ ...formData, video_thumbnail: e.target.value })}
+                            className="w-full border rounded px-2 py-1 text-sm"
+                            placeholder="https://example.com/thumb.jpg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* HTML/Native Ad Fields */}
+                  {formData.ad_type === 'html' && (
+                    <div className="col-span-2 bg-indigo-50 p-4 rounded-lg">
+                      <h3 className="font-semibold text-indigo-800 mb-2">💻 HTML/Native Ad Content</h3>
+                      <textarea
+                        value={formData.html_content || ''}
+                        onChange={(e) => setFormData({ ...formData, html_content: e.target.value })}
+                        className="w-full border rounded px-2 py-1 text-sm font-mono"
+                        rows={6}
+                        placeholder="<div>Your HTML ad code here</div>"
+                      />
+                    </div>
+                  )}
+
+                  {/* Banner Size (for banner type) */}
+                  {formData.ad_type === 'banner' && (
+                    <div className="col-span-2">
+                      <label className="block text-sm font-medium mb-1">Banner Size</label>
+                      <select
+                        value={formData.banner_size || '728x90'}
+                        onChange={(e) => setFormData({ ...formData, banner_size: e.target.value })}
+                        className="w-full border rounded px-3 py-2"
+                      >
+                        {bannerSizes.map(size => (
+                          <option key={size.value} value={size.value}>{size.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex justify-end gap-2 pt-4 border-t">
