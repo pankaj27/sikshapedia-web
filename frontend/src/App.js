@@ -21,6 +21,7 @@ import CoursesPage from './pages/CoursesPage';
 import CoursesAfter10thPage from './pages/CoursesAfter10thPage';
 import CoursesAfter12thPage from './pages/CoursesAfter12thPage';
 import DiplomaCoursesPage from './pages/DiplomaCoursesPage';
+import DynamicCourseListingPage from './pages/DynamicCourseListingPage';
 import CourseListingPage from './pages/CourseListingPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import CourseFinderPage from './pages/CourseFinderPage';
