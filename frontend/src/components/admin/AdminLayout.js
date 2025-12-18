@@ -78,7 +78,11 @@ const AdminLayout = ({ children }) => {
         { title: 'News Articles', path: '/admin/news', icon: FiFileText },
         { title: 'Blogs', path: '/admin/blogs', icon: FiFileText },
         { title: 'Scholarships', path: '/admin/scholarships', icon: FiDollarSign },
+        { title: 'Scholarships Page', path: '/admin/scholarships-listing-settings', icon: FiSettings },
         { title: 'Loans', path: '/admin/loans', icon: FiDollarSign },
+        { title: 'Loans Page', path: '/admin/loans-listing-settings', icon: FiSettings },
+        { title: 'Study Materials', path: '/admin/study-materials', icon: FiFileText },
+        { title: 'Study Materials Page', path: '/admin/study-materials-listing-settings', icon: FiSettings },
       ]
     },
     {
