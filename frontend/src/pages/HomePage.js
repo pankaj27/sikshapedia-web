@@ -14,6 +14,7 @@ import LatestNews from '../components/LatestNews';
 import TopCollegesByStream from '../components/TopCollegesByStream';
 import TopExams from '../components/TopExams';
 import { ApplyNowWidget, AskQuestionWidget, CounsellingWidget, SponsorAdWidget } from '../components/widgets/ActionWidgets';
+import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
