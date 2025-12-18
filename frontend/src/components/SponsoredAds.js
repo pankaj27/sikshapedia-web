@@ -294,9 +294,10 @@ export const UrlAwareSponsoredSection = ({
         // Get current URL path without leading slash
         const urlPath = location.pathname.replace(/^\//, '') + location.search;
         const response = await api.get(`/sponsored-ads-by-url?url=${encodeURIComponent(urlPath)}&section_type=${sectionType}`);
-        setAds(response.data || []);
+        setAds(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching URL-specific ads:', error);
+        setAds([]); // Ensure ads is always an array on error
       } finally {
         setLoading(false);
       }
@@ -304,7 +305,7 @@ export const UrlAwareSponsoredSection = ({
     fetchAds();
   }, [location.pathname, location.search, sectionType]);
 
-  if (loading || !ads || ads.length === 0) return null;
+  if (loading || !Array.isArray(ads) || ads.length === 0) return null;
 
   return (
     <div className={`bg-gradient-to-r ${bgColor || styles.bgColor} rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg my-4`}>
