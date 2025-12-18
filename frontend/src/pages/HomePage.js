@@ -376,19 +376,43 @@ const CollegeDuniaHome = () => {
               </div>
             </button>
 
-            {/* Sponsor Ad Card */}
-            <div className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden">
-              <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-                  <HiOutlineSparkles size={20} className="text-yellow-400" />
+            {/* Sponsor Ad Card - Dynamic from Admin */}
+            {homeBannerAd ? (
+              <Link 
+                to={`/college/${homeBannerAd.id}`}
+                className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden hover:from-gray-700 hover:to-gray-800 transition-all"
+              >
+                <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center overflow-hidden">
+                    {homeBannerAd.logo_url ? (
+                      <img src={homeBannerAd.logo_url} alt={homeBannerAd.name} className="w-full h-full object-contain" />
+                    ) : (
+                      <HiOutlineSparkles size={20} className="text-yellow-400" />
+                    )}
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-bold text-sm line-clamp-1">{homeBannerAd.name}</h3>
+                    <p className="text-xs text-gray-400">
+                      {homeBannerAd.type || 'Featured'} • {homeBannerAd.location?.city || 'India'}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h3 className="font-bold text-sm">IIM Programs</h3>
-                  <p className="text-xs text-gray-400">50% scholarship</p>
+              </Link>
+            ) : (
+              <div className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden">
+                <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                    <HiOutlineSparkles size={20} className="text-yellow-400" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-bold text-sm">Featured Programs</h3>
+                    <p className="text-xs text-gray-400">Add from Admin Panel</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
