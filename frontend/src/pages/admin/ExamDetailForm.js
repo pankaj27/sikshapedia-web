@@ -482,7 +482,14 @@ const ExamDetailForm = () => {
     }
   };
 
-  const streams = ['Engineering', 'Medical', 'Management', 'Law', 'Design', 'Architecture', 'Science', 'Commerce', 'Arts', 'Pharmacy', 'Agriculture'];
+  // All exam categories matching the listing page
+  const streams = [
+    'Engineering', 'Medical', 'Management', 'Science', 'Law', 'Pharmacy',
+    'Computer Applications', 'Arts', 'Education', 'Design', 'Architecture',
+    'Commerce', 'Paramedical', 'Dental', 'Class 12 Exams', 'Agriculture',
+    'Class 10 Exams', 'Hotel Management', 'Veterinary Sciences', 'Vocational Courses',
+    'Study Abroad Exams', 'Mass Communications', 'Aviation', 'Animation'
+  ];
   const indianStates = ['All India', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
 
   if (loading) {
