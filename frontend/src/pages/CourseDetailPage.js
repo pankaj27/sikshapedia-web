@@ -327,7 +327,7 @@ const CourseDetailPage = () => {
                 {[
                   { title: 'Educational Qualification', desc: eligibility },
                   { title: 'Entrance Exam', desc: course.entrance_exams?.join(', ') || 'JEE Main / State Level Entrance Exams' },
-                  { title: 'Age Limit', desc: 'No upper age limit for most institutions' },
+                  { title: 'Age Limit', desc: ageLimit },
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
                     <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm">
