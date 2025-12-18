@@ -2725,11 +2725,9 @@ async def get_authors_for_content(current_user: User = Depends(get_current_user)
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     
-    # Get all active team members (exclude password_hash)
-    authors = await db.admins.find(
-        {"is_active": True},
-        {"_id": 0, "password_hash": 0, "id": 1, "name": 1, "email": 1, "profile_photo": 1, "job_title": 1, "role": 1}
-    ).to_list(100)
+    # Get all active team members (exclude password_hash only)
+    authors_cursor = db.admins.find({"is_active": {"$ne": False}}, {"_id": 0, "password_hash": 0})
+    authors = await authors_cursor.to_list(100)
     return authors
 
 
