@@ -184,25 +184,27 @@ const CoursesAfter10thPage = () => {
           </div>
         </section>
 
-        {/* Quick Category Navigation */}
-        <section className="bg-white border-b shadow-sm sticky top-0 z-40">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
-              <span className="text-gray-500 text-sm whitespace-nowrap">Jump to:</span>
-              {Object.keys(coursesByCategory).map((category) => (
-                <button
-                  key={category}
-                  onClick={() => {
-                    document.getElementById(category.replace(/\s+/g, '-').toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-orange-100 hover:text-orange-600 rounded-full whitespace-nowrap transition-colors"
-                >
-                  {categoryMeta[category]?.icon} {category}
-                </button>
-              ))}
+        {/* Quick Category Navigation - Only show if courses exist */}
+        {totalCourses > 0 && (
+          <section className="bg-white border-b shadow-sm sticky top-0 z-40">
+            <div className="container mx-auto px-4">
+              <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
+                <span className="text-gray-500 text-sm whitespace-nowrap">Jump to:</span>
+                {Object.keys(coursesByCategory).map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => {
+                      document.getElementById(category.replace(/\s+/g, '-').toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-orange-100 hover:text-orange-600 rounded-full whitespace-nowrap transition-colors"
+                  >
+                    {categoryMeta[category]?.icon} {category}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-8">
