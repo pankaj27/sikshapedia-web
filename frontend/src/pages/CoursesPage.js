@@ -124,6 +124,15 @@ const CoursesPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* SEO Meta Tags */}
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        {settings?.meta_keywords?.length > 0 && (
+          <meta name="keywords" content={settings.meta_keywords.join(', ')} />
+        )}
+      </Helmet>
+
       {/* Hero Section with Gradient */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600"></div>
@@ -132,11 +141,10 @@ const CoursesPage = () => {
         <div className="relative container mx-auto px-4 py-16 md:py-24">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
-              Discover Your Perfect
-              <span className="block text-yellow-300">Course Journey</span>
+              {heroTitle}
             </h1>
             <p className="text-lg md:text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-              Explore 10,000+ courses across 50+ streams. Find the right path for your career.
+              {heroSubtitle}
             </p>
             
             {/* Search Bar */}
