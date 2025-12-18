@@ -11,7 +11,14 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr, field_validator
 from typing import List, Optional, Dict, Any, Union
 import uuid
 from datetime import datetime, timezone, timedelta
+
+# Fix bcrypt/passlib compatibility issue - must be before passlib import
 import bcrypt
+if not hasattr(bcrypt, "__about__"):
+    class _about:
+        __version__ = bcrypt.__version__
+    bcrypt.__about__ = _about
+
 import jwt
 from passlib.context import CryptContext
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
