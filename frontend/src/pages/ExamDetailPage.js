@@ -286,19 +286,22 @@ const ExamDetailPage = () => {
       </div>
 
       {/* Author Info */}
-      <div className="bg-white border-b py-3">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center gap-3">
-            <img src={exam.contentTeam.profileImage} alt={exam.contentTeam.author} className="w-10 h-10 rounded-full" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">{exam.contentTeam.author}</p>
-              <p className="text-xs text-gray-600">Updated on - {exam.contentTeam.updatedDate}</p>
+      {exam.contentTeam && (
+        <div className="bg-white border-b py-3">
+          <div className="container mx-auto px-6">
+            <div className="flex items-center gap-3">
+              <img src={exam.contentTeam.profileImage} alt={exam.contentTeam.author} className="w-10 h-10 rounded-full" />
+              <div>
+                <p className="text-sm font-semibold text-gray-800">{exam.contentTeam.author}</p>
+                <p className="text-xs text-gray-600">Updated on - {exam.contentTeam.updatedDate}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Key Highlights */}
+      {exam.keyHighlights?.length > 0 && (
       <div className="bg-blue-50 border-b border-blue-200 py-4">
         <div className="container mx-auto px-6">
           <h3 className="font-bold text-gray-800 mb-2">Key Summary</h3>
