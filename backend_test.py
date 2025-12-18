@@ -1846,6 +1846,248 @@ class APITester:
         else:
             self.log_test("All 15 Course Pages - Structure", False, f"Status: {status}", response)
 
+    def test_course_detail_dynamic_fields(self):
+        """Test Course Detail Dynamic Fields - Top Colleges & Age Limit"""
+        print("📚 Testing Course Detail Dynamic Fields (Top Colleges & Age Limit)...")
+        
+        # Test data from review request
+        test_course_id = "4443b705-08f0-4d03-aebe-162b9c07b122"
+        test_course_slug = "test-course-approval"
+        
+        expected_age_limit = "Candidates must be between 17-25 years for government colleges. No upper age limit for private institutions."
+        expected_top_colleges = [
+            {
+                "name": "IIT Delhi",
+                "location": "New Delhi, Delhi",
+                "rating": 4.8,
+                "fees": 200000,
+                "rank": 1
+            },
+            {
+                "name": "IIT Bombay", 
+                "location": "Mumbai, Maharashtra",
+                "rating": 4.9,
+                "fees": 210000,
+                "rank": 2
+            },
+            {
+                "name": "IIT Madras",
+                "location": "Chennai, Tamil Nadu", 
+                "rating": 4.7,
+                "fees": 195000,
+                "rank": 3
+            }
+        ]
+        
+        # Test 1: GET /api/courses-detail - Check if test course exists and has dynamic fields
+        success, response, status = self.make_request("GET", "/courses-detail")
+        if success and isinstance(response, list):
+            # Find the test course
+            test_course = None
+            for course in response:
+                if course.get("id") == test_course_id or course.get("slug") == test_course_slug:
+                    test_course = course
+                    break
+            
+            if test_course:
+                self.log_test("Find Test Course in Course Detail List", True, 
+                             f"Found course: {test_course.get('name', 'Unknown')} (ID: {test_course.get('id')})")
+                
+                # Test 2: Verify Age Limit field exists and has correct value
+                age_limit = test_course.get("age_limit")
+                if age_limit and expected_age_limit in age_limit:
+                    self.log_test("Verify Age Limit Field", True, 
+                                 f"Age limit present: {age_limit[:50]}...")
+                else:
+                    self.log_test("Verify Age Limit Field", False, 
+                                 f"Age limit missing or incorrect. Expected: '{expected_age_limit[:50]}...', Got: '{age_limit}'")
+                
+                # Test 3: Verify Top Colleges field exists and has correct structure
+                top_colleges = test_course.get("top_colleges", [])
+                if isinstance(top_colleges, list) and len(top_colleges) >= 3:
+                    self.log_test("Verify Top Colleges Field Structure", True, 
+                                 f"Found {len(top_colleges)} top colleges")
+                    
+                    # Test 4: Verify Top Colleges data structure
+                    valid_colleges = 0
+                    required_fields = ["name", "location", "rating", "fees", "rank"]
+                    
+                    for college in top_colleges:
+                        if isinstance(college, dict) and all(field in college for field in required_fields):
+                            valid_colleges += 1
+                    
+                    if valid_colleges == len(top_colleges):
+                        self.log_test("Verify Top Colleges Data Structure", True, 
+                                     f"All {valid_colleges} colleges have required fields: {', '.join(required_fields)}")
+                        
+                        # Test 5: Verify specific college data
+                        iit_delhi_found = False
+                        iit_bombay_found = False
+                        iit_madras_found = False
+                        
+                        for college in top_colleges:
+                            college_name = college.get("name", "").lower()
+                            if "iit delhi" in college_name:
+                                iit_delhi_found = True
+                            elif "iit bombay" in college_name:
+                                iit_bombay_found = True
+                            elif "iit madras" in college_name:
+                                iit_madras_found = True
+                        
+                        expected_colleges_found = sum([iit_delhi_found, iit_bombay_found, iit_madras_found])
+                        if expected_colleges_found >= 2:  # At least 2 out of 3 IITs should be present
+                            self.log_test("Verify Expected Colleges Present", True, 
+                                         f"Found {expected_colleges_found}/3 expected IIT colleges")
+                        else:
+                            self.log_test("Verify Expected Colleges Present", False, 
+                                         f"Only found {expected_colleges_found}/3 expected IIT colleges")
+                    else:
+                        self.log_test("Verify Top Colleges Data Structure", False, 
+                                     f"Only {valid_colleges}/{len(top_colleges)} colleges have proper structure")
+                else:
+                    self.log_test("Verify Top Colleges Field Structure", False, 
+                                 f"Top colleges field missing or insufficient. Expected: list with 3+ items, Got: {type(top_colleges)} with {len(top_colleges) if isinstance(top_colleges, list) else 0} items")
+                
+                # Store course data for PUT test
+                self.test_course_data = test_course
+                
+            else:
+                self.log_test("Find Test Course in Course Detail List", False, 
+                             f"Test course with ID '{test_course_id}' or slug '{test_course_slug}' not found")
+                self.test_course_data = None
+        else:
+            self.log_test("GET /courses-detail", False, f"Status: {status}", response)
+            self.test_course_data = None
+        
+        # Test 6: GET specific course by ID
+        success, response, status = self.make_request("GET", f"/courses-detail/{test_course_id}")
+        if success and isinstance(response, dict):
+            course_name = response.get("name", "Unknown")
+            self.log_test(f"GET /courses-detail/{test_course_id}", True, 
+                         f"Retrieved course: {course_name}")
+            
+            # Verify dynamic fields in individual course response
+            age_limit = response.get("age_limit")
+            top_colleges = response.get("top_colleges", [])
+            
+            if age_limit and len(top_colleges) >= 3:
+                self.log_test("Verify Dynamic Fields in Individual Course", True, 
+                             f"Both age_limit and top_colleges present")
+            else:
+                self.log_test("Verify Dynamic Fields in Individual Course", False, 
+                             f"Missing fields - age_limit: {bool(age_limit)}, top_colleges count: {len(top_colleges)}")
+        else:
+            self.log_test(f"GET /courses-detail/{test_course_id}", False, f"Status: {status}", response)
+        
+        # Test 7: PUT /api/courses-detail/{course_id} - Update with new dynamic fields
+        if self.admin_token and hasattr(self, 'test_course_data') and self.test_course_data:
+            # Prepare updated course data with new dynamic fields
+            updated_course_data = {
+                "name": self.test_course_data.get("name", "Test Course"),
+                "slug": self.test_course_data.get("slug", "test-course"),
+                "full_name": self.test_course_data.get("full_name", "Test Course Full Name"),
+                "description": self.test_course_data.get("description", "Test course description"),
+                "degree_type": self.test_course_data.get("degree_type", "UG"),
+                "stream": self.test_course_data.get("stream", "Engineering"),
+                "duration": self.test_course_data.get("duration", "4 years"),
+                "average_fees": self.test_course_data.get("average_fees", 200000),
+                "eligibility": self.test_course_data.get("eligibility", "12th pass"),
+                "entrance_exams": self.test_course_data.get("entrance_exams", []),
+                "career_options": self.test_course_data.get("career_options", []),
+                
+                # Updated dynamic fields
+                "age_limit": "Updated: " + expected_age_limit,
+                "top_colleges": [
+                    {
+                        "name": "Updated IIT Delhi",
+                        "location": "New Delhi, Delhi", 
+                        "rating": 4.9,
+                        "fees": 220000,
+                        "rank": 1
+                    },
+                    {
+                        "name": "Updated IIT Bombay",
+                        "location": "Mumbai, Maharashtra",
+                        "rating": 5.0, 
+                        "fees": 230000,
+                        "rank": 2
+                    },
+                    {
+                        "name": "Updated IIT Madras",
+                        "location": "Chennai, Tamil Nadu",
+                        "rating": 4.8,
+                        "fees": 215000, 
+                        "rank": 3
+                    }
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", f"/courses-detail/{test_course_id}", 
+                                                        updated_course_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify the update was successful
+                updated_age_limit = response.get("age_limit")
+                updated_top_colleges = response.get("top_colleges", [])
+                
+                age_limit_updated = updated_age_limit and "Updated:" in updated_age_limit
+                colleges_updated = (isinstance(updated_top_colleges, list) and 
+                                  len(updated_top_colleges) >= 3 and
+                                  any("Updated IIT" in college.get("name", "") for college in updated_top_colleges))
+                
+                if age_limit_updated and colleges_updated:
+                    self.log_test("PUT /courses-detail (update dynamic fields)", True, 
+                                 f"Successfully updated age_limit and top_colleges")
+                    
+                    # Test 8: Verify changes persist with GET request
+                    success, get_response, get_status = self.make_request("GET", f"/courses-detail/{test_course_id}")
+                    if success and isinstance(get_response, dict):
+                        persisted_age_limit = get_response.get("age_limit")
+                        persisted_top_colleges = get_response.get("top_colleges", [])
+                        
+                        age_limit_persisted = persisted_age_limit and "Updated:" in persisted_age_limit
+                        colleges_persisted = (isinstance(persisted_top_colleges, list) and 
+                                            len(persisted_top_colleges) >= 3 and
+                                            any("Updated IIT" in college.get("name", "") for college in persisted_top_colleges))
+                        
+                        if age_limit_persisted and colleges_persisted:
+                            self.log_test("Verify Dynamic Fields Update Persistence", True, 
+                                         "Updated dynamic fields persist in GET request")
+                        else:
+                            self.log_test("Verify Dynamic Fields Update Persistence", False, 
+                                         f"Fields not persisted - age_limit: {age_limit_persisted}, colleges: {colleges_persisted}")
+                    else:
+                        self.log_test("Verify Dynamic Fields Update Persistence", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("PUT /courses-detail (update dynamic fields)", False, 
+                                 f"Update failed - age_limit updated: {age_limit_updated}, colleges updated: {colleges_updated}")
+            else:
+                self.log_test("PUT /courses-detail (update dynamic fields)", False, 
+                             f"Status: {status}", response)
+        else:
+            reason = "Admin token not available" if not self.admin_token else "Test course data not available"
+            self.log_test("PUT /courses-detail (update dynamic fields)", False, reason)
+        
+        # Test 9: Verify CourseDetail model includes new fields
+        # This is implicit in the above tests, but we can add a specific check
+        if hasattr(self, 'test_course_data') and self.test_course_data:
+            model_fields_present = []
+            model_fields_missing = []
+            
+            expected_model_fields = ["age_limit", "top_colleges"]
+            for field in expected_model_fields:
+                if field in self.test_course_data:
+                    model_fields_present.append(field)
+                else:
+                    model_fields_missing.append(field)
+            
+            if len(model_fields_present) == len(expected_model_fields):
+                self.log_test("Verify CourseDetail Model Fields", True, 
+                             f"All expected dynamic fields present in model: {', '.join(model_fields_present)}")
+            else:
+                self.log_test("Verify CourseDetail Model Fields", False, 
+                             f"Missing model fields: {', '.join(model_fields_missing)}")
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
