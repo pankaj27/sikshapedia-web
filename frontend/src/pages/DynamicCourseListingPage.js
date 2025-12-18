@@ -666,19 +666,21 @@ const DynamicCourseListingPage = () => {
         </div>
 
         {/* FAQ Section */}
-        <section className="bg-white border-t py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Frequently Asked Questions</h2>
-            <div className="max-w-3xl mx-auto space-y-4">
-              {config.faqs.map((faq, idx) => (
-                <div key={idx} className={`${colors.bg} rounded-xl p-5 border ${colors.border}`}>
-                  <h3 className="font-semibold text-gray-800 mb-2">Q: {faq.q}</h3>
-                  <p className="text-gray-600 text-sm">A: {faq.a}</p>
-                </div>
-              ))}
+        {(config.faqs || []).length > 0 && (
+          <section className="bg-white border-t py-12">
+            <div className="container mx-auto px-4">
+              <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Frequently Asked Questions</h2>
+              <div className="max-w-3xl mx-auto space-y-4">
+                {(config.faqs || []).map((faq, idx) => (
+                  <div key={idx} className={`${colors.bg} rounded-xl p-5 border ${colors.border}`}>
+                    <h3 className="font-semibold text-gray-800 mb-2">Q: {faq.q || faq.question}</h3>
+                    <p className="text-gray-600 text-sm">A: {faq.a || faq.answer}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </>
   );
