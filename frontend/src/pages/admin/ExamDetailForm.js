@@ -627,19 +627,59 @@ const ExamDetailForm = () => {
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
             </div>
             <div className="lg:col-span-3">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Streams</label>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Exam Categories / Streams
+                  <span className="ml-2 text-xs font-normal text-gray-500">
+                    ({formData.streams?.length || 0} selected)
+                  </span>
+                </label>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, streams: [...streams] })}
+                    className="text-xs text-indigo-600 hover:text-indigo-800 hover:underline"
+                  >
+                    Select All
+                  </button>
+                  <span className="text-gray-300">|</span>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, streams: [] })}
+                    className="text-xs text-red-600 hover:text-red-800 hover:underline"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 {streams.map(stream => (
-                  <label key={stream} className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50">
-                    <input type="checkbox" checked={formData.streams?.includes(stream) || false}
+                  <label 
+                    key={stream} 
+                    className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
+                      formData.streams?.includes(stream) 
+                        ? 'bg-indigo-100 border-2 border-indigo-400' 
+                        : 'bg-white border border-gray-200 hover:bg-indigo-50'
+                    }`}
+                  >
+                    <input 
+                      type="checkbox" 
+                      checked={formData.streams?.includes(stream) || false}
                       onChange={(e) => {
                         if (e.target.checked) setFormData({ ...formData, streams: [...(formData.streams || []), stream] });
                         else setFormData({ ...formData, streams: (formData.streams || []).filter(s => s !== stream) });
-                      }} className="w-4 h-4 text-indigo-600 rounded" />
-                    <span className="text-sm text-gray-700">{stream}</span>
+                      }} 
+                      className="w-4 h-4 text-indigo-600 rounded" 
+                    />
+                    <span className={`text-sm ${formData.streams?.includes(stream) ? 'text-indigo-700 font-medium' : 'text-gray-700'}`}>
+                      {stream}
+                    </span>
                   </label>
                 ))}
               </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Select one or more categories. This will be used for filtering on the exam listing page.
+              </p>
             </div>
           </div>
         </CollapsibleSection>
