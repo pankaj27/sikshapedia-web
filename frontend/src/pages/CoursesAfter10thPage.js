@@ -14,40 +14,8 @@ const CoursesAfter10thPage = () => {
   const [expandedCategories, setExpandedCategories] = useState({});
   const [allCourses, setAllCourses] = useState([]);
   
-  // Default courses (shown if no API data)
-  const defaultCourses = {
-    'Engineering': [
-      { name: 'Diploma in Mechanical Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-mechanical-engineering' },
-      { name: 'Diploma in Civil Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-civil-engineering' },
-      { name: 'Diploma in Electrical Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-electrical-engineering' },
-      { name: 'Diploma in Computer Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-computer-engineering' },
-      { name: 'ITI Fitter', duration: '2 Years', course_mode: 'Full Time', slug: 'iti-fitter' },
-      { name: 'ITI Electrician', duration: '2 Years', course_mode: 'Full Time', slug: 'iti-electrician' },
-    ],
-    'Arts & Humanities': [
-      { name: 'Certificate in Spoken English', duration: '1 Year', course_mode: 'Full Time', slug: 'certificate-spoken-english' },
-      { name: 'Diploma in Fine Arts', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-fine-arts' },
-    ],
-    'Medical & Paramedical': [
-      { name: 'Diploma in Nursing (ANM)', duration: '2 Years', course_mode: 'Full Time', slug: 'diploma-anm-nursing' },
-      { name: 'Diploma in Pharmacy', duration: '2 Years', course_mode: 'Full Time', slug: 'diploma-pharmacy' },
-      { name: 'Diploma in Medical Lab Technology', duration: '2 Years', course_mode: 'Full Time', slug: 'diploma-mlt' },
-    ],
-    'Computer & IT': [
-      { name: 'Diploma in Computer Application (DCA)', duration: '1 Year', course_mode: 'Full Time', slug: 'dca' },
-      { name: 'Diploma in Information Technology', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-it' },
-    ],
-    'Hotel Management': [
-      { name: 'Diploma in Hotel Management', duration: '1 Year', course_mode: 'Full Time', slug: 'diploma-hotel-management' },
-    ],
-    'Vocational Courses': [
-      { name: 'ITI Welder', duration: '1 Year', course_mode: 'Full Time', slug: 'iti-welder' },
-      { name: 'ITI Carpenter', duration: '1 Year', course_mode: 'Full Time', slug: 'iti-carpenter' },
-    ],
-  };
-  
-  // Course data organized by category (from API or default)
-  const [coursesByCategory, setCoursesByCategory] = useState(defaultCourses);
+  // Course data organized by category (from API only)
+  const [coursesByCategory, setCoursesByCategory] = useState({});
 
   // Category icons and colors
   const categoryMeta = {
