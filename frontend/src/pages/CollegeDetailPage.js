@@ -7,6 +7,7 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import AdBanner from '../components/AdBanner';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
+import { SidebarSponsoredAd } from '../components/SponsoredAds';
 
 // Facility icon mapping for icon-based display
 const facilityIconMap = {
