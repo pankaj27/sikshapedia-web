@@ -39,9 +39,9 @@ const CoursesAfter10thPage = () => {
         const response = await api.get('/courses-detail?eligibility_level=after-10th&status=published&limit=200');
         const coursesData = response.data || [];
         
+        setAllCourses(coursesData);
+        
         if (coursesData.length > 0) {
-          setAllCourses(coursesData);
-          
           // Group courses by stream/category
           const grouped = {};
           coursesData.forEach(course => {
@@ -70,11 +70,13 @@ const CoursesAfter10thPage = () => {
           }, {});
           
           setCoursesByCategory(sortedGrouped);
+        } else {
+          // No courses found - keep empty
+          setCoursesByCategory({});
         }
-        // If no API data, keep defaultCourses
       } catch (error) {
         console.error('Error fetching courses:', error);
-        // Keep default courses on error
+        setCoursesByCategory({});
       } finally {
         setLoading(false);
       }
