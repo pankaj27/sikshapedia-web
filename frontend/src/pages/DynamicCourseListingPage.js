@@ -619,9 +619,9 @@ const DynamicCourseListingPage = () => {
                 </h3>
                 <div className="space-y-2">
                   {allCourses.length > 0 ? (
-                    // Show actual courses from database
+                    // Show actual courses from database - links to /courses/:slug
                     allCourses.slice(0, 7).map((course, idx) => (
-                      <Link key={course.id || idx} to={`/course/${course.slug || course.id}`}
+                      <Link key={course.id || idx} to={`/courses/${course.slug || course.id}`}
                         className={`flex items-center gap-3 p-2 hover:${colors.bg} rounded-lg text-gray-700 hover:${colors.text} transition-colors text-sm`}>
                         <span className={`w-6 h-6 ${colors.bg} rounded ${colors.text} flex items-center justify-center text-xs font-bold`}>{idx + 1}</span>
                         <span className="truncate">{course.name || course.full_name}</span>
