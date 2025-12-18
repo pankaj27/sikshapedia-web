@@ -1,8 +1,9 @@
 # Backend Modularization Plan
 
-## Current State
-- `server.py`: 5,831 lines (monolithic)
-- Contains all models, routes, and business logic
+## Current State (Updated: Dec 18, 2025)
+- `server.py`: ~7,800 lines (still large but modularization in progress)
+- Core modules extracted to `core/`
+- New modular routes implemented
 
 ## Target Architecture
 
@@ -10,67 +11,51 @@
 /app/backend/
 ├── server.py           # Main app entry, includes routers
 ├── core/
-│   ├── config.py       # Environment & settings
-│   ├── database.py     # MongoDB connection
-│   └── security.py     # JWT, password hashing
+│   ├── config.py       # ✅ Environment & settings
+│   ├── database.py     # ✅ MongoDB connection
+│   └── auth.py         # ✅ JWT, password hashing
 ├── models/
 │   ├── __init__.py
-│   ├── user.py         # User, AdminUser, Token
-│   ├── college.py      # College, Review, Question
-│   ├── course.py       # Course, CourseDetail
-│   ├── exam.py         # Exam, ExamDetail
-│   ├── content.py      # News, Blog, ListingPage
-│   └── admin.py        # Application, Inquiry
+│   ├── exam.py         # ✅ Exam models
+│   └── ...             # Other models still in server.py
 ├── routes/
-│   ├── __init__.py
-│   ├── auth.py         # /auth/* routes
-│   ├── admin.py        # /admin/* routes
-│   ├── colleges.py     # /colleges/*, /universities/*, /schools/*
-│   ├── courses.py      # /courses/*, /courses-detail/*
-│   ├── exams.py        # /exams/*, /exams-detail/*
-│   ├── content.py      # /news/*, /blogs/*, /listing-pages/*
-│   └── uploads.py      # /upload/*
-└── services/
-    ├── __init__.py
-    ├── approval.py     # Content approval logic
-    └── email.py        # Email notifications
+│   ├── __init__.py     # ✅ Route exports
+│   ├── auth.py         # ✅ /auth/* routes (5 routes)
+│   ├── blogs.py        # ✅ /blogs/* routes + settings
+│   ├── news.py         # ✅ /news/* routes + settings
+│   ├── admin_settings.py # ✅ Listing page settings
+│   ├── uploads.py      # Placeholder
+│   ├── colleges.py     # TODO
+│   └── courses.py      # TODO
+└── modules/            # Legacy modular architecture
 ```
 
-## Migration Steps
+## Migration Progress
 
-### Phase 1: Create Structure (DONE)
-- [x] Create routes/ directory
-- [x] Create models/ directory  
-- [x] Create placeholder files
+### Phase 1: Core Infrastructure ✅ DONE
+- [x] Create core/config.py - Settings management
+- [x] Create core/database.py - MongoDB connection
+- [x] Create core/auth.py - JWT utilities
 
-### Phase 2: Extract Models (IN PROGRESS)
-- [x] Move Exam models to models/exam.py
-- [ ] Move User models to models/user.py
-- [ ] Move College models to models/college.py
-- [ ] Move Course models to models/course.py
-- [ ] Move Content models to models/content.py
-- [ ] Update imports in server.py
+### Phase 2: Route Extraction (IN PROGRESS)
+- [x] auth.py - Authentication (register, login, profile, admin-login) ✅
+- [x] blogs.py - Blog CRUD + listing settings ✅
+- [x] news.py - News CRUD + listing settings ✅
+- [x] admin_settings.py - Course/Exam listing settings ✅
+- [ ] uploads.py - File uploads (TODO)
+- [ ] colleges.py - Colleges/Schools/Universities (TODO)
+- [ ] courses.py - Courses (TODO)
+- [ ] exams.py - Exams (TODO)
 
-### Phase 3: Extract Routes (Priority Order)
-1. [ ] auth.py - Authentication (5 routes)
-2. [ ] admin.py - Admin management (12 routes)
-3. [ ] uploads.py - File uploads (3 routes)
-4. [ ] colleges.py - Colleges/Schools/Universities (~15 routes)
-5. [ ] courses.py - Courses (~10 routes)
-6. [x] exams.py - Exams (~10 routes) - Structure created, routes in server.py
-7. [ ] content.py - News/Blogs/Listing Pages (~15 routes)
-
-### Phase 4: Extract Services
-- [ ] Move business logic to services/
-- [ ] Create shared utilities
-
-## Dependencies to Handle
-- Database connection (db)
-- JWT utilities (create_access_token, get_current_user)
-- Password context (pwd_context, bcrypt)
-- File paths (UPLOAD_DIR, BASE_URL)
+### Phase 3: Model Extraction (FUTURE)
+- [x] Exam models in models/exam.py
+- [ ] User models
+- [ ] College models
+- [ ] Course models
+- [ ] Content models
 
 ## Notes
-- Keep backwards compatibility during migration
-- Test each extracted module before moving to next
-- Update imports incrementally
+- Routes are duplicated: new modular routes + legacy routes in server.py
+- This ensures backwards compatibility during migration
+- Once fully tested, legacy routes can be removed from server.py
+- All new routes tested and working on Dec 18, 2025
