@@ -148,6 +148,7 @@ function App() {
             <Route path="/admin/listing-pages" element={<ListingPagesManagement />} />
             <Route path="/admin/listing-pages/new" element={<ListingPageForm />} />
             <Route path="/admin/listing-pages/edit/:id" element={<ListingPageForm />} />
+            <Route path="/admin/sponsored-ads" element={<SponsoredAdsManagement />} />
 
             {/* Public Routes - With Layout */}
             <Route path="/*" element={
