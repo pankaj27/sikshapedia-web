@@ -2995,6 +2995,135 @@ class MultiSponsoredAdsConfig(BaseModel):
     updated_at: Optional[datetime] = None
     updated_by: Optional[str] = None
 
+# ============= ADVANCED ADVERTISING SYSTEM =============
+
+class AdFormat(BaseModel):
+    """Different ad formats supported"""
+    type: str = "banner"  # banner, text, video, college_card, html
+    
+class AdBudget(BaseModel):
+    """Budget settings for an ad"""
+    total_budget: float = 0  # Total budget in currency
+    daily_budget: float = 0  # Daily spending limit
+    cost_per_click: float = 0  # CPC
+    cost_per_impression: float = 0  # CPM (per 1000)
+    spent_total: float = 0  # Total spent so far
+    spent_today: float = 0  # Spent today
+    last_reset_date: str = ""  # Date of last daily reset
+
+class AdStats(BaseModel):
+    """Tracking statistics for an ad"""
+    impressions: int = 0
+    clicks: int = 0
+    unique_impressions: int = 0
+    unique_clicks: int = 0
+    ctr: float = 0  # Click-through rate
+    last_impression: Optional[str] = None
+    last_click: Optional[str] = None
+    impressions_by_date: dict = {}  # date -> count
+    clicks_by_date: dict = {}  # date -> count
+    impressions_by_url: dict = {}  # url -> count
+    clicks_by_url: dict = {}  # url -> count
+
+class AdRotationSettings(BaseModel):
+    """Rotation settings for ads"""
+    enabled: bool = False
+    max_impressions: int = 0  # Max impressions before rotation
+    max_clicks: int = 0  # Max clicks before rotation
+    rotation_type: str = "sequential"  # sequential, random, weighted
+    weight: int = 1  # Weight for weighted rotation
+
+class Advertisement(BaseModel):
+    """Complete advertisement model"""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # Ad name for admin
+    
+    # Ad Format & Content
+    ad_type: str = "banner"  # banner, text, video, college_card, html, native
+    
+    # Banner specific
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
+    banner_size: str = "728x90"  # 728x90, 300x250, 160x600, 320x50, etc.
+    
+    # Text ad specific
+    headline: Optional[str] = None
+    description: Optional[str] = None
+    
+    # Video ad specific
+    video_url: Optional[str] = None
+    video_thumbnail: Optional[str] = None
+    video_duration: Optional[int] = None  # seconds
+    
+    # HTML/Native ad
+    html_content: Optional[str] = None
+    
+    # College card (existing functionality)
+    college_id: Optional[str] = None
+    
+    # Common fields
+    click_url: str = ""  # Where ad clicks go
+    click_url_target: str = "_blank"  # _blank, _self
+    
+    # Targeting
+    target_urls: List[str] = []  # List of URLs where ad should show
+    target_url_pattern: str = ""  # Regex pattern for URL matching
+    section_type: str = "banner"  # banner, featured, admission, sponsored, sidebar
+    placement_position: str = "top"  # top, middle, bottom, sidebar
+    
+    # Scheduling
+    start_date: str = ""
+    end_date: str = ""
+    start_time: str = "00:00"  # Daily start time
+    end_time: str = "23:59"  # Daily end time
+    days_of_week: List[int] = [0, 1, 2, 3, 4, 5, 6]  # 0=Mon, 6=Sun
+    
+    # Budget
+    budget: AdBudget = Field(default_factory=AdBudget)
+    
+    # Stats
+    stats: AdStats = Field(default_factory=AdStats)
+    
+    # Rotation
+    rotation: AdRotationSettings = Field(default_factory=AdRotationSettings)
+    
+    # Status
+    is_active: bool = True
+    is_paused: bool = False  # Manually paused
+    is_budget_exhausted: bool = False
+    status: str = "active"  # active, paused, completed, pending
+    
+    # Priority & Order
+    priority: int = 1  # Higher = more priority
+    serial_order: int = 1
+    
+    # Metadata
+    advertiser_id: Optional[str] = None
+    advertiser_name: Optional[str] = None
+    campaign_id: Optional[str] = None
+    campaign_name: Optional[str] = None
+    tags: List[str] = []
+    notes: Optional[str] = None
+    
+    # Timestamps
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    updated_by: Optional[str] = None
+
+class AdTrackingEvent(BaseModel):
+    """Individual tracking event"""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    ad_id: str
+    event_type: str  # impression, click, view, conversion
+    url: str  # Page URL where event occurred
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    user_ip: Optional[str] = None
+    user_agent: Optional[str] = None
+    session_id: Optional[str] = None
+    referrer: Optional[str] = None
+    metadata: dict = {}
+
 @api_router.get("/sponsored-ads-multi")
 async def get_multi_sponsored_ads():
     """Get the multi-placement sponsored ads configuration"""
