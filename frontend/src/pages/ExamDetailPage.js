@@ -450,7 +450,7 @@ const ExamDetailPage = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                          {exam.questionPapers[year].map((paper, idx) => (
+                          {(exam.questionPapers?.[year] || []).map((paper, idx) => (
                             <tr key={idx} className="hover:bg-gray-50 transition-colors">
                               <td className="px-6 py-4 text-sm text-gray-800">
                                 {exam.name} {year} Question Paper {paper.date}
