@@ -583,6 +583,18 @@ const DynamicListingPage = () => {
     }
   };
   
+  // Fetch admissions open colleges
+  const fetchAdmissionOpenColleges = async () => {
+    try {
+      const response = await api.get('/colleges?is_admission_open=true&limit=6');
+      if (response.data && response.data.length > 0) {
+        setAdmissionOpenColleges(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching admission open colleges:', error);
+    }
+  };
+  
   // Fetch page content from admin panel
   const fetchPageContent = async () => {
     try {
