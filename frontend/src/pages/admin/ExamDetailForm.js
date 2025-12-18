@@ -136,6 +136,24 @@ const ExamDetailForm = () => {
 
   const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager';
 
+  // Fetch quick entry exams for dropdown
+  const [quickEntryExams, setQuickEntryExams] = useState([]);
+  const [loadingExams, setLoadingExams] = useState(true);
+
+  useEffect(() => {
+    const fetchQuickEntryExams = async () => {
+      try {
+        const response = await api.get('/exams');
+        setQuickEntryExams(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        console.error('Error fetching exams:', error);
+      } finally {
+        setLoadingExams(false);
+      }
+    };
+    fetchQuickEntryExams();
+  }, []);
+
   const getDefaultFormData = () => ({
     name: '',
     slug: '',
