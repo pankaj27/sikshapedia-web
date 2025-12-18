@@ -198,6 +198,88 @@ const AdBanner = ({ pageName, position = 'top' }) => {
               </div>
             </div>
           )}
+
+          {/* HTML/Native Ad */}
+          {ad.ad_type === 'html' && (
+            <div className="relative bg-white rounded-lg overflow-hidden shadow-sm border">
+              <button
+                onClick={() => handleClose(ad.id)}
+                className="absolute top-2 right-2 bg-white/80 rounded-full p-1 shadow-md hover:bg-gray-100 z-10"
+                aria-label="Close ad"
+              >
+                <FiX className="w-4 h-4 text-gray-600" />
+              </button>
+              <div
+                className="cursor-pointer"
+                onClick={() => handleAdClick(ad)}
+                dangerouslySetInnerHTML={{ __html: ad.html_content || '' }}
+              />
+            </div>
+          )}
+
+          {/* Text Ad */}
+          {ad.ad_type === 'text' && (
+            <div className="relative bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200 shadow-sm">
+              <button
+                onClick={() => handleClose(ad.id)}
+                className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                aria-label="Close ad"
+              >
+                <FiX className="w-4 h-4" />
+              </button>
+              <div
+                className="cursor-pointer"
+                onClick={() => handleAdClick(ad)}
+              >
+                <span className="text-xs text-blue-600 font-medium">Sponsored</span>
+                <h4 className="font-semibold text-gray-900 mt-1">{ad.title}</h4>
+                {ad.description && (
+                  <p className="text-sm text-gray-600 mt-1">{ad.description}</p>
+                )}
+                <span className="text-xs text-blue-600 mt-2 inline-block">Learn More →</span>
+              </div>
+            </div>
+          )}
+
+          {/* Video Ad */}
+          {ad.ad_type === 'video' && (
+            <div className="relative bg-black rounded-lg overflow-hidden shadow-sm">
+              <button
+                onClick={() => handleClose(ad.id)}
+                className="absolute top-2 right-2 bg-white/80 rounded-full p-1 shadow-md hover:bg-white z-10"
+                aria-label="Close ad"
+              >
+                <FiX className="w-4 h-4 text-gray-600" />
+              </button>
+              <div className="aspect-video">
+                {ad.video_url ? (
+                  <iframe
+                    src={ad.video_url}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : ad.video_thumbnail ? (
+                  <div
+                    className="relative cursor-pointer"
+                    onClick={() => handleAdClick(ad)}
+                  >
+                    <img src={ad.video_thumbnail} alt={ad.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">
+                        <span className="text-2xl">▶</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+              {ad.title && (
+                <div className="p-3 bg-white">
+                  <p className="text-sm font-medium text-gray-800">{ad.title}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </div>
