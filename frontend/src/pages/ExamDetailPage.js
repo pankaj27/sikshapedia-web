@@ -198,7 +198,13 @@ const ExamDetailPage = () => {
       eligibility: mockExam.examInfo?.eligibility || '10+2 with required subjects',
       officialWebsite: examFromApi.official_website || mockExam.examInfo?.officialWebsite || '#'
     },
-    keyHighlights: mockExam.keyHighlights || [],
+    keyHighlights: mockExam.keyHighlights || [
+      `${examFromApi.name} is conducted by ${examFromApi.conducting_body || 'the examining authority'}`,
+      examFromApi.exam_mode ? `Exam Mode: ${examFromApi.exam_mode}` : null,
+      examFromApi.exam_duration ? `Duration: ${examFromApi.exam_duration}` : null,
+      examFromApi.total_marks ? `Total Marks: ${examFromApi.total_marks}` : null,
+      examFromApi.num_questions ? `Total Questions: ${examFromApi.num_questions}` : null,
+    ].filter(Boolean),
     menuConfig: examFromApi.menu_config,
     sidebarWidgets: examFromApi.sidebar_widgets,
     metaTitle: examFromApi.meta_title,
@@ -207,7 +213,16 @@ const ExamDetailPage = () => {
     examDate: examFromApi.exam_date,
     applicationStart: examFromApi.application_start_date,
     applicationEnd: examFromApi.application_end_date,
-    resultDate: examFromApi.result_date
+    resultDate: examFromApi.result_date,
+    contentTeam: {
+      author: 'Admissionbuddy Team',
+      profileImage: 'https://ui-avatars.com/api/?name=AB&background=f97316&color=fff&size=40',
+      updatedDate: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    },
+    tableOfContents: examFromApi.menu_config?.items?.map(item => ({
+      id: item.id,
+      title: item.label
+    })) || []
   } : mockExam;
 
   // Show loading state
