@@ -464,12 +464,10 @@ class APITester:
         # Test 1: Create Banner Ad with Custom URL Targeting
         banner_ad_data = {
             "name": "Test Banner Ad - Maharashtra",
-            "title": "Top Engineering Colleges",
-            "description": "Explore top colleges in Maharashtra",
             "ad_type": "banner",
             "image_url": "https://via.placeholder.com/728x90?text=Banner+Ad",
-            "click_url": "https://example.com/colleges",
             "banner_size": "728x90",
+            "click_url": "https://example.com/colleges",
             "target_urls": ["/maharashtra-colleges", "/mumbai-colleges"],
             "placement_position": "top",
             "start_date": "2025-01-01",
