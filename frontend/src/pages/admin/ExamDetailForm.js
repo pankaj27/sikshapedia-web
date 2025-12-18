@@ -226,6 +226,8 @@ const ExamDetailForm = () => {
     og_description: '',
     og_image_url: '',
     canonical_url: '',
+    robots_meta: 'index, follow',
+    schema_type: 'Event',
     status: 'draft'
   });
 
