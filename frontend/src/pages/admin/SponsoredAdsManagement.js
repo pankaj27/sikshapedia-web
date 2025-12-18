@@ -308,7 +308,7 @@ const SponsoredAdsManagement = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await api.post('/sponsored-ads-multi', { placements: adsConfig });
+      await api.post('/sponsored-ads-multi', { placements: adsConfig, custom_placements: customPlacements });
       alert('Sponsored ads saved successfully!');
     } catch (error) {
       console.error('Error saving:', error);
@@ -317,6 +317,49 @@ const SponsoredAdsManagement = () => {
       setSaving(false);
     }
   };
+
+  // Custom URL Placement functions
+  const addCustomPlacement = () => {
+    if (!newCustomPlacement.url || !newCustomPlacement.sectionType) {
+      alert('Please enter URL path and section type');
+      return;
+    }
+    const placementId = `custom_${newCustomPlacement.url.replace(/\//g, '_')}_${newCustomPlacement.sectionType}`;
+    const placementName = newCustomPlacement.name || `${newCustomPlacement.url} - ${SECTION_TYPES.find(s => s.id === newCustomPlacement.sectionType)?.name}`;
+    
+    // Check if already exists
+    if (customPlacements.find(p => p.id === placementId)) {
+      alert('This placement already exists!');
+      return;
+    }
+    
+    const newPlacement = {
+      id: placementId,
+      url: newCustomPlacement.url,
+      sectionType: newCustomPlacement.sectionType,
+      name: placementName,
+      contentType: 'college'
+    };
+    
+    setCustomPlacements([...customPlacements, newPlacement]);
+    setAdsConfig({ ...adsConfig, [placementId]: [] });
+    setActiveTab(placementId);
+    setShowCustomPlacementModal(false);
+    setNewCustomPlacement({ url: '', sectionType: 'featured', name: '' });
+  };
+
+  const deleteCustomPlacement = (placementId) => {
+    if (!window.confirm('Are you sure you want to delete this custom placement and all its ads?')) return;
+    setCustomPlacements(customPlacements.filter(p => p.id !== placementId));
+    const newConfig = { ...adsConfig };
+    delete newConfig[placementId];
+    setAdsConfig(newConfig);
+    setActiveTab('college_listing_featured');
+  };
+
+  const isCustomPlacement = (tabId) => tabId.startsWith('custom_');
+
+  const getCustomPlacementInfo = (tabId) => customPlacements.find(p => p.id === tabId);
 
   const isExpired = (endDate) => new Date(endDate) < new Date();
   
