@@ -179,6 +179,9 @@ const SponsoredAdsManagement = () => {
       if (configRes.data && configRes.data.placements) {
         setAdsConfig(configRes.data.placements);
       }
+      if (configRes.data && configRes.data.custom_placements) {
+        setCustomPlacements(configRes.data.custom_placements);
+      }
       
       // Fetch all content for selection
       const [collegesRes, schoolsRes, coursesRes, examsRes] = await Promise.all([
