@@ -1973,6 +1973,375 @@ class CourseListingPageSettings(BaseModel):
     updated_by: Optional[str] = None
 
 
+# Individual Course Page Settings (for /courses/engineering, /courses/medical, etc.)
+class CoursePageSettings(BaseModel):
+    """Settings for individual course listing pages like /courses/engineering, /courses/after-10th"""
+    model_config = ConfigDict(extra="allow")
+    id: str  # Page slug (e.g., "engineering", "after-10th", "medical")
+    
+    # Page Identity
+    page_type: str = "stream"  # "stream", "level", or "degree"
+    is_active: bool = True
+    
+    # Hero Section
+    title: str
+    subtitle: str
+    icon: str = "📚"
+    badge: str = ""
+    
+    # Theme
+    theme: str = "from-blue-600 via-blue-700 to-indigo-700"  # Gradient classes
+    theme_light: str = "blue"  # Color key for accents
+    
+    # Course Filter (how to fetch courses)
+    filter_key: str = "stream"  # "stream", "degree_type", "eligibility_level"
+    filter_value: str = ""  # "Engineering", "PG", "after-10th"
+    
+    # Display
+    duration: str = "3-4 Years"
+    benefits: List[str] = []
+    popular_courses: List[str] = []
+    related_pages: List[str] = []
+    
+    # FAQs
+    faqs: List[Dict] = []  # [{question, answer}]
+    
+    # SEO
+    meta_title: str = ""
+    meta_description: str = ""
+    meta_keywords: List[str] = []
+    
+    # Sidebar Content
+    sidebar_cta_title: str = "Need Guidance?"
+    sidebar_cta_text: str = "Get expert counselling"
+    sidebar_cta_button: str = "Get Free Counselling"
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_by: Optional[str] = None
+
+
+# Default configurations for course pages
+DEFAULT_COURSE_PAGE_CONFIGS = {
+    "after-10th": {
+        "page_type": "level",
+        "title": "Courses After 10th Class",
+        "subtitle": "Explore diploma, certificate & vocational courses to kickstart your career after class 10th",
+        "icon": "🎓",
+        "badge": "Diploma & Vocational",
+        "theme": "from-orange-600 via-orange-500 to-amber-500",
+        "theme_light": "orange",
+        "filter_key": "eligibility_level",
+        "filter_value": "after-10th",
+        "duration": "6 Months - 3 Years",
+        "benefits": ["Early career start", "Practical skills", "Lower fees", "Job-ready training", "Government job options"],
+        "popular_courses": ["Diploma in Engineering", "ITI Electrician", "Diploma in Pharmacy", "ANM Nursing", "Polytechnic"],
+        "related_pages": ["/courses/after-12th", "/courses/diploma", "/courses/certificate"],
+        "faqs": [
+            {"question": "What are the best courses after 10th?", "answer": "Popular courses include Diploma in Engineering, ITI courses, Diploma in Pharmacy, ANM Nursing, and various certificate programs."},
+            {"question": "Can I do diploma after 10th?", "answer": "Yes, you can pursue polytechnic diploma courses in various streams like Engineering, Pharmacy, and Hotel Management after completing 10th class."}
+        ],
+        "meta_title": "Courses After 10th - Best Diploma & Certificate Courses 2025",
+        "meta_description": "Explore 50+ diploma, certificate and ITI courses after 10th class. Find the best career-oriented courses in Engineering, Medical, IT, Design and more."
+    },
+    "after-12th": {
+        "page_type": "level",
+        "title": "Courses After 12th Class",
+        "subtitle": "Discover undergraduate programs and professional courses after completing 12th standard",
+        "icon": "📚",
+        "badge": "Undergraduate Programs",
+        "theme": "from-blue-600 via-indigo-600 to-purple-600",
+        "theme_light": "blue",
+        "filter_key": "eligibility_level",
+        "filter_value": "after-12th",
+        "duration": "3-5 Years",
+        "benefits": ["Wide career options", "Higher education path", "Professional degrees", "Better salary", "Specialization opportunities"],
+        "popular_courses": ["B.Tech", "MBBS", "B.Com", "BA", "BBA", "BCA", "B.Sc"],
+        "related_pages": ["/courses/after-10th", "/courses/pg", "/courses/engineering"],
+        "faqs": [
+            {"question": "What are the best courses after 12th?", "answer": "Popular courses include B.Tech, MBBS, B.Com, BA, BBA, BCA depending on your stream and interests."},
+            {"question": "Which stream has more career options?", "answer": "All streams have good options. Science opens doors to engineering/medical, Commerce to finance/business, Arts to humanities/civil services."}
+        ],
+        "meta_title": "Courses After 12th - Best UG Programs 2025",
+        "meta_description": "Find the best courses after 12th class. Explore B.Tech, MBBS, B.Com, BA, BBA programs with eligibility, fees, and career options."
+    },
+    "diploma": {
+        "page_type": "degree",
+        "title": "Diploma Courses in India",
+        "subtitle": "Professional diploma programs for skill-based education and career advancement",
+        "icon": "📜",
+        "badge": "Professional Certification",
+        "theme": "from-orange-500 via-amber-500 to-yellow-500",
+        "theme_light": "amber",
+        "filter_key": "degree_type",
+        "filter_value": "Diploma",
+        "duration": "1-3 Years",
+        "benefits": ["Practical training", "Quick completion", "Industry focused", "Affordable", "Job ready"],
+        "popular_courses": ["Diploma in Engineering", "Diploma in Pharmacy", "Diploma in Nursing", "DMLT", "DHM"],
+        "related_pages": ["/courses/after-10th", "/courses/certificate", "/courses/engineering"],
+        "faqs": [
+            {"question": "Is diploma better than degree?", "answer": "Diploma offers quicker job entry with practical skills. Degree provides broader knowledge and higher positions."},
+            {"question": "Can I do degree after diploma?", "answer": "Yes, you can pursue lateral entry to B.Tech/degree programs after completing diploma."}
+        ],
+        "meta_title": "Diploma Courses in India 2025 - Professional Programs",
+        "meta_description": "Explore diploma courses in India. Find engineering, pharmacy, nursing diploma programs with duration, fees, and career options."
+    },
+    "pg": {
+        "page_type": "degree",
+        "title": "PG Courses in India",
+        "subtitle": "Explore postgraduate courses including MBA, M.Tech, MA, M.Sc, M.Com and more",
+        "icon": "🎓",
+        "badge": "Masters & Postgraduate",
+        "theme": "from-violet-600 via-purple-600 to-indigo-600",
+        "theme_light": "violet",
+        "filter_key": "degree_type",
+        "filter_value": "PG",
+        "duration": "1-2 Years",
+        "benefits": ["Higher salary potential", "Specialization", "Research opportunities", "Leadership roles", "Global recognition"],
+        "popular_courses": ["MBA", "M.Tech", "M.Sc", "MA", "M.Com", "MCA", "LLM"],
+        "related_pages": ["/courses/after-12th", "/courses/phd", "/courses/management"],
+        "faqs": [
+            {"question": "What are the best PG courses?", "answer": "Popular PG courses include MBA, M.Tech, M.Sc, MA, M.Com, MCA, and specialized masters programs."},
+            {"question": "What is eligibility for PG courses?", "answer": "Generally need bachelor's degree with 50% marks. Some require entrance exams like CAT, GATE."}
+        ],
+        "meta_title": "PG Courses in India 2025 - Masters & Postgraduate Programs",
+        "meta_description": "Find 500+ postgraduate courses in India. Explore MBA, M.Tech, MA, M.Sc programs with eligibility, fees, and top colleges."
+    },
+    "phd": {
+        "page_type": "degree",
+        "title": "PhD Programs in India",
+        "subtitle": "Discover doctoral research programs across various disciplines",
+        "icon": "🔬",
+        "badge": "Doctoral Research",
+        "theme": "from-slate-700 via-slate-800 to-gray-900",
+        "theme_light": "slate",
+        "filter_key": "degree_type",
+        "filter_value": "PhD",
+        "duration": "3-5 Years",
+        "benefits": ["Research excellence", "Academic career", "Industry research", "Expert recognition", "Innovation leadership"],
+        "popular_courses": ["PhD in Science", "PhD in Engineering", "PhD in Management", "PhD in Arts", "PhD in Commerce"],
+        "related_pages": ["/courses/pg", "/courses/science"],
+        "faqs": [
+            {"question": "How to apply for PhD in India?", "answer": "Clear entrance exams like NET/GATE, apply to universities, submit research proposal, and appear for interviews."},
+            {"question": "What is PhD duration?", "answer": "PhD typically takes 3-5 years including coursework, research, and thesis submission."}
+        ],
+        "meta_title": "PhD Programs in India 2025 - Doctoral Research Courses",
+        "meta_description": "Explore PhD programs in India. Find research opportunities in Science, Engineering, Arts, Management with top universities."
+    },
+    "certificate": {
+        "page_type": "degree",
+        "title": "Certificate Courses in India",
+        "subtitle": "Short-term skill-based courses for quick career advancement",
+        "icon": "✨",
+        "badge": "Short-Term Certification",
+        "theme": "from-amber-500 via-orange-500 to-red-500",
+        "theme_light": "amber",
+        "filter_key": "degree_type",
+        "filter_value": "Certificate",
+        "duration": "3-12 Months",
+        "benefits": ["Quick completion", "Skill focused", "Affordable", "Industry recognized", "Flexible learning"],
+        "popular_courses": ["Digital Marketing", "Data Analytics", "Web Development", "Graphic Design", "Financial Modeling"],
+        "related_pages": ["/courses/diploma", "/courses/after-10th", "/courses/computer"],
+        "faqs": [
+            {"question": "Are certificate courses valuable?", "answer": "Yes, certificate courses from reputed institutions are valued by employers for specific skill sets."},
+            {"question": "What is certificate course duration?", "answer": "Certificate courses typically range from 3 months to 1 year depending on the program."}
+        ],
+        "meta_title": "Certificate Courses in India 2025 - Short Term Programs",
+        "meta_description": "Explore certificate courses in IT, Design, Marketing, Finance. Short-term programs for skill development and career growth."
+    },
+    "engineering": {
+        "page_type": "stream",
+        "title": "Engineering Courses in India",
+        "subtitle": "B.Tech, B.E, M.Tech and other engineering programs",
+        "icon": "⚙️",
+        "badge": "Technical Education",
+        "theme": "from-blue-600 via-blue-700 to-indigo-700",
+        "theme_light": "blue",
+        "filter_key": "stream",
+        "filter_value": "Engineering",
+        "duration": "4 Years (B.Tech)",
+        "benefits": ["High demand", "Innovation driven", "Global opportunities", "Diverse specializations", "High salary"],
+        "popular_courses": ["B.Tech CSE", "B.Tech ECE", "B.Tech Mechanical", "B.Tech Civil", "M.Tech"],
+        "related_pages": ["/courses/after-12th", "/courses/diploma", "/courses/pg"],
+        "faqs": [
+            {"question": "Which engineering branch is best?", "answer": "CSE, ECE, and Mechanical are popular. Choose based on interest and job market."},
+            {"question": "What is B.Tech eligibility?", "answer": "10+2 with PCM, minimum 50% marks, and clearing JEE Main/State entrance exams."}
+        ],
+        "meta_title": "Engineering Courses in India 2025 - B.Tech, BE, M.Tech",
+        "meta_description": "Explore engineering courses in India. Find B.Tech, BE, M.Tech programs in CSE, ECE, Mechanical, Civil with top colleges."
+    },
+    "medical": {
+        "page_type": "stream",
+        "title": "Medical Courses in India",
+        "subtitle": "MBBS, BDS, Nursing, Pharmacy and healthcare programs",
+        "icon": "🏥",
+        "badge": "Healthcare & Medicine",
+        "theme": "from-red-600 via-rose-600 to-pink-600",
+        "theme_light": "red",
+        "filter_key": "stream",
+        "filter_value": "Medical",
+        "duration": "4-5.5 Years",
+        "benefits": ["Noble profession", "Job security", "High respect", "Global opportunities", "Life-saving impact"],
+        "popular_courses": ["MBBS", "BDS", "BAMS", "BHMS", "B.Sc Nursing", "B.Pharm"],
+        "related_pages": ["/courses/after-12th", "/courses/pg", "/courses/science"],
+        "faqs": [
+            {"question": "How to become a doctor?", "answer": "Complete 10+2 with PCB, clear NEET, get MBBS admission, complete internship, register with MCI."},
+            {"question": "What are alternative medical courses?", "answer": "BAMS, BHMS, BDS, B.Pharm, Nursing are good alternatives to MBBS."}
+        ],
+        "meta_title": "Medical Courses in India 2025 - MBBS, BDS, Nursing",
+        "meta_description": "Explore medical courses in India. Find MBBS, BDS, BAMS, Nursing, Pharmacy programs with eligibility and top medical colleges."
+    },
+    "management": {
+        "page_type": "stream",
+        "title": "Management Courses in India",
+        "subtitle": "BBA, MBA, PGDM and business management programs",
+        "icon": "📊",
+        "badge": "Business & Management",
+        "theme": "from-purple-600 via-violet-600 to-indigo-600",
+        "theme_light": "purple",
+        "filter_key": "stream",
+        "filter_value": "Management",
+        "duration": "2-3 Years",
+        "benefits": ["Leadership skills", "High salary", "Entrepreneurship", "Global network", "Diverse careers"],
+        "popular_courses": ["MBA", "BBA", "PGDM", "BMS", "BBM", "Executive MBA"],
+        "related_pages": ["/courses/commerce", "/courses/after-12th", "/courses/pg"],
+        "faqs": [
+            {"question": "Which is better BBA or B.Com?", "answer": "BBA focuses on management, B.Com on accounting/finance. Choose based on career goals."},
+            {"question": "How to get into top MBA colleges?", "answer": "Score well in CAT/XAT, have good academics, work experience, prepare for GD-PI."}
+        ],
+        "meta_title": "Management Courses in India 2025 - BBA, MBA, PGDM",
+        "meta_description": "Explore management courses in India. Find BBA, MBA, PGDM programs with specializations in Finance, Marketing, HR."
+    },
+    "science": {
+        "page_type": "stream",
+        "title": "Science Courses in India",
+        "subtitle": "B.Sc, M.Sc and research-oriented science programs",
+        "icon": "🔬",
+        "badge": "Pure & Applied Sciences",
+        "theme": "from-cyan-600 via-teal-600 to-emerald-600",
+        "theme_light": "cyan",
+        "filter_key": "stream",
+        "filter_value": "Science",
+        "duration": "3 Years (B.Sc)",
+        "benefits": ["Research foundation", "Analytical skills", "Diverse fields", "Higher studies", "Innovation"],
+        "popular_courses": ["B.Sc Physics", "B.Sc Chemistry", "B.Sc Mathematics", "B.Sc Biology", "B.Sc Computer Science"],
+        "related_pages": ["/courses/after-12th", "/courses/engineering", "/courses/pg"],
+        "faqs": [
+            {"question": "What can I do after B.Sc?", "answer": "Pursue M.Sc, MBA, B.Ed, or enter jobs in research, teaching, pharma, IT."},
+            {"question": "Which science stream has best scope?", "answer": "Computer Science, Biotechnology, Data Science have excellent prospects."}
+        ],
+        "meta_title": "Science Courses in India 2025 - BSc, MSc Programs",
+        "meta_description": "Explore science courses in India. Find B.Sc, M.Sc programs in Physics, Chemistry, Biology with top universities."
+    },
+    "commerce": {
+        "page_type": "stream",
+        "title": "Commerce Courses in India",
+        "subtitle": "B.Com, CA, CS, CMA and finance-related programs",
+        "icon": "💰",
+        "badge": "Finance & Accounting",
+        "theme": "from-emerald-600 via-green-600 to-teal-600",
+        "theme_light": "emerald",
+        "filter_key": "stream",
+        "filter_value": "Commerce",
+        "duration": "3 Years (B.Com)",
+        "benefits": ["Financial expertise", "Stable careers", "Professional certifications", "Business acumen", "High demand"],
+        "popular_courses": ["B.Com", "B.Com (Hons)", "CA", "CS", "CMA", "BBA", "M.Com"],
+        "related_pages": ["/courses/management", "/courses/after-12th", "/courses/pg"],
+        "faqs": [
+            {"question": "What is better CA or MBA?", "answer": "CA is specialized in accounting, MBA is broader management. CA has higher entry barrier but assured career."},
+            {"question": "What are best commerce courses?", "answer": "B.Com, CA, CS, CMA, BBA, and certifications like CFA are highly valued."}
+        ],
+        "meta_title": "Commerce Courses in India 2025 - BCom, CA, CS",
+        "meta_description": "Explore commerce courses in India. Find B.Com, CA, CS, CMA programs with career options in accounting, finance."
+    },
+    "arts": {
+        "page_type": "stream",
+        "title": "Arts & Humanities Courses",
+        "subtitle": "BA, MA and liberal arts programs across disciplines",
+        "icon": "🎨",
+        "badge": "Liberal Arts & Humanities",
+        "theme": "from-pink-600 via-rose-600 to-red-600",
+        "theme_light": "pink",
+        "filter_key": "stream",
+        "filter_value": "Arts",
+        "duration": "3 Years (BA)",
+        "benefits": ["Critical thinking", "Communication skills", "Creativity", "Diverse careers", "Cultural understanding"],
+        "popular_courses": ["BA English", "BA Psychology", "BA Economics", "BA History", "BA Political Science"],
+        "related_pages": ["/courses/after-12th", "/courses/law", "/courses/education"],
+        "faqs": [
+            {"question": "What jobs with BA degree?", "answer": "Content writing, journalism, teaching, HR, civil services, social work."},
+            {"question": "Is arts a good stream?", "answer": "Yes! Arts graduates excel in media, law, civil services, teaching."}
+        ],
+        "meta_title": "Arts Courses in India 2025 - BA, MA Programs",
+        "meta_description": "Explore arts and humanities courses in India. Find BA, MA programs in English, History, Psychology."
+    },
+    "computer": {
+        "page_type": "stream",
+        "title": "Computer & IT Courses",
+        "subtitle": "BCA, MCA, B.Tech CS and information technology programs",
+        "icon": "💻",
+        "badge": "Information Technology",
+        "theme": "from-indigo-600 via-blue-600 to-violet-600",
+        "theme_light": "indigo",
+        "filter_key": "stream",
+        "filter_value": "Computer Applications",
+        "duration": "3-4 Years",
+        "benefits": ["High demand", "Remote work", "Innovation", "Global opportunities", "Excellent salary"],
+        "popular_courses": ["B.Tech CSE", "BCA", "MCA", "B.Sc IT", "Data Science", "AI/ML"],
+        "related_pages": ["/courses/engineering", "/courses/after-12th", "/courses/certificate"],
+        "faqs": [
+            {"question": "BCA or B.Tech CSE?", "answer": "B.Tech CSE is more comprehensive (4 years), BCA (3 years) is application focused."},
+            {"question": "What programming languages to learn?", "answer": "Python, JavaScript, Java, SQL are essential."}
+        ],
+        "meta_title": "Computer Courses in India 2025 - BCA, MCA, IT Programs",
+        "meta_description": "Explore computer and IT courses in India. Find BCA, MCA, B.Tech CSE, Data Science programs."
+    },
+    "law": {
+        "page_type": "stream",
+        "title": "Law Courses in India",
+        "subtitle": "LLB, BA LLB, LLM and legal education programs",
+        "icon": "⚖️",
+        "badge": "Legal Education",
+        "theme": "from-amber-600 via-yellow-600 to-orange-600",
+        "theme_light": "amber",
+        "filter_key": "stream",
+        "filter_value": "Law",
+        "duration": "3-5 Years",
+        "benefits": ["Prestigious career", "Advocacy", "Corporate law", "Judiciary", "Social impact"],
+        "popular_courses": ["BA LLB", "BBA LLB", "LLB", "LLM", "B.Com LLB"],
+        "related_pages": ["/courses/arts", "/courses/after-12th", "/courses/pg"],
+        "faqs": [
+            {"question": "How to become a lawyer?", "answer": "Complete 12th, clear CLAT/LSAT, get LLB degree, enroll with Bar Council."},
+            {"question": "3-year or 5-year LLB?", "answer": "5-year integrated BA LLB after 12th is comprehensive. 3-year LLB for graduates."}
+        ],
+        "meta_title": "Law Courses in India 2025 - LLB, BALLB, LLM",
+        "meta_description": "Explore law courses in India. Find LLB, BA LLB, LLM programs with eligibility and top law colleges."
+    },
+    "education": {
+        "page_type": "stream",
+        "title": "Education & Teaching Courses",
+        "subtitle": "B.Ed, D.El.Ed, M.Ed and teacher training programs",
+        "icon": "📖",
+        "badge": "Teacher Training",
+        "theme": "from-sky-600 via-cyan-600 to-blue-600",
+        "theme_light": "sky",
+        "filter_key": "stream",
+        "filter_value": "Education",
+        "duration": "1-2 Years",
+        "benefits": ["Noble profession", "Job security", "Work-life balance", "Government jobs", "Shape future"],
+        "popular_courses": ["B.Ed", "D.El.Ed", "M.Ed", "B.P.Ed", "NTT"],
+        "related_pages": ["/courses/arts", "/courses/pg", "/courses/after-12th"],
+        "faqs": [
+            {"question": "How to become a teacher?", "answer": "Complete graduation, clear entrance, complete B.Ed/D.El.Ed, clear TET/CTET."},
+            {"question": "B.Ed vs D.El.Ed?", "answer": "B.Ed for classes 6-12 (after graduation). D.El.Ed for classes 1-5 (after 12th)."}
+        ],
+        "meta_title": "Education Courses in India 2025 - BEd, DEd, MEd",
+        "meta_description": "Explore education and teaching courses. Find B.Ed, D.El.Ed, M.Ed programs with eligibility and career in teaching."
+    }
+}
+
+
 # ============================================
 # Helper Functions
 # ============================================
