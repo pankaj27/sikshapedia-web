@@ -3000,8 +3000,57 @@ async def get_multi_sponsored_ads():
     """Get the multi-placement sponsored ads configuration"""
     config = await db.sponsored_ads_multi.find_one({"id": "multi_sponsored_ads_config"}, {"_id": 0})
     if not config:
-        return {"placements": {}}
+        return {"placements": {}, "custom_placements": []}
     return config
+
+@api_router.get("/sponsored-ads-by-url")
+async def get_sponsored_ads_by_url(url: str = Query(...), section_type: str = Query("featured")):
+    """Get sponsored ads for a specific URL path with fallback to general placement"""
+    config = await db.sponsored_ads_multi.find_one({"id": "multi_sponsored_ads_config"}, {"_id": 0})
+    if not config:
+        return []
+    
+    # First, try to find a custom placement for this exact URL
+    custom_placement_id = f"custom_{url.replace('/', '_')}_{section_type}"
+    
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    
+    # Check custom placement first
+    if custom_placement_id in config.get("placements", {}):
+        active_items = []
+        for entry in config["placements"].get(custom_placement_id, []):
+            if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
+                item = await db.colleges.find_one({"id": entry.get("item_id")}, {"_id": 0})
+                if item:
+                    active_items.append({
+                        **item,
+                        "serial_number": entry.get("serial_order", 0)
+                    })
+        if active_items:
+            return sorted(active_items, key=lambda x: x.get("serial_number", 0))
+    
+    # Fallback to general placement based on URL pattern
+    fallback_placement = None
+    if "college" in url.lower() or "india-colleges" in url.lower():
+        fallback_placement = f"college_listing_{section_type}" if section_type != "sponsored" else "college_listing_featured"
+    elif "school" in url.lower() or "india-schools" in url.lower():
+        fallback_placement = f"school_listing_{section_type}" if section_type != "sponsored" else "school_listing_featured"
+    elif "universit" in url.lower():
+        fallback_placement = "university_listing_featured"
+    
+    if fallback_placement and fallback_placement in config.get("placements", {}):
+        active_items = []
+        for entry in config["placements"].get(fallback_placement, []):
+            if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
+                item = await db.colleges.find_one({"id": entry.get("item_id")}, {"_id": 0})
+                if item:
+                    active_items.append({
+                        **item,
+                        "serial_number": entry.get("serial_order", 0)
+                    })
+        return sorted(active_items, key=lambda x: x.get("serial_number", 0))
+    
+    return []
 
 @api_router.post("/sponsored-ads-multi")
 async def save_multi_sponsored_ads(config: MultiSponsoredAdsConfig, current_user: dict = Depends(get_current_user)):
