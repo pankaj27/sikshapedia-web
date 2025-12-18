@@ -1464,6 +1464,201 @@ const ExamDetailForm = () => {
           </button>
         </CollapsibleSection>
 
+        {/* Page-Level Sidebar Widgets */}
+        <CollapsibleSection title="Sidebar Widgets Configuration" icon={<FiGrid className="w-5 h-5" />} badge="Page Widgets" color="indigo">
+          <div className="mb-4 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+            <p className="text-sm text-indigo-800">
+              🧩 <strong>Sidebar Widgets:</strong> Configure widgets that appear in the sidebar across all exam pages.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Quick Facts Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.quick_facts?.enabled ?? true}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">📊 Quick Facts</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">Display key exam statistics in sidebar</p>
+              {formData.sidebar_widgets?.quick_facts?.enabled && (
+                <div className="space-y-2">
+                  <button type="button" onClick={() => {
+                    const items = formData.sidebar_widgets?.quick_facts?.items || [];
+                    setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, items: [...items, {label: '', value: ''}]}}});
+                  }} className="text-xs text-indigo-600 hover:underline">+ Add Custom Fact</button>
+                  {(formData.sidebar_widgets?.quick_facts?.items || []).map((item, idx) => (
+                    <div key={idx} className="flex gap-2">
+                      <input type="text" value={item.label} onChange={(e) => {
+                        const items = [...(formData.sidebar_widgets?.quick_facts?.items || [])];
+                        items[idx].label = e.target.value;
+                        setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, items}}});
+                      }} placeholder="Label" className="flex-1 border rounded px-2 py-1 text-xs" />
+                      <input type="text" value={item.value} onChange={(e) => {
+                        const items = [...(formData.sidebar_widgets?.quick_facts?.items || [])];
+                        items[idx].value = e.target.value;
+                        setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, items}}});
+                      }} placeholder="Value" className="flex-1 border rounded px-2 py-1 text-xs" />
+                      <button type="button" onClick={() => {
+                        const items = (formData.sidebar_widgets?.quick_facts?.items || []).filter((_, i) => i !== idx);
+                        setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_facts: {...formData.sidebar_widgets?.quick_facts, items}}});
+                      }} className="text-red-400 hover:text-red-600"><FiTrash2 size={14} /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Quick Navigation Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.quick_nav?.enabled ?? true}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, quick_nav: {...formData.sidebar_widgets?.quick_nav, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">📑 Quick Navigation</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500">Auto-generated from menu items</p>
+            </div>
+
+            {/* Contact CTA Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.contact_cta?.enabled ?? true}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_cta: {...formData.sidebar_widgets?.contact_cta, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">📞 Contact CTA</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">Need Help? contact box</p>
+              {formData.sidebar_widgets?.contact_cta?.enabled && (
+                <div className="space-y-2">
+                  <input type="text" value={formData.sidebar_widgets?.contact_cta?.title || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_cta: {...formData.sidebar_widgets?.contact_cta, title: e.target.value}}})} placeholder="Title (e.g., Need Help?)" className="w-full border rounded px-2 py-1 text-sm" />
+                  <input type="text" value={formData.sidebar_widgets?.contact_cta?.subtitle || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_cta: {...formData.sidebar_widgets?.contact_cta, subtitle: e.target.value}}})} placeholder="Subtitle" className="w-full border rounded px-2 py-1 text-sm" />
+                  <input type="text" value={formData.sidebar_widgets?.contact_cta?.phone || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_cta: {...formData.sidebar_widgets?.contact_cta, phone: e.target.value}}})} placeholder="Phone Number" className="w-full border rounded px-2 py-1 text-sm" />
+                  <input type="email" value={formData.sidebar_widgets?.contact_cta?.email || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, contact_cta: {...formData.sidebar_widgets?.contact_cta, email: e.target.value}}})} placeholder="Email Address" className="w-full border rounded px-2 py-1 text-sm" />
+                </div>
+              )}
+            </div>
+
+            {/* Related Exams Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.related_exams?.enabled ?? true}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_exams: {...formData.sidebar_widgets?.related_exams, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">🔗 Related Exams</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">Show links to related exams</p>
+              {formData.sidebar_widgets?.related_exams?.enabled && (
+                <div className="space-y-2">
+                  <button type="button" onClick={() => {
+                    const exams = formData.sidebar_widgets?.related_exams?.exams || [];
+                    setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_exams: {...formData.sidebar_widgets?.related_exams, exams: [...exams, {name: '', url: ''}]}}});
+                  }} className="text-xs text-indigo-600 hover:underline">+ Add Related Exam</button>
+                  {(formData.sidebar_widgets?.related_exams?.exams || []).map((exam, idx) => (
+                    <div key={idx} className="flex gap-2">
+                      <input type="text" value={exam.name} onChange={(e) => {
+                        const exams = [...(formData.sidebar_widgets?.related_exams?.exams || [])];
+                        exams[idx].name = e.target.value;
+                        setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_exams: {...formData.sidebar_widgets?.related_exams, exams}}});
+                      }} placeholder="Exam Name" className="flex-1 border rounded px-2 py-1 text-xs" />
+                      <input type="text" value={exam.url} onChange={(e) => {
+                        const exams = [...(formData.sidebar_widgets?.related_exams?.exams || [])];
+                        exams[idx].url = e.target.value;
+                        setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_exams: {...formData.sidebar_widgets?.related_exams, exams}}});
+                      }} placeholder="/exams/jee-main" className="flex-1 border rounded px-2 py-1 text-xs font-mono" />
+                      <button type="button" onClick={() => {
+                        const exams = (formData.sidebar_widgets?.related_exams?.exams || []).filter((_, i) => i !== idx);
+                        setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, related_exams: {...formData.sidebar_widgets?.related_exams, exams}}});
+                      }} className="text-red-400 hover:text-red-600"><FiTrash2 size={14} /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Download Brochure Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.download_brochure?.enabled ?? false}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, download_brochure: {...formData.sidebar_widgets?.download_brochure, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">📥 Download Brochure</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">Brochure/PDF download button</p>
+              {formData.sidebar_widgets?.download_brochure?.enabled && (
+                <div className="space-y-2">
+                  <input type="text" value={formData.sidebar_widgets?.download_brochure?.title || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, download_brochure: {...formData.sidebar_widgets?.download_brochure, title: e.target.value}}})} placeholder="Button Text" className="w-full border rounded px-2 py-1 text-sm" />
+                  <input type="text" value={formData.sidebar_widgets?.download_brochure?.file_url || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, download_brochure: {...formData.sidebar_widgets?.download_brochure, file_url: e.target.value}}})} placeholder="File URL" className="w-full border rounded px-2 py-1 text-sm font-mono" />
+                </div>
+              )}
+            </div>
+
+            {/* Upcoming Dates Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.upcoming_dates?.enabled ?? true}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, upcoming_dates: {...formData.sidebar_widgets?.upcoming_dates, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">📅 Upcoming Dates</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500">Auto-populated from Important Dates</p>
+            </div>
+
+            {/* Apply Now Widget */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.sidebar_widgets?.apply_now?.enabled ?? true}
+                    onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, apply_now: {...formData.sidebar_widgets?.apply_now, enabled: e.target.checked}}})}
+                    className="rounded text-indigo-500"
+                  />
+                  <span className="font-medium">🎯 Apply Now Button</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">CTA button to apply</p>
+              {formData.sidebar_widgets?.apply_now?.enabled && (
+                <div className="space-y-2">
+                  <input type="text" value={formData.sidebar_widgets?.apply_now?.button_text || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, apply_now: {...formData.sidebar_widgets?.apply_now, button_text: e.target.value}}})} placeholder="Button Text (e.g., Apply Now)" className="w-full border rounded px-2 py-1 text-sm" />
+                  <input type="text" value={formData.sidebar_widgets?.apply_now?.link || ''} onChange={(e) => setFormData({...formData, sidebar_widgets: {...formData.sidebar_widgets, apply_now: {...formData.sidebar_widgets?.apply_now, link: e.target.value}}})} placeholder="Application Link URL" className="w-full border rounded px-2 py-1 text-sm font-mono" />
+                </div>
+              )}
+            </div>
+          </div>
+        </CollapsibleSection>
+
         {/* Menu Configuration */}
         <CollapsibleSection title="Menu Configuration & Page Content" icon={<FiGrid className="w-5 h-5" />} badge={`${(formData.menu_config?.items || []).filter(i => i.enabled).length} items`} color="blue">
           <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
