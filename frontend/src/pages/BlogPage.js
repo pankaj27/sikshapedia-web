@@ -12,12 +12,31 @@ const BlogPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [featuredArticles, setFeaturedArticles] = useState([]);
+  const [settings, setSettings] = useState(null);
 
-  const categories = ['All', 'Admissions', 'Exams', 'Career', 'Study Abroad', 'Financial Aid', 'College Life'];
+  // Default categories (fallback)
+  const defaultCategories = ['All', 'Admissions', 'Exams', 'Career', 'Study Abroad', 'Financial Aid', 'College Life'];
+  
+  // Get categories from settings or use defaults
+  const categories = settings?.categories?.filter(c => c.enabled).map(c => c.label) || defaultCategories;
+
+  // Fetch settings on mount
+  useEffect(() => {
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     fetchArticles();
   }, [selectedCategory]);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await api.get('/blog-listing-settings');
+      setSettings(response.data);
+    } catch (error) {
+      console.error('Error fetching blog settings:', error);
+    }
+  };
 
   const fetchArticles = async () => {
     try {
