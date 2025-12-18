@@ -1783,86 +1783,88 @@ const DynamicListingPage = () => {
               </div>
             </div>
             
-            {/* Dotted Separator */}
-            <div className="border-t border-dashed border-gray-300 my-2"></div>
-            
-            {/* Applied Filters Row */}
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {/* Show active URL-based filters */}
-              {activeFilters.stream && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Stream: {activeFilters.stream}
-                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {activeFilters.state && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  State: {activeFilters.state}
-                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {activeFilters.city && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  City: {activeFilters.city}
-                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Show Type from URL */}
-              {activeFilters.collegeType && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Type: {activeFilters.collegeType}
-                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Show Accreditation from URL */}
-              {activeFilters.accreditation && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Accreditation: {activeFilters.accreditation}
-                  <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Course filter */}
-              {filters.course && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Course: {filters.course}
-                  <button onClick={() => setFilters(prev => ({ ...prev, course: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Degree Type filter */}
-              {filters.degreeType && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Degree: {filters.degreeType}
-                  <button onClick={() => setFilters(prev => ({ ...prev, degreeType: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Exam Accepted filter */}
-              {filters.examAccepted && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Exam: {filters.examAccepted}
-                  <button onClick={() => setFilters(prev => ({ ...prev, examAccepted: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Affiliation filter */}
-              {filters.affiliation && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Affiliation: {filters.affiliation}
-                  <button onClick={() => setFilters(prev => ({ ...prev, affiliation: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Recognition filter */}
-              {filters.recognition && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500 text-white rounded-full text-xs font-medium">
-                  Recognition: {filters.recognition.split(' ')[0]}
-                  <button onClick={() => setFilters(prev => ({ ...prev, recognition: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
+            {/* Applied Filters Row - Only show if filters are active */}
+            {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation || filters.course || filters.degreeType || filters.examAccepted || filters.affiliation || filters.recognition) && (
+              <>
+                <div className="border-t border-gray-200 my-3"></div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-gray-500 font-medium">Applied Filters:</span>
+                  
+                  {/* Show active URL-based filters */}
+                  {activeFilters.stream && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
+                      {activeFilters.stream}
+                      <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-blue-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {activeFilters.state && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs font-medium">
+                      {activeFilters.state}
+                      <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-green-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {activeFilters.city && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">
+                      {activeFilters.city}
+                      <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-purple-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Show Type from URL */}
+                  {activeFilters.collegeType && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium">
+                      {activeFilters.collegeType}
+                      <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-orange-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Show Accreditation from URL */}
+                  {activeFilters.accreditation && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-100 text-teal-700 rounded-lg text-xs font-medium">
+                      {activeFilters.accreditation}
+                      <button onClick={() => navigate(pageInfo.isSchools ? '/india-schools' : '/india-colleges')} className="hover:bg-teal-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Course filter */}
+                  {filters.course && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-medium">
+                      {filters.course}
+                      <button onClick={() => setFilters(prev => ({ ...prev, course: '' }))} className="hover:bg-indigo-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Degree Type filter */}
+                  {filters.degreeType && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-pink-100 text-pink-700 rounded-lg text-xs font-medium">
+                      {filters.degreeType}
+                      <button onClick={() => setFilters(prev => ({ ...prev, degreeType: '' }))} className="hover:bg-pink-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Exam Accepted filter */}
+                  {filters.examAccepted && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg text-xs font-medium">
+                      {filters.examAccepted}
+                      <button onClick={() => setFilters(prev => ({ ...prev, examAccepted: '' }))} className="hover:bg-yellow-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Affiliation filter */}
+                  {filters.affiliation && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-100 text-cyan-700 rounded-lg text-xs font-medium">
+                      {filters.affiliation.split(' ')[0]}
+                      <button onClick={() => setFilters(prev => ({ ...prev, affiliation: '' }))} className="hover:bg-cyan-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                  
+                  {/* Recognition filter */}
+                  {filters.recognition && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-100 text-rose-700 rounded-lg text-xs font-medium">
+                      {filters.recognition.split(' ')[0]}
+                      <button onClick={() => setFilters(prev => ({ ...prev, recognition: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
                 </span>
               )}
               
