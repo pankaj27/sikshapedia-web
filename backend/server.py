@@ -2006,6 +2006,65 @@ class NewsListingPageSettings(BaseModel):
     updated_by: Optional[str] = None
 
 
+# Blog Listing Page Settings Model
+class BlogListingPageSettings(BaseModel):
+    """Settings for the /blog listing page - editable from admin"""
+    model_config = ConfigDict(extra="allow")
+    id: str = "blog-listing-page"  # Singleton
+    
+    # Hero Section
+    hero_title: str = "Our Blog"
+    hero_subtitle: str = "Insights, tips and guides for students and parents"
+    
+    # Quick Stats
+    stats: List[Dict] = [
+        {"label": "Articles", "value": "200+"},
+        {"label": "Categories", "value": "10"},
+        {"label": "Authors", "value": "15+"},
+        {"label": "Readers", "value": "50K+"}
+    ]
+    
+    # Categories
+    categories: List[Dict] = [
+        {"id": "all", "label": "All Posts", "enabled": True},
+        {"id": "career", "label": "Career Guidance", "enabled": True},
+        {"id": "study-tips", "label": "Study Tips", "enabled": True},
+        {"id": "college-life", "label": "College Life", "enabled": True},
+        {"id": "exam-prep", "label": "Exam Preparation", "enabled": True}
+    ]
+    
+    # Sidebar
+    show_popular_posts: bool = True
+    popular_posts_title: str = "Popular Posts"
+    popular_posts_count: int = 5
+    
+    show_categories_sidebar: bool = True
+    categories_sidebar_title: str = "Categories"
+    
+    show_tags_cloud: bool = True
+    tags_cloud_title: str = "Popular Tags"
+    popular_tags: List[str] = ["Career", "Study Tips", "College Life", "Exams", "Scholarships", "Abroad Study"]
+    
+    show_newsletter: bool = True
+    newsletter_title: str = "Subscribe to our Blog"
+    newsletter_subtitle: str = "Get the latest articles delivered to your inbox"
+    newsletter_button_text: str = "Subscribe"
+    
+    # SEO
+    meta_title: str = "Blog | Education Insights & Tips"
+    meta_description: str = "Read our blog for career guidance, study tips, college life insights and exam preparation strategies."
+    meta_keywords: List[str] = ["education blog", "career guidance", "study tips", "college life"]
+    
+    # Additional Content
+    intro_content: Optional[str] = None
+    bottom_content: Optional[str] = None
+    faqs: List[Dict] = []
+    
+    # Timestamps
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_by: Optional[str] = None
+
+
 # Course Listing Page Settings Model
 class CourseListingPageSettings(BaseModel):
     """Settings for the /courses main listing page - editable from admin"""
