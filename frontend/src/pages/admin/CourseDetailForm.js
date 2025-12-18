@@ -1521,6 +1521,135 @@ const CourseDetailForm = () => {
           </div>
         </div>
 
+        {/* Age Limit */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">⏰ Age Limit</h2>
+          <p className="text-sm text-gray-500 mb-4">Specify age eligibility criteria for this course (displayed in Eligibility section)</p>
+          
+          <input
+            type="text"
+            name="age_limit"
+            value={formData.age_limit || ''}
+            onChange={handleChange}
+            placeholder="e.g., No upper age limit for most institutions, 17-25 years for government colleges"
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+
+        {/* Top Colleges */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">🏛️ Top Colleges</h2>
+          <p className="text-sm text-gray-500 mb-4">Add top colleges offering this course. These will appear in the "Top Colleges" section on the course detail page.</p>
+          
+          <div className="space-y-4">
+            {(formData.top_colleges || []).map((college, index) => (
+              <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="font-semibold text-gray-700">College #{index + 1}</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setFormData({...formData, top_colleges: (formData.top_colleges || []).filter((_, i) => i !== index)});
+                    }}
+                    className="text-red-500"
+                  >
+                    <FiTrash2 size={16} />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2">
+                    <label className="block text-xs text-gray-600 mb-1">College Name *</label>
+                    <input
+                      type="text"
+                      value={college.name || ''}
+                      onChange={(e) => {
+                        const newColleges = [...(formData.top_colleges || [])];
+                        newColleges[index] = {...newColleges[index], name: e.target.value};
+                        setFormData({...formData, top_colleges: newColleges});
+                      }}
+                      placeholder="e.g., Indian Institute of Technology, Delhi"
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Location</label>
+                    <input
+                      type="text"
+                      value={college.location || ''}
+                      onChange={(e) => {
+                        const newColleges = [...(formData.top_colleges || [])];
+                        newColleges[index] = {...newColleges[index], location: e.target.value};
+                        setFormData({...formData, top_colleges: newColleges});
+                      }}
+                      placeholder="e.g., New Delhi"
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Rating (out of 5)</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="5"
+                      value={college.rating || ''}
+                      onChange={(e) => {
+                        const newColleges = [...(formData.top_colleges || [])];
+                        newColleges[index] = {...newColleges[index], rating: parseFloat(e.target.value) || 0};
+                        setFormData({...formData, top_colleges: newColleges});
+                      }}
+                      placeholder="e.g., 4.8"
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Fees (per year)</label>
+                    <input
+                      type="text"
+                      value={college.fees || ''}
+                      onChange={(e) => {
+                        const newColleges = [...(formData.top_colleges || [])];
+                        newColleges[index] = {...newColleges[index], fees: e.target.value};
+                        setFormData({...formData, top_colleges: newColleges});
+                      }}
+                      placeholder="e.g., ₹2.5L/year"
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Rank</label>
+                    <input
+                      type="text"
+                      value={college.rank || ''}
+                      onChange={(e) => {
+                        const newColleges = [...(formData.top_colleges || [])];
+                        newColleges[index] = {...newColleges[index], rank: e.target.value};
+                        setFormData({...formData, top_colleges: newColleges});
+                      }}
+                      placeholder="e.g., #1"
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData({
+                  ...formData, 
+                  top_colleges: [...(formData.top_colleges || []), { name: '', location: '', rating: 0, fees: '', rank: '' }]
+                });
+              }}
+              className="w-full border-dashed"
+            >
+              + Add College
+            </Button>
+          </div>
+        </div>
+
         {/* Arrays - Subjects, Skills, Jobs */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Course Components</h2>
