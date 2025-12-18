@@ -141,6 +141,8 @@ const CourseDetailForm = () => {
     full_name: '',
     degree_type: 'UG',
     duration: '',
+    eligibility_level: 'after-12th', // after-10th, after-12th, after-graduation, professional
+    course_mode: 'Full Time', // Full Time, Part Time, Distance, Online
     stream_id: '',
     sub_stream_ids: [],
     exam_ids: [],
