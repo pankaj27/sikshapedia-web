@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight, FiSearch, FiChevronDown, FiChevronUp, FiCalendar, FiFileText, FiClock, FiBookOpen, FiTrendingUp, FiBell, FiArrowRight } from 'react-icons/fi';
+import { FiChevronRight, FiSearch, FiChevronDown, FiChevronUp, FiCalendar, FiFileText, FiClock, FiBookOpen, FiTrendingUp, FiBell, FiArrowRight, FiLoader } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { FeaturedSponsoredSection } from '../components/SponsoredAds';
+import api from '../api/axios';
 
 const ExamPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [exams, setExams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [popularExams, setPopularExams] = useState([]);
 
   const categories = [
     'Engineering', 'Medical', 'Management', 'Science', 'Law', 'Pharmacy',
@@ -17,99 +21,69 @@ const ExamPage = () => {
     'Study Abroad Exams', 'Mass Communications', 'Aviation', 'Animation'
   ];
 
-  const popularExams = [
-    { name: 'JEE Main', url: '/exams/jee-main' },
-    { name: 'NEET', url: '/exams/neet' },
-    { name: 'CAT', url: '/exams/cat' },
-    { name: 'GATE', url: '/exams/gate' },
-    { name: 'CLAT', url: '/exams/clat' },
-    { name: 'JEE Advanced', url: '/exams/jee-advanced' },
-    { name: 'COMEDK UGET', url: '/exams/comedk-uget' },
-    { name: 'AP EAPCET', url: '/exams/ap-eapcet' },
-    { name: 'WBJEE', url: '/exams/wbjee' },
-    { name: 'KCET', url: '/exams/kcet' }
+  // Color palette for exam cards
+  const colorPalette = [
+    'from-blue-500 to-blue-600',
+    'from-orange-500 to-orange-600',
+    'from-green-500 to-green-600',
+    'from-purple-500 to-purple-600',
+    'from-red-500 to-red-600',
+    'from-indigo-500 to-indigo-600',
+    'from-pink-500 to-pink-600',
+    'from-teal-500 to-teal-600',
+    'from-cyan-500 to-cyan-600',
+    'from-amber-500 to-amber-600'
   ];
 
-  const exams = [
-    {
-      name: 'CUET 2025',
-      fullName: 'Common Universities Entrance Test',
-      examMode: 'Offline Exam',
-      examDate: '12 May 25 - 02 Jun 25',
-      applicationDate: '28 Feb 25 - 23 Mar 25',
-      resultDate: '03 Jul 25',
-      category: 'Engineering',
-      initials: 'CUET',
-      color: 'from-blue-500 to-blue-600',
-      colleges: '200+',
-      applicants: '15L+'
-    },
-    {
-      name: 'JEE Main 2026',
-      fullName: 'Joint Entrance Exam Main',
-      examMode: 'Online Exam',
-      examDate: '21 Jan 26 - 29 Jan 26',
-      applicationDate: '14 Oct 25 - 24 Nov 25',
-      resultDate: '18 Feb 26',
-      category: 'Engineering',
-      initials: 'JEE',
-      color: 'from-orange-500 to-orange-600',
-      colleges: '2500+',
-      applicants: '12L+'
-    },
-    {
-      name: 'NEET 2025',
-      fullName: 'National Eligibility Cum Entrance Test',
-      examMode: 'Offline Exam',
-      examDate: '03 May 25',
-      applicationDate: '06 Feb 25 - 06 Mar 25',
-      resultDate: '13 Jun 25',
-      category: 'Medical',
-      initials: 'NEET',
-      color: 'from-green-500 to-green-600',
-      colleges: '600+',
-      applicants: '24L+'
-    },
-    {
-      name: 'CAT 2025',
-      fullName: 'Common Admission Test',
-      examMode: 'Online Exam',
-      examDate: '29 Nov 25',
-      applicationDate: '31 Jul 25 - 19 Sept 25',
-      resultDate: 'TBA',
-      category: 'Management',
-      initials: 'CAT',
-      color: 'from-purple-500 to-purple-600',
-      colleges: '1200+',
-      applicants: '3L+'
-    },
-    {
-      name: 'GATE 2026',
-      fullName: 'Graduate Aptitude Test in Engineering',
-      examMode: 'Online Exam',
-      examDate: '06 Feb 26',
-      applicationDate: '27 Aug 25 - 12 Oct 25',
-      resultDate: '18 Mar 26',
-      category: 'Engineering',
-      initials: 'GATE',
-      color: 'from-red-500 to-red-600',
-      colleges: '1000+',
-      applicants: '9L+'
-    },
-    {
-      name: 'CLAT 2025',
-      fullName: 'Common Law Admission Test',
-      examMode: 'Online Exam',
-      examDate: '06 Dec 25',
-      applicationDate: '31 Jul 25 - 30 Oct 25',
-      resultDate: '16 Dec 25',
-      category: 'Law',
-      initials: 'CLAT',
-      color: 'from-indigo-500 to-indigo-600',
-      colleges: '25+',
-      applicants: '80K+'
-    }
-  ];
+  // Fetch exams from API
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/exams?limit=100');
+        const examData = response.data || [];
+        
+        // Transform API data to match component format
+        const transformedExams = examData.map((exam, index) => ({
+          id: exam.id,
+          name: exam.name,
+          fullName: exam.full_name || exam.name,
+          examMode: exam.exam_mode ? `${exam.exam_mode} Exam` : 'Online/Offline',
+          examDate: exam.exam_date || 'TBA',
+          applicationDate: exam.application_start_date && exam.application_end_date 
+            ? `${exam.application_start_date} - ${exam.application_end_date}` 
+            : exam.application_start_date || 'TBA',
+          resultDate: exam.result_date || 'TBA',
+          category: exam.streams?.[0] || 'General',
+          streams: exam.streams || [],
+          initials: exam.name?.split(' ').map(w => w[0]).join('').substring(0, 4) || 'EXAM',
+          color: colorPalette[index % colorPalette.length],
+          colleges: exam.accepting_colleges?.length ? `${exam.accepting_colleges.length}+` : '-',
+          applicants: exam.total_applicants ? `${(exam.total_applicants / 100000).toFixed(0)}L+` : '-',
+          slug: exam.slug || exam.name?.toLowerCase().replace(/\s+/g, '-'),
+          level: exam.exam_level || exam.level,
+          conductingBody: exam.conducting_body
+        }));
+        
+        setExams(transformedExams);
+        
+        // Set first 10 as popular exams
+        setPopularExams(transformedExams.slice(0, 10).map(e => ({
+          name: e.name,
+          url: `/exams/${e.slug || e.id}`
+        })));
+        
+      } catch (error) {
+        console.error('Error fetching exams:', error);
+        // Keep some fallback data if API fails
+        setExams([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExams();
+  }, []);
 
   const filteredExams = exams.filter(exam => {
     const matchesCategory = selectedCategory === 'All' || exam.category === selectedCategory;
