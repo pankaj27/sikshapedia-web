@@ -1229,13 +1229,26 @@ const CollegeForm = () => {
         </div>
         
         {/* Quick Badges */}
-        <div className="px-4 py-2 bg-gray-50 border-t flex items-center gap-4 text-xs">
+        <div className="px-4 py-2 bg-gray-50 border-t flex items-center gap-4 flex-wrap text-xs">
           <label className="flex items-center gap-1.5 cursor-pointer">
             <input type="checkbox" checked={formData.is_verified} onChange={(e) => setFormData({...formData, is_verified: e.target.checked})} className="rounded text-blue-600" />
             <span>✅ Verified</span>
           </label>
           <label className="flex items-center gap-1.5 cursor-pointer">
-            <input type="checkbox" checked={formData.is_featured} onChange={(e) => setFormData({...formData, is_featured: e.target.checked})} className="rounded text-orange-600" />
+            <input 
+              type="checkbox" 
+              checked={formData.is_featured} 
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                setFormData({
+                  ...formData, 
+                  is_featured: isChecked,
+                  // Set featured_at timestamp when enabling (for priority sorting)
+                  featured_at: isChecked ? new Date().toISOString() : formData.featured_at
+                });
+              }} 
+              className="rounded text-orange-600" 
+            />
             <span>⭐ Featured</span>
           </label>
           <label className="flex items-center gap-1.5 cursor-pointer">
@@ -1249,6 +1262,23 @@ const CollegeForm = () => {
           <label className="flex items-center gap-1.5 cursor-pointer">
             <input type="checkbox" checked={formData.is_sponsored} onChange={(e) => setFormData({...formData, is_sponsored: e.target.checked})} className="rounded text-purple-600" />
             <span>💎 Sponsored</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input 
+              type="checkbox" 
+              checked={formData.is_admission_open} 
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                setFormData({
+                  ...formData, 
+                  is_admission_open: isChecked,
+                  // Set admission_open_at timestamp when enabling (for priority sorting)
+                  admission_open_at: isChecked ? new Date().toISOString() : formData.admission_open_at
+                });
+              }} 
+              className="rounded text-green-600" 
+            />
+            <span>🎓 Admissions Open</span>
           </label>
         </div>
         
