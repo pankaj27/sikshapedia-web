@@ -483,7 +483,7 @@ class APITester:
         }
         
         success, response, status = self.make_request("POST", "/advertisements", banner_ad_data, token=self.admin_token)
-        if success and response.get("success"):
+        if success and response.get("id"):
             banner_ad_id = response.get("id")
             self.created_ad_ids.append(banner_ad_id)
             self.log_test("Create Banner Ad with Custom URL Targeting", True, f"Created ad ID: {banner_ad_id}")
