@@ -394,7 +394,6 @@ class CourseDetail(BaseModel):
     
     # Colleges Offering
     total_colleges: int = 0
-    top_colleges: List[str] = []  # College IDs
     
     # Stats
     popularity_score: int = 0
