@@ -158,6 +158,8 @@ function App() {
             <Route path="/admin/tag-exams-courses" element={<TagExamsCourses />} />
             <Route path="/admin/users" element={<UsersManagement />} />
             <Route path="/admin/blogs" element={<BlogsManagement />} />
+            <Route path="/admin/blogs/new" element={<BlogForm />} />
+            <Route path="/admin/blogs/edit/:id" element={<BlogForm />} />
             <Route path="/admin/banners" element={<BannersManagement />} />
             <Route path="/admin/testimonials" element={<TestimonialsManagement />} />
             <Route path="/admin/faqs" element={<FAQsManagement />} />
