@@ -532,20 +532,20 @@ const SponsoredAdsManagement = () => {
                             </p>
                           </div>
                         </button>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-0.5 flex-shrink-0 ml-1">
                           <button
-                            onClick={() => editCustomPlacement(placement)}
-                            className="text-blue-400 hover:text-blue-600 p-1"
+                            onClick={(e) => { e.stopPropagation(); editCustomPlacement(placement); }}
+                            className="text-blue-400 hover:text-blue-600 p-0.5 rounded hover:bg-blue-50"
                             title="Edit placement"
                           >
-                            <FiEdit2 size={14} />
+                            <FiEdit2 size={12} />
                           </button>
                           <button
-                            onClick={() => deleteCustomPlacement(placement.id)}
-                            className="text-red-400 hover:text-red-600 p-1"
+                            onClick={(e) => { e.stopPropagation(); deleteCustomPlacement(placement.id); }}
+                            className="text-red-400 hover:text-red-600 p-0.5 rounded hover:bg-red-50"
                             title="Delete placement"
                           >
-                            <FiTrash2 size={14} />
+                            <FiTrash2 size={12} />
                           </button>
                         </div>
                       </div>
