@@ -567,7 +567,20 @@ const DynamicListingPage = () => {
     setHasMore(true);
     fetchInstitutions();
     fetchPageContent();
+    fetchFeaturedColleges();
   }, [location.pathname, filters.search, sortBy]);
+  
+  // Fetch featured/sponsored colleges
+  const fetchFeaturedColleges = async () => {
+    try {
+      const response = await api.get('/colleges?is_featured=true&limit=6');
+      if (response.data && response.data.length > 0) {
+        setFeaturedColleges(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching featured colleges:', error);
+    }
+  };
   
   // Fetch page content from admin panel
   const fetchPageContent = async () => {
