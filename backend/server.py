@@ -6373,13 +6373,16 @@ async def get_news(
 
 @api_router.get("/news/{news_id}", response_model=News)
 async def get_news_article(news_id: str):
-    """Get a specific news article by ID"""
+    """Get a specific news article by ID or slug"""
+    # Try to find by ID first, then by slug
     news = await db.news.find_one({"id": news_id}, {"_id": 0})
+    if not news:
+        news = await db.news.find_one({"slug": news_id}, {"_id": 0})
     if not news:
         raise HTTPException(status_code=404, detail="News article not found")
     
     # Increment view count
-    await db.news.update_one({"id": news_id}, {"$inc": {"views": 1}})
+    await db.news.update_one({"id": news.get("id")}, {"$inc": {"views": 1}})
     
     return News(**news)
 
