@@ -48,8 +48,8 @@ const AdminDashboard = () => {
     { title: 'Add New College', link: '/admin/colleges/new', icon: FiHome, color: 'bg-blue-500' },
     { title: 'Add New School', link: '/admin/schools/new', icon: FiBookOpen, color: 'bg-green-500' },
     { title: 'Add New University', link: '/admin/universities/new', icon: FiAward, color: 'bg-purple-500' },
+    { title: 'Sponsored Ads', link: '/admin/sponsored-ads', icon: FiDollarSign, color: 'bg-amber-500' },
     { title: 'Publish News', link: '/admin/news/new', icon: FiFileText, color: 'bg-red-500' },
-    { title: 'Manage Reviews', link: '/admin/reviews', icon: FiEdit, color: 'bg-pink-500' },
     { title: 'View Analytics', link: '/admin/analytics', icon: FiTrendingUp, color: 'bg-orange-500' }
   ];
 
