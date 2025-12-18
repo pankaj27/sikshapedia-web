@@ -337,6 +337,9 @@ class ExamDetailed(BaseModel):
     is_featured: bool = False  # Featured on homepage
     popular_order: int = 0  # Order in popular list (lower = higher priority)
     
+    # Key Summary (editable bullet points)
+    key_summary: List[str] = []  # Custom key highlights/summary points
+    
     # Approval Status
     status: str = "draft"
     rejection_reason: Optional[str] = None
