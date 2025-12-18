@@ -1449,12 +1449,14 @@ const DynamicListingPage = () => {
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'state' ? null : 'state')}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
-                    activeFilters.state ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
+                    activeFilters.state 
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:bg-blue-50'
                   }`}
                 >
                   {activeFilters.state || 'State'}
-                  <FiChevronDown size={12} />
+                  <FiChevronDown size={14} className={activeFilterDropdown === 'state' ? 'rotate-180 transition-transform' : 'transition-transform'} />
                 </button>
                 {activeFilterDropdown === 'state' && (
                   <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border z-50">
