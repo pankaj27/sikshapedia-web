@@ -9,8 +9,8 @@ import {
 } from 'react-icons/fi';
 import api from '../api/axios';
 
-// Page configurations for each course type
-const pageConfigs = {
+// Default/Fallback page configurations (used when API fails)
+const defaultPageConfigs = {
   'pg': {
     title: 'PG Courses in India',
     subtitle: 'Explore postgraduate courses including MBA, M.Tech, MA, M.Sc, M.Com and more',
