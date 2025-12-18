@@ -51,6 +51,25 @@ const CourseListingSettings = () => {
       { name: 'Education', icon: 'HiOutlineAcademicCap', link: '/courses/education', courses: ['B.Ed', 'M.Ed', 'D.El.Ed', 'B.P.Ed'], count: '50+' }
     ],
     
+    // Trending Section
+    trending_badge: '🔥 TRENDING NOW',
+    trending_title: 'High-Demand Courses',
+    trending_subtitle: 'Courses with the highest career growth potential in 2025',
+    trending_courses: [
+      { name: 'Data Science', growth: '+45%', icon: '📊', link: '/courses/search?q=Data%20Science' },
+      { name: 'Artificial Intelligence', growth: '+62%', icon: '🤖', link: '/courses/search?q=Artificial%20Intelligence' },
+      { name: 'Digital Marketing', growth: '+38%', icon: '📱', link: '/courses/search?q=Digital%20Marketing' },
+      { name: 'Cyber Security', growth: '+52%', icon: '🔒', link: '/courses/search?q=Cyber%20Security' },
+      { name: 'Cloud Computing', growth: '+41%', icon: '☁️', link: '/courses/search?q=Cloud%20Computing' },
+      { name: 'Machine Learning', growth: '+58%', icon: '🧠', link: '/courses/search?q=Machine%20Learning' }
+    ],
+    
+    // Quick Stats
+    stats_courses: '10,000+',
+    stats_colleges: '5,000+',
+    stats_streams: '50+',
+    stats_students: '2M+',
+    
     // SEO
     meta_title: 'Courses in India 2025 - UG, PG, Diploma, PhD Programs',
     meta_description: 'Explore 1000+ courses in India across Engineering, Medical, Management, Science, Commerce, Arts, Law and more.',
