@@ -167,7 +167,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Advanced Advertisement Management System Testing Complete"
+    - "Frontend UI Testing Complete"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
