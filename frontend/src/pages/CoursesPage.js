@@ -238,15 +238,19 @@ const CoursesPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {streamCategories.map((stream, idx) => {
-              const IconComponent = stream.icon;
+              // Get icon component from map or use default
+              const IconComponent = iconMap[stream.icon] || HiOutlineDesktopComputer;
+              // Get colors based on stream name
+              const colors = streamColors[stream.name] || defaultStreamColors;
+              
               return (
                 <Link
                   key={idx}
                   to={stream.link}
-                  className={`group relative p-6 rounded-2xl border-2 ${stream.borderColor} ${stream.bgColor} ${stream.hoverBg} transition-all duration-300 hover:shadow-lg hover:border-transparent`}
+                  className={`group relative p-6 rounded-2xl border-2 ${colors.borderColor} ${colors.bgColor} ${colors.hoverBg} transition-all duration-300 hover:shadow-lg hover:border-transparent`}
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-xl ${stream.bgColor} ${stream.color}`}>
+                    <div className={`p-3 rounded-xl ${colors.bgColor} ${colors.color}`}>
                       <IconComponent size={28} />
                     </div>
                     <span className="px-3 py-1 bg-white rounded-full text-sm font-bold text-gray-700 shadow-sm">
@@ -254,10 +258,10 @@ const CoursesPage = () => {
                     </span>
                   </div>
                   
-                  <h3 className={`text-xl font-bold ${stream.color} mb-3`}>{stream.name}</h3>
+                  <h3 className={`text-xl font-bold ${colors.color} mb-3`}>{stream.name}</h3>
                   
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {stream.courses.map((course, cidx) => (
+                    {(stream.courses || []).map((course, cidx) => (
                       <span key={cidx} className="px-2 py-1 bg-white rounded-md text-xs font-medium text-gray-600">
                         {course}
                       </span>
