@@ -12,71 +12,42 @@ const CoursesAfter10thPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategories, setExpandedCategories] = useState({});
+  const [allCourses, setAllCourses] = useState([]);
   
-  // Course data organized by category
-  const [coursesByCategory, setCoursesByCategory] = useState({
+  // Default courses (shown if no API data)
+  const defaultCourses = {
     'Engineering': [
-      { name: 'Diploma in Mechanical Engineering', duration: '3 Years', mode: 'Full Time', slug: 'diploma-mechanical-engineering' },
-      { name: 'Diploma in Civil Engineering', duration: '3 Years', mode: 'Full Time', slug: 'diploma-civil-engineering' },
-      { name: 'Diploma in Electrical Engineering', duration: '3 Years', mode: 'Full Time', slug: 'diploma-electrical-engineering' },
-      { name: 'Diploma in Computer Engineering', duration: '3 Years', mode: 'Full Time', slug: 'diploma-computer-engineering' },
-      { name: 'Diploma in Electronics Engineering', duration: '3 Years', mode: 'Full Time', slug: 'diploma-electronics-engineering' },
-      { name: 'ITI Fitter', duration: '2 Years', mode: 'Full Time', slug: 'iti-fitter' },
-      { name: 'ITI Electrician', duration: '2 Years', mode: 'Full Time', slug: 'iti-electrician' },
+      { name: 'Diploma in Mechanical Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-mechanical-engineering' },
+      { name: 'Diploma in Civil Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-civil-engineering' },
+      { name: 'Diploma in Electrical Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-electrical-engineering' },
+      { name: 'Diploma in Computer Engineering', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-computer-engineering' },
+      { name: 'ITI Fitter', duration: '2 Years', course_mode: 'Full Time', slug: 'iti-fitter' },
+      { name: 'ITI Electrician', duration: '2 Years', course_mode: 'Full Time', slug: 'iti-electrician' },
     ],
     'Arts & Humanities': [
-      { name: 'Certificate in Spoken English', duration: '1 Year', mode: 'Full Time', slug: 'certificate-spoken-english' },
-      { name: 'Certificate in Functional English', duration: '6 Months', mode: 'Full Time', slug: 'certificate-functional-english' },
-      { name: 'Diploma in Fine Arts', duration: '3 Years', mode: 'Full Time', slug: 'diploma-fine-arts' },
-      { name: 'Certificate in Hindi', duration: '1 Year', mode: 'Full Time', slug: 'certificate-hindi' },
-      { name: 'Diploma in Journalism', duration: '1 Year', mode: 'Full Time', slug: 'diploma-journalism' },
+      { name: 'Certificate in Spoken English', duration: '1 Year', course_mode: 'Full Time', slug: 'certificate-spoken-english' },
+      { name: 'Diploma in Fine Arts', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-fine-arts' },
     ],
     'Medical & Paramedical': [
-      { name: 'Diploma in Nursing (ANM)', duration: '2 Years', mode: 'Full Time', slug: 'diploma-anm-nursing' },
-      { name: 'Diploma in Pharmacy', duration: '2 Years', mode: 'Full Time', slug: 'diploma-pharmacy' },
-      { name: 'Diploma in Medical Laboratory Technology', duration: '2 Years', mode: 'Full Time', slug: 'diploma-mlt' },
-      { name: 'Diploma in X-Ray Technology', duration: '2 Years', mode: 'Full Time', slug: 'diploma-xray-technology' },
-      { name: 'Diploma in Operation Theatre Technology', duration: '2 Years', mode: 'Full Time', slug: 'diploma-ot-technology' },
-    ],
-    'Dental': [
-      { name: 'Diploma in Dental Mechanics', duration: '2 Years', mode: 'Full Time', slug: 'diploma-dental-mechanics' },
-      { name: 'Diploma in Dental Hygienist', duration: '2 Years', mode: 'Full Time', slug: 'diploma-dental-hygienist' },
+      { name: 'Diploma in Nursing (ANM)', duration: '2 Years', course_mode: 'Full Time', slug: 'diploma-anm-nursing' },
+      { name: 'Diploma in Pharmacy', duration: '2 Years', course_mode: 'Full Time', slug: 'diploma-pharmacy' },
+      { name: 'Diploma in Medical Lab Technology', duration: '2 Years', course_mode: 'Full Time', slug: 'diploma-mlt' },
     ],
     'Computer & IT': [
-      { name: 'Diploma in Computer Application (DCA)', duration: '1 Year', mode: 'Full Time', slug: 'dca' },
-      { name: 'Certificate in Web Development', duration: '6 Months', mode: 'Full Time', slug: 'certificate-web-development' },
-      { name: 'Diploma in Information Technology', duration: '3 Years', mode: 'Full Time', slug: 'diploma-it' },
-      { name: 'Certificate in Data Entry', duration: '3 Months', mode: 'Full Time', slug: 'certificate-data-entry' },
-    ],
-    'Animation & Design': [
-      { name: 'Certificate in Animation', duration: '1 Year', mode: 'Full Time', slug: 'certificate-animation' },
-      { name: 'Diploma in Graphic Design', duration: '1 Year', mode: 'Full Time', slug: 'diploma-graphic-design' },
-      { name: 'Certificate in VFX', duration: '6 Months', mode: 'Full Time', slug: 'certificate-vfx' },
-      { name: 'Diploma in Interior Design', duration: '1 Year', mode: 'Full Time', slug: 'diploma-interior-design' },
+      { name: 'Diploma in Computer Application (DCA)', duration: '1 Year', course_mode: 'Full Time', slug: 'dca' },
+      { name: 'Diploma in Information Technology', duration: '3 Years', course_mode: 'Full Time', slug: 'diploma-it' },
     ],
     'Hotel Management': [
-      { name: 'Craftsmanship Course in Food Production', duration: '1.5 Years', mode: 'Full Time', slug: 'craftsmanship-food-production' },
-      { name: 'Certificate in Hotel Management', duration: '1 Year', mode: 'Full Time', slug: 'certificate-hotel-management' },
-      { name: 'Diploma in Bakery & Confectionery', duration: '1 Year', mode: 'Full Time', slug: 'diploma-bakery' },
+      { name: 'Diploma in Hotel Management', duration: '1 Year', course_mode: 'Full Time', slug: 'diploma-hotel-management' },
     ],
     'Vocational Courses': [
-      { name: 'Certificate in Diesel Mechanics', duration: '1 Year', mode: 'Full Time', slug: 'certificate-diesel-mechanics' },
-      { name: 'ITI Welder', duration: '1 Year', mode: 'Full Time', slug: 'iti-welder' },
-      { name: 'ITI Carpenter', duration: '1 Year', mode: 'Full Time', slug: 'iti-carpenter' },
-      { name: 'Certificate in Automobile Repair', duration: '6 Months', mode: 'Full Time', slug: 'certificate-automobile-repair' },
-      { name: 'Certificate in Beauty & Wellness', duration: '6 Months', mode: 'Full Time', slug: 'certificate-beauty-wellness' },
+      { name: 'ITI Welder', duration: '1 Year', course_mode: 'Full Time', slug: 'iti-welder' },
+      { name: 'ITI Carpenter', duration: '1 Year', course_mode: 'Full Time', slug: 'iti-carpenter' },
     ],
-    'Agriculture': [
-      { name: 'Diploma in Agriculture', duration: '2 Years', mode: 'Full Time', slug: 'diploma-agriculture' },
-      { name: 'Certificate in Horticulture', duration: '1 Year', mode: 'Full Time', slug: 'certificate-horticulture' },
-      { name: 'Diploma in Dairy Technology', duration: '2 Years', mode: 'Full Time', slug: 'diploma-dairy-technology' },
-    ],
-    'Fashion & Textile': [
-      { name: 'Diploma in Fashion Design', duration: '1 Year', mode: 'Full Time', slug: 'diploma-fashion-design' },
-      { name: 'Certificate in Textile Design', duration: '6 Months', mode: 'Full Time', slug: 'certificate-textile-design' },
-      { name: 'Certificate in Garment Making', duration: '3 Months', mode: 'Full Time', slug: 'certificate-garment-making' },
-    ],
-  });
+  };
+  
+  // Course data organized by category (from API or default)
+  const [coursesByCategory, setCoursesByCategory] = useState(defaultCourses);
 
   // Category icons and colors
   const categoryMeta = {
