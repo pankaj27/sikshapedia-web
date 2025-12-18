@@ -1936,8 +1936,8 @@ const DynamicListingPage = () => {
               <div className="space-y-4">
                 {institutions.map((inst, idx) => (
                   <React.Fragment key={inst.id || idx}>
-                    {/* Featured Section - Appears after every 3 colleges */}
-                    {idx > 0 && idx % 3 === 0 && (
+                    {/* Featured Section - Appears after colleges 3, 9, 15, etc. */}
+                    {idx > 0 && idx % 3 === 0 && idx % 6 !== 0 && (
                       <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg">
                         <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-2 flex items-center gap-2">
                           <FiStar className="text-white fill-current" size={14} />
