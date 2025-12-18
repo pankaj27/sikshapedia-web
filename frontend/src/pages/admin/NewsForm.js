@@ -483,45 +483,6 @@ const NewsForm = () => {
                   </div>
                 </div>
 
-                {/* Author Section - From Team Management */}
-                <div className="bg-white rounded-lg shadow-sm border p-6">
-                  <h2 className="text-lg font-semibold mb-4">👤 Select Author</h2>
-                  <p className="text-sm text-gray-500 mb-4">Choose an author from the Content Team. Manage team members in Settings → Team Management.</p>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Author *</label>
-                    <select
-                      value={formData.author_id || ''}
-                      onChange={(e) => handleAuthorSelect(e.target.value)}
-                      className="w-full border rounded-lg px-4 py-2.5"
-                      required
-                    >
-                      <option value="">Select an author...</option>
-                      {authors.map((author) => (
-                        <option key={author.id} value={author.id}>
-                          {author.name} - {author.job_title || author.role}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Selected Author Preview */}
-                  {formData.author && (
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg flex items-center gap-4">
-                      {formData.author_image ? (
-                        <img src={formData.author_image} alt={formData.author} className="w-14 h-14 rounded-full object-cover" />
-                      ) : (
-                        <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xl">
-                          {formData.author.charAt(0)}
-                        </div>
-                      )}
-                      <div>
-                        <p className="font-semibold text-gray-900">{formData.author}</p>
-                        <p className="text-sm text-gray-600">{formData.author_designation}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             )}
 
