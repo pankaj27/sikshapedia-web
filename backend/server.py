@@ -383,6 +383,10 @@ class CourseDetail(BaseModel):
     highlights: Optional[List[str]] = []  # Course badges/highlights
     related_courses: Optional[List[str]] = []  # Related course names
     
+    # Top Colleges & Age Limit
+    top_colleges: Optional[List[Dict]] = []  # [{name, location, rating, fees, rank}]
+    age_limit: Optional[str] = None  # Age limit text
+    
     # Career
     career_options: List[str] = []
     average_salary: Optional[float] = None
