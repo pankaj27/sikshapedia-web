@@ -77,6 +77,7 @@ const DynamicListingPage = () => {
   const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
   const [pageContent, setPageContent] = useState(null); // Content from admin
   const [hasMore, setHasMore] = useState(true);
+  const [featuredColleges, setFeaturedColleges] = useState([]); // Featured/Sponsored colleges
   
   // Ref for infinite scroll observer
   const loadMoreRef = useRef(null);
