@@ -1917,7 +1917,7 @@ const DynamicListingPage = () => {
               </div>
             )}
 
-            {/* COLLEGE LIST - CollegeDunia Style */}
+            {/* COLLEGE LIST - CollegeDunia Style with Featured Sections */}
             {loading ? (
               <div className="bg-white rounded-xl shadow-lg p-12 text-center">
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
@@ -1935,7 +1935,77 @@ const DynamicListingPage = () => {
             ) : (
               <div className="space-y-4">
                 {institutions.map((inst, idx) => (
-                  <div key={inst.id || idx} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all group">
+                  <React.Fragment key={inst.id || idx}>
+                    {/* Featured Section - Appears after every 3 colleges */}
+                    {idx > 0 && idx % 3 === 0 && (
+                      <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg">
+                        <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-2 flex items-center gap-2">
+                          <FiStar className="text-white fill-current" size={14} />
+                          <span className="text-white font-bold text-sm">Featured Colleges</span>
+                          <span className="text-orange-100 text-xs ml-auto">Sponsored</span>
+                        </div>
+                        <div className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Featured College Card 1 */}
+                            <div className="bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md transition-all">
+                              <div className="flex items-start gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                  <span className="text-lg font-bold text-blue-600">IIT</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">Top Engineering College</h4>
+                                  <p className="text-xs text-gray-500 mt-0.5">New Delhi, India</p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">NAAC A++</span>
+                                    <span className="text-xs text-orange-600 font-medium">Apply Now →</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {/* Featured College Card 2 */}
+                            <div className="bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md transition-all">
+                              <div className="flex items-start gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                  <span className="text-lg font-bold text-purple-600">NIT</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">Premier Tech Institute</h4>
+                                  <p className="text-xs text-gray-500 mt-0.5">Bangalore, Karnataka</p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">NIRF #15</span>
+                                    <span className="text-xs text-orange-600 font-medium">Apply Now →</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {/* Featured College Card 3 */}
+                            <div className="bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md transition-all hidden md:block">
+                              <div className="flex items-start gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                  <span className="text-lg font-bold text-emerald-600">VIT</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">Top Private University</h4>
+                                  <p className="text-xs text-gray-500 mt-0.5">Vellore, Tamil Nadu</p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">5★ Rating</span>
+                                    <span className="text-xs text-orange-600 font-medium">Apply Now →</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-center mt-4">
+                            <Link to="/featured-colleges" className="text-sm text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-1">
+                              View All Featured Colleges <FiArrowRight size={14} />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Regular College Card */}
+                    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all group">
                     {/* Top Badge Bar */}
                     {(inst.is_featured || inst.is_admission_open || inst.nirf_ranking) && (
                       <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-2 flex items-center gap-3 border-b border-gray-100">
