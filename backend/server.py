@@ -3072,8 +3072,8 @@ class Advertisement(BaseModel):
     placement_position: str = "top"  # top, middle, bottom, sidebar
     
     # Scheduling
-    start_date: str = ""
-    end_date: str = ""
+    start_date: Union[str, datetime] = ""
+    end_date: Union[str, datetime] = ""
     start_time: str = "00:00"  # Daily start time
     end_time: str = "23:59"  # Daily end time
     days_of_week: List[int] = [0, 1, 2, 3, 4, 5, 6]  # 0=Mon, 6=Sun
