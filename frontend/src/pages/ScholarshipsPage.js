@@ -284,7 +284,7 @@ const ScholarshipsPage = () => {
                       </div>
                       <div>
                         <p className="text-xs text-gray-600 mb-1">Contact</p>
-                        <p className="font-semibold text-sm">{loan.contact.phone}</p>
+                        <p className="font-semibold text-sm">{loan.contact?.phone || 'N/A'}</p>
                       </div>
                     </div>
 
