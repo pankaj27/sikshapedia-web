@@ -375,7 +375,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "ExamDetailForm Menu Content Editor Testing Complete"
+    - "Course Listing Settings Testing Complete"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
