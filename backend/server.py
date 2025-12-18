@@ -6395,11 +6395,12 @@ async def get_news(
     featured: Optional[bool] = None,
     tag: Optional[str] = None,
     sort: str = "latest",
-    limit: int = Query(20, ge=1, le=50),
-    skip: int = Query(0, ge=0)
+    limit: int = Query(20, ge=1, le=200),
+    skip: int = Query(0, ge=0),
+    all_status: bool = False  # If true, return all news (for admin)
 ):
     """Get all news articles with optional filters"""
-    query = {"published": True}
+    query = {} if all_status else {"published": True}
     if category:
         query["category"] = category
     if featured is not None:
