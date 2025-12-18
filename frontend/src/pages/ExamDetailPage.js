@@ -398,24 +398,118 @@ const ExamDetailPage = () => {
             </div>
           </aside>
 
-          {/* Main Content */}
+          {/* Main Content - Dynamic based on activeSection */}
           <div className="lg:col-span-3">
-            {/* Overview Section */}
-            <div id="overview" className="mb-8 scroll-mt-20">
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <p className="text-gray-700 leading-relaxed mb-4">{exam.description}</p>
-                <div className="flex gap-3">
-                  <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                    <FiDownload className="mr-2" />
-                    Download All Question Papers
-                  </Button>
-                  <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
-                    <FiInfo className="mr-2" />
-                    Get Counseling
-                  </Button>
+            {/* Dynamic Content from Backend Menu Config */}
+            {exam.menuConfig?.items && (
+              <div className="mb-8">
+                {exam.menuConfig.items
+                  .filter(item => item.id === activeSection || (!activeSection && item.order === 0))
+                  .map(item => (
+                    <div key={item.id} className="bg-white rounded-lg shadow-md p-6">
+                      {/* Page Heading */}
+                      <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                        {item.page_heading || item.label}
+                      </h1>
+                      
+                      {/* Page Content (HTML) */}
+                      {item.content && (
+                        <div 
+                          className="prose prose-lg max-w-none mb-6 text-gray-700"
+                          dangerouslySetInnerHTML={{ __html: item.content }}
+                        />
+                      )}
+                      
+                      {/* Tables */}
+                      {item.tables?.length > 0 && (
+                        <div className="mb-6 space-y-4">
+                          {item.tables.map((table, tIdx) => (
+                            <div key={tIdx} className="overflow-x-auto">
+                              {table.title && <h3 className="text-lg font-semibold text-gray-800 mb-2">{table.title}</h3>}
+                              <table className="w-full border-collapse border border-gray-200">
+                                <thead className="bg-orange-50">
+                                  <tr>
+                                    {table.headers?.map((header, hIdx) => (
+                                      <th key={hIdx} className="border border-gray-200 px-4 py-2 text-left font-semibold text-gray-700">{header}</th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {table.rows?.map((row, rIdx) => (
+                                    <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                      {row.map((cell, cIdx) => (
+                                        <td key={cIdx} className="border border-gray-200 px-4 py-2 text-gray-600">{cell}</td>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* FAQs */}
+                      {item.faqs?.length > 0 && (
+                        <div className="mb-6">
+                          <h3 className="text-lg font-semibold text-gray-800 mb-3">Frequently Asked Questions</h3>
+                          <div className="space-y-3">
+                            {item.faqs.map((faq, fIdx) => (
+                              <div key={fIdx} className="bg-gray-50 rounded-lg p-4">
+                                <p className="font-medium text-gray-800 mb-1">Q: {faq.question}</p>
+                                <p className="text-gray-600">A: {faq.answer}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Images */}
+                      {item.images?.length > 0 && (
+                        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {item.images.map((img, iIdx) => (
+                            <div key={iIdx}>
+                              <img src={img.url} alt={img.alt || img.title} className="rounded-lg w-full" />
+                              {img.title && <p className="text-sm text-gray-500 mt-1">{img.title}</p>}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* Videos */}
+                      {item.videos?.length > 0 && (
+                        <div className="mb-6 space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-800">Videos</h3>
+                          {item.videos.map((video, vIdx) => (
+                            <div key={vIdx} className="aspect-video">
+                              <iframe src={video.url} title={video.title} className="w-full h-full rounded-lg" allowFullScreen />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {/* Fallback Overview if no menu config */}
+            {!exam.menuConfig?.items && (
+              <div id="overview" className="mb-8 scroll-mt-20">
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <p className="text-gray-700 leading-relaxed mb-4">{exam.description}</p>
+                  <div className="flex gap-3">
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                      <FiDownload className="mr-2" />
+                      Download All Question Papers
+                    </Button>
+                    <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+                      <FiInfo className="mr-2" />
+                      Get Counseling
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Question Paper Sections by Year */}
             <div className="space-y-6">
