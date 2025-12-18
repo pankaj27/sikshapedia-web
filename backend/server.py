@@ -1310,24 +1310,54 @@ class News(BaseModel):
     category: str  # Admission, Exams, Results, Events, Policy
     summary: str
     content: str
+    
+    # Media
     featured_image: Optional[str] = None
+    featured_image_alt: Optional[str] = None  # Auto-generated SEO alt text
+    video_url: Optional[str] = None  # YouTube/Vimeo embed URL
+    video_thumbnail: Optional[str] = None
+    gallery_images: List[Dict] = []  # [{url, alt, caption}]
     
     # Author Info
     author: str
     author_image: Optional[str] = None
+    author_designation: Optional[str] = None
+    
+    # Table of Contents
+    toc_enabled: bool = False
+    toc_items: List[Dict] = []  # [{id, title, level}]
+    
+    # Custom Tables
+    tables: List[Dict] = []  # [{title, headers: [], rows: [[]], style}]
+    
+    # Widgets Configuration
+    show_related_articles: bool = True
+    show_related_exams: bool = True
+    show_related_colleges: bool = True
+    show_newsletter: bool = True
+    show_cta_banner: bool = False
+    cta_banner: Optional[Dict] = None  # {title, subtitle, button_text, button_link, gradient}
     
     # Tags & Related
     tags: List[str] = []
     related_colleges: List[str] = []
     related_exams: List[str] = []
+    related_articles: List[str] = []  # Article IDs
     
     # Stats
     views: int = 0
     shares: int = 0
     
-    # SEO
+    # SEO - Auto-generate options
     meta_title: Optional[str] = None
     meta_description: Optional[str] = None
+    meta_keywords: List[str] = []
+    canonical_url: Optional[str] = None
+    og_image: Optional[str] = None
+    auto_generate_seo: bool = True  # Auto-generate meta from content
+    
+    # Schema Markup
+    schema_type: str = "NewsArticle"  # NewsArticle, BlogPosting, Article
     
     # Status & Approval
     published: bool = True
