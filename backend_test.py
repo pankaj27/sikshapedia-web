@@ -1646,6 +1646,206 @@ class APITester:
                 self.log_test("All Field Types Save Properly", False, 
                              f"Status: {status}", response)
 
+    def test_course_listing_pages_content_fields(self):
+        """Test Course Listing Pages with intro_content and bottom_content fields as per review request"""
+        print("📝 Testing Course Listing Pages Content Fields (Review Request)...")
+        
+        # Test 1: Main /courses page - Test /api/course-listing-settings
+        print("   Testing Main /courses page - /api/course-listing-settings")
+        
+        # GET should return settings with all required fields including intro_content, bottom_content
+        success, response, status = self.make_request("GET", "/course-listing-settings")
+        if success and isinstance(response, dict):
+            # Check for all required fields from review request
+            required_fields = [
+                "hero_title", "hero_subtitle", "trending_badge", "trending_title", 
+                "trending_subtitle", "trending_courses", "stats_courses", "stats_colleges", 
+                "stats_streams", "stats_students", "intro_content", "bottom_content", "faqs"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in required_fields:
+                if field in response and response[field] is not None:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 10:  # At least 10 out of 13 fields should be present
+                self.log_test("GET /course-listing-settings - Required Fields", True, 
+                             f"Found {len(present_fields)}/13 required fields: {', '.join(present_fields[:5])}...")
+                
+                # Specifically check intro_content and bottom_content
+                if "intro_content" in response:
+                    self.log_test("GET /course-listing-settings - intro_content", True, 
+                                 f"intro_content present: {len(str(response['intro_content']))} chars")
+                else:
+                    self.log_test("GET /course-listing-settings - intro_content", False, 
+                                 "intro_content field missing")
+                
+                if "bottom_content" in response:
+                    self.log_test("GET /course-listing-settings - bottom_content", True, 
+                                 f"bottom_content present: {len(str(response['bottom_content']))} chars")
+                else:
+                    self.log_test("GET /course-listing-settings - bottom_content", False, 
+                                 "bottom_content field missing")
+                    
+            else:
+                self.log_test("GET /course-listing-settings - Required Fields", False, 
+                             f"Only {len(present_fields)}/13 required fields present. Missing: {', '.join(missing_fields)}")
+        else:
+            self.log_test("GET /course-listing-settings", False, f"Status: {status}", response)
+        
+        # Test 2: PUT should save all fields including intro_content, bottom_content
+        if self.admin_token:
+            test_data = {
+                "hero_title": "Test Course Listing 2025",
+                "hero_subtitle": "Complete guide to courses in India",
+                "trending_badge": "🔥 HOT",
+                "trending_title": "Trending Courses",
+                "trending_subtitle": "Most popular courses this year",
+                "trending_courses": [
+                    {"name": "B.Tech", "growth": "+25%", "icon": "🎓", "link": "/engineering"},
+                    {"name": "MBBS", "growth": "+18%", "icon": "🏥", "link": "/medical"}
+                ],
+                "stats_courses": "500+",
+                "stats_colleges": "2000+",
+                "stats_streams": "50+",
+                "stats_students": "10L+",
+                "intro_content": "<p>Test intro content for course listing page</p>",
+                "bottom_content": "<p>Test bottom content for course listing page</p>",
+                "faqs": [
+                    {"question": "What courses are available?", "answer": "We have 500+ courses across all streams."}
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-listing-settings", 
+                                                        test_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify intro_content and bottom_content were saved
+                if (response.get("intro_content") == test_data["intro_content"] and 
+                    response.get("bottom_content") == test_data["bottom_content"]):
+                    self.log_test("PUT /course-listing-settings - Content Fields", True, 
+                                 "intro_content and bottom_content saved successfully")
+                else:
+                    self.log_test("PUT /course-listing-settings - Content Fields", False, 
+                                 f"Content fields not saved correctly. intro: {response.get('intro_content')}, bottom: {response.get('bottom_content')}")
+            else:
+                self.log_test("PUT /course-listing-settings - Content Fields", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test("PUT /course-listing-settings - Content Fields", False, 
+                         "Admin token not available")
+        
+        # Test 3: Individual Course Pages - Test /api/course-pages/{id}
+        print("   Testing Individual Course Pages - /api/course-pages/{id}")
+        
+        test_pages = ["engineering", "medical", "after-10th", "diploma"]
+        
+        for page_id in test_pages:
+            # GET should return settings with intro_content, bottom_content fields
+            success, response, status = self.make_request("GET", f"/course-pages/{page_id}")
+            if success and isinstance(response, dict):
+                # Check for intro_content and bottom_content fields
+                has_intro = "intro_content" in response
+                has_bottom = "bottom_content" in response
+                
+                if has_intro and has_bottom:
+                    self.log_test(f"GET /course-pages/{page_id} - Content Fields", True, 
+                                 f"Both intro_content and bottom_content present")
+                elif has_intro or has_bottom:
+                    missing = "bottom_content" if has_intro else "intro_content"
+                    self.log_test(f"GET /course-pages/{page_id} - Content Fields", False, 
+                                 f"Missing {missing} field")
+                else:
+                    self.log_test(f"GET /course-pages/{page_id} - Content Fields", False, 
+                                 "Both intro_content and bottom_content missing")
+                
+                # Test PUT to update intro_content and bottom_content
+                if self.admin_token:
+                    update_data = {
+                        "id": page_id,
+                        "title": response.get("title", f"{page_id.title()} Courses"),
+                        "subtitle": response.get("subtitle", f"Updated subtitle for {page_id}"),
+                        "intro_content": f"<p>Test intro content for {page_id} page</p>",
+                        "bottom_content": f"<p>Test bottom content for {page_id} page</p>",
+                        "filter_key": response.get("filter_key", "stream"),
+                        "filter_value": response.get("filter_value", page_id.title()),
+                        "theme": response.get("theme", "from-blue-500 to-purple-600")
+                    }
+                    
+                    success, put_response, put_status = self.make_request("PUT", f"/course-pages/{page_id}", 
+                                                                        update_data, token=self.admin_token)
+                    if success and isinstance(put_response, dict):
+                        # Verify content fields were updated
+                        if (put_response.get("intro_content") == update_data["intro_content"] and 
+                            put_response.get("bottom_content") == update_data["bottom_content"]):
+                            self.log_test(f"PUT /course-pages/{page_id} - Update Content", True, 
+                                         "intro_content and bottom_content updated successfully")
+                            
+                            # Verify changes persist with GET request
+                            success, get_response, get_status = self.make_request("GET", f"/course-pages/{page_id}")
+                            if success and isinstance(get_response, dict):
+                                if (get_response.get("intro_content") == update_data["intro_content"] and 
+                                    get_response.get("bottom_content") == update_data["bottom_content"]):
+                                    self.log_test(f"GET /course-pages/{page_id} - Verify Persistence", True, 
+                                                 "Updated content fields persist correctly")
+                                else:
+                                    self.log_test(f"GET /course-pages/{page_id} - Verify Persistence", False, 
+                                                 "Updated content fields do not persist")
+                            else:
+                                self.log_test(f"GET /course-pages/{page_id} - Verify Persistence", False, 
+                                             f"GET request failed with status: {get_status}")
+                        else:
+                            self.log_test(f"PUT /course-pages/{page_id} - Update Content", False, 
+                                         "Content fields not updated correctly")
+                    else:
+                        self.log_test(f"PUT /course-pages/{page_id} - Update Content", False, 
+                                     f"Status: {put_status}", put_response)
+                else:
+                    self.log_test(f"PUT /course-pages/{page_id} - Update Content", False, 
+                                 "Admin token not available")
+                    
+            else:
+                self.log_test(f"GET /course-pages/{page_id}", False, f"Status: {status}", response)
+        
+        # Test 4: Verify all 15 course pages return proper structure with content fields
+        print("   Testing All 15 Course Pages Structure")
+        
+        success, response, status = self.make_request("GET", "/course-pages")
+        if success and isinstance(response, list):
+            if len(response) == 15:
+                pages_with_content_fields = 0
+                pages_missing_fields = []
+                
+                for page in response:
+                    page_id = page.get("id", "unknown")
+                    has_intro = "intro_content" in page
+                    has_bottom = "bottom_content" in page
+                    
+                    if has_intro and has_bottom:
+                        pages_with_content_fields += 1
+                    else:
+                        missing = []
+                        if not has_intro:
+                            missing.append("intro_content")
+                        if not has_bottom:
+                            missing.append("bottom_content")
+                        pages_missing_fields.append(f"{page_id}({','.join(missing)})")
+                
+                if pages_with_content_fields == 15:
+                    self.log_test("All 15 Course Pages - Content Fields Structure", True, 
+                                 "All pages have intro_content and bottom_content fields")
+                else:
+                    self.log_test("All 15 Course Pages - Content Fields Structure", False, 
+                                 f"Only {pages_with_content_fields}/15 pages have both content fields. Missing: {', '.join(pages_missing_fields[:5])}...")
+            else:
+                self.log_test("All 15 Course Pages - Count Verification", False, 
+                             f"Expected 15 pages, got {len(response)}")
+        else:
+            self.log_test("All 15 Course Pages - Structure", False, f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
