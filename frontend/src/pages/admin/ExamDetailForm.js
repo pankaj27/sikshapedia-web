@@ -409,7 +409,8 @@ const ExamDetailForm = () => {
       tables: [],
       images: [],
       videos: [],
-      faqs: []
+      faqs: [],
+      widgets: { quick_facts: { enabled: true }, quick_nav: { enabled: true }, contact_cta: { enabled: true, title: 'Need Help?', subtitle: 'Get expert guidance' }, related_exams: { enabled: false, exams: [] } }
     };
     setFormData({
       ...formData,
