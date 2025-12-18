@@ -214,6 +214,7 @@ const CourseListingSettings = () => {
     { id: 'hero', label: 'Hero Section', icon: FiEdit3 },
     { id: 'levels', label: 'Education Levels', icon: FiLayers },
     { id: 'streams', label: 'Stream Categories', icon: FiGrid },
+    { id: 'trending', label: 'Trending & Stats', icon: FiBarChart2 },
     { id: 'seo', label: 'SEO Settings', icon: FiSearch },
     { id: 'faqs', label: 'FAQs', icon: FiHelpCircle }
   ];
