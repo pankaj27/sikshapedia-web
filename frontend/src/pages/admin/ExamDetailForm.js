@@ -1554,12 +1554,224 @@ const ExamDetailForm = () => {
                     <div className="flex items-center justify-between mb-2">
                       <label className="text-xs font-semibold text-teal-800">📊 Tables</label>
                       <button type="button" onClick={() => {
-                        const newTables = [...(item.tables || []), { title: '', headers: ['Column 1', 'Column 2'], rows: [['', '']] }];
+                        const newTables = [...(item.tables || []), { title: '', headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['', '', ''], ['', '', '']] }];
                         updateMenuItem(index, 'tables', newTables);
                       }} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200">+ Add Table</button>
                     </div>
-                    {(item.tables || []).length > 0 && (
-                      <p className="text-xs text-teal-600">{item.tables.length} table(s) added</p>
+                    
+                    {(item.tables || []).length > 0 ? (
+                      <div className="space-y-3">
+                        {(item.tables || []).map((table, tableIndex) => (
+                          <div key={tableIndex} className="bg-white border border-teal-200 rounded p-2">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-teal-100 text-teal-800 text-xs font-bold px-1.5 py-0.5 rounded">T{tableIndex + 1}</span>
+                                <input
+                                  type="text"
+                                  value={table.title || ''}
+                                  onChange={(e) => {
+                                    const newTables = [...(item.tables || [])];
+                                    newTables[tableIndex].title = e.target.value;
+                                    updateMenuItem(index, 'tables', newTables);
+                                  }}
+                                  placeholder="Table Title"
+                                  className="border rounded px-2 py-0.5 text-xs w-40"
+                                />
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newTables = [...(item.tables || [])];
+                                    newTables[tableIndex].headers.push('New Col');
+                                    newTables[tableIndex].rows.forEach(row => row.push(''));
+                                    updateMenuItem(index, 'tables', newTables);
+                                  }}
+                                  className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded hover:bg-teal-100"
+                                >
+                                  +Col
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newTables = [...(item.tables || [])];
+                                    newTables[tableIndex].rows.push(new Array(newTables[tableIndex].headers.length).fill(''));
+                                    updateMenuItem(index, 'tables', newTables);
+                                  }}
+                                  className="text-xs bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded hover:bg-teal-100"
+                                >
+                                  +Row
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newTables = (item.tables || []).filter((_, ti) => ti !== tableIndex);
+                                    updateMenuItem(index, 'tables', newTables);
+                                  }}
+                                  className="text-xs text-red-500 hover:text-red-700 px-1"
+                                >
+                                  <FiTrash2 size={12} />
+                                </button>
+                              </div>
+                            </div>
+                            
+                            {/* Table Editor */}
+                            <div className="overflow-x-auto max-h-48">
+                              <table className="w-full border-collapse text-xs">
+                                <thead>
+                                  <tr>
+                                    {(table.headers || []).map((header, colIndex) => (
+                                      <th key={colIndex} className="border border-teal-200 bg-teal-50 p-0.5">
+                                        <div className="flex items-center">
+                                          <input
+                                            type="text"
+                                            value={header}
+                                            onChange={(e) => {
+                                              const newTables = [...(item.tables || [])];
+                                              newTables[tableIndex].headers[colIndex] = e.target.value;
+                                              updateMenuItem(index, 'tables', newTables);
+                                            }}
+                                            className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 text-xs px-1"
+                                            placeholder="Header"
+                                          />
+                                          {table.headers.length > 1 && (
+                                            <button
+                                              type="button"
+                                              onClick={() => {
+                                                const newTables = [...(item.tables || [])];
+                                                newTables[tableIndex].headers.splice(colIndex, 1);
+                                                newTables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                                updateMenuItem(index, 'tables', newTables);
+                                              }}
+                                              className="text-red-400 hover:text-red-600 text-xs"
+                                            >
+                                              ×
+                                            </button>
+                                          )}
+                                        </div>
+                                      </th>
+                                    ))}
+                                    <th className="w-6"></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {(table.rows || []).map((row, rowIndex) => (
+                                    <tr key={rowIndex}>
+                                      {row.map((cell, cellIndex) => (
+                                        <td key={cellIndex} className="border border-teal-200 p-0.5">
+                                          <input
+                                            type="text"
+                                            value={cell}
+                                            onChange={(e) => {
+                                              const newTables = [...(item.tables || [])];
+                                              newTables[tableIndex].rows[rowIndex][cellIndex] = e.target.value;
+                                              updateMenuItem(index, 'tables', newTables);
+                                            }}
+                                            className="w-full border-0 text-center text-xs px-1"
+                                            placeholder="-"
+                                          />
+                                        </td>
+                                      ))}
+                                      <td className="border border-teal-200 p-0.5 text-center">
+                                        {table.rows.length > 1 && (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const newTables = [...(item.tables || [])];
+                                              newTables[tableIndex].rows = newTables[tableIndex].rows.filter((_, ri) => ri !== rowIndex);
+                                              updateMenuItem(index, 'tables', newTables);
+                                            }}
+                                            className="text-red-400 hover:text-red-600 text-xs"
+                                          >
+                                            ×
+                                          </button>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            
+                            {/* Insert to Content Button */}
+                            <div className="mt-2 flex gap-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const tableHtml = `<table class="data-table">\n  <caption>${table.title || 'Table'}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                                  updateMenuItem(index, 'content', (item.content || '') + '\n\n' + tableHtml);
+                                  alert('Table inserted into Page Content!');
+                                }}
+                                className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 flex items-center gap-1"
+                              >
+                                <FiEdit2 size={10} /> Insert to Content
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const tableHtml = `<table class="data-table">\n  <caption>${table.title || 'Table'}</caption>\n  <thead>\n    <tr>\n${table.headers.map(h => `      <th>${h}</th>`).join('\n')}\n    </tr>\n  </thead>\n  <tbody>\n${table.rows.map(row => `    <tr>\n${row.map(cell => `      <td>${cell}</td>`).join('\n')}\n    </tr>`).join('\n')}\n  </tbody>\n</table>`;
+                                  navigator.clipboard.writeText(tableHtml);
+                                  alert('Table HTML copied!');
+                                }}
+                                className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200 flex items-center gap-1"
+                              >
+                                📋 Copy HTML
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-gray-400 italic">No tables. Click &quot;+ Add Table&quot; to create data tables for this page.</p>
+                    )}
+                    
+                    {/* Quick Table Templates */}
+                    {(!item.tables || item.tables.length === 0) && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        <span className="text-xs text-gray-500">Quick add:</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(item.tables || []), {
+                              title: 'Exam Dates',
+                              headers: ['Event', 'Start Date', 'End Date'],
+                              rows: [['Application Start', '', ''], ['Exam Date', '', ''], ['Result', '', '']]
+                            }];
+                            updateMenuItem(index, 'tables', newTables);
+                          }}
+                          className="text-xs bg-white border border-teal-300 text-teal-700 px-2 py-0.5 rounded hover:bg-teal-50"
+                        >
+                          📅 Dates Table
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(item.tables || []), {
+                              title: 'Eligibility Criteria',
+                              headers: ['Category', 'Requirement'],
+                              rows: [['Education', ''], ['Age Limit', ''], ['Nationality', '']]
+                            }];
+                            updateMenuItem(index, 'tables', newTables);
+                          }}
+                          className="text-xs bg-white border border-teal-300 text-teal-700 px-2 py-0.5 rounded hover:bg-teal-50"
+                        >
+                          ✅ Eligibility Table
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTables = [...(item.tables || []), {
+                              title: 'Exam Pattern',
+                              headers: ['Section', 'Questions', 'Marks', 'Duration'],
+                              rows: [['Subject 1', '', '', ''], ['Subject 2', '', '', ''], ['Total', '', '', '']]
+                            }];
+                            updateMenuItem(index, 'tables', newTables);
+                          }}
+                          className="text-xs bg-white border border-teal-300 text-teal-700 px-2 py-0.5 rounded hover:bg-teal-50"
+                        >
+                          📝 Pattern Table
+                        </button>
+                      </div>
                     )}
                   </div>
 
