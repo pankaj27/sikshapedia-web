@@ -1652,11 +1652,17 @@ class APITester:
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
-        # Run test suites in order
+        # Run test suites in order - PRIORITY: Course Listing Settings and Course Pages
         self.test_authentication()
-        self.test_course_pages_management()  # Add course pages management tests
-        self.test_course_listing_settings()  # Add course listing settings tests
-        self.test_advertisement_system()  # Add advertisement tests
+        
+        # PRIORITY TESTS (as requested in review)
+        self.test_course_listing_settings_comprehensive()  # Comprehensive Course Listing Settings
+        self.test_course_pages_comprehensive()  # Comprehensive Course Pages Management
+        
+        # Other existing tests
+        self.test_course_pages_management()  # Original course pages tests
+        self.test_course_listing_settings()  # Original course listing tests
+        self.test_advertisement_system()  # Advertisement tests
         self.test_old_college_routes()
         self.test_new_module_routes()
         self.test_other_critical_routes()
