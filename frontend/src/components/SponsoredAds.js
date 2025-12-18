@@ -94,7 +94,7 @@ export const FeaturedSponsoredSection = ({
     fetchAds();
   }, [placementId]);
 
-  if (loading || ads.length === 0) return null;
+  if (loading || !ads || ads.length === 0) return null;
 
   return (
     <div className={`bg-gradient-to-r ${bgColor} rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg my-4`}>
@@ -105,7 +105,7 @@ export const FeaturedSponsoredSection = ({
       </div>
       <div className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {ads.slice(0, 3).map((ad, idx) => (
+          {(ads || []).slice(0, 3).map((ad, idx) => (
             <Link
               key={ad.id || idx}
               to={getInstitutionDetailUrl(ad.institution_type || 'college', ad.id, ad.name, ad.location?.city, ad.serial_number)}
