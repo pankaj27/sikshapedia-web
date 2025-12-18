@@ -1958,6 +1958,25 @@ class CourseListingPageSettings(BaseModel):
     # Featured Courses Section
     featured_courses: List[Dict] = []  # [{name, description, duration, link, image}]
     
+    # Trending Section
+    trending_badge: str = "🔥 TRENDING NOW"
+    trending_title: str = "High-Demand Courses"
+    trending_subtitle: str = "Courses with the highest career growth potential in 2025"
+    trending_courses: List[Dict] = [
+        {"name": "Data Science", "growth": "+45%", "icon": "📊", "link": "/courses/search?q=Data%20Science"},
+        {"name": "Artificial Intelligence", "growth": "+62%", "icon": "🤖", "link": "/courses/search?q=Artificial%20Intelligence"},
+        {"name": "Digital Marketing", "growth": "+38%", "icon": "📱", "link": "/courses/search?q=Digital%20Marketing"},
+        {"name": "Cyber Security", "growth": "+52%", "icon": "🔒", "link": "/courses/search?q=Cyber%20Security"},
+        {"name": "Cloud Computing", "growth": "+41%", "icon": "☁️", "link": "/courses/search?q=Cloud%20Computing"},
+        {"name": "Machine Learning", "growth": "+58%", "icon": "🧠", "link": "/courses/search?q=Machine%20Learning"}
+    ]
+    
+    # Quick Stats Section
+    stats_courses: str = "10,000+"
+    stats_colleges: str = "5,000+"
+    stats_streams: str = "50+"
+    stats_students: str = "2M+"
+    
     # SEO Settings
     meta_title: str = "Courses in India 2025 - UG, PG, Diploma, PhD Programs"
     meta_description: str = "Explore 1000+ courses in India across Engineering, Medical, Management, Science, Commerce, Arts, Law and more."
