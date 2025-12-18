@@ -5,7 +5,7 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import MetaTags from '../components/SEO/MetaTags';
-import { FeaturedSponsoredSection } from '../components/SponsoredAds';
+// FeaturedSponsoredSection import removed - component not used
 
 const ScholarshipsPage = () => {
   const [scholarships, setScholarships] = useState([]);
