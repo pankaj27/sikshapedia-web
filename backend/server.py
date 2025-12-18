@@ -4185,6 +4185,98 @@ async def update_course_listing_settings(
     
     return settings_dict
 
+
+# ============================================
+# Course Page Settings APIs (Individual Pages)
+# ============================================
+
+@api_router.get("/course-pages")
+async def get_all_course_pages():
+    """Get all course page configurations"""
+    # Get all pages from database
+    db_pages = await db.course_page_settings.find({}, {"_id": 0}).to_list(100)
+    
+    # Create a map of existing pages
+    db_pages_map = {p["id"]: p for p in db_pages}
+    
+    # Merge with defaults to ensure all pages are returned
+    all_pages = []
+    for page_id, default_config in DEFAULT_COURSE_PAGE_CONFIGS.items():
+        if page_id in db_pages_map:
+            # Use database version
+            all_pages.append(db_pages_map[page_id])
+        else:
+            # Use default with id
+            page_data = {"id": page_id, **default_config}
+            all_pages.append(page_data)
+    
+    return all_pages
+
+
+@api_router.get("/course-pages/{page_id}")
+async def get_course_page(page_id: str):
+    """Get a specific course page configuration"""
+    # Try to get from database first
+    page = await db.course_page_settings.find_one({"id": page_id}, {"_id": 0})
+    
+    if page:
+        return page
+    
+    # Fall back to default if exists
+    if page_id in DEFAULT_COURSE_PAGE_CONFIGS:
+        return {"id": page_id, **DEFAULT_COURSE_PAGE_CONFIGS[page_id]}
+    
+    raise HTTPException(status_code=404, detail="Course page not found")
+
+
+@api_router.put("/course-pages/{page_id}")
+async def update_course_page(
+    page_id: str,
+    settings: CoursePageSettings,
+    current_user: User = Depends(get_current_user)
+):
+    """Update a course page configuration (admin only)"""
+    # Check if user is admin
+    admin = await db.admins.find_one({"email": current_user.email})
+    if not admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    settings.id = page_id
+    settings.updated_at = datetime.now(timezone.utc)
+    settings.updated_by = current_user.email
+    
+    settings_dict = settings.model_dump()
+    
+    # Upsert the page settings
+    await db.course_page_settings.update_one(
+        {"id": page_id},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    
+    return settings_dict
+
+
+@api_router.post("/course-pages/{page_id}/reset")
+async def reset_course_page(
+    page_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Reset a course page to default configuration"""
+    # Check if user is admin
+    admin = await db.admins.find_one({"email": current_user.email})
+    if not admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    if page_id not in DEFAULT_COURSE_PAGE_CONFIGS:
+        raise HTTPException(status_code=404, detail="Default configuration not found")
+    
+    # Delete custom settings
+    await db.course_page_settings.delete_one({"id": page_id})
+    
+    return {"id": page_id, **DEFAULT_COURSE_PAGE_CONFIGS[page_id]}
+
+
 @api_router.put("/exam-listing-settings")
 async def update_exam_listing_settings(
     settings: ExamListingPageSettings,
