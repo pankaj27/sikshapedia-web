@@ -655,10 +655,10 @@ const DynamicCourseListingPage = () => {
 
               {/* CTA */}
               <div className="bg-gray-900 rounded-2xl shadow-sm p-5 text-white text-center">
-                <h3 className="font-bold mb-2">Need Guidance?</h3>
-                <p className="text-sm text-gray-400 mb-4">Get expert counselling</p>
+                <h3 className="font-bold mb-2">{config.sidebarCtaTitle || 'Need Guidance?'}</h3>
+                <p className="text-sm text-gray-400 mb-4">{config.sidebarCtaText || 'Get expert counselling'}</p>
                 <button className={`w-full py-3 bg-gradient-to-r ${colors.btn} text-white font-medium rounded-xl transition-colors`}>
-                  Get Free Counselling
+                  {config.sidebarCtaButton || 'Get Free Counselling'}
                 </button>
               </div>
             </div>
