@@ -205,10 +205,21 @@ const CoursesAfter10thPage = () => {
             {/* Course List */}
             <div className="flex-1">
               {filteredCategories.length === 0 ? (
-                <div className="bg-white rounded-xl p-12 text-center">
-                  <FiSearch className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-600">No courses found</h3>
-                  <p className="text-gray-400">Try a different search term</p>
+                <div className="bg-white rounded-xl p-12 text-center border">
+                  <FiBookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">No Courses Available Yet</h3>
+                  <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                    {searchQuery 
+                      ? "No courses match your search. Try a different term."
+                      : "Courses after 10th will be displayed here once they are added by the admin."}
+                  </p>
+                  {!searchQuery && (
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 max-w-md mx-auto">
+                      <p className="text-sm text-orange-700">
+                        <strong>Admin:</strong> Add courses from <a href="/admin/courses-detail/new" className="underline hover:text-orange-900">Course Details</a> with <code className="bg-orange-100 px-1 rounded">Eligibility Level = "After 10th"</code>
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-6">
