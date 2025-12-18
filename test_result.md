@@ -428,12 +428,12 @@ Testing the Course Pages Management feature with:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 3
-  run_ui: true
+  test_sequence: 4
+  run_ui: false
 
 test_plan:
   current_focus:
-    - "Course Listing Settings Testing Complete"
+    - "Course Pages Management Testing Complete"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
