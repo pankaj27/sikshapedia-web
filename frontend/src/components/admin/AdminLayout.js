@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   FiHome, FiUsers, FiBook, FiFileText, FiAward, FiGrid, 
   FiLogOut, FiChevronDown, FiChevronRight, FiBookOpen, FiTag,
-  FiSettings, FiDatabase, FiLink, FiDollarSign, FiMessageSquare, FiGlobe, FiShield, FiClock, FiStar
+  FiSettings, FiDatabase, FiLink, FiDollarSign, FiMessageSquare, FiGlobe, FiShield, FiClock, FiStar, FiImage
 } from 'react-icons/fi';
 import api from '../../api/axios';
 
