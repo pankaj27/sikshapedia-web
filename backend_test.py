@@ -2272,6 +2272,244 @@ class APITester:
                 self.log_test("Verify CourseDetail Model Fields", False, 
                              f"Missing model fields: {', '.join(model_fields_missing)}")
 
+    def test_enhanced_news_system(self):
+        """Test Enhanced News Article System with all new features"""
+        print("📰 Testing Enhanced News Article System...")
+        
+        # Store created news IDs for cleanup
+        self.created_news_ids = []
+        
+        # Test 1: Create Article with All New Fields
+        enhanced_news_data = {
+            "title": "Test News with All Features",
+            "slug": "test-news-all-features",
+            "category": "Exams",
+            "summary": "Testing all new news features",
+            "content": "<h2 id='section-1'>Section 1</h2><p>Content here</p>",
+            "author": "Test Author",
+            "author_designation": "Senior Editor",
+            "featured_image": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800",
+            "featured_image_alt": "Students studying for exams",
+            "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            "video_thumbnail": "https://via.placeholder.com/300x200?text=Video+Thumbnail",
+            "gallery_images": [
+                {"url": "https://via.placeholder.com/400x300?text=Gallery+1", "alt": "Gallery image 1", "caption": "First gallery image"},
+                {"url": "https://via.placeholder.com/400x300?text=Gallery+2", "alt": "Gallery image 2", "caption": "Second gallery image"}
+            ],
+            "toc_enabled": True,
+            "toc_items": [
+                {"id": "section-1", "title": "Section 1", "level": 1},
+                {"id": "section-2", "title": "Section 2", "level": 1},
+                {"id": "subsection-1", "title": "Subsection 1", "level": 2}
+            ],
+            "tables": [
+                {
+                    "title": "Exam Dates",
+                    "headers": ["Exam", "Date", "Registration"],
+                    "rows": [
+                        ["JEE Main", "Jan 2025", "Dec 2024"],
+                        ["NEET", "May 2025", "Mar 2025"]
+                    ],
+                    "style": "striped"
+                }
+            ],
+            "show_related_articles": True,
+            "show_related_exams": True,
+            "show_related_colleges": True,
+            "show_newsletter": True,
+            "show_cta_banner": True,
+            "cta_banner": {
+                "title": "Get Expert Guidance",
+                "subtitle": "Talk to our counselors",
+                "button_text": "Book Free Session",
+                "button_link": "/counseling",
+                "gradient": "from-blue-500 to-purple-600"
+            },
+            "tags": ["exam", "test", "news", "education"],
+            "related_colleges": ["IIT Delhi", "IIT Bombay"],
+            "related_exams": ["JEE", "NEET"],
+            "related_articles": [],
+            "meta_title": "Test News Article - Enhanced Features",
+            "meta_description": "Testing enhanced news article with all new features",
+            "meta_keywords": ["exam", "test", "news"],
+            "canonical_url": "https://example.com/news/test-news-all-features",
+            "og_image": "https://via.placeholder.com/1200x630?text=OG+Image",
+            "auto_generate_seo": True,
+            "schema_type": "NewsArticle",
+            "published": True,
+            "featured": False,
+            "status": "published"
+        }
+        
+        success, response, status = self.make_request("POST", "/news", enhanced_news_data, token=self.admin_token)
+        if success and response.get("id"):
+            news_id = response.get("id")
+            self.created_news_ids.append(news_id)
+            self.log_test("Create Enhanced News Article", True, f"Created news ID: {news_id}")
+            
+            # Test 2: Verify Response Contains All New Fields
+            required_fields = [
+                "video_url", "video_thumbnail", "gallery_images", "toc_enabled", "toc_items",
+                "tables", "show_related_articles", "show_related_exams", "show_related_colleges",
+                "show_newsletter", "show_cta_banner", "cta_banner", "meta_keywords",
+                "canonical_url", "og_image", "auto_generate_seo", "schema_type",
+                "author_designation", "featured_image_alt"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in required_fields:
+                if field in response:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 18:  # At least 18 out of 19 fields should be present
+                self.log_test("Verify Enhanced Fields in Response", True, 
+                             f"{len(present_fields)}/19 enhanced fields present")
+            else:
+                self.log_test("Verify Enhanced Fields in Response", False, 
+                             f"Only {len(present_fields)}/19 fields present. Missing: {', '.join(missing_fields)}")
+            
+            # Test 3: Verify Media Fields
+            if response.get("video_url") == enhanced_news_data["video_url"]:
+                self.log_test("Video URL Field", True, f"Video URL: {response.get('video_url')}")
+            else:
+                self.log_test("Video URL Field", False, f"Expected: {enhanced_news_data['video_url']}, Got: {response.get('video_url')}")
+            
+            if response.get("video_thumbnail") == enhanced_news_data["video_thumbnail"]:
+                self.log_test("Video Thumbnail Field", True, "Video thumbnail stored correctly")
+            else:
+                self.log_test("Video Thumbnail Field", False, "Video thumbnail not stored correctly")
+            
+            gallery_images = response.get("gallery_images", [])
+            if isinstance(gallery_images, list) and len(gallery_images) == 2:
+                self.log_test("Gallery Images Field", True, f"Found {len(gallery_images)} gallery images")
+            else:
+                self.log_test("Gallery Images Field", False, f"Expected 2 gallery images, got {len(gallery_images) if isinstance(gallery_images, list) else 0}")
+            
+            # Test 4: Verify Table of Contents Fields
+            if response.get("toc_enabled") == True:
+                self.log_test("TOC Enabled Field", True, "TOC enabled correctly")
+            else:
+                self.log_test("TOC Enabled Field", False, "TOC not enabled")
+            
+            toc_items = response.get("toc_items", [])
+            if isinstance(toc_items, list) and len(toc_items) == 3:
+                self.log_test("TOC Items Field", True, f"Found {len(toc_items)} TOC items")
+            else:
+                self.log_test("TOC Items Field", False, f"Expected 3 TOC items, got {len(toc_items) if isinstance(toc_items, list) else 0}")
+            
+            # Test 5: Verify Tables Field
+            tables = response.get("tables", [])
+            if isinstance(tables, list) and len(tables) == 1:
+                table = tables[0]
+                if table.get("title") == "Exam Dates" and len(table.get("rows", [])) == 2:
+                    self.log_test("Tables Field", True, f"Table '{table.get('title')}' with {len(table.get('rows', []))} rows")
+                else:
+                    self.log_test("Tables Field", False, "Table structure incorrect")
+            else:
+                self.log_test("Tables Field", False, f"Expected 1 table, got {len(tables) if isinstance(tables, list) else 0}")
+            
+            # Test 6: Verify Widget Configuration Fields
+            widget_fields = ["show_related_articles", "show_related_exams", "show_related_colleges", "show_newsletter", "show_cta_banner"]
+            widget_correct = all(response.get(field) == enhanced_news_data[field] for field in widget_fields)
+            
+            if widget_correct:
+                self.log_test("Widget Configuration Fields", True, "All widget settings stored correctly")
+            else:
+                incorrect_widgets = [field for field in widget_fields if response.get(field) != enhanced_news_data[field]]
+                self.log_test("Widget Configuration Fields", False, f"Incorrect widget settings: {', '.join(incorrect_widgets)}")
+            
+            # Test 7: Verify CTA Banner Field
+            cta_banner = response.get("cta_banner", {})
+            if isinstance(cta_banner, dict) and cta_banner.get("title") == "Get Expert Guidance":
+                self.log_test("CTA Banner Field", True, f"CTA Banner: {cta_banner.get('title')}")
+            else:
+                self.log_test("CTA Banner Field", False, "CTA Banner not stored correctly")
+            
+            # Test 8: Verify SEO Fields
+            seo_fields = ["meta_keywords", "canonical_url", "og_image", "auto_generate_seo", "schema_type"]
+            seo_correct = all(field in response for field in seo_fields)
+            
+            if seo_correct:
+                self.log_test("SEO Fields", True, f"All SEO fields present: {', '.join(seo_fields)}")
+            else:
+                missing_seo = [field for field in seo_fields if field not in response]
+                self.log_test("SEO Fields", False, f"Missing SEO fields: {', '.join(missing_seo)}")
+            
+            # Test 9: Verify Enhanced Author Fields
+            if response.get("author_designation") == "Senior Editor":
+                self.log_test("Author Designation Field", True, f"Author designation: {response.get('author_designation')}")
+            else:
+                self.log_test("Author Designation Field", False, f"Expected 'Senior Editor', got: {response.get('author_designation')}")
+            
+            if response.get("featured_image_alt") == "Students studying for exams":
+                self.log_test("Featured Image Alt Field", True, "Featured image alt text stored correctly")
+            else:
+                self.log_test("Featured Image Alt Field", False, "Featured image alt text not stored correctly")
+            
+            # Test 10: Get Article by ID and Verify Persistence
+            success, get_response, get_status = self.make_request("GET", f"/news/{news_id}")
+            if success and isinstance(get_response, dict):
+                if get_response.get("id") == news_id:
+                    self.log_test("Get Article by ID", True, f"Retrieved article: {get_response.get('title')}")
+                    
+                    # Verify all enhanced fields persist
+                    persistent_fields = ["video_url", "toc_enabled", "tables", "cta_banner", "meta_keywords"]
+                    all_persistent = all(field in get_response for field in persistent_fields)
+                    
+                    if all_persistent:
+                        self.log_test("Enhanced Fields Persistence", True, "All enhanced fields persist in database")
+                    else:
+                        missing_persistent = [field for field in persistent_fields if field not in get_response]
+                        self.log_test("Enhanced Fields Persistence", False, f"Missing persistent fields: {', '.join(missing_persistent)}")
+                else:
+                    self.log_test("Get Article by ID", False, "Retrieved article ID mismatch")
+            else:
+                self.log_test("Get Article by ID", False, f"Status: {get_status}", get_response)
+            
+            # Test 11: Get Article by Slug
+            success, slug_response, slug_status = self.make_request("GET", f"/news/test-news-all-features")
+            if success and isinstance(slug_response, dict):
+                if slug_response.get("slug") == "test-news-all-features":
+                    self.log_test("Get Article by Slug", True, f"Retrieved by slug: {slug_response.get('title')}")
+                else:
+                    self.log_test("Get Article by Slug", False, "Retrieved article slug mismatch")
+            else:
+                self.log_test("Get Article by Slug", False, f"Status: {slug_status}", slug_response)
+            
+        else:
+            self.log_test("Create Enhanced News Article", False, f"Status: {status}", response)
+        
+        # Test 12: List News Articles with Enhanced Fields
+        success, list_response, list_status = self.make_request("GET", "/news?limit=5")
+        if success and isinstance(list_response, list):
+            news_count = len(list_response)
+            self.log_test("List News Articles", True, f"Retrieved {news_count} news articles")
+            
+            # Check if any articles have enhanced fields
+            enhanced_articles = 0
+            for article in list_response:
+                if any(field in article for field in ["video_url", "toc_enabled", "tables", "author_designation"]):
+                    enhanced_articles += 1
+            
+            if enhanced_articles > 0:
+                self.log_test("Enhanced Fields in List", True, f"{enhanced_articles}/{news_count} articles have enhanced fields")
+            else:
+                self.log_test("Enhanced Fields in List", False, "No articles with enhanced fields found in list")
+        else:
+            self.log_test("List News Articles", False, f"Status: {list_status}", list_response)
+        
+        # Test 13: Filter by Category
+        success, category_response, category_status = self.make_request("GET", "/news?category=Exams")
+        if success and isinstance(category_response, list):
+            exam_articles = len(category_response)
+            self.log_test("Filter News by Category", True, f"Found {exam_articles} Exam category articles")
+        else:
+            self.log_test("Filter News by Category", False, f"Status: {category_status}", category_response)
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
