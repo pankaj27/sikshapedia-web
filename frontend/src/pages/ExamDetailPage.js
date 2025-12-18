@@ -1,15 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign } from 'react-icons/fi';
+import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign, FiLoader } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
+import api from '../api/axios';
 
 const ExamDetailPage = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('questionPapers');
   const [activeSection, setActiveSection] = useState('overview');
+  const [examFromApi, setExamFromApi] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Mock exam data - replace with API call
+  // Fetch exam data from API
+  useEffect(() => {
+    const fetchExam = async () => {
+      try {
+        setLoading(true);
+        // Try to fetch from exams-detail first (detailed exams)
+        let response = await api.get(`/exams-detail?limit=100`);
+        let exam = response.data?.find(e => e.slug === id || e.id === id || e.name?.toLowerCase().replace(/\s+/g, '-') === id);
+        
+        if (!exam) {
+          // Fallback to quick entry exams
+          response = await api.get(`/exams?limit=200`);
+          exam = response.data?.find(e => e.slug === id || e.id === id || e.name?.toLowerCase().replace(/\s+/g, '-') === id);
+        }
+        
+        if (exam) {
+          setExamFromApi(exam);
+        }
+      } catch (error) {
+        console.error('Error fetching exam:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchExam();
+  }, [id]);
+
+  // Fallback mock exam data for exams not in database
   const examData = {
     'jee-main': {
       name: 'JEE Main',
