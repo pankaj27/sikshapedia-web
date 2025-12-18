@@ -119,16 +119,43 @@ const NewsPage = () => {
       {/* Top Ad Banner */}
       <AdBanner pageName="news" position="top" />
       
-      {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Link to="/" className="hover:text-orange-600">Home</Link>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
+            <Link to="/" className="hover:text-white">Home</Link>
             <FiChevronRight className="w-4 h-4" />
-            <span className="text-gray-900">News</span>
+            <span className="text-white">News</span>
           </div>
+          
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">
+            {settings?.hero_title || 'Latest News & Updates'}
+          </h1>
+          <p className="text-white/90 mb-6">
+            {settings?.hero_subtitle || 'Stay updated with the latest news on admissions, exams, colleges and education'}
+          </p>
+          
+          {/* Quick Stats */}
+          {settings?.stats && settings.stats.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {settings.stats.map((stat, idx) => (
+                <div key={idx} className="bg-white/10 backdrop-blur rounded-lg p-4 text-center">
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="text-sm text-white/80">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Intro Content (from admin) */}
+      {settings?.intro_content && (
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: settings.intro_content }} />
+        </div>
+      )}
 
       {/* Categories */}
       <div className="bg-white border-b sticky top-0 z-10">
