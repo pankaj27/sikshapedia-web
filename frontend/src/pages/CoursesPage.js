@@ -383,6 +383,53 @@ const CoursesPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Intro Content Section (from Admin) */}
+      {settings?.intro_content && (
+        <section className="bg-gray-50 border-t py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <div 
+                className="prose prose-gray max-w-none text-gray-600"
+                dangerouslySetInnerHTML={{ __html: settings.intro_content }}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Bottom Content Section (from Admin) */}
+      {settings?.bottom_content && (
+        <section className="bg-white border-t py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <div 
+                className="prose prose-gray max-w-none text-gray-600"
+                dangerouslySetInnerHTML={{ __html: settings.bottom_content }}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQs Section (from Admin) */}
+      {settings?.faqs && settings.faqs.length > 0 && (
+        <section className="bg-gray-50 border-t py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-4">
+                {settings.faqs.map((faq, idx) => (
+                  <div key={idx} className="bg-white rounded-xl p-5 border border-gray-200">
+                    <h3 className="font-semibold text-gray-800 mb-2">Q: {faq.question}</h3>
+                    <p className="text-gray-600 text-sm">A: {faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
