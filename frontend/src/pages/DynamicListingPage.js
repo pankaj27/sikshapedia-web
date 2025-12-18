@@ -67,13 +67,19 @@ const DynamicListingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [institutions, setInstitutions] = useState([]);
+  const [allInstitutionsData, setAllInstitutionsData] = useState([]); // Store all fetched data for infinite scroll
   const [totalCount, setTotalCount] = useState(0);
   const [showContent, setShowContent] = useState(false);
   const [compareList, setCompareList] = useState([]);
   const [sortBy, setSortBy] = useState('ranking');
   const [activeFilterDropdown, setActiveFilterDropdown] = useState(null);
   const [pageContent, setPageContent] = useState(null); // Content from admin
+  const [hasMore, setHasMore] = useState(true);
+  
+  // Ref for infinite scroll observer
+  const loadMoreRef = useRef(null);
   
   const [filters, setFilters] = useState({
     search: '',
