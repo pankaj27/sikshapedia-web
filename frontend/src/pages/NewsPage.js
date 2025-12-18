@@ -11,15 +11,20 @@ const NewsPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [settings, setSettings] = useState(null);
   const itemsPerPage = 12;
 
-  const categories = [
-    { id: 'all', label: 'ALL NEWS', url: '/news' },
-    { id: 'admission', label: 'ADMISSION ALERT', url: '/news/admission' },
-    { id: 'college', label: 'COLLEGE NEWS', url: '/news/college' },
-    { id: 'exam', label: 'EXAM NEWS', url: '/news/exam' },
-    { id: 'latest', label: 'LATEST ALERTS', url: '/news/latest' }
+  // Default categories (used if settings not loaded)
+  const defaultCategories = [
+    { id: 'all', label: 'ALL NEWS', enabled: true },
+    { id: 'admission', label: 'ADMISSION ALERT', enabled: true },
+    { id: 'college', label: 'COLLEGE NEWS', enabled: true },
+    { id: 'exam', label: 'EXAM NEWS', enabled: true },
+    { id: 'latest', label: 'LATEST ALERTS', enabled: true }
   ];
+
+  // Get categories from settings or use defaults
+  const categories = (settings?.categories || defaultCategories).filter(cat => cat.enabled);
 
   const gradients = [
     'from-orange-400 to-red-500',
