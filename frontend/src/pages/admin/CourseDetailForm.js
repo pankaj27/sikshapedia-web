@@ -160,6 +160,9 @@ const CourseDetailForm = () => {
     average_fees: 0,
     salary_range: { min: 0, max: 0 },
     course_syllabus: [],
+    syllabus: [], // [{semester, subjects: []}]
+    highlights: [], // Course badges/highlights
+    related_courses: [], // Related course names
     subjects: [],
     skills_acquired: [],
     job_opportunities: [],
