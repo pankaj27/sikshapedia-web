@@ -4537,6 +4537,45 @@ async def update_news_listing_settings(
 
 
 # ============================================
+# Blog Listing Page Settings Routes
+# ============================================
+
+@api_router.get("/blog-listing-settings")
+async def get_blog_listing_settings():
+    """Get blog listing page settings (public)"""
+    settings = await db.blog_listing_settings.find_one({"id": "blog-listing-page"}, {"_id": 0})
+    if not settings:
+        default_settings = BlogListingPageSettings()
+        return default_settings.model_dump()
+    return settings
+
+
+@api_router.put("/blog-listing-settings")
+async def update_blog_listing_settings(
+    settings: BlogListingPageSettings,
+    current_user: User = Depends(get_current_user)
+):
+    """Update blog listing page settings (admin only)"""
+    admin = await db.admins.find_one({"email": current_user.email})
+    if not admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    settings.id = "blog-listing-page"
+    settings.updated_at = datetime.now(timezone.utc)
+    settings.updated_by = current_user.email
+    
+    settings_dict = settings.model_dump()
+    
+    await db.blog_listing_settings.update_one(
+        {"id": "blog-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    
+    return settings_dict
+
+
+# ============================================
 # Exam Routes
 # ============================================
 
