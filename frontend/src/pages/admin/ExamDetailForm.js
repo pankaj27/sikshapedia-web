@@ -542,6 +542,72 @@ const ExamDetailForm = () => {
       {/* Form */}
       <form onSubmit={handleSubmit} className="max-w-7xl mx-auto px-6 py-6 space-y-5">
         
+        {/* Popular & Featured Toggle - Prominent at top */}
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-6">
+              {/* Popular Toggle */}
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <div className="relative">
+                  <input 
+                    type="checkbox" 
+                    name="is_popular" 
+                    checked={formData.is_popular || false} 
+                    onChange={handleChange} 
+                    className="sr-only peer" 
+                  />
+                  <div className="w-14 h-7 bg-gray-200 rounded-full peer peer-checked:bg-orange-500 transition-colors"></div>
+                  <div className="absolute left-1 top-1 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-7 transition-transform"></div>
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                    🔥 Mark as Popular
+                  </span>
+                  <span className="text-xs text-gray-500">Show in "Popular Exams" section</span>
+                </div>
+              </label>
+              
+              {/* Featured Toggle */}
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <div className="relative">
+                  <input 
+                    type="checkbox" 
+                    name="is_featured" 
+                    checked={formData.is_featured || false} 
+                    onChange={handleChange} 
+                    className="sr-only peer" 
+                  />
+                  <div className="w-14 h-7 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 transition-colors"></div>
+                  <div className="absolute left-1 top-1 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-7 transition-transform"></div>
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                    ⭐ Featured Exam
+                  </span>
+                  <span className="text-xs text-gray-500">Highlight on homepage</span>
+                </div>
+              </label>
+            </div>
+            
+            {/* Popular Order */}
+            {formData.is_popular && (
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-600">Priority Order:</label>
+                <input 
+                  type="number" 
+                  name="popular_order" 
+                  value={formData.popular_order || 0} 
+                  onChange={handleChange}
+                  min="0"
+                  max="100"
+                  className="w-20 border border-amber-300 rounded-lg px-3 py-1.5 text-center text-sm"
+                />
+                <span className="text-xs text-gray-500">(Lower = Higher priority)</span>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Basic Information */}
         <CollapsibleSection title="Basic Information" icon={<FiFileText className="w-5 h-5" />} defaultOpen={true} color="indigo">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
