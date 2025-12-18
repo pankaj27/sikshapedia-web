@@ -257,19 +257,20 @@ const DynamicCourseListingPage = () => {
   // Get category from URL path (e.g., /courses/engineering -> engineering)
   const path = window.location.pathname;
   const category = path.split('/').pop() || 'engineering';
-  const config = pageConfigs[category] || pageConfigs['engineering'];
   
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategories, setExpandedCategories] = useState({});
   const [allCourses, setAllCourses] = useState([]);
   const [coursesByCategory, setCoursesByCategory] = useState({});
+  const [config, setConfig] = useState(defaultPageConfigs[category] || defaultPageConfigs['engineering']);
 
   // Theme colors based on config
   const themeColors = {
     violet: { bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', btn: 'from-violet-500 to-purple-600' },
     slate: { bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-700', btn: 'from-slate-600 to-gray-700' },
     amber: { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', btn: 'from-amber-500 to-orange-600' },
+    orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', btn: 'from-orange-500 to-amber-600' },
     blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', btn: 'from-blue-500 to-indigo-600' },
     red: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', btn: 'from-red-500 to-rose-600' },
     purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', btn: 'from-purple-500 to-violet-600' },
@@ -280,10 +281,51 @@ const DynamicCourseListingPage = () => {
     sky: { bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', btn: 'from-sky-500 to-cyan-600' },
   };
   
-  const colors = themeColors[config.themeLight] || themeColors.blue;
+  const colors = themeColors[config.themeLight || config.theme_light] || themeColors.blue;
 
+  // Fetch page settings from API
+  useEffect(() => {
+    const fetchPageSettings = async () => {
+      try {
+        const response = await api.get(`/course-pages/${category}`);
+        if (response.data) {
+          // Map API response to expected config format
+          const apiConfig = response.data;
+          setConfig({
+            title: apiConfig.title,
+            subtitle: apiConfig.subtitle,
+            metaTitle: apiConfig.meta_title,
+            metaDescription: apiConfig.meta_description,
+            filterKey: apiConfig.filter_key,
+            filterValue: apiConfig.filter_value,
+            theme: apiConfig.theme,
+            themeLight: apiConfig.theme_light,
+            icon: apiConfig.icon,
+            badge: apiConfig.badge,
+            duration: apiConfig.duration,
+            benefits: apiConfig.benefits || [],
+            faqs: (apiConfig.faqs || []).map(f => ({ q: f.question, a: f.answer })),
+            popularCourses: apiConfig.popular_courses || [],
+            relatedPages: apiConfig.related_pages || [],
+            sidebarCtaTitle: apiConfig.sidebar_cta_title,
+            sidebarCtaText: apiConfig.sidebar_cta_text,
+            sidebarCtaButton: apiConfig.sidebar_cta_button,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching page settings:', error);
+        // Keep default config on error
+      }
+    };
+    
+    fetchPageSettings();
+  }, [category]);
+
+  // Fetch courses based on config
   useEffect(() => {
     const fetchCourses = async () => {
+      if (!config.filterKey || !config.filterValue) return;
+      
       try {
         setLoading(true);
         const response = await api.get(`/courses-detail?${config.filterKey}=${config.filterValue}&status=published&limit=500`);
