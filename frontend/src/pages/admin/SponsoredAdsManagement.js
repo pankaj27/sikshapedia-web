@@ -804,25 +804,57 @@ const SponsoredAdsManagement = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Section Type *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Section Type * {!editingPlacement && <span className="text-xs text-gray-500 font-normal">(select multiple)</span>}
+                </label>
                 <div className="grid grid-cols-3 gap-2">
-                  {SECTION_TYPES.map(type => (
-                    <button
-                      key={type.id}
-                      onClick={() => setNewCustomPlacement({...newCustomPlacement, sectionType: type.id})}
-                      className={`p-3 rounded-lg border-2 flex flex-col items-center gap-1 transition-all ${
-                        newCustomPlacement.sectionType === type.id 
-                          ? 'border-purple-500 bg-purple-50' 
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <type.icon className={newCustomPlacement.sectionType === type.id ? 'text-purple-600' : 'text-gray-400'} size={20} />
-                      <span className={`text-xs font-medium ${newCustomPlacement.sectionType === type.id ? 'text-purple-600' : 'text-gray-600'}`}>
-                        {type.name}
-                      </span>
-                    </button>
-                  ))}
+                  {SECTION_TYPES.map(type => {
+                    const isSelected = editingPlacement 
+                      ? newCustomPlacement.sectionType === type.id
+                      : selectedSectionTypes.includes(type.id);
+                    
+                    const handleClick = () => {
+                      if (editingPlacement) {
+                        // Single select for editing
+                        setNewCustomPlacement({...newCustomPlacement, sectionType: type.id});
+                      } else {
+                        // Multi-select for new placements
+                        if (selectedSectionTypes.includes(type.id)) {
+                          setSelectedSectionTypes(selectedSectionTypes.filter(t => t !== type.id));
+                        } else {
+                          setSelectedSectionTypes([...selectedSectionTypes, type.id]);
+                        }
+                      }
+                    };
+                    
+                    return (
+                      <button
+                        key={type.id}
+                        onClick={handleClick}
+                        className={`p-3 rounded-lg border-2 flex flex-col items-center gap-1 transition-all relative ${
+                          isSelected 
+                            ? 'border-purple-500 bg-purple-50' 
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        {!editingPlacement && isSelected && (
+                          <div className="absolute top-1 right-1 w-4 h-4 bg-purple-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        )}
+                        <type.icon className={isSelected ? 'text-purple-600' : 'text-gray-400'} size={20} />
+                        <span className={`text-xs font-medium ${isSelected ? 'text-purple-600' : 'text-gray-600'}`}>
+                          {type.name}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
+                {!editingPlacement && selectedSectionTypes.length > 1 && (
+                  <p className="text-xs text-purple-600 mt-2">
+                    ✨ {selectedSectionTypes.length} section types selected - will create {selectedSectionTypes.length} placements
+                  </p>
+                )}
               </div>
 
               <div>
