@@ -3973,9 +3973,31 @@ async def delete_course(course_id: str, current_user: User = Depends(get_current
 @api_router.get("/courses-detail", response_model=List[CourseDetail])
 async def get_courses_detail(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000)
+    limit: int = Query(100, ge=1, le=1000),
+    eligibility_level: Optional[str] = None,  # after-10th, after-12th, after-graduation
+    stream: Optional[str] = None,
+    degree_type: Optional[str] = None,
+    status: Optional[str] = None,
+    search: Optional[str] = None
 ):
-    courses = await db.courses_detailed.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    query = {}
+    
+    if eligibility_level:
+        query["eligibility_level"] = eligibility_level
+    if stream:
+        query["stream"] = stream
+    if degree_type:
+        query["degree_type"] = degree_type
+    if status:
+        query["status"] = status
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"full_name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
+    
+    courses = await db.courses_detailed.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     
     for course in courses:
         if isinstance(course.get('created_at'), str):
