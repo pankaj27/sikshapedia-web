@@ -68,7 +68,10 @@ const ExamPage = () => {
           totalMarks: exam.total_marks,
           numQuestions: exam.num_questions,
           examDuration: exam.exam_duration,
-          status: exam.status
+          status: exam.status,
+          isPopular: exam.is_popular || false,
+          isFeatured: exam.is_featured || false,
+          popularOrder: exam.popular_order || 0
         }));
         
         // Filter only published/active exams (exclude drafts)
@@ -76,8 +79,18 @@ const ExamPage = () => {
         
         setExams(activeExams);
         
-        // Set first 10 as popular exams
-        setPopularExams(activeExams.slice(0, 10).map(e => ({
+        // Set popular exams - use is_popular flag, sorted by popular_order
+        const popular = activeExams
+          .filter(e => e.isPopular)
+          .sort((a, b) => a.popularOrder - b.popularOrder)
+          .slice(0, 10)
+          .map(e => ({
+            name: e.name,
+            url: `/exams/${e.slug || e.id}`
+          }));
+        
+        // Fallback to first 10 if no popular exams marked
+        setPopularExams(popular.length > 0 ? popular : activeExams.slice(0, 10).map(e => ({
           name: e.name,
           url: `/exams/${e.slug || e.id}`
         })));
