@@ -1860,6 +1860,54 @@ class ListingPageContent(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+
+# Exam Listing Page Settings Model
+class ExamListingPageSettings(BaseModel):
+    """Settings for the /exams listing page - editable from admin"""
+    model_config = ConfigDict(extra="allow")
+    id: str = "exam-listing-page"  # Singleton - only one settings document
+    
+    # Hero Section
+    hero_title: str = "Entrance Exams in India 2025-26"
+    hero_subtitle: str = "Complete guide to 200+ entrance exams for Engineering, Medical, Management, Law & more"
+    hero_search_placeholder: str = "Search exams (JEE, NEET, CAT, GATE...)"
+    
+    # Quick Stats (shown in hero)
+    stats: List[Dict] = [
+        {"label": "Total Exams", "value": "200+"},
+        {"label": "Categories", "value": "24"},
+        {"label": "Updates Daily", "value": "50+"},
+        {"label": "Students Helped", "value": "10M+"}
+    ]
+    
+    # Latest News/Updates Section
+    show_news_section: bool = True
+    news_section_title: str = "Latest Exam Updates"
+    news_items: List[Dict] = []  # [{title, date, tag, link}]
+    
+    # Popular Exams Sidebar
+    show_popular_sidebar: bool = True
+    popular_sidebar_title: str = "Popular Exams"
+    
+    # SEO Settings
+    meta_title: str = "Entrance Exams in India 2025-26 | Complete Guide"
+    meta_description: str = "Find all entrance exams in India for Engineering, Medical, Management, Law and more. Get exam dates, eligibility, syllabus and preparation tips."
+    meta_keywords: List[str] = ["entrance exams", "india exams", "JEE", "NEET", "CAT", "GATE"]
+    
+    # Additional Content Sections
+    intro_content: Optional[str] = None  # HTML content below hero
+    bottom_content: Optional[str] = None  # HTML content at bottom
+    faqs: List[Dict] = []  # [{question, answer}]
+    
+    # Category Customization
+    show_all_categories: bool = True
+    featured_categories: List[str] = []  # Categories to highlight
+    
+    # Timestamps
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_by: Optional[str] = None
+
+
 # ============================================
 # Helper Functions
 # ============================================
