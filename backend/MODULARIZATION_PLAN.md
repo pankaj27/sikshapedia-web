@@ -43,8 +43,12 @@
 - [x] Create models/ directory  
 - [x] Create placeholder files
 
-### Phase 2: Extract Models
-- [ ] Move Pydantic models to models/*.py
+### Phase 2: Extract Models (IN PROGRESS)
+- [x] Move Exam models to models/exam.py
+- [ ] Move User models to models/user.py
+- [ ] Move College models to models/college.py
+- [ ] Move Course models to models/course.py
+- [ ] Move Content models to models/content.py
 - [ ] Update imports in server.py
 
 ### Phase 3: Extract Routes (Priority Order)
@@ -53,7 +57,7 @@
 3. [ ] uploads.py - File uploads (3 routes)
 4. [ ] colleges.py - Colleges/Schools/Universities (~15 routes)
 5. [ ] courses.py - Courses (~10 routes)
-6. [ ] exams.py - Exams (~10 routes)
+6. [x] exams.py - Exams (~10 routes) - Structure created, routes in server.py
 7. [ ] content.py - News/Blogs/Listing Pages (~15 routes)
 
 ### Phase 4: Extract Services
