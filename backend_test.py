@@ -968,6 +968,190 @@ class APITester:
                 self.log_test("Comprehensive Settings Update", False, 
                              f"Status: {status}", response)
 
+    def test_news_listing_settings(self):
+        """Test News Listing Page Dynamic Settings feature"""
+        print("📰 Testing News Listing Page Dynamic Settings...")
+        
+        # Test 1: GET /api/news-listing-settings (public access)
+        success, response, status = self.make_request("GET", "/news-listing-settings")
+        if success and isinstance(response, dict):
+            # Verify expected structure from review request
+            expected_fields = [
+                "hero_title", "hero_subtitle", "stats", "categories", 
+                "trending_tags", "big_stories_title", "trending_tags_title"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in expected_fields:
+                if field in response:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 6:  # At least 6 out of 7 fields should be present
+                self.log_test("GET /news-listing-settings", True, 
+                             f"Retrieved settings with {len(present_fields)}/7 expected fields")
+                
+                # Verify specific field types and content
+                if isinstance(response.get("stats"), list):
+                    stats_count = len(response["stats"])
+                    self.log_test("Stats Array Structure", True, 
+                                 f"Found {stats_count} stats items")
+                else:
+                    self.log_test("Stats Array Structure", False, "Stats not a list")
+                
+                if isinstance(response.get("categories"), list):
+                    categories_count = len(response["categories"])
+                    self.log_test("Categories Array Structure", True, 
+                                 f"Found {categories_count} categories")
+                else:
+                    self.log_test("Categories Array Structure", False, "Categories not a list")
+                
+                if isinstance(response.get("trending_tags"), list):
+                    tags_count = len(response["trending_tags"])
+                    # Check for expected tags from review request
+                    expected_tags = ["CAT 2025", "JEE Main 2025", "NEET UG 2025"]
+                    found_expected_tags = [tag for tag in expected_tags if tag in response["trending_tags"]]
+                    
+                    self.log_test("Trending Tags Structure", True, 
+                                 f"Found {tags_count} trending tags, {len(found_expected_tags)}/3 expected tags present")
+                else:
+                    self.log_test("Trending Tags Structure", False, "Trending tags not a list")
+                
+                # Check for updated hero title from review request
+                hero_title = response.get("hero_title", "")
+                if "Education News & Updates" in hero_title:
+                    self.log_test("Hero Title Content", True, 
+                                 f"Hero title contains expected content: {hero_title}")
+                else:
+                    self.log_test("Hero Title Content", False, 
+                                 f"Hero title doesn't match expected. Got: {hero_title}")
+                
+                # Check sidebar titles
+                big_stories_title = response.get("big_stories_title", "")
+                trending_tags_title = response.get("trending_tags_title", "")
+                
+                if big_stories_title and trending_tags_title:
+                    self.log_test("Sidebar Titles", True, 
+                                 f"Big Stories: '{big_stories_title}', Trending: '{trending_tags_title}'")
+                else:
+                    self.log_test("Sidebar Titles", False, 
+                                 f"Missing sidebar titles. Big Stories: '{big_stories_title}', Trending: '{trending_tags_title}'")
+                    
+            else:
+                self.log_test("GET /news-listing-settings", False, 
+                             f"Only {len(present_fields)}/7 expected fields present. Missing: {', '.join(missing_fields)}")
+        else:
+            self.log_test("GET /news-listing-settings", False, f"Status: {status}", response)
+        
+        # Test 2: PUT /news-listing-settings without authentication (should fail)
+        test_settings = {
+            "hero_title": "Education News & Updates",
+            "hero_subtitle": "Stay updated with latest education news",
+            "stats": [
+                {"label": "News Articles", "value": "600+"},
+                {"label": "Categories", "value": "6"},
+                {"label": "Daily Updates", "value": "25+"},
+                {"label": "Subscribers", "value": "60K+"}
+            ],
+            "categories": [
+                {"id": "all", "label": "ALL NEWS", "enabled": True},
+                {"id": "admission", "label": "ADMISSION ALERT", "enabled": True},
+                {"id": "college", "label": "COLLEGE NEWS", "enabled": True},
+                {"id": "exam", "label": "EXAM NEWS", "enabled": True},
+                {"id": "latest", "label": "LATEST ALERTS", "enabled": True}
+            ],
+            "big_stories_title": "Top Stories Today",
+            "trending_tags_title": "Hot Topics",
+            "trending_tags": [
+                "CAT 2025", "JEE Main 2025", "NEET UG 2025", "GATE 2026", 
+                "UPSC", "IIT Admission", "MBA Colleges", "CUET"
+            ],
+            "show_newsletter": True,
+            "newsletter_title": "Subscribe to our newsletter",
+            "newsletter_subtitle": "Get our latest news about exams, colleges and others"
+        }
+        
+        success, response, status = self.make_request("PUT", "/news-listing-settings", test_settings)
+        if not success and status in [401, 403]:
+            self.log_test("PUT /news-listing-settings (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("PUT /news-listing-settings (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 3: PUT /news-listing-settings with admin authentication
+        if self.admin_token:
+            success, response, status = self.make_request("PUT", "/news-listing-settings", 
+                                                        test_settings, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify the settings were saved
+                if response.get("hero_title") == test_settings["hero_title"]:
+                    self.log_test("PUT /news-listing-settings (with admin auth)", True, 
+                                 f"Settings updated successfully")
+                    
+                    # Test 4: Verify changes persist with GET request
+                    success, get_response, get_status = self.make_request("GET", "/news-listing-settings")
+                    if success and isinstance(get_response, dict):
+                        if get_response.get("hero_title") == test_settings["hero_title"]:
+                            self.log_test("Verify Settings Persistence", True, 
+                                         "Updated settings persist in GET request")
+                            
+                            # Verify specific updated values from review request
+                            updated_big_stories = get_response.get("big_stories_title") == "Top Stories Today"
+                            updated_trending_title = get_response.get("trending_tags_title") == "Hot Topics"
+                            has_expected_tags = all(tag in get_response.get("trending_tags", []) 
+                                                  for tag in ["CAT 2025", "JEE Main 2025", "NEET UG 2025"])
+                            
+                            if updated_big_stories and updated_trending_title and has_expected_tags:
+                                self.log_test("Verify Expected Content Updates", True, 
+                                             "All expected content updates are present")
+                            else:
+                                details = []
+                                if not updated_big_stories:
+                                    details.append("Big Stories title not updated")
+                                if not updated_trending_title:
+                                    details.append("Trending tags title not updated")
+                                if not has_expected_tags:
+                                    details.append("Expected trending tags missing")
+                                self.log_test("Verify Expected Content Updates", False, 
+                                             f"Issues: {', '.join(details)}")
+                        else:
+                            self.log_test("Verify Settings Persistence", False, 
+                                         f"Settings not persisted. Expected: {test_settings['hero_title']}, Got: {get_response.get('hero_title')}")
+                    else:
+                        self.log_test("Verify Settings Persistence", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("PUT /news-listing-settings (with admin auth)", False, 
+                                 f"Settings not updated correctly. Expected: {test_settings['hero_title']}, Got: {response.get('hero_title')}")
+            else:
+                self.log_test("PUT /news-listing-settings (with admin auth)", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test("PUT /news-listing-settings (with admin auth)", False, 
+                         "Admin token not available")
+        
+        # Test 5: Verify newsletter settings structure
+        if self.admin_token:
+            success, response, status = self.make_request("GET", "/news-listing-settings")
+            if success and isinstance(response, dict):
+                newsletter_fields = ["show_newsletter", "newsletter_title", "newsletter_subtitle"]
+                newsletter_present = all(field in response for field in newsletter_fields)
+                
+                if newsletter_present:
+                    self.log_test("Newsletter Settings Structure", True, 
+                                 f"All newsletter fields present: {newsletter_fields}")
+                else:
+                    missing_newsletter = [field for field in newsletter_fields if field not in response]
+                    self.log_test("Newsletter Settings Structure", False, 
+                                 f"Missing newsletter fields: {missing_newsletter}")
+            else:
+                self.log_test("Newsletter Settings Structure", False, 
+                             f"Failed to get settings for newsletter verification")
+
     def test_course_pages_management(self):
         """Test Course Pages Management feature"""
         print("📄 Testing Course Pages Management Feature...")
