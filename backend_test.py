@@ -10,7 +10,7 @@ import sys
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://campus-catalog-3.preview.emergentagent.com/api"
+BASE_URL = "https://eduadmin-35.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
