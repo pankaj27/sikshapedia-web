@@ -3,7 +3,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime, timezone
+
+# Fix bcrypt/passlib compatibility issue - must be before passlib import
 import bcrypt
+if not hasattr(bcrypt, "__about__"):
+    class _about:
+        __version__ = bcrypt.__version__
+    bcrypt.__about__ = _about
+
 from passlib.context import CryptContext
 
 from core.database import db
