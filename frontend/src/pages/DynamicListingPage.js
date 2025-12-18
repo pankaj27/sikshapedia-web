@@ -574,11 +574,25 @@ const DynamicListingPage = () => {
   
   // Fetch featured/sponsored colleges (from admin-managed multi-placement ads)
   const fetchFeaturedColleges = async () => {
-    // Determine placement based on page type
+    // Get current URL path for custom placement lookup
+    const urlPath = location.pathname.replace(/^\//, '') + location.search;
+    
+    try {
+      // First try URL-specific custom placement
+      const customResponse = await api.get(`/sponsored-ads-by-url?url=${encodeURIComponent(urlPath)}&section_type=featured`);
+      if (customResponse.data && customResponse.data.length > 0) {
+        setFeaturedColleges(customResponse.data);
+        return;
+      }
+    } catch (error) {
+      console.error('Custom placement not available:', error);
+    }
+    
+    // Determine fallback placement based on page type
     const placementId = pageInfo.isSchools ? 'school_listing_featured' : 'college_listing_featured';
     
     try {
-      // First try admin-managed multi-placement sponsored ads
+      // Try admin-managed multi-placement sponsored ads
       const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=6`);
       if (response.data && response.data.length > 0) {
         setFeaturedColleges(response.data);
