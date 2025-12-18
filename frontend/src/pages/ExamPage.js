@@ -35,12 +35,13 @@ const ExamPage = () => {
     'from-amber-500 to-amber-600'
   ];
 
-  // Fetch exams from API
+  // Fetch exams from API (using exam details for comprehensive data)
   useEffect(() => {
     const fetchExams = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/exams?limit=100');
+        // Fetch from exams-detail endpoint for comprehensive exam data
+        const response = await api.get('/exams-detail?limit=200');
         const examData = response.data || [];
         
         // Transform API data to match component format
@@ -48,6 +49,7 @@ const ExamPage = () => {
           id: exam.id,
           name: exam.name,
           fullName: exam.full_name || exam.name,
+          description: exam.description,
           examMode: exam.exam_mode ? `${exam.exam_mode} Exam` : 'Online/Offline',
           examDate: exam.exam_date || 'TBA',
           applicationDate: exam.application_start_date && exam.application_end_date 
@@ -62,13 +64,20 @@ const ExamPage = () => {
           applicants: exam.total_applicants ? `${(exam.total_applicants / 100000).toFixed(0)}L+` : '-',
           slug: exam.slug || exam.name?.toLowerCase().replace(/\s+/g, '-'),
           level: exam.exam_level || exam.level,
-          conductingBody: exam.conducting_body
+          conductingBody: exam.conducting_body,
+          totalMarks: exam.total_marks,
+          numQuestions: exam.num_questions,
+          examDuration: exam.exam_duration,
+          status: exam.status
         }));
         
-        setExams(transformedExams);
+        // Filter only published/active exams (exclude drafts)
+        const activeExams = transformedExams.filter(e => e.status !== 'draft' || !e.status);
+        
+        setExams(activeExams);
         
         // Set first 10 as popular exams
-        setPopularExams(transformedExams.slice(0, 10).map(e => ({
+        setPopularExams(activeExams.slice(0, 10).map(e => ({
           name: e.name,
           url: `/exams/${e.slug || e.id}`
         })));
