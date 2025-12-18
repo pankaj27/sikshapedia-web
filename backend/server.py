@@ -3780,6 +3780,42 @@ async def get_exam_listing_settings():
         return default_settings.model_dump()
     return settings
 
+@api_router.get("/course-listing-settings")
+async def get_course_listing_settings():
+    """Get course listing page settings (public)"""
+    settings = await db.course_listing_settings.find_one({"id": "course-listing-page"}, {"_id": 0})
+    if not settings:
+        # Return default settings if none exist
+        default_settings = CourseListingPageSettings()
+        return default_settings.model_dump()
+    return settings
+
+@api_router.put("/course-listing-settings")
+async def update_course_listing_settings(
+    settings: CourseListingPageSettings,
+    current_user: User = Depends(get_current_user)
+):
+    """Update course listing page settings (admin only)"""
+    # Check if user is admin
+    admin = await db.admin_users.find_one({"email": current_user.email})
+    if not admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    settings.id = "course-listing-page"  # Ensure singleton ID
+    settings.updated_at = datetime.now(timezone.utc)
+    settings.updated_by = current_user.email
+    
+    settings_dict = settings.model_dump()
+    
+    # Upsert - create if not exists, update if exists
+    await db.course_listing_settings.update_one(
+        {"id": "course-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    
+    return settings_dict
+
 @api_router.put("/exam-listing-settings")
 async def update_exam_listing_settings(
     settings: ExamListingPageSettings,
