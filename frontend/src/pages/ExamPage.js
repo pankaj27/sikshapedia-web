@@ -324,8 +324,27 @@ const ExamPage = () => {
 
             {/* Exam Cards */}
             <div className="space-y-4">
-              {filteredExams.map((exam, idx) => (
-                <React.Fragment key={`exam-${idx}`}>
+              {/* Loading State */}
+              {loading && (
+                <div className="flex items-center justify-center py-12">
+                  <FiLoader className="w-8 h-8 text-indigo-600 animate-spin" />
+                  <span className="ml-3 text-gray-600">Loading exams...</span>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!loading && filteredExams.length === 0 && (
+                <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+                  <div className="text-4xl mb-4">📝</div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">No exams found</h3>
+                  <p className="text-gray-500">
+                    {searchQuery ? `No exams match "${searchQuery}"` : `No exams in ${selectedCategory} category yet`}
+                  </p>
+                </div>
+              )}
+
+              {!loading && filteredExams.map((exam, idx) => (
+                <React.Fragment key={exam.id || `exam-${idx}`}>
                   {/* Middle Ad after 3rd item */}
                   {idx === 3 && (
                     <div className="py-2">
@@ -346,18 +365,23 @@ const ExamPage = () => {
                         {/* Exam Details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-start gap-2 mb-2">
-                            <Link to={`/exams/${exam.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                            <Link to={`/exams/${exam.slug || exam.id}`}>
                               <h3 className="text-lg md:text-xl font-bold text-gray-900 hover:text-indigo-600 transition">
                                 {exam.name}
                               </h3>
                             </Link>
                             <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                              exam.examMode === 'Online Exam' 
+                              exam.examMode?.includes('Online') 
                                 ? 'bg-green-100 text-green-700' 
                                 : 'bg-blue-100 text-blue-700'
                             }`}>
                               {exam.examMode}
                             </span>
+                            {exam.level && (
+                              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
+                                {exam.level}
+                              </span>
+                            )}
                           </div>
                           
                           <p className="text-gray-600 text-sm mb-4">{exam.fullName}</p>
