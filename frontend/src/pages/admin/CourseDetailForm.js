@@ -423,7 +423,7 @@ const CourseDetailForm = () => {
   const fetchCourse = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/courses/${id}`);
+      const response = await api.get(`/courses-detail/${id}`);
       setFormData({ ...formData, ...response.data });
     } catch (error) {
       console.error('Error fetching course:', error);
