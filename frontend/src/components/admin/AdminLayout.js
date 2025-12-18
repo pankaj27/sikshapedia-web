@@ -82,6 +82,7 @@ const AdminLayout = ({ children }) => {
       icon: FiGrid,
       submenu: [
         { title: 'Sponsored Ads', path: '/admin/sponsored-ads', icon: FiStar, highlight: true },
+        { title: 'Ad Manager', path: '/admin/advertisements', icon: FiImage, highlight: true, badge: 'NEW' },
         { title: 'Banners & Sliders', path: '/admin/banners', icon: FiGrid },
         { title: 'Testimonials', path: '/admin/testimonials', icon: FiUsers },
         { title: 'FAQs', path: '/admin/faqs', icon: FiFileText },
