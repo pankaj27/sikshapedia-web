@@ -1910,6 +1910,69 @@ class ExamListingPageSettings(BaseModel):
     updated_by: Optional[str] = None
 
 
+# Course Listing Page Settings Model
+class CourseListingPageSettings(BaseModel):
+    """Settings for the /courses main listing page - editable from admin"""
+    model_config = ConfigDict(extra="allow")
+    id: str = "course-listing-page"  # Singleton
+    
+    # Hero Section
+    hero_title: str = "Explore Courses in India"
+    hero_subtitle: str = "Find the perfect course for your career - from diploma to doctorate"
+    hero_search_placeholder: str = "Search courses (B.Tech, MBA, MBBS...)"
+    
+    # Popular Tags (shown in hero)
+    popular_tags: List[Dict] = [
+        {"name": "B.Tech", "link": "/courses/engineering", "color": "bg-blue-500"},
+        {"name": "MBA", "link": "/courses/management", "color": "bg-purple-500"},
+        {"name": "MBBS", "link": "/courses/medical", "color": "bg-red-500"},
+        {"name": "B.Sc", "link": "/courses/science", "color": "bg-green-500"},
+        {"name": "B.Com", "link": "/courses/commerce", "color": "bg-yellow-500"},
+        {"name": "BA", "link": "/courses/arts", "color": "bg-pink-500"},
+        {"name": "BCA", "link": "/courses/computer", "color": "bg-indigo-500"},
+        {"name": "LLB", "link": "/courses/law", "color": "bg-gray-600"}
+    ]
+    
+    # Level-based Courses Section
+    level_courses: List[Dict] = [
+        {"title": "After 10th", "subtitle": "Diploma & Vocational", "icon": "🎓", "gradient": "from-emerald-400 to-cyan-500", "link": "/courses/after-10th", "stats": "200+ Courses", "popular": ["ITI", "Polytechnic", "Vocational"]},
+        {"title": "After 12th", "subtitle": "Undergraduate Programs", "icon": "📚", "gradient": "from-blue-500 to-purple-600", "link": "/courses/after-12th", "stats": "500+ Courses", "popular": ["B.Tech", "MBBS", "B.Com", "BA"]},
+        {"title": "Diploma", "subtitle": "Professional Certifications", "icon": "📜", "gradient": "from-orange-400 to-pink-500", "link": "/courses/diploma", "stats": "150+ Courses", "popular": ["Engineering", "Pharmacy", "Nursing"]},
+        {"title": "Postgraduate", "subtitle": "Masters & PG Programs", "icon": "🎯", "gradient": "from-purple-500 to-indigo-600", "link": "/courses/pg", "stats": "400+ Courses", "popular": ["MBA", "M.Tech", "M.Sc", "MA"]},
+        {"title": "PhD & Research", "subtitle": "Doctoral Programs", "icon": "🔬", "gradient": "from-rose-400 to-red-500", "link": "/courses/phd", "stats": "100+ Programs", "popular": ["Science", "Engineering", "Arts"]},
+        {"title": "Certificate", "subtitle": "Short-term Courses", "icon": "✨", "gradient": "from-amber-400 to-orange-500", "link": "/courses/certificate", "stats": "300+ Courses", "popular": ["IT", "Management", "Design"]}
+    ]
+    
+    # Stream Categories Section
+    stream_categories: List[Dict] = [
+        {"name": "Engineering", "icon": "HiOutlineDesktopComputer", "link": "/courses/engineering", "courses": ["B.Tech", "B.E", "M.Tech", "Polytechnic"], "count": "250+"},
+        {"name": "Medical", "icon": "HiOutlineHeart", "link": "/courses/medical", "courses": ["MBBS", "BDS", "BAMS", "Nursing"], "count": "150+"},
+        {"name": "Management", "icon": "HiOutlineOfficeBuilding", "link": "/courses/management", "courses": ["MBA", "BBA", "PGDM", "BMS"], "count": "200+"},
+        {"name": "Science", "icon": "HiOutlineBeaker", "link": "/courses/science", "courses": ["B.Sc", "M.Sc", "BCA", "MCA"], "count": "180+"},
+        {"name": "Commerce", "icon": "HiOutlineCurrencyRupee", "link": "/courses/commerce", "courses": ["B.Com", "M.Com", "CA", "CS"], "count": "120+"},
+        {"name": "Arts", "icon": "HiOutlinePencilAlt", "link": "/courses/arts", "courses": ["BA", "MA", "BFA", "Journalism"], "count": "150+"},
+        {"name": "Law", "icon": "HiOutlineScale", "link": "/courses/law", "courses": ["LLB", "BA LLB", "LLM"], "count": "80+"},
+        {"name": "Computer", "icon": "HiOutlineDesktopComputer", "link": "/courses/computer", "courses": ["BCA", "MCA", "B.Tech CSE"], "count": "100+"}
+    ]
+    
+    # Featured Courses Section
+    featured_courses: List[Dict] = []  # [{name, description, duration, link, image}]
+    
+    # SEO Settings
+    meta_title: str = "Courses in India 2025 - UG, PG, Diploma, PhD Programs"
+    meta_description: str = "Explore 1000+ courses in India across Engineering, Medical, Management, Science, Commerce, Arts, Law and more."
+    meta_keywords: List[str] = ["courses in india", "ug courses", "pg courses", "diploma", "degree"]
+    
+    # Additional Content
+    intro_content: Optional[str] = None
+    bottom_content: Optional[str] = None
+    faqs: List[Dict] = []
+    
+    # Timestamps
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_by: Optional[str] = None
+
+
 # ============================================
 # Helper Functions
 # ============================================
