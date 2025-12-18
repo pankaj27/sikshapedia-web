@@ -28,15 +28,17 @@ const ScholarshipsPage = () => {
         if (selectedType) params.append('type', selectedType);
         if (selectedLevel) params.append('level', selectedLevel);
         const response = await api.get(`/scholarships?${params.toString()}`);
-        setScholarships(response.data);
+        setScholarships(response.data || []);
       } else {
         const params = new URLSearchParams();
         if (selectedType) params.append('type', selectedType);
         const response = await api.get(`/loans?${params.toString()}`);
-        setLoans(response.data);
+        setLoans(response.data || []);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+      setScholarships([]);
+      setLoans([]);
     } finally {
       setLoading(false);
     }
