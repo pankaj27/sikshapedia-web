@@ -192,6 +192,7 @@ function App() {
                   {/* Courses */}
                   <Route path="/courses" element={<CoursesPage />} />
                   <Route path="/courses/after-10th" element={<CoursesAfter10thPage />} />
+                  <Route path="/courses/after-12th" element={<CoursesAfter12thPage />} />
                   <Route path="/course-finder" element={<CourseFinderPage />} />
                   <Route path="/courses/listing/:category" element={<CourseListingPage />} />
                   <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
