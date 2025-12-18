@@ -726,6 +726,38 @@ const CourseDetailForm = () => {
             </div>
 
             <div>
+              <label className="block text-sm font-medium mb-1">Eligibility Level *</label>
+              <select
+                name="eligibility_level"
+                value={formData.eligibility_level}
+                onChange={handleChange}
+                required
+                className="w-full border rounded px-3 py-2"
+              >
+                <option value="after-10th">After 10th</option>
+                <option value="after-12th">After 12th</option>
+                <option value="after-graduation">After Graduation</option>
+                <option value="professional">Professional</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-1">This determines which listing page the course appears on</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Course Mode</label>
+              <select
+                name="course_mode"
+                value={formData.course_mode}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+              >
+                <option value="Full Time">Full Time</option>
+                <option value="Part Time">Part Time</option>
+                <option value="Distance">Distance Learning</option>
+                <option value="Online">Online</option>
+              </select>
+            </div>
+
+            <div>
               <label className="block text-sm font-medium mb-1">Average Fees (Annual)</label>
               <input
                 type="number"
