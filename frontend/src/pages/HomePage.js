@@ -922,7 +922,7 @@ const CollegeDuniaHome = () => {
               {sponsoredFeatured.map((college, idx) => (
                 <Link 
                   key={college.id || idx}
-                  to={`/college/${college.id}`}
+                  to={getInstitutionDetailUrl(college.institution_type || 'college', college.id, college.name, college.location?.city, college.serial_number)}
                   className="bg-white rounded-xl shadow-lg border border-orange-100 overflow-hidden hover:shadow-xl hover:border-orange-300 transition-all group"
                 >
                   <div className="p-5">
