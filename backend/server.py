@@ -6587,7 +6587,7 @@ async def get_ads_analytics_summary(current_user: dict = Depends(get_current_use
             "ad_type": ad.get("ad_type"),
             "impressions": ad.get("stats", {}).get("impressions", 0),
             "clicks": ad.get("stats", {}).get("clicks", 0),
-            "ctr": round((ad.get("stats", {}).get("clicks", 0) / ad.get("stats", {}).get("impressions", 1)) * 100, 2)
+            "ctr": round((ad.get("stats", {}).get("clicks", 0) / max(ad.get("stats", {}).get("impressions", 0), 1)) * 100, 2)
         } for ad in top_ads]
     }
 
