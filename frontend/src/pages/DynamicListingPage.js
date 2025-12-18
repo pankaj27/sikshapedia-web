@@ -2004,6 +2004,57 @@ const DynamicListingPage = () => {
                       </div>
                     )}
                     
+                    {/* Top Collections Section - Appears after colleges 6, 12, 18, etc. */}
+                    {idx > 0 && idx % 6 === 0 && (
+                      <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl border border-blue-200 overflow-hidden shadow-lg">
+                        <div className="px-4 py-3 border-b border-blue-100 flex items-center justify-between">
+                          <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                            <FiGrid className="text-blue-600" size={18} />
+                            Top Collections for You
+                          </h3>
+                          <Link to="/collections" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                            View All →
+                          </Link>
+                        </div>
+                        <div className="p-4">
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {/* Collection Card 1 */}
+                            <Link to="/btech-colleges" className="group/card bg-white rounded-lg p-3 border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
+                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-2">
+                                <FiBookOpen className="text-white" size={18} />
+                              </div>
+                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-blue-600 transition-colors">BTech Colleges</h4>
+                              <p className="text-xs text-gray-500 mt-0.5">4,359+ Colleges</p>
+                            </Link>
+                            {/* Collection Card 2 */}
+                            <Link to="/mba-colleges" className="group/card bg-white rounded-lg p-3 border border-purple-100 hover:border-purple-300 hover:shadow-md transition-all">
+                              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-2">
+                                <FiAward className="text-white" size={18} />
+                              </div>
+                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-purple-600 transition-colors">MBA Colleges</h4>
+                              <p className="text-xs text-gray-500 mt-0.5">3,200+ Colleges</p>
+                            </Link>
+                            {/* Collection Card 3 */}
+                            <Link to="/medical-colleges" className="group/card bg-white rounded-lg p-3 border border-emerald-100 hover:border-emerald-300 hover:shadow-md transition-all">
+                              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mb-2">
+                                <FiHeart className="text-white" size={18} />
+                              </div>
+                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-emerald-600 transition-colors">Medical Colleges</h4>
+                              <p className="text-xs text-gray-500 mt-0.5">850+ Colleges</p>
+                            </Link>
+                            {/* Collection Card 4 */}
+                            <Link to="/law-colleges" className="group/card bg-white rounded-lg p-3 border border-orange-100 hover:border-orange-300 hover:shadow-md transition-all">
+                              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-2">
+                                <FiBookmark className="text-white" size={18} />
+                              </div>
+                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-orange-600 transition-colors">Law Colleges</h4>
+                              <p className="text-xs text-gray-500 mt-0.5">1,500+ Colleges</p>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
                     {/* Regular College Card */}
                     <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all group">
                     {/* Top Badge Bar */}
