@@ -485,25 +485,31 @@ const CourseDetailPage = () => {
               title="Top Colleges for this Course"
             />
 
-            {/* Related Courses */}
+            {/* Related Courses - Dynamic */}
             <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="font-bold text-lg mb-4 text-gray-900">Related Courses</h3>
               <div className="space-y-3">
-                {['M.Tech', 'MBA', 'BCA', 'MCA'].map((relCourse, idx) => (
-                  <Link 
-                    key={idx} 
-                    to={`/courses/${relCourse.toLowerCase().replace('.', '')}`}
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
-                      <HiOutlineAcademicCap className="text-blue-600" size={20} />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 text-sm">{relCourse}</h4>
-                      <p className="text-xs text-gray-500">View Details</p>
-                    </div>
-                  </Link>
-                ))}
+                {relatedCourses.slice(0, 5).map((relCourse, idx) => {
+                  const courseName = typeof relCourse === 'string' ? relCourse : relCourse.name;
+                  const courseSlug = typeof relCourse === 'string' 
+                    ? relCourse.toLowerCase().replace(/\s+/g, '-').replace('.', '')
+                    : relCourse.slug || relCourse.name.toLowerCase().replace(/\s+/g, '-');
+                  return (
+                    <Link 
+                      key={idx} 
+                      to={`/courses/${courseSlug}`}
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                        <HiOutlineAcademicCap className="text-blue-600" size={20} />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 text-sm">{courseName}</h4>
+                        <p className="text-xs text-gray-500">View Details</p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
