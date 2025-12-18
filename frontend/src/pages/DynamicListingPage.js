@@ -2080,25 +2080,29 @@ const DynamicListingPage = () => {
               </div>
             )}
 
-            {/* Pagination */}
+            {/* Pagination - Modern Style */}
             {!loading && institutions.length > 0 && totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-8">
+              <div className="flex justify-center items-center gap-3 mt-8 bg-white rounded-xl p-4 shadow-sm">
                 <button
                   onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
                   disabled={pagination.page === 1}
-                  className="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50"
+                  className="px-5 py-2.5 border border-gray-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 font-medium text-sm transition-all flex items-center gap-2"
                 >
-                  Previous
+                  ← Previous
                 </button>
-                <span className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg font-medium">
-                  Page {pagination.page} of {totalPages}
-                </span>
+                <div className="flex items-center gap-1">
+                  <span className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-bold text-sm shadow-sm">
+                    {pagination.page}
+                  </span>
+                  <span className="text-gray-400 text-sm">of</span>
+                  <span className="text-gray-600 font-medium text-sm">{totalPages}</span>
+                </div>
                 <button
                   onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
                   disabled={pagination.page >= totalPages}
-                  className="px-4 py-2 border rounded-lg disabled:opacity-50 hover:bg-gray-50"
+                  className="px-5 py-2.5 border border-gray-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 font-medium text-sm transition-all flex items-center gap-2"
                 >
-                  Next
+                  Next →
                 </button>
               </div>
             )}
