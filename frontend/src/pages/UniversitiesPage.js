@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { FiMapPin, FiStar, FiCheckCircle, FiAward, FiEdit3, FiGrid, FiTarget, FiFilter, FiChevronDown, FiChevronUp, FiUser, FiSearch, FiX } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 
 const UniversitiesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
