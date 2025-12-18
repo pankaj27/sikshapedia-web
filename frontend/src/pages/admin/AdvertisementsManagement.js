@@ -398,10 +398,13 @@ const AdvertisementsManagement = () => {
                       className="w-full border rounded px-3 py-2"
                       required
                     >
-                      <option value="banner">Banner</option>
-                      <option value="popup">Popup</option>
-                      <option value="sidebar">Sidebar</option>
-                      <option value="floating">Floating</option>
+                      <option value="banner">🖼️ Banner Ad</option>
+                      <option value="text">📝 Text Ad</option>
+                      <option value="video">🎬 Video Ad</option>
+                      <option value="html">💻 HTML/Native Ad</option>
+                      <option value="popup">📢 Popup</option>
+                      <option value="sidebar">📌 Sidebar</option>
+                      <option value="floating">🎈 Floating</option>
                     </select>
                   </div>
 
