@@ -29,6 +29,7 @@ const NewsForm = () => {
   const [activeTab, setActiveTab] = useState('basic');
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [authors, setAuthors] = useState([]); // Team members for author selection
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -43,7 +44,8 @@ const NewsForm = () => {
     video_thumbnail: '',
     gallery_images: [],
     
-    // Author
+    // Author (from team)
+    author_id: '', // Team member ID
     author: '',
     author_image: '',
     author_designation: '',
