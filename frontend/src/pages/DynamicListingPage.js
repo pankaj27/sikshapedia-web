@@ -1534,6 +1534,13 @@ const DynamicListingPage = () => {
         </div>
       </div>
 
+      {/* Ad Banner - Above Filters */}
+      <div className="bg-white py-4">
+        <div className="container mx-auto px-4 md:px-6">
+          <AdBanner pageName="colleges" position="top" />
+        </div>
+      </div>
+
       {/* COLLEGE LISTING SECTION */}
       <div className="bg-gray-100 py-6">
         <div className="container mx-auto px-4 md:px-6">
