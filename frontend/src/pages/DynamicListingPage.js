@@ -894,7 +894,7 @@ const DynamicListingPage = () => {
   }, [urlInfo, pageInfo, location.pathname]);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-2">
+    <div className="min-h-screen bg-gray-50">
       <Helmet>
         <title>{pageContent?.meta_title || pageInfo.title} | AdmissionBuddy</title>
         <meta name="description" content={pageContent?.meta_description || pageInfo.description} />
@@ -907,88 +907,115 @@ const DynamicListingPage = () => {
       {/* Top Ad Banner */}
       <AdBanner pageName="colleges" position="top" />
       
-      {/* BREADCRUMB NAVIGATION */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-1.5">
-          <div className="flex items-center gap-1.5 text-xs text-gray-600 flex-wrap">
+      {/* HERO SECTION - Modern Design */}
+      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white">
+        <div className="container mx-auto px-4 md:px-6 py-6 md:py-10">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-blue-200 mb-4">
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={idx}>
-                {idx > 0 && <span>/</span>}
+                {idx > 0 && <span className="text-blue-400">/</span>}
                 {idx === breadcrumbs.length - 1 ? (
-                  <span className="text-gray-900 font-medium">{crumb.label}</span>
+                  <span className="text-white font-medium">{crumb.label}</span>
                 ) : (
-                  <Link to={crumb.path} className="hover:text-orange-600 transition-colors">{crumb.label}</Link>
+                  <Link to={crumb.path} className="hover:text-white transition-colors">{crumb.label}</Link>
                 )}
               </React.Fragment>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* PAGE HEADING */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-6 py-1.5">
-          <h1 className="text-xl font-bold text-gray-900">{pageContent?.page_title || pageInfo.title}</h1>
-          {pageContent?.page_subtitle && (
-            <p className="text-sm text-gray-600 mt-0.5">{pageContent.page_subtitle}</p>
-          )}
-        </div>
-      </div>
-
-      {/* ADVERTISEMENT BANNERS */}
-      <div className="bg-white border-b py-2">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-            <Link to="/write-review" className="block">
-              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiEdit3 className="text-2xl mb-1" />
-                <h3 className="font-bold text-sm mb-0.5">Write a Review</h3>
-                <p className="text-[10px]">Get Upto ₹300*</p>
+          
+          {/* Title & Stats */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
+                {pageContent?.page_title || pageInfo.title}
+              </h1>
+              {pageContent?.page_subtitle && (
+                <p className="text-blue-200 text-sm md:text-base max-w-2xl">{pageContent.page_subtitle}</p>
+              )}
+              <div className="flex items-center gap-4 mt-3 text-sm">
+                <span className="bg-white/10 px-3 py-1 rounded-full">
+                  <strong>{totalCount.toLocaleString()}</strong> Colleges Found
+                </span>
+                <span className="hidden md:inline-flex items-center gap-1.5">
+                  <FiCheckCircle className="text-green-400" />
+                  Verified Information
+                </span>
               </div>
-            </Link>
-            <Link to="/course-finder" className="block">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiGrid className="text-2xl mb-1" />
-                <h3 className="font-bold text-sm mb-0.5">Course Finder</h3>
-                <p className="text-[10px]">Find Your Perfect Course</p>
+            </div>
+            
+            {/* Author Info - Compact */}
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-white/20 flex-shrink-0">
+                {pageContent?.updated_by_photo || pageContent?.created_by_photo ? (
+                  <img 
+                    src={pageContent?.updated_by_photo || pageContent?.created_by_photo} 
+                    alt={pageContent?.updated_by_name || 'Author'} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
+                    <FiUser size={18} />
+                  </div>
+                )}
               </div>
-            </Link>
-            <Link to="/college-predictor" className="block">
-              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-3 text-white hover:shadow-lg transition-shadow h-full flex flex-col justify-center items-center text-center">
-                <FiTarget className="text-2xl mb-1" />
-                <h3 className="font-bold text-sm mb-0.5">College Predictor</h3>
-                <p className="text-[10px]">Know Your Admission Chances</p>
+              <div>
+                <p className="text-xs text-blue-200">Curated by</p>
+                <p className="font-semibold text-sm">
+                  {pageContent?.updated_by_name || pageContent?.created_by_name || 'Content Team'}
+                </p>
+                <p className="text-xs text-blue-300">
+                  {pageContent?.updated_at ? `Updated ${formatTimeAgo(pageContent.updated_at)}` : 'Updated recently'}
+                </p>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* AUTHOR INFO */}
-      <div className="bg-white py-2 border-b">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-              {pageContent?.updated_by_photo || pageContent?.created_by_photo ? (
-                <img 
-                  src={pageContent?.updated_by_photo || pageContent?.created_by_photo} 
-                  alt={pageContent?.updated_by_name || 'Author'} 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                  <FiUser size={16} />
+      {/* QUICK ACTION CARDS */}
+      <div className="bg-white border-b shadow-sm">
+        <div className="container mx-auto px-4 md:px-6 py-4">
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
+            <Link to="/write-review" className="group">
+              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                    <FiEdit3 className="text-xl md:text-2xl" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm md:text-base truncate">Write a Review</h3>
+                    <p className="text-[10px] md:text-xs text-orange-100">Get Upto ₹300*</p>
+                  </div>
                 </div>
-              )}
-            </div>
-            <div>
-              <Link to={`/author/${pageContent?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-[13px] font-semibold text-gray-900 hover:text-orange-600">
-                {pageContent?.updated_by_name || pageContent?.created_by_name || 'Content Team'}
-              </Link>
-              <p className="text-[11px] text-gray-600">
-                Content Curator | {pageContent?.updated_at ? `Updated ${formatTimeAgo(pageContent.updated_at)}` : 'Updated recently'}
-              </p>
-            </div>
+              </div>
+            </Link>
+            <Link to="/course-finder" className="group">
+              <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                    <FiGrid className="text-xl md:text-2xl" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm md:text-base truncate">Course Finder</h3>
+                    <p className="text-[10px] md:text-xs text-blue-100">Find Your Course</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            <Link to="/college-predictor" className="group">
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                    <FiTarget className="text-xl md:text-2xl" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm md:text-base truncate">Predictor</h3>
+                    <p className="text-[10px] md:text-xs text-emerald-100">Admission Chances</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </div>
