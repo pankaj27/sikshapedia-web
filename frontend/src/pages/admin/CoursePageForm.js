@@ -33,7 +33,9 @@ const CoursePageForm = () => {
     meta_keywords: [],
     sidebar_cta_title: 'Need Guidance?',
     sidebar_cta_text: 'Get expert counselling',
-    sidebar_cta_button: 'Get Free Counselling'
+    sidebar_cta_button: 'Get Free Counselling',
+    intro_content: '',
+    bottom_content: ''
   });
 
   useEffect(() => {
