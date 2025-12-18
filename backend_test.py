@@ -88,48 +88,48 @@ class APITester:
             return False, f"Request error: {str(e)}", 500
 
     def test_authentication(self):
-        """Test authentication endpoints"""
-        print("🔐 Testing Authentication Routes...")
+        """Test authentication endpoints from modular routes"""
+        print("🔐 Testing Authentication Routes (Modular System)...")
         
-        # Test 1: Admin Login
-        success, response, status = self.make_request("POST", "/auth/admin-login", ADMIN_CREDENTIALS)
+        # Test 1: POST /api/auth/login with admin credentials
+        success, response, status = self.make_request("POST", "/auth/login", ADMIN_CREDENTIALS)
         if success and "access_token" in response:
             self.admin_token = response["access_token"]
-            self.log_test("Admin Login", True, f"Token received, user: {response.get('user', {}).get('name', 'N/A')}")
+            user_info = response.get('user', {})
+            self.log_test("POST /auth/login (admin credentials)", True, 
+                         f"Token received, user: {user_info.get('name', 'N/A')}, email: {user_info.get('email', 'N/A')}")
         else:
-            self.log_test("Admin Login", False, f"Status: {status}", response)
+            self.log_test("POST /auth/login (admin credentials)", False, f"Status: {status}", response)
         
-        # Test 2: User Registration (create test user)
-        success, response, status = self.make_request("POST", "/auth/register", USER_CREDENTIALS)
+        # Test 2: POST /api/auth/admin-login with same credentials
+        success, response, status = self.make_request("POST", "/auth/admin-login", ADMIN_CREDENTIALS)
         if success and "access_token" in response:
-            self.user_token = response["access_token"]
-            self.log_test("User Registration", True, f"User created: {response.get('user', {}).get('email', 'N/A')}")
+            self.admin_token_alt = response["access_token"]
+            user_info = response.get('user', {})
+            self.log_test("POST /auth/admin-login", True, 
+                         f"Admin token received, user: {user_info.get('name', 'N/A')}, role: {user_info.get('role', 'N/A')}")
         else:
-            # User might already exist, try login
-            success, response, status = self.make_request("POST", "/auth/login", {
-                "email": USER_CREDENTIALS["email"],
-                "password": USER_CREDENTIALS["password"]
-            })
-            if success and "access_token" in response:
-                self.user_token = response["access_token"]
-                self.log_test("User Login (existing user)", True, f"User logged in: {response.get('user', {}).get('email', 'N/A')}")
-            else:
-                self.log_test("User Registration/Login", False, f"Status: {status}", response)
+            self.log_test("POST /auth/admin-login", False, f"Status: {status}", response)
         
-        # Test 3: Get current user with token
+        # Test 3: GET /api/auth/me with valid token
         if self.admin_token:
             success, response, status = self.make_request("GET", "/auth/me", token=self.admin_token)
             if success and "email" in response:
-                self.log_test("Get Current User (Admin)", True, f"User: {response.get('email', 'N/A')}")
+                self.log_test("GET /auth/me (with valid token)", True, 
+                             f"User profile retrieved: {response.get('email', 'N/A')}")
             else:
-                self.log_test("Get Current User (Admin)", False, f"Status: {status}", response)
+                self.log_test("GET /auth/me (with valid token)", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /auth/me (with valid token)", False, "No admin token available")
         
-        if self.user_token:
-            success, response, status = self.make_request("GET", "/auth/me", token=self.user_token)
-            if success and "email" in response:
-                self.log_test("Get Current User (Regular)", True, f"User: {response.get('email', 'N/A')}")
-            else:
-                self.log_test("Get Current User (Regular)", False, f"Status: {status}", response)
+        # Test 4: GET /api/auth/me without token (should fail)
+        success, response, status = self.make_request("GET", "/auth/me")
+        if not success and status in [401, 403]:
+            self.log_test("GET /auth/me (no token - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("GET /auth/me (no token - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
 
     def test_old_college_routes(self):
         """Test old monolithic college routes (critical for frontend)"""
