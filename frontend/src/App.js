@@ -140,7 +140,11 @@ function App() {
             <Route path="/admin/rankings" element={<RankingsManagement />} />
             <Route path="/admin/rank-categories" element={<RankCategoriesManagement />} />
             <Route path="/admin/scholarships" element={<ScholarshipsManagement />} />
+            <Route path="/admin/scholarships-listing-settings" element={<ScholarshipsListingSettings />} />
             <Route path="/admin/loans" element={<LoansManagement />} />
+            <Route path="/admin/loans-listing-settings" element={<LoansListingSettings />} />
+            <Route path="/admin/study-materials" element={<StudyMaterialsManagement />} />
+            <Route path="/admin/study-materials-listing-settings" element={<StudyMaterialsListingSettings />} />
             <Route path="/admin/courses" element={<CoursesManagement />} />
             <Route path="/admin/courses-detail" element={<CoursesDetailManagement />} />
             <Route path="/admin/courses-detail/new" element={<CourseDetailForm />} />
