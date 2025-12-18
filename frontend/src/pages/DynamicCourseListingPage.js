@@ -612,19 +612,31 @@ const DynamicCourseListingPage = () => {
 
             {/* Sidebar */}
             <div className="lg:w-80 space-y-6">
-              {/* Popular Courses */}
+              {/* Popular Courses - From Database */}
               <div className="bg-white rounded-2xl shadow-sm border p-5">
                 <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <FiTrendingUp className={colors.text} /> Popular Courses
                 </h3>
                 <div className="space-y-2">
-                  {config.popularCourses.map((course, idx) => (
-                    <Link key={idx} to={`/courses/${course.toLowerCase().replace(/\s+/g, '-')}`}
-                      className={`flex items-center gap-3 p-2 hover:${colors.bg} rounded-lg text-gray-700 hover:${colors.text} transition-colors text-sm`}>
-                      <span className={`w-6 h-6 ${colors.bg} rounded ${colors.text} flex items-center justify-center text-xs font-bold`}>{idx + 1}</span>
-                      <span>{course}</span>
-                    </Link>
-                  ))}
+                  {allCourses.length > 0 ? (
+                    // Show actual courses from database
+                    allCourses.slice(0, 7).map((course, idx) => (
+                      <Link key={course.id || idx} to={`/course/${course.slug || course.id}`}
+                        className={`flex items-center gap-3 p-2 hover:${colors.bg} rounded-lg text-gray-700 hover:${colors.text} transition-colors text-sm`}>
+                        <span className={`w-6 h-6 ${colors.bg} rounded ${colors.text} flex items-center justify-center text-xs font-bold`}>{idx + 1}</span>
+                        <span className="truncate">{course.name || course.full_name}</span>
+                      </Link>
+                    ))
+                  ) : (
+                    // Fallback to config names if no courses in database
+                    (config.popularCourses || []).map((course, idx) => (
+                      <Link key={idx} to={`/courses/search?q=${encodeURIComponent(course)}`}
+                        className={`flex items-center gap-3 p-2 hover:${colors.bg} rounded-lg text-gray-700 hover:${colors.text} transition-colors text-sm`}>
+                        <span className={`w-6 h-6 ${colors.bg} rounded ${colors.text} flex items-center justify-center text-xs font-bold`}>{idx + 1}</span>
+                        <span>{course}</span>
+                      </Link>
+                    ))
+                  )}
                 </div>
               </div>
 
