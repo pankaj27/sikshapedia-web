@@ -3007,7 +3007,7 @@ async def save_multi_sponsored_ads(config: MultiSponsoredAdsConfig, current_user
     """Save the multi-placement sponsored ads configuration (admin only)"""
     config.id = "multi_sponsored_ads_config"
     config.updated_at = datetime.now(timezone.utc)
-    config.updated_by = current_user.get("email", "admin")
+    config.updated_by = current_user.email if hasattr(current_user, 'email') else current_user.get("email", "admin") if isinstance(current_user, dict) else "admin"
     
     await db.sponsored_ads_multi.update_one(
         {"id": "multi_sponsored_ads_config"},
