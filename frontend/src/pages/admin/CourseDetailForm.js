@@ -163,6 +163,8 @@ const CourseDetailForm = () => {
     syllabus: [], // [{semester, subjects: []}]
     highlights: [], // Course badges/highlights
     related_courses: [], // Related course names
+    top_colleges: [], // [{name, location, rating, fees, rank}]
+    age_limit: '', // Age limit text
     subjects: [],
     skills_acquired: [],
     job_opportunities: [],
