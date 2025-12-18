@@ -699,6 +699,85 @@ const SponsoredAdsManagement = () => {
           </div>
         </div>
       )}
+
+      {/* Custom Placement Modal */}
+      {showCustomPlacementModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-3 flex items-center justify-between">
+              <h3 className="text-white font-bold">Create Custom URL Placement</h3>
+              <button onClick={() => setShowCustomPlacementModal(false)} className="text-white/80 hover:text-white">
+                <FiX size={20} />
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">URL Path *</label>
+                <div className="flex items-center">
+                  <span className="bg-gray-100 px-3 py-2 border border-r-0 border-gray-300 rounded-l-lg text-gray-500">/</span>
+                  <input
+                    type="text"
+                    placeholder="e.g., colleges/mumbai or india-colleges?city=kolkata"
+                    value={newCustomPlacement.url}
+                    onChange={(e) => setNewCustomPlacement({...newCustomPlacement, url: e.target.value})}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Enter the URL path without leading slash</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Section Type *</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {SECTION_TYPES.map(type => (
+                    <button
+                      key={type.id}
+                      onClick={() => setNewCustomPlacement({...newCustomPlacement, sectionType: type.id})}
+                      className={`p-3 rounded-lg border-2 flex flex-col items-center gap-1 transition-all ${
+                        newCustomPlacement.sectionType === type.id 
+                          ? 'border-purple-500 bg-purple-50' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <type.icon className={newCustomPlacement.sectionType === type.id ? 'text-purple-600' : 'text-gray-400'} size={20} />
+                      <span className={`text-xs font-medium ${newCustomPlacement.sectionType === type.id ? 'text-purple-600' : 'text-gray-600'}`}>
+                        {type.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Display Name (optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Mumbai Colleges - Featured"
+                  value={newCustomPlacement.name}
+                  onChange={(e) => setNewCustomPlacement({...newCustomPlacement, name: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowCustomPlacementModal(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={addCustomPlacement}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  <FiPlus className="mr-1" /> Create Placement
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
