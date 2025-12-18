@@ -204,19 +204,51 @@ const CourseListingPage = () => {
   ];
 
   useEffect(() => {
-    setCourses(engineeringCourses);
-    setFilteredCourses(engineeringCourses);
-  }, []);
-
-  useEffect(() => {
     let filtered = courses;
     
     if (filters.level !== 'All') {
-      filtered = filtered.filter(course => course.level === filters.level);
+      filtered = filtered.filter(course => 
+        course.degree_type?.toLowerCase() === filters.level.toLowerCase() ||
+        course.level?.toLowerCase() === filters.level.toLowerCase()
+      );
+    }
+    
+    if (searchQuery) {
+      filtered = filtered.filter(course =>
+        course.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.full_name?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
     
     setFilteredCourses(filtered);
-  }, [filters, courses]);
+  }, [filters, courses, searchQuery]);
+
+  const getStreamTitle = () => {
+    if (!stream) return 'All Courses';
+    const titles = {
+      'engineering': 'Engineering Courses',
+      'medical': 'Medical Courses',
+      'management': 'Management Courses',
+      'science': 'Science Courses',
+      'commerce': 'Commerce Courses',
+      'arts': 'Arts Courses',
+      'law': 'Law Courses',
+      'mba': 'MBA/PGDM Courses',
+      'btech': 'B.Tech/B.E Courses'
+    };
+    return titles[stream.toLowerCase()] || `${stream.charAt(0).toUpperCase() + stream.slice(1)} Courses`;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading courses...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
