@@ -264,7 +264,7 @@ const ExamDetailForm = () => {
   const fetchExam = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/exams/${id}`);
+      const response = await api.get(`/exams-detail/${id}`);
       setFormData({ ...getDefaultFormData(), ...response.data });
     } catch (error) {
       console.error('Error fetching exam:', error);
