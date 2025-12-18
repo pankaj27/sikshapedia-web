@@ -7796,6 +7796,22 @@ async def reset_daily_budgets():
 
 app.include_router(api_router)
 
+# Include modular routes
+try:
+    from routes.auth import auth_router
+    from routes.blogs import blogs_router
+    from routes.news import news_router
+    from routes.admin_settings import admin_settings_router
+    
+    # Include routers with /api prefix
+    app.include_router(auth_router, prefix="/api")
+    app.include_router(blogs_router, prefix="/api")
+    app.include_router(news_router, prefix="/api")
+    app.include_router(admin_settings_router, prefix="/api")
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings")
+except ImportError as e:
+    logging.warning(f"⚠️ Modular routes not loaded: {e}")
+
 # Include modular architecture routers
 try:
     from modules.router import api_router as modules_router
