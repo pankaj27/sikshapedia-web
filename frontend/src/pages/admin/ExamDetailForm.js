@@ -1454,32 +1454,213 @@ const ExamDetailForm = () => {
         </CollapsibleSection>
 
         {/* Menu Configuration */}
-        <CollapsibleSection title="Menu Configuration" icon={<FiGrid className="w-5 h-5" />} badge={`${(formData.menu_config?.items || []).filter(i => i.enabled).length} items`} color="blue">
+        <CollapsibleSection title="Menu Configuration & Page Content" icon={<FiGrid className="w-5 h-5" />} badge={`${(formData.menu_config?.items || []).filter(i => i.enabled).length} items`} color="blue">
           <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">Configure the menu items that appear on the exam detail page. Drag to reorder, toggle to enable/disable.</p>
+            <p className="text-sm text-blue-800">
+              💡 <strong>Page Builder:</strong> Each menu item becomes a separate page/tab. Add content, SEO, images, videos for each.
+            </p>
           </div>
           
-          <div className="space-y-2">
+          {/* Menu Items List */}
+          <div className="space-y-4">
             {(formData.menu_config?.items || []).sort((a, b) => a.order - b.order).map((item, index) => (
-              <div key={item.id} className={`flex items-center gap-3 p-3 rounded-lg border ${item.enabled ? 'bg-white border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
-                <div className="flex flex-col gap-1">
-                  <button type="button" onClick={() => moveMenuItem(index, 'up')} disabled={index === 0} className="text-gray-400 hover:text-gray-600 disabled:opacity-30"><FiChevronDown className="w-4 h-4 rotate-180" /></button>
-                  <button type="button" onClick={() => moveMenuItem(index, 'down')} disabled={index === (formData.menu_config?.items || []).length - 1} className="text-gray-400 hover:text-gray-600 disabled:opacity-30"><FiChevronDown className="w-4 h-4" /></button>
-                </div>
-                <input type="checkbox" checked={item.enabled} onChange={(e) => updateMenuItem(index, 'enabled', e.target.checked)} className="w-5 h-5 text-blue-600 rounded" />
-                <input type="text" value={item.label} onChange={(e) => updateMenuItem(index, 'label', e.target.value)} className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium" />
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">/{item.id}</span>
-                {item.id.startsWith('custom-') && (
+              <div key={item.id} className={`rounded-xl border-2 overflow-hidden ${item.enabled ? 'border-blue-300 bg-white' : 'border-gray-300 bg-gray-50 opacity-70'}`}>
+                {/* Item Header */}
+                <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+                  <div className="flex flex-col gap-0.5">
+                    <button type="button" onClick={() => moveMenuItem(index, 'up')} disabled={index === 0} className="text-gray-400 hover:text-blue-600 disabled:opacity-30 p-0.5"><FiChevronDown className="w-3 h-3 rotate-180" /></button>
+                    <button type="button" onClick={() => moveMenuItem(index, 'down')} disabled={index === (formData.menu_config?.items || []).length - 1} className="text-gray-400 hover:text-blue-600 disabled:opacity-30 p-0.5"><FiChevronDown className="w-3 h-3" /></button>
+                  </div>
+                  <input type="checkbox" checked={item.enabled} onChange={(e) => updateMenuItem(index, 'enabled', e.target.checked)} className="w-5 h-5 text-blue-600 rounded" />
+                  <div className="w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center text-sm font-bold">{index + 1}</div>
+                  <input type="text" value={item.label} onChange={(e) => updateMenuItem(index, 'label', e.target.value)} className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm font-semibold" placeholder="Menu Label" />
+                  <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded border font-mono">/{item.id}</span>
                   <button type="button" onClick={() => {
-                    const newItems = (formData.menu_config?.items || []).filter(i => i.id !== item.id);
-                    setFormData({ ...formData, menu_config: { ...formData.menu_config, items: newItems } });
-                  }} className="text-red-500 hover:text-red-700"><FiTrash2 className="w-4 h-4" /></button>
-                )}
+                    const el = document.getElementById(`menu-content-${item.id}`);
+                    if (el) el.classList.toggle('hidden');
+                  }} className="text-blue-600 hover:bg-blue-100 p-2 rounded-lg text-xs font-medium">
+                    📝 Edit Content
+                  </button>
+                  {item.id.startsWith('custom-') && (
+                    <button type="button" onClick={() => {
+                      const newItems = (formData.menu_config?.items || []).filter(i => i.id !== item.id);
+                      setFormData({ ...formData, menu_config: { ...formData.menu_config, items: newItems } });
+                    }} className="text-red-500 hover:bg-red-50 p-2 rounded"><FiTrash2 className="w-4 h-4" /></button>
+                  )}
+                </div>
+                
+                {/* Item Content Editor (Collapsible) */}
+                <div id={`menu-content-${item.id}`} className="hidden p-4 bg-gray-50 border-t space-y-4">
+                  {/* Page Heading & SEO */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">📌 Page Heading (H1)</label>
+                      <input type="text" value={item.page_heading || ''} onChange={(e) => updateMenuItem(index, 'page_heading', e.target.value)}
+                        placeholder={`e.g., ${formData.name} - ${item.label}`} className="w-full border rounded-lg px-3 py-2 text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        🔍 Meta Title
+                        <button type="button" onClick={() => updateMenuItem(index, 'meta_title', `${formData.name} ${item.label} ${new Date().getFullYear()} | Admissionbuddy`)} className="ml-2 text-blue-600 text-xs">⚡ Auto</button>
+                      </label>
+                      <input type="text" value={item.meta_title || ''} onChange={(e) => updateMenuItem(index, 'meta_title', e.target.value)}
+                        placeholder="SEO title for this page" className="w-full border rounded-lg px-3 py-2 text-sm" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        📝 Meta Description
+                        <button type="button" onClick={() => updateMenuItem(index, 'meta_description', `Get complete ${item.label.toLowerCase()} details for ${formData.name} ${new Date().getFullYear()} | Admissionbuddy`)} className="ml-2 text-blue-600 text-xs">⚡ Auto</button>
+                      </label>
+                      <textarea value={item.meta_description || ''} onChange={(e) => updateMenuItem(index, 'meta_description', e.target.value)}
+                        placeholder="SEO description for this page" rows="2" className="w-full border rounded-lg px-3 py-2 text-sm" />
+                    </div>
+                  </div>
+
+                  {/* Main Content */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">📄 Page Content (HTML supported)</label>
+                    <textarea value={item.content || ''} onChange={(e) => updateMenuItem(index, 'content', e.target.value)}
+                      placeholder="Write the main content for this page... HTML is supported." rows="6" className="w-full border rounded-lg px-3 py-2 text-sm font-mono" />
+                  </div>
+
+                  {/* TOC for this page */}
+                  <div className="border border-purple-200 rounded-lg p-3 bg-purple-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-semibold text-purple-800">📑 Table of Contents</label>
+                      <button type="button" onClick={() => {
+                        const newToc = [...(item.toc || []), { title: '', anchor: '', content: '' }];
+                        updateMenuItem(index, 'toc', newToc);
+                      }} className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200">+ Add Section</button>
+                    </div>
+                    {(item.toc || []).map((tocItem, tocIndex) => (
+                      <div key={tocIndex} className="flex gap-2 mb-2 items-start">
+                        <input type="text" value={tocItem.title || ''} onChange={(e) => {
+                          const newToc = [...(item.toc || [])];
+                          newToc[tocIndex].title = e.target.value;
+                          newToc[tocIndex].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
+                          updateMenuItem(index, 'toc', newToc);
+                        }} placeholder="Section Title" className="flex-1 border rounded px-2 py-1 text-xs" />
+                        <input type="text" value={tocItem.anchor || ''} className="w-24 border rounded px-2 py-1 text-xs bg-gray-50 font-mono" readOnly />
+                        <button type="button" onClick={() => {
+                          const newToc = (item.toc || []).filter((_, i) => i !== tocIndex);
+                          updateMenuItem(index, 'toc', newToc);
+                        }} className="text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Tables for this page */}
+                  <div className="border border-teal-200 rounded-lg p-3 bg-teal-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-semibold text-teal-800">📊 Tables</label>
+                      <button type="button" onClick={() => {
+                        const newTables = [...(item.tables || []), { title: '', headers: ['Column 1', 'Column 2'], rows: [['', '']] }];
+                        updateMenuItem(index, 'tables', newTables);
+                      }} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200">+ Add Table</button>
+                    </div>
+                    {(item.tables || []).length > 0 && (
+                      <p className="text-xs text-teal-600">{item.tables.length} table(s) added</p>
+                    )}
+                  </div>
+
+                  {/* Images for this page */}
+                  <div className="border border-blue-200 rounded-lg p-3 bg-blue-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-semibold text-blue-800">🖼️ Images</label>
+                      <label className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 cursor-pointer">
+                        + Upload Image
+                        <input type="file" className="hidden" accept="image/*" onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          try {
+                            const uploadFormData = new FormData();
+                            uploadFormData.append('file', file);
+                            const response = await api.post('/upload/image?type=content', uploadFormData, { headers: { 'Content-Type': 'multipart/form-data' } });
+                            const newImages = [...(item.images || []), { url: response.data.url, title: '', alt: `${formData.name} ${item.label} - Admissionbuddy`, caption: '' }];
+                            updateMenuItem(index, 'images', newImages);
+                          } catch (error) { alert('Upload failed'); }
+                          e.target.value = '';
+                        }} />
+                      </label>
+                    </div>
+                    {(item.images || []).map((img, imgIndex) => (
+                      <div key={imgIndex} className="flex gap-2 items-center mb-2 bg-white p-2 rounded border">
+                        <img src={img.url?.startsWith('/api') ? img.url : `/api${img.url}`} alt="" className="w-12 h-12 object-cover rounded" />
+                        <input type="text" value={img.alt || ''} onChange={(e) => {
+                          const newImages = [...(item.images || [])];
+                          newImages[imgIndex].alt = e.target.value;
+                          updateMenuItem(index, 'images', newImages);
+                        }} placeholder="Alt text (SEO)" className="flex-1 border rounded px-2 py-1 text-xs" />
+                        <button type="button" onClick={() => {
+                          const newImages = (item.images || []).filter((_, i) => i !== imgIndex);
+                          updateMenuItem(index, 'images', newImages);
+                        }} className="text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Videos for this page */}
+                  <div className="border border-orange-200 rounded-lg p-3 bg-orange-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-semibold text-orange-800">🎬 Videos</label>
+                      <button type="button" onClick={() => {
+                        const url = prompt('Enter YouTube/Vimeo embed URL:');
+                        if (url) {
+                          const newVideos = [...(item.videos || []), { url, title: '', alt: `${formData.name} ${item.label} video | Admissionbuddy` }];
+                          updateMenuItem(index, 'videos', newVideos);
+                        }
+                      }} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded hover:bg-orange-200">+ Add Video</button>
+                    </div>
+                    {(item.videos || []).map((vid, vidIndex) => (
+                      <div key={vidIndex} className="flex gap-2 items-center mb-2 bg-white p-2 rounded border">
+                        <span className="text-xs text-gray-600 truncate flex-1">{vid.url}</span>
+                        <input type="text" value={vid.alt || ''} onChange={(e) => {
+                          const newVideos = [...(item.videos || [])];
+                          newVideos[vidIndex].alt = e.target.value;
+                          updateMenuItem(index, 'videos', newVideos);
+                        }} placeholder="Alt/Description (SEO)" className="w-48 border rounded px-2 py-1 text-xs" />
+                        <button type="button" onClick={() => {
+                          const newVideos = (item.videos || []).filter((_, i) => i !== vidIndex);
+                          updateMenuItem(index, 'videos', newVideos);
+                        }} className="text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* FAQs for this page */}
+                  <div className="border border-green-200 rounded-lg p-3 bg-green-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-semibold text-green-800">❓ FAQs</label>
+                      <button type="button" onClick={() => {
+                        const newFaqs = [...(item.faqs || []), { question: '', answer: '' }];
+                        updateMenuItem(index, 'faqs', newFaqs);
+                      }} className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200">+ Add FAQ</button>
+                    </div>
+                    {(item.faqs || []).map((faq, faqIndex) => (
+                      <div key={faqIndex} className="mb-2 bg-white p-2 rounded border">
+                        <input type="text" value={faq.question || ''} onChange={(e) => {
+                          const newFaqs = [...(item.faqs || [])];
+                          newFaqs[faqIndex].question = e.target.value;
+                          updateMenuItem(index, 'faqs', newFaqs);
+                        }} placeholder="Question" className="w-full border rounded px-2 py-1 text-xs mb-1" />
+                        <textarea value={faq.answer || ''} onChange={(e) => {
+                          const newFaqs = [...(item.faqs || [])];
+                          newFaqs[faqIndex].answer = e.target.value;
+                          updateMenuItem(index, 'faqs', newFaqs);
+                        }} placeholder="Answer" rows="2" className="w-full border rounded px-2 py-1 text-xs" />
+                        <button type="button" onClick={() => {
+                          const newFaqs = (item.faqs || []).filter((_, i) => i !== faqIndex);
+                          updateMenuItem(index, 'faqs', newFaqs);
+                        }} className="text-red-500 text-xs mt-1">Remove</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
           
-          <button type="button" onClick={addMenuItem} className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-blue-300 rounded-lg text-blue-600 hover:border-blue-500 hover:bg-blue-50">
+          <button type="button" onClick={addMenuItem} className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-blue-300 rounded-lg text-blue-600 hover:border-blue-500 hover:bg-blue-50 w-full justify-center">
             <FiPlus className="w-4 h-4" /> Add Custom Menu Item
           </button>
         </CollapsibleSection>
