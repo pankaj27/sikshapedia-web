@@ -203,7 +203,10 @@ const ExamDetailForm = () => {
     total_applicants: 0,
     total_seats: 0,
     difficulty_level: 'Medium',
+    // Popular & Featured
     is_popular: false,
+    is_featured: false,
+    popular_order: 0,
     // SEO Content Section
     seo_intro: '',
     seo_full_content: '',
