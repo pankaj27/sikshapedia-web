@@ -3964,17 +3964,39 @@ async def get_exam_detail(exam_id: str):
     
     return Exam(**exam)
 
-@api_router.post("/exams-detail", response_model=Exam)
-async def create_exam_detail(exam_data: ExamCreate, current_user: User = Depends(get_current_user)):
+@api_router.post("/exams-detail")
+async def create_exam_detail(exam_data: dict, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can create exams")
     
-    exam = Exam(**exam_data.model_dump())
-    exam_dict = exam.model_dump()
-    exam_dict['created_at'] = exam_dict['created_at'].isoformat()
+    # Generate ID if not provided
+    if 'id' not in exam_data or not exam_data['id']:
+        exam_data['id'] = str(uuid.uuid4())
     
-    await db.exams_detailed.insert_one(exam_dict)
-    return exam
+    # Set timestamps
+    exam_data['created_at'] = datetime.now(timezone.utc).isoformat()
+    exam_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    # Handle menu_config - ensure proper structure
+    if 'menu_config' in exam_data and exam_data['menu_config']:
+        # Ensure items have proper structure
+        items = exam_data['menu_config'].get('items', [])
+        for item in items:
+            # Ensure widgets is properly structured
+            if 'widgets' not in item or item['widgets'] is None:
+                item['widgets'] = {
+                    'quick_facts': {'enabled': True},
+                    'quick_nav': {'enabled': True},
+                    'contact_cta': {'enabled': True, 'title': 'Need Help?', 'subtitle': 'Get expert guidance'},
+                    'related_exams': {'enabled': False, 'exams': []},
+                    'download_widget': {'enabled': False, 'title': 'Download Resources', 'files': []}
+                }
+    
+    await db.exams_detailed.insert_one(exam_data)
+    
+    # Return without _id
+    created_exam = await db.exams_detailed.find_one({"id": exam_data['id']}, {"_id": 0})
+    return created_exam
 
 @api_router.put("/exams-detail/{exam_id}", response_model=Exam)
 async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
