@@ -520,26 +520,72 @@ const ExamPage = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="bg-white border-t py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Entrance Exams in India 2025-26</h2>
-            <div className="prose prose-gray max-w-none text-gray-600">
-              <p>
-                India conducts over 200 entrance examinations annually for admissions to undergraduate, 
-                postgraduate, and doctoral programs. These exams are conducted at national, state, and 
-                university levels across various streams.
-              </p>
-              <p className="mt-3">
-                Major national-level exams include JEE Main, JEE Advanced, NEET, CAT, GATE, CLAT, and UPSC CSE. 
-                Each exam has unique eligibility criteria, application processes, and syllabus. Use our 
-                comprehensive guides to prepare effectively.
-              </p>
+      {/* Intro Content Section (from Admin) */}
+      {pageSettings.intro_content && (
+        <section className="bg-gray-50 border-t py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <div 
+                className="prose prose-gray max-w-none text-gray-600"
+                dangerouslySetInnerHTML={{ __html: pageSettings.intro_content }}
+              />
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Bottom Content Section (from Admin) */}
+      {pageSettings.bottom_content ? (
+        <section className="bg-white border-t py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <div 
+                className="prose prose-gray max-w-none text-gray-600"
+                dangerouslySetInnerHTML={{ __html: pageSettings.bottom_content }}
+              />
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="bg-white border-t py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Entrance Exams in India 2025-26</h2>
+              <div className="prose prose-gray max-w-none text-gray-600">
+                <p>
+                  India conducts over 200 entrance examinations annually for admissions to undergraduate, 
+                  postgraduate, and doctoral programs. These exams are conducted at national, state, and 
+                  university levels across various streams.
+                </p>
+                <p className="mt-3">
+                  Major national-level exams include JEE Main, JEE Advanced, NEET, CAT, GATE, CLAT, and UPSC CSE. 
+                  Each exam has unique eligibility criteria, application processes, and syllabus. Use our 
+                  comprehensive guides to prepare effectively.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQs Section (from Admin) */}
+      {pageSettings.faqs && pageSettings.faqs.length > 0 && (
+        <section className="bg-gray-50 border-t py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-4">
+                {pageSettings.faqs.map((faq, idx) => (
+                  <div key={idx} className="bg-white rounded-xl p-5 border border-gray-200">
+                    <h3 className="font-semibold text-gray-800 mb-2">Q: {faq.question}</h3>
+                    <p className="text-gray-600 text-sm">A: {faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
