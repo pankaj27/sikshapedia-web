@@ -18,6 +18,7 @@ import WriteReviewPage from './pages/WriteReviewPage';
 import ExamDetailPage from './pages/ExamDetailPage';
 import ExamSubPages from './pages/ExamSubPages';
 import CoursesPage from './pages/CoursesPage';
+import CoursesAfter10thPage from './pages/CoursesAfter10thPage';
 import CourseListingPage from './pages/CourseListingPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import CourseFinderPage from './pages/CourseFinderPage';
