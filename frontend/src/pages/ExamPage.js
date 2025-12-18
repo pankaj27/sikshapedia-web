@@ -12,6 +12,25 @@ const ExamPage = () => {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [popularExams, setPopularExams] = useState([]);
+  
+  // Page settings from backend
+  const [pageSettings, setPageSettings] = useState({
+    hero_title: 'Entrance Exams in India 2025-26',
+    hero_subtitle: 'Complete guide to 200+ entrance exams for Engineering, Medical, Management, Law & more',
+    hero_search_placeholder: 'Search exams (JEE, NEET, CAT, GATE...)',
+    stats: [
+      { label: 'Total Exams', value: '200+' },
+      { label: 'Categories', value: '24' },
+      { label: 'Updates Daily', value: '50+' },
+      { label: 'Students Helped', value: '10M+' }
+    ],
+    show_news_section: true,
+    news_section_title: 'Latest Exam Updates',
+    news_items: [],
+    meta_title: 'Entrance Exams in India 2025-26 | Complete Guide',
+    meta_description: 'Find all entrance exams in India.',
+    faqs: []
+  });
 
   const categories = [
     'Engineering', 'Medical', 'Management', 'Science', 'Law', 'Pharmacy',
