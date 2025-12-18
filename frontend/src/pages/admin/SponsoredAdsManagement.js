@@ -330,7 +330,7 @@ const SponsoredAdsManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <Link to="/admin" className="p-2 hover:bg-gray-200 rounded-lg">
+          <Link to="/admin/dashboard" className="p-2 hover:bg-gray-200 rounded-lg">
             <FiArrowLeft size={20} />
           </Link>
           <div>
