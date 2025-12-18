@@ -679,7 +679,7 @@ const ExamDetailForm = () => {
               <button
                 type="button"
                 onClick={() => {
-                  const autoDesc = `Get complete details on ${formData.name} ${new Date().getFullYear()} exam date, application form, eligibility criteria, syllabus, exam pattern, cutoff & result.`;
+                  const autoDesc = `Get complete details on ${formData.name} ${new Date().getFullYear()} exam date, application form, eligibility, syllabus, pattern & result | Admissionbuddy`;
                   setFormData({...formData, meta_description: autoDesc.substring(0, 160)});
                 }}
                 className="text-xs text-blue-600 hover:underline mt-1"
