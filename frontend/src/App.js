@@ -94,6 +94,8 @@ import ExamDetailForm from './pages/admin/ExamDetailForm';
 import ExamsDetailManagement from './pages/admin/ExamsDetailManagement';
 import ExamListingSettings from './pages/admin/ExamListingSettings';
 import CourseListingSettings from './pages/admin/CourseListingSettings';
+import CoursePagesManagement from './pages/admin/CoursePagesManagement';
+import CoursePageForm from './pages/admin/CoursePageForm';
 import ListingPagesManagement from './pages/admin/ListingPagesManagement';
 import ListingPageForm from './pages/admin/ListingPageForm';
 import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
@@ -142,6 +144,8 @@ function App() {
             <Route path="/admin/exams-detail/edit/:id" element={<ExamDetailForm />} />
             <Route path="/admin/exam-listing-settings" element={<ExamListingSettings />} />
             <Route path="/admin/course-listing-settings" element={<CourseListingSettings />} />
+            <Route path="/admin/course-pages" element={<CoursePagesManagement />} />
+            <Route path="/admin/course-pages/edit/:id" element={<CoursePageForm />} />
             <Route path="/admin/advertisements" element={<AdvertisementsManagement />} />
             <Route path="/admin/advertisements/reports" element={<AdvertisementReports />} />
             <Route path="/admin/comments" element={<CommentsManagement />} />
