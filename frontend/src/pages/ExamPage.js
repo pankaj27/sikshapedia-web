@@ -134,7 +134,7 @@ const ExamPage = () => {
       }
     };
 
-    fetchExams();
+    fetchData();
   }, []);
 
   const filteredExams = exams.filter(exam => {
