@@ -248,30 +248,38 @@ const BlogPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="Education Blog & Articles | AdmissionBuddy"
-        description="Expert advice, tips, and guides for students on admissions, exams, career, and study abroad."
+        title={settings?.meta_title || "Education Blog & Articles | AdmissionBuddy"}
+        description={settings?.meta_description || "Expert advice, tips, and guides for students on admissions, exams, career, and study abroad."}
       />
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b py-2">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-gray-900 font-medium">Blog</span>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 text-white py-8">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 text-white">
+        <div className="container mx-auto px-4 py-8">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
+            <Link to="/" className="hover:text-white transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-white font-medium">Blog</span>
+          </div>
+
           <h1 className="text-2xl md:text-3xl font-bold mb-2 text-center">
-            Education Blog & Articles
+            {settings?.hero_title || 'Education Blog & Articles'}
           </h1>
           <p className="text-sm md:text-base text-center text-teal-50 mb-4">
-            Expert advice, tips, and guides for students
+            {settings?.hero_subtitle || 'Expert advice, tips, and guides for students'}
           </p>
+
+          {/* Quick Stats */}
+          {settings?.stats && settings.stats.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto mb-4">
+              {settings.stats.map((stat, idx) => (
+                <div key={idx} className="bg-white/10 backdrop-blur rounded-lg p-3 text-center">
+                  <div className="text-xl font-bold">{stat.value}</div>
+                  <div className="text-xs text-white/80">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
           
           <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
             <div className="flex gap-2">
