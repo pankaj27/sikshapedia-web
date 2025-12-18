@@ -1184,9 +1184,13 @@ class APITester:
         if self.admin_token:
             # Test with a different page to ensure consistency
             medical_update_data = {
+                "id": "medical",
+                "page_type": "stream",
                 "title": "Updated Medical Courses",
                 "subtitle": "Updated medical subtitle",
-                "theme": "from-red-500 via-pink-500 to-rose-500"
+                "theme": "from-red-500 via-pink-500 to-rose-500",
+                "filter_key": "stream",
+                "filter_value": "Medical"
             }
             
             success, response, status = self.make_request("PUT", "/course-pages/medical", 
