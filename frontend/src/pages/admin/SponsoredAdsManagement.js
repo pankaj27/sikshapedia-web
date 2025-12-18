@@ -498,7 +498,7 @@ const SponsoredAdsManagement = () => {
                   <FiPlus size={18} />
                 </button>
               </div>
-              <div className="max-h-48 overflow-y-auto">
+              <div className="max-h-48 overflow-y-auto overflow-x-visible">
                 {customPlacements.length === 0 ? (
                   <div className="px-4 py-3 text-center text-gray-400 text-xs">
                     No custom placements yet.<br/>Click + to add one.
