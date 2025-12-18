@@ -289,19 +289,25 @@ const CourseDetailPage = () => {
                 </p>
               </div>
 
-              {/* Highlights */}
+              {/* Highlights/Badges - Dynamic */}
               <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { icon: FiAward, label: 'AICTE Approved', color: 'text-green-600 bg-green-50' },
-                  { icon: FiUsers, label: 'Industry Connect', color: 'text-blue-600 bg-blue-50' },
-                  { icon: FiBriefcase, label: 'Placement Support', color: 'text-purple-600 bg-purple-50' },
-                  { icon: HiOutlineLightBulb, label: 'Skill Development', color: 'text-orange-600 bg-orange-50' },
-                ].map((item, idx) => (
-                  <div key={idx} className={`flex items-center gap-2 p-3 rounded-xl ${item.color.split(' ')[1]}`}>
-                    <item.icon className={item.color.split(' ')[0]} size={20} />
-                    <span className="text-sm font-medium text-gray-700">{item.label}</span>
-                  </div>
-                ))}
+                {highlights.slice(0, 4).map((highlight, idx) => {
+                  const colors = [
+                    'text-green-600 bg-green-50',
+                    'text-blue-600 bg-blue-50',
+                    'text-purple-600 bg-purple-50',
+                    'text-orange-600 bg-orange-50',
+                  ];
+                  const icons = [FiAward, FiUsers, FiBriefcase, HiOutlineLightBulb];
+                  const IconComponent = icons[idx % icons.length];
+                  const colorClass = colors[idx % colors.length];
+                  return (
+                    <div key={idx} className={`flex items-center gap-2 p-3 rounded-xl ${colorClass.split(' ')[1]}`}>
+                      <IconComponent className={colorClass.split(' ')[0]} size={20} />
+                      <span className="text-sm font-medium text-gray-700">{highlight}</span>
+                    </div>
+                  );
+                })}
               </div>
             </section>
 
