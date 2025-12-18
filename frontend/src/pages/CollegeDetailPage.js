@@ -1756,6 +1756,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </div>
                     </div>
 
+                    {/* Sponsored Sidebar Ad */}
+                    <div className="lg:col-span-1 mt-4">
+                      <SidebarSponsoredAd 
+                        placementId="college_detail_sidebar" 
+                        title="Similar Colleges"
+                      />
+                    </div>
+
                     {/* Google Map */}
                     <div className="lg:col-span-2">
                       <div className="bg-white border rounded-lg overflow-hidden h-full min-h-[500px]">
