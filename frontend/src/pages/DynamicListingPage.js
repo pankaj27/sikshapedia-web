@@ -1386,17 +1386,33 @@ const DynamicListingPage = () => {
       </div>
 
       {/* COLLEGE LISTING SECTION */}
-      <div className="bg-gray-50 py-4 border-t-4 border-orange-600">
-        <div className="container mx-auto px-6">
+      <div className="bg-gray-100 py-6">
+        <div className="container mx-auto px-4 md:px-6">
           {/* HORIZONTAL FILTER BAR */}
-          <div className="bg-white rounded-lg shadow-sm p-2.5 mb-4 relative">
+          <div className="bg-white rounded-xl shadow-lg p-4 mb-6 relative border border-gray-100">
+            {/* Filter Header */}
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-gray-800 text-sm flex items-center gap-2">
+                <FiFilter className="text-blue-600" />
+                Filter Colleges
+              </h3>
+              {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation) && (
+                <button 
+                  onClick={clearFilters}
+                  className="text-xs text-red-500 hover:text-red-600 font-medium"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
+            
             {/* Primary Filters Row */}
-            <div className="flex items-center gap-1.5 flex-wrap mb-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button 
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-xs font-medium shadow-sm hover:shadow-md transition-all"
               >
-                <FiFilter size={12} />
-                All Filter
+                <FiFilter size={14} />
+                All Filters
               </button>
               
               {/* Stream Filter */}
