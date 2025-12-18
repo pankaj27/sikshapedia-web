@@ -16,7 +16,7 @@ const NewsManagement = () => {
 
   const fetchNews = async () => {
     try {
-      const response = await api.get('/news?limit=100');
+      const response = await api.get('/news?limit=100&all_status=true');
       setNews(response.data);
     } catch (error) {
       console.error('Error fetching news:', error);
