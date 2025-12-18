@@ -7,3 +7,5 @@ export { default as CoursesSection } from './CoursesSection';
 export { default as AdmissionSection } from './AdmissionSection';
 export { default as CutoffSection } from './CutoffSection';
 export { default as SidebarWidgetsSection } from './SidebarWidgetsSection';
+export { default as SeoMetaSection } from './SeoMetaSection';
+export { default as LocationSection, indianStates, citiesByState } from './LocationSection';
