@@ -883,7 +883,7 @@ const SponsoredAdsManagement = () => {
                   {editingPlacement ? (
                     <><FiEdit2 className="mr-1" /> Update Placement</>
                   ) : (
-                    <><FiPlus className="mr-1" /> Create Placement</>
+                    <><FiPlus className="mr-1" /> Create {selectedSectionTypes.length > 1 ? `${selectedSectionTypes.length} Placements` : 'Placement'}</>
                   )}
                 </Button>
               </div>
