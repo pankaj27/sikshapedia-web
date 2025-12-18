@@ -18,13 +18,41 @@ const AdvertisementsManagement = () => {
     link_url: '',
     open_in_new_tab: true,
     pages: [],
+    custom_urls: [], // Custom URL targeting
     position: 'top',
     start_date: '',
     end_date: '',
+    start_time: '00:00',
+    end_time: '23:59',
     is_active: true,
     priority: 0,
-    max_impressions_per_user: null
+    max_impressions_per_user: null,
+    // Banner specific
+    banner_size: '728x90',
+    // Video specific
+    video_url: '',
+    video_thumbnail: '',
+    // HTML/Native specific
+    html_content: '',
+    // Budget & Billing
+    budget: {
+      total_budget: 0,
+      daily_budget: 0,
+      cost_per_click: 0,
+      cost_per_impression: 0,
+      spent_total: 0,
+      spent_today: 0
+    },
+    // Ad Rotation
+    rotation: {
+      enabled: false,
+      max_impressions: 0,
+      max_clicks: 0,
+      rotation_type: 'sequential',
+      weight: 1
+    }
   });
+  const [newCustomUrl, setNewCustomUrl] = useState('');
 
   const availablePages = [
     { value: 'colleges', label: 'Colleges Listing' },
@@ -36,6 +64,25 @@ const AdvertisementsManagement = () => {
     { value: 'universities', label: 'Universities Listing' },
     { value: 'courses', label: 'Courses Listing' },
     { value: 'compare', label: 'Compare' },
+    { value: 'home', label: 'Home Page' },
+    { value: 'scholarships', label: 'Scholarships' },
+    { value: 'loans', label: 'Education Loans' },
+  ];
+
+  const bannerSizes = [
+    { value: '728x90', label: 'Leaderboard (728x90)' },
+    { value: '300x250', label: 'Medium Rectangle (300x250)' },
+    { value: '160x600', label: 'Wide Skyscraper (160x600)' },
+    { value: '320x50', label: 'Mobile Banner (320x50)' },
+    { value: '300x600', label: 'Half Page (300x600)' },
+    { value: '970x250', label: 'Billboard (970x250)' },
+  ];
+
+  const adTypes = [
+    { value: 'banner', label: 'Banner Ad', icon: '🖼️' },
+    { value: 'text', label: 'Text Ad', icon: '📝' },
+    { value: 'video', label: 'Video Ad', icon: '🎬' },
+    { value: 'html', label: 'HTML/Native Ad', icon: '💻' },
   ];
 
   const availablePositions = [
