@@ -1875,14 +1875,22 @@ const DynamicListingPage = () => {
           {/* MAIN LISTING */}
           <main>
             {/* Top Controls Bar */}
-            <div className="mb-4 flex flex-wrap justify-between items-center gap-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {loading ? 'Loading...' : `${totalCount} ${pageInfo.isSchools ? 'Schools' : 'Colleges'} Found`}
-              </h3>
+            <div className="mb-5 flex flex-wrap justify-between items-center gap-4 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                  <FiAward className="text-white text-lg" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {loading ? 'Loading...' : `${totalCount.toLocaleString()} ${pageInfo.isSchools ? 'Schools' : 'Colleges'}`}
+                  </h3>
+                  <p className="text-xs text-gray-500">Ranked by popularity & reviews</p>
+                </div>
+              </div>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm bg-white"
+                className="px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white font-medium text-gray-700"
               >
                 <option value="ranking">Sort by: Ranking</option>
                 <option value="fees-low">Fees: Low to High</option>
@@ -1893,100 +1901,178 @@ const DynamicListingPage = () => {
 
             {/* Compare Bar */}
             {compareList.length > 0 && (
-              <div className="mb-4 bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="mb-5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
                 <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-gray-900">{compareList.length} colleges selected</span>
-                    <Button size="sm" onClick={() => window.open(`/compare?ids=${compareList.join(',')}`, '_blank')} className="bg-orange-600 hover:bg-orange-700 text-white">Compare Now</Button>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+                      {compareList.length}
+                    </div>
+                    <span className="font-semibold text-gray-900">colleges selected for comparison</span>
+                    <Button size="sm" onClick={() => window.open(`/compare?ids=${compareList.join(',')}`, '_blank')} className="bg-blue-600 hover:bg-blue-700 text-white">
+                      Compare Now →
+                    </Button>
                   </div>
-                  <button onClick={() => setCompareList([])} className="text-sm text-gray-600 hover:text-gray-900">Clear All</button>
+                  <button onClick={() => setCompareList([])} className="text-sm text-gray-600 hover:text-red-500 font-medium">Clear</button>
                 </div>
               </div>
             )}
 
-            {/* COLLEGE LIST */}
+            {/* COLLEGE LIST - CollegeDunia Style */}
             {loading ? (
-              <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading colleges...</p>
+              <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600 font-medium">Finding the best colleges for you...</p>
               </div>
             ) : institutions.length === 0 ? (
-              <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                <FiSearch className="mx-auto text-gray-400 mb-4" size={48} />
-                <p className="text-gray-600 text-lg mb-2">No colleges found</p>
-                <p className="text-gray-500 text-sm mb-4">Try adjusting your filters</p>
-                <Button onClick={clearFilters} variant="outline">Clear All Filters</Button>
+              <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FiSearch className="text-gray-400" size={32} />
+                </div>
+                <p className="text-gray-900 text-xl font-bold mb-2">No colleges found</p>
+                <p className="text-gray-500 text-sm mb-6">Try adjusting your filters or search criteria</p>
+                <Button onClick={clearFilters} className="bg-blue-600 hover:bg-blue-700 text-white">Clear All Filters</Button>
               </div>
             ) : (
               <div className="space-y-4">
                 {institutions.map((inst, idx) => (
-                  <div key={inst.id || idx} className="bg-white rounded-lg shadow-md border border-gray-200 p-4 hover:shadow-lg transition-shadow">
-                    <div className="flex gap-4">
-                      {/* Logo */}
-                      <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        {inst.logo_url ? (
-                          <img src={inst.logo_url} alt={inst.name} className="w-full h-full object-contain" />
-                        ) : (
-                          <span className="text-2xl font-bold text-gray-400">{inst.name?.charAt(0)}</span>
+                  <div key={inst.id || idx} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all group">
+                    {/* Top Badge Bar */}
+                    {(inst.is_featured || inst.is_admission_open || inst.nirf_ranking) && (
+                      <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-2 flex items-center gap-3 border-b border-gray-100">
+                        {inst.nirf_ranking && (
+                          <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                            #Rank {inst.nirf_ranking} in India
+                          </span>
+                        )}
+                        {inst.is_featured && (
+                          <span className="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded flex items-center gap-1">
+                            <FiStar size={10} className="fill-current" /> Featured
+                          </span>
+                        )}
+                        {inst.is_admission_open && (
+                          <span className="text-xs font-medium text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">
+                            Admissions Open
+                          </span>
                         )}
                       </div>
-                      
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
+                    )}
+                    
+                    <div className="p-4 md:p-5">
+                      <div className="flex flex-col md:flex-row gap-4">
+                        {/* Logo & Basic Info */}
+                        <div className="flex gap-4 flex-1">
+                          {/* Logo */}
+                          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border border-gray-200 group-hover:border-blue-300 transition-colors">
+                            {inst.logo_url ? (
+                              <img src={inst.logo_url} alt={`${inst.name} logo | AdmissionBuddy`} className="w-full h-full object-contain p-1" />
+                            ) : (
+                              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">{inst.name?.charAt(0)}</span>
+                            )}
+                          </div>
+                          
+                          {/* College Info */}
+                          <div className="flex-1 min-w-0">
                             <Link 
                               to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                              className="font-semibold text-lg text-gray-900 hover:text-orange-600 line-clamp-1 transition-colors"
+                              className="font-bold text-base md:text-lg text-gray-900 hover:text-blue-600 line-clamp-2 transition-colors"
                             >
                               {inst.name}
                             </Link>
-                            <div className="flex items-center gap-2 text-sm text-gray-500 mt-1 flex-wrap">
+                            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mt-1.5 flex-wrap">
                               <span className="flex items-center gap-1">
-                                <FiMapPin size={14} />
+                                <FiMapPin size={12} className="text-gray-400" />
                                 {inst.location?.city}{inst.location?.state ? `, ${inst.location.state}` : ''}
                               </span>
-                              {inst.type && <span className="px-2 py-0.5 bg-gray-100 rounded text-xs">{inst.type}</span>}
-                              {inst.institution_type && <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">{inst.institution_type}</span>}
+                              {inst.type && (
+                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                  inst.type === 'Government' ? 'bg-blue-100 text-blue-700' : 
+                                  inst.type === 'Private' ? 'bg-purple-100 text-purple-700' : 
+                                  'bg-gray-100 text-gray-700'
+                                }`}>
+                                  {inst.type}
+                                </span>
+                              )}
+                              {inst.is_verified && (
+                                <span className="flex items-center gap-0.5 text-blue-600 text-xs">
+                                  <FiCheckCircle size={12} /> Verified
+                                </span>
+                              )}
+                            </div>
+                            
+                            {/* Stats Row - Desktop */}
+                            <div className="hidden md:flex items-center gap-6 mt-3 text-sm">
+                              {inst.average_fees > 0 && (
+                                <div>
+                                  <span className="text-gray-500">Fees:</span>
+                                  <span className="ml-1 font-bold text-gray-900">
+                                    ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}/yr
+                                  </span>
+                                </div>
+                              )}
+                              {inst.rating > 0 && (
+                                <div className="flex items-center gap-1">
+                                  <span className="text-gray-500">Rating:</span>
+                                  <span className="font-bold text-gray-900">{inst.rating.toFixed(1)}</span>
+                                  <FiStar size={12} className="text-yellow-500 fill-current" />
+                                </div>
+                              )}
                             </div>
                           </div>
-                          
+                        </div>
+                        
+                        {/* Rating & Actions - Desktop */}
+                        <div className="hidden md:flex flex-col items-end justify-between gap-2 min-w-[140px]">
                           {inst.rating > 0 && (
-                            <div className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
-                              <FiStar size={14} className="fill-current" />
-                              <span className="font-semibold">{inst.rating.toFixed(1)}</span>
+                            <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 px-3 py-1.5 rounded-lg border border-green-200">
+                              <FiStar size={16} className="fill-current text-green-500" />
+                              <span className="font-bold text-lg">{inst.rating.toFixed(1)}</span>
+                              <span className="text-xs text-green-600">/5</span>
                             </div>
                           )}
-                        </div>
-                        
-                        {/* Quick Info */}
-                        <div className="flex flex-wrap gap-4 mt-3 text-sm">
-                          {inst.nirf_ranking && <span className="text-gray-600"><strong>NIRF:</strong> #{inst.nirf_ranking}</span>}
-                          {inst.average_fees > 0 && <span className="text-gray-600"><strong>Fees:</strong> ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}/yr</span>}
-                        </div>
-                        
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          {inst.is_verified && <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-xs rounded-full">✓ Verified</span>}
-                          {inst.is_featured && <span className="px-2 py-0.5 bg-orange-50 text-orange-600 text-xs rounded-full">★ Featured</span>}
-                          {inst.is_admission_open && <span className="px-2 py-0.5 bg-green-50 text-green-600 text-xs rounded-full">Admissions Open</span>}
+                          <div className="flex items-center gap-2">
+                            <button 
+                              onClick={() => toggleCompare(inst.id)}
+                              className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                                compareList.includes(inst.id) 
+                                  ? 'bg-blue-100 text-blue-700 border border-blue-300' 
+                                  : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 border border-transparent'
+                              }`}
+                            >
+                              <FiBookmark size={14} className={compareList.includes(inst.id) ? 'fill-current' : ''} />
+                            </button>
+                            <Link 
+                              to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
+                              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-xs font-medium hover:from-blue-700 hover:to-blue-800 transition-all flex items-center gap-1 shadow-sm"
+                            >
+                              View Details <FiArrowRight size={14} />
+                            </Link>
+                          </div>
                         </div>
                       </div>
                       
-                      {/* Actions */}
-                      <div className="flex flex-col items-end justify-between">
-                        <button 
-                          onClick={() => toggleCompare(inst.id)}
-                          className={`p-2 rounded ${compareList.includes(inst.id) ? 'text-orange-600' : 'text-gray-400 hover:text-orange-600'}`}
-                        >
-                          <FiBookmark size={20} />
-                        </button>
-                        <Link 
-                          to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                          className="text-orange-600 flex items-center gap-1 text-sm font-medium hover:underline"
-                        >
-                          View Details <FiArrowRight size={14} />
-                        </Link>
+                      {/* Mobile Stats & CTA */}
+                      <div className="md:hidden mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-3 text-xs">
+                            {inst.average_fees > 0 && (
+                              <span className="text-gray-700">
+                                <span className="text-gray-500">Fees: </span>
+                                <strong>₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}</strong>
+                              </span>
+                            )}
+                            {inst.rating > 0 && (
+                              <span className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
+                                <FiStar size={10} className="fill-current" /> {inst.rating.toFixed(1)}
+                              </span>
+                            )}
+                          </div>
+                          <Link 
+                            to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium"
+                          >
+                            View →
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
