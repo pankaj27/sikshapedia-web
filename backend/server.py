@@ -2991,6 +2991,7 @@ class SponsoredAdItem(BaseModel):
 class MultiSponsoredAdsConfig(BaseModel):
     id: str = "multi_sponsored_ads_config"
     placements: dict = {}  # placement_id -> List[SponsoredAdItem]
+    custom_placements: list = []  # List of custom URL-based placements
     updated_at: Optional[datetime] = None
     updated_by: Optional[str] = None
 
