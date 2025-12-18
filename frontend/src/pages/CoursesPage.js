@@ -306,17 +306,17 @@ const CoursesPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <span className="inline-block px-4 py-1 bg-yellow-500 text-gray-900 rounded-full text-sm font-semibold mb-4">
-              🔥 TRENDING NOW
+              {trendingBadge}
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">High-Demand Courses</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">Courses with the highest career growth potential in 2025</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{trendingTitle}</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">{trendingSubtitle}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {trendingCourses.map((course, idx) => (
               <Link
                 key={idx}
-                to={`/courses/search?q=${encodeURIComponent(course.name)}`}
+                to={course.link || `/courses/search?q=${encodeURIComponent(course.name)}`}
                 className="group bg-gray-800 hover:bg-gray-700 rounded-2xl p-5 text-center transition-all duration-300 hover:scale-105 border border-gray-700 hover:border-yellow-500"
               >
                 <span className="text-4xl mb-3 block">{course.icon}</span>
