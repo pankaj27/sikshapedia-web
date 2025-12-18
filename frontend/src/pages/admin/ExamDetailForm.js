@@ -1918,25 +1918,94 @@ const ExamDetailForm = () => {
                       <button type="button" onClick={() => {
                         const url = prompt('Enter YouTube/Vimeo embed URL:');
                         if (url) {
-                          const newVideos = [...(item.videos || []), { url, title: '', alt: `${formData.name} ${item.label} video | Admissionbuddy` }];
+                          const newVideos = [...(item.videos || []), { url, title: '', description: '', alt: `${formData.name} ${item.label} video | Admissionbuddy` }];
                           updateMenuItem(index, 'videos', newVideos);
                         }
                       }} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded hover:bg-orange-200">+ Add Video</button>
                     </div>
-                    {(item.videos || []).map((vid, vidIndex) => (
-                      <div key={vidIndex} className="flex gap-2 items-center mb-2 bg-white p-2 rounded border">
-                        <span className="text-xs text-gray-600 truncate flex-1">{vid.url}</span>
-                        <input type="text" value={vid.alt || ''} onChange={(e) => {
-                          const newVideos = [...(item.videos || [])];
-                          newVideos[vidIndex].alt = e.target.value;
-                          updateMenuItem(index, 'videos', newVideos);
-                        }} placeholder="Alt/Description (SEO)" className="w-48 border rounded px-2 py-1 text-xs" />
-                        <button type="button" onClick={() => {
-                          const newVideos = (item.videos || []).filter((_, i) => i !== vidIndex);
-                          updateMenuItem(index, 'videos', newVideos);
-                        }} className="text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                    
+                    {(item.videos || []).length > 0 ? (
+                      <div className="space-y-2">
+                        {(item.videos || []).map((vid, vidIndex) => (
+                          <div key={vidIndex} className="bg-white p-2 rounded border">
+                            <div className="flex gap-3">
+                              {/* Video Preview */}
+                              <div className="w-32 h-20 flex-shrink-0 rounded overflow-hidden bg-gray-900">
+                                <iframe
+                                  src={vid.url}
+                                  title={vid.title || 'Video'}
+                                  className="w-full h-full"
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                />
+                              </div>
+                              
+                              {/* Video Details */}
+                              <div className="flex-1 space-y-1">
+                                <div>
+                                  <label className="block text-xs text-gray-500">Title</label>
+                                  <input type="text" value={vid.title || ''} onChange={(e) => {
+                                    const newVideos = [...(item.videos || [])];
+                                    newVideos[vidIndex].title = e.target.value;
+                                    updateMenuItem(index, 'videos', newVideos);
+                                  }} placeholder="Video title" className="w-full border rounded px-2 py-1 text-xs" />
+                                </div>
+                                <div>
+                                  <label className="block text-xs text-gray-500">
+                                    Alt/Description (SEO)
+                                    <button type="button" onClick={() => {
+                                      const newVideos = [...(item.videos || [])];
+                                      newVideos[vidIndex].alt = `Watch ${formData.name} ${item.label} video - ${vid.title || 'guide'} | Admissionbuddy`;
+                                      newVideos[vidIndex].description = newVideos[vidIndex].alt;
+                                      updateMenuItem(index, 'videos', newVideos);
+                                    }} className="ml-2 text-orange-600 text-xs">⚡ Auto</button>
+                                  </label>
+                                  <input type="text" value={vid.alt || ''} onChange={(e) => {
+                                    const newVideos = [...(item.videos || [])];
+                                    newVideos[vidIndex].alt = e.target.value;
+                                    newVideos[vidIndex].description = e.target.value;
+                                    updateMenuItem(index, 'videos', newVideos);
+                                  }} placeholder="Alt/Description for SEO" className="w-full border rounded px-2 py-1 text-xs" />
+                                </div>
+                                <div className="flex gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const videoHtml = `<figure class="video-embed"><iframe src="${vid.url}" title="${vid.title || ''}" alt="${vid.alt || ''}" frameborder="0" allowfullscreen></iframe>${vid.description ? `<figcaption>${vid.description}</figcaption>` : ''}</figure>`;
+                                      updateMenuItem(index, 'content', (item.content || '') + '\n\n' + videoHtml);
+                                      alert('Video inserted into content!');
+                                    }}
+                                    className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded hover:bg-orange-200"
+                                  >
+                                    Insert to Content
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const videoHtml = `<iframe src="${vid.url}" title="${vid.title || ''}" frameborder="0" allowfullscreen></iframe>`;
+                                      navigator.clipboard.writeText(videoHtml);
+                                      alert('Video HTML copied!');
+                                    }}
+                                    className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded hover:bg-gray-200"
+                                  >
+                                    📋 Copy
+                                  </button>
+                                  <button type="button" onClick={() => {
+                                    const newVideos = (item.videos || []).filter((_, i) => i !== vidIndex);
+                                    updateMenuItem(index, 'videos', newVideos);
+                                  }} className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded hover:bg-red-200">
+                                    🗑️ Remove
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <p className="text-xs text-gray-400 italic">No videos. Add YouTube/Vimeo embed URLs.</p>
+                    )}
                   </div>
 
                   {/* FAQs for this page */}
