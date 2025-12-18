@@ -661,19 +661,48 @@ const DynamicListingPage = () => {
         allData.sort((a, b) => (a.nirf_ranking || 999) - (b.nirf_ranking || 999));
       }
       
-      const start = (pagination.page - 1) * pagination.limit;
-      const paginatedData = allData.slice(start, start + pagination.limit);
-      
-      setInstitutions(paginatedData);
+      // Store all data for infinite scroll
+      setAllInstitutionsData(allData);
       setTotalCount(allData.length);
-      setPagination(prev => ({ ...prev, total: allData.length }));
+      
+      // Initial load - show first batch
+      const initialBatch = allData.slice(0, pagination.limit);
+      setInstitutions(initialBatch);
+      setHasMore(initialBatch.length < allData.length);
+      setPagination(prev => ({ ...prev, page: 1, total: allData.length }));
     } catch (error) {
       console.error('Error fetching institutions:', error);
       setInstitutions([]);
+      setAllInstitutionsData([]);
     } finally {
       setLoading(false);
     }
   };
+  
+  // Load more function for infinite scroll
+  const loadMore = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    
+    setLoadingMore(true);
+    
+    // Simulate a small delay to show loading state
+    setTimeout(() => {
+      const nextPage = pagination.page + 1;
+      const start = pagination.page * pagination.limit;
+      const end = start + pagination.limit;
+      const newBatch = allInstitutionsData.slice(start, end);
+      
+      if (newBatch.length > 0) {
+        setInstitutions(prev => [...prev, ...newBatch]);
+        setPagination(prev => ({ ...prev, page: nextPage }));
+        setHasMore(end < allInstitutionsData.length);
+      } else {
+        setHasMore(false);
+      }
+      
+      setLoadingMore(false);
+    }, 300);
+  }, [loadingMore, hasMore, pagination.page, pagination.limit, allInstitutionsData]);
   
   // Slug mappings for Type and Accreditation
   const TYPE_TO_SLUG = {
