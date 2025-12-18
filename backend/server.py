@@ -2869,6 +2869,109 @@ async def get_admission_open_priority_colleges(limit: int = Query(6, ge=1, le=20
     
     return [College(**college) for college in result[:limit]]
 
+# ========== SPONSORED ADS MANAGEMENT ==========
+
+class SponsoredCollegeEntry(BaseModel):
+    college_id: str
+    college_name: str
+    college_logo: Optional[str] = None
+    college_location: Optional[str] = None
+    college_type: Optional[str] = None
+    college_nirf: Optional[int] = None
+    college_rating: Optional[float] = None
+    college_fees: Optional[float] = None
+    serial_order: int = 1
+    start_date: str  # ISO date string
+    end_date: str    # ISO date string
+    is_active: bool = True
+
+class SponsoredAdsConfig(BaseModel):
+    id: str = "sponsored_ads_config"
+    featured_colleges: List[SponsoredCollegeEntry] = []
+    admission_open_colleges: List[SponsoredCollegeEntry] = []
+    updated_at: Optional[datetime] = None
+    updated_by: Optional[str] = None
+
+@api_router.get("/sponsored-ads")
+async def get_sponsored_ads():
+    """Get the sponsored ads configuration"""
+    config = await db.sponsored_ads.find_one({"id": "sponsored_ads_config"}, {"_id": 0})
+    if not config:
+        return {"featured_colleges": [], "admission_open_colleges": []}
+    return config
+
+@api_router.post("/sponsored-ads")
+async def save_sponsored_ads(config: SponsoredAdsConfig, current_user: dict = Depends(get_current_user)):
+    """Save the sponsored ads configuration (admin only)"""
+    config.id = "sponsored_ads_config"
+    config.updated_at = datetime.now(timezone.utc)
+    config.updated_by = current_user.get("email", "admin")
+    
+    await db.sponsored_ads.update_one(
+        {"id": "sponsored_ads_config"},
+        {"$set": config.dict()},
+        upsert=True
+    )
+    return {"success": True, "message": "Sponsored ads saved successfully"}
+
+@api_router.get("/sponsored-ads/featured-active")
+async def get_active_featured_colleges(limit: int = Query(6, ge=1, le=20)):
+    """Get currently active featured colleges for display on frontend"""
+    config = await db.sponsored_ads.find_one({"id": "sponsored_ads_config"}, {"_id": 0})
+    if not config:
+        return []
+    
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    active_colleges = []
+    
+    for entry in config.get("featured_colleges", []):
+        if entry.get("is_active") and entry.get("start_date") <= now <= entry.get("end_date"):
+            # Fetch full college data
+            college = await db.colleges.find_one({"id": entry["college_id"]}, {"_id": 0})
+            if college:
+                if isinstance(college.get('created_at'), str):
+                    college['created_at'] = datetime.fromisoformat(college['created_at'])
+                college['_sponsored_order'] = entry.get("serial_order", 999)
+                active_colleges.append(college)
+    
+    # Sort by serial order
+    active_colleges.sort(key=lambda x: x.get('_sponsored_order', 999))
+    
+    # Remove temp field and return
+    for c in active_colleges:
+        c.pop('_sponsored_order', None)
+    
+    return [College(**college) for college in active_colleges[:limit]]
+
+@api_router.get("/sponsored-ads/admission-open-active")
+async def get_active_admission_open_colleges(limit: int = Query(6, ge=1, le=20)):
+    """Get currently active admission open colleges for display on frontend"""
+    config = await db.sponsored_ads.find_one({"id": "sponsored_ads_config"}, {"_id": 0})
+    if not config:
+        return []
+    
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    active_colleges = []
+    
+    for entry in config.get("admission_open_colleges", []):
+        if entry.get("is_active") and entry.get("start_date") <= now <= entry.get("end_date"):
+            # Fetch full college data
+            college = await db.colleges.find_one({"id": entry["college_id"]}, {"_id": 0})
+            if college:
+                if isinstance(college.get('created_at'), str):
+                    college['created_at'] = datetime.fromisoformat(college['created_at'])
+                college['_sponsored_order'] = entry.get("serial_order", 999)
+                active_colleges.append(college)
+    
+    # Sort by serial order
+    active_colleges.sort(key=lambda x: x.get('_sponsored_order', 999))
+    
+    # Remove temp field and return
+    for c in active_colleges:
+        c.pop('_sponsored_order', None)
+    
+    return [College(**college) for college in active_colleges[:limit]]
+
 @api_router.get("/colleges/{college_id}", response_model=College)
 async def get_college(college_id: str):
     college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
