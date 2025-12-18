@@ -88,7 +88,7 @@ const CoursesPage = () => {
   const streamCategories = [
     { 
       name: 'Engineering', 
-      icon: HiOutlineCpu, 
+      icon: HiOutlineDesktopComputer, 
       color: 'text-blue-600', 
       bgColor: 'bg-blue-50',
       hoverBg: 'hover:bg-blue-100',
