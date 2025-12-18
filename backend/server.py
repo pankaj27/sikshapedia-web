@@ -2196,6 +2196,7 @@ class CoursePageSettings(BaseModel):
     sidebar_cta_title: str = "Need Guidance?"
     sidebar_cta_text: str = "Get expert counselling"
     sidebar_cta_button: str = "Get Free Counselling"
+    sidebar_cta_link: Optional[str] = None
     
     # Additional Content
     intro_content: Optional[str] = None
