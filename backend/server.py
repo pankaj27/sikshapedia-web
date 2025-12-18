@@ -2734,6 +2734,14 @@ async def get_colleges(
     if course:
         query["courses.name"] = {"$regex": course, "$options": "i"}
     
+    # Filter by featured status
+    if is_featured is not None:
+        query["is_featured"] = is_featured
+    
+    # Filter by admission open status
+    if is_admission_open is not None:
+        query["is_admission_open"] = is_admission_open
+    
     sort_order = 1 if sort_by == "name" else 1 if sort_by == "nirf_ranking" else -1
     
     colleges = await db.colleges.find(query, {"_id": 0}).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
