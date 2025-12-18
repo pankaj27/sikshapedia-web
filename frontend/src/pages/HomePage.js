@@ -30,6 +30,7 @@ const CollegeDuniaHome = () => {
   }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredColleges, setFeaturedColleges] = useState([]);
+  const [sponsoredFeatured, setSponsoredFeatured] = useState([]); // Sponsored ads from admin
   const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0 });
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
