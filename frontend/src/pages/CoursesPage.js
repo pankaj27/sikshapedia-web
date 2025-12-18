@@ -155,7 +155,7 @@ const CoursesPage = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for courses, streams, or colleges..."
+                  placeholder={heroSearchPlaceholder}
                   className="w-full pl-14 pr-32 py-4 md:py-5 rounded-2xl text-gray-800 text-lg shadow-2xl focus:outline-none focus:ring-4 focus:ring-yellow-300/50"
                 />
                 <button 
