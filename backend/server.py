@@ -332,6 +332,11 @@ class ExamDetailed(BaseModel):
     # Menu Configuration (with nested content)
     menu_config: Optional[ExamDetailedMenuConfig] = None
     
+    # Popular & Featured
+    is_popular: bool = False  # Mark as popular exam
+    is_featured: bool = False  # Featured on homepage
+    popular_order: int = 0  # Order in popular list (lower = higher priority)
+    
     # Approval Status
     status: str = "draft"
     rejection_reason: Optional[str] = None
