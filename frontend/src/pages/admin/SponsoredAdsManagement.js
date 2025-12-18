@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowLeft, FiStar, FiCheckCircle, FiCalendar, FiMove, FiTrash2, FiPlus, FiSave, FiSearch, FiX } from 'react-icons/fi';
-import api from '../../services/api';
+import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 
 const SponsoredAdsManagement = () => {
