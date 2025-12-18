@@ -139,11 +139,14 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "News Listing Page - Dynamic Content Display"
+    - "Admin News Settings Page - Management Interface"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
   completed_tests:
+    - "News Listing Page Dynamic Settings - Backend API"
     - "Admin Form - Age Limit Input Field"
     - "Admin Form - Top Colleges Section"
     - "Course Display - Dynamic Age Limit"
