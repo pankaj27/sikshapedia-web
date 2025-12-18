@@ -572,41 +572,61 @@ const DynamicListingPage = () => {
     fetchAdmissionOpenColleges();
   }, [location.pathname, filters.search, sortBy]);
   
-  // Fetch featured/sponsored colleges (sorted by featured_at - newest first)
+  // Fetch featured/sponsored colleges (from admin-managed sponsored ads OR fallback to priority)
   const fetchFeaturedColleges = async () => {
     try {
-      const response = await api.get('/colleges/featured-priority?limit=6');
+      // First try admin-managed sponsored ads
+      const response = await api.get('/sponsored-ads/featured-active?limit=6');
       if (response.data && response.data.length > 0) {
         setFeaturedColleges(response.data);
+        return;
       }
     } catch (error) {
-      console.error('Error fetching featured colleges:', error);
-      // Fallback to regular featured query
+      console.error('Sponsored ads not available, using fallback:', error);
+    }
+    
+    // Fallback to priority-based or regular featured query
+    try {
+      const fallback = await api.get('/colleges/featured-priority?limit=6');
+      if (fallback.data && fallback.data.length > 0) {
+        setFeaturedColleges(fallback.data);
+      }
+    } catch (e) {
       try {
-        const fallback = await api.get('/colleges?is_featured=true&limit=6');
-        if (fallback.data && fallback.data.length > 0) {
-          setFeaturedColleges(fallback.data);
+        const fallback2 = await api.get('/colleges?is_featured=true&limit=6');
+        if (fallback2.data && fallback2.data.length > 0) {
+          setFeaturedColleges(fallback2.data);
         }
-      } catch (e) {}
+      } catch (e2) {}
     }
   };
   
-  // Fetch admissions open colleges (sorted by admission_open_at - newest first)
+  // Fetch admissions open colleges (from admin-managed sponsored ads OR fallback to priority)
   const fetchAdmissionOpenColleges = async () => {
     try {
-      const response = await api.get('/colleges/admission-open-priority?limit=6');
+      // First try admin-managed sponsored ads
+      const response = await api.get('/sponsored-ads/admission-open-active?limit=6');
       if (response.data && response.data.length > 0) {
         setAdmissionOpenColleges(response.data);
+        return;
       }
     } catch (error) {
-      console.error('Error fetching admission open colleges:', error);
-      // Fallback to regular admission open query
+      console.error('Sponsored ads not available, using fallback:', error);
+    }
+    
+    // Fallback to priority-based or regular admission open query
+    try {
+      const fallback = await api.get('/colleges/admission-open-priority?limit=6');
+      if (fallback.data && fallback.data.length > 0) {
+        setAdmissionOpenColleges(fallback.data);
+      }
+    } catch (e) {
       try {
-        const fallback = await api.get('/colleges?is_admission_open=true&limit=6');
-        if (fallback.data && fallback.data.length > 0) {
-          setAdmissionOpenColleges(fallback.data);
+        const fallback2 = await api.get('/colleges?is_admission_open=true&limit=6');
+        if (fallback2.data && fallback2.data.length > 0) {
+          setAdmissionOpenColleges(fallback2.data);
         }
-      } catch (e) {}
+      } catch (e2) {}
     }
   };
   
