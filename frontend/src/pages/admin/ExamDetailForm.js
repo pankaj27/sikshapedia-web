@@ -2693,6 +2693,142 @@ const ExamDetailForm = () => {
           </button>
         </CollapsibleSection>
 
+        {/* Key Summary Section */}
+        <CollapsibleSection title="Key Summary (Bullet Points)" icon={<FiList className="w-5 h-5" />} color="amber">
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Add key highlights that appear in the "Key Summary" section on the exam detail page. These are important points students should know at a glance.
+            </p>
+            
+            {/* Existing Key Points */}
+            <div className="space-y-2">
+              {(formData.key_summary || []).map((point, index) => (
+                <div key={index} className="flex items-start gap-2 bg-amber-50 rounded-lg p-3 border border-amber-200">
+                  <span className="text-amber-600 font-bold mt-0.5">•</span>
+                  <input
+                    type="text"
+                    value={point}
+                    onChange={(e) => {
+                      const newSummary = [...(formData.key_summary || [])];
+                      newSummary[index] = e.target.value;
+                      setFormData({ ...formData, key_summary: newSummary });
+                    }}
+                    placeholder="Enter key point..."
+                    className="flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-gray-800"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newSummary = (formData.key_summary || []).filter((_, i) => i !== index);
+                      setFormData({ ...formData, key_summary: newSummary });
+                    }}
+                    className="text-red-500 hover:text-red-700 p-1"
+                  >
+                    <FiTrash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            {/* Add New Point */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                id="new-key-point"
+                placeholder="Add a new key point..."
+                className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const input = e.target;
+                    if (input.value.trim()) {
+                      setFormData({ ...formData, key_summary: [...(formData.key_summary || []), input.value.trim()] });
+                      input.value = '';
+                    }
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const input = document.getElementById('new-key-point');
+                  if (input?.value.trim()) {
+                    setFormData({ ...formData, key_summary: [...(formData.key_summary || []), input.value.trim()] });
+                    input.value = '';
+                  }
+                }}
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors"
+              >
+                <FiPlus className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Quick Templates */}
+            <div className="border-t pt-4">
+              <p className="text-xs text-gray-500 mb-2">Quick Templates:</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const templates = [
+                      `${formData.name || 'This exam'} is conducted by ${formData.conducting_body || 'the examining authority'}`,
+                      `Exam Mode: ${formData.exam_mode || 'Online/Offline'}`,
+                      `Duration: ${formData.exam_duration || '3 Hours'}`,
+                      `Total Marks: ${formData.total_marks || 'N/A'}`,
+                      `Total Questions: ${formData.num_questions || 'N/A'}`
+                    ];
+                    setFormData({ ...formData, key_summary: templates });
+                  }}
+                  className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700"
+                >
+                  📝 Generate from Exam Data
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const templates = [
+                      `Application deadline: ${formData.application_end_date || 'Check official website'}`,
+                      `Exam Date: ${formData.exam_date || 'To be announced'}`,
+                      `Result Date: ${formData.result_date || 'To be announced'}`,
+                      'Admit card available 15 days before exam',
+                      'Check eligibility criteria before applying'
+                    ];
+                    setFormData({ ...formData, key_summary: [...(formData.key_summary || []), ...templates] });
+                  }}
+                  className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700"
+                >
+                  📅 Add Date Highlights
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, key_summary: [] })}
+                  className="text-xs px-3 py-1.5 bg-red-100 hover:bg-red-200 rounded-full text-red-700"
+                >
+                  🗑️ Clear All
+                </button>
+              </div>
+            </div>
+            
+            {/* Preview */}
+            {(formData.key_summary || []).length > 0 && (
+              <div className="border-t pt-4">
+                <p className="text-xs text-gray-500 mb-2">Preview:</p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-bold text-gray-800 mb-2">Key Summary</h4>
+                  <ul className="space-y-1 text-sm text-gray-700">
+                    {(formData.key_summary || []).map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-orange-600 mt-0.5">•</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </CollapsibleSection>
+
         {/* SEO Content Section */}
         <CollapsibleSection title="SEO Content" icon={<FiBook className="w-5 h-5" />} color="teal">
           <div className="space-y-6">
