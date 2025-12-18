@@ -659,6 +659,25 @@ const SchoolsPage = () => {
         </div>
       </div>
 
+      {/* Featured & Admissions Open Sponsored Sections */}
+      <div className="bg-white py-4">
+        <div className="container mx-auto px-6">
+          <FeaturedSponsoredSection 
+            placementId="school_listing_featured"
+            title="Featured Schools"
+            subtitle="Top sponsored schools with excellent academics"
+            bgColor="from-green-50 via-emerald-50 to-teal-50"
+            headerColor="from-green-600 to-teal-600"
+            linkColor="text-green-600"
+            viewAllLink="/india-schools"
+          />
+          <AdmissionsOpenSection 
+            placementId="school_listing_admission"
+            viewAllLink="/india-schools"
+          />
+        </div>
+      </div>
+
       {/* COLLEGE LISTING SECTION */}
       <div className="bg-gray-50 py-6 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">

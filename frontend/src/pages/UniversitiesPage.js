@@ -659,6 +659,21 @@ const UniversitiesPage = () => {
         </div>
       </div>
 
+      {/* Featured Universities Sponsored Section */}
+      <div className="bg-white py-4">
+        <div className="container mx-auto px-6">
+          <FeaturedSponsoredSection 
+            placementId="university_listing_featured"
+            title="Featured Universities"
+            subtitle="Top sponsored universities with excellent programs"
+            bgColor="from-purple-50 via-violet-50 to-indigo-50"
+            headerColor="from-purple-600 to-violet-600"
+            linkColor="text-purple-600"
+            viewAllLink="/india-universities"
+          />
+        </div>
+      </div>
+
       {/* COLLEGE LISTING SECTION */}
       <div className="bg-gray-50 py-6 border-t-4 border-orange-600">
         <div className="container mx-auto px-6">
