@@ -341,8 +341,8 @@ const SponsoredAdsManagement = () => {
     const placementId = `custom_${newCustomPlacement.url.replace(/\//g, '_')}_${newCustomPlacement.sectionType}`;
     const placementName = newCustomPlacement.name || `${newCustomPlacement.url} - ${SECTION_TYPES.find(s => s.id === newCustomPlacement.sectionType)?.name}`;
     
-    // Check if already exists
-    if (customPlacements.find(p => p.id === placementId)) {
+    // Check if already exists (only for new placements, not edits)
+    if (!editingPlacement && customPlacements.find(p => p.id === placementId)) {
       alert('This placement already exists!');
       return;
     }
@@ -355,11 +355,44 @@ const SponsoredAdsManagement = () => {
       contentType: 'college'
     };
     
-    setCustomPlacements([...customPlacements, newPlacement]);
-    setAdsConfig({ ...adsConfig, [placementId]: [] });
-    setActiveTab(placementId);
+    if (editingPlacement) {
+      // Editing existing placement
+      const oldId = editingPlacement.id;
+      const existingAds = adsConfig[oldId] || [];
+      
+      // Remove old placement and add updated one
+      setCustomPlacements(customPlacements.map(p => p.id === oldId ? newPlacement : p));
+      
+      // Update ads config - transfer ads to new key if ID changed
+      const newConfig = { ...adsConfig };
+      if (oldId !== placementId) {
+        delete newConfig[oldId];
+        newConfig[placementId] = existingAds;
+      } else {
+        newConfig[placementId] = existingAds;
+      }
+      setAdsConfig(newConfig);
+      setActiveTab(placementId);
+    } else {
+      // Adding new placement
+      setCustomPlacements([...customPlacements, newPlacement]);
+      setAdsConfig({ ...adsConfig, [placementId]: [] });
+      setActiveTab(placementId);
+    }
+    
     setShowCustomPlacementModal(false);
     setNewCustomPlacement({ url: '', sectionType: 'featured', name: '' });
+    setEditingPlacement(null);
+  };
+
+  const editCustomPlacement = (placement) => {
+    setEditingPlacement(placement);
+    setNewCustomPlacement({
+      url: placement.url,
+      sectionType: placement.sectionType,
+      name: placement.name
+    });
+    setShowCustomPlacementModal(true);
   };
 
   const deleteCustomPlacement = (placementId) => {
