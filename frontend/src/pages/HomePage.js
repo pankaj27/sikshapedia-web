@@ -873,6 +873,96 @@ const CollegeDuniaHome = () => {
         </div>
       </section>
 
+      {/* Sponsored Featured Colleges - From Admin */}
+      {sponsoredFeatured.length > 0 && (
+        <section className="py-12 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center">
+                  <FiStar className="text-white text-xl" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Featured Colleges</h2>
+                  <p className="text-sm text-gray-500">Sponsored recommendations for you</p>
+                </div>
+              </div>
+              <span className="text-xs text-orange-600 bg-orange-100 px-3 py-1 rounded-full font-medium">Sponsored</span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sponsoredFeatured.map((college, idx) => (
+                <Link 
+                  key={college.id || idx}
+                  to={`/college/${college.id}`}
+                  className="bg-white rounded-xl shadow-lg border border-orange-100 overflow-hidden hover:shadow-xl hover:border-orange-300 transition-all group"
+                >
+                  <div className="p-5">
+                    <div className="flex items-start gap-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-200 group-hover:border-orange-400 transition-colors">
+                        {college.logo_url ? (
+                          <img src={college.logo_url} alt={college.name} className="w-full h-full object-contain p-1" />
+                        ) : (
+                          <span className="text-2xl font-bold text-orange-600">{college.name?.charAt(0)}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                          {college.name}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                          <FiMapPin size={12} />
+                          {college.location?.city}, {college.location?.state}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                          {college.type && (
+                            <span className={`text-xs px-2 py-0.5 rounded font-medium ${
+                              college.type === 'Government' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'
+                            }`}>{college.type}</span>
+                          )}
+                          {college.nirf_ranking && (
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-medium">
+                              NIRF #{college.nirf_ranking}
+                            </span>
+                          )}
+                          {college.rating > 0 && (
+                            <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-medium flex items-center gap-0.5">
+                              <FiStar size={10} className="fill-current" /> {college.rating?.toFixed(1)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                      {college.average_fees > 0 && (
+                        <span className="text-sm text-gray-600">
+                          <span className="text-gray-400">Fees:</span>{' '}
+                          <strong className="text-gray-900">
+                            ₹{college.average_fees >= 100000 ? `${(college.average_fees / 100000).toFixed(1)}L` : `${(college.average_fees / 1000).toFixed(0)}K`}/yr
+                          </strong>
+                        </span>
+                      )}
+                      <span className="text-sm text-orange-600 font-medium group-hover:underline">
+                        View Details →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            
+            <div className="text-center mt-8">
+              <Link 
+                to="/india-colleges" 
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-semibold hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg hover:shadow-xl"
+              >
+                View All Featured Colleges <FiArrowRight />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Top Colleges by Stream */}
       <TopCollegesByStream />
 
