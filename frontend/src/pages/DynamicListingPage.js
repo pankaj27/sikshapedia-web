@@ -559,9 +559,32 @@ const DynamicListingPage = () => {
   }, [activeFilterDropdown]);
 
   useEffect(() => {
+    // Reset state when filters/location changes
+    setInstitutions([]);
+    setAllInstitutionsData([]);
+    setPagination(prev => ({ ...prev, page: 1 }));
+    setHasMore(true);
     fetchInstitutions();
     fetchPageContent();
-  }, [location.pathname, pagination.page, filters.search, sortBy]);
+  }, [location.pathname, filters.search, sortBy]);
+  
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading && !loadingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+    
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, loadMore]);
   
   // Fetch page content from admin panel
   const fetchPageContent = async () => {
