@@ -153,6 +153,7 @@ const SECTION_TYPES = [
 
 const SponsoredAdsManagement = () => {
   const [adsConfig, setAdsConfig] = useState({});
+  const [customPlacements, setCustomPlacements] = useState([]);
   const [allColleges, setAllColleges] = useState([]);
   const [allSchools, setAllSchools] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
@@ -163,6 +164,8 @@ const SponsoredAdsManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [showCustomPlacementModal, setShowCustomPlacementModal] = useState(false);
+  const [newCustomPlacement, setNewCustomPlacement] = useState({ url: '', sectionType: 'featured', name: '' });
 
   useEffect(() => {
     fetchData();
