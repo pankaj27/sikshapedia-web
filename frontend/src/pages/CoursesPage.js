@@ -104,15 +104,25 @@ const CoursesPage = () => {
   const metaTitle = settings?.meta_title || 'Courses in India 2025 - UG, PG, Diploma, PhD Programs';
   const metaDescription = settings?.meta_description || 'Explore 1000+ courses in India across Engineering, Medical, Management, Science, Commerce, Arts, Law and more.';
 
-  // Trending courses (static for now - can be made dynamic later)
-  const trendingCourses = [
-    { name: 'Data Science', growth: '+45%', icon: '📊' },
-    { name: 'Artificial Intelligence', growth: '+62%', icon: '🤖' },
-    { name: 'Digital Marketing', growth: '+38%', icon: '📱' },
-    { name: 'Cyber Security', growth: '+52%', icon: '🔒' },
-    { name: 'Cloud Computing', growth: '+41%', icon: '☁️' },
-    { name: 'Machine Learning', growth: '+58%', icon: '🧠' },
+  // Trending courses from API or defaults
+  const defaultTrendingCourses = [
+    { name: 'Data Science', growth: '+45%', icon: '📊', link: '/courses/search?q=Data%20Science' },
+    { name: 'Artificial Intelligence', growth: '+62%', icon: '🤖', link: '/courses/search?q=Artificial%20Intelligence' },
+    { name: 'Digital Marketing', growth: '+38%', icon: '📱', link: '/courses/search?q=Digital%20Marketing' },
+    { name: 'Cyber Security', growth: '+52%', icon: '🔒', link: '/courses/search?q=Cyber%20Security' },
+    { name: 'Cloud Computing', growth: '+41%', icon: '☁️', link: '/courses/search?q=Cloud%20Computing' },
+    { name: 'Machine Learning', growth: '+58%', icon: '🧠', link: '/courses/search?q=Machine%20Learning' },
   ];
+  const trendingCourses = settings?.trending_courses?.length ? settings.trending_courses : defaultTrendingCourses;
+  const trendingBadge = settings?.trending_badge || '🔥 TRENDING NOW';
+  const trendingTitle = settings?.trending_title || 'High-Demand Courses';
+  const trendingSubtitle = settings?.trending_subtitle || 'Courses with the highest career growth potential in 2025';
+  
+  // Stats from API or defaults
+  const statsCourses = settings?.stats_courses || '10,000+';
+  const statsColleges = settings?.stats_colleges || '5,000+';
+  const statsStreams = settings?.stats_streams || '50+';
+  const statsStudents = settings?.stats_students || '2M+';
 
   if (loading) {
     return (
