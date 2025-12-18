@@ -266,52 +266,66 @@ const NewsPage = () => {
               <AdBanner pageName="news" position="sidebar" />
               
               {/* The Big Stories */}
-              <div className="bg-white rounded-lg shadow-sm p-5">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">The Big Stories</h2>
-                <div className="space-y-3">
-                  {bigStories.map((story, idx) => (
-                    <div key={idx} className="border-b border-gray-200 pb-3 last:border-0 last:pb-0">
-                      <Link to="#" className="block group">
-                        <h3 className="text-sm font-bold text-gray-900 group-hover:text-orange-600 mb-1">
-                          {story.title}
-                        </h3>
-                        <p className="text-xs text-gray-500">{story.date}</p>
-                      </Link>
-                    </div>
-                  ))}
+              {(settings?.show_big_stories !== false) && bigStories.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-5">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                    {settings?.big_stories_title || 'The Big Stories'}
+                  </h2>
+                  <div className="space-y-3">
+                    {bigStories.map((story, idx) => (
+                      <div key={idx} className="border-b border-gray-200 pb-3 last:border-0 last:pb-0">
+                        <Link to={`/news/${story.slug}`} className="block group">
+                          <h3 className="text-sm font-bold text-gray-900 group-hover:text-orange-600 mb-1">
+                            {story.title}
+                          </h3>
+                          <p className="text-xs text-gray-500">{story.date}</p>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Trending Search */}
-              <div className="bg-white rounded-lg shadow-sm p-5">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">#Trending search</h2>
-                <div className="flex flex-wrap gap-2">
-                  {trendingTags.map((tag, idx) => (
-                    <Link
-                      key={idx}
-                      to={`/search?q=${encodeURIComponent(tag)}`}
-                      className="px-3 py-1.5 bg-gray-100 hover:bg-orange-50 text-blue-600 hover:text-orange-600 text-xs font-semibold rounded-full transition-colors"
-                    >
-                      {tag}
-                    </Link>
-                  ))}
+              {(settings?.show_trending_tags !== false) && trendingTags.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-5">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                    {settings?.trending_tags_title || '#Trending search'}
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {trendingTags.map((tag, idx) => (
+                      <Link
+                        key={idx}
+                        to={`/search?q=${encodeURIComponent(tag)}`}
+                        className="px-3 py-1.5 bg-gray-100 hover:bg-orange-50 text-blue-600 hover:text-orange-600 text-xs font-semibold rounded-full transition-colors"
+                      >
+                        {tag}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Newsletter Subscription */}
-              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg shadow-sm p-6 text-white">
-                <h2 className="text-lg font-bold mb-3">Subscribe to our newsletter</h2>
-                <p className="text-sm mb-4 opacity-90">Get our latest news about exams, colleges and others</p>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-2.5 rounded-lg mb-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-                />
-                <button className="w-full bg-white text-orange-600 font-bold py-2.5 rounded-lg hover:bg-gray-100 transition-colors">
-                  Subscribe
-                </button>
-                <p className="text-xs mt-3 opacity-75">*Terms & conditions apply</p>
-              </div>
+              {(settings?.show_newsletter !== false) && (
+                <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg shadow-sm p-6 text-white">
+                  <h2 className="text-lg font-bold mb-3">
+                    {settings?.newsletter_title || 'Subscribe to our newsletter'}
+                  </h2>
+                  <p className="text-sm mb-4 opacity-90">
+                    {settings?.newsletter_subtitle || 'Get our latest news about exams, colleges and others'}
+                  </p>
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-2.5 rounded-lg mb-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+                  />
+                  <button className="w-full bg-white text-orange-600 font-bold py-2.5 rounded-lg hover:bg-gray-100 transition-colors">
+                    {settings?.newsletter_button_text || 'Subscribe'}
+                  </button>
+                  <p className="text-xs mt-3 opacity-75">*Terms & conditions apply</p>
+                </div>
+              )}
             </aside>
           </div>
         )}
