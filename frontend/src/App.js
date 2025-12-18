@@ -93,6 +93,7 @@ import CoursesDetailManagement from './pages/admin/CoursesDetailManagement';
 import ExamDetailForm from './pages/admin/ExamDetailForm';
 import ExamsDetailManagement from './pages/admin/ExamsDetailManagement';
 import ExamListingSettings from './pages/admin/ExamListingSettings';
+import CourseListingSettings from './pages/admin/CourseListingSettings';
 import ListingPagesManagement from './pages/admin/ListingPagesManagement';
 import ListingPageForm from './pages/admin/ListingPageForm';
 import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
