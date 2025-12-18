@@ -5,7 +5,7 @@
 
 ## Last Test Run
 - Date: 2025-12-18
-- Status: Advanced Advertisement System Testing Complete
+- Status: Course Listing Settings Testing Complete
 - Tester: Testing Agent
 
 ## Current Test Focus
