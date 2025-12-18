@@ -841,7 +841,7 @@ const ExamDetailForm = () => {
                   {formData.meta_title || formData.name || 'Exam Title'}
                 </div>
                 <div className="text-green-700 text-sm truncate">
-                  admissionbuddy.co › exams › {formData.slug || 'exam-slug'}
+                  yoursite.com › exams › {formData.slug || 'exam-slug'}
                 </div>
                 <div className="text-gray-600 text-sm mt-1 line-clamp-2">
                   {formData.meta_description || 'Meta description will appear here. Add a compelling description to improve click-through rates.'}
