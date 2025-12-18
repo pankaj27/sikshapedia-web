@@ -2006,8 +2006,8 @@ const DynamicListingPage = () => {
               <div className="space-y-4">
                 {institutions.map((inst, idx) => (
                   <React.Fragment key={inst.id || idx}>
-                    {/* Featured Section - Appears after colleges 3, 9, 15, etc. */}
-                    {idx > 0 && idx % 3 === 0 && idx % 6 !== 0 && (
+                    {/* Featured Section - Appears after colleges 3, 9, 15, etc. (Only if featured colleges exist) */}
+                    {idx > 0 && idx % 3 === 0 && idx % 6 !== 0 && featuredColleges.length > 0 && (
                       <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg">
                         <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-2 flex items-center gap-2">
                           <FiStar className="text-white fill-current" size={14} />
@@ -2016,54 +2016,53 @@ const DynamicListingPage = () => {
                         </div>
                         <div className="p-4">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {/* Featured College Card 1 */}
-                            <div className="bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md transition-all">
-                              <div className="flex items-start gap-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                  <span className="text-lg font-bold text-blue-600">IIT</span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">Top Engineering College</h4>
-                                  <p className="text-xs text-gray-500 mt-0.5">New Delhi, India</p>
-                                  <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">NAAC A++</span>
-                                    <span className="text-xs text-orange-600 font-medium">Apply Now →</span>
+                            {featuredColleges.slice(0, 3).map((featured, fIdx) => (
+                              <Link 
+                                key={featured.id || fIdx}
+                                to={getInstitutionDetailUrl(featured.institution_type || 'college', featured.id, featured.name, featured.location?.city, featured.serial_number)}
+                                className={`bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md hover:border-orange-300 transition-all ${fIdx === 2 ? 'hidden md:block' : ''}`}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden ${
+                                    fIdx === 0 ? 'bg-gradient-to-br from-blue-100 to-blue-200' :
+                                    fIdx === 1 ? 'bg-gradient-to-br from-purple-100 to-purple-200' :
+                                    'bg-gradient-to-br from-emerald-100 to-emerald-200'
+                                  }`}>
+                                    {featured.logo_url ? (
+                                      <img src={featured.logo_url} alt={featured.name} className="w-full h-full object-contain p-1" />
+                                    ) : (
+                                      <span className={`text-lg font-bold ${
+                                        fIdx === 0 ? 'text-blue-600' :
+                                        fIdx === 1 ? 'text-purple-600' :
+                                        'text-emerald-600'
+                                      }`}>{featured.name?.charAt(0)}</span>
+                                    )}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">{featured.name}</h4>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                      {featured.location?.city}{featured.location?.state ? `, ${featured.location.state}` : ''}
+                                    </p>
+                                    <div className="flex items-center gap-2 mt-2 flex-wrap">
+                                      {featured.type && (
+                                        <span className={`text-xs px-2 py-0.5 rounded ${
+                                          featured.type === 'Government' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'
+                                        }`}>{featured.type}</span>
+                                      )}
+                                      {featured.nirf_ranking && (
+                                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">NIRF #{featured.nirf_ranking}</span>
+                                      )}
+                                      {featured.rating > 0 && (
+                                        <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded flex items-center gap-0.5">
+                                          <FiStar size={10} className="fill-current" /> {featured.rating.toFixed(1)}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span className="text-xs text-orange-600 font-medium mt-2 inline-block">Apply Now →</span>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                            {/* Featured College Card 2 */}
-                            <div className="bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md transition-all">
-                              <div className="flex items-start gap-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                  <span className="text-lg font-bold text-purple-600">NIT</span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">Premier Tech Institute</h4>
-                                  <p className="text-xs text-gray-500 mt-0.5">Bangalore, Karnataka</p>
-                                  <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">NIRF #15</span>
-                                    <span className="text-xs text-orange-600 font-medium">Apply Now →</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            {/* Featured College Card 3 */}
-                            <div className="bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md transition-all hidden md:block">
-                              <div className="flex items-start gap-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                  <span className="text-lg font-bold text-emerald-600">VIT</span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">Top Private University</h4>
-                                  <p className="text-xs text-gray-500 mt-0.5">Vellore, Tamil Nadu</p>
-                                  <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">5★ Rating</span>
-                                    <span className="text-xs text-orange-600 font-medium">Apply Now →</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                              </Link>
+                            ))}
                           </div>
                           <div className="text-center mt-4">
                             <Link to="/featured-colleges" className="text-sm text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-1">
