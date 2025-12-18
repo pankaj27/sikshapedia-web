@@ -86,9 +86,12 @@ const ExamPage = () => {
   }, []);
 
   const filteredExams = exams.filter(exam => {
-    const matchesCategory = selectedCategory === 'All' || exam.category === selectedCategory;
-    const matchesSearch = exam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          exam.fullName.toLowerCase().includes(searchQuery.toLowerCase());
+    // Match category - check both single category and streams array
+    const matchesCategory = selectedCategory === 'All' || 
+                            exam.category === selectedCategory ||
+                            (exam.streams && exam.streams.includes(selectedCategory));
+    const matchesSearch = exam.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          exam.fullName?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
