@@ -255,19 +255,23 @@ const ExamDetailPage = () => {
       <div className="bg-white border-b shadow-sm sticky top-16 z-30">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-6 overflow-x-auto py-3">
-            {(exam.menuConfig?.items || []).filter(item => item.enabled !== false).map((item, idx) => (
-              <button 
-                key={item.id} 
-                onClick={() => setActiveSection(item.id)}
-                className={`text-sm font-medium pb-3 whitespace-nowrap transition-colors cursor-pointer ${
-                  activeSection === item.id || (idx === 0 && !activeSection)
-                    ? 'font-semibold text-orange-600 border-b-2 border-orange-600' 
-                    : 'text-gray-700 hover:text-orange-600'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+            {(exam.menuConfig?.items || []).filter(item => item.enabled !== false).map((item, idx) => {
+              const enabledItems = (exam.menuConfig?.items || []).filter(i => i.enabled !== false);
+              const isActive = activeSection ? activeSection === item.id : (enabledItems[0]?.id === item.id);
+              return (
+                <button 
+                  key={item.id} 
+                  onClick={() => setActiveSection(item.id)}
+                  className={`text-sm font-medium pb-3 whitespace-nowrap transition-colors cursor-pointer ${
+                    isActive
+                      ? 'font-semibold text-orange-600 border-b-2 border-orange-600' 
+                      : 'text-gray-700 hover:text-orange-600'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
             {/* Fallback if no menu items from backend */}
             {(!exam.menuConfig?.items || exam.menuConfig.items.length === 0) && (
               <>
