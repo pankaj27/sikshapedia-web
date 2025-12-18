@@ -3039,11 +3039,13 @@ const ExamDetailForm = () => {
               <input type="number" name="total_seats" value={formData.total_seats} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1">Official Website</label>
               <input type="url" name="official_website" value={formData.official_website} onChange={handleChange} placeholder="https://..." className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
-            <div className="flex items-center pt-6">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="is_popular" checked={formData.is_popular} onChange={handleChange} className="w-5 h-5 text-indigo-600 rounded" />
-                <span className="text-sm font-medium text-gray-700">Mark as Popular</span>
-              </label>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Difficulty Level</label>
+              <select name="difficulty_level" value={formData.difficulty_level} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+                <option value="Very Hard">Very Hard</option>
+              </select>
             </div>
           </div>
         </CollapsibleSection>
