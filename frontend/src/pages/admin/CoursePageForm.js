@@ -486,7 +486,7 @@ const CoursePageForm = () => {
               {/* Sidebar CTA */}
               <div className="bg-white rounded-xl shadow-sm border p-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-4">Sidebar CTA</h2>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                     <input
@@ -511,6 +511,16 @@ const CoursePageForm = () => {
                       type="text"
                       value={settings.sidebar_cta_button}
                       onChange={(e) => handleChange('sidebar_cta_button', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Button Link</label>
+                    <input
+                      type="url"
+                      value={settings.sidebar_cta_link || ''}
+                      onChange={(e) => handleChange('sidebar_cta_link', e.target.value)}
+                      placeholder="https://example.com/counselling"
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                     />
                   </div>
