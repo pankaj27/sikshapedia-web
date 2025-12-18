@@ -156,6 +156,19 @@ const ExamPage = () => {
         </div>
       </div>
 
+      {/* Featured Colleges for Exam Preparation */}
+      <div className="container mx-auto px-8 py-4">
+        <FeaturedSponsoredSection 
+          placementId="exam_listing_featured"
+          title="Featured Colleges for Exam Preparation"
+          subtitle="Sponsored colleges with excellent exam results"
+          bgColor="from-red-50 via-rose-50 to-pink-50"
+          headerColor="from-red-500 to-rose-500"
+          linkColor="text-red-600"
+          viewAllLink="/india-colleges"
+        />
+      </div>
+
       {/* Main Content - More Compact */}
       <div className="container mx-auto px-8 py-5">
         {/* Sponsor Ad - Content Top */}
