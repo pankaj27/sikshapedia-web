@@ -709,6 +709,24 @@ const DynamicListingPage = () => {
     }, 300);
   }, [loadingMore, hasMore, pagination.page, pagination.limit, allInstitutionsData]);
   
+  // Infinite scroll observer - must be after loadMore is defined
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading && !loadingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+    
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, loadMore]);
+  
   // Slug mappings for Type and Accreditation
   const TYPE_TO_SLUG = {
     'Government': 'government',
