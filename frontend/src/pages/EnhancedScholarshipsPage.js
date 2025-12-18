@@ -49,10 +49,13 @@ const ScholarshipsPage = () => {
   const fetchScholarships = async () => {
     try {
       const response = await api.get('/scholarships');
-      setScholarships(response.data);
-      setFilteredScholarships(response.data);
+      const data = Array.isArray(response.data) ? response.data : [];
+      setScholarships(data);
+      setFilteredScholarships(data);
     } catch (error) {
       console.error('Error fetching scholarships:', error);
+      setScholarships([]);
+      setFilteredScholarships([]);
     } finally {
       setLoading(false);
     }
