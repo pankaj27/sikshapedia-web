@@ -539,6 +539,150 @@ const CourseListingSettings = () => {
             </div>
           )}
 
+          {/* Trending & Stats Tab */}
+          {activeTab === 'trending' && (
+            <>
+              {/* Trending Section Header */}
+              <div className="bg-white rounded-xl shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <FiBarChart2 className="text-yellow-600" /> Trending Section Header
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Badge Text</label>
+                    <input
+                      type="text"
+                      value={settings.trending_badge || '🔥 TRENDING NOW'}
+                      onChange={(e) => handleChange('trending_badge', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="🔥 TRENDING NOW"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Section Title</label>
+                    <input
+                      type="text"
+                      value={settings.trending_title || 'High-Demand Courses'}
+                      onChange={(e) => handleChange('trending_title', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="High-Demand Courses"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={settings.trending_subtitle || ''}
+                      onChange={(e) => handleChange('trending_subtitle', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="Courses with the highest career growth..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Trending Courses */}
+              <div className="bg-white rounded-xl shadow-sm border p-6 mt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                    🔥 Trending Courses
+                  </h2>
+                  <Button variant="outline" size="sm" onClick={addTrendingCourse}>
+                    <FiPlus className="w-4 h-4 mr-1" /> Add Course
+                  </Button>
+                </div>
+                <p className="text-sm text-gray-500 mb-4">Add high-demand/trending courses that appear in the dark section</p>
+                <div className="space-y-3">
+                  {(settings.trending_courses || []).map((course, index) => (
+                    <div key={index} className="flex gap-3 items-center bg-gray-50 rounded-lg p-3">
+                      <input
+                        type="text"
+                        value={course.icon || '📊'}
+                        onChange={(e) => updateTrendingCourse(index, 'icon', e.target.value)}
+                        className="w-16 border border-gray-300 rounded px-2 py-2 text-center text-xl"
+                        placeholder="📊"
+                      />
+                      <input
+                        type="text"
+                        value={course.name}
+                        onChange={(e) => updateTrendingCourse(index, 'name', e.target.value)}
+                        className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm"
+                        placeholder="Course name (e.g., Data Science)"
+                      />
+                      <input
+                        type="text"
+                        value={course.growth || '+0%'}
+                        onChange={(e) => updateTrendingCourse(index, 'growth', e.target.value)}
+                        className="w-20 border border-gray-300 rounded px-3 py-2 text-sm text-center"
+                        placeholder="+45%"
+                      />
+                      <input
+                        type="text"
+                        value={course.link || ''}
+                        onChange={(e) => updateTrendingCourse(index, 'link', e.target.value)}
+                        className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm"
+                        placeholder="/courses/search?q=Data%20Science"
+                      />
+                      <button onClick={() => removeTrendingCourse(index)} className="text-red-500 hover:bg-red-50 p-2 rounded">
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Stats */}
+              <div className="bg-white rounded-xl shadow-sm border p-6 mt-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  📊 Quick Stats (Orange Bar)
+                </h2>
+                <p className="text-sm text-gray-500 mb-4">These stats appear in the orange statistics bar below trending section</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Total Courses</label>
+                    <input
+                      type="text"
+                      value={settings.stats_courses || '10,000+'}
+                      onChange={(e) => handleChange('stats_courses', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="10,000+"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Total Colleges</label>
+                    <input
+                      type="text"
+                      value={settings.stats_colleges || '5,000+'}
+                      onChange={(e) => handleChange('stats_colleges', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="5,000+"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Total Streams</label>
+                    <input
+                      type="text"
+                      value={settings.stats_streams || '50+'}
+                      onChange={(e) => handleChange('stats_streams', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="50+"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Total Students</label>
+                    <input
+                      type="text"
+                      value={settings.stats_students || '2M+'}
+                      onChange={(e) => handleChange('stats_students', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="2M+"
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
           {/* SEO Tab */}
           {activeTab === 'seo' && (
             <div className="bg-white rounded-xl shadow-sm border p-6">
