@@ -210,18 +210,6 @@ const ExamPage = () => {
                   <div className="text-indigo-200 text-xs">{stat.label}</div>
                 </div>
               ))}
-              <div className="text-center">
-                <div className="text-2xl font-bold">50L+</div>
-                <div className="text-indigo-200 text-xs">Aspirants</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">5000+</div>
-                <div className="text-indigo-200 text-xs">Colleges</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">24</div>
-                <div className="text-indigo-200 text-xs">Categories</div>
-              </div>
             </div>
           </div>
         </div>
