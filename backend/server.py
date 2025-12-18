@@ -446,10 +446,14 @@ class College(BaseModel):
     is_verified: bool = False  # Verified institution badge
     is_preferred: bool = False  # Preferred/Featured badge
     is_featured: bool = False  # Featured badge
+    featured_at: Optional[datetime] = None  # When marked as featured (for priority sorting)
+    featured_priority_months: int = 2  # How many months to keep priority (default 2)
     is_trending: bool = False  # Trending badge
     is_top_rated: bool = False  # Top rated badge
     is_sponsored: bool = False  # Sponsored badge
     is_admission_open: bool = False  # Admission open badge
+    admission_open_at: Optional[datetime] = None  # When marked as admission open (for priority sorting)
+    admission_open_priority_months: int = 2  # How many months to keep priority (default 2)
     admission_deadline: Optional[str] = None  # Admission deadline date
     badge_text: Optional[str] = None  # Custom badge text (e.g., "Top Ranked", "New")
     
