@@ -1,99 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { FiCalendar, FiUser, FiShare2, FiDownload, FiThumbsUp } from 'react-icons/fi';
+import { FiCalendar, FiUser, FiShare2, FiEye, FiLoader, FiArrowLeft } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
+import api from '../api/axios';
 
 const NewsDetailPage = () => {
   const { id } = useParams();
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [article, setArticle] = useState(null);
+  const [relatedNews, setRelatedNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mock news data
-  const newsArticle = {
-    id: 1,
-    title: 'JEE Main 2025 Session 1 Exam Analysis - Live Updates',
-    category: 'Exam Analysis',
-    publishDate: 'Jan 24, 2025',
-    author: {
-      name: 'Shivam Yadav',
-      designation: 'Content Writer | Engineering Expert',
-      image: 'https://via.placeholder.com/50'
-    },
-    featuredImage: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop',
-    summary: 'The JEE Main 2025 Session 1 exam was conducted on January 24, 2025 in CBT mode. Get complete exam analysis with section-wise difficulty, good attempts, and expected cutoff.',
-    content: `
-The JEE Main 2025 Session 1 is scheduled on 24th January 2025 in **CBT Mode in two slots: 9:00 AM to 12:00 PM and 3:00 PM to 6:00 PM.** The **JEE Main 2025 Session 1 Exam Analysis Live Updates** will be provided here, based on student feedback and expert insights.
+  useEffect(() => {
+    fetchArticle();
+  }, [id]);
 
-Through this analysis, candidates can get insights into the **overall difficulty level, section-wise weightage, number of questions, and high-scoring topics** in the exam.
-
-The **JEE Main 2025 Session 1 will have 90 questions divided into 3 sections**: Physics, Chemistry, and Mathematics in 3 hours, **with overall difficulty ranging from Moderate to Difficult.**
-    `,
-    
-    tables: {
-      overallAnalysis: {
-        title: 'JEE Main 2025 Session 1 Overall Exam Analysis',
-        data: [
-          { particular: 'Number of Questions', value: '90' },
-          { particular: 'Total Marks', value: '300' },
-          { particular: 'Overall Difficulty', value: 'Moderate to Difficult' },
-          { particular: 'Difficulty Level of Physics', value: 'Moderate' },
-          { particular: 'Difficulty Level of Chemistry', value: 'Easy to Moderate' },
-          { particular: 'Difficulty Level of Mathematics', value: 'Difficult' },
-          { particular: 'Good Attempt (Overall)', value: '65-75 questions' }
-        ]
-      },
-      sectionWise: {
-        title: 'JEE Main 2025 Section-wise Exam Analysis',
-        columns: ['Section', 'Difficulty', 'Good Attempts', 'Highlights'],
-        data: [
-          {
-            section: 'Physics (30 Q)',
-            difficulty: 'Moderate',
-            goodAttempts: '20-24',
-            highlights: 'Numerical value questions were calculation-heavy; Theory-based questions were manageable'
-          },
-          {
-            section: 'Chemistry (30 Q)',
-            difficulty: 'Easy-Moderate',
-            goodAttempts: '23-27',
-            highlights: 'Organic chemistry had more weightage; Inorganic was NCERT-based'
-          },
-          {
-            section: 'Mathematics (30 Q)',
-            difficulty: 'Difficult',
-            goodAttempts: '18-22',
-            highlights: 'Calculus and coordinate geometry were tricky; Algebra was lengthy'
-          }
-        ]
+  const fetchArticle = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Fetch the news article by slug or id
+      const response = await api.get(`/news/${id}`);
+      setArticle(response.data);
+      
+      // Fetch related news (same category)
+      if (response.data?.category) {
+        const relatedResponse = await api.get(`/news?category=${response.data.category}&limit=5`);
+        // Filter out the current article
+        const filtered = (relatedResponse.data || []).filter(n => n.id !== response.data.id && n.slug !== id);
+        setRelatedNews(filtered.slice(0, 4));
       }
-    },
-    
-    memoryBasedQuestions: [
-      { section: 'Physics', questions: ['Photoelectric Effect numerical', 'Circular Motion problems', 'Thermodynamics - Heat Engine efficiency', 'Electromagnetic Induction - Faraday\'s Law'] },
-      { section: 'Chemistry', questions: ['Aldol Condensation mechanism', 'Periodic table trends', 'Chemical Bonding - Hybridization', 'Electrochemistry - Nernst Equation'] },
-      { section: 'Mathematics', questions: ['Definite Integration', 'Vector 3D Geometry', 'Probability - Conditional', 'Complex Numbers'] }
-    ],
-    
-    relatedArticles: [
-      { title: 'JEE Main 2025 Answer Key', link: '/news/jee-main-answer-key' },
-      { title: 'JEE Main 2025 Result Date', link: '/news/jee-main-result' },
-      { title: 'JEE Main 2025 Cutoff', link: '/news/jee-main-cutoff' }
-    ],
-    
-    faqs: [
-      {
-        question: 'What was the overall difficulty of JEE Main 2025 Session 1?',
-        answer: 'The overall difficulty of JEE Main 2025 Session 1 was Moderate to Difficult, with Mathematics being the toughest section.'
-      },
-      {
-        question: 'How many questions should I have attempted to get a good percentile?',
-        answer: 'Attempting 65-75 questions with good accuracy can help you secure above 95 percentile.'
-      },
-      {
-        question: 'Which section was the easiest in JEE Main 2025?',
-        answer: 'Chemistry was relatively easier compared to Physics and Mathematics, with most questions being NCERT-based.'
-      }
-    ]
+    } catch (err) {
+      console.error('Error fetching article:', err);
+      setError('Failed to load article. It may not exist or has been removed.');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  const handleShare = (platform) => {
+    const url = window.location.href;
+    const title = article?.title || '';
+    
+    const shareUrls = {
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`
+    };
+    
+    if (shareUrls[platform]) {
+      window.open(shareUrls[platform], '_blank', 'width=600,height=400');
+    }
+    setShowShareMenu(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <FiLoader className="w-8 h-8 animate-spin text-orange-500" />
+        <span className="ml-2 text-gray-600">Loading article...</span>
+      </div>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Article Not Found</h1>
+          <p className="text-gray-600 mb-6">{error || 'The article you are looking for does not exist.'}</p>
+          <Link to="/news">
+            <Button className="bg-orange-500 hover:bg-orange-600">
+              <FiArrowLeft className="mr-2" /> Back to News
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -105,7 +97,7 @@ The **JEE Main 2025 Session 1 will have 90 questions divided into 3 sections**: 
             <span>/</span>
             <Link to="/news" className="hover:text-orange-600">News</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">{newsArticle.category}</span>
+            <span className="text-gray-900 font-medium">{article.category}</span>
           </div>
         </div>
       </div>
@@ -115,25 +107,37 @@ The **JEE Main 2025 Session 1 will have 90 questions divided into 3 sections**: 
         <div className="container mx-auto px-6 py-6">
           <div className="max-w-4xl">
             <span className="inline-block px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full mb-3">
-              {newsArticle.category}
+              {article.category}
             </span>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{newsArticle.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{article.title}</h1>
             
             {/* Author Info */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <img src={newsArticle.author.image} alt={newsArticle.author.name} className="w-12 h-12 rounded-full" />
+                {article.author_image ? (
+                  <img src={article.author_image} alt={article.author} className="w-12 h-12 rounded-full object-cover" />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+                    <FiUser className="w-6 h-6 text-orange-500" />
+                  </div>
+                )}
                 <div>
-                  <Link to="#" className="font-semibold text-gray-900 hover:text-orange-600">{newsArticle.author.name}</Link>
-                  <p className="text-sm text-gray-600">{newsArticle.author.designation}</p>
+                  <p className="font-semibold text-gray-900">{article.author}</p>
+                  <p className="text-sm text-gray-600">Content Writer</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <FiCalendar size={16} />
-                  <span>Updated on - {newsArticle.publishDate}</span>
+                  <span>Updated on - {formatDate(article.updated_at || article.published_at)}</span>
                 </div>
+                {article.views > 0 && (
+                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <FiEye size={16} />
+                    <span>{article.views} views</span>
+                  </div>
+                )}
                 <div className="relative">
                   <Button
                     variant="outline"
@@ -146,10 +150,10 @@ The **JEE Main 2025 Session 1 will have 90 questions divided into 3 sections**: 
                   </Button>
                   {showShareMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border p-2 z-50">
-                      <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">Facebook</button>
-                      <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">Twitter</button>
-                      <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">LinkedIn</button>
-                      <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">WhatsApp</button>
+                      <button onClick={() => handleShare('facebook')} className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">Facebook</button>
+                      <button onClick={() => handleShare('twitter')} className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">Twitter</button>
+                      <button onClick={() => handleShare('linkedin')} className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">LinkedIn</button>
+                      <button onClick={() => handleShare('whatsapp')} className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm">WhatsApp</button>
                     </div>
                   )}
                 </div>
@@ -164,221 +168,137 @@ The **JEE Main 2025 Session 1 will have 90 questions divided into 3 sections**: 
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Featured Image */}
-            <img
-              src={newsArticle.featuredImage}
-              alt={newsArticle.title}
-              className="w-full h-96 object-cover rounded-lg shadow-md mb-6"
-            />
+            {article.featured_image && (
+              <img
+                src={article.featured_image}
+                alt={article.title}
+                className="w-full h-64 md:h-96 object-cover rounded-lg shadow-md mb-6"
+              />
+            )}
 
             {/* Summary */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
-              <p className="text-gray-800 leading-relaxed">{newsArticle.summary}</p>
-            </div>
+            {article.summary && (
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                <p className="text-gray-800 leading-relaxed">{article.summary}</p>
+              </div>
+            )}
 
             {/* Article Content */}
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: newsArticle.content.replace(/\n/g, '<br/>') }} />
+              <div 
+                className="prose max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-orange-600"
+                dangerouslySetInnerHTML={{ __html: article.content || '' }} 
+              />
             </div>
 
-            {/* Download Button */}
-            <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-lg p-6 text-center text-white mb-6">
-              <h3 className="text-xl font-bold mb-2">Download Question Paper PDF</h3>
-              <p className="mb-4 opacity-90">Get complete question paper with solutions</p>
-              <Button className="bg-white text-orange-600 hover:bg-gray-100">
-                <FiDownload className="mr-2" />
-                Download PDF
-              </Button>
-            </div>
-
-            {/* Overall Analysis Table */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3">
-                <h2 className="text-xl font-bold text-white">{newsArticle.tables.overallAnalysis.title}</h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <tbody className="divide-y divide-gray-200">
-                    {newsArticle.tables.overallAnalysis.data.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50">
-                        <td className="px-6 py-3 font-semibold text-gray-800">{row.particular}</td>
-                        <td className="px-6 py-3 text-gray-700">{row.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Section-wise Analysis Table */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-3">
-                <h2 className="text-xl font-bold text-white">{newsArticle.tables.sectionWise.title}</h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      {newsArticle.tables.sectionWise.columns.map((col, idx) => (
-                        <th key={idx} className="px-6 py-3 text-left text-sm font-bold text-gray-700">{col}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {newsArticle.tables.sectionWise.data.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50">
-                        <td className="px-6 py-3 font-semibold text-gray-800">{row.section}</td>
-                        <td className="px-6 py-3 text-gray-700">{row.difficulty}</td>
-                        <td className="px-6 py-3 text-gray-700">{row.goodAttempts}</td>
-                        <td className="px-6 py-3 text-sm text-gray-600">{row.highlights}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Memory-Based Questions */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h2 className="text-2xl font-bold mb-4">Memory-Based Questions</h2>
-              <div className="space-y-4">
-                {newsArticle.memoryBasedQuestions.map((item, idx) => (
-                  <div key={idx} className="border-l-4 border-orange-500 pl-4">
-                    <h3 className="font-bold text-lg mb-2">{item.section}</h3>
-                    <ul className="space-y-1 text-gray-700">
-                      {item.questions.map((q, qIdx) => (
-                        <li key={qIdx} className="flex items-start gap-2">
-                          <span className="text-orange-600 mt-1">•</span>
-                          <span>{q}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* FAQs */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-              <div className="space-y-4">
-                {newsArticle.faqs.map((faq, idx) => (
-                  <div key={idx} className="border-b pb-4 last:border-b-0">
-                    <h3 className="font-semibold text-lg text-gray-900 mb-2">{idx + 1}. {faq.question}</h3>
-                    <p className="text-gray-700">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Comments Section */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold mb-4">Comments (2)</h2>
-              
-              {/* Add Comment Form */}
-              <div className="mb-6 pb-6 border-b">
-                <h3 className="font-semibold mb-3">Leave a Comment</h3>
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <textarea
-                    placeholder="Write your comment here..."
-                    rows="4"
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  ></textarea>
-                  <Button className="bg-orange-500 hover:bg-orange-600">
-                    Post Comment
-                  </Button>
+            {/* Tags */}
+            {article.tags && article.tags.length > 0 && (
+              <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 className="font-bold text-gray-800 mb-3">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {article.tags.map((tag, idx) => (
+                    <Link
+                      key={idx}
+                      to={`/news?tag=${encodeURIComponent(tag)}`}
+                      className="px-3 py-1 bg-gray-100 hover:bg-orange-100 text-gray-700 hover:text-orange-600 rounded-full text-sm transition-colors"
+                    >
+                      #{tag}
+                    </Link>
+                  ))}
                 </div>
               </div>
+            )}
 
-              {/* Comments List */}
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <img src="https://via.placeholder.com/40" alt="User" className="w-10 h-10 rounded-full" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold">Rajesh Kumar</h4>
-                      <span className="text-xs text-gray-500">1 day ago</span>
-                    </div>
-                    <p className="text-gray-700 text-sm">Very helpful analysis! Mathematics was really tough this time.</p>
-                    <button className="flex items-center gap-1 text-xs text-gray-600 hover:text-orange-600 mt-2">
-                      <FiThumbsUp size={14} />
-                      Helpful (15)
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <img src="https://via.placeholder.com/40" alt="User" className="w-10 h-10 rounded-full" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold">Priya Singh</h4>
-                      <span className="text-xs text-gray-500">2 days ago</span>
-                    </div>
-                    <p className="text-gray-700 text-sm">Thanks for the detailed section-wise analysis!</p>
-                    <button className="flex items-center gap-1 text-xs text-gray-600 hover:text-orange-600 mt-2">
-                      <FiThumbsUp size={14} />
-                      Helpful (8)
-                    </button>
-                  </div>
-                </div>
-              </div>
+            {/* Back to News */}
+            <div className="flex justify-center">
+              <Link to="/news">
+                <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+                  <FiArrowLeft className="mr-2" /> Back to All News
+                </Button>
+              </Link>
             </div>
           </div>
 
           {/* Sidebar */}
           <aside className="lg:col-span-1 space-y-6">
-            {/* Table of Contents */}
-            <div className="bg-white rounded-lg shadow-md p-4 sticky top-20">
-              <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Table of Contents</h3>
-              <nav className="space-y-2 text-sm">
-                <a href="#overview" className="block text-blue-600 hover:text-orange-600">Overall Analysis</a>
-                <a href="#section" className="block text-blue-600 hover:text-orange-600">Section-wise Analysis</a>
-                <a href="#memory" className="block text-blue-600 hover:text-orange-600">Memory-Based Questions</a>
-                <a href="#faq" className="block text-blue-600 hover:text-orange-600">FAQs</a>
-              </nav>
-            </div>
-
             {/* Related Articles */}
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h3 className="font-bold text-gray-800 mb-3">Related Articles</h3>
-              <div className="space-y-3">
-                {newsArticle.relatedArticles.map((article, idx) => (
-                  <Link
-                    key={idx}
-                    to={article.link}
-                    className="block p-3 border rounded hover:bg-orange-50 hover:border-orange-500 transition-colors"
-                  >
-                    <p className="text-sm font-medium text-gray-800">{article.title}</p>
-                  </Link>
-                ))}
+            {relatedNews.length > 0 && (
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <h3 className="font-bold text-gray-800 mb-3">Related Articles</h3>
+                <div className="space-y-3">
+                  {relatedNews.map((news, idx) => (
+                    <Link
+                      key={idx}
+                      to={`/news/${news.slug || news.id}`}
+                      className="block p-3 border rounded hover:bg-orange-50 hover:border-orange-500 transition-colors"
+                    >
+                      <p className="text-sm font-medium text-gray-800 line-clamp-2">{news.title}</p>
+                      <p className="text-xs text-gray-500 mt-1">{formatDate(news.published_at)}</p>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Advertisement */}
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-md p-6 text-white text-center">
-              <h3 className="font-bold mb-2">Predict Your College</h3>
-              <p className="text-sm mb-3 opacity-90">Based on your JEE rank</p>
-              <Button className="bg-white text-purple-600 hover:bg-gray-100 w-full">
-                Predict Now
-              </Button>
-            </div>
+            {/* Related Exams */}
+            {article.related_exams && article.related_exams.length > 0 && (
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <h3 className="font-bold text-gray-800 mb-3">Related Exams</h3>
+                <div className="space-y-2">
+                  {article.related_exams.map((exam, idx) => (
+                    <Link
+                      key={idx}
+                      to={`/exams/${exam}`}
+                      className="block px-3 py-2 bg-gray-50 hover:bg-orange-50 rounded text-sm text-gray-700 hover:text-orange-600 transition-colors"
+                    >
+                      {exam}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Related Colleges */}
+            {article.related_colleges && article.related_colleges.length > 0 && (
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <h3 className="font-bold text-gray-800 mb-3">Related Colleges</h3>
+                <div className="space-y-2">
+                  {article.related_colleges.map((college, idx) => (
+                    <Link
+                      key={idx}
+                      to={`/colleges/${college}`}
+                      className="block px-3 py-2 bg-gray-50 hover:bg-orange-50 rounded text-sm text-gray-700 hover:text-orange-600 transition-colors"
+                    >
+                      {college}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Newsletter */}
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h3 className="font-bold text-gray-800 mb-2">Subscribe to Newsletter</h3>
-              <p className="text-sm text-gray-600 mb-3">Get latest exam updates</p>
+            <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-lg shadow-md p-6 text-white">
+              <h3 className="font-bold mb-2">Subscribe to Newsletter</h3>
+              <p className="text-sm mb-3 opacity-90">Get latest news and updates</p>
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full px-3 py-2 border rounded-lg text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 rounded-lg text-sm text-gray-900 mb-2 focus:outline-none focus:ring-2 focus:ring-white"
               />
-              <Button className="w-full bg-orange-500 hover:bg-orange-600 text-sm">
+              <Button className="w-full bg-white text-orange-600 hover:bg-gray-100 text-sm">
                 Subscribe
               </Button>
+            </div>
+
+            {/* Advertisement Placeholder */}
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-md p-6 text-white text-center">
+              <h3 className="font-bold mb-2">Explore Colleges</h3>
+              <p className="text-sm mb-3 opacity-90">Find the best college for you</p>
+              <Link to="/colleges">
+                <Button className="bg-white text-purple-600 hover:bg-gray-100 w-full">
+                  Browse Colleges
+                </Button>
+              </Link>
             </div>
           </aside>
         </div>
