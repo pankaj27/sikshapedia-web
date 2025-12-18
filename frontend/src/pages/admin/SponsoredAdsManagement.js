@@ -212,7 +212,20 @@ const SponsoredAdsManagement = () => {
     }
   };
 
-  const getCurrentPlacement = () => AD_PLACEMENTS.find(p => p.id === activeTab);
+  const getCurrentPlacement = () => {
+    // Check if it's a custom placement first
+    const customPlacement = customPlacements.find(p => p.id === activeTab);
+    if (customPlacement) {
+      const sectionType = SECTION_TYPES.find(s => s.id === customPlacement.sectionType);
+      return {
+        ...customPlacement,
+        icon: sectionType?.icon || FiLink,
+        color: sectionType?.color || 'from-gray-500 to-gray-600',
+        description: `Custom ads for ${customPlacement.url}`
+      };
+    }
+    return AD_PLACEMENTS.find(p => p.id === activeTab);
+  };
   
   const getCurrentAds = () => adsConfig[activeTab] || [];
 
