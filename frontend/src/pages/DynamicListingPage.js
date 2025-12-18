@@ -572,17 +572,20 @@ const DynamicListingPage = () => {
     fetchAdmissionOpenColleges();
   }, [location.pathname, filters.search, sortBy]);
   
-  // Fetch featured/sponsored colleges (from admin-managed sponsored ads OR fallback to priority)
+  // Fetch featured/sponsored colleges (from admin-managed multi-placement ads)
   const fetchFeaturedColleges = async () => {
+    // Determine placement based on page type
+    const placementId = pageInfo.isSchools ? 'school_listing_featured' : 'college_listing_featured';
+    
     try {
-      // First try admin-managed sponsored ads
-      const response = await api.get('/sponsored-ads/featured-active?limit=6');
+      // First try admin-managed multi-placement sponsored ads
+      const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=6`);
       if (response.data && response.data.length > 0) {
         setFeaturedColleges(response.data);
         return;
       }
     } catch (error) {
-      console.error('Sponsored ads not available, using fallback:', error);
+      console.error('Multi-placement ads not available:', error);
     }
     
     // Fallback to priority-based or regular featured query
@@ -601,17 +604,20 @@ const DynamicListingPage = () => {
     }
   };
   
-  // Fetch admissions open colleges (from admin-managed sponsored ads OR fallback to priority)
+  // Fetch admissions open colleges (from admin-managed multi-placement ads)
   const fetchAdmissionOpenColleges = async () => {
+    // Determine placement based on page type
+    const placementId = pageInfo.isSchools ? 'school_listing_admission' : 'college_listing_admission';
+    
     try {
-      // First try admin-managed sponsored ads
-      const response = await api.get('/sponsored-ads/admission-open-active?limit=6');
+      // First try admin-managed multi-placement sponsored ads
+      const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=6`);
       if (response.data && response.data.length > 0) {
         setAdmissionOpenColleges(response.data);
         return;
       }
     } catch (error) {
-      console.error('Sponsored ads not available, using fallback:', error);
+      console.error('Multi-placement ads not available:', error);
     }
     
     // Fallback to priority-based or regular admission open query
