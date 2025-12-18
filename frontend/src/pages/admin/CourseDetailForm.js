@@ -1338,6 +1338,187 @@ const CourseDetailForm = () => {
           </div>
         </div>
 
+        {/* Syllabus - Semester-wise */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">📚 Syllabus (Semester-wise)</h2>
+          <p className="text-sm text-gray-500 mb-4">Add semester-wise syllabus with subjects. This will appear on the course detail page.</p>
+          
+          <div className="space-y-4">
+            {(formData.syllabus || []).map((sem, semIndex) => (
+              <div key={semIndex} className="border rounded-lg p-4 bg-gray-50">
+                <div className="flex justify-between items-center mb-3">
+                  <input
+                    type="text"
+                    value={sem.semester || `Semester ${semIndex + 1}`}
+                    onChange={(e) => {
+                      const newSyllabus = [...(formData.syllabus || [])];
+                      newSyllabus[semIndex].semester = e.target.value;
+                      setFormData({...formData, syllabus: newSyllabus});
+                    }}
+                    className="font-semibold bg-white border rounded px-3 py-1"
+                    placeholder="Semester 1"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setFormData({...formData, syllabus: (formData.syllabus || []).filter((_, i) => i !== semIndex)});
+                    }}
+                    className="text-red-500"
+                  >
+                    <FiTrash2 size={14} />
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  {(sem.subjects || []).map((subject, subIndex) => (
+                    <div key={subIndex} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={subject}
+                        onChange={(e) => {
+                          const newSyllabus = [...(formData.syllabus || [])];
+                          newSyllabus[semIndex].subjects[subIndex] = e.target.value;
+                          setFormData({...formData, syllabus: newSyllabus});
+                        }}
+                        className="flex-1 border rounded px-3 py-1.5 text-sm"
+                        placeholder="Subject name"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const newSyllabus = [...(formData.syllabus || [])];
+                          newSyllabus[semIndex].subjects = newSyllabus[semIndex].subjects.filter((_, i) => i !== subIndex);
+                          setFormData({...formData, syllabus: newSyllabus});
+                        }}
+                        className="text-red-400"
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newSyllabus = [...(formData.syllabus || [])];
+                      if (!newSyllabus[semIndex].subjects) newSyllabus[semIndex].subjects = [];
+                      newSyllabus[semIndex].subjects.push('');
+                      setFormData({...formData, syllabus: newSyllabus});
+                    }}
+                    className="text-blue-600"
+                  >
+                    + Add Subject
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                const newSyllabus = [...(formData.syllabus || [])];
+                newSyllabus.push({ semester: `Semester ${newSyllabus.length + 1}`, subjects: [''] });
+                setFormData({...formData, syllabus: newSyllabus});
+              }}
+              className="w-full border-dashed"
+            >
+              + Add Semester
+            </Button>
+          </div>
+        </div>
+
+        {/* Highlights/Badges */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">✨ Highlights / Badges</h2>
+          <p className="text-sm text-gray-500 mb-4">Add course highlights that appear as badges (e.g., "AICTE Approved", "100% Placement")</p>
+          
+          <div className="space-y-2">
+            {(formData.highlights || []).map((highlight, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  value={highlight}
+                  onChange={(e) => {
+                    const newHighlights = [...(formData.highlights || [])];
+                    newHighlights[index] = e.target.value;
+                    setFormData({...formData, highlights: newHighlights});
+                  }}
+                  placeholder="e.g., AICTE Approved, 100% Placement"
+                  className="flex-1 border rounded px-3 py-2"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setFormData({...formData, highlights: (formData.highlights || []).filter((_, i) => i !== index)});
+                  }}
+                  className="text-red-500"
+                >
+                  <FiTrash2 size={16} />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData({...formData, highlights: [...(formData.highlights || []), '']});
+              }}
+              className="w-full border-dashed"
+            >
+              + Add Highlight
+            </Button>
+          </div>
+        </div>
+
+        {/* Related Courses */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-4">🔗 Related Courses</h2>
+          <p className="text-sm text-gray-500 mb-4">Add related course names that will appear in sidebar</p>
+          
+          <div className="space-y-2">
+            {(formData.related_courses || []).map((course, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  value={course}
+                  onChange={(e) => {
+                    const newCourses = [...(formData.related_courses || [])];
+                    newCourses[index] = e.target.value;
+                    setFormData({...formData, related_courses: newCourses});
+                  }}
+                  placeholder="e.g., M.Tech, MBA, MCA"
+                  className="flex-1 border rounded px-3 py-2"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setFormData({...formData, related_courses: (formData.related_courses || []).filter((_, i) => i !== index)});
+                  }}
+                  className="text-red-500"
+                >
+                  <FiTrash2 size={16} />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData({...formData, related_courses: [...(formData.related_courses || []), '']});
+              }}
+              className="w-full border-dashed"
+            >
+              + Add Related Course
+            </Button>
+          </div>
+        </div>
+
         {/* Arrays - Subjects, Skills, Jobs */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Course Components</h2>
