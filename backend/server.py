@@ -375,9 +375,13 @@ class CourseDetail(BaseModel):
     entrance_exams: List[str] = []  # Exam IDs
     
     # Curriculum
-    syllabus: Optional[str] = None
+    syllabus: List[Dict] = []  # [{semester: str, subjects: [str]}]
     subjects: List[str] = []
     specializations: List[str] = []
+    
+    # Highlights & Related
+    highlights: List[str] = []  # Course badges/highlights
+    related_courses: List[str] = []  # Related course names
     
     # Career
     career_options: List[str] = []
