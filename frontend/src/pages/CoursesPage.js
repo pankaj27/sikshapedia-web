@@ -197,9 +197,6 @@ const CoursesPage = () => {
     { name: 'Machine Learning', growth: '+58%', icon: '🧠' },
   ];
 
-  // Helper component for icon
-  const HiOutlineCpu = HiOutlineDesktopComputer;
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Gradient */}
