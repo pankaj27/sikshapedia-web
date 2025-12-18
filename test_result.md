@@ -442,3 +442,21 @@ agent_communication:
 - Admin Email: admin@admissionbuddy.co
 - Admin Password: admin123
 - Test URL: http://localhost:3000/admin/exams-detail/new
+
+## Widgets Feature Added
+
+### New Feature: Sidebar Widgets for Menu Items
+- Location: ExamDetailForm.js Menu Configuration section
+- Each menu item now has a "🧩 Sidebar Widgets" section with:
+  1. 📊 Quick Facts - Shows exam stats (enabled by default)
+  2. 📑 Quick Navigation - Menu links sidebar (enabled by default)
+  3. 📞 Contact CTA - Need Help? box (enabled by default with customizable title/subtitle)
+  4. 🔗 Related Exams - Links to other exams (disabled by default, can add exam links)
+  5. 📥 Download Widget - Downloadable files with name, URL, and type (disabled by default)
+
+### Test Requirements for Widgets
+1. Verify "🧩 Sidebar Widgets" section appears in menu item content editor
+2. Verify checkboxes for Quick Facts, Quick Navigation are checked by default
+3. Verify Contact CTA is checked and shows title/subtitle fields
+4. Verify Related Exams has "+ Add Exam" button
+5. Verify Download Widget has "+ Add File" button with file type dropdown
