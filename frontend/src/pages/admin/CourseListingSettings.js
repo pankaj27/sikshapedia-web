@@ -198,6 +198,27 @@ const CourseListingSettings = () => {
     }));
   };
 
+  // Trending Courses
+  const addTrendingCourse = () => {
+    setSettings(prev => ({
+      ...prev,
+      trending_courses: [...(prev.trending_courses || []), { name: '', growth: '+0%', icon: '📊', link: '' }]
+    }));
+  };
+
+  const updateTrendingCourse = (index, field, value) => {
+    const newCourses = [...(settings.trending_courses || [])];
+    newCourses[index] = { ...newCourses[index], [field]: value };
+    setSettings(prev => ({ ...prev, trending_courses: newCourses }));
+  };
+
+  const removeTrendingCourse = (index) => {
+    setSettings(prev => ({
+      ...prev,
+      trending_courses: (prev.trending_courses || []).filter((_, i) => i !== index)
+    }));
+  };
+
   const colorOptions = [
     'bg-blue-500', 'bg-purple-500', 'bg-red-500', 'bg-green-500', 
     'bg-yellow-500', 'bg-pink-500', 'bg-indigo-500', 'bg-gray-600',
