@@ -4584,6 +4584,214 @@ async def update_blog_listing_settings(
 
 
 # ============================================
+# Loans Listing Page Settings
+# ============================================
+
+class LoansListingPageSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "loans-listing-page"
+    hero_title: str = "Education Loans"
+    hero_subtitle: str = "Find the best education loan options for your studies"
+    hero_bg_gradient: str = "from-blue-600 to-indigo-700"
+    stats: List[Dict[str, Any]] = []
+    loan_types: List[Dict[str, Any]] = []
+    show_calculator: bool = True
+    calculator_title: str = "EMI Calculator"
+    show_eligibility_checker: bool = True
+    eligibility_title: str = "Check Your Eligibility"
+    cta_title: str = "Need Help Choosing?"
+    cta_subtitle: str = "Our experts can help you find the right loan"
+    cta_button_text: str = "Get Free Consultation"
+    cta_button_link: str = "/contact"
+    meta_title: str = "Education Loans - Compare & Apply | Admissionbuddy"
+    meta_description: str = "Compare education loans from top banks."
+    meta_keywords: List[str] = []
+    faqs: List[Dict[str, Any]] = []
+    updated_at: Optional[datetime] = None
+
+@api_router.get("/loans-listing-settings")
+async def get_loans_listing_settings():
+    settings = await db.loans_listing_settings.find_one({"id": "loans-listing-page"}, {"_id": 0})
+    if not settings:
+        return LoansListingPageSettings().model_dump()
+    return settings
+
+@api_router.put("/loans-listing-settings")
+async def update_loans_listing_settings(settings: LoansListingPageSettings):
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.loans_listing_settings.update_one(
+        {"id": "loans-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return settings_dict
+
+
+# ============================================
+# Scholarships Listing Page Settings
+# ============================================
+
+class ScholarshipsListingPageSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "scholarships-listing-page"
+    hero_title: str = "Scholarships & Financial Aid"
+    hero_subtitle: str = "Find scholarships to fund your education dreams"
+    hero_bg_gradient: str = "from-green-600 to-teal-600"
+    stats: List[Dict[str, Any]] = []
+    scholarship_types: List[Dict[str, Any]] = []
+    education_levels: List[Dict[str, Any]] = []
+    show_deadline_filter: bool = True
+    show_amount_filter: bool = True
+    cta_title: str = "Need Help Finding Scholarships?"
+    cta_subtitle: str = "Our experts can guide you to the right opportunities"
+    cta_button_text: str = "Get Free Guidance"
+    cta_button_link: str = "/contact"
+    meta_title: str = "Scholarships 2025 - Find & Apply | Admissionbuddy"
+    meta_description: str = "Discover 500+ scholarships for Indian students."
+    meta_keywords: List[str] = []
+    faqs: List[Dict[str, Any]] = []
+    updated_at: Optional[datetime] = None
+
+@api_router.get("/scholarships-listing-settings")
+async def get_scholarships_listing_settings():
+    settings = await db.scholarships_listing_settings.find_one({"id": "scholarships-listing-page"}, {"_id": 0})
+    if not settings:
+        return ScholarshipsListingPageSettings().model_dump()
+    return settings
+
+@api_router.put("/scholarships-listing-settings")
+async def update_scholarships_listing_settings(settings: ScholarshipsListingPageSettings):
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.scholarships_listing_settings.update_one(
+        {"id": "scholarships-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return settings_dict
+
+
+# ============================================
+# Study Materials Listing Page Settings
+# ============================================
+
+class StudyMaterialsListingPageSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "study-materials-listing-page"
+    hero_title: str = "Study Materials"
+    hero_subtitle: str = "Free notes, sample papers, and mock tests"
+    hero_bg_gradient: str = "from-purple-600 to-indigo-700"
+    stats: List[Dict[str, Any]] = []
+    material_types: List[Dict[str, Any]] = []
+    exam_categories: List[Dict[str, Any]] = []
+    show_filters: bool = True
+    show_premium_badge: bool = True
+    premium_cta_text: str = "Unlock Premium Materials"
+    cta_title: str = "Need More Resources?"
+    cta_subtitle: str = "Get access to premium study materials"
+    cta_button_text: str = "Upgrade to Premium"
+    cta_button_link: str = "/premium"
+    meta_title: str = "Study Materials - Free Notes & Mock Tests | Admissionbuddy"
+    meta_description: str = "Download free study materials for competitive exams."
+    meta_keywords: List[str] = []
+    faqs: List[Dict[str, Any]] = []
+    updated_at: Optional[datetime] = None
+
+@api_router.get("/study-materials-listing-settings")
+async def get_study_materials_listing_settings():
+    settings = await db.study_materials_listing_settings.find_one({"id": "study-materials-listing-page"}, {"_id": 0})
+    if not settings:
+        return StudyMaterialsListingPageSettings().model_dump()
+    return settings
+
+@api_router.put("/study-materials-listing-settings")
+async def update_study_materials_listing_settings(settings: StudyMaterialsListingPageSettings):
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.study_materials_listing_settings.update_one(
+        {"id": "study-materials-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return settings_dict
+
+
+# ============================================
+# Study Materials CRUD
+# ============================================
+
+class StudyMaterial(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    slug: str
+    exam_name: str
+    subject: str
+    material_type: str  # Notes, Sample Paper, Previous Year, Mock Test, Video
+    description: str
+    file_url: Optional[str] = None
+    external_link: Optional[str] = None
+    thumbnail: Optional[str] = None
+    author: Optional[str] = None
+    pages: Optional[int] = None
+    duration: Optional[str] = None
+    downloads: int = 0
+    views: int = 0
+    is_premium: bool = False
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+@api_router.get("/study-materials")
+async def get_study_materials(
+    exam: Optional[str] = None,
+    material_type: Optional[str] = None,
+    subject: Optional[str] = None,
+    is_premium: Optional[bool] = None,
+    limit: int = 50
+):
+    query = {}
+    if exam:
+        query["exam_name"] = exam
+    if material_type:
+        query["material_type"] = material_type
+    if subject:
+        query["subject"] = subject
+    if is_premium is not None:
+        query["is_premium"] = is_premium
+    
+    materials = await db.study_materials.find(query, {"_id": 0}).limit(limit).to_list(limit)
+    return materials
+
+@api_router.get("/study-materials/{material_id}")
+async def get_study_material(material_id: str):
+    material = await db.study_materials.find_one({"id": material_id}, {"_id": 0})
+    if not material:
+        raise HTTPException(status_code=404, detail="Study material not found")
+    # Increment views
+    await db.study_materials.update_one({"id": material_id}, {"$inc": {"views": 1}})
+    return material
+
+@api_router.post("/study-materials")
+async def create_study_material(material: StudyMaterial):
+    material_dict = material.model_dump()
+    material_dict["created_at"] = material_dict["created_at"].isoformat()
+    await db.study_materials.insert_one(material_dict)
+    return material_dict
+
+@api_router.put("/study-materials/{material_id}")
+async def update_study_material(material_id: str, material: StudyMaterial):
+    material_dict = material.model_dump()
+    await db.study_materials.update_one({"id": material_id}, {"$set": material_dict})
+    return {"message": "Study material updated"}
+
+@api_router.delete("/study-materials/{material_id}")
+async def delete_study_material(material_id: str):
+    await db.study_materials.delete_one({"id": material_id})
+    return {"message": "Study material deleted"}
+
+
+# ============================================
 # Exam Routes
 # ============================================
 
