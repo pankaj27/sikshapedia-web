@@ -519,38 +519,67 @@ const CoursePageForm = () => {
 
           {/* SEO Tab */}
           {activeTab === 'seo' && (
-            <div className="bg-white rounded-xl shadow-sm border p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">SEO Settings</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
-                  <input
-                    type="text"
-                    value={settings.meta_title}
-                    onChange={(e) => handleChange('meta_title', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">{settings.meta_title?.length || 0}/60 characters</p>
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">SEO Settings</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
+                    <input
+                      type="text"
+                      value={settings.meta_title}
+                      onChange={(e) => handleChange('meta_title', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">{settings.meta_title?.length || 0}/60 characters</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                    <textarea
+                      value={settings.meta_description}
+                      onChange={(e) => handleChange('meta_description', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      rows="3"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">{settings.meta_description?.length || 0}/160 characters</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords (comma separated)</label>
+                    <input
+                      type="text"
+                      value={(settings.meta_keywords || []).join(', ')}
+                      onChange={(e) => handleChange('meta_keywords', e.target.value.split(',').map(k => k.trim()).filter(k => k))}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
+                      placeholder="engineering courses, b.tech, m.tech..."
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-                  <textarea
-                    value={settings.meta_description}
-                    onChange={(e) => handleChange('meta_description', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
-                    rows="3"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">{settings.meta_description?.length || 0}/160 characters</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords (comma separated)</label>
-                  <input
-                    type="text"
-                    value={(settings.meta_keywords || []).join(', ')}
-                    onChange={(e) => handleChange('meta_keywords', e.target.value.split(',').map(k => k.trim()).filter(k => k))}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5"
-                    placeholder="engineering courses, b.tech, m.tech..."
-                  />
+              </div>
+
+              {/* Additional Content Section */}
+              <div className="bg-white rounded-xl shadow-sm border p-6">
+                <h2 className="text-lg font-semibold text-gray-800 mb-4">Additional Content</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Intro Content (HTML) - Shows at top</label>
+                    <textarea
+                      value={settings.intro_content || ''}
+                      onChange={(e) => handleChange('intro_content', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 font-mono text-sm"
+                      rows="4"
+                      placeholder="<p>Introduction content...</p>"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Bottom Content (HTML) - Shows at bottom</label>
+                    <textarea
+                      value={settings.bottom_content || ''}
+                      onChange={(e) => handleChange('bottom_content', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 font-mono text-sm"
+                      rows="4"
+                      placeholder="<p>Bottom content...</p>"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
