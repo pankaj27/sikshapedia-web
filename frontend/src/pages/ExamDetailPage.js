@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
+import { SidebarSponsoredAd } from '../components/SponsoredAds';
 
 const ExamDetailPage = () => {
   const { id } = useParams();
