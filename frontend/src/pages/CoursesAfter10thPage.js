@@ -292,8 +292,18 @@ const CoursesAfter10thPage = () => {
                                       </span>
                                       <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 border border-green-200 rounded-full text-xs font-medium text-green-700">
                                         <FiBookOpen className="w-3 h-3" />
-                                        {course.mode}
+                                        {course.course_mode || course.mode || 'Full Time'}
                                       </span>
+                                      {course.degree_type && (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-50 border border-purple-200 rounded-full text-xs font-medium text-purple-700">
+                                          {course.degree_type}
+                                        </span>
+                                      )}
+                                      {course.average_fees && (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-full text-xs font-medium text-amber-700">
+                                          ₹{(course.average_fees / 1000).toFixed(0)}K/year
+                                        </span>
+                                      )}
                                     </div>
                                     {/* Quick Links */}
                                     <div className="flex flex-wrap items-center gap-3 mt-3">
