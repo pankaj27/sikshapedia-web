@@ -147,6 +147,7 @@ function App() {
             <Route path="/admin/exam-listing-settings" element={<ExamListingSettings />} />
             <Route path="/admin/course-listing-settings" element={<CourseListingSettings />} />
             <Route path="/admin/news-listing-settings" element={<NewsListingSettings />} />
+            <Route path="/admin/blog-listing-settings" element={<BlogListingSettings />} />
             <Route path="/admin/course-pages" element={<CoursePagesManagement />} />
             <Route path="/admin/course-pages/edit/:id" element={<CoursePageForm />} />
             <Route path="/admin/advertisements" element={<AdvertisementsManagement />} />
