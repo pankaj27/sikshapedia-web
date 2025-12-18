@@ -6198,15 +6198,24 @@ async def get_advertisement_reports(current_user: User = Depends(get_current_use
         start_date = ad.get('start_date')
         end_date = ad.get('end_date')
         
+        # Parse dates and ensure timezone awareness
         if isinstance(start_date, str):
-            start_date = datetime.fromisoformat(start_date)
+            start_date = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
         if isinstance(end_date, str):
-            end_date = datetime.fromisoformat(end_date)
+            end_date = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
         
-        is_currently_active = (
-            ad.get('is_active', False) and 
-            start_date <= now <= end_date
-        )
+        # Make dates timezone-aware if they aren't
+        if start_date and start_date.tzinfo is None:
+            start_date = start_date.replace(tzinfo=timezone.utc)
+        if end_date and end_date.tzinfo is None:
+            end_date = end_date.replace(tzinfo=timezone.utc)
+        
+        is_currently_active = False
+        if ad.get('is_active', False) and start_date and end_date:
+            try:
+                is_currently_active = start_date <= now <= end_date
+            except TypeError:
+                is_currently_active = False
         
         report_data.append({
             "id": ad.get('id'),
