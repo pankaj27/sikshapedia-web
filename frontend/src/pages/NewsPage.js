@@ -98,16 +98,17 @@ const NewsPage = () => {
     }
   };
 
-  // Big Stories - get top 5 news items
-  const bigStories = news.slice(0, 5).map(item => ({
+  // Big Stories - get top stories from news
+  const bigStoriesCount = settings?.big_stories_count || 5;
+  const bigStories = news.slice(0, bigStoriesCount).map(item => ({
     title: item.title,
-    date: item.published_date || item.date || new Date().toLocaleDateString()
+    date: item.published_date || item.date || new Date().toLocaleDateString(),
+    slug: item.slug || item.id
   }));
 
-  const trendingTags = [
-    'CAT 2025', 'JEE Main', 'NEET UG', 'GATE 2026', 'UPSC',
-    'IIT Admission', 'MBA Colleges', 'CUET', 'NTA', 'Engineering'
-  ];
+  // Trending tags from settings or defaults
+  const defaultTrendingTags = ['CAT 2025', 'JEE Main', 'NEET UG', 'GATE 2026', 'UPSC', 'IIT Admission', 'MBA Colleges', 'CUET', 'NTA', 'Engineering'];
+  const trendingTags = settings?.trending_tags || defaultTrendingTags;
 
   const filteredNews = activeCategory === 'all' 
     ? news 
