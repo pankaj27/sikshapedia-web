@@ -200,13 +200,16 @@ const ExamDetailPage = () => {
       eligibility: mockExam.examInfo?.eligibility || '10+2 with required subjects',
       officialWebsite: examFromApi.official_website || mockExam.examInfo?.officialWebsite || '#'
     },
-    keyHighlights: mockExam.keyHighlights || [
-      `${examFromApi.name} is conducted by ${examFromApi.conducting_body || 'the examining authority'}`,
-      examFromApi.exam_mode ? `Exam Mode: ${examFromApi.exam_mode}` : null,
-      examFromApi.exam_duration ? `Duration: ${examFromApi.exam_duration}` : null,
-      examFromApi.total_marks ? `Total Marks: ${examFromApi.total_marks}` : null,
-      examFromApi.num_questions ? `Total Questions: ${examFromApi.num_questions}` : null,
-    ].filter(Boolean),
+    // Use custom key_summary if available, otherwise auto-generate
+    keyHighlights: (examFromApi.key_summary && examFromApi.key_summary.length > 0) 
+      ? examFromApi.key_summary 
+      : (mockExam.keyHighlights || [
+          `${examFromApi.name} is conducted by ${examFromApi.conducting_body || 'the examining authority'}`,
+          examFromApi.exam_mode ? `Exam Mode: ${examFromApi.exam_mode}` : null,
+          examFromApi.exam_duration ? `Duration: ${examFromApi.exam_duration}` : null,
+          examFromApi.total_marks ? `Total Marks: ${examFromApi.total_marks}` : null,
+          examFromApi.num_questions ? `Total Questions: ${examFromApi.num_questions}` : null,
+        ].filter(Boolean)),
     menuConfig: examFromApi.menu_config,
     sidebarWidgets: examFromApi.sidebar_widgets,
     metaTitle: examFromApi.meta_title,
