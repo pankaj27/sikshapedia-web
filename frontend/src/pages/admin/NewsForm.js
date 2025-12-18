@@ -88,39 +88,24 @@ const NewsForm = () => {
   const [tagInput, setTagInput] = useState('');
   const [keywordInput, setKeywordInput] = useState('');
 
-  // Fetch authors from team management
+  // Auto-fill author from current logged-in user
   useEffect(() => {
-    fetchAuthors();
-  }, []);
+    if (user && !isEdit) {
+      setFormData(prev => ({
+        ...prev,
+        author_id: user.id,
+        author: user.name || user.email,
+        author_image: user.profile_photo || '',
+        author_designation: user.job_title || user.role || 'Content Writer'
+      }));
+    }
+  }, [user, isEdit]);
 
   useEffect(() => {
     if (isEdit) {
       fetchNews();
     }
   }, [id]);
-
-  const fetchAuthors = async () => {
-    try {
-      const response = await api.get('/admin/authors');
-      setAuthors(response.data || []);
-    } catch (error) {
-      console.error('Error fetching authors:', error);
-    }
-  };
-
-  // Handle author selection
-  const handleAuthorSelect = (authorId) => {
-    const selectedAuthor = authors.find(a => a.id === authorId);
-    if (selectedAuthor) {
-      setFormData(prev => ({
-        ...prev,
-        author_id: authorId,
-        author: selectedAuthor.name,
-        author_image: selectedAuthor.profile_photo || '',
-        author_designation: selectedAuthor.job_title || selectedAuthor.role
-      }));
-    }
-  };
 
   // Auto-generate slug from title
   useEffect(() => {
