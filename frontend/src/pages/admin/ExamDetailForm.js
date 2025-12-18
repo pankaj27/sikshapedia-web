@@ -2011,30 +2011,72 @@ const ExamDetailForm = () => {
                   {/* FAQs for this page */}
                   <div className="border border-green-200 rounded-lg p-3 bg-green-50">
                     <div className="flex items-center justify-between mb-2">
-                      <label className="text-xs font-semibold text-green-800">❓ FAQs</label>
+                      <label className="text-xs font-semibold text-green-800">❓ FAQs ({(item.faqs || []).length})</label>
                       <button type="button" onClick={() => {
                         const newFaqs = [...(item.faqs || []), { question: '', answer: '' }];
                         updateMenuItem(index, 'faqs', newFaqs);
                       }} className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200">+ Add FAQ</button>
                     </div>
-                    {(item.faqs || []).map((faq, faqIndex) => (
-                      <div key={faqIndex} className="mb-2 bg-white p-2 rounded border">
-                        <input type="text" value={faq.question || ''} onChange={(e) => {
-                          const newFaqs = [...(item.faqs || [])];
-                          newFaqs[faqIndex].question = e.target.value;
-                          updateMenuItem(index, 'faqs', newFaqs);
-                        }} placeholder="Question" className="w-full border rounded px-2 py-1 text-xs mb-1" />
-                        <textarea value={faq.answer || ''} onChange={(e) => {
-                          const newFaqs = [...(item.faqs || [])];
-                          newFaqs[faqIndex].answer = e.target.value;
-                          updateMenuItem(index, 'faqs', newFaqs);
-                        }} placeholder="Answer" rows="2" className="w-full border rounded px-2 py-1 text-xs" />
-                        <button type="button" onClick={() => {
-                          const newFaqs = (item.faqs || []).filter((_, i) => i !== faqIndex);
-                          updateMenuItem(index, 'faqs', newFaqs);
-                        }} className="text-red-500 text-xs mt-1">Remove</button>
+                    
+                    {(item.faqs || []).length > 0 ? (
+                      <div className="space-y-2">
+                        {(item.faqs || []).map((faq, faqIndex) => (
+                          <div key={faqIndex} className="bg-white p-2 rounded border">
+                            <div className="flex items-start gap-2 mb-1">
+                              <span className="text-xs text-green-600 font-bold flex-shrink-0">Q{faqIndex + 1}:</span>
+                              <input type="text" value={faq.question || ''} onChange={(e) => {
+                                const newFaqs = [...(item.faqs || [])];
+                                newFaqs[faqIndex].question = e.target.value;
+                                updateMenuItem(index, 'faqs', newFaqs);
+                              }} placeholder="Enter question..." className="flex-1 border rounded px-2 py-1 text-xs" />
+                              <button type="button" onClick={() => {
+                                const newFaqs = (item.faqs || []).filter((_, i) => i !== faqIndex);
+                                updateMenuItem(index, 'faqs', newFaqs);
+                              }} className="text-red-400 hover:text-red-600 p-1"><FiTrash2 size={12} /></button>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <span className="text-xs text-blue-600 font-bold flex-shrink-0">A:</span>
+                              <textarea value={faq.answer || ''} onChange={(e) => {
+                                const newFaqs = [...(item.faqs || [])];
+                                newFaqs[faqIndex].answer = e.target.value;
+                                updateMenuItem(index, 'faqs', newFaqs);
+                              }} placeholder="Enter answer..." rows="2" className="flex-1 border rounded px-2 py-1 text-xs" />
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <p className="text-xs text-gray-400 italic">No FAQs. Click &quot;+ Add FAQ&quot; to add questions.</p>
+                    )}
+                    
+                    {/* Quick FAQ Templates */}
+                    {(!item.faqs || item.faqs.length === 0) && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        <span className="text-xs text-gray-500">Quick add:</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newFaqs = [
+                              { question: `What is ${formData.name || 'this exam'}?`, answer: '' },
+                              { question: `What is the eligibility for ${formData.name || 'this exam'}?`, answer: '' },
+                              { question: `What is the exam pattern for ${formData.name || 'this exam'}?`, answer: '' },
+                              { question: `When will ${formData.name || 'this exam'} ${new Date().getFullYear()} be conducted?`, answer: '' }
+                            ];
+                            updateMenuItem(index, 'faqs', newFaqs);
+                          }}
+                          className="text-xs bg-white border border-green-300 text-green-700 px-2 py-0.5 rounded hover:bg-green-50"
+                        >
+                          📝 Common Exam FAQs
+                        </button>
+                      </div>
+                    )}
+                    
+                    {/* FAQ Schema Info */}
+                    {(item.faqs || []).length > 0 && (
+                      <div className="mt-2 p-2 bg-green-100 rounded border border-green-200 text-xs text-green-700">
+                        💡 FAQs will generate FAQ Schema markup for better SEO.
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
