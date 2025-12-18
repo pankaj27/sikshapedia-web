@@ -427,45 +427,82 @@ const CourseListingPage = () => {
                     </div>
 
                     {/* Apply Now Button */}
-                    <Link 
-                      to={course.links.overview}
-                      className="ml-4 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded shadow-sm whitespace-nowrap"
-                    >
-                      Apply Now
-                    </Link>
+                        </div>
+                      </div>
+
+                      {/* Apply Now Button */}
+                      <div className="flex flex-col items-end gap-2">
+                        <button
+                          onClick={() => setActiveWidget(course.name || 'Course')}
+                          className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-all flex items-center gap-2"
+                        >
+                          <FiSend size={14} />
+                          Apply Now
+                        </button>
+                        <Link 
+                          to={`/courses/detail/${courseSlug}`}
+                          className="text-xs text-gray-500 hover:text-orange-600"
+                        >
+                          View Details →
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Top Engineering Colleges Section */}
-            <div className="mt-12 bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Top Engineering Colleges In India</h2>
+            {/* Empty State */}
+            {filteredCourses.length === 0 && (
+              <div className="text-center py-12 bg-white rounded-xl">
+                <FiBookOpen size={48} className="mx-auto text-gray-300 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No courses found</h3>
+                <p className="text-gray-500">Try adjusting your search or filters</p>
+              </div>
+            )}
+
+            {/* Top Colleges Section */}
+            <div className="mt-12 bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Top Colleges In India</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  { name: 'IIT Bombay - Indian Institute of Technology - [IITB]', location: 'Mumbai, Maharashtra' },
-                  { name: 'IIT Delhi - Indian Institute of Technology [IITD]', location: 'New Delhi, Delhi NCR' },
-                  { name: 'IIT Madras - Indian Institute of Technology - [IITM]', location: 'Chennai, Tamil Nadu' },
-                  { name: 'IIT Kanpur - Indian Institute of Technology - [IITK]', location: 'Kanpur, Uttar Pradesh' },
-                  { name: 'IIT Kharagpur - Indian Institute of Technology - [IITKGP]', location: 'Kharagpur, West Bengal' },
-                  { name: 'IIT Roorkee - Indian Institute of Technology - [IITR]', location: 'Roorkee, Uttarakhand' }
+                  { name: 'IIT Bombay - Indian Institute of Technology', location: 'Mumbai, Maharashtra', rating: '4.5' },
+                  { name: 'IIT Delhi - Indian Institute of Technology', location: 'New Delhi, Delhi NCR', rating: '4.4' },
+                  { name: 'IIT Madras - Indian Institute of Technology', location: 'Chennai, Tamil Nadu', rating: '4.5' },
+                  { name: 'IIT Kanpur - Indian Institute of Technology', location: 'Kanpur, Uttar Pradesh', rating: '4.3' },
+                  { name: 'BITS Pilani - Birla Institute of Technology', location: 'Pilani, Rajasthan', rating: '4.2' },
+                  { name: 'NIT Trichy - National Institute of Technology', location: 'Tiruchirappalli, Tamil Nadu', rating: '4.1' }
                 ].map((college, idx) => (
-                  <Link key={idx} to={`/colleges/${idx + 1}`} className="flex items-start gap-3 p-3 border border-gray-200 rounded hover:bg-gray-50 transition-colors">
-                    <div className="w-10 h-10 bg-gray-200 rounded flex-shrink-0"></div>
-                    <div>
+                  <Link key={idx} to={`/colleges/${idx + 1}`} className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-all">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-orange-600 font-bold">{idx + 1}</span>
+                    </div>
+                    <div className="flex-1">
                       <h3 className="text-sm font-semibold text-gray-900 hover:text-blue-600">{college.name}</h3>
-                      <p className="text-xs text-gray-600">{college.location}</p>
+                      <p className="text-xs text-gray-500">{college.location}</p>
+                      <div className="flex items-center gap-1 mt-1">
+                        <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">★ {college.rating}</span>
+                      </div>
                     </div>
                   </Link>
                 ))}
               </div>
-              <Link to="/engineering-colleges" className="inline-block mt-4 text-sm text-blue-600 hover:underline font-medium">
-                show more colleges
+              <Link to="/colleges" className="inline-flex items-center gap-1 mt-4 text-sm text-orange-600 hover:text-orange-700 font-medium">
+                View all colleges <FiChevronRight size={14} />
               </Link>
             </div>
           </main>
         </div>
       </div>
+
+      {/* Apply Now Widget Modal */}
+      {activeWidget && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setActiveWidget(null)}>
+          <div className="max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            <ApplyNowWidget courseName={activeWidget} onClose={() => setActiveWidget(null)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
