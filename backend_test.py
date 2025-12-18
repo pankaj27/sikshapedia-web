@@ -1202,6 +1202,450 @@ class APITester:
                 self.log_test("Admin Authentication Consistency Check", False, 
                              f"Admin auth failed for medical page. Status: {status}")
 
+    def test_course_listing_settings_comprehensive(self):
+        """Comprehensive test of Course Listing Settings including trending section"""
+        print("📚 Testing Course Listing Settings - COMPREHENSIVE (Including Trending Section)...")
+        
+        # Test 1: GET /api/course-listing-settings - verify all fields returned
+        success, response, status = self.make_request("GET", "/course-listing-settings")
+        if success and isinstance(response, dict):
+            # Verify ALL expected fields including trending section
+            expected_fields = [
+                "hero_title", "hero_subtitle", "hero_search_placeholder",
+                "popular_tags", "level_courses", "stream_categories",
+                "trending_badge", "trending_title", "trending_subtitle", "trending_courses",
+                "stats_courses", "stats_colleges", "stats_streams", "stats_students",
+                "meta_title", "meta_description", "meta_keywords", "faqs"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in expected_fields:
+                if field in response:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 16:  # At least 16 out of 18 fields should be present
+                self.log_test("GET /course-listing-settings - All Fields", True, 
+                             f"Retrieved settings with {len(present_fields)}/18 expected fields (including trending)")
+                
+                # Verify trending section specifically
+                trending_fields = ["trending_badge", "trending_title", "trending_subtitle", "trending_courses"]
+                trending_present = [f for f in trending_fields if f in response]
+                
+                if len(trending_present) == 4:
+                    self.log_test("Trending Section Fields", True, 
+                                 f"All trending fields present: {', '.join(trending_present)}")
+                    
+                    # Verify trending_courses structure
+                    trending_courses = response.get("trending_courses", [])
+                    if isinstance(trending_courses, list) and len(trending_courses) > 0:
+                        # Check if trending courses have required fields: name, growth, icon, link
+                        valid_trending = 0
+                        for course in trending_courses:
+                            if all(field in course for field in ["name", "growth", "icon", "link"]):
+                                valid_trending += 1
+                        
+                        if valid_trending == len(trending_courses):
+                            self.log_test("Trending Courses Structure", True, 
+                                         f"All {len(trending_courses)} trending courses have required fields (name, growth, icon, link)")
+                        else:
+                            self.log_test("Trending Courses Structure", False, 
+                                         f"Only {valid_trending}/{len(trending_courses)} trending courses have proper structure")
+                    else:
+                        self.log_test("Trending Courses Array", False, "Trending courses not an array or empty")
+                else:
+                    self.log_test("Trending Section Fields", False, 
+                                 f"Missing trending fields: {[f for f in trending_fields if f not in response]}")
+                
+                # Verify stats fields
+                stats_fields = ["stats_courses", "stats_colleges", "stats_streams", "stats_students"]
+                stats_present = [f for f in stats_fields if f in response]
+                
+                if len(stats_present) == 4:
+                    self.log_test("Stats Fields", True, f"All stats fields present: {', '.join(stats_present)}")
+                else:
+                    self.log_test("Stats Fields", False, 
+                                 f"Missing stats fields: {[f for f in stats_fields if f not in response]}")
+                    
+            else:
+                self.log_test("GET /course-listing-settings - All Fields", False, 
+                             f"Only {len(present_fields)}/18 expected fields present. Missing: {', '.join(missing_fields)}")
+        else:
+            self.log_test("GET /course-listing-settings", False, f"Status: {status}", response)
+        
+        # Test 2: PUT /course-listing-settings - test saving with updated values including trending
+        if self.admin_token:
+            comprehensive_update_data = {
+                "hero_title": "Updated Course Listing 2025",
+                "hero_subtitle": "Updated comprehensive guide to courses",
+                "hero_search_placeholder": "Search updated courses...",
+                "popular_tags": [
+                    {"name": "Updated B.Tech", "link": "/updated-engineering", "color": "bg-blue-600"},
+                    {"name": "Updated MBA", "link": "/updated-management", "color": "bg-purple-600"},
+                    {"name": "Updated MBBS", "link": "/updated-medical", "color": "bg-red-600"}
+                ],
+                "level_courses": [
+                    {
+                        "title": "Updated After 12th", 
+                        "subtitle": "Updated Undergraduate Programs", 
+                        "icon": "📚", 
+                        "link": "/updated-after-12th"
+                    }
+                ],
+                "stream_categories": [
+                    {
+                        "name": "Updated Engineering", 
+                        "icon": "HiOutlineDesktopComputer", 
+                        "link": "/updated-engineering", 
+                        "courses": ["Updated B.Tech", "Updated B.E"], 
+                        "count": "100+"
+                    }
+                ],
+                "trending_badge": "🔥 TRENDING NOW",
+                "trending_title": "Updated Trending Courses 2025",
+                "trending_subtitle": "Updated most sought-after programs",
+                "trending_courses": [
+                    {"name": "Updated AI & ML", "growth": "+85%", "icon": "🤖", "link": "/updated-ai-ml"},
+                    {"name": "Updated Data Science", "growth": "+70%", "icon": "📊", "link": "/updated-data-science"},
+                    {"name": "Updated Cybersecurity", "growth": "+65%", "icon": "🔒", "link": "/updated-cybersecurity"}
+                ],
+                "stats_courses": "500+",
+                "stats_colleges": "2000+",
+                "stats_streams": "25+",
+                "stats_students": "50K+",
+                "meta_title": "Updated Courses in India 2025",
+                "meta_description": "Updated comprehensive guide to courses",
+                "meta_keywords": ["updated courses", "2025", "comprehensive"],
+                "faqs": [
+                    {"question": "Updated FAQ 1?", "answer": "Updated answer 1"},
+                    {"question": "Updated FAQ 2?", "answer": "Updated answer 2"}
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-listing-settings", 
+                                                        comprehensive_update_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify all fields were saved correctly
+                all_fields_saved = True
+                failed_fields = []
+                
+                for key, expected_value in comprehensive_update_data.items():
+                    if key not in response or response[key] != expected_value:
+                        all_fields_saved = False
+                        failed_fields.append(key)
+                
+                if all_fields_saved:
+                    self.log_test("PUT /course-listing-settings - Comprehensive Update", True, 
+                                 "All fields including trending section saved correctly")
+                else:
+                    self.log_test("PUT /course-listing-settings - Comprehensive Update", False, 
+                                 f"Failed to save fields: {', '.join(failed_fields[:5])}...")
+                
+                # Test 3: Verify saved data persists on subsequent GET
+                success, get_response, get_status = self.make_request("GET", "/course-listing-settings")
+                if success and isinstance(get_response, dict):
+                    # Check persistence of key fields including trending
+                    key_fields_to_check = [
+                        "hero_title", "trending_title", "trending_courses", 
+                        "stats_courses", "meta_title"
+                    ]
+                    
+                    persistence_success = True
+                    failed_persistence = []
+                    
+                    for field in key_fields_to_check:
+                        if get_response.get(field) != comprehensive_update_data.get(field):
+                            persistence_success = False
+                            failed_persistence.append(field)
+                    
+                    if persistence_success:
+                        self.log_test("Course Listing Settings Persistence", True, 
+                                     "All updated fields persist correctly in subsequent GET")
+                    else:
+                        self.log_test("Course Listing Settings Persistence", False, 
+                                     f"Fields not persisted: {', '.join(failed_persistence)}")
+                else:
+                    self.log_test("Course Listing Settings Persistence", False, 
+                                 f"GET request failed with status: {get_status}")
+            else:
+                self.log_test("PUT /course-listing-settings - Comprehensive Update", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test("PUT /course-listing-settings - Comprehensive Update", False, 
+                         "Admin token not available")
+
+    def test_course_pages_comprehensive(self):
+        """Comprehensive test of Course Pages Management - Multiple pages testing"""
+        print("📄 Testing Course Pages Management - COMPREHENSIVE (Multiple Pages)...")
+        
+        # Test 1: GET /api/course-pages - should return 15 pages
+        success, response, status = self.make_request("GET", "/course-pages")
+        if success and isinstance(response, list):
+            if len(response) == 15:
+                self.log_test("GET /course-pages - Count Verification", True, 
+                             f"Retrieved exactly 15 course pages as expected")
+                
+                # Store pages for further testing
+                self.all_course_pages = response
+                page_ids = [page.get("id") for page in response]
+                self.log_test("Course Pages IDs", True, 
+                             f"Found pages: {', '.join(page_ids[:8])}...")
+            else:
+                self.log_test("GET /course-pages - Count Verification", False, 
+                             f"Expected 15 pages, got {len(response)}")
+                self.all_course_pages = response
+        else:
+            self.log_test("GET /course-pages", False, f"Status: {status}", response)
+            self.all_course_pages = []
+        
+        # Test 2: GET /api/course-pages/engineering - get specific page
+        success, response, status = self.make_request("GET", "/course-pages/engineering")
+        if success and isinstance(response, dict):
+            if response.get("id") == "engineering":
+                self.log_test("GET /course-pages/engineering", True, 
+                             f"Retrieved engineering page: {response.get('title')}")
+                self.original_engineering_title = response.get("title")
+            else:
+                self.log_test("GET /course-pages/engineering", False, 
+                             f"Wrong page returned: {response.get('id')}")
+        else:
+            self.log_test("GET /course-pages/engineering", False, f"Status: {status}", response)
+        
+        # Test 3: PUT /api/course-pages/engineering - update with new title
+        if self.admin_token:
+            engineering_update = {
+                "id": "engineering",
+                "page_type": "stream",
+                "title": "Updated Engineering Courses in India 2025",
+                "subtitle": "Updated comprehensive guide to engineering programs",
+                "theme": "from-blue-600 via-blue-700 to-indigo-700",
+                "filter_key": "stream",
+                "filter_value": "Engineering",
+                "benefits": [
+                    "Updated High-paying career opportunities",
+                    "Updated Innovation and technology focus",
+                    "Updated Global job prospects"
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-pages/engineering", 
+                                                        engineering_update, token=self.admin_token)
+            if success and isinstance(response, dict):
+                if response.get("title") == engineering_update["title"]:
+                    self.log_test("PUT /course-pages/engineering - Update Title", True, 
+                                 f"Successfully updated engineering page title")
+                else:
+                    self.log_test("PUT /course-pages/engineering - Update Title", False, 
+                                 f"Title not updated correctly")
+            else:
+                self.log_test("PUT /course-pages/engineering - Update Title", False, 
+                             f"Status: {status}", response)
+        
+        # Test 4: GET /api/course-pages/engineering - verify changes persisted
+        success, response, status = self.make_request("GET", "/course-pages/engineering")
+        if success and isinstance(response, dict):
+            if "Updated Engineering Courses in India 2025" in response.get("title", ""):
+                self.log_test("Engineering Page Update Persistence", True, 
+                             "Updated title persists in GET request")
+            else:
+                self.log_test("Engineering Page Update Persistence", False, 
+                             f"Title not persisted: {response.get('title')}")
+        else:
+            self.log_test("Engineering Page Update Persistence", False, f"Status: {status}", response)
+        
+        # Test 5: GET /api/course-pages/medical - test another page
+        success, response, status = self.make_request("GET", "/course-pages/medical")
+        if success and isinstance(response, dict):
+            if response.get("id") == "medical":
+                self.log_test("GET /course-pages/medical", True, 
+                             f"Retrieved medical page: {response.get('title')}")
+                self.original_medical_subtitle = response.get("subtitle")
+            else:
+                self.log_test("GET /course-pages/medical", False, 
+                             f"Wrong page returned: {response.get('id')}")
+        else:
+            self.log_test("GET /course-pages/medical", False, f"Status: {status}", response)
+        
+        # Test 6: PUT /api/course-pages/medical - update with new subtitle
+        if self.admin_token:
+            medical_update = {
+                "id": "medical",
+                "page_type": "stream",
+                "title": "Medical Courses in India",
+                "subtitle": "Updated comprehensive guide to medical education and healthcare programs",
+                "theme": "from-red-600 via-red-700 to-pink-700",
+                "filter_key": "stream",
+                "filter_value": "Medical"
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-pages/medical", 
+                                                        medical_update, token=self.admin_token)
+            if success and isinstance(response, dict):
+                if "Updated comprehensive guide to medical" in response.get("subtitle", ""):
+                    self.log_test("PUT /course-pages/medical - Update Subtitle", True, 
+                                 f"Successfully updated medical page subtitle")
+                else:
+                    self.log_test("PUT /course-pages/medical - Update Subtitle", False, 
+                                 f"Subtitle not updated correctly")
+            else:
+                self.log_test("PUT /course-pages/medical - Update Subtitle", False, 
+                             f"Status: {status}", response)
+        
+        # Test 7: GET /api/course-pages/after-10th - test level page
+        success, response, status = self.make_request("GET", "/course-pages/after-10th")
+        if success and isinstance(response, dict):
+            if response.get("id") == "after-10th":
+                self.log_test("GET /course-pages/after-10th", True, 
+                             f"Retrieved after-10th page: {response.get('title')}")
+            else:
+                self.log_test("GET /course-pages/after-10th", False, 
+                             f"Wrong page returned: {response.get('id')}")
+        else:
+            self.log_test("GET /course-pages/after-10th", False, f"Status: {status}", response)
+        
+        # Test 8: PUT /api/course-pages/after-10th - update benefits array
+        if self.admin_token:
+            after_10th_update = {
+                "id": "after-10th",
+                "page_type": "level",
+                "title": "Courses After 10th Class",
+                "subtitle": "Explore career paths after completing 10th standard",
+                "theme": "from-green-600 via-green-700 to-emerald-700",
+                "filter_key": "eligibility_level",
+                "filter_value": "after-10th",
+                "benefits": [
+                    "Updated Early career specialization",
+                    "Updated Diverse field options",
+                    "Updated Skill-based learning",
+                    "Updated Industry-ready programs"
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-pages/after-10th", 
+                                                        after_10th_update, token=self.admin_token)
+            if success and isinstance(response, dict):
+                benefits = response.get("benefits", [])
+                if isinstance(benefits, list) and len(benefits) == 4:
+                    self.log_test("PUT /course-pages/after-10th - Update Benefits", True, 
+                                 f"Successfully updated benefits array with {len(benefits)} items")
+                else:
+                    self.log_test("PUT /course-pages/after-10th - Update Benefits", False, 
+                                 f"Benefits array not updated correctly: {benefits}")
+            else:
+                self.log_test("PUT /course-pages/after-10th - Update Benefits", False, 
+                             f"Status: {status}", response)
+        
+        # Test 9: POST /api/course-pages/engineering/reset - reset to defaults
+        if self.admin_token:
+            success, response, status = self.make_request("POST", "/course-pages/engineering/reset", 
+                                                        token=self.admin_token)
+            if success and isinstance(response, dict):
+                if response.get("title") == "Engineering Courses in India":
+                    self.log_test("POST /course-pages/engineering/reset", True, 
+                                 "Successfully reset engineering page to defaults")
+                else:
+                    self.log_test("POST /course-pages/engineering/reset", False, 
+                                 f"Reset failed, title: {response.get('title')}")
+            else:
+                self.log_test("POST /course-pages/engineering/reset", False, 
+                             f"Status: {status}", response)
+        
+        # Test 10: Verify reset worked
+        success, response, status = self.make_request("GET", "/course-pages/engineering")
+        if success and isinstance(response, dict):
+            if response.get("title") == "Engineering Courses in India":
+                self.log_test("Verify Engineering Page Reset", True, 
+                             "Engineering page successfully reverted to default title")
+            else:
+                self.log_test("Verify Engineering Page Reset", False, 
+                             f"Reset verification failed, title: {response.get('title')}")
+        else:
+            self.log_test("Verify Engineering Page Reset", False, f"Status: {status}", response)
+        
+        # Test 11: Authentication verification for all endpoints
+        # Test PUT without auth
+        test_data = {"title": "Unauthorized Update"}
+        success, response, status = self.make_request("PUT", "/course-pages/medical", test_data)
+        if not success and status in [401, 403]:
+            self.log_test("Authentication Required - PUT (should fail)", True, 
+                         f"Correctly rejected unauthorized PUT with status {status}")
+        else:
+            self.log_test("Authentication Required - PUT (should fail)", False, 
+                         f"Should have rejected unauthorized PUT, got status {status}")
+        
+        # Test POST without auth
+        success, response, status = self.make_request("POST", "/course-pages/medical/reset")
+        if not success and status in [401, 403]:
+            self.log_test("Authentication Required - POST (should fail)", True, 
+                         f"Correctly rejected unauthorized POST with status {status}")
+        else:
+            self.log_test("Authentication Required - POST (should fail)", False, 
+                         f"Should have rejected unauthorized POST, got status {status}")
+        
+        # Test 12: Verify all field types save properly
+        if self.admin_token and hasattr(self, 'all_course_pages') and self.all_course_pages:
+            # Test with comprehensive data types
+            comprehensive_test_data = {
+                "id": "computer",
+                "page_type": "stream",
+                "title": "Computer Science Courses",  # String
+                "subtitle": "Advanced computing programs",  # String
+                "theme": "from-purple-600 to-blue-600",  # String
+                "filter_key": "stream",  # String
+                "filter_value": "Computer Science",  # String
+                "benefits": [  # Array
+                    "High-demand skills",
+                    "Innovation opportunities",
+                    "Global career prospects"
+                ],
+                "stats": {  # Object
+                    "total_courses": 150,
+                    "avg_salary": "12 LPA",
+                    "job_growth": "22%"
+                },
+                "featured_colleges": [  # Array of objects
+                    {"name": "IIT Delhi", "rank": 1},
+                    {"name": "IIT Bombay", "rank": 2}
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-pages/computer", 
+                                                        comprehensive_test_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify all field types were saved
+                field_types_correct = True
+                type_errors = []
+                
+                # Check string fields
+                string_fields = ["title", "subtitle", "theme", "filter_key", "filter_value"]
+                for field in string_fields:
+                    if not isinstance(response.get(field), str):
+                        field_types_correct = False
+                        type_errors.append(f"{field}: expected str, got {type(response.get(field))}")
+                
+                # Check array fields
+                if not isinstance(response.get("benefits"), list):
+                    field_types_correct = False
+                    type_errors.append(f"benefits: expected list, got {type(response.get('benefits'))}")
+                
+                # Check object fields
+                if not isinstance(response.get("stats"), dict):
+                    field_types_correct = False
+                    type_errors.append(f"stats: expected dict, got {type(response.get('stats'))}")
+                
+                if field_types_correct:
+                    self.log_test("All Field Types Save Properly", True, 
+                                 "Strings, arrays, and objects all saved with correct types")
+                else:
+                    self.log_test("All Field Types Save Properly", False, 
+                                 f"Type errors: {'; '.join(type_errors[:3])}")
+            else:
+                self.log_test("All Field Types Save Properly", False, 
+                             f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
