@@ -48,6 +48,30 @@ backend:
         comment: "✅ Both GET /api/courses-detail and PUT /api/courses-detail/{id} endpoints working correctly. Test course ID 4443b705-08f0-4d03-aebe-162b9c07b122 found and accessible. Admin authentication working for PUT operations."
 
 frontend:
+  - task: "News Listing Page - Dynamic Content Display"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/NewsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "⚠️ Frontend testing not performed - system limitations. Need to verify News page at /news displays dynamic categories, 'Top Stories Today' sidebar title, 'Hot Topics' trending section, and updated trending tags (CAT 2025, JEE Main 2025, NEET UG 2025)."
+
+  - task: "Admin News Settings Page - Management Interface"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/admin/NewsListingSettings.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "⚠️ Frontend testing not performed - system limitations. Need to verify Admin page at /admin/news-listing-settings loads with current settings, shows Hero Section, Quick Stats, News Categories, Sidebar Settings, SEO Settings sections, and Save Settings button works."
+
   - task: "Admin Form - Age Limit Input Field"
     implemented: true
     working: true
