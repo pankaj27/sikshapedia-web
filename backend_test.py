@@ -454,6 +454,139 @@ class APITester:
         else:
             self.log_test("Route Consistency Check", False, "One or both routes failed")
 
+    def test_seo_content_display_exam_detail(self):
+        """Test SEO Content Display feature on Exam Detail Page"""
+        print("📝 Testing SEO Content Display on Exam Detail Page...")
+        
+        # Test 1: Get exam detail with SEO content
+        exam_slug = "detailed-test-exam-2025"
+        success, response, status = self.make_request("GET", f"/exams-detail?slug={exam_slug}")
+        
+        if success and isinstance(response, list) and len(response) > 0:
+            exam_data = response[0]  # Get first matching exam
+            exam_name = exam_data.get("name", "Unknown")
+            self.log_test("GET /exams-detail by slug", True, f"Found exam: {exam_name}")
+            
+            # Test 2: Verify SEO Intro content
+            seo_intro = exam_data.get("seo_intro")
+            if seo_intro and len(seo_intro.strip()) > 0:
+                self.log_test("SEO Intro Content", True, f"SEO intro present ({len(seo_intro)} chars)")
+            else:
+                self.log_test("SEO Intro Content", False, "SEO intro missing or empty")
+            
+            # Test 3: Verify SEO Table of Contents
+            seo_toc = exam_data.get("seo_toc", [])
+            if isinstance(seo_toc, list) and len(seo_toc) > 0:
+                toc_sections = [section.get("title", "Untitled") for section in seo_toc]
+                self.log_test("SEO Table of Contents", True, f"Found {len(seo_toc)} TOC sections: {', '.join(toc_sections[:3])}...")
+            else:
+                self.log_test("SEO Table of Contents", False, "SEO TOC missing or empty")
+            
+            # Test 4: Verify SEO Full Content
+            seo_full_content = exam_data.get("seo_full_content")
+            if seo_full_content and len(seo_full_content.strip()) > 0:
+                self.log_test("SEO Full Content", True, f"SEO full content present ({len(seo_full_content)} chars)")
+            else:
+                self.log_test("SEO Full Content", False, "SEO full content missing or empty")
+            
+            # Test 5: Verify SEO Tables
+            seo_tables = exam_data.get("seo_tables", [])
+            if isinstance(seo_tables, list) and len(seo_tables) > 0:
+                table_titles = [table.get("title", "Untitled") for table in seo_tables]
+                self.log_test("SEO Tables", True, f"Found {len(seo_tables)} tables: {', '.join(table_titles)}")
+                
+                # Verify table structure
+                valid_tables = 0
+                for table in seo_tables:
+                    if table.get("headers") and table.get("rows"):
+                        valid_tables += 1
+                
+                if valid_tables == len(seo_tables):
+                    self.log_test("SEO Tables Structure", True, f"All {valid_tables} tables have headers and rows")
+                else:
+                    self.log_test("SEO Tables Structure", False, f"Only {valid_tables}/{len(seo_tables)} tables have proper structure")
+            else:
+                self.log_test("SEO Tables", False, "SEO tables missing or empty")
+            
+            # Test 6: Verify SEO Images
+            seo_images = exam_data.get("seo_images", [])
+            if isinstance(seo_images, list) and len(seo_images) > 0:
+                image_captions = [img.get("caption", "No caption") for img in seo_images]
+                self.log_test("SEO Images", True, f"Found {len(seo_images)} images with captions: {', '.join(image_captions[:2])}...")
+            else:
+                self.log_test("SEO Images", False, "SEO images missing or empty")
+            
+            # Test 7: Verify SEO Video
+            seo_video_url = exam_data.get("seo_video_url")
+            seo_video_title = exam_data.get("seo_video_title")
+            seo_video_description = exam_data.get("seo_video_description")
+            
+            if seo_video_url and seo_video_title:
+                self.log_test("SEO Video", True, f"Video: {seo_video_title} ({seo_video_url[:50]}...)")
+            else:
+                self.log_test("SEO Video", False, "SEO video URL or title missing")
+            
+            # Test 8: Verify SEO FAQs
+            seo_faqs = exam_data.get("seo_faqs", [])
+            if isinstance(seo_faqs, list) and len(seo_faqs) > 0:
+                faq_questions = [faq.get("question", "No question") for faq in seo_faqs]
+                self.log_test("SEO FAQs", True, f"Found {len(seo_faqs)} FAQs: {faq_questions[0][:50]}..." if faq_questions else "Found FAQs")
+                
+                # Verify FAQ structure
+                valid_faqs = 0
+                for faq in seo_faqs:
+                    if faq.get("question") and faq.get("answer"):
+                        valid_faqs += 1
+                
+                if valid_faqs == len(seo_faqs):
+                    self.log_test("SEO FAQs Structure", True, f"All {valid_faqs} FAQs have questions and answers")
+                else:
+                    self.log_test("SEO FAQs Structure", False, f"Only {valid_faqs}/{len(seo_faqs)} FAQs have proper Q&A structure")
+            else:
+                self.log_test("SEO FAQs", False, "SEO FAQs missing or empty")
+            
+            # Test 9: Verify all required SEO fields are present
+            required_seo_fields = [
+                "seo_intro", "seo_toc", "seo_full_content", "seo_tables", 
+                "seo_images", "seo_video_url", "seo_video_title", "seo_faqs"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in required_seo_fields:
+                if field in exam_data and exam_data[field]:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 6:  # At least 6 out of 8 fields should be present
+                self.log_test("SEO Fields Completeness", True, f"{len(present_fields)}/8 SEO fields present")
+            else:
+                self.log_test("SEO Fields Completeness", False, f"Only {len(present_fields)}/8 SEO fields present. Missing: {', '.join(missing_fields)}")
+            
+        elif success and isinstance(response, list) and len(response) == 0:
+            self.log_test("GET /exams-detail by slug", False, f"Exam '{exam_slug}' not found in database")
+        else:
+            self.log_test("GET /exams-detail by slug", False, f"Status: {status}", response)
+        
+        # Test 10: Alternative endpoint - try direct exam ID lookup
+        success, response, status = self.make_request("GET", "/exams-detail")
+        if success and isinstance(response, list):
+            # Look for the test exam in the list
+            test_exam = None
+            for exam in response:
+                if exam.get("slug") == exam_slug or "detailed-test-exam" in exam.get("name", "").lower():
+                    test_exam = exam
+                    break
+            
+            if test_exam:
+                self.log_test("Find Test Exam in List", True, f"Found exam: {test_exam.get('name')} (ID: {test_exam.get('id')})")
+            else:
+                self.log_test("Find Test Exam in List", False, f"Test exam '{exam_slug}' not found in {len(response)} exams")
+        else:
+            self.log_test("GET /exams-detail (all)", False, f"Status: {status}", response)
+
     def test_advertisement_system(self):
         """Test Advanced Advertisement Management System"""
         print("📢 Testing Advanced Advertisement Management System...")
