@@ -968,6 +968,234 @@ class APITester:
                 self.log_test("Comprehensive Settings Update", False, 
                              f"Status: {status}", response)
 
+    def test_course_pages_management(self):
+        """Test Course Pages Management feature"""
+        print("📄 Testing Course Pages Management Feature...")
+        
+        # Expected page IDs from the review request
+        expected_page_ids = [
+            "after-10th", "after-12th", "diploma", "pg", "phd", "certificate",
+            "engineering", "medical", "management", "science", "commerce", 
+            "arts", "computer", "law", "education"
+        ]
+        
+        # Test 1: GET /api/course-pages - Should return list of all 15 course page configurations
+        success, response, status = self.make_request("GET", "/course-pages")
+        if success and isinstance(response, list):
+            page_count = len(response)
+            if page_count == 15:
+                self.log_test("GET /course-pages (count verification)", True, 
+                             f"Retrieved exactly 15 course pages as expected")
+                
+                # Verify all expected page IDs are present
+                returned_ids = [page.get("id") for page in response if "id" in page]
+                missing_ids = [pid for pid in expected_page_ids if pid not in returned_ids]
+                extra_ids = [pid for pid in returned_ids if pid not in expected_page_ids]
+                
+                if not missing_ids and not extra_ids:
+                    self.log_test("GET /course-pages (ID verification)", True, 
+                                 f"All expected page IDs present: {', '.join(expected_page_ids[:5])}...")
+                else:
+                    details = ""
+                    if missing_ids:
+                        details += f"Missing: {', '.join(missing_ids)}. "
+                    if extra_ids:
+                        details += f"Extra: {', '.join(extra_ids)}."
+                    self.log_test("GET /course-pages (ID verification)", False, details)
+                
+                # Verify each page has required fields
+                required_fields = ["id", "title", "subtitle", "filter_key", "filter_value", "theme"]
+                pages_with_all_fields = 0
+                for page in response:
+                    if all(field in page for field in required_fields):
+                        pages_with_all_fields += 1
+                
+                if pages_with_all_fields == 15:
+                    self.log_test("GET /course-pages (field structure)", True, 
+                                 f"All 15 pages have required fields: {', '.join(required_fields)}")
+                else:
+                    self.log_test("GET /course-pages (field structure)", False, 
+                                 f"Only {pages_with_all_fields}/15 pages have all required fields")
+                
+                # Store response for later tests
+                self.course_pages_response = response
+                
+            else:
+                self.log_test("GET /course-pages (count verification)", False, 
+                             f"Expected 15 pages, got {page_count}")
+        else:
+            self.log_test("GET /course-pages", False, f"Status: {status}", response)
+            self.course_pages_response = []
+        
+        # Test 2: GET /api/course-pages/{id} - Test for specific pages
+        test_pages = [
+            {"id": "engineering", "expected_title": "Engineering Courses in India"},
+            {"id": "medical", "expected_title": "Medical Courses in India"},
+            {"id": "after-10th", "expected_title": "Courses After 10th Class"}
+        ]
+        
+        for test_page in test_pages:
+            page_id = test_page["id"]
+            expected_title = test_page["expected_title"]
+            
+            success, response, status = self.make_request("GET", f"/course-pages/{page_id}")
+            if success and isinstance(response, dict):
+                if response.get("id") == page_id and response.get("title") == expected_title:
+                    self.log_test(f"GET /course-pages/{page_id}", True, 
+                                 f"Retrieved {page_id} page: {response.get('title')}")
+                else:
+                    self.log_test(f"GET /course-pages/{page_id}", False, 
+                                 f"ID or title mismatch. Expected: {page_id}/{expected_title}, Got: {response.get('id')}/{response.get('title')}")
+            else:
+                self.log_test(f"GET /course-pages/{page_id}", False, f"Status: {status}", response)
+        
+        # Test 3: GET /api/course-pages/nonexistent - Should return 404
+        success, response, status = self.make_request("GET", "/course-pages/nonexistent")
+        if not success and status == 404:
+            self.log_test("GET /course-pages/nonexistent (should return 404)", True, 
+                         f"Correctly returned 404 for non-existent page")
+        else:
+            self.log_test("GET /course-pages/nonexistent (should return 404)", False, 
+                         f"Expected 404, got status {status}", response)
+        
+        # Test 4: PUT /api/course-pages/{id} without authentication (should fail)
+        test_update_data = {
+            "title": "Updated Engineering Courses",
+            "subtitle": "Updated subtitle for testing",
+            "theme": "from-green-600 via-green-700 to-emerald-700",
+            "filter_key": "stream",
+            "filter_value": "Engineering"
+        }
+        
+        success, response, status = self.make_request("PUT", "/course-pages/engineering", test_update_data)
+        if not success and status in [401, 403]:
+            self.log_test("PUT /course-pages/engineering (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("PUT /course-pages/engineering (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 5: PUT /api/course-pages/{id} with admin authentication
+        if self.admin_token:
+            success, response, status = self.make_request("PUT", "/course-pages/engineering", 
+                                                        test_update_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                if response.get("title") == test_update_data["title"]:
+                    self.log_test("PUT /course-pages/engineering (with admin auth)", True, 
+                                 f"Successfully updated engineering page title")
+                    
+                    # Test 6: Verify changes are persisted with subsequent GET
+                    success, get_response, get_status = self.make_request("GET", "/course-pages/engineering")
+                    if success and isinstance(get_response, dict):
+                        if get_response.get("title") == test_update_data["title"]:
+                            self.log_test("Verify Engineering Page Update Persistence", True, 
+                                         "Updated title persists in GET request")
+                        else:
+                            self.log_test("Verify Engineering Page Update Persistence", False, 
+                                         f"Title not persisted. Expected: {test_update_data['title']}, Got: {get_response.get('title')}")
+                    else:
+                        self.log_test("Verify Engineering Page Update Persistence", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("PUT /course-pages/engineering (with admin auth)", False, 
+                                 f"Title not updated. Expected: {test_update_data['title']}, Got: {response.get('title')}")
+            else:
+                self.log_test("PUT /course-pages/engineering (with admin auth)", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test("PUT /course-pages/engineering (with admin auth)", False, 
+                         "Admin token not available")
+        
+        # Test 7: POST /api/course-pages/{id}/reset without authentication (should fail)
+        success, response, status = self.make_request("POST", "/course-pages/engineering/reset")
+        if not success and status in [401, 403]:
+            self.log_test("POST /course-pages/engineering/reset (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("POST /course-pages/engineering/reset (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 8: POST /api/course-pages/{id}/reset with admin authentication
+        if self.admin_token:
+            success, response, status = self.make_request("POST", "/course-pages/engineering/reset", 
+                                                        token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Should return default configuration
+                if response.get("id") == "engineering" and response.get("title") == "Engineering Courses in India":
+                    self.log_test("POST /course-pages/engineering/reset (with admin auth)", True, 
+                                 f"Successfully reset engineering page to defaults")
+                    
+                    # Test 9: Verify reset reverted to default configuration
+                    success, get_response, get_status = self.make_request("GET", "/course-pages/engineering")
+                    if success and isinstance(get_response, dict):
+                        if get_response.get("title") == "Engineering Courses in India":
+                            self.log_test("Verify Engineering Page Reset", True, 
+                                         "Page successfully reverted to default configuration")
+                        else:
+                            self.log_test("Verify Engineering Page Reset", False, 
+                                         f"Page not reset properly. Got title: {get_response.get('title')}")
+                    else:
+                        self.log_test("Verify Engineering Page Reset", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("POST /course-pages/engineering/reset (with admin auth)", False, 
+                                 f"Reset response incorrect. Expected engineering/Engineering Courses in India, Got: {response.get('id')}/{response.get('title')}")
+            else:
+                self.log_test("POST /course-pages/engineering/reset (with admin auth)", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test("POST /course-pages/engineering/reset (with admin auth)", False, 
+                         "Admin token not available")
+        
+        # Test 10: Verify API returns proper JSON structure for all pages
+        if hasattr(self, 'course_pages_response') and self.course_pages_response:
+            json_structure_valid = True
+            invalid_pages = []
+            
+            for page in self.course_pages_response:
+                # Check if it's a valid dict with required structure
+                if not isinstance(page, dict):
+                    json_structure_valid = False
+                    invalid_pages.append(f"Non-dict page: {type(page)}")
+                    continue
+                
+                # Check for required fields and their types
+                required_checks = [
+                    ("id", str), ("title", str), ("subtitle", str),
+                    ("filter_key", str), ("filter_value", str), ("theme", str)
+                ]
+                
+                for field, expected_type in required_checks:
+                    if field not in page or not isinstance(page[field], expected_type):
+                        json_structure_valid = False
+                        invalid_pages.append(f"{page.get('id', 'unknown')}: {field}")
+                        break
+            
+            if json_structure_valid:
+                self.log_test("Course Pages JSON Structure Validation", True, 
+                             "All pages have proper JSON structure with correct field types")
+            else:
+                self.log_test("Course Pages JSON Structure Validation", False, 
+                             f"Invalid structure in pages: {', '.join(invalid_pages[:3])}...")
+        
+        # Test 11: Test admin authentication requirement verification
+        if self.admin_token:
+            # Test with a different page to ensure consistency
+            medical_update_data = {
+                "title": "Updated Medical Courses",
+                "subtitle": "Updated medical subtitle",
+                "theme": "from-red-500 via-pink-500 to-rose-500"
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-pages/medical", 
+                                                        medical_update_data, token=self.admin_token)
+            if success and response.get("title") == medical_update_data["title"]:
+                self.log_test("Admin Authentication Consistency Check", True, 
+                             "Admin authentication works consistently across different pages")
+            else:
+                self.log_test("Admin Authentication Consistency Check", False, 
+                             f"Admin auth failed for medical page. Status: {status}")
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
@@ -976,6 +1204,7 @@ class APITester:
         
         # Run test suites in order
         self.test_authentication()
+        self.test_course_pages_management()  # Add course pages management tests
         self.test_course_listing_settings()  # Add course listing settings tests
         self.test_advertisement_system()  # Add advertisement tests
         self.test_old_college_routes()
