@@ -290,12 +290,8 @@ const ExamDetailPage = () => {
               </div>
             </div>
 
-            {/* Advertisement - Sidebar */}
-            <div className="bg-white rounded-lg shadow-md border-2 border-orange-300 p-4 text-center">
-              <p className="text-xs text-orange-600 uppercase tracking-wide mb-2 font-semibold">Advertisement</p>
-              <img src="https://via.placeholder.com/250x200?text=Ad+Space" alt="Advertisement" className="w-full rounded mb-3" />
-              <p className="text-xs text-gray-600">Your ad could be here</p>
-            </div>
+            {/* Sponsored Sidebar Ads */}
+            <SidebarSponsoredAd placementId="exam_detail_sidebar" title="Recommended Colleges" />
 
             {/* College Predictor Banner */}
             <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg shadow-md p-4 text-white text-center">

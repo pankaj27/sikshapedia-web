@@ -4,6 +4,7 @@ import { FiSearch, FiCalendar, FiBookOpen, FiAward } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 
 const ExamsPage = () => {
   const [exams, setExams] = useState([]);

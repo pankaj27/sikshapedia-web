@@ -4,6 +4,7 @@ import { FiSearch, FiFilter, FiDollarSign, FiPercent, FiClock, FiCheckCircle, Fi
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import MetaTags from '../components/SEO/MetaTags';
+import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 
 const EducationLoansPage = () => {
   const [loans, setLoans] = useState([]);

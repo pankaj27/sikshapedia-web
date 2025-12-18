@@ -5,6 +5,7 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import MetaTags from '../components/SEO/MetaTags';
+import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 
 const ScholarshipsPage = () => {
   const [scholarships, setScholarships] = useState([]);

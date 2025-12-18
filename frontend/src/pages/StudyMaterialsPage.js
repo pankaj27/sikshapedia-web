@@ -3,6 +3,7 @@ import { FiDownload, FiExternalLink, FiFilter, FiStar, FiBook, FiVideo, FiFileTe
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import MetaTags from '../components/SEO/MetaTags';
+import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 
 const StudyMaterialsPage = () => {
   const [materials, setMaterials] = useState([]);
