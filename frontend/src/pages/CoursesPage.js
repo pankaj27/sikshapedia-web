@@ -1,12 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiChevronRight, FiArrowRight, FiBookOpen, FiBriefcase, FiActivity, FiTrendingUp, FiAward, FiCpu, FiHeart, FiUsers, FiLayers, FiTarget, FiCompass } from 'react-icons/fi';
+import { Helmet } from 'react-helmet-async';
+import { FiSearch, FiChevronRight, FiArrowRight, FiBookOpen, FiBriefcase, FiActivity, FiTrendingUp, FiAward, FiCpu, FiHeart, FiUsers, FiLayers, FiTarget, FiCompass, FiLoader } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineBeaker, HiOutlineScale, HiOutlineCurrencyRupee, HiOutlineDesktopComputer, HiOutlinePencilAlt, HiOutlineOfficeBuilding, HiOutlineHeart } from 'react-icons/hi';
 import { FeaturedSponsoredSection } from '../components/SponsoredAds';
+import api from '../api/axios';
+
+// Icon mapping for dynamic rendering
+const iconMap = {
+  HiOutlineDesktopComputer,
+  HiOutlineHeart,
+  HiOutlineOfficeBuilding,
+  HiOutlineBeaker,
+  HiOutlineCurrencyRupee,
+  HiOutlinePencilAlt,
+  HiOutlineScale,
+  HiOutlineAcademicCap
+};
+
+// Color configuration for streams
+const streamColors = {
+  'Engineering': { color: 'text-blue-600', bgColor: 'bg-blue-50', hoverBg: 'hover:bg-blue-100', borderColor: 'border-blue-200' },
+  'Medical': { color: 'text-red-600', bgColor: 'bg-red-50', hoverBg: 'hover:bg-red-100', borderColor: 'border-red-200' },
+  'Management': { color: 'text-purple-600', bgColor: 'bg-purple-50', hoverBg: 'hover:bg-purple-100', borderColor: 'border-purple-200' },
+  'Science': { color: 'text-green-600', bgColor: 'bg-green-50', hoverBg: 'hover:bg-green-100', borderColor: 'border-green-200' },
+  'Commerce': { color: 'text-amber-600', bgColor: 'bg-amber-50', hoverBg: 'hover:bg-amber-100', borderColor: 'border-amber-200' },
+  'Arts': { color: 'text-pink-600', bgColor: 'bg-pink-50', hoverBg: 'hover:bg-pink-100', borderColor: 'border-pink-200' },
+  'Law': { color: 'text-gray-700', bgColor: 'bg-gray-50', hoverBg: 'hover:bg-gray-100', borderColor: 'border-gray-200' },
+  'Computer': { color: 'text-indigo-600', bgColor: 'bg-indigo-50', hoverBg: 'hover:bg-indigo-100', borderColor: 'border-indigo-200' },
+  'Education': { color: 'text-teal-600', bgColor: 'bg-teal-50', hoverBg: 'hover:bg-teal-100', borderColor: 'border-teal-200' }
+};
+
+const defaultStreamColors = { color: 'text-gray-600', bgColor: 'bg-gray-50', hoverBg: 'hover:bg-gray-100', borderColor: 'border-gray-200' };
 
 const CoursesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await api.get('/course-listing-settings');
+      setSettings(response.data);
+    } catch (error) {
+      console.error('Error fetching course settings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
