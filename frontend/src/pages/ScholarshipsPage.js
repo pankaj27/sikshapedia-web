@@ -52,9 +52,10 @@ const ScholarshipsPage = () => {
     }
     try {
       const response = await api.get(`/scholarships?search=${encodeURIComponent(searchQuery)}`);
-      setScholarships(response.data);
+      setScholarships(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error searching:', error);
+      setScholarships([]);
     }
   };
 
