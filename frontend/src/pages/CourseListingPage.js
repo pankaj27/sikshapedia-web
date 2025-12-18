@@ -421,12 +421,6 @@ const CourseListingPage = () => {
                           >
                             Syllabus
                           </Link>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Apply Now Button */}
                         </div>
                       </div>
 
