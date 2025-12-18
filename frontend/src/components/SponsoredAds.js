@@ -174,9 +174,10 @@ export const AdmissionsOpenSection = ({
     const fetchAds = async () => {
       try {
         const response = await api.get(`/sponsored-ads-multi/${placementId}?limit=6`);
-        setAds(response.data || []);
+        setAds(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching admission ads:', error);
+        setAds([]); // Ensure ads is always an array on error
       } finally {
         setLoading(false);
       }
@@ -184,7 +185,7 @@ export const AdmissionsOpenSection = ({
     fetchAds();
   }, [placementId]);
 
-  if (loading || !ads || ads.length === 0) return null;
+  if (loading || !Array.isArray(ads) || ads.length === 0) return null;
 
   return (
     <div className="bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 rounded-xl border-2 border-green-200 overflow-hidden shadow-lg my-4">
