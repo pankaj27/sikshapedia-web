@@ -79,6 +79,7 @@ import TagCoursesColleges from './pages/admin/TagCoursesColleges';
 import TagExamsCourses from './pages/admin/TagExamsCourses';
 import UsersManagement from './pages/admin/UsersManagement';
 import BlogsManagement from './pages/admin/BlogsManagement';
+import BlogForm from './pages/admin/BlogForm';
 import BannersManagement from './pages/admin/BannersManagement';
 import TestimonialsManagement from './pages/admin/TestimonialsManagement';
 import FAQsManagement from './pages/admin/FAQsManagement';
