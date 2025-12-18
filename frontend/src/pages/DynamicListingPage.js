@@ -2087,51 +2087,62 @@ const DynamicListingPage = () => {
                       </div>
                     )}
                     
-                    {/* Top Collections Section - Appears after colleges 6, 12, 18, etc. */}
-                    {idx > 0 && idx % 6 === 0 && (
-                      <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl border border-blue-200 overflow-hidden shadow-lg">
-                        <div className="px-4 py-3 border-b border-blue-100 flex items-center justify-between">
-                          <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                            <FiGrid className="text-blue-600" size={18} />
-                            Top Collections for You
-                          </h3>
-                          <Link to="/collections" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                            View All →
-                          </Link>
+                    {/* Admissions Open Section - Appears after colleges 6, 12, 18, etc. (Only if admission open colleges exist) */}
+                    {idx > 0 && idx % 6 === 0 && admissionOpenColleges.length > 0 && (
+                      <div className="bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 rounded-xl border-2 border-green-200 overflow-hidden shadow-lg">
+                        <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 flex items-center gap-2">
+                          <FiCheckCircle className="text-white" size={14} />
+                          <span className="text-white font-bold text-sm">Admissions Open 2025</span>
+                          <span className="text-green-100 text-xs ml-auto">Apply Now</span>
                         </div>
                         <div className="p-4">
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            {/* Collection Card 1 */}
-                            <Link to="/btech-colleges" className="group/card bg-white rounded-lg p-3 border border-blue-100 hover:border-blue-300 hover:shadow-md transition-all">
-                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-2">
-                                <FiBookOpen className="text-white" size={18} />
-                              </div>
-                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-blue-600 transition-colors">BTech Colleges</h4>
-                              <p className="text-xs text-gray-500 mt-0.5">4,359+ Colleges</p>
-                            </Link>
-                            {/* Collection Card 2 */}
-                            <Link to="/mba-colleges" className="group/card bg-white rounded-lg p-3 border border-purple-100 hover:border-purple-300 hover:shadow-md transition-all">
-                              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-2">
-                                <FiAward className="text-white" size={18} />
-                              </div>
-                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-purple-600 transition-colors">MBA Colleges</h4>
-                              <p className="text-xs text-gray-500 mt-0.5">3,200+ Colleges</p>
-                            </Link>
-                            {/* Collection Card 3 */}
-                            <Link to="/medical-colleges" className="group/card bg-white rounded-lg p-3 border border-emerald-100 hover:border-emerald-300 hover:shadow-md transition-all">
-                              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center mb-2">
-                                <FiHeart className="text-white" size={18} />
-                              </div>
-                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-emerald-600 transition-colors">Medical Colleges</h4>
-                              <p className="text-xs text-gray-500 mt-0.5">850+ Colleges</p>
-                            </Link>
-                            {/* Collection Card 4 */}
-                            <Link to="/law-colleges" className="group/card bg-white rounded-lg p-3 border border-orange-100 hover:border-orange-300 hover:shadow-md transition-all">
-                              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-2">
-                                <FiBookmark className="text-white" size={18} />
-                              </div>
-                              <h4 className="font-semibold text-sm text-gray-900 group-hover/card:text-orange-600 transition-colors">Law Colleges</h4>
-                              <p className="text-xs text-gray-500 mt-0.5">1,500+ Colleges</p>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {admissionOpenColleges.slice(0, 3).map((college, aIdx) => (
+                              <Link 
+                                key={college.id || aIdx}
+                                to={getInstitutionDetailUrl(college.institution_type || 'college', college.id, college.name, college.location?.city, college.serial_number)}
+                                className={`bg-white rounded-lg p-4 border border-green-100 hover:shadow-md hover:border-green-300 transition-all ${aIdx === 2 ? 'hidden md:block' : ''}`}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden ${
+                                    aIdx === 0 ? 'bg-gradient-to-br from-green-100 to-green-200' :
+                                    aIdx === 1 ? 'bg-gradient-to-br from-teal-100 to-teal-200' :
+                                    'bg-gradient-to-br from-emerald-100 to-emerald-200'
+                                  }`}>
+                                    {college.logo_url ? (
+                                      <img src={college.logo_url} alt={college.name} className="w-full h-full object-contain p-1" />
+                                    ) : (
+                                      <span className={`text-lg font-bold ${
+                                        aIdx === 0 ? 'text-green-600' :
+                                        aIdx === 1 ? 'text-teal-600' :
+                                        'text-emerald-600'
+                                      }`}>{college.name?.charAt(0)}</span>
+                                    )}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="font-semibold text-sm text-gray-900 line-clamp-1">{college.name}</h4>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                      {college.location?.city}{college.location?.state ? `, ${college.location.state}` : ''}
+                                    </p>
+                                    <div className="flex items-center gap-2 mt-2 flex-wrap">
+                                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded font-medium">
+                                        Admissions Open
+                                      </span>
+                                      {college.average_fees > 0 && (
+                                        <span className="text-xs text-gray-600">
+                                          ₹{college.average_fees >= 100000 ? `${(college.average_fees / 100000).toFixed(1)}L` : `${(college.average_fees / 1000).toFixed(0)}K`}/yr
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span className="text-xs text-green-600 font-medium mt-2 inline-block">Apply Now →</span>
+                                  </div>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="text-center mt-4">
+                            <Link to="/admissions-open" className="text-sm text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-1">
+                              View All Colleges with Open Admissions <FiArrowRight size={14} />
                             </Link>
                           </div>
                         </div>
