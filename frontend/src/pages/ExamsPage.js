@@ -107,6 +107,21 @@ const ExamsPage = () => {
         </div>
       </section>
 
+      {/* Featured Exams/Colleges Sponsored Section */}
+      <section className="py-4">
+        <div className="container mx-auto px-4">
+          <FeaturedSponsoredSection 
+            placementId="exam_listing_featured"
+            title="Featured Colleges for Exam Preparation"
+            subtitle="Sponsored colleges with excellent exam results"
+            bgColor="from-red-50 via-rose-50 to-pink-50"
+            headerColor="from-red-500 to-rose-500"
+            linkColor="text-red-600"
+            viewAllLink="/india-colleges"
+          />
+        </div>
+      </section>
+
       {/* Exams List */}
       <section className="py-12">
         <div className="container mx-auto px-4">
