@@ -65,12 +65,14 @@ const CollegeDuniaHome = () => {
 
   const fetchData = async () => {
     try {
-      const [collegesRes, statsRes] = await Promise.all([
+      const [collegesRes, statsRes, sponsoredRes] = await Promise.all([
         api.get('/colleges/featured?limit=12'),
-        api.get('/stats')
+        api.get('/stats'),
+        api.get('/sponsored-ads-multi/home_featured?limit=6').catch(() => ({ data: [] }))
       ]);
       setFeaturedColleges(collegesRes.data);
       setStats(statsRes.data);
+      setSponsoredFeatured(sponsoredRes.data || []);
     } catch (error) {
       console.error('Error:', error);
     } finally {
