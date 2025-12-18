@@ -1122,6 +1122,9 @@ const DynamicListingPage = () => {
         </div>
       </div>
 
+      {/* Ad Banner - Below Hero Section */}
+      <AdBanner pageName="colleges" position="top" />
+
       {/* QUICK ACTION CARDS */}
       <div className="bg-white border-b shadow-sm">
         <div className="container mx-auto px-4 md:px-6 py-4">
