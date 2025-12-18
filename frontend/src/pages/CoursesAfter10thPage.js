@@ -64,13 +64,63 @@ const CoursesAfter10thPage = () => {
   };
 
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => setLoading(false), 500);
-    // Initialize all categories as expanded
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        // Fetch courses with eligibility_level = after-10th
+        const response = await api.get('/courses-detail?eligibility_level=after-10th&status=published&limit=200');
+        const coursesData = response.data || [];
+        
+        if (coursesData.length > 0) {
+          setAllCourses(coursesData);
+          
+          // Group courses by stream/category
+          const grouped = {};
+          coursesData.forEach(course => {
+            const category = course.stream || 'Other';
+            if (!grouped[category]) {
+              grouped[category] = [];
+            }
+            grouped[category].push({
+              id: course.id,
+              name: course.name,
+              full_name: course.full_name,
+              duration: course.duration,
+              course_mode: course.course_mode || 'Full Time',
+              slug: course.slug,
+              degree_type: course.degree_type,
+              average_fees: course.average_fees,
+              career_options: course.career_options || [],
+              eligibility: course.eligibility
+            });
+          });
+          
+          // Sort categories and set state
+          const sortedGrouped = Object.keys(grouped).sort().reduce((obj, key) => {
+            obj[key] = grouped[key];
+            return obj;
+          }, {});
+          
+          setCoursesByCategory(sortedGrouped);
+        }
+        // If no API data, keep defaultCourses
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        // Keep default courses on error
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCourses();
+  }, []);
+  
+  // Initialize expanded categories when coursesByCategory changes
+  useEffect(() => {
     const expanded = {};
     Object.keys(coursesByCategory).forEach(cat => expanded[cat] = true);
     setExpandedCategories(expanded);
-  }, []);
+  }, [coursesByCategory]);
 
   const toggleCategory = (category) => {
     setExpandedCategories(prev => ({
