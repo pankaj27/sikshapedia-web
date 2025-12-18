@@ -787,6 +787,187 @@ class APITester:
             else:
                 self.log_test("Verify Custom URLs Storage", False, f"Status: {status}", response)
 
+    def test_course_listing_settings(self):
+        """Test Course Listing Settings feature"""
+        print("📚 Testing Course Listing Settings Feature...")
+        
+        # Test 1: GET /api/course-listing-settings (public access)
+        success, response, status = self.make_request("GET", "/course-listing-settings")
+        if success and isinstance(response, dict):
+            # Verify expected structure
+            expected_fields = [
+                "hero_title", "hero_subtitle", "hero_search_placeholder",
+                "popular_tags", "level_courses", "stream_categories",
+                "meta_title", "meta_description", "meta_keywords", "faqs"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in expected_fields:
+                if field in response:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 8:  # At least 8 out of 10 fields should be present
+                self.log_test("GET /course-listing-settings", True, 
+                             f"Retrieved settings with {len(present_fields)}/10 expected fields")
+                
+                # Verify specific field types
+                if isinstance(response.get("popular_tags"), list):
+                    self.log_test("Popular Tags Structure", True, 
+                                 f"Found {len(response['popular_tags'])} popular tags")
+                else:
+                    self.log_test("Popular Tags Structure", False, "Popular tags not a list")
+                
+                if isinstance(response.get("level_courses"), list):
+                    self.log_test("Level Courses Structure", True, 
+                                 f"Found {len(response['level_courses'])} level courses")
+                else:
+                    self.log_test("Level Courses Structure", False, "Level courses not a list")
+                
+                if isinstance(response.get("stream_categories"), list):
+                    self.log_test("Stream Categories Structure", True, 
+                                 f"Found {len(response['stream_categories'])} stream categories")
+                else:
+                    self.log_test("Stream Categories Structure", False, "Stream categories not a list")
+                
+                if isinstance(response.get("faqs"), list):
+                    self.log_test("FAQs Structure", True, 
+                                 f"Found {len(response['faqs'])} FAQs")
+                else:
+                    self.log_test("FAQs Structure", False, "FAQs not a list")
+                    
+            else:
+                self.log_test("GET /course-listing-settings", False, 
+                             f"Only {len(present_fields)}/10 expected fields present. Missing: {', '.join(missing_fields)}")
+        else:
+            self.log_test("GET /course-listing-settings", False, f"Status: {status}", response)
+        
+        # Test 2: PUT /course-listing-settings without authentication (should fail)
+        test_settings = {
+            "hero_title": "Test Course Listing",
+            "hero_subtitle": "Test subtitle",
+            "hero_search_placeholder": "Search test courses...",
+            "popular_tags": [
+                {"name": "Test Course", "link": "/test", "color": "bg-blue-500"}
+            ],
+            "level_courses": [
+                {"title": "Test Level", "subtitle": "Test programs", "icon": "🎓", "link": "/test"}
+            ],
+            "stream_categories": [
+                {"name": "Test Stream", "icon": "HiOutlineDesktopComputer", "link": "/test", "courses": ["Test"], "count": "1+"}
+            ],
+            "meta_title": "Test Meta Title",
+            "meta_description": "Test meta description",
+            "meta_keywords": ["test", "course"],
+            "faqs": [
+                {"question": "Test question?", "answer": "Test answer"}
+            ]
+        }
+        
+        success, response, status = self.make_request("PUT", "/course-listing-settings", test_settings)
+        if not success and status in [401, 403]:
+            self.log_test("PUT /course-listing-settings (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("PUT /course-listing-settings (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 3: PUT /course-listing-settings with admin authentication
+        if self.admin_token:
+            success, response, status = self.make_request("PUT", "/course-listing-settings", 
+                                                        test_settings, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify the settings were saved
+                if response.get("hero_title") == test_settings["hero_title"]:
+                    self.log_test("PUT /course-listing-settings (with admin auth)", True, 
+                                 f"Settings updated successfully")
+                    
+                    # Test 4: Verify changes persist with GET request
+                    success, get_response, get_status = self.make_request("GET", "/course-listing-settings")
+                    if success and isinstance(get_response, dict):
+                        if get_response.get("hero_title") == test_settings["hero_title"]:
+                            self.log_test("Verify Settings Persistence", True, 
+                                         "Updated settings persist in GET request")
+                        else:
+                            self.log_test("Verify Settings Persistence", False, 
+                                         f"Settings not persisted. Expected: {test_settings['hero_title']}, Got: {get_response.get('hero_title')}")
+                    else:
+                        self.log_test("Verify Settings Persistence", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("PUT /course-listing-settings (with admin auth)", False, 
+                                 f"Settings not updated correctly. Expected: {test_settings['hero_title']}, Got: {response.get('hero_title')}")
+            else:
+                self.log_test("PUT /course-listing-settings (with admin auth)", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test("PUT /course-listing-settings (with admin auth)", False, 
+                         "Admin token not available")
+        
+        # Test 5: Verify all required fields are properly saved and retrieved
+        if self.admin_token:
+            # Create comprehensive test data
+            comprehensive_settings = {
+                "hero_title": "Comprehensive Test Title",
+                "hero_subtitle": "Comprehensive test subtitle with detailed information",
+                "hero_search_placeholder": "Search comprehensive test courses...",
+                "popular_tags": [
+                    {"name": "B.Tech Test", "link": "/test-engineering", "color": "bg-blue-500"},
+                    {"name": "MBA Test", "link": "/test-management", "color": "bg-purple-500"},
+                    {"name": "MBBS Test", "link": "/test-medical", "color": "bg-red-500"}
+                ],
+                "level_courses": [
+                    {
+                        "title": "After 12th Test", 
+                        "subtitle": "Undergraduate Test Programs", 
+                        "icon": "📚", 
+                        "gradient": "from-blue-500 to-purple-600",
+                        "link": "/test-after-12th", 
+                        "stats": "100+ Test Courses",
+                        "popular": ["B.Tech Test", "MBBS Test", "B.Com Test"]
+                    }
+                ],
+                "stream_categories": [
+                    {
+                        "name": "Engineering Test", 
+                        "icon": "HiOutlineDesktopComputer", 
+                        "link": "/test-engineering", 
+                        "courses": ["B.Tech Test", "B.E Test"], 
+                        "count": "50+"
+                    }
+                ],
+                "meta_title": "Test Courses in India 2025 - Comprehensive Testing",
+                "meta_description": "Explore comprehensive test courses across all streams and levels for testing purposes.",
+                "meta_keywords": ["test courses", "comprehensive testing", "course listing"],
+                "faqs": [
+                    {"question": "What is this test?", "answer": "This is a comprehensive test of the course listing settings feature."},
+                    {"question": "How does testing work?", "answer": "Testing verifies that all functionality works as expected."}
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/course-listing-settings", 
+                                                        comprehensive_settings, token=self.admin_token)
+            if success:
+                # Verify all fields are present in response
+                all_fields_present = True
+                for key, value in comprehensive_settings.items():
+                    if key not in response or response[key] != value:
+                        all_fields_present = False
+                        break
+                
+                if all_fields_present:
+                    self.log_test("Comprehensive Settings Update", True, 
+                                 "All fields saved and returned correctly")
+                else:
+                    self.log_test("Comprehensive Settings Update", False, 
+                                 "Some fields not saved correctly")
+            else:
+                self.log_test("Comprehensive Settings Update", False, 
+                             f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Comprehensive Backend API Testing...")
@@ -795,6 +976,7 @@ class APITester:
         
         # Run test suites in order
         self.test_authentication()
+        self.test_course_listing_settings()  # Add course listing settings tests
         self.test_advertisement_system()  # Add advertisement tests
         self.test_old_college_routes()
         self.test_new_module_routes()
