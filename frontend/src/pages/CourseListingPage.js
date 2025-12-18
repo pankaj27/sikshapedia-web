@@ -259,8 +259,34 @@ const CourseListingPage = () => {
             <Link to="/" className="hover:text-orange-600">Home</Link>
             <FiChevronRight size={14} className="mx-2" />
             <Link to="/courses" className="hover:text-orange-600">Courses</Link>
-            <FiChevronRight size={14} className="mx-2" />
-            <span className="text-gray-900 font-medium">Engineering Courses After 12th</span>
+            {stream && (
+              <>
+                <FiChevronRight size={14} className="mx-2" />
+                <span className="text-gray-900 font-medium">{getStreamTitle()}</span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Page Header */}
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-8">
+        <div className="container mx-auto px-6">
+          <h1 className="text-3xl font-bold mb-2">{getStreamTitle()} in India 2025</h1>
+          <p className="text-orange-100">Explore {filteredCourses.length}+ courses | Find the best course for your career</p>
+          
+          {/* Search Bar */}
+          <div className="mt-4 max-w-xl">
+            <div className="relative">
+              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search courses..."
+                className="w-full pl-12 pr-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -268,13 +294,18 @@ const CourseListingPage = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="flex gap-6">
           {/* Sidebar Filters */}
-          <aside className="w-64 flex-shrink-0">
+          <aside className="w-64 flex-shrink-0 hidden lg:block">
             <div className="bg-white rounded-lg shadow-sm p-5 sticky top-24">
+              <div className="flex items-center gap-2 mb-4">
+                <FiFilter className="text-orange-600" />
+                <h2 className="font-bold text-gray-800">Filters</h2>
+              </div>
+              
               {/* Level Filter */}
               <div className="mb-6">
-                <h3 className="font-bold text-sm mb-3 text-gray-800">Level of Course</h3>
+                <h3 className="font-semibold text-sm mb-3 text-gray-800">Degree Level</h3>
                 <div className="space-y-2">
-                  {['All', 'Bachelors', 'Diploma'].map(level => (
+                  {['All', 'UG', 'PG', 'Diploma', 'PhD'].map(level => (
                     <label key={level} className="flex items-center cursor-pointer">
                       <input
                         type="radio"
