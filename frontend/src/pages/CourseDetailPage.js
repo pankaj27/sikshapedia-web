@@ -99,13 +99,24 @@ const CourseDetailPage = () => {
     { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb },
   ];
 
-  // Sample syllabus data
-  const syllabusData = [
+  // Syllabus data - from API or default
+  const defaultSyllabus = [
     { semester: 'Semester 1', subjects: ['Foundation Course I', 'Core Subject I', 'Practical Lab I', 'Communication Skills'] },
     { semester: 'Semester 2', subjects: ['Foundation Course II', 'Core Subject II', 'Practical Lab II', 'Soft Skills'] },
     { semester: 'Semester 3', subjects: ['Advanced Core I', 'Elective I', 'Project Work I', 'Industry Training'] },
     { semester: 'Semester 4', subjects: ['Advanced Core II', 'Elective II', 'Project Work II', 'Internship'] },
   ];
+  const syllabusData = course.syllabus && course.syllabus.length > 0 ? course.syllabus : defaultSyllabus;
+
+  // Highlights/Badges - from API or default
+  const defaultHighlights = ['AICTE Approved', 'Industry Connect', 'Placement Support', 'Skill Development'];
+  const highlights = course.highlights && course.highlights.length > 0 ? course.highlights : defaultHighlights;
+
+  // Related Courses - from API or default based on stream
+  const defaultRelatedCourses = ['M.Tech', 'MBA', 'BCA', 'MCA'];
+  const relatedCourses = course.related_courses && course.related_courses.length > 0 
+    ? course.related_courses 
+    : defaultRelatedCourses;
 
   // Sample colleges
   const topColleges = [
