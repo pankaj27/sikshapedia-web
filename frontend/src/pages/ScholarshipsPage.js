@@ -179,20 +179,7 @@ const ScholarshipsPage = () => {
         </section>
       )}
 
-      {/* Featured Colleges for Scholarships */}
-      <section className="py-4">
-        <div className="container mx-auto px-4">
-          <FeaturedSponsoredSection 
-            placementId="scholarship_featured"
-            title="Colleges with Best Scholarship Programs"
-            subtitle="Explore institutions offering merit and need-based scholarships"
-            bgColor="from-yellow-50 via-amber-50 to-orange-50"
-            headerColor="from-yellow-500 to-amber-500"
-            linkColor="text-yellow-600"
-            viewAllLink="/india-colleges"
-          />
-        </div>
-      </section>
+      {/* Featured Colleges for Scholarships - Removed due to stability issues */}
 
       {/* Content */}
       <section className="py-12">
