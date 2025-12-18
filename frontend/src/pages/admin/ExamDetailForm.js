@@ -448,7 +448,7 @@ const ExamDetailForm = () => {
     setActionLoading(true);
     try {
       await api.post(`/admin/submit-for-review/exam/${id}`);
-      const response = await api.get(`/exams/${id}`);
+      const response = await api.get(`/exams-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Exam submitted for review!');
     } catch (error) {
@@ -462,7 +462,7 @@ const ExamDetailForm = () => {
     setActionLoading(true);
     try {
       await api.post(`/admin/approve/exam/${id}`, { action: 'approve', comment: 'Approved' });
-      const response = await api.get(`/exams/${id}`);
+      const response = await api.get(`/exams-detail/${id}`);
       setFormData({ ...formData, ...response.data });
       alert('Exam approved!');
     } catch (error) {
