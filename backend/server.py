@@ -3998,7 +3998,7 @@ async def create_exam_detail(exam_data: dict, current_user: User = Depends(get_c
     created_exam = await db.exams_detailed.find_one({"id": exam_data['id']}, {"_id": 0})
     return created_exam
 
-@api_router.put("/exams-detail/{exam_id}", response_model=Exam)
+@api_router.put("/exams-detail/{exam_id}")
 async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can update exams")
@@ -4007,13 +4007,36 @@ async def update_exam_detail(exam_id: str, exam_data: dict, current_user: User =
     if not existing_exam:
         raise HTTPException(status_code=404, detail="Exam not found")
     
+    # Update timestamp
+    exam_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    # Preserve original id and created_at
+    exam_data['id'] = exam_id
+    if 'created_at' not in exam_data:
+        exam_data['created_at'] = existing_exam.get('created_at')
+    
+    # Handle menu_config - ensure proper structure
+    if 'menu_config' in exam_data and exam_data['menu_config']:
+        items = exam_data['menu_config'].get('items', [])
+        for item in items:
+            # Initialize missing arrays
+            for field in ['toc', 'tables', 'images', 'videos', 'faqs']:
+                if field not in item or item[field] is None:
+                    item[field] = []
+            # Initialize widgets if missing
+            if 'widgets' not in item or item['widgets'] is None:
+                item['widgets'] = {
+                    'quick_facts': {'enabled': True},
+                    'quick_nav': {'enabled': True},
+                    'contact_cta': {'enabled': True, 'title': 'Need Help?', 'subtitle': 'Get expert guidance'},
+                    'related_exams': {'enabled': False, 'exams': []},
+                    'download_widget': {'enabled': False, 'title': 'Download Resources', 'files': []}
+                }
+    
     await db.exams_detailed.update_one({"id": exam_id}, {"$set": exam_data})
     updated_exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
     
-    if isinstance(updated_exam.get('created_at'), str):
-        updated_exam['created_at'] = datetime.fromisoformat(updated_exam['created_at'])
-    
-    return Exam(**updated_exam)
+    return updated_exam
 
 @api_router.delete("/exams-detail/{exam_id}")
 async def delete_exam_detail(exam_id: str, current_user: User = Depends(get_current_user)):
