@@ -298,6 +298,7 @@ const ScholarshipsPage = () => {
                       </div>
                     </div>
 
+                    {loan.special_features && loan.special_features.length > 0 && (
                     <div className="mb-4">
                       <h4 className="font-semibold mb-2">Special Features:</h4>
                       <ul className="list-disc list-inside text-sm text-gray-700">
@@ -306,6 +307,7 @@ const ScholarshipsPage = () => {
                         ))}
                       </ul>
                     </div>
+                    )}
 
                     {loan.website && (
                       <a href={loan.website} target="_blank" rel="noopener noreferrer">
