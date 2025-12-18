@@ -144,6 +144,13 @@ const AD_PLACEMENTS = [
   },
 ];
 
+// Section types for custom URL placements
+const SECTION_TYPES = [
+  { id: 'featured', name: 'Featured', icon: FiStar, color: 'from-orange-500 to-amber-500' },
+  { id: 'admission', name: 'Admissions Open', icon: FiCheckCircle, color: 'from-green-500 to-emerald-500' },
+  { id: 'sponsored', name: 'Sponsored', icon: FiDollarSign, color: 'from-blue-500 to-indigo-500' },
+];
+
 const SponsoredAdsManagement = () => {
   const [adsConfig, setAdsConfig] = useState({});
   const [allColleges, setAllColleges] = useState([]);
