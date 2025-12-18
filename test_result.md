@@ -9,32 +9,29 @@
 - Tester: Testing Agent
 
 ## Current Test Focus
-Testing the enhanced Advertisement Management system with:
-1. Banner Ads with different sizes
-2. Text Ads, Video Ads, HTML/Native Ads
-3. Click & Impression Tracking
-4. Budget & Billing (CPC, CPM)
-5. Ad Rotation settings
-6. Link-wise targeting (Custom URLs)
-7. Analytics Dashboard
+Testing the Course Pages Management feature with:
+1. GET /api/course-pages - List all 15 course page configurations
+2. GET /api/course-pages/{id} - Get specific page configurations
+3. PUT /api/course-pages/{id} - Update page with admin authentication
+4. POST /api/course-pages/{id}/reset - Reset page to defaults
 
 ## Test Scenarios
-1. Create a Banner Ad with custom URL targeting
-2. Create a Video Ad with budget settings
-3. Create an HTML Ad with rotation enabled
-4. Verify analytics/reports page
-5. Test impression and click tracking APIs
+1. Verify all 15 expected course pages are returned
+2. Test specific page retrieval (engineering, medical, after-10th)
+3. Test 404 for non-existent pages
+4. Test admin authentication requirements
+5. Test page updates and persistence
+6. Test page reset functionality
 
 ## Credentials
 - Admin Email: admin@admissionbuddy.co
 - Admin Password: admin123
 
 ## API Endpoints to Test
-- POST /api/advertisements - Create ad
-- GET /api/advertisements - List ads
-- POST /api/advertisements/{id}/track?event_type=impression - Track impression
-- POST /api/advertisements/{id}/track?event_type=click - Track click
-- GET /api/advertisements/analytics/summary - Get analytics
+- GET /api/course-pages - List all course pages
+- GET /api/course-pages/{id} - Get specific course page
+- PUT /api/course-pages/{id} - Update course page (admin only)
+- POST /api/course-pages/{id}/reset - Reset to defaults (admin only)
 
 ## Backend Test Results
 
