@@ -223,7 +223,17 @@ const ExamDetailPage = () => {
     tableOfContents: examFromApi.menu_config?.items?.map(item => ({
       id: item.id,
       title: item.label
-    })) || []
+    })) || [],
+    // SEO Content fields
+    seoIntro: examFromApi.seo_intro,
+    seoFullContent: examFromApi.seo_full_content,
+    seoToc: examFromApi.seo_toc || [],
+    seoTables: examFromApi.seo_tables || [],
+    seoImages: examFromApi.seo_images || [],
+    seoVideoUrl: examFromApi.seo_video_url,
+    seoVideoTitle: examFromApi.seo_video_title,
+    seoVideoDescription: examFromApi.seo_video_description,
+    seoFaqs: examFromApi.seo_faqs || []
   } : mockExam;
 
   // Show loading state
