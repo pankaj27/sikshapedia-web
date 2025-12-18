@@ -8,7 +8,7 @@ import api from '../api/axios';
 const ExamDetailPage = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('questionPapers');
-  const [activeSection, setActiveSection] = useState('overview');
+  const [activeSection, setActiveSection] = useState(null); // Start with null, will be set to first item
   const [examFromApi, setExamFromApi] = useState(null);
   const [loading, setLoading] = useState(true);
 
