@@ -462,39 +462,61 @@ class APITester:
             else:
                 self.log_test(f"Detail Page: {institution['expected']}", False, "No ID available")
 
-    def test_route_consistency(self):
-        """Test that old and new routes return consistent data"""
-        print("🔄 Testing Route Consistency (Old vs New)...")
+    def test_server_health(self):
+        """Test server health and bcrypt warnings"""
+        print("🏥 Testing Server Health...")
         
-        # Get data from both old and new routes
-        old_success, old_data, _ = self.make_request("GET", "/colleges?limit=5")
-        new_success, new_data, _ = self.make_request("GET", "/institutions?limit=5")
-        
-        if old_success and new_success:
-            old_count = len(old_data) if isinstance(old_data, list) else 0
-            new_count = len(new_data) if isinstance(new_data, list) else 0
-            
-            if old_count > 0 and new_count > 0:
-                # Check if data structure is similar
-                old_sample = old_data[0] if old_data else {}
-                new_sample = new_data[0] if new_data else {}
-                
-                # Check for common fields
-                common_fields = set(old_sample.keys()) & set(new_sample.keys())
-                total_fields = set(old_sample.keys()) | set(new_sample.keys())
-                
-                consistency_ratio = len(common_fields) / len(total_fields) if total_fields else 0
-                
-                if consistency_ratio > 0.7:  # 70% field overlap is good
-                    self.log_test("Route Consistency Check", True, 
-                                f"Old: {old_count} items, New: {new_count} items, {len(common_fields)}/{len(total_fields)} common fields")
-                else:
-                    self.log_test("Route Consistency Check", False, 
-                                f"Low consistency: {len(common_fields)}/{len(total_fields)} common fields")
-            else:
-                self.log_test("Route Consistency Check", False, "One or both routes returned empty data")
+        # Test 1: Check if server is responding
+        success, response, status = self.make_request("GET", "/")
+        if success:
+            self.log_test("Server Response", True, f"Server responding with status {status}")
         else:
-            self.log_test("Route Consistency Check", False, "One or both routes failed")
+            self.log_test("Server Response", False, f"Server not responding, status: {status}")
+        
+        # Test 2: Check backend logs for bcrypt warnings
+        try:
+            import subprocess
+            result = subprocess.run(
+                ["tail", "-n", "100", "/var/log/supervisor/backend.err.log"],
+                capture_output=True, text=True, timeout=10
+            )
+            
+            if result.returncode == 0:
+                log_content = result.stdout
+                bcrypt_warnings = [line for line in log_content.split('\n') 
+                                 if 'bcrypt' in line.lower() and ('warning' in line.lower() or 'error' in line.lower())]
+                
+                if not bcrypt_warnings:
+                    self.log_test("bcrypt/passlib Warnings Check", True, "No bcrypt warnings found in logs")
+                else:
+                    self.log_test("bcrypt/passlib Warnings Check", False, 
+                                f"Found {len(bcrypt_warnings)} bcrypt warnings in logs")
+            else:
+                self.log_test("bcrypt/passlib Warnings Check", False, "Could not read backend logs")
+        except Exception as e:
+            self.log_test("bcrypt/passlib Warnings Check", False, f"Error checking logs: {str(e)}")
+        
+        # Test 3: Test modular routes are loaded
+        modular_routes = [
+            ("/auth/me", "Authentication routes"),
+            ("/blogs", "Blog routes"),
+            ("/news", "News routes"),
+            ("/blog-listing-settings", "Blog listing settings"),
+            ("/news-listing-settings", "News listing settings")
+        ]
+        
+        loaded_routes = 0
+        for route, description in modular_routes:
+            success, response, status = self.make_request("GET", route)
+            # Even 401/403 means the route is loaded, just needs auth
+            if status != 404:
+                loaded_routes += 1
+        
+        if loaded_routes == len(modular_routes):
+            self.log_test("Modular Routes Loading", True, f"All {loaded_routes} modular routes loaded")
+        else:
+            self.log_test("Modular Routes Loading", False, 
+                         f"Only {loaded_routes}/{len(modular_routes)} modular routes loaded")
 
     def test_seo_content_display_exam_detail(self):
         """Test SEO Content Display feature on Exam Detail Page"""
