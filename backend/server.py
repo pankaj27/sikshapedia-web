@@ -217,6 +217,132 @@ class ExamCreate(BaseModel):
     eligibility: Dict
     application_fee: Dict
 
+# Exam Detailed Model (for comprehensive exam entry form)
+class ExamDetailedWidget(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    enabled: bool = True
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    exams: Optional[List[Dict]] = []
+    files: Optional[List[Dict]] = []
+
+class ExamDetailedWidgets(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    quick_facts: Optional[ExamDetailedWidget] = None
+    quick_nav: Optional[ExamDetailedWidget] = None
+    contact_cta: Optional[ExamDetailedWidget] = None
+    related_exams: Optional[ExamDetailedWidget] = None
+    download_widget: Optional[ExamDetailedWidget] = None
+
+class ExamDetailedMenuItem(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    id: str
+    label: str
+    icon: Optional[str] = None
+    enabled: bool = True
+    order: int = 0
+    content: Optional[str] = ""
+    page_heading: Optional[str] = ""
+    meta_title: Optional[str] = ""
+    meta_description: Optional[str] = ""
+    toc: Optional[List[Dict]] = []  # [{title, anchor, content}]
+    tables: Optional[List[Dict]] = []  # [{title, headers, rows}]
+    images: Optional[List[Dict]] = []  # [{url, title, alt, caption}]
+    videos: Optional[List[Dict]] = []  # [{url, title, description, alt}]
+    faqs: Optional[List[Dict]] = []  # [{question, answer}]
+    widgets: Optional[ExamDetailedWidgets] = None
+
+class ExamDetailedMenuConfig(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    use_custom_menu: bool = False
+    auto_from_toc: bool = True
+    items: List[ExamDetailedMenuItem] = []
+
+class ExamDetailed(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    slug: Optional[str] = None
+    full_name: Optional[str] = None
+    description: Optional[str] = None
+    conducting_body: Optional[str] = None
+    type: Optional[str] = None
+    level: Optional[str] = None
+    exam_level: Optional[str] = None
+    exam_type: Optional[str] = None
+    streams: List[str] = []
+    
+    # Basic Exam Details
+    exam_mode: Optional[str] = None
+    exam_duration: Optional[str] = None
+    total_marks: Optional[int] = None
+    num_questions: Optional[int] = None
+    exam_pattern: Optional[Dict] = None
+    syllabus: Optional[str] = None
+    
+    # Important Dates
+    application_start_date: Optional[str] = None
+    application_end_date: Optional[str] = None
+    exam_date: Optional[str] = None
+    result_date: Optional[str] = None
+    counseling_date: Optional[str] = None
+    
+    # Eligibility & Fees
+    eligibility: Optional[Dict] = None
+    age_limit: Optional[str] = None
+    application_fee: Optional[Dict] = None
+    previous_year_cutoffs: List[Dict] = []
+    
+    # Study Materials
+    study_materials: List[Dict] = []
+    sample_papers: List[Dict] = []
+    important_topics: List[str] = []
+    
+    # Stats
+    total_applicants: Optional[int] = None
+    total_seats: Optional[int] = None
+    difficulty_level: Optional[str] = None
+    
+    # Related
+    accepting_colleges: List[str] = []
+    official_website: Optional[str] = None
+    
+    # ========== NEW FIELDS ==========
+    # Exam Logo
+    logo_url: Optional[str] = None
+    
+    # Content Images & Videos (for main content area)
+    content_images: List[Dict] = []  # [{url, title, alt}]
+    content_videos: List[Dict] = []  # [{url, title, description}]
+    
+    # Question Papers
+    question_papers: List[Dict] = []  # [{year, name, file_url, external_link}]
+    
+    # SEO Fields (Page Level)
+    seo_toc: List[Dict] = []  # [{title, anchor}]
+    seo_tables: List[Dict] = []  # Full table data [{title, headers, rows}]
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    meta_keywords: Optional[str] = None
+    og_title: Optional[str] = None
+    og_description: Optional[str] = None
+    og_image: Optional[str] = None
+    canonical_url: Optional[str] = None
+    
+    # Menu Configuration (with nested content)
+    menu_config: Optional[ExamDetailedMenuConfig] = None
+    
+    # Approval Status
+    status: str = "draft"
+    rejection_reason: Optional[str] = None
+    submitted_by: Optional[dict] = None
+    submitted_at: Optional[datetime] = None
+    approved_by: Optional[dict] = None
+    approved_at: Optional[datetime] = None
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
+
 # Course Models (Enhanced)
 class CourseDetail(BaseModel):
     model_config = ConfigDict(extra="ignore")
