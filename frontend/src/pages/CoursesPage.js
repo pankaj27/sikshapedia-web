@@ -343,6 +343,18 @@ const CoursesPage = () => {
         </div>
       </section>
 
+      {/* Sponsored Featured Colleges for Courses */}
+      <section className="py-8 bg-white">
+        <div className="container mx-auto px-4">
+          <FeaturedSponsoredSection 
+            placementId="course_listing_featured"
+            title="Featured Colleges"
+            subtitle="Top institutions for your chosen course"
+            viewAllLink="/india-colleges"
+          />
+        </div>
+      </section>
+
       {/* Trending Courses Section */}
       <section className="py-16 bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="container mx-auto px-4">
