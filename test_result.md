@@ -433,7 +433,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Course Pages Management Testing Complete"
+    - "Course Listing Settings and Course Pages Comprehensive Testing Complete"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
