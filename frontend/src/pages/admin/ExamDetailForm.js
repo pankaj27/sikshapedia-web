@@ -649,7 +649,7 @@ const ExamDetailForm = () => {
               <button
                 type="button"
                 onClick={() => {
-                  const autoTitle = `${formData.name} ${new Date().getFullYear()} - Exam Date, Application, Eligibility`;
+                  const autoTitle = `${formData.name} ${new Date().getFullYear()} - Exam Date, Application | Admissionbuddy`;
                   setFormData({...formData, meta_title: autoTitle.substring(0, 60)});
                 }}
                 className="text-xs text-blue-600 hover:underline mt-1"
