@@ -12,6 +12,7 @@ const ExamDetailPage = () => {
   const [activeSection, setActiveSection] = useState(null); // Start with null, will be set to first item
   const [examFromApi, setExamFromApi] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSeoContent, setShowSeoContent] = useState(false); // For Read More toggle
 
   // Fetch exam data from API
   useEffect(() => {
