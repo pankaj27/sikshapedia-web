@@ -462,6 +462,12 @@ const CourseDetailPage = () => {
               </div>
             </div>
 
+            {/* Sponsored Colleges for this Course */}
+            <SidebarSponsoredAd 
+              placementId="course_detail_sidebar" 
+              title="Top Colleges for this Course"
+            />
+
             {/* Related Courses */}
             <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="font-bold text-lg mb-4 text-gray-900">Related Courses</h3>
