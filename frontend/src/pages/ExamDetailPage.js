@@ -173,7 +173,52 @@ const ExamDetailPage = () => {
     }
   };
 
-  const exam = examData[id] || examData['jee-main'];
+  // Use API data if available, otherwise fallback to mock data
+  const mockExam = examData[id] || examData['jee-main'];
+  
+  // Transform API data to match expected format
+  const exam = examFromApi ? {
+    name: examFromApi.name,
+    fullName: examFromApi.full_name || examFromApi.name,
+    description: examFromApi.description || `${examFromApi.name} is an entrance examination.`,
+    conductor: examFromApi.conducting_body || 'Various',
+    questionPapers: examFromApi.question_papers?.reduce((acc, paper) => {
+      const year = paper.year || '2024';
+      if (!acc[year]) acc[year] = [];
+      acc[year].push({ date: paper.name, downloadLink: paper.file_url || paper.external_link || '#', solutionLink: '#' });
+      return acc;
+    }, {}) || mockExam.questionPapers,
+    examInfo: {
+      examMode: examFromApi.exam_mode ? `${examFromApi.exam_mode} Based Test` : mockExam.examInfo?.examMode || 'Computer Based Test',
+      examDuration: examFromApi.exam_duration || mockExam.examInfo?.examDuration || '3 Hours',
+      totalQuestions: examFromApi.num_questions ? `${examFromApi.num_questions} Questions` : mockExam.examInfo?.totalQuestions || '-',
+      totalMarks: examFromApi.total_marks ? `${examFromApi.total_marks} Marks` : mockExam.examInfo?.totalMarks || '-',
+      examLevel: examFromApi.exam_level || mockExam.examInfo?.examLevel || 'National Level',
+      examFrequency: mockExam.examInfo?.examFrequency || 'Once a Year',
+      eligibility: mockExam.examInfo?.eligibility || '10+2 with required subjects',
+      officialWebsite: examFromApi.official_website || mockExam.examInfo?.officialWebsite || '#'
+    },
+    keyHighlights: mockExam.keyHighlights || [],
+    menuConfig: examFromApi.menu_config,
+    sidebarWidgets: examFromApi.sidebar_widgets,
+    metaTitle: examFromApi.meta_title,
+    metaDescription: examFromApi.meta_description,
+    streams: examFromApi.streams || [],
+    examDate: examFromApi.exam_date,
+    applicationStart: examFromApi.application_start_date,
+    applicationEnd: examFromApi.application_end_date,
+    resultDate: examFromApi.result_date
+  } : mockExam;
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <FiLoader className="w-8 h-8 text-blue-600 animate-spin" />
+        <span className="ml-3 text-gray-600">Loading exam details...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -193,8 +238,15 @@ const ExamDetailPage = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
         <div className="container mx-auto px-6">
-          <h1 className="text-3xl font-bold mb-2">{exam.name} Previous Years Question Paper with Solution PDF and Answer Key</h1>
-          <p className="text-lg">Download {exam.name} Question Papers from 2025-2022 with detailed solutions</p>
+          <h1 className="text-3xl font-bold mb-2">{exam.fullName || exam.name}</h1>
+          <p className="text-lg">{exam.description || `Complete information about ${exam.name}`}</p>
+          {exam.streams?.length > 0 && (
+            <div className="flex gap-2 mt-3">
+              {exam.streams.map((stream, idx) => (
+                <span key={idx} className="px-3 py-1 bg-white/20 rounded-full text-sm">{stream}</span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
