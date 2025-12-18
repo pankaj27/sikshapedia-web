@@ -380,7 +380,7 @@ const CollegeDuniaHome = () => {
             {/* Sponsor Ad Card - Dynamic from Admin */}
             {homeBannerAd ? (
               <Link 
-                to={`/college/${homeBannerAd.id}`}
+                to={getInstitutionDetailUrl(homeBannerAd.institution_type || 'college', homeBannerAd.id, homeBannerAd.name, homeBannerAd.location?.city, homeBannerAd.serial_number)}
                 className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden hover:from-gray-700 hover:to-gray-800 transition-all"
               >
                 <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
