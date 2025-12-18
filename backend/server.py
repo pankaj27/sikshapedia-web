@@ -2035,6 +2035,10 @@ class CoursePageSettings(BaseModel):
     sidebar_cta_text: str = "Get expert counselling"
     sidebar_cta_button: str = "Get Free Counselling"
     
+    # Additional Content
+    intro_content: Optional[str] = None
+    bottom_content: Optional[str] = None
+    
     # Timestamps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
