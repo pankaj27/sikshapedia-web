@@ -566,7 +566,7 @@ const ExamDetailPage = () => {
                 Related Videos
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {exam.videos.map((video, idx) => (
+                {(exam.videos || []).map((video, idx) => (
                   <div key={idx} className="cursor-pointer group">
                     <div className="relative rounded-lg overflow-hidden shadow-md">
                       <img src={video.thumbnail} alt={video.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
