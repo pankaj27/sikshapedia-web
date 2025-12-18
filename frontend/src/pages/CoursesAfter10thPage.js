@@ -144,7 +144,9 @@ const CoursesAfter10thPage = () => {
                 Courses After 10th Class
               </h1>
               <p className="text-lg text-orange-100 mb-6 max-w-2xl">
-                Explore {totalCourses}+ diploma, certificate & vocational courses to kickstart your career after class 10th
+                {totalCourses > 0 
+                  ? `Explore ${totalCourses} diploma, certificate & vocational courses to kickstart your career after class 10th`
+                  : 'Explore diploma, certificate & vocational courses to kickstart your career after class 10th'}
               </p>
 
               {/* Search Box */}
