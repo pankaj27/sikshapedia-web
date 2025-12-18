@@ -166,6 +166,7 @@ const SponsoredAdsManagement = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showCustomPlacementModal, setShowCustomPlacementModal] = useState(false);
   const [newCustomPlacement, setNewCustomPlacement] = useState({ url: '', sectionType: 'featured', name: '' });
+  const [editingPlacement, setEditingPlacement] = useState(null); // For editing existing custom placements
 
   useEffect(() => {
     fetchData();
