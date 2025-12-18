@@ -369,151 +369,182 @@ const ExamDetailPage = () => {
       </div>
       )}
 
-      {/* SEO Content Section - Dynamic from Admin Panel */}
+      {/* SEO Content Section - Dynamic from Admin Panel (Collapsible) */}
       {(exam.seoIntro || exam.seoFullContent || exam.seoToc?.length > 0 || exam.seoTables?.length > 0 || exam.seoFaqs?.length > 0 || exam.seoVideoUrl) && (
         <div className="bg-white border-b py-6">
           <div className="container mx-auto px-6">
-            {/* SEO Intro */}
+            {/* SEO Intro Preview - Always visible, truncated when collapsed */}
             {exam.seoIntro && (
-              <div className="mb-6">
-                <p className="text-gray-700 text-lg leading-relaxed">{exam.seoIntro}</p>
+              <div className="mb-4">
+                <p className={`text-gray-700 text-lg leading-relaxed ${!showSeoContent ? 'line-clamp-3' : ''}`}>
+                  {exam.seoIntro}
+                </p>
               </div>
             )}
 
-            {/* SEO Table of Contents */}
-            {exam.seoToc?.length > 0 && (
-              <div className="mb-6 bg-gray-50 rounded-lg p-4">
-                <h3 className="font-bold text-gray-800 mb-3 text-lg">📑 Table of Contents</h3>
-                <nav className="space-y-1">
-                  {exam.seoToc.map((item, idx) => (
-                    <a
-                      key={idx}
-                      href={`#${item.anchor || item.title?.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="block text-blue-600 hover:text-orange-600 text-sm py-1 hover:underline"
-                    >
-                      {idx + 1}. {item.title}
-                    </a>
-                  ))}
-                </nav>
+            {/* Read More Button - Show when collapsed */}
+            {!showSeoContent && (
+              <div className="text-center mb-4">
+                <button
+                  onClick={() => setShowSeoContent(true)}
+                  className="inline-flex items-center gap-2 px-6 py-2 border-2 border-orange-500 text-orange-600 hover:bg-orange-50 text-sm font-medium rounded-full transition-colors"
+                >
+                  <span>Read More</span>
+                  <FiChevronDown size={18} />
+                </button>
               </div>
             )}
 
-            {/* SEO Full Content (HTML) */}
-            {exam.seoFullContent && (
-              <div 
-                className="prose prose-lg max-w-none mb-6 text-gray-700"
-                dangerouslySetInnerHTML={{ __html: exam.seoFullContent }}
-              />
-            )}
-
-            {/* SEO TOC Content Sections */}
-            {exam.seoToc?.filter(item => item.content)?.length > 0 && (
-              <div className="space-y-6 mb-6">
-                {exam.seoToc.filter(item => item.content).map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    id={item.anchor || item.title?.toLowerCase().replace(/\s+/g, '-')}
-                    className="scroll-mt-24"
-                  >
-                    <h3 className="text-xl font-bold text-gray-800 mb-3 border-l-4 border-orange-500 pl-4">
-                      {item.title}
-                    </h3>
-                    <div 
-                      className="prose max-w-none text-gray-600"
-                      dangerouslySetInnerHTML={{ __html: item.content }}
-                    />
+            {/* Expandable SEO Content - Show when expanded */}
+            {showSeoContent && (
+              <div className="space-y-6">
+                {/* SEO Table of Contents */}
+                {exam.seoToc?.length > 0 && (
+                  <div className="bg-gray-50 rounded-lg p-4 border">
+                    <h3 className="font-bold text-gray-800 mb-3 text-lg">📑 Table of Contents</h3>
+                    <nav className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-1">
+                      {exam.seoToc.map((item, idx) => (
+                        <a
+                          key={idx}
+                          href={`#${item.anchor || item.title?.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="text-blue-600 hover:text-orange-600 text-sm py-1 hover:underline"
+                        >
+                          {idx + 1}. {item.title}
+                        </a>
+                      ))}
+                    </nav>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {/* SEO Tables */}
-            {exam.seoTables?.length > 0 && (
-              <div className="space-y-6 mb-6">
-                {exam.seoTables.map((table, tIdx) => (
-                  <div key={tIdx} className="overflow-x-auto">
-                    {table.title && (
-                      <h3 className="text-lg font-semibold text-gray-800 mb-3">{table.title}</h3>
-                    )}
-                    <table className="w-full border-collapse border border-gray-200 rounded-lg overflow-hidden">
-                      <thead className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
-                        <tr>
-                          {table.headers?.map((header, hIdx) => (
-                            <th key={hIdx} className="border border-orange-400 px-4 py-3 text-left font-semibold">
-                              {header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {table.rows?.map((row, rIdx) => (
-                          <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                            {row.map((cell, cIdx) => (
-                              <td key={cIdx} className="border border-gray-200 px-4 py-3 text-gray-700">
-                                {cell}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* SEO Images */}
-            {exam.seoImages?.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                {exam.seoImages.map((img, iIdx) => (
-                  <figure key={iIdx} className="bg-gray-50 rounded-lg overflow-hidden">
-                    <img 
-                      src={img.url} 
-                      alt={img.alt || img.title || `${exam.name} image`} 
-                      className="w-full h-auto object-cover"
-                    />
-                    {(img.title || img.caption) && (
-                      <figcaption className="text-sm text-gray-600 p-3 text-center">
-                        {img.caption || img.title}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
-              </div>
-            )}
-
-            {/* SEO Video */}
-            {exam.seoVideoUrl && (
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                  🎬 {exam.seoVideoTitle || `${exam.name} Video Guide`}
-                </h3>
-                <div className="aspect-video rounded-lg overflow-hidden shadow-md">
-                  <iframe 
-                    src={exam.seoVideoUrl} 
-                    title={exam.seoVideoTitle || exam.name}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-                {exam.seoVideoDescription && (
-                  <p className="text-sm text-gray-600 mt-2">{exam.seoVideoDescription}</p>
                 )}
-              </div>
-            )}
 
-            {/* SEO FAQs */}
-            {exam.seoFaqs?.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">❓ Frequently Asked Questions</h3>
-                <div className="space-y-3">
-                  {exam.seoFaqs.map((faq, fIdx) => (
-                    <div key={fIdx} className="bg-gray-50 rounded-lg p-4 border-l-4 border-orange-500">
-                      <p className="font-semibold text-gray-800 mb-2">Q: {faq.question}</p>
-                      <p className="text-gray-600">A: {faq.answer}</p>
+                {/* SEO Full Content (HTML) */}
+                {exam.seoFullContent && (
+                  <div 
+                    className="prose prose-lg max-w-none text-gray-700"
+                    dangerouslySetInnerHTML={{ __html: exam.seoFullContent }}
+                  />
+                )}
+
+                {/* SEO TOC Content Sections */}
+                {exam.seoToc?.filter(item => item.content)?.length > 0 && (
+                  <div className="space-y-6">
+                    {exam.seoToc.filter(item => item.content).map((item, idx) => (
+                      <div 
+                        key={idx} 
+                        id={item.anchor || item.title?.toLowerCase().replace(/\s+/g, '-')}
+                        className="scroll-mt-24"
+                      >
+                        <h3 className="text-xl font-bold text-gray-800 mb-3 border-l-4 border-orange-500 pl-4">
+                          {item.title}
+                        </h3>
+                        <div 
+                          className="prose max-w-none text-gray-600"
+                          dangerouslySetInnerHTML={{ __html: item.content }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* SEO Tables */}
+                {exam.seoTables?.length > 0 && (
+                  <div className="space-y-6">
+                    {exam.seoTables.map((table, tIdx) => (
+                      <div key={tIdx} className="overflow-x-auto">
+                        {table.title && (
+                          <h3 className="text-lg font-semibold text-gray-800 mb-3">{table.title}</h3>
+                        )}
+                        <table className="w-full border-collapse border border-gray-200 rounded-lg overflow-hidden">
+                          <thead className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+                            <tr>
+                              {table.headers?.map((header, hIdx) => (
+                                <th key={hIdx} className="border border-orange-400 px-4 py-3 text-left font-semibold">
+                                  {header}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {table.rows?.map((row, rIdx) => (
+                              <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                {row.map((cell, cIdx) => (
+                                  <td key={cIdx} className="border border-gray-200 px-4 py-3 text-gray-700">
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* SEO Images */}
+                {exam.seoImages?.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {exam.seoImages.map((img, iIdx) => (
+                      <figure key={iIdx} className="bg-gray-50 rounded-lg overflow-hidden">
+                        <img 
+                          src={img.url} 
+                          alt={img.alt || img.title || `${exam.name} image`} 
+                          className="w-full h-auto object-cover"
+                        />
+                        {(img.title || img.caption) && (
+                          <figcaption className="text-sm text-gray-600 p-3 text-center">
+                            {img.caption || img.title}
+                          </figcaption>
+                        )}
+                      </figure>
+                    ))}
+                  </div>
+                )}
+
+                {/* SEO Video */}
+                {exam.seoVideoUrl && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                      🎬 {exam.seoVideoTitle || `${exam.name} Video Guide`}
+                    </h3>
+                    <div className="aspect-video rounded-lg overflow-hidden shadow-md">
+                      <iframe 
+                        src={exam.seoVideoUrl} 
+                        title={exam.seoVideoTitle || exam.name}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     </div>
-                  ))}
+                    {exam.seoVideoDescription && (
+                      <p className="text-sm text-gray-600 mt-2">{exam.seoVideoDescription}</p>
+                    )}
+                  </div>
+                )}
+
+                {/* SEO FAQs */}
+                {exam.seoFaqs?.length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">❓ Frequently Asked Questions</h3>
+                    <div className="space-y-3">
+                      {exam.seoFaqs.map((faq, fIdx) => (
+                        <div key={fIdx} className="bg-gray-50 rounded-lg p-4 border-l-4 border-orange-500">
+                          <p className="font-semibold text-gray-800 mb-2">Q: {faq.question}</p>
+                          <p className="text-gray-600">A: {faq.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Read Less Button - Show at the end when expanded */}
+                <div className="text-center mt-6">
+                  <button
+                    onClick={() => setShowSeoContent(false)}
+                    className="inline-flex items-center gap-2 px-6 py-2 border-2 border-orange-500 text-orange-600 hover:bg-orange-50 text-sm font-medium rounded-full transition-colors"
+                  >
+                    <span>Read Less</span>
+                    <FiChevronUp size={18} />
+                  </button>
                 </div>
               </div>
             )}
