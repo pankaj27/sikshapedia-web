@@ -3940,29 +3940,26 @@ async def delete_course_detail(course_id: str, current_user: User = Depends(get_
 # Exams Detail Routes (Separate Collection)
 # ============================================
 
-@api_router.get("/exams-detail", response_model=List[Exam])
+@api_router.get("/exams-detail")
 async def get_exams_detail(
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000)
+    limit: int = Query(20, ge=1, le=1000),
+    status: Optional[str] = Query(None)
 ):
-    exams = await db.exams_detailed.find({}, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    query = {}
+    if status:
+        query['status'] = status
     
-    for exam in exams:
-        if isinstance(exam.get('created_at'), str):
-            exam['created_at'] = datetime.fromisoformat(exam['created_at'])
-    
+    exams = await db.exams_detailed.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     return exams
 
-@api_router.get("/exams-detail/{exam_id}", response_model=Exam)
+@api_router.get("/exams-detail/{exam_id}")
 async def get_exam_detail(exam_id: str):
     exam = await db.exams_detailed.find_one({"id": exam_id}, {"_id": 0})
     if not exam:
         raise HTTPException(status_code=404, detail="Exam not found")
     
-    if isinstance(exam.get('created_at'), str):
-        exam['created_at'] = datetime.fromisoformat(exam['created_at'])
-    
-    return Exam(**exam)
+    return exam
 
 @api_router.post("/exams-detail")
 async def create_exam_detail(exam_data: dict, current_user: User = Depends(get_current_user)):
