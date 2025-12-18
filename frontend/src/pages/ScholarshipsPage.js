@@ -218,7 +218,7 @@ const ScholarshipsPage = () => {
                           <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
                             {scholarship.level}
                           </span>
-                          {scholarship.countries.map((country, idx) => (
+                          {scholarship.countries && scholarship.countries.map((country, idx) => (
                             <span key={idx} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
                               {country}
                             </span>
