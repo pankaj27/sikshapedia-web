@@ -6070,12 +6070,22 @@ async def create_advertisement(ad_data: dict, current_user: User = Depends(get_c
     if 'end_date' in ad_data and isinstance(ad_data['end_date'], str):
         ad_data['end_date'] = datetime.fromisoformat(ad_data['end_date'].replace('Z', '+00:00'))
     
+    # Set timestamps
+    ad_data['created_at'] = datetime.now(timezone.utc)
+    ad_data['updated_at'] = datetime.now(timezone.utc)
+    
     ad = Advertisement(**ad_data, created_by=current_user.id)
     ad_dict = ad.model_dump()
-    ad_dict['created_at'] = ad_dict['created_at'].isoformat()
-    ad_dict['updated_at'] = ad_dict['updated_at'].isoformat()
-    ad_dict['start_date'] = ad_dict['start_date'].isoformat()
-    ad_dict['end_date'] = ad_dict['end_date'].isoformat()
+    
+    # Convert datetime objects to ISO strings for MongoDB
+    if isinstance(ad_dict.get('created_at'), datetime):
+        ad_dict['created_at'] = ad_dict['created_at'].isoformat()
+    if isinstance(ad_dict.get('updated_at'), datetime):
+        ad_dict['updated_at'] = ad_dict['updated_at'].isoformat()
+    if isinstance(ad_dict.get('start_date'), datetime):
+        ad_dict['start_date'] = ad_dict['start_date'].isoformat()
+    if isinstance(ad_dict.get('end_date'), datetime):
+        ad_dict['end_date'] = ad_dict['end_date'].isoformat()
     
     await db.advertisements.insert_one(ad_dict)
     return ad
