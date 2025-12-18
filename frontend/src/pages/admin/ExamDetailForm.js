@@ -1842,20 +1842,73 @@ const ExamDetailForm = () => {
                         }} />
                       </label>
                     </div>
-                    {(item.images || []).map((img, imgIndex) => (
-                      <div key={imgIndex} className="flex gap-2 items-center mb-2 bg-white p-2 rounded border">
-                        <img src={img.url?.startsWith('/api') ? img.url : `/api${img.url}`} alt="" className="w-12 h-12 object-cover rounded" />
-                        <input type="text" value={img.alt || ''} onChange={(e) => {
-                          const newImages = [...(item.images || [])];
-                          newImages[imgIndex].alt = e.target.value;
-                          updateMenuItem(index, 'images', newImages);
-                        }} placeholder="Alt text (SEO)" className="flex-1 border rounded px-2 py-1 text-xs" />
-                        <button type="button" onClick={() => {
-                          const newImages = (item.images || []).filter((_, i) => i !== imgIndex);
-                          updateMenuItem(index, 'images', newImages);
-                        }} className="text-red-500 p-1"><FiTrash2 className="w-3 h-3" /></button>
+                    
+                    {(item.images || []).length > 0 ? (
+                      <div className="space-y-2">
+                        {(item.images || []).map((img, imgIndex) => (
+                          <div key={imgIndex} className="bg-white p-2 rounded border flex gap-3">
+                            <img src={img.url?.startsWith('/api') ? img.url : `/api${img.url}`} alt="" className="w-20 h-20 object-cover rounded flex-shrink-0" />
+                            <div className="flex-1 space-y-1">
+                              <div>
+                                <label className="block text-xs text-gray-500">Title</label>
+                                <input type="text" value={img.title || ''} onChange={(e) => {
+                                  const newImages = [...(item.images || [])];
+                                  newImages[imgIndex].title = e.target.value;
+                                  updateMenuItem(index, 'images', newImages);
+                                }} placeholder="Image title" className="w-full border rounded px-2 py-1 text-xs" />
+                              </div>
+                              <div>
+                                <label className="block text-xs text-gray-500">
+                                  Alt Text (SEO)
+                                  <button type="button" onClick={() => {
+                                    const newImages = [...(item.images || [])];
+                                    newImages[imgIndex].alt = `${formData.name} ${item.label} ${img.title || ''} - Admissionbuddy`.trim();
+                                    updateMenuItem(index, 'images', newImages);
+                                  }} className="ml-2 text-blue-600 text-xs">⚡ Auto</button>
+                                </label>
+                                <input type="text" value={img.alt || ''} onChange={(e) => {
+                                  const newImages = [...(item.images || [])];
+                                  newImages[imgIndex].alt = e.target.value;
+                                  updateMenuItem(index, 'images', newImages);
+                                }} placeholder="Alt text for SEO" className="w-full border rounded px-2 py-1 text-xs" />
+                              </div>
+                              <div className="flex gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const imgHtml = `<figure class="content-image"><img src="${img.url}" alt="${img.alt || ''}" title="${img.title || ''}" />${img.caption ? `<figcaption>${img.caption}</figcaption>` : ''}</figure>`;
+                                    updateMenuItem(index, 'content', (item.content || '') + '\n\n' + imgHtml);
+                                    alert('Image inserted into content!');
+                                  }}
+                                  className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded hover:bg-blue-200"
+                                >
+                                  Insert to Content
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const imgHtml = `<img src="${img.url}" alt="${img.alt || ''}" title="${img.title || ''}" />`;
+                                    navigator.clipboard.writeText(imgHtml);
+                                    alert('Image HTML copied!');
+                                  }}
+                                  className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded hover:bg-gray-200"
+                                >
+                                  📋 Copy
+                                </button>
+                                <button type="button" onClick={() => {
+                                  const newImages = (item.images || []).filter((_, i) => i !== imgIndex);
+                                  updateMenuItem(index, 'images', newImages);
+                                }} className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded hover:bg-red-200">
+                                  🗑️ Remove
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <p className="text-xs text-gray-400 italic">No images. Upload images to add to this page.</p>
+                    )}
                   </div>
 
                   {/* Videos for this page */}
