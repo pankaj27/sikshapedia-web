@@ -3,30 +3,40 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   FiSave, FiX, FiPlus, FiTrash2, FiSend, FiCheck, FiUpload, FiLink, FiFile,
   FiChevronDown, FiChevronRight, FiCalendar, FiBook, FiUsers, FiAward,
-  FiFileText, FiClipboard, FiExternalLink, FiDownload, FiEdit2, FiLoader
+  FiFileText, FiClipboard, FiExternalLink, FiDownload, FiEdit2, FiLoader,
+  FiImage, FiVideo, FiList, FiGrid, FiMove, FiCopy, FiSettings
 } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
 import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
-import AdminLayout from '../../components/admin/AdminLayout';
 
 // Collapsible Section Component
-const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null }) => {
+const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null, color = 'indigo' }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  
+  const colorClasses = {
+    indigo: 'border-indigo-200 bg-indigo-50',
+    purple: 'border-purple-200 bg-purple-50',
+    teal: 'border-teal-200 bg-teal-50',
+    blue: 'border-blue-200 bg-blue-50',
+    green: 'border-green-200 bg-green-50',
+    orange: 'border-orange-200 bg-orange-50',
+    rose: 'border-rose-200 bg-rose-50',
+  };
   
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+        className={`w-full px-5 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors ${isOpen ? colorClasses[color] : ''}`}
       >
         <div className="flex items-center gap-3">
-          {icon && <span className="text-indigo-600">{icon}</span>}
+          {icon && <span className={`text-${color}-600`}>{icon}</span>}
           <h2 className="text-base font-semibold text-gray-800">{title}</h2>
-          {badge && <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">{badge}</span>}
+          {badge && <span className={`text-xs bg-${color}-100 text-${color}-700 px-2 py-0.5 rounded-full font-medium`}>{badge}</span>}
         </div>
         {isOpen ? <FiChevronDown className="w-5 h-5 text-gray-500" /> : <FiChevronRight className="w-5 h-5 text-gray-500" />}
       </button>
@@ -122,12 +132,11 @@ const ExamDetailForm = () => {
   const [saving, setSaving] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Role checks
-  const isDataEntry = user?.role === 'data_entry';
   const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager';
 
-  const [formData, setFormData] = useState({
+  const getDefaultFormData = () => ({
     name: '',
     slug: '',
     full_name: '',
@@ -136,41 +145,91 @@ const ExamDetailForm = () => {
     conducting_body: '',
     state: '',
     description: '',
-    exam_overview: '',
+    // Exam Pattern & Details
     exam_pattern: '',
     exam_syllabus: '',
     eligibility: '',
     age_limit: '',
     application_fee: { General: 0, OBC: 0, SC_ST: 0 },
+    // Important Dates
     exam_date: '',
     application_start: '',
     application_end: '',
     result_date: '',
     counseling_date: '',
-    official_website: '',
+    // Exam Config
     exam_duration: '',
     exam_mode: 'Online',
-    streams: [],
-    sections: [],
-    marking_scheme: '',
-    negative_marking: '',
     total_marks: 0,
     total_questions: 0,
+    negative_marking: '',
+    marking_scheme: '',
     languages_offered: [],
+    // Categories & Streams
+    streams: [],
+    sections: [],
+    // Official Info
+    official_website: '',
     exam_centers: [],
     accepted_by: [],
+    // Preparation
     preparation_tips: [],
     previous_year_cutoffs: [],
-    important_dates: [],
+    // Question Papers Table
     question_papers: [],
+    // Study Materials
     study_materials: [],
+    // Important Links
     important_links: [],
+    // Statistics
     total_applicants: 0,
     total_seats: 0,
     difficulty_level: 'Medium',
     is_popular: false,
+    // SEO Content Section
+    seo_intro: '',
+    seo_full_content: '',
+    // TOC (Table of Contents)
+    seo_toc: [],
+    // Tables Builder
+    seo_tables: [],
+    // Images with Title & Alt
+    seo_images: [],
+    // Video
+    seo_video_url: '',
+    seo_video_title: '',
+    seo_video_description: '',
+    // FAQs
+    seo_faqs: [],
+    // Menu Configuration
+    menu_config: {
+      use_custom_menu: false,
+      auto_from_toc: true,
+      items: [
+        { id: 'overview', label: 'Overview', icon: 'info', enabled: true, order: 0, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'dates', label: 'Important Dates', icon: 'calendar', enabled: true, order: 1, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'eligibility', label: 'Eligibility', icon: 'check', enabled: true, order: 2, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'application', label: 'Application', icon: 'form', enabled: true, order: 3, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'pattern', label: 'Exam Pattern', icon: 'pattern', enabled: true, order: 4, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'syllabus', label: 'Syllabus', icon: 'book', enabled: true, order: 5, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'preparation', label: 'Preparation', icon: 'prep', enabled: true, order: 6, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'cutoff', label: 'Cutoff', icon: 'cutoff', enabled: true, order: 7, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'result', label: 'Result', icon: 'result', enabled: true, order: 8, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+        { id: 'counseling', label: 'Counseling', icon: 'counseling', enabled: true, order: 9, content: '', page_heading: '', meta_title: '', meta_description: '', toc: [], tables: [], images: [], videos: [], faqs: [] },
+      ]
+    },
+    // SEO Meta Tags
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    og_title: '',
+    og_description: '',
+    og_image_url: '',
+    canonical_url: '',
     status: 'draft'
   });
+
+  const [formData, setFormData] = useState(getDefaultFormData());
 
   useEffect(() => {
     if (id) {
@@ -182,7 +241,7 @@ const ExamDetailForm = () => {
     setLoading(true);
     try {
       const response = await api.get(`/exams/${id}`);
-      setFormData({ ...formData, ...response.data });
+      setFormData({ ...getDefaultFormData(), ...response.data });
     } catch (error) {
       console.error('Error fetching exam:', error);
       alert('Failed to fetch exam details');
@@ -195,11 +254,7 @@ const ExamDetailForm = () => {
     const { name, value, type, checked } = e.target;
     
     if (name === 'name' && (!formData.slug || formData.slug === generateSlug(formData.name))) {
-      setFormData({ 
-        ...formData, 
-        [name]: value,
-        slug: generateSlug(value)
-      });
+      setFormData({ ...formData, [name]: value, slug: generateSlug(value) });
     } else if (type === 'checkbox') {
       setFormData({ ...formData, [name]: checked });
     } else {
@@ -214,28 +269,18 @@ const ExamDetailForm = () => {
     });
   };
 
-  const handleArrayChange = (field, index, value) => {
-    const newArray = [...formData[field]];
-    newArray[index] = value;
-    setFormData({ ...formData, [field]: newArray });
-  };
-
   const handleArrayObjectChange = (field, index, key, value) => {
-    const newArray = [...formData[field]];
+    const newArray = [...(formData[field] || [])];
     newArray[index] = { ...newArray[index], [key]: value };
     setFormData({ ...formData, [field]: newArray });
   };
 
-  const addArrayItem = (field, defaultValue = '') => {
-    setFormData({ ...formData, [field]: [...formData[field], defaultValue] });
-  };
-
   const addArrayObjectItem = (field, defaultObj) => {
-    setFormData({ ...formData, [field]: [...formData[field], defaultObj] });
+    setFormData({ ...formData, [field]: [...(formData[field] || []), defaultObj] });
   };
 
   const removeArrayItem = (field, index) => {
-    const newArray = formData[field].filter((_, i) => i !== index);
+    const newArray = (formData[field] || []).filter((_, i) => i !== index);
     setFormData({ ...formData, [field]: newArray });
   };
 
@@ -253,7 +298,7 @@ const ExamDetailForm = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
-      const newArray = [...formData[field]];
+      const newArray = [...(formData[field] || [])];
       newArray[index] = { 
         ...newArray[index], 
         file_url: response.data.url,
@@ -269,15 +314,94 @@ const ExamDetailForm = () => {
     }
   };
 
+  // Image upload handler
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setUploadingImage(true);
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+    
+    try {
+      const response = await api.post('/upload/image?type=exam', uploadFormData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const newImage = {
+        url: response.data.url,
+        title: '',
+        alt: '',
+        caption: ''
+      };
+      setFormData({
+        ...formData,
+        seo_images: [...(formData.seo_images || []), newImage]
+      });
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploadingImage(false);
+    }
+    e.target.value = '';
+  };
+
+  // Update Menu Item
+  const updateMenuItem = (index, key, value) => {
+    const newItems = [...(formData.menu_config?.items || [])];
+    newItems[index] = { ...newItems[index], [key]: value };
+    setFormData({
+      ...formData,
+      menu_config: { ...formData.menu_config, items: newItems }
+    });
+  };
+
+  // Move Menu Item
+  const moveMenuItem = (index, direction) => {
+    const newItems = [...(formData.menu_config?.items || [])];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= newItems.length) return;
+    [newItems[index], newItems[newIndex]] = [newItems[newIndex], newItems[index]];
+    newItems.forEach((item, i) => item.order = i);
+    setFormData({
+      ...formData,
+      menu_config: { ...formData.menu_config, items: newItems }
+    });
+  };
+
+  // Add Custom Menu Item
+  const addMenuItem = () => {
+    const newItem = {
+      id: `custom-${Date.now()}`,
+      label: 'New Section',
+      icon: 'custom',
+      enabled: true,
+      order: (formData.menu_config?.items || []).length,
+      content: '',
+      page_heading: '',
+      meta_title: '',
+      meta_description: '',
+      toc: [],
+      tables: [],
+      images: [],
+      videos: [],
+      faqs: []
+    };
+    setFormData({
+      ...formData,
+      menu_config: {
+        ...formData.menu_config,
+        items: [...(formData.menu_config?.items || []), newItem]
+      }
+    });
+  };
+
   const handleSubmit = async (e, saveAsDraft = false) => {
     e.preventDefault();
     setSaving(true);
 
     try {
-      const dataToSave = {
-        ...formData,
-        status: saveAsDraft ? 'draft' : formData.status
-      };
+      const dataToSave = { ...formData, status: saveAsDraft ? 'draft' : formData.status };
       
       if (id) {
         await api.put(`/exams/${id}`, dataToSave);
@@ -303,7 +427,6 @@ const ExamDetailForm = () => {
       setFormData({ ...formData, ...response.data });
       alert('Exam submitted for review!');
     } catch (error) {
-      console.error('Error submitting for review:', error);
       alert('Error submitting for review');
     } finally {
       setActionLoading(false);
@@ -316,35 +439,16 @@ const ExamDetailForm = () => {
       await api.post(`/admin/approve/exam/${id}`, { action: 'approve', comment: 'Approved' });
       const response = await api.get(`/exams/${id}`);
       setFormData({ ...formData, ...response.data });
-      alert('Exam approved and published!');
+      alert('Exam approved!');
     } catch (error) {
-      console.error('Error approving:', error);
       alert('Error approving exam');
     } finally {
       setActionLoading(false);
     }
   };
 
-  const handleReject = async () => {
-    const reason = prompt('Please provide a reason for rejection:');
-    if (!reason) return;
-    
-    setActionLoading(true);
-    try {
-      await api.post(`/admin/approve/exam/${id}`, { action: 'reject', comment: reason });
-      const response = await api.get(`/exams/${id}`);
-      setFormData({ ...formData, ...response.data });
-      alert('Exam rejected');
-    } catch (error) {
-      console.error('Error rejecting:', error);
-      alert('Error rejecting exam');
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const streams = ['Engineering', 'Medical', 'Management', 'Law', 'Design', 'Architecture', 'Science', 'Commerce', 'Arts', 'Pharmacy', 'Agriculture'];
-  const indianStates = ['All India', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi'];
+  const indianStates = ['All India', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
 
   if (loading) {
     return (
@@ -367,55 +471,24 @@ const ExamDetailForm = () => {
               {id && formData.status && <StatusBadge status={formData.status} />}
             </div>
             <div className="flex items-center gap-3">
-              {/* Approval Actions */}
               {id && formData.status === 'draft' && (
-                <Button 
-                  type="button" 
-                  onClick={handleSubmitForReview}
-                  disabled={actionLoading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
+                <Button type="button" onClick={handleSubmitForReview} disabled={actionLoading} className="bg-blue-600 hover:bg-blue-700 text-white">
                   <FiSend className="mr-2 w-4 h-4" /> Submit for Review
                 </Button>
               )}
               {id && formData.status === 'pending' && canApprove && (
-                <>
-                  <Button 
-                    type="button" 
-                    onClick={handleApprove}
-                    disabled={actionLoading}
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    <FiCheck className="mr-2 w-4 h-4" /> Approve
-                  </Button>
-                  <Button 
-                    type="button" 
-                    onClick={handleReject}
-                    disabled={actionLoading}
-                    variant="outline"
-                    className="text-red-600 border-red-300 hover:bg-red-50"
-                  >
-                    <FiX className="mr-2 w-4 h-4" /> Reject
-                  </Button>
-                </>
+                <Button type="button" onClick={handleApprove} disabled={actionLoading} className="bg-green-600 hover:bg-green-700 text-white">
+                  <FiCheck className="mr-2 w-4 h-4" /> Approve
+                </Button>
               )}
               <Button variant="outline" onClick={() => navigate('/admin/exams-detail')}>
                 <FiX className="mr-2 w-4 h-4" /> Cancel
               </Button>
-              <Button 
-                onClick={(e) => handleSubmit(e, true)} 
-                disabled={saving}
-                variant="outline"
-                className="border-indigo-300 text-indigo-600 hover:bg-indigo-50"
-              >
+              <Button onClick={(e) => handleSubmit(e, true)} disabled={saving} variant="outline" className="border-indigo-300 text-indigo-600 hover:bg-indigo-50">
                 {saving ? <FiLoader className="mr-2 w-4 h-4 animate-spin" /> : <FiSave className="mr-2 w-4 h-4" />}
                 Save Draft
               </Button>
-              <Button 
-                onClick={handleSubmit} 
-                disabled={saving}
-                className="bg-indigo-600 hover:bg-indigo-700"
-              >
+              <Button onClick={handleSubmit} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700">
                 {saving ? <FiLoader className="mr-2 w-4 h-4 animate-spin" /> : <FiSave className="mr-2 w-4 h-4" />}
                 Save & Publish
               </Button>
@@ -424,80 +497,35 @@ const ExamDetailForm = () => {
         </div>
       </div>
 
-      {/* Rejection Reason Alert */}
-      {formData.status === 'rejected' && formData.rejection_reason && (
-        <div className="max-w-7xl mx-auto px-6 mt-4">
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 flex items-start gap-3">
-            <FiX className="w-5 h-5 mt-0.5" />
-            <div>
-              <strong className="font-semibold">Rejection Reason:</strong>
-              <p className="mt-1">{formData.rejection_reason}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Form */}
       <form onSubmit={handleSubmit} className="max-w-7xl mx-auto px-6 py-6 space-y-5">
         
         {/* Basic Information */}
-        <CollapsibleSection title="Basic Information" icon={<FiFileText className="w-5 h-5" />} defaultOpen={true}>
+        <CollapsibleSection title="Basic Information" icon={<FiFileText className="w-5 h-5" />} defaultOpen={true} color="indigo">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Exam Name *</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                placeholder="e.g., JEE Main 2025"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="e.g., JEE Main 2025"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">URL Slug *</label>
-              <input
-                type="text"
-                name="slug"
-                value={formData.slug}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <input type="text" name="slug" value={formData.slug} onChange={handleChange} required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-50" />
             </div>
             <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-              <input
-                type="text"
-                name="full_name"
-                value={formData.full_name}
-                onChange={handleChange}
-                required
-                placeholder="e.g., Joint Entrance Examination Main"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required placeholder="e.g., Joint Entrance Examination Main"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Conducting Body</label>
-              <input
-                type="text"
-                name="conducting_body"
-                value={formData.conducting_body}
-                onChange={handleChange}
-                placeholder="e.g., NTA"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <input type="text" name="conducting_body" value={formData.conducting_body} onChange={handleChange} placeholder="e.g., NTA"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Exam Type *</label>
-              <select
-                name="exam_type"
-                value={formData.exam_type}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              <select name="exam_type" value={formData.exam_type} onChange={handleChange} required className="w-full border border-gray-300 rounded-lg px-4 py-2.5">
                 <option value="National">National Level</option>
                 <option value="State">State Level</option>
                 <option value="University">University Level</option>
@@ -506,13 +534,7 @@ const ExamDetailForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Exam Level *</label>
-              <select
-                name="exam_level"
-                value={formData.exam_level}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              <select name="exam_level" value={formData.exam_level} onChange={handleChange} required className="w-full border border-gray-300 rounded-lg px-4 py-2.5">
                 <option value="UG">Undergraduate (UG)</option>
                 <option value="PG">Postgraduate (PG)</option>
                 <option value="Diploma">Diploma</option>
@@ -521,72 +543,26 @@ const ExamDetailForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">State (for State Level)</label>
-              <select
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              >
+              <select name="state" value={formData.state} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5">
                 <option value="">Select State</option>
-                {indianStates.map(state => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Exam Mode</label>
-              <select
-                name="exam_mode"
-                value={formData.exam_mode}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="Online">Online (CBT)</option>
-                <option value="Offline">Offline (Pen & Paper)</option>
-                <option value="Both">Both</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty Level</label>
-              <select
-                name="difficulty_level"
-                value={formData.difficulty_level}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
+                {indianStates.map(state => (<option key={state} value={state}>{state}</option>))}
               </select>
             </div>
             <div className="lg:col-span-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows="3"
-                placeholder="Brief description of the exam..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <textarea name="description" value={formData.description} onChange={handleChange} rows="3" placeholder="Brief description..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
             </div>
             <div className="lg:col-span-3">
               <label className="block text-sm font-medium text-gray-700 mb-2">Streams</label>
               <div className="flex flex-wrap gap-2">
                 {streams.map(stream => (
-                  <label key={stream} className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-colors">
-                    <input
-                      type="checkbox"
-                      checked={formData.streams?.includes(stream) || false}
+                  <label key={stream} className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50">
+                    <input type="checkbox" checked={formData.streams?.includes(stream) || false}
                       onChange={(e) => {
-                        if (e.target.checked) {
-                          setFormData({ ...formData, streams: [...(formData.streams || []), stream] });
-                        } else {
-                          setFormData({ ...formData, streams: (formData.streams || []).filter(s => s !== stream) });
-                        }
-                      }}
-                      className="w-4 h-4 text-indigo-600 rounded"
-                    />
+                        if (e.target.checked) setFormData({ ...formData, streams: [...(formData.streams || []), stream] });
+                        else setFormData({ ...formData, streams: (formData.streams || []).filter(s => s !== stream) });
+                      }} className="w-4 h-4 text-indigo-600 rounded" />
                     <span className="text-sm text-gray-700">{stream}</span>
                   </label>
                 ))}
@@ -596,256 +572,456 @@ const ExamDetailForm = () => {
         </CollapsibleSection>
 
         {/* Important Dates */}
-        <CollapsibleSection title="Important Dates" icon={<FiCalendar className="w-5 h-5" />} defaultOpen={true}>
+        <CollapsibleSection title="Important Dates" icon={<FiCalendar className="w-5 h-5" />} defaultOpen={true} color="orange">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Application Start Date</label>
-              <input type="date" name="application_start" value={formData.application_start} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Application End Date</label>
-              <input type="date" name="application_end" value={formData.application_end} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Exam Date</label>
-              <input type="date" name="exam_date" value={formData.exam_date} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Result Date</label>
-              <input type="date" name="result_date" value={formData.result_date} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Counseling Date</label>
-              <input type="date" name="counseling_date" value={formData.counseling_date} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Application Start</label>
+              <input type="date" name="application_start" value={formData.application_start} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Application End</label>
+              <input type="date" name="application_end" value={formData.application_end} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Exam Date</label>
+              <input type="date" name="exam_date" value={formData.exam_date} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Result Date</label>
+              <input type="date" name="result_date" value={formData.result_date} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Counseling Date</label>
+              <input type="date" name="counseling_date" value={formData.counseling_date} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
           </div>
         </CollapsibleSection>
 
-        {/* Exam Details */}
-        <CollapsibleSection title="Exam Pattern & Details" icon={<FiClipboard className="w-5 h-5" />}>
+        {/* Exam Pattern & Details */}
+        <CollapsibleSection title="Exam Pattern & Details" icon={<FiClipboard className="w-5 h-5" />} color="green">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Exam Duration</label>
-              <input type="text" name="exam_duration" value={formData.exam_duration} onChange={handleChange}
-                placeholder="e.g., 3 Hours" className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Total Marks</label>
-              <input type="number" name="total_marks" value={formData.total_marks} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Total Questions</label>
-              <input type="number" name="total_questions" value={formData.total_questions} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Negative Marking</label>
-              <input type="text" name="negative_marking" value={formData.negative_marking} onChange={handleChange}
-                placeholder="e.g., -1 per wrong answer" className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Exam Mode</label>
+              <select name="exam_mode" value={formData.exam_mode} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5">
+                <option value="Online">Online (CBT)</option><option value="Offline">Offline (Pen & Paper)</option><option value="Both">Both</option>
+              </select></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+              <input type="text" name="exam_duration" value={formData.exam_duration} onChange={handleChange} placeholder="3 Hours" className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Total Marks</label>
+              <input type="number" name="total_marks" value={formData.total_marks} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Total Questions</label>
+              <input type="number" name="total_questions" value={formData.total_questions} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Exam Pattern (Detailed)</label>
-            <textarea name="exam_pattern" value={formData.exam_pattern} onChange={handleChange} rows="4"
-              placeholder="Describe the exam pattern, sections, marks distribution..."
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Marking Scheme</label>
+              <input type="text" name="marking_scheme" value={formData.marking_scheme} onChange={handleChange} placeholder="+4 for correct" className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Negative Marking</label>
+              <input type="text" name="negative_marking" value={formData.negative_marking} onChange={handleChange} placeholder="-1 for wrong" className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
           </div>
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Syllabus</label>
-            <textarea name="exam_syllabus" value={formData.exam_syllabus} onChange={handleChange} rows="4"
-              placeholder="List the syllabus topics..."
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-          </div>
+          <div className="mt-4"><label className="block text-sm font-medium text-gray-700 mb-1">Exam Pattern (Detailed)</label>
+            <textarea name="exam_pattern" value={formData.exam_pattern} onChange={handleChange} rows="4" placeholder="Describe sections, marks distribution..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+          <div className="mt-4"><label className="block text-sm font-medium text-gray-700 mb-1">Syllabus</label>
+            <textarea name="exam_syllabus" value={formData.exam_syllabus} onChange={handleChange} rows="4" placeholder="List syllabus topics..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
         </CollapsibleSection>
 
         {/* Application Fees */}
-        <CollapsibleSection title="Application Fees" icon={<FiAward className="w-5 h-5" />}>
+        <CollapsibleSection title="Application Fees" icon={<FiAward className="w-5 h-5" />} color="rose">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">General (₹)</label>
-              <input type="number" value={formData.application_fee?.General || 0}
-                onChange={(e) => handleNestedChange('application_fee', 'General', parseInt(e.target.value) || 0)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">OBC (₹)</label>
-              <input type="number" value={formData.application_fee?.OBC || 0}
-                onChange={(e) => handleNestedChange('application_fee', 'OBC', parseInt(e.target.value) || 0)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">SC/ST (₹)</label>
-              <input type="number" value={formData.application_fee?.SC_ST || 0}
-                onChange={(e) => handleNestedChange('application_fee', 'SC_ST', parseInt(e.target.value) || 0)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">General (₹)</label>
+              <input type="number" value={formData.application_fee?.General || 0} onChange={(e) => handleNestedChange('application_fee', 'General', parseInt(e.target.value) || 0)} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">OBC (₹)</label>
+              <input type="number" value={formData.application_fee?.OBC || 0} onChange={(e) => handleNestedChange('application_fee', 'OBC', parseInt(e.target.value) || 0)} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">SC/ST (₹)</label>
+              <input type="number" value={formData.application_fee?.SC_ST || 0} onChange={(e) => handleNestedChange('application_fee', 'SC_ST', parseInt(e.target.value) || 0)} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
           </div>
         </CollapsibleSection>
 
         {/* Question Papers Table */}
-        <CollapsibleSection title="Question Papers" icon={<FiFile className="w-5 h-5" />} badge={`${formData.question_papers?.length || 0} papers`}>
+        <CollapsibleSection title="Question Papers" icon={<FiFile className="w-5 h-5" />} badge={`${formData.question_papers?.length || 0} papers`} color="purple">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Year</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Paper Name</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Shift/Set</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">File Upload</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">External Link</th>
-                  <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-b w-20">Actions</th>
+                <tr className="bg-purple-50">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-purple-800 uppercase border-b border-purple-200">Year</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-purple-800 uppercase border-b border-purple-200">Paper Name</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-purple-800 uppercase border-b border-purple-200">Shift/Set</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-purple-800 uppercase border-b border-purple-200">File Upload</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-purple-800 uppercase border-b border-purple-200">External Link</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-purple-800 uppercase border-b border-purple-200 w-20">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {(formData.question_papers || []).map((paper, index) => (
                   <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <input
-                        type="text"
-                        value={paper.year || ''}
-                        onChange={(e) => handleArrayObjectChange('question_papers', index, 'year', e.target.value)}
-                        placeholder="2024"
-                        className="w-20 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="text"
-                        value={paper.name || ''}
-                        onChange={(e) => handleArrayObjectChange('question_papers', index, 'name', e.target.value)}
-                        placeholder="JEE Main Paper 1"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="text"
-                        value={paper.shift || ''}
-                        onChange={(e) => handleArrayObjectChange('question_papers', index, 'shift', e.target.value)}
-                        placeholder="Morning Shift"
-                        className="w-32 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </td>
+                    <td className="px-4 py-3"><input type="text" value={paper.year || ''} onChange={(e) => handleArrayObjectChange('question_papers', index, 'year', e.target.value)} placeholder="2024" className="w-20 border border-gray-300 rounded-lg px-3 py-2 text-sm" /></td>
+                    <td className="px-4 py-3"><input type="text" value={paper.name || ''} onChange={(e) => handleArrayObjectChange('question_papers', index, 'name', e.target.value)} placeholder="JEE Main Paper 1" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></td>
+                    <td className="px-4 py-3"><input type="text" value={paper.shift || ''} onChange={(e) => handleArrayObjectChange('question_papers', index, 'shift', e.target.value)} placeholder="Morning" className="w-28 border border-gray-300 rounded-lg px-3 py-2 text-sm" /></td>
                     <td className="px-4 py-3">
                       {paper.file_url ? (
                         <div className="flex items-center gap-2">
-                          <a href={paper.file_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 text-sm flex items-center gap-1">
-                            <FiDownload className="w-4 h-4" />
-                            {paper.file_name || 'Download'}
-                          </a>
-                          <button type="button" onClick={() => handleArrayObjectChange('question_papers', index, 'file_url', '')} className="text-red-500 hover:text-red-700">
-                            <FiX className="w-4 h-4" />
-                          </button>
+                          <a href={paper.file_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 text-sm flex items-center gap-1"><FiDownload className="w-4 h-4" />{paper.file_name || 'Download'}</a>
+                          <button type="button" onClick={() => handleArrayObjectChange('question_papers', index, 'file_url', '')} className="text-red-500 hover:text-red-700"><FiX className="w-4 h-4" /></button>
                         </div>
                       ) : (
                         <label className="flex items-center gap-2 cursor-pointer text-gray-500 hover:text-indigo-600">
-                          <FiUpload className="w-4 h-4" />
-                          <span className="text-sm">{uploadingFile ? 'Uploading...' : 'Upload PDF'}</span>
+                          <FiUpload className="w-4 h-4" /><span className="text-sm">{uploadingFile ? 'Uploading...' : 'Upload PDF'}</span>
                           <input type="file" accept=".pdf" className="hidden" onChange={(e) => handleFileUpload(e, 'question_papers', index)} disabled={uploadingFile} />
                         </label>
                       )}
                     </td>
-                    <td className="px-4 py-3">
-                      <HyperlinkInput
-                        value={paper.external_link}
-                        onChange={(link) => handleArrayObjectChange('question_papers', index, 'external_link', link)}
-                      />
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <button type="button" onClick={() => removeArrayItem('question_papers', index)} className="text-red-500 hover:text-red-700 p-1">
-                        <FiTrash2 className="w-4 h-4" />
-                      </button>
-                    </td>
+                    <td className="px-4 py-3"><HyperlinkInput value={paper.external_link} onChange={(link) => handleArrayObjectChange('question_papers', index, 'external_link', link)} /></td>
+                    <td className="px-4 py-3 text-center"><button type="button" onClick={() => removeArrayItem('question_papers', index)} className="text-red-500 hover:text-red-700 p-1"><FiTrash2 className="w-4 h-4" /></button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <button
-            type="button"
-            onClick={() => addArrayObjectItem('question_papers', { year: '', name: '', shift: '', file_url: '', external_link: null })}
-            className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
-          >
+          <button type="button" onClick={() => addArrayObjectItem('question_papers', { year: '', name: '', shift: '', file_url: '', external_link: null })}
+            className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-purple-300 rounded-lg text-purple-600 hover:border-purple-500 hover:bg-purple-50">
             <FiPlus className="w-4 h-4" /> Add Question Paper
           </button>
         </CollapsibleSection>
 
-        {/* Study Materials */}
-        <CollapsibleSection title="Study Materials & Resources" icon={<FiBook className="w-5 h-5" />} badge={`${formData.study_materials?.length || 0} items`}>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Title</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Type</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Description</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b">Link / File</th>
-                  <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-b w-20">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(formData.study_materials || []).map((material, index) => (
-                  <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <input
-                        type="text"
-                        value={material.title || ''}
-                        onChange={(e) => handleArrayObjectChange('study_materials', index, 'title', e.target.value)}
-                        placeholder="Material title"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <select
-                        value={material.type || 'PDF'}
-                        onChange={(e) => handleArrayObjectChange('study_materials', index, 'type', e.target.value)}
-                        className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="PDF">PDF</option>
-                        <option value="Video">Video</option>
-                        <option value="Article">Article</option>
-                        <option value="Book">Book</option>
-                        <option value="Notes">Notes</option>
-                      </select>
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="text"
-                        value={material.description || ''}
-                        onChange={(e) => handleArrayObjectChange('study_materials', index, 'description', e.target.value)}
-                        placeholder="Brief description"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <HyperlinkInput
-                        value={material.link}
-                        onChange={(link) => handleArrayObjectChange('study_materials', index, 'link', link)}
-                      />
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <button type="button" onClick={() => removeArrayItem('study_materials', index)} className="text-red-500 hover:text-red-700 p-1">
-                        <FiTrash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Menu Configuration */}
+        <CollapsibleSection title="Menu Configuration" icon={<FiGrid className="w-5 h-5" />} badge={`${(formData.menu_config?.items || []).filter(i => i.enabled).length} items`} color="blue">
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">Configure the menu items that appear on the exam detail page. Drag to reorder, toggle to enable/disable.</p>
           </div>
-          <button
-            type="button"
-            onClick={() => addArrayObjectItem('study_materials', { title: '', type: 'PDF', description: '', link: null })}
-            className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
-          >
-            <FiPlus className="w-4 h-4" /> Add Study Material
+          
+          <div className="space-y-2">
+            {(formData.menu_config?.items || []).sort((a, b) => a.order - b.order).map((item, index) => (
+              <div key={item.id} className={`flex items-center gap-3 p-3 rounded-lg border ${item.enabled ? 'bg-white border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
+                <div className="flex flex-col gap-1">
+                  <button type="button" onClick={() => moveMenuItem(index, 'up')} disabled={index === 0} className="text-gray-400 hover:text-gray-600 disabled:opacity-30"><FiChevronDown className="w-4 h-4 rotate-180" /></button>
+                  <button type="button" onClick={() => moveMenuItem(index, 'down')} disabled={index === (formData.menu_config?.items || []).length - 1} className="text-gray-400 hover:text-gray-600 disabled:opacity-30"><FiChevronDown className="w-4 h-4" /></button>
+                </div>
+                <input type="checkbox" checked={item.enabled} onChange={(e) => updateMenuItem(index, 'enabled', e.target.checked)} className="w-5 h-5 text-blue-600 rounded" />
+                <input type="text" value={item.label} onChange={(e) => updateMenuItem(index, 'label', e.target.value)} className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium" />
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">/{item.id}</span>
+                {item.id.startsWith('custom-') && (
+                  <button type="button" onClick={() => {
+                    const newItems = (formData.menu_config?.items || []).filter(i => i.id !== item.id);
+                    setFormData({ ...formData, menu_config: { ...formData.menu_config, items: newItems } });
+                  }} className="text-red-500 hover:text-red-700"><FiTrash2 className="w-4 h-4" /></button>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <button type="button" onClick={addMenuItem} className="mt-4 flex items-center gap-2 px-4 py-2 border border-dashed border-blue-300 rounded-lg text-blue-600 hover:border-blue-500 hover:bg-blue-50">
+            <FiPlus className="w-4 h-4" /> Add Custom Menu Item
           </button>
+        </CollapsibleSection>
+
+        {/* SEO Content Section */}
+        <CollapsibleSection title="SEO Content" icon={<FiBook className="w-5 h-5" />} color="teal">
+          <div className="space-y-6">
+            {/* SEO Intro */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">SEO Introduction</label>
+              <textarea name="seo_intro" value={formData.seo_intro} onChange={handleChange} rows="3" placeholder="Short intro paragraph for SEO..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
+            </div>
+
+            {/* SEO Full Content */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">SEO Full Content (HTML Supported)</label>
+              <textarea name="seo_full_content" value={formData.seo_full_content} onChange={handleChange} rows="8" placeholder="Full SEO content with HTML..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 font-mono text-sm" />
+            </div>
+
+            {/* Table of Contents Builder */}
+            <div className="border-2 border-purple-300 rounded-lg p-4 bg-purple-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-purple-800">📑 Table of Contents Builder</label>
+                  <p className="text-xs text-purple-600">Create clickable TOC sections with content</p>
+                </div>
+                <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">{formData.seo_toc?.length || 0} sections</span>
+              </div>
+              
+              <div className="space-y-3 mb-4">
+                {(formData.seo_toc || []).map((item, index) => (
+                  <div key={index} className="bg-white rounded-lg border-2 border-purple-200 p-3">
+                    <div className="flex items-start gap-3">
+                      <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-800 rounded-full font-bold text-sm flex-shrink-0">{index + 1}</div>
+                      <div className="flex-1 space-y-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div><label className="block text-xs text-gray-600 mb-1">Section Title *</label>
+                            <input type="text" value={item.title || ''} onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].title = e.target.value;
+                              newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-').substring(0, 50);
+                              setFormData({...formData, seo_toc: newToc});
+                            }} placeholder="e.g., Exam Overview" className="w-full border-2 border-purple-200 rounded px-2 py-1.5 text-sm" /></div>
+                          <div><label className="block text-xs text-gray-600 mb-1">Anchor ID</label>
+                            <input type="text" value={item.anchor || ''} onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                              setFormData({...formData, seo_toc: newToc});
+                            }} placeholder="exam-overview" className="w-full border rounded px-2 py-1.5 text-sm font-mono bg-gray-50" /></div>
+                        </div>
+                        <div><label className="block text-xs text-gray-600 mb-1">Section Content *</label>
+                          <textarea value={item.content || ''} onChange={(e) => {
+                            const newToc = [...(formData.seo_toc || [])];
+                            newToc[index].content = e.target.value;
+                            setFormData({...formData, seo_toc: newToc});
+                          }} placeholder="Write content for this section..." rows="4" className="w-full border rounded px-2 py-1.5 text-sm" /></div>
+                        <button type="button" onClick={() => {
+                          const html = `<h2 id="${item.anchor}">${item.title}</h2>\n<div class="toc-section">\n${item.content}\n</div>`;
+                          navigator.clipboard.writeText(html);
+                          alert('Section HTML copied!');
+                        }} className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200">📋 Copy Section HTML</button>
+                      </div>
+                      <button type="button" onClick={() => setFormData({...formData, seo_toc: (formData.seo_toc || []).filter((_, i) => i !== index)})} className="text-red-500 hover:bg-red-50 p-1.5 rounded"><FiTrash2 /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <button type="button" onClick={() => setFormData({...formData, seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]})}
+                className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"><FiPlus /> Add TOC Section</button>
+              
+              {/* Quick Add Templates */}
+              <div className="mt-4 p-3 bg-white border border-purple-200 rounded-lg">
+                <p className="text-xs font-medium text-purple-800 mb-2">💡 Quick Add Sections:</p>
+                <div className="flex flex-wrap gap-2">
+                  {['About', 'Eligibility', 'Application Process', 'Exam Pattern', 'Syllabus', 'Preparation Tips', 'Cutoff', 'Result', 'Counseling', 'FAQs'].map((template, i) => (
+                    <button key={i} type="button" onClick={() => {
+                      const anchor = template.toLowerCase().replace(/\s+/g, '-');
+                      if (!(formData.seo_toc || []).some(t => t.anchor === anchor)) {
+                        setFormData({...formData, seo_toc: [...(formData.seo_toc || []), { title: template, anchor, content: '' }]});
+                      }
+                    }} className="text-xs bg-purple-50 border border-purple-200 text-purple-700 px-2 py-1 rounded hover:bg-purple-100">+ {template}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Table Builder */}
+            <div className="border-2 border-teal-300 rounded-lg p-4 bg-teal-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-teal-800">📊 Table Builder</label>
+                  <p className="text-xs text-teal-600">Create tables for cutoffs, exam pattern, dates, etc.</p>
+                </div>
+                <span className="text-xs bg-teal-200 text-teal-800 px-2 py-1 rounded">{formData.seo_tables?.length || 0} tables</span>
+              </div>
+
+              <div className="space-y-4 mb-4">
+                {(formData.seo_tables || []).map((table, tableIndex) => (
+                  <div key={tableIndex} className="bg-white rounded-lg border-2 border-teal-200 p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded">Table {tableIndex + 1}</span>
+                        <input type="text" value={table.title || ''} onChange={(e) => {
+                          const newTables = [...(formData.seo_tables || [])];
+                          newTables[tableIndex].title = e.target.value;
+                          setFormData({...formData, seo_tables: newTables});
+                        }} placeholder="Table Title" className="border rounded px-2 py-1 text-sm w-48" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button type="button" onClick={() => {
+                          const newTables = [...(formData.seo_tables || [])];
+                          newTables[tableIndex].headers.push('New Column');
+                          newTables[tableIndex].rows.forEach(row => row.push(''));
+                          setFormData({...formData, seo_tables: newTables});
+                        }} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200">+ Column</button>
+                        <button type="button" onClick={() => {
+                          const newTables = [...(formData.seo_tables || [])];
+                          newTables[tableIndex].rows.push(new Array(newTables[tableIndex].headers.length).fill(''));
+                          setFormData({...formData, seo_tables: newTables});
+                        }} className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded hover:bg-teal-200">+ Row</button>
+                        <button type="button" onClick={() => setFormData({...formData, seo_tables: (formData.seo_tables || []).filter((_, i) => i !== tableIndex)})}
+                          className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200">Delete</button>
+                      </div>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr>
+                            {(table.headers || []).map((header, colIndex) => (
+                              <th key={colIndex} className="border border-teal-200 bg-teal-100 p-1">
+                                <div className="flex items-center gap-1">
+                                  <input type="text" value={header} onChange={(e) => {
+                                    const newTables = [...(formData.seo_tables || [])];
+                                    newTables[tableIndex].headers[colIndex] = e.target.value;
+                                    setFormData({...formData, seo_tables: newTables});
+                                  }} className="w-full border-0 bg-transparent font-semibold text-center text-teal-800 focus:outline-none" placeholder="Header" />
+                                  {table.headers.length > 1 && (
+                                    <button type="button" onClick={() => {
+                                      const newTables = [...(formData.seo_tables || [])];
+                                      newTables[tableIndex].headers.splice(colIndex, 1);
+                                      newTables[tableIndex].rows.forEach(row => row.splice(colIndex, 1));
+                                      setFormData({...formData, seo_tables: newTables});
+                                    }} className="text-red-500 hover:text-red-700 text-xs">×</button>
+                                  )}
+                                </div>
+                              </th>
+                            ))}
+                            <th className="w-8"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(table.rows || []).map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                              {row.map((cell, colIndex) => (
+                                <td key={colIndex} className="border border-teal-200 p-1">
+                                  <input type="text" value={cell} onChange={(e) => {
+                                    const newTables = [...(formData.seo_tables || [])];
+                                    newTables[tableIndex].rows[rowIndex][colIndex] = e.target.value;
+                                    setFormData({...formData, seo_tables: newTables});
+                                  }} className="w-full border-0 bg-transparent px-1" placeholder="Cell" />
+                                </td>
+                              ))}
+                              <td className="w-8">{table.rows.length > 1 && (
+                                <button type="button" onClick={() => {
+                                  const newTables = [...(formData.seo_tables || [])];
+                                  newTables[tableIndex].rows.splice(rowIndex, 1);
+                                  setFormData({...formData, seo_tables: newTables});
+                                }} className="text-red-500 hover:text-red-700 text-xs p-1">×</button>
+                              )}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="mt-3 flex gap-2">
+                      <button type="button" onClick={() => {
+                        const tableHtml = `<table class="data-table"><caption>${table.title}</caption><thead><tr>${table.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${table.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+                        navigator.clipboard.writeText(tableHtml);
+                        alert('Table HTML copied!');
+                      }} className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded hover:bg-green-200">📋 Copy HTML</button>
+                      <button type="button" onClick={() => {
+                        const tableHtml = `<table class="data-table"><caption>${table.title}</caption><thead><tr>${table.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${table.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+                        setFormData({...formData, seo_full_content: (formData.seo_full_content || '') + '\n\n' + tableHtml});
+                        alert('Table added to content!');
+                      }} className="text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded hover:bg-blue-200">⚡ Insert into Content</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button type="button" onClick={() => setFormData({...formData, seo_tables: [...(formData.seo_tables || []), { title: '', headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['', '', ''], ['', '', '']] }]})}
+                className="text-sm text-teal-700 hover:bg-teal-100 px-3 py-1.5 rounded border border-teal-300 flex items-center gap-1"><FiPlus /> Add New Table</button>
+
+              {/* Quick Table Templates */}
+              <div className="mt-4 p-3 bg-white border border-teal-200 rounded-lg">
+                <p className="text-xs font-medium text-teal-800 mb-2">💡 Quick Add Templates:</p>
+                <div className="flex flex-wrap gap-2">
+                  <button type="button" onClick={() => setFormData({...formData, seo_tables: [...(formData.seo_tables || []), { title: 'Important Dates', headers: ['Event', 'Date', 'Status'], rows: [['Application Start', '', 'Upcoming'], ['Application End', '', ''], ['Exam Date', '', ''], ['Result', '', '']] }]})}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100">+ Important Dates</button>
+                  <button type="button" onClick={() => setFormData({...formData, seo_tables: [...(formData.seo_tables || []), { title: 'Exam Pattern', headers: ['Section', 'Questions', 'Marks', 'Duration'], rows: [['Section A', '', '', ''], ['Section B', '', '', '']] }]})}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100">+ Exam Pattern</button>
+                  <button type="button" onClick={() => setFormData({...formData, seo_tables: [...(formData.seo_tables || []), { title: 'Cutoff Marks', headers: ['Category', 'Opening Rank', 'Closing Rank'], rows: [['General', '', ''], ['OBC', '', ''], ['SC/ST', '', '']] }]})}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100">+ Cutoff</button>
+                  <button type="button" onClick={() => setFormData({...formData, seo_tables: [...(formData.seo_tables || []), { title: 'Application Fee', headers: ['Category', 'Fee (₹)', 'Payment Mode'], rows: [['General/OBC', '', 'Online'], ['SC/ST/PwD', '', 'Online']] }]})}
+                    className="text-xs bg-teal-50 border border-teal-200 text-teal-700 px-2 py-1 rounded hover:bg-teal-100">+ Application Fee</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Image Upload */}
+            <div className="border-2 border-dashed border-blue-300 rounded-lg p-4 bg-blue-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-blue-800">🖼️ Content Images</label>
+                  <p className="text-xs text-blue-600">Add images with title & alt text</p>
+                </div>
+                <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">{formData.seo_images?.length || 0} images</span>
+              </div>
+
+              <div className="mb-4">
+                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-blue-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-blue-50 transition-colors">
+                  <div className="flex flex-col items-center justify-center py-4">
+                    <FiUpload className="w-6 h-6 text-blue-500 mb-1" />
+                    <p className="text-sm text-blue-600">{uploadingImage ? 'Uploading...' : 'Click to upload image'}</p>
+                    <p className="text-xs text-gray-500">PNG, JPG, WebP</p>
+                  </div>
+                  <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
+                </label>
+              </div>
+
+              {formData.seo_images?.length > 0 && (
+                <div className="space-y-3">
+                  {formData.seo_images.map((image, index) => (
+                    <div key={index} className="bg-white rounded-lg border p-3">
+                      <div className="flex gap-4">
+                        <div className="w-32 h-24 flex-shrink-0">
+                          <img src={image.url?.startsWith('/api') ? image.url : `/api${image.url}`} alt={image.alt || 'Image'} className="w-full h-full object-cover rounded border"
+                            onError={(e) => { e.target.src = 'https://via.placeholder.com/128x96?text=Image'; }} />
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div><label className="block text-xs text-gray-600 mb-1">Image Title</label>
+                              <input type="text" value={image.title || ''} onChange={(e) => {
+                                const newImages = [...formData.seo_images];
+                                newImages[index].title = e.target.value;
+                                setFormData({...formData, seo_images: newImages});
+                              }} placeholder="Image title" className="w-full border rounded px-2 py-1 text-sm" /></div>
+                            <div><label className="block text-xs text-gray-600 mb-1">Alt Text</label>
+                              <input type="text" value={image.alt || ''} onChange={(e) => {
+                                const newImages = [...formData.seo_images];
+                                newImages[index].alt = e.target.value;
+                                setFormData({...formData, seo_images: newImages});
+                              }} placeholder="Alt text for accessibility" className="w-full border rounded px-2 py-1 text-sm" /></div>
+                          </div>
+                          <div><label className="block text-xs text-gray-600 mb-1">Caption</label>
+                            <input type="text" value={image.caption || ''} onChange={(e) => {
+                              const newImages = [...formData.seo_images];
+                              newImages[index].caption = e.target.value;
+                              setFormData({...formData, seo_images: newImages});
+                            }} placeholder="Image caption" className="w-full border rounded px-2 py-1 text-sm" /></div>
+                          <button type="button" onClick={() => {
+                            const imgHtml = `<figure><img src="${image.url}" alt="${image.alt || ''}" title="${image.title || ''}" />${image.caption ? `<figcaption>${image.caption}</figcaption>` : ''}</figure>`;
+                            navigator.clipboard.writeText(imgHtml);
+                            alert('Image HTML copied!');
+                          }} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200">📋 Copy HTML</button>
+                        </div>
+                        <button type="button" onClick={() => setFormData({...formData, seo_images: formData.seo_images.filter((_, i) => i !== index)})} className="text-red-500 hover:bg-red-50 p-1 rounded self-start"><FiTrash2 /></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Video Upload */}
+            <div className="border-2 border-orange-300 rounded-lg p-4 bg-orange-50">
+              <label className="block text-sm font-medium text-orange-800 mb-2">🎬 Video Embed</label>
+              <p className="text-xs text-orange-600 mb-3">YouTube or video embed URL with title & description</p>
+              <div className="space-y-2">
+                <div><label className="block text-xs text-gray-700 mb-1">Video URL</label>
+                  <input type="url" name="seo_video_url" value={formData.seo_video_url} onChange={handleChange} placeholder="https://youtube.com/embed/..." className="w-full border rounded px-3 py-2" /></div>
+                <div><label className="block text-xs text-gray-700 mb-1">Video Title</label>
+                  <input type="text" name="seo_video_title" value={formData.seo_video_title || ''} onChange={handleChange} placeholder="Video title for accessibility" className="w-full border-2 border-orange-200 rounded px-3 py-2 text-sm" /></div>
+                <div><label className="block text-xs text-gray-700 mb-1">Video Description</label>
+                  <textarea name="seo_video_description" value={formData.seo_video_description || ''} onChange={handleChange} placeholder="Brief description..." rows="2" className="w-full border rounded px-3 py-2 text-sm" /></div>
+              </div>
+            </div>
+
+            {/* FAQs */}
+            <div>
+              <label className="block text-sm font-medium mb-2">SEO FAQs</label>
+              <div className="space-y-3">
+                {(formData.seo_faqs || []).map((faq, index) => (
+                  <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                    <div className="space-y-2">
+                      <div><label className="block text-xs font-medium mb-1">Question {index + 1}</label>
+                        <input type="text" value={faq.question || ''} onChange={(e) => {
+                          const newFaqs = [...(formData.seo_faqs || [])];
+                          newFaqs[index].question = e.target.value;
+                          setFormData({...formData, seo_faqs: newFaqs});
+                        }} placeholder="Question..." className="w-full border rounded px-3 py-2" /></div>
+                      <div><label className="block text-xs font-medium mb-1">Answer</label>
+                        <textarea value={faq.answer || ''} onChange={(e) => {
+                          const newFaqs = [...(formData.seo_faqs || [])];
+                          newFaqs[index].answer = e.target.value;
+                          setFormData({...formData, seo_faqs: newFaqs});
+                        }} placeholder="Answer..." rows="3" className="w-full border rounded px-3 py-2" /></div>
+                    </div>
+                    <Button type="button" variant="outline" size="sm" onClick={() => setFormData({...formData, seo_faqs: (formData.seo_faqs || []).filter((_, i) => i !== index)})} className="mt-2">
+                      <FiTrash2 className="mr-2" /> Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <Button type="button" size="sm" onClick={() => setFormData({...formData, seo_faqs: [...(formData.seo_faqs || []), { question: '', answer: '' }]})} className="mt-3">
+                <FiPlus className="mr-2" /> Add FAQ
+              </Button>
+            </div>
+          </div>
         </CollapsibleSection>
 
         {/* Important Links */}
@@ -854,59 +1030,32 @@ const ExamDetailForm = () => {
             {(formData.important_links || []).map((link, index) => (
               <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    value={link.title || ''}
-                    onChange={(e) => handleArrayObjectChange('important_links', index, 'title', e.target.value)}
-                    placeholder="Link title (e.g., Official Website)"
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                  <input
-                    type="url"
-                    value={link.url || ''}
-                    onChange={(e) => handleArrayObjectChange('important_links', index, 'url', e.target.value)}
-                    placeholder="https://example.com"
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
+                  <input type="text" value={link.title || ''} onChange={(e) => handleArrayObjectChange('important_links', index, 'title', e.target.value)} placeholder="Link title" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+                  <input type="url" value={link.url || ''} onChange={(e) => handleArrayObjectChange('important_links', index, 'url', e.target.value)} placeholder="https://..." className="border border-gray-300 rounded-lg px-3 py-2 text-sm" />
                 </div>
-                <button type="button" onClick={() => removeArrayItem('important_links', index)} className="text-red-500 hover:text-red-700 p-2">
-                  <FiTrash2 className="w-4 h-4" />
-                </button>
+                <button type="button" onClick={() => removeArrayItem('important_links', index)} className="text-red-500 hover:text-red-700 p-2"><FiTrash2 className="w-4 h-4" /></button>
               </div>
             ))}
-            <button
-              type="button"
-              onClick={() => addArrayObjectItem('important_links', { title: '', url: '' })}
-              className="flex items-center gap-2 px-4 py-2 border border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
-            >
+            <button type="button" onClick={() => addArrayObjectItem('important_links', { title: '', url: '' })}
+              className="flex items-center gap-2 px-4 py-2 border border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-600">
               <FiPlus className="w-4 h-4" /> Add Important Link
             </button>
           </div>
         </CollapsibleSection>
 
         {/* Statistics */}
-        <CollapsibleSection title="Statistics & Additional Info" icon={<FiUsers className="w-5 h-5" />}>
+        <CollapsibleSection title="Statistics & Info" icon={<FiUsers className="w-5 h-5" />}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Total Applicants</label>
-              <input type="number" name="total_applicants" value={formData.total_applicants} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Total Seats</label>
-              <input type="number" name="total_seats" value={formData.total_seats} onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Official Website</label>
-              <input type="url" name="official_website" value={formData.official_website} onChange={handleChange}
-                placeholder="https://..." className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-            </div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Total Applicants</label>
+              <input type="number" name="total_applicants" value={formData.total_applicants} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Total Seats</label>
+              <input type="number" name="total_seats" value={formData.total_seats} onChange={handleChange} className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1">Official Website</label>
+              <input type="url" name="official_website" value={formData.official_website} onChange={handleChange} placeholder="https://..." className="w-full border border-gray-300 rounded-lg px-4 py-2.5" /></div>
             <div className="flex items-center pt-6">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="is_popular" checked={formData.is_popular} onChange={handleChange}
-                  className="w-5 h-5 text-indigo-600 rounded" />
-                <span className="text-sm font-medium text-gray-700">Mark as Popular Exam</span>
+                <input type="checkbox" name="is_popular" checked={formData.is_popular} onChange={handleChange} className="w-5 h-5 text-indigo-600 rounded" />
+                <span className="text-sm font-medium text-gray-700">Mark as Popular</span>
               </label>
             </div>
           </div>
