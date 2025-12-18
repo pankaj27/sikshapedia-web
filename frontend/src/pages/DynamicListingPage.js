@@ -924,8 +924,6 @@ const DynamicListingPage = () => {
   const removeFilter = (filterType) => {
     setFilters(prev => ({ ...prev, [filterType]: '' }));
   };
-
-  const totalPages = Math.ceil(totalCount / pagination.limit);
   
   // Breadcrumb generation
   const breadcrumbs = useMemo(() => {
