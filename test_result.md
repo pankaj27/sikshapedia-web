@@ -103,14 +103,15 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
+  current_focus: []
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+  completed_tests:
     - "Admin Form - Age Limit Input Field"
     - "Admin Form - Top Colleges Section"
     - "Course Display - Dynamic Age Limit"
     - "Course Display - Dynamic Top Colleges"
-  stuck_tasks: []
-  test_all: false
-  test_priority: "high_first"
 
 agent_communication:
   - agent: "testing"
