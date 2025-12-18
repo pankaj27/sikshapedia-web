@@ -1538,7 +1538,7 @@ const CourseDetailForm = () => {
         {/* Top Colleges */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">🏛️ Top Colleges</h2>
-          <p className="text-sm text-gray-500 mb-4">Add top colleges offering this course. These will appear in the "Top Colleges" section on the course detail page.</p>
+          <p className="text-sm text-gray-500 mb-4">Add top colleges offering this course. These will appear in the Top Colleges section on the course detail page.</p>
           
           <div className="space-y-4">
             {(formData.top_colleges || []).map((college, index) => (
