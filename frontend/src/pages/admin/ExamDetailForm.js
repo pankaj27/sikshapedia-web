@@ -622,6 +622,502 @@ const ExamDetailForm = () => {
           </div>
         </CollapsibleSection>
 
+        {/* Media Section - Logo, Images, Videos */}
+        <CollapsibleSection title="Media (Logo, Images & Videos)" icon={<FiImage className="w-5 h-5" />} defaultOpen={true} color="purple">
+          <div className="space-y-6">
+            
+            {/* Exam Logo Upload */}
+            <div className="border-2 border-purple-300 rounded-xl p-5 bg-purple-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-semibold text-purple-800 flex items-center gap-2">
+                    🏷️ Exam Logo
+                  </h3>
+                  <p className="text-xs text-purple-600 mt-1">Upload exam logo. Recommended: 200x200px, Max 500KB</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Logo Preview */}
+                <div className="flex flex-col items-center">
+                  <div className="w-40 h-40 border-2 border-dashed border-purple-300 rounded-xl flex items-center justify-center bg-white overflow-hidden">
+                    {formData.logo_url ? (
+                      <img 
+                        src={formData.logo_url.startsWith('/api') ? formData.logo_url : `/api${formData.logo_url}`} 
+                        alt="Exam Logo" 
+                        className="w-full h-full object-contain"
+                        onError={(e) => { e.target.src = 'https://via.placeholder.com/200x200?text=Logo'; }}
+                      />
+                    ) : (
+                      <div className="text-center text-purple-400">
+                        <FiImage className="w-12 h-12 mx-auto mb-2" />
+                        <span className="text-xs">No logo uploaded</span>
+                      </div>
+                    )}
+                  </div>
+                  {formData.logo_url && (
+                    <button
+                      type="button"
+                      onClick={() => setFormData({...formData, logo_url: ''})}
+                      className="mt-2 text-xs text-red-600 hover:text-red-700"
+                    >
+                      Remove Logo
+                    </button>
+                  )}
+                </div>
+                
+                {/* Logo Upload Controls */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Logo</label>
+                    <label className="flex items-center justify-center w-full h-24 border-2 border-purple-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-purple-50 transition-colors">
+                      <div className="flex flex-col items-center">
+                        <FiUpload className="w-6 h-6 text-purple-500 mb-1" />
+                        <span className="text-sm text-purple-600">Click to upload</span>
+                        <span className="text-xs text-gray-500">PNG, JPG, WebP (Max 500KB)</span>
+                      </div>
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept="image/png,image/jpeg,image/webp"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          if (file.size > 500 * 1024) {
+                            alert('Logo file size must be under 500KB. Please compress your image.');
+                            return;
+                          }
+                          setUploadingImage(true);
+                          const uploadFormData = new FormData();
+                          uploadFormData.append('file', file);
+                          try {
+                            const response = await api.post('/upload/image?type=logo', uploadFormData, {
+                              headers: { 'Content-Type': 'multipart/form-data' }
+                            });
+                            setFormData({...formData, logo_url: response.data.url});
+                          } catch (error) {
+                            alert('Failed to upload logo');
+                          } finally {
+                            setUploadingImage(false);
+                          }
+                          e.target.value = '';
+                        }}
+                      />
+                    </label>
+                  </div>
+                  
+                  {/* Logo Size Guidelines */}
+                  <div className="bg-white border border-purple-200 rounded-lg p-3">
+                    <h4 className="text-xs font-semibold text-purple-800 mb-2">📐 Size Guidelines:</h4>
+                    <ul className="text-xs text-gray-600 space-y-1">
+                      <li>• <strong>Recommended:</strong> 200x200 pixels (square)</li>
+                      <li>• <strong>Max File Size:</strong> 500KB</li>
+                      <li>• <strong>Formats:</strong> PNG (transparent), JPG, WebP</li>
+                      <li>• <strong>Tip:</strong> Use <a href="https://tinypng.com" target="_blank" rel="noopener noreferrer" className="text-purple-600 underline">TinyPNG</a> to compress</li>
+                    </ul>
+                  </div>
+                  
+                  {/* Or Enter URL */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Or Enter Logo URL</label>
+                    <input
+                      type="url"
+                      value={formData.logo_url || ''}
+                      onChange={(e) => setFormData({...formData, logo_url: e.target.value})}
+                      placeholder="https://example.com/logo.png"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Images with Alt Tag Generation */}
+            <div className="border-2 border-blue-300 rounded-xl p-5 bg-blue-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-semibold text-blue-800 flex items-center gap-2">
+                    🖼️ Content Images
+                  </h3>
+                  <p className="text-xs text-blue-600 mt-1">Upload images with SEO alt tags. Recommended: 1200x800px for content images</p>
+                </div>
+                <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{formData.content_images?.length || 0} images</span>
+              </div>
+              
+              {/* Image Upload */}
+              <div className="mb-4">
+                <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-blue-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-blue-50 transition-colors">
+                  <div className="flex flex-col items-center">
+                    <FiUpload className="w-8 h-8 text-blue-500 mb-2" />
+                    <span className="text-sm text-blue-600 font-medium">Click to upload content image</span>
+                    <span className="text-xs text-gray-500">PNG, JPG, WebP (Max 2MB) - Recommended: 1200x800px</span>
+                  </div>
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      if (file.size > 2 * 1024 * 1024) {
+                        alert('Image file size must be under 2MB');
+                        return;
+                      }
+                      setUploadingImage(true);
+                      const uploadFormData = new FormData();
+                      uploadFormData.append('file', file);
+                      try {
+                        const response = await api.post('/upload/image?type=content', uploadFormData, {
+                          headers: { 'Content-Type': 'multipart/form-data' }
+                        });
+                        const newImage = {
+                          url: response.data.url,
+                          title: '',
+                          alt: '',
+                          caption: '',
+                          width: '',
+                          height: ''
+                        };
+                        setFormData({
+                          ...formData,
+                          content_images: [...(formData.content_images || []), newImage]
+                        });
+                      } catch (error) {
+                        alert('Failed to upload image');
+                      } finally {
+                        setUploadingImage(false);
+                      }
+                      e.target.value = '';
+                    }}
+                  />
+                </label>
+              </div>
+
+              {/* Uploaded Images List */}
+              {(formData.content_images || []).length > 0 && (
+                <div className="space-y-4">
+                  {(formData.content_images || []).map((image, index) => (
+                    <div key={index} className="bg-white rounded-lg border border-blue-200 p-4">
+                      <div className="flex gap-4">
+                        {/* Image Preview */}
+                        <div className="w-36 h-28 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
+                          <img 
+                            src={image.url?.startsWith('/api') ? image.url : `/api${image.url}`} 
+                            alt={image.alt || 'Content Image'} 
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.target.src = 'https://via.placeholder.com/144x112?text=Image'; }}
+                          />
+                        </div>
+                        
+                        {/* Image Details */}
+                        <div className="flex-1 space-y-3">
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-medium text-gray-700 mb-1">Image Title</label>
+                              <input
+                                type="text"
+                                value={image.title || ''}
+                                onChange={(e) => {
+                                  const newImages = [...(formData.content_images || [])];
+                                  newImages[index].title = e.target.value;
+                                  setFormData({...formData, content_images: newImages});
+                                }}
+                                placeholder="Image title"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                Alt Text (SEO) 
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newImages = [...(formData.content_images || [])];
+                                    const autoAlt = `${formData.name} ${image.title || 'exam image'} - Admissionbuddy`;
+                                    newImages[index].alt = autoAlt;
+                                    setFormData({...formData, content_images: newImages});
+                                  }}
+                                  className="ml-2 text-blue-600 hover:text-blue-700 text-xs"
+                                >
+                                  ⚡ Auto-generate
+                                </button>
+                              </label>
+                              <input
+                                type="text"
+                                value={image.alt || ''}
+                                onChange={(e) => {
+                                  const newImages = [...(formData.content_images || [])];
+                                  newImages[index].alt = e.target.value;
+                                  setFormData({...formData, content_images: newImages});
+                                }}
+                                placeholder="Alt text for accessibility & SEO"
+                                className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Caption (optional)</label>
+                            <input
+                              type="text"
+                              value={image.caption || ''}
+                              onChange={(e) => {
+                                const newImages = [...(formData.content_images || [])];
+                                newImages[index].caption = e.target.value;
+                                setFormData({...formData, content_images: newImages});
+                              }}
+                              placeholder="Image caption"
+                              className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm"
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const imgHtml = `<figure class="content-image"><img src="${image.url}" alt="${image.alt || ''}" title="${image.title || ''}" />${image.caption ? `<figcaption>${image.caption}</figcaption>` : ''}</figure>`;
+                                navigator.clipboard.writeText(imgHtml);
+                                alert('Image HTML copied!');
+                              }}
+                              className="text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded hover:bg-blue-200"
+                            >
+                              📋 Copy HTML
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newImages = (formData.content_images || []).filter((_, i) => i !== index);
+                                setFormData({...formData, content_images: newImages});
+                              }}
+                              className="text-xs bg-red-100 text-red-700 px-3 py-1.5 rounded hover:bg-red-200"
+                            >
+                              🗑️ Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Video Upload with SEO Alt Tag */}
+            <div className="border-2 border-orange-300 rounded-xl p-5 bg-orange-50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-semibold text-orange-800 flex items-center gap-2">
+                    🎬 Videos
+                  </h3>
+                  <p className="text-xs text-orange-600 mt-1">Add YouTube/Vimeo videos with SEO-optimized titles and descriptions</p>
+                </div>
+                <span className="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded-full">{formData.content_videos?.length || 0} videos</span>
+              </div>
+
+              {/* Add Video Form */}
+              <div className="bg-white border border-orange-200 rounded-lg p-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Video URL (YouTube/Vimeo Embed)</label>
+                    <input
+                      type="url"
+                      id="new-video-url"
+                      placeholder="https://www.youtube.com/embed/VIDEO_ID"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Use embed URL: youtube.com/embed/... or player.vimeo.com/video/...</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Video Title (SEO)
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const titleInput = document.getElementById('new-video-title');
+                          if (titleInput) {
+                            titleInput.value = `${formData.name} ${new Date().getFullYear()} - Complete Guide Video | Admissionbuddy`;
+                          }
+                        }}
+                        className="ml-2 text-orange-600 hover:text-orange-700 text-xs"
+                      >
+                        ⚡ Auto-generate
+                      </button>
+                    </label>
+                    <input
+                      type="text"
+                      id="new-video-title"
+                      placeholder="Video title for SEO"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Video Alt/Description (SEO)
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const descInput = document.getElementById('new-video-desc');
+                          if (descInput) {
+                            descInput.value = `Watch complete guide on ${formData.name} ${new Date().getFullYear()} covering exam pattern, syllabus, preparation tips and more | Admissionbuddy`;
+                          }
+                        }}
+                        className="ml-2 text-orange-600 hover:text-orange-700 text-xs"
+                      >
+                        ⚡ Auto-generate
+                      </button>
+                    </label>
+                    <input
+                      type="text"
+                      id="new-video-desc"
+                      placeholder="Video description for accessibility & SEO"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Thumbnail URL (optional)</label>
+                    <input
+                      type="url"
+                      id="new-video-thumb"
+                      placeholder="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const url = document.getElementById('new-video-url')?.value;
+                        const title = document.getElementById('new-video-title')?.value;
+                        const desc = document.getElementById('new-video-desc')?.value;
+                        const thumb = document.getElementById('new-video-thumb')?.value;
+                        
+                        if (!url) {
+                          alert('Please enter a video URL');
+                          return;
+                        }
+                        
+                        const newVideo = {
+                          url: url,
+                          title: title || '',
+                          description: desc || '',
+                          thumbnail: thumb || '',
+                          alt: desc || title || ''
+                        };
+                        
+                        setFormData({
+                          ...formData,
+                          content_videos: [...(formData.content_videos || []), newVideo]
+                        });
+                        
+                        // Clear inputs
+                        document.getElementById('new-video-url').value = '';
+                        document.getElementById('new-video-title').value = '';
+                        document.getElementById('new-video-desc').value = '';
+                        document.getElementById('new-video-thumb').value = '';
+                      }}
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                    >
+                      <FiPlus className="inline mr-2" /> Add Video
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Added Videos List */}
+              {(formData.content_videos || []).length > 0 && (
+                <div className="space-y-3">
+                  {(formData.content_videos || []).map((video, index) => (
+                    <div key={index} className="bg-white border border-orange-200 rounded-lg p-4">
+                      <div className="flex gap-4">
+                        {/* Video Preview */}
+                        <div className="w-48 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-gray-900">
+                          <iframe
+                            src={video.url}
+                            title={video.title || 'Video'}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        </div>
+                        
+                        {/* Video Details */}
+                        <div className="flex-1">
+                          <div className="space-y-2">
+                            <div>
+                              <label className="block text-xs font-medium text-gray-600">Title</label>
+                              <input
+                                type="text"
+                                value={video.title || ''}
+                                onChange={(e) => {
+                                  const newVideos = [...(formData.content_videos || [])];
+                                  newVideos[index].title = e.target.value;
+                                  setFormData({...formData, content_videos: newVideos});
+                                }}
+                                className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-medium text-gray-600">
+                                Alt/Description (SEO)
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newVideos = [...(formData.content_videos || [])];
+                                    newVideos[index].description = `Watch ${formData.name} video guide - ${video.title || 'exam preparation'} | Admissionbuddy`;
+                                    newVideos[index].alt = newVideos[index].description;
+                                    setFormData({...formData, content_videos: newVideos});
+                                  }}
+                                  className="ml-2 text-orange-600 hover:text-orange-700 text-xs"
+                                >
+                                  ⚡ Auto-generate
+                                </button>
+                              </label>
+                              <input
+                                type="text"
+                                value={video.description || ''}
+                                onChange={(e) => {
+                                  const newVideos = [...(formData.content_videos || [])];
+                                  newVideos[index].description = e.target.value;
+                                  newVideos[index].alt = e.target.value;
+                                  setFormData({...formData, content_videos: newVideos});
+                                }}
+                                className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mt-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const videoHtml = `<figure class="video-embed"><iframe src="${video.url}" title="${video.title || ''}" alt="${video.alt || video.description || ''}" frameborder="0" allowfullscreen></iframe>${video.description ? `<figcaption>${video.description}</figcaption>` : ''}</figure>`;
+                                navigator.clipboard.writeText(videoHtml);
+                                alert('Video HTML copied!');
+                              }}
+                              className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded hover:bg-orange-200"
+                            >
+                              📋 Copy HTML
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newVideos = (formData.content_videos || []).filter((_, i) => i !== index);
+                                setFormData({...formData, content_videos: newVideos});
+                              }}
+                              className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200"
+                            >
+                              🗑️ Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+        </CollapsibleSection>
+
         {/* SEO & Meta Tags (Main Page) */}
         <CollapsibleSection title="SEO & Meta Tags (Main Page)" icon={<FiSettings className="w-5 h-5" />} color="rose">
           <p className="text-sm text-gray-600 mb-4">
