@@ -2260,96 +2260,24 @@ const DynamicListingPage = () => {
               </div>
             )}
 
-            {/* Load More / Infinite Scroll Style */}
-            {!loading && institutions.length > 0 && totalPages > 1 && (
-              <div className="mt-8">
-                {/* Progress Indicator */}
-                <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">
-                      Showing <strong>{institutions.length}</strong> of <strong>{totalCount.toLocaleString()}</strong> colleges
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      Page {pagination.page} of {totalPages}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${Math.min((pagination.page / totalPages) * 100, 100)}%` }}
-                    ></div>
+            {/* Infinite Scroll Trigger */}
+            <div ref={loadMoreRef} className="py-8">
+              {loadingMore && (
+                <div className="flex justify-center items-center gap-3">
+                  <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-200 border-t-blue-600"></div>
+                  <span className="text-gray-600 font-medium">Loading more colleges...</span>
+                </div>
+              )}
+              
+              {!hasMore && institutions.length > 0 && (
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 rounded-full text-gray-600">
+                    <FiCheckCircle className="text-green-500" size={18} />
+                    <span className="font-medium">You've seen all {totalCount.toLocaleString()} colleges</span>
                   </div>
                 </div>
-                
-                {/* Load More Button - Infinite Scroll Style */}
-                {pagination.page < totalPages && (
-                  <div className="text-center">
-                    <button
-                      onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-                      className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-base hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2 mx-auto"
-                    >
-                      <FiChevronDown size={20} />
-                      Load More Colleges
-                    </button>
-                    <p className="text-xs text-gray-500 mt-2">
-                      {totalCount - (pagination.page * pagination.limit)} more colleges available
-                    </p>
-                  </div>
-                )}
-                
-                {/* Pagination Numbers - For Jump Navigation */}
-                <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: 1 }))}
-                    disabled={pagination.page === 1}
-                    className="px-3 py-2 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-blue-50 hover:border-blue-300 text-sm transition-all"
-                  >
-                    First
-                  </button>
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
-                    disabled={pagination.page === 1}
-                    className="px-3 py-2 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-blue-50 hover:border-blue-300 text-sm transition-all"
-                  >
-                    ← Prev
-                  </button>
-                  
-                  {/* Page Numbers */}
-                  {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                    const pageNum = Math.max(1, Math.min(pagination.page - 2 + i, totalPages - 4)) + i;
-                    if (pageNum > totalPages || pageNum < 1) return null;
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => setPagination(prev => ({ ...prev, page: pageNum }))}
-                        className={`w-10 h-10 rounded-lg font-medium text-sm transition-all ${
-                          pagination.page === pageNum 
-                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md' 
-                            : 'border border-gray-200 hover:bg-blue-50 hover:border-blue-300'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
-                  
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-                    disabled={pagination.page >= totalPages}
-                    className="px-3 py-2 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-blue-50 hover:border-blue-300 text-sm transition-all"
-                  >
-                    Next →
-                  </button>
-                  <button
-                    onClick={() => setPagination(prev => ({ ...prev, page: totalPages }))}
-                    disabled={pagination.page >= totalPages}
-                    className="px-3 py-2 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-blue-50 hover:border-blue-300 text-sm transition-all"
-                  >
-                    Last
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </main>
         </div>
       </div>
