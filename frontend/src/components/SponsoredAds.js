@@ -245,4 +245,120 @@ export const AdmissionsOpenSection = ({
   );
 };
 
-export default { SidebarSponsoredAd, FeaturedSponsoredSection, AdmissionsOpenSection };
+// URL-Aware Sponsored Section - Automatically uses URL-specific ads with fallback
+export const UrlAwareSponsoredSection = ({ 
+  sectionType = 'featured', // 'featured', 'admission', 'sponsored'
+  title,
+  subtitle,
+  bgColor,
+  headerColor,
+  viewAllLink = "/india-colleges"
+}) => {
+  const location = useLocation();
+  const [ads, setAds] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Default styles based on section type
+  const defaultStyles = {
+    featured: {
+      title: 'Featured Colleges',
+      subtitle: 'Sponsored recommendations',
+      bgColor: 'from-orange-50 via-amber-50 to-yellow-50',
+      headerColor: 'from-orange-500 to-amber-500',
+      icon: FiStar
+    },
+    admission: {
+      title: 'Admissions Open 2025',
+      subtitle: 'Apply now for upcoming session',
+      bgColor: 'from-green-50 via-emerald-50 to-teal-50',
+      headerColor: 'from-green-600 to-emerald-600',
+      icon: FiCheckCircle
+    },
+    sponsored: {
+      title: 'Sponsored Colleges',
+      subtitle: 'Featured partners',
+      bgColor: 'from-blue-50 via-indigo-50 to-purple-50',
+      headerColor: 'from-blue-600 to-indigo-600',
+      icon: FiStar
+    }
+  };
+
+  const styles = defaultStyles[sectionType] || defaultStyles.featured;
+  const Icon = styles.icon;
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        // Get current URL path without leading slash
+        const urlPath = location.pathname.replace(/^\//, '') + location.search;
+        const response = await api.get(`/sponsored-ads-by-url?url=${encodeURIComponent(urlPath)}&section_type=${sectionType}`);
+        setAds(response.data || []);
+      } catch (error) {
+        console.error('Error fetching URL-specific ads:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAds();
+  }, [location.pathname, location.search, sectionType]);
+
+  if (loading || !ads || ads.length === 0) return null;
+
+  return (
+    <div className={`bg-gradient-to-r ${bgColor || styles.bgColor} rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg my-4`}>
+      <div className={`bg-gradient-to-r ${headerColor || styles.headerColor} px-4 py-2 flex items-center gap-2`}>
+        <Icon className="text-white fill-current" size={14} />
+        <span className="text-white font-bold text-sm">{title || styles.title}</span>
+        <span className="text-white/70 text-xs ml-auto">Sponsored</span>
+      </div>
+      <div className="p-4">
+        {subtitle && <p className="text-gray-600 text-sm mb-3">{subtitle || styles.subtitle}</p>}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {(ads || []).slice(0, 3).map((ad, idx) => (
+            <Link
+              key={ad.id || idx}
+              to={getInstitutionDetailUrl(ad.institution_type || 'college', ad.id, ad.name, ad.location?.city, ad.serial_number)}
+              className={`bg-white rounded-lg p-4 border border-orange-100 hover:shadow-md hover:border-orange-300 transition-all ${idx === 2 ? 'hidden md:block' : ''}`}
+            >
+              <div className="flex items-start gap-3">
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden ${
+                  idx === 0 ? 'bg-gradient-to-br from-orange-100 to-orange-200' :
+                  idx === 1 ? 'bg-gradient-to-br from-amber-100 to-amber-200' :
+                  'bg-gradient-to-br from-yellow-100 to-yellow-200'
+                }`}>
+                  {ad.logo_url ? (
+                    <img src={ad.logo_url} alt={ad.name} className="w-full h-full object-contain p-1" />
+                  ) : (
+                    <span className="text-lg font-bold text-orange-600">{ad.name?.charAt(0)}</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-sm text-gray-900 line-clamp-2 hover:text-orange-600 transition-colors">
+                    {ad.name}
+                  </h4>
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
+                    <FiMapPin size={10} />
+                    <span className="truncate">{ad.location?.city}, {ad.location?.state}</span>
+                  </div>
+                  {ad.rating > 0 && (
+                    <div className="flex items-center gap-1 mt-1">
+                      <FiStar className="text-yellow-500 fill-current" size={12} />
+                      <span className="text-xs font-medium text-gray-700">{ad.rating?.toFixed(1)}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="text-center mt-4">
+          <Link to={viewAllLink} className="text-sm text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-1">
+            View All <FiArrowRight size={14} />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default { SidebarSponsoredAd, FeaturedSponsoredSection, AdmissionsOpenSection, UrlAwareSponsoredSection };
