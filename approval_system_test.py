@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional
 from datetime import datetime, timezone
 
 # Backend URL from frontend .env
-BASE_URL = "https://eduadmin-35.preview.emergentagent.com/api"
+BASE_URL = "https://collportal.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
