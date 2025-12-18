@@ -251,31 +251,31 @@ const ExamDetailPage = () => {
       </div>
 
       {/* Exam Menu */}
-      {/* Dynamic Menu Tabs from Backend */}
+      {/* Dynamic Menu Tabs from Backend - Works as tabs on same page */}
       <div className="bg-white border-b shadow-sm sticky top-16 z-30">
         <div className="container mx-auto px-6">
           <div className="flex items-center gap-6 overflow-x-auto py-3">
             {(exam.menuConfig?.items || []).filter(item => item.enabled !== false).map((item, idx) => (
-              <Link 
+              <button 
                 key={item.id} 
-                to={`/exams/${id}/${item.id}`} 
-                className={`text-sm font-medium pb-3 whitespace-nowrap transition-colors ${
-                  idx === 0 || activeSection === item.id
+                onClick={() => setActiveSection(item.id)}
+                className={`text-sm font-medium pb-3 whitespace-nowrap transition-colors cursor-pointer ${
+                  activeSection === item.id || (idx === 0 && !activeSection)
                     ? 'font-semibold text-orange-600 border-b-2 border-orange-600' 
                     : 'text-gray-700 hover:text-orange-600'
                 }`}
               >
                 {item.label}
-              </Link>
+              </button>
             ))}
             {/* Fallback if no menu items from backend */}
             {(!exam.menuConfig?.items || exam.menuConfig.items.length === 0) && (
               <>
-                <Link to={`/exams/${id}/overview`} className="text-sm font-semibold text-orange-600 border-b-2 border-orange-600 pb-3 whitespace-nowrap">Overview</Link>
-                <Link to={`/exams/${id}/eligibility`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">Eligibility</Link>
-                <Link to={`/exams/${id}/syllabus`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">Syllabus</Link>
-                <Link to={`/exams/${id}/exam-pattern`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">Exam Pattern</Link>
-                <Link to={`/exams/${id}/result`} className="text-sm font-medium text-gray-700 hover:text-orange-600 pb-3 whitespace-nowrap transition-colors">Result</Link>
+                <button onClick={() => setActiveSection('overview')} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'overview' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Overview</button>
+                <button onClick={() => setActiveSection('eligibility')} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'eligibility' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Eligibility</button>
+                <button onClick={() => setActiveSection('syllabus')} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'syllabus' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Syllabus</button>
+                <button onClick={() => setActiveSection('exam-pattern')} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'exam-pattern' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Exam Pattern</button>
+                <button onClick={() => setActiveSection('result')} className={`text-sm pb-3 whitespace-nowrap ${activeSection === 'result' ? 'font-semibold text-orange-600 border-b-2 border-orange-600' : 'font-medium text-gray-700 hover:text-orange-600'}`}>Result</button>
               </>
             )}
           </div>
