@@ -2146,6 +2146,7 @@ const DynamicListingPage = () => {
                       </div>
                     </div>
                   </div>
+                  </React.Fragment>
                 ))}
               </div>
             )}
