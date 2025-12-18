@@ -246,6 +246,10 @@ const ExamDetailForm = () => {
     canonical_url: '',
     robots_meta: 'index, follow',
     schema_type: 'Event',
+    // Media
+    logo_url: '',
+    content_images: [],
+    content_videos: [],
     status: 'draft'
   });
 
