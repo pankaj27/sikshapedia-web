@@ -401,10 +401,16 @@ const ExamDetailPage = () => {
           {/* Main Content - Dynamic based on activeSection */}
           <div className="lg:col-span-3">
             {/* Dynamic Content from Backend Menu Config */}
-            {exam.menuConfig?.items && (
+            {exam.menuConfig?.items && exam.menuConfig.items.length > 0 && (
               <div className="mb-8">
                 {exam.menuConfig.items
-                  .filter(item => item.id === activeSection || (!activeSection && item.order === 0))
+                  .filter(item => {
+                    // If activeSection is set, match by id
+                    if (activeSection) return item.id === activeSection;
+                    // Otherwise show first enabled item
+                    const firstEnabledItem = exam.menuConfig.items.find(i => i.enabled !== false);
+                    return item.id === firstEnabledItem?.id;
+                  })
                   .map(item => (
                     <div key={item.id} className="bg-white rounded-lg shadow-md p-6">
                       {/* Page Heading */}
