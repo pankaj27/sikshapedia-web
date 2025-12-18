@@ -54,11 +54,22 @@ const ExamPage = () => {
     'from-amber-500 to-amber-600'
   ];
 
-  // Fetch exams from API (using exam details for comprehensive data)
+  // Fetch page settings and exams from API
   useEffect(() => {
-    const fetchExams = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
+        
+        // Fetch page settings
+        try {
+          const settingsRes = await api.get('/exam-listing-settings');
+          if (settingsRes.data) {
+            setPageSettings(prev => ({ ...prev, ...settingsRes.data }));
+          }
+        } catch (err) {
+          console.log('Using default page settings');
+        }
+        
         // Fetch from exams-detail endpoint for comprehensive exam data
         const response = await api.get('/exams-detail?limit=200');
         const examData = response.data || [];
