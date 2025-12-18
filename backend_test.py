@@ -540,7 +540,7 @@ class APITester:
         }
         
         success, response, status = self.make_request("POST", "/advertisements", html_ad_data, token=self.admin_token)
-        if success and response.get("success"):
+        if success and response.get("id"):
             html_ad_id = response.get("id")
             self.created_ad_ids.append(html_ad_id)
             self.log_test("Create HTML/Native Ad", True, f"Created ad ID: {html_ad_id}")
