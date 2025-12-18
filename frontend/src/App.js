@@ -90,6 +90,7 @@ import ExamDetailForm from './pages/admin/ExamDetailForm';
 import ExamsDetailManagement from './pages/admin/ExamsDetailManagement';
 import ListingPagesManagement from './pages/admin/ListingPagesManagement';
 import ListingPageForm from './pages/admin/ListingPageForm';
+import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
 import './App.css';
 
 function App() {
