@@ -118,14 +118,18 @@ const CourseDetailPage = () => {
     ? course.related_courses 
     : defaultRelatedCourses;
 
-  // Sample colleges
-  const topColleges = [
+  // Top Colleges - from API or default
+  const defaultTopColleges = [
     { name: 'Indian Institute of Technology, Delhi', location: 'New Delhi', rating: 4.8, fees: '₹2.5L/year', rank: '#1' },
     { name: 'Indian Institute of Technology, Bombay', location: 'Mumbai', rating: 4.7, fees: '₹2.8L/year', rank: '#2' },
     { name: 'Indian Institute of Technology, Madras', location: 'Chennai', rating: 4.7, fees: '₹2.6L/year', rank: '#3' },
     { name: 'BITS Pilani', location: 'Pilani, Rajasthan', rating: 4.5, fees: '₹4.5L/year', rank: '#4' },
     { name: 'NIT Trichy', location: 'Tiruchirappalli', rating: 4.4, fees: '₹1.5L/year', rank: '#5' },
   ];
+  const topColleges = course.top_colleges && course.top_colleges.length > 0 ? course.top_colleges : defaultTopColleges;
+
+  // Age Limit - from API or default
+  const ageLimit = course.age_limit || 'No upper age limit for most institutions';
 
   // Sample career options
   const careerOptions = course.career_options || [
