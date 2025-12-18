@@ -185,7 +185,15 @@ const CollegeForm = () => {
     // Badges & Status
     is_verified: false,
     is_preferred: false,
+    is_featured: false,
+    featured_at: null,
+    featured_priority_months: 2,
+    is_trending: false,
+    is_top_rated: false,
+    is_sponsored: false,
     is_admission_open: false,
+    admission_open_at: null,
+    admission_open_priority_months: 2,
     admission_deadline: '',
     badge_text: '',
     location: { 
