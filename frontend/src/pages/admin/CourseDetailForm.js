@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/button';
 import { generateSlug } from '../../utils/slugify';
 import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
+import { SeoMetaSection } from '../../components/admin/college-form';
 
 // Menu icon options
 const menuIconOptions = [
