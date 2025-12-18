@@ -477,6 +477,41 @@ const NewsForm = () => {
                 <div className="bg-white rounded-lg shadow-sm border p-6">
                   <h2 className="text-lg font-semibold mb-4">🖼️ Featured Image</h2>
                   <div className="space-y-4">
+                    {/* Upload Section */}
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-orange-400 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            handleImageUpload(file, 'featured_image');
+                            // Auto-generate alt from title if not set
+                            if (!formData.featured_image_alt && formData.title) {
+                              handleChange('featured_image_alt', formData.title);
+                            }
+                          }
+                        }}
+                        className="hidden"
+                        id="featured-image-upload"
+                      />
+                      <label htmlFor="featured-image-upload" className="cursor-pointer">
+                        <FiUpload className="mx-auto h-12 w-12 text-gray-400 mb-3" />
+                        <p className="text-sm font-medium text-gray-700">Click to upload image</p>
+                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, WEBP up to 5MB</p>
+                      </label>
+                    </div>
+
+                    {/* Or use URL */}
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">or enter URL</span>
+                      </div>
+                    </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
                       <input
@@ -487,21 +522,57 @@ const NewsForm = () => {
                         placeholder="https://images.unsplash.com/..."
                       />
                     </div>
+
+                    {/* Image Preview */}
                     {formData.featured_image && (
-                      <div className="relative">
-                        <img src={formData.featured_image} alt="Preview" className="w-full h-48 object-cover rounded-lg" />
+                      <div className="relative group">
+                        <img src={formData.featured_image} alt={formData.featured_image_alt || 'Preview'} className="w-full h-48 object-cover rounded-lg" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleChange('featured_image', '');
+                            handleChange('featured_image_alt', '');
+                          }}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
                       </div>
                     )}
+
+                    {/* Alt Text with Auto-Generate */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Alt Text (SEO)</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-sm font-medium text-gray-700">Alt Text (SEO)</label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (formData.title) {
+                              const autoAlt = `${formData.title} - ${formData.category} News | Admissionbuddy`;
+                              handleChange('featured_image_alt', autoAlt.substring(0, 125));
+                            } else {
+                              alert('Please enter a title first to auto-generate alt text');
+                            }
+                          }}
+                          className="text-xs text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1"
+                        >
+                          ⚡ Auto-Generate from Title
+                        </button>
+                      </div>
                       <input
                         type="text"
                         value={formData.featured_image_alt || ''}
                         onChange={(e) => handleChange('featured_image_alt', e.target.value)}
                         className="w-full border rounded-lg px-4 py-2.5"
                         placeholder="Descriptive alt text for accessibility & SEO"
+                        maxLength={125}
                       />
-                      <p className="text-xs text-gray-500 mt-1">Auto-generated from title if empty</p>
+                      <div className="flex justify-between mt-1">
+                        <p className="text-xs text-gray-500">Helps with SEO and accessibility</p>
+                        <span className={`text-xs ${(formData.featured_image_alt?.length || 0) > 100 ? 'text-yellow-600' : 'text-gray-400'}`}>
+                          {formData.featured_image_alt?.length || 0}/125
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
