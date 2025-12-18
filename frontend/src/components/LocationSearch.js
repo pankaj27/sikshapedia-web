@@ -22,9 +22,9 @@ const LocationSearch = () => {
         api.get('/locations/cities'),
         api.get('/locations/countries')
       ]);
-      setStates(statesRes.data.slice(0, 15));
-      setCities(citiesRes.data.slice(0, 20));
-      setCountries(countriesRes.data.slice(0, 12));
+      setStates(Array.isArray(statesRes.data) ? statesRes.data.slice(0, 15) : []);
+      setCities(Array.isArray(citiesRes.data) ? citiesRes.data.slice(0, 20) : []);
+      setCountries(Array.isArray(countriesRes.data) ? countriesRes.data.slice(0, 12) : []);
     } catch (error) {
       console.error('Error fetching locations:', error);
     } finally {
