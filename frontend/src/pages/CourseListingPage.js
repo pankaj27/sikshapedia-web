@@ -370,7 +370,7 @@ const CourseListingPage = () => {
                       <div className="flex-1">
                         {/* Course Name */}
                         <Link 
-                          to={`/course/${courseSlug}`} 
+                          to={`/courses/${courseSlug}`} 
                           className="text-lg font-bold text-blue-700 hover:text-blue-800 hover:underline mb-2 block"
                         >
                           {course.full_name || course.name}
@@ -404,19 +404,19 @@ const CourseListingPage = () => {
                         {/* Quick Links */}
                         <div className="flex flex-wrap items-center gap-2">
                           <Link 
-                            to={`/course/${courseSlug}`} 
+                            to={`/courses/${courseSlug}`} 
                             className="text-xs bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
                           >
                             Course Overview
                           </Link>
                           <Link 
-                            to={`/course/${courseSlug}#career`} 
+                            to={`/courses/${courseSlug}#career`} 
                             className="text-xs bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full hover:bg-purple-100 transition"
                           >
                             Career Options & Jobs
                           </Link>
                           <Link 
-                            to={`/course/${courseSlug}#syllabus`} 
+                            to={`/courses/${courseSlug}#syllabus`} 
                             className="text-xs bg-green-50 text-green-700 px-3 py-1.5 rounded-full hover:bg-green-100 transition"
                           >
                             Syllabus
@@ -434,7 +434,7 @@ const CourseListingPage = () => {
                           Apply Now
                         </button>
                         <Link 
-                          to={`/course/${courseSlug}`}
+                          to={`/courses/${courseSlug}`}
                           className="text-xs text-gray-500 hover:text-orange-600"
                         >
                           View Details →
