@@ -142,6 +142,17 @@ const EducationLoansPage = () => {
       </section>
 
       <div className="container mx-auto px-4 py-6">
+        {/* Featured Colleges for Education Loans */}
+        <FeaturedSponsoredSection 
+          placementId="loan_featured"
+          title="Colleges with Loan Assistance"
+          subtitle="Explore institutions with education loan tie-ups"
+          bgColor="from-emerald-50 via-green-50 to-teal-50"
+          headerColor="from-emerald-500 to-green-500"
+          linkColor="text-emerald-600"
+          viewAllLink="/india-colleges"
+        />
+
         {/* Filters */}
         <div className="bg-white rounded-lg shadow p-4 mb-6">
           <div className="flex items-center gap-2 mb-3">
