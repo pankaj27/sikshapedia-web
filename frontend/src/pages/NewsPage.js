@@ -41,9 +41,23 @@ const NewsPage = () => {
 
   const getGradient = (index) => gradients[index % gradients.length];
 
+  // Fetch settings on mount
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
   useEffect(() => {
     fetchNews();
   }, [activeCategory, currentPage]);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await api.get('/news-listing-settings');
+      setSettings(response.data);
+    } catch (error) {
+      console.error('Error fetching news settings:', error);
+    }
+  };
 
   const fetchNews = async () => {
     setLoading(true);
