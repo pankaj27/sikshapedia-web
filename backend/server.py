@@ -2673,7 +2673,9 @@ async def get_colleges(
     max_fees: Optional[float] = None,
     course: Optional[str] = None,
     sort_by: Optional[str] = Query("nirf_ranking", regex="^(name|nirf_ranking|average_fees|rating)$"),
-    include_drafts: Optional[str] = Query(None)  # Admin can set to "true" to see drafts
+    include_drafts: Optional[str] = Query(None),  # Admin can set to "true" to see drafts
+    is_featured: Optional[bool] = None,  # Filter by featured status
+    is_admission_open: Optional[bool] = None  # Filter by admission open status
 ):
     query = {}
     
