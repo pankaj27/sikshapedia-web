@@ -1864,20 +1864,12 @@ const DynamicListingPage = () => {
                   {filters.recognition && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-100 text-rose-700 rounded-lg text-xs font-medium">
                       {filters.recognition.split(' ')[0]}
-                      <button onClick={() => setFilters(prev => ({ ...prev, recognition: '' }))} className="hover:bg-orange-600 rounded-full"><FiX size={12} /></button>
-                </span>
-              )}
-              
-              {/* Clear All button */}
-              {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation || filters.course || filters.degreeType || filters.examAccepted || filters.affiliation || filters.recognition) && (
-                <button 
-                  onClick={() => clearFilters()} 
-                  className="text-xs text-gray-600 hover:text-gray-900 font-medium ml-1"
-                >
-                  Clear All
-                </button>
-              )}
-            </div>
+                      <button onClick={() => setFilters(prev => ({ ...prev, recognition: '' }))} className="hover:bg-rose-200 rounded-full p-0.5"><FiX size={12} /></button>
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
           </div>
           
           {/* MAIN LISTING */}
