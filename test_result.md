@@ -1,4 +1,16 @@
 backend:
+  - task: "News Listing Page Dynamic Settings - Backend API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ News Listing Page Dynamic Settings fully working. GET /api/news-listing-settings returns all expected fields (hero_title, hero_subtitle, stats, categories, trending_tags, big_stories_title, trending_tags_title, newsletter settings). PUT /api/news-listing-settings with admin auth successfully updates and persists settings. Admin authentication properly enforced. All expected content from review request present: 'Education News & Updates' hero title, 'Top Stories Today' sidebar title, 'Hot Topics' trending title, and trending tags including 'CAT 2025', 'JEE Main 2025', 'NEET UG 2025'."
+
   - task: "Age Limit Field - Dynamic Eligibility Criteria"
     implemented: true
     working: true
