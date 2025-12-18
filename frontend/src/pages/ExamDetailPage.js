@@ -315,6 +315,7 @@ const ExamDetailPage = () => {
           </ul>
         </div>
       </div>
+      )}
 
       {/* Top Advertisement Banner */}
       <div className="bg-gray-100 border-b py-4">
