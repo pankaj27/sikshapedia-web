@@ -70,6 +70,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Course Details', path: '/admin/courses-detail', icon: FiBook },
         { title: 'Exams (Quick Entry)', path: '/admin/exams', icon: FiFileText },
         { title: 'Exam Details', path: '/admin/exams-detail', icon: FiFileText },
+        { title: 'Exam Listing Page', path: '/admin/exam-listing-settings', icon: FiSettings },
         { title: 'News Articles', path: '/admin/news', icon: FiFileText },
         { title: 'Blogs', path: '/admin/blogs', icon: FiFileText },
         { title: 'Scholarships', path: '/admin/scholarships', icon: FiDollarSign },
