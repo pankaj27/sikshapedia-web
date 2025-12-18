@@ -565,7 +565,7 @@ const CourseDetailPage = () => {
                   <tbody>
                     <tr><td className="border border-gray-300 py-2 px-4 text-sm">Internet technology</td><td className="border border-gray-300 py-2 px-4 text-sm">Artificial intelligence</td></tr>
                     <tr><td className="border border-gray-300 py-2 px-4 text-sm">Multimedia technology</td><td className="border border-gray-300 py-2 px-4 text-sm">Economics</td></tr>
-                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Practical's</td><td className="border border-gray-300 py-2 px-4 text-sm">Practical's</td></tr>
+                    <tr><td className="border border-gray-300 py-2 px-4 text-sm">Practicals</td><td className="border border-gray-300 py-2 px-4 text-sm">Practicals</td></tr>
                     <tr><td className="border border-gray-300 py-2 px-4 text-sm">Elective - I</td><td className="border border-gray-300 py-2 px-4 text-sm">Elective - II</td></tr>
                   </tbody>
                 </table>
