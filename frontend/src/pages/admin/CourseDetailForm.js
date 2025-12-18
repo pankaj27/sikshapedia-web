@@ -156,7 +156,6 @@ const CourseDetailForm = () => {
     admission_process: '',
     selection_criteria: '',
     career_prospects: '',
-    top_colleges: [],
     average_fees: 0,
     salary_range: { min: 0, max: 0 },
     course_syllabus: [],
