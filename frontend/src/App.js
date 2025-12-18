@@ -186,7 +186,7 @@ function App() {
                   <Route path="/courses" element={<CoursesPage />} />
                   <Route path="/course-finder" element={<CourseFinderPage />} />
                   <Route path="/courses/listing/:category" element={<CourseListingPage />} />
-                  <Route path="/courses/detail/:id" element={<CourseDetailPage />} />
+                  <Route path="/courses/course/:id" element={<CourseDetailPage />} />
                   <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
                   <Route path="/courses/:stream" element={<CourseListingPage />} />
                   
