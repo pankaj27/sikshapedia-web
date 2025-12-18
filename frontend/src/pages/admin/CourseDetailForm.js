@@ -2406,81 +2406,15 @@ const CourseDetailForm = () => {
         </CollapsibleSection>
 
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
-        {/* SEO & META TAGS SECTION                                                         */}
+        {/* SEO & META TAGS SECTION - Using Reusable Component                              */}
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         <CollapsibleSection title="SEO & Meta Tags" icon="🏷️" defaultOpen={false} badge="Auto Generate">
-          <div className="space-y-4">
-            {/* Auto Generate Info */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-green-600 text-lg">✨</span>
-                <div>
-                  <p className="text-sm font-medium text-green-800">Auto Generate SEO Tags</p>
-                  <p className="text-xs text-green-600">Click the button to auto generate SEO tags based on course information.</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  if (formData.name) {
-                    const seoTags = generateSeoMetaTags(formData);
-                    setFormData({
-                      ...formData,
-                      meta_title: seoTags.metaTitle,
-                      meta_description: seoTags.metaDesc,
-                      meta_keywords: seoTags.keywords
-                    });
-                  } else {
-                    alert('Please select a course first');
-                  }
-                }}
-                className="px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 flex items-center gap-2 font-medium"
-              >
-                ✨ Auto Generate
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">Meta Title</label>
-                <input
-                  type="text"
-                  name="meta_title"
-                  value={formData.meta_title || ''}
-                  onChange={handleChange}
-                  placeholder="Click 'Auto Generate' or enter manually"
-                  className="w-full border rounded px-3 py-2"
-                  maxLength={60}
-                />
-                <p className="text-xs text-gray-500 mt-1">{(formData.meta_title || '').length}/60 characters</p>
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">Meta Description</label>
-                <textarea
-                  name="meta_description"
-                  value={formData.meta_description || ''}
-                  onChange={handleChange}
-                  placeholder="Click 'Auto Generate' or enter manually"
-                  className="w-full border rounded px-3 py-2"
-                  rows="2"
-                  maxLength={160}
-                />
-                <p className="text-xs text-gray-500 mt-1">{(formData.meta_description || '').length}/160 characters</p>
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">Meta Keywords</label>
-                <input
-                  type="text"
-                  name="meta_keywords"
-                  value={formData.meta_keywords || ''}
-                  onChange={handleChange}
-                  placeholder="Click 'Auto Generate' or enter manually"
-                  className="w-full border rounded px-3 py-2"
-                />
-                <p className="text-xs text-gray-400 mt-1">Comma-separated keywords for SEO</p>
-              </div>
-            </div>
-          </div>
+          <SeoMetaSection 
+            formData={formData} 
+            setFormData={setFormData} 
+            handleChange={handleChange}
+            entityType="course"
+          />
         </CollapsibleSection>
 
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
