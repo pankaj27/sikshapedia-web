@@ -135,6 +135,7 @@ function App() {
             <Route path="/admin/exams-detail" element={<ExamsDetailManagement />} />
             <Route path="/admin/exams-detail/new" element={<ExamDetailForm />} />
             <Route path="/admin/exams-detail/edit/:id" element={<ExamDetailForm />} />
+            <Route path="/admin/exam-listing-settings" element={<ExamListingSettings />} />
             <Route path="/admin/advertisements" element={<AdvertisementsManagement />} />
             <Route path="/admin/advertisements/reports" element={<AdvertisementReports />} />
             <Route path="/admin/comments" element={<CommentsManagement />} />
