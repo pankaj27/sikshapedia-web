@@ -199,9 +199,9 @@ function App() {
                   
                   {/* Courses */}
                   <Route path="/courses" element={<CoursesPage />} />
-                  <Route path="/courses/after-10th" element={<CoursesAfter10thPage />} />
-                  <Route path="/courses/after-12th" element={<CoursesAfter12thPage />} />
-                  <Route path="/courses/diploma" element={<DiplomaCoursesPage />} />
+                  <Route path="/courses/after-10th" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/after-12th" element={<DynamicCourseListingPage />} />
+                  <Route path="/courses/diploma" element={<DynamicCourseListingPage />} />
                   {/* Dynamic course listing pages */}
                   <Route path="/courses/pg" element={<DynamicCourseListingPage />} />
                   <Route path="/courses/phd" element={<DynamicCourseListingPage />} />
