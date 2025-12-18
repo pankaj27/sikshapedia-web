@@ -219,6 +219,16 @@ const ExamDetailForm = () => {
     seo_video_description: '',
     // FAQs
     seo_faqs: [],
+    // Page-Level Sidebar Widgets
+    sidebar_widgets: {
+      quick_facts: { enabled: true, items: [] },
+      quick_nav: { enabled: true },
+      contact_cta: { enabled: true, title: 'Need Help?', subtitle: 'Get expert guidance', phone: '', email: '' },
+      related_exams: { enabled: true, exams: [] },
+      download_brochure: { enabled: false, title: 'Download Brochure', file_url: '' },
+      upcoming_dates: { enabled: true },
+      apply_now: { enabled: true, button_text: 'Apply Now', link: '' }
+    },
     // Menu Configuration
     menu_config: {
       use_custom_menu: false,
