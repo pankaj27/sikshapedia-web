@@ -1060,6 +1060,8 @@ class APITester:
         
         # Test 4: PUT /api/course-pages/{id} without authentication (should fail)
         test_update_data = {
+            "id": "engineering",
+            "page_type": "stream",
             "title": "Updated Engineering Courses",
             "subtitle": "Updated subtitle for testing",
             "theme": "from-green-600 via-green-700 to-emerald-700",
