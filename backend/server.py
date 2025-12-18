@@ -1917,6 +1917,65 @@ class ExamListingPageSettings(BaseModel):
     updated_by: Optional[str] = None
 
 
+# News Listing Page Settings Model
+class NewsListingPageSettings(BaseModel):
+    """Settings for the /news listing page - editable from admin"""
+    model_config = ConfigDict(extra="allow")
+    id: str = "news-listing-page"  # Singleton - only one settings document
+    
+    # Hero Section
+    hero_title: str = "Latest News & Updates"
+    hero_subtitle: str = "Stay updated with the latest news on admissions, exams, colleges and education"
+    
+    # Quick Stats (shown in hero)
+    stats: List[Dict] = [
+        {"label": "News Articles", "value": "500+"},
+        {"label": "Categories", "value": "5"},
+        {"label": "Daily Updates", "value": "20+"},
+        {"label": "Subscribers", "value": "50K+"}
+    ]
+    
+    # Categories Configuration
+    categories: List[Dict] = [
+        {"id": "all", "label": "ALL NEWS", "enabled": True},
+        {"id": "admission", "label": "ADMISSION ALERT", "enabled": True},
+        {"id": "college", "label": "COLLEGE NEWS", "enabled": True},
+        {"id": "exam", "label": "EXAM NEWS", "enabled": True},
+        {"id": "latest", "label": "LATEST ALERTS", "enabled": True}
+    ]
+    
+    # Sidebar Configuration
+    show_big_stories: bool = True
+    big_stories_title: str = "The Big Stories"
+    big_stories_count: int = 5
+    
+    show_trending_tags: bool = True
+    trending_tags_title: str = "#Trending search"
+    trending_tags: List[str] = [
+        "CAT 2025", "JEE Main", "NEET UG", "GATE 2026", "UPSC",
+        "IIT Admission", "MBA Colleges", "CUET", "NTA", "Engineering"
+    ]
+    
+    show_newsletter: bool = True
+    newsletter_title: str = "Subscribe to our newsletter"
+    newsletter_subtitle: str = "Get our latest news about exams, colleges and others"
+    newsletter_button_text: str = "Subscribe"
+    
+    # SEO Settings
+    meta_title: str = "Latest News & Updates | Education News"
+    meta_description: str = "Stay updated with the latest news on admissions, exams, colleges and education in India."
+    meta_keywords: List[str] = ["education news", "admission news", "exam news", "college news"]
+    
+    # Additional Content
+    intro_content: Optional[str] = None  # HTML content below hero
+    bottom_content: Optional[str] = None  # HTML content at bottom
+    faqs: List[Dict] = []  # [{question, answer}]
+    
+    # Timestamps
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_by: Optional[str] = None
+
+
 # Course Listing Page Settings Model
 class CourseListingPageSettings(BaseModel):
     """Settings for the /courses main listing page - editable from admin"""
