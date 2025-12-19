@@ -318,50 +318,28 @@ const CollegeDuniaHome = () => {
       </section>
 
       {/* Quick Links Section - Compact */}
+      {showQuickLinks && (
       <section className="py-5 border-b">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            <Link to="/india-colleges" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-blue-200 transition">
-                <FiBookOpen className="text-blue-600 text-xl" />
-              </div>
-              <span className="text-xs font-semibold text-center">Top Colleges</span>
-            </Link>
-            <Link to="/india-schools" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-red-200 transition">
-                <FiBook className="text-red-600 text-xl" />
-              </div>
-              <span className="text-xs font-semibold text-center">Top Schools</span>
-            </Link>
-            <Link to="/exams" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-green-200 transition">
-                <FiFileText className="text-green-600 text-xl" />
-              </div>
-              <span className="text-xs font-semibold text-center">Top Exams</span>
-            </Link>
-            <Link to="/courses" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-purple-200 transition">
-                <FiBookOpen className="text-purple-600 text-xl" />
-              </div>
-              <span className="text-xs font-semibold text-center">Top Courses</span>
-            </Link>
-            <Link to="/loans" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-pink-200 transition">
-                <FiTrendingUp className="text-pink-600 text-xl" />
-              </div>
-              <span className="text-xs font-semibold text-center">Education Loans</span>
-            </Link>
-            <Link to="/study-materials" className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
-              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-1.5 group-hover:bg-indigo-200 transition">
-                <FiZap className="text-indigo-600 text-xl" />
-              </div>
-              <span className="text-xs font-semibold text-center">Study Materials</span>
-            </Link>
+            {quickLinks.map((item, idx) => {
+              const IconComponent = getIconComponent(item.icon);
+              return (
+                <Link key={idx} to={item.link} className="flex flex-col items-center p-3 rounded-lg hover:bg-orange-50 transition group">
+                  <div className={`w-12 h-12 ${item.bg_color} rounded-full flex items-center justify-center mb-1.5 group-hover:opacity-80 transition`}>
+                    <IconComponent className={`${item.icon_color} text-xl`} />
+                  </div>
+                  <span className="text-xs font-semibold text-center">{item.name}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
+      )}
 
       {/* Quick Action Widgets */}
+      {showQuickActions && (
       <section className="py-6 bg-gradient-to-r from-gray-50 to-gray-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
