@@ -1678,24 +1678,7 @@ class Ranking(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Scholarship Model
-class Scholarship(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    name: str
-    slug: str
-    provider: str  # Government, Private, College
-    amount: Optional[float] = None
-    amount_type: str = "Fixed"  # Fixed, Variable, Percentage
-    eligibility: str
-    description: str
-    how_to_apply: str
-    deadline: Optional[datetime] = None
-    website: Optional[str] = None
-    is_active: bool = True
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-# Loan Model
+# Loan Model (Scholarship model defined at top of file)
 class Loan(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
