@@ -224,7 +224,7 @@ const CollegeDuniaHome = () => {
             {/* Animated Title */}
             <div className="mb-2">
               <h1 className="text-2xl md:text-4xl font-bold drop-shadow-lg">
-                Find Your Dream{' '}
+                {heroTitle}{' '}
                 <span 
                   key={currentTextIndex}
                   className="inline-block text-white animate-fade-in-up"
@@ -239,7 +239,7 @@ const CollegeDuniaHome = () => {
             
             {/* Subtitle */}
             <p className="text-base md:text-lg text-white/90 mb-5 drop-shadow">
-              Explore 250+ Exams, 5000+ Colleges & Universities across India
+              {heroSubtitle}
             </p>
             
             {/* Single Search Input - Compact */}
