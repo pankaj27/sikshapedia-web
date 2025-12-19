@@ -695,6 +695,7 @@ const DynamicListingPage = () => {
       const buildQueryParams = (institutionType = null) => {
         let queryParams = new URLSearchParams();
         queryParams.append('limit', 100);
+        queryParams.append('fields', 'minimal');  // Optimize payload size
         
         if (institutionType) {
           queryParams.append('institution_type', institutionType);
