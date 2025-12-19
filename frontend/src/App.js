@@ -315,6 +315,7 @@ function App() {
                   {/* Single segment dynamic routes - e.g., /delhi-colleges, /btech, /engineering */}
                   <Route path="/:locationOrStream" element={<DynamicListingPage />} />
                 </Routes>
+                <FloatingApplyButton />
               </Layout>
             } />
           </Routes>
