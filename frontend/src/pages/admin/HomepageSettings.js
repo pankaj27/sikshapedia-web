@@ -756,6 +756,108 @@ const HomepageSettings = () => {
                 </div>
               </div>
 
+              {/* College Rankings */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <div>
+                    <h2 className="text-lg font-semibold">College Rankings Table</h2>
+                    <input
+                      type="text"
+                      value={settings.college_rankings_title}
+                      onChange={(e) => handleChange('college_rankings_title', e.target.value)}
+                      className="text-sm text-gray-600 border-b border-transparent hover:border-gray-300 focus:border-purple-500 outline-none mt-1"
+                      placeholder="Section title..."
+                    />
+                  </div>
+                  <Button variant="outline" size="sm" onClick={addRankingCollege}>
+                    <FiPlus className="mr-1" /> Add College
+                  </Button>
+                </div>
+                
+                {/* Years */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Year Options</label>
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={yearInput}
+                      onChange={(e) => setYearInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addRankingYear())}
+                      className="w-24 border rounded px-3 py-1.5 text-sm"
+                      placeholder="2025"
+                    />
+                    <Button variant="outline" size="sm" onClick={addRankingYear}>Add Year</Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {(settings.college_rankings_years || []).map((year, idx) => (
+                      <span key={idx} className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                        {year}
+                        <button onClick={() => removeRankingYear(year)} className="hover:text-red-500">×</button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Rankings Data */}
+                <div className="space-y-2 max-h-72 overflow-y-auto">
+                  {(settings.college_rankings_data || []).map((college, index) => (
+                    <div key={index} className="p-3 bg-gray-50 rounded-lg flex gap-2 items-center">
+                      <input
+                        type="number"
+                        value={college.rank}
+                        onChange={(e) => updateRankingCollege(index, 'rank', parseInt(e.target.value) || 1)}
+                        className="w-14 border rounded px-2 py-1 text-sm text-center"
+                        placeholder="#"
+                      />
+                      <input
+                        type="text"
+                        value={college.name}
+                        onChange={(e) => updateRankingCollege(index, 'name', e.target.value)}
+                        className="flex-1 border rounded px-2 py-1 text-sm"
+                        placeholder="College Name"
+                      />
+                      <input
+                        type="text"
+                        value={college.location}
+                        onChange={(e) => updateRankingCollege(index, 'location', e.target.value)}
+                        className="w-24 border rounded px-2 py-1 text-sm"
+                        placeholder="Location"
+                      />
+                      <input
+                        type="number"
+                        value={college.rating}
+                        onChange={(e) => updateRankingCollege(index, 'rating', parseFloat(e.target.value) || 0)}
+                        className="w-16 border rounded px-2 py-1 text-sm"
+                        placeholder="Rating"
+                        step="0.1"
+                      />
+                      <input
+                        type="text"
+                        value={college.fees}
+                        onChange={(e) => updateRankingCollege(index, 'fees', e.target.value)}
+                        className="w-16 border rounded px-2 py-1 text-sm"
+                        placeholder="Fees"
+                      />
+                      <select
+                        value={college.type}
+                        onChange={(e) => updateRankingCollege(index, 'type', e.target.value)}
+                        className="w-28 border rounded px-2 py-1 text-sm"
+                      >
+                        <option value="Engineering">Engineering</option>
+                        <option value="Medical">Medical</option>
+                        <option value="Management">Management</option>
+                        <option value="Law">Law</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Science">Science</option>
+                      </select>
+                      <button onClick={() => removeRankingCollege(index)} className="text-red-500 hover:text-red-700">
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Top Schools */}
               <div>
                 <div className="flex justify-between items-center mb-3">
