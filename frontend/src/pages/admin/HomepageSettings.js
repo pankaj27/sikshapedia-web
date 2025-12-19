@@ -967,6 +967,123 @@ const HomepageSettings = () => {
                 )}
               </div>
 
+              {/* Featured Schools Section */}
+              <div className="mt-6 p-6 bg-emerald-50 rounded-xl border border-emerald-200">
+                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  <FiStar className="text-emerald-600" />
+                  Featured Schools (Top Schools Section)
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">Search and add schools - Position #1 appears first</p>
+                <div className="relative mb-4">
+                  <input type="text" value={featuredSchoolSearch}
+                    onChange={(e) => { setFeaturedSchoolSearch(e.target.value); searchFeaturedSchools(e.target.value); }}
+                    className="w-full border-2 border-emerald-200 rounded-lg px-4 py-3 focus:border-emerald-500 focus:outline-none"
+                    placeholder="Search school by name..." />
+                  <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  {showSchoolFeaturedDropdown && featuredSchoolResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border-2 border-emerald-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {featuredSchoolResults.map((s, i) => (
+                        <div key={i} onClick={() => addFeaturedSchool(s)} className="px-4 py-3 hover:bg-emerald-50 cursor-pointer border-b last:border-b-0 flex justify-between">
+                          <div><div className="font-medium">{s.name}</div><div className="text-xs text-gray-500">{s.board} • {s.city}</div></div>
+                          <FiPlus className="text-emerald-600" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {featuredSchoolsList.length > 0 ? (
+                  <div className="space-y-2">
+                    {featuredSchoolsList.map((s, i) => (
+                      <div key={s.id} className="flex items-center gap-3 bg-white p-3 rounded-lg border">
+                        <span className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-sm">{i + 1}</span>
+                        <div className="flex-1"><div className="font-medium">{s.name}</div><div className="text-xs text-gray-500">{s.board}</div></div>
+                        <button onClick={() => moveFeaturedSchool(i, 'up')} disabled={i === 0} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronUp /></button>
+                        <button onClick={() => moveFeaturedSchool(i, 'down')} disabled={i === featuredSchoolsList.length - 1} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronDown /></button>
+                        <button onClick={() => removeFeaturedSchool(s.id)} className="p-1.5 hover:bg-red-100 text-red-600 rounded"><FiTrash2 /></button>
+                      </div>
+                    ))}
+                  </div>
+                ) : <div className="text-center py-6 bg-white rounded-lg border-2 border-dashed"><p className="text-gray-500">No schools added</p></div>}
+              </div>
+
+              {/* Featured Exams Section */}
+              <div className="mt-6 p-6 bg-blue-50 rounded-xl border border-blue-200">
+                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  <FiStar className="text-blue-600" />
+                  Featured Exams (Top Exams Section)
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">Search and add exams - Position #1 appears first</p>
+                <div className="relative mb-4">
+                  <input type="text" value={featuredExamSearch}
+                    onChange={(e) => { setFeaturedExamSearch(e.target.value); searchFeaturedExams(e.target.value); }}
+                    className="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none"
+                    placeholder="Search exam by name..." />
+                  <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  {showExamFeaturedDropdown && featuredExamResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border-2 border-blue-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {featuredExamResults.map((e, i) => (
+                        <div key={i} onClick={() => addFeaturedExam(e)} className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b last:border-b-0 flex justify-between">
+                          <div><div className="font-medium">{e.name}</div><div className="text-xs text-gray-500">{e.level} • {e.conducting_body}</div></div>
+                          <FiPlus className="text-blue-600" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {featuredExamsList.length > 0 ? (
+                  <div className="space-y-2">
+                    {featuredExamsList.map((e, i) => (
+                      <div key={e.id} className="flex items-center gap-3 bg-white p-3 rounded-lg border">
+                        <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">{i + 1}</span>
+                        <div className="flex-1"><div className="font-medium">{e.name}</div><div className="text-xs text-gray-500">{e.level}</div></div>
+                        <button onClick={() => moveFeaturedExam(i, 'up')} disabled={i === 0} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronUp /></button>
+                        <button onClick={() => moveFeaturedExam(i, 'down')} disabled={i === featuredExamsList.length - 1} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronDown /></button>
+                        <button onClick={() => removeFeaturedExam(e.id)} className="p-1.5 hover:bg-red-100 text-red-600 rounded"><FiTrash2 /></button>
+                      </div>
+                    ))}
+                  </div>
+                ) : <div className="text-center py-6 bg-white rounded-lg border-2 border-dashed"><p className="text-gray-500">No exams added</p></div>}
+              </div>
+
+              {/* Featured News Section */}
+              <div className="mt-6 p-6 bg-orange-50 rounded-xl border border-orange-200">
+                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  <FiStar className="text-orange-600" />
+                  Featured News (Latest News Section)
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">Search and add news - Position #1 appears first</p>
+                <div className="relative mb-4">
+                  <input type="text" value={featuredNewsSearch}
+                    onChange={(e) => { setFeaturedNewsSearch(e.target.value); searchFeaturedNews(e.target.value); }}
+                    className="w-full border-2 border-orange-200 rounded-lg px-4 py-3 focus:border-orange-500 focus:outline-none"
+                    placeholder="Search news by title..." />
+                  <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  {showNewsFeaturedDropdown && featuredNewsResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border-2 border-orange-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {featuredNewsResults.map((n, i) => (
+                        <div key={i} onClick={() => addFeaturedNews(n)} className="px-4 py-3 hover:bg-orange-50 cursor-pointer border-b last:border-b-0 flex justify-between">
+                          <div><div className="font-medium">{n.title}</div><div className="text-xs text-gray-500">{n.category}</div></div>
+                          <FiPlus className="text-orange-600" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {featuredNewsList.length > 0 ? (
+                  <div className="space-y-2">
+                    {featuredNewsList.map((n, i) => (
+                      <div key={n.id} className="flex items-center gap-3 bg-white p-3 rounded-lg border">
+                        <span className="w-8 h-8 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold text-sm">{i + 1}</span>
+                        <div className="flex-1"><div className="font-medium line-clamp-1">{n.title}</div><div className="text-xs text-gray-500">{n.category}</div></div>
+                        <button onClick={() => moveFeaturedNews(i, 'up')} disabled={i === 0} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronUp /></button>
+                        <button onClick={() => moveFeaturedNews(i, 'down')} disabled={i === featuredNewsList.length - 1} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronDown /></button>
+                        <button onClick={() => removeFeaturedNews(n.id)} className="p-1.5 hover:bg-red-100 text-red-600 rounded"><FiTrash2 /></button>
+                      </div>
+                    ))}
+                  </div>
+                ) : <div className="text-center py-6 bg-white rounded-lg border-2 border-dashed"><p className="text-gray-500">No news added</p></div>}
+              </div>
+
               {/* CTA Section */}
               <div className="mt-8">
                 <h3 className="text-lg font-semibold border-b pb-2 mb-4">Call to Action Section</h3>
