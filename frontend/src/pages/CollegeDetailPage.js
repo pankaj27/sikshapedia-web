@@ -9,6 +9,7 @@ import AdBanner from '../components/AdBanner';
 import ApplyNowModal from '../components/ApplyNowModal';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
+import { useCollegeContext } from '../contexts/CollegeContext';
 
 // Facility icon mapping for icon-based display
 const facilityIconMap = {
