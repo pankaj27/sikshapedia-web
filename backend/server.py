@@ -3694,16 +3694,27 @@ async def get_colleges(
     
     sort_order = 1 if sort_by == "name" else 1 if sort_by == "nirf_ranking" else -1
     
-    # Sort by display_priority first (items with priority > 0 come first, sorted by priority), then by the requested sort
-    colleges = await db.colleges.find(query, {"_id": 0}).sort([
-        ("display_priority", -1),  # Higher priority first (non-zero values come before 0)
-        (sort_by, sort_order)
-    ]).skip(skip).limit(limit).to_list(limit)
+    # Fetch colleges
+    colleges = await db.colleges.find(query, {"_id": 0}).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
     
-    # Re-sort to put items with display_priority > 0 first, ordered by priority (lower = first)
-    prioritized = [c for c in colleges if c.get('display_priority', 0) > 0]
-    non_prioritized = [c for c in colleges if c.get('display_priority', 0) == 0]
-    prioritized.sort(key=lambda x: x.get('display_priority', 0))
+    # Apply location-specific priority sorting
+    def get_priority(college):
+        # Check city priority first (most specific)
+        if city and college.get('city_priority', {}).get(city, 0) > 0:
+            return college['city_priority'][city]
+        # Then state priority
+        if state and college.get('state_priority', {}).get(state, 0) > 0:
+            return college['state_priority'][state]
+        # Finally national/default priority
+        return college.get('display_priority', 0)
+    
+    # Separate prioritized and non-prioritized
+    prioritized = [c for c in colleges if get_priority(c) > 0]
+    non_prioritized = [c for c in colleges if get_priority(c) == 0]
+    
+    # Sort prioritized by their priority (lower number = first)
+    prioritized.sort(key=lambda x: get_priority(x))
+    
     colleges = prioritized + non_prioritized
     
     for college in colleges:
