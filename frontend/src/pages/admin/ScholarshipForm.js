@@ -133,6 +133,28 @@ const ScholarshipForm = () => {
     }
   }, [formData.name, isEdit, slugManuallyEdited]);
 
+  // Auto-generate SEO fields
+  useEffect(() => {
+    if (formData.auto_generate_seo) {
+      const autoSeo = {};
+      if (!formData.meta_title && formData.name) {
+        autoSeo.meta_title = `${formData.name} | Scholarship Details | Admissionbuddy`;
+      }
+      if (!formData.meta_description && formData.short_description) {
+        autoSeo.meta_description = formData.short_description.slice(0, 160);
+      }
+      if (!formData.featured_image_alt && formData.name) {
+        autoSeo.featured_image_alt = `${formData.name} Scholarship | Admissionbuddy`;
+      }
+      if (!formData.og_image && formData.featured_image) {
+        autoSeo.og_image = formData.featured_image;
+      }
+      if (Object.keys(autoSeo).length > 0) {
+        setFormData(prev => ({ ...prev, ...autoSeo }));
+      }
+    }
+  }, [formData.name, formData.short_description, formData.featured_image, formData.auto_generate_seo]);
+
   const fetchScholarship = async () => {
     setLoading(true);
     try {
