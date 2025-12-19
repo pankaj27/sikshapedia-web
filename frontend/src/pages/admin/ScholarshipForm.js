@@ -698,7 +698,7 @@ const ScholarshipForm = () => {
                           if (file) {
                             handleImageUpload(file, 'featured_image');
                             if (!formData.featured_image_alt && formData.name) {
-                              handleChange('featured_image_alt', formData.name);
+                              handleChange('featured_image_alt', `${formData.name} Scholarship | Admissionbuddy`);
                             }
                           }
                         }}
