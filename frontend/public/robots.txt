@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://dynacampus.preview.emergentagent.com/sitemap.xml
+Sitemap: https://applynow-portal.preview.emergentagent.com/sitemap.xml
