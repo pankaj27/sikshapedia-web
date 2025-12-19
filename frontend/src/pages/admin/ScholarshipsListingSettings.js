@@ -378,7 +378,7 @@ const ScholarshipsListingSettings = () => {
           </div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
