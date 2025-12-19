@@ -444,7 +444,7 @@ async def get_liked_colleges(request: Request, db=Depends(get_db)):
     ).sort("created_at", -1).to_list(100)
     
     # Get college details
-    college_ids = [l["entity_id"] for l in likes]
+    college_ids = [like_item["entity_id"] for like_item in likes]
     colleges = await db.colleges.find(
         {"id": {"$in": college_ids}},
         {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "location": 1}
