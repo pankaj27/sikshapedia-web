@@ -89,6 +89,13 @@ const HomepageSettings = () => {
     // Top Schools
     top_schools_title: 'Top Schools in India',
     top_schools: [],
+    featured_schools_ids: [],
+    
+    // Top Exams
+    featured_exams_ids: [],
+    
+    // Latest News
+    featured_news_ids: [],
     
     // College Rankings
     college_rankings_title: 'College Rankings',
