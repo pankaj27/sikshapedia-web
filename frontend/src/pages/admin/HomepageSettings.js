@@ -423,14 +423,21 @@ const HomepageSettings = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                  { key: 'show_hero_slider', label: 'Hero Slider' },
-                  { key: 'show_study_goals', label: 'Study Goals' },
-                  { key: 'show_programs', label: 'Quick Programs' },
-                  { key: 'show_cities', label: 'Cities Section' },
-                  { key: 'show_featured_colleges', label: 'Featured Colleges' },
-                  { key: 'show_top_exams', label: 'Top Exams' },
-                  { key: 'show_latest_news', label: 'Latest News' },
-                  { key: 'show_top_colleges_by_stream', label: 'Colleges by Stream' },
+                  { key: 'show_hero_slider', label: '1. Hero Slider' },
+                  { key: 'show_quick_links', label: '2. Quick Links Bar' },
+                  { key: 'show_quick_actions', label: '3. Quick Actions' },
+                  { key: 'show_study_goals', label: '4. Study Goals' },
+                  { key: 'show_programs', label: '5. Explore Programs' },
+                  { key: 'show_top_universities', label: '6. Top Universities' },
+                  { key: 'show_top_schools', label: '7. Top Schools' },
+                  { key: 'show_college_rankings', label: '8. Rankings Table' },
+                  { key: 'show_cities', label: '9. Popular Cities' },
+                  { key: 'show_newsletter', label: '10. Newsletter' },
+                  { key: 'show_sponsored_colleges', label: '11. Sponsored Colleges' },
+                  { key: 'show_top_colleges_by_stream', label: '12. Colleges by Stream' },
+                  { key: 'show_top_exams', label: '13. Top Exams' },
+                  { key: 'show_location_search', label: '14. Location Search' },
+                  { key: 'show_latest_news', label: '15. Latest News' },
                 ].map(({ key, label }) => (
                   <label key={key} className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
                     <input
