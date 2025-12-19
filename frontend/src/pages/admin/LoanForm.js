@@ -1157,7 +1157,7 @@ const LoanForm = () => {
           </form>
         </main>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
