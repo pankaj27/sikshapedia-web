@@ -7175,15 +7175,22 @@ async def get_scholarships(limit: int = 100):
     scholarships = await db.scholarships.find({}, {"_id": 0}).limit(limit).to_list(limit)
     return scholarships
 
-@api_router.post("/scholarships", response_model=Scholarship)
+@api_router.post("/scholarships")
 async def create_scholarship(scholarship: Scholarship):
-    await db.scholarships.insert_one(scholarship.model_dump())
-    return scholarship
+    scholarship_dict = scholarship.model_dump()
+    # Convert datetime to string for JSON serialization
+    if isinstance(scholarship_dict.get('created_at'), datetime):
+        scholarship_dict['created_at'] = scholarship_dict['created_at'].isoformat()
+    await db.scholarships.insert_one(scholarship_dict)
+    return scholarship_dict
 
 @api_router.put("/scholarships/{scholarship_id}")
 async def update_scholarship(scholarship_id: str, scholarship: Scholarship):
-    await db.scholarships.update_one({"id": scholarship_id}, {"$set": scholarship.model_dump()})
-    return scholarship
+    scholarship_dict = scholarship.model_dump()
+    if isinstance(scholarship_dict.get('created_at'), datetime):
+        scholarship_dict['created_at'] = scholarship_dict['created_at'].isoformat()
+    await db.scholarships.update_one({"id": scholarship_id}, {"$set": scholarship_dict})
+    return scholarship_dict
 
 @api_router.delete("/scholarships/{scholarship_id}")
 async def delete_scholarship(scholarship_id: str):
