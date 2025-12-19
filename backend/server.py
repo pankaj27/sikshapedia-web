@@ -6657,6 +6657,112 @@ async def update_study_abroad_listing_settings(settings: StudyAbroadListingPageS
 
 
 # ============================================
+# Homepage Settings
+# ============================================
+
+class HomepageSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "homepage-settings"
+    
+    # Hero Section
+    hero_title: str = "Find Your Dream"
+    hero_rotating_texts: List[str] = ["Exams", "Colleges", "Courses", "Schools", "Universities", "Scholarships"]
+    hero_subtitle: str = "Explore 10,000+ Colleges, Universities & Schools across India"
+    hero_bg_gradient: str = "from-purple-900 via-indigo-900 to-blue-900"
+    
+    # Hero Slides (Banner Carousel)
+    hero_slides: List[Dict[str, Any]] = [
+        {"image": "https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop", "type": "college", "name": "IIT Bombay", "rating": 4.8, "reviews": 2847, "location": "Mumbai, Maharashtra", "slug": "iit-bombay-002"},
+        {"image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop", "type": "school", "name": "Delhi Public School", "rating": 4.6, "reviews": 1523, "location": "New Delhi, Delhi", "slug": "dps-rk-puram-001"},
+        {"image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop", "type": "university", "name": "Delhi University", "rating": 4.5, "reviews": 3256, "location": "New Delhi, Delhi", "slug": "delhi-university-001"}
+    ]
+    
+    # Study Goals Section
+    study_goals_title: str = "What do you want to study?"
+    study_goals: List[Dict[str, Any]] = [
+        {"name": "Engineering", "icon": "FiTool", "courses": "B.Tech, M.Tech", "count": "5000+", "color": "text-blue-600"},
+        {"name": "Management", "icon": "FiBriefcase", "courses": "MBA, PGDM", "count": "3000+", "color": "text-purple-600"},
+        {"name": "Medical", "icon": "FiActivity", "courses": "MBBS, BDS", "count": "2000+", "color": "text-red-600"},
+        {"name": "Commerce", "icon": "FiTrendingUp", "courses": "B.Com, M.Com", "count": "2500+", "color": "text-green-600"},
+        {"name": "Arts", "icon": "FiFeather", "courses": "BA, MA", "count": "1800+", "color": "text-pink-600"},
+        {"name": "Science", "icon": "FiCpu", "courses": "B.Sc, M.Sc", "count": "2200+", "color": "text-indigo-600"},
+        {"name": "Law", "icon": "FiShield", "courses": "LLB, LLM", "count": "1000+", "color": "text-yellow-600"},
+        {"name": "Design", "icon": "FiLayout", "courses": "B.Des, M.Des", "count": "800+", "color": "text-orange-600"}
+    ]
+    
+    # Quick Links/Programs Section
+    programs_title: str = "Explore Programs"
+    programs: List[Dict[str, Any]] = [
+        {"title": "College Ranking", "subtitle": "Find Top Colleges", "icon": "FiAward", "color": "bg-orange-100", "iconColor": "text-orange-600", "link": "/colleges"},
+        {"title": "Exams", "subtitle": "JEE, NEET, CAT", "icon": "FiFileText", "color": "bg-blue-100", "iconColor": "text-blue-600", "link": "/exams"},
+        {"title": "Compare Colleges", "subtitle": "Side by Side", "icon": "FiBarChart2", "color": "bg-green-100", "iconColor": "text-green-600", "link": "/compare"},
+        {"title": "Course Finder", "subtitle": "Find Best Courses", "icon": "FiCompass", "color": "bg-purple-100", "iconColor": "text-purple-600", "link": "/course-finder"}
+    ]
+    
+    # Cities Section
+    cities_title: str = "Top Study Destinations"
+    cities: List[Dict[str, Any]] = [
+        {"name": "Delhi", "image": "/assets/cities/New Delhi.svg"},
+        {"name": "Mumbai", "image": "/assets/cities/Mumbai.svg"},
+        {"name": "Bangalore", "image": "/assets/cities/Bangalore.svg"},
+        {"name": "Hyderabad", "image": "/assets/cities/Hyderabad.svg"},
+        {"name": "Chennai", "image": "/assets/cities/Chennai.svg"},
+        {"name": "Pune", "image": "/assets/cities/Pune.svg"},
+        {"name": "Kolkata", "image": "/assets/cities/Kolkata.svg"},
+        {"name": "Bhopal", "image": "/assets/cities/Bhopal.svg"}
+    ]
+    
+    # Ranking Agencies
+    ranking_agencies: List[str] = ["India Today", "NIRF", "The Week", "Outlook"]
+    
+    # Section Visibility
+    show_hero_slider: bool = True
+    show_study_goals: bool = True
+    show_programs: bool = True
+    show_cities: bool = True
+    show_featured_colleges: bool = True
+    show_top_exams: bool = True
+    show_latest_news: bool = True
+    show_top_colleges_by_stream: bool = True
+    
+    # CTA Section
+    cta_enabled: bool = True
+    cta_title: str = "Start Your Journey Today"
+    cta_subtitle: str = "Join millions of students who found their dream college through Admissionbuddy"
+    cta_button_text: str = "Explore Colleges"
+    cta_button_link: str = "/india-colleges"
+    
+    # SEO
+    auto_generate_seo: bool = True
+    meta_title: str = "Admissionbuddy - Top Colleges, Universities & Institutes in India | Admission 2025"
+    meta_description: str = "Find detailed information about 10,000+ colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details."
+    meta_keywords: List[str] = ["colleges in india", "top universities", "engineering colleges", "medical colleges", "MBA colleges", "admissions 2025"]
+    canonical_url: Optional[str] = None
+    og_image: Optional[str] = None
+    
+    updated_at: Optional[datetime] = None
+
+@api_router.get("/homepage-settings")
+async def get_homepage_settings():
+    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
+    if not settings:
+        return HomepageSettings().model_dump()
+    return settings
+
+@api_router.put("/homepage-settings")
+async def update_homepage_settings(settings: HomepageSettings):
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.homepage_settings.update_one(
+        {"id": "homepage-settings"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return settings_dict
+
+
+
+# ============================================
 # Scholarship Routes
 # ============================================
 
