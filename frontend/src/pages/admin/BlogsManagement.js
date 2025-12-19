@@ -51,19 +51,20 @@ const BlogsManagement = () => {
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Blog Posts</h1>
-          <p className="text-gray-500 mt-1">Manage your blog articles</p>
+    <AdminLayout>
+      <div className="p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Blog Posts</h1>
+            <p className="text-gray-500 mt-1">Manage your blog articles</p>
+          </div>
+          <Link to="/admin/blogs/new">
+            <Button className="bg-blue-500 hover:bg-blue-600">
+              <FiPlus className="mr-2" /> Add Blog Post
+            </Button>
+          </Link>
         </div>
-        <Link to="/admin/blogs/new">
-          <Button className="bg-blue-500 hover:bg-blue-600">
-            <FiPlus className="mr-2" /> Add Blog Post
-          </Button>
-        </Link>
-      </div>
 
       {/* Search */}
       <div className="mb-6">
