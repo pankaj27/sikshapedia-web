@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ScrollToTop';
+import AutoApplyPopup from './components/AutoApplyPopup';
 import HomePage from './pages/HomePage';
 // DEPRECATED: CollegeListingPage - now redirects to DynamicListingPage
 // import CollegeListingPage from './pages/CollegeListingPage';
