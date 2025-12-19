@@ -1272,6 +1272,22 @@ const CollegeForm = () => {
             <input type="checkbox" checked={formData.is_sponsored} onChange={(e) => setFormData({...formData, is_sponsored: e.target.checked})} className="rounded text-purple-600" />
             <span>💎 Sponsored</span>
           </label>
+          
+          {/* Display Priority for Listing Page Order */}
+          <div className="flex items-center gap-2 bg-indigo-50 px-3 py-2 rounded-lg">
+            <span className="text-sm font-medium text-indigo-700">📌 Display Priority:</span>
+            <input 
+              type="number" 
+              min="0"
+              max="999"
+              value={formData.display_priority || 0}
+              onChange={(e) => setFormData({...formData, display_priority: parseInt(e.target.value) || 0})}
+              className="w-20 border rounded px-2 py-1 text-center text-sm"
+              placeholder="0"
+            />
+            <span className="text-xs text-indigo-600">(1=Top, 0=Default)</span>
+          </div>
+          
           <label className="flex items-center gap-1.5 cursor-pointer">
             <input 
               type="checkbox" 
