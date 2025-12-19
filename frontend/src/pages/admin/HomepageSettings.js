@@ -29,6 +29,24 @@ const HomepageSettings = () => {
   const [featuredCollegeResults, setFeaturedCollegeResults] = useState([]);
   const [showFeaturedDropdown, setShowFeaturedDropdown] = useState(false);
   const [featuredColleges, setFeaturedColleges] = useState([]);
+  
+  // Featured schools for Top Schools section
+  const [featuredSchoolSearch, setFeaturedSchoolSearch] = useState('');
+  const [featuredSchoolResults, setFeaturedSchoolResults] = useState([]);
+  const [showSchoolFeaturedDropdown, setShowSchoolFeaturedDropdown] = useState(false);
+  const [featuredSchoolsList, setFeaturedSchoolsList] = useState([]);
+  
+  // Featured exams for Top Exams section
+  const [featuredExamSearch, setFeaturedExamSearch] = useState('');
+  const [featuredExamResults, setFeaturedExamResults] = useState([]);
+  const [showExamFeaturedDropdown, setShowExamFeaturedDropdown] = useState(false);
+  const [featuredExamsList, setFeaturedExamsList] = useState([]);
+  
+  // Featured news for Latest News section
+  const [featuredNewsSearch, setFeaturedNewsSearch] = useState('');
+  const [featuredNewsResults, setFeaturedNewsResults] = useState([]);
+  const [showNewsFeaturedDropdown, setShowNewsFeaturedDropdown] = useState(false);
+  const [featuredNewsList, setFeaturedNewsList] = useState([]);
   const [settings, setSettings] = useState({
     // Hero Section
     hero_title: 'Find Your Dream',
