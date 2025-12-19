@@ -811,14 +811,14 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold">{collegeRankingsTitle} {activeRankingYear}</h2>
-            <select 
+            <select
               value={activeRankingYear}
               onChange={(e) => setActiveRankingYear(e.target.value)}
               className="border rounded px-4 py-2"
             >
-              <option value="2024">2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
+              {collegeRankingsYears.map((year, idx) => (
+                <option key={idx} value={year}>{year}</option>
+              ))}
             </select>
           </div>
 
@@ -842,28 +842,30 @@ const CollegeDuniaHome = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rating</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fees</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {featuredColleges.slice(0, 10).map((college, idx) => (
-                  <tr key={college.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold">{idx + 1}</td>
+                {collegeRankingsData.map((college, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-orange-600">#{college.rank}</td>
                     <td className="px-6 py-4">
-                      <Link to={`/colleges/${college.id}`} className="font-semibold hover:text-orange-600">
-                        {college.name}
-                      </Link>
+                      <span className="font-semibold">{college.name}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {college.location?.city}
+                      {college.location}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
                         <FiStar className="text-yellow-500" />
-                        <span className="font-semibold">{college.rating || 'N/A'}</span>
+                        <span className="font-semibold">{college.rating}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-orange-600">
-                      ₹{(college.average_fees / 100000).toFixed(1)}L
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                      ₹{college.fees}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">{college.type}</span>
                     </td>
                   </tr>
                 ))}
