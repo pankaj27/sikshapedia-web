@@ -375,6 +375,7 @@ const ScholarshipsListingSettings = () => {
                 />
               </div>
             ))}
+            </div>
           </div>
         </div>
       </div>
