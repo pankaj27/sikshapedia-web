@@ -362,9 +362,14 @@ const LoanForm = () => {
                       <input
                         type="text"
                         value={formData.slug}
-                        onChange={(e) => handleChange('slug', e.target.value)}
+                        onChange={(e) => {
+                          handleChange('slug', e.target.value);
+                          setSlugManuallyEdited(true);
+                        }}
                         className="w-full border rounded-lg px-4 py-2.5 bg-gray-50"
+                        placeholder="auto-generated-from-name"
                       />
+                      <p className="text-xs text-gray-500 mt-1">URL: /loans/{formData.slug || 'slug'}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
