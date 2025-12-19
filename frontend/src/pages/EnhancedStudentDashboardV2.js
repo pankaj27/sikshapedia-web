@@ -32,7 +32,7 @@ const EnhancedStudentDashboard = () => {
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (!savedUser) {
-      navigate('/login');
+      navigate('/signup');
       return;
     }
     setUser(JSON.parse(savedUser));
