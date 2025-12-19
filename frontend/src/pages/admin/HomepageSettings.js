@@ -1169,6 +1169,66 @@ const HomepageSettings = () => {
                 ) : <div className="text-center py-6 bg-white rounded-lg border-2 border-dashed"><p className="text-gray-500">No news added</p></div>}
               </div>
 
+              {/* Colleges by Stream Section */}
+              <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 via-green-50 to-purple-50 rounded-xl border border-gray-200">
+                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  <FiGrid className="text-gray-700" />
+                  Colleges by Stream (Top Colleges by Stream Section)
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">Select up to 4 colleges for each stream. These will appear in the "Top Colleges by Stream" section.</p>
+                
+                {/* Stream Tabs */}
+                <div className="flex gap-2 mb-4">
+                  {['Engineering', 'Medical', 'Management', 'Law'].map(stream => (
+                    <button
+                      key={stream}
+                      onClick={() => setActiveStream(stream)}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                        activeStream === stream 
+                          ? 'bg-gray-800 text-white' 
+                          : 'bg-white text-gray-600 hover:bg-gray-100 border'
+                      }`}
+                    >
+                      {stream} ({streamColleges[stream]?.length || 0}/4)
+                    </button>
+                  ))}
+                </div>
+
+                {/* Search for active stream */}
+                <div className="relative mb-4">
+                  <input type="text" value={streamSearch}
+                    onChange={(e) => { setStreamSearch(e.target.value); searchStreamColleges(e.target.value); }}
+                    className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-gray-500 focus:outline-none"
+                    placeholder={`Search ${activeStream} college to add...`} />
+                  <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  {showStreamDropdown && streamSearchResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border-2 border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {streamSearchResults.map((c, i) => (
+                        <div key={i} onClick={() => addStreamCollege(c)} className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0 flex justify-between">
+                          <div><div className="font-medium">{c.name}</div><div className="text-xs text-gray-500">{c.location?.city} • {c.type}</div></div>
+                          <FiPlus className="text-gray-600" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Display colleges for active stream */}
+                {streamColleges[activeStream]?.length > 0 ? (
+                  <div className="space-y-2">
+                    {streamColleges[activeStream].map((c, i) => (
+                      <div key={c.id} className="flex items-center gap-3 bg-white p-3 rounded-lg border">
+                        <span className="w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold text-sm">{i + 1}</span>
+                        <div className="flex-1"><div className="font-medium">{c.name}</div><div className="text-xs text-gray-500">{c.location?.city}</div></div>
+                        <button onClick={() => moveStreamCollege(activeStream, i, 'up')} disabled={i === 0} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronUp /></button>
+                        <button onClick={() => moveStreamCollege(activeStream, i, 'down')} disabled={i === streamColleges[activeStream].length - 1} className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"><FiChevronDown /></button>
+                        <button onClick={() => removeStreamCollege(activeStream, c.id)} className="p-1.5 hover:bg-red-100 text-red-600 rounded"><FiTrash2 /></button>
+                      </div>
+                    ))}
+                  </div>
+                ) : <div className="text-center py-6 bg-white rounded-lg border-2 border-dashed"><p className="text-gray-500">No {activeStream} colleges added</p></div>}
+              </div>
+
               {/* CTA Section */}
               <div className="mt-8">
                 <h3 className="text-lg font-semibold border-b pb-2 mb-4">Call to Action Section</h3>
