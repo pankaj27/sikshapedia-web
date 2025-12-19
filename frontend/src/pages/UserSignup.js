@@ -189,7 +189,7 @@ const UserSignup = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-              {error}
+              {formatError(error)}
             </div>
           )}
           
