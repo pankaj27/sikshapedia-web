@@ -988,16 +988,16 @@ const CollegeDuniaHome = () => {
       )}
 
       {/* Top Colleges by Stream */}
-      <TopCollegesByStream />
+      {showTopCollegesByStream && <TopCollegesByStream />}
 
       {/* Top Entrance Exams */}
-      <TopExams />
+      {showTopExams && <TopExams />}
 
       {/* Location-based Search */}
       <LocationSearch />
 
       {/* Latest News & Alerts */}
-      <LatestNews />
+      {showLatestNews && <LatestNews />}
 
     </div>
   );
