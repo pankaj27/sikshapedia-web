@@ -7203,6 +7203,32 @@ async def get_news(
     news = await db.news.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
     return news
 
+@api_router.get("/news/featured", response_model=List[News])
+async def get_featured_news(limit: int = Query(4, ge=1, le=20)):
+    """Get featured news for homepage - prioritizes manually selected news from homepage settings"""
+    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
+    featured_ids = settings.get("featured_news_ids", []) if settings else []
+    
+    featured_news = []
+    
+    # Get news from homepage settings (in specified order)
+    if featured_ids:
+        for news_id in featured_ids[:limit]:
+            news = await db.news.find_one({"id": news_id, "status": "published"}, {"_id": 0})
+            if news:
+                featured_news.append(news)
+    
+    # If not enough, fill with latest published news
+    if len(featured_news) < limit:
+        existing_ids = [n.get('id') for n in featured_news]
+        additional = await db.news.find(
+            {"status": "published", "id": {"$nin": existing_ids}}, 
+            {"_id": 0}
+        ).sort("published_at", -1).limit(limit - len(featured_news)).to_list(limit - len(featured_news))
+        featured_news.extend(additional)
+    
+    return featured_news
+
 @api_router.get("/news/{news_id}", response_model=News)
 async def get_news_article(news_id: str):
     """Get a specific news article by ID or slug"""
