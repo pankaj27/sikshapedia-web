@@ -664,101 +664,72 @@ const CollegeDuniaHome = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {topSchoolsData.map((school, idx) => (
-              <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border relative">
-                {/* Header Image with Badges - Compact */}
-                <div className="relative h-24 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
-                  <FiBook className="text-white text-5xl opacity-20" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                      <FiBook className="text-green-600 text-2xl" />
+              <div key={idx} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 h-[320px] flex flex-col">
+                {/* Modern Header */}
+                <div className="relative h-24 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500">
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10" />
+                  
+                  {/* Top Badges - Modern Pills */}
+                  <div className="absolute top-3 left-3 flex gap-1.5">
+                    {school.rank && (
+                      <span className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-semibold text-gray-800">
+                        #{school.rank} Rank
+                      </span>
+                    )}
+                    <span className="px-2 py-1 bg-emerald-400 rounded-full text-[10px] font-semibold text-emerald-900">
+                      {school.board}
+                    </span>
+                  </div>
+                  
+                  {/* Rating Badge */}
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1">
+                    <FiStar className="text-amber-400 text-xs fill-amber-400" />
+                    <span className="text-xs font-semibold text-gray-800">{school.rating}</span>
+                  </div>
+                  
+                  {/* School Icon - Bottom Left */}
+                  <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white">
+                    <FiBook className="text-xl text-emerald-600" />
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-4 pt-8 flex-1 flex flex-col">
+                  <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-emerald-600 transition-colors cursor-pointer">
+                    {school.name}
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                    <FiMapPin className="text-[10px]" />
+                    {school.location}
+                  </p>
+                  
+                  {/* Stats Row - Modern */}
+                  <div className="flex items-center gap-3 mt-3 py-2 border-y border-gray-100">
+                    <div className="flex-1 text-center">
+                      <p className="text-sm font-bold text-emerald-600">₹{school.fees}</p>
+                      <p className="text-[10px] text-gray-400">Annual Fee</p>
+                    </div>
+                    <div className="w-px h-8 bg-gray-100" />
+                    <div className="flex-1 text-center">
+                      <p className="text-sm font-bold text-gray-700">{school.type || 'Day'}</p>
+                      <p className="text-[10px] text-gray-400">Type</p>
                     </div>
                   </div>
                   
-                  {/* Top Right Badges */}
-                  <div className="absolute top-1 right-1 flex flex-col gap-1">
-                    {idx < 3 && (
-                      <div className="bg-green-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
-                        <FiCheckCircle className="text-[10px]" /> Verified
-                      </div>
-                    )}
-                    {idx < 2 && (
-                      <div className="bg-purple-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
-                        <FiStar className="text-[10px]" /> Featured
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Admission Open Badge */}
-                  {idx < 5 && (
-                    <div className="absolute bottom-1 right-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
-                      Admission 2025 Open
-                    </div>
-                  )}
-                </div>
-
-                {/* School Logo Badge - Perfectly Positioned */}
-                <div className="absolute top-16 left-4 w-14 h-14 bg-white rounded-full border-3 border-white shadow-xl flex items-center justify-center z-10">
-                  <FiBook className="text-green-600 text-2xl" />
-                </div>
-
-                <div className="p-3 pt-10">
-                  {/* School Name and Location */}
-                  <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600 transition cursor-pointer">{school.name}</h3>
-                  <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2">
-                    <FiMapPin className="text-orange-600 text-xs" />
-                    <span>{school.location}</span>
-                  </div>
-
-                  {/* Stats Grid - Compact */}
-                  <div className="grid grid-cols-3 gap-1 mb-2 pb-2 border-b">
-                    <div className="text-center">
-                      <div className="text-orange-600 font-bold text-sm">₹{school.fees}</div>
-                      <div className="text-[10px] text-gray-500">Annual</div>
-                    </div>
-                    <div className="text-center border-x">
-                      <div className="text-orange-600 font-bold text-sm">{school.board}</div>
-                      <div className="text-[10px] text-gray-500">Board</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-orange-600 font-bold text-sm flex items-center justify-center gap-0.5">
-                        <FiStar className="text-yellow-500 text-xs" />
-                        {school.rating}
-                      </div>
-                      <div className="text-[10px] text-gray-500">Rating</div>
-                    </div>
-                  </div>
-
-                  {/* Ranking - Compact */}
-                  <div className="text-[11px] text-gray-600 mb-2">
-                    <span className="font-semibold">Ranked {school.rank}</span> / 100
-                  </div>
-
-                  {/* Action Buttons - With Icons */}
-                  <div className="space-y-1.5">
-                    <div className="flex gap-1.5">
-                      <Button 
-                        onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/compare`)}
-                        variant="outline"
-                        className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
-                      >
-                        <FiBarChart2 className="text-xs" />
-                        Compare
-                      </Button>
-                      <Button 
-                        onClick={() => window.open(`/schools/${school.name}/brochure`, '_blank')}
-                        variant="outline"
-                        className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
-                      >
-                        <FiDownload className="text-xs" />
-                        Brochure
-                      </Button>
-                    </div>
+                  {/* Action Buttons - Modern */}
+                  <div className="mt-auto pt-3 flex gap-2">
+                    <Button 
+                      onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}`)}
+                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs py-2.5 h-auto rounded-xl font-medium transition-all"
+                    >
+                      View Details
+                    </Button>
                     <Button 
                       onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/apply`)}
-                      className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-semibold flex items-center justify-between px-2.5 group"
+                      variant="outline"
+                      className="flex-1 border-emerald-200 text-emerald-600 hover:bg-emerald-50 text-xs py-2.5 h-auto rounded-xl font-medium"
                     >
-                      <span>Apply Now</span>
-                      <span className="text-base font-normal">›</span>
+                      Apply Now
                     </Button>
                   </div>
                 </div>
