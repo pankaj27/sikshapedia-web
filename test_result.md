@@ -419,3 +419,15 @@ agent_communication:
 - Email: admin@admissionbuddy.co
 - Password: admin123
 
+
+### Test Results - Location-Specific Display Priority:
+✅ Backend Tests: 22/22 PASSED
+✅ Frontend UI Tests: ALL PASSED
+✅ News display_priority: Added and verified
+
+### News Display Priority Feature Added:
+- Added display_priority field to News model (server.py line ~1451)
+- Updated GET /api/news endpoint to respect display_priority sorting
+- Added Display Priority input in NewsForm.js admin UI
+- UI shows (0=none, lower=first) hint for clarity
+
