@@ -3753,7 +3753,7 @@ COLLEGE_MINIMAL_PROJECTION = {
     "city_priority": 1, "accreditation": 1, "ranking": 1, "established_year": 1
 }
 
-@api_router.get("/colleges", response_model=List[College])
+@api_router.get("/colleges")
 async def get_colleges(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=1000),
