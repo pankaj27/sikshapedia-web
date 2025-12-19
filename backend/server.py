@@ -7141,6 +7141,13 @@ async def get_schools(
     sort_order = -1 if sort == "rating" else 1
     
     schools = await db.schools.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
+    
+    # Re-sort to put items with display_priority > 0 first
+    prioritized = [s for s in schools if s.get('display_priority', 0) > 0]
+    non_prioritized = [s for s in schools if s.get('display_priority', 0) == 0]
+    prioritized.sort(key=lambda x: x.get('display_priority', 0))
+    schools = prioritized + non_prioritized
+    
     return schools
 
 @api_router.get("/schools/featured", response_model=List[School])
