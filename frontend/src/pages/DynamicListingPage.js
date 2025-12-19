@@ -2372,9 +2372,15 @@ const DynamicListingPage = () => {
                               </span>
                             )}
                           </div>
+                          <button
+                            onClick={(e) => { e.preventDefault(); setSelectedCollege(inst); setApplyModalOpen(true); }}
+                            className="px-3 py-2 bg-orange-500 text-white rounded-lg text-xs font-medium"
+                          >
+                            Apply
+                          </button>
                           <Link 
                             to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium"
+                            className="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium"
                           >
                             View →
                           </Link>
