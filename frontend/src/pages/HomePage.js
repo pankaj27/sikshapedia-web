@@ -896,10 +896,11 @@ const CollegeDuniaHome = () => {
       )}
 
       {/* Newsletter Subscription - Perfect Button Height */}
+      {showNewsletter && (
       <section className="py-6 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-lg font-bold mb-2">Subscribe to Our Newsletter</h2>
-          <p className="text-sm mb-3 text-white">Get the latest updates on college admissions, exams, and education news</p>
+          <h2 className="text-lg font-bold mb-2">{newsletterTitle}</h2>
+          <p className="text-sm mb-3 text-white">{newsletterSubtitle}</p>
           <form className="max-w-md mx-auto flex gap-2 items-center">
             <Input
               type="email"
