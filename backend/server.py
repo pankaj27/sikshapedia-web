@@ -1700,18 +1700,88 @@ class Loan(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    slug: str
-    provider: str  # Bank name or NBFC
+    slug: Optional[str] = None
+    bank_name: Optional[str] = None
+    bank_type: Optional[str] = None
+    bank_logo: Optional[str] = None
+    loan_type: Optional[str] = None
+    short_description: Optional[str] = None
+    
+    # Loan Details
+    min_amount: Optional[str] = None
+    max_amount: Optional[str] = None
+    interest_rate_min: Optional[str] = None
+    interest_rate_max: Optional[str] = None
+    interest_type: Optional[str] = None
+    processing_fee: Optional[str] = None
+    tenure_min: Optional[str] = None
+    tenure_max: Optional[str] = None
+    moratorium_period: Optional[str] = None
+    
+    # Eligibility
+    age_min: Optional[str] = None
+    age_max: Optional[str] = None
+    nationality: Optional[str] = None
+    eligibility_criteria: List[str] = []
+    courses_covered: List[str] = []
+    countries_covered: List[str] = []
+    documents_required: List[str] = []
+    
+    # Media
+    featured_image: Optional[str] = None
+    featured_image_alt: Optional[str] = None
+    gallery_images: List[str] = []
+    
+    # Content
+    content: Optional[str] = None
+    benefits: List[str] = []
+    key_features: List[str] = []
+    application_process: Optional[str] = None
+    repayment_options: Optional[str] = None
+    
+    # TOC & Tables
+    toc_enabled: bool = False
+    toc_items: List[Dict] = []
+    tables: List[Dict] = []
+    
+    # Contact & Links
+    official_website: Optional[str] = None
+    apply_link: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    branch_locator_link: Optional[str] = None
+    
+    # SEO
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    meta_keywords: List[str] = []
+    canonical_url: Optional[str] = None
+    og_image: Optional[str] = None
+    auto_generate_seo: bool = True
+    schema_type: Optional[str] = "FinancialProduct"
+    
+    # Status
+    is_active: bool = True
+    is_featured: bool = False
+    views: int = 0
+    applications: int = 0
+    
+    # FAQs
+    faqs: List[Dict] = []
+    
+    created_by: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+    # Legacy fields for backward compatibility
+    provider: Optional[str] = None
     loan_amount_min: Optional[float] = None
     loan_amount_max: Optional[float] = None
     interest_rate: Optional[float] = None
-    eligibility: str
-    description: str
+    eligibility: Optional[str] = None
+    description: Optional[str] = None
     features: List[str] = []
-    how_to_apply: str
+    how_to_apply: Optional[str] = None
     website: Optional[str] = None
-    is_active: bool = True
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # Comment Model
 class Comment(BaseModel):
