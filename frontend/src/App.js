@@ -190,6 +190,7 @@ function App() {
             <Route path="/admin/listing-pages" element={<ListingPagesManagement />} />
             <Route path="/admin/listing-pages/new" element={<ListingPageForm />} />
             <Route path="/admin/listing-pages/edit/:id" element={<ListingPageForm />} />
+            <Route path="/admin/homepage-settings" element={<HomepageSettings />} />
             <Route path="/admin/static-pages" element={<StaticPagesManagement />} />
             <Route path="/admin/static-pages/edit/:slug" element={<StaticPageForm />} />
             <Route path="/admin/study-abroad" element={<StudyAbroadManagement />} />
