@@ -208,6 +208,10 @@ const HomepageSettings = () => {
         if (response.data.featured_news_ids?.length > 0) {
           fetchFeaturedData('news', response.data.featured_news_ids, setFeaturedNewsList);
         }
+        // Load stream colleges
+        if (response.data.stream_colleges) {
+          fetchStreamCollegesData(response.data.stream_colleges);
+        }
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
