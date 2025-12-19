@@ -1053,26 +1053,7 @@ class LoanApplicationCreate(BaseModel):
     annual_family_income: float
     existing_loans: Optional[str] = None
 
-# Scholarship Models
-class Scholarship(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    name: str
-    provider: str  # Government, Private, College
-    scholarship_type: str  # Merit-based, Need-based, Sports, etc.
-    amount: float
-    eligibility: str
-    applicable_courses: List[str] = []
-    education_level: str  # UG, PG, PhD
-    deadline: str
-    application_link: Optional[str] = None
-    documents_required: List[str] = []
-    description: str
-    benefits: List[str] = []
-    selection_process: str
-    active: bool = True
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
+# Scholarship Models (main Scholarship model defined at top of file)
 class ScholarshipApplication(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
