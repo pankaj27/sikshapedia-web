@@ -1485,6 +1485,116 @@ class News(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Lead/Inquiry Models
+class Lead(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    
+    # User Info
+    name: str
+    email: EmailStr
+    mobile: str
+    city: str
+    course_interested: str
+    
+    # College Info (for college-specific forms)
+    college_id: Optional[str] = None
+    college_name: Optional[str] = None
+    
+    # Source & Tracking
+    source: str = "general"  # general, college, homepage_cta, listing_page
+    form_heading: Optional[str] = None  # For general forms
+    utm_source: Optional[str] = None
+    utm_medium: Optional[str] = None
+    utm_campaign: Optional[str] = None
+    
+    # Status & Follow-up
+    status: str = "new"  # new, contacted, converted, closed
+    notes: Optional[str] = None
+    assigned_to: Optional[str] = None  # Admin user ID
+    contacted_at: Optional[datetime] = None
+    converted_at: Optional[datetime] = None
+    
+    # Notifications
+    email_sent: bool = False
+    whatsapp_sent: bool = False
+    whatsapp_message_sid: Optional[str] = None
+    
+    # Timestamps
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class LeadCreate(BaseModel):
+    name: str
+    email: EmailStr
+    mobile: str
+    city: str
+    course_interested: str
+    college_id: Optional[str] = None
+    college_name: Optional[str] = None
+    source: str = "general"
+    form_heading: Optional[str] = None
+    utm_source: Optional[str] = None
+    utm_medium: Optional[str] = None
+    utm_campaign: Optional[str] = None
+
+class LeadSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "lead-settings"
+    
+    # General Form Settings
+    general_form_heading: str = "Get Expert Counselling"
+    general_form_subheading: str = "Fill the form and our team will get back to you within 24 hours"
+    general_form_enabled: bool = True
+    
+    # CTA Button Settings
+    cta_button_text: str = "Apply Now"
+    cta_button_color: str = "#f97316"  # Orange
+    show_floating_cta: bool = True
+    show_header_cta: bool = True
+    
+    # Notification Settings
+    notification_emails: List[str] = []  # List of admin emails to notify
+    default_notification_email: str = ""  # Fallback email
+    enable_email_notifications: bool = True
+    enable_whatsapp_notifications: bool = True
+    whatsapp_business_number: str = ""  # Business WhatsApp number for wa.me links
+    
+    # Auto-response Messages
+    email_subject: str = "Thank you for your inquiry - {college_name}"
+    email_template: str = """
+Dear {name},
+
+Thank you for your interest in {college_name}!
+
+We have received your inquiry for {course_interested}. Our counselling team will contact you shortly.
+
+Your Details:
+- Name: {name}
+- Email: {email}
+- Mobile: {mobile}
+- City: {city}
+- Course: {course_interested}
+
+Best regards,
+Admissionbuddy Team
+    """
+    
+    whatsapp_message_template: str = """
+Hello {name}! 👋
+
+Thank you for your interest in {college_name}!
+
+We've received your inquiry for *{course_interested}*. Our expert counsellor will contact you shortly on {mobile}.
+
+📞 For immediate assistance, reply to this message.
+
+- Team Admissionbuddy
+    """
+    
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Admin User Model
 class AdminUser(BaseModel):
     model_config = ConfigDict(extra="ignore")
