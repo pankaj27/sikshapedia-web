@@ -5526,16 +5526,14 @@ async def get_scholarships(
     
     return scholarships
 
-@api_router.get("/scholarships/{scholarship_id}", response_model=Scholarship)
+@api_router.get("/scholarships/{scholarship_id}")
 async def get_scholarship(scholarship_id: str):
     scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
     if not scholarship:
         raise HTTPException(status_code=404, detail="Scholarship not found")
     
-    if isinstance(scholarship.get('created_at'), str):
-        scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
-    
-    return Scholarship(**scholarship)
+    # Return raw data without strict model validation to support both old and new formats
+    return scholarship
 
 @api_router.post("/scholarship-applications", response_model=ScholarshipApplication)
 async def create_scholarship_application(app_data: ScholarshipApplicationCreate, current_user: User = Depends(get_current_user)):
