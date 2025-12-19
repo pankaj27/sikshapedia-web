@@ -325,7 +325,8 @@ function App() {
               </Layout>
             } />
           </Routes>
-        </BrowserRouter>
+          </BrowserRouter>
+        </CollegeProvider>
       </AuthProvider>
     </HelmetProvider>
   );
