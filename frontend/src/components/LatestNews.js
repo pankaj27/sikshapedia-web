@@ -13,7 +13,8 @@ const LatestNews = () => {
 
   const fetchNews = async () => {
     try {
-      const response = await api.get('/news?limit=4&status=published');
+      // Use featured endpoint which prioritizes admin-selected news
+      const response = await api.get('/news/featured?limit=4');
       setNewsItems(response.data || []);
     } catch (error) {
       console.error('Error fetching news:', error);
