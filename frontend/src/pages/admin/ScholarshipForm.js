@@ -132,7 +132,39 @@ const ScholarshipForm = () => {
     setLoading(true);
     try {
       const response = await api.get(`/scholarships/${id}`);
-      setFormData(prev => ({ ...prev, ...response.data }));
+      const data = response.data;
+      
+      // Map old field names to new field names for backward compatibility
+      const mappedData = {
+        ...data,
+        // Map 'type' to 'scholarship_type' if it exists
+        scholarship_type: data.scholarship_type || data.type || 'Merit-Based',
+        // Map 'level' to 'education_level' if it exists  
+        education_level: data.education_level || data.level || 'Undergraduate',
+        // Map 'description' to 'short_description' if short_description is empty
+        short_description: data.short_description || data.description || '',
+        // Map 'eligibility' string to eligibility_criteria array if it's a string
+        eligibility_criteria: data.eligibility_criteria || 
+          (typeof data.eligibility === 'string' && data.eligibility ? [data.eligibility] : []),
+        // Map 'requirements' to 'documents_required' if it exists
+        documents_required: data.documents_required || data.requirements || [],
+        // Map 'how_to_apply' to 'application_process'
+        application_process: data.application_process || data.how_to_apply || '',
+        // Map 'website' to 'official_website'
+        official_website: data.official_website || data.website || '',
+        // Ensure arrays exist
+        toc_items: data.toc_items || [],
+        tables: data.tables || [],
+        meta_keywords: data.meta_keywords || [],
+        benefits: data.benefits || [],
+        faqs: data.faqs || [],
+        category: data.category || [],
+        states: data.states || [],
+        courses_applicable: data.courses_applicable || [],
+        gallery_images: data.gallery_images || [],
+      };
+      
+      setFormData(prev => ({ ...prev, ...mappedData }));
     } catch (error) {
       console.error('Error fetching scholarship:', error);
       alert('Failed to load scholarship');
