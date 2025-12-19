@@ -10,12 +10,14 @@ const Header = () => {
   const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
   const [goalDropdownOpen, setGoalDropdownOpen] = useState(false);
   const [allCoursesDropdownOpen, setAllCoursesDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGoal, setSelectedGoal] = useState('Admission Goal');
   
   // Timeout refs for hover delay
   const goalTimeoutRef = useRef(null);
   const allCoursesTimeoutRef = useRef(null);
+  const userDropdownRef = useRef(null);
 
   useEffect(() => {
     // Check for user on mount
