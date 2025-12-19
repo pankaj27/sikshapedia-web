@@ -25,6 +25,13 @@ from emergentintegrations.payments.stripe.checkout import StripeCheckout, Checko
 import shutil
 from PIL import Image
 import io
+import asyncio
+
+# Resend Email
+import resend
+
+# Twilio WhatsApp
+from twilio.rest import Client as TwilioClient
 
 # Import modular architecture
 import sys
