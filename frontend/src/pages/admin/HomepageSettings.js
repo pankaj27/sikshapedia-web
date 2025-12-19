@@ -59,6 +59,14 @@ const HomepageSettings = () => {
     
     // College Rankings
     college_rankings_title: 'College Rankings',
+    college_rankings_years: ['2024', '2023', '2022'],
+    college_rankings_data: [
+      { rank: 1, name: 'IIT Bombay', location: 'Mumbai', rating: 4.9, fees: '2.5L', type: 'Engineering' },
+      { rank: 2, name: 'IIT Delhi', location: 'New Delhi', rating: 4.8, fees: '2.5L', type: 'Engineering' },
+      { rank: 3, name: 'IIT Madras', location: 'Chennai', rating: 4.8, fees: '2.5L', type: 'Engineering' },
+      { rank: 4, name: 'IIT Kanpur', location: 'Kanpur', rating: 4.7, fees: '2.5L', type: 'Engineering' },
+      { rank: 5, name: 'IIT Kharagpur', location: 'Kharagpur', rating: 4.7, fees: '2.5L', type: 'Engineering' }
+    ],
     
     // Newsletter
     newsletter_title: 'Subscribe to Our Newsletter',
