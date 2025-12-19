@@ -80,7 +80,7 @@ backend:
   - task: "Location-Specific Display Priority Feature for Colleges"
     implemented: true
     working: true
-    file: "backend/server.py"
+    file: "backend/server.py, frontend/src/pages/admin/CollegeForm.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
@@ -88,6 +88,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ LOCATION-SPECIFIC DISPLAY PRIORITY FULLY WORKING: Comprehensive testing completed for college location-specific display priority feature. ✅ Backend Model: College model supports all 3 priority fields - display_priority (national level), state_priority (Dict mapping state to priority), city_priority (Dict mapping city to priority). ✅ Admin API: PUT /api/colleges/{id} successfully updates college with location priorities (display_priority=5, state_priority={'Maharashtra': 1, 'Karnataka': 3}, city_priority={'Mumbai': 1, 'Bangalore': 2}). ✅ National Sorting: GET /api/colleges respects display_priority sorting - test college with priority 5 appears at correct position. ✅ State Sorting: GET /api/colleges?state=Maharashtra returns colleges with Maharashtra state_priority=1 appearing first (11 Maharashtra colleges found). ✅ City Sorting: GET /api/colleges?city=Mumbai returns colleges with Mumbai city_priority=1 appearing first (9 Mumbai colleges found). ✅ Data Persistence: All priority fields persist correctly in database after updates. All 22 backend tests passed (100% success rate). Location-specific display priority feature ready for production use."
+      - working: true
+        agent: "testing"
+        comment: "✅ FRONTEND UI TESTING COMPLETE - ALL TESTS PASSED: Successfully tested Location-Specific Display Priority UI in admin college form using comprehensive Playwright automation. ✅ Admin Login: Successfully logged in with admin@admissionbuddy.co credentials and accessed college edit form. ✅ Priority Settings Section: Found 'Location-Specific Display Priority' section with proper layout and styling. ✅ National Priority: 'India Priority' input field working correctly - set value to 5 successfully. ✅ State Priority UI: State dropdown with Maharashtra, Karnataka, Tamil Nadu options working. Selected Maharashtra, entered priority 1, clicked Add button, and state priority tag 'Maharashtra: #1×' appeared correctly with remove functionality. ✅ City Priority UI: City input field working. Entered 'Pune', priority 2, clicked Add button, and city priority tag 'Pune: #2×' appeared correctly with remove functionality. ✅ Tag System: Purple tags for state priorities and blue tags for city priorities displaying correctly with remove buttons (×). ✅ Form Integration: All priority settings integrated properly in college edit form with Save button available. ✅ UI/UX: Clean, intuitive interface with proper color coding (purple for states, blue for cities) and responsive design. All requirements from review request met successfully. Frontend UI fully functional and ready for production use."
 
 frontend:
   - task: "News Listing Page - Dynamic Content Display"
