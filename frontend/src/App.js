@@ -128,6 +128,7 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             {/* Admin Routes - Without Layout */}
             <Route path="/admin/login" element={<AdminLogin />} />
