@@ -133,16 +133,17 @@ const StudyMaterialsListingSettings = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Study Materials Page Settings</h1>
-          <p className="text-gray-500">Configure the /study-materials listing page</p>
+    <AdminLayout>
+      <div className="p-6 max-w-4xl">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">Study Materials Page Settings</h1>
+            <p className="text-gray-500">Configure the /study-materials listing page</p>
+          </div>
+          <Button onClick={handleSave} disabled={saving} className="bg-purple-500 hover:bg-purple-600">
+            <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Settings'}
+          </Button>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="bg-purple-500 hover:bg-purple-600">
-          <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Settings'}
-        </Button>
-      </div>
 
       <div className="space-y-6">
         {/* Hero Section */}
