@@ -139,8 +139,8 @@ const CollegeDuniaHome = () => {
               <Link to="/exams" className="block py-2">Exams</Link>
               <Link to="/courses" className="block py-2">Courses</Link>
               <Link to="/rankings" className="block py-2">Rankings</Link>
-              <Link to="/login" className="block py-2">Login</Link>
-              <Link to="/register" className="block py-2 text-orange-600">Sign Up</Link>
+              <Link to="/signup" className="block py-2">Login</Link>
+              <Link to="/signup" className="block py-2 text-orange-600">Sign Up</Link>
             </div>
           </div>
         )}
