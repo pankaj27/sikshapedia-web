@@ -350,47 +350,25 @@ const CollegeDuniaHome = () => {
       <section className="py-6 bg-gradient-to-r from-gray-50 to-gray-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {/* Apply Now */}
-            <button
-              onClick={() => setActiveWidget('apply')}
-              className="flex items-center gap-3 p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
-            >
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <FiSend size={20} />
-              </div>
-              <div className="text-left">
-                <h3 className="font-bold text-sm">Apply Now</h3>
-                <p className="text-xs text-white/80">Quick admission</p>
-              </div>
-            </button>
-
-            {/* Ask Question */}
-            <button
-              onClick={() => setActiveWidget('question')}
-              className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
-            >
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <FiMessageCircle size={20} />
-              </div>
-              <div className="text-left">
-                <h3 className="font-bold text-sm">Ask Question</h3>
-                <p className="text-xs text-white/80">Get expert help</p>
-              </div>
-            </button>
-
-            {/* Need Counselling */}
-            <button
-              onClick={() => setActiveWidget('counselling')}
-              className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105"
-            >
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <FiPhone size={20} />
-              </div>
-              <div className="text-left">
-                <h3 className="font-bold text-sm">Counselling</h3>
-                <p className="text-xs text-white/80">Free guidance</p>
-              </div>
-            </button>
+            {/* Quick Action Buttons - Dynamic from Backend */}
+            {quickActions.map((action, idx) => {
+              const IconComponent = getIconComponent(action.icon);
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setActiveWidget(action.id)}
+                  className={`flex items-center gap-3 p-4 bg-gradient-to-r ${action.gradient} text-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105`}
+                >
+                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <IconComponent size={20} />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-bold text-sm">{action.title}</h3>
+                    <p className="text-xs text-white/80">{action.subtitle}</p>
+                  </div>
+                </button>
+              );
+            })}
 
             {/* Sponsor Ad Card - Dynamic from Admin */}
             {homeBannerAd ? (
