@@ -30,14 +30,19 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Check if we're on an admin page
       const isAdminPage = window.location.pathname.startsWith('/admin');
+      const isInstitutePage = window.location.pathname.startsWith('/institute');
       if (isAdminPage) {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         window.location.href = '/admin/login';
+      } else if (isInstitutePage) {
+        localStorage.removeItem('institute_token');
+        localStorage.removeItem('institute');
+        window.location.href = '/institute/login';
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        window.location.href = '/signup';
       }
     }
     return Promise.reject(error);
