@@ -6447,16 +6447,14 @@ async def get_loan_providers(
     
     return loans
 
-@api_router.get("/loans/{loan_id}", response_model=LoanProvider)
+@api_router.get("/loans/{loan_id}")
 async def get_loan_provider(loan_id: str):
     loan = await db.loans.find_one({"id": loan_id}, {"_id": 0})
     if not loan:
         raise HTTPException(status_code=404, detail="Loan provider not found")
     
-    if isinstance(loan.get('created_at'), str):
-        loan['created_at'] = datetime.fromisoformat(loan['created_at'])
-    
-    return LoanProvider(**loan)
+    # Return raw data without strict model validation to support both old and new formats
+    return loan
 
 # ============================================
 # Blog/Article Routes
