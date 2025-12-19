@@ -219,44 +219,44 @@ const ApplyNowModal = ({
                 </div>
               </div>
 
-              {/* Mobile */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
-                <div className="relative">
-                  <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
-                    type="tel"
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    placeholder="10-digit mobile number"
-                    maxLength={10}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
-                    required
-                  />
+              {/* Mobile & City - 2 columns */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">Mobile *</label>
+                  <div className="relative">
+                    <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="tel"
+                      name="mobile"
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      placeholder="10-digit number"
+                      maxLength={10}
+                      className="w-full pl-10 pr-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-
-              {/* City */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    placeholder="Your city"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
-                    required
-                  />
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">City *</label>
+                  <div className="relative">
+                    <FiMapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      placeholder="Your city"
+                      className="w-full pl-10 pr-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Course Interested */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Course Interested *</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Course Interested *</label>
                 <div className="relative">
                   <FiBook className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                   {courses.length > 0 ? (
@@ -264,7 +264,7 @@ const ApplyNowModal = ({
                       name="course_interested"
                       value={formData.course_interested}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors appearance-none bg-white"
+                      className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors appearance-none bg-white"
                       required
                     >
                       <option value="">Select a course</option>
@@ -279,7 +279,7 @@ const ApplyNowModal = ({
                       value={formData.course_interested}
                       onChange={handleChange}
                       placeholder="e.g., B.Tech, MBA, MBBS"
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                      className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                       required
                     />
                   )}
