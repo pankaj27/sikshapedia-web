@@ -3690,7 +3690,17 @@ async def get_colleges(
     
     sort_order = 1 if sort_by == "name" else 1 if sort_by == "nirf_ranking" else -1
     
-    colleges = await db.colleges.find(query, {"_id": 0}).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
+    # Sort by display_priority first (items with priority > 0 come first, sorted by priority), then by the requested sort
+    colleges = await db.colleges.find(query, {"_id": 0}).sort([
+        ("display_priority", -1),  # Higher priority first (non-zero values come before 0)
+        (sort_by, sort_order)
+    ]).skip(skip).limit(limit).to_list(limit)
+    
+    # Re-sort to put items with display_priority > 0 first, ordered by priority (lower = first)
+    prioritized = [c for c in colleges if c.get('display_priority', 0) > 0]
+    non_prioritized = [c for c in colleges if c.get('display_priority', 0) == 0]
+    prioritized.sort(key=lambda x: x.get('display_priority', 0))
+    colleges = prioritized + non_prioritized
     
     for college in colleges:
         if isinstance(college.get('created_at'), str):
