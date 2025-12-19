@@ -6558,6 +6558,94 @@ async def delete_study_abroad_university(university_id: str):
     await db.study_abroad.delete_one({"id": university_id})
     return {"success": True}
 
+
+# ============================================
+# Study Abroad Listing Page Settings
+# ============================================
+
+class StudyAbroadListingPageSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "study-abroad-listing-page"
+    
+    # Hero Section
+    hero_title: str = "Study Abroad"
+    hero_subtitle: str = "Explore top universities around the world and find your perfect study destination"
+    hero_bg_gradient: str = "from-indigo-600 to-purple-700"
+    hero_image: Optional[str] = None
+    
+    # Stats
+    stats: List[Dict[str, Any]] = [
+        {"label": "Partner Universities", "value": "500+", "icon": "🏛️"},
+        {"label": "Countries", "value": "50+", "icon": "🌍"},
+        {"label": "Students Placed", "value": "10K+", "icon": "👨‍🎓"},
+        {"label": "Scholarship Value", "value": "$50M+", "icon": "💰"}
+    ]
+    
+    # Featured Countries
+    featured_countries: List[Dict[str, Any]] = [
+        {"name": "USA", "flag": "🇺🇸", "universities": 100, "description": "World-class education system"},
+        {"name": "UK", "flag": "🇬🇧", "universities": 80, "description": "Rich academic heritage"},
+        {"name": "Canada", "flag": "🇨🇦", "universities": 60, "description": "Multicultural environment"},
+        {"name": "Australia", "flag": "🇦🇺", "universities": 50, "description": "Quality lifestyle"}
+    ]
+    
+    # Filter Options
+    show_country_filter: bool = True
+    show_ranking_filter: bool = True
+    show_tuition_filter: bool = True
+    show_program_filter: bool = True
+    
+    # Program Types
+    program_types: List[Dict[str, Any]] = [
+        {"id": "undergraduate", "name": "Undergraduate", "icon": "📚"},
+        {"id": "postgraduate", "name": "Postgraduate", "icon": "🎓"},
+        {"id": "phd", "name": "PhD/Research", "icon": "🔬"},
+        {"id": "mba", "name": "MBA", "icon": "💼"}
+    ]
+    
+    # CTA Section
+    cta_title: str = "Need Help Choosing the Right University?"
+    cta_subtitle: str = "Our expert counselors can help you find the perfect study abroad destination"
+    cta_button_text: str = "Get Free Counseling"
+    cta_button_link: str = "/counseling"
+    
+    # Why Study Abroad Section
+    why_study_abroad: List[Dict[str, Any]] = [
+        {"title": "Global Recognition", "description": "Degrees recognized worldwide", "icon": "🌐"},
+        {"title": "Career Opportunities", "description": "Better job prospects globally", "icon": "💼"},
+        {"title": "Cultural Exposure", "description": "Experience diverse cultures", "icon": "🎭"},
+        {"title": "Personal Growth", "description": "Develop independence and skills", "icon": "🚀"}
+    ]
+    
+    # SEO
+    meta_title: str = "Study Abroad 2025 - Top Universities Worldwide | Admissionbuddy"
+    meta_description: str = "Explore 500+ top universities in USA, UK, Canada, Australia. Get expert guidance for your study abroad journey. Apply now!"
+    meta_keywords: List[str] = ["study abroad", "international universities", "USA universities", "UK universities", "study in Canada"]
+    
+    # FAQs
+    faqs: List[Dict[str, Any]] = []
+    
+    updated_at: Optional[datetime] = None
+
+@api_router.get("/study-abroad-listing-settings")
+async def get_study_abroad_listing_settings():
+    settings = await db.study_abroad_listing_settings.find_one({"id": "study-abroad-listing-page"}, {"_id": 0})
+    if not settings:
+        return StudyAbroadListingPageSettings().model_dump()
+    return settings
+
+@api_router.put("/study-abroad-listing-settings")
+async def update_study_abroad_listing_settings(settings: StudyAbroadListingPageSettings):
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.study_abroad_listing_settings.update_one(
+        {"id": "study-abroad-listing-page"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return settings_dict
+
+
 # ============================================
 # Scholarship Routes
 # ============================================
