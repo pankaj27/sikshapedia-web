@@ -9290,13 +9290,18 @@ try:
     from routes.blogs import blogs_router
     from routes.news import news_router
     from routes.admin_settings import admin_settings_router
+    from routes.leads import leads_router, set_database as set_leads_db
+    
+    # Set database for leads router
+    set_leads_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
     app.include_router(blogs_router, prefix="/api")
     app.include_router(news_router, prefix="/api")
     app.include_router(admin_settings_router, prefix="/api")
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings")
+    app.include_router(leads_router)  # Already has /api prefix
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
