@@ -1287,19 +1287,123 @@ const CollegeForm = () => {
           
           {/* Display Priority for Listing Page Order */}
           <div className="flex items-center gap-2 bg-indigo-50 px-3 py-2 rounded-lg">
-            <span className="text-sm font-medium text-indigo-700">📌 Display Priority:</span>
+            <span className="text-sm font-medium text-indigo-700">📌 India Priority:</span>
             <input 
               type="number" 
               min="0"
               max="999"
               value={formData.display_priority || 0}
               onChange={(e) => setFormData({...formData, display_priority: parseInt(e.target.value) || 0})}
-              className="w-20 border rounded px-2 py-1 text-center text-sm"
+              className="w-16 border rounded px-2 py-1 text-center text-sm"
               placeholder="0"
             />
-            <span className="text-xs text-indigo-600">(1=Top, 0=Default)</span>
+            <span className="text-xs text-indigo-600">(1=Top)</span>
           </div>
+        </div>
+
+        {/* Location-Specific Priorities */}
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl border border-purple-200 mt-4">
+          <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            📍 Location-Specific Display Priority
+            <span className="text-xs font-normal text-gray-500">(Set different priority for State/City pages)</span>
+          </h4>
           
+          <div className="grid grid-cols-2 gap-4">
+            {/* State Priority */}
+            <div>
+              <label className="block text-sm font-medium text-purple-700 mb-2">State Priority</label>
+              <div className="flex gap-2">
+                <select
+                  id="state-select"
+                  className="flex-1 border rounded px-2 py-1.5 text-sm"
+                  defaultValue=""
+                >
+                  <option value="">Select State</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                </select>
+                <input type="number" id="state-priority-value" min="1" max="99" placeholder="Priority" className="w-20 border rounded px-2 py-1.5 text-sm text-center" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const state = document.getElementById('state-select').value;
+                    const priority = parseInt(document.getElementById('state-priority-value').value);
+                    if (state && priority > 0) {
+                      setFormData({...formData, state_priority: {...(formData.state_priority || {}), [state]: priority}});
+                      document.getElementById('state-select').value = '';
+                      document.getElementById('state-priority-value').value = '';
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-purple-600 text-white rounded text-sm hover:bg-purple-700"
+                >
+                  Add
+                </button>
+              </div>
+              {/* Display added state priorities */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {Object.entries(formData.state_priority || {}).map(([state, priority]) => (
+                  <span key={state} className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">
+                    {state}: #{priority}
+                    <button type="button" onClick={() => {
+                      const newPriority = {...formData.state_priority};
+                      delete newPriority[state];
+                      setFormData({...formData, state_priority: newPriority});
+                    }} className="ml-1 text-purple-500 hover:text-red-500">×</button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* City Priority */}
+            <div>
+              <label className="block text-sm font-medium text-blue-700 mb-2">City Priority</label>
+              <div className="flex gap-2">
+                <input type="text" id="city-input" placeholder="City name" className="flex-1 border rounded px-2 py-1.5 text-sm" />
+                <input type="number" id="city-priority-value" min="1" max="99" placeholder="Priority" className="w-20 border rounded px-2 py-1.5 text-sm text-center" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const city = document.getElementById('city-input').value.trim();
+                    const priority = parseInt(document.getElementById('city-priority-value').value);
+                    if (city && priority > 0) {
+                      setFormData({...formData, city_priority: {...(formData.city_priority || {}), [city]: priority}});
+                      document.getElementById('city-input').value = '';
+                      document.getElementById('city-priority-value').value = '';
+                    }
+                  }}
+                  className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                >
+                  Add
+                </button>
+              </div>
+              {/* Display added city priorities */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {Object.entries(formData.city_priority || {}).map(([city, priority]) => (
+                  <span key={city} className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                    {city}: #{priority}
+                    <button type="button" onClick={() => {
+                      const newPriority = {...formData.city_priority};
+                      delete newPriority[city];
+                      setFormData({...formData, city_priority: newPriority});
+                    }} className="ml-1 text-blue-500 hover:text-red-500">×</button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 mt-4">
           <label className="flex items-center gap-1.5 cursor-pointer">
             <input 
               type="checkbox" 
