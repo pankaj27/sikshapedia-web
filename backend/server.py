@@ -7295,7 +7295,13 @@ async def get_news(
     sort_order = -1
     
     news = await db.news.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
-    return news
+    
+    # Apply display_priority sorting - items with priority > 0 come first
+    prioritized = [n for n in news if n.get('display_priority', 0) > 0]
+    non_prioritized = [n for n in news if n.get('display_priority', 0) == 0]
+    prioritized.sort(key=lambda x: x.get('display_priority', 0))
+    
+    return prioritized + non_prioritized
 
 @api_router.get("/news/featured", response_model=List[News])
 async def get_featured_news(limit: int = Query(4, ge=1, le=20)):
