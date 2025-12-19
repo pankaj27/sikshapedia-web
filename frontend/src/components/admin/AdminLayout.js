@@ -99,6 +99,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Listing Pages', path: '/admin/listing-pages', icon: FiGlobe },
         { title: 'Static Pages', path: '/admin/static-pages', icon: FiFileText, badge: 'NEW' },
         { title: 'Study Abroad', path: '/admin/study-abroad', icon: FiGlobe, badge: 'NEW' },
+        { title: 'Study Abroad Settings', path: '/admin/study-abroad-listing-settings', icon: FiSettings },
       ]
     },
     {
