@@ -66,22 +66,22 @@ const BlogsManagement = () => {
           </Link>
         </div>
 
-      {/* Search */}
-      <div className="mb-6">
-        <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search blogs..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
+        {/* Search */}
+        <div className="mb-6">
+          <div className="relative">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search blogs..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        {/* Table */}
+        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 border-b">
             <tr>
