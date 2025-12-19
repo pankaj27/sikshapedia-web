@@ -3891,8 +3891,18 @@ async def get_colleges(
     
     return [College(**college) for college in colleges]
 
-@api_router.get("/colleges/featured", response_model=List[College])
-async def get_featured_colleges(limit: int = Query(12, ge=1, le=50)):
+# Minimal projection for listing pages - reduces payload by ~80%
+COLLEGE_MINIMAL_PROJECTION = {
+    "_id": 0, "id": 1, "name": 1, "slug": 1, "serial_number": 1,
+    "institution_type": 1, "type": 1, "location": 1, "logo_url": 1,
+    "rating": 1, "average_fees": 1, "courses": 1, "is_featured": 1,
+    "is_admission_open": 1, "is_admission_partner": 1, "is_no_cost_emi": 1,
+    "is_verified": 1, "display_priority": 1, "state_priority": 1,
+    "city_priority": 1, "accreditation": 1, "ranking": 1, "established_year": 1
+}
+
+@api_router.get("/colleges/featured")
+async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Optional[str] = Query(None)):
     """
     Get featured colleges for homepage display.
     Priority: 
@@ -3900,6 +3910,8 @@ async def get_featured_colleges(limit: int = Query(12, ge=1, le=50)):
       2) Colleges marked as is_featured=True (sorted by featured_at desc)
       3) Fallback to top colleges by NIRF ranking
     """
+    projection = COLLEGE_MINIMAL_PROJECTION if fields == "minimal" else {"_id": 0}
+    
     # First check homepage settings for manually selected colleges
     settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
     featured_ids = settings.get("featured_colleges_ids", []) if settings else []
@@ -3909,7 +3921,7 @@ async def get_featured_colleges(limit: int = Query(12, ge=1, le=50)):
     # Get colleges from homepage settings (in specified order)
     if featured_ids:
         for college_id in featured_ids[:limit]:
-            college = await db.colleges.find_one({"id": college_id, "status": "published"}, {"_id": 0})
+            college = await db.colleges.find_one({"id": college_id, "status": "published"}, projection)
             if college:
                 featured_colleges.append(college)
     
@@ -3918,7 +3930,7 @@ async def get_featured_colleges(limit: int = Query(12, ge=1, le=50)):
         existing_ids = [c.get('id') for c in featured_colleges]
         additional = await db.colleges.find(
             {"status": "published", "is_featured": True, "id": {"$nin": existing_ids}}, 
-            {"_id": 0}
+            projection
         ).sort("featured_at", -1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
         featured_colleges.extend(additional)
     
@@ -3927,15 +3939,11 @@ async def get_featured_colleges(limit: int = Query(12, ge=1, le=50)):
         existing_ids = [c.get('id') for c in featured_colleges]
         additional = await db.colleges.find(
             {"status": "published", "id": {"$nin": existing_ids}}, 
-            {"_id": 0}
+            projection
         ).sort("nirf_ranking", 1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
         featured_colleges.extend(additional)
     
-    for college in featured_colleges:
-        if isinstance(college.get('created_at'), str):
-            college['created_at'] = datetime.fromisoformat(college['created_at'])
-    
-    return [College(**college) for college in featured_colleges]
+    return featured_colleges
 
 @api_router.get("/colleges/featured-priority", response_model=List[College])
 async def get_featured_priority_colleges(limit: int = Query(6, ge=1, le=20)):
