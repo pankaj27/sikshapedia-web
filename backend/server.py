@@ -7146,6 +7146,8 @@ async def create_scholarship(scholarship: Scholarship):
     if isinstance(scholarship_dict.get('created_at'), datetime):
         scholarship_dict['created_at'] = scholarship_dict['created_at'].isoformat()
     await db.scholarships.insert_one(scholarship_dict)
+    # Remove MongoDB _id from response
+    scholarship_dict.pop('_id', None)
     return scholarship_dict
 
 @api_router.put("/scholarships/{scholarship_id}")
@@ -7174,6 +7176,8 @@ async def create_loan(loan: Loan):
     if isinstance(loan_dict.get('created_at'), datetime):
         loan_dict['created_at'] = loan_dict['created_at'].isoformat()
     await db.loans.insert_one(loan_dict)
+    # Remove MongoDB _id from response
+    loan_dict.pop('_id', None)
     return loan_dict
 
 @api_router.put("/loans/{loan_id}")
