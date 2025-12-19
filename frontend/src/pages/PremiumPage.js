@@ -36,7 +36,7 @@ const PremiumPage = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Please login to upgrade');
-      navigate('/login');
+      navigate('/signup');
       return;
     }
 
