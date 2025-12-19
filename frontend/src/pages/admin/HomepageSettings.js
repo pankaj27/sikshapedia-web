@@ -66,6 +66,7 @@ const HomepageSettings = () => {
     
     // Top Universities
     top_universities_title: 'Top Universities & Colleges',
+    featured_colleges_ids: [],
     
     // Top Schools
     top_schools_title: 'Top Schools in India',
