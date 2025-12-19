@@ -6979,6 +6979,7 @@ async def get_stats():
 
 @api_router.get("/schools", response_model=List[School])
 async def get_schools(
+    search: Optional[str] = None,
     city: Optional[str] = None,
     state: Optional[str] = None,
     board: Optional[str] = None,
@@ -6990,6 +6991,11 @@ async def get_schools(
 ):
     """Get all schools with optional filters"""
     query = {}
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
     if city:
         query["city"] = city
     if state:
