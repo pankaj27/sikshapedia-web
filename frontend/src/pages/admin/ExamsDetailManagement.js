@@ -159,31 +159,32 @@ const ExamsDetailManagement = () => {
             )}
           </tbody>
         </table>
-      </div>
+        </div>
 
-      {/* Summary Stats */}
-      <div className="mt-6 grid grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-orange-600">{exams.length}</div>
-          <div className="text-sm text-gray-600">Total Exams</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-blue-600">
-            {exams.filter(e => e.exam_type === 'National').length}
+        {/* Summary Stats */}
+        <div className="mt-6 grid grid-cols-4 gap-4">
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-orange-600">{exams.length}</div>
+            <div className="text-sm text-gray-600">Total Exams</div>
           </div>
-          <div className="text-sm text-gray-600">National Level</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-green-600">
-            {exams.filter(e => e.exam_type === 'State').length}
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-blue-600">
+              {exams.filter(e => e.exam_type === 'National').length}
+            </div>
+            <div className="text-sm text-gray-600">National Level</div>
           </div>
-          <div className="text-sm text-gray-600">State Level</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-purple-600">
-            {exams.filter(e => e.is_popular || e.popular).length}
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-green-600">
+              {exams.filter(e => e.exam_type === 'State').length}
+            </div>
+            <div className="text-sm text-gray-600">State Level</div>
           </div>
-          <div className="text-sm text-gray-600">Popular Exams</div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-purple-600">
+              {exams.filter(e => e.is_popular || e.popular).length}
+            </div>
+            <div className="text-sm text-gray-600">Popular Exams</div>
+          </div>
         </div>
       </div>
     </AdminLayout>
