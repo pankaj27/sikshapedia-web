@@ -133,11 +133,6 @@ const AutoApplyPopup = () => {
     }
   };
 
-  const handleClose = () => {
-    setShowModal(false);
-    setCollegeData(null);
-  };
-
   return (
     <ApplyNowModal
       isOpen={showModal}
