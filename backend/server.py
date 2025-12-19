@@ -6618,9 +6618,19 @@ class StudyAbroadListingPageSettings(BaseModel):
     ]
     
     # SEO
+    auto_generate_seo: bool = True
     meta_title: str = "Study Abroad 2025 - Top Universities Worldwide | Admissionbuddy"
     meta_description: str = "Explore 500+ top universities in USA, UK, Canada, Australia. Get expert guidance for your study abroad journey. Apply now!"
     meta_keywords: List[str] = ["study abroad", "international universities", "USA universities", "UK universities", "study in Canada"]
+    canonical_url: Optional[str] = None
+    og_image: Optional[str] = None
+    og_title: Optional[str] = None
+    og_description: Optional[str] = None
+    twitter_card: str = "summary_large_image"
+    twitter_title: Optional[str] = None
+    twitter_description: Optional[str] = None
+    schema_type: str = "WebPage"
+    robots: str = "index, follow"
     
     # FAQs
     faqs: List[Dict[str, Any]] = []
