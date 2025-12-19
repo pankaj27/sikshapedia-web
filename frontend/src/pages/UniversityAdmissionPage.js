@@ -328,7 +328,7 @@ const UniversityAdmissionPage = () => {
                   <div className="p-3">
                     <div className="mb-1">
                       <span className="text-xs font-semibold text-purple-600">
-                        {admission.courses.slice(0, 2).join(' | ')}
+                        {(admission.courses || admission.streams || []).slice(0, 2).join(' | ')}
                       </span>
                     </div>
                     <Link to={`/universities/${admission.id}`}>
