@@ -260,7 +260,7 @@ const ScholarshipsPage = () => {
                     </div>
                   </div>
                   <div className="text-right ml-3">
-                    <div className="text-xl font-bold text-purple-600">₹{(scholarship.amount / 1000).toFixed(0)}K</div>
+                    <div className="text-lg font-bold text-purple-600">{scholarship.amount || 'Varies'}</div>
                     <div className="text-xs text-gray-600">Value</div>
                   </div>
                 </div>
