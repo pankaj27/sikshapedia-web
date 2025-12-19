@@ -675,7 +675,9 @@ class College(BaseModel):
     institution_type: Optional[str] = None  # College, School, University
     
     # Display Priority for listing pages (lower number = appears first, 0 = default/no priority)
-    display_priority: int = 0
+    display_priority: int = 0  # National/India level priority
+    state_priority: Dict[str, int] = {}  # State-wise priority e.g., {"Maharashtra": 1, "Karnataka": 2}
+    city_priority: Dict[str, int] = {}  # City-wise priority e.g., {"Mumbai": 1, "Pune": 3}
     
     # Badges & Status
     status: str = "draft"  # draft, pending, published, rejected
