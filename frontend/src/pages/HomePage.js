@@ -436,15 +436,21 @@ const CollegeDuniaHome = () => {
       )}
 
       {/* Widget Modals */}
-      {activeWidget && (
+      {activeWidget && activeWidget !== 'apply' && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setActiveWidget(null)}>
           <div className="max-w-md w-full" onClick={(e) => e.stopPropagation()}>
-            {activeWidget === 'apply' && <ApplyNowWidget onClose={() => setActiveWidget(null)} />}
             {activeWidget === 'question' && <AskQuestionWidget onClose={() => setActiveWidget(null)} />}
             {activeWidget === 'counselling' && <CounsellingWidget onClose={() => setActiveWidget(null)} />}
           </div>
         </div>
       )}
+
+      {/* Main Apply Now Modal */}
+      <ApplyNowModal
+        isOpen={activeWidget === 'apply'}
+        onClose={() => setActiveWidget(null)}
+        source="homepage"
+      />
 
       {/* Study Goals Carousel - Compact */}
       {showStudyGoals && (
