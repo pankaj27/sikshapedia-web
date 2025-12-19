@@ -863,25 +863,27 @@ const CollegeDuniaHome = () => {
       </section>
 
       {/* Popular Cities */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">{pageSettings?.cities_title || 'Explore Colleges in Popular Places'}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {cities.map((city, idx) => (
-              <Link
-                key={idx}
-                to={`/colleges?city=${city.name}`}
-                className="bg-white rounded-lg p-4 text-center hover:shadow-lg transition group"
-              >
-                <div className="w-16 h-16 mx-auto mb-2 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <img src={city.image} alt={city.name} className="w-14 h-14 object-contain" />
-                </div>
-                <h3 className="font-semibold text-sm group-hover:text-orange-600 transition">{city.name}</h3>
-              </Link>
-            ))}
+      {showCities && (
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-8">{pageSettings?.cities_title || 'Explore Colleges in Popular Places'}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+              {cities.map((city, idx) => (
+                <Link
+                  key={idx}
+                  to={`/colleges?city=${city.name}`}
+                  className="bg-white rounded-lg p-4 text-center hover:shadow-lg transition group"
+                >
+                  <div className="w-16 h-16 mx-auto mb-2 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <img src={city.image} alt={city.name} className="w-14 h-14 object-contain" />
+                  </div>
+                  <h3 className="font-semibold text-sm group-hover:text-orange-600 transition">{city.name}</h3>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Newsletter Subscription - Perfect Button Height */}
       <section className="py-6 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
