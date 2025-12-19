@@ -61,6 +61,15 @@ const AdminLayout = ({ children }) => {
       highlight: true
     },
     {
+      id: 'leads',
+      title: 'Lead Management',
+      icon: FiUsers,
+      submenu: [
+        { title: 'All Leads', path: '/admin/leads', icon: FiUsers, highlight: true, badge: 'NEW' },
+        { title: 'Lead Settings', path: '/admin/lead-settings', icon: FiSettings },
+      ]
+    },
+    {
       id: 'content',
       title: 'Content Management',
       icon: FiDatabase,
