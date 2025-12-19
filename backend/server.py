@@ -7058,6 +7058,32 @@ async def get_schools(
     schools = await db.schools.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
     return schools
 
+@api_router.get("/schools/featured", response_model=List[School])
+async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
+    """Get featured schools for homepage - prioritizes manually selected schools from homepage settings"""
+    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
+    featured_ids = settings.get("featured_schools_ids", []) if settings else []
+    
+    featured_schools = []
+    
+    # Get schools from homepage settings (in specified order)
+    if featured_ids:
+        for school_id in featured_ids[:limit]:
+            school = await db.schools.find_one({"id": school_id}, {"_id": 0})
+            if school:
+                featured_schools.append(school)
+    
+    # If not enough, fill with top rated schools
+    if len(featured_schools) < limit:
+        existing_ids = [s.get('id') for s in featured_schools]
+        additional = await db.schools.find(
+            {"id": {"$nin": existing_ids}}, 
+            {"_id": 0}
+        ).sort("rating", -1).limit(limit - len(featured_schools)).to_list(limit - len(featured_schools))
+        featured_schools.extend(additional)
+    
+    return featured_schools
+
 @api_router.get("/schools/{school_id}", response_model=School)
 async def get_school(school_id: str):
     """Get a specific school by ID"""
