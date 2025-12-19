@@ -323,7 +323,6 @@ const ApplyNowModal = ({
             </form>
           )}
         </div>
-        </div>
       </div>
     </div>
   );
