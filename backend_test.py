@@ -3769,30 +3769,175 @@ class APITester:
             self.log_test(f"POST /colleges/{college_id}/generate-credentials (with admin auth)", False, 
                          "Admin token not available")
 
+    def test_user_auth_send_otp(self):
+        """Test User Authentication - Send OTP API"""
+        print("📧 Testing User Authentication - Send OTP...")
+        
+        # Test 1: POST /api/auth/user/send-otp - Send OTP to test email
+        test_email = "test@example.com"
+        success, response, status = self.make_request("POST", "/auth/user/send-otp", {"email": test_email})
+        if success and response.get("message") == "OTP sent successfully":
+            self.log_test("POST /auth/user/send-otp", True, 
+                         f"OTP sent to {response.get('email')}")
+        else:
+            self.log_test("POST /auth/user/send-otp", False, f"Status: {status}", response)
+
+    def test_user_auth_verify_otp(self):
+        """Test User Authentication - Verify OTP API"""
+        print("🔐 Testing User Authentication - Verify OTP...")
+        
+        # Test with invalid OTP (should fail)
+        test_email = "test@example.com"
+        success, response, status = self.make_request("POST", "/auth/user/verify-otp", 
+                                                    {"email": test_email, "otp": "123456"})
+        if not success and status == 400:
+            self.log_test("POST /auth/user/verify-otp (invalid OTP)", True, 
+                         "Correctly rejected invalid OTP")
+        else:
+            self.log_test("POST /auth/user/verify-otp (invalid OTP)", False, 
+                         f"Should have rejected invalid OTP, got status {status}", response)
+
+    def test_institute_auth_invalid_credentials(self):
+        """Test Institute Authentication - Invalid Credentials"""
+        print("❌ Testing Institute Authentication - Invalid Credentials...")
+        
+        # Test with INVALID credentials first (expect 401)
+        invalid_credentials = {"login_id": "INVALID", "password": "wrong"}
+        success, response, status = self.make_request("POST", "/institute/login", invalid_credentials)
+        if not success and status == 401:
+            self.log_test("POST /institute/login (invalid credentials)", True, 
+                         "Correctly rejected invalid credentials with 401")
+        else:
+            self.log_test("POST /institute/login (invalid credentials)", False, 
+                         f"Should have returned 401, got status {status}", response)
+
+    def test_institute_auth_valid_credentials(self):
+        """Test Institute Authentication - Valid Credentials"""
+        print("✅ Testing Institute Authentication - Valid Credentials...")
+        
+        # Test with valid credentials: login_id="UPDA0001", password="hrZiJlz0NyXY"
+        valid_credentials = {"login_id": "UPDA0001", "password": "hrZiJlz0NyXY"}
+        success, response, status = self.make_request("POST", "/institute/login", valid_credentials)
+        if success and response.get("message") == "Login successful":
+            self.institute_token = response.get("session_token")
+            institution = response.get("institution", {})
+            self.log_test("POST /institute/login (valid credentials)", True, 
+                         f"Login successful for {institution.get('name', 'Unknown')}")
+        else:
+            self.log_test("POST /institute/login (valid credentials)", False, f"Status: {status}", response)
+            self.institute_token = None
+
+    def test_institute_forgot_password(self):
+        """Test Institute Forgot Password API"""
+        print("🔑 Testing Institute Forgot Password...")
+        
+        # Test with email
+        test_email = "test@example.com"
+        success, response, status = self.make_request("POST", "/institute/forgot-password", 
+                                                    {"email": test_email})
+        if success and "reset link has been sent" in response.get("message", ""):
+            self.log_test("POST /institute/forgot-password", True, 
+                         "Password reset request processed")
+        else:
+            self.log_test("POST /institute/forgot-password", False, f"Status: {status}", response)
+
+    def test_institute_dashboard_data(self):
+        """Test Institute Dashboard API (if login successful)"""
+        print("📊 Testing Institute Dashboard...")
+        
+        if not hasattr(self, 'institute_token') or not self.institute_token:
+            self.log_test("Institute Dashboard (skipped)", False, 
+                         "No institute token available - login may have failed")
+            return
+        
+        # GET /api/institute/dashboard - Should return leads and applications stats
+        success, response, status = self.make_request("GET", "/institute/dashboard", 
+                                                    token=self.institute_token)
+        if success and isinstance(response, dict):
+            institution = response.get("institution", {})
+            leads = response.get("leads", {})
+            applications = response.get("applications", {})
+            
+            self.log_test("GET /institute/dashboard", True, 
+                         f"Dashboard data retrieved - Institution: {institution.get('name', 'N/A')}, "
+                         f"Total leads: {leads.get('total', 0)}, Total applications: {applications.get('total', 0)}")
+        else:
+            self.log_test("GET /institute/dashboard", False, f"Status: {status}", response)
+
+    def test_institute_leads_api(self):
+        """Test Institute Leads API"""
+        print("📋 Testing Institute Leads...")
+        
+        if not hasattr(self, 'institute_token') or not self.institute_token:
+            self.log_test("Institute Leads (skipped)", False, 
+                         "No institute token available")
+            return
+        
+        # GET /api/institute/leads - Should return leads list
+        success, response, status = self.make_request("GET", "/institute/leads", 
+                                                    token=self.institute_token)
+        if success and isinstance(response, list):
+            leads_count = len(response)
+            self.log_test("GET /institute/leads", True, f"Retrieved {leads_count} leads")
+        else:
+            self.log_test("GET /institute/leads", False, f"Status: {status}", response)
+
+    def test_institute_applications_api(self):
+        """Test Institute Applications API"""
+        print("📝 Testing Institute Applications...")
+        
+        if not hasattr(self, 'institute_token') or not self.institute_token:
+            self.log_test("Institute Applications (skipped)", False, 
+                         "No institute token available")
+            return
+        
+        # GET /api/institute/applications - Should return applications list
+        success, response, status = self.make_request("GET", "/institute/applications", 
+                                                    token=self.institute_token)
+        if success and isinstance(response, list):
+            applications_count = len(response)
+            self.log_test("GET /institute/applications", True, f"Retrieved {applications_count} applications")
+        else:
+            self.log_test("GET /institute/applications", False, f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites focusing on User and Institute Dashboard APIs"""
-        print("🚀 TESTING USER & INSTITUTE DASHBOARD APIs")
+        print("🚀 TESTING USER & INSTITUTE AUTHENTICATION AND DASHBOARD SYSTEM")
         print(f"🌐 Base URL: {BASE_URL}")
-        print("=" * 60)
+        print("=" * 80)
         
-        # Authentication first
+        # Core authentication first
         self.test_authentication()
         
-        # NEW: User and Institute Dashboard API Tests (Primary focus)
+        # **1. User Authentication APIs:**
+        self.test_user_auth_send_otp()
+        self.test_user_auth_verify_otp()
+        
+        # **2. Institute Authentication APIs:**
+        self.test_institute_auth_invalid_credentials()
+        self.test_institute_auth_valid_credentials()
+        self.test_institute_forgot_password()
+        
+        # **3. Institute Dashboard APIs (if login successful):**
+        self.test_institute_dashboard_data()
+        self.test_institute_leads_api()
+        self.test_institute_applications_api()
+        
+        # Legacy User and Institute Dashboard API Tests
         self.test_user_authentication_otp_flow()
         self.test_user_dashboard_apis_unauthorized()
         self.test_institute_authentication()
         self.test_admin_credential_generation()
         
-        # Legacy tests for compatibility
+        # Additional compatibility tests
         self.test_server_health()
         self.test_blog_routes()
         self.test_news_routes()
         
         # Summary
-        print("=" * 60)
+        print("=" * 80)
         print("📊 TEST SUMMARY")
-        print("=" * 60)
+        print("=" * 80)
         
         total_tests = len(self.test_results)
         passed_tests = sum(1 for result in self.test_results if result["success"])
