@@ -8303,6 +8303,9 @@ try:
     from routes.financial_aid import financial_aid_router, set_database as set_financial_db
     from routes.homepage_settings import homepage_settings_router, set_database as set_homepage_db
     from routes.sponsored_ads import sponsored_ads_router, set_database as set_sponsored_db
+    from routes.user_auth import router as user_auth_router
+    from routes.user_dashboard import router as user_dashboard_router
+    from routes.institute_auth import router as institute_router
     
     # Set database for modular routers
     set_leads_db(db)
@@ -8319,7 +8322,10 @@ try:
     app.include_router(financial_aid_router)  # Already has /api prefix
     app.include_router(homepage_settings_router)  # Already has /api prefix
     app.include_router(sponsored_ads_router)  # Already has /api prefix
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads")
+    app.include_router(user_auth_router, prefix="/api")  # User auth routes
+    app.include_router(user_dashboard_router, prefix="/api")  # User dashboard routes
+    app.include_router(institute_router, prefix="/api")  # Institute auth & dashboard routes
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
