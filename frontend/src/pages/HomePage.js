@@ -425,6 +425,7 @@ const CollegeDuniaHome = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* Widget Modals */}
       {activeWidget && (
