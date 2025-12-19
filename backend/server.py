@@ -8115,6 +8115,116 @@ async def reset_daily_budgets():
     )
     return {"success": True, "updated": result.modified_count}
 
+# ============================================
+# Static Pages CMS
+# ============================================
+
+class PageWidget(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    type: str  # hero, rich_text, faq, cta_cards, stats, gallery, contact_form
+    title: Optional[str] = None
+    enabled: bool = True
+    order: int = 0
+    settings: Dict[str, Any] = {}
+    content: Any = None  # Widget-specific content
+
+class StaticPage(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    slug: str  # about, contact, privacy, terms, admission-schools, admission-colleges, admission-universities
+    page_title: str
+    
+    # Hero Section
+    hero_enabled: bool = True
+    hero_title: str = ""
+    hero_subtitle: str = ""
+    hero_background_type: str = "gradient"  # gradient, image, color
+    hero_background_value: str = "from-purple-600 to-indigo-700"
+    hero_cta_text: Optional[str] = None
+    hero_cta_link: Optional[str] = None
+    hero_image: Optional[str] = None
+    
+    # Widgets/Content Blocks
+    widgets: List[Dict] = []
+    
+    # SEO
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    meta_keywords: List[str] = []
+    og_image: Optional[str] = None
+    canonical_url: Optional[str] = None
+    auto_generate_seo: bool = True
+    schema_type: str = "WebPage"
+    
+    # Settings
+    show_breadcrumb: bool = True
+    show_sidebar: bool = False
+    sidebar_widgets: List[Dict] = []
+    custom_css: Optional[str] = None
+    
+    # Status
+    is_published: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_by: Optional[str] = None
+
+# Static Pages API
+@api_router.get("/static-pages")
+async def get_static_pages():
+    pages = await db.static_pages.find({}, {"_id": 0}).to_list(100)
+    return pages
+
+@api_router.get("/static-pages/{slug}")
+async def get_static_page(slug: str):
+    page = await db.static_pages.find_one({"slug": slug}, {"_id": 0})
+    if not page:
+        # Return default page structure if not found
+        return {
+            "slug": slug,
+            "page_title": slug.replace("-", " ").title(),
+            "hero_enabled": True,
+            "hero_title": slug.replace("-", " ").title(),
+            "hero_subtitle": "",
+            "widgets": [],
+            "is_published": False
+        }
+    return page
+
+@api_router.post("/static-pages")
+async def create_static_page(page: StaticPage):
+    page_dict = page.model_dump()
+    if isinstance(page_dict.get('created_at'), datetime):
+        page_dict['created_at'] = page_dict['created_at'].isoformat()
+    if isinstance(page_dict.get('updated_at'), datetime):
+        page_dict['updated_at'] = page_dict['updated_at'].isoformat()
+    
+    # Check if page with slug exists
+    existing = await db.static_pages.find_one({"slug": page.slug})
+    if existing:
+        # Update existing
+        await db.static_pages.update_one({"slug": page.slug}, {"$set": page_dict})
+    else:
+        await db.static_pages.insert_one(page_dict)
+    
+    page_dict.pop('_id', None)
+    return page_dict
+
+@api_router.put("/static-pages/{slug}")
+async def update_static_page(slug: str, page: StaticPage):
+    page_dict = page.model_dump()
+    page_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    if isinstance(page_dict.get('created_at'), datetime):
+        page_dict['created_at'] = page_dict['created_at'].isoformat()
+    
+    await db.static_pages.update_one({"slug": slug}, {"$set": page_dict}, upsert=True)
+    page_dict.pop('_id', None)
+    return page_dict
+
+@api_router.delete("/static-pages/{slug}")
+async def delete_static_page(slug: str):
+    await db.static_pages.delete_one({"slug": slug})
+    return {"success": True}
+
 app.include_router(api_router)
 
 # Include modular routes
