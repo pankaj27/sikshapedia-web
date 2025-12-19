@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiSave, FiPlus, FiTrash2 } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const StudyMaterialsListingSettings = () => {
   const [loading, setLoading] = useState(true);
