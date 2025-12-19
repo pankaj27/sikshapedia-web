@@ -159,6 +159,20 @@ const CollegeDuniaHome = () => {
   const topUniversitiesTitle = pageSettings?.top_universities_title || 'Top Universities & Colleges';
   const topSchoolsTitle = pageSettings?.top_schools_title || 'Top Schools in India';
   const collegeRankingsTitle = pageSettings?.college_rankings_title || 'College Rankings';
+  const collegeRankingsYears = (pageSettings?.college_rankings_years?.length > 0) ? pageSettings.college_rankings_years : ['2024', '2023', '2022'];
+  const defaultRankingsData = [
+    { rank: 1, name: 'IIT Bombay', location: 'Mumbai', rating: 4.9, fees: '2.5L', type: 'Engineering' },
+    { rank: 2, name: 'IIT Delhi', location: 'New Delhi', rating: 4.8, fees: '2.5L', type: 'Engineering' },
+    { rank: 3, name: 'IIT Madras', location: 'Chennai', rating: 4.8, fees: '2.5L', type: 'Engineering' },
+    { rank: 4, name: 'IIT Kanpur', location: 'Kanpur', rating: 4.7, fees: '2.5L', type: 'Engineering' },
+    { rank: 5, name: 'IIT Kharagpur', location: 'Kharagpur', rating: 4.7, fees: '2.5L', type: 'Engineering' },
+    { rank: 6, name: 'IIT Roorkee', location: 'Roorkee', rating: 4.6, fees: '2.5L', type: 'Engineering' },
+    { rank: 7, name: 'IIT Guwahati', location: 'Guwahati', rating: 4.6, fees: '2.5L', type: 'Engineering' },
+    { rank: 8, name: 'BITS Pilani', location: 'Pilani', rating: 4.5, fees: '4.5L', type: 'Engineering' },
+    { rank: 9, name: 'NIT Trichy', location: 'Trichy', rating: 4.5, fees: '1.5L', type: 'Engineering' },
+    { rank: 10, name: 'VIT Vellore', location: 'Vellore', rating: 4.4, fees: '3.5L', type: 'Engineering' }
+  ];
+  const collegeRankingsData = (pageSettings?.college_rankings_data?.length > 0) ? pageSettings.college_rankings_data : defaultRankingsData;
   const newsletterTitle = pageSettings?.newsletter_title || 'Subscribe to Our Newsletter';
   const newsletterSubtitle = pageSettings?.newsletter_subtitle || 'Get the latest updates on college admissions, exams, and education news';
   
