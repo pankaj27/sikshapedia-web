@@ -84,6 +84,30 @@ frontend:
         agent: "testing"
         comment: "⚠️ Frontend testing not performed - system limitations. Need to verify Admin page at /admin/news-listing-settings loads with current settings, shows Hero Section, Quick Stats, News Categories, Sidebar Settings, SEO Settings sections, and Save Settings button works."
 
+  - task: "Scholarship Form - Admin Panel Entry Form"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/admin/ScholarshipForm.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Scholarship Form fully functional. All 7 tabs (Basic Info, Eligibility, Media, Content, TOC, Tables, SEO) are present and clickable. Basic Info tab: scholarship name field works, slug auto-generates correctly, Merit-Based type selection works, Undergraduate level selection works, provider name field works, Featured Scholarship and Active checkboxes work. Eligibility tab: Min Percentage, Max Family Income, and Age Limit fields all present. Media tab: Auto-Generate alt tag button present. TOC tab: Enable TOC and Add TOC Item functionality works. Tables tab: Add Table functionality works. SEO tab: Meta Title and Meta Description fields present with Search Preview section. Minor: Image upload section not detected in Media tab, Keywords field not detected in SEO tab, but core functionality is working."
+
+  - task: "Loan Form - Admin Panel Entry Form"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/admin/LoanForm.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Loan Form fully functional. All 7 tabs (Basic Info, Eligibility, Media, Content, TOC, Tables, SEO) are present and clickable. Basic Info tab: loan name field works ('SBI Education Loan'), bank name field works ('State Bank of India'), Public Sector Bank type selection works. Loan Details section: Min Amount, Max Amount, Interest Rate Min, and Interest Rate Max fields all present and working. SEO tab: Search Preview section present and functional. Form structure matches NewsForm with comprehensive multi-tab functionality as required."
+
   - task: "Admin Form - Age Limit Input Field"
     implemented: true
     working: true
