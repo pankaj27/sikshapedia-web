@@ -6487,47 +6487,7 @@ async def get_countries():
 # Scholarship Routes
 # ============================================
 
-@api_router.get("/scholarships", response_model=List[ScholarshipProgram])
-async def get_scholarships(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000),
-    type: Optional[str] = None,
-    level: Optional[str] = None,
-    search: Optional[str] = None
-):
-    query = {}
-    
-    if type:
-        query["type"] = type
-    
-    if level:
-        query["level"] = level
-    
-    if search:
-        query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"provider": {"$regex": search, "$options": "i"}},
-            {"description": {"$regex": search, "$options": "i"}}
-        ]
-    
-    scholarships = await db.scholarships.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
-    
-    for scholarship in scholarships:
-        if isinstance(scholarship.get('created_at'), str):
-            scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
-    
-    return scholarships
-
-@api_router.get("/scholarships/{scholarship_id}", response_model=ScholarshipProgram)
-async def get_scholarship(scholarship_id: str):
-    scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
-    if not scholarship:
-        raise HTTPException(status_code=404, detail="Scholarship not found")
-    
-    if isinstance(scholarship.get('created_at'), str):
-        scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
-    
-    return ScholarshipProgram(**scholarship)
+# Removed duplicate scholarship routes - using routes defined later in file
 
 # ============================================
 # Loan Routes
