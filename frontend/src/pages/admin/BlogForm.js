@@ -1065,7 +1065,7 @@ const BlogForm = () => {
           </form>
         </main>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
