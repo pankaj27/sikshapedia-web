@@ -39,17 +39,26 @@ const ApplyNowModal = ({
   // Memoize collegeCourses to prevent infinite loops
   const memoizedCollegeCourses = useMemo(() => collegeCourses, [JSON.stringify(collegeCourses)]);
 
-  // Fetch lead settings on mount
+  // Fetch lead settings and all courses on mount
   useEffect(() => {
-    const fetchSettings = async () => {
+    const fetchInitialData = async () => {
       try {
-        const response = await api.get('/lead-settings');
-        setSettings(response.data);
+        const [settingsRes, coursesRes] = await Promise.all([
+          api.get('/lead-settings'),
+          api.get('/courses')  // Fetch all courses for general form
+        ]);
+        setSettings(settingsRes.data);
+        // Extract course names from courses data
+        const courseNames = coursesRes.data
+          .map(c => c.name)
+          .filter(Boolean)
+          .sort();
+        setAllCourses([...new Set(courseNames)]);  // Remove duplicates
       } catch (err) {
-        console.error('Failed to fetch lead settings:', err);
+        console.error('Failed to fetch initial data:', err);
       }
     };
-    fetchSettings();
+    fetchInitialData();
   }, []);
 
   // Fetch courses if collegeId provided but no courses passed
