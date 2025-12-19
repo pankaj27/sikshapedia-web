@@ -161,16 +161,16 @@ const ApplyNowModal = ({
         {/* Form */}
         <div className="p-4">
           {success ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiCheck className="w-8 h-8 text-green-600" />
+            <div className="text-center py-6">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <FiCheck className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Thank You!</h3>
-              <p className="text-gray-600 mb-4">We've received your inquiry. Our counsellor will contact you shortly.</p>
+              <h3 className="text-base font-semibold text-gray-800 mb-1">Thank You!</h3>
+              <p className="text-gray-600 text-sm mb-3">Our counsellor will contact you shortly.</p>
               {settings?.whatsapp_business_number && (
                 <button
                   onClick={openWhatsApp}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 transition-colors"
                 >
                   <FiMessageCircle className="w-4 h-4" />
                   Chat on WhatsApp
@@ -178,16 +178,16 @@ const ApplyNowModal = ({
               )}
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               {error && (
-                <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm">
+                <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm">
                   {error}
                 </div>
               )}
 
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Full Name *</label>
                 <div className="relative">
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
@@ -196,7 +196,7 @@ const ApplyNowModal = ({
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter your full name"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                    className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
                     required
                   />
                 </div>
