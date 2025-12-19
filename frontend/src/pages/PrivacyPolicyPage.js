@@ -86,8 +86,6 @@ const PrivacyPolicyPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-purple-700 to-indigo-800 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
@@ -216,7 +214,6 @@ const PrivacyPolicyPage = () => {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 };
