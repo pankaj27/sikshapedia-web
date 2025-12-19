@@ -392,6 +392,73 @@ const HomepageSettings = () => {
     setSettings(prev => ({ ...prev, featured_news_ids: newList.map(n => n.id) }));
   };
 
+  // ========== STREAM COLLEGES ==========
+  const fetchStreamCollegesData = async (streamData) => {
+    const result = { Engineering: [], Medical: [], Management: [], Law: [] };
+    for (const stream of Object.keys(streamData)) {
+      if (streamData[stream]?.length > 0) {
+        const colleges = [];
+        for (const id of streamData[stream]) {
+          try {
+            const res = await api.get(`/colleges/${id}`);
+            if (res.data) colleges.push(res.data);
+          } catch (e) {}
+        }
+        result[stream] = colleges;
+      }
+    }
+    setStreamColleges(result);
+  };
+
+  const searchStreamColleges = async (query) => {
+    if (!query || query.length < 2) { setStreamSearchResults([]); setShowStreamDropdown(false); return; }
+    try {
+      const response = await api.get(`/colleges?search=${encodeURIComponent(query)}&limit=10`);
+      setStreamSearchResults(response.data || []);
+      setShowStreamDropdown(true);
+    } catch (error) { console.error('Error:', error); }
+  };
+
+  const addStreamCollege = (college) => {
+    if (streamColleges[activeStream].find(c => c.id === college.id)) { alert('Already added'); return; }
+    if (streamColleges[activeStream].length >= 4) { alert('Maximum 4 colleges per stream'); return; }
+    const newList = [...streamColleges[activeStream], college];
+    const newStreamColleges = { ...streamColleges, [activeStream]: newList };
+    setStreamColleges(newStreamColleges);
+    // Update settings with IDs only
+    const streamIds = {};
+    Object.keys(newStreamColleges).forEach(s => {
+      streamIds[s] = newStreamColleges[s].map(c => c.id);
+    });
+    setSettings(prev => ({ ...prev, stream_colleges: streamIds }));
+    setStreamSearch(''); setStreamSearchResults([]); setShowStreamDropdown(false);
+  };
+
+  const removeStreamCollege = (stream, collegeId) => {
+    const newList = streamColleges[stream].filter(c => c.id !== collegeId);
+    const newStreamColleges = { ...streamColleges, [stream]: newList };
+    setStreamColleges(newStreamColleges);
+    const streamIds = {};
+    Object.keys(newStreamColleges).forEach(s => {
+      streamIds[s] = newStreamColleges[s].map(c => c.id);
+    });
+    setSettings(prev => ({ ...prev, stream_colleges: streamIds }));
+  };
+
+  const moveStreamCollege = (stream, index, direction) => {
+    const newIdx = direction === 'up' ? index - 1 : index + 1;
+    if (newIdx < 0 || newIdx >= streamColleges[stream].length) return;
+    const newList = [...streamColleges[stream]];
+    [newList[index], newList[newIdx]] = [newList[newIdx], newList[index]];
+    const newStreamColleges = { ...streamColleges, [stream]: newList };
+    setStreamColleges(newStreamColleges);
+    const streamIds = {};
+    Object.keys(newStreamColleges).forEach(s => {
+      streamIds[s] = newStreamColleges[s].map(c => c.id);
+    });
+    setSettings(prev => ({ ...prev, stream_colleges: streamIds }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
