@@ -4191,14 +4191,14 @@ async def generate_college_credentials(college_id: str, background_tasks: Backgr
     
     try:
         from routes.institute_auth import create_institute_credentials
-        contact = college.get('contact', {})
-        contact_email = contact.get('email', '')
-        contact_phone = contact.get('phone', '')
+        contact = college.get('contact') or {}
+        contact_email = contact.get('email', '') if isinstance(contact, dict) else ''
+        contact_phone = contact.get('phone', '') if isinstance(contact, dict) else ''
         
         credentials = await create_institute_credentials(
             db, 
             college_id, 
-            college.get('name', ''), 
+            college.get('name', 'Unknown Institution'), 
             contact_email, 
             contact_phone,
             background_tasks
