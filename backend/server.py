@@ -3872,16 +3872,6 @@ async def get_colleges(
     
     return [College(**college) for college in colleges]
 
-# Minimal projection for listing pages - reduces payload by ~80%
-COLLEGE_MINIMAL_PROJECTION = {
-    "_id": 0, "id": 1, "name": 1, "slug": 1, "serial_number": 1,
-    "institution_type": 1, "type": 1, "location": 1, "logo_url": 1,
-    "rating": 1, "average_fees": 1, "courses": 1, "is_featured": 1,
-    "is_admission_open": 1, "is_admission_partner": 1, "is_no_cost_emi": 1,
-    "is_verified": 1, "display_priority": 1, "state_priority": 1,
-    "city_priority": 1, "accreditation": 1, "ranking": 1, "established_year": 1
-}
-
 @api_router.get("/colleges/featured")
 async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Optional[str] = Query(None)):
     """
