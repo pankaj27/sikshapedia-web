@@ -7180,6 +7180,7 @@ async def create_university(university: University):
 
 @api_router.get("/news", response_model=List[News])
 async def get_news(
+    search: Optional[str] = None,
     category: Optional[str] = None,
     featured: Optional[bool] = None,
     tag: Optional[str] = None,
@@ -7190,6 +7191,11 @@ async def get_news(
 ):
     """Get all news articles with optional filters"""
     query = {} if all_status else {"published": True}
+    if search:
+        query["$or"] = [
+            {"title": {"$regex": search, "$options": "i"}},
+            {"content": {"$regex": search, "$options": "i"}}
+        ]
     if category:
         query["category"] = category
     if featured is not None:
