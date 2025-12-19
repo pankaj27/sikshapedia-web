@@ -225,6 +225,7 @@ test_plan:
     - "Study Abroad Frontend Testing - Complete Functionality"
     - "Homepage Settings - Add School and Add College Functionality"
     - "Homepage Settings - Add School and Add College Functionality with Search"
+    - "Location-Specific Display Priority Feature for Colleges"
 
 agent_communication:
   - agent: "testing"
