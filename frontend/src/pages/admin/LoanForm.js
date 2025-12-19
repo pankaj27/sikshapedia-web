@@ -314,30 +314,26 @@ const LoanForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AdminLayout>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-20">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/admin/loans" className="text-gray-600 hover:text-gray-900">
-                <FiArrowLeft size={24} />
-              </Link>
-              <h1 className="text-xl font-bold text-gray-900">
-                {isEdit ? 'Edit Loan' : 'Create Education Loan'}
-              </h1>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => window.open(`/loans/${formData.slug}`, '_blank')} disabled={!formData.slug}>
-                <FiEye className="mr-2" /> Preview
-              </Button>
-              <Button onClick={handleSubmit} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
-                <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Loan'}
-              </Button>
-            </div>
-          </div>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link to="/admin/loans" className="text-gray-600 hover:text-gray-900">
+            <FiArrowLeft size={24} />
+          </Link>
+          <h1 className="text-xl font-bold text-gray-900">
+            {isEdit ? 'Edit Loan' : 'Create Education Loan'}
+          </h1>
         </div>
-      </header>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={() => window.open(`/loans/${formData.slug}`, '_blank')} disabled={!formData.slug}>
+            <FiEye className="mr-2" /> Preview
+          </Button>
+          <Button onClick={handleSubmit} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
+            <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Loan'}
+          </Button>
+        </div>
+      </div>
 
       <div className="flex">
         {/* Sidebar Tabs */}
