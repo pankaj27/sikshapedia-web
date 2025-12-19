@@ -30,8 +30,11 @@ const AutoApplyPopup = () => {
   // Check if we're on a college/school/university detail page
   const isCollegePage = location.pathname.match(/^\/(colleges|schools|universities)\/[^/]+$/);
   
-  // Skip popup on admin pages
+  // Skip popup on admin pages and auth pages
   const isAdminPage = location.pathname.startsWith('/admin');
+  const isAuthPage = ['/signup', '/login', '/register', '/auth/callback', '/dashboard', '/institute'].some(
+    path => location.pathname.startsWith(path)
+  );
   
   // Extract the slug from URL if on detail page (fallback for when context isn't available)
   const getSlugFromPath = () => {
