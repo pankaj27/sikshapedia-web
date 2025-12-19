@@ -1,34 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiTrendingUp } from 'react-icons/fi';
+import { FiTrendingUp, FiArrowRight } from 'react-icons/fi';
+import api from '../api/axios';
 
 const TopCollegesByStream = () => {
+  const [streamData, setStreamData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const streams = [
-    {
-      name: 'Engineering',
-      icon: '⚙️',
-      colleges: ['IIT Bombay', 'IIT Delhi', 'IIT Madras', 'NIT Trichy'],
-      color: 'from-blue-500 to-blue-600'
-    },
-    {
-      name: 'Medical',
-      icon: '🏥',
-      colleges: ['AIIMS Delhi', 'CMC Vellore', 'JIPMER Puducherry', 'KGMU Lucknow'],
-      color: 'from-red-500 to-red-600'
-    },
-    {
-      name: 'Management',
-      icon: '💼',
-      colleges: ['IIM Ahmedabad', 'IIM Bangalore', 'IIM Calcutta', 'XLRI Jamshedpur'],
-      color: 'from-green-500 to-green-600'
-    },
-    {
-      name: 'Law',
-      icon: '⚖️',
-      colleges: ['NLSIU Bangalore', 'NALSAR Hyderabad', 'NLU Delhi', 'NUJS Kolkata'],
-      color: 'from-purple-500 to-purple-600'
-    }
+    { name: 'Engineering', icon: '⚙️', color: 'from-blue-500 to-blue-600', query: 'Engineering' },
+    { name: 'Medical', icon: '🏥', color: 'from-red-500 to-red-600', query: 'Medical' },
+    { name: 'Management', icon: '💼', color: 'from-green-500 to-green-600', query: 'Management' },
+    { name: 'Law', icon: '⚖️', color: 'from-purple-500 to-purple-600', query: 'Law' }
   ];
+
+  useEffect(() => {
+    fetchCollegesByStream();
+  }, []);
+
+  const fetchCollegesByStream = async () => {
+    try {
+      // Fetch colleges for each stream
+      const results = await Promise.all(
+        streams.map(async (stream) => {
+          try {
+            const response = await api.get(`/colleges?stream=${stream.query}&limit=4&status=published`);
+            return {
+              ...stream,
+              colleges: response.data?.slice(0, 4).map(c => c.name) || []
+            };
+          } catch (error) {
+            return { ...stream, colleges: [] };
+          }
+        })
+      );
+      setStreamData(results);
+    } catch (error) {
+      console.error('Error fetching colleges by stream:', error);
+      // Fallback to default data
+      setStreamData(streams.map(s => ({ ...s, colleges: [] })));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Default colleges for fallback
+  const defaultColleges = {
+    'Engineering': ['IIT Bombay', 'IIT Delhi', 'IIT Madras', 'NIT Trichy'],
+    'Medical': ['AIIMS Delhi', 'CMC Vellore', 'JIPMER Puducherry', 'KGMU Lucknow'],
+    'Management': ['IIM Ahmedabad', 'IIM Bangalore', 'IIM Calcutta', 'XLRI Jamshedpur'],
+    'Law': ['NLSIU Bangalore', 'NALSAR Hyderabad', 'NLU Delhi', 'NUJS Kolkata']
+  };
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto mb-8"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="bg-gray-100 rounded-xl h-64"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-white">
@@ -43,33 +82,49 @@ const TopCollegesByStream = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {streams.map((stream, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-            >
-              <div className={`bg-gradient-to-r ${stream.color} p-6 text-white`}>
-                <div className="text-4xl mb-2">{stream.icon}</div>
-                <h3 className="text-2xl font-bold">{stream.name}</h3>
+          {streamData.map((stream, idx) => {
+            const colleges = stream.colleges.length > 0 ? stream.colleges : defaultColleges[stream.name] || [];
+            return (
+              <div
+                key={idx}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              >
+                <div className={`bg-gradient-to-r ${stream.color} p-6 text-white`}>
+                  <span className="text-4xl mb-3 block">{stream.icon}</span>
+                  <h3 className="text-xl font-bold">{stream.name}</h3>
+                  <p className="text-white/80 text-sm">Top Colleges</p>
+                </div>
+                <div className="p-6">
+                  <ul className="space-y-3">
+                    {colleges.map((college, cIdx) => (
+                      <li key={cIdx} className="flex items-center gap-3">
+                        <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
+                          {cIdx + 1}
+                        </span>
+                        <span className="text-gray-700 text-sm line-clamp-1">{college}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to={`/colleges?stream=${stream.query}`}
+                    className="mt-4 flex items-center gap-2 text-orange-600 hover:text-orange-700 font-semibold text-sm"
+                  >
+                    View All <FiArrowRight />
+                  </Link>
+                </div>
               </div>
-              <div className="p-6">
-                <ul className="space-y-3">
-                  {stream.colleges.map((college, cidx) => (
-                    <li key={cidx} className="flex items-center text-gray-700">
-                      <FiTrendingUp className="text-orange-600 mr-2" size={16} />
-                      <span className="text-sm">{college}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to={`/colleges?type=${stream.name}`}
-                  className="mt-4 block text-center bg-gray-100 hover:bg-orange-600 hover:text-white py-2 rounded-lg font-semibold transition-colors"
-                >
-                  View All →
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+
+        <div className="text-center mt-10">
+          <Link
+            to="/colleges"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
+          >
+            <FiTrendingUp />
+            Explore All Colleges
+          </Link>
         </div>
       </div>
     </section>
