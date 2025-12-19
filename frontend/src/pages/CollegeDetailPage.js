@@ -1988,6 +1988,7 @@ const CollegeDetailPage = ({ overrideId }) => {
         onClose={() => setShowApplyModal(false)}
         collegeId={college?.id}
         collegeName={college?.name}
+        collegeLogoUrl={college?.logo_url}
         collegeCourses={college?.courses?.map(c => typeof c === 'object' ? c.name : c) || []}
         source="college"
       />
