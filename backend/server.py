@@ -554,18 +554,32 @@ class StudyAbroadUniversity(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
+    slug: Optional[str] = None
     country: str
     city: str
     description: str
-    ranking: Dict
+    ranking: Dict = {}
     programs: List[str] = []
-    tuition_fees: Dict  # Currency, min, max
-    living_cost: Dict
+    tuition_fees: Dict = {}  # Currency, min, max
+    living_cost: Dict = {}
     application_deadline: Optional[str] = None
-    language_requirements: Dict  # IELTS, TOEFL scores
+    application_fee: Optional[str] = None
+    language_requirements: Dict = {}  # IELTS, TOEFL scores
     acceptance_rate: Optional[float] = None
     images: List[str] = []
+    logo: Optional[str] = None
     website: Optional[str] = None
+    
+    # SEO
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    meta_keywords: List[str] = []
+    auto_generate_seo: bool = True
+    
+    # Status
+    is_featured: bool = False
+    is_active: bool = True
+    
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # Scholarship Models
