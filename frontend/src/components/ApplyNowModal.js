@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FiX, FiUser, FiMail, FiPhone, FiMapPin, FiBook, FiSend, FiLoader, FiCheck, FiMessageCircle } from 'react-icons/fi';
 import api from '../api/axios';
+import { INDIAN_CITIES } from '../utils/urlHelpers';
+
+// Format city name for display (capitalize first letter)
+const formatCityName = (city) => {
+  return city.charAt(0).toUpperCase() + city.slice(1);
+};
+
+// Sorted cities for dropdown
+const SORTED_CITIES = [...INDIAN_CITIES].sort().map(formatCityName);
 
 const ApplyNowModal = ({ 
   isOpen, 
   onClose, 
   collegeId = null,
   collegeName = null,
+  collegeLogoUrl = null,  // NEW: College logo URL
   collegeCourses = [],
   formHeading = null,
   source = 'general'
