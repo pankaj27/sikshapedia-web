@@ -49,10 +49,11 @@ const ApplyNowModal = ({
         }
       };
       fetchCourses();
-    } else {
+    } else if (collegeCourses.length > 0) {
       setCourses(collegeCourses);
     }
-  }, [collegeId, collegeCourses]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collegeId]);
 
   // Reset form when modal opens
   useEffect(() => {
@@ -62,12 +63,12 @@ const ApplyNowModal = ({
         email: '',
         mobile: '',
         city: '',
-        course_interested: courses.length > 0 ? courses[0] : ''
+        course_interested: ''
       });
       setSuccess(false);
       setError('');
     }
-  }, [isOpen, courses]);
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
