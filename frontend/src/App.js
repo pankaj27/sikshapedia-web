@@ -117,6 +117,9 @@ import HomepageSettings from './pages/admin/HomepageSettings';
 import ListingPageForm from './pages/admin/ListingPageForm';
 import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
 import AdvertisementManagement from './pages/admin/AdvertisementManagement';
+import LeadsList from './pages/admin/LeadsList';
+import LeadSettings from './pages/admin/LeadSettings';
+import FloatingApplyButton from './components/FloatingApplyButton';
 import './App.css';
 
 function App() {
