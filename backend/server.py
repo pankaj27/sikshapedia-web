@@ -6521,6 +6521,29 @@ async def get_countries():
     countries = await db.study_abroad.distinct("country")
     return {"countries": sorted(countries)}
 
+@api_router.post("/study-abroad")
+async def create_study_abroad_university(university: StudyAbroadUniversity):
+    uni_dict = university.model_dump()
+    if isinstance(uni_dict.get('created_at'), datetime):
+        uni_dict['created_at'] = uni_dict['created_at'].isoformat()
+    await db.study_abroad.insert_one(uni_dict)
+    uni_dict.pop('_id', None)
+    return uni_dict
+
+@api_router.put("/study-abroad/{university_id}")
+async def update_study_abroad_university(university_id: str, university: StudyAbroadUniversity):
+    uni_dict = university.model_dump()
+    if isinstance(uni_dict.get('created_at'), datetime):
+        uni_dict['created_at'] = uni_dict['created_at'].isoformat()
+    await db.study_abroad.update_one({"id": university_id}, {"$set": uni_dict})
+    uni_dict.pop('_id', None)
+    return uni_dict
+
+@api_router.delete("/study-abroad/{university_id}")
+async def delete_study_abroad_university(university_id: str):
+    await db.study_abroad.delete_one({"id": university_id})
+    return {"success": True}
+
 # ============================================
 # Scholarship Routes
 # ============================================
