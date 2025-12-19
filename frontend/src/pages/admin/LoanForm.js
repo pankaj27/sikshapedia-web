@@ -130,7 +130,41 @@ const LoanForm = () => {
     setLoading(true);
     try {
       const response = await api.get(`/loans/${id}`);
-      setFormData(prev => ({ ...prev, ...response.data }));
+      const data = response.data;
+      
+      // Map old field names to new field names for backward compatibility
+      const mappedData = {
+        ...data,
+        // Map 'type' to 'bank_type' if it exists
+        bank_type: data.bank_type || data.type || 'Public Sector Bank',
+        // Map 'name' to bank_name if bank_name is empty
+        bank_name: data.bank_name || '',
+        // Map 'max_amount' string to structured fields
+        max_amount: data.max_amount || '',
+        // Map 'interest_rate' to interest_rate fields  
+        interest_rate_min: data.interest_rate_min || data.interest_rate || '',
+        // Map 'loan_tenure' to tenure fields
+        tenure_max: data.tenure_max || data.loan_tenure || '',
+        // Map 'description' to 'short_description' if empty
+        short_description: data.short_description || data.description || '',
+        // Map 'eligibility' string to eligibility_criteria array
+        eligibility_criteria: data.eligibility_criteria || 
+          (typeof data.eligibility === 'string' && data.eligibility ? [data.eligibility] : []),
+        // Map 'documents_required' array
+        documents_required: data.documents_required || [],
+        // Map 'website' to 'official_website'
+        official_website: data.official_website || data.website || '',
+        // Ensure arrays exist
+        toc_items: data.toc_items || [],
+        tables: data.tables || [],
+        meta_keywords: data.meta_keywords || [],
+        benefits: data.benefits || data.special_features || [],
+        faqs: data.faqs || [],
+        courses_covered: data.courses_covered || [],
+        countries_covered: data.countries_covered || [],
+      };
+      
+      setFormData(prev => ({ ...prev, ...mappedData }));
     } catch (error) {
       console.error('Error fetching loan:', error);
       alert('Failed to load loan');
