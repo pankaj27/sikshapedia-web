@@ -231,6 +231,9 @@ class Exam(BaseModel):
     exam_type: Optional[str] = None  # Entrance, Eligibility - Alias for type
     streams: List[str] = []  # Engineering, Medical, Management, etc.
     
+    # Display Priority for listing pages (lower number = appears first, 0 = default)
+    display_priority: int = 0
+    
     # Exam Details
     exam_mode: Optional[str] = None  # Online, Offline, Both
     exam_duration: Optional[str] = None
