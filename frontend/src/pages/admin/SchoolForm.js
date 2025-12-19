@@ -81,26 +81,20 @@ const SchoolForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link to="/admin/schools" className="text-gray-600 hover:text-gray-900">
-              <FiArrowLeft size={24} />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {isEdit ? 'Edit School' : 'Add New School'}
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Fill in the school details below
-              </p>
-            </div>
-          </div>
+    <AdminLayout>
+      <div className="mb-4 flex items-center gap-4">
+        <Link to="/admin/schools" className="text-gray-600 hover:text-gray-900">
+          <FiArrowLeft size={24} />
+        </Link>
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">
+            {isEdit ? 'Edit School' : 'Add New School'}
+          </h1>
+          <p className="text-sm text-gray-600">Fill in the school details below</p>
         </div>
-      </header>
+      </div>
 
-      <div className="p-6">
+      <div className="bg-gray-50 -mx-6 -mb-6 p-6">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 space-y-6">
             {/* Basic Information */}
