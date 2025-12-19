@@ -18,10 +18,32 @@ const Header = () => {
   const allCoursesTimeoutRef = useRef(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    // Check for user on mount
+    const checkUser = () => {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (e) {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+    
+    checkUser();
+    
+    // Listen for storage changes (for cross-tab sync)
+    window.addEventListener('storage', checkUser);
+    
+    // Also check periodically for same-tab updates
+    const interval = setInterval(checkUser, 1000);
+    
+    return () => {
+      window.removeEventListener('storage', checkUser);
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSearch = (e) => {
