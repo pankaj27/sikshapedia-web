@@ -32,7 +32,7 @@ const FloatingApplyButton = () => {
       {/* Floating Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+        className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2 px-5 py-3 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
         style={{ backgroundColor: buttonColor }}
       >
         <FiEdit3 className="w-5 h-5" />
