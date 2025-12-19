@@ -5520,7 +5520,7 @@ async def get_user_dashboard_stats(current_user: User = Depends(get_current_user
 # Education Loan Routes
 # ============================================
 
-@api_router.get("/education-loans", response_model=List[EducationLoan])
+@api_router.get("/education-loans")
 async def get_education_loans(
     loan_type: Optional[str] = None,
     max_interest_rate: Optional[float] = None,
@@ -5535,13 +5535,85 @@ async def get_education_loans(
     if max_interest_rate:
         query["interest_rate"] = {"$lte": max_interest_rate}
     
-    loans = await db.education_loans.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    # Get loans from education_loans collection
+    education_loans = await db.education_loans.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     
-    for loan in loans:
-        if isinstance(loan.get('created_at'), str):
-            loan['created_at'] = datetime.fromisoformat(loan['created_at'])
+    # Also get loans from loans collection (admin-created entries)
+    admin_loans = await db.loans.find({}, {"_id": 0}).to_list(100)
     
-    return loans
+    # Transform admin loans to match EducationLoan format for frontend
+    transformed_admin_loans = []
+    for loan in admin_loans:
+        # Parse interest rate from string like "9.85%" to float
+        interest_rate_min = loan.get('interest_rate_min', '0')
+        if isinstance(interest_rate_min, str):
+            interest_rate_min = float(interest_rate_min.replace('%', '').strip() or 0)
+        
+        # Parse max amount from string like "₹1 Crore" 
+        max_amount = loan.get('max_amount', '0')
+        max_loan_amount = 0
+        if isinstance(max_amount, str):
+            if 'Crore' in max_amount or 'crore' in max_amount:
+                try:
+                    num = float(''.join(c for c in max_amount if c.isdigit() or c == '.') or 0)
+                    max_loan_amount = num * 10000000  # 1 crore = 10 million
+                except:
+                    max_loan_amount = 10000000
+            elif 'Lakh' in max_amount or 'lakh' in max_amount:
+                try:
+                    num = float(''.join(c for c in max_amount if c.isdigit() or c == '.') or 0)
+                    max_loan_amount = num * 100000
+                except:
+                    max_loan_amount = 100000
+        
+        # Parse tenure from string like "15 Years"
+        tenure_max = loan.get('tenure_max', '10')
+        repayment_period = 10
+        if isinstance(tenure_max, str):
+            try:
+                repayment_period = int(''.join(c for c in tenure_max if c.isdigit()) or 10)
+            except:
+                repayment_period = 10
+        
+        # Parse processing fee
+        processing_fee_str = loan.get('processing_fee', '1%')
+        processing_fee = 1.0
+        if isinstance(processing_fee_str, str):
+            try:
+                processing_fee = float(''.join(c for c in processing_fee_str if c.isdigit() or c == '.') or 1)
+            except:
+                processing_fee = 1.0
+        
+        transformed = {
+            'id': loan.get('id'),
+            'bank_name': loan.get('bank_name') or loan.get('name', 'Unknown Bank'),
+            'loan_type': loan.get('loan_type', 'Domestic'),
+            'interest_rate': interest_rate_min,
+            'max_loan_amount': max_loan_amount,
+            'repayment_period': repayment_period,
+            'processing_fee': processing_fee,
+            'collateral_required': False,  # Default
+            'features': loan.get('key_features', []) or loan.get('benefits', []),
+            'eligibility_criteria': ', '.join(loan.get('eligibility_criteria', [])) if isinstance(loan.get('eligibility_criteria'), list) else loan.get('eligibility_criteria', ''),
+            'documents_required': loan.get('documents_required', []),
+            'website_url': loan.get('official_website') or loan.get('apply_link'),
+            'contact_number': loan.get('contact_phone'),
+            'rating': 4.0,  # Default rating
+            'created_at': loan.get('created_at')
+        }
+        
+        # Apply filters if present
+        if loan_type and transformed['loan_type'] != loan_type:
+            continue
+        if max_interest_rate and transformed['interest_rate'] > max_interest_rate:
+            continue
+            
+        transformed_admin_loans.append(transformed)
+    
+    # Combine both lists
+    all_loans = education_loans + transformed_admin_loans
+    
+    return all_loans
 
 @api_router.get("/education-loans/{loan_id}", response_model=EducationLoan)
 async def get_education_loan(loan_id: str):
