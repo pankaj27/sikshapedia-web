@@ -47,6 +47,15 @@ const HomepageSettings = () => {
   const [featuredNewsResults, setFeaturedNewsResults] = useState([]);
   const [showNewsFeaturedDropdown, setShowNewsFeaturedDropdown] = useState(false);
   const [featuredNewsList, setFeaturedNewsList] = useState([]);
+  
+  // Stream colleges management
+  const [streamColleges, setStreamColleges] = useState({
+    Engineering: [], Medical: [], Management: [], Law: []
+  });
+  const [activeStream, setActiveStream] = useState('Engineering');
+  const [streamSearch, setStreamSearch] = useState('');
+  const [streamSearchResults, setStreamSearchResults] = useState([]);
+  const [showStreamDropdown, setShowStreamDropdown] = useState(false);
   const [settings, setSettings] = useState({
     // Hero Section
     hero_title: 'Find Your Dream',
