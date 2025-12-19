@@ -1080,7 +1080,7 @@ class APITester:
                 # Verify College Rankings structure
                 if isinstance(response.get("college_rankings_data"), list):
                     colleges_count = len(response["college_rankings_data"])
-                    # Check for expected colleges (IIT Bombay, IIT Delhi, etc.)
+                    # Check for expected colleges (IIT Bombay, IIT Delhi, etc.) or any valid college data
                     expected_colleges = ["IIT Bombay", "IIT Delhi", "IIT Madras", "IIT Kanpur", "IIT Kharagpur"]
                     found_colleges = []
                     
@@ -1091,8 +1091,22 @@ class APITester:
                                 found_colleges.append(expected)
                                 break
                     
-                    self.log_test("College Rankings Structure", True, 
-                                 f"Found {colleges_count} colleges, {len(found_colleges)}/5 expected colleges present: {', '.join(found_colleges)}")
+                    # If no expected colleges found, check if we have valid college structure
+                    if len(found_colleges) == 0 and colleges_count > 0:
+                        # Check if colleges have required fields
+                        first_college = response["college_rankings_data"][0]
+                        required_fields = ["rank", "name", "location", "rating", "fees", "type"]
+                        has_required_fields = all(field in first_college for field in required_fields)
+                        
+                        if has_required_fields:
+                            self.log_test("College Rankings Structure", True, 
+                                         f"Found {colleges_count} colleges with valid structure (test data present)")
+                        else:
+                            self.log_test("College Rankings Structure", False, 
+                                         f"Colleges missing required fields: {required_fields}")
+                    else:
+                        self.log_test("College Rankings Structure", True, 
+                                     f"Found {colleges_count} colleges, {len(found_colleges)}/5 expected colleges present: {', '.join(found_colleges)}")
                 else:
                     self.log_test("College Rankings Structure", False, "College rankings not a list")
                 
