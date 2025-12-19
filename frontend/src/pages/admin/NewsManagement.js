@@ -52,30 +52,21 @@ const NewsManagement = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/admin/dashboard" className="text-gray-600 hover:text-gray-900">
-                <FiArrowLeft size={24} />
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">News Management</h1>
-                <p className="text-sm text-gray-600 mt-1">Manage all news articles and announcements</p>
-              </div>
-            </div>
-            <Link to="/admin/news/new">
-              <Button className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2">
-                <FiPlus size={18} />
-                Publish News
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
+    <AdminLayout>
       <div className="p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">News Management</h1>
+            <p className="text-sm text-gray-600 mt-1">Manage all news articles and announcements</p>
+          </div>
+          <Link to="/admin/news/new">
+            <Button className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2">
+              <FiPlus size={18} />
+              Publish News
+            </Button>
+          </Link>
+        </div>
         <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-100">
           <div className="relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
