@@ -5604,41 +5604,7 @@ async def get_my_loan_applications(current_user: User = Depends(get_current_user
 # Scholarship Routes
 # ============================================
 
-@api_router.get("/scholarships", response_model=List[ScholarshipProgram])
-async def get_scholarships(
-    scholarship_type: Optional[str] = None,
-    provider: Optional[str] = None,
-    education_level: Optional[str] = None,
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
-):
-    query = {}
-    
-    if scholarship_type:
-        query["scholarship_type"] = scholarship_type
-    
-    if provider:
-        query["provider"] = provider
-    
-    if education_level:
-        query["education_level"] = education_level
-    
-    scholarships = await db.scholarships.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
-    
-    for scholarship in scholarships:
-        if isinstance(scholarship.get('created_at'), str):
-            scholarship['created_at'] = datetime.fromisoformat(scholarship['created_at'])
-    
-    return scholarships
-
-@api_router.get("/scholarships/{scholarship_id}")
-async def get_scholarship(scholarship_id: str):
-    scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
-    if not scholarship:
-        raise HTTPException(status_code=404, detail="Scholarship not found")
-    
-    # Return raw data without strict model validation to support both old and new formats
-    return scholarship
+# Removed duplicate scholarship routes - using routes defined at bottom of file
 
 @api_router.post("/scholarship-applications", response_model=ScholarshipApplication)
 async def create_scholarship_application(app_data: ScholarshipApplicationCreate, current_user: User = Depends(get_current_user)):
