@@ -92,6 +92,8 @@ const ScholarshipForm = () => {
     meta_keywords: [],
     canonical_url: '',
     og_image: '',
+    auto_generate_seo: true,
+    schema_type: 'Scholarship',
     
     // Status
     is_active: true,
