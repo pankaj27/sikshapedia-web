@@ -6,6 +6,7 @@ import api from '../../api/axios';
 import { generateSlug } from '../../utils/slugify';
 import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const TABS = [
   { id: 'basic', label: 'Basic Info', icon: FiSettings },
