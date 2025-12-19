@@ -48,16 +48,12 @@ const ReviewsModeration = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link to="/admin/dashboard" className="text-gray-600 hover:text-gray-900">
-              <FiArrowLeft size={24} />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Reviews Moderation</h1>
-              <p className="text-sm text-gray-600 mt-1">Approve or reject user reviews</p>
+    <AdminLayout>
+      <div className="p-6">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Reviews Moderation</h1>
+          <p className="text-sm text-gray-600 mt-1">Approve or reject user reviews</p>
             </div>
           </div>
         </div>
