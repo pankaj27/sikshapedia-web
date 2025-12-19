@@ -150,10 +150,28 @@ const UserSignup = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Signup failed');
+      // Handle validation errors (Pydantic returns array of objects)
+      const detail = err.response?.data?.detail;
+      if (Array.isArray(detail)) {
+        // Extract first error message
+        const firstError = detail[0];
+        setError(firstError?.msg || firstError?.message || 'Validation error');
+      } else if (typeof detail === 'object' && detail !== null) {
+        setError(detail.msg || detail.message || JSON.stringify(detail));
+      } else {
+        setError(detail || 'Signup failed');
+      }
     } finally {
       setLoading(false);
     }
+  };
+  
+  // Helper to format error for display
+  const formatError = (error) => {
+    if (typeof error === 'string') return error;
+    if (Array.isArray(error)) return error.map(e => e.msg || e.message || String(e)).join(', ');
+    if (typeof error === 'object' && error !== null) return error.msg || error.message || JSON.stringify(error);
+    return String(error);
   };
   
   return (
