@@ -73,6 +73,26 @@ const StudyAbroadListingSettings = () => {
     fetchSettings();
   }, []);
 
+  // Auto-generate SEO fields when hero title changes
+  useEffect(() => {
+    if (settings.auto_generate_seo && settings.hero_title) {
+      const newMetaTitle = `${settings.hero_title} 2025 - Top Universities Worldwide | Admissionbuddy`;
+      const newMetaDesc = settings.hero_subtitle 
+        ? `${settings.hero_subtitle.slice(0, 140)}...` 
+        : `Explore top universities for ${settings.hero_title}. Get expert guidance for your study abroad journey.`;
+      
+      setSettings(prev => ({
+        ...prev,
+        meta_title: newMetaTitle,
+        meta_description: newMetaDesc,
+        og_title: prev.og_title || newMetaTitle,
+        og_description: prev.og_description || newMetaDesc,
+        twitter_title: prev.twitter_title || newMetaTitle,
+        twitter_description: prev.twitter_description || newMetaDesc,
+      }));
+    }
+  }, [settings.hero_title, settings.hero_subtitle, settings.auto_generate_seo]);
+
   const fetchSettings = async () => {
     try {
       const response = await api.get('/study-abroad-listing-settings');
