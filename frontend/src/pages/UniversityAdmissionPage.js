@@ -312,11 +312,13 @@ const UniversityAdmissionPage = () => {
                   <div className={`h-40 bg-gradient-to-br ${getGradient(index)} relative`}>
                     <div className="absolute top-2 left-2">
                       <div className="bg-white/95 px-2 py-1 rounded text-xs font-semibold text-gray-700">
-                        {new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                        {admission.admission_date 
+                          ? new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
+                          : admission.university_type || 'Open'}
                       </div>
                     </div>
                     <div className="absolute bottom-2 left-2 right-2">
-                      <Link to={`/universities/${admission.id}`}>
+                      <Link to={`/universities/${admission.slug || admission.id}`}>
                         <Button className="w-full bg-purple-600 hover:bg-purple-700 h-7 text-xs">
                           Apply Now
                         </Button>
@@ -331,13 +333,13 @@ const UniversityAdmissionPage = () => {
                         {(admission.courses || admission.streams || []).slice(0, 2).join(' | ')}
                       </span>
                     </div>
-                    <Link to={`/universities/${admission.id}`}>
+                    <Link to={`/universities/${admission.slug || admission.id}`}>
                       <h3 className="text-sm font-bold mb-1 hover:text-purple-600 transition line-clamp-2">
                         {admission.name} Admission 2026
                       </h3>
                     </Link>
                     <p className="text-xs text-gray-600 line-clamp-2">
-                      {admission.description}
+                      {admission.description || `${admission.university_type || 'University'} in ${admission.city || ''}, ${admission.state || 'India'}. NAAC ${admission.accreditation || 'Accredited'}.`}
                     </p>
                   </div>
                 </div>
