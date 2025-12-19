@@ -309,6 +309,19 @@ function App() {
                   <Route path="/register" element={<RegisterPage />} />
                   
                   {/* ============================================ */}
+                  {/* New User Dashboard Routes */}
+                  {/* ============================================ */}
+                  <Route path="/signup" element={<UserSignup />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                  <Route path="/dashboard" element={<UserDashboard />} />
+                  
+                  {/* ============================================ */}
+                  {/* Institute Dashboard Routes */}
+                  {/* ============================================ */}
+                  <Route path="/institute/login" element={<InstituteLogin />} />
+                  <Route path="/institute/dashboard" element={<InstituteDashboardNew />} />
+                  
+                  {/* ============================================ */}
                   {/* SEO-FRIENDLY DYNAMIC ROUTES - Must come LAST */}
                   {/* These are catch-all routes that match patterns */}
                   {/* ============================================ */}
