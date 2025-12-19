@@ -3740,7 +3740,7 @@ class APITester:
         print("🔑 Testing Admin Credential Generation...")
         
         # Test: POST /api/colleges/{college_id}/generate-credentials
-        college_id = "060-test-engineering-college-mumbai"
+        college_id = "1cf2ec89-2f03-4e98-a8c4-43b828a69a6d"  # Test Engineering College Mumbai
         
         # Test without admin authentication (should fail)
         success, response, status = self.make_request("POST", f"/colleges/{college_id}/generate-credentials")
