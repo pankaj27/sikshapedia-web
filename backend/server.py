@@ -6677,6 +6677,13 @@ class HomepageSettings(BaseModel):
         {"image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop", "type": "university", "name": "Delhi University", "rating": 4.5, "reviews": 3256, "location": "New Delhi, Delhi", "slug": "delhi-university-001"}
     ]
     
+    # Quick Actions Section
+    quick_actions: List[Dict[str, Any]] = [
+        {"id": "apply", "title": "Apply Now", "subtitle": "Quick admission", "icon": "FiSend", "gradient": "from-orange-500 to-orange-600"},
+        {"id": "question", "title": "Ask Question", "subtitle": "Get expert help", "icon": "FiMessageCircle", "gradient": "from-blue-500 to-blue-600"},
+        {"id": "counselling", "title": "Counselling", "subtitle": "Free guidance", "icon": "FiPhone", "gradient": "from-purple-500 to-purple-600"}
+    ]
+    
     # Study Goals Section
     study_goals_title: str = "What do you want to study?"
     study_goals: List[Dict[str, Any]] = [
