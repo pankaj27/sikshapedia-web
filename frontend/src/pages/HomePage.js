@@ -209,7 +209,9 @@ const CollegeDuniaHome = () => {
     { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L', type: 'Day School', rank: 10 },
     { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
   ];
-  const topSchoolsData = (pageSettings?.top_schools?.length > 0) ? pageSettings.top_schools : defaultTopSchools;
+  // Use featured schools from API (admin-controlled), fallback to pageSettings, then defaults
+  const topSchoolsData = featuredSchools.length > 0 ? featuredSchools : 
+    (pageSettings?.top_schools?.length > 0 ? pageSettings.top_schools : defaultTopSchools);
   
   // SEO
   const metaTitle = pageSettings?.meta_title || 'AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024';
