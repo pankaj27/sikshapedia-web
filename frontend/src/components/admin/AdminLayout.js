@@ -97,6 +97,7 @@ const AdminLayout = ({ children }) => {
         { title: 'FAQs', path: '/admin/faqs', icon: FiFileText },
         { title: 'Cities', path: '/admin/cities', icon: FiGrid },
         { title: 'Listing Pages', path: '/admin/listing-pages', icon: FiGlobe },
+        { title: 'Static Pages', path: '/admin/static-pages', icon: FiFileText, badge: 'NEW' },
       ]
     },
     {
