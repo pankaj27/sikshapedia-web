@@ -70,6 +70,7 @@ const LoanForm = () => {
     // Content
     content: '',
     benefits: [],
+    key_features: [],
     application_process: '',
     repayment_options: '',
     
@@ -724,7 +725,7 @@ const LoanForm = () => {
                           if (file) {
                             handleImageUpload(file, 'featured_image');
                             if (!formData.featured_image_alt && formData.name) {
-                              handleChange('featured_image_alt', formData.name);
+                              handleChange('featured_image_alt', `${formData.name} | Education Loan | Admissionbuddy`);
                             }
                           }
                         }}
@@ -756,7 +757,7 @@ const LoanForm = () => {
                         <label className="block text-sm font-medium">Alt Text (SEO)</label>
                         <button
                           type="button"
-                          onClick={() => handleChange('featured_image_alt', `${formData.name} | ${formData.bank_name} Education Loan`)}
+                          onClick={() => handleChange('featured_image_alt', `${formData.name} | ${formData.bank_name} Education Loan | Admissionbuddy`)}
                           className="text-xs text-blue-600 hover:underline"
                         >
                           ⚡ Auto-Generate
