@@ -191,6 +191,8 @@ test_plan:
     - "Loan Form - Admin Panel Entry Form"
     - "Static Pages CMS - Connect Frontend to Backend API"
     - "Study Abroad Page - Connect to Admin Module"
+    - "Static Pages Frontend Testing - All 4 Pages"
+    - "Study Abroad Frontend Testing - Complete Functionality"
 
 agent_communication:
   - agent: "testing"
