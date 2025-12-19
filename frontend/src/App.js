@@ -44,6 +44,8 @@ import SchoolAdmissionPage from './pages/SchoolAdmissionPage';
 import UniversityAdmissionPage from './pages/UniversityAdmissionPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
