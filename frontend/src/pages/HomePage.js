@@ -158,9 +158,9 @@ const CollegeDuniaHome = () => {
   return (
     <div className="min-h-screen bg-white -mt-20 pt-20">
       <MetaTags 
-        title="AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024"
-        description="Find detailed information about 10,000+ colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details. Read reviews and make informed decisions."
-        keywords="colleges in india, top universities, engineering colleges, medical colleges, MBA colleges, admissions 2024, college rankings, NIRF rankings, JEE, NEET, CAT preparation, course finder, study abroad"
+        title={metaTitle}
+        description={metaDescription}
+        keywords={metaKeywords}
         canonical="/"
       />
       <OrganizationSchema />
