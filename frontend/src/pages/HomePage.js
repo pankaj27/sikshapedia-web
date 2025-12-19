@@ -913,9 +913,10 @@ const CollegeDuniaHome = () => {
           </form>
         </div>
       </section>
+      )}
 
       {/* Sponsored Featured Colleges - From Admin */}
-      {sponsoredFeatured.length > 0 && (
+      {showSponsoredColleges && sponsoredFeatured.length > 0 && (
         <section className="py-12 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
