@@ -334,9 +334,6 @@ const ScholarshipForm = () => {
           </Button>
         </div>
       </div>
-      <div className="bg-gray-50 -mx-6 -mb-6 p-6">
-        </div>
-      </header>
 
       <div className="flex">
         {/* Sidebar Tabs */}
