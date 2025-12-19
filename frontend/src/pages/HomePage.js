@@ -609,7 +609,7 @@ const CollegeDuniaHome = () => {
                       <Link to={`/colleges/${college.id}`} className="ml-16">
                         <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600">{college.name}</h3>
                       </Link>
-                      <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2">
+                      <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2 ml-16">
                         <FiMapPin className="text-orange-600 text-xs" />
                         <span>{college.location?.city}, {college.location?.state}</span>
                       </div>
