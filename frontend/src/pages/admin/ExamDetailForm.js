@@ -208,6 +208,7 @@ const ExamDetailForm = () => {
     is_popular: false,
     is_featured: false,
     popular_order: 0,
+    display_priority: 0,
     // Key Summary (editable bullet points)
     key_summary: [],
     // SEO Content Section
