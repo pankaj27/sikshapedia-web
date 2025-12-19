@@ -187,6 +187,8 @@ test_plan:
     - "Admin Form - Top Colleges Section"
     - "Course Display - Dynamic Age Limit"
     - "Course Display - Dynamic Top Colleges"
+    - "Scholarship Form - Admin Panel Entry Form"
+    - "Loan Form - Admin Panel Entry Form"
 
 agent_communication:
   - agent: "testing"
