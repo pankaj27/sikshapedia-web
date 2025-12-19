@@ -562,7 +562,7 @@ const CollegeDuniaHome = () => {
             >
               {featuredColleges.map((college, idx) => (
                 <SwiperSlide key={college.id}>
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border relative">
+                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border relative h-[340px] flex flex-col">
                     {/* Header Image with Badges - Reduced Height */}
                     <div className="relative h-24 bg-gradient-to-br from-blue-500 to-indigo-600">
                       {college.images?.[0] ? (
