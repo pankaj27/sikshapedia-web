@@ -3164,14 +3164,15 @@ class APITester:
 
     def run_all_tests(self):
         """Run all test suites focusing on Homepage Settings functionality"""
-        print("🚀 TESTING HOMEPAGE SETTINGS - ADD SCHOOL & ADD COLLEGE FUNCTIONALITY")
+        print("🚀 TESTING HOMEPAGE SETTINGS - ADD SCHOOL & ADD COLLEGE FUNCTIONALITY WITH SEARCH")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
         # Authentication first
         self.test_authentication()
         
-        # Primary test for this request
+        # Primary tests for this request
+        self.test_college_school_search_autocomplete()
         self.test_homepage_settings()
         
         # Legacy tests for compatibility
