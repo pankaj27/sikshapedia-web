@@ -4125,15 +4125,16 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
     # Generate institute credentials if contact info available
     try:
         from routes.institute_auth import create_institute_credentials
-        contact_email = college_data.contact.get('email') if college_data.contact else None
-        contact_phone = college_data.contact.get('phone') if college_data.contact else None
+        contact = getattr(college_data, 'contact', None) or {}
+        contact_email = contact.get('email', '') if isinstance(contact, dict) else ''
+        contact_phone = contact.get('phone', '') if isinstance(contact, dict) else ''
         if contact_email or contact_phone:
             await create_institute_credentials(
                 db, 
                 college.id, 
                 college.name, 
-                contact_email or '', 
-                contact_phone or '',
+                contact_email, 
+                contact_phone,
                 background_tasks
             )
             logging.info(f"✅ Institute credentials created for {college.name}")
