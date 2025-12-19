@@ -6752,6 +6752,8 @@ class HomepageSettings(BaseModel):
     
     # Top Universities Section
     top_universities_title: str = "Top Universities & Colleges"
+    # Featured colleges for Top Universities section - stores college IDs in display order
+    featured_colleges_ids: List[str] = []
     
     # Top Schools Section
     top_schools_title: str = "Top Schools in India"
