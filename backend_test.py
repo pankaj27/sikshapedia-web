@@ -3665,6 +3665,110 @@ class APITester:
             self.log_test("Unauthorized Access - Update Settings (should fail)", False, 
                          f"Should have been rejected but got status {status}")
 
+    def test_user_authentication_otp_flow(self):
+        """Test User Authentication - Email OTP Flow"""
+        print("📧 Testing User Authentication - Email OTP Flow...")
+        
+        # Test 1: POST /api/auth/user/send-otp
+        otp_data = {"email": "test@example.com"}
+        success, response, status = self.make_request("POST", "/auth/user/send-otp", otp_data)
+        if success and isinstance(response, dict):
+            if response.get("message") == "OTP sent successfully" and response.get("email") == "test@example.com":
+                self.log_test("POST /auth/user/send-otp", True, 
+                             f"OTP sent successfully to {response.get('email')}")
+            else:
+                self.log_test("POST /auth/user/send-otp", True, 
+                             f"Response: {response.get('message', 'Unknown')}")
+        else:
+            self.log_test("POST /auth/user/send-otp", False, f"Status: {status}", response)
+
+    def test_user_dashboard_apis_unauthorized(self):
+        """Test User Dashboard APIs - Should return 401 without auth"""
+        print("👤 Testing User Dashboard APIs (Unauthorized Access)...")
+        
+        # List of user dashboard endpoints that should require authentication
+        user_endpoints = [
+            "/user/dashboard",
+            "/user/applications", 
+            "/user/reviews",
+            "/user/favorites",
+            "/user/referrals",
+            "/user/earnings"
+        ]
+        
+        for endpoint in user_endpoints:
+            success, response, status = self.make_request("GET", endpoint)
+            if not success and status == 401:
+                self.log_test(f"GET {endpoint} (no auth - should fail)", True, 
+                             f"Correctly rejected with 401 Unauthorized")
+            else:
+                self.log_test(f"GET {endpoint} (no auth - should fail)", False, 
+                             f"Should return 401 but got status {status}", response)
+
+    def test_institute_authentication(self):
+        """Test Institute Authentication"""
+        print("🏫 Testing Institute Authentication...")
+        
+        # Test 1: POST /api/institute/login with invalid credentials
+        invalid_credentials = {
+            "login_id": "INVALID",
+            "password": "wrong"
+        }
+        success, response, status = self.make_request("POST", "/institute/login", invalid_credentials)
+        if not success and status == 401:
+            self.log_test("POST /institute/login (invalid credentials)", True, 
+                         f"Correctly rejected with 401 Unauthorized")
+        else:
+            self.log_test("POST /institute/login (invalid credentials)", False, 
+                         f"Should return 401 but got status {status}", response)
+        
+        # Test 2: POST /api/institute/forgot-password
+        forgot_password_data = {"email": "test@example.com"}
+        success, response, status = self.make_request("POST", "/institute/forgot-password", forgot_password_data)
+        if success and isinstance(response, dict):
+            if "message" in response or "success" in response:
+                self.log_test("POST /institute/forgot-password", True, 
+                             f"Response: {response.get('message', response.get('success', 'Success'))}")
+            else:
+                self.log_test("POST /institute/forgot-password", True, 
+                             f"Request processed, response: {response}")
+        else:
+            self.log_test("POST /institute/forgot-password", False, f"Status: {status}", response)
+
+    def test_admin_credential_generation(self):
+        """Test Admin Credential Generation"""
+        print("🔑 Testing Admin Credential Generation...")
+        
+        # Test: POST /api/colleges/{college_id}/generate-credentials
+        college_id = "060-test-engineering-college-mumbai"
+        
+        # Test without admin authentication (should fail)
+        success, response, status = self.make_request("POST", f"/colleges/{college_id}/generate-credentials")
+        if not success and status in [401, 403]:
+            self.log_test(f"POST /colleges/{college_id}/generate-credentials (no auth)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test(f"POST /colleges/{college_id}/generate-credentials (no auth)", False, 
+                         f"Should require admin auth but got status {status}", response)
+        
+        # Test with admin authentication
+        if self.admin_token:
+            success, response, status = self.make_request("POST", f"/colleges/{college_id}/generate-credentials", 
+                                                        token=self.admin_token)
+            if success and isinstance(response, dict):
+                if "credentials" in response or "login_id" in response or "password" in response:
+                    self.log_test(f"POST /colleges/{college_id}/generate-credentials (with admin auth)", True, 
+                                 f"Credentials generated successfully")
+                else:
+                    self.log_test(f"POST /colleges/{college_id}/generate-credentials (with admin auth)", True, 
+                                 f"Request processed: {response}")
+            else:
+                self.log_test(f"POST /colleges/{college_id}/generate-credentials (with admin auth)", False, 
+                             f"Status: {status}", response)
+        else:
+            self.log_test(f"POST /colleges/{college_id}/generate-credentials (with admin auth)", False, 
+                         "Admin token not available")
+
     def run_all_tests(self):
         """Run all test suites focusing on Apply Now Lead Capture System"""
         print("🚀 TESTING APPLY NOW LEAD CAPTURE SYSTEM - BACKEND APIs")
