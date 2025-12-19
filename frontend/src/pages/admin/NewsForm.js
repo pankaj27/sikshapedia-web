@@ -459,7 +459,7 @@ const NewsForm = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 flex-wrap">
                       <label className="flex items-center gap-2">
                         <input
                           type="checkbox"
@@ -478,6 +478,19 @@ const NewsForm = () => {
                         />
                         <span className="text-sm">Published</span>
                       </label>
+                      <div className="flex items-center gap-2 ml-4">
+                        <label className="text-sm text-gray-600">Display Priority:</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="99"
+                          value={formData.display_priority || 0}
+                          onChange={(e) => handleChange('display_priority', parseInt(e.target.value) || 0)}
+                          className="w-16 border rounded px-2 py-1 text-sm text-center"
+                          title="Lower number = appears first. 0 = no priority"
+                        />
+                        <span className="text-xs text-gray-400">(0=none, lower=first)</span>
+                      </div>
                     </div>
                   </div>
                 </div>
