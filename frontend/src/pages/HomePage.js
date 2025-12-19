@@ -136,19 +136,53 @@ const CollegeDuniaHome = () => {
     { image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop', type: 'college', name: 'AIIMS Delhi - All India Institute of Medical Sciences', rating: 4.9, reviews: 2134, location: 'New Delhi, Delhi', slug: 'aiims-delhi-001' }
   ];
   
-  // Section visibility from settings
+  // Section visibility from settings - ALL 15 SECTIONS
   const showHeroSlider = pageSettings?.show_hero_slider !== false;
+  const showQuickLinks = pageSettings?.show_quick_links !== false;
+  const showQuickActions = pageSettings?.show_quick_actions !== false;
   const showStudyGoals = pageSettings?.show_study_goals !== false;
   const showPrograms = pageSettings?.show_programs !== false;
+  const showTopUniversities = pageSettings?.show_top_universities !== false;
+  const showTopSchools = pageSettings?.show_top_schools !== false;
+  const showCollegeRankings = pageSettings?.show_college_rankings !== false;
   const showCities = pageSettings?.show_cities !== false;
-  const showFeaturedColleges = pageSettings?.show_featured_colleges !== false;
-  const showTopExams = pageSettings?.show_top_exams !== false;
-  const showLatestNews = pageSettings?.show_latest_news !== false;
+  const showNewsletter = pageSettings?.show_newsletter !== false;
+  const showSponsoredColleges = pageSettings?.show_sponsored_colleges !== false;
   const showTopCollegesByStream = pageSettings?.show_top_colleges_by_stream !== false;
+  const showTopExams = pageSettings?.show_top_exams !== false;
+  const showLocationSearch = pageSettings?.show_location_search !== false;
+  const showLatestNews = pageSettings?.show_latest_news !== false;
   
-  // Hero content
+  // Section Titles from settings
   const heroTitle = pageSettings?.hero_title || 'Find Your Dream';
   const heroSubtitle = pageSettings?.hero_subtitle || 'Explore 10,000+ Colleges, Universities & Schools across India';
+  const topUniversitiesTitle = pageSettings?.top_universities_title || 'Top Universities & Colleges';
+  const topSchoolsTitle = pageSettings?.top_schools_title || 'Top Schools in India';
+  const collegeRankingsTitle = pageSettings?.college_rankings_title || 'College Rankings';
+  const newsletterTitle = pageSettings?.newsletter_title || 'Subscribe to Our Newsletter';
+  const newsletterSubtitle = pageSettings?.newsletter_subtitle || 'Get the latest updates on college admissions, exams, and education news';
+  
+  // Quick Links from settings
+  const quickLinks = pageSettings?.quick_links || [
+    {name: 'Top Colleges', icon: 'FiBookOpen', link: '/india-colleges', bg_color: 'bg-blue-100', icon_color: 'text-blue-600'},
+    {name: 'Top Schools', icon: 'FiBook', link: '/india-schools', bg_color: 'bg-red-100', icon_color: 'text-red-600'},
+    {name: 'Top Exams', icon: 'FiFileText', link: '/exams', bg_color: 'bg-green-100', icon_color: 'text-green-600'},
+    {name: 'Top Courses', icon: 'FiBookOpen', link: '/courses', bg_color: 'bg-purple-100', icon_color: 'text-purple-600'},
+    {name: 'Education Loans', icon: 'FiTrendingUp', link: '/loans', bg_color: 'bg-pink-100', icon_color: 'text-pink-600'},
+    {name: 'Study Materials', icon: 'FiZap', link: '/study-materials', bg_color: 'bg-indigo-100', icon_color: 'text-indigo-600'}
+  ];
+  
+  // Top Schools from settings
+  const topSchoolsData = pageSettings?.top_schools || [
+    { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
+    { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L', type: 'Day School', rank: 5 },
+    { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L', type: 'Boarding', rank: 2 },
+    { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L', type: 'Boarding', rank: 3 },
+    { name: 'Bishop Cotton School', location: 'Shimla', board: 'ICSE', rating: 4.6, fees: '6L', type: 'Boarding', rank: 8 },
+    { name: 'La Martiniere College', location: 'Kolkata', board: 'ICSE', rating: 4.7, fees: '1.5L', type: 'Day School', rank: 6 },
+    { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L', type: 'Day School', rank: 10 },
+    { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
+  ];
   
   // SEO
   const metaTitle = pageSettings?.meta_title || 'AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024';
