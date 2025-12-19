@@ -77,6 +77,7 @@ const AutoApplyPopup = () => {
       collegeName={collegeData?.name || null}
       collegeLogoUrl={collegeData?.logo_url || null}
       collegeCourses={collegeData?.courses || []}
+      formHeading={collegeData?.name ? `Apply to ${collegeData.name}` : null}
       source={isCollegePage ? 'auto_popup_college' : 'auto_popup_general'}
     />
   );
