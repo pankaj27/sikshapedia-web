@@ -6775,6 +6775,14 @@ class HomepageSettings(BaseModel):
     
     # Top Schools Section
     top_schools_title: str = "Top Schools in India"
+    # Featured schools for Top Schools section - stores school IDs in display order
+    featured_schools_ids: List[str] = []
+    
+    # Top Exams Section
+    featured_exams_ids: List[str] = []
+    
+    # Latest News Section
+    featured_news_ids: List[str] = []
     top_schools: List[Dict[str, Any]] = [
         {"name": "Delhi Public School (DPS)", "location": "Multiple Locations", "board": "CBSE", "rating": 4.8, "fees": "2.5L", "type": "Day School", "rank": 1},
         {"name": "Sanskriti School", "location": "New Delhi", "board": "CBSE", "rating": 4.7, "fees": "3.2L", "type": "Day School", "rank": 5},
