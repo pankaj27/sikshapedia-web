@@ -183,7 +183,7 @@ const UniversityAdmissionPage = () => {
     } catch (error) {
       const filtered = generateMockAdmissions().filter(admission =>
         admission.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        admission.type.toLowerCase().includes(searchQuery.toLowerCase())
+        (admission.type || admission.university_type || '').toLowerCase().includes(searchQuery.toLowerCase())
       );
       setAdmissions(filtered);
     }
