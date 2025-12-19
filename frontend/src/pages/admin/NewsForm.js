@@ -82,6 +82,7 @@ const NewsForm = () => {
     // Status
     published: true,
     featured: false,
+    display_priority: 0,
     status: 'draft'
   });
 
