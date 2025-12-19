@@ -1012,7 +1012,7 @@ const CollegeDuniaHome = () => {
       {showTopExams && <TopExams />}
 
       {/* Location-based Search */}
-      <LocationSearch />
+      {showLocationSearch && <LocationSearch />}
 
       {/* Latest News & Alerts */}
       {showLatestNews && <LatestNews />}
