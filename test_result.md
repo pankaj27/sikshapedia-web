@@ -366,3 +366,36 @@ agent_communication:
 - Test admin panel at /admin/static-pages allows editing page content
 - Test admin panel at /admin/study-abroad allows adding/editing universities
 - Verify CMS changes reflect on frontend after save
+
+---
+
+## Test Session: Location-Specific Display Priority (Dec 19, 2025)
+
+### Feature to Test:
+**Location-Specific Display Priority for Colleges**
+- Allow colleges to have different display priorities for national, state, and city listing pages
+- Backend fields: `display_priority` (national), `state_priority` (Dict[str, int]), `city_priority` (Dict[str, int])
+- Frontend UI added in CollegeForm.js to manage these priorities
+
+### Test Cases Needed:
+1. Backend API:
+   - GET /api/colleges - Verify national display_priority sorting works
+   - GET /api/colleges?state=Maharashtra - Verify state_priority sorting works
+   - GET /api/colleges?city=Mumbai - Verify city_priority sorting works
+
+2. Admin UI:
+   - Navigate to College Edit form
+   - Verify State Priority UI visible with Add/Remove functionality
+   - Verify City Priority UI visible with Add/Remove functionality
+   - Add state priority and save college
+   - Add city priority and save college
+
+3. Frontend Public Pages:
+   - Check /india-colleges page respects display_priority
+   - Check /india-colleges/maharashtra (or state page) respects state_priority
+   - Check /india-colleges/maharashtra/mumbai (or city page) respects city_priority
+
+### Admin Credentials:
+- Email: admin@admissionbuddy.co
+- Password: admin123
+
