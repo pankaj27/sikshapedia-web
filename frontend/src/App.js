@@ -110,6 +110,8 @@ import CoursePageForm from './pages/admin/CoursePageForm';
 import ListingPagesManagement from './pages/admin/ListingPagesManagement';
 import StaticPagesManagement from './pages/admin/StaticPagesManagement';
 import StaticPageForm from './pages/admin/StaticPageForm';
+import StudyAbroadManagement from './pages/admin/StudyAbroadManagement';
+import StudyAbroadForm from './pages/admin/StudyAbroadForm';
 import ListingPageForm from './pages/admin/ListingPageForm';
 import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
 import AdvertisementManagement from './pages/admin/AdvertisementManagement';
