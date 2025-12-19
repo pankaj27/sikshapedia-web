@@ -425,7 +425,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <span className="text-gray-600 text-sm">({college.reviews || 344} Reviews)</span>
                     </div>
                     
-                    <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                    <Button 
+                      className="bg-orange-600 hover:bg-orange-700 text-white"
+                      onClick={() => setShowApplyModal(true)}
+                    >
                       <FiCheckCircle className="mr-2" size={16} />
                       Apply Now
                     </Button>
