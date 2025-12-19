@@ -126,7 +126,14 @@ const UserSignup = () => {
         navigate('/dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Invalid OTP');
+      const detail = err.response?.data?.detail;
+      if (Array.isArray(detail)) {
+        setError(detail[0]?.msg || 'Invalid OTP');
+      } else if (typeof detail === 'object' && detail !== null) {
+        setError(detail.msg || detail.message || 'Invalid OTP');
+      } else {
+        setError(detail || 'Invalid OTP');
+      }
     } finally {
       setLoading(false);
     }
