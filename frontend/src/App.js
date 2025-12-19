@@ -194,6 +194,7 @@ function App() {
             <Route path="/admin/study-abroad" element={<StudyAbroadManagement />} />
             <Route path="/admin/study-abroad/new" element={<StudyAbroadForm />} />
             <Route path="/admin/study-abroad/edit/:id" element={<StudyAbroadForm />} />
+            <Route path="/admin/study-abroad-listing-settings" element={<StudyAbroadListingSettings />} />
             <Route path="/admin/sponsored-ads" element={<SponsoredAdsManagement />} />
 
             {/* Public Routes - With Layout */}
