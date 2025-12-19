@@ -691,6 +691,90 @@ const HomepageSettings = () => {
                 </div>
               </div>
 
+              {/* Quick Actions */}
+              <div>
+                <h2 className="text-lg font-semibold mb-3">Quick Actions (Apply, Ask, Counselling)</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {settings.quick_actions?.map((action, index) => (
+                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                      <input
+                        type="text"
+                        value={action.title}
+                        onChange={(e) => updateQuickAction(index, 'title', e.target.value)}
+                        className="w-full border rounded px-3 py-1.5 text-sm mb-2"
+                        placeholder="Button Title"
+                      />
+                      <input
+                        type="text"
+                        value={action.subtitle}
+                        onChange={(e) => updateQuickAction(index, 'subtitle', e.target.value)}
+                        className="w-full border rounded px-3 py-1.5 text-sm"
+                        placeholder="Subtitle"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Top Schools */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <div>
+                    <h2 className="text-lg font-semibold">Top Schools</h2>
+                    <input
+                      type="text"
+                      value={settings.top_schools_title}
+                      onChange={(e) => handleChange('top_schools_title', e.target.value)}
+                      className="text-sm text-gray-600 border-b border-transparent hover:border-gray-300 focus:border-purple-500 outline-none mt-1"
+                      placeholder="Section title..."
+                    />
+                  </div>
+                  <Button variant="outline" size="sm" onClick={addTopSchool}>
+                    <FiPlus className="mr-1" /> Add School
+                  </Button>
+                </div>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {settings.top_schools?.map((school, index) => (
+                    <div key={index} className="p-3 bg-gray-50 rounded-lg flex gap-2 items-center">
+                      <input
+                        type="text"
+                        value={school.name}
+                        onChange={(e) => updateTopSchool(index, 'name', e.target.value)}
+                        className="flex-1 border rounded px-2 py-1 text-sm"
+                        placeholder="School Name"
+                      />
+                      <input
+                        type="text"
+                        value={school.location}
+                        onChange={(e) => updateTopSchool(index, 'location', e.target.value)}
+                        className="w-28 border rounded px-2 py-1 text-sm"
+                        placeholder="Location"
+                      />
+                      <select
+                        value={school.board}
+                        onChange={(e) => updateTopSchool(index, 'board', e.target.value)}
+                        className="w-20 border rounded px-2 py-1 text-sm"
+                      >
+                        <option value="CBSE">CBSE</option>
+                        <option value="ICSE">ICSE</option>
+                        <option value="IB">IB</option>
+                        <option value="State">State</option>
+                      </select>
+                      <input
+                        type="text"
+                        value={school.fees}
+                        onChange={(e) => updateTopSchool(index, 'fees', e.target.value)}
+                        className="w-16 border rounded px-2 py-1 text-sm"
+                        placeholder="Fees"
+                      />
+                      <button onClick={() => removeTopSchool(index)} className="text-red-500 hover:text-red-700">
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Cities */}
               <div>
                 <div className="flex justify-between items-center mb-3">
