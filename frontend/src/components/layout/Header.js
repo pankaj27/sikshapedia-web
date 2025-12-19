@@ -515,7 +515,35 @@ const Header = () => {
               })}
             </div>
 
-            {!user && (
+            {user ? (
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex items-center gap-3 mb-4">
+                  {user.profile_photo_url ? (
+                    <img src={user.profile_photo_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-gray-900">{user.name}</p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
+                </div>
+                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full mb-2">
+                    <FiGrid className="mr-2" /> Dashboard
+                  </Button>
+                </Link>
+                <Button 
+                  onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+                  variant="ghost" 
+                  className="w-full text-red-600 hover:bg-red-50"
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t">
                 <Link to="/signup">
                   <Button variant="outline" className="w-full">
