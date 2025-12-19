@@ -352,7 +352,7 @@ const SchoolForm = () => {
           </div>
         </form>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
