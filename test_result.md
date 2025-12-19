@@ -509,6 +509,48 @@ agent_communication:
 
 ---
 
+## Test Session: User & Institute Dashboard System (Dec 19, 2025)
+
+### Features Implemented:
+**1. User Authentication System:**
+- Email OTP signup/login: POST /api/auth/user/send-otp, POST /api/auth/user/verify-otp
+- Profile completion: POST /api/auth/user/complete-signup
+- Google OAuth integration
+
+**2. User Dashboard (GET /api/user/dashboard):**
+- Profile management, applications tracking, reviews/comments
+- Referral system with share links
+- Favorites and liked colleges
+
+**3. Institute Authentication:**
+- Institute login: POST /api/institute/login
+- Forgot password: POST /api/institute/forgot-password
+
+**4. Institute Dashboard (GET /api/institute/dashboard):**
+- Lead management with organic/ad source tracking
+- Application management with status updates
+- Ad analytics
+
+### Test Cases Needed:
+1. **User Auth APIs:**
+   - POST /api/auth/user/send-otp - Send OTP to email
+   - POST /api/auth/user/verify-otp - Verify OTP returns pending_signup or authenticated
+   
+2. **Institute Auth APIs:**
+   - POST /api/institute/login - Test with invalid credentials (expect 401)
+   - POST /api/institute/forgot-password - Test password reset flow
+
+3. **Institute Dashboard APIs (requires auth):**
+   - GET /api/institute/dashboard - Returns leads and applications stats
+   - GET /api/institute/leads - Returns leads list
+   - GET /api/institute/applications - Returns applications list
+
+### Test Credentials:
+- Admin: admin@admissionbuddy.co / admin123
+- Test Institute: login_id: UPDA0001, password: hrZiJlz0NyXY
+
+---
+
 ## Test Session: Location-Specific Display Priority (Dec 19, 2025)
 
 ### Feature to Test:
