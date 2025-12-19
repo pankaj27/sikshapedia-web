@@ -6715,15 +6715,53 @@ class HomepageSettings(BaseModel):
     # Ranking Agencies
     ranking_agencies: List[str] = ["India Today", "NIRF", "The Week", "Outlook"]
     
+    # Quick Links Section (Top Colleges, Schools, Exams icons bar)
+    quick_links_title: str = "Quick Links"
+    quick_links: List[Dict[str, Any]] = [
+        {"name": "Top Colleges", "icon": "FiBookOpen", "link": "/india-colleges", "bg_color": "bg-blue-100", "icon_color": "text-blue-600"},
+        {"name": "Top Schools", "icon": "FiBook", "link": "/india-schools", "bg_color": "bg-red-100", "icon_color": "text-red-600"},
+        {"name": "Top Exams", "icon": "FiFileText", "link": "/exams", "bg_color": "bg-green-100", "icon_color": "text-green-600"},
+        {"name": "Top Courses", "icon": "FiBookOpen", "link": "/courses", "bg_color": "bg-purple-100", "icon_color": "text-purple-600"},
+        {"name": "Education Loans", "icon": "FiTrendingUp", "link": "/loans", "bg_color": "bg-pink-100", "icon_color": "text-pink-600"},
+        {"name": "Study Materials", "icon": "FiZap", "link": "/study-materials", "bg_color": "bg-indigo-100", "icon_color": "text-indigo-600"}
+    ]
+    
+    # Top Universities Section
+    top_universities_title: str = "Top Universities & Colleges"
+    
+    # Top Schools Section
+    top_schools_title: str = "Top Schools in India"
+    top_schools: List[Dict[str, Any]] = [
+        {"name": "Delhi Public School (DPS)", "location": "Multiple Locations", "board": "CBSE", "rating": 4.8, "fees": "2.5L", "type": "Day School", "rank": 1},
+        {"name": "Sanskriti School", "location": "New Delhi", "board": "CBSE", "rating": 4.7, "fees": "3.2L", "type": "Day School", "rank": 5},
+        {"name": "The Doon School", "location": "Dehradun", "board": "ICSE", "rating": 4.9, "fees": "8L", "type": "Boarding", "rank": 2},
+        {"name": "Mayo College", "location": "Ajmer", "board": "CBSE", "rating": 4.8, "fees": "7.5L", "type": "Boarding", "rank": 3}
+    ]
+    
+    # College Rankings Section
+    college_rankings_title: str = "College Rankings"
+    
+    # Newsletter Section
+    newsletter_title: str = "Subscribe to Our Newsletter"
+    newsletter_subtitle: str = "Get the latest updates on college admissions, exams, and education news"
+    newsletter_button_text: str = "Subscribe"
+    
     # Section Visibility
     show_hero_slider: bool = True
+    show_quick_links: bool = True
+    show_quick_actions: bool = True
     show_study_goals: bool = True
     show_programs: bool = True
+    show_top_universities: bool = True
+    show_top_schools: bool = True
+    show_college_rankings: bool = True
     show_cities: bool = True
-    show_featured_colleges: bool = True
-    show_top_exams: bool = True
-    show_latest_news: bool = True
+    show_newsletter: bool = True
+    show_sponsored_colleges: bool = True
     show_top_colleges_by_stream: bool = True
+    show_top_exams: bool = True
+    show_location_search: bool = True
+    show_latest_news: bool = True
     
     # CTA Section
     cta_enabled: bool = True
