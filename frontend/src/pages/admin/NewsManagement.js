@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiEdit, FiTrash2, FiSearch, FiArrowLeft, FiEye } from 'react-icons/fi';
+import { FiPlus, FiEdit, FiTrash2, FiSearch, FiEye } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
+import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 
 const NewsManagement = () => {
