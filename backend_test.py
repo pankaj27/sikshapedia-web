@@ -3770,16 +3770,19 @@ class APITester:
                          "Admin token not available")
 
     def run_all_tests(self):
-        """Run all test suites focusing on Apply Now Lead Capture System"""
-        print("🚀 TESTING APPLY NOW LEAD CAPTURE SYSTEM - BACKEND APIs")
+        """Run all test suites focusing on User and Institute Dashboard APIs"""
+        print("🚀 TESTING USER & INSTITUTE DASHBOARD APIs")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
         # Authentication first
         self.test_authentication()
         
-        # Primary test for this request
-        self.test_apply_now_lead_capture_system()
+        # NEW: User and Institute Dashboard API Tests (Primary focus)
+        self.test_user_authentication_otp_flow()
+        self.test_user_dashboard_apis_unauthorized()
+        self.test_institute_authentication()
+        self.test_admin_credential_generation()
         
         # Legacy tests for compatibility
         self.test_server_health()
