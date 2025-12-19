@@ -152,22 +152,22 @@ const CoursesDetailManagement = () => {
             )}
           </tbody>
         </table>
-      </div>
+        </div>
 
-      {/* Summary Stats */}
-      <div className="mt-6 grid grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-orange-600">{courses.length}</div>
-          <div className="text-sm text-gray-600">Total Courses</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-blue-600">
-            {courses.filter(c => c.degree_type === 'UG').length}
+        {/* Summary Stats */}
+        <div className="mt-6 grid grid-cols-4 gap-4">
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-orange-600">{courses.length}</div>
+            <div className="text-sm text-gray-600">Total Courses</div>
           </div>
-          <div className="text-sm text-gray-600">UG Courses</div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-green-600">
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-blue-600">
+              {courses.filter(c => c.degree_type === 'UG').length}
+            </div>
+            <div className="text-sm text-gray-600">UG Courses</div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-green-600">
             {courses.filter(c => c.degree_type === 'PG').length}
           </div>
           <div className="text-sm text-gray-600">PG Courses</div>
