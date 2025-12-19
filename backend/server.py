@@ -3830,8 +3830,40 @@ async def get_colleges(
     
     sort_order = 1 if sort_by == "name" else 1 if sort_by == "nirf_ranking" else -1
     
+    # Define projection based on fields parameter
+    if fields == "minimal":
+        # Minimal fields for listing pages - significantly reduces payload size
+        projection = {
+            "_id": 0,
+            "id": 1,
+            "name": 1,
+            "slug": 1,
+            "serial_number": 1,
+            "institution_type": 1,
+            "type": 1,
+            "location": 1,
+            "logo_url": 1,
+            "rating": 1,
+            "average_fees": 1,
+            "courses": 1,
+            "is_featured": 1,
+            "is_admission_open": 1,
+            "is_admission_partner": 1,
+            "is_no_cost_emi": 1,
+            "is_verified": 1,
+            "display_priority": 1,
+            "state_priority": 1,
+            "city_priority": 1,
+            "accreditation": 1,
+            "ranking": 1,
+            "established_year": 1
+        }
+    else:
+        # Full data for detail pages and admin
+        projection = {"_id": 0}
+    
     # Fetch colleges
-    colleges = await db.colleges.find(query, {"_id": 0}).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
+    colleges = await db.colleges.find(query, projection).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
     
     # Apply location-specific priority sorting
     def get_priority(college):
