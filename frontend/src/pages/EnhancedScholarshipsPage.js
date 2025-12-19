@@ -274,7 +274,7 @@ const ScholarshipsPage = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <FiCalendar className="text-orange-600 text-sm" />
-                    <span className="text-gray-700"><strong>Deadline:</strong> {new Date(scholarship.deadline).toLocaleDateString()}</span>
+                    <span className="text-gray-700"><strong>Deadline:</strong> {scholarship.application_end_date ? new Date(scholarship.application_end_date).toLocaleDateString() : 'Check website'}</span>
                   </div>
                 </div>
 
