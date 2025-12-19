@@ -568,10 +568,14 @@ const CollegeDuniaHome = () => {
               {featuredColleges.map((college, idx) => (
                 <SwiperSlide key={college.id}>
                   <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 h-[340px] flex flex-col">
-                    {/* Modern Header with Gradient Overlay */}
+                    {/* Modern Header with Gradient Overlay - Uses banner_url first, then images[0] */}
                     <div className="relative h-28">
-                      {college.images?.[0] ? (
-                        <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
+                      {(college.banner_url || college.images?.[0]) ? (
+                        <img 
+                          src={college.banner_url || college.images[0]} 
+                          alt={college.banner_alt || college.name} 
+                          className="w-full h-full object-cover" 
+                        />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
                       )}
