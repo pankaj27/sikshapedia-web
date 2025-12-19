@@ -870,6 +870,7 @@ const CollegeDuniaHome = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* Popular Cities */}
       {showCities && (
