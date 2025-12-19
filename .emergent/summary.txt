@@ -1,73 +1,108 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to build a comprehensive college portal. In this session, the user's requests focused on making the frontend fully dynamic and controllable via the admin panel.
+The user's primary goal is to gain full, dynamic control over the college portal's frontend content and layout directly from the admin panel.
 
-1.  **Connect Static Pages to CMS**: The user wanted the static pages (, , , ) to be editable from the admin panel.
-2.  **Connect Study Abroad Page**: The user asked for admin control over the  listing page.
-3.  **Enhance Study Abroad Settings**: The user requested a dedicated settings page for the Study Abroad listing, including full SEO controls with auto-generation.
-4.  **Full Homepage Control**: The user demanded complete backend control over the entire homepage (), including the visibility and content of all 15 sections, from the hero slider to the footer components. This became the main focus, requiring several iterations to satisfy the user's definition of properly connected.
-5.  **Fix Admin Form Functionality**: The user reported that the Add College and Add School buttons in the new Homepage Settings form were not working.
+In this session, the user's requests expanded significantly, moving from fixing simple button functionality to demanding granular control over content ordering and appearance across the entire site. Key requests included:
+- **Homepage Content Control:** Making several previously hardcoded homepage sections (, , , ) fully dynamic.
+- **Manual Sorting/Curation:** Implementing features to manually select and re-order content on the homepage for all major sections, overriding default database order.
+- **Listing Page Sorting:** Implementing a  system to manually control the order of items on main listing pages (e.g., , ).
+- **Location-Specific Sorting:** A request to have different display priorities for items based on the geographical context (e.g., a college having a different rank on the national list vs. a state list).
+- **UI/UX Enhancements:** Redesigning the college/school cards for a modern look, fixing layout issues like inconsistent heights and overlapping elements.
+- **New Features:** Adding new badges (Admission Partner, No Cost EMI) to colleges and ensuring they are displayed correctly on all relevant pages.
+- **Banner Image Integration:** Ensuring the uploaded  for a college is used on its homepage card and detail page hero section.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is a powerful CMS. The public-facing static pages (, , etc.) and the  page are now fully dynamic, fetching their content from the backend admin panel.
+The application is a powerful CMS-driven college portal. The entire homepage is now dynamically controlled from a comprehensive Homepage Settings page in the admin panel. This includes toggling the visibility of all sections and, crucially, manually selecting and ordering the specific content that appears in , , , , and .
 
-A new, highly comprehensive Homepage Settings feature has been implemented. This allows an administrator to control the content, visibility, and data of all 15 sections of the main homepage, from the hero slider and quick links down to the rankings tables and featured schools. The implementation required multiple iterations to ensure every piece of content was dynamic and that the admin controls were robust.
+A global  system is in place for Colleges, Schools, and Exams, allowing an administrator to override default sorting on listing pages. The college and school cards on the homepage have been redesigned with a modern UI, consistent layouts, and now display new badges like Admission Partner and No Cost EMI. The card's hero image correctly uses the uploaded banner.
 
 **Last working item**:
--   **Last item agent was working**: Fixing the Add School and Add College buttons in the  admin form. The buttons appeared non-functional because the form was saving empty arrays to the database, which, when re-fetched, would override the UI's default lists. The agent implemented a fix to merge the fetched data with local defaults if the arrays were empty, ensuring the UI always has data to display and append to.
--   **Status**: USER VERIFICATION PENDING
--   **Agent Testing Done**: Y
--   **Which testing method agent to use?**: manual testing by curl. The agent verified via screenshots that the admin form now correctly displays the default data for Top Schools and College Rankings. It then clicked the Add School button. The next step is to confirm a new, empty school row appears in the UI and can be saved.
+-   **Last item agent was working**: Implementing location-specific display priorities. The user wants to set different display orders for a college depending on whether it's viewed on the national, a specific state, or a specific city listing page. The agent has added the backend models (, ), updated the API logic, and added the UI to the . The feature is coded but not yet tested.
+-   **Status**: IN PROGRESS
+-   **Agent Testing Done**: N
+-   **Which testing method agent to use?**: Frontend testing agent. The test should verify that setting a state-specific priority for a college makes it appear at the specified rank on that state's listing page, without affecting its rank on the national or other state pages.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Verify Add button functionality in Homepage Settings (P0)**
-    -   **Description**: The user reported that the Add School and Add College buttons in the homepage settings admin were not working. The agent has implemented a fix but needs to confirm it works correctly.
-    -   **Status**: USER VERIFICATION PENDING
-    -   **Next step**: The agent's last action was clicking the Add School button. The next agent needs to take a screenshot to confirm that a new empty item row appears in the UI, fill it with data, save it, and verify it persists and appears on the public homepage.
+-   **Issue 1: Implement and Verify Location-Specific Display Priority (P0)**
+    -   **Description**: The user wants the ability to set different display priorities for colleges on national, state, and city listing pages. The implementation is complete but requires testing and verification.
+    -   **Status**: IN PROGRESS
+    -   **Attempted fixes**: N/A (new feature).
+    -   **Next debug checklist**:
+        1.  Restart the backend service to load the latest code changes.
+        2.  Navigate to a college's edit page in the admin panel.
+        3.  Verify the new UI for State Priorities and City Priorities is visible.
+        4.  Add a state priority for a college (e.g., set priority  for Maharashtra).
+        5.  Save the changes.
+        6.  Navigate to that state's public listing page (e.g., ) and confirm the college now appears at the top.
+        7.  Verify the college's position on the main listing page () is unchanged (or respects the global ).
+    -   **Why fix this issue and what will be achieved with the fix?**: This will provide the user with fine-grained control over content ranking in different geographical contexts, a key feature they requested.
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: Both.
+    -   **Blocked on other issue**: None.
 
 **In progress Task List**:
--   None. The homepage control task is pending user verification.
+-   **Task 1: Complete Location-Specific Display Priority Feature (P0)**
+    -   **Where to resume**: The backend and frontend code has been written. The next step is to restart the backend (backend: stopped
+backend: started) and proceed with testing as outlined in the issue above.
+    -   **What will be achieved with this?**: The user will gain the ability to manually rank colleges differently for national, state, and city-level views.
+    -   **Status**: IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?**: Both.
+    -   **Blocked on something**: None.
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   (P1) **Complete Refactor of **: The file is significantly cleaner after previous refactoring, but a full modularization by moving remaining endpoints (courses, exams, colleges) into their own router files is still needed.
-    -   (P2) **Continue Refactor of Large Admin Components**: , , and  remain very large and should be broken down into smaller, reusable components.  has also become very large and is a candidate for refactoring.
-    -   (P3) **Connect Frontend Pages to Backend**: The frontend pages , , and  now have backend support and need to be fully connected to display dynamic data from the admin panel.
+    -   (P1) **Add  to News**: Implement the global display priority feature for the News model, API, and admin form, which was missed.
+    -   (P2) **Refactor **: Continue modularizing the main backend file by moving endpoints into separate router files.
+    -   (P3) **Refactor Large Admin Components**:  and  have become extremely large and should be broken down into smaller, manageable components.
+    -   (P4) **Connect Remaining Frontend Pages**: The , , and  pages need to be connected to the backend to display dynamic data.
 -   **Future Tasks:**
-    -   (P4) **Create Automated Tests**: Develop a suite of automated tests for the advanced content features (TOC, tables, widgets) and admin workflows to ensure long-term stability.
+    -   (P5) **Create Automated Tests**: Develop a suite of automated tests for the advanced content curation and admin workflows.
 
 **Completed work in this session**
--   **Static Pages Connected to CMS**: The , , , and  pages now fetch their content dynamically from the Static Page CMS, with a fallback to the original content.
--   **Study Abroad Page Connected to Admin**: The public  page now fetches its list of universities from the  endpoint, making it fully dynamic.
--   **Feature - Study Abroad Listing Settings**: Created a new admin page () to control the Study Abroad page's hero, stats, featured countries, and full SEO settings, including auto-generation.
--   **Feature - Comprehensive Homepage CMS**: Built a new admin page () giving administrators full control over the homepage. This includes:
-    -   Toggling the visibility of all 15 sections.
-    -   Editing titles, subtitles, and content for each section.
-    -   Managing dynamic lists like Quick Links, Quick Actions, Top Schools, Popular Cities, and the College Rankings table directly from the homepage settings.
--   **Bug Fix - Admin Data Display**: Resolved a critical issue where the admin panel would show empty lists for sections like Top Schools and Rankings if the database had empty arrays. The fix ensures the UI falls back to default data, making the Add buttons functional.
--   **Homepage Fully Dynamic**: Refactored  to remove almost all hardcoded content, connecting every section title, content block, and data list to the new  endpoint.
+-   **Feature - Homepage Autocomplete**: Add College/School in homepage settings now uses a search/autocomplete feature to add existing entries.
+-   **Feature - Dynamic Homepage Sections**: Made , , , , and  sections dynamic, fetching data from the backend.
+-   **Feature - Manual Homepage Curation**: Implemented admin UI to manually select and re-order content for all major homepage sections.
+-   **Feature - Global Display Priority**: Added a  field to Colleges, Schools, and Exams to control their order on listing pages.
+-   **UI/UX - Modern Card Redesign**: Redesigned homepage college/school cards with a modern look, fixing all layout and height issues.
+-   **Feature - New College Badges**: Added Admission Partner and No Cost EMI badges, which are now visible on the homepage, college listing page, and detail pages.
+-   **Feature - Banner Image Integration**: College cards and detail pages now correctly use the uploaded  for the hero image.
 
 **Earlier issues found/mentioned but not fixed**
--   None.
+-   **Issue 1: Missing Display Priority for News**
+    -   **Debug checklist**: The  field needs to be added to the  Pydantic model in . The  listing endpoint must be updated to use this field for sorting. The news admin form needs a UI input for this field.
+    -   **Why to solve this issue and what will be achieved with this?**: To provide consistent manual sorting capabilities across all major content types as requested by the user.
+    -   **Should Test frontend/backend/both after fix**: Both.
+    -   **Is recurring issue?**: N.
 
 **Known issue recurrence from previous fork**
--   ** Monolith**: This technical debt is being addressed but is not yet fully resolved. The refactoring is in progress.
--   **Admin Form Complexity**: This technical debt is also being addressed, but forms like  and the new  remain large.
+-   ** Monolith**: This technical debt persists and is growing as more endpoints are added.
+-   **Large React Components**: The admin forms, especially , are becoming unmaintainably large.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Dynamic Page Rendering with Fallbacks**: Implemented a pattern using a custom hook () to fetch CMS data for static pages, gracefully falling back to hardcoded content if the API fails or no data exists.
--   **Comprehensive Admin Settings Model**: Designed a complex Pydantic model () and a corresponding React state structure to manage over 15 distinct sections, each with its own visibility toggle, titles, and dynamic data lists (e.g., rankings, schools, quick links).
--   **Robust UI State Management**: Solved a recurring problem where empty arrays from the database would break the admin UI. The solution involves checking for and merging empty arrays with default data upon fetching, ensuring the UI is always populated and functional.
--   **Iterative Development**: The agent worked through multiple user feedback loops to progressively make the homepage more dynamic, demonstrating the ability to refine a feature based on evolving, and sometimes vague, user requirements.
+-   **Manual Content Curation**: An admin can now override default sorting by creating ordered lists of content IDs (e.g., ) within a single  document. The backend then fetches and returns these specific items in the specified order.
+-   **Location-Aware Sorting**: The  API endpoint now uses a dynamic MongoDB aggregation pipeline. It checks for  or  query parameters and, if present, adds a  stage that uses the new  or  fields before falling back to the global .
+-   **Dynamic Component Refactoring**: Converted previously static/hardcoded homepage components into fully dynamic ones that fetch their content from new, dedicated API endpoints (e.g., ).
 
 **key DB schema**
--   ** (NEW Pydantic Model)**: Stores hero content, SEO settings, stats, and featured items for the  page. Managed in the  collection.
--   ** (NEW Pydantic Model)**: A large model storing all configurable data for the main homepage, including visibility toggles and content for 15 sections. Managed in the  collection.
+-   ** model**:
+    -   
+    -   
+    -   
+    -   
+    -   
+-   ** model**:
+    -   
+    -   
+    -   
+    -   
+    -   
+-   ** &  models**:
+    -   
 
 **changes in tech stack**
 -   None.
@@ -81,47 +116,46 @@ A new, highly comprehensive Homepage Settings feature has been implemented. This
 -   
 -   
 -   
--   
--   
--   
--   
--   
 
 **Areas that need refactoring**:
--   ****: Still contains many core routes that should be modularized.
--   ****: Now over 1000 lines. The individual sections should be broken out into their own components.
--   ****: Now over 1000 lines. The management UI for each content block could be its own component.
+-   ****: Urgently needs to be broken down into sub-components for each management section (e.g., , ). The file is now extremely large and difficult to maintain.
+-   ****: This form is also becoming very large and could benefit from being split into smaller components based on sections (e.g., Badges, Priorities, Basic Info).
+-   ****: The main backend file continues to grow, increasing technical debt. A concerted effort to modularize into routers is needed.
 
 **key api endpoints**
--   **/api/study-abroad-listing-settings**: (GET, PUT) - **NEW**
--   **/api/homepage-settings**: (GET, PUT) - **NEW**
--   **/api/static-pages/{page_slug}**: (GET) - Now consumed by multiple frontend pages.
--   **/api/study-abroad**: (GET) - Now consumed by the public frontend page.
+-   **/api/colleges/featured-homepage**: (GET) **NEW** - Returns colleges specified in .
+-   **/api/schools/featured-homepage**: (GET) **NEW** - Returns schools specified in .
+-   **/api/exams/featured-homepage**: (GET) **NEW** - Returns exams specified in .
+-   **/api/news/featured-homepage**: (GET) **NEW** - Returns news specified in .
+-   **/api/colleges/by-stream-homepage**: (GET) **NEW** - Returns colleges for streams specified in .
+-   **/api/colleges**: (GET) - Logic updated to handle global, state, and city-level .
+-   **/api/schools**: (GET) - Logic updated to handle  and added a  parameter.
+-   **/api/exams**: (GET) - Logic updated to handle .
 
 **Critical Info for New Agent**
--   **Homepage is the priority**: The user has repeatedly focused on getting full and proper control over the homepage. The work is nearly complete, but you must verify the final Add button fix and be prepared for further refinement requests on this feature.
--   **The Empty Array Problem**: Be aware of the pattern where the database may contain documents with empty arrays for fields that have defaults in the Pydantic model. The frontend solution was to check for empty arrays () and merge with defaults if needed. This pattern is crucial for the admin panel's stability and may be needed elsewhere.
--   **Verifying the Last Fix**: Your immediate task is to confirm the Add School and Add College buttons work. Take a screenshot after clicking Add School, confirm a new row appears, fill it, save, and ensure the data persists on both the admin panel and the public homepage.
+-   The user's core requirement is maximum manual control. When implementing new features, always consider providing a manual override or curation option.
+-   Your immediate task is to test the **location-specific display priority** feature. The code is written but untested. Follow the test plan in the Last working item section.
+-   Be mindful of the complexity in . It's a critical but fragile component due to its size.
+-   The listing page for colleges is , which renders the  component.
 
 **documents and test_reports created in this job**
--    (Updated for backend and frontend tests).
+-    (updated for backend tests)
 
 **Last 10 User Messages and any pending HUMAN messages**
--   User: add college and ad school is nit working in home page setting form
--   User: College Rankings 2024 this data of home page come from where ?
--   User: make it dynamic in home page setting in admin panel
--   User: is all section connected with backend check properly
--   User: still error
--   User: check properly . section name in frontend and section name in back end not matching .... what you are doing ... check the entair front end and connect it with back end ..... all section you need to make dynamic ... understand
--   User: is home page properly controol from this home page back end ? what you make ? do it properly .... seethe home page properly duffer ...
--   User: https://edumanager-cms.preview.emergentagent.com/
-how i control this page from backend
--   User: in seo setting need auto generation option . need all seo field
--   User: proceed
+-   display priority i understand for india page .... but if i need the same thing for state page or city page ...... i mean different priority for state or city page . how i do ?
+-   i add IIT Bombay Eng no cost emi and admission partner but it is not showing college list .
+-   is the banner shown in college card hero section
+-   i have banner upload option in institution entry ...... where the banner will be shown
+-   i add IIT Bombay Eng no cost emi and admission partner .... but it is not showing in home page college card why ?
+-   add admission partner and no cost emi badge in institution entry from
+-   another problem is . in every listing page i need to place college,school, as per my choice . last entry college i want to place in middle or top , how ?
+-   Top Colleges by Stream section in home page how i manage this section from back end
+-   similarly problem for Schools , Exams, News & Alerts
+-   see if ihave 100 top college in database which will show in front end . if i want 99 number college to show in top college number 1 in home page how i do that ?
 
 **Project Health Check:**
--   **Broken**: None
--   **Mocked**: None
+-   **Broken**: None.
+-   **Mocked**: None.
 
 **3rd Party Integrations**
 -   React Icons
@@ -140,4 +174,4 @@ how i control this page from backend
 -   **Admin Password**: 
 
 **What agent forgot to execute**
--   The agent did not forget to execute any major tasks. The development of the homepage CMS was an iterative process driven by detailed user feedback. The current pending issue with the Add buttons is the final step in this iterative implementation.</analysis>
+-   The agent implemented the  feature for Colleges, Schools, and Exams but forgot to add it to the  model and its related admin form and API endpoint.</analysis>
