@@ -2016,6 +2016,16 @@ const CollegeDetailPage = ({ overrideId }) => {
           </aside>
         </div>
       </div>
+
+      {/* Apply Now Modal */}
+      <ApplyNowModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        collegeId={college?.id}
+        collegeName={college?.name}
+        collegeCourses={college?.courses?.map(c => typeof c === 'object' ? c.name : c) || []}
+        source="college"
+      />
     </div>
   );
 };
