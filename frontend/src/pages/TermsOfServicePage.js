@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiFileText, FiCheckCircle, FiAlertCircle, FiUsers, FiBook, FiMail, FiPhone } from 'react-icons/fi';
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
 
 const TermsOfServicePage = () => {
   const lastUpdated = 'December 19, 2025';
