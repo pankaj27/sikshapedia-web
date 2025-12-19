@@ -273,8 +273,8 @@ function App() {
                   <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
                   <Route path="/courses/:slug" element={<CourseDetailPage />} />
                   
-                  {/* User & Dashboard */}
-                  <Route path="/dashboard" element={<StudentDashboard />} />
+                  {/* User & Dashboard - Old dashboard moved to /old-dashboard */}
+                  <Route path="/old-dashboard" element={<StudentDashboard />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/search" element={<GlobalSearchPage />} />
                   <Route path="/write-review" element={<WriteReviewPage />} />
