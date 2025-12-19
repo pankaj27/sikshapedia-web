@@ -475,7 +475,7 @@ const CollegeDuniaHome = () => {
       {/* Programs Exploration - Compact */}
       <section className="py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-5">Explore Programs</h2>
+          <h2 className="text-2xl font-bold text-center mb-5">{pageSettings?.programs_title || 'Explore Programs'}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {programs.map((program, idx) => {
               const IconComponent = getIconComponent(program.icon);
