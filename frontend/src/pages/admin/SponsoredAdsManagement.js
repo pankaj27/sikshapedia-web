@@ -463,23 +463,19 @@ const SponsoredAdsManagement = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <Link to="/admin/dashboard" className="p-2 hover:bg-gray-200 rounded-lg">
-            <FiArrowLeft size={20} />
-          </Link>
+    <AdminLayout>
+      <div className="p-4 md:p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Sponsored Ads Management</h1>
             <p className="text-sm text-gray-500">Manage ads across all pages - {AD_PLACEMENTS.length} placements available</p>
           </div>
+          <Button onClick={handleSave} disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <FiSave className="mr-2" />
+            {saving ? 'Saving...' : 'Save All Changes'}
+          </Button>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white">
-          <FiSave className="mr-2" />
-          {saving ? 'Saving...' : 'Save All Changes'}
-        </Button>
-      </div>
 
       <div className="flex gap-6">
         {/* Sidebar - Placement List */}
