@@ -68,16 +68,20 @@ const CollegeDuniaHome = () => {
 
   const fetchData = async () => {
     try {
-      const [collegesRes, statsRes, sponsoredRes, bannerRes] = await Promise.all([
+      const [collegesRes, statsRes, sponsoredRes, bannerRes, settingsRes] = await Promise.all([
         api.get('/colleges/featured?limit=12'),
         api.get('/stats'),
         api.get('/sponsored-ads-multi/home_featured?limit=6').catch(() => ({ data: [] })),
-        api.get('/sponsored-ads-multi/home_banner?limit=1').catch(() => ({ data: [] }))
+        api.get('/sponsored-ads-multi/home_banner?limit=1').catch(() => ({ data: [] })),
+        api.get('/homepage-settings').catch(() => ({ data: null }))
       ]);
       setFeaturedColleges(collegesRes.data);
       setStats(statsRes.data);
       setSponsoredFeatured(sponsoredRes.data || []);
       setHomeBannerAd(bannerRes.data?.[0] || null);
+      if (settingsRes.data) {
+        setPageSettings(settingsRes.data);
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
