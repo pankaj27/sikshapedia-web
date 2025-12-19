@@ -24,9 +24,19 @@ except ImportError:
 
 router = APIRouter(prefix="/institute", tags=["Institute Auth & Dashboard"])
 
-# Get database from app state
-async def get_db(request: Request):
-    return request.app.state.db
+# Database reference - will be set by main app
+_db = None
+
+def set_database(database):
+    """Set database reference from main app"""
+    global _db
+    _db = database
+
+async def get_db():
+    """Get database reference"""
+    if _db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    return _db
 
 # ============ CONFIG ============
 
