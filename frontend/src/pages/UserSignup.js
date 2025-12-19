@@ -367,7 +367,7 @@ const UserSignup = () => {
                   <SearchableSelect
                     options={INDIA_CITIES}
                     value={city}
-                    onChange={setCity}
+                    onChange={(e) => setCity(e.target.value)}
                     placeholder="Search & select city"
                     icon={<FiMapPin className="text-gray-400" />}
                   />
@@ -379,7 +379,7 @@ const UserSignup = () => {
                   <SearchableSelect
                     options={courses.length > 0 ? courses : ['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Sc', 'M.Sc', 'MBBS', 'BDS', 'LLB', 'B.Com', 'M.Com', 'BCA', 'MCA', 'B.Pharm', 'M.Pharm']}
                     value={course}
-                    onChange={setCourse}
+                    onChange={(e) => setCourse(e.target.value)}
                     placeholder="Search & select course"
                     icon={<FiBook className="text-gray-400" />}
                   />
