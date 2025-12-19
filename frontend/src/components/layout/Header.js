@@ -441,12 +441,12 @@ const Header = () => {
 
             {!user && (
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t">
-                <Link to="/login">
+                <Link to="/signup">
                   <Button variant="outline" className="w-full">
                     Login
                   </Button>
                 </Link>
-                <Link to="/register">
+                <Link to="/signup">
                   <Button className="w-full bg-orange-600 hover:bg-orange-700">
                     Sign Up
                   </Button>
