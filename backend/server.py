@@ -62,6 +62,23 @@ SUBSCRIPTION_PACKAGES = {
     "premium-yearly": {"amount": 2999.0, "name": "Premium Yearly", "duration_days": 365}
 }
 
+# Resend Email Configuration
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
+
+# Twilio WhatsApp Configuration
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID', '')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN', '')
+TWILIO_WHATSAPP_NUMBER = os.environ.get('TWILIO_WHATSAPP_NUMBER', '')
+twilio_client = None
+if TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN:
+    try:
+        twilio_client = TwilioClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    except Exception as e:
+        logging.error(f"Failed to initialize Twilio client: {e}")
+
 # Create the main app
 app = FastAPI(title="Sikshapedia API", version="2.0.0")
 api_router = APIRouter(prefix="/api")
