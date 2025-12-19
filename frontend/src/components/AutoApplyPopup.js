@@ -68,8 +68,8 @@ const AutoApplyPopup = () => {
       clearTimeout(timerRef.current);
     }
 
-    // Don't show popup on admin pages
-    if (isAdminPage) {
+    // Don't show popup on admin pages or auth pages
+    if (isAdminPage || isAuthPage) {
       return;
     }
 
