@@ -1711,7 +1711,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                                 <p className="text-sm text-gray-600">
                                   {college.location?.city}, {college.location?.state}
                                 </p>
-                                <p className="text-sm text-gray-600">India - 400076</p>
+                                <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
                               </div>
                             </div>
 
@@ -1719,7 +1719,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                               <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
                               <div>
                                 <p className="text-sm text-gray-700 font-medium">Phone</p>
-                                <p className="text-sm text-gray-600">+91 22-2576-7000</p>
+                                <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
                               </div>
                             </div>
 
@@ -1728,7 +1728,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                               <div>
                                 <p className="text-sm text-gray-700 font-medium">Email</p>
                                 <p className="text-sm text-gray-600">
-                                  info@{college.name.toLowerCase().replace(/\s+/g, '')}.edu
+                                  {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
                                 </p>
                               </div>
                             </div>
@@ -1737,8 +1737,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                               <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
                               <div>
                                 <p className="text-sm text-gray-700 font-medium">Website</p>
-                                <a href="#" className="text-sm text-blue-600 hover:underline">
-                                  www.{college.name.toLowerCase().replace(/\s+/g, '')}.ac.in
+                                <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                                  {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
                                 </a>
                               </div>
                             </div>
@@ -1761,24 +1761,15 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </div>
                     </div>
 
-                    {/* Sponsored Sidebar Ad */}
-                    <div className="lg:col-span-1 mt-4">
-                      <SidebarSponsoredAd 
-                        placementId="college_detail_sidebar" 
-                        title="Similar Colleges"
-                      />
-                    </div>
-
-                    {/* Google Map */}
+                    {/* Google Map - Takes 2 columns */}
                     <div className="lg:col-span-2">
-                      <div className="bg-white border rounded-lg overflow-hidden h-full min-h-[500px]">
-                        {/* Google Maps Embed - Replace with actual Google Maps API */}
+                      <div className="bg-white border rounded-lg overflow-hidden h-full min-h-[400px]">
                         <iframe
                           title="College Location Map"
-                          src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.0!2d72.9!3d19.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA2JzAwLjAiTiA3MsKwNTQnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890`}
+                          src={college.location?.map_embed_url || `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.0!2d72.9!3d19.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA2JzAwLjAiTiA3MsKwNTQnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890`}
                           width="100%"
                           height="100%"
-                          style={{ border: 0, minHeight: '500px' }}
+                          style={{ border: 0, minHeight: '400px' }}
                           allowFullScreen=""
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
