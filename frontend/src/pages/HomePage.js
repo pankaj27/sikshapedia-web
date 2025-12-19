@@ -162,8 +162,8 @@ const CollegeDuniaHome = () => {
   const newsletterTitle = pageSettings?.newsletter_title || 'Subscribe to Our Newsletter';
   const newsletterSubtitle = pageSettings?.newsletter_subtitle || 'Get the latest updates on college admissions, exams, and education news';
   
-  // Quick Links from settings
-  const quickLinks = pageSettings?.quick_links || [
+  // Quick Links from settings - check for empty array too
+  const defaultQuickLinks = [
     {name: 'Top Colleges', icon: 'FiBookOpen', link: '/india-colleges', bg_color: 'bg-blue-100', icon_color: 'text-blue-600'},
     {name: 'Top Schools', icon: 'FiBook', link: '/india-schools', bg_color: 'bg-red-100', icon_color: 'text-red-600'},
     {name: 'Top Exams', icon: 'FiFileText', link: '/exams', bg_color: 'bg-green-100', icon_color: 'text-green-600'},
@@ -171,16 +171,18 @@ const CollegeDuniaHome = () => {
     {name: 'Education Loans', icon: 'FiTrendingUp', link: '/loans', bg_color: 'bg-pink-100', icon_color: 'text-pink-600'},
     {name: 'Study Materials', icon: 'FiZap', link: '/study-materials', bg_color: 'bg-indigo-100', icon_color: 'text-indigo-600'}
   ];
+  const quickLinks = (pageSettings?.quick_links?.length > 0) ? pageSettings.quick_links : defaultQuickLinks;
   
-  // Quick Actions from settings
-  const quickActions = pageSettings?.quick_actions || [
+  // Quick Actions from settings - check for empty array too
+  const defaultQuickActions = [
     { id: 'apply', title: 'Apply Now', subtitle: 'Quick admission', icon: 'FiSend', gradient: 'from-orange-500 to-orange-600' },
     { id: 'question', title: 'Ask Question', subtitle: 'Get expert help', icon: 'FiMessageCircle', gradient: 'from-blue-500 to-blue-600' },
     { id: 'counselling', title: 'Counselling', subtitle: 'Free guidance', icon: 'FiPhone', gradient: 'from-purple-500 to-purple-600' }
   ];
+  const quickActions = (pageSettings?.quick_actions?.length > 0) ? pageSettings.quick_actions : defaultQuickActions;
   
-  // Top Schools from settings
-  const topSchoolsData = pageSettings?.top_schools || [
+  // Top Schools from settings - check for empty array too
+  const defaultTopSchools = [
     { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
     { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L', type: 'Day School', rank: 5 },
     { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L', type: 'Boarding', rank: 2 },
