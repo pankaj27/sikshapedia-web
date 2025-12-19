@@ -229,13 +229,54 @@ const Header = () => {
 
             {/* Auth Buttons / User Profile */}
             {user ? (
-              <div className="flex items-center gap-3">
-                <Link to="/dashboard">
-                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:text-orange-400">
-                    <FiUser />
-                    {user.name}
-                  </Button>
-                </Link>
+              <div className="relative" ref={userDropdownRef}>
+                <button
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="flex items-center gap-2 text-white hover:text-orange-400 transition-colors px-3 py-2 rounded-lg hover:bg-white/10"
+                >
+                  {user.profile_photo_url ? (
+                    <img src={user.profile_photo_url} alt="" className="w-8 h-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span className="hidden md:block font-medium">{user.name?.split(' ')[0]}</span>
+                  <FiChevronDown className={`transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {userDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border py-2 z-50">
+                    <div className="px-4 py-3 border-b">
+                      <p className="font-semibold text-gray-900">{user.name}</p>
+                      <p className="text-sm text-gray-500 truncate">{user.email}</p>
+                    </div>
+                    <Link 
+                      to="/dashboard" 
+                      className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      onClick={() => setUserDropdownOpen(false)}
+                    >
+                      <FiGrid size={18} /> Dashboard
+                    </Link>
+                    <Link 
+                      to="/dashboard" 
+                      className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 hover:text-orange-600"
+                      onClick={() => { setUserDropdownOpen(false); }}
+                    >
+                      <FiUser size={18} /> My Profile
+                    </Link>
+                    <div className="border-t my-1"></div>
+                    <button
+                      onClick={() => {
+                        setUserDropdownOpen(false);
+                        handleLogout();
+                      }}
+                      className="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 w-full text-left"
+                    >
+                      <FiX size={18} /> Logout
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-2">
