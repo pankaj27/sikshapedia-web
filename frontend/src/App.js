@@ -147,6 +147,10 @@ function App() {
             <Route path="/admin/loans-listing-settings" element={<LoansListingSettings />} />
             <Route path="/admin/study-materials" element={<StudyMaterialsManagement />} />
             <Route path="/admin/study-materials-listing-settings" element={<StudyMaterialsListingSettings />} />
+            <Route path="/admin/scholarships/new" element={<ScholarshipForm />} />
+            <Route path="/admin/scholarships/edit/:id" element={<ScholarshipForm />} />
+            <Route path="/admin/loans/new" element={<LoanForm />} />
+            <Route path="/admin/loans/edit/:id" element={<LoanForm />} />
             <Route path="/admin/courses" element={<CoursesManagement />} />
             <Route path="/admin/courses-detail" element={<CoursesDetailManagement />} />
             <Route path="/admin/courses-detail/new" element={<CourseDetailForm />} />

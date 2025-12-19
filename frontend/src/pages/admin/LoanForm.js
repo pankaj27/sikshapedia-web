@@ -230,7 +230,7 @@ const LoanForm = () => {
 
   const updateTableHeader = (tableIndex, colIndex, value) => {
     const newTables = [...formData.tables];
-    newTables[tableIndex].headers[colIdx] = value;
+    newTables[tableIndex].headers[colIndex] = value;
     handleChange('tables', newTables);
   };
 
