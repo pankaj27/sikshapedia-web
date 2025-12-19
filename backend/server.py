@@ -4085,7 +4085,7 @@ async def get_college(college_id: str):
     return College(**college)
 
 @api_router.post("/colleges", response_model=College)
-async def create_college(college_data: CollegeCreate, current_user: User = Depends(get_current_user)):
+async def create_college(college_data: CollegeCreate, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can create colleges")
     
@@ -4121,6 +4121,25 @@ async def create_college(college_data: CollegeCreate, current_user: User = Depen
     college_dict['updated_at'] = college_dict['updated_at'].isoformat()
     
     await db.colleges.insert_one(college_dict)
+    
+    # Generate institute credentials if contact info available
+    try:
+        from routes.institute_auth import create_institute_credentials
+        contact_email = college_data.contact.get('email') if college_data.contact else None
+        contact_phone = college_data.contact.get('phone') if college_data.contact else None
+        if contact_email or contact_phone:
+            await create_institute_credentials(
+                db, 
+                college.id, 
+                college.name, 
+                contact_email or '', 
+                contact_phone or '',
+                background_tasks
+            )
+            logging.info(f"✅ Institute credentials created for {college.name}")
+    except Exception as e:
+        logging.warning(f"⚠️ Could not create institute credentials: {e}")
+    
     return college
 
 @api_router.put("/colleges/{college_id}", response_model=College)
