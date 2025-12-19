@@ -2994,17 +2994,16 @@ class APITester:
             self.log_test("Pagination Functionality", False, f"Page 1 failed with status: {page1_status}")
 
     def run_all_tests(self):
-        """Run all test suites focusing on new CMS features"""
-        print("🚀 TESTING STATIC PAGES CMS & STUDY ABROAD INTEGRATION")
+        """Run all test suites focusing on Homepage Settings functionality"""
+        print("🚀 TESTING HOMEPAGE SETTINGS - ADD SCHOOL & ADD COLLEGE FUNCTIONALITY")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
         # Authentication first
         self.test_authentication()
         
-        # New feature tests
-        self.test_static_pages_cms()
-        self.test_study_abroad_dynamic_content()
+        # Primary test for this request
+        self.test_homepage_settings()
         
         # Legacy tests for compatibility
         self.test_server_health()
