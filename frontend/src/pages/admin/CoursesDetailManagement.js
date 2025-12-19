@@ -172,11 +172,12 @@ const CoursesDetailManagement = () => {
           </div>
           <div className="text-sm text-gray-600">PG Courses</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-purple-600">
-            {courses.filter(c => c.is_popular).length}
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="text-2xl font-bold text-purple-600">
+              {courses.filter(c => c.is_popular).length}
+            </div>
+            <div className="text-sm text-gray-600">Popular Courses</div>
           </div>
-          <div className="text-sm text-gray-600">Popular Courses</div>
         </div>
       </div>
     </AdminLayout>
