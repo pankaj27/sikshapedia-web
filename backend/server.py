@@ -139,11 +139,82 @@ class Faculty(BaseModel):
     specialization: Optional[str] = None
 
 class Scholarship(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    amount: str
-    eligibility: str
-    description: str
+    slug: Optional[str] = None
+    scholarship_type: Optional[str] = None
+    education_level: Optional[str] = None
+    provider: Optional[str] = None
+    provider_type: Optional[str] = None
+    amount: Optional[str] = None
+    amount_type: Optional[str] = None
+    application_start_date: Optional[str] = None
+    application_end_date: Optional[str] = None
+    short_description: Optional[str] = None
+    
+    # Eligibility
+    min_percentage: Optional[str] = None
+    max_family_income: Optional[str] = None
+    age_limit: Optional[str] = None
+    gender: Optional[str] = None
+    eligibility_criteria: List[str] = []
+    documents_required: List[str] = []
+    category: List[str] = []
+    states: List[str] = []
+    courses_applicable: List[str] = []
+    
+    # Media
+    featured_image: Optional[str] = None
+    featured_image_alt: Optional[str] = None
+    provider_logo: Optional[str] = None
+    gallery_images: List[str] = []
+    
+    # Content
+    content: Optional[str] = None
+    benefits: List[str] = []
+    application_process: Optional[str] = None
+    selection_process: Optional[str] = None
+    
+    # TOC & Tables
+    toc_enabled: bool = False
+    toc_items: List[Dict] = []
+    tables: List[Dict] = []
+    
+    # Contact & Links
+    official_website: Optional[str] = None
+    application_link: Optional[str] = None
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    
+    # SEO
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    meta_keywords: List[str] = []
+    canonical_url: Optional[str] = None
+    og_image: Optional[str] = None
+    auto_generate_seo: bool = True
+    schema_type: Optional[str] = "Scholarship"
+    
+    # Status
+    is_active: bool = True
+    is_featured: bool = False
+    views: int = 0
+    applications: int = 0
+    
+    # FAQs
+    faqs: List[Dict] = []
+    
+    created_by: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+    # Legacy fields for backward compatibility
+    eligibility: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[str] = None
+    level: Optional[str] = None
+    requirements: List[str] = []
+    website: Optional[str] = None
 
 # Exam Models
 class Exam(BaseModel):
