@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiShield, FiLock, FiEye, FiDatabase, FiMail, FiPhone } from 'react-icons/fi';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 
 const PrivacyPolicyPage = () => {
   const lastUpdated = 'December 19, 2025';
