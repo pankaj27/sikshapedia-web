@@ -1274,6 +1274,14 @@ const CollegeForm = () => {
             <input type="checkbox" checked={formData.is_sponsored} onChange={(e) => setFormData({...formData, is_sponsored: e.target.checked})} className="rounded text-purple-600" />
             <span>💎 Sponsored</span>
           </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_admission_partner} onChange={(e) => setFormData({...formData, is_admission_partner: e.target.checked})} className="rounded text-green-600" />
+            <span>🤝 Admission Partner</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" checked={formData.is_no_cost_emi} onChange={(e) => setFormData({...formData, is_no_cost_emi: e.target.checked})} className="rounded text-blue-600" />
+            <span>💳 No Cost EMI</span>
+          </label>
           
           {/* Display Priority for Listing Page Order */}
           <div className="flex items-center gap-2 bg-indigo-50 px-3 py-2 rounded-lg">
