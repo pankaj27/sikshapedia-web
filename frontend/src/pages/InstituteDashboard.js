@@ -108,7 +108,10 @@ const InstituteDashboard = () => {
   const handleLogout = async () => {
     try {
       await api.post('/institute/logout');
-    } catch (e) {}
+    } catch (e) {
+      // Ignore logout errors
+      console.log('Logout error:', e);
+    }
     localStorage.removeItem('institute_token');
     localStorage.removeItem('institute');
     navigate('/institute/login');
