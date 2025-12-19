@@ -1136,7 +1136,7 @@ const NewsForm = () => {
           </form>
         </main>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
