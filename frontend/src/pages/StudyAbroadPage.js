@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FiSearch, FiMapPin, FiGlobe, FiDollarSign, FiAward, FiCalendar, FiUsers, FiStar, FiChevronRight } from 'react-icons/fi';
+import { FiSearch, FiMapPin, FiGlobe, FiDollarSign, FiAward, FiCalendar, FiUsers, FiStar, FiChevronRight, FiPlus, FiMinus } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -13,14 +13,26 @@ const StudyAbroadPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [totalCount, setTotalCount] = useState(0);
+  const [settings, setSettings] = useState(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   useEffect(() => {
+    fetchSettings();
     fetchCountries();
   }, []);
 
   useEffect(() => {
     fetchUniversities();
   }, [selectedCountry]);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await api.get('/study-abroad-listing-settings');
+      setSettings(response.data);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
 
   const fetchCountries = async () => {
     try {
@@ -96,21 +108,36 @@ const StudyAbroadPage = () => {
     return 'N/A';
   };
 
+  // Get values from settings or use defaults
+  const heroTitle = settings?.hero_title || 'Study Abroad';
+  const heroSubtitle = settings?.hero_subtitle || 'Explore top universities around the world and find your perfect study destination';
+  const heroGradient = settings?.hero_bg_gradient || 'from-indigo-600 to-purple-700';
+  const stats = settings?.stats || [];
+  const featuredCountries = settings?.featured_countries || [];
+  const whyStudyAbroad = settings?.why_study_abroad || [];
+  const ctaTitle = settings?.cta_title || 'Need Help Choosing the Right University?';
+  const ctaSubtitle = settings?.cta_subtitle || 'Our expert counselors can help you find the perfect study abroad destination';
+  const ctaButtonText = settings?.cta_button_text || 'Get Free Counseling';
+  const ctaButtonLink = settings?.cta_button_link || '/counseling';
+  const faqs = settings?.faqs || [];
+  const metaTitle = settings?.meta_title || 'Study Abroad - Top Universities Worldwide | Admissionbuddy';
+  const metaDescription = settings?.meta_description || 'Explore top universities around the world for your study abroad journey.';
+  const metaKeywords = settings?.meta_keywords || [];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
-        <title>Study Abroad - Top Universities Worldwide | Admissionbuddy</title>
-        <meta name="description" content="Explore top universities around the world for your study abroad journey. Find programs, tuition fees, and admission requirements." />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        {metaKeywords.length > 0 && <meta name="keywords" content={metaKeywords.join(', ')} />}
       </Helmet>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-12">
+      <section className={`bg-gradient-to-r ${heroGradient} text-white py-12`}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">Study Abroad</h1>
-            <p className="text-base md:text-lg mb-6 text-indigo-100">
-              Explore top universities around the world and find your perfect study destination
-            </p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">{heroTitle}</h1>
+            <p className="text-base md:text-lg mb-6 text-white/90">{heroSubtitle}</p>
             
             <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
               <div className="flex gap-2">
@@ -129,11 +156,50 @@ const StudyAbroadPage = () => {
               </div>
             </form>
           </div>
+
+          {/* Stats */}
+          {stats.length > 0 && (
+            <div className="max-w-4xl mx-auto mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+              {stats.map((stat, idx) => (
+                <div key={idx} className="text-center bg-white/10 rounded-lg p-4">
+                  <div className="text-2xl mb-1">{stat.icon}</div>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="text-sm text-white/80">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
+      {/* Featured Countries */}
+      {featuredCountries.length > 0 && (
+        <section className="py-8 bg-white border-b">
+          <div className="container mx-auto px-4">
+            <h2 className="text-xl font-bold mb-4 text-center">Popular Destinations</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+              {featuredCountries.map((country, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedCountry(country.name)}
+                  className={`p-4 rounded-xl border-2 transition text-center hover:shadow-md ${
+                    selectedCountry === country.name 
+                      ? 'border-indigo-500 bg-indigo-50' 
+                      : 'border-gray-200 hover:border-indigo-300'
+                  }`}
+                >
+                  <div className="text-3xl mb-2">{country.flag}</div>
+                  <div className="font-semibold">{country.name}</div>
+                  <div className="text-xs text-gray-500">{country.universities}+ Universities</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Countries Filter */}
-      {countries.length > 0 && (
+      {countries.length > 0 && settings?.show_country_filter !== false && (
         <section className="bg-white border-b shadow-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
@@ -342,20 +408,65 @@ const StudyAbroadPage = () => {
         </div>
       </section>
 
+      {/* Why Study Abroad Section */}
+      {whyStudyAbroad.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold text-center mb-8">Why Study Abroad?</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {whyStudyAbroad.map((item, idx) => (
+                <div key={idx} className="text-center p-4">
+                  <div className="text-4xl mb-3">{item.icon}</div>
+                  <h3 className="font-semibold mb-1">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQs Section */}
+      {faqs.length > 0 && (
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-3xl">
+            <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+            <div className="space-y-3">
+              {faqs.map((faq, idx) => (
+                <div key={idx} className="bg-white rounded-lg border overflow-hidden">
+                  <button
+                    onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                    className="w-full flex justify-between items-center p-4 text-left font-medium hover:bg-gray-50 transition"
+                  >
+                    <span>{faq.question}</span>
+                    {openFaqIndex === idx ? <FiMinus /> : <FiPlus />}
+                  </button>
+                  {openFaqIndex === idx && (
+                    <div className="px-4 pb-4 text-gray-600">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CTA Section */}
       {universities.length > 0 && (
-        <section className="py-12 bg-gradient-to-r from-indigo-600 to-purple-700">
+        <section className={`py-12 bg-gradient-to-r ${heroGradient}`}>
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Need Help Choosing the Right University?
+              {ctaTitle}
             </h2>
-            <p className="text-indigo-100 mb-6 max-w-2xl mx-auto">
-              Our expert counselors can help you find the perfect study abroad destination based on your goals and preferences.
+            <p className="text-white/90 mb-6 max-w-2xl mx-auto">
+              {ctaSubtitle}
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/counseling">
+              <Link to={ctaButtonLink}>
                 <Button className="bg-white text-indigo-700 hover:bg-gray-100">
-                  Get Free Counseling
+                  {ctaButtonText}
                 </Button>
               </Link>
               <Link to="/scholarships">
