@@ -7039,6 +7039,13 @@ async def get_scholarships(limit: int = 100):
     scholarships = await db.scholarships.find({}, {"_id": 0}).limit(limit).to_list(limit)
     return scholarships
 
+@api_router.get("/scholarships/{scholarship_id}")
+async def get_scholarship(scholarship_id: str):
+    scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
+    if not scholarship:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    return scholarship
+
 @api_router.post("/scholarships")
 async def create_scholarship(scholarship: Scholarship):
     scholarship_dict = scholarship.model_dump()
@@ -7068,6 +7075,13 @@ async def delete_scholarship(scholarship_id: str):
 async def get_loans(limit: int = 100):
     loans = await db.loans.find({}, {"_id": 0}).limit(limit).to_list(limit)
     return loans
+
+@api_router.get("/loans/{loan_id}")
+async def get_loan(loan_id: str):
+    loan = await db.loans.find_one({"id": loan_id}, {"_id": 0})
+    if not loan:
+        raise HTTPException(status_code=404, detail="Loan not found")
+    return loan
 
 @api_router.post("/loans")
 async def create_loan(loan: Loan):
