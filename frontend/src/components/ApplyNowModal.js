@@ -138,6 +138,10 @@ const ApplyNowModal = ({
       await api.post('/leads', payload);
       setSuccess(true);
       
+      // Mark user as having submitted a lead - they won't get popup on every page anymore
+      localStorage.setItem('leadSubmitted', 'true');
+      sessionStorage.setItem('applyPopupShown', 'true');
+      
       // Auto close after 3 seconds
       setTimeout(() => {
         onClose();
