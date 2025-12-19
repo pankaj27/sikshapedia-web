@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FiX, FiUser, FiMail, FiPhone, FiMapPin, FiBook, FiSend, FiLoader, FiCheck, FiMessageCircle } from 'react-icons/fi';
 import api from '../api/axios';
 
@@ -21,8 +21,11 @@ const ApplyNowModal = ({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [courses, setCourses] = useState(collegeCourses);
+  const [courses, setCourses] = useState([]);
   const [settings, setSettings] = useState(null);
+  
+  // Memoize collegeCourses to prevent infinite loops
+  const memoizedCollegeCourses = useMemo(() => collegeCourses, [JSON.stringify(collegeCourses)]);
 
   // Fetch lead settings on mount
   useEffect(() => {
