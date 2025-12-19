@@ -112,11 +112,34 @@ const HomepageSettings = () => {
     fetchSettings();
   }, []);
 
+  // Default data for when arrays are empty
+  const defaultTopSchools = [
+    { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
+    { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L', type: 'Boarding', rank: 2 },
+    { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L', type: 'Boarding', rank: 3 },
+    { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
+  ];
+
+  const defaultRankingsData = [
+    { rank: 1, name: 'IIT Bombay', location: 'Mumbai', rating: 4.9, fees: '2.5L', type: 'Engineering' },
+    { rank: 2, name: 'IIT Delhi', location: 'New Delhi', rating: 4.8, fees: '2.5L', type: 'Engineering' },
+    { rank: 3, name: 'IIT Madras', location: 'Chennai', rating: 4.8, fees: '2.5L', type: 'Engineering' },
+    { rank: 4, name: 'IIT Kanpur', location: 'Kanpur', rating: 4.7, fees: '2.5L', type: 'Engineering' },
+    { rank: 5, name: 'IIT Kharagpur', location: 'Kharagpur', rating: 4.7, fees: '2.5L', type: 'Engineering' }
+  ];
+
   const fetchSettings = async () => {
     try {
       const response = await api.get('/homepage-settings');
       if (response.data) {
-        setSettings(prev => ({ ...prev, ...response.data }));
+        // Merge with defaults for empty arrays
+        const data = {
+          ...response.data,
+          top_schools: response.data.top_schools?.length > 0 ? response.data.top_schools : defaultTopSchools,
+          college_rankings_data: response.data.college_rankings_data?.length > 0 ? response.data.college_rankings_data : defaultRankingsData,
+          college_rankings_years: response.data.college_rankings_years?.length > 0 ? response.data.college_rankings_years : ['2024', '2023', '2022']
+        };
+        setSettings(prev => ({ ...prev, ...data }));
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
