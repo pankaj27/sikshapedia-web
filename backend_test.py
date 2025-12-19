@@ -1032,6 +1032,252 @@ class APITester:
                 self.log_test("Comprehensive Settings Update", False, 
                              f"Status: {status}", response)
 
+    def test_homepage_settings(self):
+        """Test Homepage Settings Admin Page - Add School and Add College functionality"""
+        print("🏠 Testing Homepage Settings Admin Page...")
+        
+        # Test 1: GET /api/homepage-settings (public access)
+        success, response, status = self.make_request("GET", "/homepage-settings")
+        if success and isinstance(response, dict):
+            # Verify expected structure from review request
+            expected_fields = [
+                "top_schools", "college_rankings_data", "top_schools_title", 
+                "college_rankings_title", "hero_title", "show_top_schools", "show_college_rankings"
+            ]
+            
+            present_fields = []
+            missing_fields = []
+            
+            for field in expected_fields:
+                if field in response:
+                    present_fields.append(field)
+                else:
+                    missing_fields.append(field)
+            
+            if len(present_fields) >= 5:  # At least 5 out of 7 fields should be present
+                self.log_test("GET /homepage-settings", True, 
+                             f"Retrieved settings with {len(present_fields)}/7 expected fields")
+                
+                # Verify Top Schools structure
+                if isinstance(response.get("top_schools"), list):
+                    schools_count = len(response["top_schools"])
+                    # Check for expected schools from review request
+                    expected_schools = ["Delhi Public School", "The Doon School", "Mayo College", "Scindia School"]
+                    found_schools = []
+                    
+                    for school in response["top_schools"]:
+                        school_name = school.get("name", "")
+                        for expected in expected_schools:
+                            if expected.lower() in school_name.lower():
+                                found_schools.append(expected)
+                                break
+                    
+                    self.log_test("Top Schools Structure", True, 
+                                 f"Found {schools_count} schools, {len(found_schools)}/4 expected schools present: {', '.join(found_schools)}")
+                else:
+                    self.log_test("Top Schools Structure", False, "Top schools not a list")
+                
+                # Verify College Rankings structure
+                if isinstance(response.get("college_rankings_data"), list):
+                    colleges_count = len(response["college_rankings_data"])
+                    # Check for expected colleges (IIT Bombay, IIT Delhi, etc.)
+                    expected_colleges = ["IIT Bombay", "IIT Delhi", "IIT Madras", "IIT Kanpur", "IIT Kharagpur"]
+                    found_colleges = []
+                    
+                    for college in response["college_rankings_data"]:
+                        college_name = college.get("name", "")
+                        for expected in expected_colleges:
+                            if expected.lower() in college_name.lower():
+                                found_colleges.append(expected)
+                                break
+                    
+                    self.log_test("College Rankings Structure", True, 
+                                 f"Found {colleges_count} colleges, {len(found_colleges)}/5 expected colleges present: {', '.join(found_colleges)}")
+                else:
+                    self.log_test("College Rankings Structure", False, "College rankings not a list")
+                
+                # Store original data for comparison
+                self.original_schools = response.get("top_schools", [])
+                self.original_colleges = response.get("college_rankings_data", [])
+                    
+            else:
+                self.log_test("GET /homepage-settings", False, 
+                             f"Only {len(present_fields)}/7 expected fields present. Missing: {', '.join(missing_fields)}")
+        else:
+            self.log_test("GET /homepage-settings", False, f"Status: {status}", response)
+            self.original_schools = []
+            self.original_colleges = []
+        
+        # Test 2: PUT /homepage-settings without authentication (should fail)
+        test_settings = {
+            "top_schools": [
+                {"name": "Test School", "location": "Test City", "board": "CBSE", "fees": "1L", "rating": 4.5, "type": "Day School", "rank": 99}
+            ],
+            "college_rankings_data": [
+                {"rank": 99, "name": "Test College", "location": "Test City", "rating": 4.0, "fees": "5L", "type": "Engineering"}
+            ]
+        }
+        
+        success, response, status = self.make_request("PUT", "/homepage-settings", test_settings)
+        if not success and status in [401, 403]:
+            self.log_test("PUT /homepage-settings (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("PUT /homepage-settings (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 3: Test Add School functionality
+        if self.admin_token and hasattr(self, 'original_schools'):
+            # Create new school data (simulating "Add School" button functionality)
+            new_school = {
+                "name": "Test School", 
+                "location": "Test City", 
+                "board": "CBSE", 
+                "fees": "1L", 
+                "rating": 4.5, 
+                "type": "Day School", 
+                "rank": len(self.original_schools) + 1
+            }
+            
+            updated_schools = self.original_schools + [new_school]
+            
+            # Update settings with new school
+            update_data = {"top_schools": updated_schools}
+            success, response, status = self.make_request("PUT", "/homepage-settings", 
+                                                        update_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify the new school was added
+                response_schools = response.get("top_schools", [])
+                if len(response_schools) == len(updated_schools):
+                    # Check if our new school is in the response
+                    new_school_found = any(
+                        school.get("name") == "Test School" and 
+                        school.get("location") == "Test City" and
+                        school.get("board") == "CBSE" and
+                        school.get("fees") == "1L"
+                        for school in response_schools
+                    )
+                    
+                    if new_school_found:
+                        self.log_test("Add School Functionality", True, 
+                                     f"New school added successfully. Total schools: {len(response_schools)}")
+                    else:
+                        self.log_test("Add School Functionality", False, 
+                                     "New school not found in response")
+                else:
+                    self.log_test("Add School Functionality", False, 
+                                 f"School count mismatch. Expected: {len(updated_schools)}, Got: {len(response_schools)}")
+            else:
+                self.log_test("Add School Functionality", False, f"Status: {status}", response)
+        else:
+            self.log_test("Add School Functionality", False, "Admin token or original schools not available")
+        
+        # Test 4: Test Add College functionality
+        if self.admin_token and hasattr(self, 'original_colleges'):
+            # Create new college data (simulating "Add College" button functionality)
+            new_college = {
+                "rank": len(self.original_colleges) + 1, 
+                "name": "Test College", 
+                "location": "Test City", 
+                "rating": 4.0, 
+                "fees": "5L", 
+                "type": "Engineering"
+            }
+            
+            updated_colleges = self.original_colleges + [new_college]
+            
+            # Update settings with new college
+            update_data = {"college_rankings_data": updated_colleges}
+            success, response, status = self.make_request("PUT", "/homepage-settings", 
+                                                        update_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify the new college was added
+                response_colleges = response.get("college_rankings_data", [])
+                if len(response_colleges) == len(updated_colleges):
+                    # Check if our new college is in the response
+                    new_college_found = any(
+                        college.get("name") == "Test College" and 
+                        college.get("location") == "Test City" and
+                        college.get("rating") == 4.0 and
+                        college.get("fees") == "5L" and
+                        college.get("type") == "Engineering"
+                        for college in response_colleges
+                    )
+                    
+                    if new_college_found:
+                        self.log_test("Add College Functionality", True, 
+                                     f"New college added successfully. Total colleges: {len(response_colleges)}")
+                    else:
+                        self.log_test("Add College Functionality", False, 
+                                     "New college not found in response")
+                else:
+                    self.log_test("Add College Functionality", False, 
+                                 f"College count mismatch. Expected: {len(updated_colleges)}, Got: {len(response_colleges)}")
+            else:
+                self.log_test("Add College Functionality", False, f"Status: {status}", response)
+        else:
+            self.log_test("Add College Functionality", False, "Admin token or original colleges not available")
+        
+        # Test 5: Test comprehensive update with both schools and colleges
+        if self.admin_token and hasattr(self, 'original_schools') and hasattr(self, 'original_colleges'):
+            # Add both new school and new college in single update
+            comprehensive_update = {
+                "top_schools": self.original_schools + [
+                    {"name": "Comprehensive Test School", "location": "Comprehensive City", "board": "ICSE", "fees": "2L", "rating": 4.7, "type": "Boarding", "rank": len(self.original_schools) + 1}
+                ],
+                "college_rankings_data": self.original_colleges + [
+                    {"rank": len(self.original_colleges) + 1, "name": "Comprehensive Test College", "location": "Comprehensive City", "rating": 4.2, "fees": "6L", "type": "Medical"}
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/homepage-settings", 
+                                                        comprehensive_update, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify both additions
+                response_schools = response.get("top_schools", [])
+                response_colleges = response.get("college_rankings_data", [])
+                
+                school_added = any(school.get("name") == "Comprehensive Test School" for school in response_schools)
+                college_added = any(college.get("name") == "Comprehensive Test College" for college in response_colleges)
+                
+                if school_added and college_added:
+                    self.log_test("Comprehensive Update (School + College)", True, 
+                                 f"Both school and college added. Schools: {len(response_schools)}, Colleges: {len(response_colleges)}")
+                else:
+                    missing = []
+                    if not school_added:
+                        missing.append("school")
+                    if not college_added:
+                        missing.append("college")
+                    self.log_test("Comprehensive Update (School + College)", False, 
+                                 f"Missing: {', '.join(missing)}")
+            else:
+                self.log_test("Comprehensive Update (School + College)", False, f"Status: {status}", response)
+        
+        # Test 6: Verify data persistence after refresh
+        success, response, status = self.make_request("GET", "/homepage-settings")
+        if success and isinstance(response, dict):
+            current_schools = response.get("top_schools", [])
+            current_colleges = response.get("college_rankings_data", [])
+            
+            # Check if our test data persisted
+            test_school_persisted = any(school.get("name") == "Comprehensive Test School" for school in current_schools)
+            test_college_persisted = any(college.get("name") == "Comprehensive Test College" for college in current_colleges)
+            
+            if test_school_persisted and test_college_persisted:
+                self.log_test("Data Persistence After Refresh", True, 
+                             "Test school and college data persisted correctly")
+            else:
+                missing = []
+                if not test_school_persisted:
+                    missing.append("school")
+                if not test_college_persisted:
+                    missing.append("college")
+                self.log_test("Data Persistence After Refresh", False, 
+                             f"Test data not persisted: {', '.join(missing)}")
+        else:
+            self.log_test("Data Persistence After Refresh", False, f"Status: {status}", response)
+
     def test_news_listing_settings(self):
         """Test News Listing Page Dynamic Settings feature"""
         print("📰 Testing News Listing Page Dynamic Settings...")
