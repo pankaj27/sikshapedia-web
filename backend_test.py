@@ -2574,15 +2574,194 @@ class APITester:
         else:
             self.log_test("Filter News by Category", False, f"Status: {category_status}", category_response)
 
+    def test_static_pages_cms(self):
+        """Test Static Pages CMS Integration"""
+        print("📄 Testing Static Pages CMS Integration...")
+        
+        # Test 1: GET /api/static-pages - Should return list of static pages
+        success, response, status = self.make_request("GET", "/static-pages")
+        if success and isinstance(response, list):
+            pages_count = len(response)
+            self.log_test("GET /static-pages", True, f"Retrieved {pages_count} static pages")
+            
+            # Store page slugs for individual tests
+            self.static_page_slugs = [page.get("slug") for page in response if page.get("slug")]
+        else:
+            self.log_test("GET /static-pages", False, f"Status: {status}", response)
+            self.static_page_slugs = []
+        
+        # Test 2-5: Test individual static page endpoints
+        test_pages = ["about", "privacy", "terms", "contact"]
+        
+        for page_slug in test_pages:
+            success, response, status = self.make_request("GET", f"/static-pages/{page_slug}")
+            if success and isinstance(response, dict):
+                # Check if it's a real page or fallback
+                is_published = response.get("is_published", False)
+                page_title = response.get("page_title", "")
+                hero_title = response.get("hero_title", "")
+                
+                if is_published and response.get("widgets"):
+                    # Real CMS page with content
+                    widgets_count = len(response.get("widgets", []))
+                    self.log_test(f"GET /static-pages/{page_slug}", True, 
+                                 f"CMS page found: '{page_title}' with {widgets_count} widgets")
+                else:
+                    # Fallback page structure
+                    self.log_test(f"GET /static-pages/{page_slug}", True, 
+                                 f"Fallback page returned: '{page_title}' (hero: '{hero_title}')")
+            else:
+                self.log_test(f"GET /static-pages/{page_slug}", False, f"Status: {status}", response)
+        
+        # Test 6: Verify fallback content structure for About page
+        success, response, status = self.make_request("GET", "/static-pages/about")
+        if success and isinstance(response, dict):
+            # Check for expected fallback content
+            hero_title = response.get("hero_title", "")
+            if "About" in hero_title or "about" in hero_title.lower():
+                self.log_test("About Page Fallback Content", True, 
+                             f"About page has appropriate hero title: '{hero_title}'")
+            else:
+                self.log_test("About Page Fallback Content", False, 
+                             f"About page hero title unexpected: '{hero_title}'")
+            
+            # Verify page structure
+            required_fields = ["slug", "page_title", "hero_enabled", "hero_title", "widgets"]
+            missing_fields = [field for field in required_fields if field not in response]
+            
+            if not missing_fields:
+                self.log_test("Static Page Structure Validation", True, 
+                             "All required fields present in page response")
+            else:
+                self.log_test("Static Page Structure Validation", False, 
+                             f"Missing fields: {', '.join(missing_fields)}")
+        else:
+            self.log_test("About Page Fallback Content", False, f"Status: {status}", response)
+
+    def test_study_abroad_dynamic_content(self):
+        """Test Study Abroad Dynamic Content"""
+        print("🌍 Testing Study Abroad Dynamic Content...")
+        
+        # Test 1: GET /api/study-abroad - Should return list of universities from database
+        success, response, status = self.make_request("GET", "/study-abroad")
+        if success and isinstance(response, list):
+            universities_count = len(response)
+            self.log_test("GET /study-abroad", True, f"Retrieved {universities_count} universities")
+            
+            # Store first university for detail test
+            self.test_university_id = response[0].get("id") if response else None
+            
+            # Verify university structure
+            if response:
+                first_uni = response[0]
+                required_fields = ["id", "name", "country", "city", "description"]
+                missing_fields = [field for field in required_fields if field not in first_uni]
+                
+                if not missing_fields:
+                    uni_name = first_uni.get("name", "Unknown")
+                    uni_country = first_uni.get("country", "Unknown")
+                    self.log_test("University Data Structure", True, 
+                                 f"University '{uni_name}' in {uni_country} has all required fields")
+                else:
+                    self.log_test("University Data Structure", False, 
+                                 f"Missing fields in university data: {', '.join(missing_fields)}")
+        else:
+            self.log_test("GET /study-abroad", False, f"Status: {status}", response)
+            self.test_university_id = None
+        
+        # Test 2: GET /api/study-abroad/countries/list - Should return list of countries
+        success, response, status = self.make_request("GET", "/study-abroad/countries/list")
+        if success and isinstance(response, dict) and "countries" in response:
+            countries = response.get("countries", [])
+            countries_count = len(countries)
+            
+            if countries_count > 0:
+                # Show first few countries
+                sample_countries = countries[:5] if len(countries) > 5 else countries
+                self.log_test("GET /study-abroad/countries/list", True, 
+                             f"Retrieved {countries_count} countries: {', '.join(sample_countries)}")
+            else:
+                self.log_test("GET /study-abroad/countries/list", True, 
+                             "Countries endpoint working but no countries in database")
+        else:
+            self.log_test("GET /study-abroad/countries/list", False, f"Status: {status}", response)
+        
+        # Test 3: Test country filtering
+        if hasattr(self, 'test_university_id') and self.test_university_id:
+            # Get the first university's country for filtering test
+            success, uni_response, uni_status = self.make_request("GET", f"/study-abroad/{self.test_university_id}")
+            if success and isinstance(uni_response, dict):
+                test_country = uni_response.get("country")
+                if test_country:
+                    # Test filtering by country
+                    success, filtered_response, filtered_status = self.make_request("GET", f"/study-abroad?country={test_country}")
+                    if success and isinstance(filtered_response, list):
+                        filtered_count = len(filtered_response)
+                        # Verify all returned universities are from the specified country
+                        correct_country = all(uni.get("country") == test_country for uni in filtered_response)
+                        
+                        if correct_country:
+                            self.log_test("Country Filtering", True, 
+                                         f"Found {filtered_count} universities in {test_country}")
+                        else:
+                            self.log_test("Country Filtering", False, 
+                                         f"Some universities not from {test_country}")
+                    else:
+                        self.log_test("Country Filtering", False, f"Status: {filtered_status}", filtered_response)
+                else:
+                    self.log_test("Country Filtering", False, "No country found in test university")
+            else:
+                self.log_test("Country Filtering", False, "Could not get test university details")
+        
+        # Test 4: Test search functionality
+        success, search_response, search_status = self.make_request("GET", "/study-abroad?search=university")
+        if success and isinstance(search_response, list):
+            search_count = len(search_response)
+            self.log_test("Search Functionality", True, 
+                         f"Search for 'university' returned {search_count} results")
+        else:
+            self.log_test("Search Functionality", False, f"Status: {search_status}", search_response)
+        
+        # Test 5: Test pagination
+        success, page1_response, page1_status = self.make_request("GET", "/study-abroad?limit=5&skip=0")
+        if success and isinstance(page1_response, list):
+            page1_count = len(page1_response)
+            
+            success, page2_response, page2_status = self.make_request("GET", "/study-abroad?limit=5&skip=5")
+            if success and isinstance(page2_response, list):
+                page2_count = len(page2_response)
+                
+                # Check if pagination returns different results
+                page1_ids = [uni.get("id") for uni in page1_response]
+                page2_ids = [uni.get("id") for uni in page2_response]
+                different_results = not any(id in page1_ids for id in page2_ids)
+                
+                if different_results or page2_count == 0:
+                    self.log_test("Pagination Functionality", True, 
+                                 f"Page 1: {page1_count} universities, Page 2: {page2_count} universities")
+                else:
+                    self.log_test("Pagination Functionality", False, 
+                                 "Pagination returned overlapping results")
+            else:
+                self.log_test("Pagination Functionality", False, f"Page 2 failed with status: {page2_status}")
+        else:
+            self.log_test("Pagination Functionality", False, f"Page 1 failed with status: {page1_status}")
+
     def run_all_tests(self):
-        """Run all test suites focusing on server refactoring"""
-        print("🚀 TESTING SERVER REFACTORING & MODULAR ROUTES")
+        """Run all test suites focusing on new CMS features"""
+        print("🚀 TESTING STATIC PAGES CMS & STUDY ABROAD INTEGRATION")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
-        # Server refactoring specific tests
-        self.test_server_health()
+        # Authentication first
         self.test_authentication()
+        
+        # New feature tests
+        self.test_static_pages_cms()
+        self.test_study_abroad_dynamic_content()
+        
+        # Legacy tests for compatibility
+        self.test_server_health()
         self.test_blog_routes()
         self.test_news_routes()
         
