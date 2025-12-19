@@ -14,42 +14,55 @@ const TopCollegesByStream = () => {
     { name: 'Law', icon: '⚖️', color: 'from-purple-500 to-purple-600', query: 'Law' }
   ];
 
-  useEffect(() => {
-    fetchCollegesByStream();
-  }, []);
-
-  const fetchCollegesByStream = async () => {
-    try {
-      // Fetch colleges for each stream
-      const results = await Promise.all(
-        streams.map(async (stream) => {
-          try {
-            const response = await api.get(`/colleges?stream=${stream.query}&limit=4&status=published`);
-            return {
-              ...stream,
-              colleges: response.data?.slice(0, 4).map(c => c.name) || []
-            };
-          } catch (error) {
-            return { ...stream, colleges: [] };
-          }
-        })
-      );
-      setStreamData(results);
-    } catch (error) {
-      console.error('Error fetching colleges by stream:', error);
-      // Fallback to default data
-      setStreamData(streams.map(s => ({ ...s, colleges: [] })));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Default colleges for fallback
   const defaultColleges = {
     'Engineering': ['IIT Bombay', 'IIT Delhi', 'IIT Madras', 'NIT Trichy'],
     'Medical': ['AIIMS Delhi', 'CMC Vellore', 'JIPMER Puducherry', 'KGMU Lucknow'],
     'Management': ['IIM Ahmedabad', 'IIM Bangalore', 'IIM Calcutta', 'XLRI Jamshedpur'],
     'Law': ['NLSIU Bangalore', 'NALSAR Hyderabad', 'NLU Delhi', 'NUJS Kolkata']
+  };
+
+  useEffect(() => {
+    fetchCollegesByStream();
+  }, []);
+
+  const fetchCollegesByStream = async () => {
+    try {
+      // First try to get admin-selected colleges from featured endpoint
+      const featuredRes = await api.get('/colleges/by-stream-featured').catch(() => null);
+      
+      if (featuredRes?.data) {
+        // Use admin-selected data
+        const results = streams.map(stream => ({
+          ...stream,
+          colleges: featuredRes.data[stream.name]?.length > 0 
+            ? featuredRes.data[stream.name] 
+            : defaultColleges[stream.name]
+        }));
+        setStreamData(results);
+      } else {
+        // Fallback: Fetch colleges for each stream from regular endpoint
+        const results = await Promise.all(
+          streams.map(async (stream) => {
+            try {
+              const response = await api.get(`/colleges?stream=${stream.query}&limit=4&status=published`);
+              return {
+                ...stream,
+                colleges: response.data?.slice(0, 4).map(c => c.name) || defaultColleges[stream.name]
+              };
+            } catch (error) {
+              return { ...stream, colleges: defaultColleges[stream.name] };
+            }
+          })
+        );
+        setStreamData(results);
+      }
+    } catch (error) {
+      console.error('Error fetching colleges by stream:', error);
+      setStreamData(streams.map(s => ({ ...s, colleges: defaultColleges[s.name] })));
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
@@ -82,39 +95,36 @@ const TopCollegesByStream = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {streamData.map((stream, idx) => {
-            const colleges = stream.colleges.length > 0 ? stream.colleges : defaultColleges[stream.name] || [];
-            return (
-              <div
-                key={idx}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-              >
-                <div className={`bg-gradient-to-r ${stream.color} p-6 text-white`}>
-                  <span className="text-4xl mb-3 block">{stream.icon}</span>
-                  <h3 className="text-xl font-bold">{stream.name}</h3>
-                  <p className="text-white/80 text-sm">Top Colleges</p>
-                </div>
-                <div className="p-6">
-                  <ul className="space-y-3">
-                    {colleges.map((college, cIdx) => (
-                      <li key={cIdx} className="flex items-center gap-3">
-                        <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
-                          {cIdx + 1}
-                        </span>
-                        <span className="text-gray-700 text-sm line-clamp-1">{college}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    to={`/colleges?stream=${stream.query}`}
-                    className="mt-4 flex items-center gap-2 text-orange-600 hover:text-orange-700 font-semibold text-sm"
-                  >
-                    View All <FiArrowRight />
-                  </Link>
-                </div>
+          {streamData.map((stream, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+            >
+              <div className={`bg-gradient-to-r ${stream.color} p-6 text-white`}>
+                <span className="text-4xl mb-3 block">{stream.icon}</span>
+                <h3 className="text-xl font-bold">{stream.name}</h3>
+                <p className="text-white/80 text-sm">Top Colleges</p>
               </div>
-            );
-          })}
+              <div className="p-6">
+                <ul className="space-y-3">
+                  {stream.colleges.map((college, cIdx) => (
+                    <li key={cIdx} className="flex items-center gap-3">
+                      <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
+                        {cIdx + 1}
+                      </span>
+                      <span className="text-gray-700 text-sm line-clamp-1">{college}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to={`/colleges?stream=${stream.query}`}
+                  className="mt-4 flex items-center gap-2 text-orange-600 hover:text-orange-700 font-semibold text-sm"
+                >
+                  View All <FiArrowRight />
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="text-center mt-10">
