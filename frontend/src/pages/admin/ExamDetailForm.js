@@ -2968,6 +2968,11 @@ const ExamDetailForm = () => {
                 <option value="Very Hard">Very Hard</option>
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">📌 Display Priority (Listing Order)</label>
+              <input type="number" name="display_priority" value={formData.display_priority || 0} onChange={handleChange} min="0" max="999" className="w-full border border-gray-300 rounded-lg px-4 py-2.5" />
+              <p className="text-xs text-gray-500 mt-1">1 = Top, 0 = Default</p>
+            </div>
           </div>
         </CollapsibleSection>
 
