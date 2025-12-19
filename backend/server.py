@@ -4174,6 +4174,54 @@ async def delete_college(college_id: str, current_user: User = Depends(get_curre
     
     return {"message": "College deleted successfully"}
 
+@api_router.post("/colleges/{college_id}/generate-credentials")
+async def generate_college_credentials(college_id: str, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
+    """Generate institute login credentials for an existing college"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can generate credentials")
+    
+    college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    if not college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Check if credentials already exist
+    existing = await db.institute_credentials.find_one({"institution_id": college_id}, {"_id": 0})
+    if existing:
+        return {"message": "Credentials already exist", "login_id": existing.get("login_id")}
+    
+    try:
+        from routes.institute_auth import create_institute_credentials
+        contact = college.get('contact', {})
+        contact_email = contact.get('email', '')
+        contact_phone = contact.get('phone', '')
+        
+        credentials = await create_institute_credentials(
+            db, 
+            college_id, 
+            college.get('name', ''), 
+            contact_email, 
+            contact_phone,
+            background_tasks
+        )
+        
+        return {
+            "message": "Credentials generated successfully",
+            "login_id": credentials.get("login_id"),
+            "password": credentials.get("password"),  # Only shown once
+            "note": "Credentials have been sent via email and WhatsApp if contact info was available"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating credentials: {str(e)}")
+
+@api_router.get("/admin/credential-reports")
+async def get_all_credential_reports(current_user: User = Depends(get_current_user)):
+    """Get all credential reports (Admin only)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can view credential reports")
+    
+    reports = await db.credential_reports.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return reports
+
 # ============================================
 # Review Routes
 # ============================================
