@@ -38,10 +38,11 @@ const CollegeDuniaHome = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeRankingYear, setActiveRankingYear] = useState('2024');
   const [activeWidget, setActiveWidget] = useState(null); // For widget modals
+  const [pageSettings, setPageSettings] = useState(null);
   
   // Animated text rotation
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const rotatingTexts = ['Exams', 'Colleges', 'Courses', 'Schools', 'Universities', 'Scholarships'];
+  const rotatingTexts = pageSettings?.hero_rotating_texts || ['Exams', 'Colleges', 'Courses', 'Schools', 'Universities', 'Scholarships'];
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,7 +50,7 @@ const CollegeDuniaHome = () => {
     }, 2000); // Change every 2 seconds
     
     return () => clearInterval(interval);
-  }, []);
+  }, [rotatingTexts.length]);
 
   // Icon component mapper
   const iconComponents = {
