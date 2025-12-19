@@ -686,26 +686,18 @@ const CollegeDuniaHome = () => {
       )}
 
       {/* Top Schools Section */}
+      {showTopSchools && (
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Top Schools in India</h2>
+            <h2 className="text-3xl font-bold">{topSchoolsTitle}</h2>
             <Link to="/colleges?type=school">
               <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All Schools</Button>
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
-              { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L', type: 'Day School', rank: 5 },
-              { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L', type: 'Boarding', rank: 2 },
-              { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L', type: 'Boarding', rank: 3 },
-              { name: 'Bishop Cotton School', location: 'Shimla', board: 'ICSE', rating: 4.6, fees: '6L', type: 'Boarding', rank: 8 },
-              { name: 'La Martiniere College', location: 'Kolkata', board: 'ICSE', rating: 4.7, fees: '1.5L', type: 'Day School', rank: 6 },
-              { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L', type: 'Day School', rank: 10 },
-              { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
-            ].map((school, idx) => (
+            {topSchoolsData.map((school, idx) => (
               <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border relative">
                 {/* Header Image with Badges - Compact */}
                 <div className="relative h-24 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
