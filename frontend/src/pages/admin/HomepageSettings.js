@@ -224,6 +224,31 @@ const HomepageSettings = () => {
     handleChange('cities', settings.cities.filter((_, i) => i !== index));
   };
 
+  // Quick Actions
+  const updateQuickAction = (index, field, value) => {
+    const newActions = [...(settings.quick_actions || [])];
+    newActions[index] = { ...newActions[index], [field]: value };
+    handleChange('quick_actions', newActions);
+  };
+
+  // Top Schools
+  const addTopSchool = () => {
+    setSettings(prev => ({
+      ...prev,
+      top_schools: [...(prev.top_schools || []), { name: 'New School', location: '', board: 'CBSE', rating: 4.5, fees: '2L', type: 'Day School', rank: 1 }]
+    }));
+  };
+
+  const updateTopSchool = (index, field, value) => {
+    const newSchools = [...(settings.top_schools || [])];
+    newSchools[index] = { ...newSchools[index], [field]: value };
+    handleChange('top_schools', newSchools);
+  };
+
+  const removeTopSchool = (index) => {
+    handleChange('top_schools', (settings.top_schools || []).filter((_, i) => i !== index));
+  };
+
   // Keywords
   const addKeyword = () => {
     if (keywordInput.trim() && !settings.meta_keywords.includes(keywordInput.trim())) {
