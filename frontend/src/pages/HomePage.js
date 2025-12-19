@@ -594,7 +594,7 @@ const CollegeDuniaHome = () => {
                     </div>
 
                     {/* College Logo Badge - Perfectly Positioned */}
-                    <div className="absolute top-16 left-4 w-14 h-14 bg-white rounded-full border-3 border-white shadow-xl flex items-center justify-center z-10 overflow-hidden">
+                    <div className="absolute top-24 left-4 w-14 h-14 bg-white rounded-full border-2 border-white shadow-xl flex items-center justify-center z-10 overflow-hidden">
                       {college.images?.[0] ? (
                         <img src={college.images[0]} alt={`${college.name} logo`} className="w-full h-full object-cover" />
                       ) : (
