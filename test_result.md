@@ -189,6 +189,8 @@ test_plan:
     - "Course Display - Dynamic Top Colleges"
     - "Scholarship Form - Admin Panel Entry Form"
     - "Loan Form - Admin Panel Entry Form"
+    - "Static Pages CMS - Connect Frontend to Backend API"
+    - "Study Abroad Page - Connect to Admin Module"
 
 agent_communication:
   - agent: "testing"
