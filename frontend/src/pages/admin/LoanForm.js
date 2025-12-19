@@ -853,6 +853,32 @@ const LoanForm = () => {
                         ))}
                       </div>
                     </div>
+
+                    {/* Key Features */}
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="block text-sm font-medium">⭐ Key Features</label>
+                        <Button type="button" variant="outline" size="sm" onClick={() => addArrayItem('key_features', '')}>
+                          <FiPlus className="mr-1" /> Add Feature
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {(formData.key_features || []).map((item, idx) => (
+                          <div key={idx} className="flex gap-2">
+                            <input
+                              type="text"
+                              value={item}
+                              onChange={(e) => updateArrayItem('key_features', idx, e.target.value)}
+                              className="flex-1 border rounded px-3 py-2"
+                              placeholder="e.g., No collateral up to ₹7.5 lakhs"
+                            />
+                            <button type="button" onClick={() => removeArrayItem('key_features', idx)} className="text-red-500 p-2">
+                              <FiTrash2 />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
