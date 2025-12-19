@@ -92,6 +92,18 @@ backend:
         agent: "testing"
         comment: "✅ FRONTEND UI TESTING COMPLETE - ALL TESTS PASSED: Successfully tested Location-Specific Display Priority UI in admin college form using comprehensive Playwright automation. ✅ Admin Login: Successfully logged in with admin@admissionbuddy.co credentials and accessed college edit form. ✅ Priority Settings Section: Found 'Location-Specific Display Priority' section with proper layout and styling. ✅ National Priority: 'India Priority' input field working correctly - set value to 5 successfully. ✅ State Priority UI: State dropdown with Maharashtra, Karnataka, Tamil Nadu options working. Selected Maharashtra, entered priority 1, clicked Add button, and state priority tag 'Maharashtra: #1×' appeared correctly with remove functionality. ✅ City Priority UI: City input field working. Entered 'Pune', priority 2, clicked Add button, and city priority tag 'Pune: #2×' appeared correctly with remove functionality. ✅ Tag System: Purple tags for state priorities and blue tags for city priorities displaying correctly with remove buttons (×). ✅ Form Integration: All priority settings integrated properly in college edit form with Save button available. ✅ UI/UX: Clean, intuitive interface with proper color coding (purple for states, blue for cities) and responsive design. All requirements from review request met successfully. Frontend UI fully functional and ready for production use."
 
+  - task: "Apply Now Lead Capture System - Backend APIs"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ APPLY NOW LEAD CAPTURE SYSTEM BACKEND FULLY WORKING: Comprehensive testing completed for all lead capture backend APIs. ✅ Create Lead API: POST /api/leads successfully creates leads with all required fields (name, email, mobile, city, course_interested, college_name, source) and returns lead with status='new'. ✅ Admin Authentication: POST /api/auth/login working with admin@admissionbuddy.co credentials. ✅ Get All Leads: GET /api/leads with admin auth returns leads array with total count. Created lead found in admin list. ✅ Lead Filtering: GET /api/leads?status=new&source=college correctly filters leads by status and source. ✅ Update Lead Status: PUT /api/leads/{id} successfully updates lead status to 'contacted' and automatically sets contacted_at timestamp. ✅ Lead Settings: GET /api/lead-settings returns all expected fields (general_form_heading='Get Expert Counselling', cta_button_text='Apply Now', notification settings). PUT /api/lead-settings with admin auth successfully updates and persists settings. ✅ College Courses API: GET /api/colleges/{id}/courses-for-form returns college_name and courses array for form population. ✅ CSV Export: GET /api/leads/export with admin auth successfully exports leads as CSV format. ✅ Security: All admin endpoints properly reject unauthorized access with 401/403 status. All 18 backend API tests passed (100% success rate). Lead capture system backend ready for production use."
+
 frontend:
   - task: "News Listing Page - Dynamic Content Display"
     implemented: true
