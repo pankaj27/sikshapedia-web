@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FiX, FiUser, FiMail, FiPhone, FiMapPin, FiBook, FiSend, FiLoader, FiCheck, FiMessageCircle } from 'react-icons/fi';
 import api from '../api/axios';
 import { INDIAN_CITIES } from '../utils/urlHelpers';
+import SearchableSelect from './SearchableSelect';
 
 // Format city name for display (capitalize first letter)
 const formatCityName = (city) => {
@@ -16,7 +17,7 @@ const ApplyNowModal = ({
   onClose, 
   collegeId = null,
   collegeName = null,
-  collegeLogoUrl = null,  // NEW: College logo URL
+  collegeLogoUrl = null,
   collegeCourses = [],
   formHeading = null,
   source = 'general'
@@ -32,6 +33,7 @@ const ApplyNowModal = ({
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [courses, setCourses] = useState([]);
+  const [allCourses, setAllCourses] = useState([]);  // All courses for general form
   const [settings, setSettings] = useState(null);
   
   // Memoize collegeCourses to prevent infinite loops
