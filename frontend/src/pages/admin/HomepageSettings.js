@@ -106,6 +106,11 @@ const HomepageSettings = () => {
     // Latest News
     featured_news_ids: [],
     
+    // Colleges by Stream
+    stream_colleges: {
+      Engineering: [], Medical: [], Management: [], Law: []
+    },
+    
     // College Rankings
     college_rankings_title: 'College Rankings',
     college_rankings_years: ['2024', '2023', '2022'],
