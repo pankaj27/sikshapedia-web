@@ -1,38 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiBell, FiCalendar, FiTrendingUp } from 'react-icons/fi';
+import { FiBell, FiCalendar, FiTrendingUp, FiBookOpen } from 'react-icons/fi';
+import api from '../api/axios';
 
 const LatestNews = () => {
-  const newsItems = [
-    {
-      title: 'JEE Main 2024 Registration Started',
-      date: 'Dec 10, 2024',
-      category: 'Exam Alert',
-      color: 'bg-red-100 text-red-700',
-      icon: <FiBell />
-    },
-    {
-      title: 'NEET 2024 Exam Dates Announced',
-      date: 'Dec 8, 2024',
-      category: 'Important Date',
-      color: 'bg-blue-100 text-blue-700',
-      icon: <FiCalendar />
-    },
-    {
-      title: 'Top Engineering Colleges Released NIRF Rankings',
-      date: 'Dec 5, 2024',
-      category: 'Trending',
-      color: 'bg-green-100 text-green-700',
-      icon: <FiTrendingUp />
-    },
-    {
-      title: 'CAT 2024 Results Out - Check Cutoffs',
-      date: 'Dec 3, 2024',
-      category: 'Result',
-      color: 'bg-orange-100 text-orange-700',
-      icon: <FiBell />
+  const [newsItems, setNewsItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  const fetchNews = async () => {
+    try {
+      const response = await api.get('/news?limit=4&status=published');
+      setNewsItems(response.data || []);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      setNewsItems([]);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  const getCategoryStyle = (category) => {
+    const styles = {
+      'Exam Alert': { color: 'bg-red-100 text-red-700', icon: <FiBell /> },
+      'Admission': { color: 'bg-blue-100 text-blue-700', icon: <FiCalendar /> },
+      'Result': { color: 'bg-orange-100 text-orange-700', icon: <FiBell /> },
+      'Trending': { color: 'bg-green-100 text-green-700', icon: <FiTrendingUp /> },
+      'default': { color: 'bg-gray-100 text-gray-700', icon: <FiBookOpen /> }
+    };
+    return styles[category] || styles['default'];
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  if (loading) {
+    return (
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="bg-gray-100 rounded-lg p-6 h-40"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (newsItems.length === 0) {
+    return null; // Don't show section if no news
+  }
 
   return (
     <section className="py-12 bg-white">
@@ -51,25 +78,28 @@ const LatestNews = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {newsItems.map((news, idx) => (
-            <Link
-              key={idx}
-              to={`/news/${news.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
-              className="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 block"
-            >
-              <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold mb-4 ${news.color}`}>
-                {news.icon}
-                {news.category}
-              </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2">
-                {news.title}
-              </h3>
-              <p className="text-sm text-gray-500 flex items-center gap-2">
-                <FiCalendar size={14} />
-                {news.date}
-              </p>
-            </Link>
-          ))}
+          {newsItems.map((news, idx) => {
+            const categoryStyle = getCategoryStyle(news.category);
+            return (
+              <Link
+                key={news.id || idx}
+                to={`/news/${news.slug || news.id}`}
+                className="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200 block"
+              >
+                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold mb-4 ${categoryStyle.color}`}>
+                  {categoryStyle.icon}
+                  {news.category || 'News'}
+                </div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2">
+                  {news.title}
+                </h3>
+                <p className="text-sm text-gray-500 flex items-center gap-2">
+                  <FiCalendar size={14} />
+                  {formatDate(news.published_at || news.created_at)}
+                </p>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="text-center mt-8 md:hidden">
