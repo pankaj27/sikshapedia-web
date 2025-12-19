@@ -192,6 +192,8 @@ const CollegeForm = () => {
     is_trending: false,
     is_top_rated: false,
     is_sponsored: false,
+    is_admission_partner: false,
+    is_no_cost_emi: false,
     is_admission_open: false,
     admission_open_at: null,
     admission_open_priority_months: 2,
