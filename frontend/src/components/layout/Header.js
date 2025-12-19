@@ -215,12 +215,12 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link to="/login">
+                <Link to="/signup">
                   <Button variant="ghost" className="text-white hover:text-orange-400 text-sm">
                     Login
                   </Button>
                 </Link>
-                <Link to="/register">
+                <Link to="/signup">
                   <Button className="bg-orange-600 hover:bg-orange-700 text-white text-sm">
                     Sign Up
                   </Button>
