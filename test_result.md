@@ -241,6 +241,7 @@ test_plan:
     - "Homepage Settings - Add School and Add College Functionality"
     - "Homepage Settings - Add School and Add College Functionality with Search"
     - "Location-Specific Display Priority Feature for Colleges"
+    - "Apply Now Lead Capture System - Backend APIs"
 
 agent_communication:
   - agent: "testing"
