@@ -4992,6 +4992,32 @@ async def get_exams(
     
     return exams
 
+@api_router.get("/exams/featured", response_model=List[Exam])
+async def get_featured_exams(limit: int = Query(6, ge=1, le=20)):
+    """Get featured exams for homepage - prioritizes manually selected exams from homepage settings"""
+    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
+    featured_ids = settings.get("featured_exams_ids", []) if settings else []
+    
+    featured_exams = []
+    
+    # Get exams from homepage settings (in specified order)
+    if featured_ids:
+        for exam_id in featured_ids[:limit]:
+            exam = await db.exams.find_one({"id": exam_id, "status": "published"}, {"_id": 0})
+            if exam:
+                featured_exams.append(exam)
+    
+    # If not enough, fill with published exams
+    if len(featured_exams) < limit:
+        existing_ids = [e.get('id') for e in featured_exams]
+        additional = await db.exams.find(
+            {"status": "published", "id": {"$nin": existing_ids}}, 
+            {"_id": 0}
+        ).sort("total_applicants", -1).limit(limit - len(featured_exams)).to_list(limit - len(featured_exams))
+        featured_exams.extend(additional)
+    
+    return featured_exams
+
 @api_router.get("/exams/{exam_id}", response_model=Exam)
 async def get_exam(exam_id: str):
     exam = await db.exams.find_one({"id": exam_id}, {"_id": 0})
