@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle } from 'react-icons/fi';
+import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
@@ -189,27 +189,68 @@ const UserSignup = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 flex items-center justify-center p-4">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/4 w-60 h-60 bg-white/5 rounded-full blur-2xl"></div>
-      </div>
-      
-      <div className="w-full max-w-md relative z-10">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link to="/">
-            <img src="/favicon.png" alt="Admission Buddy" className="h-16 mx-auto mb-4" />
-          </Link>
-          <h1 className="text-3xl font-bold text-white">Create Your Account</h1>
-          <p className="text-orange-100 mt-2">Join thousands of students finding their dream college</p>
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Left Side - Illustration/Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-orange-400/10 rounded-full blur-2xl"></div>
         </div>
         
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-white">
+          <Link to="/">
+            <img src="/favicon.png" alt="Admission Buddy" className="h-20 mb-8" />
+          </Link>
+          <h1 className="text-4xl font-bold mb-4 text-center">Join Admission Buddy</h1>
+          <p className="text-xl text-orange-100 text-center max-w-md">
+            Find your dream college and track your applications all in one place
+          </p>
+          
+          {/* Benefits */}
+          <div className="mt-12 space-y-4 text-left max-w-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <FiCheckCircle />
+              </div>
+              <span>Compare 10,000+ colleges</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <FiCheckCircle />
+              </div>
+              <span>Track your applications</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <FiCheckCircle />
+              </div>
+              <span>Get personalized recommendations</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <FiGift />
+              </div>
+              <span>Earn rewards for referrals</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Right Side - Signup Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 overflow-y-auto">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-6">
+            <Link to="/">
+              <img src="/favicon.png" alt="Admission Buddy" className="h-14 mx-auto mb-4" />
+            </Link>
+          </div>
+          
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
               {formatError(error)}
             </div>
           )}
@@ -217,32 +258,37 @@ const UserSignup = () => {
           {/* Step 1: Email Input */}
           {step === 'email' && (
             <>
+              <div className="text-center mb-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Create Account</h2>
+                <p className="text-gray-500 mt-2">Join thousands of students finding their dream college</p>
+              </div>
+              
               {/* Google Login Button */}
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition mb-6"
+                className="w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
               >
                 <FcGoogle className="text-2xl" />
                 <span className="font-medium text-gray-700">Continue with Google</span>
               </button>
               
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-4 my-6">
                 <div className="flex-1 h-px bg-gray-200"></div>
-                <span className="text-gray-500 text-sm">or</span>
+                <span className="text-gray-400 text-sm font-medium">OR</span>
                 <div className="flex-1 h-px bg-gray-200"></div>
               </div>
               
-              <form onSubmit={handleSendOTP}>
-                <div className="mb-4">
+              <form onSubmit={handleSendOTP} className="space-y-5">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                   <div className="relative">
-                    <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@example.com"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:bg-white transition-all text-gray-900"
                       required
                     />
                   </div>
@@ -251,87 +297,106 @@ const UserSignup = () => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-orange-600 hover:bg-orange-700 py-3 text-lg"
+                  className="w-full bg-orange-600 hover:bg-orange-700 py-4 text-base font-semibold rounded-xl shadow-lg shadow-orange-600/25 hover:shadow-orange-600/40 transition-all"
                 >
                   {loading ? (
                     <><FiLoader className="animate-spin mr-2" /> Sending OTP...</>
                   ) : (
-                    'Continue with Email'
+                    <>Continue with Email <FiArrowRight className="ml-2" /></>
                   )}
                 </Button>
               </form>
+              
+              {/* Login Link */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <p className="text-center text-gray-600">
+                  Already have an account?{' '}
+                  <Link to="/login" className="text-orange-600 hover:text-orange-700 font-semibold">
+                    Sign In
+                  </Link>
+                </p>
+              </div>
+              
+              {/* Back to Home */}
+              <p className="mt-6 text-center">
+                <Link to="/" className="text-gray-500 hover:text-gray-700 text-sm">
+                  ← Back to Home
+                </Link>
+              </p>
             </>
           )}
           
           {/* Step 2: OTP Verification */}
           {step === 'otp' && (
-            <form onSubmit={handleVerifyOTP}>
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <>
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <FiMail className="text-orange-600 text-2xl" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Check Your Email</h2>
-                <p className="text-gray-600 mt-2">We sent a 6-digit code to <strong>{email}</strong></p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Check Your Email</h2>
+                <p className="text-gray-500 mt-2">We sent a 6-digit code to <strong className="text-gray-700">{email}</strong></p>
               </div>
               
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="000000"
-                  className="w-full text-center text-2xl tracking-widest px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  maxLength={6}
-                  required
-                />
-              </div>
-              
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-orange-600 hover:bg-orange-700 py-3 text-lg"
-              >
-                {loading ? (
-                  <><FiLoader className="animate-spin mr-2" /> Verifying...</>
-                ) : (
-                  'Verify OTP'
-                )}
-              </Button>
+              <form onSubmit={handleVerifyOTP} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="000000"
+                    className="w-full text-center text-2xl tracking-[0.5em] px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:bg-white transition-all font-mono"
+                    maxLength={6}
+                    required
+                  />
+                </div>
+                
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-orange-600 hover:bg-orange-700 py-4 text-base font-semibold rounded-xl shadow-lg shadow-orange-600/25 hover:shadow-orange-600/40 transition-all"
+                >
+                  {loading ? (
+                    <><FiLoader className="animate-spin mr-2" /> Verifying...</>
+                  ) : (
+                    <>Verify OTP <FiArrowRight className="ml-2" /></>
+                  )}
+                </Button>
+              </form>
               
               <button
                 type="button"
                 onClick={() => setStep('email')}
-                className="w-full mt-4 text-orange-600 hover:text-orange-700"
+                className="w-full mt-4 text-gray-600 hover:text-gray-800 py-2"
               >
                 ← Change Email
               </button>
-            </form>
+            </>
           )}
           
           {/* Step 3: Complete Profile */}
           {step === 'details' && (
-            <form onSubmit={handleCompleteSignup}>
+            <>
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <FiCheckCircle className="text-green-600 text-2xl" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Almost There!</h2>
-                <p className="text-gray-600 mt-2">Complete your profile to continue</p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Almost There!</h2>
+                <p className="text-gray-500 mt-2">Complete your profile to get started</p>
               </div>
               
-              <div className="space-y-4">
+              <form onSubmit={handleCompleteSignup} className="space-y-4">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
                   <div className="relative">
-                    <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Your full name"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:bg-white transition-all text-gray-900"
                       required
                     />
                   </div>
@@ -339,106 +404,105 @@ const UserSignup = () => {
                 
                 {/* Email (readonly) */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
                   <div className="relative">
-                    <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="email"
                       value={email}
                       readOnly
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600"
+                      className="w-full pl-12 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-600"
                     />
                   </div>
                 </div>
                 
                 {/* Phone */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number *</label>
                   <div className="relative">
-                    <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                       placeholder="10-digit mobile number"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      maxLength={10}
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:bg-white transition-all text-gray-900"
                       required
                     />
                   </div>
                 </div>
                 
-                {/* City Dropdown */}
+                {/* City */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">City *</label>
                   <SearchableSelect
                     options={INDIA_CITIES}
                     value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="Search & select city"
-                    icon={<FiMapPin className="text-gray-400" />}
+                    onChange={setCity}
+                    placeholder="Select your city"
+                    className="rounded-xl"
                   />
                 </div>
                 
-                {/* Course Dropdown */}
+                {/* Course Interested */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Course Interested *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Course Interested *</label>
                   <SearchableSelect
-                    options={courses.length > 0 ? courses : ['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Sc', 'M.Sc', 'MBBS', 'BDS', 'LLB', 'B.Com', 'M.Com', 'BCA', 'MCA', 'B.Pharm', 'M.Pharm']}
+                    options={courses}
                     value={course}
-                    onChange={(e) => setCourse(e.target.value)}
-                    placeholder="Search & select course"
-                    icon={<FiBook className="text-gray-400" />}
+                    onChange={setCourse}
+                    placeholder="Select course"
+                    className="rounded-xl"
                   />
                 </div>
                 
                 {/* Referral Code */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Referral Code (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Referral Code <span className="text-gray-400">(Optional)</span>
+                  </label>
                   <div className="relative">
-                    <FiGift className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiGift className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="text"
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
                       placeholder="Enter referral code"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent focus:bg-white transition-all text-gray-900"
                     />
                   </div>
                   {referralCode && (
-                    <p className="text-xs text-green-600 mt-1">🎁 You&apos;ll get ₹100 signup bonus!</p>
+                    <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                      <FiGift size={12} /> You'll get ₹100 signup bonus!
+                    </p>
                   )}
                 </div>
-              </div>
+                
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-orange-600 hover:bg-orange-700 py-4 text-base font-semibold rounded-xl shadow-lg shadow-orange-600/25 hover:shadow-orange-600/40 transition-all mt-6"
+                >
+                  {loading ? (
+                    <><FiLoader className="animate-spin mr-2" /> Creating Account...</>
+                  ) : (
+                    <>Create Account <FiArrowRight className="ml-2" /></>
+                  )}
+                </Button>
+              </form>
               
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full mt-6 bg-orange-600 hover:bg-orange-700 py-3 text-lg"
-              >
-                {loading ? (
-                  <><FiLoader className="animate-spin mr-2" /> Creating Account...</>
-                ) : (
-                  'Create Account'
-                )}
-              </Button>
-            </form>
+              {/* Login Link */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <p className="text-center text-gray-600">
+                  Already have an account?{' '}
+                  <Link to="/login" className="text-orange-600 hover:text-orange-700 font-semibold">
+                    Sign In
+                  </Link>
+                </p>
+              </div>
+            </>
           )}
-          
-          {/* Login Link */}
-          <div className="mt-6 text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="text-orange-600 hover:text-orange-700 font-semibold">
-              Sign In
-            </Link>
-          </div>
         </div>
-        
-        <p className="mt-6 text-center text-orange-100 text-sm">
-          <Link to="/" className="hover:text-white transition">
-            ← Back to Home
-          </Link>
-        </p>
       </div>
     </div>
   );
