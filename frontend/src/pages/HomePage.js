@@ -633,12 +633,14 @@ const CollegeDuniaHome = () => {
                         </div>
                       </div>
 
-                      {/* Ranking - Compact */}
-                      {college.nirf_ranking && (
-                        <div className="text-[11px] text-gray-600 mb-2">
-                          <span className="font-semibold">Ranked {college.nirf_ranking}</span> / 300
-                        </div>
-                      )}
+                      {/* Ranking - Compact - Always show for consistent height */}
+                      <div className="text-[11px] text-gray-600 mb-2 h-4">
+                        {college.nirf_ranking ? (
+                          <><span className="font-semibold">Ranked {college.nirf_ranking}</span> / 300</>
+                        ) : (
+                          <span className="text-gray-400">Ranking: N/A</span>
+                        )}
+                      </div>
 
                       {/* Action Buttons - With Icons */}
                       <div className="space-y-1.5">
