@@ -201,6 +201,8 @@ function App() {
             <Route path="/admin/study-abroad/edit/:id" element={<StudyAbroadForm />} />
             <Route path="/admin/study-abroad-listing-settings" element={<StudyAbroadListingSettings />} />
             <Route path="/admin/sponsored-ads" element={<SponsoredAdsManagement />} />
+            <Route path="/admin/leads" element={<LeadsList />} />
+            <Route path="/admin/lead-settings" element={<LeadSettings />} />
 
             {/* Public Routes - With Layout */}
             <Route path="/*" element={
