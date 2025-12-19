@@ -308,6 +308,38 @@ const CollegeDetailPage = ({ overrideId }) => {
     <div className="min-h-screen bg-white pt-2">
       {/* Top Ad Banner */}
       <AdBanner pageName="college-detail" position="top" />
+
+      {/* College Banner - Hero Section */}
+      {college.banner_url && (
+        <div className="relative w-full h-48 md:h-64 lg:h-72 overflow-hidden">
+          <img 
+            src={college.banner_url} 
+            alt={college.banner_alt || `${college.name} banner`}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          {/* Banner overlay content */}
+          <div className="absolute bottom-4 left-4 right-4 max-w-7xl mx-auto px-4">
+            <div className="flex flex-wrap gap-2">
+              {college.is_admission_partner && (
+                <span className="px-3 py-1 bg-green-500 text-white text-sm font-semibold rounded-full">
+                  🤝 Admission Partner
+                </span>
+              )}
+              {college.is_no_cost_emi && (
+                <span className="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">
+                  💳 No Cost EMI Available
+                </span>
+              )}
+              {college.is_verified && (
+                <span className="px-3 py-1 bg-emerald-500 text-white text-sm font-semibold rounded-full">
+                  ✓ Verified
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* BREADCRUMB */}
       <div className="border-b">
