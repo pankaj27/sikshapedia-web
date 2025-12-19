@@ -212,6 +212,7 @@ test_plan:
     - "Static Pages Frontend Testing - All 4 Pages"
     - "Study Abroad Frontend Testing - Complete Functionality"
     - "Homepage Settings - Add School and Add College Functionality"
+    - "Homepage Settings - Add School and Add College Functionality with Search"
 
 agent_communication:
   - agent: "testing"
