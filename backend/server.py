@@ -1448,6 +1448,7 @@ class News(BaseModel):
     # Status & Approval
     published: bool = True
     featured: bool = False
+    display_priority: int = 0  # Display priority for listing pages (lower number = appears first, 0 = no priority)
     status: str = "draft"  # draft, pending, published, rejected
     rejection_reason: Optional[str] = None
     submitted_by: Optional[dict] = None  # {id, name, email}
