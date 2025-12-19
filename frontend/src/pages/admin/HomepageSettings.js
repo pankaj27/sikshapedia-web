@@ -181,9 +181,18 @@ const HomepageSettings = () => {
         };
         setSettings(prev => ({ ...prev, ...data }));
         
-        // Fetch full college data for featured colleges
+        // Fetch full data for all featured sections
         if (response.data.featured_colleges_ids?.length > 0) {
-          fetchFeaturedCollegesData(response.data.featured_colleges_ids);
+          fetchFeaturedData('colleges', response.data.featured_colleges_ids, setFeaturedColleges);
+        }
+        if (response.data.featured_schools_ids?.length > 0) {
+          fetchFeaturedData('schools', response.data.featured_schools_ids, setFeaturedSchoolsList);
+        }
+        if (response.data.featured_exams_ids?.length > 0) {
+          fetchFeaturedData('exams', response.data.featured_exams_ids, setFeaturedExamsList);
+        }
+        if (response.data.featured_news_ids?.length > 0) {
+          fetchFeaturedData('news', response.data.featured_news_ids, setFeaturedNewsList);
         }
       }
     } catch (error) {
@@ -193,17 +202,17 @@ const HomepageSettings = () => {
     }
   };
 
-  // Fetch full college data for featured colleges IDs
-  const fetchFeaturedCollegesData = async (ids) => {
+  // Generic fetch function for featured items
+  const fetchFeaturedData = async (type, ids, setterFn) => {
     try {
-      const colleges = [];
+      const items = [];
       for (const id of ids) {
-        const res = await api.get(`/colleges/${id}`);
-        if (res.data) colleges.push(res.data);
+        const res = await api.get(`/${type}/${id}`);
+        if (res.data) items.push(res.data);
       }
-      setFeaturedColleges(colleges);
+      setterFn(items);
     } catch (error) {
-      console.error('Error fetching featured colleges:', error);
+      console.error(`Error fetching featured ${type}:`, error);
     }
   };
 
