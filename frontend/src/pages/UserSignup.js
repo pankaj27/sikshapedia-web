@@ -91,7 +91,14 @@ const UserSignup = () => {
       await api.post('/auth/user/send-otp', { email });
       setStep('otp');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to send OTP');
+      const detail = err.response?.data?.detail;
+      if (Array.isArray(detail)) {
+        setError(detail[0]?.msg || 'Failed to send OTP');
+      } else if (typeof detail === 'object' && detail !== null) {
+        setError(detail.msg || detail.message || 'Failed to send OTP');
+      } else {
+        setError(detail || 'Failed to send OTP');
+      }
     } finally {
       setLoading(false);
     }
