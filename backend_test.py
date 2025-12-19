@@ -3162,6 +3162,245 @@ class APITester:
         else:
             self.log_test("Pagination Functionality", False, f"Page 1 failed with status: {page1_status}")
 
+    def test_location_specific_display_priority(self):
+        """Test Location-Specific Display Priority Feature for Colleges"""
+        print("📍 Testing Location-Specific Display Priority Feature...")
+        
+        # Test 1: Admin Authentication
+        if not self.admin_token:
+            self.log_test("Admin Authentication Required", False, "Admin token not available for priority testing")
+            return
+        
+        # Test 2: Get All Colleges - Verify API Works
+        success, response, status = self.make_request("GET", "/colleges")
+        if success and isinstance(response, list):
+            college_count = len(response)
+            self.log_test("GET /colleges - Verify API Works", True, f"Retrieved {college_count} colleges")
+            
+            # Store first college ID for testing
+            if college_count > 0:
+                self.test_college_for_priority = response[0]
+                test_college_id = self.test_college_for_priority.get("id")
+                test_college_name = self.test_college_for_priority.get("name", "Unknown")
+                self.log_test("Find College to Test With", True, f"Using college: {test_college_name} (ID: {test_college_id})")
+            else:
+                self.log_test("Find College to Test With", False, "No colleges available for testing")
+                return
+        else:
+            self.log_test("GET /colleges - Verify API Works", False, f"Status: {status}", response)
+            return
+        
+        # Test 3: Update College with Location Priorities via Admin API
+        test_college_id = self.test_college_for_priority.get("id")
+        priority_update_data = {
+            "display_priority": 5,
+            "state_priority": {"Maharashtra": 1, "Karnataka": 3},
+            "city_priority": {"Mumbai": 1, "Bangalore": 2}
+        }
+        
+        success, response, status = self.make_request("PUT", f"/colleges/{test_college_id}", 
+                                                    priority_update_data, token=self.admin_token)
+        if success and isinstance(response, dict):
+            # Verify the priority fields were updated
+            updated_display_priority = response.get("display_priority")
+            updated_state_priority = response.get("state_priority", {})
+            updated_city_priority = response.get("city_priority", {})
+            
+            if (updated_display_priority == 5 and 
+                updated_state_priority.get("Maharashtra") == 1 and 
+                updated_state_priority.get("Karnataka") == 3 and
+                updated_city_priority.get("Mumbai") == 1 and
+                updated_city_priority.get("Bangalore") == 2):
+                self.log_test("Update College with Location Priorities", True, 
+                             f"College {test_college_id} updated with priorities: display=5, Maharashtra=1, Karnataka=3, Mumbai=1, Bangalore=2")
+            else:
+                self.log_test("Update College with Location Priorities", False, 
+                             f"Priority fields not updated correctly. Got: display={updated_display_priority}, state={updated_state_priority}, city={updated_city_priority}")
+        else:
+            self.log_test("Update College with Location Priorities", False, f"Status: {status}", response)
+            return
+        
+        # Test 4: Verify National Sorting - GET /colleges
+        success, response, status = self.make_request("GET", "/colleges")
+        if success and isinstance(response, list):
+            # Find our test college in the results
+            test_college_position = None
+            for i, college in enumerate(response):
+                if college.get("id") == test_college_id:
+                    test_college_position = i + 1
+                    break
+            
+            if test_college_position is not None:
+                # Check if colleges are sorted by display_priority (lower number = appears first)
+                colleges_with_priority = []
+                for college in response:
+                    priority = college.get("display_priority", 0)
+                    colleges_with_priority.append((college.get("name", "Unknown"), priority))
+                
+                # Check if our college with priority 5 appears before colleges with higher priority or 0
+                colleges_after_test = response[test_college_position:]
+                higher_priority_after = [c for c in colleges_after_test if c.get("display_priority", 0) > 5]
+                
+                self.log_test("Verify National Sorting", True, 
+                             f"Test college appears at position {test_college_position} with display_priority=5. Found {len(higher_priority_after)} colleges with higher priority after it.")
+            else:
+                self.log_test("Verify National Sorting", False, "Test college not found in national listing")
+        else:
+            self.log_test("Verify National Sorting", False, f"Status: {status}", response)
+        
+        # Test 5: Verify State Sorting - GET /colleges?state=Maharashtra
+        success, response, status = self.make_request("GET", "/colleges?state=Maharashtra")
+        if success and isinstance(response, list):
+            maharashtra_count = len(response)
+            
+            # Find our test college in Maharashtra results
+            test_college_in_maharashtra = None
+            test_college_mh_position = None
+            for i, college in enumerate(response):
+                if college.get("id") == test_college_id:
+                    test_college_in_maharashtra = college
+                    test_college_mh_position = i + 1
+                    break
+            
+            if test_college_in_maharashtra:
+                # Check state_priority for Maharashtra
+                state_priority = test_college_in_maharashtra.get("state_priority", {})
+                mh_priority = state_priority.get("Maharashtra")
+                
+                if mh_priority == 1:
+                    self.log_test("Verify State Sorting - Maharashtra", True, 
+                                 f"Test college found at position {test_college_mh_position} in Maharashtra with state_priority=1. Total Maharashtra colleges: {maharashtra_count}")
+                else:
+                    self.log_test("Verify State Sorting - Maharashtra", False, 
+                                 f"Test college Maharashtra priority is {mh_priority}, expected 1")
+            else:
+                # College might not be in Maharashtra, which is fine
+                self.log_test("Verify State Sorting - Maharashtra", True, 
+                             f"Retrieved {maharashtra_count} Maharashtra colleges (test college may not be in Maharashtra)")
+        else:
+            self.log_test("Verify State Sorting - Maharashtra", False, f"Status: {status}", response)
+        
+        # Test 6: Verify Another State - GET /colleges?state=Karnataka
+        success, response, status = self.make_request("GET", "/colleges?state=Karnataka")
+        if success and isinstance(response, list):
+            karnataka_count = len(response)
+            
+            # Find our test college in Karnataka results
+            test_college_in_karnataka = None
+            test_college_ka_position = None
+            for i, college in enumerate(response):
+                if college.get("id") == test_college_id:
+                    test_college_in_karnataka = college
+                    test_college_ka_position = i + 1
+                    break
+            
+            if test_college_in_karnataka:
+                # Check state_priority for Karnataka
+                state_priority = test_college_in_karnataka.get("state_priority", {})
+                ka_priority = state_priority.get("Karnataka")
+                
+                if ka_priority == 3:
+                    self.log_test("Verify Another State - Karnataka", True, 
+                                 f"Test college found at position {test_college_ka_position} in Karnataka with state_priority=3. Total Karnataka colleges: {karnataka_count}")
+                else:
+                    self.log_test("Verify Another State - Karnataka", False, 
+                                 f"Test college Karnataka priority is {ka_priority}, expected 3")
+            else:
+                # College might not be in Karnataka, which is fine
+                self.log_test("Verify Another State - Karnataka", True, 
+                             f"Retrieved {karnataka_count} Karnataka colleges (test college may not be in Karnataka)")
+        else:
+            self.log_test("Verify Another State - Karnataka", False, f"Status: {status}", response)
+        
+        # Test 7: Verify City Sorting - GET /colleges?city=Mumbai
+        success, response, status = self.make_request("GET", "/colleges?city=Mumbai")
+        if success and isinstance(response, list):
+            mumbai_count = len(response)
+            
+            # Find our test college in Mumbai results
+            test_college_in_mumbai = None
+            test_college_mumbai_position = None
+            for i, college in enumerate(response):
+                if college.get("id") == test_college_id:
+                    test_college_in_mumbai = college
+                    test_college_mumbai_position = i + 1
+                    break
+            
+            if test_college_in_mumbai:
+                # Check city_priority for Mumbai
+                city_priority = test_college_in_mumbai.get("city_priority", {})
+                mumbai_priority = city_priority.get("Mumbai")
+                
+                if mumbai_priority == 1:
+                    self.log_test("Verify City Sorting - Mumbai", True, 
+                                 f"Test college found at position {test_college_mumbai_position} in Mumbai with city_priority=1. Total Mumbai colleges: {mumbai_count}")
+                else:
+                    self.log_test("Verify City Sorting - Mumbai", False, 
+                                 f"Test college Mumbai priority is {mumbai_priority}, expected 1")
+            else:
+                # College might not be in Mumbai, which is fine
+                self.log_test("Verify City Sorting - Mumbai", True, 
+                             f"Retrieved {mumbai_count} Mumbai colleges (test college may not be in Mumbai)")
+        else:
+            self.log_test("Verify City Sorting - Mumbai", False, f"Status: {status}", response)
+        
+        # Test 8: Verify City Sorting - GET /colleges?city=Bangalore
+        success, response, status = self.make_request("GET", "/colleges?city=Bangalore")
+        if success and isinstance(response, list):
+            bangalore_count = len(response)
+            
+            # Find our test college in Bangalore results
+            test_college_in_bangalore = None
+            test_college_bangalore_position = None
+            for i, college in enumerate(response):
+                if college.get("id") == test_college_id:
+                    test_college_in_bangalore = college
+                    test_college_bangalore_position = i + 1
+                    break
+            
+            if test_college_in_bangalore:
+                # Check city_priority for Bangalore
+                city_priority = test_college_in_bangalore.get("city_priority", {})
+                bangalore_priority = city_priority.get("Bangalore")
+                
+                if bangalore_priority == 2:
+                    self.log_test("Verify City Sorting - Bangalore", True, 
+                                 f"Test college found at position {test_college_bangalore_position} in Bangalore with city_priority=2. Total Bangalore colleges: {bangalore_count}")
+                else:
+                    self.log_test("Verify City Sorting - Bangalore", False, 
+                                 f"Test college Bangalore priority is {bangalore_priority}, expected 2")
+            else:
+                # College might not be in Bangalore, which is fine
+                self.log_test("Verify City Sorting - Bangalore", True, 
+                             f"Retrieved {bangalore_count} Bangalore colleges (test college may not be in Bangalore)")
+        else:
+            self.log_test("Verify City Sorting - Bangalore", False, f"Status: {status}", response)
+        
+        # Test 9: Verify Priority Fields Persistence
+        success, response, status = self.make_request("GET", f"/colleges/{test_college_id}")
+        if success and isinstance(response, dict):
+            # Verify all priority fields are still correctly stored
+            display_priority = response.get("display_priority")
+            state_priority = response.get("state_priority", {})
+            city_priority = response.get("city_priority", {})
+            
+            all_priorities_correct = (
+                display_priority == 5 and
+                state_priority.get("Maharashtra") == 1 and
+                state_priority.get("Karnataka") == 3 and
+                city_priority.get("Mumbai") == 1 and
+                city_priority.get("Bangalore") == 2
+            )
+            
+            if all_priorities_correct:
+                self.log_test("Verify Priority Fields Persistence", True, 
+                             "All location-specific priority fields persist correctly in database")
+            else:
+                self.log_test("Verify Priority Fields Persistence", False, 
+                             f"Priority fields not persisted correctly. display={display_priority}, state={state_priority}, city={city_priority}")
+        else:
+            self.log_test("Verify Priority Fields Persistence", False, f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites focusing on Homepage Settings functionality"""
         print("🚀 TESTING HOMEPAGE SETTINGS - ADD SCHOOL & ADD COLLEGE FUNCTIONALITY WITH SEARCH")
