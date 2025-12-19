@@ -25,7 +25,7 @@ const ProfilePage = () => {
     if (loading) return;
     
     if (!user) {
-      navigate('/login');
+      navigate('/signup');
       return;
     }
     
