@@ -275,16 +275,19 @@ const ApplyNowModal = ({
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">City *</label>
                   <div className="relative">
-                    <FiMapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-                    <input
-                      type="text"
+                    <FiMapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none z-10" />
+                    <select
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
-                      placeholder="Your city"
-                      className="w-full pl-10 pr-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                      className="w-full pl-10 pr-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors appearance-none bg-white cursor-pointer"
                       required
-                    />
+                    >
+                      <option value="">Select city</option>
+                      {SORTED_CITIES.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
