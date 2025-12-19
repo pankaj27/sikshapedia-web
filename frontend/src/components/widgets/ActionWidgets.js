@@ -1,26 +1,60 @@
 import React, { useState } from 'react';
-import { FiSend, FiMessageCircle, FiUsers, FiX, FiPhone, FiMail, FiCheckCircle } from 'react-icons/fi';
+import { FiSend, FiMessageCircle, FiUsers, FiX, FiPhone, FiMail, FiCheckCircle, FiUser, FiMapPin, FiBook, FiLoader } from 'react-icons/fi';
 import { HiOutlineSparkles, HiOutlineChatAlt2 } from 'react-icons/hi';
 import { Button } from '../ui/button';
+import { INDIAN_CITIES } from '../../utils/urlHelpers';
+import api from '../../api/axios';
 
-// Apply Now Widget
-export const ApplyNowWidget = ({ collegeName, courseName, onClose }) => {
+// Format city name for display
+const formatCityName = (city) => city.charAt(0).toUpperCase() + city.slice(1);
+const SORTED_CITIES = [...INDIAN_CITIES].sort().map(formatCityName);
+
+// Apply Now Widget - with Admission Buddy logo and city dropdown
+export const ApplyNowWidget = ({ collegeName, collegeLogoUrl, courseName, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    city: '',
     course: courseName || ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send to API
-    console.log('Apply Now submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      if (onClose) onClose();
-    }, 2000);
+    setLoading(true);
+    setError('');
+
+    // Validation
+    const mobileRegex = /^[6-9]\d{9}$/;
+    if (!mobileRegex.test(formData.phone.replace(/\D/g, ''))) {
+      setError('Please enter a valid 10-digit mobile number');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.phone,
+        city: formData.city,
+        course_interested: formData.course,
+        college_name: collegeName || 'General Inquiry',
+        source: 'homepage_widget'
+      };
+      await api.post('/leads', payload);
+      setSubmitted(true);
+      setTimeout(() => {
+        if (onClose) onClose();
+      }, 2000);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -36,9 +70,19 @@ export const ApplyNowWidget = ({ collegeName, courseName, onClose }) => {
   return (
     <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-5 text-white shadow-lg">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <HiOutlineSparkles size={24} />
-          <h3 className="font-bold text-lg">Apply Now</h3>
+        <div className="flex items-center gap-3">
+          {/* Logo */}
+          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden shadow-md flex-shrink-0">
+            {collegeLogoUrl ? (
+              <img src={collegeLogoUrl} alt={collegeName || 'College'} className="w-8 h-8 object-contain" onError={(e) => { e.target.src = '/favicon.png'; }} />
+            ) : (
+              <img src="/favicon.png" alt="Admission Buddy" className="w-8 h-8 object-contain" />
+            )}
+          </div>
+          <div>
+            <h3 className="font-bold text-lg">Apply Now</h3>
+            <p className="text-xs text-white/80">{collegeName || 'Start your admission journey'}</p>
+          </div>
         </div>
         {onClose && (
           <button onClick={onClose} className="text-white/80 hover:text-white">
@@ -46,39 +90,91 @@ export const ApplyNowWidget = ({ collegeName, courseName, onClose }) => {
           </button>
         )}
       </div>
-      <p className="text-sm text-white/90 mb-4">
-        {collegeName ? `Apply to ${collegeName}` : 'Start your admission journey today!'}
-      </p>
+
+      {error && (
+        <div className="bg-red-100 text-red-700 px-3 py-2 rounded-lg text-sm mb-3">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-3">
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
-          required
-          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={(e) => setFormData({...formData, email: e.target.value})}
-          required
-          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
-        />
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          value={formData.phone}
-          onChange={(e) => setFormData({...formData, phone: e.target.value})}
-          required
-          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
-        />
+        <div className="relative">
+          <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            required
+            className="w-full pl-10 pr-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white text-sm"
+          />
+        </div>
+        <div className="relative">
+          <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4" />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            required
+            className="w-full pl-10 pr-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white text-sm"
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="relative">
+            <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4" />
+            <input
+              type="tel"
+              placeholder="Phone"
+              maxLength={10}
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              required
+              className="w-full pl-10 pr-2 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white text-sm"
+            />
+          </div>
+          <div className="relative">
+            <FiMapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4 pointer-events-none z-10" />
+            <select
+              value={formData.city}
+              onChange={(e) => setFormData({...formData, city: e.target.value})}
+              required
+              className="w-full pl-10 pr-2 py-2 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none focus:border-white text-sm appearance-none cursor-pointer [&>option]:text-gray-800"
+            >
+              <option value="" className="text-gray-500">Select City</option>
+              {SORTED_CITIES.map((city) => (
+                <option key={city} value={city}>{city}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="relative">
+          <FiBook className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Course Interested (e.g., B.Tech, MBA)"
+            value={formData.course}
+            onChange={(e) => setFormData({...formData, course: e.target.value})}
+            required
+            className="w-full pl-10 pr-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white text-sm"
+          />
+        </div>
         <button
           type="submit"
-          className="w-full py-2.5 bg-white text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors"
+          disabled={loading}
+          className="w-full py-2.5 bg-white text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          Submit Application
+          {loading ? (
+            <>
+              <FiLoader className="w-4 h-4 animate-spin" />
+              Submitting...
+            </>
+          ) : (
+            <>
+              <FiSend className="w-4 h-4" />
+              Submit Application
+            </>
+          )}
         </button>
       </form>
     </div>
