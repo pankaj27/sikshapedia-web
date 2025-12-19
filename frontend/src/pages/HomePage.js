@@ -172,6 +172,13 @@ const CollegeDuniaHome = () => {
     {name: 'Study Materials', icon: 'FiZap', link: '/study-materials', bg_color: 'bg-indigo-100', icon_color: 'text-indigo-600'}
   ];
   
+  // Quick Actions from settings
+  const quickActions = pageSettings?.quick_actions || [
+    { id: 'apply', title: 'Apply Now', subtitle: 'Quick admission', icon: 'FiSend', gradient: 'from-orange-500 to-orange-600' },
+    { id: 'question', title: 'Ask Question', subtitle: 'Get expert help', icon: 'FiMessageCircle', gradient: 'from-blue-500 to-blue-600' },
+    { id: 'counselling', title: 'Counselling', subtitle: 'Free guidance', icon: 'FiPhone', gradient: 'from-purple-500 to-purple-600' }
+  ];
+  
   // Top Schools from settings
   const topSchoolsData = pageSettings?.top_schools || [
     { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
