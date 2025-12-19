@@ -59,11 +59,12 @@ const AutoApplyPopup = () => {
       return;
     }
 
-    // For REGISTERED users: Check if popup was already shown in this session
-    if (isLoggedIn()) {
+    // For REGISTERED users or users who submitted a lead: 
+    // Check if popup was already shown in this session
+    if (isRegisteredOrSubmitted()) {
       const popupShown = sessionStorage.getItem('applyPopupShown');
       if (popupShown) {
-        return; // Don't show popup again for logged-in users
+        return; // Don't show popup again for registered/submitted users
       }
     }
 
