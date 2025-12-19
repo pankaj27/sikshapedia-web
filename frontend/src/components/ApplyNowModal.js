@@ -290,11 +290,11 @@ const ApplyNowModal = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
-                    <FiLoader className="w-5 h-5 animate-spin" />
+                    <FiLoader className="w-4 h-4 animate-spin" />
                     Submitting...
                   </>
                 ) : (
@@ -307,27 +307,22 @@ const ApplyNowModal = ({
 
               {/* WhatsApp Option */}
               {settings?.whatsapp_business_number && (
-                <div className="text-center">
-                  <span className="text-gray-500 text-sm">or</span>
-                  <button
-                    type="button"
-                    onClick={openWhatsApp}
-                    className="w-full mt-2 py-2.5 border-2 border-green-500 text-green-600 font-medium rounded-lg hover:bg-green-50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FiMessageCircle className="w-4 h-4" />
-                    Chat on WhatsApp
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={openWhatsApp}
+                  className="w-full mt-2 py-2 border border-green-500 text-green-600 text-sm font-medium rounded-lg hover:bg-green-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  <FiMessageCircle className="w-4 h-4" />
+                  Chat on WhatsApp
+                </button>
               )}
+
+              <p className="text-xs text-gray-400 mt-2 text-center">
+                By submitting, you agree to our Terms & Privacy Policy
+              </p>
             </form>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="px-6 pb-4 text-center">
-          <p className="text-xs text-gray-500">
-            By submitting, you agree to our Terms & Privacy Policy
-          </p>
         </div>
       </div>
     </div>
