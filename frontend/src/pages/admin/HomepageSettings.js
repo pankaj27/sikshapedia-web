@@ -748,6 +748,100 @@ const HomepageSettings = () => {
                 ))}
               </div>
 
+              {/* Featured Colleges for Top Universities Section */}
+              <div className="mt-8 p-6 bg-indigo-50 rounded-xl border border-indigo-200">
+                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  <FiStar className="text-indigo-600" />
+                  Featured Colleges (Top Universities Section)
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Search and add colleges to display in the "Top Universities" section. Drag to reorder - Position #1 will appear first on homepage.
+                </p>
+                
+                {/* Search Input */}
+                <div className="relative mb-4">
+                  <input
+                    type="text"
+                    value={featuredCollegeSearch}
+                    onChange={(e) => {
+                      setFeaturedCollegeSearch(e.target.value);
+                      searchFeaturedColleges(e.target.value);
+                    }}
+                    onFocus={() => featuredCollegeResults.length > 0 && setShowFeaturedDropdown(true)}
+                    className="w-full border-2 border-indigo-200 rounded-lg px-4 py-3 focus:border-indigo-500 focus:outline-none"
+                    placeholder="Search college by name to add..."
+                  />
+                  <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  
+                  {/* Search Dropdown */}
+                  {showFeaturedDropdown && featuredCollegeResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border-2 border-indigo-200 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {featuredCollegeResults.map((college, idx) => (
+                        <div
+                          key={idx}
+                          onClick={() => addFeaturedCollege(college)}
+                          className="px-4 py-3 hover:bg-indigo-50 cursor-pointer border-b last:border-b-0 flex items-center justify-between"
+                        >
+                          <div>
+                            <div className="font-medium text-gray-900">{college.name}</div>
+                            <div className="text-xs text-gray-500">{college.location?.city} • {college.type}</div>
+                          </div>
+                          <FiPlus className="text-indigo-600" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Featured Colleges List */}
+                {featuredColleges.length > 0 ? (
+                  <div className="space-y-2">
+                    {featuredColleges.map((college, index) => (
+                      <div key={college.id} className="flex items-center gap-3 bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                        <span className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                          {index + 1}
+                        </span>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">{college.name}</div>
+                          <div className="text-xs text-gray-500">{college.location?.city} • NIRF: {college.nirf_ranking || 'N/A'}</div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => moveFeaturedCollegeUp(index)}
+                            disabled={index === 0}
+                            className="p-1.5 rounded hover:bg-gray-100 disabled:opacity-30"
+                            title="Move Up"
+                          >
+                            <FiChevronUp />
+                          </button>
+                          <button
+                            onClick={() => moveFeaturedCollegeDown(index)}
+                            disabled={index === featuredColleges.length - 1}
+                            className="p-1.5 rounded hover:bg-gray-100 disabled:opacity-30"
+                            title="Move Down"
+                          >
+                            <FiChevronDown />
+                          </button>
+                          <button
+                            onClick={() => removeFeaturedCollege(college.id)}
+                            className="p-1.5 rounded hover:bg-red-100 text-red-600"
+                            title="Remove"
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 bg-white rounded-lg border-2 border-dashed border-gray-200">
+                    <FiStar className="mx-auto text-4xl text-gray-300 mb-2" />
+                    <p className="text-gray-500">No colleges added yet</p>
+                    <p className="text-sm text-gray-400">Search and add colleges above</p>
+                  </div>
+                )}
+              </div>
+
               {/* CTA Section */}
               <div className="mt-8">
                 <h3 className="text-lg font-semibold border-b pb-2 mb-4">Call to Action Section</h3>
