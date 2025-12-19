@@ -52,9 +52,20 @@ const StudyAbroadListingSettings = () => {
       { title: 'Cultural Exposure', description: 'Experience diverse cultures', icon: '🎭' },
       { title: 'Personal Growth', description: 'Develop independence and skills', icon: '🚀' }
     ],
+    // SEO Fields
+    auto_generate_seo: true,
     meta_title: 'Study Abroad 2025 - Top Universities Worldwide | Admissionbuddy',
     meta_description: 'Explore 500+ top universities in USA, UK, Canada, Australia. Get expert guidance for your study abroad journey. Apply now!',
     meta_keywords: ['study abroad', 'international universities', 'USA universities', 'UK universities', 'study in Canada'],
+    canonical_url: '',
+    og_image: '',
+    og_title: '',
+    og_description: '',
+    twitter_card: 'summary_large_image',
+    twitter_title: '',
+    twitter_description: '',
+    schema_type: 'WebPage',
+    robots: 'index, follow',
     faqs: []
   });
 
