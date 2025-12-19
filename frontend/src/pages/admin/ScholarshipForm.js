@@ -122,11 +122,14 @@ const ScholarshipForm = () => {
     }
   }, [id]);
 
+  // Auto-generate slug from name for new entries
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+  
   useEffect(() => {
-    if (!isEdit && formData.name && !formData.slug) {
+    if (!isEdit && formData.name && !slugManuallyEdited) {
       setFormData(prev => ({ ...prev, slug: generateSlug(formData.name) }));
     }
-  }, [formData.name, isEdit]);
+  }, [formData.name, isEdit, slugManuallyEdited]);
 
   const fetchScholarship = async () => {
     setLoading(true);
