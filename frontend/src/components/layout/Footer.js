@@ -179,6 +179,21 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+        
+        {/* For Institutions Banner */}
+        <div className="mt-8 pt-8 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-900 rounded-xl p-6">
+            <div>
+              <h4 className="text-white font-bold text-lg mb-1">Are you an Institution?</h4>
+              <p className="text-gray-400 text-sm">Manage your leads, applications and analytics from your dashboard</p>
+            </div>
+            <Link to="/institute/login">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap">
+                Institute Login →
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Bottom Footer */}
