@@ -43,19 +43,19 @@ const ApplyNowModal = ({
   // Fetch courses if collegeId provided but no courses passed
   useEffect(() => {
     const fetchCoursesForCollege = async () => {
-      if (collegeId && collegeCourses.length === 0) {
+      if (collegeId && memoizedCollegeCourses.length === 0) {
         try {
           const response = await api.get(`/colleges/${collegeId}/courses-for-form`);
           setCourses(response.data.courses || []);
         } catch (err) {
           console.error('Failed to fetch college courses:', err);
         }
-      } else if (collegeCourses.length > 0) {
-        setCourses(collegeCourses);
+      } else if (memoizedCollegeCourses.length > 0) {
+        setCourses(memoizedCollegeCourses);
       }
     };
     fetchCoursesForCollege();
-  }, [collegeId, collegeCourses]);
+  }, [collegeId, memoizedCollegeCourses]);
 
   // Reset form when modal opens
   useEffect(() => {
