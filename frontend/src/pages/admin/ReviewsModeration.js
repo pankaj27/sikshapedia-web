@@ -142,7 +142,7 @@ const ReviewsModeration = () => {
           )}
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
