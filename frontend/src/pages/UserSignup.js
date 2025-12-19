@@ -421,9 +421,9 @@ const UserSignup = () => {
           {/* Login Link */}
           <div className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link to="/login" className="text-orange-600 hover:text-orange-700 font-medium">
-              Login
-            </Link>
+            <button onClick={() => setStep('email')} className="text-orange-600 hover:text-orange-700 font-medium">
+              Login with Email/Google
+            </button>
           </div>
         </div>
       </div>
