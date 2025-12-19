@@ -154,12 +154,99 @@ const HomepageSettings = () => {
           college_rankings_years: response.data.college_rankings_years?.length > 0 ? response.data.college_rankings_years : ['2024', '2023', '2022']
         };
         setSettings(prev => ({ ...prev, ...data }));
+        
+        // Fetch full college data for featured colleges
+        if (response.data.featured_colleges_ids?.length > 0) {
+          fetchFeaturedCollegesData(response.data.featured_colleges_ids);
+        }
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Fetch full college data for featured colleges IDs
+  const fetchFeaturedCollegesData = async (ids) => {
+    try {
+      const colleges = [];
+      for (const id of ids) {
+        const res = await api.get(`/colleges/${id}`);
+        if (res.data) colleges.push(res.data);
+      }
+      setFeaturedColleges(colleges);
+    } catch (error) {
+      console.error('Error fetching featured colleges:', error);
+    }
+  };
+
+  // Search colleges for featured section
+  const searchFeaturedColleges = async (query) => {
+    if (!query || query.length < 2) {
+      setFeaturedCollegeResults([]);
+      setShowFeaturedDropdown(false);
+      return;
+    }
+    try {
+      const response = await api.get(`/colleges?search=${encodeURIComponent(query)}&limit=10`);
+      setFeaturedCollegeResults(response.data || []);
+      setShowFeaturedDropdown(true);
+    } catch (error) {
+      console.error('Error searching colleges:', error);
+    }
+  };
+
+  // Add college to featured list
+  const addFeaturedCollege = (college) => {
+    // Check if already added
+    if (featuredColleges.find(c => c.id === college.id)) {
+      alert('This college is already in the list');
+      return;
+    }
+    const newFeatured = [...featuredColleges, college];
+    setFeaturedColleges(newFeatured);
+    setSettings(prev => ({
+      ...prev,
+      featured_colleges_ids: newFeatured.map(c => c.id)
+    }));
+    setFeaturedCollegeSearch('');
+    setFeaturedCollegeResults([]);
+    setShowFeaturedDropdown(false);
+  };
+
+  // Remove college from featured list
+  const removeFeaturedCollege = (collegeId) => {
+    const newFeatured = featuredColleges.filter(c => c.id !== collegeId);
+    setFeaturedColleges(newFeatured);
+    setSettings(prev => ({
+      ...prev,
+      featured_colleges_ids: newFeatured.map(c => c.id)
+    }));
+  };
+
+  // Move college up in the list
+  const moveFeaturedCollegeUp = (index) => {
+    if (index === 0) return;
+    const newFeatured = [...featuredColleges];
+    [newFeatured[index - 1], newFeatured[index]] = [newFeatured[index], newFeatured[index - 1]];
+    setFeaturedColleges(newFeatured);
+    setSettings(prev => ({
+      ...prev,
+      featured_colleges_ids: newFeatured.map(c => c.id)
+    }));
+  };
+
+  // Move college down in the list
+  const moveFeaturedCollegeDown = (index) => {
+    if (index === featuredColleges.length - 1) return;
+    const newFeatured = [...featuredColleges];
+    [newFeatured[index], newFeatured[index + 1]] = [newFeatured[index + 1], newFeatured[index]];
+    setFeaturedColleges(newFeatured);
+    setSettings(prev => ({
+      ...prev,
+      featured_colleges_ids: newFeatured.map(c => c.id)
+    }));
   };
 
   const handleSave = async () => {
