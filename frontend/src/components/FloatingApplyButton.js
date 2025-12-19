@@ -19,8 +19,8 @@ const FloatingApplyButton = () => {
     fetchSettings();
   }, []);
 
-  // Don't render if floating CTA is disabled
-  if (settings && !settings.show_floating_cta) {
+  // Don't render if floating CTA is explicitly disabled (default to true)
+  if (settings && settings.show_floating_cta === false) {
     return null;
   }
 
