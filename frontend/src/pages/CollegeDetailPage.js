@@ -1894,7 +1894,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                 <div className="text-center">
                   <h3 className="font-bold text-xl mb-2">Apply to {college.name}</h3>
                   <p className="text-sm text-orange-100 mb-4">Start your admission process now</p>
-                  <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2">
+                  <button 
+                    onClick={() => setShowApplyModal(true)}
+                    className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
+                  >
                     <FiCheckCircle size={18} />
                     <span>Apply Now</span>
                   </button>
