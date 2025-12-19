@@ -1041,32 +1041,46 @@ const LoanForm = () => {
             {activeTab === 'seo' && (
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-sm border p-6">
-                  <h2 className="text-lg font-semibold mb-4">🔍 SEO Settings</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold">🔍 SEO Settings</h2>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={formData.auto_generate_seo}
+                        onChange={(e) => handleChange('auto_generate_seo', e.target.checked)}
+                        className="rounded"
+                      />
+                      <span className="text-sm">Auto-generate from content</span>
+                    </label>
+                  </div>
+                  
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1">Meta Title</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
                       <input
                         type="text"
-                        value={formData.meta_title}
+                        value={formData.meta_title || ''}
                         onChange={(e) => handleChange('meta_title', e.target.value)}
                         className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="SEO title (auto-generated if empty)"
                       />
-                      <p className="text-xs text-gray-500 mt-1">{(formData.meta_title || '').length}/60</p>
+                      <p className="text-xs text-gray-500 mt-1">{(formData.meta_title || '').length}/60 characters</p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1">Meta Description</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
                       <textarea
-                        value={formData.meta_description}
+                        value={formData.meta_description || ''}
                         onChange={(e) => handleChange('meta_description', e.target.value)}
                         className="w-full border rounded-lg px-4 py-2.5"
                         rows="3"
+                        placeholder="SEO description (auto-generated from short description if empty)"
                       />
-                      <p className="text-xs text-gray-500 mt-1">{(formData.meta_description || '').length}/160</p>
+                      <p className="text-xs text-gray-500 mt-1">{(formData.meta_description || '').length}/160 characters</p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1">Meta Keywords</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
                       <div className="flex gap-2 mb-2">
                         <input
                           type="text"
@@ -1074,6 +1088,7 @@ const LoanForm = () => {
                           onChange={(e) => setKeywordInput(e.target.value)}
                           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addKeyword())}
                           className="flex-1 border rounded-lg px-4 py-2"
+                          placeholder="Add keyword"
                         />
                         <Button type="button" variant="outline" onClick={addKeyword}>Add</Button>
                       </div>
@@ -1081,36 +1096,61 @@ const LoanForm = () => {
                         {(formData.meta_keywords || []).map((kw, idx) => (
                           <span key={idx} className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
                             {kw}
-                            <button type="button" onClick={() => removeArrayItem('meta_keywords', idx)}>×</button>
+                            <button type="button" onClick={() => removeArrayItem('meta_keywords', idx)} className="hover:text-red-500">×</button>
                           </span>
                         ))}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1">OG Image URL</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">OG Image URL</label>
                       <input
                         type="url"
-                        value={formData.og_image}
+                        value={formData.og_image || ''}
                         onChange={(e) => handleChange('og_image', e.target.value)}
                         className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="Social sharing image (uses featured image if empty)"
                       />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Canonical URL</label>
+                      <input
+                        type="url"
+                        value={formData.canonical_url || ''}
+                        onChange={(e) => handleChange('canonical_url', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="Leave empty to use default URL"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Schema Type</label>
+                      <select
+                        value={formData.schema_type || 'FinancialProduct'}
+                        onChange={(e) => handleChange('schema_type', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                      >
+                        <option value="FinancialProduct">Financial Product</option>
+                        <option value="LoanOrCredit">Loan/Credit</option>
+                        <option value="Article">Article</option>
+                      </select>
                     </div>
                   </div>
                 </div>
 
-                {/* Preview */}
+                {/* SEO Preview */}
                 <div className="bg-white rounded-lg shadow-sm border p-6">
                   <h2 className="text-lg font-semibold mb-4">👁️ Search Preview</h2>
                   <div className="border rounded-lg p-4 bg-gray-50">
-                    <p className="text-blue-600 text-lg hover:underline">
-                      {formData.meta_title || formData.name || 'Loan Title'}
+                    <p className="text-blue-600 text-lg hover:underline cursor-pointer">
+                      {formData.meta_title || formData.name || 'Education Loan Title'}
                     </p>
                     <p className="text-green-700 text-sm">
                       {window.location.origin}/loans/{formData.slug || 'slug'}
                     </p>
                     <p className="text-gray-600 text-sm mt-1">
-                      {formData.meta_description || formData.short_description || 'Meta description...'}
+                      {formData.meta_description || formData.short_description || 'Meta description will appear here...'}
                     </p>
                   </div>
                 </div>
