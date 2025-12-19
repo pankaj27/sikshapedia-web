@@ -8887,6 +8887,401 @@ async def delete_static_page(slug: str):
     await db.static_pages.delete_one({"slug": slug})
     return {"success": True}
 
+# ============================================
+# Lead/Inquiry Management APIs
+# ============================================
+
+async def send_lead_email_notification(lead: dict, settings: dict):
+    """Send email notification for new lead"""
+    if not RESEND_API_KEY or not settings.get('enable_email_notifications', True):
+        return False
+    
+    try:
+        # Get notification emails
+        notification_emails = settings.get('notification_emails', [])
+        default_email = settings.get('default_notification_email', '')
+        
+        to_emails = notification_emails if notification_emails else ([default_email] if default_email else [])
+        if not to_emails:
+            logging.warning("No notification emails configured for leads")
+            return False
+        
+        # Format email content
+        college_name = lead.get('college_name', 'General Inquiry')
+        subject = settings.get('email_subject', 'New Lead - {college_name}').format(
+            college_name=college_name,
+            name=lead.get('name', ''),
+            course_interested=lead.get('course_interested', '')
+        )
+        
+        html_content = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #f97316;">New Lead Received! 🎉</h2>
+            <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Lead Details:</h3>
+                <p><strong>Name:</strong> {lead.get('name', '')}</p>
+                <p><strong>Email:</strong> {lead.get('email', '')}</p>
+                <p><strong>Mobile:</strong> {lead.get('mobile', '')}</p>
+                <p><strong>City:</strong> {lead.get('city', '')}</p>
+                <p><strong>Course Interested:</strong> {lead.get('course_interested', '')}</p>
+                <p><strong>College:</strong> {college_name}</p>
+                <p><strong>Source:</strong> {lead.get('source', 'general')}</p>
+            </div>
+            <p style="color: #6b7280; font-size: 14px;">
+                Login to your admin panel to follow up with this lead.
+            </p>
+        </div>
+        """
+        
+        params = {
+            "from": SENDER_EMAIL,
+            "to": to_emails,
+            "subject": subject,
+            "html": html_content
+        }
+        
+        # Run sync SDK in thread to keep FastAPI non-blocking
+        await asyncio.to_thread(resend.Emails.send, params)
+        logging.info(f"Lead notification email sent to {to_emails}")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to send lead email notification: {e}")
+        return False
+
+async def send_lead_whatsapp_notification(lead: dict, settings: dict):
+    """Send WhatsApp notification to the lead"""
+    if not twilio_client or not settings.get('enable_whatsapp_notifications', True):
+        return None
+    
+    if not TWILIO_WHATSAPP_NUMBER:
+        logging.warning("Twilio WhatsApp number not configured")
+        return None
+    
+    try:
+        # Format message
+        college_name = lead.get('college_name', 'Admissionbuddy')
+        message_template = settings.get('whatsapp_message_template', '')
+        
+        message_text = message_template.format(
+            name=lead.get('name', ''),
+            college_name=college_name,
+            course_interested=lead.get('course_interested', ''),
+            mobile=lead.get('mobile', ''),
+            email=lead.get('email', ''),
+            city=lead.get('city', '')
+        )
+        
+        # Format phone number for WhatsApp
+        mobile = lead.get('mobile', '')
+        if not mobile.startswith('+'):
+            mobile = '+91' + mobile  # Default to India country code
+        
+        to_number = f"whatsapp:{mobile}"
+        
+        # Send message
+        message = twilio_client.messages.create(
+            body=message_text,
+            from_=f"whatsapp:{TWILIO_WHATSAPP_NUMBER}",
+            to=to_number
+        )
+        
+        logging.info(f"WhatsApp message sent to {mobile}, SID: {message.sid}")
+        return message.sid
+    except Exception as e:
+        logging.error(f"Failed to send WhatsApp notification: {e}")
+        return None
+
+@api_router.post("/leads", response_model=Lead)
+async def create_lead(lead_data: LeadCreate):
+    """Create a new lead/inquiry and send notifications"""
+    # Create lead document
+    lead = Lead(
+        **lead_data.model_dump(),
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc)
+    )
+    lead_dict = lead.model_dump()
+    
+    # Convert datetime to ISO string
+    if isinstance(lead_dict.get('created_at'), datetime):
+        lead_dict['created_at'] = lead_dict['created_at'].isoformat()
+    if isinstance(lead_dict.get('updated_at'), datetime):
+        lead_dict['updated_at'] = lead_dict['updated_at'].isoformat()
+    
+    # Insert into database
+    await db.leads.insert_one(lead_dict)
+    
+    # Get lead settings for notifications
+    settings = await db.lead_settings.find_one({"id": "lead-settings"}, {"_id": 0})
+    if not settings:
+        settings = LeadSettings().model_dump()
+    
+    # Send notifications asynchronously
+    try:
+        # Send email notification to admins
+        email_sent = await send_lead_email_notification(lead_dict, settings)
+        
+        # Send WhatsApp notification to lead
+        whatsapp_sid = await send_lead_whatsapp_notification(lead_dict, settings)
+        
+        # Update lead with notification status
+        update_data = {
+            "email_sent": email_sent,
+            "whatsapp_sent": whatsapp_sid is not None,
+            "whatsapp_message_sid": whatsapp_sid
+        }
+        await db.leads.update_one({"id": lead.id}, {"$set": update_data})
+        lead_dict.update(update_data)
+    except Exception as e:
+        logging.error(f"Error sending lead notifications: {e}")
+    
+    lead_dict.pop('_id', None)
+    return lead_dict
+
+@api_router.get("/leads")
+async def get_leads(
+    status: Optional[str] = None,
+    college_id: Optional[str] = None,
+    source: Optional[str] = None,
+    search: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    limit: int = Query(50, ge=1, le=500),
+    skip: int = Query(0, ge=0),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get all leads with filters (Admin only)"""
+    # Verify admin token
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") not in ["super_admin", "content_manager", "admin"]:
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    # Build query
+    query = {}
+    if status:
+        query["status"] = status
+    if college_id:
+        query["college_id"] = college_id
+    if source:
+        query["source"] = source
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"email": {"$regex": search, "$options": "i"}},
+            {"mobile": {"$regex": search, "$options": "i"}},
+            {"college_name": {"$regex": search, "$options": "i"}}
+        ]
+    if start_date:
+        query["created_at"] = {"$gte": start_date}
+    if end_date:
+        if "created_at" in query:
+            query["created_at"]["$lte"] = end_date
+        else:
+            query["created_at"] = {"$lte": end_date}
+    
+    # Get total count
+    total = await db.leads.count_documents(query)
+    
+    # Get leads
+    leads = await db.leads.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    return {
+        "leads": leads,
+        "total": total,
+        "limit": limit,
+        "skip": skip
+    }
+
+@api_router.get("/leads/export")
+async def export_leads(
+    status: Optional[str] = None,
+    college_id: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Export leads as CSV (Admin only)"""
+    # Verify admin token
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") not in ["super_admin", "content_manager", "admin"]:
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    # Build query
+    query = {}
+    if status:
+        query["status"] = status
+    if college_id:
+        query["college_id"] = college_id
+    if start_date:
+        query["created_at"] = {"$gte": start_date}
+    if end_date:
+        if "created_at" in query:
+            query["created_at"]["$lte"] = end_date
+        else:
+            query["created_at"] = {"$lte": end_date}
+    
+    # Get all matching leads
+    leads = await db.leads.find(query, {"_id": 0}).sort("created_at", -1).to_list(10000)
+    
+    # Generate CSV content
+    import csv
+    import io
+    
+    output = io.StringIO()
+    fieldnames = ["id", "name", "email", "mobile", "city", "course_interested", "college_name", "source", "status", "created_at"]
+    writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+    
+    for lead in leads:
+        writer.writerow(lead)
+    
+    csv_content = output.getvalue()
+    
+    from fastapi.responses import Response
+    return Response(
+        content=csv_content,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=leads_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"}
+    )
+
+@api_router.get("/leads/{lead_id}")
+async def get_lead(lead_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get a specific lead by ID (Admin only)"""
+    # Verify admin token
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    lead = await db.leads.find_one({"id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    return lead
+
+@api_router.put("/leads/{lead_id}")
+async def update_lead(
+    lead_id: str,
+    update_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Update lead status/notes (Admin only)"""
+    # Verify admin token
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") not in ["super_admin", "content_manager", "admin"]:
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    # Allowed update fields
+    allowed_fields = ["status", "notes", "assigned_to", "contacted_at", "converted_at"]
+    update_dict = {k: v for k, v in update_data.items() if k in allowed_fields}
+    update_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    # Set timestamps based on status
+    if update_dict.get("status") == "contacted" and not update_dict.get("contacted_at"):
+        update_dict["contacted_at"] = datetime.now(timezone.utc).isoformat()
+    if update_dict.get("status") == "converted" and not update_dict.get("converted_at"):
+        update_dict["converted_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.leads.update_one({"id": lead_id}, {"$set": update_dict})
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    lead = await db.leads.find_one({"id": lead_id}, {"_id": 0})
+    return lead
+
+@api_router.delete("/leads/{lead_id}")
+async def delete_lead(lead_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Delete a lead (Admin only)"""
+    # Verify admin token
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Super admin access required")
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    result = await db.leads.delete_one({"id": lead_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    return {"success": True, "message": "Lead deleted"}
+
+# Lead Settings APIs
+@api_router.get("/lead-settings")
+async def get_lead_settings():
+    """Get lead form settings"""
+    settings = await db.lead_settings.find_one({"id": "lead-settings"}, {"_id": 0})
+    if not settings:
+        # Return defaults
+        settings = LeadSettings().model_dump()
+        if isinstance(settings.get('created_at'), datetime):
+            settings['created_at'] = settings['created_at'].isoformat()
+        if isinstance(settings.get('updated_at'), datetime):
+            settings['updated_at'] = settings['updated_at'].isoformat()
+    return settings
+
+@api_router.put("/lead-settings")
+async def update_lead_settings(
+    settings_data: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Update lead form settings (Admin only)"""
+    # Verify admin token
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") not in ["super_admin", "admin"]:
+            raise HTTPException(status_code=403, detail="Admin access required")
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    settings_data["id"] = "lead-settings"
+    settings_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.lead_settings.update_one(
+        {"id": "lead-settings"},
+        {"$set": settings_data},
+        upsert=True
+    )
+    
+    settings = await db.lead_settings.find_one({"id": "lead-settings"}, {"_id": 0})
+    return settings
+
+# Get college courses for Apply Now form dropdown
+@api_router.get("/colleges/{college_id}/courses-for-form")
+async def get_college_courses_for_form(college_id: str):
+    """Get college name and courses for Apply Now form"""
+    college = await db.colleges.find_one({"id": college_id}, {"_id": 0, "id": 1, "name": 1, "courses": 1})
+    if not college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Extract course names
+    courses = college.get("courses", [])
+    course_names = []
+    for course in courses:
+        if isinstance(course, dict):
+            course_names.append(course.get("name", ""))
+        elif isinstance(course, str):
+            course_names.append(course)
+    
+    return {
+        "college_id": college.get("id"),
+        "college_name": college.get("name"),
+        "courses": course_names
+    }
+
 app.include_router(api_router)
 
 # Include modular routes
