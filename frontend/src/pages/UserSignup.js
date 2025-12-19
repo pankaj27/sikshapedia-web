@@ -428,11 +428,17 @@ const UserSignup = () => {
           {/* Login Link */}
           <div className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <button onClick={() => setStep('email')} className="text-orange-600 hover:text-orange-700 font-medium">
-              Login with Email/Google
-            </button>
+            <Link to="/login" className="text-orange-600 hover:text-orange-700 font-semibold">
+              Sign In
+            </Link>
           </div>
         </div>
+        
+        <p className="mt-6 text-center text-orange-100 text-sm">
+          <Link to="/" className="hover:text-white transition">
+            ← Back to Home
+          </Link>
+        </p>
       </div>
     </div>
   );
