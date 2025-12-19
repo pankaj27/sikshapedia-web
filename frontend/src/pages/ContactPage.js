@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { FiMail, FiPhone, FiMapPin, FiSend } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import useStaticPage from '../hooks/useStaticPage';
+import api from '../api/axios';
 
 const ContactPage = () => {
+  const { pageData, loading } = useStaticPage('contact');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,23 +16,59 @@ const ContactPage = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 3000);
+    setSubmitting(true);
+    try {
+      await api.post('/contact-inquiries', formData);
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Failed to submit form. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  // Use CMS data if available, otherwise defaults
+  const heroTitle = pageData?.hero_title || 'Get in Touch';
+  const heroSubtitle = pageData?.hero_subtitle || "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.";
+  const heroGradient = pageData?.hero_background_value || 'from-blue-600 to-indigo-700';
+  const metaTitle = pageData?.meta_title || 'Contact Us | Admissionbuddy';
+  const metaDescription = pageData?.meta_description || 'Contact Admissionbuddy for any questions about colleges, admissions, scholarships, or study abroad programs.';
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 h-48 animate-pulse" />
+        <div className="max-w-4xl mx-auto px-4 py-12">
+          <div className="space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/2 animate-pulse" />
+            <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
+      <Helmet>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        {pageData?.meta_keywords?.length > 0 && <meta name="keywords" content={pageData.meta_keywords.join(', ')} />}
+      </Helmet>
+
+      <section className={`bg-gradient-to-r ${heroGradient} text-white py-20`}>
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">Get in Touch</h1>
-          <p className="text-xl max-w-2xl mx-auto">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{heroTitle}</h1>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto">{heroSubtitle}</p>
         </div>
       </section>
 
@@ -83,8 +123,8 @@ const ContactPage = () => {
                         required
                       />
                     </div>
-                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-                      <FiSend className="mr-2" /> Send Message
+                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={submitting}>
+                      <FiSend className="mr-2" /> {submitting ? 'Sending...' : 'Send Message'}
                     </Button>
                   </form>
                 )}
@@ -101,8 +141,8 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <p className="font-semibold">Email</p>
-                      <p className="text-sm text-gray-600">support@admissionbuddy.com</p>
-                      <p className="text-sm text-gray-600">info@admissionbuddy.com</p>
+                      <p className="text-sm text-gray-600">support@admissionbuddy.co</p>
+                      <p className="text-sm text-gray-600">info@admissionbuddy.co</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -131,7 +171,7 @@ const ContactPage = () => {
               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-3">Quick Links</h3>
                 <div className="space-y-2">
-                  <Link to="/colleges" className="block hover:underline">Browse Colleges</Link>
+                  <Link to="/india-colleges" className="block hover:underline">Browse Colleges</Link>
                   <Link to="/exams" className="block hover:underline">Entrance Exams</Link>
                   <Link to="/scholarships" className="block hover:underline">Scholarships</Link>
                   <Link to="/blog" className="block hover:underline">Blog & Articles</Link>
@@ -160,6 +200,33 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Render CMS Widgets if available */}
+      {pageData?.widgets?.length > 0 && (
+        <div className="container mx-auto px-4 pb-16">
+          {pageData.widgets
+            .filter(w => w.enabled)
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map(widget => {
+              if (widget.type === 'faq') {
+                return (
+                  <div key={widget.id} className="max-w-4xl mx-auto mb-8">
+                    <h2 className="text-2xl font-bold mb-6 text-center">{widget.title || 'FAQ'}</h2>
+                    <div className="space-y-3">
+                      {widget.content?.items?.map((item, idx) => (
+                        <details key={idx} className="bg-white rounded-lg border p-4">
+                          <summary className="font-medium cursor-pointer">{item.question}</summary>
+                          <p className="mt-3 text-gray-600">{item.answer}</p>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+        </div>
+      )}
     </div>
   );
 };
