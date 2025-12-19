@@ -15,6 +15,14 @@ const HomepageSettings = () => {
   const [activeTab, setActiveTab] = useState('hero');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  
+  // Search states for college and school autocomplete
+  const [collegeSearchQuery, setCollegeSearchQuery] = useState('');
+  const [schoolSearchQuery, setSchoolSearchQuery] = useState('');
+  const [collegeSearchResults, setCollegeSearchResults] = useState([]);
+  const [schoolSearchResults, setSchoolSearchResults] = useState([]);
+  const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
+  const [showSchoolDropdown, setShowSchoolDropdown] = useState(false);
   const [settings, setSettings] = useState({
     // Hero Section
     hero_title: 'Find Your Dream',
