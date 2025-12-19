@@ -886,8 +886,9 @@ const SponsoredAdsManagement = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+        )}
+      </div>
+    </AdminLayout>
   );
 };
 
