@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FiArrowLeft, FiCheck, FiX, FiEye, FiStar } from 'react-icons/fi';
+import { FiCheck, FiX, FiStar } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
+import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 
 const ReviewsModeration = () => {
