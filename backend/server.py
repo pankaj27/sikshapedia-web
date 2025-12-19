@@ -3690,26 +3690,44 @@ async def get_colleges(
     return [College(**college) for college in colleges]
 
 @api_router.get("/colleges/featured", response_model=List[College])
-async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
+async def get_featured_colleges(limit: int = Query(12, ge=1, le=50)):
     """
     Get featured colleges for homepage display.
-    Priority: 1) Colleges marked as is_featured=True (sorted by featured_at desc)
-              2) Fallback to top colleges by NIRF ranking
+    Priority: 
+      1) Colleges from homepage settings featured_colleges_ids (in exact order)
+      2) Colleges marked as is_featured=True (sorted by featured_at desc)
+      3) Fallback to top colleges by NIRF ranking
     """
-    # First try to get colleges marked as featured
-    featured_colleges = await db.colleges.find(
-        {"status": "published", "is_featured": True}, 
-        {"_id": 0}
-    ).sort("featured_at", -1).limit(limit).to_list(limit)
+    # First check homepage settings for manually selected colleges
+    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
+    featured_ids = settings.get("featured_colleges_ids", []) if settings else []
     
-    # If not enough featured colleges, fill with top ranked colleges
+    featured_colleges = []
+    
+    # Get colleges from homepage settings (in specified order)
+    if featured_ids:
+        for college_id in featured_ids[:limit]:
+            college = await db.colleges.find_one({"id": college_id, "status": "published"}, {"_id": 0})
+            if college:
+                featured_colleges.append(college)
+    
+    # If not enough, get colleges marked as is_featured
     if len(featured_colleges) < limit:
         existing_ids = [c.get('id') for c in featured_colleges]
-        additional_colleges = await db.colleges.find(
+        additional = await db.colleges.find(
+            {"status": "published", "is_featured": True, "id": {"$nin": existing_ids}}, 
+            {"_id": 0}
+        ).sort("featured_at", -1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
+        featured_colleges.extend(additional)
+    
+    # If still not enough, fill with top ranked colleges
+    if len(featured_colleges) < limit:
+        existing_ids = [c.get('id') for c in featured_colleges]
+        additional = await db.colleges.find(
             {"status": "published", "id": {"$nin": existing_ids}}, 
             {"_id": 0}
         ).sort("nirf_ranking", 1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
-        featured_colleges.extend(additional_colleges)
+        featured_colleges.extend(additional)
     
     for college in featured_colleges:
         if isinstance(college.get('created_at'), str):
