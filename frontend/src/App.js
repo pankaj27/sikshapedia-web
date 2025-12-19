@@ -40,6 +40,12 @@ import PremiumPage from './pages/PremiumPage';
 import PremiumSuccess from './pages/PremiumSuccess';
 import InstitutionDashboard from './pages/InstitutionDashboard';
 import CompareCollegesPage from './pages/CompareCollegesPage';
+// New User & Institute Dashboards
+import UserSignup from './pages/UserSignup';
+import AuthCallback from './pages/AuthCallback';
+import UserDashboard from './pages/UserDashboard';
+import InstituteLogin from './pages/InstituteLogin';
+import InstituteDashboardNew from './pages/InstituteDashboard';
 import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import CollegeAdmissionPage from './pages/CollegeAdmissionPage';
