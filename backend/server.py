@@ -1310,6 +1310,9 @@ class School(BaseModel):
     pincode: Optional[str] = None
     established_year: Optional[int] = None
     
+    # Display Priority for listing pages (lower number = appears first, 0 = default)
+    display_priority: int = 0
+    
     # Academic Info
     classes_offered: List[str] = []  # ["Nursery", "LKG", "UKG", "1-10", "11-12"]
     streams_offered: List[str] = []  # ["Science", "Commerce", "Arts"]
