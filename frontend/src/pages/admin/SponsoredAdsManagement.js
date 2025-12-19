@@ -614,7 +614,7 @@ const SponsoredAdsManagement = () => {
                 <div className="text-center py-12 text-gray-500">
                   <FiStar size={48} className="mx-auto mb-3 text-gray-300" />
                   <p className="font-medium">No ads configured for this placement</p>
-                  <p className="text-sm">Click "Add" to add sponsored content</p>
+                  <p className="text-sm">Click &quot;Add&quot; to add sponsored content</p>
                 </div>
               ) : (
                 currentAds.map((item, idx) => (
