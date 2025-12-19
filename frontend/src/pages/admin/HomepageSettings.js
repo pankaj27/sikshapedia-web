@@ -284,6 +284,96 @@ const HomepageSettings = () => {
     }));
   };
 
+  // ========== SCHOOLS ==========
+  const searchFeaturedSchools = async (query) => {
+    if (!query || query.length < 2) { setFeaturedSchoolResults([]); setShowSchoolFeaturedDropdown(false); return; }
+    try {
+      const response = await api.get(`/schools?search=${encodeURIComponent(query)}&limit=10`);
+      setFeaturedSchoolResults(response.data || []);
+      setShowSchoolFeaturedDropdown(true);
+    } catch (error) { console.error('Error:', error); }
+  };
+  const addFeaturedSchool = (school) => {
+    if (featuredSchoolsList.find(s => s.id === school.id)) { alert('Already added'); return; }
+    const newList = [...featuredSchoolsList, school];
+    setFeaturedSchoolsList(newList);
+    setSettings(prev => ({ ...prev, featured_schools_ids: newList.map(s => s.id) }));
+    setFeaturedSchoolSearch(''); setFeaturedSchoolResults([]); setShowSchoolFeaturedDropdown(false);
+  };
+  const removeFeaturedSchool = (id) => {
+    const newList = featuredSchoolsList.filter(s => s.id !== id);
+    setFeaturedSchoolsList(newList);
+    setSettings(prev => ({ ...prev, featured_schools_ids: newList.map(s => s.id) }));
+  };
+  const moveFeaturedSchool = (index, direction) => {
+    const newIdx = direction === 'up' ? index - 1 : index + 1;
+    if (newIdx < 0 || newIdx >= featuredSchoolsList.length) return;
+    const newList = [...featuredSchoolsList];
+    [newList[index], newList[newIdx]] = [newList[newIdx], newList[index]];
+    setFeaturedSchoolsList(newList);
+    setSettings(prev => ({ ...prev, featured_schools_ids: newList.map(s => s.id) }));
+  };
+
+  // ========== EXAMS ==========
+  const searchFeaturedExams = async (query) => {
+    if (!query || query.length < 2) { setFeaturedExamResults([]); setShowExamFeaturedDropdown(false); return; }
+    try {
+      const response = await api.get(`/exams?search=${encodeURIComponent(query)}&limit=10`);
+      setFeaturedExamResults(response.data || []);
+      setShowExamFeaturedDropdown(true);
+    } catch (error) { console.error('Error:', error); }
+  };
+  const addFeaturedExam = (exam) => {
+    if (featuredExamsList.find(e => e.id === exam.id)) { alert('Already added'); return; }
+    const newList = [...featuredExamsList, exam];
+    setFeaturedExamsList(newList);
+    setSettings(prev => ({ ...prev, featured_exams_ids: newList.map(e => e.id) }));
+    setFeaturedExamSearch(''); setFeaturedExamResults([]); setShowExamFeaturedDropdown(false);
+  };
+  const removeFeaturedExam = (id) => {
+    const newList = featuredExamsList.filter(e => e.id !== id);
+    setFeaturedExamsList(newList);
+    setSettings(prev => ({ ...prev, featured_exams_ids: newList.map(e => e.id) }));
+  };
+  const moveFeaturedExam = (index, direction) => {
+    const newIdx = direction === 'up' ? index - 1 : index + 1;
+    if (newIdx < 0 || newIdx >= featuredExamsList.length) return;
+    const newList = [...featuredExamsList];
+    [newList[index], newList[newIdx]] = [newList[newIdx], newList[index]];
+    setFeaturedExamsList(newList);
+    setSettings(prev => ({ ...prev, featured_exams_ids: newList.map(e => e.id) }));
+  };
+
+  // ========== NEWS ==========
+  const searchFeaturedNews = async (query) => {
+    if (!query || query.length < 2) { setFeaturedNewsResults([]); setShowNewsFeaturedDropdown(false); return; }
+    try {
+      const response = await api.get(`/news?search=${encodeURIComponent(query)}&limit=10`);
+      setFeaturedNewsResults(response.data || []);
+      setShowNewsFeaturedDropdown(true);
+    } catch (error) { console.error('Error:', error); }
+  };
+  const addFeaturedNews = (news) => {
+    if (featuredNewsList.find(n => n.id === news.id)) { alert('Already added'); return; }
+    const newList = [...featuredNewsList, news];
+    setFeaturedNewsList(newList);
+    setSettings(prev => ({ ...prev, featured_news_ids: newList.map(n => n.id) }));
+    setFeaturedNewsSearch(''); setFeaturedNewsResults([]); setShowNewsFeaturedDropdown(false);
+  };
+  const removeFeaturedNews = (id) => {
+    const newList = featuredNewsList.filter(n => n.id !== id);
+    setFeaturedNewsList(newList);
+    setSettings(prev => ({ ...prev, featured_news_ids: newList.map(n => n.id) }));
+  };
+  const moveFeaturedNews = (index, direction) => {
+    const newIdx = direction === 'up' ? index - 1 : index + 1;
+    if (newIdx < 0 || newIdx >= featuredNewsList.length) return;
+    const newList = [...featuredNewsList];
+    [newList[index], newList[newIdx]] = [newList[newIdx], newList[index]];
+    setFeaturedNewsList(newList);
+    setSettings(prev => ({ ...prev, featured_news_ids: newList.map(n => n.id) }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
