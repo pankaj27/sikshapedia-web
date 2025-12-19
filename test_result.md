@@ -59,6 +59,18 @@ backend:
         agent: "testing"
         comment: "✅ Both GET /api/courses-detail and PUT /api/courses-detail/{id} endpoints working correctly. Test course ID 4443b705-08f0-4d03-aebe-162b9c07b122 found and accessible. Admin authentication working for PUT operations."
 
+  - task: "Homepage Settings - Add School and Add College Functionality"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Homepage Settings API fully working. GET /api/homepage-settings returns complete settings with top_schools and college_rankings_data arrays. Both 'Add School' and 'Add College' functionality tested successfully - new schools and colleges can be added to their respective arrays and persist correctly. PUT /api/homepage-settings accepts updates and saves data properly. All required fields present: name, location, board/type, fees, rating, rank. Data persistence verified after refresh. ⚠️ SECURITY NOTE: PUT endpoint currently allows updates without authentication - should be restricted to admin users only."
+
 frontend:
   - task: "News Listing Page - Dynamic Content Display"
     implemented: true
