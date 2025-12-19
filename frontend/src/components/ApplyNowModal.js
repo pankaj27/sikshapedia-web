@@ -170,8 +170,8 @@ const ApplyNowModal = ({
         className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with Logo */}
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 relative sticky top-0">
+        {/* Header with Logo - z-60 to stay above dropdown (z-50) */}
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 relative sticky top-0 z-[60]">
           <button 
             onClick={onClose}
             className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20 transition-colors z-10"
