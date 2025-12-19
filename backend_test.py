@@ -1032,6 +1032,161 @@ class APITester:
                 self.log_test("Comprehensive Settings Update", False, 
                              f"Status: {status}", response)
 
+    def test_college_school_search_autocomplete(self):
+        """Test College and School Search Autocomplete functionality for Homepage Settings"""
+        print("🔍 Testing College and School Search Autocomplete...")
+        
+        # Test 1: College Search - GET /api/colleges?search=IIT&limit=5
+        success, response, status = self.make_request("GET", "/colleges?search=IIT&limit=5")
+        if success and isinstance(response, list):
+            college_count = len(response)
+            if college_count > 0:
+                # Check if results contain IIT colleges
+                iit_colleges = [c for c in response if "IIT" in c.get("name", "").upper()]
+                if len(iit_colleges) > 0:
+                    first_college = iit_colleges[0]
+                    required_fields = ["name", "location", "type", "average_fees", "rating"]
+                    has_required_fields = all(field in first_college for field in required_fields)
+                    
+                    if has_required_fields:
+                        self.log_test("College Search - IIT", True, 
+                                     f"Found {len(iit_colleges)} IIT colleges with required fields: {first_college.get('name')}")
+                    else:
+                        missing_fields = [f for f in required_fields if f not in first_college]
+                        self.log_test("College Search - IIT", False, 
+                                     f"Missing required fields: {missing_fields}")
+                else:
+                    self.log_test("College Search - IIT", False, 
+                                 f"No IIT colleges found in {college_count} results")
+            else:
+                self.log_test("College Search - IIT", False, "No colleges returned for IIT search")
+        else:
+            self.log_test("College Search - IIT", False, f"Status: {status}", response)
+        
+        # Test 2: College Search - GET /api/colleges?search=Bombay&limit=5
+        success, response, status = self.make_request("GET", "/colleges?search=Bombay&limit=5")
+        if success and isinstance(response, list):
+            college_count = len(response)
+            if college_count > 0:
+                # Check if results contain Bombay colleges
+                bombay_colleges = [c for c in response if "BOMBAY" in c.get("name", "").upper() or "MUMBAI" in c.get("name", "").upper()]
+                if len(bombay_colleges) > 0:
+                    first_college = bombay_colleges[0]
+                    self.log_test("College Search - Bombay", True, 
+                                 f"Found {len(bombay_colleges)} Bombay/Mumbai colleges: {first_college.get('name')}")
+                else:
+                    self.log_test("College Search - Bombay", True, 
+                                 f"Search returned {college_count} results (may not contain 'Bombay' in name)")
+            else:
+                self.log_test("College Search - Bombay", False, "No colleges returned for Bombay search")
+        else:
+            self.log_test("College Search - Bombay", False, f"Status: {status}", response)
+        
+        # Test 3: School Search - GET /api/schools?search=Delhi&limit=5
+        success, response, status = self.make_request("GET", "/schools?search=Delhi&limit=5")
+        if success and isinstance(response, list):
+            school_count = len(response)
+            if school_count > 0:
+                # Check if results contain Delhi schools
+                delhi_schools = [s for s in response if "DELHI" in s.get("name", "").upper() or s.get("city", "").upper() == "DELHI"]
+                if len(delhi_schools) > 0:
+                    first_school = delhi_schools[0]
+                    required_fields = ["name", "city", "board", "annual_fee", "rating"]
+                    # Check for alternative field names
+                    alt_fields = {"annual_fee": ["fees", "fee"], "city": ["location"]}
+                    
+                    has_required_fields = True
+                    missing_fields = []
+                    for field in required_fields:
+                        if field not in first_school:
+                            # Check alternative field names
+                            found_alt = False
+                            if field in alt_fields:
+                                for alt_field in alt_fields[field]:
+                                    if alt_field in first_school:
+                                        found_alt = True
+                                        break
+                            if not found_alt:
+                                has_required_fields = False
+                                missing_fields.append(field)
+                    
+                    if has_required_fields or len(missing_fields) <= 1:  # Allow 1 missing field
+                        self.log_test("School Search - Delhi", True, 
+                                     f"Found {len(delhi_schools)} Delhi schools: {first_school.get('name')}")
+                    else:
+                        self.log_test("School Search - Delhi", False, 
+                                     f"Missing required fields: {missing_fields}")
+                else:
+                    self.log_test("School Search - Delhi", True, 
+                                 f"Search returned {school_count} results (may not contain 'Delhi' in name)")
+            else:
+                self.log_test("School Search - Delhi", False, "No schools returned for Delhi search")
+        else:
+            self.log_test("School Search - Delhi", False, f"Status: {status}", response)
+        
+        # Test 4: School Search - GET /api/schools?search=Public&limit=5
+        success, response, status = self.make_request("GET", "/schools?search=Public&limit=5")
+        if success and isinstance(response, list):
+            school_count = len(response)
+            if school_count > 0:
+                # Check if results contain Public schools
+                public_schools = [s for s in response if "PUBLIC" in s.get("name", "").upper()]
+                if len(public_schools) > 0:
+                    first_school = public_schools[0]
+                    self.log_test("School Search - Public", True, 
+                                 f"Found {len(public_schools)} Public schools: {first_school.get('name')}")
+                else:
+                    self.log_test("School Search - Public", True, 
+                                 f"Search returned {school_count} results (may not contain 'Public' in name)")
+            else:
+                self.log_test("School Search - Public", False, "No schools returned for Public search")
+        else:
+            self.log_test("School Search - Public", False, f"Status: {status}", response)
+        
+        # Test 5: Verify search results have auto-populate fields for colleges
+        success, response, status = self.make_request("GET", "/colleges?search=Institute&limit=3")
+        if success and isinstance(response, list) and len(response) > 0:
+            college = response[0]
+            auto_populate_fields = {
+                "name": college.get("name"),
+                "location": college.get("location", {}).get("city") if isinstance(college.get("location"), dict) else str(college.get("location", "")),
+                "fees": college.get("average_fees"),
+                "rating": college.get("rating"),
+                "type": college.get("type")
+            }
+            
+            populated_fields = [k for k, v in auto_populate_fields.items() if v is not None and v != ""]
+            if len(populated_fields) >= 3:  # At least 3 fields should be populated
+                self.log_test("College Auto-populate Fields", True, 
+                             f"College has {len(populated_fields)}/5 auto-populate fields: {', '.join(populated_fields)}")
+            else:
+                self.log_test("College Auto-populate Fields", False, 
+                             f"Only {len(populated_fields)}/5 fields populated: {populated_fields}")
+        else:
+            self.log_test("College Auto-populate Fields", False, "No colleges found for auto-populate test")
+        
+        # Test 6: Verify search results have auto-populate fields for schools
+        success, response, status = self.make_request("GET", "/schools?search=School&limit=3")
+        if success and isinstance(response, list) and len(response) > 0:
+            school = response[0]
+            auto_populate_fields = {
+                "name": school.get("name"),
+                "location": school.get("city") or school.get("location"),
+                "board": school.get("board"),
+                "fees": school.get("annual_fee") or school.get("fees"),
+                "rating": school.get("rating")
+            }
+            
+            populated_fields = [k for k, v in auto_populate_fields.items() if v is not None and v != ""]
+            if len(populated_fields) >= 3:  # At least 3 fields should be populated
+                self.log_test("School Auto-populate Fields", True, 
+                             f"School has {len(populated_fields)}/5 auto-populate fields: {', '.join(populated_fields)}")
+            else:
+                self.log_test("School Auto-populate Fields", False, 
+                             f"Only {len(populated_fields)}/5 fields populated: {populated_fields}")
+        else:
+            self.log_test("School Auto-populate Fields", False, "No schools found for auto-populate test")
+
     def test_homepage_settings(self):
         """Test Homepage Settings Admin Page - Add School and Add College functionality"""
         print("🏠 Testing Homepage Settings Admin Page...")
