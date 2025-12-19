@@ -160,6 +160,7 @@ const LoanForm = () => {
         tables: data.tables || [],
         meta_keywords: data.meta_keywords || [],
         benefits: data.benefits || data.special_features || [],
+        key_features: data.key_features || [],
         faqs: data.faqs || [],
         courses_covered: data.courses_covered || [],
         countries_covered: data.countries_covered || [],
