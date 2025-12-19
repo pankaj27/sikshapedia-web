@@ -385,9 +385,12 @@ const NewsForm = () => {
                       <input
                         type="text"
                         value={formData.slug}
-                        onChange={(e) => handleChange('slug', e.target.value)}
+                        onChange={(e) => {
+                          handleChange('slug', e.target.value);
+                          setSlugManuallyEdited(true);
+                        }}
                         className="w-full border rounded-lg px-4 py-2.5 bg-gray-50"
-                        placeholder="auto-generated-slug"
+                        placeholder="auto-generated-from-title"
                       />
                       <p className="text-xs text-gray-500 mt-1">URL: /news/{formData.slug || 'slug'}</p>
                     </div>
