@@ -3691,14 +3691,31 @@ async def get_colleges(
 
 @api_router.get("/colleges/featured", response_model=List[College])
 async def get_featured_colleges(limit: int = Query(8, ge=1, le=20)):
-    # Only show published colleges
-    colleges = await db.colleges.find({"status": "published"}, {"_id": 0}).sort("nirf_ranking", 1).limit(limit).to_list(limit)
+    """
+    Get featured colleges for homepage display.
+    Priority: 1) Colleges marked as is_featured=True (sorted by featured_at desc)
+              2) Fallback to top colleges by NIRF ranking
+    """
+    # First try to get colleges marked as featured
+    featured_colleges = await db.colleges.find(
+        {"status": "published", "is_featured": True}, 
+        {"_id": 0}
+    ).sort("featured_at", -1).limit(limit).to_list(limit)
     
-    for college in colleges:
+    # If not enough featured colleges, fill with top ranked colleges
+    if len(featured_colleges) < limit:
+        existing_ids = [c.get('id') for c in featured_colleges]
+        additional_colleges = await db.colleges.find(
+            {"status": "published", "id": {"$nin": existing_ids}}, 
+            {"_id": 0}
+        ).sort("nirf_ranking", 1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
+        featured_colleges.extend(additional_colleges)
+    
+    for college in featured_colleges:
         if isinstance(college.get('created_at'), str):
             college['created_at'] = datetime.fromisoformat(college['created_at'])
     
-    return [College(**college) for college in colleges]
+    return [College(**college) for college in featured_colleges]
 
 @api_router.get("/colleges/featured-priority", response_model=List[College])
 async def get_featured_priority_colleges(limit: int = Query(6, ge=1, le=20)):
