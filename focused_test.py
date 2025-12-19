@@ -6,7 +6,7 @@ Focused test for Course Listing Settings and Course Pages APIs
 import requests
 import json
 
-BASE_URL = "https://edu-listing-admin.preview.emergentagent.com/api"
+BASE_URL = "https://collegedata-cms.preview.emergentagent.com/api"
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
     "password": "admin123"
