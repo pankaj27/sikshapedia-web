@@ -7203,15 +7203,22 @@ async def get_loans(limit: int = 100):
     loans = await db.loans.find({}, {"_id": 0}).limit(limit).to_list(limit)
     return loans
 
-@api_router.post("/loans", response_model=Loan)
+@api_router.post("/loans")
 async def create_loan(loan: Loan):
-    await db.loans.insert_one(loan.model_dump())
-    return loan
+    loan_dict = loan.model_dump()
+    # Convert datetime to string for JSON serialization
+    if isinstance(loan_dict.get('created_at'), datetime):
+        loan_dict['created_at'] = loan_dict['created_at'].isoformat()
+    await db.loans.insert_one(loan_dict)
+    return loan_dict
 
 @api_router.put("/loans/{loan_id}")
 async def update_loan(loan_id: str, loan: Loan):
-    await db.loans.update_one({"id": loan_id}, {"$set": loan.model_dump()})
-    return loan
+    loan_dict = loan.model_dump()
+    if isinstance(loan_dict.get('created_at'), datetime):
+        loan_dict['created_at'] = loan_dict['created_at'].isoformat()
+    await db.loans.update_one({"id": loan_id}, {"$set": loan_dict})
+    return loan_dict
 
 @api_router.delete("/loans/{loan_id}")
 async def delete_loan(loan_id: str):
