@@ -205,6 +205,7 @@ test_plan:
     - "Study Abroad Page - Connect to Admin Module"
     - "Static Pages Frontend Testing - All 4 Pages"
     - "Study Abroad Frontend Testing - Complete Functionality"
+    - "Homepage Settings - Add School and Add College Functionality"
 
 agent_communication:
   - agent: "testing"
