@@ -7768,78 +7768,7 @@ async def delete_ranking(ranking_id: str):
     return {"success": True}
 
 # Scholarships
-@api_router.get("/scholarships")
-async def get_scholarships(limit: int = 100):
-    scholarships = await db.scholarships.find({}, {"_id": 0}).limit(limit).to_list(limit)
-    return scholarships
-
-@api_router.get("/scholarships/{scholarship_id}")
-async def get_scholarship(scholarship_id: str):
-    scholarship = await db.scholarships.find_one({"id": scholarship_id}, {"_id": 0})
-    if not scholarship:
-        raise HTTPException(status_code=404, detail="Scholarship not found")
-    return scholarship
-
-@api_router.post("/scholarships")
-async def create_scholarship(scholarship: Scholarship):
-    scholarship_dict = scholarship.model_dump()
-    # Convert datetime to string for JSON serialization
-    if isinstance(scholarship_dict.get('created_at'), datetime):
-        scholarship_dict['created_at'] = scholarship_dict['created_at'].isoformat()
-    await db.scholarships.insert_one(scholarship_dict)
-    # Remove MongoDB _id from response
-    scholarship_dict.pop('_id', None)
-    return scholarship_dict
-
-@api_router.put("/scholarships/{scholarship_id}")
-async def update_scholarship(scholarship_id: str, scholarship: Scholarship):
-    scholarship_dict = scholarship.model_dump()
-    if isinstance(scholarship_dict.get('created_at'), datetime):
-        scholarship_dict['created_at'] = scholarship_dict['created_at'].isoformat()
-    await db.scholarships.update_one({"id": scholarship_id}, {"$set": scholarship_dict})
-    return scholarship_dict
-
-@api_router.delete("/scholarships/{scholarship_id}")
-async def delete_scholarship(scholarship_id: str):
-    await db.scholarships.delete_one({"id": scholarship_id})
-    return {"success": True}
-
-# Loans
-@api_router.get("/loans")
-async def get_loans(limit: int = 100):
-    loans = await db.loans.find({}, {"_id": 0}).limit(limit).to_list(limit)
-    return loans
-
-@api_router.get("/loans/{loan_id}")
-async def get_loan(loan_id: str):
-    loan = await db.loans.find_one({"id": loan_id}, {"_id": 0})
-    if not loan:
-        raise HTTPException(status_code=404, detail="Loan not found")
-    return loan
-
-@api_router.post("/loans")
-async def create_loan(loan: Loan):
-    loan_dict = loan.model_dump()
-    # Convert datetime to string for JSON serialization
-    if isinstance(loan_dict.get('created_at'), datetime):
-        loan_dict['created_at'] = loan_dict['created_at'].isoformat()
-    await db.loans.insert_one(loan_dict)
-    # Remove MongoDB _id from response
-    loan_dict.pop('_id', None)
-    return loan_dict
-
-@api_router.put("/loans/{loan_id}")
-async def update_loan(loan_id: str, loan: Loan):
-    loan_dict = loan.model_dump()
-    if isinstance(loan_dict.get('created_at'), datetime):
-        loan_dict['created_at'] = loan_dict['created_at'].isoformat()
-    await db.loans.update_one({"id": loan_id}, {"$set": loan_dict})
-    return loan_dict
-
-@api_router.delete("/loans/{loan_id}")
-async def delete_loan(loan_id: str):
-    await db.loans.delete_one({"id": loan_id})
-    return {"success": True}
+# Scholarships and Loans moved to routes/financial_aid.py
 
 # Comments
 @api_router.get("/comments")
