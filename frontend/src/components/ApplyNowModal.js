@@ -61,22 +61,18 @@ const ApplyNowModal = ({
     fetchInitialData();
   }, []);
 
-  // Fetch courses if collegeId provided but no courses passed
+  // Set courses from props - courses come from CollegeContext via CollegeDetailPage
+  // For college-specific forms: use collegeCourses passed via props
+  // For general forms: use allCourses fetched from /api/courses
   useEffect(() => {
-    const fetchCoursesForCollege = async () => {
-      if (collegeId && memoizedCollegeCourses.length === 0) {
-        try {
-          const response = await api.get(`/colleges/${collegeId}/courses-for-form`);
-          setCourses(response.data.courses || []);
-        } catch (err) {
-          console.error('Failed to fetch college courses:', err);
-        }
-      } else if (memoizedCollegeCourses.length > 0) {
-        setCourses(memoizedCollegeCourses);
-      }
-    };
-    fetchCoursesForCollege();
-  }, [collegeId, memoizedCollegeCourses]);
+    if (memoizedCollegeCourses.length > 0) {
+      // College-specific form: use the courses from the college data
+      setCourses(memoizedCollegeCourses);
+    } else {
+      // General form or college has no courses: clear local courses (will use allCourses)
+      setCourses([]);
+    }
+  }, [memoizedCollegeCourses]);
 
   // Reset form when modal opens
   useEffect(() => {
