@@ -108,6 +108,8 @@ import BlogListingSettings from './pages/admin/BlogListingSettings';
 import CoursePagesManagement from './pages/admin/CoursePagesManagement';
 import CoursePageForm from './pages/admin/CoursePageForm';
 import ListingPagesManagement from './pages/admin/ListingPagesManagement';
+import StaticPagesManagement from './pages/admin/StaticPagesManagement';
+import StaticPageForm from './pages/admin/StaticPageForm';
 import ListingPageForm from './pages/admin/ListingPageForm';
 import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
 import AdvertisementManagement from './pages/admin/AdvertisementManagement';
