@@ -379,7 +379,7 @@ const LoansListingSettings = () => {
           </div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
