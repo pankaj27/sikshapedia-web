@@ -155,11 +155,18 @@ const CollegeDetailPage = ({ overrideId }) => {
   const [dislikes, setDislikes] = useState(12);
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
   const [showApplyModal, setShowApplyModal] = useState(false);
+  
+  // Use college context to share data with AutoApplyPopup
+  const { setCollegeData, clearCollegeData } = useCollegeContext();
 
   useEffect(() => {
     if (id) {
       fetchCollegeDetails();
     }
+    // Clear college data when leaving the page
+    return () => {
+      clearCollegeData();
+    };
   }, [id]);
 
   const fetchCollegeDetails = async () => {
@@ -167,6 +174,8 @@ const CollegeDetailPage = ({ overrideId }) => {
     try {
       const response = await api.get(`/colleges/${id}`);
       setCollege(response.data);
+      // Set college data in context for AutoApplyPopup to use
+      setCollegeData(response.data);
     } catch (error) {
       console.error('Error fetching college details:', error);
     } finally {
