@@ -45,7 +45,7 @@ const TopCollegesByStream = () => {
         const results = await Promise.all(
           streams.map(async (stream) => {
             try {
-              const response = await api.get(`/colleges?stream=${stream.query}&limit=4&status=published`);
+              const response = await api.get(`/colleges?stream=${stream.query}&limit=4&fields=minimal`);
               return {
                 ...stream,
                 colleges: response.data?.slice(0, 4).map(c => c.name) || defaultColleges[stream.name]
