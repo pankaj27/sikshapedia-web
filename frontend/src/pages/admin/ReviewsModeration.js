@@ -54,12 +54,8 @@ const ReviewsModeration = () => {
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Reviews Moderation</h1>
           <p className="text-sm text-gray-600 mt-1">Approve or reject user reviews</p>
-            </div>
-          </div>
         </div>
-      </header>
 
-      <div className="p-6">
         {/* Filter Tabs */}
         <div className="bg-white rounded-lg shadow-sm p-1 mb-6 border border-gray-100 inline-flex">
           {['all', 'pending', 'approved', 'rejected'].map((tab) => (
