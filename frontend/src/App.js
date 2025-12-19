@@ -97,6 +97,8 @@ import LoansListingSettings from './pages/admin/LoansListingSettings';
 import ScholarshipsListingSettings from './pages/admin/ScholarshipsListingSettings';
 import StudyMaterialsListingSettings from './pages/admin/StudyMaterialsListingSettings';
 import StudyMaterialsManagement from './pages/admin/StudyMaterialsManagement';
+import ScholarshipForm from './pages/admin/ScholarshipForm';
+import LoanForm from './pages/admin/LoanForm';
 import ExamListingSettings from './pages/admin/ExamListingSettings';
 import CourseListingSettings from './pages/admin/CourseListingSettings';
 import NewsListingSettings from './pages/admin/NewsListingSettings';
