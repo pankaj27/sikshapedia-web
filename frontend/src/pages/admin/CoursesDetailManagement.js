@@ -179,7 +179,7 @@ const CoursesDetailManagement = () => {
           <div className="text-sm text-gray-600">Popular Courses</div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
