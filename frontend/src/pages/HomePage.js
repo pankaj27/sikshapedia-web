@@ -515,7 +515,7 @@ const CollegeDuniaHome = () => {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Top Universities & Colleges</h2>
+            <h2 className="text-3xl font-bold">{topUniversitiesTitle}</h2>
             <div className="flex items-center gap-4">
               {/* Custom Navigation Arrows */}
               <div className="flex gap-2">
