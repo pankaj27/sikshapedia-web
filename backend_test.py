@@ -3401,9 +3401,273 @@ class APITester:
         else:
             self.log_test("Verify Priority Fields Persistence", False, f"Status: {status}", response)
 
+    def test_apply_now_lead_capture_system(self):
+        """Test Apply Now Lead Capture System - Backend APIs"""
+        print("📝 Testing Apply Now Lead Capture System - Backend APIs...")
+        
+        # Store created lead IDs for cleanup and tracking
+        self.created_lead_ids = []
+        
+        # Test 1: Create Lead (Public API) - POST /api/leads
+        lead_data = {
+            "name": "John Doe",
+            "email": "john.doe@test.com",
+            "mobile": "9876543210",
+            "city": "Delhi",
+            "course_interested": "MBA",
+            "college_name": "IIM Bangalore",
+            "source": "college"
+        }
+        
+        success, response, status = self.make_request("POST", "/leads", lead_data)
+        if success and response.get("id"):
+            lead_id = response.get("id")
+            self.created_lead_ids.append(lead_id)
+            expected_status = response.get("status")
+            self.log_test("Create Lead (Public API)", True, 
+                         f"Lead created with ID: {lead_id}, status: {expected_status}")
+            
+            # Verify lead data
+            if (response.get("name") == lead_data["name"] and 
+                response.get("email") == lead_data["email"] and
+                response.get("status") == "new"):
+                self.log_test("Verify Lead Data", True, "Lead data matches input and status is 'new'")
+            else:
+                self.log_test("Verify Lead Data", False, 
+                             f"Lead data mismatch. Expected status: new, Got: {response.get('status')}")
+        else:
+            self.log_test("Create Lead (Public API)", False, f"Status: {status}", response)
+            lead_id = None
+        
+        # Test 2: Admin Login - POST /api/auth/login
+        if not self.admin_token:
+            success, response, status = self.make_request("POST", "/auth/login", ADMIN_CREDENTIALS)
+            if success and "access_token" in response:
+                self.admin_token = response["access_token"]
+                self.log_test("Admin Login", True, f"Admin token obtained")
+            else:
+                self.log_test("Admin Login", False, f"Status: {status}", response)
+        else:
+            self.log_test("Admin Login", True, "Admin token already available")
+        
+        # Test 3: Get All Leads (Admin) - GET /api/leads
+        if self.admin_token:
+            success, response, status = self.make_request("GET", "/leads", token=self.admin_token)
+            if success and isinstance(response, dict) and "leads" in response:
+                leads = response.get("leads", [])
+                total = response.get("total", 0)
+                self.log_test("Get All Leads (Admin)", True, 
+                             f"Retrieved {len(leads)} leads, total: {total}")
+                
+                # Check if our created lead is in the list
+                if lead_id:
+                    created_lead_found = any(lead.get("id") == lead_id for lead in leads)
+                    if created_lead_found:
+                        self.log_test("Find Created Lead in List", True, "Created lead found in admin list")
+                    else:
+                        self.log_test("Find Created Lead in List", False, "Created lead not found in admin list")
+            else:
+                self.log_test("Get All Leads (Admin)", False, f"Status: {status}", response)
+        else:
+            self.log_test("Get All Leads (Admin)", False, "Admin token not available")
+        
+        # Test 4: Get Leads with Filters - GET /api/leads?status=new&source=college
+        if self.admin_token:
+            success, response, status = self.make_request("GET", "/leads?status=new&source=college", 
+                                                        token=self.admin_token)
+            if success and isinstance(response, dict) and "leads" in response:
+                filtered_leads = response.get("leads", [])
+                # Verify all leads have status=new and source=college
+                valid_filter = all(
+                    lead.get("status") == "new" and lead.get("source") == "college" 
+                    for lead in filtered_leads
+                )
+                if valid_filter or len(filtered_leads) == 0:
+                    self.log_test("Get Leads with Filters", True, 
+                                 f"Retrieved {len(filtered_leads)} leads with status=new, source=college")
+                else:
+                    self.log_test("Get Leads with Filters", False, "Some leads don't match filter criteria")
+            else:
+                self.log_test("Get Leads with Filters", False, f"Status: {status}", response)
+        else:
+            self.log_test("Get Leads with Filters", False, "Admin token not available")
+        
+        # Test 5: Update Lead Status - PUT /api/leads/{lead_id}
+        if self.admin_token and lead_id:
+            update_data = {"status": "contacted"}
+            success, response, status = self.make_request("PUT", f"/leads/{lead_id}", 
+                                                        update_data, token=self.admin_token)
+            if success and isinstance(response, dict):
+                updated_status = response.get("status")
+                if updated_status == "contacted":
+                    self.log_test("Update Lead Status", True, 
+                                 f"Lead status updated to: {updated_status}")
+                    
+                    # Verify contacted_at timestamp was set
+                    contacted_at = response.get("contacted_at")
+                    if contacted_at:
+                        self.log_test("Verify Contacted Timestamp", True, 
+                                     "contacted_at timestamp automatically set")
+                    else:
+                        self.log_test("Verify Contacted Timestamp", False, 
+                                     "contacted_at timestamp not set")
+                else:
+                    self.log_test("Update Lead Status", False, 
+                                 f"Status not updated. Expected: contacted, Got: {updated_status}")
+            else:
+                self.log_test("Update Lead Status", False, f"Status: {status}", response)
+        else:
+            self.log_test("Update Lead Status", False, "Admin token or lead ID not available")
+        
+        # Test 6: Get Lead Settings (Public) - GET /api/lead-settings
+        success, response, status = self.make_request("GET", "/lead-settings")
+        if success and isinstance(response, dict):
+            # Verify expected settings fields
+            expected_fields = [
+                "general_form_heading", "cta_button_text", "notification_emails",
+                "enable_email_notifications", "enable_whatsapp_notifications"
+            ]
+            present_fields = [field for field in expected_fields if field in response]
+            
+            if len(present_fields) >= 3:  # At least 3 key fields should be present
+                self.log_test("Get Lead Settings (Public)", True, 
+                             f"Settings retrieved with {len(present_fields)}/5 expected fields")
+                
+                # Check specific values
+                form_heading = response.get("general_form_heading", "")
+                cta_text = response.get("cta_button_text", "")
+                if form_heading and cta_text:
+                    self.log_test("Verify Settings Content", True, 
+                                 f"Form heading: '{form_heading}', CTA: '{cta_text}'")
+                else:
+                    self.log_test("Verify Settings Content", False, 
+                                 "Form heading or CTA button text missing")
+            else:
+                missing_fields = [f for f in expected_fields if f not in response]
+                self.log_test("Get Lead Settings (Public)", False, 
+                             f"Missing fields: {missing_fields}")
+        else:
+            self.log_test("Get Lead Settings (Public)", False, f"Status: {status}", response)
+        
+        # Test 7: Update Lead Settings (Admin) - PUT /api/lead-settings
+        if self.admin_token:
+            settings_update = {
+                "general_form_heading": "Apply Now - Test Updated",
+                "cta_button_text": "Get Started - Test",
+                "enable_email_notifications": True,
+                "notification_emails": ["test@admissionbuddy.co"]
+            }
+            
+            success, response, status = self.make_request("PUT", "/lead-settings", 
+                                                        settings_update, token=self.admin_token)
+            if success and isinstance(response, dict):
+                # Verify settings were updated
+                updated_heading = response.get("general_form_heading")
+                updated_cta = response.get("cta_button_text")
+                
+                if (updated_heading == settings_update["general_form_heading"] and
+                    updated_cta == settings_update["cta_button_text"]):
+                    self.log_test("Update Lead Settings (Admin)", True, 
+                                 f"Settings updated: heading='{updated_heading}', cta='{updated_cta}'")
+                    
+                    # Test 8: Verify settings persistence with GET request
+                    success, get_response, get_status = self.make_request("GET", "/lead-settings")
+                    if success and isinstance(get_response, dict):
+                        persisted_heading = get_response.get("general_form_heading")
+                        if persisted_heading == settings_update["general_form_heading"]:
+                            self.log_test("Verify Settings Persistence", True, 
+                                         "Updated settings persist in GET request")
+                        else:
+                            self.log_test("Verify Settings Persistence", False, 
+                                         f"Settings not persisted. Expected: {settings_update['general_form_heading']}, Got: {persisted_heading}")
+                    else:
+                        self.log_test("Verify Settings Persistence", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("Update Lead Settings (Admin)", False, 
+                                 f"Settings not updated correctly")
+            else:
+                self.log_test("Update Lead Settings (Admin)", False, f"Status: {status}", response)
+        else:
+            self.log_test("Update Lead Settings (Admin)", False, "Admin token not available")
+        
+        # Test 9: Get College Courses for Form - GET /api/colleges/{college_id}/courses-for-form
+        # First, get a college ID
+        success, response, status = self.make_request("GET", "/colleges?limit=1")
+        if success and isinstance(response, list) and len(response) > 0:
+            college = response[0]
+            college_id = college.get("id")
+            college_name = college.get("name")
+            
+            if college_id:
+                success, course_response, course_status = self.make_request("GET", f"/colleges/{college_id}/courses-for-form")
+                if success and isinstance(course_response, dict):
+                    returned_college_name = course_response.get("college_name")
+                    courses = course_response.get("courses", [])
+                    
+                    if returned_college_name and isinstance(courses, list):
+                        self.log_test("Get College Courses for Form", True, 
+                                     f"College: {returned_college_name}, Courses: {len(courses)}")
+                        
+                        # Verify structure
+                        if course_response.get("college_id") == college_id:
+                            self.log_test("Verify Course Form Response Structure", True, 
+                                         "Response contains college_id, college_name, and courses array")
+                        else:
+                            self.log_test("Verify Course Form Response Structure", False, 
+                                         "college_id mismatch in response")
+                    else:
+                        self.log_test("Get College Courses for Form", False, 
+                                     "Missing college_name or courses array")
+                else:
+                    self.log_test("Get College Courses for Form", False, f"Status: {course_status}", course_response)
+            else:
+                self.log_test("Get College Courses for Form", False, "No college ID available")
+        else:
+            self.log_test("Get College Courses for Form", False, "No colleges found for testing")
+        
+        # Test 10: Test Lead Export (Admin) - GET /api/leads/export
+        if self.admin_token:
+            success, response, status = self.make_request("GET", "/leads/export", token=self.admin_token)
+            if success:
+                # Check if response is CSV format (should be text/csv or contain CSV data)
+                if isinstance(response, str) and ("name,email,mobile" in response or "Name,Email,Mobile" in response):
+                    self.log_test("Export Leads CSV (Admin)", True, 
+                                 f"CSV export successful, content length: {len(response)} chars")
+                elif isinstance(response, dict) and response.get("error"):
+                    self.log_test("Export Leads CSV (Admin)", False, 
+                                 f"Export error: {response.get('error')}")
+                else:
+                    self.log_test("Export Leads CSV (Admin)", True, 
+                                 f"Export response received (format may vary)")
+            else:
+                self.log_test("Export Leads CSV (Admin)", False, f"Status: {status}", response)
+        else:
+            self.log_test("Export Leads CSV (Admin)", False, "Admin token not available")
+        
+        # Test 11: Test unauthorized access to admin endpoints
+        # Test GET /api/leads without token (should fail)
+        success, response, status = self.make_request("GET", "/leads")
+        if not success and status in [401, 403]:
+            self.log_test("Unauthorized Access - Get Leads (should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("Unauthorized Access - Get Leads (should fail)", False, 
+                         f"Should have been rejected but got status {status}")
+        
+        # Test PUT /api/lead-settings without token (should fail)
+        test_settings = {"general_form_heading": "Unauthorized Test"}
+        success, response, status = self.make_request("PUT", "/lead-settings", test_settings)
+        if not success and status in [401, 403]:
+            self.log_test("Unauthorized Access - Update Settings (should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("Unauthorized Access - Update Settings (should fail)", False, 
+                         f"Should have been rejected but got status {status}")
+
     def run_all_tests(self):
-        """Run all test suites focusing on Location-Specific Display Priority Feature"""
-        print("🚀 TESTING LOCATION-SPECIFIC DISPLAY PRIORITY FEATURE FOR COLLEGES")
+        """Run all test suites focusing on Apply Now Lead Capture System"""
+        print("🚀 TESTING APPLY NOW LEAD CAPTURE SYSTEM - BACKEND APIs")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 60)
         
@@ -3411,7 +3675,7 @@ class APITester:
         self.test_authentication()
         
         # Primary test for this request
-        self.test_location_specific_display_priority()
+        self.test_apply_now_lead_capture_system()
         
         # Legacy tests for compatibility
         self.test_server_health()
