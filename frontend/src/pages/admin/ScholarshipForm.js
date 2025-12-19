@@ -1102,7 +1102,8 @@ const ScholarshipForm = () => {
           </form>
         </main>
       </div>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 
