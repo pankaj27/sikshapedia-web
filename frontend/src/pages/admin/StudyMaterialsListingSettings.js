@@ -397,7 +397,7 @@ const StudyMaterialsListingSettings = () => {
           </div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
