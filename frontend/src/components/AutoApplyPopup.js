@@ -61,6 +61,12 @@ const AutoApplyPopup = () => {
 
     // Set timer for 5 seconds
     timerRef.current = setTimeout(async () => {
+      // For REGISTERED users: Mark popup as shown IMMEDIATELY
+      // This prevents popup from showing on subsequent pages during navigation
+      if (isLoggedIn()) {
+        sessionStorage.setItem('applyPopupShown', 'true');
+      }
+
       // If on college detail page, fetch college data
       if (isCollegePage) {
         const slug = getSlugFromPath();
@@ -83,11 +89,6 @@ const AutoApplyPopup = () => {
       
       // Show the modal
       setShowModal(true);
-      
-      // For REGISTERED users: Mark popup as shown for this session
-      if (isLoggedIn()) {
-        sessionStorage.setItem('applyPopupShown', 'true');
-      }
     }, 5000); // 5 seconds
 
     // Cleanup timer on unmount or location change
