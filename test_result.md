@@ -105,6 +105,18 @@ backend:
         comment: "✅ APPLY NOW LEAD CAPTURE SYSTEM BACKEND FULLY WORKING: Comprehensive testing completed for all lead capture backend APIs. ✅ Create Lead API: POST /api/leads successfully creates leads with all required fields (name, email, mobile, city, course_interested, college_name, source) and returns lead with status='new'. ✅ Admin Authentication: POST /api/auth/login working with admin@admissionbuddy.co credentials. ✅ Get All Leads: GET /api/leads with admin auth returns leads array with total count. Created lead found in admin list. ✅ Lead Filtering: GET /api/leads?status=new&source=college correctly filters leads by status and source. ✅ Update Lead Status: PUT /api/leads/{id} successfully updates lead status to 'contacted' and automatically sets contacted_at timestamp. ✅ Lead Settings: GET /api/lead-settings returns all expected fields (general_form_heading='Get Expert Counselling', cta_button_text='Apply Now', notification settings). PUT /api/lead-settings with admin auth successfully updates and persists settings. ✅ College Courses API: GET /api/colleges/{id}/courses-for-form returns college_name and courses array for form population. ✅ CSV Export: GET /api/leads/export with admin auth successfully exports leads as CSV format. ✅ Security: All admin endpoints properly reject unauthorized access with 401/403 status. All 18 backend API tests passed (100% success rate). Lead capture system backend ready for production use."
 
 frontend:
+  - task: "College Detail Page Layout - Hero Banner Removal & Map Section Fixes"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/CollegeDetailPage.js, InstitutionDetailPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ College Detail Page Layout Testing Complete - ALL TESTS PASSED: Successfully verified layout fixes at /colleges/060-test-engineering-college-mumbai. ✅ Hero Banner Removal: CONFIRMED - No hero banner section found (correct). Page starts with breadcrumb → header (no hero in between). ✅ Map Section Layout: Fixed 3-column grid working correctly (1 column address card + 2 columns Google Maps iframe). No longer broken 4-column overflow. ✅ Address Card: Contains contact info (phone, email, website), 'How to Reach' section, and 'Get Directions' button. ✅ Nearby Places: 6 items displayed in clean grid (Hospital, Bank, Market, Metro Station, Airport, Restaurants). All layout changes implemented successfully."
+
   - task: "News Listing Page - Dynamic Content Display"
     implemented: true
     working: "NA"
