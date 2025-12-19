@@ -670,6 +670,7 @@ const CollegeDuniaHome = () => {
           )}
         </div>
       </section>
+      )}
 
       {/* Top Schools Section */}
       <section className="py-12 bg-white">
