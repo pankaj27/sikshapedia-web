@@ -29,6 +29,7 @@ const SchoolForm = () => {
     admission_fee: 0,
     annual_fee: 0,
     rating: 0,
+    display_priority: 0,
     phone: '',
     email: '',
     website: ''
