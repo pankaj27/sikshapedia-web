@@ -163,7 +163,7 @@ const BlogsManagement = () => {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 
