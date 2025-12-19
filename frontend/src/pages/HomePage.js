@@ -562,121 +562,83 @@ const CollegeDuniaHome = () => {
             >
               {featuredColleges.map((college, idx) => (
                 <SwiperSlide key={college.id}>
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition border relative h-[380px] flex flex-col">
-                    {/* Header Image with Badges */}
-                    <div className="relative h-32 bg-gradient-to-br from-blue-500 to-indigo-600">
+                  <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 h-[340px] flex flex-col">
+                    {/* Modern Header with Gradient Overlay */}
+                    <div className="relative h-28">
                       {college.images?.[0] ? (
                         <img src={college.images[0]} alt={college.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white text-3xl font-bold">
-                          {college.name.charAt(0)}
-                        </div>
+                        <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
                       )}
-                      {/* Top Right Badges */}
-                      <div className="absolute top-1 right-1 flex flex-col gap-1">
-                        {idx < 3 && (
-                          <div className="bg-green-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
-                            <FiCheckCircle className="text-[10px]" /> Verified
-                          </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      
+                      {/* Top Badges - Modern Pills */}
+                      <div className="absolute top-3 left-3 flex gap-1.5">
+                        {college.nirf_ranking && (
+                          <span className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-semibold text-gray-800">
+                            #{college.nirf_ranking} NIRF
+                          </span>
                         )}
                         {idx < 2 && (
-                          <div className="bg-purple-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-1">
-                            <FiStar className="text-[10px]" /> Featured
-                          </div>
+                          <span className="px-2 py-1 bg-amber-400 rounded-full text-[10px] font-semibold text-amber-900">
+                            Featured
+                          </span>
                         )}
                       </div>
-                      {/* Admission Open Badge */}
-                      {idx < 4 && (
-                        <div className="absolute bottom-1 right-1 bg-orange-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
-                          Admission 2025 Open
-                        </div>
-                      )}
-                    </div>
-
-                    {/* College Logo Badge - Perfectly Positioned */}
-                    <div className="absolute top-24 left-4 w-14 h-14 bg-white rounded-full border-2 border-white shadow-xl flex items-center justify-center z-10 overflow-hidden">
-                      {college.images?.[0] ? (
-                        <img src={college.images[0]} alt={`${college.name} logo`} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="text-blue-600 font-bold text-xl">
+                      
+                      {/* Rating Badge */}
+                      <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1">
+                        <FiStar className="text-amber-400 text-xs fill-amber-400" />
+                        <span className="text-xs font-semibold text-gray-800">{college.rating || '4.5'}</span>
+                      </div>
+                      
+                      {/* College Initial - Bottom Left */}
+                      <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white">
+                        <span className="text-xl font-bold bg-gradient-to-br from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                           {college.name.charAt(0)}
-                        </div>
-                      )}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="p-3 pt-10 flex-1 flex flex-col">
-                      {/* College Name and Location */}
+                    {/* Content */}
+                    <div className="p-4 pt-8 flex-1 flex flex-col">
                       <Link to={`/colleges/${college.id}`}>
-                        <h3 className="font-bold text-sm mb-0.5 line-clamp-2 hover:text-orange-600">{college.name}</h3>
+                        <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                          {college.name}
+                        </h3>
                       </Link>
-                      <div className="flex items-center gap-1 text-[11px] text-gray-600 mb-2">
-                        <FiMapPin className="text-orange-600 text-xs" />
-                        <span>{college.location?.city}, {college.location?.state}</span>
-                      </div>
-
-                      {/* Stats Grid - Compact */}
-                      <div className="grid grid-cols-3 gap-1 mb-2 pb-2 border-b">
-                        <div className="text-center">
-                          <div className="text-orange-600 font-bold text-sm">₹{(college.average_fees / 100000).toFixed(1)}L</div>
-                          <div className="text-[10px] text-gray-500">First Year</div>
+                      <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                        <FiMapPin className="text-[10px]" />
+                        {college.location?.city}, {college.location?.state}
+                      </p>
+                      
+                      {/* Stats Row - Modern */}
+                      <div className="flex items-center gap-3 mt-3 py-2 border-y border-gray-100">
+                        <div className="flex-1 text-center">
+                          <p className="text-sm font-bold text-indigo-600">₹{(college.average_fees / 100000).toFixed(1)}L</p>
+                          <p className="text-[10px] text-gray-400">Avg. Fee</p>
                         </div>
-                        <div className="text-center border-x">
-                          <div className="text-orange-600 font-bold text-sm">JEE</div>
-                          <div className="text-[10px] text-gray-500">Exam</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-orange-600 font-bold text-sm flex items-center justify-center gap-0.5">
-                            <FiStar className="text-yellow-500 text-xs" />
-                            {college.rating || '4.5'}
-                          </div>
-                          <div className="text-[10px] text-gray-500">Rating</div>
+                        <div className="w-px h-8 bg-gray-100" />
+                        <div className="flex-1 text-center">
+                          <p className="text-sm font-bold text-gray-700">{college.courses?.length || '50'}+</p>
+                          <p className="text-[10px] text-gray-400">Courses</p>
                         </div>
                       </div>
-
-                      {/* Ranking - Compact - Always show for consistent height */}
-                      <div className="text-[11px] text-gray-600 mb-2 h-4">
-                        {college.nirf_ranking ? (
-                          <><span className="font-semibold">Ranked {college.nirf_ranking}</span> / 300</>
-                        ) : (
-                          <span className="text-gray-400">Ranking: N/A</span>
-                        )}
-                      </div>
-
-                      {/* Action Buttons - With Icons */}
-                      <div className="space-y-1.5">
-                        <div className="flex gap-1.5">
-                          <Button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              navigate(`/colleges/${college.id}/compare`);
-                            }}
-                            variant="outline"
-                            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
-                          >
-                            <FiBarChart2 className="text-xs" />
-                            Compare
-                          </Button>
-                          <Button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              window.open(`/colleges/${college.id}/brochure`, '_blank');
-                            }}
-                            variant="outline"
-                            className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 text-[11px] py-1.5 h-auto flex items-center justify-center gap-1"
-                          >
-                            <FiDownload className="text-xs" />
-                            Brochure
-                          </Button>
-                        </div>
+                      
+                      {/* Action Buttons - Modern */}
+                      <div className="mt-auto pt-3 flex gap-2">
                         <Button 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            navigate(`/colleges/${college.id}/apply`);
-                          }}
-                          className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs py-2 h-auto font-semibold flex items-center justify-between px-2.5 group"
+                          onClick={(e) => { e.preventDefault(); navigate(`/colleges/${college.id}`); }}
+                          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs py-2.5 h-auto rounded-xl font-medium transition-all"
                         >
-                          <span>Apply Now</span>
-                          <span className="text-base font-normal">›</span>
+                          View Details
+                        </Button>
+                        <Button 
+                          onClick={(e) => { e.preventDefault(); navigate(`/colleges/${college.id}/apply`); }}
+                          variant="outline"
+                          className="flex-1 border-indigo-200 text-indigo-600 hover:bg-indigo-50 text-xs py-2.5 h-auto rounded-xl font-medium"
+                        >
+                          Apply Now
                         </Button>
                       </div>
                     </div>
