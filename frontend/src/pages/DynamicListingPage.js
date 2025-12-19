@@ -2414,6 +2414,16 @@ const DynamicListingPage = () => {
           </main>
         </div>
       </div>
+
+      {/* Apply Now Modal */}
+      <ApplyNowModal
+        isOpen={applyModalOpen}
+        onClose={() => { setApplyModalOpen(false); setSelectedCollege(null); }}
+        collegeId={selectedCollege?.id}
+        collegeName={selectedCollege?.name}
+        collegeCourses={selectedCollege?.courses?.map(c => typeof c === 'object' ? c.name : c) || []}
+        source="listing_page"
+      />
     </div>
   );
 };
