@@ -12,7 +12,19 @@ const api = axios.create({
 // Add auth token to requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+    // Check which page we're on to determine which token to use
+    const isAdminPage = window.location.pathname.startsWith('/admin');
+    const isInstitutePage = window.location.pathname.startsWith('/institute');
+    
+    let token = null;
+    if (isAdminPage) {
+      token = localStorage.getItem('adminToken');
+    } else if (isInstitutePage) {
+      token = localStorage.getItem('institute_token');
+    } else {
+      token = localStorage.getItem('token');
+    }
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
