@@ -80,6 +80,8 @@ const DynamicListingPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const [featuredColleges, setFeaturedColleges] = useState([]); // Featured/Sponsored colleges
   const [admissionOpenColleges, setAdmissionOpenColleges] = useState([]); // Admissions Open colleges
+  const [applyModalOpen, setApplyModalOpen] = useState(false);
+  const [selectedCollege, setSelectedCollege] = useState(null);
   
   // Ref for infinite scroll observer
   const loadMoreRef = useRef(null);
