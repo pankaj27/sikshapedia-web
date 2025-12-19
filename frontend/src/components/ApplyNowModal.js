@@ -159,16 +159,38 @@ const ApplyNowModal = ({
         className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+        {/* Header with Logo */}
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 relative sticky top-0">
           <button 
             onClick={onClose}
-            className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20 transition-colors"
+            className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20 transition-colors z-10"
           >
             <FiX className="w-5 h-5" />
           </button>
-          <h2 className="text-lg font-bold pr-8">{displayHeading}</h2>
-          <p className="text-orange-100 text-xs mt-0.5">{displaySubheading}</p>
+          
+          {/* Logo Section */}
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center overflow-hidden shadow-md flex-shrink-0">
+              {collegeLogoUrl ? (
+                <img 
+                  src={collegeLogoUrl} 
+                  alt={collegeName || 'College'} 
+                  className="w-10 h-10 object-contain"
+                  onError={(e) => { e.target.src = '/favicon.png'; }}
+                />
+              ) : (
+                <img 
+                  src="/favicon.png" 
+                  alt="Admission Buddy" 
+                  className="w-10 h-10 object-contain"
+                />
+              )}
+            </div>
+            <div className="flex-1 pr-6">
+              <h2 className="text-lg font-bold leading-tight">{displayHeading}</h2>
+              <p className="text-orange-100 text-xs mt-0.5">{displaySubheading}</p>
+            </div>
+          </div>
         </div>
 
         {/* Form */}
