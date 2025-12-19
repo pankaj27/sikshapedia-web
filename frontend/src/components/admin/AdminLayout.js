@@ -90,6 +90,7 @@ const AdminLayout = ({ children }) => {
       title: 'Frontend Elements',
       icon: FiGrid,
       submenu: [
+        { title: 'Homepage Settings', path: '/admin/homepage-settings', icon: FiHome, highlight: true, badge: 'NEW' },
         { title: 'Sponsored Ads', path: '/admin/sponsored-ads', icon: FiStar, highlight: true },
         { title: 'Ad Manager', path: '/admin/advertisements', icon: FiImage, highlight: true, badge: 'NEW' },
         { title: 'Banners & Sliders', path: '/admin/banners', icon: FiGrid },
