@@ -429,6 +429,18 @@ agent_communication:
         agent: "testing"
         comment: "✅ FRONTEND STUDY ABROAD PAGE TESTING COMPLETE - ALL TESTS PASSED: Successfully tested Study Abroad page using Playwright automation. ✅ Hero Section: Shows 'Study Abroad' title with proper subtitle and search bar functionality. ✅ Country Filters: All 5 country buttons (All Countries, Australia, Canada, Singapore, UK, USA) working correctly. ✅ University Display: Shows 5 universities with complete information - university name (Massachusetts Institute of Technology first), location (Cambridge, USA), world ranking badges (#1 World, #4 World, #18 World), tuition/year info, acceptance rates, Visit Website buttons. ✅ Filter Functionality: USA filter shows 1 university correctly, Canada filter shows 1 university, 'All Countries' resets properly with active state highlighting working. ✅ Search Functionality: Search for 'MIT' returns 1 result correctly. ✅ Responsive Design: Mobile view (390x844) works properly with all elements visible. ✅ Quality Checks: No double headers/footers, no console errors, proper 'Showing X universities' text updates dynamically. All requirements from review request met successfully."
 
+  - task: "Apply Now Forms - Frontend UI Testing"
+    implemented: true
+    working: true
+    file: "frontend/src/components/ApplyNowModal.js, FloatingApplyButton.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ APPLY NOW FORMS FRONTEND TESTING COMPLETE - ALL TESTS PASSED: Successfully tested both Apply Now forms across the site using comprehensive Playwright automation. ✅ GENERAL APPLY NOW FORM (FLOATING): Found floating Apply Now button (bottom-right corner), modal opens with Admission Buddy logo (favicon.png) at top, orange gradient header, all required fields present (Name, Email, Mobile, City DROPDOWN, Course Interested), city dropdown contains 95 Indian cities alphabetically sorted (Agra to Warangal), form interaction works perfectly. ✅ COLLEGE-SPECIFIC APPLY NOW FORM: Tested at /colleges/060-test-engineering-college-mumbai, found 5 Apply Now buttons on college page, modal opens with college-specific heading 'Apply to Test Engineering College Mumbai', Admission Buddy logo as fallback, same city dropdown with all Indian cities, course field is text input (no specific courses configured), form fills and submits correctly. ✅ KEY REQUIREMENTS MET: Both forms have logo at top (Admission Buddy for general, college logo/fallback for college-specific), City is DROPDOWN not text input, all cities listed alphabetically, all required fields present and functional. Apply Now forms are fully working and ready for production use."
+
 ## Incorporate User Feedback
 - Test static pages (About, Contact, Privacy, Terms) load correctly with fallback content
 - Test Study Abroad page loads universities from database with proper filtering
