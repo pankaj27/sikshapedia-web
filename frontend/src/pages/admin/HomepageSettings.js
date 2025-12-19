@@ -270,6 +270,82 @@ const HomepageSettings = () => {
     handleChange('quick_actions', newActions);
   };
 
+  // Search colleges from database
+  const searchColleges = async (query) => {
+    if (!query || query.length < 2) {
+      setCollegeSearchResults([]);
+      setShowCollegeDropdown(false);
+      return;
+    }
+    try {
+      const response = await api.get(`/colleges?search=${encodeURIComponent(query)}&limit=10`);
+      setCollegeSearchResults(response.data || []);
+      setShowCollegeDropdown(true);
+    } catch (error) {
+      console.error('Error searching colleges:', error);
+      setCollegeSearchResults([]);
+    }
+  };
+
+  // Search schools from database
+  const searchSchools = async (query) => {
+    if (!query || query.length < 2) {
+      setSchoolSearchResults([]);
+      setShowSchoolDropdown(false);
+      return;
+    }
+    try {
+      const response = await api.get(`/schools?search=${encodeURIComponent(query)}&limit=10`);
+      setSchoolSearchResults(response.data || []);
+      setShowSchoolDropdown(true);
+    } catch (error) {
+      console.error('Error searching schools:', error);
+      setSchoolSearchResults([]);
+    }
+  };
+
+  // Add college from search result
+  const addCollegeFromSearch = (college) => {
+    const currentData = settings.college_rankings_data || [];
+    const nextRank = currentData.length > 0 ? Math.max(...currentData.map(c => c.rank)) + 1 : 1;
+    const location = college.location?.city || college.city || '';
+    setSettings(prev => ({
+      ...prev,
+      college_rankings_data: [...(prev.college_rankings_data || []), {
+        rank: nextRank,
+        name: college.name,
+        location: location,
+        rating: college.rating || 4.5,
+        fees: college.fees?.amount ? `${(college.fees.amount / 100000).toFixed(1)}L` : '2L',
+        type: college.type || 'Engineering'
+      }]
+    }));
+    setCollegeSearchQuery('');
+    setCollegeSearchResults([]);
+    setShowCollegeDropdown(false);
+  };
+
+  // Add school from search result
+  const addSchoolFromSearch = (school) => {
+    const currentSchools = settings.top_schools || [];
+    const nextRank = currentSchools.length > 0 ? Math.max(...currentSchools.map(s => s.rank || 0)) + 1 : 1;
+    setSettings(prev => ({
+      ...prev,
+      top_schools: [...(prev.top_schools || []), {
+        name: school.name,
+        location: school.location?.city || school.city || school.address?.city || '',
+        board: school.board || 'CBSE',
+        rating: school.rating || 4.5,
+        fees: school.fees ? `${(school.fees / 100000).toFixed(1)}L` : '2L',
+        type: school.type || 'Day School',
+        rank: nextRank
+      }]
+    }));
+    setSchoolSearchQuery('');
+    setSchoolSearchResults([]);
+    setShowSchoolDropdown(false);
+  };
+
   // Top Schools
   const addTopSchool = () => {
     setSettings(prev => ({
