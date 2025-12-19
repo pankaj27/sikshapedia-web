@@ -40,15 +40,39 @@ const HomepageSettings = () => {
     // Ranking Agencies
     ranking_agencies: ['India Today', 'NIRF', 'The Week', 'Outlook'],
     
-    // Section Visibility
+    // Quick Links
+    quick_links: [],
+    
+    // Top Universities
+    top_universities_title: 'Top Universities & Colleges',
+    
+    // Top Schools
+    top_schools_title: 'Top Schools in India',
+    top_schools: [],
+    
+    // College Rankings
+    college_rankings_title: 'College Rankings',
+    
+    // Newsletter
+    newsletter_title: 'Subscribe to Our Newsletter',
+    newsletter_subtitle: 'Get the latest updates on college admissions, exams, and education news',
+    
+    // Section Visibility - All 15 sections
     show_hero_slider: true,
+    show_quick_links: true,
+    show_quick_actions: true,
     show_study_goals: true,
     show_programs: true,
+    show_top_universities: true,
+    show_top_schools: true,
+    show_college_rankings: true,
     show_cities: true,
-    show_featured_colleges: true,
-    show_top_exams: true,
-    show_latest_news: true,
+    show_newsletter: true,
+    show_sponsored_colleges: true,
     show_top_colleges_by_stream: true,
+    show_top_exams: true,
+    show_location_search: true,
+    show_latest_news: true,
     
     // CTA
     cta_enabled: true,
