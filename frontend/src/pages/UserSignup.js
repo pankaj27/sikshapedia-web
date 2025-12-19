@@ -367,7 +367,7 @@ const UserSignup = () => {
                     />
                   </div>
                   {referralCode && (
-                    <p className="text-xs text-green-600 mt-1">🎁 You'll get ₹100 signup bonus!</p>
+                    <p className="text-xs text-green-600 mt-1">🎁 You&apos;ll get ₹100 signup bonus!</p>
                   )}
                 </div>
               </div>
