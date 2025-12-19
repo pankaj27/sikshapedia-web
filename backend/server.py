@@ -5029,6 +5029,12 @@ async def get_exams(
     
     exams = await db.exams.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     
+    # Re-sort to put items with display_priority > 0 first
+    prioritized = [e for e in exams if e.get('display_priority', 0) > 0]
+    non_prioritized = [e for e in exams if e.get('display_priority', 0) == 0]
+    prioritized.sort(key=lambda x: x.get('display_priority', 0))
+    exams = prioritized + non_prioritized
+    
     for exam in exams:
         if isinstance(exam.get('created_at'), str):
             exam['created_at'] = datetime.fromisoformat(exam['created_at'])
