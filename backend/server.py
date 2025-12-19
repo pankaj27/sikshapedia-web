@@ -8303,15 +8303,18 @@ try:
     from routes.financial_aid import financial_aid_router, set_database as set_financial_db
     from routes.homepage_settings import homepage_settings_router, set_database as set_homepage_db
     from routes.sponsored_ads import sponsored_ads_router, set_database as set_sponsored_db
-    from routes.user_auth import router as user_auth_router
-    from routes.user_dashboard import router as user_dashboard_router
-    from routes.institute_auth import router as institute_router
+    from routes.user_auth import router as user_auth_router, set_database as set_user_auth_db
+    from routes.user_dashboard import router as user_dashboard_router, set_database as set_user_dashboard_db
+    from routes.institute_auth import router as institute_router, set_database as set_institute_db
     
     # Set database for modular routers
     set_leads_db(db)
     set_financial_db(db)
     set_homepage_db(db)
     set_sponsored_db(db)
+    set_user_auth_db(db)
+    set_user_dashboard_db(db)
+    set_institute_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
