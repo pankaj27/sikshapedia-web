@@ -314,30 +314,27 @@ const ScholarshipForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AdminLayout>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-20">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/admin/scholarships" className="text-gray-600 hover:text-gray-900">
-                <FiArrowLeft size={24} />
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  {isEdit ? 'Edit Scholarship' : 'Create Scholarship'}
-                </h1>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => window.open(`/scholarships/${formData.slug}`, '_blank')} disabled={!formData.slug}>
-                <FiEye className="mr-2" /> Preview
-              </Button>
-              <Button onClick={handleSubmit} disabled={saving} className="bg-green-500 hover:bg-green-600">
-                <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Scholarship'}
-              </Button>
-            </div>
-          </div>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link to="/admin/scholarships" className="text-gray-600 hover:text-gray-900">
+            <FiArrowLeft size={24} />
+          </Link>
+          <h1 className="text-xl font-bold text-gray-900">
+            {isEdit ? 'Edit Scholarship' : 'Create Scholarship'}
+          </h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={() => window.open(`/scholarships/${formData.slug}`, '_blank')} disabled={!formData.slug}>
+            <FiEye className="mr-2" /> Preview
+          </Button>
+          <Button onClick={handleSubmit} disabled={saving} className="bg-green-500 hover:bg-green-600">
+            <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Scholarship'}
+          </Button>
+        </div>
+      </div>
+      <div className="bg-gray-50 -mx-6 -mb-6 p-6">
         </div>
       </header>
 
