@@ -692,6 +692,8 @@ class College(BaseModel):
     is_trending: bool = False  # Trending badge
     is_top_rated: bool = False  # Top rated badge
     is_sponsored: bool = False  # Sponsored badge
+    is_admission_partner: bool = False  # Admission Partner badge
+    is_no_cost_emi: bool = False  # No Cost EMI available badge
     is_admission_open: bool = False  # Admission open badge
     admission_open_at: Optional[datetime] = None  # When marked as admission open (for priority sorting)
     admission_open_priority_months: int = 2  # How many months to keep priority (default 2)
