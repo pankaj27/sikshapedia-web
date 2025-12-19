@@ -433,15 +433,18 @@ agent_communication:
 
   - task: "Apply Now Forms - Frontend UI Testing"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/components/ApplyNowModal.js, FloatingApplyButton.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "testing"
         comment: "✅ APPLY NOW FORMS FRONTEND TESTING COMPLETE - ALL TESTS PASSED: Successfully tested both Apply Now forms across the site using comprehensive Playwright automation. ✅ GENERAL APPLY NOW FORM (FLOATING): Found floating Apply Now button (bottom-right corner), modal opens with Admission Buddy logo (favicon.png) at top, orange gradient header, all required fields present (Name, Email, Mobile, City DROPDOWN, Course Interested), city dropdown contains 95 Indian cities alphabetically sorted (Agra to Warangal), form interaction works perfectly. ✅ COLLEGE-SPECIFIC APPLY NOW FORM: Tested at /colleges/060-test-engineering-college-mumbai, found 5 Apply Now buttons on college page, modal opens with college-specific heading 'Apply to Test Engineering College Mumbai', Admission Buddy logo as fallback, same city dropdown with all Indian cities, course field is text input (no specific courses configured), form fills and submits correctly. ✅ KEY REQUIREMENTS MET: Both forms have logo at top (Admission Buddy for general, college logo/fallback for college-specific), City is DROPDOWN not text input, all cities listed alphabetically, all required fields present and functional. Apply Now forms are fully working and ready for production use."
+      - working: false
+        agent: "testing"
+        comment: "❌ APPLY NOW MODAL FIXES TESTING - CRITICAL ISSUE FOUND: Comprehensive testing of Apply Now modal fixes revealed mixed results. ✅ PASSED TESTS: Modal opens with college-specific titles ('Apply to Updated College Name via API Test', 'Apply to Test Engineering College Mumbai'), Z-index fix verified (header z-index: 60 stays above dropdowns), Auto-popup behavior working correctly (appears after 5-6 seconds, shows college-specific title, does NOT reappear after closing). ❌ CRITICAL FAILURE: Course dropdown shows 20+ global courses instead of expected 3 college-specific courses (B.Tech, M.Tech, PhD) at /colleges/001-updated-college-name-via-api-test. This indicates the CollegeContext fix is NOT working properly - the dropdown should show only college-specific courses but is showing the global courses list instead. The main issue is that the college courses are not being properly passed from CollegeDetailPage to AutoApplyPopup via CollegeContext."
 
 ## Incorporate User Feedback
 - Test static pages (About, Contact, Privacy, Terms) load correctly with fallback content
