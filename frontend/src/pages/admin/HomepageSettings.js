@@ -257,6 +257,38 @@ const HomepageSettings = () => {
     handleChange('top_schools', (settings.top_schools || []).filter((_, i) => i !== index));
   };
 
+  // College Rankings
+  const addRankingCollege = () => {
+    const currentData = settings.college_rankings_data || [];
+    const nextRank = currentData.length > 0 ? Math.max(...currentData.map(c => c.rank)) + 1 : 1;
+    setSettings(prev => ({
+      ...prev,
+      college_rankings_data: [...(prev.college_rankings_data || []), { rank: nextRank, name: 'New College', location: '', rating: 4.5, fees: '2L', type: 'Engineering' }]
+    }));
+  };
+
+  const updateRankingCollege = (index, field, value) => {
+    const newData = [...(settings.college_rankings_data || [])];
+    newData[index] = { ...newData[index], [field]: value };
+    handleChange('college_rankings_data', newData);
+  };
+
+  const removeRankingCollege = (index) => {
+    handleChange('college_rankings_data', (settings.college_rankings_data || []).filter((_, i) => i !== index));
+  };
+
+  // Ranking Years
+  const [yearInput, setYearInput] = useState('');
+  const addRankingYear = () => {
+    if (yearInput.trim() && !(settings.college_rankings_years || []).includes(yearInput.trim())) {
+      handleChange('college_rankings_years', [...(settings.college_rankings_years || []), yearInput.trim()]);
+      setYearInput('');
+    }
+  };
+  const removeRankingYear = (year) => {
+    handleChange('college_rankings_years', (settings.college_rankings_years || []).filter(y => y !== year));
+  };
+
   // Keywords
   const addKeyword = () => {
     if (keywordInput.trim() && !settings.meta_keywords.includes(keywordInput.trim())) {
