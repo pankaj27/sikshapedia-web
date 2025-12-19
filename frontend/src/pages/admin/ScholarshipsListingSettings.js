@@ -143,8 +143,8 @@ const ScholarshipsListingSettings = () => {
           </Button>
         </div>
 
-      <div className="space-y-6">
-        {/* Hero Section */}
+        <div className="space-y-6">
+          {/* Hero Section */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-lg font-semibold mb-4">🦸 Hero Section</h2>
           <div className="space-y-4">
