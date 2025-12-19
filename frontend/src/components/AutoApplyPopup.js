@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ApplyNowModal from './ApplyNowModal';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,6 +19,7 @@ const AutoApplyPopup = () => {
   const [collegeData, setCollegeData] = useState(null);
   const location = useLocation();
   const { user } = useAuth();  // Check if user is logged in
+  const timerRef = useRef(null);
   
   // Check if we're on a college/school/university detail page
   const isCollegePage = location.pathname.match(/^\/(colleges|schools|universities)\/[^/]+$/);
@@ -32,14 +33,26 @@ const AutoApplyPopup = () => {
     return match ? match[2] : null;
   };
 
+  // Check if user is logged in (check localStorage directly for reliability)
+  const isLoggedIn = () => {
+    const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    return !!(token && savedUser);
+  };
+
   useEffect(() => {
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
     // Don't show popup on admin pages
     if (isAdminPage) {
       return;
     }
 
     // For REGISTERED users: Check if popup was already shown in this session
-    if (user) {
+    if (isLoggedIn()) {
       const popupShown = sessionStorage.getItem('applyPopupShown');
       if (popupShown) {
         return; // Don't show popup again for logged-in users
@@ -47,7 +60,7 @@ const AutoApplyPopup = () => {
     }
 
     // Set timer for 5 seconds
-    const timer = setTimeout(async () => {
+    timerRef.current = setTimeout(async () => {
       // If on college detail page, fetch college data
       if (isCollegePage) {
         const slug = getSlugFromPath();
@@ -72,14 +85,18 @@ const AutoApplyPopup = () => {
       setShowModal(true);
       
       // For REGISTERED users: Mark popup as shown for this session
-      if (user) {
+      if (isLoggedIn()) {
         sessionStorage.setItem('applyPopupShown', 'true');
       }
     }, 5000); // 5 seconds
 
     // Cleanup timer on unmount or location change
-    return () => clearTimeout(timer);
-  }, [location.pathname, isCollegePage, isAdminPage, user]);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [location.pathname, isCollegePage, isAdminPage]);
 
   const handleClose = () => {
     setShowModal(false);
