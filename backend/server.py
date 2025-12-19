@@ -671,6 +671,9 @@ class College(BaseModel):
     affiliation: Optional[str] = None
     institution_type: Optional[str] = None  # College, School, University
     
+    # Display Priority for listing pages (lower number = appears first, 0 = default/no priority)
+    display_priority: int = 0
+    
     # Badges & Status
     status: str = "draft"  # draft, pending, published, rejected
     rejection_reason: Optional[str] = None  # Reason for rejection
