@@ -584,9 +584,25 @@ const StudyAbroadListingSettings = () => {
           {/* SEO & FAQs Tab */}
           {activeTab === 'seo' && (
             <div className="space-y-6">
-              {/* SEO Settings */}
+              {/* Auto Generate Toggle */}
+              <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={settings.auto_generate_seo}
+                    onChange={(e) => handleChange('auto_generate_seo', e.target.checked)}
+                    className="w-5 h-5 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <div>
+                    <span className="font-semibold text-indigo-900">Auto-Generate SEO</span>
+                    <p className="text-sm text-indigo-700">Automatically generate SEO fields based on hero title and subtitle</p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Basic SEO Settings */}
               <div>
-                <h2 className="text-lg font-semibold border-b pb-2 mb-4">SEO Settings</h2>
+                <h2 className="text-lg font-semibold border-b pb-2 mb-4">Basic SEO</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Meta Title</label>
@@ -595,7 +611,9 @@ const StudyAbroadListingSettings = () => {
                       value={settings.meta_title}
                       onChange={(e) => handleChange('meta_title', e.target.value)}
                       className="w-full border rounded-lg px-4 py-2.5"
+                      disabled={settings.auto_generate_seo}
                     />
+                    <p className="text-xs text-gray-500 mt-1">{settings.meta_title?.length || 0}/60 characters recommended</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Meta Description</label>
@@ -604,8 +622,9 @@ const StudyAbroadListingSettings = () => {
                       onChange={(e) => handleChange('meta_description', e.target.value)}
                       className="w-full border rounded-lg px-4 py-2.5"
                       rows="3"
+                      disabled={settings.auto_generate_seo}
                     />
-                    <p className="text-xs text-gray-500 mt-1">{settings.meta_description.length}/160 characters</p>
+                    <p className="text-xs text-gray-500 mt-1">{settings.meta_description?.length || 0}/160 characters recommended</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Meta Keywords</label>
@@ -621,7 +640,7 @@ const StudyAbroadListingSettings = () => {
                       <Button variant="outline" onClick={addKeyword}>Add</Button>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {settings.meta_keywords.map((keyword, index) => (
+                      {settings.meta_keywords?.map((keyword, index) => (
                         <span key={index} className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
                           {keyword}
                           <button onClick={() => removeKeyword(keyword)} className="hover:text-red-500">×</button>
@@ -629,6 +648,136 @@ const StudyAbroadListingSettings = () => {
                       ))}
                     </div>
                   </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Canonical URL</label>
+                      <input
+                        type="text"
+                        value={settings.canonical_url || ''}
+                        onChange={(e) => handleChange('canonical_url', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="https://admissionbuddy.co/study-abroad"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Robots</label>
+                      <select
+                        value={settings.robots || 'index, follow'}
+                        onChange={(e) => handleChange('robots', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                      >
+                        <option value="index, follow">Index, Follow</option>
+                        <option value="noindex, follow">No Index, Follow</option>
+                        <option value="index, nofollow">Index, No Follow</option>
+                        <option value="noindex, nofollow">No Index, No Follow</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Open Graph Settings */}
+              <div>
+                <h2 className="text-lg font-semibold border-b pb-2 mb-4">Open Graph (Facebook/LinkedIn)</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">OG Image URL</label>
+                    <input
+                      type="text"
+                      value={settings.og_image || ''}
+                      onChange={(e) => handleChange('og_image', e.target.value)}
+                      className="w-full border rounded-lg px-4 py-2.5"
+                      placeholder="https://example.com/og-image.jpg"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Recommended: 1200x630 pixels</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">OG Title</label>
+                      <input
+                        type="text"
+                        value={settings.og_title || ''}
+                        onChange={(e) => handleChange('og_title', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="Leave empty to use Meta Title"
+                        disabled={settings.auto_generate_seo}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">OG Description</label>
+                      <input
+                        type="text"
+                        value={settings.og_description || ''}
+                        onChange={(e) => handleChange('og_description', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="Leave empty to use Meta Description"
+                        disabled={settings.auto_generate_seo}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Twitter Card Settings */}
+              <div>
+                <h2 className="text-lg font-semibold border-b pb-2 mb-4">Twitter Card</h2>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Card Type</label>
+                      <select
+                        value={settings.twitter_card || 'summary_large_image'}
+                        onChange={(e) => handleChange('twitter_card', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                      >
+                        <option value="summary">Summary</option>
+                        <option value="summary_large_image">Summary Large Image</option>
+                        <option value="app">App</option>
+                        <option value="player">Player</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Twitter Title</label>
+                      <input
+                        type="text"
+                        value={settings.twitter_title || ''}
+                        onChange={(e) => handleChange('twitter_title', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="Leave empty to use Meta Title"
+                        disabled={settings.auto_generate_seo}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Twitter Description</label>
+                      <input
+                        type="text"
+                        value={settings.twitter_description || ''}
+                        onChange={(e) => handleChange('twitter_description', e.target.value)}
+                        className="w-full border rounded-lg px-4 py-2.5"
+                        placeholder="Leave empty to use Meta Description"
+                        disabled={settings.auto_generate_seo}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Schema Settings */}
+              <div>
+                <h2 className="text-lg font-semibold border-b pb-2 mb-4">Schema Markup</h2>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Schema Type</label>
+                  <select
+                    value={settings.schema_type || 'WebPage'}
+                    onChange={(e) => handleChange('schema_type', e.target.value)}
+                    className="w-full border rounded-lg px-4 py-2.5 max-w-xs"
+                  >
+                    <option value="WebPage">WebPage</option>
+                    <option value="CollectionPage">CollectionPage</option>
+                    <option value="ItemList">ItemList</option>
+                    <option value="FAQPage">FAQPage</option>
+                    <option value="EducationalOrganization">EducationalOrganization</option>
+                  </select>
                 </div>
               </div>
 
