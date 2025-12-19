@@ -23,6 +23,12 @@ const HomepageSettings = () => {
   const [schoolSearchResults, setSchoolSearchResults] = useState([]);
   const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
   const [showSchoolDropdown, setShowSchoolDropdown] = useState(false);
+  
+  // Featured colleges for Top Universities section
+  const [featuredCollegeSearch, setFeaturedCollegeSearch] = useState('');
+  const [featuredCollegeResults, setFeaturedCollegeResults] = useState([]);
+  const [showFeaturedDropdown, setShowFeaturedDropdown] = useState(false);
+  const [featuredColleges, setFeaturedColleges] = useState([]);
   const [settings, setSettings] = useState({
     // Hero Section
     hero_title: 'Find Your Dream',
