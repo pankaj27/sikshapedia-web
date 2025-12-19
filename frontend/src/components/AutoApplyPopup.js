@@ -8,18 +8,21 @@ import api from '../api/axios';
  * AutoApplyPopup - Automatically shows Apply Now form after 5 seconds
  * 
  * Behavior:
- * - GUEST users: Popup shows on EVERY page after 5 seconds
- * - REGISTERED users: Popup shows only ONCE per session
+ * - GUEST users on GENERAL pages: Popup shows on every page after 5 seconds
+ * - GUEST users on COLLEGE/SCHOOL pages: Popup shows once per page (not again after closing until page change)
+ * - REGISTERED/SUBMITTED users: Popup shows only ONCE per session
  * 
- * - On college/school/university detail pages: shows college-specific form
+ * - On college/school/university detail pages: shows college-specific form with college name
  * - On other pages: shows general form
  */
 const AutoApplyPopup = () => {
   const [showModal, setShowModal] = useState(false);
   const [collegeData, setCollegeData] = useState(null);
+  const [popupClosedOnPage, setPopupClosedOnPage] = useState(false);  // Track if closed on current page
   const location = useLocation();
-  const { user } = useAuth();  // Check if user is logged in
+  const { user } = useAuth();
   const timerRef = useRef(null);
+  const currentPathRef = useRef(location.pathname);
   
   // Check if we're on a college/school/university detail page
   const isCollegePage = location.pathname.match(/^\/(colleges|schools|universities)\/[^/]+$/);
@@ -34,19 +37,24 @@ const AutoApplyPopup = () => {
   };
 
   // Check if user is logged in OR has already submitted a lead
-  // This determines if they should get popup only once (true) or every page (false)
   const isRegisteredOrSubmitted = () => {
-    // Check if user is logged in via AuthContext/localStorage
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     if (token && savedUser) return true;
     
-    // Check if user has submitted a lead before (set when they submit the form)
     const hasSubmitted = localStorage.getItem('leadSubmitted');
     if (hasSubmitted) return true;
     
     return false;
   };
+
+  // Reset popupClosedOnPage when pathname changes
+  useEffect(() => {
+    if (currentPathRef.current !== location.pathname) {
+      setPopupClosedOnPage(false);
+      currentPathRef.current = location.pathname;
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     // Clear any existing timer
@@ -59,29 +67,34 @@ const AutoApplyPopup = () => {
       return;
     }
 
-    // For REGISTERED users or users who submitted a lead: 
-    // Check if popup was already shown in this session
+    // If popup was closed on this page (for college pages), don't show again
+    if (popupClosedOnPage && isCollegePage) {
+      return;
+    }
+
+    // For REGISTERED/SUBMITTED users: Check if popup was already shown in this session
     if (isRegisteredOrSubmitted()) {
       const popupShown = sessionStorage.getItem('applyPopupShown');
       if (popupShown) {
-        return; // Don't show popup again for registered/submitted users
+        return;
       }
     }
 
     // Set timer for 5 seconds
     timerRef.current = setTimeout(async () => {
       // For REGISTERED/SUBMITTED users: Mark popup as shown IMMEDIATELY
-      // This prevents popup from showing on subsequent pages during navigation
       if (isRegisteredOrSubmitted()) {
         sessionStorage.setItem('applyPopupShown', 'true');
       }
 
-      // If on college detail page, fetch college data
+      // If on college/school detail page, fetch college data for college-specific popup
       if (isCollegePage) {
         const slug = getSlugFromPath();
         if (slug) {
           try {
-            const response = await api.get(`/colleges/by-slug/${slug}`);
+            // Determine endpoint based on path
+            const pathType = location.pathname.split('/')[1]; // 'colleges', 'schools', or 'universities'
+            const response = await api.get(`/${pathType}/by-slug/${slug}`);
             if (response.data) {
               setCollegeData({
                 id: response.data.id,
@@ -91,22 +104,34 @@ const AutoApplyPopup = () => {
               });
             }
           } catch (err) {
-            console.error('Failed to fetch college for popup:', err);
+            console.error('Failed to fetch institution for popup:', err);
+            // Still show popup but without college-specific data
           }
         }
+      } else {
+        // Clear college data for general pages
+        setCollegeData(null);
       }
       
       // Show the modal
       setShowModal(true);
-    }, 5000); // 5 seconds
+    }, 5000);
 
-    // Cleanup timer on unmount or location change
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [location.pathname, isCollegePage, isAdminPage]);
+  }, [location.pathname, isCollegePage, isAdminPage, popupClosedOnPage]);
+
+  const handleClose = () => {
+    setShowModal(false);
+    
+    // For college/school pages: mark as closed so it doesn't show again on this page
+    if (isCollegePage) {
+      setPopupClosedOnPage(true);
+    }
+  };
 
   const handleClose = () => {
     setShowModal(false);
