@@ -3866,6 +3866,11 @@ async def get_colleges(
     
     colleges = prioritized + non_prioritized
     
+    # Return minimal data directly without model conversion for better performance
+    if fields == "minimal":
+        return colleges
+    
+    # Full data - convert through model for validation
     for college in colleges:
         if isinstance(college.get('created_at'), str):
             college['created_at'] = datetime.fromisoformat(college['created_at'])
