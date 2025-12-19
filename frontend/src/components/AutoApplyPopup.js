@@ -87,25 +87,39 @@ const AutoApplyPopup = () => {
         sessionStorage.setItem('applyPopupShown', 'true');
       }
 
-      // If on college/school detail page, fetch college data for college-specific popup
+      // If on college/school detail page, try to get college info from the page
       if (isCollegePage) {
-        const slug = getSlugFromPath();
-        if (slug) {
-          try {
-            // Determine endpoint based on path
-            const pathType = location.pathname.split('/')[1]; // 'colleges', 'schools', or 'universities'
-            const response = await api.get(`/${pathType}/by-slug/${slug}`);
-            if (response.data) {
-              setCollegeData({
-                id: response.data.id,
-                name: response.data.name,
-                logo_url: response.data.logo_url,
-                courses: response.data.courses?.map(c => typeof c === 'object' ? c.name : c) || []
-              });
-            }
-          } catch (err) {
-            console.error('Failed to fetch institution for popup:', err);
-            // Still show popup but without college-specific data
+        // Try to extract college name from the page's h1 element
+        const h1Element = document.querySelector('h1');
+        const collegeName = h1Element?.textContent?.trim();
+        
+        // Try to extract logo from the page
+        const logoElement = document.querySelector('img[alt*="logo"], .college-logo img');
+        const logoUrl = logoElement?.src;
+        
+        if (collegeName && collegeName !== 'Loading...') {
+          setCollegeData({
+            id: null,
+            name: collegeName,
+            logo_url: logoUrl || null,
+            courses: []
+          });
+        } else {
+          // Fallback: extract name from URL slug
+          const slug = getSlugFromPath();
+          if (slug) {
+            // Convert "060-test-engineering-college-mumbai" to "Test Engineering College Mumbai"
+            const nameFromSlug = slug
+              .replace(/^\d+-/, '')  // Remove leading numbers
+              .split('-')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+            setCollegeData({
+              id: null,
+              name: nameFromSlug,
+              logo_url: null,
+              courses: []
+            });
           }
         }
       } else {
