@@ -27,7 +27,7 @@ const CollegeDuniaHome = () => {
   const fetchData = async () => {
     try {
       const [collegesRes, statsRes] = await Promise.all([
-        api.get('/colleges/featured?limit=12'),
+        api.get('/colleges/featured?limit=12&fields=minimal'),
         api.get('/stats')
       ]);
       setFeaturedColleges(collegesRes.data);
