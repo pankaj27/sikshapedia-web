@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ApplyNowModal from './ApplyNowModal';
 import { useAuth } from '../contexts/AuthContext';
-import api from '../api/axios';
+import { useCollegeContext } from '../contexts/CollegeContext';
 
 /**
  * AutoApplyPopup - Automatically shows Apply Now form after 5 seconds
@@ -12,15 +12,18 @@ import api from '../api/axios';
  * - GUEST users on COLLEGE/SCHOOL pages: Popup shows once per page (not again after closing until page change)
  * - REGISTERED/SUBMITTED users: Popup shows only ONCE per session
  * 
- * - On college/school/university detail pages: shows college-specific form with college name
+ * - On college/school/university detail pages: shows college-specific form with college name and courses
  * - On other pages: shows general form
+ * 
+ * Uses CollegeContext to get college data (name, logo, courses) from CollegeDetailPage
+ * instead of scraping from DOM.
  */
 const AutoApplyPopup = () => {
   const [showModal, setShowModal] = useState(false);
-  const [collegeData, setCollegeData] = useState(null);
-  const [popupClosedOnPage, setPopupClosedOnPage] = useState(false);  // Track if closed on current page
+  const [popupClosedOnPage, setPopupClosedOnPage] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
+  const { currentCollege } = useCollegeContext();
   const timerRef = useRef(null);
   const currentPathRef = useRef(location.pathname);
   
@@ -30,7 +33,7 @@ const AutoApplyPopup = () => {
   // Skip popup on admin pages
   const isAdminPage = location.pathname.startsWith('/admin');
   
-  // Extract the slug from URL if on detail page
+  // Extract the slug from URL if on detail page (fallback for when context isn't available)
   const getSlugFromPath = () => {
     const match = location.pathname.match(/^\/(colleges|schools|universities)\/(.+)$/);
     return match ? match[2] : null;
@@ -81,50 +84,10 @@ const AutoApplyPopup = () => {
     }
 
     // Set timer for 5 seconds
-    timerRef.current = setTimeout(async () => {
+    timerRef.current = setTimeout(() => {
       // For REGISTERED/SUBMITTED users: Mark popup as shown IMMEDIATELY
       if (isRegisteredOrSubmitted()) {
         sessionStorage.setItem('applyPopupShown', 'true');
-      }
-
-      // If on college/school detail page, try to get college info from the page
-      if (isCollegePage) {
-        // Try to extract college name from the page's h1 element
-        const h1Element = document.querySelector('h1');
-        const collegeName = h1Element?.textContent?.trim();
-        
-        // Try to extract logo from the page
-        const logoElement = document.querySelector('img[alt*="logo"], .college-logo img');
-        const logoUrl = logoElement?.src;
-        
-        if (collegeName && collegeName !== 'Loading...') {
-          setCollegeData({
-            id: null,
-            name: collegeName,
-            logo_url: logoUrl || null,
-            courses: []
-          });
-        } else {
-          // Fallback: extract name from URL slug
-          const slug = getSlugFromPath();
-          if (slug) {
-            // Convert "060-test-engineering-college-mumbai" to "Test Engineering College Mumbai"
-            const nameFromSlug = slug
-              .replace(/^\d+-/, '')  // Remove leading numbers
-              .split('-')
-              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(' ');
-            setCollegeData({
-              id: null,
-              name: nameFromSlug,
-              logo_url: null,
-              courses: []
-            });
-          }
-        }
-      } else {
-        // Clear college data for general pages
-        setCollegeData(null);
       }
       
       // Show the modal
@@ -146,6 +109,40 @@ const AutoApplyPopup = () => {
       setPopupClosedOnPage(true);
     }
   };
+
+  // Get college data from context or fallback to slug parsing
+  const getCollegeData = () => {
+    if (isCollegePage) {
+      // Use context data if available (preferred - has courses)
+      if (currentCollege) {
+        return {
+          id: currentCollege.id,
+          name: currentCollege.name,
+          logo_url: currentCollege.logo_url,
+          courses: currentCollege.courses || []
+        };
+      }
+      
+      // Fallback: Extract name from URL slug (no courses available)
+      const slug = getSlugFromPath();
+      if (slug) {
+        const nameFromSlug = slug
+          .replace(/^\d+-/, '')
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+        return {
+          id: null,
+          name: nameFromSlug,
+          logo_url: null,
+          courses: []
+        };
+      }
+    }
+    return null;
+  };
+
+  const collegeData = getCollegeData();
 
   return (
     <ApplyNowModal
