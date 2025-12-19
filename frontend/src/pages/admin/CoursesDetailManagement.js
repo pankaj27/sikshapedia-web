@@ -54,16 +54,17 @@ const CoursesDetailManagement = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Course Details Management</h1>
-        <Button
-          onClick={() => navigate('/admin/courses-detail/new')}
-          className="bg-orange-600 hover:bg-orange-700"
-        >
-          <FiPlus className="mr-2" /> Add Detailed Course
-        </Button>
-      </div>
+    <AdminLayout>
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">Course Details Management</h1>
+          <Button
+            onClick={() => navigate('/admin/courses-detail/new')}
+            className="bg-orange-600 hover:bg-orange-700"
+          >
+            <FiPlus className="mr-2" /> Add Detailed Course
+          </Button>
+        </div>
 
       {/* Search Bar */}
       <div className="mb-6">
