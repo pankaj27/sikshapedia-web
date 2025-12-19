@@ -504,7 +504,7 @@ const UserDashboard = () => {
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                     <FiBookmark className="text-6xl text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">No Favorites Yet</h3>
-                    <p className="text-gray-600 mb-4">Save colleges you're interested in</p>
+                    <p className="text-gray-600 mb-4">Save colleges you&apos;re interested in</p>
                     <Link to="/colleges">
                       <Button className="bg-orange-600 hover:bg-orange-700">Browse Colleges</Button>
                     </Link>
