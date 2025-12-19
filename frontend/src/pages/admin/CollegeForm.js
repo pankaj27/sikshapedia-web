@@ -187,6 +187,8 @@ const CollegeForm = () => {
     is_preferred: false,
     is_featured: false,
     display_priority: 0,
+    state_priority: {},
+    city_priority: {},
     featured_at: null,
     featured_priority_months: 2,
     is_trending: false,
