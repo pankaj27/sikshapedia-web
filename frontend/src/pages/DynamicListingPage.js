@@ -2340,11 +2340,17 @@ const DynamicListingPage = () => {
                             >
                               <FiBookmark size={14} className={compareList.includes(inst.id) ? 'fill-current' : ''} />
                             </button>
+                            <button
+                              onClick={(e) => { e.preventDefault(); setSelectedCollege(inst); setApplyModalOpen(true); }}
+                              className="px-3 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-medium hover:from-orange-600 hover:to-orange-700 transition-all flex items-center gap-1 shadow-sm"
+                            >
+                              <FiSend size={12} /> Apply
+                            </button>
                             <Link 
                               to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-xs font-medium hover:from-blue-700 hover:to-blue-800 transition-all flex items-center gap-1 shadow-sm"
+                              className="px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-xs font-medium hover:from-blue-700 hover:to-blue-800 transition-all flex items-center gap-1 shadow-sm"
                             >
-                              View Details <FiArrowRight size={14} />
+                              View <FiArrowRight size={12} />
                             </Link>
                           </div>
                         </div>
