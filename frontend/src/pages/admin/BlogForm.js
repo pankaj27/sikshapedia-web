@@ -305,37 +305,33 @@ const BlogForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AdminLayout>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-20">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/admin/blogs" className="text-gray-600 hover:text-gray-900">
-                <FiArrowLeft size={24} />
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  {isEdit ? 'Edit Blog Post' : 'Create Blog Post'}
-                </h1>
-                {isEdit && formData.status && (
-                  <StatusBadge status={formData.status} />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => window.open(`/blog/${formData.slug}`, '_blank')} disabled={!formData.slug}>
-                <FiEye className="mr-2" /> Preview
-              </Button>
-              <Button onClick={handleSubmit} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
-                <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Blog'}
-              </Button>
-            </div>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link to="/admin/blogs" className="text-gray-600 hover:text-gray-900">
+            <FiArrowLeft size={24} />
+          </Link>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">
+              {isEdit ? 'Edit Blog Post' : 'Create Blog Post'}
+            </h1>
+            {isEdit && formData.status && (
+              <StatusBadge status={formData.status} />
+            )}
           </div>
         </div>
-      </header>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={() => window.open(`/blog/${formData.slug}`, '_blank')} disabled={!formData.slug}>
+            <FiEye className="mr-2" /> Preview
+          </Button>
+          <Button onClick={handleSubmit} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
+            <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Blog'}
+          </Button>
+        </div>
+      </div>
 
-      <div className="flex">
+      <div className="flex bg-gray-50 -mx-6 -mb-6 p-6">
         {/* Sidebar Tabs */}
         <aside className="w-56 bg-white border-r min-h-[calc(100vh-73px)] p-4">
           <nav className="space-y-1">
