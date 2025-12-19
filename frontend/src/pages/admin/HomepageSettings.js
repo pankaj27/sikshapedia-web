@@ -43,6 +43,13 @@ const HomepageSettings = () => {
     // Quick Links
     quick_links: [],
     
+    // Quick Actions
+    quick_actions: [
+      { id: 'apply', title: 'Apply Now', subtitle: 'Quick admission', icon: 'FiSend', gradient: 'from-orange-500 to-orange-600' },
+      { id: 'question', title: 'Ask Question', subtitle: 'Get expert help', icon: 'FiMessageCircle', gradient: 'from-blue-500 to-blue-600' },
+      { id: 'counselling', title: 'Counselling', subtitle: 'Free guidance', icon: 'FiPhone', gradient: 'from-purple-500 to-purple-600' }
+    ],
+    
     // Top Universities
     top_universities_title: 'Top Universities & Colleges',
     
