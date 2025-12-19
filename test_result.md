@@ -431,3 +431,29 @@ agent_communication:
 - Added Display Priority input in NewsForm.js admin UI
 - UI shows (0=none, lower=first) hint for clarity
 
+
+---
+
+## Test Session: Apply Now Lead Capture System (Dec 19, 2025)
+
+### Feature Implemented:
+**Apply Now Lead Capture System** with:
+- College-specific Apply Now form (auto-populates college name & courses)
+- General Apply Now form (customizable heading from admin)
+- Floating CTA button on all pages
+- Admin Lead Management page with filters, export, status tracking
+- Admin Lead Settings page for form customization and notifications
+
+### Test Cases Needed:
+1. **Create Lead via API**: POST /api/leads
+2. **Get Leads**: GET /api/leads (admin only)
+3. **Update Lead Status**: PUT /api/leads/{id}
+4. **Export Leads CSV**: GET /api/leads/export
+5. **Get/Update Lead Settings**: GET/PUT /api/lead-settings
+6. **Frontend Modal**: Click Apply Now button opens modal
+7. **Form Submission**: Fill form and submit creates lead
+
+### Admin Credentials:
+- Email: admin@admissionbuddy.co
+- Password: admin123
+
