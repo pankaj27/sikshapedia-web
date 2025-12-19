@@ -117,6 +117,19 @@ frontend:
         agent: "testing"
         comment: "✅ College Detail Page Layout Testing Complete - ALL TESTS PASSED: Successfully verified layout fixes at /colleges/060-test-engineering-college-mumbai. ✅ Hero Banner Removal: CONFIRMED - No hero banner section found (correct). Page starts with breadcrumb → header (no hero in between). ✅ Map Section Layout: Fixed 3-column grid working correctly (1 column address card + 2 columns Google Maps iframe). No longer broken 4-column overflow. ✅ Address Card: Contains contact info (phone, email, website), 'How to Reach' section, and 'Get Directions' button. ✅ Nearby Places: 6 items displayed in clean grid (Hospital, Bank, Market, Metro Station, Airport, Restaurants). All layout changes implemented successfully."
 
+  - task: "Admin Form Layout Fixes - AdminLayout Wrapper"
+    implemented: true
+    working: pending
+    file: "frontend/src/pages/admin/*.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: pending
+        agent: "main"
+        comment: "Fixed 10+ admin pages missing AdminLayout wrapper (sidebar/header). Fixed: NewsManagement, BlogsManagement, ReviewsModeration, SponsoredAdsManagement, CoursesDetailManagement, ExamsDetailManagement, LoansListingSettings, ScholarshipsListingSettings, StudyMaterialsListingSettings. All pages now have consistent layout with navigation sidebar and admin header."
+
+
   - task: "News Listing Page - Dynamic Content Display"
     implemented: true
     working: "NA"
