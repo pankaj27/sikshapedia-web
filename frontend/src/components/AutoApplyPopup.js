@@ -33,11 +33,19 @@ const AutoApplyPopup = () => {
     return match ? match[2] : null;
   };
 
-  // Check if user is logged in (check localStorage directly for reliability)
-  const isLoggedIn = () => {
+  // Check if user is logged in OR has already submitted a lead
+  // This determines if they should get popup only once (true) or every page (false)
+  const isRegisteredOrSubmitted = () => {
+    // Check if user is logged in via AuthContext/localStorage
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
-    return !!(token && savedUser);
+    if (token && savedUser) return true;
+    
+    // Check if user has submitted a lead before (set when they submit the form)
+    const hasSubmitted = localStorage.getItem('leadSubmitted');
+    if (hasSubmitted) return true;
+    
+    return false;
   };
 
   useEffect(() => {
