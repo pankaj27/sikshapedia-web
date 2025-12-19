@@ -6459,33 +6459,7 @@ async def get_countries():
 # Loan Routes
 # ============================================
 
-@api_router.get("/loans", response_model=List[LoanProvider])
-async def get_loan_providers(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000),
-    type: Optional[str] = None
-):
-    query = {}
-    
-    if type:
-        query["type"] = type
-    
-    loans = await db.loans.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
-    
-    for loan in loans:
-        if isinstance(loan.get('created_at'), str):
-            loan['created_at'] = datetime.fromisoformat(loan['created_at'])
-    
-    return loans
-
-@api_router.get("/loans/{loan_id}")
-async def get_loan_provider(loan_id: str):
-    loan = await db.loans.find_one({"id": loan_id}, {"_id": 0})
-    if not loan:
-        raise HTTPException(status_code=404, detail="Loan provider not found")
-    
-    # Return raw data without strict model validation to support both old and new formats
-    return loan
+# Removed duplicate loan routes - using routes defined at bottom of file
 
 # ============================================
 # Blog/Article Routes
