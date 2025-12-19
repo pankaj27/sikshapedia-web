@@ -4,6 +4,7 @@ import { FiArrowLeft, FiSave } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 import { generateSlug } from '../../utils/slugify';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const SchoolForm = () => {
   const navigate = useNavigate();
