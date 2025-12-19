@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
+import { CollegeProvider } from './contexts/CollegeContext';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import AutoApplyPopup from './components/AutoApplyPopup';
