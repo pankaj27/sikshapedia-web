@@ -1936,7 +1936,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <p className="text-xs text-gray-700 mb-3 font-medium">
                         ₹{(course.fees / 100000).toFixed(2)} Lakhs
                       </p>
-                      <button className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold py-2.5 rounded transition-colors">
+                      <button 
+                        onClick={() => setShowApplyModal(true)}
+                        className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold py-2.5 rounded transition-colors"
+                      >
                         Apply Now
                       </button>
                     </div>
