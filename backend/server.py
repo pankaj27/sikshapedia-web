@@ -6809,6 +6809,14 @@ class HomepageSettings(BaseModel):
     
     # Latest News Section
     featured_news_ids: List[str] = []
+    
+    # Top Colleges by Stream Section - stores college IDs for each stream
+    stream_colleges: Dict[str, List[str]] = {
+        "Engineering": [],
+        "Medical": [],
+        "Management": [],
+        "Law": []
+    }
     top_schools: List[Dict[str, Any]] = [
         {"name": "Delhi Public School (DPS)", "location": "Multiple Locations", "board": "CBSE", "rating": 4.8, "fees": "2.5L", "type": "Day School", "rank": 1},
         {"name": "Sanskriti School", "location": "New Delhi", "board": "CBSE", "rating": 4.7, "fees": "3.2L", "type": "Day School", "rank": 5},
