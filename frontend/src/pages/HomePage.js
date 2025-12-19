@@ -578,15 +578,25 @@ const CollegeDuniaHome = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                       
                       {/* Top Badges - Modern Pills */}
-                      <div className="absolute top-3 left-3 flex gap-1.5">
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[70%]">
                         {college.nirf_ranking && (
                           <span className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-semibold text-gray-800">
                             #{college.nirf_ranking} NIRF
                           </span>
                         )}
-                        {idx < 2 && (
+                        {college.is_featured && (
                           <span className="px-2 py-1 bg-amber-400 rounded-full text-[10px] font-semibold text-amber-900">
                             Featured
+                          </span>
+                        )}
+                        {college.is_admission_partner && (
+                          <span className="px-2 py-1 bg-green-500 rounded-full text-[10px] font-semibold text-white">
+                            🤝 Partner
+                          </span>
+                        )}
+                        {college.is_no_cost_emi && (
+                          <span className="px-2 py-1 bg-blue-500 rounded-full text-[10px] font-semibold text-white">
+                            💳 No Cost EMI
                           </span>
                         )}
                       </div>
