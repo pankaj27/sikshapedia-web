@@ -1009,9 +1009,40 @@ const HomepageSettings = () => {
                       placeholder="Section title..."
                     />
                   </div>
-                  <Button variant="outline" size="sm" onClick={addTopSchool}>
-                    <FiPlus className="mr-1" /> Add School
-                  </Button>
+                  {/* Search and Add School */}
+                  <div className="relative">
+                    <div className="flex gap-2">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={schoolSearchQuery}
+                          onChange={(e) => {
+                            setSchoolSearchQuery(e.target.value);
+                            searchSchools(e.target.value);
+                          }}
+                          onFocus={() => schoolSearchResults.length > 0 && setShowSchoolDropdown(true)}
+                          className="w-64 border rounded px-3 py-1.5 text-sm"
+                          placeholder="Search school by name..."
+                        />
+                        <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        {/* Dropdown */}
+                        {showSchoolDropdown && schoolSearchResults.length > 0 && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            {schoolSearchResults.map((school, idx) => (
+                              <div
+                                key={idx}
+                                onClick={() => addSchoolFromSearch(school)}
+                                className="px-3 py-2 hover:bg-purple-50 cursor-pointer border-b last:border-b-0"
+                              >
+                                <div className="font-medium text-sm">{school.name}</div>
+                                <div className="text-xs text-gray-500">{school.board || ''} {school.location?.city || ''}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {settings.top_schools?.map((school, index) => (
