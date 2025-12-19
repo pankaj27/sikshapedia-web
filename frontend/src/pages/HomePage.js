@@ -429,7 +429,7 @@ const CollegeDuniaHome = () => {
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-5">
-            <h2 className="text-2xl font-bold">Select Your Study Goal</h2>
+            <h2 className="text-2xl font-bold">{pageSettings?.study_goals_title || 'Select Your Study Goal'}</h2>
             <div className="flex gap-2">
               <button className="swiper-button-prev-goals w-8 h-8 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-50 shadow-sm">
                 <FiChevronDown className="transform rotate-90 text-gray-600" size={16} />
