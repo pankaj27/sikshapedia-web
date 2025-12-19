@@ -13,7 +13,8 @@ const TopExams = () => {
 
   const fetchExams = async () => {
     try {
-      const response = await api.get('/exams?limit=6&status=published');
+      // Use featured endpoint which prioritizes admin-selected exams
+      const response = await api.get('/exams/featured?limit=6');
       setExams(response.data || []);
     } catch (error) {
       console.error('Error fetching exams:', error);
