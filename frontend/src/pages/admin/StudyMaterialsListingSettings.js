@@ -394,6 +394,7 @@ const StudyMaterialsListingSettings = () => {
                 />
               </div>
             ))}
+            </div>
           </div>
         </div>
       </div>
