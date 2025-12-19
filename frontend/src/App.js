@@ -129,9 +129,10 @@ function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <AutoApplyPopup />
+        <CollegeProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <AutoApplyPopup />
           <Routes>
             {/* Admin Routes - Without Layout */}
             <Route path="/admin/login" element={<AdminLogin />} />
