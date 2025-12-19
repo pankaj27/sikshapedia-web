@@ -141,25 +141,25 @@ const ApplyNowModal = ({
     : (settings?.general_form_subheading || 'Fill the form and our team will get back to you within 24 hours');
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
       <div 
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200"
+        className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 relative">
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 relative sticky top-0">
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/20 transition-colors"
+            className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20 transition-colors"
           >
             <FiX className="w-5 h-5" />
           </button>
-          <h2 className="text-xl font-bold pr-8">{displayHeading}</h2>
-          <p className="text-orange-100 text-sm mt-1">{displaySubheading}</p>
+          <h2 className="text-lg font-bold pr-8">{displayHeading}</h2>
+          <p className="text-orange-100 text-xs mt-0.5">{displaySubheading}</p>
         </div>
 
         {/* Form */}
-        <div className="p-6">
+        <div className="p-4">
           {success ? (
             <div className="text-center py-8">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
