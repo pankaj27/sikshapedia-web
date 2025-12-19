@@ -2224,8 +2224,8 @@ const DynamicListingPage = () => {
                     {/* Regular College Card */}
                     <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all group">
                     {/* Top Badge Bar */}
-                    {(inst.is_featured || inst.is_admission_open || inst.nirf_ranking) && (
-                      <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-2 flex items-center gap-3 border-b border-gray-100">
+                    {(inst.is_featured || inst.is_admission_open || inst.nirf_ranking || inst.is_admission_partner || inst.is_no_cost_emi) && (
+                      <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-2 flex items-center gap-2 flex-wrap border-b border-gray-100">
                         {inst.nirf_ranking && (
                           <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
                             #Rank {inst.nirf_ranking} in India
@@ -2234,6 +2234,16 @@ const DynamicListingPage = () => {
                         {inst.is_featured && (
                           <span className="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded flex items-center gap-1">
                             <FiStar size={10} className="fill-current" /> Featured
+                          </span>
+                        )}
+                        {inst.is_admission_partner && (
+                          <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded">
+                            🤝 Admission Partner
+                          </span>
+                        )}
+                        {inst.is_no_cost_emi && (
+                          <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                            💳 No Cost EMI
                           </span>
                         )}
                         {inst.is_admission_open && (
