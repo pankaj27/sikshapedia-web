@@ -70,9 +70,9 @@ const AutoApplyPopup = () => {
 
     // Set timer for 5 seconds
     timerRef.current = setTimeout(async () => {
-      // For REGISTERED users: Mark popup as shown IMMEDIATELY
+      // For REGISTERED/SUBMITTED users: Mark popup as shown IMMEDIATELY
       // This prevents popup from showing on subsequent pages during navigation
-      if (isLoggedIn()) {
+      if (isRegisteredOrSubmitted()) {
         sessionStorage.setItem('applyPopupShown', 'true');
       }
 
