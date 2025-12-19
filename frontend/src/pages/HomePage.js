@@ -96,7 +96,8 @@ const CollegeDuniaHome = () => {
     }
   };
 
-  const studyGoals = [
+  // Use settings from API or fallback to defaults
+  const studyGoals = pageSettings?.study_goals?.length > 0 ? pageSettings.study_goals : [
     { name: 'Engineering', icon: 'FiTool', courses: 'B.Tech, M.Tech', count: '5000+', color: 'text-blue-600' },
     { name: 'Management', icon: 'FiBriefcase', courses: 'MBA, PGDM', count: '3000+', color: 'text-purple-600' },
     { name: 'Medical', icon: 'FiActivity', courses: 'MBBS, BDS', count: '2000+', color: 'text-red-600' },
@@ -107,14 +108,14 @@ const CollegeDuniaHome = () => {
     { name: 'Design', icon: 'FiLayout', courses: 'B.Des, M.Des', count: '800+', color: 'text-orange-600' }
   ];
 
-  const programs = [
+  const programs = pageSettings?.programs?.length > 0 ? pageSettings.programs : [
     { title: 'College Ranking', subtitle: 'Find Top Colleges', icon: 'FiAward', color: 'bg-orange-100', iconColor: 'text-orange-600', link: '/colleges' },
     { title: 'Exams', subtitle: 'JEE, NEET, CAT', icon: 'FiFileText', color: 'bg-blue-100', iconColor: 'text-blue-600', link: '/exams' },
     { title: 'Compare Colleges', subtitle: 'Side by Side', icon: 'FiBarChart2', color: 'bg-green-100', iconColor: 'text-green-600', link: '/compare' },
     { title: 'Course Finder', subtitle: 'Find Best Courses', icon: 'FiCompass', color: 'bg-purple-100', iconColor: 'text-purple-600', link: '/course-finder' }
   ];
 
-  const cities = [
+  const cities = pageSettings?.cities?.length > 0 ? pageSettings.cities : [
     { name: 'Delhi', image: '/assets/cities/New Delhi.svg' },
     { name: 'Mumbai', image: '/assets/cities/Mumbai.svg' },
     { name: 'Bangalore', image: '/assets/cities/Bangalore.svg' },
@@ -125,7 +126,34 @@ const CollegeDuniaHome = () => {
     { name: 'Bhopal', image: '/assets/cities/Bhopal.svg' }
   ];
 
-  const rankingAgencies = ['India Today', 'NIRF', 'The Week', 'Outlook'];
+  const rankingAgencies = pageSettings?.ranking_agencies?.length > 0 ? pageSettings.ranking_agencies : ['India Today', 'NIRF', 'The Week', 'Outlook'];
+  
+  // Hero slides from settings or defaults
+  const heroSlides = pageSettings?.hero_slides?.length > 0 ? pageSettings.hero_slides : [
+    { image: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop', type: 'college', name: 'IIT Bombay - Indian Institute of Technology', rating: 4.8, reviews: 2847, location: 'Mumbai, Maharashtra', slug: 'iit-bombay-002' },
+    { image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop', type: 'school', name: 'Delhi Public School, R.K. Puram', rating: 4.6, reviews: 1523, location: 'New Delhi, Delhi', slug: 'dps-rk-puram-001' },
+    { image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop', type: 'university', name: 'Delhi University', rating: 4.5, reviews: 3256, location: 'New Delhi, Delhi', slug: 'delhi-university-001' },
+    { image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop', type: 'college', name: 'AIIMS Delhi - All India Institute of Medical Sciences', rating: 4.9, reviews: 2134, location: 'New Delhi, Delhi', slug: 'aiims-delhi-001' }
+  ];
+  
+  // Section visibility from settings
+  const showHeroSlider = pageSettings?.show_hero_slider !== false;
+  const showStudyGoals = pageSettings?.show_study_goals !== false;
+  const showPrograms = pageSettings?.show_programs !== false;
+  const showCities = pageSettings?.show_cities !== false;
+  const showFeaturedColleges = pageSettings?.show_featured_colleges !== false;
+  const showTopExams = pageSettings?.show_top_exams !== false;
+  const showLatestNews = pageSettings?.show_latest_news !== false;
+  const showTopCollegesByStream = pageSettings?.show_top_colleges_by_stream !== false;
+  
+  // Hero content
+  const heroTitle = pageSettings?.hero_title || 'Find Your Dream';
+  const heroSubtitle = pageSettings?.hero_subtitle || 'Explore 10,000+ Colleges, Universities & Schools across India';
+  
+  // SEO
+  const metaTitle = pageSettings?.meta_title || 'AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024';
+  const metaDescription = pageSettings?.meta_description || 'Find detailed information about 10,000+ colleges, universities, courses, exams in India.';
+  const metaKeywords = pageSettings?.meta_keywords?.join(', ') || 'colleges in india, top universities, engineering colleges, medical colleges, MBA colleges';
 
   return (
     <div className="min-h-screen bg-white -mt-20 pt-20">
