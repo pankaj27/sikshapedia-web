@@ -11,6 +11,25 @@ const LocationSearch = () => {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Color palette for dynamic items
+  const stateColors = [
+    'bg-orange-100 text-orange-700',
+    'bg-blue-100 text-blue-700',
+    'bg-green-100 text-green-700',
+    'bg-purple-100 text-purple-700',
+    'bg-red-100 text-red-700',
+    'bg-yellow-100 text-yellow-700',
+    'bg-pink-100 text-pink-700',
+    'bg-indigo-100 text-indigo-700'
+  ];
+
+  const countryFlags = {
+    'USA': '🇺🇸', 'UK': '🇬🇧', 'Canada': '🇨🇦', 'Australia': '🇦🇺',
+    'Germany': '🇩🇪', 'France': '🇫🇷', 'Singapore': '🇸🇬', 'Japan': '🇯🇵',
+    'China': '🇨🇳', 'Netherlands': '🇳🇱', 'Ireland': '🇮🇪', 'New Zealand': '🇳🇿',
+    'default': '🌍'
+  };
+
   useEffect(() => {
     fetchLocations();
   }, []);
@@ -18,19 +37,67 @@ const LocationSearch = () => {
   const fetchLocations = async () => {
     try {
       const [statesRes, citiesRes, countriesRes] = await Promise.all([
-        api.get('/locations/states'),
-        api.get('/locations/cities'),
-        api.get('/locations/countries')
+        api.get('/locations/states').catch(() => ({ data: [] })),
+        api.get('/locations/cities').catch(() => ({ data: [] })),
+        api.get('/locations/countries').catch(() => ({ data: [] }))
       ]);
-      setStates(Array.isArray(statesRes.data) ? statesRes.data.slice(0, 15) : []);
-      setCities(Array.isArray(citiesRes.data) ? citiesRes.data.slice(0, 20) : []);
-      setCountries(Array.isArray(countriesRes.data) ? countriesRes.data.slice(0, 12) : []);
+      
+      // Process states - use API data or fallback
+      const statesData = Array.isArray(statesRes.data) && statesRes.data.length > 0 
+        ? statesRes.data.slice(0, 12) 
+        : defaultStates;
+      setStates(statesData);
+      
+      // Process cities - use API data or fallback
+      const citiesData = Array.isArray(citiesRes.data) && citiesRes.data.length > 0 
+        ? citiesRes.data.slice(0, 16) 
+        : defaultCities;
+      setCities(citiesData);
+      
+      // Process countries - use API data or fallback
+      const countriesData = Array.isArray(countriesRes.data) && countriesRes.data.length > 0 
+        ? countriesRes.data.slice(0, 12) 
+        : defaultCountries;
+      setCountries(countriesData);
     } catch (error) {
       console.error('Error fetching locations:', error);
+      setStates(defaultStates);
+      setCities(defaultCities);
+      setCountries(defaultCountries);
     } finally {
       setLoading(false);
     }
   };
+
+  // Default data for fallback
+  const defaultStates = [
+    { name: 'Maharashtra', count: 2000 },
+    { name: 'Tamil Nadu', count: 1800 },
+    { name: 'Karnataka', count: 1500 },
+    { name: 'Uttar Pradesh', count: 1400 },
+    { name: 'Delhi', count: 1200 },
+    { name: 'West Bengal', count: 1000 }
+  ];
+
+  const defaultCities = [
+    { name: 'Mumbai', state: 'Maharashtra' },
+    { name: 'Delhi', state: 'Delhi' },
+    { name: 'Bangalore', state: 'Karnataka' },
+    { name: 'Hyderabad', state: 'Telangana' },
+    { name: 'Chennai', state: 'Tamil Nadu' },
+    { name: 'Pune', state: 'Maharashtra' },
+    { name: 'Kolkata', state: 'West Bengal' },
+    { name: 'Ahmedabad', state: 'Gujarat' }
+  ];
+
+  const defaultCountries = [
+    { name: 'USA', count: 500 },
+    { name: 'UK', count: 400 },
+    { name: 'Canada', count: 350 },
+    { name: 'Australia', count: 300 },
+    { name: 'Germany', count: 250 },
+    { name: 'France', count: 200 }
+  ];
 
   const handleLocationClick = (type, value) => {
     if (type === 'state') {
@@ -42,34 +109,31 @@ const LocationSearch = () => {
     }
   };
 
-  const topStates = [
-    { name: 'Maharashtra', count: '2000+', color: 'bg-orange-100 text-orange-700' },
-    { name: 'Tamil Nadu', count: '1800+', color: 'bg-blue-100 text-blue-700' },
-    { name: 'Karnataka', count: '1500+', color: 'bg-green-100 text-green-700' },
-    { name: 'Uttar Pradesh', count: '1400+', color: 'bg-purple-100 text-purple-700' },
-    { name: 'Delhi', count: '1200+', color: 'bg-red-100 text-red-700' },
-    { name: 'West Bengal', count: '1000+', color: 'bg-yellow-100 text-yellow-700' }
-  ];
+  const formatCount = (count) => {
+    if (!count) return '';
+    if (count >= 1000) return `${(count / 1000).toFixed(0)}K+`;
+    return `${count}+`;
+  };
 
-  const topCities = [
-    { name: 'Mumbai', state: 'Maharashtra', icon: 'FiHome' },
-    { name: 'Delhi', state: 'Delhi', icon: 'FiMapPin' },
-    { name: 'Bangalore', state: 'Karnataka', icon: 'FiCpu' },
-    { name: 'Hyderabad', state: 'Telangana', icon: 'FiTrendingUp' },
-    { name: 'Chennai', state: 'Tamil Nadu', icon: 'FiStar' },
-    { name: 'Pune', state: 'Maharashtra', icon: 'FiBookOpen' },
-    { name: 'Kolkata', state: 'West Bengal', icon: 'FiMapPin' },
-    { name: 'Ahmedabad', state: 'Gujarat', icon: 'FiTrendingUp' }
-  ];
+  const iconComponents = { FiHome, FiMapPin, FiCpu, FiTrendingUp, FiStar, FiBookOpen };
+  const iconKeys = Object.keys(iconComponents);
 
-  const topCountries = [
-    { name: 'USA', count: '500+', flag: '🇺🇸' },
-    { name: 'UK', count: '400+', flag: '🇬🇧' },
-    { name: 'Canada', count: '350+', flag: '🇨🇦' },
-    { name: 'Australia', count: '300+', flag: '🇦🇺' },
-    { name: 'Germany', count: '250+', flag: '🇩🇪' },
-    { name: 'France', count: '200+', flag: '🇫🇷' }
-  ];
+  if (loading) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto mb-8"></div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} className="bg-gray-100 rounded-lg h-24"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-gray-50">
@@ -122,27 +186,27 @@ const LocationSearch = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* States Content */}
         {activeTab === 'state' && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {topStates.map((state, idx) => (
+            {states.map((state, idx) => (
               <button
                 key={idx}
                 onClick={() => handleLocationClick('state', state.name)}
-                className={`${state.color} p-4 rounded-lg hover:shadow-lg transition-all text-center`}
+                className={`${stateColors[idx % stateColors.length]} p-4 rounded-lg hover:shadow-lg transition-all text-center`}
               >
                 <div className="font-bold text-lg mb-1">{state.name}</div>
-                <div className="text-sm">{state.count} Colleges</div>
+                <div className="text-sm">{formatCount(state.count || state.college_count)} Colleges</div>
               </button>
             ))}
           </div>
         )}
 
+        {/* Cities Content */}
         {activeTab === 'city' && (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {topCities.map((city, idx) => {
-              const iconComponents = { FiHome, FiMapPin, FiCpu, FiTrendingUp, FiStar, FiBookOpen };
-              const IconComponent = iconComponents[city.icon] || FiMapPin;
+            {cities.map((city, idx) => {
+              const IconComponent = iconComponents[iconKeys[idx % iconKeys.length]];
               return (
                 <button
                   key={idx}
@@ -162,19 +226,20 @@ const LocationSearch = () => {
           </div>
         )}
 
+        {/* Countries Content */}
         {activeTab === 'country' && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {topCountries.map((country, idx) => (
+            {countries.map((country, idx) => (
               <button
                 key={idx}
                 onClick={() => handleLocationClick('country', country.name)}
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all text-center group"
               >
-                <div className="text-4xl mb-2">{country.flag}</div>
+                <div className="text-4xl mb-2">{countryFlags[country.name] || countryFlags['default']}</div>
                 <div className="font-bold text-lg text-gray-900 group-hover:text-orange-600">
                   {country.name}
                 </div>
-                <div className="text-sm text-gray-600">{country.count} Universities</div>
+                <div className="text-sm text-gray-600">{formatCount(country.count || country.university_count)} Universities</div>
               </button>
             ))}
           </div>
