@@ -19,7 +19,7 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate('/signup');
       return;
     }
     fetchDashboardData();
