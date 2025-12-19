@@ -108,26 +108,37 @@ const NewsForm = () => {
   }, [id]);
 
   // Auto-generate slug from title
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
+  
   useEffect(() => {
-    if (!isEdit && formData.title && !formData.slug) {
+    if (!isEdit && formData.title && !slugManuallyEdited) {
       setFormData(prev => ({ ...prev, slug: generateSlug(formData.title) }));
     }
-  }, [formData.title, isEdit]);
+  }, [formData.title, isEdit, slugManuallyEdited]);
 
   // Auto-generate SEO fields
   useEffect(() => {
-    if (formData.auto_generate_seo) {
+    if (formData.auto_generate_seo && formData.title) {
       const autoSeo = {};
-      if (!formData.meta_title && formData.title) {
-        autoSeo.meta_title = `${formData.title} | Education News`;
+      // Always update meta_title when title changes (if auto-generate is on)
+      const newMetaTitle = `${formData.title} | Education News | Admissionbuddy`;
+      if (formData.meta_title !== newMetaTitle) {
+        autoSeo.meta_title = newMetaTitle;
       }
-      if (!formData.meta_description && formData.summary) {
-        autoSeo.meta_description = formData.summary.slice(0, 160);
+      // Update meta_description from summary
+      if (formData.summary) {
+        const newMetaDesc = formData.summary.slice(0, 160);
+        if (formData.meta_description !== newMetaDesc) {
+          autoSeo.meta_description = newMetaDesc;
+        }
       }
-      if (!formData.featured_image_alt && formData.title) {
-        autoSeo.featured_image_alt = formData.title;
+      // Update alt tag
+      const newAlt = `${formData.title} | News | Admissionbuddy`;
+      if (formData.featured_image_alt !== newAlt) {
+        autoSeo.featured_image_alt = newAlt;
       }
-      if (!formData.og_image && formData.featured_image) {
+      // Update OG image
+      if (formData.featured_image && !formData.og_image) {
         autoSeo.og_image = formData.featured_image;
       }
       if (Object.keys(autoSeo).length > 0) {
