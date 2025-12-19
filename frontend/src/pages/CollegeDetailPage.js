@@ -153,6 +153,7 @@ const CollegeDetailPage = ({ overrideId }) => {
   const [likes, setLikes] = useState(245);
   const [dislikes, setDislikes] = useState(12);
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   useEffect(() => {
     if (id) {
