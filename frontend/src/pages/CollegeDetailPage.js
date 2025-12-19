@@ -6,6 +6,7 @@ import { MdOutlineSportsBasketball, MdOutlinePool, MdOutlineFitnessCenter, MdOut
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import AdBanner from '../components/AdBanner';
+import ApplyNowModal from '../components/ApplyNowModal';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 
