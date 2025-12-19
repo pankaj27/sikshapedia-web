@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import ApplyNowModal from './ApplyNowModal';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 
 /**
  * AutoApplyPopup - Automatically shows Apply Now form after 5 seconds
- * - Shows only once per session (using sessionStorage)
+ * 
+ * Behavior:
+ * - GUEST users: Popup shows on EVERY page after 5 seconds
+ * - REGISTERED users: Popup shows only ONCE per session
+ * 
  * - On college/school/university detail pages: shows college-specific form
  * - On other pages: shows general form
  */
@@ -13,9 +18,13 @@ const AutoApplyPopup = () => {
   const [showModal, setShowModal] = useState(false);
   const [collegeData, setCollegeData] = useState(null);
   const location = useLocation();
+  const { user } = useAuth();  // Check if user is logged in
   
   // Check if we're on a college/school/university detail page
   const isCollegePage = location.pathname.match(/^\/(colleges|schools|universities)\/[^/]+$/);
+  
+  // Skip popup on admin pages
+  const isAdminPage = location.pathname.startsWith('/admin');
   
   // Extract the slug from URL if on detail page
   const getSlugFromPath = () => {
@@ -24,11 +33,17 @@ const AutoApplyPopup = () => {
   };
 
   useEffect(() => {
-    // Check if popup was already shown in this session
-    const popupShown = sessionStorage.getItem('applyPopupShown');
-    
-    if (popupShown) {
-      return; // Don't show popup again
+    // Don't show popup on admin pages
+    if (isAdminPage) {
+      return;
+    }
+
+    // For REGISTERED users: Check if popup was already shown in this session
+    if (user) {
+      const popupShown = sessionStorage.getItem('applyPopupShown');
+      if (popupShown) {
+        return; // Don't show popup again for logged-in users
+      }
     }
 
     // Set timer for 5 seconds
@@ -56,13 +71,15 @@ const AutoApplyPopup = () => {
       // Show the modal
       setShowModal(true);
       
-      // Mark popup as shown for this session
-      sessionStorage.setItem('applyPopupShown', 'true');
+      // For REGISTERED users: Mark popup as shown for this session
+      if (user) {
+        sessionStorage.setItem('applyPopupShown', 'true');
+      }
     }, 5000); // 5 seconds
 
     // Cleanup timer on unmount or location change
     return () => clearTimeout(timer);
-  }, [location.pathname, isCollegePage]);
+  }, [location.pathname, isCollegePage, isAdminPage, user]);
 
   const handleClose = () => {
     setShowModal(false);
