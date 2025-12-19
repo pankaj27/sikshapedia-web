@@ -127,16 +127,17 @@ const LoansListingSettings = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Loans Page Settings</h1>
-          <p className="text-gray-500">Configure the /loans listing page</p>
+    <AdminLayout>
+      <div className="p-6 max-w-4xl">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">Loans Page Settings</h1>
+            <p className="text-gray-500">Configure the /loans listing page</p>
+          </div>
+          <Button onClick={handleSave} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
+            <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Settings'}
+          </Button>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="bg-blue-500 hover:bg-blue-600">
-          <FiSave className="mr-2" /> {saving ? 'Saving...' : 'Save Settings'}
-        </Button>
-      </div>
 
       <div className="space-y-6">
         {/* Hero Section */}
