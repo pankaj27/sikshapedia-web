@@ -162,6 +162,7 @@ const BlogsManagement = () => {
             </Link>
           </div>
         )}
+        </div>
       </div>
     </AdminLayout>
   );
