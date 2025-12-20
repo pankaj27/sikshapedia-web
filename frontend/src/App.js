@@ -44,6 +44,7 @@ import CompareCollegesPage from './pages/CompareCollegesPage';
 import UserSignup from './pages/UserSignup';
 import AuthCallback from './pages/AuthCallback';
 import UserDashboard from './pages/UserDashboard';
+import EditProfile from './pages/EditProfile';
 import InstituteLogin from './pages/InstituteLogin';
 import InstituteDashboardNew from './pages/InstituteDashboard';
 import BlogPage from './pages/BlogPage';
