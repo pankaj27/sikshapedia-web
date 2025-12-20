@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 
 /**
  * CollegeContext - Shares college data between CollegeDetailPage and AutoApplyPopup
@@ -13,8 +13,8 @@ const CollegeContext = createContext(null);
 export const CollegeProvider = ({ children }) => {
   const [currentCollege, setCurrentCollege] = useState(null);
 
-  // Set college data when CollegeDetailPage loads
-  const setCollegeData = (collegeData) => {
+  // Set college data when CollegeDetailPage loads - memoized
+  const setCollegeData = useCallback((collegeData) => {
     if (collegeData) {
       setCurrentCollege({
         id: collegeData.id,
@@ -27,15 +27,22 @@ export const CollegeProvider = ({ children }) => {
     } else {
       setCurrentCollege(null);
     }
-  };
+  }, []);
 
-  // Clear college data when leaving the page
-  const clearCollegeData = () => {
+  // Clear college data when leaving the page - memoized
+  const clearCollegeData = useCallback(() => {
     setCurrentCollege(null);
-  };
+  }, []);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const value = useMemo(() => ({
+    currentCollege,
+    setCollegeData,
+    clearCollegeData
+  }), [currentCollege, setCollegeData, clearCollegeData]);
 
   return (
-    <CollegeContext.Provider value={{ currentCollege, setCollegeData, clearCollegeData }}>
+    <CollegeContext.Provider value={value}>
       {children}
     </CollegeContext.Provider>
   );
