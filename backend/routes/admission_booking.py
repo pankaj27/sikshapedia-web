@@ -99,11 +99,16 @@ INDIAN_CITIES = {
 
 # ============ MODELS ============
 
-class AdmissionSettings(BaseModel):
-    id: str = "admission_settings"
+class EntityFeeSettings(BaseModel):
     form_fee: float = 1000.0
     platform_fee: float = 250.0
     gst_percentage: float = 18.0
+
+class AdmissionSettings(BaseModel):
+    id: str = "admission_settings"
+    college: EntityFeeSettings = EntityFeeSettings(form_fee=1000.0, platform_fee=250.0, gst_percentage=18.0)
+    school: EntityFeeSettings = EntityFeeSettings(form_fee=500.0, platform_fee=150.0, gst_percentage=18.0)
+    university: EntityFeeSettings = EntityFeeSettings(form_fee=1500.0, platform_fee=350.0, gst_percentage=18.0)
     updated_at: Optional[str] = None
     updated_by: Optional[str] = None
 
