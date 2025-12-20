@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo, useCallback } from 'react';
 import api from '../api/axios';
 
 const AuthContext = createContext(null);
@@ -20,20 +20,25 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     
     if (token && savedUser) {
-      setUserState(JSON.parse(savedUser));
+      try {
+        setUserState(JSON.parse(savedUser));
+      } catch (e) {
+        // Invalid JSON in localStorage
+        setUserState(null);
+      }
     }
     setLoading(false);
   }, []);
 
-  // Wrapper to update both state and localStorage
-  const setUser = (userData) => {
+  // Wrapper to update both state and localStorage - memoized
+  const setUser = useCallback((userData) => {
     if (userData) {
       localStorage.setItem('user', JSON.stringify(userData));
     }
     setUserState(userData);
-  };
+  }, []);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
       const { access_token, user } = response.data;
@@ -46,9 +51,9 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return { success: false, error: error.response?.data?.detail || 'Login failed' };
     }
-  };
+  }, [setUser]);
 
-  const register = async (name, email, password) => {
+  const register = useCallback(async (name, email, password) => {
     try {
       const response = await api.post('/auth/register', { name, email, password });
       const { access_token, user } = response.data;
@@ -61,15 +66,16 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return { success: false, error: error.response?.data?.detail || 'Registration failed' };
     }
-  };
+  }, [setUser]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
-  };
+  }, [setUser]);
 
-  const value = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const value = useMemo(() => ({
     user,
     setUser,
     login,
@@ -77,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     loading,
     isAuthenticated: !!user,
-  };
+  }), [user, setUser, login, register, logout, loading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
