@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../components/CustomLink';
 import { FiSearch, FiFilter, FiDollarSign, FiPercent, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';

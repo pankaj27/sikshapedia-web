@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from '../components/CustomLink';
 import { FiSearch, FiMapPin, FiStar } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
