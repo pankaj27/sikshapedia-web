@@ -117,7 +117,7 @@ const TopCollegesByStream = () => {
                   ))}
                 </ul>
                 <Link
-                  to={`/colleges?stream=${stream.query}`}
+                  to={`/india-colleges/${stream.query.toLowerCase()}`}
                   className="mt-4 flex items-center gap-2 text-orange-600 hover:text-orange-700 font-semibold text-sm"
                 >
                   View All <FiArrowRight />
