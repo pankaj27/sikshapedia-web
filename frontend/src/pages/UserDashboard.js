@@ -755,7 +755,7 @@ const UserDashboard = () => {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-bold">My Admission Applications</h2>
-                  <Link to="/admission-partners/colleges">
+                  <Link to="/admission/colleges">
                     <Button className="bg-green-600 hover:bg-green-700 flex items-center gap-2">
                       <FiPlus /> Book New Admission
                     </Button>
