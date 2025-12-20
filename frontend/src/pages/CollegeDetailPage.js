@@ -1548,7 +1548,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                       className="w-full border border-gray-300 rounded-lg p-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                       rows="3"
                     ></textarea>
-                    <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                    <Button 
+                      onClick={handleAskQuestion}
+                      className="bg-orange-600 hover:bg-orange-700 text-white"
+                    >
                       Submit Question
                     </Button>
                   </div>
