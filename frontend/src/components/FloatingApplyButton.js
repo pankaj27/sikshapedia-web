@@ -53,20 +53,6 @@ const FloatingApplyButton = () => {
         formHeading={settings?.general_form_heading}
         source="floating_cta"
       />
-
-      <style jsx>{`
-        @keyframes bounce-slow {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-5px);
-          }
-        }
-        .animate-bounce-slow {
-          animation: bounce-slow 2s ease-in-out infinite;
-        }
-      `}</style>
     </>
   );
 };
