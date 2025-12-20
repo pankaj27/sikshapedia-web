@@ -705,16 +705,32 @@ const DynamicListingPage = () => {
           queryParams.append('institution_type', institutionType);
         }
         
-        // Handle combined filters (state + city from URL)
-        if (pageInfo.state) {
+        // Handle new URL structure filters
+        if (pageInfo.filters) {
+          if (pageInfo.filters.state) {
+            queryParams.append('state', pageInfo.filters.state);
+          }
+          if (pageInfo.filters.city) {
+            queryParams.append('city', pageInfo.filters.city);
+          }
+          if (pageInfo.filters.stream) {
+            queryParams.append('stream', pageInfo.filters.stream);
+          }
+          if (pageInfo.filters.course) {
+            queryParams.append('course', pageInfo.filters.course);
+          }
+        }
+        
+        // Fallback to direct pageInfo fields
+        if (pageInfo.state && !pageInfo.filters?.state) {
           queryParams.append('state', toDisplayName(pageInfo.state));
         }
-        if (pageInfo.city) {
+        if (pageInfo.city && !pageInfo.filters?.city) {
           queryParams.append('city', toDisplayName(pageInfo.city));
         }
         
-        // Handle single location filter
-        if (pageInfo.location && !pageInfo.state && !pageInfo.city) {
+        // Handle single location filter (legacy)
+        if (pageInfo.location && !pageInfo.state && !pageInfo.city && !pageInfo.filters?.state && !pageInfo.filters?.city) {
           const locationDisplay = toDisplayName(pageInfo.location);
           if (pageInfo.locationType === 'state') {
             queryParams.append('state', locationDisplay);
@@ -723,8 +739,12 @@ const DynamicListingPage = () => {
           }
         }
         
-        if (pageInfo.stream) {
+        if (pageInfo.stream && !pageInfo.filters?.stream) {
           queryParams.append('stream', toDisplayName(pageInfo.stream));
+        }
+        
+        if (pageInfo.course && !pageInfo.filters?.course) {
+          queryParams.append('course', toDisplayName(pageInfo.course));
         }
         
         if (pageInfo.subStream) {
@@ -744,10 +764,21 @@ const DynamicListingPage = () => {
       
       let allData = [];
       
+      // Determine which API endpoint to use based on institution type
+      const getApiEndpoint = () => {
+        if (pageInfo.isUniversity) {
+          return '/universities';
+        } else if (pageInfo.isSchools) {
+          return '/schools';
+        }
+        return '/colleges';
+      };
+      
       if (pageInfo.institutionTypes && pageInfo.institutionTypes.length > 0) {
         const fetchPromises = pageInfo.institutionTypes.map(async (type) => {
           const queryParams = buildQueryParams(type);
-          const response = await api.get(`/colleges?${queryParams.toString()}`);
+          const endpoint = getApiEndpoint();
+          const response = await api.get(`${endpoint}?${queryParams.toString()}`);
           return response.data || [];
         });
         
@@ -755,7 +786,8 @@ const DynamicListingPage = () => {
         allData = results.flat();
       } else {
         const queryParams = buildQueryParams();
-        const response = await api.get(`/colleges?${queryParams.toString()}`);
+        const endpoint = getApiEndpoint();
+        const response = await api.get(`${endpoint}?${queryParams.toString()}`);
         allData = response.data || [];
       }
       
