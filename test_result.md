@@ -346,6 +346,47 @@
 - All Link components should use CustomLink from '../components/CustomLink'
 - Admission partners routes changed to /admission-partners/* to avoid conflict with existing /admission/* routes
 
+## NEW FEATURES TESTING (Dec 20, 2025):
+
+### Feature 1: Footer Lead Generation Forms
+**Test URL:** http://localhost:3000 (scroll to footer)
+
+**Test Cases:**
+1. **Register My Institute Form**
+   - Location: Footer Quick Links section
+   - Modal: Blue header with "Register My Institute" title
+   - Form fields: Institute Name, Contact Person, Designation, Email, Phone, City, State dropdown, Institute Type dropdown, Message
+   - Submit button: "Submit Registration"
+   - Success message verification
+
+2. **Advertise With Us Form**
+   - Location: Footer Quick Links section  
+   - Modal: Orange header with "Advertise With Us" title
+   - Form fields: Company/Brand Name, Contact Person, Designation, Email, Phone, Advertising Interest dropdown, Budget Range dropdown, Message
+   - Submit button: "Submit Inquiry"
+   - Success message verification
+
+### Feature 2: Guest User Restrictions
+**Test URL:** http://localhost:3000/colleges/001-updated-college-name-via-api-test-mumbai
+
+**Test Cases:**
+1. **Like Button Guest Restriction**
+   - Location: College header area (👍 245)
+   - Expected: "Login Required" modal with lock icon, title, message, "Create Free Account" and "Already have an account? Login" buttons
+   - Bonus message about earning rewards
+
+2. **Dislike Button Guest Restriction**
+   - Location: College header area (👎 12)
+   - Expected: Same login prompt modal
+
+3. **Write a Review Guest Restriction**
+   - Location: Reviews section "Write a Review" button
+   - Expected: Login prompt modal
+
+4. **GuestGate Content Blur**
+   - Sections: Fee Details, Placement Data, Admission Dates
+   - Expected: Blurred content with registration prompt overlay
+
 ## Frontend Testing Results (Dec 20, 2025):
 
 ### ✅ WORKING PAGES:
