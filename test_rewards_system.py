@@ -99,22 +99,64 @@ class RewardsAPITester:
         else:
             self.log_test("Admin Login", False, f"Status: {status}", response)
         
-        # User signup/login
-        success, response, status = self.make_request("POST", "/auth/register", TEST_USER_CREDENTIALS)
-        if success and "access_token" in response:
-            self.user_token = response["access_token"]
-            self.log_test("User Registration", True, f"Test user created successfully")
-        else:
-            # Try login if user already exists
-            success, response, status = self.make_request("POST", "/auth/login", {
-                "email": TEST_USER_CREDENTIALS["email"],
-                "password": TEST_USER_CREDENTIALS["password"]
-            })
-            if success and "access_token" in response:
-                self.user_token = response["access_token"]
-                self.log_test("User Login", True, "Existing test user logged in")
+        # User authentication via OTP flow
+        # Step 1: Send OTP
+        otp_request = {"email": TEST_USER_CREDENTIALS["email"]}
+        success, response, status = self.make_request("POST", "/auth/user/send-otp", otp_request)
+        if success:
+            self.log_test("Send OTP", True, f"OTP sent to {TEST_USER_CREDENTIALS['email']}")
+            
+            # For testing, we'll use a mock OTP since we don't have email access
+            # In a real scenario, you'd get the OTP from email
+            # Let's try with a common test OTP or check if there's a test mode
+            test_otp = "123456"  # Common test OTP
+            
+            # Step 2: Verify OTP
+            verify_request = {"email": TEST_USER_CREDENTIALS["email"], "otp": test_otp}
+            success, response, status = self.make_request("POST", "/auth/user/verify-otp", verify_request)
+            
+            if success:
+                if response.get("status") == "pending_signup":
+                    # User doesn't exist, complete signup
+                    signup_request = {
+                        "name": TEST_USER_CREDENTIALS["name"],
+                        "email": TEST_USER_CREDENTIALS["email"],
+                        "phone": "9876543210",
+                        "city": "Mumbai",
+                        "course": "Engineering"
+                    }
+                    success, response, status = self.make_request("POST", "/auth/user/complete-signup", signup_request)
+                    if success and "session_token" in response:
+                        self.user_token = response["session_token"]
+                        self.log_test("User Signup Complete", True, "Test user created and authenticated")
+                    else:
+                        self.log_test("User Signup Complete", False, f"Status: {status}", response)
+                elif response.get("status") == "authenticated":
+                    # User exists and is authenticated
+                    self.user_token = response.get("session_token")
+                    self.log_test("User OTP Authentication", True, "Existing user authenticated")
+                else:
+                    self.log_test("User OTP Verification", False, f"Unexpected response: {response}")
             else:
-                self.log_test("User Authentication", False, f"Status: {status}", response)
+                # OTP verification failed, let's try to create user directly if possible
+                self.log_test("User OTP Verification", False, f"Status: {status}, trying alternative approach")
+                
+                # Alternative: Try to create user directly via complete-signup (might work if OTP was sent)
+                signup_request = {
+                    "name": TEST_USER_CREDENTIALS["name"],
+                    "email": TEST_USER_CREDENTIALS["email"],
+                    "phone": "9876543210",
+                    "city": "Mumbai",
+                    "course": "Engineering"
+                }
+                success, response, status = self.make_request("POST", "/auth/user/complete-signup", signup_request)
+                if success and "session_token" in response:
+                    self.user_token = response["session_token"]
+                    self.log_test("User Direct Signup", True, "Test user created via direct signup")
+                else:
+                    self.log_test("User Authentication Failed", False, f"Could not authenticate user: {status}")
+        else:
+            self.log_test("Send OTP", False, f"Status: {status}", response)
 
     def test_user_rewards_apis(self):
         """Test User Rewards APIs"""
