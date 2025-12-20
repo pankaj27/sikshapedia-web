@@ -191,7 +191,37 @@ async def delete_advertisement(ad_id: str):
 
 
 # ============================================
-# Ad Tracking Endpoints
+# Simple Tracking Endpoints (Legacy/Backward Compatible)
+# ============================================
+
+@router.post("/advertisements/{ad_id}/impression")
+async def track_impression(ad_id: str):
+    """Track an impression for an advertisement (Public - Simple)"""
+    result = await db.advertisements.update_one(
+        {"id": ad_id},
+        {"$inc": {"impressions": 1, "stats.impressions": 1}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    return {"message": "Impression tracked"}
+
+
+@router.post("/advertisements/{ad_id}/click")
+async def track_click(ad_id: str):
+    """Track a click for an advertisement (Public - Simple)"""
+    result = await db.advertisements.update_one(
+        {"id": ad_id},
+        {"$inc": {"clicks": 1, "stats.clicks": 1}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    
+    return {"message": "Click tracked"}
+
+
+# ============================================
+# Ad Tracking Endpoints (Advanced)
 # ============================================
 
 @router.post("/advertisements/{ad_id}/track")
