@@ -75,7 +75,9 @@ const Footer = () => {
     { name: 'Contact Us', link: '/contact' },
     { name: 'Privacy Policy', link: '/privacy' },
     { name: 'Terms & Conditions', link: '/terms' },
-    { name: 'Institute Login', link: '/institute/login' }
+    { name: 'Institute Login', link: '/institute/login' },
+    { name: 'Register My Institute', link: '/register-institute' },
+    { name: 'Advertise With Us', link: '/advertise' }
   ];
 
   return (
