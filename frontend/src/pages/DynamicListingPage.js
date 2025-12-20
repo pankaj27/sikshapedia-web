@@ -1051,8 +1051,8 @@ const DynamicListingPage = () => {
   const toggleFilter = (type) => {
     // If type is already selected (from URL), remove it by going back to base URL
     if (activeFilters.collegeType === type) {
-      const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
-      navigate(`/india-${suffix}`);
+      const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
+      navigate(`/${baseSuffix}`);
       return;
     }
     // Otherwise, navigate to the type URL
