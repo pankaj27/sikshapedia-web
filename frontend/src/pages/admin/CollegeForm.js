@@ -1756,36 +1756,27 @@ const CollegeForm = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">State *</label>
-              <select
+              <SearchableSelect
+                options={indianStates}
                 value={formData.location.state}
-                onChange={(e) => handleNestedChange('location', 'state', e.target.value)}
+                onChange={(value) => handleNestedChange('location', 'state', value)}
+                placeholder="Select State"
+                label="state"
                 required
-                className="w-full border rounded px-3 py-2"
-              >
-                <option value="">Select State</option>
-                {indianStates.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">City *</label>
-              <select
+              <SearchableSelect
+                options={availableCities}
                 value={formData.location.city}
-                onChange={(e) => handleNestedChange('location', 'city', e.target.value)}
-                required
+                onChange={(value) => handleNestedChange('location', 'city', value)}
+                placeholder="Select City"
+                label="city"
                 disabled={!formData.location.state}
-                className="w-full border rounded px-3 py-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-              >
-                <option value="">Select City</option>
-                {availableCities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
+                required
+                allowCustom
+              />
             </div>
             <div className="col-span-2">
               <label className="block text-sm font-medium mb-1">Full Address</label>
