@@ -424,42 +424,45 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
     <div className="fixed left-0 right-0 bottom-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style={{ top: '64px' }} onClick={onClose}>
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         {/* Header with Institution Info */}
-        <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sticky top-0 z-10">
+        <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-5 sticky top-0 z-10">
           <button onClick={onClose} className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20">
             <FiX size={20} />
           </button>
           
+          {/* Main Heading */}
+          <h1 className="text-xl font-bold text-center mb-4">📚 Book Your Seat Now</h1>
+          
           {/* Institution Logo and Name */}
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-4 bg-white/10 rounded-xl p-3">
             {(institutionDetails?.logo || institutionDetails?.logo_url || institution?.logo) ? (
               <img 
                 src={institutionDetails?.logo || institutionDetails?.logo_url || institution?.logo} 
                 alt={institution?.name}
-                className="w-14 h-14 rounded-lg bg-white object-contain p-1"
+                className="w-16 h-16 rounded-xl bg-white object-contain p-1.5 shadow-lg"
               />
             ) : (
-              <div className="w-14 h-14 rounded-lg bg-white/20 flex items-center justify-center text-2xl">
-                {institutionType === 'school' ? '🏫' : institutionType === 'university' ? '🏛️' : '🎓'}
+              <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center text-3xl shadow-lg">
+                {institutionType === 'school' ? '🏫' : '🎓'}
               </div>
             )}
             <div className="flex-1">
               <h2 className="text-lg font-bold leading-tight">{institution?.name}</h2>
-              <p className="text-sm text-white/80">
-                {institution?.city && institution?.state ? `${institution.city}, ${institution.state}` : 'Book Your Seat'}
+              <p className="text-sm text-white/90">
+                {institution?.city && institution?.state ? `📍 ${institution.city}, ${institution.state}` : ''}
               </p>
             </div>
           </div>
           
           {/* Step indicator */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2 mt-4">
             {['Form', 'Review', 'Payment', 'Done'].map((s, i) => (
               <div key={i} className="flex items-center">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
                   step > i + 1 ? 'bg-green-400' : step === i + 1 ? 'bg-white text-green-600' : 'bg-white/30'
                 }`}>
                   {step > i + 1 ? <FiCheck /> : i + 1}
                 </div>
-                {i < 3 && <div className={`w-8 h-0.5 ${step > i + 1 ? 'bg-green-400' : 'bg-white/30'}`} />}
+                {i < 3 && <div className={`w-10 h-0.5 ${step > i + 1 ? 'bg-green-400' : 'bg-white/30'}`} />}
               </div>
             ))}
           </div>
