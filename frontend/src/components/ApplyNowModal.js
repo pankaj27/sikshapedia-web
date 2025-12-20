@@ -318,15 +318,17 @@ const ApplyNowModal = ({
 
               {/* Course Interested - Searchable Dropdown */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Course Interested *</label>
-                {/* College-specific form: use college courses, General form: use all courses */}
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  {isSchool ? 'Class Interested *' : 'Course Interested *'}
+                </label>
+                {/* College-specific form: use college courses, School form: use classes, General form: use all courses */}
                 <SearchableSelect
                   name="course_interested"
                   options={courses.length > 0 ? courses : allCourses}
                   value={formData.course_interested}
                   onChange={handleChange}
-                  placeholder="Search & select course"
-                  searchPlaceholder="Type to search courses..."
+                  placeholder={isSchool ? "Search & select class" : "Search & select course"}
+                  searchPlaceholder={isSchool ? "Type to search classes..." : "Type to search courses..."}
                   icon={<FiBook className="w-4 h-4" />}
                   required
                 />
