@@ -41,7 +41,7 @@ const AdmissionPartnersPage = () => {
     setLoading(true);
     try {
       const response = await api.get('/admission/partners', {
-        params: { institution_type: institutionType }
+        params: { entity_type: institutionType }
       });
       setPartners(response.data.partners || []);
     } catch (err) {
