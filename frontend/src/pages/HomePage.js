@@ -140,33 +140,37 @@ const CollegeDuniaHome = () => {
     { image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop', type: 'college', name: 'AIIMS Delhi - All India Institute of Medical Sciences', rating: 4.9, reviews: 2134, location: 'New Delhi, Delhi', slug: 'aiims-delhi-001' }
   ];
   
-  // Generate hero slides from featured colleges if settings don't have custom slides
-  const generateHeroSlidesFromFeatured = () => {
-    if (featuredColleges.length === 0) return defaultHeroSlides;
+  // Generate hero slides from featured colleges dynamically
+  const heroSlides = React.useMemo(() => {
+    // Use custom slides from settings if available
+    if (pageSettings?.hero_slides?.length > 0) {
+      return pageSettings.hero_slides;
+    }
     
-    const defaultImages = [
-      'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop',
-      'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop'
-    ];
+    // Generate from featured colleges if available
+    if (featuredColleges.length > 0) {
+      const defaultImages = [
+        'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop'
+      ];
+      
+      return featuredColleges.slice(0, 4).map((college, idx) => ({
+        image: college.banner_url || college.images?.[0] || defaultImages[idx % defaultImages.length],
+        type: (college.institution_type || 'college').toLowerCase(),
+        name: college.name,
+        rating: college.rating || 4.5,
+        reviews: college.total_reviews || 1000,
+        location: `${college.location?.city || ''}, ${college.location?.state || ''}`,
+        id: college.id,
+        serial_number: college.serial_number,
+        city: college.location?.city
+      }));
+    }
     
-    return featuredColleges.slice(0, 4).map((college, idx) => ({
-      image: college.banner_url || college.images?.[0] || defaultImages[idx % defaultImages.length],
-      type: (college.institution_type || 'college').toLowerCase(),
-      name: college.name,
-      rating: college.rating || 4.5,
-      reviews: college.total_reviews || 1000,
-      location: `${college.location?.city || ''}, ${college.location?.state || ''}`,
-      id: college.id,
-      serial_number: college.serial_number,
-      city: college.location?.city
-    }));
-  };
-  
-  const heroSlides = pageSettings?.hero_slides?.length > 0 
-    ? pageSettings.hero_slides 
-    : generateHeroSlidesFromFeatured();
+    return defaultHeroSlides;
+  }, [featuredColleges, pageSettings?.hero_slides]);
   
   // Section visibility from settings - ALL 15 SECTIONS
   const showHeroSlider = pageSettings?.show_hero_slider !== false;
