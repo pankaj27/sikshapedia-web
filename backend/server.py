@@ -7245,6 +7245,7 @@ try:
     from routes.study_abroad import router as study_abroad_router, set_database as set_study_abroad_db
     from routes.taxonomy import router as taxonomy_router, set_database as set_taxonomy_db
     from routes.reviews_questions import router as reviews_questions_router, set_database as set_reviews_questions_db
+    from routes.advertisements import router as advertisements_router, set_database as set_advertisements_db
     
     # Set database for modular routers
     set_leads_db(db)
