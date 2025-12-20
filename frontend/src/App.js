@@ -338,6 +338,7 @@ function App() {
               <Route path="/signup" element={<UserSignup />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/dashboard" element={<UserDashboard />} />
+              <Route path="/profile/edit" element={<EditProfile />} />
                   
               {/* ============================================ */}
               {/* Institute Dashboard Routes */}
