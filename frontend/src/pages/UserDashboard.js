@@ -64,6 +64,10 @@ const UserDashboard = () => {
           const appsRes = await api.get('/user/applications');
           setApplications(appsRes.data);
           break;
+        case 'admissions':
+          const admissionsRes = await api.get('/admission/my-bookings');
+          setAdmissionBookings(admissionsRes.data.bookings || []);
+          break;
         case 'reviews':
           const reviewsRes = await api.get('/user/reviews');
           setReviews(reviewsRes.data);
