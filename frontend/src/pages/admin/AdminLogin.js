@@ -23,8 +23,10 @@ const AdminLogin = () => {
       localStorage.setItem('adminToken', response.data.access_token);
       localStorage.setItem('adminUser', JSON.stringify(response.data.user));
       
-      // Redirect to admin dashboard using full page reload (React Router v7 workaround)
-      window.location.href = '/admin/dashboard';
+      // Use setTimeout to ensure localStorage is saved before navigation
+      setTimeout(() => {
+        window.location.replace('/admin/dashboard');
+      }, 100);
     } catch (err) {
       setError(err.response?.data?.detail || 'Invalid credentials');
     } finally {
