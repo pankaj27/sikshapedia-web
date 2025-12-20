@@ -114,6 +114,7 @@ const CollegeForm = () => {
   // Collapsible section states for form UI
   const [isAdmissionFeesCollapsed, setIsAdmissionFeesCollapsed] = useState(true);
   const [isLocationPriorityCollapsed, setIsLocationPriorityCollapsed] = useState(true);
+  const [isContentStatusCollapsed, setIsContentStatusCollapsed] = useState(true);
 
   // Icon mapping for facilities
   const iconComponents = {
