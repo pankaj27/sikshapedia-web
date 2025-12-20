@@ -158,10 +158,6 @@ function App() {
             <Route path="/admin/schools/add" element={<SchoolForm />} />
             <Route path="/admin/schools/new" element={<SchoolForm />} />
             <Route path="/admin/schools/edit/:id" element={<SchoolForm />} />
-            <Route path="/admin/universities" element={<CollegesListManagement type="universities" />} />
-            <Route path="/admin/universities/add" element={<CollegeForm type="university" />} />
-            <Route path="/admin/universities/new" element={<CollegeForm type="university" />} />
-            <Route path="/admin/universities/edit/:id" element={<CollegeForm type="university" />} />
             <Route path="/admin/news" element={<NewsManagement />} />
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
