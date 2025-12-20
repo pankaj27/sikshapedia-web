@@ -5842,74 +5842,9 @@ async def get_institution_dashboard(current_user: User = Depends(get_current_use
     }
 
 # ============================================
-# Study Abroad Routes
+# Study Abroad Routes - MOVED TO routes/study_abroad.py
 # ============================================
-
-@api_router.get("/study-abroad", response_model=List[StudyAbroadUniversity])
-async def get_study_abroad_universities(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000),
-    country: Optional[str] = None,
-    search: Optional[str] = None
-):
-    query = {}
-    
-    if country:
-        query["country"] = country
-    
-    if search:
-        query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"city": {"$regex": search, "$options": "i"}},
-            {"description": {"$regex": search, "$options": "i"}}
-        ]
-    
-    universities = await db.study_abroad.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
-    
-    for uni in universities:
-        if isinstance(uni.get('created_at'), str):
-            uni['created_at'] = datetime.fromisoformat(uni['created_at'])
-    
-    return universities
-
-@api_router.get("/study-abroad/{university_id}", response_model=StudyAbroadUniversity)
-async def get_study_abroad_university(university_id: str):
-    university = await db.study_abroad.find_one({"id": university_id}, {"_id": 0})
-    if not university:
-        raise HTTPException(status_code=404, detail="University not found")
-    
-    if isinstance(university.get('created_at'), str):
-        university['created_at'] = datetime.fromisoformat(university['created_at'])
-    
-    return StudyAbroadUniversity(**university)
-
-@api_router.get("/study-abroad/countries/list")
-async def get_countries():
-    countries = await db.study_abroad.distinct("country")
-    return {"countries": sorted(countries)}
-
-@api_router.post("/study-abroad")
-async def create_study_abroad_university(university: StudyAbroadUniversity):
-    uni_dict = university.model_dump()
-    if isinstance(uni_dict.get('created_at'), datetime):
-        uni_dict['created_at'] = uni_dict['created_at'].isoformat()
-    await db.study_abroad.insert_one(uni_dict)
-    uni_dict.pop('_id', None)
-    return uni_dict
-
-@api_router.put("/study-abroad/{university_id}")
-async def update_study_abroad_university(university_id: str, university: StudyAbroadUniversity):
-    uni_dict = university.model_dump()
-    if isinstance(uni_dict.get('created_at'), datetime):
-        uni_dict['created_at'] = uni_dict['created_at'].isoformat()
-    await db.study_abroad.update_one({"id": university_id}, {"$set": uni_dict})
-    uni_dict.pop('_id', None)
-    return uni_dict
-
-@api_router.delete("/study-abroad/{university_id}")
-async def delete_study_abroad_university(university_id: str):
-    await db.study_abroad.delete_one({"id": university_id})
-    return {"success": True}
+# All study-abroad endpoints have been modularized
 
 
 # ============================================
