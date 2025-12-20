@@ -8,6 +8,8 @@ const LocationsManagement = () => {
   const [activeTab, setActiveTab] = useState('states');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [streams, setStreams] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -31,13 +33,17 @@ const LocationsManagement = () => {
 
   const fetchLocations = async () => {
     try {
-      const [statesRes, citiesRes, countriesRes] = await Promise.all([
+      const [statesRes, citiesRes, streamsRes, coursesRes, countriesRes] = await Promise.all([
         api.get('/admin/locations/states').catch(() => ({ data: [] })),
         api.get('/admin/locations/cities').catch(() => ({ data: [] })),
+        api.get('/admin/locations/streams').catch(() => ({ data: [] })),
+        api.get('/admin/locations/courses').catch(() => ({ data: [] })),
         api.get('/admin/locations/countries').catch(() => ({ data: [] }))
       ]);
       setStates(statesRes.data || []);
       setCities(citiesRes.data || []);
+      setStreams(streamsRes.data || []);
+      setCourses(coursesRes.data || []);
       setCountries(countriesRes.data || []);
     } catch (error) {
       console.error('Error fetching locations:', error);
