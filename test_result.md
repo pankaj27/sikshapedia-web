@@ -117,6 +117,19 @@
 5. ✅ **Payment integration ready** - Razorpay test keys configured
 6. 🎯 **Ready for frontend testing** - All backend endpoints available for frontend integration
 
+## Admin Form UI Improvements (Dec 20, 2025):
+
+### ✅ COMPLETED CHANGES:
+1. **"Admissions Open" checkbox moved to Quick Badges section** - Now appears alongside Verified, Featured, Trending, Top Rated, Sponsored, Admission Partner, No Cost EMI checkboxes in the header row
+2. **"Institution-Specific Admission Fees" section is now collapsible** - Only appears when "Admission Partner" is checked; collapsed by default with expand/collapse toggle
+3. **"Location-Specific Display Priority" section is now collapsible** - Collapsed by default with expand/collapse toggle showing State Priority and City Priority inputs
+
+### UI Behavior:
+- Both collapsible sections start **collapsed by default**
+- Click on section header to expand/collapse
+- Green highlight for fees section, purple highlight for location priority section
+- Chevron icons indicate state: `>` = collapsed, `v` = expanded
+
 ## Incorporate User Feedback:
 - Navigation uses full page reload (CustomLink) due to React Router v7 conflict
 - All Link components should use CustomLink from '../components/CustomLink'
