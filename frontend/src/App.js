@@ -220,6 +220,7 @@ function App() {
             <Route path="/admin/leads" element={<LeadsList />} />
             <Route path="/admin/lead-settings" element={<LeadSettings />} />
             <Route path="/admin/admission-bookings" element={<AdmissionBookingsManagement />} />
+            <Route path="/admin/admission-partners/:type" element={<AdmissionPartnersList />} />
 
             {/* Public Routes - With Layout */}
             <Route element={<LayoutWrapper />}>
