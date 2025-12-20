@@ -159,6 +159,21 @@ export const parseListingUrl = (pathname, searchParams = '') => {
     recognition: queryParams.get('recognition') || null,
   };
   
+  // Handle /india-colleges/engineering, /india-schools/cbse patterns
+  if (parts.length === 2 && parts[0].startsWith('india-')) {
+    const institutionType = parts[0].replace('india-', ''); // 'colleges', 'schools', 'universities'
+    const stream = parts[1]; // 'engineering', 'medical', 'cbse', etc.
+    
+    return {
+      type: 'institution-listing',
+      location: null,
+      institutionType: institutionType,
+      stream: stream,
+      combinedFilters: { stream: stream },
+      queryFilters
+    };
+  }
+  
   // Check for institution listing patterns: /{location}-colleges or /{type}-colleges or /{accreditation}-colleges
   const institutionMatch = parts[0]?.match(/^(.+)-(colleges|schools|universities)$/);
   if (institutionMatch && parts.length === 1) {
