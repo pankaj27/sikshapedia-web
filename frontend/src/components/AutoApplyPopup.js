@@ -162,4 +162,6 @@ const AutoApplyPopup = () => {
   );
 };
 
+// Temporarily disabled to debug infinite loop
+const AutoApplyPopup = () => null;
 export default AutoApplyPopup;
