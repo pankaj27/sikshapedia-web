@@ -79,12 +79,22 @@ const SchoolForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [availableCities, setAvailableCities] = useState([]);
 
   useEffect(() => {
     if (isEdit) {
       fetchSchool();
     }
   }, [id]);
+
+  // Update available cities when state changes
+  useEffect(() => {
+    if (formData.state) {
+      setAvailableCities(citiesByState[formData.state] || []);
+    } else {
+      setAvailableCities([]);
+    }
+  }, [formData.state]);
 
   const fetchSchool = async () => {
     try {
