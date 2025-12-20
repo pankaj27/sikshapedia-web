@@ -57,8 +57,10 @@ const getMenuIcon = (iconId) => iconMap[iconId] || iconMap['default'];
 const getMenuIconLarge = (iconId) => iconMapLarge[iconId] || iconMapLarge['default'];
 
 const CollegeSubPage = () => {
-  // ONLY support new format: /colleges/{number}-{slug}/{section}
-  const { idSlug, section } = useParams();
+  // Support both idSlug (legacy) and seg1 (new router)
+  const params = useParams();
+  const idSlug = params.idSlug || params.seg1;
+  const section = params.section || params.seg2;
   const navigate = useNavigate();
   const location = useLocation();
   const [college, setCollege] = useState(null);
