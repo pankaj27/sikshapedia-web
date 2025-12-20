@@ -123,7 +123,8 @@ const UserSignup = () => {
         // User exists, login successful
         localStorage.setItem('token', response.data.session_token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        navigate('/dashboard');
+        // Use full page reload for navigation (React Router v7 workaround)
+        window.location.href = '/dashboard';
       }
     } catch (err) {
       const detail = err.response?.data?.detail;
