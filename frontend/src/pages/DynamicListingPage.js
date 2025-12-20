@@ -123,8 +123,8 @@ const DynamicListingPage = () => {
   
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
   
-  // Parse URL to determine what to show (including query params)
-  const urlInfo = useMemo(() => parseListingUrl(location.pathname, location.search), [location.pathname, location.search]);
+  // Parse URL using new URL structure
+  const urlInfo = useMemo(() => parseInstitutionUrl(location.pathname), [location.pathname]);
   
   // Accreditation display names mapping
   const ACCREDITATION_DISPLAY = {
