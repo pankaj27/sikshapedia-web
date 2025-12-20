@@ -93,7 +93,7 @@ const ListingPageForm = () => {
   };
 
   const pageTypes = [
-    { value: 'india', label: 'India Page', example: 'india-colleges' },
+    { value: 'india', label: 'India Page', example: 'colleges' },
     { value: 'state', label: 'State Page', example: 'maharashtra-colleges' },
     { value: 'city', label: 'City Page', example: 'mumbai-colleges' },
     { value: 'stream', label: 'Stream Page', example: 'engineering' },
