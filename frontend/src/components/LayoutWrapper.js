@@ -18,7 +18,7 @@ const LayoutWrapper = () => {
     <div className="flex flex-col min-h-screen w-full m-0 p-0">
       <Header />
       <main className="flex-1 w-full">
-        <Outlet key={location.pathname} />
+        <Outlet key={location.key || location.pathname} />
       </main>
       <Footer />
     </div>
