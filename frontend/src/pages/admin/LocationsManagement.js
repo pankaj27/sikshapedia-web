@@ -156,10 +156,12 @@ const LocationsManagement = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 flex-wrap">
           {[
             { id: 'states', label: 'States', icon: FiMapPin },
             { id: 'cities', label: 'Cities', icon: FiMapPin },
+            { id: 'streams', label: 'Streams', icon: FiGrid },
+            { id: 'courses', label: 'Courses', icon: FiGrid },
             { id: 'countries', label: 'Countries (Study Abroad)', icon: FiGlobe }
           ].map(tab => (
             <button
