@@ -7484,6 +7484,8 @@ try:
     from routes.universities import router as universities_router, set_database as set_universities_db
     from routes.colleges import router as colleges_router, set_database as set_colleges_db
     from routes.courses_exams import router as courses_exams_router, set_database as set_courses_exams_db
+    from routes.study_abroad import router as study_abroad_router, set_database as set_study_abroad_db
+    from routes.taxonomy import router as taxonomy_router, set_database as set_taxonomy_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -7504,6 +7506,8 @@ try:
     set_universities_db(db)
     set_colleges_db(db)
     set_courses_exams_db(db)
+    set_study_abroad_db(db)
+    set_taxonomy_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
