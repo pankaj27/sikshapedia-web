@@ -86,38 +86,49 @@ const UsersPointsReport = () => {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referral Code</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cash Value</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Details</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cash Value</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {users.map((user, index) => (
                   <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                    <td className="px-4 py-4 whitespace-nowrap text-gray-500">
                       {page * limit + index + 1}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       <div>
                         <p className="font-medium text-gray-800">{user.name}</p>
                         <p className="text-sm text-gray-500">{user.email}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                    <td className="px-4 py-4 whitespace-nowrap text-gray-600">
                       {user.phone || '-'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-mono text-blue-600">{user.referral_code || '-'}</span>
+                    <td className="px-4 py-4">
+                      {user.payment_details?.upi_id ? (
+                        <div>
+                          <span className="font-mono text-green-600 text-sm">{user.payment_details.upi_id}</span>
+                          <span className="text-xs text-gray-400 ml-1">(UPI)</span>
+                        </div>
+                      ) : user.payment_details?.account_number ? (
+                        <div>
+                          <span className="font-mono text-blue-600 text-sm">****{user.payment_details.account_number.slice(-4)}</span>
+                          <span className="text-xs text-gray-400 ml-1">(Bank)</span>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400 text-sm">Not added</span>
+                      )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       <span className="font-bold text-orange-600">{user.points}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       <span className="text-green-600">₹{(user.points * 0.5).toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
