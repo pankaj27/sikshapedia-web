@@ -8392,6 +8392,7 @@ try:
     from routes.admission_booking import router as admission_booking_router, set_database as set_admission_booking_db
     from routes.rewards_system import router as rewards_router, set_database as set_rewards_db
     from routes.admin_rewards import router as admin_rewards_router, set_database as set_admin_rewards_db
+    from routes.lead_forms import router as lead_forms_router, set_database as set_lead_forms_db
     
     # Set database for modular routers
     set_leads_db(db)
