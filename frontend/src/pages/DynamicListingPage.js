@@ -1081,7 +1081,7 @@ const DynamicListingPage = () => {
     setActiveFilterDropdown(null);
     // Navigate to base URL to clear all URL-based filters
     const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
-    navigate(`/${baseSuffix}`);
+    window.location.href = `/${baseSuffix}`;
   };
 
   const removeFilter = (filterType) => {
