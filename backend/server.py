@@ -6113,17 +6113,7 @@ async def delete_news(news_id: str):
 # Schools PUT/DELETE moved to routes/schools.py
 # Universities PUT/DELETE moved to routes/universities.py
 
-@api_router.patch("/reviews/{review_id}/approve")
-async def approve_review(review_id: str):
-    """Approve a review (admin only)"""
-    await db.reviews.update_one({"id": review_id}, {"$set": {"status": "approved"}})
-    return {"success": True, "status": "approved"}
-
-@api_router.patch("/reviews/{review_id}/reject")
-async def reject_review(review_id: str):
-    """Reject a review (admin only)"""
-    await db.reviews.update_one({"id": review_id}, {"$set": {"status": "rejected"}})
-    return {"success": True, "status": "rejected"}
+# Reviews approve/reject - MOVED TO routes/reviews_questions.py
 
 # ============================================
 # Taxonomy & Master Data Routes - MOVED TO routes/taxonomy.py
