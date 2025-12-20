@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { FiSearch, FiMenu, FiX, FiChevronDown, FiStar, FiMapPin, FiBookOpen, FiFileText, FiAward, FiTrendingUp, FiZap, FiTool, FiBriefcase, FiActivity, FiFeather, FiCpu, FiShield, FiLayout, FiBarChart2, FiCompass, FiUsers, FiBook, FiCheckCircle, FiDownload, FiArrowRight, FiSend, FiMessageCircle, FiPhone } from 'react-icons/fi';
@@ -19,6 +19,24 @@ import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
+/**
+ * Custom Link component that handles navigation with full page reload
+ * as a workaround for React Router v7 interference from external scripts.
+ */
+const Link = ({ to, children, className, onClick, ...props }) => {
+  const handleClick = useCallback((e) => {
+    e.preventDefault();
+    if (onClick) onClick(e);
+    window.location.href = to;
+  }, [to, onClick]);
+  
+  return (
+    <a href={to} onClick={handleClick} className={className} {...props}>
+      {children}
+    </a>
+  );
+};
 
 const CollegeDuniaHome = () => {
   const navigate = useNavigate();
