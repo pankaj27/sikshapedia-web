@@ -40,7 +40,13 @@ const AdmissionPartnersList = () => {
       const endpoint = type === 'schools' ? '/schools' : 
                        type === 'universities' ? '/universities' : '/colleges';
       const response = await api.get(endpoint);
-      const data = response.data[type] || response.data.colleges || response.data.schools || response.data.universities || [];
+      // Handle both array and object responses
+      let data = [];
+      if (Array.isArray(response.data)) {
+        data = response.data;
+      } else {
+        data = response.data[type] || response.data.colleges || response.data.schools || response.data.universities || [];
+      }
       setInstitutions(data);
     } catch (error) {
       console.error('Error fetching institutions:', error);
