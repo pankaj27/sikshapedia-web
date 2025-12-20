@@ -86,6 +86,24 @@ class UrlUpdate(BaseModel):
     display_order: Optional[int] = None
 
 
+@router.get("/stats")
+async def get_url_stats():
+    """Get URL structure counts by type"""
+    try:
+        database = get_db()
+        pipeline = [
+            {"$group": {"_id": "$type", "count": {"$sum": 1}}},
+            {"$sort": {"_id": 1}}
+        ]
+        results = await database.url_structures.aggregate(pipeline).to_list(100)
+        stats = {item["_id"]: item["count"] for item in results if item["_id"]}
+        total = sum(stats.values())
+        return {"stats": stats, "total": total}
+    except Exception as e:
+        print(f"Error fetching URL stats: {e}")
+        return {"stats": {}, "total": 0}
+
+
 @router.get("")
 async def get_url_structures(type: Optional[str] = None, skip: int = 0, limit: int = 500):
     """Get all URL structures"""
