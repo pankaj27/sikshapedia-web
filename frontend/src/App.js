@@ -353,8 +353,11 @@ function App() {
                   
               {/* India-wide Institution Listings */}
               <Route path="/india-colleges" element={<DynamicListingPage />} />
+              <Route path="/india-colleges/:stream" element={<DynamicListingPage />} />
               <Route path="/india-schools" element={<DynamicListingPage />} />
+              <Route path="/india-schools/:stream" element={<DynamicListingPage />} />
               <Route path="/india-universities" element={<DynamicListingPage />} />
+              <Route path="/india-universities/:stream" element={<DynamicListingPage />} />
                   
               {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
               <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
