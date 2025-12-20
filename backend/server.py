@@ -3735,7 +3735,7 @@ async def get_admin_stats(current_user: User = Depends(get_current_user)):
 async def root():
     return {"message": "Sikshapedia API - College Discovery Platform"}
 
-# Minimal projection for listing pages - reduces payload by ~80%
+# Minimal projection constant - kept for backward compatibility
 COLLEGE_MINIMAL_PROJECTION = {
     "_id": 0, "id": 1, "name": 1, "slug": 1, "serial_number": 1,
     "institution_type": 1, "type": 1, "location": 1, "logo_url": 1,
@@ -3745,129 +3745,9 @@ COLLEGE_MINIMAL_PROJECTION = {
     "city_priority": 1, "accreditation": 1, "ranking": 1, "established_year": 1
 }
 
-@api_router.get("/colleges")
-async def get_colleges(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000),
-    search: Optional[str] = None,
-    city: Optional[str] = None,
-    state: Optional[str] = None,
-    type: Optional[str] = None,
-    institution_type: Optional[str] = None,  # College, School, University
-    stream: Optional[str] = None,  # Engineering, Medical, etc.
-    sub_stream: Optional[str] = None,  # Computer Science, Mechanical, etc.
-    min_fees: Optional[float] = None,
-    max_fees: Optional[float] = None,
-    course: Optional[str] = None,
-    sort_by: Optional[str] = Query("nirf_ranking", regex="^(name|nirf_ranking|average_fees|rating)$"),
-    include_drafts: Optional[str] = Query(None),  # Admin can set to "true" to see drafts
-    is_featured: Optional[bool] = None,  # Filter by featured status
-    is_admission_open: Optional[bool] = None,  # Filter by admission open status
-    fields: Optional[str] = Query(None)  # "minimal" for listing pages, None for full data
-):
-    query = {}
-    
-    # Only show published colleges on frontend (unless admin requests drafts)
-    # Handle both string "true" and boolean True
-    show_drafts = include_drafts and include_drafts.lower() == "true"
-    if not show_drafts:
-        query["status"] = "published"
-    
-    if search:
-        query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"description": {"$regex": search, "$options": "i"}}
-        ]
-    
-    if city:
-        query["location.city"] = {"$regex": city, "$options": "i"}
-    
-    if state:
-        query["location.state"] = {"$regex": state, "$options": "i"}
-    
-    if type:
-        query["type"] = type
-    
-    # Filter by institution type (College, School, University)
-    if institution_type:
-        query["institution_type"] = {"$regex": f"^{institution_type}$", "$options": "i"}
-    
-    # Filter by stream (searches in courses array)
-    if stream:
-        # Match stream in courses array or description
-        query["$or"] = query.get("$or", []) + [
-            {"courses": {"$regex": stream, "$options": "i"}},
-            {"description": {"$regex": stream, "$options": "i"}}
-        ]
-    
-    # Filter by sub-stream
-    if sub_stream:
-        sub_stream_conditions = [
-            {"courses": {"$regex": sub_stream, "$options": "i"}},
-            {"description": {"$regex": sub_stream, "$options": "i"}}
-        ]
-        if "$or" in query:
-            # Combine with AND logic
-            query["$and"] = [{"$or": query.pop("$or")}, {"$or": sub_stream_conditions}]
-        else:
-            query["$or"] = sub_stream_conditions
-    
-    if min_fees is not None or max_fees is not None:
-        query["average_fees"] = {}
-        if min_fees is not None:
-            query["average_fees"]["$gte"] = min_fees
-        if max_fees is not None:
-            query["average_fees"]["$lte"] = max_fees
-    
-    if course:
-        query["courses.name"] = {"$regex": course, "$options": "i"}
-    
-    # Filter by featured status
-    if is_featured is not None:
-        query["is_featured"] = is_featured
-    
-    # Filter by admission open status
-    if is_admission_open is not None:
-        query["is_admission_open"] = is_admission_open
-    
-    sort_order = 1 if sort_by == "name" else 1 if sort_by == "nirf_ranking" else -1
-    
-    # Define projection based on fields parameter
-    projection = COLLEGE_MINIMAL_PROJECTION if fields == "minimal" else {"_id": 0}
-    
-    # Fetch colleges
-    colleges = await db.colleges.find(query, projection).sort(sort_by, sort_order).skip(skip).limit(limit).to_list(limit)
-    
-    # Apply location-specific priority sorting
-    def get_priority(college):
-        # Check city priority first (most specific)
-        if city and college.get('city_priority', {}).get(city, 0) > 0:
-            return college['city_priority'][city]
-        # Then state priority
-        if state and college.get('state_priority', {}).get(state, 0) > 0:
-            return college['state_priority'][state]
-        # Finally national/default priority
-        return college.get('display_priority', 0)
-    
-    # Separate prioritized and non-prioritized
-    prioritized = [c for c in colleges if get_priority(c) > 0]
-    non_prioritized = [c for c in colleges if get_priority(c) == 0]
-    
-    # Sort prioritized by their priority (lower number = first)
-    prioritized.sort(key=lambda x: get_priority(x))
-    
-    colleges = prioritized + non_prioritized
-    
-    # Return minimal data directly without model conversion for better performance
-    if fields == "minimal":
-        return colleges
-    
-    # Full data - convert through model for validation
-    for college in colleges:
-        if isinstance(college.get('created_at'), str):
-            college['created_at'] = datetime.fromisoformat(college['created_at'])
-    
-    return [College(**college) for college in colleges]
+# ===========================================
+# College Admin CRUD (POST/PUT/DELETE) - Keep in server.py due to auth dependencies
+# ===========================================
 
 @api_router.get("/colleges/featured")
 async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Optional[str] = Query(None)):
