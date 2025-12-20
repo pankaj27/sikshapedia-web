@@ -264,6 +264,7 @@ const CollegeDuniaHome = () => {
       {/* Hero Section with Background Slider - Compact */}
       <section className="relative h-[460px] overflow-hidden -mt-20">
         <Swiper
+          key={featuredColleges.length > 0 ? 'loaded' : 'loading'}
           modules={[Pagination, Autoplay]}
           pagination={{ clickable: true }}
           autoplay={{ delay: 4000 }}
