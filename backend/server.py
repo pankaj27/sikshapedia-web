@@ -8142,6 +8142,7 @@ try:
     from routes.listing_pages import router as listing_pages_router, set_database as set_listing_pages_db
     from routes.schools import router as schools_router, set_database as set_schools_db
     from routes.universities import router as universities_router, set_database as set_universities_db
+    from routes.colleges import router as colleges_router, set_database as set_colleges_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -8160,6 +8161,7 @@ try:
     set_listing_pages_db(db)
     set_schools_db(db)
     set_universities_db(db)
+    set_colleges_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
