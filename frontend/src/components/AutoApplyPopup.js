@@ -28,7 +28,7 @@ const AutoApplyPopup = () => {
   const currentPathRef = useRef(location.pathname);
   
   // Check if we're on a college/school/university detail page
-  const isCollegePage = location.pathname.match(/^\/(colleges|schools|universities)\/[^/]+$/);
+  const isCollegePage = /^\/(colleges|schools|universities)\/[^/]+$/.test(location.pathname);
   
   // Skip popup on admin pages and auth pages
   const isAdminPage = location.pathname.startsWith('/admin');
