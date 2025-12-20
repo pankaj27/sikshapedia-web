@@ -62,7 +62,7 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
   useEffect(() => {
     if (isOpen && institution) {
       fetchStates();
-      fetchSettings();
+      fetchInstitutionDetails();
     }
   }, [isOpen, institution]);
 
@@ -91,16 +91,74 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
     }
   };
 
-  const fetchSettings = async () => {
+  const fetchInstitutionDetails = async () => {
     try {
-      // Fetch entity-specific fee settings
-      const entityType = institutionType || 'college';
-      const response = await api.get('/admission/settings', {
-        params: { entity_type: entityType }
-      });
-      setSettings(response.data);
+      // Fetch institution details including courses and fees
+      const endpoint = institutionType === 'school' ? `/schools/${institution.id}` :
+                       institutionType === 'university' ? `/universities/${institution.id}` :
+                       `/colleges/${institution.id}`;
+      
+      const response = await api.get(endpoint);
+      const instData = response.data;
+      setInstitutionDetails(instData);
+      
+      // Extract courses/classes based on institution type
+      if (institutionType === 'school') {
+        // For schools, use classes_offered
+        const classes = instData.classes_offered || instData.classes || 
+                        ['Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 
+                         'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12'];
+        setCourses(classes);
+      } else {
+        // For colleges/universities, use courses
+        const courseList = instData.courses?.map(c => typeof c === 'object' ? c.name : c) || 
+                          instData.courses_offered || 
+                          instData.streams || 
+                          ['B.Tech', 'M.Tech', 'MBA', 'BBA', 'BCA', 'MCA'];
+        setCourses(courseList);
+      }
+      
+      // Fetch institution-specific fee settings (or fall back to entity defaults)
+      await fetchSettings(instData);
+    } catch (err) {
+      console.error('Failed to fetch institution details:', err);
+      // Fall back to default courses
+      if (institutionType === 'school') {
+        setCourses(['Nursery', 'LKG', 'UKG', 'Class 1-5', 'Class 6-8', 'Class 9-10', 'Class 11-12']);
+      } else {
+        setCourses(['B.Tech', 'M.Tech', 'MBA', 'BBA', 'BCA', 'MCA', 'B.Com', 'M.Com']);
+      }
+      await fetchSettings(null);
+    }
+  };
+
+  const fetchSettings = async (instData) => {
+    try {
+      // Check if institution has specific fees, otherwise use entity defaults
+      if (instData?.admission_fees) {
+        setSettings({
+          form_fee: instData.admission_fees.form_fee || 1000,
+          platform_fee: instData.admission_fees.platform_fee || 250,
+          gst_percentage: instData.admission_fees.gst_percentage || 18,
+          total: ((instData.admission_fees.form_fee || 1000) + (instData.admission_fees.platform_fee || 250)) * 
+                 (1 + (instData.admission_fees.gst_percentage || 18) / 100)
+        });
+      } else {
+        // Fetch entity-specific fee settings as fallback
+        const entityType = institutionType || 'college';
+        const response = await api.get('/admission/settings', {
+          params: { entity_type: entityType }
+        });
+        setSettings(response.data);
+      }
     } catch (err) {
       console.error('Failed to fetch settings:', err);
+      // Default fallback
+      setSettings({
+        form_fee: institutionType === 'school' ? 500 : institutionType === 'university' ? 1500 : 1000,
+        platform_fee: institutionType === 'school' ? 150 : institutionType === 'university' ? 350 : 250,
+        gst_percentage: 18
+      });
     }
   };
 
