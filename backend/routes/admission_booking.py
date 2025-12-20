@@ -309,6 +309,33 @@ async def send_status_update_email(booking: dict, user_email: str):
     except Exception as e:
         print(f"Failed to send status update email: {e}")
 
+
+async def send_admission_email(booking_id: str, email_type: str, db):
+    """Send admission related email based on type"""
+    try:
+        booking = await db.admission_bookings.find_one({"id": booking_id}, {"_id": 0})
+        if not booking:
+            return
+        
+        if email_type == "confirmation":
+            # Send to user
+            await send_booking_email_to_user(booking, booking.get("email"))
+            
+            # Try to send to institution
+            institution = await db.colleges.find_one({"id": booking.get("institution_id")}, {"_id": 0, "email": 1})
+            if not institution:
+                institution = await db.schools.find_one({"id": booking.get("institution_id")}, {"_id": 0, "email": 1})
+            if not institution:
+                institution = await db.universities.find_one({"id": booking.get("institution_id")}, {"_id": 0, "email": 1})
+            
+            if institution and institution.get("email"):
+                await send_booking_email_to_institution(booking, institution["email"])
+                
+        elif email_type == "status_update":
+            await send_status_update_email(booking, booking.get("email"))
+    except Exception as e:
+        print(f"Failed to send admission email: {e}")
+
 async def send_admission_email(booking_id: str, email_type: str, db):
     """Send admission related email based on type"""
     try:
