@@ -3751,38 +3751,6 @@ COLLEGE_MINIMAL_PROJECTION = {
 
 # College CRUD functions start here
 
-@api_router.get("/colleges/by-stream-featured")
-async def get_colleges_by_stream_featured():
-    """Get featured colleges by stream for homepage - prioritizes admin-selected colleges"""
-    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
-    stream_colleges = settings.get("stream_colleges", {}) if settings else {}
-    
-    streams = ["Engineering", "Medical", "Management", "Law"]
-    result = {}
-    
-    for stream in streams:
-        college_ids = stream_colleges.get(stream, [])
-        colleges = []
-        
-        # Get admin-selected colleges first
-        if college_ids:
-            for cid in college_ids[:4]:
-                college = await db.colleges.find_one({"id": cid, "status": "published"}, {"_id": 0, "name": 1, "id": 1})
-                if college:
-                    colleges.append(college.get("name", ""))
-        
-        # If not enough, fetch from database by stream
-        if len(colleges) < 4:
-            additional = await db.colleges.find(
-                {"status": "published", "type": {"$regex": stream, "$options": "i"}},
-                {"_id": 0, "name": 1}
-            ).limit(4 - len(colleges)).to_list(4 - len(colleges))
-            colleges.extend([c.get("name", "") for c in additional])
-        
-        result[stream] = colleges[:4]
-    
-    return result
-
 @api_router.get("/colleges/admission-open-priority", response_model=List[College])
 async def get_admission_open_priority_colleges(limit: int = Query(6, ge=1, le=20)):
     """
