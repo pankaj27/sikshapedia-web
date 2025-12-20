@@ -30,17 +30,36 @@ const ListingPagesManagement = () => {
 
   const urlTypes = [
     { value: 'all', label: 'All URLs' },
-    { value: 'college_state', label: 'Colleges (State)' },
-    { value: 'college_city', label: 'Colleges (City)' },
-    { value: 'college_state_city', label: 'Colleges (State+City)' },
-    { value: 'school_state', label: 'Schools (State)' },
-    { value: 'school_city', label: 'Schools (City)' },
-    { value: 'school_state_city', label: 'Schools (State+City)' },
-    { value: 'university_state', label: 'Universities (State)' },
-    { value: 'university_city', label: 'Universities (City)' },
-    { value: 'university_state_city', label: 'Universities (State+City)' },
-    { value: 'stream', label: 'Streams' },
-    { value: 'course', label: 'Courses' },
+    // Location-based
+    { value: 'college_state', label: 'College (State)' },
+    { value: 'college_city', label: 'College (City)' },
+    { value: 'college_state_city', label: 'College (State+City)' },
+    { value: 'school_state', label: 'School (State)' },
+    { value: 'school_city', label: 'School (City)' },
+    { value: 'school_state_city', label: 'School (State+City)' },
+    { value: 'university_state', label: 'University (State)' },
+    { value: 'university_city', label: 'University (City)' },
+    { value: 'university_state_city', label: 'University (State+City)' },
+    // College Course & Stream
+    { value: 'college_india_course', label: 'College India+Course' },
+    { value: 'college_india_stream', label: 'College India+Stream' },
+    { value: 'college_india_stream_course', label: 'College India+Stream+Course' },
+    { value: 'college_state_course', label: 'College State+Course' },
+    { value: 'college_city_course', label: 'College City+Course' },
+    { value: 'college_state_city_course', label: 'College State+City+Course' },
+    { value: 'college_state_stream', label: 'College State+Stream' },
+    { value: 'college_city_stream', label: 'College City+Stream' },
+    { value: 'college_state_city_stream_course', label: 'College State+City+Stream+Course' },
+    // University Course & Stream
+    { value: 'university_india_course', label: 'University India+Course' },
+    { value: 'university_india_stream', label: 'University India+Stream' },
+    { value: 'university_india_stream_course', label: 'University India+Stream+Course' },
+    { value: 'university_state_course', label: 'University State+Course' },
+    { value: 'university_city_course', label: 'University City+Course' },
+    { value: 'university_state_city_course', label: 'University State+City+Course' },
+    { value: 'university_state_stream', label: 'University State+Stream' },
+    { value: 'university_city_stream', label: 'University City+Stream' },
+    { value: 'university_state_city_stream_course', label: 'University State+City+Stream+Course' },
   ];
 
   useEffect(() => {
