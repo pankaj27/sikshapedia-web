@@ -231,7 +231,7 @@ function App() {
               <Route path="/universities" element={<UniversitiesPage />} />
                   
               {/* Institution Detail Pages: /colleges/{number}-{slug} */}
-              <Route path="/colleges/:idSlug/:section" element={<Layout><CollegeSubPage /></Layout>} />
+              <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
               <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
               <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
               <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
