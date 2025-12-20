@@ -8408,6 +8408,8 @@ try:
     set_rewards_db(db)
     set_admin_rewards_db(db)
     set_lead_forms_db(db)
+    set_admin_counselors_db(db)
+    set_admin_locations_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
