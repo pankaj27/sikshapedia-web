@@ -767,7 +767,7 @@ const UserDashboard = () => {
                     <FiCheckCircle className="text-6xl text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">No Admission Bookings Yet</h3>
                     <p className="text-gray-600 mb-4">Book your seat at admission partner institutions</p>
-                    <Link to="/admission/colleges">
+                    <Link to="/admission-partners/colleges">
                       <Button className="bg-green-600 hover:bg-green-700">Browse Admission Partners</Button>
                     </Link>
                   </div>
