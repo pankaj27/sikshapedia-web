@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FiDownload, FiCalendar, FiFileText, FiInfo, FiBook, FiAward, FiCheckCircle } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 
+import { Link } from '../components/CustomLink';
 const ExamSubPages = () => {
   const { id, section } = useParams();
   const navigate = useNavigate();

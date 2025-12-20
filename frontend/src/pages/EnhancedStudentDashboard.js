@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FiFileText, FiStar, FiBookmark, FiLogOut, FiUser, FiBarChart2, FiTrash2, FiEdit } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
+import { Link } from '../components/CustomLink';
 const EnhancedStudentDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);

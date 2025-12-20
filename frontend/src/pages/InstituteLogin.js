@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FiUser, FiLock, FiLoader, FiAlertCircle } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
+import { Link } from '../components/CustomLink';
 const InstituteLogin = () => {
   const navigate = useNavigate();
   const [loginId, setLoginId] = useState('');

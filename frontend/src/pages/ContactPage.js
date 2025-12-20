@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiMail, FiPhone, FiMapPin, FiSend } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
@@ -7,6 +6,7 @@ import { Input } from '../components/ui/input';
 import useStaticPage from '../hooks/useStaticPage';
 import api from '../api/axios';
 
+import { Link } from '../components/CustomLink';
 const ContactPage = () => {
   const { pageData, loading } = useStaticPage('contact');
   const [formData, setFormData] = useState({

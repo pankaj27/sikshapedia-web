@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FiX, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 
+import { Link } from '../components/CustomLink';
 const CourseFinderPage = () => {
   const [activeFilterTab, setActiveFilterTab] = useState('course');
   const [selectedFilters, setSelectedFilters] = useState({

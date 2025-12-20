@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiUsers, FiTarget, FiHeart, FiAward } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import useStaticPage from '../hooks/useStaticPage';
 import StaticPageRenderer from '../components/StaticPageRenderer';
 
+import { Link } from '../components/CustomLink';
 // Fallback hardcoded content (used when CMS has no content)
 const FallbackAboutPage = () => (
   <div className="min-h-screen bg-gray-50">

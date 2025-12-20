@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FiCalendar, FiUser, FiShare2, FiEye, FiLoader, FiArrowLeft, FiList } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
 
+import { Link } from '../components/CustomLink';
 const NewsDetailPage = () => {
   const { id } = useParams();
   const [showShareMenu, setShowShareMenu] = useState(false);

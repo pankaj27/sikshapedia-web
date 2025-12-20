@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FiChevronRight, FiClock, FiBookOpen, FiUsers, FiSearch, FiFilter, FiSend } from 'react-icons/fi';
 import api from '../api/axios';
 import { ApplyNowWidget } from '../components/widgets/ActionWidgets';
 
+import { Link } from '../components/CustomLink';
 const CourseListingPage = () => {
   const { stream } = useParams();
   const [courses, setCourses] = useState([]);

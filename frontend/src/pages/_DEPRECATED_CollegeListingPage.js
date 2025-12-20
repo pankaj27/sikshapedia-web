@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FiMapPin, FiStar, FiCheckCircle, FiAward, FiEdit3, FiGrid, FiTarget, FiFilter, FiChevronDown, FiChevronUp, FiUser, FiSearch, FiX } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
@@ -7,6 +7,7 @@ import AdBanner from '../components/AdBanner';
 import { getInstitutionListingUrl, getStreamListingUrl } from '../utils/urlHelpers';
 import { generateSlug } from '../utils/slugify';
 
+import { Link } from '../components/CustomLink';
 const CollegeListingPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();

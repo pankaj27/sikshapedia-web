@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiFileText, FiCheckCircle, FiAlertCircle, FiUsers, FiBook, FiMail, FiPhone } from 'react-icons/fi';
 import useStaticPage from '../hooks/useStaticPage';
 import StaticPageRenderer from '../components/StaticPageRenderer';
 
+import { Link } from '../components/CustomLink';
 // Default sections for fallback
 const defaultSections = [
   {

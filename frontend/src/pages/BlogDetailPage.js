@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FiCalendar, FiUser, FiEye, FiHeart, FiArrowLeft } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
+import { Link } from '../components/CustomLink';
 const BlogDetailPage = () => {
   const { id } = useParams();
   const [article, setArticle] = useState(null);

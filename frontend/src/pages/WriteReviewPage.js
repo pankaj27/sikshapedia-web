@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FiStar, FiUpload, FiCheckCircle, FiAward } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 
+import { Link } from '../components/CustomLink';
 const WriteReviewPage = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({

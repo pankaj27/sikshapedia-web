@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FiMapPin, FiStar, FiUser, FiChevronDown, FiChevronUp, FiDownload, FiCheckCircle, FiPhone, FiMail, FiGlobe, FiExternalLink, FiHome, FiInfo, FiBook, FiFileText, FiBarChart2, FiBriefcase, FiAward, FiDollarSign, FiGrid, FiMessageSquare, FiBookmark, FiLayers, FiUsers, FiCalendar, FiMapPin as FiLocation, FiImage, FiHelpCircle, FiWifi, FiCoffee, FiActivity, FiShield, FiTruck, FiDroplet, FiSun, FiMonitor, FiHeadphones, FiPackage, FiHeart, FiCpu, FiSettings, FiZap } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineClipboardList, HiOutlineTrendingUp, HiOutlineUserGroup, HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
 import { MdOutlineSportsBasketball, MdOutlinePool, MdOutlineFitnessCenter, MdOutlineLocalHospital, MdOutlineRestaurant, MdOutlineLocalParking, MdOutlineAtm, MdOutlineTheaters, MdOutlinePark, MdOutlineAir, MdOutlineBed, MdOutlineScience, MdOutlineComputer, MdOutlineWifi, MdOutlineLocalLaundryService, MdOutlineSecurity, MdOutlineLocalCafe } from 'react-icons/md';
@@ -11,6 +11,7 @@ import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import { useCollegeContext } from '../contexts/CollegeContext';
 
+import { Link } from '../components/CustomLink';
 // Facility icon mapping for icon-based display
 const facilityIconMap = {
   // Library & Academic

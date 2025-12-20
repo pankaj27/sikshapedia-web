@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiCalendar, FiUsers, FiFileText, FiArrowRight } from 'react-icons/fi';
 import api from '../api/axios';
 
+import { Link } from './CustomLink';
 const TopExams = () => {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);

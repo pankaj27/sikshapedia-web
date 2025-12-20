@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiChevronRight, FiPlus, FiMinus } from 'react-icons/fi';
 import { Button } from './ui/button';
 
+import { Link } from './CustomLink';
 // Widget Renderer Component
 const WidgetRenderer = ({ widget }) => {
   if (!widget.enabled) return null;

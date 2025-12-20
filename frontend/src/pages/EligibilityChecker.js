@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { FiAward, FiUsers, FiCalendar, FiMapPin, FiTarget, FiBookOpen, FiTrendingUp, FiX, FiCheckCircle, FiStar } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import MetaTags from '../components/SEO/MetaTags';
 import api from '../api/axios';
 
+import { Link } from '../components/CustomLink';
 const EligibilityChecker = () => {
   const [searchParams] = useSearchParams();
   const [selectedCourse, setSelectedCourse] = useState('all');

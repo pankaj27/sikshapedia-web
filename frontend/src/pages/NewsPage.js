@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiChevronRight, FiLoader } from 'react-icons/fi';
 import api from '../api/axios';
 import AdBanner from '../components/AdBanner';
 
+import { Link } from '../components/CustomLink';
 const NewsPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [news, setNews] = useState([]);

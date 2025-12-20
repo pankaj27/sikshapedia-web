@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
+import { Link } from '../components/CustomLink';
   FiUsers, FiFileText, FiBarChart2, FiTrendingUp, FiLogOut,
   FiCheckCircle, FiClock, FiXCircle, FiAlertCircle, FiFilter,
   FiPhone, FiMail, FiMapPin, FiEye, FiSearch

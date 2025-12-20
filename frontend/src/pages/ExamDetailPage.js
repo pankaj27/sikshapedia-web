@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSign, FiLoader, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import api from '../api/axios';
 
+import { Link } from '../components/CustomLink';
 const ExamDetailPage = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('questionPapers');

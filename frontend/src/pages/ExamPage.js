@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiChevronRight, FiSearch, FiChevronDown, FiChevronUp, FiCalendar, FiFileText, FiClock, FiBookOpen, FiTrendingUp, FiBell, FiArrowRight, FiLoader } from 'react-icons/fi';
 import AdBanner from '../components/AdBanner';
 import { FeaturedSponsoredSection } from '../components/SponsoredAds';
 import api from '../api/axios';
 
+import { Link } from '../components/CustomLink';
 const ExamPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAllCategories, setShowAllCategories] = useState(false);

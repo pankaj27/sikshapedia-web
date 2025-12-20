@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { FiStar, FiCheckCircle, FiMapPin, FiArrowRight } from 'react-icons/fi';
 import api from '../api/axios';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 
+import { Link } from './CustomLink';
 // Sidebar Ad Component - For detail pages
 export const SidebarSponsoredAd = ({ placementId, title = "Sponsored" }) => {
   const [ads, setAds] = useState([]);

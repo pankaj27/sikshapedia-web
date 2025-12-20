@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiBell, FiCalendar, FiTrendingUp, FiBookOpen } from 'react-icons/fi';
 import api from '../api/axios';
 
+import { Link } from './CustomLink';
 const LatestNews = () => {
   const [newsItems, setNewsItems] = useState([]);
   const [loading, setLoading] = useState(true);

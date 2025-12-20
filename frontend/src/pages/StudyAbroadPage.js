@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiSearch, FiMapPin, FiGlobe, FiDollarSign, FiAward, FiCalendar, FiUsers, FiStar, FiChevronRight, FiPlus, FiMinus } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 
+import { Link } from '../components/CustomLink';
 const StudyAbroadPage = () => {
   const [universities, setUniversities] = useState([]);
   const [countries, setCountries] = useState([]);

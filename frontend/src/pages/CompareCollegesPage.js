@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { FiX, FiPlus, FiMapPin, FiStar, FiDollarSign, FiUsers, FiAward } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 
+import { Link } from '../components/CustomLink';
 const CompareCollegesPage = () => {
   const [searchParams] = useSearchParams();
   const [selectedItems, setSelectedItems] = useState([]);
