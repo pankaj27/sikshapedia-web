@@ -20,6 +20,10 @@ const ListingPagesManagement = () => {
     { value: 'city', label: 'City Pages' },
     { value: 'stream', label: 'Stream Pages' },
     { value: 'course', label: 'Course Pages' },
+    { value: 'state_stream', label: 'State+Stream' },
+    { value: 'state_city', label: 'State+City' },
+    { value: 'city_stream', label: 'City+Stream' },
+    { value: 'stream_course', label: 'Stream+Course' },
     { value: 'type', label: 'Type Pages' },
     { value: 'accreditation', label: 'Accreditation Pages' }
   ];
