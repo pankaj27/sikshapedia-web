@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '../components/CustomLink';
 import { Helmet } from 'react-helmet-async';
 import { FiSearch, FiChevronRight, FiArrowRight, FiBookOpen, FiBriefcase, FiActivity, FiTrendingUp, FiAward, FiCpu, FiHeart, FiUsers, FiLayers, FiTarget, FiCompass, FiLoader } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineBeaker, HiOutlineScale, HiOutlineCurrencyRupee, HiOutlineDesktopComputer, HiOutlinePencilAlt, HiOutlineOfficeBuilding, HiOutlineHeart } from 'react-icons/hi';
