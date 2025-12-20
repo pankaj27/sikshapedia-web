@@ -225,7 +225,7 @@ const Header = () => {
                       const iconComponents = { FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone };
                       const IconComponent = iconComponents[item.icon] || FiGrid;
                       return (
-                        <Link
+                        <NavLink
                           key={idx}
                           to={item.link}
                           onClick={() => setExploreDropdownOpen(false)}
