@@ -75,13 +75,13 @@ const PremiumSuccess = () => {
             <p className="text-gray-600 mb-6">{message}</p>
             <div className="space-y-3">
               <Button
-                onClick={() => navigate('/dashboard')}
+                onClick={() => window.location.href = '/dashboard')}
                 className="w-full bg-orange-600 hover:bg-orange-700"
               >
                 Go to Dashboard
               </Button>
               <Button
-                onClick={() => navigate('/premium')}
+                onClick={() => window.location.href = '/premium')}
                 variant="outline"
                 className="w-full"
               >
@@ -100,13 +100,13 @@ const PremiumSuccess = () => {
             <p className="text-gray-600 mb-6">{message}</p>
             <div className="space-y-3">
               <Button
-                onClick={() => navigate('/premium')}
+                onClick={() => window.location.href = '/premium')}
                 className="w-full bg-orange-600 hover:bg-orange-700"
               >
                 Try Again
               </Button>
               <Button
-                onClick={() => navigate('/dashboard')}
+                onClick={() => window.location.href = '/dashboard')}
                 variant="outline"
                 className="w-full"
               >
