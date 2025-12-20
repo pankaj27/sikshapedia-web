@@ -7858,12 +7858,24 @@ async def get_advertisement_reports(current_user: User = Depends(get_current_use
 # Listing Page Content API - Manage content for listing pages
 # ============================================
 
+@api_router.get("/listing-pages/stats")
+async def get_listing_pages_stats():
+    """Get listing page statistics by page_type"""
+    pipeline = [
+        {"$group": {"_id": "$page_type", "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}}
+    ]
+    results = await db.listing_pages.aggregate(pipeline).to_list(50)
+    stats = {item["_id"]: item["count"] for item in results if item["_id"]}
+    total = sum(stats.values())
+    return {"stats": stats, "total": total}
+
 @api_router.get("/listing-pages")
 async def get_listing_pages(
     page_type: Optional[str] = None,
     institution_type: Optional[str] = None,
     is_published: Optional[bool] = None,
-    limit: int = 100
+    limit: int = 1000
 ):
     """Get all listing page content with optional filters"""
     query = {}
