@@ -217,18 +217,17 @@ function App() {
             <Route path="/admin/lead-settings" element={<LeadSettings />} />
 
             {/* Public Routes - With Layout */}
-            <Route element={<Layout />}>
-              <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Layout><HomePage /></Layout>} />
               
-              {/* ============================================ */}
-              {/* SPECIFIC ROUTES - Must come BEFORE dynamic routes */}
-              {/* ============================================ */}
+            {/* ============================================ */}
+            {/* SPECIFIC ROUTES - Must come BEFORE dynamic routes */}
+            {/* ============================================ */}
               
-              {/* Institution Listing Pages */}
-              {/* DEPRECATED: Old /colleges route now redirects to /india-colleges */}
-              <Route path="/colleges" element={<Navigate to="/india-colleges" replace />} />
-              <Route path="/schools" element={<SchoolsPage />} />
-              <Route path="/universities" element={<UniversitiesPage />} />
+            {/* Institution Listing Pages */}
+            {/* DEPRECATED: Old /colleges route now redirects to /india-colleges */}
+            <Route path="/colleges" element={<Navigate to="/india-colleges" replace />} />
+            <Route path="/schools" element={<Layout><SchoolsPage /></Layout>} />
+            <Route path="/universities" element={<Layout><UniversitiesPage /></Layout>} />
                   
               {/* Institution Detail Pages: /colleges/{number}-{slug} */}
               <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
