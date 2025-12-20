@@ -346,7 +346,7 @@ async def get_cities(state: str):
 
 @router.get("/partners")
 async def get_admission_partners(
-    institution_type: Optional[str] = None,
+    entity_type: Optional[str] = Query(None, description="college, school, or university"),
     limit: int = 50,
     skip: int = 0,
     db=Depends(get_db)
@@ -354,27 +354,30 @@ async def get_admission_partners(
     """Get list of admission partner institutions"""
     query = {"is_admission_partner": True}
     
-    if institution_type:
-        query["institution_type"] = institution_type
-    
     projection = {
         "_id": 0,
         "id": 1,
         "name": 1,
-        "institution_type": 1,
-        "location": 1,
-        "logo_url": 1,
-        "banner_url": 1,
+        "slug": 1,
+        "city": 1,
+        "state": 1,
+        "logo": 1,
+        "banner": 1,
         "is_admission_partner": 1,
-        "is_admission_open": 1,
-        "admission_deadline": 1,
-        "average_fees": 1,
         "rating": 1,
-        "courses": 1
+        "type": 1
     }
     
-    partners = await db.colleges.find(query, projection).skip(skip).limit(limit).to_list(limit)
-    total = await db.colleges.count_documents(query)
+    # Determine which collection to query
+    if entity_type == "school":
+        collection = db.schools
+    elif entity_type == "university":
+        collection = db.universities
+    else:
+        collection = db.colleges
+    
+    partners = await collection.find(query, projection).skip(skip).limit(limit).to_list(limit)
+    total = await collection.count_documents(query)
     
     return {
         "partners": partners,
