@@ -4,6 +4,10 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
 import { Link } from '../components/CustomLink';
+
+// Flag to prevent re-renders during navigation
+let isNavigating = false;
+
 const InstituteLogin = () => {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
@@ -19,6 +23,8 @@ const InstituteLogin = () => {
       setError('Please enter login ID and password');
       return;
     }
+    
+    if (isNavigating) return; // Prevent double submission
     
     setLoading(true);
     setError('');
@@ -36,14 +42,12 @@ const InstituteLogin = () => {
         alert('Please change your password for security.');
       }
       
-      // Use setTimeout to ensure localStorage is saved before navigation
-      // This also helps avoid the React render loop interrupting the redirect
-      setTimeout(() => {
-        window.location.replace('/institute/dashboard');
-      }, 100);
+      // Set flag and navigate immediately
+      isNavigating = true;
+      document.location.href = '/institute/dashboard';
+      return; // Prevent any further state updates
     } catch (err) {
       setError(err.response?.data?.detail || 'Login failed');
-    } finally {
       setLoading(false);
     }
   };
