@@ -16,9 +16,9 @@ const AdmissionBookingsManagement = () => {
   const [settings, setSettings] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [settingsForm, setSettingsForm] = useState({
-    form_fee: 1000,
-    platform_fee: 250,
-    gst_percentage: 18
+    college: { form_fee: 1000, platform_fee: 250, gst_percentage: 18 },
+    school: { form_fee: 500, platform_fee: 150, gst_percentage: 18 },
+    university: { form_fee: 1500, platform_fee: 350, gst_percentage: 18 }
   });
   const [selectedBooking, setSelectedBooking] = useState(null);
 
@@ -47,11 +47,13 @@ const AdmissionBookingsManagement = () => {
     try {
       const response = await api.get('/admission/settings');
       setSettings(response.data);
-      setSettingsForm({
-        form_fee: response.data.form_fee || 1000,
-        platform_fee: response.data.platform_fee || 250,
-        gst_percentage: response.data.gst_percentage || 18
-      });
+      if (response.data.college) {
+        setSettingsForm({
+          college: response.data.college || { form_fee: 1000, platform_fee: 250, gst_percentage: 18 },
+          school: response.data.school || { form_fee: 500, platform_fee: 150, gst_percentage: 18 },
+          university: response.data.university || { form_fee: 1500, platform_fee: 350, gst_percentage: 18 }
+        });
+      }
     } catch (err) {
       console.error('Failed to fetch settings:', err);
     }
@@ -69,6 +71,21 @@ const AdmissionBookingsManagement = () => {
     } catch (err) {
       alert('Failed to save settings');
     }
+  };
+
+  const updateEntityFee = (entityType, field, value) => {
+    setSettingsForm(prev => ({
+      ...prev,
+      [entityType]: {
+        ...prev[entityType],
+        [field]: parseFloat(value) || 0
+      }
+    }));
+  };
+
+  const calculateTotal = (entity) => {
+    const fees = settingsForm[entity];
+    return ((fees.form_fee + fees.platform_fee) * (1 + fees.gst_percentage / 100)).toFixed(2);
   };
 
   const getStatusBadge = (status) => {
