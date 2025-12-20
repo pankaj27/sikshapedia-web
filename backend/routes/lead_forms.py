@@ -7,12 +7,22 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime, timezone
 import uuid
-import os
 
 router = APIRouter(prefix="/api/lead-forms", tags=["Lead Forms"])
 
-# Get database connection
-from server import get_db
+# Database reference (set by server.py)
+db = None
+
+def set_database(database):
+    """Set the database reference"""
+    global db
+    db = database
+
+def get_db():
+    """Get the database reference"""
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    return db
 
 # Models
 class InstituteRegistrationForm(BaseModel):
@@ -42,7 +52,7 @@ class AdvertiseWithUsForm(BaseModel):
 async def register_institute(form_data: InstituteRegistrationForm):
     """Submit Register My Institute form"""
     try:
-        db = get_db()
+        database = get_db()
         
         submission = {
             "id": str(uuid.uuid4()),
@@ -55,7 +65,7 @@ async def register_institute(form_data: InstituteRegistrationForm):
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
         
-        await db.lead_form_submissions.insert_one(submission)
+        await database.lead_form_submissions.insert_one(submission)
         
         return {
             "success": True,
@@ -71,7 +81,7 @@ async def register_institute(form_data: InstituteRegistrationForm):
 async def advertise_with_us(form_data: AdvertiseWithUsForm):
     """Submit Advertise With Us form"""
     try:
-        db = get_db()
+        database = get_db()
         
         submission = {
             "id": str(uuid.uuid4()),
@@ -84,7 +94,7 @@ async def advertise_with_us(form_data: AdvertiseWithUsForm):
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
         
-        await db.lead_form_submissions.insert_one(submission)
+        await database.lead_form_submissions.insert_one(submission)
         
         return {
             "success": True,
@@ -101,7 +111,7 @@ async def advertise_with_us(form_data: AdvertiseWithUsForm):
 async def get_submissions(form_type: Optional[str] = None, status: Optional[str] = None, skip: int = 0, limit: int = 50):
     """Get all form submissions (admin only)"""
     try:
-        db = get_db()
+        database = get_db()
         
         query = {}
         if form_type:
@@ -109,8 +119,8 @@ async def get_submissions(form_type: Optional[str] = None, status: Optional[str]
         if status:
             query["status"] = status
         
-        submissions = await db.lead_form_submissions.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
-        total = await db.lead_form_submissions.count_documents(query)
+        submissions = await database.lead_form_submissions.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+        total = await database.lead_form_submissions.count_documents(query)
         
         return {
             "submissions": submissions,
@@ -127,7 +137,7 @@ async def get_submissions(form_type: Optional[str] = None, status: Optional[str]
 async def update_submission_status(submission_id: str, status: str, notes: Optional[str] = None):
     """Update submission status (admin only)"""
     try:
-        db = get_db()
+        database = get_db()
         
         valid_statuses = ["new", "contacted", "converted", "closed"]
         if status not in valid_statuses:
@@ -144,7 +154,7 @@ async def update_submission_status(submission_id: str, status: str, notes: Optio
         if status == "contacted":
             update_data["contacted_at"] = datetime.now(timezone.utc).isoformat()
         
-        result = await db.lead_form_submissions.update_one(
+        result = await database.lead_form_submissions.update_one(
             {"id": submission_id},
             {"$set": update_data}
         )
@@ -164,14 +174,14 @@ async def update_submission_status(submission_id: str, status: str, notes: Optio
 async def get_submission_stats():
     """Get submission statistics (admin only)"""
     try:
-        db = get_db()
+        database = get_db()
         
-        total = await db.lead_form_submissions.count_documents({})
-        register_institute = await db.lead_form_submissions.count_documents({"form_type": "register_institute"})
-        advertise = await db.lead_form_submissions.count_documents({"form_type": "advertise_with_us"})
-        new_count = await db.lead_form_submissions.count_documents({"status": "new"})
-        contacted = await db.lead_form_submissions.count_documents({"status": "contacted"})
-        converted = await db.lead_form_submissions.count_documents({"status": "converted"})
+        total = await database.lead_form_submissions.count_documents({})
+        register_institute = await database.lead_form_submissions.count_documents({"form_type": "register_institute"})
+        advertise = await database.lead_form_submissions.count_documents({"form_type": "advertise_with_us"})
+        new_count = await database.lead_form_submissions.count_documents({"status": "new"})
+        contacted = await database.lead_form_submissions.count_documents({"status": "contacted"})
+        converted = await database.lead_form_submissions.count_documents({"status": "converted"})
         
         return {
             "total": total,
