@@ -167,8 +167,6 @@ class RewardsAPITester:
                 self.log_test("Extract OTP from logs", False, f"Error reading logs: {str(e)}")
         else:
             self.log_test("Send OTP", False, f"Status: {status}", response)
-        else:
-            self.log_test("Send OTP", False, f"Status: {status}", response)
 
     def test_user_rewards_apis(self):
         """Test User Rewards APIs"""
