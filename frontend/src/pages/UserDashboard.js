@@ -5,10 +5,344 @@ import {
   FiUser, FiFileText, FiStar, FiBookmark, FiHeart, FiMessageSquare, 
   FiHelpCircle, FiGift, FiDollarSign, FiShare2, FiLogOut, FiBarChart2,
   FiEdit, FiCamera, FiCopy, FiCheckCircle, FiClock, FiXCircle, FiAlertCircle,
-  FiPlus, FiExternalLink
+  FiPlus, FiExternalLink, FiCreditCard, FiTrendingUp, FiArrowRight
 } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+
+// Earnings Tab Component with Redemption
+const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
+  const [pointsSummary, setPointsSummary] = useState(null);
+  const [redemptions, setRedemptions] = useState([]);
+  const [showRedeemModal, setShowRedeemModal] = useState(false);
+  const [redeemPoints, setRedeemPoints] = useState('');
+  const [upiId, setUpiId] = useState('');
+  const [processing, setProcessing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [summaryRes, redemptionsRes] = await Promise.all([
+          api.get('/rewards/points-summary'),
+          api.get('/rewards/redemptions')
+        ]);
+        setPointsSummary(summaryRes.data);
+        setRedemptions(redemptionsRes.data.redemptions || []);
+      } catch (error) {
+        console.error('Error fetching earnings data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleRedeem = async () => {
+    if (!redeemPoints || parseInt(redeemPoints) < 200) {
+      alert('Minimum 200 points required for redemption');
+      return;
+    }
+    if (!upiId || !upiId.includes('@')) {
+      alert('Please enter a valid UPI ID');
+      return;
+    }
+
+    setProcessing(true);
+    try {
+      await api.post('/rewards/redeem', {
+        points: parseInt(redeemPoints),
+        upi_id: upiId
+      });
+      alert('Redemption request submitted! You will receive payment within 24-48 hours.');
+      setShowRedeemModal(false);
+      setRedeemPoints('');
+      setUpiId('');
+      // Refresh data
+      const [summaryRes, redemptionsRes] = await Promise.all([
+        api.get('/rewards/points-summary'),
+        api.get('/rewards/redemptions')
+      ]);
+      setPointsSummary(summaryRes.data);
+      setRedemptions(redemptionsRes.data.redemptions || []);
+      onRefresh();
+    } catch (error) {
+      alert(error.response?.data?.detail || 'Error submitting redemption request');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const currentPoints = pointsSummary?.current_points || dashboard?.stats?.points || 0;
+  const cashValue = currentPoints * 0.5;
+  const canRedeem = currentPoints >= 200;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Earnings & Rewards</h2>
+        <Button 
+          onClick={() => setShowRedeemModal(true)}
+          disabled={!canRedeem}
+          className={`flex items-center gap-2 ${canRedeem ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400'}`}
+        >
+          <FiCreditCard /> Redeem Points
+        </Button>
+      </div>
+
+      {/* Main Balance Card */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm opacity-90 mb-1">Available Balance</p>
+            <p className="text-4xl font-bold">{currentPoints} <span className="text-lg font-normal">points</span></p>
+            <p className="text-lg opacity-90 mt-1">= ₹{cashValue.toFixed(2)}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm opacity-90">Conversion Rate</p>
+            <p className="font-semibold">100 pts = ₹50</p>
+            <p className="text-sm opacity-75 mt-2">Min. redemption: 200 pts</p>
+          </div>
+        </div>
+        {!canRedeem && (
+          <div className="mt-4 bg-white/20 rounded-lg p-3 text-sm">
+            💡 You need {200 - currentPoints} more points to redeem. Write reviews to earn more!
+          </div>
+        )}
+      </div>
+
+      {/* Points Breakdown */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+          <FiStar className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-yellow-600">{pointsSummary?.breakdown?.from_reviews || 0}</p>
+          <p className="text-sm text-gray-600">From Reviews</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+          <FiGift className="w-8 h-8 text-purple-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-purple-600">{pointsSummary?.breakdown?.from_referrals || 0}</p>
+          <p className="text-sm text-gray-600">From Referrals</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+          <FiMessageSquare className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-blue-600">{pointsSummary?.breakdown?.from_answers || 0}</p>
+          <p className="text-sm text-gray-600">From Answers</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+          <FiTrendingUp className="w-8 h-8 text-red-500 mx-auto mb-2" />
+          <p className="text-2xl font-bold text-red-600">{pointsSummary?.breakdown?.redeemed || 0}</p>
+          <p className="text-sm text-gray-600">Redeemed</p>
+        </div>
+      </div>
+
+      {/* How to Earn */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h3 className="font-bold mb-4 text-lg">💰 How to Earn Points</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="font-semibold text-yellow-600 mb-2 flex items-center gap-2">
+              <FiStar /> Review Rewards
+            </h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex items-center justify-between">
+                <span>Write a review</span>
+                <span className="font-semibold text-green-600">+50 pts</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Detailed review (200+ chars)</span>
+                <span className="font-semibold text-green-600">+50 pts</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Add photos</span>
+                <span className="font-semibold text-green-600">+30 pts</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Verified student bonus</span>
+                <span className="font-semibold text-green-600">+50 pts</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-purple-600 mb-2 flex items-center gap-2">
+              <FiGift /> Referral & Others
+            </h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex items-center justify-between">
+                <span>Successful referral</span>
+                <span className="font-semibold text-green-600">+100 pts</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Answer approved</span>
+                <span className="font-semibold text-green-600">+10 pts</span>
+              </li>
+            </ul>
+            <div className="mt-4 p-3 bg-purple-50 rounded-lg">
+              <p className="text-sm text-purple-700">
+                Your referral code: <strong>{dashboard?.referral_code}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Redemption History */}
+      {redemptions.length > 0 && (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h3 className="font-bold mb-4">Redemption History</h3>
+          <div className="space-y-3">
+            {redemptions.map((r) => (
+              <div key={r.id} className="flex items-center justify-between p-4 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    r.status === 'completed' ? 'bg-green-100' : 
+                    r.status === 'pending' ? 'bg-yellow-100' : 'bg-red-100'
+                  }`}>
+                    <FiCreditCard className={
+                      r.status === 'completed' ? 'text-green-600' : 
+                      r.status === 'pending' ? 'text-yellow-600' : 'text-red-600'
+                    } />
+                  </div>
+                  <div>
+                    <p className="font-medium">{r.points} points → ₹{r.amount}</p>
+                    <p className="text-sm text-gray-500">UPI: {r.upi_id}</p>
+                    <p className="text-xs text-gray-400">{new Date(r.created_at).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${
+                  r.status === 'completed' ? 'bg-green-100 text-green-700' : 
+                  r.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                }`}>
+                  {r.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recent Points Transactions */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h3 className="font-bold mb-4">Recent Points Activity</h3>
+        {pointsSummary?.recent_transactions?.length > 0 ? (
+          <div className="space-y-3">
+            {pointsSummary.recent_transactions.map((tx) => (
+              <div key={tx.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    tx.type === 'review' ? 'bg-yellow-100' : 
+                    tx.type === 'referral' ? 'bg-purple-100' :
+                    tx.type === 'answer' ? 'bg-blue-100' :
+                    tx.type === 'redemption' ? 'bg-red-100' : 'bg-gray-100'
+                  }`}>
+                    {tx.type === 'review' && <FiStar className="text-yellow-600" />}
+                    {tx.type === 'referral' && <FiGift className="text-purple-600" />}
+                    {tx.type === 'answer' && <FiMessageSquare className="text-blue-600" />}
+                    {tx.type === 'redemption' && <FiCreditCard className="text-red-600" />}
+                    {!['review', 'referral', 'answer', 'redemption'].includes(tx.type) && <FiDollarSign className="text-gray-600" />}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{tx.description}</p>
+                    <p className="text-xs text-gray-500">{new Date(tx.created_at).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <p className={`text-lg font-bold ${tx.points > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {tx.points > 0 ? '+' : ''}{tx.points} pts
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 py-8">No transactions yet. Start earning by writing reviews!</p>
+        )}
+      </div>
+
+      {/* Redeem Modal */}
+      {showRedeemModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">💸 Redeem Points</h2>
+            
+            <div className="bg-green-50 p-4 rounded-lg mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700">Available Points:</span>
+                <span className="font-bold text-green-600">{currentPoints} pts</span>
+              </div>
+              <div className="flex justify-between items-center mt-1">
+                <span className="text-gray-700">Cash Value:</span>
+                <span className="font-bold text-green-600">₹{cashValue.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Points to Redeem *
+                </label>
+                <input
+                  type="number"
+                  value={redeemPoints}
+                  onChange={(e) => setRedeemPoints(e.target.value)}
+                  min="200"
+                  max={currentPoints}
+                  placeholder="Minimum 200 points"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+                {redeemPoints && (
+                  <p className="text-sm text-green-600 mt-1">
+                    You will receive: ₹{(parseInt(redeemPoints || 0) * 0.5).toFixed(2)}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  UPI ID *
+                </label>
+                <input
+                  type="text"
+                  value={upiId}
+                  onChange={(e) => setUpiId(e.target.value)}
+                  placeholder="yourname@upi"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+                <p className="text-xs text-gray-500 mt-1">Enter your UPI ID (e.g., name@paytm, phone@ybl)</p>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowRedeemModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="flex-1 bg-green-600 hover:bg-green-700"
+                onClick={handleRedeem}
+                disabled={processing || !redeemPoints || !upiId}
+              >
+                {processing ? 'Processing...' : 'Confirm Redemption'}
+              </Button>
+            </div>
+
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Payment will be processed within 24-48 hours
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const UserDashboard = () => {
   const navigate = useNavigate();
