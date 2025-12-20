@@ -2425,6 +2425,7 @@ const DynamicListingPage = () => {
         collegeLogoUrl={selectedCollege?.logo_url}
         collegeCourses={selectedCollege?.courses?.map(c => typeof c === 'object' ? c.name : c) || []}
         source="listing_page"
+        isSchool={selectedCollege?.institution_type === 'School'}
       />
     </div>
   );
