@@ -255,11 +255,7 @@ function App() {
               {/* ============================================ */}
               
               {/* Institution Listing Pages - handled by new dynamic routes */}
-              {/* Detail pages: /colleges/001-iit-bombay - handled by InstitutionRouter */}
-              {/* Listing pages: /colleges/west-bengal - handled by InstitutionRouter */}
-              <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
-              <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
-              <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
+              {/* Sub-pages (sections) are handled by checking if first segment has numeric prefix */}
                   
               {/* Exams */}
               <Route path="/exams" element={<ExamPage />} />
