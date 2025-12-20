@@ -6001,47 +6001,45 @@ const CollegeForm = () => {
         </CollapsibleSection>
 
         {/* Bottom Save Button (Duplicate for convenience) */}
-        <div className="sticky bottom-0 bg-white border-t py-3 px-4 flex justify-between items-center -mx-4 -mb-4">
-          <div className="flex items-center gap-2 text-xs">
-            <span className={`px-2 py-1 rounded ${formData.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+        <div className="sticky bottom-0 bg-white border-t py-4 px-6 flex justify-between items-center shadow-lg">
+          <div className="flex items-center gap-2 text-sm">
+            <span className={`px-3 py-1 rounded-full font-medium ${formData.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
               {formData.status === 'published' ? '📢 Published' : '📝 Draft'}
             </span>
             {formData.name && <span className="text-gray-500">— {formData.name}</span>}
           </div>
-          <div className="flex items-center gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => navigate('/admin/colleges')}>
-              <FiX className="w-4 h-4 mr-1" /> Cancel
+          <div className="flex items-center gap-3">
+            <Button type="button" variant="outline" onClick={() => window.location.href = '/admin/colleges'}>
+              <FiX className="w-4 h-4 mr-2" /> Cancel
             </Button>
             <Button 
               type="button" 
               variant="outline" 
-              size="sm" 
               disabled={saving}
               onClick={() => {
                 setFormData(prev => ({...prev, status: 'draft'}));
                 setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
               }}
-              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              className="border-orange-300 text-orange-600 hover:bg-orange-50"
             >
-              <FiFileText className="w-4 h-4 mr-1" /> Save Draft
+              <FiFileText className="w-4 h-4 mr-2" /> Save Draft
             </Button>
             <Button 
               type="button" 
-              size="sm" 
               disabled={saving} 
               onClick={() => {
                 setFormData(prev => ({...prev, status: 'published'}));
                 setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
               }}
-              className="bg-orange-600 hover:bg-orange-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white"
             >
-              {saving ? <FiLoader className="w-4 h-4 animate-spin mr-1" /> : <FiSave className="w-4 h-4 mr-1" />}
-              {saving ? 'Publishing...' : 'Publish'}
+              {saving ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
+              {saving ? 'Publishing...' : 'Save & Publish'}
             </Button>
           </div>
         </div>
       </form>
-    </AdminLayout>
+    </div>
   );
 };
 
