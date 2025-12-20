@@ -254,13 +254,11 @@ function App() {
               {/* ============================================ */}
               
               {/* Institution Listing Pages - handled by new dynamic routes */}
-              {/* Detail pages with specific IDs are handled first */}
+              {/* Detail pages: /colleges/001-iit-bombay - handled by InstitutionRouter */}
+              {/* Listing pages: /colleges/west-bengal - handled by InstitutionRouter */}
               <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
-              <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
               <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
-              <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
               <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
-              <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
                   
               {/* Exams */}
               <Route path="/exams" element={<ExamPage />} />
