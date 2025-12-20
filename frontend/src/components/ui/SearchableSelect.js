@@ -67,10 +67,11 @@ const SearchableSelect = ({
     }
   }, [highlightedIndex, isOpen, filteredOptions.length]);
 
-  // Reset highlighted index when search changes
-  useEffect(() => {
+  // Handle search term change - reset highlight
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
     setHighlightedIndex(0);
-  }, [searchTerm]);
+  };
 
   const handleSelect = (optValue) => {
     onChange(optValue);
