@@ -1091,6 +1091,57 @@ const DynamicListingPage = () => {
     setFilters(prev => ({ ...prev, [filterType]: '' }));
   };
   
+  // Remove a filter from URL and navigate to new URL
+  const removeUrlFilter = (filterToRemove) => {
+    const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
+    
+    // Get current filters from URL
+    let newState = urlInfo.state;
+    let newCity = urlInfo.city;
+    let newStream = urlInfo.stream;
+    let newCourse = urlInfo.course;
+    
+    // Remove the specified filter
+    switch (filterToRemove) {
+      case 'state':
+        newState = null;
+        newCity = null; // City is under state, so remove it too
+        break;
+      case 'city':
+        newCity = null;
+        break;
+      case 'stream':
+        newStream = null;
+        newCourse = null; // Course is under stream, so remove it too
+        break;
+      case 'course':
+        newCourse = null;
+        break;
+      default:
+        break;
+    }
+    
+    // Build new URL with remaining filters
+    let segments = [baseSuffix];
+    if (newState) segments.push(newState);
+    if (newCity && !newState) segments.push(newCity);
+    if (newStream) segments.push(newStream);
+    if (newCourse) segments.push(newCourse);
+    
+    // Handle query params for type and accreditation
+    const queryParams = new URLSearchParams(location.search);
+    if (filterToRemove === 'collegeType') {
+      queryParams.delete('type');
+    }
+    if (filterToRemove === 'accreditation') {
+      queryParams.delete('accreditation');
+    }
+    
+    const newPath = '/' + segments.join('/');
+    const queryString = queryParams.toString();
+    navigate(queryString ? `${newPath}?${queryString}` : newPath);
+  };
+  
   // Breadcrumb generation
   const breadcrumbs = useMemo(() => {
     const crumbs = [{ label: 'Home', path: '/' }];
