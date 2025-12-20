@@ -118,6 +118,8 @@ const AdminLayout = ({ children }) => {
         { title: 'Testimonials', path: '/admin/testimonials', icon: FiUsers },
         { title: 'FAQs', path: '/admin/faqs', icon: FiFileText },
         { title: 'Cities', path: '/admin/cities', icon: FiGrid },
+        { title: 'Locations (Find by)', path: '/admin/locations', icon: FiGlobe, badge: 'NEW' },
+        { title: 'Counselors', path: '/admin/counselors', icon: FiUsers, badge: 'NEW' },
         { title: 'Listing Pages', path: '/admin/listing-pages', icon: FiGlobe },
         { title: 'Static Pages', path: '/admin/static-pages', icon: FiFileText, badge: 'NEW' },
         { title: 'Study Abroad', path: '/admin/study-abroad', icon: FiGlobe, badge: 'NEW' },
