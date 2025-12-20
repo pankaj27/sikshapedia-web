@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://edudashboard-10.preview.emergentagent.com/sitemap.xml
+Sitemap: https://collegebuddy-6.preview.emergentagent.com/sitemap.xml
