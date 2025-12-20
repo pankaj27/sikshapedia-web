@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { FiUsers, FiChevronLeft, FiChevronRight, FiSearch, FiEdit } from 'react-icons/fi';
+import { FiUsers, FiChevronLeft, FiChevronRight, FiSearch, FiEdit, FiCreditCard, FiX } from 'react-icons/fi';
 import api from '../../api/axios';
 
 const UsersPointsReport = () => {
@@ -9,6 +9,7 @@ const UsersPointsReport = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [showAdjustModal, setShowAdjustModal] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(null);
   const [adjustPoints, setAdjustPoints] = useState(0);
   const [adjustReason, setAdjustReason] = useState('');
   const [processing, setProcessing] = useState(false);
