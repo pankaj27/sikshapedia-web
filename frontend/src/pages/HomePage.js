@@ -291,7 +291,8 @@ const CollegeDuniaHome = () => {
                 </div>
               </Link>
             </SwiperSlide>
-          ))}
+            );
+          })}
         </Swiper>
 
         {/* Search Overlay - Compact with Animated Title */}
