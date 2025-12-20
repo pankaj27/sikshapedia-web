@@ -234,6 +234,66 @@ async def generate_url_structures(request: GenerateRequest):
                     })
                     idx += 1
         
+        elif url_type == "university_state":
+            # Universities by State: /{state}-universities
+            for idx, state in enumerate(STATES, 1):
+                slug = generate_slug(state)
+                structures.append({
+                    "id": str(uuid.uuid4()),
+                    "name": f"{state} Universities",
+                    "slug": slug,
+                    "type": "university_state",
+                    "state": state,
+                    "link": f"/{slug}-universities",
+                    "display_order": idx,
+                    "is_active": True,
+                    "created_at": now,
+                    "updated_at": now
+                })
+        
+        elif url_type == "university_city":
+            # Universities by City: /{city}-universities
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                for city in cities:
+                    slug = generate_slug(city)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{city} Universities",
+                        "slug": slug,
+                        "type": "university_city",
+                        "state": state,
+                        "city": city,
+                        "link": f"/{slug}-universities",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "university_state_city":
+            # Universities by State+City: /{state}/{city}-universities
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                state_slug = generate_slug(state)
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{city}, {state} Universities",
+                        "slug": f"{state_slug}/{city_slug}",
+                        "type": "university_state_city",
+                        "state": state,
+                        "city": city,
+                        "link": f"/{state_slug}/{city_slug}-universities",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
         elif url_type == "stream":
             # Streams: /india-colleges/{stream}
             for idx, stream in enumerate(STREAMS, 1):
