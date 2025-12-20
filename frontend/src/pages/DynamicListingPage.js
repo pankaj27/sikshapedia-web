@@ -1142,29 +1142,48 @@ const DynamicListingPage = () => {
     navigate(queryString ? `${newPath}?${queryString}` : newPath);
   };
   
-  // Breadcrumb generation
+  // Breadcrumb generation - Updated for NEW URL structure
   const breadcrumbs = useMemo(() => {
     const crumbs = [{ label: 'Home', path: '/' }];
     
     if (urlInfo.type === 'institution-listing') {
       const isSchools = urlInfo.institutionType === 'schools';
-      const typeName = isSchools ? 'Schools' : 'Colleges';
+      const isUniversity = urlInfo.institutionType === 'university';
+      const typeName = isSchools ? 'Schools' : isUniversity ? 'Universities' : 'Colleges';
+      const basePath = `/${urlInfo.institutionType}`;
       
-      if (urlInfo.location) {
-        crumbs.push({ label: `All ${typeName} in India`, path: `/india-${urlInfo.institutionType}` });
-        crumbs.push({ label: `${toDisplayName(urlInfo.location)} ${typeName}`, path: location.pathname });
-      } else {
-        crumbs.push({ label: `All ${typeName} in India`, path: location.pathname });
+      // Always add base institution type
+      crumbs.push({ label: `All ${typeName} in India`, path: basePath });
+      
+      // Add state if present
+      if (urlInfo.state) {
+        const statePath = `${basePath}/${urlInfo.state}`;
+        crumbs.push({ label: `${getStateName(urlInfo.state)} ${typeName}`, path: statePath });
       }
-    } else if (urlInfo.type === 'stream-listing') {
-      crumbs.push({ label: 'All Colleges in India', path: '/colleges' });
-      if (pageInfo.stream) {
-        crumbs.push({ label: `${toDisplayName(pageInfo.stream)} Colleges`, path: `/${pageInfo.stream}` });
+      
+      // Add city if present (only if different path from state)
+      if (urlInfo.city) {
+        const cityPath = urlInfo.state 
+          ? `${basePath}/${urlInfo.state}/${urlInfo.city}` 
+          : `${basePath}/${urlInfo.city}`;
+        crumbs.push({ label: `${getCityName(urlInfo.city)} ${typeName}`, path: cityPath });
+      }
+      
+      // Add stream if present
+      if (urlInfo.stream) {
+        const streamName = getStreamName(urlInfo.stream);
+        crumbs.push({ label: `${streamName} ${typeName}`, path: location.pathname });
+      }
+      
+      // Add course if present
+      if (urlInfo.course) {
+        const courseName = getCourseName(urlInfo.course);
+        crumbs.push({ label: `${courseName} ${typeName}`, path: location.pathname });
       }
     }
     
     return crumbs;
-  }, [urlInfo, pageInfo, location.pathname]);
+  }, [urlInfo, location.pathname]);
 
   return (
     <div className="min-h-screen bg-gray-50">
