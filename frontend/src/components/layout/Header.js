@@ -25,12 +25,19 @@ const Header = () => {
       const savedUser = localStorage.getItem('user');
       if (savedUser) {
         try {
-          setUser(JSON.parse(savedUser));
+          const parsedUser = JSON.parse(savedUser);
+          // Only update if user data has changed
+          setUser(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(parsedUser)) {
+              return parsedUser;
+            }
+            return prev;
+          });
         } catch (e) {
           setUser(null);
         }
       } else {
-        setUser(null);
+        setUser(prev => prev ? null : prev);
       }
     };
     
@@ -39,8 +46,8 @@ const Header = () => {
     // Listen for storage changes (for cross-tab sync)
     window.addEventListener('storage', checkUser);
     
-    // Also check periodically for same-tab updates
-    const interval = setInterval(checkUser, 1000);
+    // Check periodically for same-tab updates - reduced frequency
+    const interval = setInterval(checkUser, 5000);
     
     return () => {
       window.removeEventListener('storage', checkUser);
