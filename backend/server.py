@@ -1388,6 +1388,9 @@ class University(BaseModel):
     address: Optional[str] = None
     established_year: Optional[int] = None
     
+    # Admission Partner
+    is_admission_partner: bool = False
+    
     # Academic Info
     streams: List[str] = []  # Engineering, Medical, Management, etc.
     total_courses: int = 0
