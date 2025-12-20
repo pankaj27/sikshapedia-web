@@ -8415,6 +8415,7 @@ try:
     from routes.lead_forms import router as lead_forms_router, set_database as set_lead_forms_db
     from routes.admin_counselors import router as admin_counselors_router, set_database as set_admin_counselors_db
     from routes.admin_auth_pages import router as admin_auth_pages_router, set_database as set_admin_auth_pages_db
+    from routes.listing_pages import router as listing_pages_router, set_database as set_listing_pages_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -8430,6 +8431,7 @@ try:
     set_lead_forms_db(db)
     set_admin_counselors_db(db)
     set_admin_auth_pages_db(db)
+    set_listing_pages_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
