@@ -1,67 +1,36 @@
-"""
-Reviews and Questions Routes
-Handles user reviews and Q&A for colleges/schools
-"""
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from pydantic import BaseModel, Field, ConfigDict
+"""Reviews and Q&A API"""
+from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import Optional, List
 from datetime import datetime, timezone
+from pydantic import BaseModel, Field, ConfigDict
 import uuid
-import os
-import jwt
 
-# Create router
-reviews_router = APIRouter(prefix="/api", tags=["Reviews & Questions"])
-security = HTTPBearer(auto_error=False)
+router = APIRouter(prefix="/api", tags=["Reviews & Q&A"])
 
-# JWT Configuration
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here')
-ALGORITHM = "HS256"
-
-# Database will be injected from main app
+# Database reference (set by main app)
 db = None
 
 def set_database(database):
-    """Set the database instance from main app"""
     global db
     db = database
 
-# ============================================
-# Pydantic Models
-# ============================================
-
+# Models
 class Review(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     college_id: str
     user_id: str
     user_name: str
-    rating: float
-    review_text: str
-    pros: List[str] = []
-    cons: List[str] = []
-    placement_rating: Optional[float] = None
-    faculty_rating: Optional[float] = None
-    infrastructure_rating: Optional[float] = None
-    campus_life_rating: Optional[float] = None
-    value_for_money_rating: Optional[float] = None
-    helpful_count: int = 0
-    status: str = "pending"
-    earnings: float = 0
+    rating: int  # 1-5
+    review_text: Optional[str] = None
+    pros: Optional[str] = None
+    cons: Optional[str] = None
+    placements_rating: Optional[int] = None
+    infrastructure_rating: Optional[int] = None
+    faculty_rating: Optional[int] = None
+    status: str = "pending"  # pending, approved, rejected
+    earnings: float = 0.0
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-class ReviewCreate(BaseModel):
-    college_id: str
-    rating: float
-    review_text: str
-    pros: List[str] = []
-    cons: List[str] = []
-    placement_rating: Optional[float] = None
-    faculty_rating: Optional[float] = None
-    infrastructure_rating: Optional[float] = None
-    campus_life_rating: Optional[float] = None
-    value_for_money_rating: Optional[float] = None
 
 class Question(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -69,175 +38,167 @@ class Question(BaseModel):
     college_id: str
     user_id: str
     user_name: str
-    question_text: str
+    question: str
     answers: List[dict] = []
-    helpful_count: int = 0
-    status: str = "pending"
+    is_answered: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class QuestionCreate(BaseModel):
-    college_id: str
-    question_text: str
-
 
 # ============================================
-# Helper Functions
+# Review Endpoints (Public Read)
 # ============================================
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Get current user from JWT token"""
-    if not credentials:
-        raise HTTPException(status_code=401, detail="Authentication required")
-    try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        user = await db.users.find_one({"id": payload.get("sub")}, {"_id": 0})
-        if not user:
-            raise HTTPException(status_code=401, detail="User not found")
-        return type('User', (), user)()
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-
-
-# ============================================
-# Review Endpoints
-# ============================================
-
-@reviews_router.post("/reviews", response_model=Review)
-async def create_review(review_data: ReviewCreate, current_user = Depends(get_current_user)):
-    """Create a new review for a college"""
-    college = await db.colleges.find_one({"id": review_data.college_id})
-    if not college:
-        raise HTTPException(status_code=404, detail="College not found")
-    
-    existing_review = await db.reviews.find_one({
-        "college_id": review_data.college_id,
-        "user_id": current_user.id
-    })
-    if existing_review:
-        raise HTTPException(status_code=400, detail="You have already reviewed this college")
-    
-    # Calculate review earnings
-    review_earnings = 50.0
-    if review_data.review_text and len(review_data.review_text) > 200:
-        review_earnings = 100.0
-    
-    review = Review(
-        **review_data.model_dump(), 
-        user_id=current_user.id, 
-        user_name=current_user.name,
-        earnings=review_earnings,
-        status="approved"
-    )
-    review_dict = review.model_dump()
-    if isinstance(review_dict.get('created_at'), datetime):
-        review_dict['created_at'] = review_dict['created_at'].isoformat()
-    
-    await db.reviews.insert_one(review_dict)
-    
-    # Update user earnings
-    await db.users.update_one(
-        {"id": current_user.id},
-        {"$inc": {"total_earnings": review_earnings}}
-    )
-    
-    review_dict.pop('_id', None)
-    return review_dict
-
-@reviews_router.get("/reviews/college/{college_id}", response_model=List[Review])
-async def get_college_reviews(college_id: str, limit: int = 20):
-    """Get reviews for a specific college"""
+@router.get("/reviews/college/{college_id}", response_model=List[Review])
+async def get_college_reviews(
+    college_id: str, 
+    skip: int = Query(0, ge=0), 
+    limit: int = Query(20, ge=1, le=100)
+):
+    """Get all reviews for a college (Public)"""
     reviews = await db.reviews.find(
-        {"college_id": college_id, "status": "approved"},
+        {"college_id": college_id, "status": "approved"}, 
         {"_id": 0}
-    ).sort("created_at", -1).limit(limit).to_list(limit)
-    return reviews
-
-@reviews_router.get("/reviews/pending")
-async def get_pending_reviews(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Get pending reviews for admin approval"""
-    if not credentials:
-        raise HTTPException(status_code=401, detail="Authentication required")
-    try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        if payload.get("role") not in ["super_admin", "content_manager"]:
-            raise HTTPException(status_code=403, detail="Admin access required")
-    except:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
     
-    reviews = await db.reviews.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    for review in reviews:
+        if isinstance(review.get('created_at'), str):
+            review['created_at'] = datetime.fromisoformat(review['created_at'])
+    
     return reviews
 
-@reviews_router.patch("/reviews/{review_id}/approve")
-async def approve_review(review_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Approve a pending review"""
-    await db.reviews.update_one({"id": review_id}, {"$set": {"status": "approved"}})
-    return {"success": True}
 
-@reviews_router.patch("/reviews/{review_id}/reject")
-async def reject_review(review_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Reject a pending review"""
-    await db.reviews.update_one({"id": review_id}, {"$set": {"status": "rejected"}})
-    return {"success": True}
-
-@reviews_router.delete("/reviews/{review_id}")
-async def delete_review(review_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Delete a review"""
-    await db.reviews.delete_one({"id": review_id})
-    return {"success": True}
+@router.get("/reviews/stats/{college_id}")
+async def get_review_stats(college_id: str):
+    """Get review statistics for a college"""
+    reviews = await db.reviews.find(
+        {"college_id": college_id, "status": "approved"}, 
+        {"_id": 0, "rating": 1, "placements_rating": 1, "infrastructure_rating": 1, "faculty_rating": 1}
+    ).to_list(1000)
+    
+    if not reviews:
+        return {
+            "total_reviews": 0,
+            "average_rating": 0,
+            "rating_breakdown": {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0},
+            "category_ratings": {
+                "placements": 0,
+                "infrastructure": 0,
+                "faculty": 0
+            }
+        }
+    
+    total = len(reviews)
+    avg_rating = sum(r.get('rating', 0) for r in reviews) / total
+    
+    rating_breakdown = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
+    placements_total = 0
+    infrastructure_total = 0
+    faculty_total = 0
+    count_placements = 0
+    count_infrastructure = 0
+    count_faculty = 0
+    
+    for r in reviews:
+        rating_str = str(r.get('rating', 3))
+        if rating_str in rating_breakdown:
+            rating_breakdown[rating_str] += 1
+        
+        if r.get('placements_rating'):
+            placements_total += r['placements_rating']
+            count_placements += 1
+        if r.get('infrastructure_rating'):
+            infrastructure_total += r['infrastructure_rating']
+            count_infrastructure += 1
+        if r.get('faculty_rating'):
+            faculty_total += r['faculty_rating']
+            count_faculty += 1
+    
+    return {
+        "total_reviews": total,
+        "average_rating": round(avg_rating, 1),
+        "rating_breakdown": rating_breakdown,
+        "category_ratings": {
+            "placements": round(placements_total / count_placements, 1) if count_placements > 0 else 0,
+            "infrastructure": round(infrastructure_total / count_infrastructure, 1) if count_infrastructure > 0 else 0,
+            "faculty": round(faculty_total / count_faculty, 1) if count_faculty > 0 else 0
+        }
+    }
 
 
 # ============================================
-# Question Endpoints
+# Question Endpoints (Public Read)
 # ============================================
 
-@reviews_router.post("/questions", response_model=Question)
-async def create_question(question_data: QuestionCreate, current_user = Depends(get_current_user)):
-    """Create a new question for a college"""
-    question = Question(
-        **question_data.model_dump(),
-        user_id=current_user.id,
-        user_name=current_user.name
-    )
-    question_dict = question.model_dump()
-    if isinstance(question_dict.get('created_at'), datetime):
-        question_dict['created_at'] = question_dict['created_at'].isoformat()
-    
-    await db.questions.insert_one(question_dict)
-    question_dict.pop('_id', None)
-    return question_dict
-
-@reviews_router.get("/questions/college/{college_id}", response_model=List[Question])
-async def get_college_questions(college_id: str, limit: int = 20):
-    """Get questions for a specific college"""
+@router.get("/questions/college/{college_id}", response_model=List[Question])
+async def get_college_questions(
+    college_id: str, 
+    skip: int = Query(0, ge=0), 
+    limit: int = Query(20, ge=1, le=100)
+):
+    """Get all questions for a college (Public)"""
     questions = await db.questions.find(
-        {"college_id": college_id},
+        {"college_id": college_id}, 
         {"_id": 0}
-    ).sort("created_at", -1).limit(limit).to_list(limit)
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    for question in questions:
+        if isinstance(question.get('created_at'), str):
+            question['created_at'] = datetime.fromisoformat(question['created_at'])
+    
     return questions
 
-@reviews_router.post("/questions/answer")
-async def answer_question(answer_data: dict, current_user = Depends(get_current_user)):
-    """Add an answer to a question"""
-    question_id = answer_data.get("question_id")
-    answer_text = answer_data.get("answer_text")
+
+@router.get("/questions/{question_id}")
+async def get_question(question_id: str):
+    """Get a single question with answers"""
+    question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
     
-    if not question_id or not answer_text:
-        raise HTTPException(status_code=400, detail="Question ID and answer text required")
+    if isinstance(question.get('created_at'), str):
+        question['created_at'] = datetime.fromisoformat(question['created_at'])
     
-    answer = {
-        "id": str(uuid.uuid4()),
-        "user_id": current_user.id,
-        "user_name": current_user.name,
-        "answer_text": answer_text,
-        "helpful_count": 0,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
+    return question
+
+
+# ============================================
+# Admin Review Management
+# ============================================
+
+@router.get("/admin/reviews/pending")
+async def get_pending_reviews(limit: int = Query(50, ge=1, le=200)):
+    """Get pending reviews for admin approval"""
+    reviews = await db.reviews.find(
+        {"status": "pending"}, 
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
     
-    await db.questions.update_one(
-        {"id": question_id},
-        {"$push": {"answers": answer}}
+    for review in reviews:
+        if isinstance(review.get('created_at'), str):
+            review['created_at'] = datetime.fromisoformat(review['created_at'])
+    
+    return reviews
+
+
+@router.patch("/reviews/{review_id}/approve")
+async def approve_review(review_id: str):
+    """Approve a review (Admin only)"""
+    result = await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"status": "approved"}}
     )
-    
-    return {"success": True, "answer": answer}
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"message": "Review approved", "status": "approved"}
+
+
+@router.patch("/reviews/{review_id}/reject")
+async def reject_review(review_id: str):
+    """Reject a review (Admin only)"""
+    result = await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"status": "rejected"}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"message": "Review rejected", "status": "rejected"}
