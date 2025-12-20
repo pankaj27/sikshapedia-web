@@ -2,7 +2,7 @@
 Admission Booking Routes - Admission Partner System
 Handles admission bookings, payments, and approval workflow
 """
-from fastapi import APIRouter, HTTPException, Depends, Request, UploadFile, File, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends, Request, UploadFile, File, BackgroundTasks, Query
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
 from datetime import datetime, timezone
