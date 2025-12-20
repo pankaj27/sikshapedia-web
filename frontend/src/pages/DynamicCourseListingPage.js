@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { 
   FiChevronRight, FiSearch, FiClock, FiBookOpen, FiArrowRight, 
