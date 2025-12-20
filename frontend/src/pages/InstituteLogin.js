@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FiUser, FiLock, FiLoader, FiAlertCircle } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
 import { Link } from '../components/CustomLink';
 const InstituteLogin = () => {
-  const navigate = useNavigate();
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,7 +36,8 @@ const InstituteLogin = () => {
         alert('Please change your password for security.');
       }
       
-      navigate('/institute/dashboard');
+      // Use full page reload for navigation (React Router v7 workaround)
+      window.location.href = '/institute/dashboard';
     } catch (err) {
       setError(err.response?.data?.detail || 'Login failed');
     } finally {
