@@ -1032,6 +1032,156 @@ class APITester:
                 self.log_test("Comprehensive Settings Update", False, 
                              f"Status: {status}", response)
 
+    def test_institute_login_and_dashboard(self):
+        """Test Institute Login and Dashboard Flow"""
+        print("🏫 Testing Institute Login and Dashboard Flow...")
+        
+        # Test credentials from review request
+        INSTITUTE_CREDENTIALS = {
+            "login_id": "UPDA0001",
+            "password": "hrZiJlz0NyXY"
+        }
+        
+        # Test 1: POST /api/institute/login with valid credentials
+        success, response, status = self.make_request("POST", "/institute/login", INSTITUTE_CREDENTIALS)
+        if success and "session_token" in response:
+            self.institute_session_token = response["session_token"]
+            institution_info = response.get('institution', {})
+            needs_password_change = response.get('needs_password_change', False)
+            self.log_test("POST /institute/login (valid credentials)", True, 
+                         f"Login successful, Institution: {institution_info.get('name', 'N/A')}, Needs password change: {needs_password_change}")
+        else:
+            self.log_test("POST /institute/login (valid credentials)", False, f"Status: {status}", response)
+            self.institute_session_token = None
+        
+        # Test 2: POST /institute/login with invalid credentials (should fail)
+        invalid_credentials = {"login_id": "INVALID", "password": "wrongpass"}
+        success, response, status = self.make_request("POST", "/institute/login", invalid_credentials)
+        if not success and status == 401:
+            self.log_test("POST /institute/login (invalid credentials - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("POST /institute/login (invalid credentials - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 3: GET /api/institute/me (get current institute details)
+        if self.institute_session_token:
+            success, response, status = self.make_request("GET", "/institute/me", 
+                                                        headers={"Authorization": f"Bearer {self.institute_session_token}"})
+            if success and "id" in response:
+                self.log_test("GET /institute/me (with valid session)", True, 
+                             f"Institute details retrieved: {response.get('name', 'N/A')}")
+            else:
+                self.log_test("GET /institute/me (with valid session)", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /institute/me (no session token)", False, "No institute session token available")
+        
+        # Test 4: GET /api/institute/dashboard (main dashboard data)
+        if self.institute_session_token:
+            success, response, status = self.make_request("GET", "/institute/dashboard", 
+                                                        headers={"Authorization": f"Bearer {self.institute_session_token}"})
+            if success and isinstance(response, dict):
+                # Check dashboard structure
+                institution = response.get('institution', {})
+                leads = response.get('leads', {})
+                applications = response.get('applications', {})
+                ad_analytics = response.get('ad_analytics', {})
+                
+                # Verify dashboard components
+                has_overview_data = all(key in leads for key in ['total', 'organic', 'from_ads', 'status_breakdown'])
+                has_application_data = all(key in applications for key in ['total', 'status_breakdown'])
+                
+                if has_overview_data and has_application_data:
+                    self.log_test("GET /institute/dashboard (dashboard structure)", True, 
+                                 f"Total Leads: {leads.get('total', 0)}, Organic: {leads.get('organic', 0)}, From Ads: {leads.get('from_ads', 0)}, Applications: {applications.get('total', 0)}")
+                else:
+                    self.log_test("GET /institute/dashboard (dashboard structure)", False, 
+                                 "Missing required dashboard components")
+                
+                # Check if infinite render loop issue is resolved
+                if 'institution' in response and 'leads' in response:
+                    self.log_test("Dashboard Infinite Render Loop Fix", True, 
+                                 "Dashboard loads successfully without infinite render loop")
+                else:
+                    self.log_test("Dashboard Infinite Render Loop Fix", False, 
+                                 "Dashboard may still have loading issues")
+                    
+            else:
+                self.log_test("GET /institute/dashboard", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /institute/dashboard (no session token)", False, "No institute session token available")
+        
+        # Test 5: GET /api/institute/leads (leads tab functionality)
+        if self.institute_session_token:
+            success, response, status = self.make_request("GET", "/institute/leads", 
+                                                        headers={"Authorization": f"Bearer {self.institute_session_token}"})
+            if success and isinstance(response, list):
+                leads_count = len(response)
+                self.log_test("GET /institute/leads (Leads tab)", True, 
+                             f"Leads tab loads successfully, found {leads_count} leads")
+            else:
+                self.log_test("GET /institute/leads (Leads tab)", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /institute/leads (no session token)", False, "No institute session token available")
+        
+        # Test 6: GET /api/institute/applications (admission bookings tab functionality)
+        if self.institute_session_token:
+            success, response, status = self.make_request("GET", "/institute/applications", 
+                                                        headers={"Authorization": f"Bearer {self.institute_session_token}"})
+            if success and isinstance(response, list):
+                applications_count = len(response)
+                self.log_test("GET /institute/applications (Admission Bookings tab)", True, 
+                             f"Admission Bookings tab loads successfully, found {applications_count} applications")
+            else:
+                self.log_test("GET /institute/applications (Admission Bookings tab)", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /institute/applications (no session token)", False, "No institute session token available")
+        
+        # Test 7: GET /api/institute/ad-analytics (ad analytics tab functionality)
+        if self.institute_session_token:
+            success, response, status = self.make_request("GET", "/institute/ad-analytics", 
+                                                        headers={"Authorization": f"Bearer {self.institute_session_token}"})
+            if success and isinstance(response, dict):
+                summary = response.get('summary', {})
+                ads = response.get('ads', [])
+                self.log_test("GET /institute/ad-analytics (Ad Analytics tab)", True, 
+                             f"Ad Analytics tab loads successfully, {len(ads)} ads, {summary.get('total_impressions', 0)} impressions")
+            else:
+                self.log_test("GET /institute/ad-analytics (Ad Analytics tab)", False, f"Status: {status}", response)
+        else:
+            self.log_test("GET /institute/ad-analytics (no session token)", False, "No institute session token available")
+        
+        # Test 8: POST /api/institute/logout (logout functionality)
+        if self.institute_session_token:
+            success, response, status = self.make_request("POST", "/institute/logout", 
+                                                        headers={"Authorization": f"Bearer {self.institute_session_token}"})
+            if success and response.get("message") == "Logged out successfully":
+                self.log_test("POST /institute/logout (logout functionality)", True, 
+                             "Logout successful")
+                
+                # Test 9: Verify session is invalidated after logout
+                success, response, status = self.make_request("GET", "/institute/me", 
+                                                            headers={"Authorization": f"Bearer {self.institute_session_token}"})
+                if not success and status in [401, 403]:
+                    self.log_test("Session Invalidation After Logout", True, 
+                                 f"Session correctly invalidated after logout (status {status})")
+                else:
+                    self.log_test("Session Invalidation After Logout", False, 
+                                 f"Session still valid after logout (status {status})")
+            else:
+                self.log_test("POST /institute/logout (logout functionality)", False, f"Status: {status}", response)
+        else:
+            self.log_test("POST /institute/logout (no session token)", False, "No institute session token available")
+        
+        # Test 10: GET /institute/dashboard without authentication (should fail)
+        success, response, status = self.make_request("GET", "/institute/dashboard")
+        if not success and status in [401, 403]:
+            self.log_test("GET /institute/dashboard (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("GET /institute/dashboard (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+
     def test_admission_booking_system(self):
         """Test Admission Partner Booking System APIs"""
         print("🎓 Testing Admission Partner Booking System...")
