@@ -64,7 +64,9 @@ const ApplyNowModal = ({
           .map(c => c.name)
           .filter(Boolean)
           .sort();
-        setAllCourses([...new Set(courseNames)]);  // Remove duplicates
+        // Add "School Admission" at the beginning for general form
+        const uniqueCourses = [...new Set(courseNames)];
+        setAllCourses(['School Admission', ...uniqueCourses]);
       } catch (err) {
         console.error('Failed to fetch initial data:', err);
       }
@@ -74,16 +76,21 @@ const ApplyNowModal = ({
 
   // Set courses from props - courses come from CollegeContext via CollegeDetailPage
   // For college-specific forms: use collegeCourses passed via props
+  // For school-specific forms: use school classes
   // For general forms: use allCourses fetched from /api/courses
   useEffect(() => {
-    if (memoizedCollegeCourses.length > 0) {
+    if (isSchool) {
+      // School-specific form: use school classes
+      const classes = schoolClasses.length > 0 ? schoolClasses : SCHOOL_CLASSES;
+      setCourses(classes);
+    } else if (memoizedCollegeCourses.length > 0) {
       // College-specific form: use the courses from the college data
       setCourses(memoizedCollegeCourses);
     } else {
       // General form or college has no courses: clear local courses (will use allCourses)
       setCourses([]);
     }
-  }, [memoizedCollegeCourses]);
+  }, [memoizedCollegeCourses, isSchool, schoolClasses]);
 
   // Reset form when modal opens
   useEffect(() => {
