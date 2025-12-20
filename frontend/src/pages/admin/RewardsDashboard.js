@@ -48,21 +48,6 @@ const RewardsDashboard = () => {
     );
   }
 
-  const StatCard = ({ title, value, subValue, icon: Icon, color, link }) => (
-    <Link to={link} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-500 text-sm">{title}</p>
-          <p className={`text-3xl font-bold ${color}`}>{value}</p>
-          {subValue && <p className="text-sm text-gray-400 mt-1">{subValue}</p>}
-        </div>
-        <div className={`p-3 rounded-full ${color.replace('text-', 'bg-').replace('600', '100')}`}>
-          <Icon className={`w-6 h-6 ${color}`} />
-        </div>
-      </div>
-    </Link>
-  );
-
   return (
     <AdminLayout>
       <div className="space-y-6">
