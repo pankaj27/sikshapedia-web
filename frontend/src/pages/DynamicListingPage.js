@@ -935,7 +935,8 @@ const DynamicListingPage = () => {
       } else if (currentCity) {
         basePath = `/${streamSlug}/${generateSlug(currentCity)}-${suffix}`;
       } else {
-        basePath = `/${streamSlug}`;
+        // Navigate to /india-colleges/engineering format
+        basePath = `/india-${suffix}/${streamSlug}`;
       }
       navigate(buildUrlWithQueryParams(basePath));
       return;
