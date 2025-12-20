@@ -175,19 +175,49 @@ const ListingPageForm = () => {
     
     switch (formData.page_type) {
       case 'india':
-        slug = `india-${inst}`;
+        slug = inst;
         break;
       case 'state':
-        slug = formData.state ? `${generateSlug(formData.state)}-${inst}` : '';
+        slug = formData.state ? `${inst}/${generateSlug(formData.state)}` : '';
         break;
       case 'city':
-        slug = formData.city ? `${generateSlug(formData.city)}-${inst}` : '';
+        slug = formData.city ? `${inst}/${generateSlug(formData.city)}` : '';
         break;
       case 'stream':
-        slug = formData.stream ? generateSlug(formData.stream) : '';
+        slug = formData.stream ? `${inst}/${generateSlug(formData.stream)}` : '';
         break;
       case 'course':
-        slug = formData.course ? generateSlug(formData.course) : '';
+        slug = formData.course ? `${inst}/${generateSlug(formData.course)}` : '';
+        break;
+      case 'state_stream':
+        if (formData.state && formData.stream) {
+          slug = `${inst}/${generateSlug(formData.state)}/${generateSlug(formData.stream)}`;
+        }
+        break;
+      case 'state_city':
+        if (formData.state && formData.city) {
+          slug = `${inst}/${generateSlug(formData.state)}/${generateSlug(formData.city)}`;
+        }
+        break;
+      case 'city_stream':
+        if (formData.city && formData.stream) {
+          slug = `${inst}/${generateSlug(formData.city)}/${generateSlug(formData.stream)}`;
+        }
+        break;
+      case 'stream_course':
+        if (formData.stream && formData.course) {
+          slug = `${inst}/${generateSlug(formData.stream)}/${generateSlug(formData.course)}`;
+        }
+        break;
+      case 'state_stream_course':
+        if (formData.state && formData.stream && formData.course) {
+          slug = `${inst}/${generateSlug(formData.state)}/${generateSlug(formData.stream)}/${generateSlug(formData.course)}`;
+        }
+        break;
+      case 'city_stream_course':
+        if (formData.city && formData.stream && formData.course) {
+          slug = `${inst}/${generateSlug(formData.city)}/${generateSlug(formData.stream)}/${generateSlug(formData.course)}`;
+        }
         break;
       case 'type':
         slug = formData.college_type ? `${generateSlug(formData.college_type)}-${inst}` : '';
