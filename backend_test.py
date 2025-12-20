@@ -4334,6 +4334,9 @@ class APITester:
         self.test_institute_leads_api()
         self.test_institute_applications_api()
         
+        # **NEW: Institute Login and Dashboard Flow Test (Review Request):**
+        self.test_institute_login_and_dashboard()
+        
         # Legacy User and Institute Dashboard API Tests
         self.test_user_authentication_otp_flow()
         self.test_user_dashboard_apis_unauthorized()
