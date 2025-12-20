@@ -370,106 +370,140 @@ const ListingPagesManagement = () => {
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-6 border border-blue-200">
               <h3 className="font-bold text-lg mb-4">Generate URL Structures</h3>
               <p className="text-sm text-gray-600 mb-4">Click to bulk-generate URL structures. You can edit them after generation.</p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Button
-                  onClick={() => generateUrls('college_state')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-green-500" />}
-                  Colleges (State)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('college_city')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-orange-500" />}
-                  Colleges (City)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('college_state_city')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiGrid className="mr-2 text-teal-500" />}
-                  Colleges (State+City)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('school_state')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-green-500" />}
-                  Schools (State)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('school_city')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-orange-500" />}
-                  Schools (City)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('school_state_city')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiGrid className="mr-2 text-teal-500" />}
-                  Schools (State+City)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('university_state')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-blue-500" />}
-                  Universities (State)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('university_city')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-indigo-500" />}
-                  Universities (City)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('university_state_city')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiGrid className="mr-2 text-violet-500" />}
-                  Universities (State+City)
-                </Button>
-                <Button
-                  onClick={() => generateUrls('stream')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiBook className="mr-2 text-purple-500" />}
-                  Streams
-                </Button>
-                <Button
-                  onClick={() => generateUrls('course')}
-                  disabled={generating}
-                  variant="outline"
-                  className="justify-start"
-                >
-                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiBook className="mr-2 text-cyan-500" />}
-                  Courses
-                </Button>
+              
+              {/* Location-based URLs */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-sm text-gray-700 mb-3 flex items-center">
+                  <FiMapPin className="mr-2" /> Location-based URLs
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                  <Button onClick={() => generateUrls('college_state')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-green-500" />}
+                    College (State)
+                  </Button>
+                  <Button onClick={() => generateUrls('college_city')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-orange-500" />}
+                    College (City)
+                  </Button>
+                  <Button onClick={() => generateUrls('college_state_city')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-teal-500" />}
+                    College (State+City)
+                  </Button>
+                  <Button onClick={() => generateUrls('school_state')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-green-500" />}
+                    School (State)
+                  </Button>
+                  <Button onClick={() => generateUrls('school_city')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-orange-500" />}
+                    School (City)
+                  </Button>
+                  <Button onClick={() => generateUrls('school_state_city')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-teal-500" />}
+                    School (State+City)
+                  </Button>
+                  <Button onClick={() => generateUrls('university_state')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-blue-500" />}
+                    University (State)
+                  </Button>
+                  <Button onClick={() => generateUrls('university_city')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-indigo-500" />}
+                    University (City)
+                  </Button>
+                  <Button onClick={() => generateUrls('university_state_city')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-violet-500" />}
+                    University (State+City)
+                  </Button>
+                </div>
+              </div>
+
+              {/* College Course & Stream URLs */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-sm text-gray-700 mb-3 flex items-center">
+                  <FiBook className="mr-2 text-green-600" /> College - Course & Stream URLs
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  <Button onClick={() => generateUrls('college_india_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiBook className="mr-1 text-cyan-500" />}
+                    India + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('college_india_stream')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiBook className="mr-1 text-purple-500" />}
+                    India + Stream
+                  </Button>
+                  <Button onClick={() => generateUrls('college_india_stream_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-pink-500" />}
+                    India + Stream + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('college_state_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-cyan-500" />}
+                    State + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('college_city_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-cyan-500" />}
+                    City + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('college_state_city_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-cyan-500" />}
+                    State + City + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('college_state_stream')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-purple-500" />}
+                    State + Stream
+                  </Button>
+                  <Button onClick={() => generateUrls('college_city_stream')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-purple-500" />}
+                    City + Stream
+                  </Button>
+                  <Button onClick={() => generateUrls('college_state_city_stream_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-rose-500" />}
+                    State+City+Stream+Course
+                  </Button>
+                </div>
+              </div>
+
+              {/* University Course & Stream URLs */}
+              <div>
+                <h4 className="font-semibold text-sm text-gray-700 mb-3 flex items-center">
+                  <FiBook className="mr-2 text-blue-600" /> University - Course & Stream URLs
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  <Button onClick={() => generateUrls('university_india_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiBook className="mr-1 text-cyan-500" />}
+                    India + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('university_india_stream')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiBook className="mr-1 text-purple-500" />}
+                    India + Stream
+                  </Button>
+                  <Button onClick={() => generateUrls('university_india_stream_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-pink-500" />}
+                    India + Stream + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('university_state_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-cyan-500" />}
+                    State + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('university_city_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-cyan-500" />}
+                    City + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('university_state_city_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-cyan-500" />}
+                    State + City + Course
+                  </Button>
+                  <Button onClick={() => generateUrls('university_state_stream')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-purple-500" />}
+                    State + Stream
+                  </Button>
+                  <Button onClick={() => generateUrls('university_city_stream')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiMapPin className="mr-1 text-purple-500" />}
+                    City + Stream
+                  </Button>
+                  <Button onClick={() => generateUrls('university_state_city_stream_course')} disabled={generating} variant="outline" size="sm" className="justify-start text-xs">
+                    {generating ? <FiLoader className="animate-spin mr-1" /> : <FiGrid className="mr-1 text-rose-500" />}
+                    State+City+Stream+Course
+                  </Button>
+                </div>
               </div>
             </div>
 
