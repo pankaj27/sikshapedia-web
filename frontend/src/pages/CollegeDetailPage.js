@@ -1652,7 +1652,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                   <div className="bg-gray-50 border rounded-lg p-8 text-center mb-6">
                     <div className="text-6xl mb-4">⭐</div>
                     <p className="text-gray-600 mb-4">Share your experience and help others!</p>
-                    <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                    <Button 
+                      onClick={handleWriteReview}
+                      className="bg-orange-600 hover:bg-orange-700 text-white"
+                    >
                       Write a Review
                     </Button>
                   </div>
