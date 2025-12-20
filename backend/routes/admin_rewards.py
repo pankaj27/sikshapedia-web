@@ -340,7 +340,7 @@ async def process_answer(
             "user_id": user_id,
             "type": "answer",
             "points": points,
-            "description": f"Answer approved",
+            "description": "Answer approved",
             "reference_id": answer_id,
             "status": "completed",
             "created_at": datetime.now(timezone.utc).isoformat()
@@ -450,7 +450,7 @@ async def process_redemption(
         # Update point transaction
         await db.point_transactions.update_one(
             {"reference_id": redemption_id, "type": "redemption"},
-            {"$set": {"status": "rejected", "description": f"Redemption rejected - points refunded"}}
+            {"$set": {"status": "rejected", "description": "Redemption rejected - points refunded"}}
         )
         
         # Add refund transaction
@@ -459,7 +459,7 @@ async def process_redemption(
             "user_id": user_id,
             "type": "refund",
             "points": points,
-            "description": f"Refund for rejected redemption",
+            "description": "Refund for rejected redemption",
             "reference_id": redemption_id,
             "status": "completed",
             "created_at": datetime.now(timezone.utc).isoformat()
