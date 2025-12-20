@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiMapPin, FiGlobe, FiSearch, FiMove } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiMapPin, FiGlobe, FiSearch, FiMove, FiGrid } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
