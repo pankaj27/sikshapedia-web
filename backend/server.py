@@ -8395,6 +8395,7 @@ try:
     from routes.lead_forms import router as lead_forms_router, set_database as set_lead_forms_db
     from routes.admin_counselors import router as admin_counselors_router, set_database as set_admin_counselors_db
     from routes.admin_locations import router as admin_locations_router, set_database as set_admin_locations_db
+    from routes.admin_url_structures import router as admin_url_structures_router, set_database as set_admin_url_structures_db
     
     # Set database for modular routers
     set_leads_db(db)
