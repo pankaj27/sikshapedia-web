@@ -61,6 +61,7 @@ import ProfilePage from './pages/ProfilePage';
 // New SEO-friendly URL pages
 import DynamicListingPage from './pages/DynamicListingPage';
 import InstitutionDetailPage from './pages/InstitutionDetailPage';
+import InstitutionRouter from './pages/InstitutionRouter';
 import LegacyCollegeRedirect from './components/LegacyCollegeRedirect';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
