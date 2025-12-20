@@ -539,6 +539,84 @@ async def reset_daily_budgets():
 # Reports
 # ============================================
 
+@router.get("/advertisements/reports/stats")
+async def get_advertisement_reports():
+    """Get advertisement performance reports with detailed stats"""
+    ads = await db.advertisements.find({}, {"_id": 0}).to_list(1000)
+    
+    # Calculate CTR and organize data
+    report_data = []
+    for ad in ads:
+        impressions = ad.get("stats", {}).get("impressions", 0) or ad.get('impressions', 0)
+        clicks = ad.get("stats", {}).get("clicks", 0) or ad.get('clicks', 0)
+        ctr = (clicks / impressions * 100) if impressions > 0 else 0
+        
+        # Check if ad is currently active
+        now = datetime.now(timezone.utc)
+        start_date = ad.get('start_date')
+        end_date = ad.get('end_date')
+        
+        # Parse dates and ensure timezone awareness
+        if isinstance(start_date, str) and start_date:
+            try:
+                start_date = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            except:
+                start_date = None
+        if isinstance(end_date, str) and end_date:
+            try:
+                end_date = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            except:
+                end_date = None
+        
+        # Make dates timezone-aware if they aren't
+        if start_date and hasattr(start_date, 'tzinfo') and start_date.tzinfo is None:
+            start_date = start_date.replace(tzinfo=timezone.utc)
+        if end_date and hasattr(end_date, 'tzinfo') and end_date.tzinfo is None:
+            end_date = end_date.replace(tzinfo=timezone.utc)
+        
+        is_currently_active = False
+        if ad.get('is_active', False) and start_date and end_date:
+            try:
+                is_currently_active = start_date <= now <= end_date
+            except TypeError:
+                is_currently_active = False
+        
+        report_data.append({
+            "id": ad.get('id'),
+            "name": ad.get('name'),
+            "ad_type": ad.get('ad_type'),
+            "pages": ad.get('pages', []),
+            "impressions": impressions,
+            "clicks": clicks,
+            "ctr": round(ctr, 2),
+            "start_date": start_date.isoformat() if start_date and hasattr(start_date, 'isoformat') else start_date,
+            "end_date": end_date.isoformat() if end_date and hasattr(end_date, 'isoformat') else end_date,
+            "is_active": ad.get('is_active'),
+            "is_currently_active": is_currently_active,
+            "priority": ad.get('priority', 0)
+        })
+    
+    # Sort by impressions descending
+    report_data.sort(key=lambda x: x['impressions'], reverse=True)
+    
+    # Calculate summary stats
+    total_impressions = sum(ad['impressions'] for ad in report_data)
+    total_clicks = sum(ad['clicks'] for ad in report_data)
+    avg_ctr = (total_clicks / total_impressions * 100) if total_impressions > 0 else 0
+    active_count = sum(1 for ad in report_data if ad['is_currently_active'])
+    
+    return {
+        "summary": {
+            "total_ads": len(report_data),
+            "active_ads": active_count,
+            "total_impressions": total_impressions,
+            "total_clicks": total_clicks,
+            "average_ctr": round(avg_ctr, 2)
+        },
+        "advertisements": report_data
+    }
+
+
 @router.get("/advertisements/reports/performance")
 async def get_performance_report(
     start_date: str = Query(None),
