@@ -144,7 +144,7 @@ const InstituteDashboard = () => {
     }
     localStorage.removeItem('institute_token');
     localStorage.removeItem('institute');
-    navigate('/institute/login');
+    window.location.href = '/institute/login';
   };
   
   const handleLeadStatusUpdate = async (leadId, status) => {
