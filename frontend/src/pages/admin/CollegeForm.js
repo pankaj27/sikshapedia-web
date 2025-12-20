@@ -1305,6 +1305,62 @@ const CollegeForm = () => {
             <span className="text-xs text-indigo-600">(1=Top)</span>
           </div>
         </div>
+        
+        {/* Institution-Specific Admission Fees (only if Admission Partner) */}
+        {formData.is_admission_partner && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200 mt-4">
+            <h4 className="font-semibold text-green-700 mb-3 flex items-center gap-2">
+              💰 Institution-Specific Admission Fees
+              <span className="text-xs font-normal text-green-600">(Leave empty to use default fees)</span>
+            </h4>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Form Fee (₹)</label>
+                <input
+                  type="number"
+                  value={formData.admission_fees?.form_fee || ''}
+                  onChange={(e) => setFormData({
+                    ...formData, 
+                    admission_fees: { ...formData.admission_fees, form_fee: e.target.value ? parseFloat(e.target.value) : '' }
+                  })}
+                  placeholder="Default: 1000"
+                  className="w-full px-2 py-1.5 border rounded text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Platform Fee (₹)</label>
+                <input
+                  type="number"
+                  value={formData.admission_fees?.platform_fee || ''}
+                  onChange={(e) => setFormData({
+                    ...formData, 
+                    admission_fees: { ...formData.admission_fees, platform_fee: e.target.value ? parseFloat(e.target.value) : '' }
+                  })}
+                  placeholder="Default: 250"
+                  className="w-full px-2 py-1.5 border rounded text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">GST (%)</label>
+                <input
+                  type="number"
+                  value={formData.admission_fees?.gst_percentage ?? 18}
+                  onChange={(e) => setFormData({
+                    ...formData, 
+                    admission_fees: { ...formData.admission_fees, gst_percentage: e.target.value ? parseFloat(e.target.value) : 18 }
+                  })}
+                  placeholder="18"
+                  className="w-full px-2 py-1.5 border rounded text-sm"
+                />
+              </div>
+            </div>
+            {formData.admission_fees?.form_fee && formData.admission_fees?.platform_fee && (
+              <p className="text-sm text-green-600 mt-2">
+                Total: ₹{((parseFloat(formData.admission_fees.form_fee) + parseFloat(formData.admission_fees.platform_fee)) * (1 + (formData.admission_fees.gst_percentage || 18) / 100)).toFixed(2)}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Location-Specific Priorities */}
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl border border-purple-200 mt-4">
