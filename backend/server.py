@@ -3909,7 +3909,8 @@ async def get_all_credential_reports(current_user: User = Depends(get_current_us
     return reports
 
 # ============================================
-# Review Routes
+# Review Routes - Read endpoints MOVED TO routes/reviews_questions.py
+# Write endpoints kept here due to auth/earnings dependencies
 # ============================================
 
 @api_router.post("/reviews", response_model=Review)
