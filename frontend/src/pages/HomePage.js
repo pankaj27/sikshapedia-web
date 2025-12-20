@@ -140,17 +140,8 @@ const CollegeDuniaHome = () => {
     { image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop', type: 'college', name: 'AIIMS Delhi - All India Institute of Medical Sciences', rating: 4.9, reviews: 2134, location: 'New Delhi, Delhi', slug: 'aiims-delhi-001' }
   ];
   
-  // Generate hero slides from featured colleges dynamically
-  const heroSlides = React.useMemo(() => {
-    // Always prefer generating from featured colleges for correct URLs
-    // Only use custom slides from settings if they have serial_number (valid new format)
-    const settingsSlides = pageSettings?.hero_slides;
-    const hasValidSettingsSlides = settingsSlides?.length > 0 && settingsSlides.every(s => s.serial_number);
-    
-    if (hasValidSettingsSlides) {
-      return settingsSlides;
-    }
-    
+  // Generate hero slides - prioritize featured colleges for correct URLs
+  const getHeroSlides = () => {
     // Generate from featured colleges if available
     if (featuredColleges.length > 0) {
       const defaultImages = [
@@ -174,7 +165,9 @@ const CollegeDuniaHome = () => {
     }
     
     return defaultHeroSlides;
-  }, [featuredColleges, pageSettings?.hero_slides]);
+  };
+  
+  const heroSlides = getHeroSlides();
   
   // Section visibility from settings - ALL 15 SECTIONS
   const showHeroSlider = pageSettings?.show_hero_slider !== false;
