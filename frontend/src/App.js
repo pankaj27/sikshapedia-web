@@ -366,10 +366,12 @@ function App() {
               
               {/* Legacy routes - redirect to new structure */}
               <Route path="/india-colleges" element={<Navigate to="/colleges" replace />} />
-              <Route path="/india-colleges/:stream" element={<DynamicListingPage />} />
               <Route path="/india-schools" element={<Navigate to="/schools" replace />} />
-              <Route path="/india-schools/:stream" element={<DynamicListingPage />} />
               <Route path="/india-universities" element={<Navigate to="/university" replace />} />
+              
+              {/* Legacy routes with stream - handled by DynamicListingPage */}
+              <Route path="/india-colleges/:stream" element={<DynamicListingPage />} />
+              <Route path="/india-schools/:stream" element={<DynamicListingPage />} />
               <Route path="/india-universities/:stream" element={<DynamicListingPage />} />
                   
               {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
