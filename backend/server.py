@@ -726,6 +726,9 @@ class College(BaseModel):
     admission_deadline: Optional[str] = None  # Admission deadline date
     badge_text: Optional[str] = None  # Custom badge text (e.g., "Top Ranked", "New")
     
+    # Institution-specific admission fees (overrides default entity fees)
+    admission_fees: Optional[Dict] = None  # { form_fee, platform_fee, gst_percentage }
+    
     # Recognition & Affiliations
     recognized_by: List[str] = []  # UGC, AICTE, NBA, NAAC
     affiliated_to: Optional[str] = None
