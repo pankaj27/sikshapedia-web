@@ -220,7 +220,7 @@ const AdmissionPartnersList = () => {
                             <FiEye size={14} /> View
                           </Button>
                         </Link>
-                        <Link to={`/admin/${type}/${inst.id}`}>
+                        <Link to={`/admin/${type}/edit/${inst.id}`}>
                           <Button variant="outline" size="sm" className="flex items-center gap-1">
                             <FiEdit size={14} /> Edit
                           </Button>
