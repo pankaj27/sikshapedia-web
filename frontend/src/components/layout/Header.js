@@ -154,7 +154,7 @@ const Header = () => {
                 onMouseLeave={handleGoalMouseLeave}
               >
                 {admissionGoals.map((goal, idx) => (
-                  <Link
+                  <NavLink
                     key={idx}
                     to={goal.link}
                     onClick={() => {
@@ -164,7 +164,7 @@ const Header = () => {
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                   >
                     {goal.name}
-                  </Link>
+                  </NavLink>
                 ))}
               </div>
             )}
