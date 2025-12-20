@@ -142,9 +142,13 @@ const CollegeDuniaHome = () => {
   
   // Generate hero slides from featured colleges dynamically
   const heroSlides = React.useMemo(() => {
-    // Use custom slides from settings if available
-    if (pageSettings?.hero_slides?.length > 0) {
-      return pageSettings.hero_slides;
+    // Always prefer generating from featured colleges for correct URLs
+    // Only use custom slides from settings if they have serial_number (valid new format)
+    const settingsSlides = pageSettings?.hero_slides;
+    const hasValidSettingsSlides = settingsSlides?.length > 0 && settingsSlides.every(s => s.serial_number);
+    
+    if (hasValidSettingsSlides) {
+      return settingsSlides;
     }
     
     // Generate from featured colleges if available
