@@ -498,7 +498,7 @@ const CollegeDuniaHome = () => {
                 const IconComponent = getIconComponent(goal.icon);
                 return (
                   <SwiperSlide key={idx}>
-                    <Link to={`/colleges?course=${goal.name}`} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
+                    <Link to={`/india-colleges?course=${encodeURIComponent(goal.name)}`} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
                       <div className="flex justify-center mb-2">
                         <IconComponent className={`text-4xl ${goal.color} group-hover:scale-110 transition-transform`} />
                       </div>
