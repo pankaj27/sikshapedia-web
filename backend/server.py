@@ -8303,6 +8303,8 @@ try:
     from routes.admin_counselors import router as admin_counselors_router, set_database as set_admin_counselors_db
     from routes.admin_auth_pages import router as admin_auth_pages_router, set_database as set_admin_auth_pages_db
     from routes.listing_pages import router as listing_pages_router, set_database as set_listing_pages_db
+    from routes.schools import router as schools_router, set_database as set_schools_db
+    from routes.universities import router as universities_router, set_database as set_universities_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -8319,6 +8321,8 @@ try:
     set_admin_counselors_db(db)
     set_admin_auth_pages_db(db)
     set_listing_pages_db(db)
+    set_schools_db(db)
+    set_universities_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
