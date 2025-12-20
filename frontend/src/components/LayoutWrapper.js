@@ -1,32 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 
 /**
  * LayoutWrapper - A wrapper component for React Router v6/v7 nested routes
- * Uses a counter-based key to force re-mount of children on navigation
+ * Uses pathname as key to force re-mount on navigation
  */
-const LayoutWrapper = () => {
+const LayoutWrapper = memo(() => {
   const location = useLocation();
-  const [renderKey, setRenderKey] = useState(0);
+  const prevPathRef = useRef(location.pathname);
   
-  // Force re-render when location changes
+  // Log navigation (without causing re-renders)
   useEffect(() => {
-    console.log('[LayoutWrapper] Location changed to:', location.pathname);
-    // Increment key to force Outlet re-mount
-    setRenderKey(prev => prev + 1);
+    if (prevPathRef.current !== location.pathname) {
+      console.log('[LayoutWrapper] Navigated from', prevPathRef.current, 'to', location.pathname);
+      prevPathRef.current = location.pathname;
+    }
   }, [location.pathname]);
   
   return (
     <div className="flex flex-col min-h-screen w-full m-0 p-0">
-      <Header />
-      <main className="flex-1 w-full" key={renderKey}>
-        <Outlet />
+      <Header key="header" />
+      <main className="flex-1 w-full">
+        <Outlet key={location.pathname + location.search} />
       </main>
-      <Footer />
+      <Footer key="footer" />
     </div>
   );
-};
+});
+
+LayoutWrapper.displayName = 'LayoutWrapper';
 
 export default LayoutWrapper;
