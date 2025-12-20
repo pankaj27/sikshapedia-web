@@ -411,8 +411,19 @@ async def update_profile(profile: UserProfileUpdate, request: Request, db=Depend
     # Get current user
     user = await get_current_user(request, db)
     
-    # Build update dict
-    update_data = {k: v for k, v in profile.dict().items() if v is not None}
+    # Build update dict - handle payment_details specially
+    update_data = {}
+    profile_dict = profile.dict(exclude_none=True)
+    
+    for key, value in profile_dict.items():
+        if key == "payment_details" and value:
+            # Merge with existing payment details instead of replacing
+            existing_payment = user.get("payment_details", {}) or {}
+            payment_update = {k: v for k, v in value.items() if v is not None}
+            update_data["payment_details"] = {**existing_payment, **payment_update}
+        elif value is not None:
+            update_data[key] = value
+    
     update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     
     # Update user
