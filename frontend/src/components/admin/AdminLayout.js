@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Link } from '../../components/CustomLink';
 import { 
   FiHome, FiUsers, FiBook, FiFileText, FiAward, FiGrid, 
   FiLogOut, FiChevronDown, FiChevronRight, FiBookOpen, FiTag,

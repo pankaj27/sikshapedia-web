@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../../components/CustomLink';
 import { FiGrid, FiUsers, FiBook, FiFileText, FiAward, FiBuilding, FiTrendingUp, FiEdit, FiEye, FiSchool, FiHome, FiBookOpen, FiSend, FiMessageCircle, FiPhone, FiDollarSign, FiSettings, FiImage } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import AdminLayout from '../../components/admin/AdminLayout';
