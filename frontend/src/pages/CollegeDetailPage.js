@@ -465,7 +465,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </div>
                 </div>
 
-                {/* LIKE/DISLIKE */}
+                {/* LIKE/DISLIKE/FAVORITE */}
                 <div className="flex items-center gap-2 ml-4">
                   <button 
                     onClick={handleLike}
@@ -492,6 +492,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                     <span className={`text-sm font-semibold ${userVote === 'dislike' ? 'text-red-600' : 'text-gray-700'}`}>
                       {dislikes}
                     </span>
+                  </button>
+                  <button 
+                    onClick={handleFavorite}
+                    className="flex items-center gap-2 px-4 py-2 border rounded-lg transition-all border-gray-300 hover:bg-pink-50 hover:border-pink-500"
+                    title="Add to Favorites"
+                  >
+                    <FiHeart className="text-pink-500" size={18} />
+                    <span className="text-sm font-semibold text-gray-700">Save</span>
                   </button>
                 </div>
               </div>
