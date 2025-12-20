@@ -232,31 +232,18 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
     
     await db.users.insert_one(user)
     
-    # Award referral bonus to referrer
+    # Create referral record (pending status - will be completed when first review is submitted)
     if referred_by:
-        await db.users.update_one(
-            {"id": referred_by},
-            {"$inc": {"points": 200}}  # Referral bonus
-        )
-        # Create referral record
         await db.referrals.insert_one({
             "id": f"ref_{uuid4().hex[:12]}",
             "referrer_id": referred_by,
-            "referred_user_id": user_id,
+            "referred_id": user_id,
             "referred_user_name": request.name,
             "referred_user_email": request.email,
-            "points_earned": 200,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-        # Create earning transaction for referrer
-        await db.earnings.insert_one({
-            "id": f"earn_{uuid4().hex[:12]}",
-            "user_id": referred_by,
-            "type": "referral",
-            "amount": 200,
-            "description": f"Referral bonus for {request.name}",
-            "reference_id": user_id,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "status": "pending",  # Will be "completed" when first review is approved
+            "points_earned": 0,  # Will be 100 when completed
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "completed_at": None
         })
     
     # Create session
