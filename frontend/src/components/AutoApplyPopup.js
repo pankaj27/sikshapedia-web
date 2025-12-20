@@ -102,7 +102,8 @@ const AutoApplyPopup = () => {
         clearTimeout(timerRef.current);
       }
     };
-  }, [location.pathname, isCollegePage, isAdminPage, popupClosedOnPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, popupClosedOnPage]);
 
   const handleClose = () => {
     setShowModal(false);
