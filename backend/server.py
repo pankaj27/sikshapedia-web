@@ -8405,6 +8405,7 @@ try:
     set_admission_booking_db(db)
     set_rewards_db(db)
     set_admin_rewards_db(db)
+    set_lead_forms_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
