@@ -138,6 +138,7 @@ function App() {
         <CollegeProvider>
           <BrowserRouter>
             <ScrollToTop />
+            <SimpleAutoPopup />
           <Routes>
             {/* Admin Routes - Without Layout */}
             <Route path="/admin/login" element={<AdminLogin />} />
