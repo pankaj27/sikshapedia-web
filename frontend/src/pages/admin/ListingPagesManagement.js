@@ -174,10 +174,35 @@ const ListingPagesManagement = () => {
       case 'india': return <FiGlobe className="text-blue-500" />;
       case 'state': 
       case 'college_state':
-      case 'school_state': return <FiMapPin className="text-green-500" />;
+      case 'school_state':
+      case 'university_state': return <FiMapPin className="text-green-500" />;
       case 'city': 
       case 'college_city':
-      case 'school_city': return <FiMapPin className="text-orange-500" />;
+      case 'school_city':
+      case 'university_city': return <FiMapPin className="text-orange-500" />;
+      case 'college_state_city':
+      case 'school_state_city':
+      case 'university_state_city': return <FiGrid className="text-teal-500" />;
+      // College Course & Stream
+      case 'college_india_course':
+      case 'college_state_course':
+      case 'college_city_course':
+      case 'college_state_city_course': return <FiBook className="text-cyan-500" />;
+      case 'college_india_stream':
+      case 'college_state_stream':
+      case 'college_city_stream': return <FiBook className="text-purple-500" />;
+      case 'college_india_stream_course':
+      case 'college_state_city_stream_course': return <FiGrid className="text-rose-500" />;
+      // University Course & Stream
+      case 'university_india_course':
+      case 'university_state_course':
+      case 'university_city_course':
+      case 'university_state_city_course': return <FiBook className="text-cyan-500" />;
+      case 'university_india_stream':
+      case 'university_state_stream':
+      case 'university_city_stream': return <FiBook className="text-purple-500" />;
+      case 'university_india_stream_course':
+      case 'university_state_city_stream_course': return <FiGrid className="text-rose-500" />;
       case 'stream': return <FiBook className="text-purple-500" />;
       case 'course': return <FiBook className="text-cyan-500" />;
       case 'type': return <FiFilter className="text-pink-500" />;
@@ -190,12 +215,35 @@ const ListingPagesManagement = () => {
       case 'india': return 'bg-blue-100 text-blue-700';
       case 'state': 
       case 'college_state':
-      case 'school_state': return 'bg-green-100 text-green-700';
+      case 'school_state':
+      case 'university_state': return 'bg-green-100 text-green-700';
       case 'city': 
       case 'college_city':
-      case 'school_city': return 'bg-orange-100 text-orange-700';
+      case 'school_city':
+      case 'university_city': return 'bg-orange-100 text-orange-700';
       case 'college_state_city':
-      case 'school_state_city': return 'bg-teal-100 text-teal-700';
+      case 'school_state_city':
+      case 'university_state_city': return 'bg-teal-100 text-teal-700';
+      // College Course & Stream
+      case 'college_india_course':
+      case 'college_state_course':
+      case 'college_city_course':
+      case 'college_state_city_course': return 'bg-cyan-100 text-cyan-700';
+      case 'college_india_stream':
+      case 'college_state_stream':
+      case 'college_city_stream': return 'bg-purple-100 text-purple-700';
+      case 'college_india_stream_course':
+      case 'college_state_city_stream_course': return 'bg-rose-100 text-rose-700';
+      // University Course & Stream
+      case 'university_india_course':
+      case 'university_state_course':
+      case 'university_city_course':
+      case 'university_state_city_course': return 'bg-cyan-100 text-cyan-700';
+      case 'university_india_stream':
+      case 'university_state_stream':
+      case 'university_city_stream': return 'bg-purple-100 text-purple-700';
+      case 'university_india_stream_course':
+      case 'university_state_city_stream_course': return 'bg-rose-100 text-rose-700';
       case 'stream': return 'bg-purple-100 text-purple-700';
       case 'course': return 'bg-cyan-100 text-cyan-700';
       case 'type': return 'bg-pink-100 text-pink-700';
