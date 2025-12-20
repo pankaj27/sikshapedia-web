@@ -437,25 +437,25 @@ const Header = () => {
             <Link to="/schools" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/schools'; }}>
               Schools
             </Link>
-            <Link to="/btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/btech'; }}>
               B.Tech
             </Link>
-            <Link to="/mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/mba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/mba'; }}>
               MBA
             </Link>
-            <Link to="/mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/mbbs" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/mbbs'; }}>
               MBBS
             </Link>
-            <Link to="/bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/bcom" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/bcom'; }}>
               B.Com
             </Link>
-            <Link to="/bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/bsc" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/bsc'; }}>
               B.Sc
             </Link>
-            <Link to="/bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/bsc-nursing" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/bsc-nursing'; }}>
               B.Sc (Nursing)
             </Link>
-            <Link to="/ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/ba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/ba'; }}>
               BA
             </Link>
             <Link to="/bba" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
