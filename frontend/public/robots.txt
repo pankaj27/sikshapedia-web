@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://admitflow-2.preview.emergentagent.com/sitemap.xml
+Sitemap: https://adminsys-2.preview.emergentagent.com/sitemap.xml
