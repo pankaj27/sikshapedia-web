@@ -46,34 +46,39 @@ const SchoolAdmissionPage = () => {
   const fetchAdmissions = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
+      
+      // Fetch ONLY admission partners
+      const response = await api.get('/admission/partners', {
+        params: { entity_type: 'school' }
+      });
+      
+      let partnersData = response.data.partners || [];
+      
+      // Apply filters
       if (selectedBoard && selectedBoard !== 'all') {
-        params.append('board', selectedBoard);
+        partnersData = partnersData.filter(p => p.board === selectedBoard);
       }
       if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-        params.append('state', selectedState);
+        partnersData = partnersData.filter(p => p.state === selectedState);
       }
       if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-        params.append('city', selectedCity);
+        partnersData = partnersData.filter(p => p.city === selectedCity);
       }
       
-      const response = await api.get(`/schools?${params.toString()}`);
-      // Transform schools data to include admission partner info
-      const schoolsData = Array.isArray(response.data) ? response.data : (response.data.schools || []);
-      const transformedData = schoolsData.map(school => ({
+      const transformedData = partnersData.map(school => ({
         id: school.id,
         name: school.name,
         slug: school.slug,
         location: { city: school.city || 'Unknown', state: school.state || 'Unknown' },
         board: school.board || 'CBSE',
-        classes: school.classes || ['All Classes'],
-        average_fees: school.average_fees || 100000,
+        classes: school.classes_offered || ['All Classes'],
+        average_fees: school.annual_fee || 100000,
         admission_date: school.admission_deadline || new Date().toISOString().split('T')[0],
         deadline: school.admission_deadline || '2025-03-31',
         students: school.total_students || 500,
         rating: school.rating || 4.0,
-        description: school.short_description || school.description?.substring(0, 150) || `${school.name} offers quality education.`,
-        is_admission_partner: school.is_admission_partner || false,
+        description: school.short_description || `${school.name} offers quality education.`,
+        is_admission_partner: true,
         logo: school.logo
       }));
       setAdmissions(transformedData);
