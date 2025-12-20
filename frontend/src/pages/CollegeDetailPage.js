@@ -9,7 +9,7 @@ import AdBanner from '../components/AdBanner';
 import ApplyNowModal from '../components/ApplyNowModal';
 import AdmissionBookingModal from '../components/AdmissionBookingModal';
 import AdmissionPartnerBadge from '../components/AdmissionPartnerBadge';
-import GuestGate from '../components/GuestGate';
+import GuestGate, { useGuestGate, LoginPromptModal } from '../components/GuestGate';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import { useCollegeContext } from '../contexts/CollegeContext';
