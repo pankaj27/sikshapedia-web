@@ -368,9 +368,9 @@ const UserSignup = () => {
               {/* Login Link */}
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <p className="text-center text-gray-600">
-                  Already have an account?{' '}
-                  <Link to="/login" className="text-orange-600 hover:text-orange-700 font-semibold">
-                    Sign In
+                  {content.footer_text}{' '}
+                  <Link to={content.footer_link_url || '/login'} className="text-orange-600 hover:text-orange-700 font-semibold">
+                    {content.footer_link_text}
                   </Link>
                 </p>
               </div>
