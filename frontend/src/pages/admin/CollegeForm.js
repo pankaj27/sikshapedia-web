@@ -1508,16 +1508,32 @@ const CollegeForm = () => {
           )}
         </div>
         
-        {/* Approval Actions - Only show for existing content */}
+        {/* Approval Actions - Collapsible, Only show for existing content */}
         {id && (
-          <div className="px-4 py-3 bg-blue-50 border-t">
-            <ContentApprovalActions
-              contentType="college"
-              contentId={id}
-              currentStatus={formData.status || 'draft'}
-              rejectionReason={formData.rejection_reason}
-              onStatusChange={(newStatus) => setFormData(prev => ({...prev, status: newStatus}))}
-            />
+          <div className="bg-blue-50 rounded-xl border border-blue-200 mt-4 overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setIsContentStatusCollapsed(!isContentStatusCollapsed)}
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-blue-100/50 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-lg">📋</span>
+                <h4 className="font-semibold text-blue-700">Content Status & Approval</h4>
+                <span className="text-xs font-normal text-blue-600">(Submit for review or publish)</span>
+              </div>
+              {isContentStatusCollapsed ? <FiChevronRight className="w-5 h-5 text-blue-600" /> : <FiChevronDown className="w-5 h-5 text-blue-600" />}
+            </button>
+            {!isContentStatusCollapsed && (
+              <div className="px-4 pb-4 border-t border-blue-200">
+                <ContentApprovalActions
+                  contentType="college"
+                  contentId={id}
+                  currentStatus={formData.status || 'draft'}
+                  rejectionReason={formData.rejection_reason}
+                  onStatusChange={(newStatus) => setFormData(prev => ({...prev, status: newStatus}))}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>
