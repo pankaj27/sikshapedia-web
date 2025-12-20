@@ -92,8 +92,13 @@ const ListingPagesManagement = () => {
     try {
       setLoading(true);
       const params = urlFilterType !== 'all' ? `?type=${urlFilterType}` : '';
-      const response = await api.get(`/admin/url-structures${params}`);
-      setUrlStructures(response.data || []);
+      const [structuresRes, statsRes] = await Promise.all([
+        api.get(`/admin/url-structures${params}`),
+        api.get('/admin/url-structures/stats')
+      ]);
+      setUrlStructures(structuresRes.data || []);
+      setUrlStatsData(statsRes.data?.stats || {});
+      setTotalUrlCount(statsRes.data?.total || 0);
     } catch (error) {
       console.error('Error fetching URL structures:', error);
       setUrlStructures([]);
