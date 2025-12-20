@@ -19,6 +19,7 @@ const UserDashboard = () => {
   
   // Tab-specific data
   const [applications, setApplications] = useState([]);
+  const [admissionBookings, setAdmissionBookings] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [comments, setComments] = useState([]);
