@@ -240,6 +240,8 @@ function App() {
             <Route path="/admin/rewards/pending-reviews" element={<PendingReviews />} />
             <Route path="/admin/rewards/pending-answers" element={<PendingAnswers />} />
             <Route path="/admin/rewards/redemptions" element={<RedemptionManagement />} />
+            <Route path="/admin/counselors" element={<CounselorsManagement />} />
+            <Route path="/admin/locations" element={<LocationsManagement />} />
             <Route path="/admin/rewards/payments" element={<PaymentHistory />} />
             <Route path="/admin/rewards/users-report" element={<UsersPointsReport />} />
 
