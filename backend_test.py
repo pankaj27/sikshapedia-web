@@ -4182,6 +4182,10 @@ class APITester:
         self.test_blog_routes()
         self.test_news_routes()
         
+        # **4. Admission Partner Booking System Tests:**
+        self.test_admission_booking_system()
+        self.test_admission_document_upload()
+        
         # Summary
         print("=" * 80)
         print("📊 TEST SUMMARY")
