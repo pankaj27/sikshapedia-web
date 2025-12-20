@@ -294,15 +294,20 @@ async def generate_url_structures(request: GenerateRequest):
                     })
                     idx += 1
         
-        elif url_type == "stream":
-            # Streams: /india-colleges/{stream}
-            for idx, stream in enumerate(STREAMS, 1):
-                slug = generate_slug(stream)
+        # =============================================
+        # COLLEGE COURSE & STREAM URL STRUCTURES
+        # =============================================
+        
+        elif url_type == "college_india_course":
+            # India + Course: /india-colleges/{course}
+            for idx, course in enumerate(COURSES, 1):
+                slug = generate_slug(course)
                 structures.append({
                     "id": str(uuid.uuid4()),
-                    "name": stream,
+                    "name": f"{course} Colleges in India",
                     "slug": slug,
-                    "type": "stream",
+                    "type": "college_india_course",
+                    "course": course,
                     "link": f"/india-colleges/{slug}",
                     "display_order": idx,
                     "is_active": True,
@@ -310,21 +315,394 @@ async def generate_url_structures(request: GenerateRequest):
                     "updated_at": now
                 })
         
-        elif url_type == "course":
-            # Courses: /india-colleges?course={course}
-            for idx, course in enumerate(COURSES, 1):
-                slug = generate_slug(course)
+        elif url_type == "college_india_stream":
+            # India + Stream: /india-colleges/{stream}
+            for idx, stream in enumerate(STREAMS, 1):
+                slug = generate_slug(stream)
                 structures.append({
                     "id": str(uuid.uuid4()),
-                    "name": course,
+                    "name": f"{stream} Colleges in India",
                     "slug": slug,
-                    "type": "course",
-                    "link": f"/india-colleges?course={slug}",
+                    "type": "college_india_stream",
+                    "stream": stream,
+                    "link": f"/india-colleges/{slug}",
                     "display_order": idx,
                     "is_active": True,
                     "created_at": now,
                     "updated_at": now
                 })
+        
+        elif url_type == "college_india_stream_course":
+            # India + Stream + Course: /india-colleges/{stream}/{course}
+            idx = 1
+            for stream in STREAMS:
+                stream_slug = generate_slug(stream)
+                for course in COURSES:
+                    course_slug = generate_slug(course)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{course} in {stream} - India",
+                        "slug": f"{stream_slug}/{course_slug}",
+                        "type": "college_india_stream_course",
+                        "stream": stream,
+                        "course": course,
+                        "link": f"/india-colleges/{stream_slug}/{course_slug}",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "college_state_course":
+            # State + Course: /{state}/{course}
+            idx = 1
+            for state in STATES:
+                state_slug = generate_slug(state)
+                for course in COURSES:
+                    course_slug = generate_slug(course)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{course} Colleges in {state}",
+                        "slug": f"{state_slug}/{course_slug}",
+                        "type": "college_state_course",
+                        "state": state,
+                        "course": course,
+                        "link": f"/{state_slug}/{course_slug}",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "college_city_course":
+            # City + Course: /{city}/{course}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for course in COURSES:
+                        course_slug = generate_slug(course)
+                        structures.append({
+                            "id": str(uuid.uuid4()),
+                            "name": f"{course} Colleges in {city}",
+                            "slug": f"{city_slug}/{course_slug}",
+                            "type": "college_city_course",
+                            "state": state,
+                            "city": city,
+                            "course": course,
+                            "link": f"/{city_slug}/{course_slug}",
+                            "display_order": idx,
+                            "is_active": True,
+                            "created_at": now,
+                            "updated_at": now
+                        })
+                        idx += 1
+        
+        elif url_type == "college_state_city_course":
+            # State + City + Course: /{state}/{city}/{course}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                state_slug = generate_slug(state)
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for course in COURSES:
+                        course_slug = generate_slug(course)
+                        structures.append({
+                            "id": str(uuid.uuid4()),
+                            "name": f"{course} Colleges in {city}, {state}",
+                            "slug": f"{state_slug}/{city_slug}/{course_slug}",
+                            "type": "college_state_city_course",
+                            "state": state,
+                            "city": city,
+                            "course": course,
+                            "link": f"/{state_slug}/{city_slug}/{course_slug}",
+                            "display_order": idx,
+                            "is_active": True,
+                            "created_at": now,
+                            "updated_at": now
+                        })
+                        idx += 1
+        
+        elif url_type == "college_state_stream":
+            # State + Stream: /{state}/{stream}
+            idx = 1
+            for state in STATES:
+                state_slug = generate_slug(state)
+                for stream in STREAMS:
+                    stream_slug = generate_slug(stream)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{stream} Colleges in {state}",
+                        "slug": f"{state_slug}/{stream_slug}",
+                        "type": "college_state_stream",
+                        "state": state,
+                        "stream": stream,
+                        "link": f"/{state_slug}/{stream_slug}",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "college_city_stream":
+            # City + Stream: /{city}/{stream}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for stream in STREAMS:
+                        stream_slug = generate_slug(stream)
+                        structures.append({
+                            "id": str(uuid.uuid4()),
+                            "name": f"{stream} Colleges in {city}",
+                            "slug": f"{city_slug}/{stream_slug}",
+                            "type": "college_city_stream",
+                            "state": state,
+                            "city": city,
+                            "stream": stream,
+                            "link": f"/{city_slug}/{stream_slug}",
+                            "display_order": idx,
+                            "is_active": True,
+                            "created_at": now,
+                            "updated_at": now
+                        })
+                        idx += 1
+        
+        elif url_type == "college_state_city_stream_course":
+            # State + City + Stream + Course: /{state}/{city}/{stream}/{course}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                state_slug = generate_slug(state)
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for stream in STREAMS:
+                        stream_slug = generate_slug(stream)
+                        for course in COURSES:
+                            course_slug = generate_slug(course)
+                            structures.append({
+                                "id": str(uuid.uuid4()),
+                                "name": f"{course} ({stream}) in {city}, {state}",
+                                "slug": f"{state_slug}/{city_slug}/{stream_slug}/{course_slug}",
+                                "type": "college_state_city_stream_course",
+                                "state": state,
+                                "city": city,
+                                "stream": stream,
+                                "course": course,
+                                "link": f"/{state_slug}/{city_slug}/{stream_slug}/{course_slug}",
+                                "display_order": idx,
+                                "is_active": True,
+                                "created_at": now,
+                                "updated_at": now
+                            })
+                            idx += 1
+        
+        # =============================================
+        # UNIVERSITY COURSE & STREAM URL STRUCTURES
+        # =============================================
+        
+        elif url_type == "university_india_course":
+            # India + Course: /india-universities/{course}
+            for idx, course in enumerate(COURSES, 1):
+                slug = generate_slug(course)
+                structures.append({
+                    "id": str(uuid.uuid4()),
+                    "name": f"{course} Universities in India",
+                    "slug": slug,
+                    "type": "university_india_course",
+                    "course": course,
+                    "link": f"/india-universities/{slug}",
+                    "display_order": idx,
+                    "is_active": True,
+                    "created_at": now,
+                    "updated_at": now
+                })
+        
+        elif url_type == "university_india_stream":
+            # India + Stream: /india-universities/{stream}
+            for idx, stream in enumerate(STREAMS, 1):
+                slug = generate_slug(stream)
+                structures.append({
+                    "id": str(uuid.uuid4()),
+                    "name": f"{stream} Universities in India",
+                    "slug": slug,
+                    "type": "university_india_stream",
+                    "stream": stream,
+                    "link": f"/india-universities/{slug}",
+                    "display_order": idx,
+                    "is_active": True,
+                    "created_at": now,
+                    "updated_at": now
+                })
+        
+        elif url_type == "university_india_stream_course":
+            # India + Stream + Course: /india-universities/{stream}/{course}
+            idx = 1
+            for stream in STREAMS:
+                stream_slug = generate_slug(stream)
+                for course in COURSES:
+                    course_slug = generate_slug(course)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{course} in {stream} - Universities India",
+                        "slug": f"{stream_slug}/{course_slug}",
+                        "type": "university_india_stream_course",
+                        "stream": stream,
+                        "course": course,
+                        "link": f"/india-universities/{stream_slug}/{course_slug}",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "university_state_course":
+            # State + Course: /{state}-universities/{course}
+            idx = 1
+            for state in STATES:
+                state_slug = generate_slug(state)
+                for course in COURSES:
+                    course_slug = generate_slug(course)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{course} Universities in {state}",
+                        "slug": f"{state_slug}/{course_slug}",
+                        "type": "university_state_course",
+                        "state": state,
+                        "course": course,
+                        "link": f"/{state_slug}-universities/{course_slug}",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "university_city_course":
+            # City + Course: /{city}-universities/{course}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for course in COURSES:
+                        course_slug = generate_slug(course)
+                        structures.append({
+                            "id": str(uuid.uuid4()),
+                            "name": f"{course} Universities in {city}",
+                            "slug": f"{city_slug}/{course_slug}",
+                            "type": "university_city_course",
+                            "state": state,
+                            "city": city,
+                            "course": course,
+                            "link": f"/{city_slug}-universities/{course_slug}",
+                            "display_order": idx,
+                            "is_active": True,
+                            "created_at": now,
+                            "updated_at": now
+                        })
+                        idx += 1
+        
+        elif url_type == "university_state_city_course":
+            # State + City + Course: /{state}/{city}-universities/{course}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                state_slug = generate_slug(state)
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for course in COURSES:
+                        course_slug = generate_slug(course)
+                        structures.append({
+                            "id": str(uuid.uuid4()),
+                            "name": f"{course} Universities in {city}, {state}",
+                            "slug": f"{state_slug}/{city_slug}/{course_slug}",
+                            "type": "university_state_city_course",
+                            "state": state,
+                            "city": city,
+                            "course": course,
+                            "link": f"/{state_slug}/{city_slug}-universities/{course_slug}",
+                            "display_order": idx,
+                            "is_active": True,
+                            "created_at": now,
+                            "updated_at": now
+                        })
+                        idx += 1
+        
+        elif url_type == "university_state_stream":
+            # State + Stream: /{state}-universities/{stream}
+            idx = 1
+            for state in STATES:
+                state_slug = generate_slug(state)
+                for stream in STREAMS:
+                    stream_slug = generate_slug(stream)
+                    structures.append({
+                        "id": str(uuid.uuid4()),
+                        "name": f"{stream} Universities in {state}",
+                        "slug": f"{state_slug}/{stream_slug}",
+                        "type": "university_state_stream",
+                        "state": state,
+                        "stream": stream,
+                        "link": f"/{state_slug}-universities/{stream_slug}",
+                        "display_order": idx,
+                        "is_active": True,
+                        "created_at": now,
+                        "updated_at": now
+                    })
+                    idx += 1
+        
+        elif url_type == "university_city_stream":
+            # City + Stream: /{city}-universities/{stream}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for stream in STREAMS:
+                        stream_slug = generate_slug(stream)
+                        structures.append({
+                            "id": str(uuid.uuid4()),
+                            "name": f"{stream} Universities in {city}",
+                            "slug": f"{city_slug}/{stream_slug}",
+                            "type": "university_city_stream",
+                            "state": state,
+                            "city": city,
+                            "stream": stream,
+                            "link": f"/{city_slug}-universities/{stream_slug}",
+                            "display_order": idx,
+                            "is_active": True,
+                            "created_at": now,
+                            "updated_at": now
+                        })
+                        idx += 1
+        
+        elif url_type == "university_state_city_stream_course":
+            # State + City + Stream + Course: /{state}/{city}-universities/{stream}/{course}
+            idx = 1
+            for state, cities in CITIES_BY_STATE.items():
+                state_slug = generate_slug(state)
+                for city in cities:
+                    city_slug = generate_slug(city)
+                    for stream in STREAMS:
+                        stream_slug = generate_slug(stream)
+                        for course in COURSES:
+                            course_slug = generate_slug(course)
+                            structures.append({
+                                "id": str(uuid.uuid4()),
+                                "name": f"{course} ({stream}) Universities in {city}, {state}",
+                                "slug": f"{state_slug}/{city_slug}/{stream_slug}/{course_slug}",
+                                "type": "university_state_city_stream_course",
+                                "state": state,
+                                "city": city,
+                                "stream": stream,
+                                "course": course,
+                                "link": f"/{state_slug}/{city_slug}-universities/{stream_slug}/{course_slug}",
+                                "display_order": idx,
+                                "is_active": True,
+                                "created_at": now,
+                                "updated_at": now
+                            })
+                            idx += 1
         
         else:
             raise HTTPException(status_code=400, detail=f"Unknown URL type: {url_type}")
