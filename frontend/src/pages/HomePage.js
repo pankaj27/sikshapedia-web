@@ -641,7 +641,7 @@ const CollegeDuniaHome = () => {
 
                     {/* Content */}
                     <div className="p-4 pt-8 flex-1 flex flex-col">
-                      <Link to={`/colleges/${college.id}`}>
+                      <Link to={getInstitutionDetailUrl(college.institution_type || 'college', college.id, college.name, college.location?.city, college.serial_number)}>
                         <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-indigo-600 transition-colors">
                           {college.name}
                         </h3>
@@ -667,13 +667,13 @@ const CollegeDuniaHome = () => {
                       {/* Action Buttons - Modern */}
                       <div className="mt-auto pt-3 flex gap-2">
                         <Button 
-                          onClick={(e) => { e.preventDefault(); navigate(`/colleges/${college.id}`); }}
+                          onClick={(e) => { e.preventDefault(); navigate(getInstitutionDetailUrl(college.institution_type || 'college', college.id, college.name, college.location?.city, college.serial_number)); }}
                           className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs py-2.5 h-auto rounded-xl font-medium transition-all"
                         >
                           View Details
                         </Button>
                         <Button 
-                          onClick={(e) => { e.preventDefault(); navigate(`/colleges/${college.id}/apply`); }}
+                          onClick={(e) => { e.preventDefault(); setActiveWidget('apply'); }}
                           variant="outline"
                           className="flex-1 border-indigo-200 text-indigo-600 hover:bg-indigo-50 text-xs py-2.5 h-auto rounded-xl font-medium"
                         >
