@@ -238,9 +238,21 @@ const CollegeDuniaHome = () => {
           loop
           className="h-full"
         >
-          {heroSlides.map((slide, idx) => (
+          {heroSlides.map((slide, idx) => {
+            // Generate proper URL using serial_number if available, otherwise use slug as-is
+            const institutionUrl = slide.serial_number 
+              ? getInstitutionDetailUrl(
+                  slide.type === 'school' ? 'school' : slide.type === 'university' ? 'university' : 'college',
+                  slide.id || slide.slug,
+                  slide.name,
+                  slide.city || slide.location?.split(',')[0],
+                  slide.serial_number
+                )
+              : `/${slide.type === 'school' ? 'schools' : slide.type === 'university' ? 'universities' : 'colleges'}/${slide.slug}`;
+            
+            return (
             <SwiperSlide key={idx}>
-              <Link to={`/${slide.type === 'school' ? 'schools' : slide.type === 'university' ? 'universities' : 'colleges'}/${slide.slug}`} className="block h-full relative z-0">
+              <Link to={institutionUrl} className="block h-full relative z-0">
                 <div className="relative h-full cursor-pointer group">
                   <img 
                     src={slide.image} 
