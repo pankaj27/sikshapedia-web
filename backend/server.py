@@ -7291,6 +7291,7 @@ try:
     set_courses_exams_db(db)
     set_study_abroad_db(db)
     set_taxonomy_db(db)
+    set_reviews_questions_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
