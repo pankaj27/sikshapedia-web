@@ -2026,6 +2026,21 @@ const CollegeDetailPage = ({ overrideId }) => {
         source={college?.institution_type?.toLowerCase() || 'college'}
         isSchool={college?.institution_type === 'School'}
       />
+      
+      {/* Admission Booking Modal (for Admission Partners) */}
+      <AdmissionBookingModal
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        institution={{
+          id: college?.id,
+          name: college?.name,
+          type: college?.institution_type?.toLowerCase() || 'college',
+          city: college?.city,
+          state: college?.state
+        }}
+        institutionType={college?.institution_type?.toLowerCase() === 'school' ? 'school' : 
+                         college?.institution_type?.toLowerCase() === 'university' ? 'university' : 'college'}
+      />
     </div>
   );
 };
