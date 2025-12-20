@@ -306,6 +306,33 @@ const CollegeDetailPage = ({ overrideId }) => {
     alert('Review form coming soon!');
   };
 
+  const handleAskQuestion = () => {
+    // Check if user is logged in
+    if (!requireAuth('ask a question')) return;
+    // TODO: Submit question functionality
+    alert('Question submission coming soon!');
+  };
+
+  const handleReply = () => {
+    // Check if user is logged in
+    if (!requireAuth('reply to questions')) return;
+    // TODO: Reply functionality
+    alert('Reply functionality coming soon!');
+  };
+
+  const handleFavorite = () => {
+    // Check if user is logged in
+    if (!requireAuth('add to favorites')) return;
+    // TODO: Add to favorites functionality
+    alert('Added to favorites!');
+  };
+
+  const handleQALike = () => {
+    // Check if user is logged in
+    if (!requireAuth('like this answer')) return;
+    // TODO: Like answer functionality
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center pt-20">
