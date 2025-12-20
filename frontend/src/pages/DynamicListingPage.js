@@ -157,17 +157,18 @@ const DynamicListingPage = () => {
       const isUniversity = urlInfo.institutionType === 'university';
       const typeName = isSchools ? 'Schools' : isUniversity ? 'Universities' : 'Colleges';
       
-      // Build title based on filters
+      // Build title based on filters (with safety check)
+      const filters = urlInfo.filters || {};
       let titleParts = [];
       
       // Add course if present
-      if (urlInfo.filters.course) {
-        titleParts.push(urlInfo.filters.course);
+      if (filters.course) {
+        titleParts.push(filters.course);
       }
       
       // Add stream if present
-      if (urlInfo.filters.stream) {
-        titleParts.push(urlInfo.filters.stream);
+      if (filters.stream) {
+        titleParts.push(filters.stream);
       }
       
       titleParts.push(typeName);
