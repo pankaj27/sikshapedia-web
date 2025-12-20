@@ -242,10 +242,16 @@ const UserSignup = () => {
     return String(error);
   };
   
+  // Render benefit icon
+  const renderIcon = (iconName) => {
+    const IconComponent = ICON_MAP[iconName] || FiCheckCircle;
+    return <IconComponent />;
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Left Side - Illustration/Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 relative overflow-hidden">
+      <div className={`hidden lg:flex lg:w-1/2 ${gradientClass} relative overflow-hidden`}>
         {/* Background Pattern */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
@@ -256,38 +262,38 @@ const UserSignup = () => {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-white">
           <Link to="/">
-            <img src="/favicon.png" alt="Admission Buddy" className="h-20 mb-8" />
+            <img src={content.logo_url} alt="Admission Buddy" className="h-20 mb-8" />
           </Link>
-          <h1 className="text-4xl font-bold mb-4 text-center">Join Admission Buddy</h1>
+          <h1 className="text-4xl font-bold mb-4 text-center">{content.heading}</h1>
           <p className="text-xl text-orange-100 text-center max-w-md">
-            Find your dream college and track your applications all in one place
+            {content.subheading}
           </p>
           
+          {/* Stats (if any) */}
+          {content.stats && content.stats.length > 0 && (
+            <div className="mt-12 grid grid-cols-3 gap-8 text-center">
+              {content.stats.map((stat, idx) => (
+                <div key={idx}>
+                  <p className="text-3xl font-bold">{stat.value}</p>
+                  <p className="text-orange-200 text-sm">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          
           {/* Benefits */}
-          <div className="mt-12 space-y-4 text-left max-w-sm">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <FiCheckCircle />
-              </div>
-              <span>Compare 10,000+ colleges</span>
+          {content.benefits && content.benefits.length > 0 && (
+            <div className="mt-12 space-y-4 text-left max-w-sm">
+              {content.benefits.map((benefit, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    {renderIcon(benefit.icon)}
+                  </div>
+                  <span>{benefit.text}</span>
+                </div>
+              ))}
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <FiCheckCircle />
-              </div>
-              <span>Track your applications</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <FiCheckCircle />
-              </div>
-              <span>Get personalized recommendations</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <FiGift />
-              </div>
-              <span>Earn rewards for referrals</span>
+          )}
             </div>
           </div>
         </div>
