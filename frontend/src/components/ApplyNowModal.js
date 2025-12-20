@@ -47,8 +47,9 @@ const ApplyNowModal = ({
   const [allCourses, setAllCourses] = useState([]);  // All courses for general form
   const [settings, setSettings] = useState(null);
   
-  // Memoize collegeCourses to prevent infinite loops - using array length as dependency
-  const memoizedCollegeCourses = useMemo(() => collegeCourses, [collegeCourses.length, collegeCourses.join(',')]);
+  // Memoize collegeCourses to prevent infinite loops - use stable reference
+  const collegeCourseString = collegeCourses.join(',');
+  const memoizedCollegeCourses = useMemo(() => collegeCourses, [collegeCourseString]);
 
   // Fetch lead settings and all courses on mount
   useEffect(() => {
