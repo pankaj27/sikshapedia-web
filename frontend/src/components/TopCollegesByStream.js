@@ -129,7 +129,7 @@ const TopCollegesByStream = () => {
 
         <div className="text-center mt-10">
           <Link
-            to="/colleges"
+            to="/india-colleges"
             className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
           >
             <FiTrendingUp />
