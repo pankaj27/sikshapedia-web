@@ -187,7 +187,7 @@ const Header = () => {
           {/* Right Side Actions - Desktop */}
           <div className="hidden lg:flex items-center gap-3 relative">
             {/* Write Review Button - White Color */}
-            <Link to="/write-review">
+            <NavLink to="/write-review">
               <button className="flex items-center gap-2 px-3 py-1 border-2 border-white/30 text-white hover:bg-white/10 hover:border-white rounded-lg transition-colors">
                 <FiEdit3 size={16} />
                 <div className="text-left leading-tight">
@@ -195,7 +195,7 @@ const Header = () => {
                   <div className="text-[10px] whitespace-nowrap">Get Upto ₹300*</div>
                 </div>
               </button>
-            </Link>
+            </NavLink>
 
             {/* Explore Dropdown */}
             <div 
@@ -233,7 +233,7 @@ const Header = () => {
                         >
                           <IconComponent className="text-lg" />
                           <span>{item.title}</span>
-                        </Link>
+                        </NavLink>
                       );
                     })}
                   </div>
@@ -265,20 +265,20 @@ const Header = () => {
                       <p className="font-semibold text-gray-900">{user.name}</p>
                       <p className="text-sm text-gray-500 truncate">{user.email}</p>
                     </div>
-                    <Link 
+                    <NavLink 
                       to="/dashboard" 
                       className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 hover:text-orange-600"
                       onClick={() => setUserDropdownOpen(false)}
                     >
                       <FiGrid size={18} /> Dashboard
-                    </Link>
-                    <Link 
+                    </NavLink>
+                    <NavLink 
                       to="/dashboard" 
                       className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-orange-50 hover:text-orange-600"
                       onClick={() => { setUserDropdownOpen(false); }}
                     >
                       <FiUser size={18} /> My Profile
-                    </Link>
+                    </NavLink>
                     <div className="border-t my-1"></div>
                     <button
                       onClick={() => {
@@ -294,16 +294,16 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link to="/login">
+                <NavLink to="/login">
                   <Button variant="ghost" className="text-white hover:text-orange-400 text-sm">
                     Login
                   </Button>
-                </Link>
-                <Link to="/signup">
+                </NavLink>
+                <NavLink to="/signup">
                   <Button className="bg-orange-600 hover:bg-orange-700 text-white text-sm">
                     Sign Up
                   </Button>
-                </Link>
+                </NavLink>
               </div>
             )}
 
@@ -339,90 +339,90 @@ const Header = () => {
                   onMouseEnter={handleAllCoursesMouseEnter}
                   onMouseLeave={handleAllCoursesMouseLeave}
                 >
-                  <Link to="/courses" className="block px-4 py-2.5 text-base font-bold text-orange-600 hover:bg-orange-50 transition-colors">
+                  <NavLink to="/courses" className="block px-4 py-2.5 text-base font-bold text-orange-600 hover:bg-orange-50 transition-colors">
                     📚 View All Courses
-                  </Link>
+                  </NavLink>
                   <div className="border-t-2 border-gray-200 my-2"></div>
                   
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🎓 ENGINEERING COURSES</p>
-                  <Link to="/btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Tech - Bachelor of Technology
-                  </Link>
-                  <Link to="/mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Tech - Master of Technology
-                  </Link>
-                  <Link to="/be" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/be" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BE - Bachelor of Engineering
-                  </Link>
-                  <Link to="/me" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/me" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     ME - Master of Engineering
-                  </Link>
+                  </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💼 MANAGEMENT COURSES</p>
-                  <Link to="/mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBA - Master of Business Administration
-                  </Link>
-                  <Link to="/bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BBA - Bachelor of Business Administration
-                  </Link>
-                  <Link to="/pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     PGDM - Post Graduate Diploma in Management
-                  </Link>
+                  </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🏥 MEDICAL COURSES</p>
-                  <Link to="/mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBBS - Bachelor of Medicine & Surgery
-                  </Link>
-                  <Link to="/bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BDS - Bachelor of Dental Surgery
-                  </Link>
-                  <Link to="/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc Nursing - Bachelor of Science in Nursing
-                  </Link>
-                  <Link to="/bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Pharm - Bachelor of Pharmacy
-                  </Link>
+                  </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">📊 COMMERCE COURSES</p>
-                  <Link to="/bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Com - Bachelor of Commerce
-                  </Link>
-                  <Link to="/mcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/mcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Com - Master of Commerce
-                  </Link>
-                  <Link to="/ca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/ca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     CA - Chartered Accountant
-                  </Link>
+                  </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🔬 SCIENCE COURSES</p>
-                  <Link to="/bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc - Bachelor of Science
-                  </Link>
-                  <Link to="/msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Sc - Master of Science
-                  </Link>
+                  </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🎨 ARTS COURSES</p>
-                  <Link to="/ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BA - Bachelor of Arts
-                  </Link>
-                  <Link to="/ma" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/ma" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MA - Master of Arts
-                  </Link>
+                  </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💻 COMPUTER COURSES</p>
-                  <Link to="/bca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/bca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BCA - Bachelor of Computer Applications
-                  </Link>
-                  <Link to="/mca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  </NavLink>
+                  <NavLink to="/mca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MCA - Master of Computer Applications
-                  </Link>
+                  </NavLink>
                 </div>
               )}
             </div>
@@ -496,7 +496,7 @@ const Header = () => {
                   className="block py-2 text-sm text-gray-700 hover:text-orange-600"
                 >
                   {goal.name}
-                </Link>
+                </NavLink>
               ))}
             </div>
 
@@ -513,7 +513,7 @@ const Header = () => {
                   >
                     <IconComponent />
                     <span>{item.title}</span>
-                  </Link>
+                  </NavLink>
                 );
               })}
             </div>
@@ -533,11 +533,11 @@ const Header = () => {
                     <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
                 </div>
-                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                <NavLink to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="outline" className="w-full mb-2">
                     <FiGrid className="mr-2" /> Dashboard
                   </Button>
-                </Link>
+                </NavLink>
                 <Button 
                   onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
                   variant="ghost" 
@@ -548,16 +548,16 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t">
-                <Link to="/login">
+                <NavLink to="/login">
                   <Button variant="outline" className="w-full">
                     Login
                   </Button>
-                </Link>
-                <Link to="/signup">
+                </NavLink>
+                <NavLink to="/signup">
                   <Button className="w-full bg-orange-600 hover:bg-orange-700">
                     Sign Up
                   </Button>
-                </Link>
+                </NavLink>
               </div>
             )}
           </nav>
