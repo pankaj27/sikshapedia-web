@@ -158,6 +158,7 @@ const CollegeDetailPage = ({ overrideId }) => {
   const [dislikes, setDislikes] = useState(12);
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
   const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
   
   // Use college context to share data with AutoApplyPopup
   const { setCollegeData, clearCollegeData } = useCollegeContext();
