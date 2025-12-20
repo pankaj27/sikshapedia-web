@@ -84,6 +84,24 @@ const formatTimeAgo = (dateString) => {
 const DynamicListingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // Check if this is a detail page URL (e.g., /colleges/001-iit-bombay)
+  // Detail page URLs have a numeric prefix like "001-" or "1-"
+  useEffect(() => {
+    const parts = location.pathname.split('/').filter(Boolean);
+    if (parts.length >= 2 && ['colleges', 'schools', 'university'].includes(parts[0])) {
+      const secondPart = parts[1];
+      // Check if it matches detail page pattern: number-slug or number (like 001-iit-bombay)
+      if (/^\d+-/.test(secondPart) || /^\d+$/.test(secondPart)) {
+        // This is a detail page, redirect to the proper route
+        // The detail pages are already handled by specific routes, 
+        // so this shouldn't normally be reached
+        console.log('Detail page detected, this should be handled by InstitutionDetailPage');
+        return;
+      }
+    }
+  }, [location.pathname]);
+  
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [institutions, setInstitutions] = useState([]);
