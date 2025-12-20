@@ -1121,7 +1121,7 @@ const DynamicListingPage = () => {
     // Build new URL with remaining filters
     let segments = [baseSuffix];
     if (newState) segments.push(newState);
-    if (newCity && !newState) segments.push(newCity);
+    if (newCity) segments.push(newCity); // City can be with state now
     if (newStream) segments.push(newStream);
     if (newCourse) segments.push(newCourse);
     
@@ -1136,7 +1136,7 @@ const DynamicListingPage = () => {
     
     const newPath = '/' + segments.join('/');
     const queryString = queryParams.toString();
-    navigate(queryString ? `${newPath}?${queryString}` : newPath);
+    window.location.href = queryString ? `${newPath}?${queryString}` : newPath;
   };
   
   // Breadcrumb generation - Updated for NEW URL structure
