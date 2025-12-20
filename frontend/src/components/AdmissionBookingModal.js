@@ -241,9 +241,46 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
     setError('');
 
     try {
-      // Create Razorpay order
-      const orderResponse = await api.post(`/admission/create-order?booking_id=${booking.id}`);
-      const orderData = orderResponse.data;
+      // Try to create Razorpay order first
+      let orderData;
+      let useTestPayment = false;
+      
+      try {
+        const orderResponse = await api.post(`/admission/create-order?booking_id=${booking.id}`);
+        orderData = orderResponse.data;
+      } catch (orderErr) {
+        // If Razorpay fails, use test payment
+        console.log('Razorpay order failed, using test payment:', orderErr);
+        useTestPayment = true;
+        const testOrderResponse = await api.post(`/admission/create-test-order/${booking.id}`);
+        orderData = testOrderResponse.data;
+      }
+
+      if (useTestPayment || orderData.is_test) {
+        // Use test payment flow
+        const confirmTest = window.confirm(
+          `Test Payment Mode\n\n` +
+          `Amount: ₹${(orderData.amount / 100).toFixed(2)}\n\n` +
+          `Click OK to simulate successful payment.\n` +
+          `(Razorpay keys not configured - using test mode)`
+        );
+        
+        if (confirmTest) {
+          const testPayment = await api.post(`/admission/complete-test-payment/${booking.id}`);
+          if (testPayment.data.success) {
+            // Refresh booking data
+            const updatedBooking = await api.get(`/admission/my-bookings`);
+            const myBooking = updatedBooking.data.bookings?.find(b => b.id === booking.id);
+            if (myBooking) {
+              setBooking(myBooking);
+            }
+            setStep(4); // Success
+          }
+        } else {
+          setLoading(false);
+        }
+        return;
+      }
 
       // Load Razorpay script if not loaded
       if (!window.Razorpay) {
