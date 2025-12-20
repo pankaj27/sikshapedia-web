@@ -11,6 +11,8 @@ const ListingPagesManagement = () => {
   const [activeTab, setActiveTab] = useState('pages'); // 'pages' or 'urls'
   const [pages, setPages] = useState([]);
   const [urlStructures, setUrlStructures] = useState([]);
+  const [urlStatsData, setUrlStatsData] = useState({});
+  const [totalUrlCount, setTotalUrlCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
