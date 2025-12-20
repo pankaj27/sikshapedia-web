@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiPlus, FiTrash2, FiUpload, FiLoader } from 'react-icons/fi';
 import { Button } from '../../ui/button';
+import SearchableSelect from '../../ui/SearchableSelect';
 import CollapsibleSection from '../CollapsibleSection';
 
 const CoursesSection = ({ 
@@ -14,6 +15,12 @@ const CoursesSection = ({
   uploadingCourseBrochure,
   handleCourseBrochureUpload 
 }) => {
+  // Format courses for SearchableSelect
+  const courseOptions = availableCourses.map(c => ({
+    value: c.name,
+    label: `${c.name} - ${c.degree_type} (${c.stream})`
+  }));
+
   return (
     <CollapsibleSection title="Courses & Fees" icon="📚" defaultOpen={true}>
       <div className="mb-4">
@@ -34,19 +41,15 @@ const CoursesSection = ({
             <div className="grid grid-cols-2 gap-4 mb-2">
               <div className="col-span-2">
                 <label className="block text-xs text-gray-600 mb-1">Course Name *</label>
-                <select
+                <SearchableSelect
+                  options={courseOptions}
                   value={course.name}
-                  onChange={(e) => updateCourse(index, 'name', e.target.value)}
-                  className="w-full border rounded px-3 py-2 bg-white"
-                >
-                  <option value="">Select Course</option>
-                  {availableCourses.map((c) => (
-                    <option key={c.id} value={c.name}>
-                      {c.name} - {c.degree_type} ({c.stream})
-                    </option>
-                  ))}
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Select a course to auto-fill duration, eligibility, and selection criteria</p>
+                  onChange={(value) => updateCourse(index, 'name', value)}
+                  placeholder="Search and select course..."
+                  label="course"
+                  allowCustom
+                />
+                <p className="text-xs text-gray-500 mt-1">Search by course name, degree type, or stream</p>
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">Duration</label>
