@@ -437,7 +437,7 @@ async def get_liked_entities(entity_type: str, request: Request, db=Depends(get_
         {"_id": 0}
     ).to_list(500)
     
-    return {"likes": likes, "entity_ids": [l["entity_id"] for l in likes]}
+    return {"likes": likes, "entity_ids": [like_item["entity_id"] for like_item in likes]}
 
 # ============ FAVORITES ============
 
