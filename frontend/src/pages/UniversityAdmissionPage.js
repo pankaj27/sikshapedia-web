@@ -332,19 +332,40 @@ const UniversityAdmissionPage = () => {
                 <div key={admission.id} className="bg-white rounded shadow hover:shadow-md transition overflow-hidden">
                   {/* Image at TOP */}
                   <div className={`h-40 bg-gradient-to-br ${getGradient(index)} relative`}>
-                    <div className="absolute top-2 left-2">
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
                       <div className="bg-white/95 px-2 py-1 rounded text-xs font-semibold text-gray-700">
                         {admission.admission_date 
                           ? new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
                           : admission.university_type || 'Open'}
                       </div>
+                      {admission.is_admission_partner && (
+                        <AdmissionPartnerBadge size="sm" />
+                      )}
                     </div>
-                    <div className="absolute bottom-2 left-2 right-2">
-                      <Link to={`/universities/${admission.slug || admission.id}`}>
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700 h-7 text-xs">
-                          Apply Now
+                    <div className="absolute bottom-2 left-2 right-2 space-y-1">
+                      {admission.is_admission_partner ? (
+                        <Button 
+                          onClick={() => {
+                            setSelectedInstitution({
+                              id: admission.id,
+                              name: admission.name,
+                              type: 'university',
+                              city: admission.location?.city,
+                              state: admission.location?.state
+                            });
+                            setShowBookingModal(true);
+                          }}
+                          className="w-full bg-green-600 hover:bg-green-700 h-7 text-xs"
+                        >
+                          🏛️ Book Your Seat
                         </Button>
-                      </Link>
+                      ) : (
+                        <Link to={`/universities/${admission.slug || admission.id}`}>
+                          <Button className="w-full bg-purple-600 hover:bg-purple-700 h-7 text-xs">
+                            Apply Now
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                   </div>
 
@@ -370,6 +391,17 @@ const UniversityAdmissionPage = () => {
           )}
         </div>
       </section>
+
+      {/* Admission Booking Modal */}
+      <AdmissionBookingModal
+        isOpen={showBookingModal}
+        onClose={() => {
+          setShowBookingModal(false);
+          setSelectedInstitution(null);
+        }}
+        institution={selectedInstitution}
+        institutionType="university"
+      />
     </div>
   );
 };
