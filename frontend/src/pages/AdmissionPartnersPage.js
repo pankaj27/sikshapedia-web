@@ -3,7 +3,7 @@
  * Routes: /admission/schools, /admission/colleges, /admission/universities
  */
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Link } from '../components/CustomLink';
 import { Helmet } from 'react-helmet-async';
 import { FiMapPin, FiStar, FiArrowRight, FiFilter, FiSearch } from 'react-icons/fi';
@@ -13,7 +13,13 @@ import AdmissionPartnerBadge from '../components/AdmissionPartnerBadge';
 import AdmissionBookingModal from '../components/AdmissionBookingModal';
 
 const AdmissionPartnersPage = () => {
-  const { type } = useParams(); // schools, colleges, universities
+  const { type: paramType } = useParams(); // schools, colleges, universities from /admission/:type
+  const location = useLocation();
+  
+  // Get type from URL path if not from params (for static routes like /admission/colleges)
+  const pathSegments = location.pathname.split('/');
+  const type = paramType || pathSegments[pathSegments.length - 1] || 'colleges';
+  
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,6 +35,7 @@ const AdmissionPartnersPage = () => {
   useEffect(() => {
     fetchPartners();
   }, [type]);
+
 
   const fetchPartners = async () => {
     setLoading(true);
