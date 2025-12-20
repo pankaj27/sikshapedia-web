@@ -260,6 +260,9 @@ const CollegeDetailPage = ({ overrideId }) => {
   };
 
   const handleLike = () => {
+    // Check if user is logged in
+    if (!requireAuth('like this institution')) return;
+    
     if (userVote === 'like') {
       // Remove like
       setLikes(likes - 1);
@@ -277,6 +280,9 @@ const CollegeDetailPage = ({ overrideId }) => {
   };
 
   const handleDislike = () => {
+    // Check if user is logged in
+    if (!requireAuth('dislike this institution')) return;
+    
     if (userVote === 'dislike') {
       // Remove dislike
       setDislikes(dislikes - 1);
@@ -291,6 +297,13 @@ const CollegeDetailPage = ({ overrideId }) => {
       setDislikes(dislikes + 1);
       setUserVote('dislike');
     }
+  };
+
+  const handleWriteReview = () => {
+    // Check if user is logged in
+    if (!requireAuth('write a review')) return;
+    // TODO: Navigate to review form or open review modal
+    alert('Review form coming soon!');
   };
 
   if (loading) {
