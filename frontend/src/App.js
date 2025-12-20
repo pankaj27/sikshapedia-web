@@ -218,6 +218,7 @@ function App() {
             <Route path="/admin/sponsored-ads" element={<SponsoredAdsManagement />} />
             <Route path="/admin/leads" element={<LeadsList />} />
             <Route path="/admin/lead-settings" element={<LeadSettings />} />
+            <Route path="/admin/admission-bookings" element={<AdmissionBookingsManagement />} />
 
             {/* Public Routes - With Layout */}
             <Route element={<LayoutWrapper />}>
