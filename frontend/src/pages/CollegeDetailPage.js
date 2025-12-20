@@ -2067,6 +2067,13 @@ const CollegeDetailPage = ({ overrideId }) => {
         institutionType={college?.institution_type?.toLowerCase() === 'school' ? 'school' : 
                          college?.institution_type?.toLowerCase() === 'university' ? 'university' : 'college'}
       />
+      
+      {/* Login Prompt Modal (for guest action restrictions) */}
+      <LoginPromptModal 
+        isOpen={!!showPrompt} 
+        onClose={closePrompt} 
+        action={showPrompt?.action || 'perform this action'}
+      />
     </div>
   );
 };
