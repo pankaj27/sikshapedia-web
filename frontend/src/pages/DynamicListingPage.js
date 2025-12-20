@@ -696,12 +696,29 @@ const DynamicListingPage = () => {
   const fetchInstitutions = async () => {
     setLoading(true);
     try {
+      // Determine which API endpoint to use based on institution type
+      const getApiEndpoint = () => {
+        if (pageInfo.isUniversity) {
+          return '/universities';
+        } else if (pageInfo.isSchools) {
+          return '/schools';
+        }
+        return '/colleges';
+      };
+      
       const buildQueryParams = (institutionType = null) => {
         let queryParams = new URLSearchParams();
         queryParams.append('limit', 100);
-        queryParams.append('fields', 'minimal');  // Optimize payload size
         
-        if (institutionType) {
+        const endpoint = getApiEndpoint();
+        const isCollegesEndpoint = endpoint === '/colleges';
+        
+        // Only add fields=minimal for colleges endpoint
+        if (isCollegesEndpoint) {
+          queryParams.append('fields', 'minimal');
+        }
+        
+        if (institutionType && isCollegesEndpoint) {
           queryParams.append('institution_type', institutionType);
         }
         
@@ -755,7 +772,7 @@ const DynamicListingPage = () => {
           queryParams.append('search', filters.search);
         }
         
-        if (filters.type.length > 0) {
+        if (filters.type.length > 0 && isCollegesEndpoint) {
           queryParams.append('type', filters.type[0]);
         }
         
@@ -763,21 +780,16 @@ const DynamicListingPage = () => {
       };
       
       let allData = [];
+      const endpoint = getApiEndpoint();
       
-      // Determine which API endpoint to use based on institution type
-      const getApiEndpoint = () => {
-        if (pageInfo.isUniversity) {
-          return '/universities';
-        } else if (pageInfo.isSchools) {
-          return '/schools';
-        }
-        return '/colleges';
-      };
-      
-      if (pageInfo.institutionTypes && pageInfo.institutionTypes.length > 0) {
+      // For universities and schools, don't use institutionTypes loop
+      if (endpoint !== '/colleges') {
+        const queryParams = buildQueryParams();
+        const response = await api.get(`${endpoint}?${queryParams.toString()}`);
+        allData = response.data || [];
+      } else if (pageInfo.institutionTypes && pageInfo.institutionTypes.length > 0) {
         const fetchPromises = pageInfo.institutionTypes.map(async (type) => {
           const queryParams = buildQueryParams(type);
-          const endpoint = getApiEndpoint();
           const response = await api.get(`${endpoint}?${queryParams.toString()}`);
           return response.data || [];
         });
@@ -786,7 +798,6 @@ const DynamicListingPage = () => {
         allData = results.flat();
       } else {
         const queryParams = buildQueryParams();
-        const endpoint = getApiEndpoint();
         const response = await api.get(`${endpoint}?${queryParams.toString()}`);
         allData = response.data || [];
       }
@@ -799,7 +810,7 @@ const DynamicListingPage = () => {
       } else if (sortBy === 'fees-high') {
         allData.sort((a, b) => (b.average_fees || 0) - (a.average_fees || 0));
       } else {
-        allData.sort((a, b) => (a.nirf_ranking || 999) - (b.nirf_ranking || 999));
+        allData.sort((a, b) => (a.nirf_ranking || a.nirf_rank || 999) - (b.nirf_ranking || b.nirf_rank || 999));
       }
       
       // Store all data for infinite scroll
