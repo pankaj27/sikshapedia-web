@@ -129,6 +129,8 @@ import AdvertisementManagement from './pages/admin/AdvertisementManagement';
 import LeadsList from './pages/admin/LeadsList';
 import LeadSettings from './pages/admin/LeadSettings';
 import FloatingApplyButton from './components/FloatingApplyButton';
+// Admission Partner Pages
+import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
 import './App.css';
 
 function App() {
