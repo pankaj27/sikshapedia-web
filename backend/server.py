@@ -8416,6 +8416,11 @@ UPLOAD_DIR = Path(__file__).parent / "static" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/api/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
 
+# Admission documents upload directory
+ADMISSION_DOCS_DIR = Path(__file__).parent / "uploads" / "admission_docs"
+ADMISSION_DOCS_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/api/uploads", StaticFiles(directory=str(Path(__file__).parent / "uploads")), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
