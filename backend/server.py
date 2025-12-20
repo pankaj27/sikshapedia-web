@@ -3993,18 +3993,11 @@ async def create_review(review_data: ReviewCreate, current_user: User = Depends(
     
     return review
 
-@api_router.get("/reviews/college/{college_id}", response_model=List[Review])
-async def get_college_reviews(college_id: str, skip: int = 0, limit: int = 20):
-    reviews = await db.reviews.find({"college_id": college_id}, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
-    
-    for review in reviews:
-        if isinstance(review.get('created_at'), str):
-            review['created_at'] = datetime.fromisoformat(review['created_at'])
-    
-    return reviews
+# GET /reviews/college/{college_id} - MOVED TO routes/reviews_questions.py
 
 # ============================================
-# Q&A Routes
+# Q&A Routes - Read endpoints MOVED TO routes/reviews_questions.py
+# Write endpoints kept here due to auth dependencies
 # ============================================
 
 @api_router.post("/questions", response_model=Question)
