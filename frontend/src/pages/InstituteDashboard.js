@@ -33,12 +33,13 @@ const InstituteDashboard = () => {
   useEffect(() => {
     const savedInstitute = localStorage.getItem('institute');
     if (!savedInstitute) {
-      navigate('/institute/login');
+      // Use window.location for navigation (React Router v7 workaround)
+      window.location.href = '/institute/login';
       return;
     }
     setInstitution(JSON.parse(savedInstitute));
     fetchDashboard();
-  }, [navigate]);
+  }, []);
   
   const fetchDashboard = async () => {
     try {
@@ -51,7 +52,8 @@ const InstituteDashboard = () => {
       if (error.response?.status === 401) {
         localStorage.removeItem('institute_token');
         localStorage.removeItem('institute');
-        navigate('/institute/login');
+        // Use window.location for navigation (React Router v7 workaround)
+        window.location.href = '/institute/login';
       }
     } finally {
       setLoading(false);
