@@ -1577,8 +1577,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                             <p className="text-xs text-gray-500">Answered by Alumni • 1 day ago</p>
                           </div>
                           <div className="flex items-center gap-4 mt-3">
-                            <button className="text-sm text-blue-600 hover:underline">Reply</button>
-                            <button className="text-sm text-gray-600 hover:text-gray-800">👍 12</button>
+                            <button onClick={handleReply} className="text-sm text-blue-600 hover:underline">Reply</button>
+                            <button onClick={handleQALike} className="text-sm text-gray-600 hover:text-gray-800">👍 12</button>
                             <button className="text-sm text-gray-600 hover:text-gray-800">Share</button>
                           </div>
                         </div>
@@ -1602,8 +1602,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                             <p className="text-xs text-gray-500">Answered by Current Student • 4 days ago</p>
                           </div>
                           <div className="flex items-center gap-4 mt-3">
-                            <button className="text-sm text-blue-600 hover:underline">Reply</button>
-                            <button className="text-sm text-gray-600 hover:text-gray-800">👍 28</button>
+                            <button onClick={handleReply} className="text-sm text-blue-600 hover:underline">Reply</button>
+                            <button onClick={handleQALike} className="text-sm text-gray-600 hover:text-gray-800">👍 28</button>
                             <button className="text-sm text-gray-600 hover:text-gray-800">Share</button>
                           </div>
                         </div>
