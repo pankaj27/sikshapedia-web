@@ -359,11 +359,6 @@ function App() {
               <Route path="/schools/:seg1" element={<InstitutionRouter />} />
               <Route path="/schools/:seg1/:seg2" element={<InstitutionRouter />} />
               
-              {/* Legacy routes - redirect to new structure */}
-              <Route path="/colleges" element={<Navigate to="/colleges" replace />} />
-              <Route path="/schools" element={<Navigate to="/schools" replace />} />
-              <Route path="/university" element={<Navigate to="/university" replace />} />
-              
               {/* Legacy routes with stream - handled by DynamicListingPage */}
               <Route path="/colleges/:stream" element={<DynamicListingPage />} />
               <Route path="/schools/:stream" element={<DynamicListingPage />} />
