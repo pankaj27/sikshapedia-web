@@ -700,6 +700,200 @@ const InstituteDashboard = () => {
                 )}
               </>
             )}
+            
+            {/* Admission Bookings Tab */}
+            {activeTab === 'admission_bookings' && (
+              <>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Admission Bookings</h2>
+                    <p className="text-gray-600">Manage seat booking applications from students</p>
+                  </div>
+                </div>
+                
+                {admissionBookings.length === 0 ? (
+                  <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+                    <FiDollarSign className="text-6xl text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">No Admission Bookings</h3>
+                    <p className="text-gray-600">Admission bookings will appear here when students book seats</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {admissionBookings.map((booking) => (
+                      <div key={booking.id} className="bg-white rounded-xl shadow-sm p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="text-lg font-bold">{booking.student_name}</h3>
+                            <p className="text-gray-600">{booking.course_or_class}</p>
+                            <p className="text-sm text-gray-500">Application #{booking.id?.slice(0, 15)}</p>
+                          </div>
+                          {(() => {
+                            const statusConfig = {
+                              submitted: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Submitted' },
+                              approved: { bg: 'bg-green-100', text: 'text-green-800', label: 'Approved' },
+                              rejected: { bg: 'bg-red-100', text: 'text-red-800', label: 'Rejected' }
+                            };
+                            const config = statusConfig[booking.status] || statusConfig.submitted;
+                            return (
+                              <span className={`px-3 py-1 rounded-full text-sm font-medium ${config.bg} ${config.text}`}>
+                                {config.label}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+                          <div>
+                            <p className="text-gray-600">Father's Name</p>
+                            <p className="font-medium">{booking.father_name}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Mobile</p>
+                            <p className="font-medium">{booking.mobile}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Email</p>
+                            <p className="font-medium">{booking.email}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Amount Paid</p>
+                            <p className="font-medium text-green-600">₹{booking.total_amount}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+                          <div>
+                            <p className="text-gray-600">DOB</p>
+                            <p className="font-medium">{booking.dob}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Aadhaar</p>
+                            <p className="font-medium">{booking.aadhaar_number}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Last Qualification</p>
+                            <p className="font-medium">{booking.last_qualification}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Applied On</p>
+                            <p className="font-medium">{new Date(booking.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="text-sm mb-4">
+                          <p className="text-gray-600">Address</p>
+                          <p className="font-medium">{booking.address}, {booking.city}, {booking.state} - {booking.pin}</p>
+                        </div>
+                        
+                        {/* Documents */}
+                        <div className="flex gap-3 mb-4 text-sm">
+                          {booking.photo_url && (
+                            <a href={booking.photo_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                              <FiEye size={14} /> Photo
+                            </a>
+                          )}
+                          {booking.aadhaar_doc_url && (
+                            <a href={booking.aadhaar_doc_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                              <FiEye size={14} /> Aadhaar Doc
+                            </a>
+                          )}
+                          {booking.qualification_doc_url && (
+                            <a href={booking.qualification_doc_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                              <FiEye size={14} /> Qualification Doc
+                            </a>
+                          )}
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        {booking.status === 'submitted' && (
+                          <div className="flex gap-3 pt-4 border-t">
+                            <Button
+                              size="sm"
+                              onClick={() => setSelectedAdmissionBooking(booking)}
+                              className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
+                            >
+                              <FiCheckCircle size={14} /> Approve
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedAdmissionBooking(booking);
+                                setAdmissionComment('');
+                              }}
+                              className="text-red-600 border-red-600"
+                            >
+                              <FiXCircle size={14} /> Reject
+                            </Button>
+                          </div>
+                        )}
+                        
+                        {/* Institution Comments */}
+                        {booking.institution_comments && (
+                          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                            <p className="text-sm font-medium text-gray-700">Your Comments:</p>
+                            <p className="text-sm text-gray-600">{booking.institution_comments}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Approve/Reject Modal */}
+                {selectedAdmissionBooking && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
+                      <h3 className="text-lg font-bold mb-4">
+                        Update Application Status
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        Student: <strong>{selectedAdmissionBooking.student_name}</strong><br />
+                        Course: <strong>{selectedAdmissionBooking.course_or_class}</strong>
+                      </p>
+                      
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Add Comments (optional)
+                        </label>
+                        <textarea
+                          value={admissionComment}
+                          onChange={(e) => setAdmissionComment(e.target.value)}
+                          placeholder="Enter any comments for the student..."
+                          rows={3}
+                          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => {
+                            setSelectedAdmissionBooking(null);
+                            setAdmissionComment('');
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={() => handleAdmissionStatusUpdate(selectedAdmissionBooking.id, 'approved')}
+                          className="flex-1 bg-green-600 hover:bg-green-700"
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          onClick={() => handleAdmissionStatusUpdate(selectedAdmissionBooking.id, 'rejected')}
+                          className="flex-1 bg-red-600 hover:bg-red-700"
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
