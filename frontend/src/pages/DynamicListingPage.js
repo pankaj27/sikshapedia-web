@@ -701,7 +701,7 @@ const DynamicListingPage = () => {
     try {
       // Build the URL slug to look up
       const pathParts = location.pathname.split('/').filter(Boolean);
-      let slug = pathParts.join('/') || 'india-colleges';
+      let slug = pathParts.join('/') || 'colleges';
       
       // Also try without trailing path
       if (pathParts.length === 1) {
