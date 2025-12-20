@@ -118,7 +118,7 @@ const InstitutionDetailPage = () => {
           <h1 className="text-2xl font-bold text-gray-800 mb-2">{error}</h1>
           <p className="text-gray-600 mb-4">The institution you're looking for doesn't exist or may have been moved.</p>
           <button
-            onClick={() => window.location.href = '/india-colleges')}
+            onClick={() => { window.location.href = '/india-colleges'; }}
             className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
           >
             Browse All Colleges
