@@ -1289,6 +1289,22 @@ const CollegeForm = () => {
             <input type="checkbox" checked={formData.is_no_cost_emi} onChange={(e) => setFormData({...formData, is_no_cost_emi: e.target.checked})} className="rounded text-blue-600" />
             <span>💳 No Cost EMI</span>
           </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input 
+              type="checkbox" 
+              checked={formData.is_admission_open} 
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                setFormData({
+                  ...formData, 
+                  is_admission_open: isChecked,
+                  admission_open_at: isChecked ? new Date().toISOString() : formData.admission_open_at
+                });
+              }} 
+              className="rounded text-green-600" 
+            />
+            <span>🎓 Admissions Open</span>
+          </label>
           
           {/* Display Priority for Listing Page Order */}
           <div className="flex items-center gap-2 bg-indigo-50 px-3 py-2 rounded-lg">
