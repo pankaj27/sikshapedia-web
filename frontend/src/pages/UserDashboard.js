@@ -211,6 +211,7 @@ const UserDashboard = () => {
                 {[
                   { id: 'overview', icon: FiBarChart2, label: 'Overview' },
                   { id: 'profile', icon: FiUser, label: 'My Profile' },
+                  { id: 'admissions', icon: FiCheckCircle, label: 'Admission Bookings', highlight: true },
                   { id: 'applications', icon: FiFileText, label: 'Applications', count: dashboard?.stats?.applications },
                   { id: 'reviews', icon: FiStar, label: 'My Reviews', count: dashboard?.stats?.reviews },
                   { id: 'questions', icon: FiHelpCircle, label: 'My Questions', count: dashboard?.stats?.questions },
@@ -227,7 +228,7 @@ const UserDashboard = () => {
                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition text-sm ${
                       activeTab === item.id 
                         ? 'bg-orange-50 text-orange-600 font-semibold' 
-                        : 'text-gray-700 hover:bg-gray-50'
+                        : item.highlight ? 'text-green-700 hover:bg-green-50 bg-green-50/50' : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
                     <span className="flex items-center gap-2">
