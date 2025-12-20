@@ -52,12 +52,16 @@ async def get_admin_states():
     """Get all states for admin"""
     try:
         database = get_db()
+        print(f"[admin_locations] Database: {database}, Collection: {database.managed_locations}")
         states = await database.managed_locations.find(
             {"type": "state"}, {"_id": 0}
         ).sort("display_order", 1).to_list(100)
+        print(f"[admin_locations] Found {len(states)} states")
         return states
     except Exception as e:
         print(f"Error fetching states: {e}")
+        import traceback
+        traceback.print_exc()
         return []
 
 
