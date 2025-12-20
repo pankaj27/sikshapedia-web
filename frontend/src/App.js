@@ -227,97 +227,97 @@ function App() {
               {/* Institution Listing Pages */}
               {/* DEPRECATED: Old /colleges route now redirects to /india-colleges */}
               <Route path="/colleges" element={<Navigate to="/india-colleges" replace />} />
-                  <Route path="/schools" element={<SchoolsPage />} />
-                  <Route path="/universities" element={<UniversitiesPage />} />
+              <Route path="/schools" element={<SchoolsPage />} />
+              <Route path="/universities" element={<UniversitiesPage />} />
                   
                   {/* Institution Detail Pages: /colleges/{number}-{slug} */}
-                  <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
-                  <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
-                  <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
+              <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
+              <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
+              <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
+              <Route path="/universities/:idSlug" element={<InstitutionDetailPage />} />
+              <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
+              <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
                   
                   {/* Exams */}
-                  <Route path="/exams" element={<ExamPage />} />
-                  <Route path="/exams-old" element={<ExamsPage />} />
-                  <Route path="/exams/:id/:section" element={<ExamSubPages />} />
-                  <Route path="/exams/:id" element={<ExamDetailPage />} />
+              <Route path="/exams" element={<ExamPage />} />
+              <Route path="/exams-old" element={<ExamsPage />} />
+              <Route path="/exams/:id/:section" element={<ExamSubPages />} />
+              <Route path="/exams/:id" element={<ExamDetailPage />} />
                   
                   {/* News */}
-                  <Route path="/news" element={<NewsPage />} />
-                  <Route path="/news/:id" element={<NewsDetailPage />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/news/:id" element={<NewsDetailPage />} />
                   
                   {/* Courses */}
-                  <Route path="/courses" element={<CoursesPage />} />
-                  <Route path="/courses/after-10th" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/after-12th" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/diploma" element={<DynamicCourseListingPage />} />
+              <Route path="/courses" element={<CoursesPage />} />
+              <Route path="/courses/after-10th" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/after-12th" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/diploma" element={<DynamicCourseListingPage />} />
                   {/* Dynamic course listing pages */}
-                  <Route path="/courses/pg" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/phd" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/certificate" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/engineering" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/medical" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/management" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/science" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/commerce" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/arts" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/computer" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/law" element={<DynamicCourseListingPage />} />
-                  <Route path="/courses/education" element={<DynamicCourseListingPage />} />
-                  <Route path="/course-finder" element={<CourseFinderPage />} />
-                  <Route path="/courses/listing/:category" element={<CourseListingPage />} />
-                  <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
-                  <Route path="/courses/:slug" element={<CourseDetailPage />} />
+              <Route path="/courses/pg" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/phd" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/certificate" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/engineering" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/medical" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/management" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/science" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/commerce" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/arts" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/computer" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/law" element={<DynamicCourseListingPage />} />
+              <Route path="/courses/education" element={<DynamicCourseListingPage />} />
+              <Route path="/course-finder" element={<CourseFinderPage />} />
+              <Route path="/courses/listing/:category" element={<CourseListingPage />} />
+              <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
+              <Route path="/courses/:slug" element={<CourseDetailPage />} />
                   
                   {/* User & Dashboard - Old dashboard moved to /old-dashboard */}
-                  <Route path="/old-dashboard" element={<StudentDashboard />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/search" element={<GlobalSearchPage />} />
-                  <Route path="/write-review" element={<WriteReviewPage />} />
+              <Route path="/old-dashboard" element={<StudentDashboard />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/search" element={<GlobalSearchPage />} />
+              <Route path="/write-review" element={<WriteReviewPage />} />
                   
                   {/* Tools & Services */}
-                  <Route path="/eligibility-checker" element={<EligibilityChecker />} />
-                  <Route path="/study-abroad" element={<StudyAbroadPage />} />
-                  <Route path="/scholarships" element={<ScholarshipsPage />} />
-                  <Route path="/loans" element={<EducationLoansPage />} />
-                  <Route path="/study-materials" element={<StudyMaterialsPage />} />
-                  <Route path="/counseling" element={<CounselingPage />} />
-                  <Route path="/premium" element={<PremiumPage />} />
-                  <Route path="/premium/success" element={<PremiumSuccess />} />
-                  <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
-                  <Route path="/compare" element={<CompareCollegesPage />} />
+              <Route path="/eligibility-checker" element={<EligibilityChecker />} />
+              <Route path="/study-abroad" element={<StudyAbroadPage />} />
+              <Route path="/scholarships" element={<ScholarshipsPage />} />
+              <Route path="/loans" element={<EducationLoansPage />} />
+              <Route path="/study-materials" element={<StudyMaterialsPage />} />
+              <Route path="/counseling" element={<CounselingPage />} />
+              <Route path="/premium" element={<PremiumPage />} />
+              <Route path="/premium/success" element={<PremiumSuccess />} />
+              <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
+              <Route path="/compare" element={<CompareCollegesPage />} />
                   
                   {/* Blog */}
-                  <Route path="/blog" element={<BlogPage />} />
-                  <Route path="/blog/:id" element={<BlogDetailPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:id" element={<BlogDetailPage />} />
                   
                   {/* Admissions */}
-                  <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
-                  <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
-                  <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
+              <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
+              <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
+              <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
                   
                   {/* Static Pages */}
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                  <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                  <Route path="/terms" element={<TermsOfServicePage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
                   
                   {/* ============================================ */}
                   {/* New User Dashboard Routes */}
                   {/* ============================================ */}
-                  <Route path="/signup" element={<UserSignup />} />
-                  <Route path="/auth/callback" element={<AuthCallback />} />
-                  <Route path="/dashboard" element={<UserDashboard />} />
+              <Route path="/signup" element={<UserSignup />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/dashboard" element={<UserDashboard />} />
                   
                   {/* ============================================ */}
                   {/* Institute Dashboard Routes */}
                   {/* ============================================ */}
-                  <Route path="/institute/login" element={<InstituteLogin />} />
-                  <Route path="/institute/dashboard" element={<InstituteDashboardNew />} />
+              <Route path="/institute/login" element={<InstituteLogin />} />
+              <Route path="/institute/dashboard" element={<InstituteDashboardNew />} />
                   
                   {/* ============================================ */}
                   {/* SEO-FRIENDLY DYNAMIC ROUTES - Must come LAST */}
@@ -325,15 +325,15 @@ function App() {
                   {/* ============================================ */}
                   
                   {/* India-wide Institution Listings */}
-                  <Route path="/india-colleges" element={<DynamicListingPage />} />
-                  <Route path="/india-schools" element={<DynamicListingPage />} />
-                  <Route path="/india-universities" element={<DynamicListingPage />} />
+              <Route path="/india-colleges" element={<DynamicListingPage />} />
+              <Route path="/india-schools" element={<DynamicListingPage />} />
+              <Route path="/india-universities" element={<DynamicListingPage />} />
                   
                   {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
-                  <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
+              <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
                   
                   {/* Stream-based Listings (2 segments) - e.g., /btech/computer-science or /btech/west-bengal */}
-                  <Route path="/:stream/:subStreamOrLocation" element={<DynamicListingPage />} />
+              <Route path="/:stream/:subStreamOrLocation" element={<DynamicListingPage />} />
                   
               {/* Single segment dynamic routes - e.g., /delhi-colleges, /btech, /engineering */}
               <Route path="/:locationOrStream" element={<DynamicListingPage />} />
