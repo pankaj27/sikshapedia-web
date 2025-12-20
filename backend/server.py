@@ -8422,7 +8422,8 @@ try:
     app.include_router(admission_booking_router, prefix="/api")  # Admission booking routes
     app.include_router(rewards_router, prefix="/api")  # Rewards system routes
     app.include_router(admin_rewards_router, prefix="/api")  # Admin rewards management routes
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards")
+    app.include_router(lead_forms_router)  # Lead forms routes - already has /api prefix
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
