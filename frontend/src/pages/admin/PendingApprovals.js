@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiCheck, FiX, FiClock, FiFileText, FiHome, FiBook, FiEdit3, FiGlobe } from 'react-icons/fi';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 
+import { Link } from '../../components/CustomLink';
 const TYPE_ICONS = {
   college: FiHome,
   listing_page: FiGlobe,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { 
+import { Link } from '../../components/CustomLink';
   FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiEye, FiPause, FiPlay, 
   FiBarChart2, FiDollarSign, FiImage, FiVideo, FiFileText, FiCode,
   FiTarget, FiCalendar, FiClock, FiTrendingUp, FiMousePointer,

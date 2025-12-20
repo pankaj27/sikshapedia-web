@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiSave, FiSend, FiImage, FiVideo, FiList, FiGrid, FiSettings, FiSearch, FiPlus, FiTrash2, FiMove, FiEye, FiUpload } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
@@ -8,6 +8,7 @@ import StatusBadge from '../../components/admin/StatusBadge';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const TABS = [
   { id: 'basic', label: 'Basic Info', icon: FiSettings },
   { id: 'media', label: 'Media', icon: FiImage },

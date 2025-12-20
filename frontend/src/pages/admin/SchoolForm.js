@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiSave } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 import { generateSlug } from '../../utils/slugify';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const SchoolForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();

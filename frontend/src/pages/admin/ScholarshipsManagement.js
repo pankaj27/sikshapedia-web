@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiEye, FiDollarSign, FiCalendar, FiAward } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const ScholarshipsManagement = () => {
   const [scholarships, setScholarships] = useState([]);
   const [loading, setLoading] = useState(true);

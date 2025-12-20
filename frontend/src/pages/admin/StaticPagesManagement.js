@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiEye, FiFileText, FiLayout, FiSearch } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const STATIC_PAGES = [
   { slug: 'about', name: 'About Us', path: '/about', icon: '📄' },
   { slug: 'contact', name: 'Contact Us', path: '/contact', icon: '📞' },

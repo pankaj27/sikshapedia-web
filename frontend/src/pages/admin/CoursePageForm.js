@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FiSave, FiLoader, FiArrowLeft, FiPlus, FiTrash2, FiEye, FiSettings, FiEdit3, FiSearch, FiHelpCircle, FiGrid, FiTrendingUp, FiLink } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const CoursePageForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();

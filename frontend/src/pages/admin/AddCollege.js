@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
@@ -9,6 +9,7 @@ import { Textarea } from '../../components/ui/textarea';
 import { FiArrowLeft, FiPlus, FiX } from 'react-icons/fi';
 import { generateSlug } from '../../utils/slugify';
 
+import { Link } from '../../components/CustomLink';
 const AddCollege = () => {
   const navigate = useNavigate();
   const { user } = useAuth();

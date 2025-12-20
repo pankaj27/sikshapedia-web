@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiGlobe, FiMapPin, FiBook, FiFilter, FiEye, FiEyeOff } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const ListingPagesManagement = () => {
   const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);

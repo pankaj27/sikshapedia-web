@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit, FiTrash2, FiSearch, FiEye } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
 
+import { Link } from '../../components/CustomLink';
 const NewsManagement = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);

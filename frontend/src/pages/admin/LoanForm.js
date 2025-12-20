@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft, FiSave, FiImage, FiList, FiGrid, FiSettings, FiSearch, FiPlus, FiTrash2, FiEye, FiUpload } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
@@ -7,6 +7,7 @@ import { generateSlug } from '../../utils/slugify';
 import { useAuth } from '../../contexts/AuthContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 
+import { Link } from '../../components/CustomLink';
 const TABS = [
   { id: 'basic', label: 'Basic Info', icon: FiSettings },
   { id: 'eligibility', label: 'Eligibility', icon: FiList },
