@@ -9,12 +9,23 @@ const api = axios.create({
   },
 });
 
+// Helper function to safely get current path without causing React re-renders
+// This is safe because it's called during axios request, not during React render
+const getCurrentPath = () => {
+  try {
+    return window.location.pathname || '/';
+  } catch {
+    return '/';
+  }
+};
+
 // Add auth token to requests
 api.interceptors.request.use(
   (config) => {
-    // Check which page we're on to determine which token to use
-    const isAdminPage = window.location.pathname.startsWith('/admin');
-    const isInstitutePage = window.location.pathname.startsWith('/institute');
+    // Get current path at request time (not during React render)
+    const currentPath = getCurrentPath();
+    const isAdminPage = currentPath.startsWith('/admin');
+    const isInstitutePage = currentPath.startsWith('/institute');
     
     let token = null;
     if (isAdminPage) {
@@ -40,9 +51,10 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Check if we're on an admin page
-      const isAdminPage = window.location.pathname.startsWith('/admin');
-      const isInstitutePage = window.location.pathname.startsWith('/institute');
+      // Get current path for redirect logic
+      const currentPath = getCurrentPath();
+      const isAdminPage = currentPath.startsWith('/admin');
+      const isInstitutePage = currentPath.startsWith('/institute');
       if (isAdminPage) {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
