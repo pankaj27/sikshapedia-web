@@ -45,18 +45,18 @@ class StudyAbroadListingPageSettings(BaseModel):
     
     # Stats
     stats: List[Dict[str, Any]] = [
-        {"label": "Partner Universities", "value": "500+", "icon": "\ud83c\udfdb\ufe0f"},
-        {"label": "Countries", "value": "50+", "icon": "\ud83c\udf0d"},
-        {"label": "Students Placed", "value": "10K+", "icon": "\ud83d\udc68\u200d\ud83c\udf93"},
-        {"label": "Scholarship Value", "value": "$50M+", "icon": "\ud83d\udcb0"}
+        {"label": "Partner Universities", "value": "500+", "icon": "university"},
+        {"label": "Countries", "value": "50+", "icon": "globe"},
+        {"label": "Students Placed", "value": "10K+", "icon": "students"},
+        {"label": "Scholarship Value", "value": "$50M+", "icon": "money"}
     ]
     
     # Featured Countries
     featured_countries: List[Dict[str, Any]] = [
-        {"name": "USA", "flag": "\ud83c\uddfa\ud83c\uddf8", "universities": 100, "description": "World-class education system"},
-        {"name": "UK", "flag": "\ud83c\uddec\ud83c\udde7", "universities": 80, "description": "Rich academic heritage"},
-        {"name": "Canada", "flag": "\ud83c\udde8\ud83c\udde6", "universities": 60, "description": "Multicultural environment"},
-        {"name": "Australia", "flag": "\ud83c\udde6\ud83c\uddfa", "universities": 50, "description": "Quality lifestyle"}
+        {"name": "USA", "flag": "us", "universities": 100, "description": "World-class education system"},
+        {"name": "UK", "flag": "gb", "universities": 80, "description": "Rich academic heritage"},
+        {"name": "Canada", "flag": "ca", "universities": 60, "description": "Multicultural environment"},
+        {"name": "Australia", "flag": "au", "universities": 50, "description": "Quality lifestyle"}
     ]
     
     # Filter Options
@@ -67,10 +67,10 @@ class StudyAbroadListingPageSettings(BaseModel):
     
     # Program Types
     program_types: List[Dict[str, Any]] = [
-        {"id": "undergraduate", "name": "Undergraduate", "icon": "\ud83d\udcda"},
-        {"id": "postgraduate", "name": "Postgraduate", "icon": "\ud83c\udf93"},
-        {"id": "phd", "name": "PhD/Research", "icon": "\ud83d\udd2c"},
-        {"id": "mba", "name": "MBA", "icon": "\ud83d\udcbc"}
+        {"id": "undergraduate", "name": "Undergraduate", "icon": "book"},
+        {"id": "postgraduate", "name": "Postgraduate", "icon": "graduation"},
+        {"id": "phd", "name": "PhD/Research", "icon": "research"},
+        {"id": "mba", "name": "MBA", "icon": "briefcase"}
     ]
     
     # CTA Section
@@ -81,10 +81,10 @@ class StudyAbroadListingPageSettings(BaseModel):
     
     # Why Study Abroad Section
     why_study_abroad: List[Dict[str, Any]] = [
-        {"title": "Global Recognition", "description": "Degrees recognized worldwide", "icon": "\ud83c\udf10"},
-        {"title": "Career Opportunities", "description": "Better job prospects globally", "icon": "\ud83d\udcbc"},
-        {"title": "Cultural Exposure", "description": "Experience diverse cultures", "icon": "\ud83c\udfad"},
-        {"title": "Personal Growth", "description": "Develop independence and skills", "icon": "\ud83d\ude80"}
+        {"title": "Global Recognition", "description": "Degrees recognized worldwide", "icon": "globe"},
+        {"title": "Career Opportunities", "description": "Better job prospects globally", "icon": "briefcase"},
+        {"title": "Cultural Exposure", "description": "Experience diverse cultures", "icon": "culture"},
+        {"title": "Personal Growth", "description": "Develop independence and skills", "icon": "rocket"}
     ]
     
     # SEO
