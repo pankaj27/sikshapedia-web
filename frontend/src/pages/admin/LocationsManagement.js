@@ -131,7 +131,15 @@ const LocationsManagement = () => {
   };
 
   const getCurrentList = () => {
-    let list = activeTab === 'states' ? states : activeTab === 'cities' ? cities : countries;
+    let list;
+    switch(activeTab) {
+      case 'states': list = states; break;
+      case 'cities': list = cities; break;
+      case 'streams': list = streams; break;
+      case 'courses': list = courses; break;
+      case 'countries': list = countries; break;
+      default: list = states;
+    }
     if (searchTerm) {
       list = list.filter(item => 
         item.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -141,7 +149,14 @@ const LocationsManagement = () => {
   };
 
   const getTabLabel = () => {
-    return activeTab === 'states' ? 'State' : activeTab === 'cities' ? 'City' : 'Country';
+    switch(activeTab) {
+      case 'states': return 'State';
+      case 'cities': return 'City';
+      case 'streams': return 'Stream';
+      case 'courses': return 'Course';
+      case 'countries': return 'Country';
+      default: return 'Location';
+    }
   };
 
   return (
