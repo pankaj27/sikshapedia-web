@@ -4606,6 +4606,10 @@ class APITester:
         # Core authentication first
         self.test_authentication()
         
+        # **NEW: URL ROUTING SYSTEM TESTS (Review Request):**
+        self.test_url_routing_system()
+        self.test_url_routing_title_generation()
+        
         # **1. User Authentication APIs:**
         self.test_user_auth_send_otp()
         self.test_user_auth_verify_otp()
