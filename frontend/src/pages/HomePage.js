@@ -750,7 +750,7 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold">{topSchoolsTitle}</h2>
-            <Link to="/colleges?type=school">
+            <Link to="/india-schools">
               <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All Schools</Button>
             </Link>
           </div>
