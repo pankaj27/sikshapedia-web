@@ -20,6 +20,9 @@ const InstituteDashboard = () => {
   const [leads, setLeads] = useState([]);
   const [applications, setApplications] = useState([]);
   const [adAnalytics, setAdAnalytics] = useState(null);
+  const [admissionBookings, setAdmissionBookings] = useState([]);
+  const [selectedAdmissionBooking, setSelectedAdmissionBooking] = useState(null);
+  const [admissionComment, setAdmissionComment] = useState('');
   
   // Filters
   const [leadSourceFilter, setLeadSourceFilter] = useState('');
