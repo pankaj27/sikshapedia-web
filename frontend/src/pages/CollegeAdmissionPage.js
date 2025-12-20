@@ -454,6 +454,17 @@ const CollegeAdmissionPage = () => {
           {/* Pagination would go here */}
         </div>
       </section>
+
+      {/* Admission Booking Modal */}
+      <AdmissionBookingModal
+        isOpen={showBookingModal}
+        onClose={() => {
+          setShowBookingModal(false);
+          setSelectedInstitution(null);
+        }}
+        institution={selectedInstitution}
+        institutionType="college"
+      />
     </div>
   );
 };
