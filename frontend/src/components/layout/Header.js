@@ -434,7 +434,7 @@ const Header = () => {
               )}
             </div>
             
-            <Link to="/schools" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+            <Link to="/schools" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false" onClick={(e) => { e.preventDefault(); window.location.href = '/schools'; }}>
               Schools
             </Link>
             <Link to="/btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
