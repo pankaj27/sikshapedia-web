@@ -1350,6 +1350,9 @@ class School(BaseModel):
     # Admission Partner
     is_admission_partner: bool = False
     
+    # Institution-specific admission fees (overrides default entity fees)
+    admission_fees: Optional[Dict] = None  # { form_fee, platform_fee, gst_percentage }
+    
     # Academic Info
     classes_offered: List[str] = []  # ["Nursery", "LKG", "UKG", "1-10", "11-12"]
     streams_offered: List[str] = []  # ["Science", "Commerce", "Arts"]
