@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiYoutube } from 'react-icons/fi';
 import { Button } from '../ui/button';
-
-// Custom Link component that uses full page navigation
-const Link = ({ to, children, className, onClick, ...props }) => {
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (onClick) onClick(e);
-    window.location.href = to;
-  };
-  return (
-    <a href={to} onClick={handleClick} className={className} {...props}>
-      {children}
-    </a>
-  );
-};
 
 const Footer = () => {
   const [email, setEmail] = useState('');

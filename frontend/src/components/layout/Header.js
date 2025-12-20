@@ -1,24 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid, FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone } from 'react-icons/fi';
 import { Button } from '../ui/button';
-
-// Custom Link component that uses full page navigation to fix React Router issues
-const NavLink = ({ to, children, className, onClick, ...props }) => {
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (onClick) onClick(e);
-    window.location.href = to;
-  };
-  return (
-    <a href={to} onClick={handleClick} className={className} {...props}>
-      {children}
-    </a>
-  );
-};
-
-// For Links that should NOT do full page reload (like # anchors or special cases)
-const Link = NavLink;
 
 const Header = () => {
   const navigate = useNavigate();
