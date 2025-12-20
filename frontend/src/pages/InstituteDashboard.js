@@ -744,7 +744,7 @@ const InstituteDashboard = () => {
                         
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
                           <div>
-                            <p className="text-gray-600">Father's Name</p>
+                            <p className="text-gray-600">Father&apos;s Name</p>
                             <p className="font-medium">{booking.father_name}</p>
                           </div>
                           <div>
