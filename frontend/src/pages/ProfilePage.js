@@ -130,7 +130,7 @@ const ProfilePage = () => {
         {/* Header */}
         <div className="mb-6">
           <button
-            onClick={() => window.location.href = '/dashboard')}
+            onClick={() => { window.location.href = '/dashboard'; }}
             className="flex items-center text-gray-600 hover:text-orange-600 mb-4"
           >
             <FiArrowLeft className="mr-2" />
