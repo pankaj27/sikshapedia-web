@@ -7,6 +7,8 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import AdBanner from '../components/AdBanner';
 import ApplyNowModal from '../components/ApplyNowModal';
+import AdmissionBookingModal from '../components/AdmissionBookingModal';
+import AdmissionPartnerBadge from '../components/AdmissionPartnerBadge';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import { useCollegeContext } from '../contexts/CollegeContext';
