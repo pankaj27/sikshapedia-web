@@ -252,24 +252,28 @@ const SchoolForm = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">Location</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
-                  <input
-                    type="text"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">State *</label>
+                  <SearchableSelect
+                    options={indianStates}
+                    value={formData.state}
+                    onChange={(value) => setFormData({ ...formData, state: value, city: '' })}
+                    placeholder="Search and select state..."
+                    label="state"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">State *</label>
-                  <input
-                    type="text"
-                    value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                  <SearchableSelect
+                    options={availableCities}
+                    value={formData.city}
+                    onChange={(value) => setFormData({ ...formData, city: value })}
+                    placeholder="Search and select city..."
+                    label="city"
+                    disabled={!formData.state}
                     required
+                    allowCustom
                   />
                 </div>
 
