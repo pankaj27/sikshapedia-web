@@ -5,7 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CollegeProvider } from './contexts/CollegeContext';
 import LayoutWrapper from './components/LayoutWrapper';
 import ScrollToTop from './components/ScrollToTop';
-import AutoApplyPopup from './components/AutoApplyPopup';
+import SimpleAutoPopup from './components/SimpleAutoPopup';
 import HomePage from './pages/HomePage';
 // DEPRECATED: CollegeListingPage - now redirects to DynamicListingPage
 // import CollegeListingPage from './pages/CollegeListingPage';
