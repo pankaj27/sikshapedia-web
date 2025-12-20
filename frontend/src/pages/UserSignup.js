@@ -1,12 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
+import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight, FiHeart, FiStar, FiAward } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import SearchableSelect from '../components/SearchableSelect';
 
 import { Link } from '../components/CustomLink';
+
+// Default content (used while loading or if API fails)
+const DEFAULT_CONTENT = {
+  logo_url: "/favicon.png",
+  heading: "Join Admission Buddy",
+  subheading: "Find your dream college and track your applications all in one place",
+  gradient_from: "orange-500",
+  gradient_via: "orange-600",
+  gradient_to: "red-600",
+  stats: [],
+  benefits: [
+    { icon: "check", text: "Compare 10,000+ colleges" },
+    { icon: "check", text: "Track your applications" },
+    { icon: "check", text: "Get personalized recommendations" },
+    { icon: "gift", text: "Earn rewards for referrals" }
+  ],
+  form_title: "Create Account",
+  form_subtitle: "Join thousands of students finding their dream college",
+  footer_text: "Already have an account?",
+  footer_link_text: "Sign In",
+  footer_link_url: "/login"
+};
+
+// Icon mapping
+const ICON_MAP = {
+  check: FiCheckCircle,
+  gift: FiGift,
+  star: FiStar,
+  heart: FiHeart,
+  award: FiAward
+};
+
 // All India Cities
 const INDIA_CITIES = [
   "Agra", "Ahmedabad", "Ajmer", "Aligarh", "Allahabad", "Amritsar", "Aurangabad",
@@ -27,6 +59,7 @@ const UserSignup = () => {
   const [step, setStep] = useState('email'); // email, otp, details
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [content, setContent] = useState(DEFAULT_CONTENT);
   
   // Form data
   const [email, setEmail] = useState('');
@@ -58,9 +91,21 @@ const UserSignup = () => {
       setReferralCode(refCode);
     }
     
-    // Fetch courses
+    // Fetch courses and content
     fetchCourses();
+    fetchContent();
   }, [googleEmail, googleName, refCode]);
+  
+  const fetchContent = async () => {
+    try {
+      const response = await api.get('/admin/auth-pages/signup');
+      if (response.data?.content) {
+        setContent({ ...DEFAULT_CONTENT, ...response.data.content });
+      }
+    } catch (err) {
+      console.log('Using default signup content');
+    }
+  };
   
   const fetchCourses = async () => {
     try {
@@ -76,6 +121,9 @@ const UserSignup = () => {
     const redirectUrl = window.location.origin + '/auth/callback';
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
+  
+  // Build gradient class dynamically
+  const gradientClass = `bg-gradient-to-br from-${content.gradient_from} via-${content.gradient_via || content.gradient_from} to-${content.gradient_to}`;
   
   const handleSendOTP = async (e) => {
     e.preventDefault();
