@@ -184,9 +184,13 @@ const ApplyNowModal = ({
     : (settings?.general_form_subheading || 'Fill the form and our team will get back to you within 24 hours');
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div 
+      className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" 
+      onClick={onClose}
+      style={{ top: '64px' }} // Leave header area clickable (header height is ~64px)
+    >
       <div 
-        className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200"
+        className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[85vh] overflow-y-auto animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with Logo - z-60 to stay above dropdown (z-50) */}
