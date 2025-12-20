@@ -804,7 +804,7 @@ const CollegeDuniaHome = () => {
                   {/* Action Buttons - Modern */}
                   <div className="mt-auto pt-3 flex gap-2">
                     <Button 
-                      onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}`)}
+                      onClick={() => window.location.href = `/schools/${encodeURIComponent(school.name)}`}
                       className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs py-2.5 h-auto rounded-xl font-medium transition-all"
                     >
                       View Details
