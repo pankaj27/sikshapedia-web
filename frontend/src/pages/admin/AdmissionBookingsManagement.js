@@ -291,43 +291,124 @@ const AdmissionBookingsManagement = () => {
 
         {/* Settings Modal */}
         {showSettings && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-bold mb-4">Admission Fee Settings</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Form Fee (₹)</label>
-                  <input
-                    type="number"
-                    value={settingsForm.form_fee}
-                    onChange={(e) => setSettingsForm(prev => ({ ...prev, form_fee: parseFloat(e.target.value) }))}
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+              <p className="text-gray-500 text-sm mb-6">Set different fees for Schools, Colleges, and Universities</p>
+              
+              <div className="space-y-6">
+                {/* College Fees */}
+                <div className="border rounded-lg p-4">
+                  <h3 className="font-semibold text-blue-700 mb-3 flex items-center gap-2">
+                    🎓 College Fees
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Form Fee (₹)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.college.form_fee}
+                        onChange={(e) => updateEntityFee('college', 'form_fee', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Platform Fee (₹)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.college.platform_fee}
+                        onChange={(e) => updateEntityFee('college', 'platform_fee', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">GST (%)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.college.gst_percentage}
+                        onChange={(e) => updateEntityFee('college', 'gst_percentage', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-sm text-blue-600 mt-2">Total: ₹{calculateTotal('college')}</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Platform Fee (₹)</label>
-                  <input
-                    type="number"
-                    value={settingsForm.platform_fee}
-                    onChange={(e) => setSettingsForm(prev => ({ ...prev, platform_fee: parseFloat(e.target.value) }))}
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+
+                {/* School Fees */}
+                <div className="border rounded-lg p-4">
+                  <h3 className="font-semibold text-green-700 mb-3 flex items-center gap-2">
+                    🏫 School Fees
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Form Fee (₹)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.school.form_fee}
+                        onChange={(e) => updateEntityFee('school', 'form_fee', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Platform Fee (₹)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.school.platform_fee}
+                        onChange={(e) => updateEntityFee('school', 'platform_fee', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">GST (%)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.school.gst_percentage}
+                        onChange={(e) => updateEntityFee('school', 'gst_percentage', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-sm text-green-600 mt-2">Total: ₹{calculateTotal('school')}</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">GST (%)</label>
-                  <input
-                    type="number"
-                    value={settingsForm.gst_percentage}
-                    onChange={(e) => setSettingsForm(prev => ({ ...prev, gst_percentage: parseFloat(e.target.value) }))}
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="bg-orange-50 p-3 rounded-lg">
-                  <p className="text-sm text-gray-600">
-                    Total: ₹{(settingsForm.form_fee + settingsForm.platform_fee) * (1 + settingsForm.gst_percentage / 100)}
-                  </p>
+
+                {/* University Fees */}
+                <div className="border rounded-lg p-4">
+                  <h3 className="font-semibold text-purple-700 mb-3 flex items-center gap-2">
+                    🏛️ University Fees
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Form Fee (₹)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.university.form_fee}
+                        onChange={(e) => updateEntityFee('university', 'form_fee', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Platform Fee (₹)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.university.platform_fee}
+                        onChange={(e) => updateEntityFee('university', 'platform_fee', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">GST (%)</label>
+                      <input
+                        type="number"
+                        value={settingsForm.university.gst_percentage}
+                        onChange={(e) => updateEntityFee('university', 'gst_percentage', e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-sm text-purple-600 mt-2">Total: ₹{calculateTotal('university')}</p>
                 </div>
               </div>
+
               <div className="flex gap-3 mt-6">
                 <Button onClick={() => setShowSettings(false)} variant="outline" className="flex-1">
                   Cancel
