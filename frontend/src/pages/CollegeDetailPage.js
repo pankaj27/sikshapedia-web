@@ -2000,7 +2000,8 @@ const CollegeDetailPage = ({ overrideId }) => {
         collegeName={college?.name}
         collegeLogoUrl={college?.logo_url}
         collegeCourses={college?.courses?.map(c => typeof c === 'object' ? c.name : c) || []}
-        source="college"
+        source={college?.institution_type?.toLowerCase() || 'college'}
+        isSchool={college?.institution_type === 'School'}
       />
     </div>
   );
