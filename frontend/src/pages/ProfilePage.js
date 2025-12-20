@@ -261,7 +261,7 @@ const ProfilePage = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => window.location.href = '/dashboard')}
+              onClick={() => { window.location.href = '/dashboard'; }}
               className="flex-1"
             >
               Cancel
