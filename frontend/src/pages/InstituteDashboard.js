@@ -273,6 +273,7 @@ const InstituteDashboard = () => {
                   { id: 'overview', icon: FiBarChart2, label: 'Overview' },
                   { id: 'leads', icon: FiUsers, label: 'Leads', count: dashboard?.leads?.total },
                   { id: 'applications', icon: FiFileText, label: 'Applications', count: dashboard?.applications?.total },
+                  { id: 'admission_bookings', icon: FiDollarSign, label: 'Admission Bookings', highlight: true },
                   { id: 'analytics', icon: FiTrendingUp, label: 'Ad Analytics' },
                 ].map((item) => (
                   <button
@@ -281,7 +282,7 @@ const InstituteDashboard = () => {
                     className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition ${
                       activeTab === item.id 
                         ? 'bg-blue-50 text-blue-600 font-semibold' 
-                        : 'text-gray-700 hover:bg-gray-50'
+                        : item.highlight ? 'text-green-700 hover:bg-green-50 bg-green-50/50' : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
                     <span className="flex items-center gap-3">
