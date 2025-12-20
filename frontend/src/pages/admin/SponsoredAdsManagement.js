@@ -790,7 +790,7 @@ const SponsoredAdsManagement = () => {
                   <span className="bg-gray-100 px-3 py-2 border border-r-0 border-gray-300 rounded-l-lg text-gray-500">/</span>
                   <input
                     type="text"
-                    placeholder="e.g., colleges/mumbai or india-colleges?city=kolkata"
+                    placeholder="e.g., colleges/mumbai or colleges?city=kolkata"
                     value={newCustomPlacement.url}
                     onChange={(e) => setNewCustomPlacement({...newCustomPlacement, url: e.target.value})}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
