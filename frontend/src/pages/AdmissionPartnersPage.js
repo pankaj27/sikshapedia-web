@@ -13,10 +13,10 @@ import AdmissionPartnerBadge from '../components/AdmissionPartnerBadge';
 import AdmissionBookingModal from '../components/AdmissionBookingModal';
 
 const AdmissionPartnersPage = () => {
-  const { type: paramType } = useParams(); // schools, colleges, universities from /admission/:type
+  const { type: paramType } = useParams(); // schools, colleges, universities from /admission-partners/:type
   const location = useLocation();
   
-  // Get type from URL path if not from params (for static routes like /admission/colleges)
+  // Get type from URL path if not from params (for static routes like /admission-partners/colleges)
   const pathSegments = location.pathname.split('/');
   const type = paramType || pathSegments[pathSegments.length - 1] || 'colleges';
   
