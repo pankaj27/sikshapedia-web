@@ -6140,71 +6140,9 @@ async def reject_review(review_id: str):
     return {"success": True, "status": "rejected"}
 
 # ============================================
-# Taxonomy & Master Data Routes
+# Taxonomy & Master Data Routes - MOVED TO routes/taxonomy.py
 # ============================================
-
-# Streams
-@api_router.get("/streams")
-async def get_streams(limit: int = 100):
-    streams = await db.streams.find({}, {"_id": 0}).limit(limit).to_list(limit)
-    return streams
-
-@api_router.post("/streams", response_model=Stream)
-async def create_stream(stream: Stream):
-    await db.streams.insert_one(stream.model_dump())
-    return stream
-
-@api_router.put("/streams/{stream_id}")
-async def update_stream(stream_id: str, stream: Stream):
-    await db.streams.update_one({"id": stream_id}, {"$set": stream.model_dump()})
-    return stream
-
-@api_router.delete("/streams/{stream_id}")
-async def delete_stream(stream_id: str):
-    await db.streams.delete_one({"id": stream_id})
-    return {"success": True}
-
-# Sub-Streams
-@api_router.get("/sub-streams")
-async def get_sub_streams(limit: int = 100):
-    sub_streams = await db.sub_streams.find({}, {"_id": 0}).limit(limit).to_list(limit)
-    return sub_streams
-
-@api_router.post("/sub-streams", response_model=SubStream)
-async def create_sub_stream(sub_stream: SubStream):
-    await db.sub_streams.insert_one(sub_stream.model_dump())
-    return sub_stream
-
-@api_router.put("/sub-streams/{sub_stream_id}")
-async def update_sub_stream(sub_stream_id: str, sub_stream: SubStream):
-    await db.sub_streams.update_one({"id": sub_stream_id}, {"$set": sub_stream.model_dump()})
-    return sub_stream
-
-@api_router.delete("/sub-streams/{sub_stream_id}")
-async def delete_sub_stream(sub_stream_id: str):
-    await db.sub_streams.delete_one({"id": sub_stream_id})
-    return {"success": True}
-
-# Boards
-@api_router.get("/boards")
-async def get_boards(limit: int = 100):
-    boards = await db.boards.find({}, {"_id": 0}).limit(limit).to_list(limit)
-    return boards
-
-@api_router.post("/boards", response_model=Board)
-async def create_board(board: Board):
-    await db.boards.insert_one(board.model_dump())
-    return board
-
-@api_router.put("/boards/{board_id}")
-async def update_board(board_id: str, board: Board):
-    await db.boards.update_one({"id": board_id}, {"$set": board.model_dump()})
-    return board
-
-@api_router.delete("/boards/{board_id}")
-async def delete_board(board_id: str):
-    await db.boards.delete_one({"id": board_id})
-    return {"success": True}
+# All streams, sub-streams, and boards endpoints have been modularized
 
 # College Types
 @api_router.get("/college-types")
