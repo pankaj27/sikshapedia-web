@@ -630,6 +630,194 @@ const ListingPageForm = () => {
               </div>
             )}
 
+            {/* State + Stream */}
+            {formData.page_type === 'state_stream' && (
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select State *</label>
+                  <select
+                    value={formData.state}
+                    onChange={(e) => handleChange('state', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select State</option>
+                    {indianStates.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select Stream *</label>
+                  <select
+                    value={formData.stream}
+                    onChange={(e) => handleChange('stream', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select Stream</option>
+                    {streams.map(stream => (
+                      <option key={stream} value={stream}>{stream}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {/* State + City */}
+            {formData.page_type === 'state_city' && (
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select State *</label>
+                  <select
+                    value={formData.state}
+                    onChange={(e) => handleChange('state', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select State</option>
+                    {indianStates.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">City Name *</label>
+                  <Input
+                    value={formData.city}
+                    onChange={(e) => handleChange('city', e.target.value)}
+                    placeholder="Enter city name"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* City + Stream */}
+            {formData.page_type === 'city_stream' && (
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">City Name *</label>
+                  <Input
+                    value={formData.city}
+                    onChange={(e) => handleChange('city', e.target.value)}
+                    placeholder="Enter city name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select Stream *</label>
+                  <select
+                    value={formData.stream}
+                    onChange={(e) => handleChange('stream', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select Stream</option>
+                    {streams.map(stream => (
+                      <option key={stream} value={stream}>{stream}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {/* Stream + Course */}
+            {formData.page_type === 'stream_course' && (
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select Stream *</label>
+                  <select
+                    value={formData.stream}
+                    onChange={(e) => handleChange('stream', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select Stream</option>
+                    {streams.map(stream => (
+                      <option key={stream} value={stream}>{stream}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Course Name *</label>
+                  <Input
+                    value={formData.course}
+                    onChange={(e) => handleChange('course', e.target.value)}
+                    placeholder="Enter course name (e.g., B.Tech)"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* State + Stream + Course */}
+            {formData.page_type === 'state_stream_course' && (
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select State *</label>
+                  <select
+                    value={formData.state}
+                    onChange={(e) => handleChange('state', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select State</option>
+                    {indianStates.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select Stream *</label>
+                  <select
+                    value={formData.stream}
+                    onChange={(e) => handleChange('stream', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select Stream</option>
+                    {streams.map(stream => (
+                      <option key={stream} value={stream}>{stream}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Course Name *</label>
+                  <Input
+                    value={formData.course}
+                    onChange={(e) => handleChange('course', e.target.value)}
+                    placeholder="e.g., B.Tech"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* City + Stream + Course */}
+            {formData.page_type === 'city_stream_course' && (
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">City Name *</label>
+                  <Input
+                    value={formData.city}
+                    onChange={(e) => handleChange('city', e.target.value)}
+                    placeholder="Enter city name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Select Stream *</label>
+                  <select
+                    value={formData.stream}
+                    onChange={(e) => handleChange('stream', e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="">Select Stream</option>
+                    {streams.map(stream => (
+                      <option key={stream} value={stream}>{stream}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Course Name *</label>
+                  <Input
+                    value={formData.course}
+                    onChange={(e) => handleChange('course', e.target.value)}
+                    placeholder="e.g., B.Tech"
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">URL Slug *</label>
               <div className="flex gap-2">
