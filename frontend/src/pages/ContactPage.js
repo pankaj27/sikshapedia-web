@@ -171,7 +171,7 @@ const ContactPage = () => {
               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-3">Quick Links</h3>
                 <div className="space-y-2">
-                  <Link to="/india-colleges" className="block hover:underline">Browse Colleges</Link>
+                  <Link to="/colleges" className="block hover:underline">Browse Colleges</Link>
                   <Link to="/exams" className="block hover:underline">Entrance Exams</Link>
                   <Link to="/scholarships" className="block hover:underline">Scholarships</Link>
                   <Link to="/blog" className="block hover:underline">Blog & Articles</Link>

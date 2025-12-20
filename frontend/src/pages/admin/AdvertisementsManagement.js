@@ -534,7 +534,7 @@ const AdvertisementsManagement = () => {
                         value={newCustomUrl}
                         onChange={(e) => setNewCustomUrl(e.target.value)}
                         className="flex-1 border rounded px-3 py-2 text-sm"
-                        placeholder="/maharashtra-colleges or /india-colleges?city=Mumbai"
+                        placeholder="/maharashtra-colleges or /colleges?city=Mumbai"
                       />
                       <Button
                         type="button"

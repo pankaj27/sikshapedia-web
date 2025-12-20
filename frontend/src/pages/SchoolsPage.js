@@ -670,11 +670,11 @@ const SchoolsPage = () => {
             bgColor="from-green-50 via-emerald-50 to-teal-50"
             headerColor="from-green-600 to-teal-600"
             linkColor="text-green-600"
-            viewAllLink="/india-schools"
+            viewAllLink="/schools"
           />
           <AdmissionsOpenSection 
             placementId="school_listing_admission"
-            viewAllLink="/india-schools"
+            viewAllLink="/schools"
           />
         </div>
       </div>

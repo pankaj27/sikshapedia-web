@@ -163,7 +163,7 @@ const CollegeSubPage = () => {
           <div className="text-6xl mb-4">🔗</div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Invalid URL format</h1>
           <p className="text-gray-600 mb-4">The URL format is not valid. Please use the correct format.</p>
-          <Link to="/india-colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
+          <Link to="/colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
             Browse All Colleges
           </Link>
         </div>
@@ -187,7 +187,7 @@ const CollegeSubPage = () => {
           <div className="text-6xl mb-4">🎓</div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">College not found</h1>
           <p className="text-gray-600 mb-4">The institution you're looking for doesn't exist.</p>
-          <Link to="/india-colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
+          <Link to="/colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
             Browse All Colleges
           </Link>
         </div>

@@ -150,7 +150,7 @@ const EducationLoansPage = () => {
           bgColor="from-emerald-50 via-green-50 to-teal-50"
           headerColor="from-emerald-500 to-green-500"
           linkColor="text-emerald-600"
-          viewAllLink="/india-colleges"
+          viewAllLink="/colleges"
         />
 
         {/* Filters */}

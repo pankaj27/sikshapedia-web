@@ -763,7 +763,7 @@ const AdvertisementManagement = () => {
                     value={newTargetUrl}
                     onChange={(e) => setNewTargetUrl(e.target.value)}
                     className="flex-1 px-3 py-2 border rounded-lg"
-                    placeholder="/maharashtra-colleges or /india-colleges?city=Mumbai"
+                    placeholder="/maharashtra-colleges or /colleges?city=Mumbai"
                   />
                   <Button onClick={addTargetUrl} variant="outline">
                     <FiPlus className="mr-1" /> Add

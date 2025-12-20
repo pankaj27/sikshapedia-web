@@ -122,7 +122,7 @@ const StudyMaterialsPage = () => {
           bgColor="from-cyan-50 via-blue-50 to-indigo-50"
           headerColor="from-cyan-500 to-blue-500"
           linkColor="text-cyan-600"
-          viewAllLink="/india-colleges"
+          viewAllLink="/colleges"
         />
 
         {/* Quick Stats */}

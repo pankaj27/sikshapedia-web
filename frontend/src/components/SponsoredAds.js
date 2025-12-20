@@ -77,7 +77,7 @@ export const FeaturedSponsoredSection = ({
   bgColor = "from-orange-50 via-amber-50 to-yellow-50",
   headerColor = "from-orange-500 to-amber-500",
   linkColor = "text-orange-600",
-  viewAllLink = "/india-colleges"
+  viewAllLink = "/colleges"
 }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -167,7 +167,7 @@ export const FeaturedSponsoredSection = ({
 // Admissions Open Section Component
 export const AdmissionsOpenSection = ({ 
   placementId,
-  viewAllLink = "/india-colleges"
+  viewAllLink = "/colleges"
 }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -256,7 +256,7 @@ export const UrlAwareSponsoredSection = ({
   subtitle,
   bgColor,
   headerColor,
-  viewAllLink = "/india-colleges"
+  viewAllLink = "/colleges"
 }) => {
   const location = useLocation();
   const [ads, setAds] = useState([]);

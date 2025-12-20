@@ -124,7 +124,7 @@ const FallbackAboutPage = () => (
             <Link to="/register">
               <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100">Get Started</Button>
             </Link>
-            <Link to="/india-colleges">
+            <Link to="/colleges">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600">Explore Colleges</Button>
             </Link>
           </div>

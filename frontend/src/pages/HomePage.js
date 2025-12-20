@@ -121,7 +121,7 @@ const CollegeDuniaHome = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/india-colleges?search=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/colleges?search=${encodeURIComponent(searchQuery)}`;
     }
   };
 
@@ -236,8 +236,8 @@ const CollegeDuniaHome = () => {
   
   // Quick Links from settings - check for empty array too
   const defaultQuickLinks = [
-    {name: 'Top Colleges', icon: 'FiBookOpen', link: '/india-colleges', bg_color: 'bg-blue-100', icon_color: 'text-blue-600'},
-    {name: 'Top Schools', icon: 'FiBook', link: '/india-schools', bg_color: 'bg-red-100', icon_color: 'text-red-600'},
+    {name: 'Top Colleges', icon: 'FiBookOpen', link: '/colleges', bg_color: 'bg-blue-100', icon_color: 'text-blue-600'},
+    {name: 'Top Schools', icon: 'FiBook', link: '/schools', bg_color: 'bg-red-100', icon_color: 'text-red-600'},
     {name: 'Top Exams', icon: 'FiFileText', link: '/exams', bg_color: 'bg-green-100', icon_color: 'text-green-600'},
     {name: 'Top Courses', icon: 'FiBookOpen', link: '/courses', bg_color: 'bg-purple-100', icon_color: 'text-purple-600'},
     {name: 'Education Loans', icon: 'FiTrendingUp', link: '/loans', bg_color: 'bg-pink-100', icon_color: 'text-pink-600'},
@@ -552,7 +552,7 @@ const CollegeDuniaHome = () => {
                 const IconComponent = getIconComponent(goal.icon);
                 return (
                   <SwiperSlide key={idx}>
-                    <Link to={`/india-colleges?course=${encodeURIComponent(goal.name)}`} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
+                    <Link to={`/colleges?course=${encodeURIComponent(goal.name)}`} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
                       <div className="flex justify-center mb-2">
                         <IconComponent className={`text-4xl ${goal.color} group-hover:scale-110 transition-transform`} />
                       </div>
@@ -607,7 +607,7 @@ const CollegeDuniaHome = () => {
                   <FiChevronDown className="transform -rotate-90 text-gray-600" />
                 </button>
               </div>
-              <Link to="/india-colleges">
+              <Link to="/colleges">
                 <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All</Button>
               </Link>
             </div>
@@ -750,7 +750,7 @@ const CollegeDuniaHome = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold">{topSchoolsTitle}</h2>
-            <Link to="/india-schools">
+            <Link to="/schools">
               <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">View All Schools</Button>
             </Link>
           </div>
@@ -1027,7 +1027,7 @@ const CollegeDuniaHome = () => {
             
             <div className="text-center mt-8">
               <Link 
-                to="/india-colleges" 
+                to="/colleges" 
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-semibold hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg hover:shadow-xl"
               >
                 View All Featured Colleges <FiArrowRight />

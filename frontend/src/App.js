@@ -360,14 +360,14 @@ function App() {
               <Route path="/schools/:seg1/:seg2" element={<InstitutionRouter />} />
               
               {/* Legacy routes - redirect to new structure */}
-              <Route path="/india-colleges" element={<Navigate to="/colleges" replace />} />
-              <Route path="/india-schools" element={<Navigate to="/schools" replace />} />
-              <Route path="/india-universities" element={<Navigate to="/university" replace />} />
+              <Route path="/colleges" element={<Navigate to="/colleges" replace />} />
+              <Route path="/schools" element={<Navigate to="/schools" replace />} />
+              <Route path="/university" element={<Navigate to="/university" replace />} />
               
               {/* Legacy routes with stream - handled by DynamicListingPage */}
-              <Route path="/india-colleges/:stream" element={<DynamicListingPage />} />
-              <Route path="/india-schools/:stream" element={<DynamicListingPage />} />
-              <Route path="/india-universities/:stream" element={<DynamicListingPage />} />
+              <Route path="/colleges/:stream" element={<DynamicListingPage />} />
+              <Route path="/schools/:stream" element={<DynamicListingPage />} />
+              <Route path="/university/:stream" element={<DynamicListingPage />} />
                   
               {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
               <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />

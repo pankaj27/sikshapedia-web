@@ -670,7 +670,7 @@ const UniversitiesPage = () => {
             bgColor="from-purple-50 via-violet-50 to-indigo-50"
             headerColor="from-purple-600 to-violet-600"
             linkColor="text-purple-600"
-            viewAllLink="/india-universities"
+            viewAllLink="/university"
           />
         </div>
       </div>

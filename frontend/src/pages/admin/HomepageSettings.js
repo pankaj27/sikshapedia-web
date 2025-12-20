@@ -148,7 +148,7 @@ const HomepageSettings = () => {
     cta_title: 'Start Your Journey Today',
     cta_subtitle: 'Join millions of students who found their dream college through Admissionbuddy',
     cta_button_text: 'Explore Colleges',
-    cta_button_link: '/india-colleges',
+    cta_button_link: '/colleges',
     
     // SEO
     auto_generate_seo: true,

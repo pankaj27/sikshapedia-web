@@ -101,9 +101,9 @@ const LocationSearch = () => {
 
   const handleLocationClick = (type, value) => {
     if (type === 'state') {
-      navigate(`/india-colleges?state=${encodeURIComponent(value)}`);
+      navigate(`/colleges?state=${encodeURIComponent(value)}`);
     } else if (type === 'city') {
-      navigate(`/india-colleges?city=${encodeURIComponent(value)}`);
+      navigate(`/colleges?city=${encodeURIComponent(value)}`);
     } else if (type === 'country') {
       navigate(`/study-abroad?country=${encodeURIComponent(value)}`);
     }

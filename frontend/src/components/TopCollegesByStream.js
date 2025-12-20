@@ -117,7 +117,7 @@ const TopCollegesByStream = () => {
                   ))}
                 </ul>
                 <Link
-                  to={`/india-colleges/${stream.query.toLowerCase()}`}
+                  to={`/colleges/${stream.query.toLowerCase()}`}
                   className="mt-4 flex items-center gap-2 text-orange-600 hover:text-orange-700 font-semibold text-sm"
                 >
                   View All <FiArrowRight />
@@ -129,7 +129,7 @@ const TopCollegesByStream = () => {
 
         <div className="text-center mt-10">
           <Link
-            to="/india-colleges"
+            to="/colleges"
             className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
           >
             <FiTrendingUp />

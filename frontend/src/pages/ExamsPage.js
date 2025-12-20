@@ -268,7 +268,7 @@ const ExamsPage = () => {
                   bgColor="from-red-50 via-rose-50 to-pink-50"
                   headerColor="from-red-500 to-rose-500"
                   linkColor="text-red-600"
-                  viewAllLink="/india-colleges"
+                  viewAllLink="/colleges"
                 />
               </div>
 

@@ -297,7 +297,7 @@ const CoursesPage = () => {
             placementId="course_listing_featured"
             title="Featured Colleges"
             subtitle="Top institutions for your chosen course"
-            viewAllLink="/india-colleges"
+            viewAllLink="/colleges"
           />
         </div>
       </section>
