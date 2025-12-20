@@ -8411,6 +8411,7 @@ try:
     set_lead_forms_db(db)
     set_admin_counselors_db(db)
     set_admin_locations_db(db)
+    set_admin_url_structures_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
