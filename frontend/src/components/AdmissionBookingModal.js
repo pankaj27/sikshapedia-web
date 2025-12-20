@@ -58,11 +58,11 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
 
   // Fetch states and settings
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && institution) {
       fetchStates();
       fetchSettings();
     }
-  }, [isOpen]);
+  }, [isOpen, institution]);
 
   // Fetch cities when state changes
   useEffect(() => {
@@ -91,7 +91,11 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
 
   const fetchSettings = async () => {
     try {
-      const response = await api.get('/admission/settings');
+      // Fetch entity-specific fee settings
+      const entityType = institutionType || 'college';
+      const response = await api.get('/admission/settings', {
+        params: { entity_type: entityType }
+      });
       setSettings(response.data);
     } catch (err) {
       console.error('Failed to fetch settings:', err);
