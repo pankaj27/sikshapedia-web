@@ -8184,7 +8184,8 @@ try:
     app.include_router(listing_pages_router)  # Listing pages routes - already has /api prefix
     app.include_router(schools_router)  # Schools routes - already has /api prefix
     app.include_router(universities_router)  # Universities routes - already has /api prefix
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities")
+    app.include_router(colleges_router)  # Colleges routes - already has /api prefix
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities, colleges")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
