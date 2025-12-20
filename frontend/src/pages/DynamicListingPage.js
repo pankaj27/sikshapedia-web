@@ -260,10 +260,11 @@ const DynamicListingPage = () => {
     };
   }, [urlInfo]);
   
-  // Active filters based on URL
+  // Active filters based on URL - NEW STRUCTURE
   const activeFilters = useMemo(() => {
     const active = {
       stream: null,
+      course: null,
       subStream: null,
       state: null,
       city: null,
@@ -271,56 +272,40 @@ const DynamicListingPage = () => {
       accreditation: null,
     };
     
-    // Check for combined filters from URL (e.g., /engineering/maharashtra-colleges)
-    if (urlInfo.combinedFilters) {
-      if (urlInfo.combinedFilters.stream) {
-        active.stream = toDisplayName(urlInfo.combinedFilters.stream);
+    // Use pageInfo filters from new URL structure
+    if (pageInfo.filters) {
+      if (pageInfo.filters.stream) {
+        active.stream = pageInfo.filters.stream;
       }
-      if (urlInfo.combinedFilters.state) {
-        active.state = toDisplayName(urlInfo.combinedFilters.state);
+      if (pageInfo.filters.course) {
+        active.course = pageInfo.filters.course;
       }
-      if (urlInfo.combinedFilters.city) {
-        active.city = toDisplayName(urlInfo.combinedFilters.city);
+      if (pageInfo.filters.state) {
+        active.state = pageInfo.filters.state;
       }
-      if (urlInfo.combinedFilters.location) {
-        const loc = urlInfo.combinedFilters.location;
-        if (isState(loc)) {
-          active.state = toDisplayName(loc);
-        } else if (isCity(loc)) {
-          active.city = toDisplayName(loc);
-        }
-      }
-      // Handle college type from URL (e.g., /government-colleges)
-      if (urlInfo.combinedFilters.collegeType) {
-        active.collegeType = TYPE_DISPLAY[urlInfo.combinedFilters.collegeType] || toDisplayName(urlInfo.combinedFilters.collegeType);
-      }
-      // Handle accreditation from URL (e.g., /naac-a-plus-colleges)
-      if (urlInfo.combinedFilters.accreditation) {
-        active.accreditation = ACCREDITATION_DISPLAY[urlInfo.combinedFilters.accreditation] || toDisplayName(urlInfo.combinedFilters.accreditation);
+      if (pageInfo.filters.city) {
+        active.city = pageInfo.filters.city;
       }
     }
     
-    // Check for college type from URL
-    if (pageInfo.collegeType && !active.collegeType) {
-      active.collegeType = TYPE_DISPLAY[pageInfo.collegeType] || toDisplayName(pageInfo.collegeType);
-    }
-    
-    // Check for accreditation from URL
-    if (pageInfo.accreditation && !active.accreditation) {
-      active.accreditation = ACCREDITATION_DISPLAY[pageInfo.accreditation] || toDisplayName(pageInfo.accreditation);
-    }
-    
-    // Check for stream from URL (e.g., /engineering, /medical)
+    // Fallback to pageInfo direct fields
     if (pageInfo.stream && !active.stream) {
       active.stream = toDisplayName(pageInfo.stream);
     }
+    if (pageInfo.course && !active.course) {
+      active.course = toDisplayName(pageInfo.course);
+    }
+    if (pageInfo.state && !active.state) {
+      active.state = toDisplayName(pageInfo.state);
+    }
+    if (pageInfo.city && !active.city) {
+      active.city = toDisplayName(pageInfo.city);
+    }
     
-    // Check for subStream
+    // Legacy support
     if (pageInfo.subStream && !active.subStream) {
       active.subStream = toDisplayName(pageInfo.subStream);
     }
-    
-    // Check for location (state or city)
     if (pageInfo.location && !active.state && !active.city) {
       const locationName = toDisplayName(pageInfo.location);
       if (pageInfo.locationType === 'state') {
@@ -329,9 +314,15 @@ const DynamicListingPage = () => {
         active.city = locationName;
       }
     }
+    if (pageInfo.collegeType && !active.collegeType) {
+      active.collegeType = TYPE_DISPLAY[pageInfo.collegeType] || toDisplayName(pageInfo.collegeType);
+    }
+    if (pageInfo.accreditation && !active.accreditation) {
+      active.accreditation = ACCREDITATION_DISPLAY[pageInfo.accreditation] || toDisplayName(pageInfo.accreditation);
+    }
     
     return active;
-  }, [pageInfo, urlInfo]);
+  }, [pageInfo]);
   
   // All Indian States
   const allStates = [
