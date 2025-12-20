@@ -210,7 +210,7 @@ const SearchableSelect = ({
                     onClick={() => handleSelect(searchTerm)}
                     className="text-orange-600 hover:underline"
                   >
-                    Add "{searchTerm}"
+                    Add &ldquo;{searchTerm}&rdquo;
                   </button>
                 ) : (
                   'No results found'
