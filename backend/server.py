@@ -3751,57 +3751,6 @@ COLLEGE_MINIMAL_PROJECTION = {
 
 # College CRUD functions start here
 
-@api_router.get("/colleges/admission-open-priority", response_model=List[College])
-async def get_admission_open_priority_colleges(limit: int = Query(6, ge=1, le=20)):
-    """
-    Get admission open colleges sorted by priority:
-    - Colleges within their priority period (default 2 months) appear first, sorted by admission_open_at (newest first)
-    - After priority period expires, sorted by nirf_ranking
-    """
-    # Get all admission open published colleges
-    colleges = await db.colleges.find(
-        {"status": "published", "is_admission_open": True}, 
-        {"_id": 0}
-    ).to_list(100)
-    
-    now = datetime.now(timezone.utc)
-    priority_colleges = []
-    regular_colleges = []
-    
-    for college in colleges:
-        if isinstance(college.get('created_at'), str):
-            college['created_at'] = datetime.fromisoformat(college['created_at'])
-        
-        admission_open_at = college.get('admission_open_at')
-        priority_months = college.get('admission_open_priority_months', 2)
-        
-        # Check if within priority period
-        if admission_open_at:
-            if isinstance(admission_open_at, str):
-                admission_open_at = datetime.fromisoformat(admission_open_at.replace('Z', '+00:00'))
-            if not admission_open_at.tzinfo:
-                admission_open_at = admission_open_at.replace(tzinfo=timezone.utc)
-            
-            months_passed = (now - admission_open_at).days / 30
-            if months_passed <= priority_months:
-                priority_colleges.append((college, admission_open_at))
-            else:
-                regular_colleges.append(college)
-        else:
-            regular_colleges.append(college)
-    
-    # Sort priority colleges by admission_open_at (newest first)
-    priority_colleges.sort(key=lambda x: x[1], reverse=True)
-    priority_colleges = [c[0] for c in priority_colleges]
-    
-    # Sort regular colleges by nirf_ranking
-    regular_colleges.sort(key=lambda x: x.get('nirf_ranking') or 9999)
-    
-    # Combine: priority first, then regular
-    result = priority_colleges + regular_colleges
-    
-    return [College(**college) for college in result[:limit]]
-
 # ========== SPONSORED ADS MANAGEMENT ==========
 
 class SponsoredCollegeEntry(BaseModel):
@@ -3819,17 +3768,6 @@ class SponsoredCollegeEntry(BaseModel):
     is_active: bool = True
 
 # SponsoredAdsConfig, Multi-placement ads, and Advertisement models moved to routes/sponsored_ads.py
-
-@api_router.get("/colleges/{college_id}", response_model=College)
-async def get_college(college_id: str):
-    college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
-    if not college:
-        raise HTTPException(status_code=404, detail="College not found")
-    
-    if isinstance(college.get('created_at'), str):
-        college['created_at'] = datetime.fromisoformat(college['created_at'])
-    
-    return College(**college)
 
 @api_router.post("/colleges", response_model=College)
 async def create_college(college_data: CollegeCreate, background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
