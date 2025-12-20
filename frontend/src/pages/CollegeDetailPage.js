@@ -1862,6 +1862,25 @@ const CollegeDetailPage = ({ overrideId }) => {
               {/* Sponsor Ad - Sidebar */}
               <AdBanner pageName="college-detail" position="sidebar" />
               
+              {/* ADMISSION PARTNER - BOOK YOUR SEAT */}
+              {college.is_admission_partner && (
+                <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-white shadow-lg">
+                  <div className="text-center">
+                    <AdmissionPartnerBadge size="lg" className="mb-3 justify-center" />
+                    <h3 className="font-bold text-xl mb-2">Admission Open!</h3>
+                    <p className="text-sm text-green-100 mb-4">Book your seat at {college.name}</p>
+                    <button 
+                      onClick={() => setShowBookingModal(true)}
+                      className="w-full bg-white text-green-600 hover:bg-green-50 font-bold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
+                    >
+                      <FiCheckCircle size={18} />
+                      <span>🎓 Book Your Seat</span>
+                    </button>
+                    <p className="text-xs text-green-100 mt-3">Limited seats available. Apply now!</p>
+                  </div>
+                </div>
+              )}
+              
               {/* APPLY NOW BUTTON */}
               <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-lg p-6 text-white shadow-lg">
                 <div className="text-center">
