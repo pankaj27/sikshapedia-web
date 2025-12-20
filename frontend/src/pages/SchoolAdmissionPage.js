@@ -329,34 +329,24 @@ const SchoolAdmissionPage = () => {
                       <div className="bg-white/95 px-2 py-1 rounded text-xs font-semibold text-gray-700">
                         {new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
                       </div>
-                      {admission.is_admission_partner && (
-                        <AdmissionPartnerBadge size="sm" />
-                      )}
+                      <AdmissionPartnerBadge size="sm" />
                     </div>
                     <div className="absolute bottom-2 left-2 right-2 space-y-1">
-                      {admission.is_admission_partner ? (
-                        <Button 
-                          onClick={() => {
-                            setSelectedInstitution({
-                              id: admission.id,
-                              name: admission.name,
-                              type: 'school',
-                              city: admission.location?.city,
-                              state: admission.location?.state
-                            });
-                            setShowBookingModal(true);
-                          }}
-                          className="w-full bg-green-600 hover:bg-green-700 h-7 text-xs"
-                        >
-                          🏫 Book Your Seat
-                        </Button>
-                      ) : (
-                        <Link to={`/schools/${admission.id}`}>
-                          <Button className="w-full bg-pink-600 hover:bg-pink-700 h-7 text-xs">
-                            Apply Now
-                          </Button>
-                        </Link>
-                      )}
+                      <Button 
+                        onClick={() => {
+                          setSelectedInstitution({
+                            id: admission.id,
+                            name: admission.name,
+                            type: 'school',
+                            city: admission.location?.city,
+                            state: admission.location?.state
+                          });
+                          setShowBookingModal(true);
+                        }}
+                        className="w-full bg-green-600 hover:bg-green-700 h-7 text-xs"
+                      >
+                        🏫 Book Your Seat
+                      </Button>
                     </div>
                   </div>
 
