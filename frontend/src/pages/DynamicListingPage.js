@@ -1083,8 +1083,8 @@ const DynamicListingPage = () => {
     });
     setActiveFilterDropdown(null);
     // Navigate to base URL to clear all URL-based filters
-    const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
-    navigate(`/india-${suffix}`);
+    const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
+    navigate(`/${baseSuffix}`);
   };
 
   const removeFilter = (filterType) => {
