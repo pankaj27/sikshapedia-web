@@ -2071,21 +2071,21 @@ const DynamicListingPage = () => {
                   {activeFilters.stream && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
                       {activeFilters.stream}
-                      <button onClick={() => window.location.href = pageInfo.isSchools ? '/schools' : '/colleges'} className="hover:bg-blue-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      <button onClick={() => removeUrlFilter('stream')} className="hover:bg-blue-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
                   {activeFilters.state && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs font-medium">
                       {activeFilters.state}
-                      <button onClick={() => window.location.href = pageInfo.isSchools ? '/schools' : '/colleges'} className="hover:bg-green-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      <button onClick={() => removeUrlFilter('state')} className="hover:bg-green-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
                   {activeFilters.city && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">
                       {activeFilters.city}
-                      <button onClick={() => window.location.href = pageInfo.isSchools ? '/schools' : '/colleges'} className="hover:bg-purple-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      <button onClick={() => removeUrlFilter('city')} className="hover:bg-purple-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
@@ -2093,7 +2093,7 @@ const DynamicListingPage = () => {
                   {activeFilters.collegeType && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium">
                       {activeFilters.collegeType}
-                      <button onClick={() => window.location.href = pageInfo.isSchools ? '/schools' : '/colleges'} className="hover:bg-orange-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      <button onClick={() => removeUrlFilter('collegeType')} className="hover:bg-orange-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
@@ -2101,15 +2101,15 @@ const DynamicListingPage = () => {
                   {activeFilters.accreditation && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-100 text-teal-700 rounded-lg text-xs font-medium">
                       {activeFilters.accreditation}
-                      <button onClick={() => window.location.href = pageInfo.isSchools ? '/schools' : '/colleges'} className="hover:bg-teal-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      <button onClick={() => removeUrlFilter('accreditation')} className="hover:bg-teal-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
                   {/* Course filter */}
-                  {filters.course && (
+                  {activeFilters.course && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-medium">
-                      {filters.course}
-                      <button onClick={() => setFilters(prev => ({ ...prev, course: '' }))} className="hover:bg-indigo-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      {activeFilters.course}
+                      <button onClick={() => removeUrlFilter('course')} className="hover:bg-indigo-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
