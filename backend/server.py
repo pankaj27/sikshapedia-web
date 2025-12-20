@@ -6916,6 +6916,7 @@ async def get_universities(
     university_type: Optional[str] = None,
     accreditation: Optional[str] = None,
     stream: Optional[str] = None,
+    course: Optional[str] = None,
     sort: str = "rating",
     limit: int = Query(50, ge=1, le=1000),
     skip: int = Query(0, ge=0)
@@ -6923,15 +6924,22 @@ async def get_universities(
     """Get all universities with optional filters"""
     query = {}
     if city:
-        query["city"] = city
+        query["city"] = {"$regex": city, "$options": "i"}
     if state:
-        query["state"] = state
+        query["state"] = {"$regex": state, "$options": "i"}
     if university_type:
         query["university_type"] = university_type
     if accreditation:
         query["accreditation"] = accreditation
     if stream:
-        query["streams"] = stream
+        query["streams"] = {"$regex": stream, "$options": "i"}
+    if course:
+        # Search in courses array - can be list of strings or list of dicts
+        query["$or"] = [
+            {"courses": {"$regex": course, "$options": "i"}},
+            {"courses.name": {"$regex": course, "$options": "i"}},
+            {"courses.degree_type": {"$regex": course, "$options": "i"}}
+        ]
     
     sort_field = "rating" if sort == "rating" else "nirf_rank" if sort == "ranking" else "name"
     sort_order = -1 if sort == "rating" else 1
