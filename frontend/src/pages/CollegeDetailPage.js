@@ -161,6 +161,9 @@ const CollegeDetailPage = ({ overrideId }) => {
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   
+  // Guest gate hook for action restrictions
+  const { isLoggedIn, requireAuth, showPrompt, closePrompt } = useGuestGate();
+  
   // Use college context to share data with AutoApplyPopup
   const { setCollegeData, clearCollegeData } = useCollegeContext();
 
