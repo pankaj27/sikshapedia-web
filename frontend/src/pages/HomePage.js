@@ -103,7 +103,7 @@ const CollegeDuniaHome = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/india-colleges?search=${encodeURIComponent(searchQuery)}`;
+      navigate(`/india-colleges?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
