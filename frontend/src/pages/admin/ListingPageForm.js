@@ -94,10 +94,16 @@ const ListingPageForm = () => {
 
   const pageTypes = [
     { value: 'india', label: 'India Page', example: 'colleges' },
-    { value: 'state', label: 'State Page', example: 'maharashtra-colleges' },
-    { value: 'city', label: 'City Page', example: 'mumbai-colleges' },
-    { value: 'stream', label: 'Stream Page', example: 'engineering' },
-    { value: 'course', label: 'Course Page', example: 'btech' },
+    { value: 'state', label: 'State Page', example: 'colleges/maharashtra' },
+    { value: 'city', label: 'City Page', example: 'colleges/mumbai' },
+    { value: 'stream', label: 'Stream Page', example: 'colleges/engineering' },
+    { value: 'course', label: 'Course Page', example: 'colleges/btech' },
+    { value: 'state_stream', label: 'State + Stream', example: 'colleges/maharashtra/engineering' },
+    { value: 'state_city', label: 'State + City', example: 'schools/maharashtra/mumbai' },
+    { value: 'city_stream', label: 'City + Stream', example: 'colleges/mumbai/engineering' },
+    { value: 'stream_course', label: 'Stream + Course', example: 'colleges/engineering/btech' },
+    { value: 'state_stream_course', label: 'State + Stream + Course', example: 'colleges/maharashtra/engineering/btech' },
+    { value: 'city_stream_course', label: 'City + Stream + Course', example: 'colleges/mumbai/engineering/btech' },
     { value: 'type', label: 'College Type Page', example: 'government-colleges' },
     { value: 'accreditation', label: 'Accreditation Page', example: 'naac-a-plus-colleges' }
   ];
