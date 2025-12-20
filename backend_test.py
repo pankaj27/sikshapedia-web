@@ -1278,9 +1278,21 @@ class APITester:
         
         # Test 5: PUT /api/admission/settings (admin only - should fail without auth)
         test_settings = {
-            "form_fee": 1200.0,
-            "platform_fee": 300.0,
-            "gst_percentage": 18.0
+            "college": {
+                "form_fee": 1200.0,
+                "platform_fee": 300.0,
+                "gst_percentage": 18.0
+            },
+            "school": {
+                "form_fee": 600.0,
+                "platform_fee": 180.0,
+                "gst_percentage": 18.0
+            },
+            "university": {
+                "form_fee": 1800.0,
+                "platform_fee": 400.0,
+                "gst_percentage": 18.0
+            }
         }
         success, response, status = self.make_request("PUT", "/admission/settings", test_settings)
         if not success and status in [401, 403]:
