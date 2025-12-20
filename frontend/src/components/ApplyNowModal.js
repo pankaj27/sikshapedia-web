@@ -12,6 +12,15 @@ const formatCityName = (city) => {
 // Sorted cities for dropdown
 const SORTED_CITIES = [...INDIAN_CITIES].sort().map(formatCityName);
 
+// School classes for school forms
+const SCHOOL_CLASSES = [
+  'Nursery', 'LKG', 'UKG', 
+  'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5',
+  'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10',
+  'Class 11 - Science', 'Class 11 - Commerce', 'Class 11 - Arts',
+  'Class 12 - Science', 'Class 12 - Commerce', 'Class 12 - Arts'
+];
+
 const ApplyNowModal = ({ 
   isOpen, 
   onClose, 
@@ -20,7 +29,9 @@ const ApplyNowModal = ({
   collegeLogoUrl = null,
   collegeCourses = [],
   formHeading = null,
-  source = 'general'
+  source = 'general',
+  isSchool = false,  // NEW: Flag to indicate if this is a school
+  schoolClasses = [] // NEW: Classes offered by school
 }) => {
   const [formData, setFormData] = useState({
     name: '',
