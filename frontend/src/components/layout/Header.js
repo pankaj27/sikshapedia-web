@@ -490,7 +490,7 @@ const Header = () => {
             <div className="mb-3">
               <p className="text-xs font-semibold text-gray-500 mb-2">ADMISSION GOALS</p>
               {admissionGoals.map((goal, idx) => (
-                <Link
+                <NavLink
                   key={idx}
                   to={goal.link}
                   className="block py-2 text-sm text-gray-700 hover:text-orange-600"
@@ -506,7 +506,7 @@ const Header = () => {
                 const iconComponents = { FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone };
                 const IconComponent = iconComponents[item.icon] || FiGrid;
                 return (
-                  <Link
+                  <NavLink
                     key={idx}
                     to={item.link}
                     className="flex items-center gap-2 py-2 text-sm text-gray-700 hover:text-orange-600"
