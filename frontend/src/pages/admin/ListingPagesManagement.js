@@ -9,6 +9,8 @@ import { Link } from '../../components/CustomLink';
 
 const ListingPagesManagement = () => {
   const [pages, setPages] = useState([]);
+  const [pageStats, setPageStats] = useState({});
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -30,7 +32,18 @@ const ListingPagesManagement = () => {
 
   useEffect(() => {
     fetchPages();
+    fetchStats();
   }, [filterType]);
+
+  const fetchStats = async () => {
+    try {
+      const response = await api.get('/listing-pages/stats');
+      setPageStats(response.data?.stats || {});
+      setTotalCount(response.data?.total || 0);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   const fetchPages = async () => {
     try {
