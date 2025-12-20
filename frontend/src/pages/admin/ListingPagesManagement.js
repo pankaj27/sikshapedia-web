@@ -259,10 +259,10 @@ const ListingPagesManagement = () => {
     }
   };
 
-  // URL Stats
+  // URL Stats - from backend
   const urlStats = urlTypes.slice(1).map(type => ({
     ...type,
-    count: urlStructures.filter(u => u.type === type.value).length
+    count: urlStatsData[type.value] || 0
   }));
 
   return (
