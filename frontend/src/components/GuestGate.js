@@ -1,6 +1,98 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { FiLock, FiUserPlus } from 'react-icons/fi';
 import { Button } from './ui/button';
+
+// Auth Context for checking guest status
+const GuestContext = createContext({ isLoggedIn: false, showLoginPrompt: () => {} });
+
+/**
+ * Hook to check if user is logged in and show login prompt
+ */
+export const useGuestGate = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const hasSession = document.cookie.includes('session_token') || 
+                        localStorage.getItem('user_token') ||
+                        localStorage.getItem('user');
+      setIsLoggedIn(hasSession);
+    };
+    checkAuth();
+    
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
+  }, []);
+
+  const requireAuth = (action = 'perform this action') => {
+    if (!isLoggedIn) {
+      setShowPrompt({ action });
+      return false;
+    }
+    return true;
+  };
+
+  const closePrompt = () => setShowPrompt(false);
+
+  return { isLoggedIn, requireAuth, showPrompt, closePrompt };
+};
+
+/**
+ * Login Prompt Modal - shown when guest tries to perform an action
+ */
+export const LoginPromptModal = ({ isOpen, onClose, action = 'perform this action' }) => {
+  if (!isOpen) return null;
+
+  const handleRegister = () => {
+    sessionStorage.setItem('redirect_after_login', window.location.pathname);
+    window.location.href = '/signup';
+  };
+
+  const handleLogin = () => {
+    sessionStorage.setItem('redirect_after_login', window.location.pathname);
+    window.location.href = '/login';
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-xl p-6 max-w-md w-full" onClick={e => e.stopPropagation()}>
+        <div className="text-center">
+          <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FiLock className="w-10 h-10 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-6">
+            Please login or create a free account to {action}.
+            Plus, earn rewards for reviews and referrals!
+          </p>
+          
+          <div className="space-y-3">
+            <Button 
+              onClick={handleRegister}
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3"
+            >
+              <FiUserPlus className="w-4 h-4 mr-2" /> Create Free Account
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={handleLogin}
+              className="w-full py-3"
+            >
+              Already have an account? Login
+            </Button>
+          </div>
+
+          <div className="mt-6 pt-4 border-t">
+            <p className="text-xs text-gray-500">
+              🎁 Bonus: Earn ₹50+ for every review you write!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /**
  * GuestGate - Blurs content for guest users and prompts registration
