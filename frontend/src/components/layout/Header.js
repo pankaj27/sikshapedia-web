@@ -19,44 +19,17 @@ const Header = () => {
   const allCoursesTimeoutRef = useRef(null);
   const userDropdownRef = useRef(null);
 
-  // TEMPORARILY DISABLED FOR DEBUGGING
-  /*
   useEffect(() => {
-    // Check for user on mount
-    const checkUser = () => {
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        try {
-          const parsedUser = JSON.parse(savedUser);
-          // Only update if user data has changed
-          setUser(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(parsedUser)) {
-              return parsedUser;
-            }
-            return prev;
-          });
-        } catch (e) {
-          setUser(null);
-        }
-      } else {
-        setUser(prev => prev ? null : prev);
+    // Check for user on mount only (no interval)
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        setUser(null);
       }
-    };
-    
-    checkUser();
-    
-    // Listen for storage changes (for cross-tab sync)
-    window.addEventListener('storage', checkUser);
-    
-    // Check periodically for same-tab updates - reduced frequency
-    const interval = setInterval(checkUser, 5000);
-    
-    return () => {
-      window.removeEventListener('storage', checkUser);
-      clearInterval(interval);
-    };
+    }
   }, []);
-  */
 
   // Close user dropdown when clicking outside
   useEffect(() => {
