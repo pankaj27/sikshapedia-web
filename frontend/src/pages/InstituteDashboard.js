@@ -99,6 +99,32 @@ const InstituteDashboard = () => {
     if (tab === 'leads') fetchLeads();
     if (tab === 'applications') fetchApplications();
     if (tab === 'analytics') fetchAdAnalytics();
+    if (tab === 'admission_bookings') fetchAdmissionBookings();
+  };
+  
+  const fetchAdmissionBookings = async () => {
+    try {
+      const response = await api.get('/admission/institution-bookings');
+      setAdmissionBookings(response.data.bookings || []);
+    } catch (error) {
+      console.error('Error fetching admission bookings:', error);
+    }
+  };
+  
+  const handleAdmissionStatusUpdate = async (bookingId, status) => {
+    try {
+      await api.put(`/admission/booking/${bookingId}/status`, {
+        status,
+        comments: admissionComment || `Application ${status} by institution`
+      });
+      setAdmissionComment('');
+      setSelectedAdmissionBooking(null);
+      fetchAdmissionBookings();
+      alert(`Application ${status} successfully!`);
+    } catch (error) {
+      console.error('Error updating status:', error);
+      alert('Failed to update application status');
+    }
   };
   
   useEffect(() => {
