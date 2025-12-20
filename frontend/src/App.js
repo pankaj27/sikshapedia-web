@@ -253,15 +253,8 @@ function App() {
               {/* SPECIFIC ROUTES - Must come BEFORE dynamic routes */}
               {/* ============================================ */}
               
-              {/* Institution Listing Pages */}
-              {/* DEPRECATED: Old /colleges route now redirects to /india-colleges */}
-              <Route path="/colleges" element={<Navigate to="/india-colleges" replace />} />
-              <Route path="/schools" element={<SchoolsPage />} />
-              <Route path="/universities" element={<UniversitiesPage />} />
-              
-              {/* Admission Partner Pages (Book Your Seat) - Now merged into /admission/* pages */}
-                  
-              {/* Institution Detail Pages: /colleges/{number}-{slug} */}
+              {/* Institution Listing Pages - handled by new dynamic routes */}
+              {/* Detail pages with specific IDs are handled first */}
               <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
               <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
               <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
