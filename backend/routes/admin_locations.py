@@ -68,10 +68,38 @@ async def get_admin_cities():
         database = get_db()
         cities = await database.managed_locations.find(
             {"type": "city"}, {"_id": 0}
-        ).sort("display_order", 1).to_list(200)
+        ).sort("display_order", 1).to_list(500)
         return cities
     except Exception as e:
         print(f"Error fetching cities: {e}")
+        return []
+
+
+@router.get("/streams")
+async def get_admin_streams():
+    """Get all streams for admin"""
+    try:
+        database = get_db()
+        streams = await database.managed_locations.find(
+            {"type": "stream"}, {"_id": 0}
+        ).sort("display_order", 1).to_list(100)
+        return streams
+    except Exception as e:
+        print(f"Error fetching streams: {e}")
+        return []
+
+
+@router.get("/courses")
+async def get_admin_courses():
+    """Get all courses for admin"""
+    try:
+        database = get_db()
+        courses = await database.managed_locations.find(
+            {"type": "course"}, {"_id": 0}
+        ).sort("display_order", 1).to_list(200)
+        return courses
+    except Exception as e:
+        print(f"Error fetching courses: {e}")
         return []
 
 
