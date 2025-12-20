@@ -1,7 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid, FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone } from 'react-icons/fi';
 import { Button } from '../ui/button';
+
+/**
+ * Custom NavLink component that handles navigation with full page reload
+ * as a workaround for React Router v7 interference from external scripts.
+ * This ensures navigation always works correctly even when React state updates are blocked.
+ */
+const NavLink = ({ to, children, className, onClick, ...props }) => {
+  const handleClick = useCallback((e) => {
+    e.preventDefault();
+    if (onClick) onClick(e);
+    // Use full page reload to ensure navigation works
+    window.location.href = to;
+  }, [to, onClick]);
+  
+  return (
+    <a href={to} onClick={handleClick} className={className} {...props}>
+      {children}
+    </a>
+  );
+};
 
 const Header = () => {
   const navigate = useNavigate();
