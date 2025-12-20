@@ -540,6 +540,116 @@ async def create_razorpay_order(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create order: {str(e)}")
 
+@router.post("/create-test-order/{booking_id}")
+async def create_test_order(
+    booking_id: str,
+    request: Request,
+    db=Depends(get_db)
+):
+    """Create a test order for development/testing (bypasses Razorpay)"""
+    user = await get_current_user(request, db)
+    
+    # Get booking
+    booking = await db.admission_bookings.find_one(
+        {"id": booking_id, "user_id": user["id"]},
+        {"_id": 0}
+    )
+    
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    if booking["payment_status"] == "completed":
+        raise HTTPException(status_code=400, detail="Payment already completed")
+    
+    # Create mock order ID
+    mock_order_id = f"test_order_{str(uuid4())[:8]}"
+    amount_in_paise = int(booking["total_amount"] * 100)
+    
+    # Update booking with order ID
+    await db.admission_bookings.update_one(
+        {"id": booking_id},
+        {"$set": {
+            "razorpay_order_id": mock_order_id,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {
+        "order_id": mock_order_id,
+        "amount": amount_in_paise,
+        "currency": "INR",
+        "key_id": "test_key",
+        "booking_id": booking_id,
+        "is_test": True,
+        "prefill": {
+            "name": booking["student_name"],
+            "email": booking["email"],
+            "contact": booking["mobile"]
+        }
+    }
+
+@router.post("/complete-test-payment/{booking_id}")
+async def complete_test_payment(
+    booking_id: str,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    db=Depends(get_db)
+):
+    """Complete a test payment (bypasses Razorpay verification)"""
+    user = await get_current_user(request, db)
+    
+    # Get booking
+    booking = await db.admission_bookings.find_one(
+        {"id": booking_id, "user_id": user["id"]},
+        {"_id": 0}
+    )
+    
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    if booking["payment_status"] == "completed":
+        raise HTTPException(status_code=400, detail="Payment already completed")
+    
+    # Update booking status
+    now = datetime.now(timezone.utc).isoformat()
+    mock_payment_id = f"test_pay_{str(uuid4())[:8]}"
+    
+    status_update = {
+        "status": "submitted",
+        "timestamp": now,
+        "updated_by": user["id"],
+        "comment": "Test payment completed"
+    }
+    
+    await db.admission_bookings.update_one(
+        {"id": booking_id},
+        {
+            "$set": {
+                "payment_status": "completed",
+                "razorpay_payment_id": mock_payment_id,
+                "status": "submitted",
+                "updated_at": now
+            },
+            "$push": {"status_history": status_update}
+        }
+    )
+    
+    # Queue email notifications (if configured)
+    background_tasks.add_task(
+        send_admission_email,
+        booking_id=booking_id,
+        email_type="confirmation",
+        db=db
+    )
+    
+    return {
+        "success": True,
+        "message": "Test payment completed successfully",
+        "booking_id": booking_id,
+        "payment_id": mock_payment_id,
+        "status": "submitted"
+    }
+
 @router.post("/verify-payment")
 async def verify_razorpay_payment(
     payment_data: PaymentVerification,
