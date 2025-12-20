@@ -608,13 +608,23 @@ const ListingPagesManagement = () => {
             </div>
 
             {/* URL Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
-              {urlStats.map(stat => (
-                <div key={stat.value} className="bg-white rounded-lg shadow p-3 text-center">
-                  <div className="text-xl font-bold text-gray-800">{stat.count}</div>
-                  <div className="text-xs text-gray-500 truncate">{stat.label}</div>
-                </div>
-              ))}
+            <div className="bg-white rounded-lg shadow p-4 mb-6">
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="font-semibold text-gray-700">URL Statistics</h4>
+                <span className="text-sm text-gray-500">Total: <span className="font-bold text-orange-600">{totalUrlCount.toLocaleString()}</span> URLs</span>
+              </div>
+              <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2">
+                {urlStats.filter(stat => stat.count > 0).map(stat => (
+                  <div 
+                    key={stat.value} 
+                    className="bg-gray-50 rounded p-2 text-center cursor-pointer hover:bg-gray-100"
+                    onClick={() => setUrlFilterType(stat.value)}
+                  >
+                    <div className="text-lg font-bold text-gray-800">{stat.count.toLocaleString()}</div>
+                    <div className="text-xs text-gray-500 truncate" title={stat.label}>{stat.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* URL List */}
