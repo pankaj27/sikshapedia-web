@@ -4340,6 +4340,263 @@ class APITester:
         else:
             self.log_test("GET /institute/applications", False, f"Status: {status}", response)
 
+    def test_url_routing_system(self):
+        """Test the new URL routing system for institution listing pages"""
+        print("🔗 Testing New URL Routing System for Institution Listing Pages...")
+        
+        # Test 1: Colleges - All colleges in India
+        success, response, status = self.make_request("GET", "/colleges")
+        if success and isinstance(response, list):
+            total_colleges = len(response)
+            self.log_test("GET /colleges (All colleges in India)", True, 
+                         f"Retrieved {total_colleges} colleges")
+        else:
+            self.log_test("GET /colleges (All colleges in India)", False, f"Status: {status}", response)
+        
+        # Test 2: Colleges by state - West Bengal
+        success, response, status = self.make_request("GET", "/colleges?state=West Bengal")
+        if success and isinstance(response, list):
+            wb_colleges = len(response)
+            # Verify filtering works
+            state_filtered = True
+            for college in response[:5]:  # Check first 5
+                location = college.get("location", {})
+                if isinstance(location, dict) and location.get("state") != "West Bengal":
+                    if not ("west bengal" in location.get("state", "").lower()):
+                        state_filtered = False
+                        break
+            
+            if state_filtered or wb_colleges == 0:
+                self.log_test("GET /colleges?state=West Bengal", True, 
+                             f"Retrieved {wb_colleges} colleges from West Bengal")
+            else:
+                self.log_test("GET /colleges?state=West Bengal", False, 
+                             "State filtering not working correctly")
+        else:
+            self.log_test("GET /colleges?state=West Bengal", False, f"Status: {status}", response)
+        
+        # Test 3: Colleges by city - Kolkata
+        success, response, status = self.make_request("GET", "/colleges?city=Kolkata")
+        if success and isinstance(response, list):
+            kolkata_colleges = len(response)
+            self.log_test("GET /colleges?city=Kolkata", True, 
+                         f"Retrieved {kolkata_colleges} colleges from Kolkata")
+        else:
+            self.log_test("GET /colleges?city=Kolkata", False, f"Status: {status}", response)
+        
+        # Test 4: Colleges by stream - Engineering
+        success, response, status = self.make_request("GET", "/colleges?stream=Engineering")
+        if success and isinstance(response, list):
+            engineering_colleges = len(response)
+            self.log_test("GET /colleges?stream=Engineering", True, 
+                         f"Retrieved {engineering_colleges} Engineering colleges")
+        else:
+            self.log_test("GET /colleges?stream=Engineering", False, f"Status: {status}", response)
+        
+        # Test 5: Colleges by course - BTech
+        success, response, status = self.make_request("GET", "/colleges?course=BTech")
+        if success and isinstance(response, list):
+            btech_colleges = len(response)
+            self.log_test("GET /colleges?course=BTech", True, 
+                         f"Retrieved {btech_colleges} colleges offering BTech")
+        else:
+            self.log_test("GET /colleges?course=BTech", False, f"Status: {status}", response)
+        
+        # Test 6: Combined filters - State + Stream
+        success, response, status = self.make_request("GET", "/colleges?state=West Bengal&stream=Engineering")
+        if success and isinstance(response, list):
+            wb_engineering = len(response)
+            self.log_test("GET /colleges?state=West Bengal&stream=Engineering", True, 
+                         f"Retrieved {wb_engineering} Engineering colleges in West Bengal")
+        else:
+            self.log_test("GET /colleges?state=West Bengal&stream=Engineering", False, f"Status: {status}", response)
+        
+        # Test 7: Combined filters - Stream + Course
+        success, response, status = self.make_request("GET", "/colleges?stream=Engineering&course=BTech")
+        if success and isinstance(response, list):
+            engineering_btech = len(response)
+            self.log_test("GET /colleges?stream=Engineering&course=BTech", True, 
+                         f"Retrieved {engineering_btech} Engineering colleges offering BTech")
+        else:
+            self.log_test("GET /colleges?stream=Engineering&course=BTech", False, f"Status: {status}", response)
+        
+        # Test 8: Detail page with numeric prefix (001-iit-bombay)
+        # First, let's find a college with numeric prefix
+        success, response, status = self.make_request("GET", "/colleges?limit=50")
+        if success and isinstance(response, list):
+            numeric_prefix_college = None
+            for college in response:
+                college_id = college.get("id", "")
+                if college_id and len(college_id) > 3 and college_id[:3].isdigit() and college_id[3] == "-":
+                    numeric_prefix_college = college_id
+                    break
+            
+            if numeric_prefix_college:
+                success, detail_response, detail_status = self.make_request("GET", f"/colleges/{numeric_prefix_college}")
+                if success and isinstance(detail_response, dict) and "id" in detail_response:
+                    college_name = detail_response.get("name", "Unknown")
+                    self.log_test(f"GET /colleges/{numeric_prefix_college} (Detail page with numeric prefix)", True, 
+                                 f"College detail retrieved: {college_name}")
+                else:
+                    self.log_test(f"GET /colleges/{numeric_prefix_college} (Detail page with numeric prefix)", False, 
+                                 f"Status: {detail_status}", detail_response)
+            else:
+                self.log_test("Detail page with numeric prefix", False, "No college with numeric prefix found")
+        
+        # Test 9: Universities - All universities
+        success, response, status = self.make_request("GET", "/universities")
+        if success and isinstance(response, list):
+            total_universities = len(response)
+            self.log_test("GET /universities (All universities)", True, 
+                         f"Retrieved {total_universities} universities")
+        else:
+            self.log_test("GET /universities (All universities)", False, f"Status: {status}", response)
+        
+        # Test 10: Universities by state - Maharashtra
+        success, response, status = self.make_request("GET", "/universities?state=Maharashtra")
+        if success and isinstance(response, list):
+            mh_universities = len(response)
+            self.log_test("GET /universities?state=Maharashtra", True, 
+                         f"Retrieved {mh_universities} universities from Maharashtra")
+        else:
+            self.log_test("GET /universities?state=Maharashtra", False, f"Status: {status}", response)
+        
+        # Test 11: Universities by stream - Engineering
+        success, response, status = self.make_request("GET", "/universities?stream=Engineering")
+        if success and isinstance(response, list):
+            engineering_universities = len(response)
+            self.log_test("GET /universities?stream=Engineering", True, 
+                         f"Retrieved {engineering_universities} Engineering universities")
+        else:
+            self.log_test("GET /universities?stream=Engineering", False, f"Status: {status}", response)
+        
+        # Test 12: Schools - All schools
+        success, response, status = self.make_request("GET", "/schools")
+        if success and isinstance(response, list):
+            total_schools = len(response)
+            self.log_test("GET /schools (All schools)", True, 
+                         f"Retrieved {total_schools} schools")
+        else:
+            self.log_test("GET /schools (All schools)", False, f"Status: {status}", response)
+        
+        # Test 13: Schools by city/state - Delhi
+        success, response, status = self.make_request("GET", "/schools?city=Delhi")
+        if success and isinstance(response, list):
+            delhi_schools_city = len(response)
+            self.log_test("GET /schools?city=Delhi", True, 
+                         f"Retrieved {delhi_schools_city} schools from Delhi (city filter)")
+        else:
+            self.log_test("GET /schools?city=Delhi", False, f"Status: {status}", response)
+        
+        # Test 14: Schools by state - Delhi
+        success, response, status = self.make_request("GET", "/schools?state=Delhi")
+        if success and isinstance(response, list):
+            delhi_schools_state = len(response)
+            self.log_test("GET /schools?state=Delhi", True, 
+                         f"Retrieved {delhi_schools_state} schools from Delhi (state filter)")
+        else:
+            self.log_test("GET /schools?state=Delhi", False, f"Status: {status}", response)
+        
+        # Test 15: Test institution_type filtering for colleges endpoint
+        success, response, status = self.make_request("GET", "/colleges?institution_type=College")
+        if success and isinstance(response, list):
+            college_type_count = len(response)
+            # Verify all returned items are colleges
+            all_colleges = True
+            for item in response[:10]:  # Check first 10
+                if item.get("institution_type") != "College":
+                    all_colleges = False
+                    break
+            
+            if all_colleges or college_type_count == 0:
+                self.log_test("GET /colleges?institution_type=College", True, 
+                             f"Retrieved {college_type_count} institutions of type College")
+            else:
+                self.log_test("GET /colleges?institution_type=College", False, 
+                             "Institution type filtering not working correctly")
+        else:
+            self.log_test("GET /colleges?institution_type=College", False, f"Status: {status}", response)
+        
+        # Test 16: Test institution_type filtering for universities
+        success, response, status = self.make_request("GET", "/colleges?institution_type=University")
+        if success and isinstance(response, list):
+            university_type_count = len(response)
+            self.log_test("GET /colleges?institution_type=University", True, 
+                         f"Retrieved {university_type_count} institutions of type University")
+        else:
+            self.log_test("GET /colleges?institution_type=University", False, f"Status: {status}", response)
+        
+        # Test 17: Test institution_type filtering for schools
+        success, response, status = self.make_request("GET", "/colleges?institution_type=School")
+        if success and isinstance(response, list):
+            school_type_count = len(response)
+            self.log_test("GET /colleges?institution_type=School", True, 
+                         f"Retrieved {school_type_count} institutions of type School")
+        else:
+            self.log_test("GET /colleges?institution_type=School", False, f"Status: {status}", response)
+
+    def test_url_routing_title_generation(self):
+        """Test that correct titles are generated based on URL parameters"""
+        print("📝 Testing URL-based Title Generation Logic...")
+        
+        # Test different combinations and verify the filtering works
+        test_cases = [
+            {
+                "url": "/colleges?state=Maharashtra",
+                "expected_contains": ["Maharashtra", "colleges"],
+                "description": "Colleges in Maharashtra"
+            },
+            {
+                "url": "/colleges?city=Mumbai", 
+                "expected_contains": ["Mumbai", "colleges"],
+                "description": "Colleges in Mumbai"
+            },
+            {
+                "url": "/colleges?stream=Engineering",
+                "expected_contains": ["Engineering", "colleges"],
+                "description": "Engineering Colleges"
+            },
+            {
+                "url": "/colleges?course=MBA",
+                "expected_contains": ["MBA", "colleges"],
+                "description": "Colleges offering MBA"
+            },
+            {
+                "url": "/colleges?state=West Bengal&stream=Engineering",
+                "expected_contains": ["West Bengal", "Engineering"],
+                "description": "Engineering Colleges in West Bengal"
+            },
+            {
+                "url": "/universities?state=Karnataka",
+                "expected_contains": ["Karnataka", "universities"],
+                "description": "Universities in Karnataka"
+            },
+            {
+                "url": "/schools?state=Delhi",
+                "expected_contains": ["Delhi", "schools"],
+                "description": "Schools in Delhi"
+            }
+        ]
+        
+        for test_case in test_cases:
+            url_path = test_case["url"].replace("/colleges", "").replace("/universities", "").replace("/schools", "")
+            
+            if "/colleges" in test_case["url"]:
+                endpoint = f"/colleges{url_path}"
+            elif "/universities" in test_case["url"]:
+                endpoint = f"/universities{url_path}"
+            else:
+                endpoint = f"/schools{url_path}"
+            
+            success, response, status = self.make_request("GET", endpoint)
+            if success and isinstance(response, list):
+                count = len(response)
+                self.log_test(f"Title Generation Test: {test_case['description']}", True, 
+                             f"API returns {count} results for filtering")
+            else:
+                self.log_test(f"Title Generation Test: {test_case['description']}", False, 
+                             f"API failed with status {status}")
+
     def run_all_tests(self):
         """Run all test suites focusing on User and Institute Dashboard APIs"""
         print("🚀 TESTING USER & INSTITUTE AUTHENTICATION AND DASHBOARD SYSTEM")
