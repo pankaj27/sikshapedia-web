@@ -8374,6 +8374,7 @@ try:
     from routes.user_auth import router as user_auth_router, set_database as set_user_auth_db
     from routes.user_dashboard import router as user_dashboard_router, set_database as set_user_dashboard_db
     from routes.institute_auth import router as institute_router, set_database as set_institute_db
+    from routes.admission_booking import router as admission_booking_router, set_database as set_admission_booking_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -8383,6 +8384,7 @@ try:
     set_user_auth_db(db)
     set_user_dashboard_db(db)
     set_institute_db(db)
+    set_admission_booking_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
@@ -8396,7 +8398,8 @@ try:
     app.include_router(user_auth_router, prefix="/api")  # User auth routes
     app.include_router(user_dashboard_router, prefix="/api")  # User dashboard routes
     app.include_router(institute_router, prefix="/api")  # Institute auth & dashboard routes
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute")
+    app.include_router(admission_booking_router, prefix="/api")  # Admission booking routes
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
