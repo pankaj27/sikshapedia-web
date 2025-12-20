@@ -137,6 +137,8 @@ import PendingAnswers from './pages/admin/PendingAnswers';
 import RedemptionManagement from './pages/admin/RedemptionManagement';
 import PaymentHistory from './pages/admin/PaymentHistory';
 import UsersPointsReport from './pages/admin/UsersPointsReport';
+import CounselorsManagement from './pages/admin/CounselorsManagement';
+import LocationsManagement from './pages/admin/LocationsManagement';
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
 import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
