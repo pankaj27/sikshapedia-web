@@ -344,34 +344,24 @@ const UniversityAdmissionPage = () => {
                           ? new Date(admission.admission_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
                           : admission.university_type || 'Open'}
                       </div>
-                      {admission.is_admission_partner && (
-                        <AdmissionPartnerBadge size="sm" />
-                      )}
+                      <AdmissionPartnerBadge size="sm" />
                     </div>
                     <div className="absolute bottom-2 left-2 right-2 space-y-1">
-                      {admission.is_admission_partner ? (
-                        <Button 
-                          onClick={() => {
-                            setSelectedInstitution({
-                              id: admission.id,
-                              name: admission.name,
-                              type: 'university',
-                              city: admission.location?.city,
-                              state: admission.location?.state
-                            });
-                            setShowBookingModal(true);
-                          }}
-                          className="w-full bg-green-600 hover:bg-green-700 h-7 text-xs"
-                        >
-                          🏛️ Book Your Seat
-                        </Button>
-                      ) : (
-                        <Link to={`/universities/${admission.slug || admission.id}`}>
-                          <Button className="w-full bg-purple-600 hover:bg-purple-700 h-7 text-xs">
-                            Apply Now
-                          </Button>
-                        </Link>
-                      )}
+                      <Button 
+                        onClick={() => {
+                          setSelectedInstitution({
+                            id: admission.id,
+                            name: admission.name,
+                            type: 'university',
+                            city: admission.location?.city,
+                            state: admission.location?.state
+                          });
+                          setShowBookingModal(true);
+                        }}
+                        className="w-full bg-green-600 hover:bg-green-700 h-7 text-xs"
+                      >
+                        🏛️ Book Your Seat
+                      </Button>
                     </div>
                   </div>
 
@@ -379,7 +369,7 @@ const UniversityAdmissionPage = () => {
                   <div className="p-3">
                     <div className="mb-1">
                       <span className="text-xs font-semibold text-purple-600">
-                        {(admission.courses || admission.streams || []).slice(0, 2).join(' | ')}
+                        {(admission.programs || []).slice(0, 2).join(' | ')}
                       </span>
                     </div>
                     <Link to={`/universities/${admission.slug || admission.id}`}>
@@ -388,7 +378,7 @@ const UniversityAdmissionPage = () => {
                       </h3>
                     </Link>
                     <p className="text-xs text-gray-600 line-clamp-2">
-                      {admission.description || `${admission.university_type || 'University'} in ${admission.city || ''}, ${admission.state || 'India'}. NAAC ${admission.accreditation || 'Accredited'}.`}
+                      {admission.description || `${admission.type || 'University'} in ${admission.location?.city || ''}, ${admission.location?.state || 'India'}. NAAC ${admission.accreditation || 'Accredited'}.`}
                     </p>
                   </div>
                 </div>
