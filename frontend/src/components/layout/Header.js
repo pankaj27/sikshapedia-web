@@ -19,6 +19,8 @@ const Header = () => {
   const allCoursesTimeoutRef = useRef(null);
   const userDropdownRef = useRef(null);
 
+  // TEMPORARILY DISABLED FOR DEBUGGING
+  /*
   useEffect(() => {
     // Check for user on mount
     const checkUser = () => {
@@ -54,6 +56,7 @@ const Header = () => {
       clearInterval(interval);
     };
   }, []);
+  */
 
   // Close user dropdown when clicking outside
   useEffect(() => {
