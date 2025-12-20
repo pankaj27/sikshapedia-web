@@ -3,6 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FiSearch, FiMenu, FiX, FiChevronDown, FiUser, FiBell, FiEdit3, FiGrid, FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone } from 'react-icons/fi';
 import { Button } from '../ui/button';
 
+// Helper function for navigation - uses full page reload to fix React Router issues
+const navigateTo = (path) => (e) => {
+  e.preventDefault();
+  window.location.href = path;
+};
+
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
