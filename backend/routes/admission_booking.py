@@ -312,12 +312,27 @@ async def send_status_update_email(booking: dict, user_email: str):
 # ============ SETTINGS ENDPOINTS ============
 
 @router.get("/settings")
-async def get_admission_settings(db=Depends(get_db)):
-    """Get admission fee settings"""
-    settings = await db.admission_settings.find_one({"id": "admission_settings"}, {"_id": 0})
+async def get_admission_settings(entity_type: Optional[str] = Query(None, description="college, school, or university"), db=Depends(get_db)):
+    """Get admission fee settings - optionally filtered by entity type"""
+    settings = await db.admissions_settings.find_one({"id": "admission_settings"}, {"_id": 0})
     if not settings:
         default_settings = AdmissionSettings()
-        return default_settings.model_dump()
+        settings = default_settings.model_dump()
+    
+    # If entity_type specified, return only that entity's fees
+    if entity_type and entity_type in ['college', 'school', 'university']:
+        entity_fees = settings.get(entity_type, {})
+        return {
+            "entity_type": entity_type,
+            "form_fee": entity_fees.get('form_fee', 1000),
+            "platform_fee": entity_fees.get('platform_fee', 250),
+            "gst_percentage": entity_fees.get('gst_percentage', 18),
+            "total": round(
+                (entity_fees.get('form_fee', 1000) + entity_fees.get('platform_fee', 250)) * 
+                (1 + entity_fees.get('gst_percentage', 18) / 100), 2
+            )
+        }
+    
     return settings
 
 @router.put("/settings")
@@ -329,7 +344,7 @@ async def update_admission_settings(settings: AdmissionSettings, request: Reques
     settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
     settings_dict["updated_by"] = admin.get("id", admin.get("email"))
     
-    await db.admission_settings.update_one(
+    await db.admissions_settings.update_one(
         {"id": "admission_settings"},
         {"$set": settings_dict},
         upsert=True
