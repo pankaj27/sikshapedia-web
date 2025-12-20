@@ -1189,14 +1189,27 @@ class APITester:
         # Test 1: GET /api/admission/settings (public endpoint)
         success, response, status = self.make_request("GET", "/admission/settings")
         if success and isinstance(response, dict):
-            required_fields = ["form_fee", "platform_fee", "gst_percentage"]
-            has_all_fields = all(field in response for field in required_fields)
-            if has_all_fields:
-                self.log_test("GET /admission/settings", True, 
-                             f"Form fee: ₹{response.get('form_fee')}, Platform fee: ₹{response.get('platform_fee')}, GST: {response.get('gst_percentage')}%")
+            # Check if it has the nested structure for different entity types
+            if "college" in response and "school" in response and "university" in response:
+                college_settings = response.get("college", {})
+                required_fields = ["form_fee", "platform_fee", "gst_percentage"]
+                has_all_fields = all(field in college_settings for field in required_fields)
+                if has_all_fields:
+                    self.log_test("GET /admission/settings", True, 
+                                 f"College - Form fee: ₹{college_settings.get('form_fee')}, Platform fee: ₹{college_settings.get('platform_fee')}, GST: {college_settings.get('gst_percentage')}%")
+                else:
+                    missing_fields = [f for f in required_fields if f not in college_settings]
+                    self.log_test("GET /admission/settings", False, f"Missing fields in college settings: {missing_fields}")
             else:
-                missing_fields = [f for f in required_fields if f not in response]
-                self.log_test("GET /admission/settings", False, f"Missing fields: {missing_fields}")
+                # Check for flat structure (legacy)
+                required_fields = ["form_fee", "platform_fee", "gst_percentage"]
+                has_all_fields = all(field in response for field in required_fields)
+                if has_all_fields:
+                    self.log_test("GET /admission/settings", True, 
+                                 f"Form fee: ₹{response.get('form_fee')}, Platform fee: ₹{response.get('platform_fee')}, GST: {response.get('gst_percentage')}%")
+                else:
+                    missing_fields = [f for f in required_fields if f not in response]
+                    self.log_test("GET /admission/settings", False, f"Missing fields: {missing_fields}")
         else:
             self.log_test("GET /admission/settings", False, f"Status: {status}", response)
         
