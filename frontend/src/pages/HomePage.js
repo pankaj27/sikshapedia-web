@@ -810,7 +810,7 @@ const CollegeDuniaHome = () => {
                       View Details
                     </Button>
                     <Button 
-                      onClick={() => navigate(`/schools/${encodeURIComponent(school.name)}/apply`)}
+                      onClick={() => window.location.href = `/schools/${encodeURIComponent(school.name)}/apply`}
                       variant="outline"
                       className="flex-1 border-emerald-200 text-emerald-600 hover:bg-emerald-50 text-xs py-2.5 h-auto rounded-xl font-medium"
                     >
