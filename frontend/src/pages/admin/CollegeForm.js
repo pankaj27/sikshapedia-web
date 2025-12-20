@@ -201,6 +201,11 @@ const CollegeForm = () => {
     admission_open_priority_months: 2,
     admission_deadline: '',
     badge_text: '',
+    admission_fees: {
+      form_fee: '',
+      platform_fee: '',
+      gst_percentage: 18
+    },
     location: { 
       city: '', 
       state: '', 
