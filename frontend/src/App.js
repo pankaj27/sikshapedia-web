@@ -234,11 +234,11 @@ function App() {
               <Route path="/schools" element={<SchoolsPage />} />
               <Route path="/universities" element={<UniversitiesPage />} />
               
-              {/* Admission Partner Pages */}
-              <Route path="/admission/schools" element={<AdmissionPartnersPage />} />
-              <Route path="/admission/colleges" element={<AdmissionPartnersPage />} />
-              <Route path="/admission/universities" element={<AdmissionPartnersPage />} />
-              <Route path="/admission/:type" element={<AdmissionPartnersPage />} />
+              {/* Admission Partner Pages (Book Your Seat) */}
+              <Route path="/admission-partners/schools" element={<AdmissionPartnersPage />} />
+              <Route path="/admission-partners/colleges" element={<AdmissionPartnersPage />} />
+              <Route path="/admission-partners/universities" element={<AdmissionPartnersPage />} />
+              <Route path="/admission-partners/:type" element={<AdmissionPartnersPage />} />
                   
               {/* Institution Detail Pages: /colleges/{number}-{slug} */}
               <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
