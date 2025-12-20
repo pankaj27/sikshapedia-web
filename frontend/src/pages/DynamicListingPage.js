@@ -951,33 +951,31 @@ const DynamicListingPage = () => {
   };
 
   // Handle filter selection - Navigate to NEW SEO-friendly URL structure
-  // NEW URL format: /colleges/{state}, /colleges/{stream}, /colleges/{state}/{stream}, etc.
+  // NEW URL format: /colleges/{state}/{city}/{stream}/{course}
   const handleFilterSelect = (filterType, value) => {
     setActiveFilterDropdown(null);
     
     // Determine base path based on institution type
     const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
     
-    // Get current filters from URL
+    // Get current filters from URL (these are already slugs)
     const currentStream = urlInfo.stream;
     const currentState = urlInfo.state;
     const currentCity = urlInfo.city;
     const currentCourse = urlInfo.course;
     
-    // Build URL path segments
-    let pathSegments = [baseSuffix];
-    
     // Helper to build the final URL
+    // Pattern: /colleges/{state}/{city}/{stream}/{course}
     const buildNewUrl = (state, city, stream, course) => {
       let segments = [baseSuffix];
       
-      // Priority order for URL segments: location first, then academic filters
-      // Pattern: /colleges/{state}/{city}/{stream}/{course}
-      // But we support various combinations
-      
+      // Add state if present
       if (state) segments.push(generateSlug(state));
-      if (city && !state) segments.push(generateSlug(city)); // City only if no state (cities are under states)
+      // Add city if present (can be with or without state)
+      if (city) segments.push(generateSlug(city));
+      // Add stream if present
       if (stream) segments.push(generateSlug(stream));
+      // Add course if present
       if (course) segments.push(generateSlug(course));
       
       return '/' + segments.join('/');
@@ -985,37 +983,35 @@ const DynamicListingPage = () => {
     
     // Handle STATE filter
     if (filterType === 'state') {
-      const newState = value;
-      // Keep existing stream/course, clear city (city changes with state)
-      const newUrl = buildNewUrl(newState, null, currentStream, currentCourse);
-      navigate(buildUrlWithQueryParams(newUrl));
+      const newStateSlug = generateSlug(value);
+      // When state changes, clear city (city is dependent on state)
+      const newUrl = buildNewUrl(newStateSlug, null, currentStream, currentCourse);
+      window.location.href = newUrl; // Use full page navigation to ensure proper state update
       return;
     }
     
     // Handle CITY filter
     if (filterType === 'city') {
-      const newCity = value;
-      // Keep existing state, stream, course
-      const newUrl = buildNewUrl(currentState, newCity, currentStream, currentCourse);
-      navigate(buildUrlWithQueryParams(newUrl));
+      const newCitySlug = generateSlug(value);
+      // City can work with or without state
+      const newUrl = buildNewUrl(currentState, newCitySlug, currentStream, currentCourse);
+      window.location.href = newUrl; // Use full page navigation to ensure proper state update
       return;
     }
     
     // Handle STREAM filter
     if (filterType === 'stream' || filterType === 'subStream') {
-      const newStream = value;
-      // Keep existing location, update stream
-      const newUrl = buildNewUrl(currentState, currentCity, newStream, currentCourse);
-      navigate(buildUrlWithQueryParams(newUrl));
+      const newStreamSlug = generateSlug(value);
+      const newUrl = buildNewUrl(currentState, currentCity, newStreamSlug, currentCourse);
+      window.location.href = newUrl; // Use full page navigation to ensure proper state update
       return;
     }
     
-    // Handle COURSE filter (add to URL path)
+    // Handle COURSE filter
     if (filterType === 'course') {
-      const newCourse = value;
-      // Keep existing filters, add course
-      const newUrl = buildNewUrl(currentState, currentCity, currentStream, newCourse);
-      navigate(buildUrlWithQueryParams(newUrl));
+      const newCourseSlug = generateSlug(value);
+      const newUrl = buildNewUrl(currentState, currentCity, currentStream, newCourseSlug);
+      window.location.href = newUrl; // Use full page navigation to ensure proper state update
       return;
     }
     
@@ -1024,7 +1020,7 @@ const DynamicListingPage = () => {
       const currentPath = location.pathname;
       const queryParams = new URLSearchParams(location.search);
       queryParams.set('type', generateSlug(value));
-      navigate(`${currentPath}?${queryParams.toString()}`);
+      window.location.href = `${currentPath}?${queryParams.toString()}`;
       return;
     }
     
@@ -1032,14 +1028,15 @@ const DynamicListingPage = () => {
       const currentPath = location.pathname;
       const queryParams = new URLSearchParams(location.search);
       queryParams.set('accreditation', ACCREDITATION_TO_SLUG[value] || generateSlug(value));
-      navigate(`${currentPath}?${queryParams.toString()}`);
+      window.location.href = `${currentPath}?${queryParams.toString()}`;
       return;
     }
     
     // Secondary filters - Query parameters (degreeType, examAccepted, affiliation, recognition)
     if (['degreeType', 'examAccepted', 'affiliation', 'recognition'].includes(filterType)) {
       const currentPath = location.pathname;
-      navigate(buildUrlWithQueryParams(currentPath, { type: filterType, value }));
+      const newUrl = buildUrlWithQueryParams(currentPath, { type: filterType, value });
+      window.location.href = newUrl;
       return;
     }
     
