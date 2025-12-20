@@ -103,7 +103,7 @@ class RewardsAPITester:
         success, response, status = self.make_request("POST", "/auth/register", TEST_USER_CREDENTIALS)
         if success and "access_token" in response:
             self.user_token = response["access_token"]
-            self.log_test("User Signup", True, f"Test user created successfully")
+            self.log_test("User Registration", True, f"Test user created successfully")
         else:
             # Try login if user already exists
             success, response, status = self.make_request("POST", "/auth/login", {
