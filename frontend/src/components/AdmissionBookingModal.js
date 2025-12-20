@@ -17,6 +17,8 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
   const [settings, setSettings] = useState(null);
   const [booking, setBooking] = useState(null);
   const [user, setUser] = useState(null);
+  const [institutionDetails, setInstitutionDetails] = useState(null);
+  const [courses, setCourses] = useState([]);
   
   const [formData, setFormData] = useState({
     student_name: '',
