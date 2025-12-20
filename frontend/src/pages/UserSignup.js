@@ -163,7 +163,8 @@ const UserSignup = () => {
       
       localStorage.setItem('token', response.data.session_token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/dashboard');
+      // Use full page reload for navigation (React Router v7 workaround)
+      window.location.href = '/dashboard';
     } catch (err) {
       // Handle validation errors (Pydantic returns array of objects)
       const detail = err.response?.data?.detail;
