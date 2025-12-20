@@ -562,14 +562,14 @@ async def get_users_points_report(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db=Depends(get_db)
 ):
-    """Get users with points for reporting"""
+    """Get users with points for reporting, including payment details"""
     await verify_admin(credentials, db)
     
     total = await db.users.count_documents({"points": {"$gt": 0}})
     
     users = await db.users.find(
         {"points": {"$gt": 0}},
-        {"_id": 0, "id": 1, "name": 1, "email": 1, "phone": 1, "points": 1, "referral_code": 1, "created_at": 1}
+        {"_id": 0, "id": 1, "name": 1, "email": 1, "phone": 1, "points": 1, "referral_code": 1, "created_at": 1, "payment_details": 1}
     ).sort("points", -1).skip(offset).limit(limit).to_list(limit)
     
     return {
@@ -578,6 +578,25 @@ async def get_users_points_report(
         "limit": limit,
         "offset": offset
     }
+
+@router.get("/user/{user_id}/payment-details")
+async def get_user_payment_details(
+    user_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db=Depends(get_db)
+):
+    """Get user's saved payment details for admin"""
+    await verify_admin(credentials, db)
+    
+    user = await db.users.find_one(
+        {"id": user_id},
+        {"_id": 0, "id": 1, "name": 1, "email": 1, "phone": 1, "payment_details": 1}
+    )
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return user
 
 # ============ PAYMENT HISTORY ============
 
