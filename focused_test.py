@@ -6,7 +6,7 @@ Focused test for Course Listing Settings and Course Pages APIs
 import requests
 import json
 
-BASE_URL = "https://enrollease-3.preview.emergentagent.com/api"
+BASE_URL = "https://admitflow-2.preview.emergentagent.com/api"
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
     "password": "admin123"
