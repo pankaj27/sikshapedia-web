@@ -587,16 +587,22 @@ const DynamicListingPage = () => {
   }, [activeFilterDropdown]);
 
   useEffect(() => {
-    // Reset state when filters/location changes
+    // Reset state when URL changes
     setInstitutions([]);
     setAllInstitutionsData([]);
     setPagination(prev => ({ ...prev, page: 1 }));
     setHasMore(true);
-    fetchInstitutions();
-    fetchPageContent();
-    fetchFeaturedColleges();
-    fetchAdmissionOpenColleges();
-  }, [location.pathname, filters.search, sortBy]);
+  }, [location.pathname]);
+  
+  // Separate effect for fetching data - only runs when pageInfo is stable
+  useEffect(() => {
+    if (pageInfo && pageInfo.title) {
+      fetchInstitutions();
+      fetchPageContent();
+      fetchFeaturedColleges();
+      fetchAdmissionOpenColleges();
+    }
+  }, [pageInfo?.institutionType, pageInfo?.state, pageInfo?.city, pageInfo?.stream, pageInfo?.course, filters.search, sortBy]);
   
   // Fetch featured/sponsored colleges (from admin-managed multi-placement ads)
   const fetchFeaturedColleges = async () => {
