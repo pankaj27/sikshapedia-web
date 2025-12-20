@@ -149,24 +149,83 @@ const DynamicListingPage = () => {
     'aided': 'Aided'
   };
 
-  // Determine page title and type from URL
+  // Determine page title and type from URL - NEW URL STRUCTURE
   const pageInfo = useMemo(() => {
-    // Handle combined filters from URL (e.g., /engineering/maharashtra-colleges or /maharashtra/mumbai-colleges)
+    // Handle new URL structure: /university, /colleges, /schools
+    if (urlInfo.type === 'institution-listing') {
+      const isSchools = urlInfo.institutionType === 'schools';
+      const isUniversity = urlInfo.institutionType === 'university';
+      const typeName = isSchools ? 'Schools' : isUniversity ? 'Universities' : 'Colleges';
+      
+      // Build title based on filters
+      let titleParts = [];
+      
+      // Add course if present
+      if (urlInfo.filters.course) {
+        titleParts.push(urlInfo.filters.course);
+      }
+      
+      // Add stream if present
+      if (urlInfo.filters.stream) {
+        titleParts.push(urlInfo.filters.stream);
+      }
+      
+      titleParts.push(typeName);
+      
+      // Add location
+      if (urlInfo.filters.city && urlInfo.filters.state) {
+        titleParts.push(`in ${urlInfo.filters.city}, ${urlInfo.filters.state}`);
+      } else if (urlInfo.filters.city) {
+        titleParts.push(`in ${urlInfo.filters.city}`);
+      } else if (urlInfo.filters.state) {
+        titleParts.push(`in ${urlInfo.filters.state}`);
+      } else {
+        titleParts.push('in India');
+      }
+      
+      // Determine institution types for API query
+      let institutionTypes = ['College'];
+      if (isSchools) {
+        institutionTypes = ['School'];
+      } else if (isUniversity) {
+        institutionTypes = ['University'];
+      }
+      
+      return {
+        title: `Top ${titleParts.join(' ')} 2025`,
+        description: generateMetaDescription(urlInfo),
+        institutionTypes: institutionTypes,
+        institutionType: urlInfo.institutionType,
+        stream: urlInfo.stream,
+        course: urlInfo.course,
+        state: urlInfo.state,
+        city: urlInfo.city,
+        location: urlInfo.city || urlInfo.state,
+        locationType: urlInfo.city ? 'city' : urlInfo.state ? 'state' : null,
+        filters: urlInfo.filters,
+        isSchools,
+        isUniversity
+      };
+    }
+    
+    // Handle institution detail page
+    if (urlInfo.type === 'institution-detail') {
+      return {
+        type: 'detail',
+        institutionType: urlInfo.institutionType,
+        idSlug: urlInfo.idSlug
+      };
+    }
+    
+    // Legacy URL handling for backward compatibility
     if (urlInfo.combinedFilters) {
       const cf = urlInfo.combinedFilters;
       const isSchools = urlInfo.institutionType === 'schools';
       const typeName = isSchools ? 'Schools' : 'Colleges';
       
-      // Build title based on combined filters
       let titleParts = [];
-      
-      // Add college type if present (e.g., "Government")
       if (cf.collegeType) titleParts.push(TYPE_DISPLAY[cf.collegeType] || toDisplayName(cf.collegeType));
-      
-      // Add accreditation if present (e.g., "NAAC A+")
       if (cf.accreditation) titleParts.push(ACCREDITATION_DISPLAY[cf.accreditation] || toDisplayName(cf.accreditation));
-      
-      // Add stream if present
       if (cf.stream) titleParts.push(toDisplayName(cf.stream));
       
       titleParts.push(typeName);
@@ -193,73 +252,10 @@ const DynamicListingPage = () => {
       };
     }
     
-    if (urlInfo.type === 'institution-listing') {
-      const locationName = urlInfo.location 
-        ? toDisplayName(urlInfo.location)
-        : 'India';
-      
-      const isSchools = urlInfo.institutionType === 'schools';
-      const typeName = isSchools ? 'Schools' : 'Colleges';
-      
-      return {
-        title: `Top ${typeName} in ${locationName} 2025`,
-        description: `Explore top ${typeName.toLowerCase()} in ${locationName}. Find courses, fees, placements, rankings and more.`,
-        institutionTypes: isSchools ? ['School'] : ['College', 'University'],
-        location: urlInfo.location,
-        locationType: urlInfo.location ? (isState(urlInfo.location) ? 'state' : 'city') : null,
-        isSchools
-      };
-    }
-    
-    if (urlInfo.type === 'institution-location-listing') {
-      const locationName = toDisplayName(urlInfo.location);
-      const isSchools = urlInfo.institutionType === 'school';
-      const typeName = isSchools ? 'Schools' : 'Colleges';
-      return {
-        title: `Top ${typeName} in ${locationName} 2025`,
-        description: `Explore top ${typeName.toLowerCase()} in ${locationName}. Find admissions, fees, and more.`,
-        institutionTypes: isSchools ? ['School'] : ['College', 'University'],
-        location: urlInfo.location,
-        locationType: isState(urlInfo.location) ? 'state' : 'city',
-        isSchools
-      };
-    }
-    
-    if (urlInfo.type === 'stream-listing') {
-      const streamName = toDisplayName(urlInfo.stream);
-      const subStreamName = urlInfo.subStream ? toDisplayName(urlInfo.subStream) : null;
-      const locationName = urlInfo.location ? toDisplayName(urlInfo.location) : null;
-      
-      let title = `Top ${streamName} Colleges`;
-      if (subStreamName && !isState(urlInfo.subStream) && !isCity(urlInfo.subStream)) {
-        title = `Top ${streamName} - ${subStreamName} Colleges`;
-      } else if (subStreamName) {
-        title = `Top ${streamName} Colleges in ${subStreamName}`;
-      }
-      if (locationName) title = `Top ${streamName}${subStreamName && !isState(urlInfo.subStream) && !isCity(urlInfo.subStream) ? ` - ${subStreamName}` : ''} Colleges in ${locationName}`;
-      
-      let actualSubStream = urlInfo.subStream;
-      let actualLocation = urlInfo.location;
-      
-      if (urlInfo.subStream && (isState(urlInfo.subStream) || isCity(urlInfo.subStream))) {
-        actualLocation = urlInfo.subStream;
-        actualSubStream = null;
-      }
-      
-      return {
-        title: `${title} 2025`,
-        description: `Explore top colleges for ${streamName}${actualSubStream ? ` - ${toDisplayName(actualSubStream)}` : ''}${actualLocation ? ` in ${toDisplayName(actualLocation)}` : ''}.`,
-        stream: urlInfo.stream,
-        subStream: actualSubStream,
-        location: actualLocation,
-        locationType: actualLocation ? (isState(actualLocation) ? 'state' : 'city') : null,
-        isSchools: false
-      };
-    }
-    
     return {
       title: 'Top Colleges in India 2025',
       description: 'Explore top institutions in India',
+      institutionTypes: ['College', 'University'],
       isSchools: false
     };
   }, [urlInfo]);
