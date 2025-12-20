@@ -143,13 +143,17 @@ const ListingPagesManagement = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
+        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-2 mb-6">
           {pageTypes.slice(1).map(type => {
             const count = pages.filter(p => p.page_type === type.value).length;
             return (
-              <div key={type.value} className="bg-white rounded-lg shadow p-3 text-center">
-                <div className="text-2xl font-bold text-gray-800">{count}</div>
-                <div className="text-xs text-gray-500">{type.label}</div>
+              <div 
+                key={type.value} 
+                className="bg-white rounded-lg shadow p-2 text-center cursor-pointer hover:bg-gray-50"
+                onClick={() => setFilterType(type.value)}
+              >
+                <div className="text-lg font-bold text-gray-800">{count}</div>
+                <div className="text-xs text-gray-500 truncate">{type.label}</div>
               </div>
             );
           })}
