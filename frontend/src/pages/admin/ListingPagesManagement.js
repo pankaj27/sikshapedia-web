@@ -36,6 +36,9 @@ const ListingPagesManagement = () => {
     { value: 'school_state', label: 'Schools (State)' },
     { value: 'school_city', label: 'Schools (City)' },
     { value: 'school_state_city', label: 'Schools (State+City)' },
+    { value: 'university_state', label: 'Universities (State)' },
+    { value: 'university_city', label: 'Universities (City)' },
+    { value: 'university_state_city', label: 'Universities (State+City)' },
     { value: 'stream', label: 'Streams' },
     { value: 'course', label: 'Courses' },
   ];
