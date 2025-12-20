@@ -142,7 +142,7 @@ const SearchableSelect = ({
               ref={inputRef}
               type="text"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={`Search ${label || placeholder}...`}
               className="flex-1 outline-none bg-transparent text-sm"
