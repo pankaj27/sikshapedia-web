@@ -1397,6 +1397,9 @@ class University(BaseModel):
     # Admission Partner
     is_admission_partner: bool = False
     
+    # Institution-specific admission fees (overrides default entity fees)
+    admission_fees: Optional[Dict] = None  # { form_fee, platform_fee, gst_percentage }
+    
     # Academic Info
     streams: List[str] = []  # Engineering, Medical, Management, etc.
     total_courses: int = 0
