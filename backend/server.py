@@ -4013,15 +4013,7 @@ async def create_question(question_data: QuestionCreate, current_user: User = De
     await db.questions.insert_one(question_dict)
     return question
 
-@api_router.get("/questions/college/{college_id}", response_model=List[Question])
-async def get_college_questions(college_id: str, skip: int = 0, limit: int = 20):
-    questions = await db.questions.find({"college_id": college_id}, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
-    
-    for question in questions:
-        if isinstance(question.get('created_at'), str):
-            question['created_at'] = datetime.fromisoformat(question['created_at'])
-    
-    return questions
+# GET /questions/college/{college_id} - MOVED TO routes/reviews_questions.py
 
 @api_router.post("/questions/answer")
 async def create_answer(answer_data: AnswerCreate, current_user: User = Depends(get_current_user)):
