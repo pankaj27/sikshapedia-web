@@ -8395,7 +8395,6 @@ try:
     from routes.lead_forms import router as lead_forms_router, set_database as set_lead_forms_db
     from routes.admin_counselors import router as admin_counselors_router, set_database as set_admin_counselors_db
     from routes.admin_locations import router as admin_locations_router, set_database as set_admin_locations_db
-    from routes.admin_url_structures import router as admin_url_structures_router, set_database as set_admin_url_structures_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -8411,7 +8410,6 @@ try:
     set_lead_forms_db(db)
     set_admin_counselors_db(db)
     set_admin_locations_db(db)
-    set_admin_url_structures_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
@@ -8431,8 +8429,7 @@ try:
     app.include_router(lead_forms_router)  # Lead forms routes - already has /api prefix
     app.include_router(admin_counselors_router)  # Admin counselors routes - already has /api prefix
     app.include_router(admin_locations_router)  # Admin locations routes - already has /api prefix
-    app.include_router(admin_url_structures_router)  # Admin URL structures routes - already has /api prefix
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_locations, admin_url_structures")
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_locations")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
