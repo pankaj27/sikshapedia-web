@@ -3749,49 +3749,7 @@ COLLEGE_MINIMAL_PROJECTION = {
 # College Admin CRUD (POST/PUT/DELETE) - Keep in server.py due to auth dependencies
 # ===========================================
 
-@api_router.get("/colleges/featured")
-async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Optional[str] = Query(None)):
-    """
-    Get featured colleges for homepage display.
-    Priority: 
-      1) Colleges from homepage settings featured_colleges_ids (in exact order)
-      2) Colleges marked as is_featured=True (sorted by featured_at desc)
-      3) Fallback to top colleges by NIRF ranking
-    """
-    projection = COLLEGE_MINIMAL_PROJECTION if fields == "minimal" else {"_id": 0}
-    
-    # First check homepage settings for manually selected colleges
-    settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
-    featured_ids = settings.get("featured_colleges_ids", []) if settings else []
-    
-    featured_colleges = []
-    
-    # Get colleges from homepage settings (in specified order)
-    if featured_ids:
-        for college_id in featured_ids[:limit]:
-            college = await db.colleges.find_one({"id": college_id, "status": "published"}, projection)
-            if college:
-                featured_colleges.append(college)
-    
-    # If not enough, get colleges marked as is_featured
-    if len(featured_colleges) < limit:
-        existing_ids = [c.get('id') for c in featured_colleges]
-        additional = await db.colleges.find(
-            {"status": "published", "is_featured": True, "id": {"$nin": existing_ids}}, 
-            projection
-        ).sort("featured_at", -1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
-        featured_colleges.extend(additional)
-    
-    # If still not enough, fill with top ranked colleges
-    if len(featured_colleges) < limit:
-        existing_ids = [c.get('id') for c in featured_colleges]
-        additional = await db.colleges.find(
-            {"status": "published", "id": {"$nin": existing_ids}}, 
-            projection
-        ).sort("nirf_ranking", 1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
-        featured_colleges.extend(additional)
-    
-    return featured_colleges
+# College CRUD functions start here
 
 @api_router.get("/colleges/featured-priority", response_model=List[College])
 async def get_featured_priority_colleges(limit: int = Query(6, ge=1, le=20)):
