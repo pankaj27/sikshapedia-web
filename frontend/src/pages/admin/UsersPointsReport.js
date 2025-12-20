@@ -131,16 +131,23 @@ const UsersPointsReport = () => {
                     <td className="px-4 py-4 whitespace-nowrap">
                       <span className="text-green-600">₹{(user.points * 0.5).toFixed(2)}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {user.created_at ? new Date(user.created_at).toLocaleDateString() : '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => setShowAdjustModal(user)}
-                        className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
-                      >
-                        <FiEdit className="w-4 h-4" /> Adjust
-                      </button>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setShowPaymentModal(user)}
+                          className="flex items-center gap-1 text-green-600 hover:text-green-800 text-sm"
+                          title="View Payment Details"
+                        >
+                          <FiCreditCard className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setShowAdjustModal(user)}
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm"
+                          title="Adjust Points"
+                        >
+                          <FiEdit className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
