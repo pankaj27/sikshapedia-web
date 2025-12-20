@@ -4,6 +4,8 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import MetaTags from '../components/SEO/MetaTags';
+import AdmissionPartnerBadge from '../components/AdmissionPartnerBadge';
+import AdmissionBookingModal from '../components/AdmissionBookingModal';
 
 import { Link } from '../components/CustomLink';
 const CollegeAdmissionPage = () => {
@@ -13,6 +15,8 @@ const CollegeAdmissionPage = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedState, setSelectedState] = useState('all');
   const [selectedCity, setSelectedCity] = useState('all');
+  const [selectedInstitution, setSelectedInstitution] = useState(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   const collegeTypes = ['All', 'Engineering', 'Medical', 'Management', 'Law', 'Arts & Science'];
   
