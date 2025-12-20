@@ -377,6 +377,17 @@ const SchoolAdmissionPage = () => {
           )}
         </div>
       </section>
+
+      {/* Admission Booking Modal */}
+      <AdmissionBookingModal
+        isOpen={showBookingModal}
+        onClose={() => {
+          setShowBookingModal(false);
+          setSelectedInstitution(null);
+        }}
+        institution={selectedInstitution}
+        institutionType="school"
+      />
     </div>
   );
 };
