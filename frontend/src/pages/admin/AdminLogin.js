@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FiUser, FiLock, FiShield } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -25,8 +23,8 @@ const AdminLogin = () => {
       localStorage.setItem('adminToken', response.data.access_token);
       localStorage.setItem('adminUser', JSON.stringify(response.data.user));
       
-      // Redirect to admin dashboard
-      navigate('/admin/dashboard');
+      // Redirect to admin dashboard using full page reload (React Router v7 workaround)
+      window.location.href = '/admin/dashboard';
     } catch (err) {
       setError(err.response?.data?.detail || 'Invalid credentials');
     } finally {
