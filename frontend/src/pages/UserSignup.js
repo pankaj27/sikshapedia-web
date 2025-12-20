@@ -294,8 +294,6 @@ const UserSignup = () => {
               ))}
             </div>
           )}
-            </div>
-          </div>
         </div>
       </div>
       
@@ -305,7 +303,7 @@ const UserSignup = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-6">
             <Link to="/">
-              <img src="/favicon.png" alt="Admission Buddy" className="h-14 mx-auto mb-4" />
+              <img src={content.logo_url} alt="Admission Buddy" className="h-14 mx-auto mb-4" />
             </Link>
           </div>
           
@@ -319,8 +317,8 @@ const UserSignup = () => {
           {step === 'email' && (
             <>
               <div className="text-center mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Create Account</h2>
-                <p className="text-gray-500 mt-2">Join thousands of students finding their dream college</p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{content.form_title}</h2>
+                <p className="text-gray-500 mt-2">{content.form_subtitle}</p>
               </div>
               
               {/* Google Login Button */}
