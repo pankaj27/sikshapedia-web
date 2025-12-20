@@ -118,9 +118,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {topExams.map((exam, idx) => (
                 <li key={idx}>
-                  <Link to={exam.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={exam.link} className="text-sm hover:text-orange-500 transition-colors">
                     {exam.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -132,9 +132,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {topColleges.map((college, idx) => (
                 <li key={idx}>
-                  <Link to={college.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={college.link} className="text-sm hover:text-orange-500 transition-colors">
                     {college.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -146,9 +146,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {topCourses.map((course, idx) => (
                 <li key={idx}>
-                  <Link to={course.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={course.link} className="text-sm hover:text-orange-500 transition-colors">
                     {course.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -160,9 +160,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {studyAbroad.map((country, idx) => (
                 <li key={idx}>
-                  <Link to={country.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={country.link} className="text-sm hover:text-orange-500 transition-colors">
                     {country.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -174,9 +174,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {resources.map((resource, idx) => (
                 <li key={idx}>
-                  <Link to={resource.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={resource.link} className="text-sm hover:text-orange-500 transition-colors">
                     {resource.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -188,9 +188,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {quickLinks.map((link, idx) => (
                 <li key={idx}>
-                  <Link to={link.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={link.link} className="text-sm hover:text-orange-500 transition-colors">
                     {link.name}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -204,11 +204,11 @@ const Footer = () => {
               <h4 className="text-white font-bold text-lg mb-1">Are you an Institution?</h4>
               <p className="text-gray-400 text-sm">Manage your leads, applications and analytics from your dashboard</p>
             </div>
-            <Link to="/institute/login">
+            <NavLink to="/institute/login">
               <Button className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap">
                 Institute Login →
               </Button>
-            </Link>
+            </NavLink>
           </div>
         </div>
       </div>
