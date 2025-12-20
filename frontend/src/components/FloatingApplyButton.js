@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { FiEdit3 } from 'react-icons/fi';
 import ApplyNowModal from './ApplyNowModal';
 import api from '../api/axios';
@@ -6,6 +7,7 @@ import api from '../api/axios';
 const FloatingApplyButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [settings, setSettings] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -18,6 +20,11 @@ const FloatingApplyButton = () => {
     };
     fetchSettings();
   }, []);
+
+  // Don't render on admin or institute pages
+  if (location.pathname.startsWith('/admin') || location.pathname.startsWith('/institute')) {
+    return null;
+  }
 
   // Don't render if floating CTA is explicitly disabled (default to true)
   if (settings && settings.show_floating_cta === false) {
