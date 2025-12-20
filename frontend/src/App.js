@@ -335,12 +335,10 @@ function App() {
                   {/* Stream-based Listings (2 segments) - e.g., /btech/computer-science or /btech/west-bengal */}
                   <Route path="/:stream/:subStreamOrLocation" element={<DynamicListingPage />} />
                   
-                  {/* Single segment dynamic routes - e.g., /delhi-colleges, /btech, /engineering */}
-                  <Route path="/:locationOrStream" element={<DynamicListingPage />} />
-                </Routes>
-                <FloatingApplyButton />
-              </Layout>
-            } />
+              {/* Single segment dynamic routes - e.g., /delhi-colleges, /btech, /engineering */}
+              <Route path="/:locationOrStream" element={<DynamicListingPage />} />
+            </Route>
+            <FloatingApplyButton />
           </Routes>
           </BrowserRouter>
         </CollegeProvider>
