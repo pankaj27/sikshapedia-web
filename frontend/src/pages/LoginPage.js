@@ -1,17 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiMail, FiLock, FiLoader, FiArrowRight, FiSmartphone } from 'react-icons/fi';
+import { FiMail, FiLock, FiLoader, FiArrowRight } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
+import api from '../api/axios';
 
 import { Link } from '../components/CustomLink';
+
+// Default content (used while loading or if API fails)
+const DEFAULT_CONTENT = {
+  logo_url: "/favicon.png",
+  heading: "Welcome Back!",
+  subheading: "Sign in to access your dashboard and track your college applications",
+  gradient_from: "blue-600",
+  gradient_via: "blue-700",
+  gradient_to: "indigo-800",
+  stats: [
+    { value: "10K+", label: "Colleges" },
+    { value: "50K+", label: "Students" },
+    { value: "500+", label: "Courses" }
+  ],
+  benefits: [],
+  form_title: "Sign In",
+  form_subtitle: "Enter your credentials to continue",
+  footer_text: "Don't have an account?",
+  footer_link_text: "Create Account",
+  footer_link_url: "/signup",
+  show_institute_login: true,
+  institute_login_text: "Are you an institution?",
+  institute_login_link_text: "Institute Login →"
+};
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState(DEFAULT_CONTENT);
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
+
+  const fetchContent = async () => {
+    try {
+      const response = await api.get('/admin/auth-pages/login');
+      if (response.data?.content) {
+        setContent({ ...DEFAULT_CONTENT, ...response.data.content });
+      }
+    } catch (err) {
+      console.log('Using default login content');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,10 +76,13 @@ const LoginPage = () => {
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
+  // Build gradient class dynamically
+  const gradientClass = `bg-gradient-to-br from-${content.gradient_from} via-${content.gradient_via || content.gradient_from} to-${content.gradient_to}`;
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Left Side - Illustration/Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 relative overflow-hidden">
+      <div className={`hidden lg:flex lg:w-1/2 ${gradientClass} relative overflow-hidden`}>
         {/* Background Pattern */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
@@ -48,28 +93,38 @@ const LoginPage = () => {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-white">
           <Link to="/">
-            <img src="/favicon.png" alt="Admission Buddy" className="h-20 mb-8" />
+            <img src={content.logo_url} alt="Admission Buddy" className="h-20 mb-8" />
           </Link>
-          <h1 className="text-4xl font-bold mb-4 text-center">Welcome Back!</h1>
+          <h1 className="text-4xl font-bold mb-4 text-center">{content.heading}</h1>
           <p className="text-xl text-blue-100 text-center max-w-md">
-            Sign in to access your dashboard and track your college applications
+            {content.subheading}
           </p>
           
           {/* Stats */}
-          <div className="mt-12 grid grid-cols-3 gap-8 text-center">
-            <div>
-              <p className="text-3xl font-bold">10K+</p>
-              <p className="text-blue-200 text-sm">Colleges</p>
+          {content.stats && content.stats.length > 0 && (
+            <div className="mt-12 grid grid-cols-3 gap-8 text-center">
+              {content.stats.map((stat, idx) => (
+                <div key={idx}>
+                  <p className="text-3xl font-bold">{stat.value}</p>
+                  <p className="text-blue-200 text-sm">{stat.label}</p>
+                </div>
+              ))}
             </div>
-            <div>
-              <p className="text-3xl font-bold">50K+</p>
-              <p className="text-blue-200 text-sm">Students</p>
+          )}
+          
+          {/* Benefits (if any) */}
+          {content.benefits && content.benefits.length > 0 && (
+            <div className="mt-12 space-y-4 text-left max-w-sm">
+              {content.benefits.map((benefit, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    ✓
+                  </div>
+                  <span>{benefit.text}</span>
+                </div>
+              ))}
             </div>
-            <div>
-              <p className="text-3xl font-bold">500+</p>
-              <p className="text-blue-200 text-sm">Courses</p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
       
@@ -79,13 +134,13 @@ const LoginPage = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
             <Link to="/">
-              <img src="/favicon.png" alt="Admission Buddy" className="h-14 mx-auto mb-4" />
+              <img src={content.logo_url} alt="Admission Buddy" className="h-14 mx-auto mb-4" />
             </Link>
           </div>
           
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Sign In</h2>
-            <p className="text-gray-500 mt-2">Enter your credentials to continue</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{content.form_title}</h2>
+            <p className="text-gray-500 mt-2">{content.form_subtitle}</p>
           </div>
           
           {error && (
@@ -156,22 +211,24 @@ const LoginPage = () => {
           {/* Divider */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-center text-gray-600">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-semibold">
-                Create Account
+              {content.footer_text}{' '}
+              <Link to={content.footer_link_url || '/signup'} className="text-blue-600 hover:text-blue-700 font-semibold">
+                {content.footer_link_text}
               </Link>
             </p>
           </div>
           
           {/* Institute Login Link */}
-          <div className="mt-6 p-4 bg-gray-100 rounded-xl text-center">
-            <p className="text-sm text-gray-600">
-              Are you an institution?{' '}
-              <Link to="/institute/login" className="text-blue-600 hover:text-blue-700 font-semibold">
-                Institute Login →
-              </Link>
-            </p>
-          </div>
+          {content.show_institute_login && (
+            <div className="mt-6 p-4 bg-gray-100 rounded-xl text-center">
+              <p className="text-sm text-gray-600">
+                {content.institute_login_text}{' '}
+                <Link to="/institute/login" className="text-blue-600 hover:text-blue-700 font-semibold">
+                  {content.institute_login_link_text}
+                </Link>
+              </p>
+            </div>
+          )}
           
           {/* Back to Home */}
           <p className="mt-6 text-center">
