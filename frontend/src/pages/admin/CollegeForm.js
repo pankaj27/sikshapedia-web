@@ -66,7 +66,6 @@ const getMenuIconById = (iconId) => {
   return found ? found.icon : <FiBookmark size={16} />;
 };
 import { generateSlug } from '../../utils/slugify';
-import AdminLayout from '../../components/admin/AdminLayout';
 
 // Compact Collapsible Section Component
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null, badge = null }) => {
