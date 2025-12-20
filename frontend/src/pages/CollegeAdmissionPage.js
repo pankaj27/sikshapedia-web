@@ -69,6 +69,7 @@ const CollegeAdmissionPage = () => {
         let admissionsData = collegesData.map(college => ({
           id: college.id,
           name: college.name,
+          slug: college.slug,
           location: { 
             city: college.city || 'Unknown', 
             state: college.state || 'Unknown' 
@@ -82,6 +83,8 @@ const CollegeAdmissionPage = () => {
           rating: college.rating || 4.0,
           description: college.short_description || college.description?.substring(0, 150) || `${college.name} offers quality education with excellent facilities.`,
           is_admission_open: college.is_admission_open || false,
+          is_admission_partner: college.is_admission_partner || false,
+          logo: college.logo,
           serial_number: college.serial_number
         }));
         
