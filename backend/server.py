@@ -6940,36 +6940,8 @@ async def delete_news(news_id: str):
 # ============================================
 # Additional Admin CRUD Routes
 # ============================================
-
-@api_router.put("/schools/{school_id}", response_model=School)
-async def update_school(school_id: str, school: School):
-    """Update a school (admin only)"""
-    school_dict = school.model_dump()
-    await db.schools.update_one({"id": school_id}, {"$set": school_dict})
-    return school
-
-@api_router.delete("/schools/{school_id}")
-async def delete_school(school_id: str):
-    """Delete a school (admin only)"""
-    result = await db.schools.delete_one({"id": school_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="School not found")
-    return {"success": True}
-
-@api_router.put("/universities/{university_id}", response_model=University)
-async def update_university(university_id: str, university: University):
-    """Update a university (admin only)"""
-    university_dict = university.model_dump()
-    await db.universities.update_one({"id": university_id}, {"$set": university_dict})
-    return university
-
-@api_router.delete("/universities/{university_id}")
-async def delete_university(university_id: str):
-    """Delete a university (admin only)"""
-    result = await db.universities.delete_one({"id": university_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="University not found")
-    return {"success": True}
+# Schools PUT/DELETE moved to routes/schools.py
+# Universities PUT/DELETE moved to routes/universities.py
 
 @api_router.patch("/reviews/{review_id}/approve")
 async def approve_review(review_id: str):
