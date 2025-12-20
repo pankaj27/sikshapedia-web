@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import api from '../api/axios';
@@ -22,7 +22,6 @@ const INDIA_CITIES = [
 ];
 
 const UserSignup = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
   const [step, setStep] = useState('email'); // email, otp, details
