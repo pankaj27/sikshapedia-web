@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Link } from '../components/CustomLink';
 import { 
   FiUsers, FiFileText, FiBarChart2, FiTrendingUp, FiLogOut,
@@ -10,7 +9,6 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 
 const InstituteDashboard = () => {
-  const navigate = useNavigate();
   const [institution, setInstitution] = useState(null);
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
