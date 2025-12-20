@@ -355,12 +355,28 @@ function App() {
               {/* These are catch-all routes that match patterns */}
               {/* ============================================ */}
                   
-              {/* India-wide Institution Listings */}
-              <Route path="/india-colleges" element={<DynamicListingPage />} />
+              {/* NEW URL STRUCTURE - Institution Listings */}
+              {/* /university, /colleges, /schools base routes */}
+              <Route path="/university" element={<DynamicListingPage />} />
+              <Route path="/university/:seg1" element={<DynamicListingPage />} />
+              <Route path="/university/:seg1/:seg2" element={<DynamicListingPage />} />
+              <Route path="/university/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
+              
+              <Route path="/colleges" element={<DynamicListingPage />} />
+              <Route path="/colleges/:seg1" element={<DynamicListingPage />} />
+              <Route path="/colleges/:seg1/:seg2" element={<DynamicListingPage />} />
+              <Route path="/colleges/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
+              
+              <Route path="/schools" element={<DynamicListingPage />} />
+              <Route path="/schools/:seg1" element={<DynamicListingPage />} />
+              <Route path="/schools/:seg1/:seg2" element={<DynamicListingPage />} />
+              
+              {/* Legacy routes - redirect to new structure */}
+              <Route path="/india-colleges" element={<Navigate to="/colleges" replace />} />
               <Route path="/india-colleges/:stream" element={<DynamicListingPage />} />
-              <Route path="/india-schools" element={<DynamicListingPage />} />
+              <Route path="/india-schools" element={<Navigate to="/schools" replace />} />
               <Route path="/india-schools/:stream" element={<DynamicListingPage />} />
-              <Route path="/india-universities" element={<DynamicListingPage />} />
+              <Route path="/india-universities" element={<Navigate to="/university" replace />} />
               <Route path="/india-universities/:stream" element={<DynamicListingPage />} />
                   
               {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
