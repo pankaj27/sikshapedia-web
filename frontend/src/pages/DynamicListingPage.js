@@ -1049,7 +1049,7 @@ const DynamicListingPage = () => {
     // If type is already selected (from URL), remove it by going back to base URL
     if (activeFilters.collegeType === type) {
       const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
-      navigate(`/${baseSuffix}`);
+      window.location.href = `/${baseSuffix}`;
       return;
     }
     // Otherwise, navigate to the type URL
