@@ -36,8 +36,11 @@ const InstituteLogin = () => {
         alert('Please change your password for security.');
       }
       
-      // Use full page reload for navigation (React Router v7 workaround)
-      window.location.href = '/institute/dashboard';
+      // Use setTimeout to ensure localStorage is saved before navigation
+      // This also helps avoid the React render loop interrupting the redirect
+      setTimeout(() => {
+        window.location.replace('/institute/dashboard');
+      }, 100);
     } catch (err) {
       setError(err.response?.data?.detail || 'Login failed');
     } finally {
