@@ -545,82 +545,11 @@ const UserDashboard = () => {
             
             {/* Earnings Tab */}
             {activeTab === 'earnings' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-bold">Earnings & Rewards</h2>
-                
-                {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
-                    <h3 className="text-sm opacity-90 mb-1">Total Points</h3>
-                    <p className="text-3xl font-bold">{earnings.total_points || 0}</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
-                    <h3 className="text-sm opacity-90 mb-1">Review Earnings</h3>
-                    <p className="text-3xl font-bold">₹{earnings.review_earnings || 0}</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
-                    <h3 className="text-sm opacity-90 mb-1">Referral Earnings</h3>
-                    <p className="text-3xl font-bold">₹{earnings.referral_earnings || 0}</p>
-                  </div>
-                </div>
-                
-                {/* How to Earn */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h3 className="font-bold mb-3 flex items-center gap-2">
-                      <FiStar className="text-yellow-500" /> Review Rewards
-                    </h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>• Write a review: ₹50</li>
-                      <li>• Detailed review (200+ words): ₹100</li>
-                      <li>• Verified student: +₹50 bonus</li>
-                      <li>• Include photos: +₹30 bonus</li>
-                    </ul>
-                  </div>
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h3 className="font-bold mb-3 flex items-center gap-2">
-                      <FiGift className="text-purple-500" /> Referral Rewards
-                    </h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>• Each successful referral: ₹200</li>
-                      <li>• Your friend gets: ₹100</li>
-                      <li>• Your code: <strong>{dashboard?.referral_code}</strong></li>
-                    </ul>
-                  </div>
-                </div>
-                
-                {/* Transactions */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h3 className="font-bold mb-4">Transaction History</h3>
-                  {earnings.transactions?.length > 0 ? (
-                    <div className="space-y-3">
-                      {earnings.transactions.map((tx) => (
-                        <div key={tx.id} className="flex items-center justify-between p-3 border rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              tx.type === 'review' ? 'bg-yellow-100' : 'bg-purple-100'
-                            }`}>
-                              {tx.type === 'review' ? 
-                                <FiStar className="text-yellow-600" /> : 
-                                <FiGift className="text-purple-600" />
-                              }
-                            </div>
-                            <div>
-                              <p className="font-medium">{tx.description}</p>
-                              <p className="text-xs text-gray-500">
-                                {new Date(tx.created_at).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-lg font-bold text-green-600">+₹{tx.amount}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-center text-gray-500 py-8">No transactions yet</p>
-                  )}
-                </div>
-              </div>
+              <EarningsTab 
+                dashboard={dashboard} 
+                earnings={earnings} 
+                onRefresh={() => fetchTabData('earnings')} 
+              />
             )}
             
             {/* Share Tab */}
