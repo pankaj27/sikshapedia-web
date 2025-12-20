@@ -1170,29 +1170,42 @@ class APITester:
             self.log_test("GET /admission/admin/bookings (with admin auth)", False, "Admin token not available")
         
         # Test 9: Create a test user for user-specific tests
-        test_user_data = {
-            "email": "testuser.admission@example.com",
-            "password": "testpass123",
-            "name": "Test Admission User"
-        }
+        test_user_email = "testuser.admission@example.com"
         
-        success, response, status = self.make_request("POST", "/auth/user/signup", test_user_data)
-        if success and "access_token" in response:
-            self.user_token = response["access_token"]
-            self.log_test("Create Test User for Admission", True, 
-                         f"User created: {response.get('user', {}).get('name')}")
-        else:
-            # Try to login if user already exists
-            login_data = {"email": test_user_data["email"], "password": test_user_data["password"]}
-            success, response, status = self.make_request("POST", "/auth/user/login", login_data)
-            if success and "access_token" in response:
-                self.user_token = response["access_token"]
-                self.log_test("Login Test User for Admission", True, 
-                             f"User logged in: {response.get('user', {}).get('name')}")
+        # Step 1: Send OTP
+        otp_request = {"email": test_user_email}
+        success, response, status = self.make_request("POST", "/auth/user/send-otp", otp_request)
+        if success:
+            self.log_test("Send OTP for Test User", True, f"OTP sent to {test_user_email}")
+            
+            # Step 2: Try to verify with a test OTP (this will likely fail, but we can check the flow)
+            verify_request = {"email": test_user_email, "otp": "123456"}
+            success, response, status = self.make_request("POST", "/auth/user/verify-otp", verify_request)
+            
+            if response.get("status") == "pending_signup":
+                self.log_test("OTP Verification Flow", True, "User needs to complete signup")
+                
+                # Step 3: Complete signup (this will also likely fail without valid OTP, but we test the endpoint)
+                signup_data = {
+                    "name": "Test Admission User",
+                    "email": test_user_email,
+                    "phone": "9876543210",
+                    "city": "Mumbai",
+                    "course": "B.Tech Computer Science"
+                }
+                success, response, status = self.make_request("POST", "/auth/user/complete-signup", signup_data)
+                if success and "session_token" in response:
+                    self.user_token = response["session_token"]
+                    self.log_test("Complete User Signup", True, f"User created: {response.get('user', {}).get('name')}")
+                else:
+                    self.log_test("Complete User Signup", False, f"Status: {status} - Expected without valid OTP verification")
+                    self.user_token = None
             else:
-                self.log_test("Create/Login Test User for Admission", False, 
-                             f"Status: {status}", response)
+                self.log_test("OTP Verification Flow", False, f"Unexpected response: {response}")
                 self.user_token = None
+        else:
+            self.log_test("Send OTP for Test User", False, f"Status: {status}", response)
+            self.user_token = None
         
         # Test 10: GET /api/admission/my-bookings (user auth required - should fail without auth)
         success, response, status = self.make_request("GET", "/admission/my-bookings")
