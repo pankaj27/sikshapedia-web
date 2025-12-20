@@ -174,12 +174,12 @@ const DynamicListingPage = () => {
       titleParts.push(typeName);
       
       // Add location
-      if (urlInfo.filters.city && urlInfo.filters.state) {
-        titleParts.push(`in ${urlInfo.filters.city}, ${urlInfo.filters.state}`);
-      } else if (urlInfo.filters.city) {
-        titleParts.push(`in ${urlInfo.filters.city}`);
-      } else if (urlInfo.filters.state) {
-        titleParts.push(`in ${urlInfo.filters.state}`);
+      if (filters.city && filters.state) {
+        titleParts.push(`in ${filters.city}, ${filters.state}`);
+      } else if (filters.city) {
+        titleParts.push(`in ${filters.city}`);
+      } else if (filters.state) {
+        titleParts.push(`in ${filters.state}`);
       } else {
         titleParts.push('in India');
       }
@@ -203,7 +203,7 @@ const DynamicListingPage = () => {
         city: urlInfo.city,
         location: urlInfo.city || urlInfo.state,
         locationType: urlInfo.city ? 'city' : urlInfo.state ? 'state' : null,
-        filters: urlInfo.filters,
+        filters: filters,
         isSchools,
         isUniversity
       };
