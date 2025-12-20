@@ -950,101 +950,94 @@ const DynamicListingPage = () => {
     return queryString ? `${basePath}?${queryString}` : basePath;
   };
 
-  // Handle filter selection - Navigate to SEO-friendly URLs with combined filters
+  // Handle filter selection - Navigate to NEW SEO-friendly URL structure
+  // NEW URL format: /colleges/{state}, /colleges/{stream}, /colleges/{state}/{stream}, etc.
   const handleFilterSelect = (filterType, value) => {
     setActiveFilterDropdown(null);
     
-    const suffix = pageInfo.isSchools ? 'schools' : 'colleges';
-    const currentStream = activeFilters.stream || activeFilters.subStream;
-    const currentState = activeFilters.state;
-    const currentCity = activeFilters.city;
-    const currentCollegeType = activeFilters.collegeType;
-    const currentAccreditation = activeFilters.accreditation;
+    // Determine base path based on institution type
+    const baseSuffix = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'schools' : 'colleges';
     
-    // Build combined URL based on selected filter and existing filters
+    // Get current filters from URL
+    const currentStream = urlInfo.stream;
+    const currentState = urlInfo.state;
+    const currentCity = urlInfo.city;
+    const currentCourse = urlInfo.course;
+    
+    // Build URL path segments
+    let pathSegments = [baseSuffix];
+    
+    // Helper to build the final URL
+    const buildNewUrl = (state, city, stream, course) => {
+      let segments = [baseSuffix];
+      
+      // Priority order for URL segments: location first, then academic filters
+      // Pattern: /colleges/{state}/{city}/{stream}/{course}
+      // But we support various combinations
+      
+      if (state) segments.push(generateSlug(state));
+      if (city && !state) segments.push(generateSlug(city)); // City only if no state (cities are under states)
+      if (stream) segments.push(generateSlug(stream));
+      if (course) segments.push(generateSlug(course));
+      
+      return '/' + segments.join('/');
+    };
+    
+    // Handle STATE filter
     if (filterType === 'state') {
-      const stateSlug = generateSlug(value);
-      let basePath;
-      // If stream is selected, combine: /engineering/maharashtra-colleges
-      if (currentStream) {
-        basePath = `/${generateSlug(currentStream)}/${stateSlug}-${suffix}`;
-      } else if (currentCollegeType) {
-        basePath = `/${TYPE_TO_SLUG[currentCollegeType] || generateSlug(currentCollegeType)}/${stateSlug}-${suffix}`;
-      } else if (currentAccreditation) {
-        basePath = `/${ACCREDITATION_TO_SLUG[currentAccreditation] || generateSlug(currentAccreditation)}/${stateSlug}-${suffix}`;
-      } else {
-        basePath = `/${stateSlug}-${suffix}`;
-      }
-      navigate(buildUrlWithQueryParams(basePath));
+      const newState = value;
+      // Keep existing stream/course, clear city (city changes with state)
+      const newUrl = buildNewUrl(newState, null, currentStream, currentCourse);
+      navigate(buildUrlWithQueryParams(newUrl));
       return;
     }
     
+    // Handle CITY filter
     if (filterType === 'city') {
-      const citySlug = generateSlug(value);
-      let basePath;
-      // If stream is selected, combine: /engineering/mumbai-colleges
-      if (currentStream) {
-        basePath = `/${generateSlug(currentStream)}/${citySlug}-${suffix}`;
-      } 
-      // If state is selected, combine: /maharashtra/mumbai-colleges
-      else if (currentState) {
-        basePath = `/${generateSlug(currentState)}/${citySlug}-${suffix}`;
-      } else {
-        basePath = `/${citySlug}-${suffix}`;
-      }
-      navigate(buildUrlWithQueryParams(basePath));
+      const newCity = value;
+      // Keep existing state, stream, course
+      const newUrl = buildNewUrl(currentState, newCity, currentStream, currentCourse);
+      navigate(buildUrlWithQueryParams(newUrl));
       return;
     }
     
-    // Stream filter
+    // Handle STREAM filter
     if (filterType === 'stream' || filterType === 'subStream') {
-      const streamSlug = generateSlug(value);
-      let basePath;
-      // If state or city is selected, combine: /engineering/maharashtra-colleges
-      if (currentState) {
-        basePath = `/${streamSlug}/${generateSlug(currentState)}-${suffix}`;
-      } else if (currentCity) {
-        basePath = `/${streamSlug}/${generateSlug(currentCity)}-${suffix}`;
-      } else {
-        // Navigate to /colleges/engineering format
-        basePath = `/india-${suffix}/${streamSlug}`;
-      }
-      navigate(buildUrlWithQueryParams(basePath));
+      const newStream = value;
+      // Keep existing location, update stream
+      const newUrl = buildNewUrl(currentState, currentCity, newStream, currentCourse);
+      navigate(buildUrlWithQueryParams(newUrl));
       return;
     }
     
-    // Type filter - SEO URL (e.g., /government-colleges)
+    // Handle COURSE filter (add to URL path)
+    if (filterType === 'course') {
+      const newCourse = value;
+      // Keep existing filters, add course
+      const newUrl = buildNewUrl(currentState, currentCity, currentStream, newCourse);
+      navigate(buildUrlWithQueryParams(newUrl));
+      return;
+    }
+    
+    // Handle collegeType, accreditation as query params (not in path)
     if (filterType === 'collegeType') {
-      const typeSlug = TYPE_TO_SLUG[value] || generateSlug(value);
-      let basePath;
-      if (currentState) {
-        basePath = `/${typeSlug}/${generateSlug(currentState)}-${suffix}`;
-      } else if (currentCity) {
-        basePath = `/${typeSlug}/${generateSlug(currentCity)}-${suffix}`;
-      } else {
-        basePath = `/${typeSlug}-${suffix}`;
-      }
-      navigate(buildUrlWithQueryParams(basePath));
+      const currentPath = location.pathname;
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('type', generateSlug(value));
+      navigate(`${currentPath}?${queryParams.toString()}`);
       return;
     }
     
-    // Accreditation filter - SEO URL (e.g., /naac-a-plus-colleges)
     if (filterType === 'accreditation') {
-      const accredSlug = ACCREDITATION_TO_SLUG[value] || generateSlug(value);
-      let basePath;
-      if (currentState) {
-        basePath = `/${accredSlug}/${generateSlug(currentState)}-${suffix}`;
-      } else if (currentCity) {
-        basePath = `/${accredSlug}/${generateSlug(currentCity)}-${suffix}`;
-      } else {
-        basePath = `/${accredSlug}-${suffix}`;
-      }
-      navigate(buildUrlWithQueryParams(basePath));
+      const currentPath = location.pathname;
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set('accreditation', ACCREDITATION_TO_SLUG[value] || generateSlug(value));
+      navigate(`${currentPath}?${queryParams.toString()}`);
       return;
     }
     
-    // Secondary filters - Query parameters (course, degreeType, examAccepted, affiliation, recognition)
-    if (['course', 'degreeType', 'examAccepted', 'affiliation', 'recognition'].includes(filterType)) {
+    // Secondary filters - Query parameters (degreeType, examAccepted, affiliation, recognition)
+    if (['degreeType', 'examAccepted', 'affiliation', 'recognition'].includes(filterType)) {
       const currentPath = location.pathname;
       navigate(buildUrlWithQueryParams(currentPath, { type: filterType, value }));
       return;
