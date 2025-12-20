@@ -1201,58 +1201,70 @@ const CollegeForm = () => {
   }
 
   return (
-    <AdminLayout>
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-20 bg-white border-b shadow-sm">
-        <div className="px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-bold text-gray-900">
-              {id ? 'Edit Institution' : 'Add New Institution'}
-            </h1>
-            <select
-              name="institution_type"
-              value={formData.institution_type}
-              onChange={handleChange}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
-            >
-              <option value="College">🎓 College</option>
-              <option value="School">🏫 School</option>
-              <option value="University">🏛️ University</option>
-            </select>
-            {formData.name && (
-              <span className="text-sm text-gray-500">— {formData.name}</span>
-            )}
-            {/* Status Badge */}
-            {id && <StatusBadge status={formData.status || 'draft'} size="sm" />}
-          </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              type="button"
-              variant="outline" 
-              size="sm"
-              onClick={() => navigate('/admin/colleges')}
-            >
-              <FiX className="w-4 h-4" />
-            </Button>
-            <Button 
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={saving}
-              onClick={() => {
-                setFormData(prev => ({...prev, status: 'draft'}));
-                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
-              }}
-              className="border-gray-300 text-gray-700 hover:bg-gray-100"
-            >
-              {saving && formData.status === 'draft' ? <FiLoader className="w-4 h-4 animate-spin" /> : <FiFileText className="w-4 h-4" />}
-              <span className="ml-1">Save Draft</span>
-            </Button>
+    <div className="min-h-screen bg-gray-50">
+      {/* Clean Header without Sidebar */}
+      <div className="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {id ? 'Edit Institution' : 'Add New Institution'}
+              </h1>
+              <select
+                name="institution_type"
+                value={formData.institution_type}
+                onChange={handleChange}
+                className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white font-medium"
+              >
+                <option value="College">🎓 College</option>
+                <option value="School">🏫 School</option>
+                <option value="University">🏛️ University</option>
+              </select>
+              {formData.name && (
+                <span className="text-sm text-gray-500 hidden md:inline">— {formData.name}</span>
+              )}
+              {id && <StatusBadge status={formData.status || 'draft'} />}
+            </div>
+            <div className="flex items-center gap-3">
+              <Button 
+                type="button"
+                variant="outline" 
+                onClick={() => window.location.href = '/admin/colleges'}
+                className="text-gray-600"
+              >
+                <FiX className="w-4 h-4 mr-2" /> Cancel
+              </Button>
+              <Button 
+                type="button"
+                variant="outline"
+                disabled={saving}
+                onClick={() => {
+                  setFormData(prev => ({...prev, status: 'draft'}));
+                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                }}
+                className="border-orange-300 text-orange-600 hover:bg-orange-50"
+              >
+                {saving && formData.status === 'draft' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiFileText className="w-4 h-4 mr-2" />}
+                Save Draft
+              </Button>
+              <Button 
+                type="button"
+                disabled={saving}
+                onClick={() => {
+                  setFormData(prev => ({...prev, status: 'published'}));
+                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                {saving && formData.status === 'published' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
+                Save & Publish
+              </Button>
+            </div>
           </div>
         </div>
         
         {/* Quick Badges */}
-        <div className="px-4 py-2 bg-gray-50 border-t flex items-center gap-4 flex-wrap text-xs">
+        <div className="max-w-7xl mx-auto px-6 py-2 bg-gray-50 border-t flex items-center gap-4 flex-wrap text-xs">
           <label className="flex items-center gap-1.5 cursor-pointer">
             <input type="checkbox" checked={formData.is_verified} onChange={(e) => setFormData({...formData, is_verified: e.target.checked})} className="rounded text-blue-600" />
             <span>✅ Verified</span>
