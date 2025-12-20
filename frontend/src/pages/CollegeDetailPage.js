@@ -669,35 +669,37 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </div>
                     </section>
 
-                    {/* FEES - FROM TOC #02 */}
+                    {/* FEES - FROM TOC #02 - Guest Gated */}
                     <section id="seo-fees">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Fees 2026</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         The fee structure for various courses at {college.name}:
                       </p>
 
-                      <div className="overflow-x-auto mb-6">
-                        <table className="w-full border-collapse border">
-                          <thead>
-                            <tr className="bg-orange-50">
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="hover:bg-gray-50">
-                              <td className="border px-4 py-3">
-                                <Link to="#" className="text-blue-600 hover:underline font-medium">B.Tech</Link>
-                              </td>
-                              <td className="border px-4 py-3 text-sm">4 Years</td>
-                              <td className="border px-4 py-3 text-sm font-semibold">INR {(college.average_fees / 100000).toFixed(2)} Lakhs</td>
-                              <td className="border px-4 py-3 text-sm font-semibold">INR {((college.average_fees * 4) / 100000).toFixed(2)} Lakhs</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      <GuestGate title="Fee Details">
+                        <div className="overflow-x-auto mb-6">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-orange-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr className="hover:bg-gray-50">
+                                <td className="border px-4 py-3">
+                                  <Link to="#" className="text-blue-600 hover:underline font-medium">B.Tech</Link>
+                                </td>
+                                <td className="border px-4 py-3 text-sm">4 Years</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">INR {(college.average_fees / 100000).toFixed(2)} Lakhs</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">INR {((college.average_fees * 4) / 100000).toFixed(2)} Lakhs</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </GuestGate>
                     </section>
 
                     {/* RANKING - FROM TOC #03 */}
