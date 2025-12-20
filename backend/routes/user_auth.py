@@ -56,10 +56,18 @@ class OTPVerifyRequest(BaseModel):
 class GoogleSessionRequest(BaseModel):
     session_id: str
 
+class PaymentDetails(BaseModel):
+    upi_id: Optional[str] = None
+    bank_name: Optional[str] = None
+    account_holder: Optional[str] = None
+    account_number: Optional[str] = None
+    ifsc_code: Optional[str] = None
+
 class UserProfileUpdate(BaseModel):
     name: Optional[str] = None
     phone: Optional[str] = None
     city: Optional[str] = None
+    state: Optional[str] = None
     course: Optional[str] = None
     bio: Optional[str] = None
     profile_photo_url: Optional[str] = None
@@ -68,6 +76,7 @@ class UserProfileUpdate(BaseModel):
     address: Optional[str] = None
     education_level: Optional[str] = None
     preferred_courses: Optional[list] = None
+    payment_details: Optional[PaymentDetails] = None
 
 # ============ HELPER FUNCTIONS ============
 
