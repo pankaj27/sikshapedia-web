@@ -750,6 +750,116 @@ const UserDashboard = () => {
               </div>
             )}
             
+            {/* Admission Bookings Tab */}
+            {activeTab === 'admissions' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold">My Admission Applications</h2>
+                  <Link to="/admission/colleges">
+                    <Button className="bg-green-600 hover:bg-green-700 flex items-center gap-2">
+                      <FiPlus /> Book New Admission
+                    </Button>
+                  </Link>
+                </div>
+                
+                {admissionBookings.length === 0 ? (
+                  <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+                    <FiCheckCircle className="text-6xl text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">No Admission Bookings Yet</h3>
+                    <p className="text-gray-600 mb-4">Book your seat at admission partner institutions</p>
+                    <Link to="/admission/colleges">
+                      <Button className="bg-green-600 hover:bg-green-700">Browse Admission Partners</Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {admissionBookings.map((booking) => (
+                      <div key={booking.id} className="bg-white rounded-xl shadow-sm p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="text-lg font-bold">{booking.institution_name}</h3>
+                            <p className="text-gray-600">{booking.course_or_class}</p>
+                            <p className="text-sm text-gray-500">Application #{booking.id?.slice(0, 12)}</p>
+                          </div>
+                          {(() => {
+                            const statusConfig = {
+                              pending_payment: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: FiClock, label: 'Pending Payment' },
+                              submitted: { bg: 'bg-blue-100', text: 'text-blue-800', icon: FiClock, label: 'Submitted' },
+                              approved: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'Approved' },
+                              rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'Rejected' }
+                            };
+                            const config = statusConfig[booking.status] || statusConfig.submitted;
+                            const Icon = config.icon;
+                            return (
+                              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${config.bg} ${config.text}`}>
+                                <Icon size={14} /> {config.label}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+                          <div>
+                            <p className="text-gray-600">Student Name</p>
+                            <p className="font-medium">{booking.student_name}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Mobile</p>
+                            <p className="font-medium">{booking.mobile}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Amount Paid</p>
+                            <p className="font-medium text-green-600">₹{booking.total_amount}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Applied On</p>
+                            <p className="font-medium">{new Date(booking.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        
+                        {/* Payment Status */}
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-sm text-gray-600">Payment:</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            booking.payment_status === 'completed' 
+                              ? 'bg-green-100 text-green-700' 
+                              : 'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            {booking.payment_status === 'completed' ? '✓ Paid' : 'Pending'}
+                          </span>
+                        </div>
+                        
+                        {/* Institution Comments */}
+                        {booking.institution_comments && (
+                          <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <p className="text-sm font-medium text-blue-800 mb-1">Institution Comments:</p>
+                            <p className="text-sm text-blue-700">{booking.institution_comments}</p>
+                          </div>
+                        )}
+                        
+                        {/* Status History */}
+                        {booking.status_history && booking.status_history.length > 0 && (
+                          <div className="mt-4 pt-4 border-t">
+                            <p className="text-sm font-medium text-gray-700 mb-2">Status History:</p>
+                            <div className="space-y-1">
+                              {booking.status_history.slice(-3).map((history, index) => (
+                                <div key={index} className="text-xs text-gray-500 flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-gray-300"></span>
+                                  <span className="capitalize">{history.status.replace('_', ' ')}</span>
+                                  <span>-</span>
+                                  <span>{new Date(history.timestamp).toLocaleString()}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            
             {/* Referrals Tab */}
             {activeTab === 'referrals' && (
               <div className="space-y-6">
