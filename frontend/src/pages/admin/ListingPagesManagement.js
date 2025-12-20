@@ -156,20 +156,26 @@ const ListingPagesManagement = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-2 mb-6">
-          {pageTypes.slice(1).map(type => {
-            const count = pages.filter(p => p.page_type === type.value).length;
-            return (
-              <div 
-                key={type.value} 
-                className="bg-white rounded-lg shadow p-2 text-center cursor-pointer hover:bg-gray-50"
-                onClick={() => setFilterType(type.value)}
-              >
-                <div className="text-lg font-bold text-gray-800">{count}</div>
-                <div className="text-xs text-gray-500 truncate">{type.label}</div>
-              </div>
-            );
-          })}
+        <div className="bg-white rounded-lg shadow p-4 mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="font-semibold text-gray-700">Page Statistics</h3>
+            <span className="text-sm text-gray-500">Total: <span className="font-bold text-orange-600">{totalCount.toLocaleString()}</span> pages</span>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-11 gap-2">
+            {pageTypes.slice(1).map(type => {
+              const count = pageStats[type.value] || 0;
+              return (
+                <div 
+                  key={type.value} 
+                  className={`rounded-lg p-2 text-center cursor-pointer transition-colors ${filterType === type.value ? 'bg-orange-100 border-2 border-orange-500' : 'bg-gray-50 hover:bg-gray-100'}`}
+                  onClick={() => setFilterType(type.value)}
+                >
+                  <div className="text-lg font-bold text-gray-800">{count}</div>
+                  <div className="text-xs text-gray-500 truncate" title={type.label}>{type.label}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Pages List */}
