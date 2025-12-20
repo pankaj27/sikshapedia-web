@@ -7813,6 +7813,7 @@ try:
     from routes.schools import router as schools_router, set_database as set_schools_db
     from routes.universities import router as universities_router, set_database as set_universities_db
     from routes.colleges import router as colleges_router, set_database as set_colleges_db
+    from routes.courses_exams import router as courses_exams_router, set_database as set_courses_exams_db
     
     # Set database for modular routers
     set_leads_db(db)
@@ -7832,6 +7833,7 @@ try:
     set_schools_db(db)
     set_universities_db(db)
     set_colleges_db(db)
+    set_courses_exams_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
