@@ -231,6 +231,14 @@ function App() {
             <Route path="/admin/lead-settings" element={<LeadSettings />} />
             <Route path="/admin/admission-bookings" element={<AdmissionBookingsManagement />} />
             <Route path="/admin/admission-partners/:type" element={<AdmissionPartnersList />} />
+            
+            {/* Rewards & Payments Routes */}
+            <Route path="/admin/rewards" element={<RewardsDashboard />} />
+            <Route path="/admin/rewards/pending-reviews" element={<PendingReviews />} />
+            <Route path="/admin/rewards/pending-answers" element={<PendingAnswers />} />
+            <Route path="/admin/rewards/redemptions" element={<RedemptionManagement />} />
+            <Route path="/admin/rewards/payments" element={<PaymentHistory />} />
+            <Route path="/admin/rewards/users-report" element={<UsersPointsReport />} />
 
             {/* Public Routes - With Layout */}
             <Route element={<LayoutWrapper />}>
