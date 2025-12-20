@@ -58,7 +58,25 @@ const UniversityAdmissionPage = () => {
       }
       
       const response = await api.get(`/universities?${params.toString()}`);
-      setAdmissions(response.data);
+      // Transform university data to include admission partner info
+      const universitiesData = Array.isArray(response.data) ? response.data : (response.data.universities || []);
+      const transformedData = universitiesData.map(uni => ({
+        id: uni.id,
+        name: uni.name,
+        slug: uni.slug,
+        location: { city: uni.city || 'Unknown', state: uni.state || 'Unknown' },
+        type: uni.university_type || uni.type || 'Central',
+        programs: uni.programs || ['Various Programs'],
+        average_fees: uni.average_fees || 200000,
+        admission_date: uni.admission_deadline || new Date().toISOString().split('T')[0],
+        deadline: uni.admission_deadline || '2025-03-31',
+        students: uni.total_students || 5000,
+        rating: uni.rating || 4.0,
+        description: uni.short_description || uni.description?.substring(0, 150) || `${uni.name} offers quality higher education.`,
+        is_admission_partner: uni.is_admission_partner || false,
+        logo: uni.logo
+      }));
+      setAdmissions(transformedData);
     } catch (error) {
       console.error('Error fetching admissions:', error);
       let filteredData = generateMockAdmissions();
