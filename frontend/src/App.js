@@ -130,6 +130,12 @@ import LeadsList from './pages/admin/LeadsList';
 import LeadSettings from './pages/admin/LeadSettings';
 import AdmissionBookingsManagement from './pages/admin/AdmissionBookingsManagement';
 import AdmissionPartnersList from './pages/admin/AdmissionPartnersList';
+import RewardsDashboard from './pages/admin/RewardsDashboard';
+import PendingReviews from './pages/admin/PendingReviews';
+import PendingAnswers from './pages/admin/PendingAnswers';
+import RedemptionManagement from './pages/admin/RedemptionManagement';
+import PaymentHistory from './pages/admin/PaymentHistory';
+import UsersPointsReport from './pages/admin/UsersPointsReport';
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
 import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
