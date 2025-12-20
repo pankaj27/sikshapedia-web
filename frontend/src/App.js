@@ -230,7 +230,7 @@ function App() {
               <Route path="/schools" element={<SchoolsPage />} />
               <Route path="/universities" element={<UniversitiesPage />} />
                   
-                  {/* Institution Detail Pages: /colleges/{number}-{slug} */}
+              {/* Institution Detail Pages: /colleges/{number}-{slug} */}
               <Route path="/colleges/:idSlug/:section" element={<CollegeSubPage />} />
               <Route path="/colleges/:idSlug" element={<InstitutionDetailPage />} />
               <Route path="/universities/:idSlug/:section" element={<CollegeSubPage />} />
@@ -238,22 +238,22 @@ function App() {
               <Route path="/schools/:idSlug/:section" element={<CollegeSubPage />} />
               <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
                   
-                  {/* Exams */}
+              {/* Exams */}
               <Route path="/exams" element={<ExamPage />} />
               <Route path="/exams-old" element={<ExamsPage />} />
               <Route path="/exams/:id/:section" element={<ExamSubPages />} />
               <Route path="/exams/:id" element={<ExamDetailPage />} />
                   
-                  {/* News */}
+              {/* News */}
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:id" element={<NewsDetailPage />} />
                   
-                  {/* Courses */}
+              {/* Courses */}
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/courses/after-10th" element={<DynamicCourseListingPage />} />
               <Route path="/courses/after-12th" element={<DynamicCourseListingPage />} />
               <Route path="/courses/diploma" element={<DynamicCourseListingPage />} />
-                  {/* Dynamic course listing pages */}
+              {/* Dynamic course listing pages */}
               <Route path="/courses/pg" element={<DynamicCourseListingPage />} />
               <Route path="/courses/phd" element={<DynamicCourseListingPage />} />
               <Route path="/courses/certificate" element={<DynamicCourseListingPage />} />
@@ -271,13 +271,13 @@ function App() {
               <Route path="/courses/:stream/:subStream" element={<CourseListingPage />} />
               <Route path="/courses/:slug" element={<CourseDetailPage />} />
                   
-                  {/* User & Dashboard - Old dashboard moved to /old-dashboard */}
+              {/* User & Dashboard - Old dashboard moved to /old-dashboard */}
               <Route path="/old-dashboard" element={<StudentDashboard />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/search" element={<GlobalSearchPage />} />
               <Route path="/write-review" element={<WriteReviewPage />} />
                   
-                  {/* Tools & Services */}
+              {/* Tools & Services */}
               <Route path="/eligibility-checker" element={<EligibilityChecker />} />
               <Route path="/study-abroad" element={<StudyAbroadPage />} />
               <Route path="/scholarships" element={<ScholarshipsPage />} />
@@ -289,16 +289,16 @@ function App() {
               <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
               <Route path="/compare" element={<CompareCollegesPage />} />
                   
-                  {/* Blog */}
+              {/* Blog */}
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:id" element={<BlogDetailPage />} />
                   
-                  {/* Admissions */}
+              {/* Admissions */}
               <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
               <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
               <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
                   
-                  {/* Static Pages */}
+              {/* Static Pages */}
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
@@ -306,33 +306,33 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
                   
-                  {/* ============================================ */}
-                  {/* New User Dashboard Routes */}
-                  {/* ============================================ */}
+              {/* ============================================ */}
+              {/* New User Dashboard Routes */}
+              {/* ============================================ */}
               <Route path="/signup" element={<UserSignup />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/dashboard" element={<UserDashboard />} />
                   
-                  {/* ============================================ */}
-                  {/* Institute Dashboard Routes */}
-                  {/* ============================================ */}
+              {/* ============================================ */}
+              {/* Institute Dashboard Routes */}
+              {/* ============================================ */}
               <Route path="/institute/login" element={<InstituteLogin />} />
               <Route path="/institute/dashboard" element={<InstituteDashboardNew />} />
                   
-                  {/* ============================================ */}
-                  {/* SEO-FRIENDLY DYNAMIC ROUTES - Must come LAST */}
-                  {/* These are catch-all routes that match patterns */}
-                  {/* ============================================ */}
+              {/* ============================================ */}
+              {/* SEO-FRIENDLY DYNAMIC ROUTES - Must come LAST */}
+              {/* These are catch-all routes that match patterns */}
+              {/* ============================================ */}
                   
-                  {/* India-wide Institution Listings */}
+              {/* India-wide Institution Listings */}
               <Route path="/india-colleges" element={<DynamicListingPage />} />
               <Route path="/india-schools" element={<DynamicListingPage />} />
               <Route path="/india-universities" element={<DynamicListingPage />} />
                   
-                  {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
+              {/* Stream-based Listings (3 segments) - e.g., /btech/computer-science/west-bengal */}
               <Route path="/:stream/:subStream/:location" element={<DynamicListingPage />} />
                   
-                  {/* Stream-based Listings (2 segments) - e.g., /btech/computer-science or /btech/west-bengal */}
+              {/* Stream-based Listings (2 segments) - e.g., /btech/computer-science or /btech/west-bengal */}
               <Route path="/:stream/:subStreamOrLocation" element={<DynamicListingPage />} />
                   
               {/* Single segment dynamic routes - e.g., /delhi-colleges, /btech, /engineering */}
