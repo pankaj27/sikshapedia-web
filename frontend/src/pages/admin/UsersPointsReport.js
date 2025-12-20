@@ -232,6 +232,72 @@ const UsersPointsReport = () => {
             </div>
           </div>
         )}
+
+        {/* Payment Details Modal */}
+        {showPaymentModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-800">Payment Details</h2>
+                <button onClick={() => setShowPaymentModal(null)} className="p-1 hover:bg-gray-100 rounded">
+                  <FiX className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                <p className="text-gray-600">User: <span className="font-semibold">{showPaymentModal.name}</span></p>
+                <p className="text-gray-600">Email: <span className="font-semibold">{showPaymentModal.email}</span></p>
+                <p className="text-gray-600">Phone: <span className="font-semibold">{showPaymentModal.phone || 'Not provided'}</span></p>
+                <p className="text-gray-600">Points: <span className="font-semibold text-orange-600">{showPaymentModal.points}</span></p>
+                <p className="text-gray-600">Cash Value: <span className="font-semibold text-green-600">₹{(showPaymentModal.points * 0.5).toFixed(2)}</span></p>
+              </div>
+
+              <div className="space-y-4">
+                {/* UPI Details */}
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <h3 className="font-semibold text-green-700 mb-2">💳 UPI Details</h3>
+                  {showPaymentModal.payment_details?.upi_id ? (
+                    <p className="font-mono text-lg text-green-800">{showPaymentModal.payment_details.upi_id}</p>
+                  ) : (
+                    <p className="text-gray-500 text-sm">UPI ID not provided by user</p>
+                  )}
+                </div>
+
+                {/* Bank Details */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold text-blue-700 mb-2">🏦 Bank Details</h3>
+                  {showPaymentModal.payment_details?.account_number ? (
+                    <div className="space-y-1 text-sm">
+                      <p><span className="text-gray-600">Account Holder:</span> <span className="font-medium">{showPaymentModal.payment_details.account_holder || '-'}</span></p>
+                      <p><span className="text-gray-600">Bank:</span> <span className="font-medium">{showPaymentModal.payment_details.bank_name || '-'}</span></p>
+                      <p><span className="text-gray-600">Account No:</span> <span className="font-mono font-medium">{showPaymentModal.payment_details.account_number}</span></p>
+                      <p><span className="text-gray-600">IFSC:</span> <span className="font-mono font-medium">{showPaymentModal.payment_details.ifsc_code || '-'}</span></p>
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-sm">Bank details not provided by user</p>
+                  )}
+                </div>
+
+                {!showPaymentModal.payment_details?.upi_id && !showPaymentModal.payment_details?.account_number && (
+                  <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <p className="text-yellow-800 text-sm">
+                      ⚠️ This user has not added any payment details yet. They will need to update their profile before you can process a payout.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6">
+                <button
+                  onClick={() => setShowPaymentModal(null)}
+                  className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );
