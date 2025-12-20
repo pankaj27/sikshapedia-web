@@ -1307,9 +1307,10 @@ class APITester:
             success, response, status = self.make_request("PUT", "/admission/settings", 
                                                         test_settings, token=self.admin_token)
             if success and isinstance(response, dict):
-                if response.get("form_fee") == test_settings["form_fee"]:
+                college_settings = response.get("college", {})
+                if college_settings.get("form_fee") == test_settings["college"]["form_fee"]:
                     self.log_test("PUT /admission/settings (with admin auth)", True, 
-                                 f"Settings updated: Form fee ₹{response.get('form_fee')}")
+                                 f"Settings updated: College form fee ₹{college_settings.get('form_fee')}")
                 else:
                     self.log_test("PUT /admission/settings (with admin auth)", False, 
                                  "Settings not updated correctly")
