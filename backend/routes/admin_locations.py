@@ -16,8 +16,10 @@ db = None
 def set_database(database):
     global db
     db = database
+    print(f"[admin_locations] Database set: {db}")
 
 def get_db():
+    print(f"[admin_locations] get_db called, db={db}")
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     return db
