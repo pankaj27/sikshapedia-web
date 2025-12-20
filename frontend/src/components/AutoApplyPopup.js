@@ -162,6 +162,6 @@ const AutoApplyPopup = () => {
   );
 };
 
-// Temporarily disabled to debug infinite loop
-const AutoApplyPopup = () => null;
-export default AutoApplyPopup;
+// Temporarily disabled to debug infinite loop - just return null
+const AutoApplyPopupDisabled = () => null;
+export default AutoApplyPopupDisabled;
