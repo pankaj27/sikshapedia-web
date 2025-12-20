@@ -1,7 +1,24 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
 import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiYoutube } from 'react-icons/fi';
 import { Button } from '../ui/button';
+
+/**
+ * Custom NavLink component that handles navigation with full page reload
+ * as a workaround for React Router v7 interference from external scripts.
+ */
+const NavLink = ({ to, children, className, onClick, ...props }) => {
+  const handleClick = useCallback((e) => {
+    e.preventDefault();
+    if (onClick) onClick(e);
+    window.location.href = to;
+  }, [to, onClick]);
+  
+  return (
+    <a href={to} onClick={handleClick} className={className} {...props}>
+      {children}
+    </a>
+  );
+};
 
 const Footer = () => {
   const [email, setEmail] = useState('');
