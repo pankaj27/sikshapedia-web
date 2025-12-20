@@ -426,6 +426,33 @@ const ListingPagesManagement = () => {
                   Schools (State+City)
                 </Button>
                 <Button
+                  onClick={() => generateUrls('university_state')}
+                  disabled={generating}
+                  variant="outline"
+                  className="justify-start"
+                >
+                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-blue-500" />}
+                  Universities (State)
+                </Button>
+                <Button
+                  onClick={() => generateUrls('university_city')}
+                  disabled={generating}
+                  variant="outline"
+                  className="justify-start"
+                >
+                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiMapPin className="mr-2 text-indigo-500" />}
+                  Universities (City)
+                </Button>
+                <Button
+                  onClick={() => generateUrls('university_state_city')}
+                  disabled={generating}
+                  variant="outline"
+                  className="justify-start"
+                >
+                  {generating ? <FiLoader className="animate-spin mr-2" /> : <FiGrid className="mr-2 text-violet-500" />}
+                  Universities (State+City)
+                </Button>
+                <Button
                   onClick={() => generateUrls('stream')}
                   disabled={generating}
                   variant="outline"
