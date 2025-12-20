@@ -347,17 +347,17 @@ function App() {
               {/* /university, /colleges, /schools base routes */}
               <Route path="/university" element={<DynamicListingPage />} />
               <Route path="/university/:seg1" element={<InstitutionRouter />} />
-              <Route path="/university/:seg1/:seg2" element={<DynamicListingPage />} />
+              <Route path="/university/:seg1/:seg2" element={<InstitutionRouter />} />
               <Route path="/university/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
               
               <Route path="/colleges" element={<DynamicListingPage />} />
               <Route path="/colleges/:seg1" element={<InstitutionRouter />} />
-              <Route path="/colleges/:seg1/:seg2" element={<DynamicListingPage />} />
+              <Route path="/colleges/:seg1/:seg2" element={<InstitutionRouter />} />
               <Route path="/colleges/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
               
               <Route path="/schools" element={<DynamicListingPage />} />
               <Route path="/schools/:seg1" element={<InstitutionRouter />} />
-              <Route path="/schools/:seg1/:seg2" element={<DynamicListingPage />} />
+              <Route path="/schools/:seg1/:seg2" element={<InstitutionRouter />} />
               
               {/* Legacy routes - redirect to new structure */}
               <Route path="/india-colleges" element={<Navigate to="/colleges" replace />} />
