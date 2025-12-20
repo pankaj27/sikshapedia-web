@@ -313,7 +313,6 @@ function App() {
               {/* Admissions */}
               <Route path="/admission/colleges" element={<CollegeAdmissionPage />} />
               <Route path="/admission/schools" element={<SchoolAdmissionPage />} />
-              <Route path="/admission/universities" element={<UniversityAdmissionPage />} />
                   
               {/* Static Pages */}
               <Route path="/about" element={<AboutPage />} />
