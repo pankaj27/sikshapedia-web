@@ -44,15 +44,22 @@ const CollegeDuniaHome = () => {
   
   // Animated text rotation
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const rotatingTexts = pageSettings?.hero_rotating_texts || ['Exams', 'Colleges', 'Courses', 'Schools', 'Universities', 'Scholarships'];
+  const defaultTexts = ['Exams', 'Colleges', 'Courses', 'Schools', 'Universities', 'Scholarships'];
+  const rotatingTexts = pageSettings?.hero_rotating_texts?.length > 0 
+    ? pageSettings.hero_rotating_texts 
+    : defaultTexts;
+  
+  // Store the texts length in a ref to avoid useEffect dependency issues
+  const textsLengthRef = React.useRef(rotatingTexts.length);
+  textsLengthRef.current = rotatingTexts.length;
   
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % rotatingTexts.length);
+      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % textsLengthRef.current);
     }, 2000); // Change every 2 seconds
     
     return () => clearInterval(interval);
-  }, [rotatingTexts.length]);
+  }, []); // Empty dependency - interval runs once
 
   // Icon component mapper
   const iconComponents = {
