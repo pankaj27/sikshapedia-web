@@ -49,24 +49,25 @@ const CollegeAdmissionPage = () => {
   const fetchAdmissions = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      params.append('limit', '50');
       
-      // Filter by state
+      // Fetch ONLY admission partners
+      const response = await api.get('/admission/partners', {
+        params: { entity_type: 'college' }
+      });
+      
+      let partnersData = response.data.partners || [];
+      
+      // Apply filters
       if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-        params.append('state', selectedState);
+        partnersData = partnersData.filter(p => p.state === selectedState);
       }
-      // Filter by city
       if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-        params.append('city', selectedCity);
+        partnersData = partnersData.filter(p => p.city === selectedCity);
       }
       
-      const response = await api.get(`/colleges?${params.toString()}`);
-      let collegesData = response.data || [];
-      
-      if (collegesData.length > 0) {
-        // Transform college data to admission format
-        let admissionsData = collegesData.map(college => ({
+      if (partnersData.length > 0) {
+        // Transform partner data to admission format
+        let admissionsData = partnersData.map(college => ({
           id: college.id,
           name: college.name,
           slug: college.slug,
@@ -74,16 +75,16 @@ const CollegeAdmissionPage = () => {
             city: college.city || 'Unknown', 
             state: college.state || 'Unknown' 
           },
-          type: college.streams?.[0] || college.institution_type || 'General',
-          courses: college.courses?.slice(0, 3).map(c => c.name || c) || ['Various Courses'],
+          type: college.type || 'General',
+          courses: college.courses_offered?.slice(0, 3) || ['Various Courses'],
           average_fees: college.average_fees || 100000,
           admission_date: college.admission_deadline || new Date().toISOString().split('T')[0],
           deadline: college.admission_deadline || '2025-03-31',
           seats: college.total_seats || 500,
           rating: college.rating || 4.0,
-          description: college.short_description || college.description?.substring(0, 150) || `${college.name} offers quality education with excellent facilities.`,
-          is_admission_open: college.is_admission_open || false,
-          is_admission_partner: college.is_admission_partner || false,
+          description: college.short_description || `${college.name} offers quality education with excellent facilities.`,
+          is_admission_open: true,
+          is_admission_partner: true,
           logo: college.logo,
           serial_number: college.serial_number
         }));
