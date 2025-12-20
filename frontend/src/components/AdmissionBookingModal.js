@@ -423,24 +423,43 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
   return (
     <div className="fixed left-0 right-0 bottom-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style={{ top: '64px' }} onClick={onClose}>
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 sticky top-0 z-10">
+        {/* Header with Institution Info */}
+        <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sticky top-0 z-10">
           <button onClick={onClose} className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20">
             <FiX size={20} />
           </button>
-          <h2 className="text-lg font-bold">Book Your Seat</h2>
-          <p className="text-sm text-white/80">{institution?.name}</p>
+          
+          {/* Institution Logo and Name */}
+          <div className="flex items-center gap-3 mb-3">
+            {(institutionDetails?.logo || institutionDetails?.logo_url || institution?.logo) ? (
+              <img 
+                src={institutionDetails?.logo || institutionDetails?.logo_url || institution?.logo} 
+                alt={institution?.name}
+                className="w-14 h-14 rounded-lg bg-white object-contain p-1"
+              />
+            ) : (
+              <div className="w-14 h-14 rounded-lg bg-white/20 flex items-center justify-center text-2xl">
+                {institutionType === 'school' ? '🏫' : institutionType === 'university' ? '🏛️' : '🎓'}
+              </div>
+            )}
+            <div className="flex-1">
+              <h2 className="text-lg font-bold leading-tight">{institution?.name}</h2>
+              <p className="text-sm text-white/80">
+                {institution?.city && institution?.state ? `${institution.city}, ${institution.state}` : 'Book Your Seat'}
+              </p>
+            </div>
+          </div>
           
           {/* Step indicator */}
-          <div className="flex items-center mt-3 gap-2">
+          <div className="flex items-center gap-2">
             {['Form', 'Review', 'Payment', 'Done'].map((s, i) => (
               <div key={i} className="flex items-center">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                  step > i + 1 ? 'bg-green-500' : step === i + 1 ? 'bg-white text-orange-600' : 'bg-white/30'
+                  step > i + 1 ? 'bg-green-400' : step === i + 1 ? 'bg-white text-green-600' : 'bg-white/30'
                 }`}>
                   {step > i + 1 ? <FiCheck /> : i + 1}
                 </div>
-                {i < 3 && <div className={`w-8 h-0.5 ${step > i + 1 ? 'bg-green-500' : 'bg-white/30'}`} />}
+                {i < 3 && <div className={`w-8 h-0.5 ${step > i + 1 ? 'bg-green-400' : 'bg-white/30'}`} />}
               </div>
             ))}
           </div>
