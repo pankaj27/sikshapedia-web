@@ -6841,9 +6841,9 @@ async def get_schools(
             {"description": {"$regex": search, "$options": "i"}}
         ]
     if city:
-        query["city"] = city
+        query["city"] = {"$regex": city, "$options": "i"}
     if state:
-        query["state"] = state
+        query["state"] = {"$regex": state, "$options": "i"}
     if board:
         query["board"] = board
     if school_type:
