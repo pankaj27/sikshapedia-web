@@ -1337,7 +1337,7 @@ const CollegeDetailPage = ({ overrideId }) => {
 
                 {/* CUTOFF */}
                 <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff 2025</h2>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     The cutoff varies for different programs and categories. Below are the cutoff ranks for General Category:
                   </p>
