@@ -1285,17 +1285,68 @@ const HomepageSettings = () => {
                   <div className="space-y-2 max-h-60 overflow-y-auto bg-gray-50 p-3 rounded-lg">
                     {(settings.location_states || []).map((item, index) => (
                       <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border">
-                        <input
-                          type="text"
-                          value={item.icon}
-                          onChange={(e) => {
-                            const updated = [...settings.location_states];
-                            updated[index].icon = e.target.value;
-                            handleChange('location_states', updated);
-                          }}
-                          className="w-12 border rounded px-2 py-1 text-center"
-                          placeholder="🏛️"
-                        />
+                        <div className="flex items-center gap-1">
+                          {item.icon_url ? (
+                            <img src={item.icon_url} alt="" className="w-8 h-8 object-contain rounded" />
+                          ) : (
+                            <span className="w-8 h-8 flex items-center justify-center text-lg">{item.icon}</span>
+                          )}
+                          <div className="flex flex-col">
+                            <input
+                              type="text"
+                              value={item.icon || ''}
+                              onChange={(e) => {
+                                const updated = [...settings.location_states];
+                                updated[index].icon = e.target.value;
+                                handleChange('location_states', updated);
+                              }}
+                              className="w-12 border rounded px-1 py-0.5 text-center text-sm"
+                              placeholder="🏛️"
+                              title="Emoji icon"
+                            />
+                            <label className="text-xs text-blue-600 cursor-pointer hover:underline">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files[0];
+                                  if (file) {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    try {
+                                      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, {
+                                        method: 'POST',
+                                        body: formData
+                                      });
+                                      const data = await res.json();
+                                      if (data.url) {
+                                        const updated = [...settings.location_states];
+                                        updated[index].icon_url = data.url;
+                                        handleChange('location_states', updated);
+                                      }
+                                    } catch (err) {
+                                      console.error('Upload failed:', err);
+                                    }
+                                  }
+                                }}
+                              />
+                              Upload
+                            </label>
+                          </div>
+                          {item.icon_url && (
+                            <button
+                              onClick={() => {
+                                const updated = [...settings.location_states];
+                                updated[index].icon_url = '';
+                                handleChange('location_states', updated);
+                              }}
+                              className="text-xs text-red-500 hover:underline"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
                         <input
                           type="text"
                           value={item.name}
@@ -1331,7 +1382,7 @@ const HomepageSettings = () => {
                     ))}
                   </div>
                   <button
-                    onClick={() => handleChange('location_states', [...(settings.location_states || []), { name: '', icon: '🏛️', link: '/colleges?state=' }])}
+                    onClick={() => handleChange('location_states', [...(settings.location_states || []), { name: '', icon: '🏛️', icon_url: '', link: '/colleges?state=' }])}
                     className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
                   >
                     <FiPlus size={14} /> Add State
@@ -1344,17 +1395,68 @@ const HomepageSettings = () => {
                   <div className="space-y-2 max-h-60 overflow-y-auto bg-gray-50 p-3 rounded-lg">
                     {(settings.location_cities || []).map((item, index) => (
                       <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border">
-                        <input
-                          type="text"
-                          value={item.icon}
-                          onChange={(e) => {
-                            const updated = [...settings.location_cities];
-                            updated[index].icon = e.target.value;
-                            handleChange('location_cities', updated);
-                          }}
-                          className="w-12 border rounded px-2 py-1 text-center"
-                          placeholder="🌆"
-                        />
+                        <div className="flex items-center gap-1">
+                          {item.icon_url ? (
+                            <img src={item.icon_url} alt="" className="w-8 h-8 object-contain rounded" />
+                          ) : (
+                            <span className="w-8 h-8 flex items-center justify-center text-lg">{item.icon}</span>
+                          )}
+                          <div className="flex flex-col">
+                            <input
+                              type="text"
+                              value={item.icon || ''}
+                              onChange={(e) => {
+                                const updated = [...settings.location_cities];
+                                updated[index].icon = e.target.value;
+                                handleChange('location_cities', updated);
+                              }}
+                              className="w-12 border rounded px-1 py-0.5 text-center text-sm"
+                              placeholder="🌆"
+                              title="Emoji icon"
+                            />
+                            <label className="text-xs text-blue-600 cursor-pointer hover:underline">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files[0];
+                                  if (file) {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    try {
+                                      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, {
+                                        method: 'POST',
+                                        body: formData
+                                      });
+                                      const data = await res.json();
+                                      if (data.url) {
+                                        const updated = [...settings.location_cities];
+                                        updated[index].icon_url = data.url;
+                                        handleChange('location_cities', updated);
+                                      }
+                                    } catch (err) {
+                                      console.error('Upload failed:', err);
+                                    }
+                                  }
+                                }}
+                              />
+                              Upload
+                            </label>
+                          </div>
+                          {item.icon_url && (
+                            <button
+                              onClick={() => {
+                                const updated = [...settings.location_cities];
+                                updated[index].icon_url = '';
+                                handleChange('location_cities', updated);
+                              }}
+                              className="text-xs text-red-500 hover:underline"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
                         <input
                           type="text"
                           value={item.name}
@@ -1390,7 +1492,7 @@ const HomepageSettings = () => {
                     ))}
                   </div>
                   <button
-                    onClick={() => handleChange('location_cities', [...(settings.location_cities || []), { name: '', icon: '🌆', link: '/colleges?city=' }])}
+                    onClick={() => handleChange('location_cities', [...(settings.location_cities || []), { name: '', icon: '🌆', icon_url: '', link: '/colleges?city=' }])}
                     className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
                   >
                     <FiPlus size={14} /> Add City
@@ -1403,17 +1505,68 @@ const HomepageSettings = () => {
                   <div className="space-y-2 max-h-60 overflow-y-auto bg-gray-50 p-3 rounded-lg">
                     {(settings.location_countries || []).map((item, index) => (
                       <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border">
-                        <input
-                          type="text"
-                          value={item.icon}
-                          onChange={(e) => {
-                            const updated = [...settings.location_countries];
-                            updated[index].icon = e.target.value;
-                            handleChange('location_countries', updated);
-                          }}
-                          className="w-12 border rounded px-2 py-1 text-center"
-                          placeholder="🌍"
-                        />
+                        <div className="flex items-center gap-1">
+                          {item.icon_url ? (
+                            <img src={item.icon_url} alt="" className="w-8 h-8 object-contain rounded" />
+                          ) : (
+                            <span className="w-8 h-8 flex items-center justify-center text-lg">{item.icon}</span>
+                          )}
+                          <div className="flex flex-col">
+                            <input
+                              type="text"
+                              value={item.icon || ''}
+                              onChange={(e) => {
+                                const updated = [...settings.location_countries];
+                                updated[index].icon = e.target.value;
+                                handleChange('location_countries', updated);
+                              }}
+                              className="w-12 border rounded px-1 py-0.5 text-center text-sm"
+                              placeholder="🌍"
+                              title="Emoji icon"
+                            />
+                            <label className="text-xs text-blue-600 cursor-pointer hover:underline">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files[0];
+                                  if (file) {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    try {
+                                      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, {
+                                        method: 'POST',
+                                        body: formData
+                                      });
+                                      const data = await res.json();
+                                      if (data.url) {
+                                        const updated = [...settings.location_countries];
+                                        updated[index].icon_url = data.url;
+                                        handleChange('location_countries', updated);
+                                      }
+                                    } catch (err) {
+                                      console.error('Upload failed:', err);
+                                    }
+                                  }
+                                }}
+                              />
+                              Upload
+                            </label>
+                          </div>
+                          {item.icon_url && (
+                            <button
+                              onClick={() => {
+                                const updated = [...settings.location_countries];
+                                updated[index].icon_url = '';
+                                handleChange('location_countries', updated);
+                              }}
+                              className="text-xs text-red-500 hover:underline"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
                         <input
                           type="text"
                           value={item.name}
@@ -1449,7 +1602,7 @@ const HomepageSettings = () => {
                     ))}
                   </div>
                   <button
-                    onClick={() => handleChange('location_countries', [...(settings.location_countries || []), { name: '', icon: '🌍', link: '/study-abroad?country=' }])}
+                    onClick={() => handleChange('location_countries', [...(settings.location_countries || []), { name: '', icon: '🌍', icon_url: '', link: '/study-abroad?country=' }])}
                     className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
                   >
                     <FiPlus size={14} /> Add Country
