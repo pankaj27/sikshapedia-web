@@ -297,6 +297,13 @@ const QuestionsSection = ({ entityId, entityType = 'college', entityName }) => {
         entityName={entityName}
         onSuccess={fetchQuestions}
       />
+      
+      <LoginPromptModal
+        isOpen={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        action="ask a question"
+        message="Get answers from students, alumni, and experts"
+      />
     </div>
   );
 };
