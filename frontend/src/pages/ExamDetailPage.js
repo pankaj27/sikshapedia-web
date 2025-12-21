@@ -5,6 +5,9 @@ import { FiDownload, FiFileText, FiCalendar, FiInfo, FiBook, FiAward, FiDollarSi
 import { Button } from '../components/ui/button';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import api from '../api/axios';
+import ReviewsSection from '../components/ReviewsSection';
+import QuestionsSection from '../components/QuestionsSection';
+import CommentsSection from '../components/CommentsSection';
 
 import { Link } from '../components/CustomLink';
 const ExamDetailPage = () => {
