@@ -164,6 +164,7 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <CollegeProvider>
+          <YearProvider>
           <BrowserRouter>
             <ScrollToTop />
             <SimpleAutoPopup />
