@@ -991,7 +991,7 @@ const UserDashboard = () => {
             {/* Liked Tab */}
             {activeTab === 'liked' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-bold">Liked Colleges</h2>
+                <h2 className="text-xl font-bold">Liked Institutes</h2>
                 {liked.length === 0 ? (
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                     <FiHeart className="text-6xl text-gray-300 mx-auto mb-4" />
