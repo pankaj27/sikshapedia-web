@@ -419,6 +419,34 @@ async def get_pending_questions(limit: int = Query(50, ge=1, le=200)):
         {}, 
         {"_id": 0}
     ).sort("created_at", -1).to_list(limit)
+    
+    # Enrich questions with entity names
+    for question in questions:
+        entity_id = question.get("college_id")
+        if entity_id:
+            # Try to find in colleges, schools, universities, courses, or exams
+            entity = await db.colleges.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            entity_type = "College"
+            
+            if not entity:
+                entity = await db.schools.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+                entity_type = "School"
+            if not entity:
+                entity = await db.universities.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+                entity_type = "University"
+            if not entity:
+                entity = await db.courses.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+                entity_type = "Course"
+            if not entity:
+                entity = await db.exams.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+                entity_type = "Exam"
+            
+            question["entity_name"] = entity.get("name") if entity else "Unknown"
+            question["entity_type_label"] = entity_type if entity else "Unknown"
+        else:
+            question["entity_name"] = "N/A"
+            question["entity_type_label"] = "N/A"
+    
     return questions
 
 
