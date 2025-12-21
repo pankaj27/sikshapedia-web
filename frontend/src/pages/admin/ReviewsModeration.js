@@ -42,6 +42,16 @@ const ReviewsModeration = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this review permanently?')) return;
+    try {
+      await api.delete(`/reviews/${id}`);
+      setReviews(reviews.filter(r => r.id !== id));
+    } catch (error) {
+      console.error('Error deleting review:', error);
+    }
+  };
+
   const filteredReviews = reviews.filter(review => {
     if (filter === 'all') return true;
     return review.status === filter;
