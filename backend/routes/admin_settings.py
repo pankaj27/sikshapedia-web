@@ -10,6 +10,53 @@ from core.auth import get_current_user
 admin_settings_router = APIRouter(prefix="/admin-settings", tags=["Admin Settings"])
 
 # ============================================
+# Footer Settings
+# ============================================
+
+class SocialMediaLink(BaseModel):
+    platform: str  # facebook, twitter, instagram, youtube, linkedin
+    url: str
+    is_active: bool = True
+
+class FooterSettings(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "footer-settings"
+    copyright_text: str = "© 2025 admissionbuddy. All rights reserved."
+    company_name: str = "admissionbuddy"
+    social_links: List[SocialMediaLink] = [
+        {"platform": "facebook", "url": "https://facebook.com/admissionbuddy", "is_active": True},
+        {"platform": "twitter", "url": "https://twitter.com/admissionbuddy", "is_active": True},
+        {"platform": "instagram", "url": "https://instagram.com/admissionbuddy", "is_active": True},
+        {"platform": "youtube", "url": "https://youtube.com/admissionbuddy", "is_active": True},
+        {"platform": "linkedin", "url": "https://linkedin.com/company/admissionbuddy", "is_active": True},
+    ]
+    updated_at: Optional[datetime] = None
+    updated_by: Optional[str] = None
+
+@admin_settings_router.get("/footer")
+async def get_footer_settings():
+    """Get footer settings"""
+    settings = await db.footer_settings.find_one({"id": "footer-settings"}, {"_id": 0})
+    if not settings:
+        return FooterSettings().model_dump()
+    return settings
+
+@admin_settings_router.put("/footer")
+async def update_footer_settings(settings: FooterSettings, current_user: dict = Depends(get_current_user)):
+    """Update footer settings"""
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    settings_dict["updated_by"] = current_user.get("id")
+    
+    await db.footer_settings.update_one(
+        {"id": "footer-settings"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return settings_dict
+
+
+# ============================================
 # Course Listing Settings
 # ============================================
 
