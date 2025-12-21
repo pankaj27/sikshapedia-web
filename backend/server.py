@@ -6654,7 +6654,8 @@ try:
     app.include_router(reviews_questions_router)  # Reviews & Q&A routes - already has /api prefix
     app.include_router(advertisements_router)  # Advertisements routes - already has /api prefix
     app.include_router(comments_router)  # Comments routes - already has /api prefix
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities, colleges, courses_exams, study_abroad, taxonomy, reviews_questions, advertisements, comments")
+    app.include_router(newsletter_router, prefix="/api")  # Newsletter routes
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities, colleges, courses_exams, study_abroad, taxonomy, reviews_questions, advertisements, comments, newsletter")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
