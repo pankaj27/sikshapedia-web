@@ -1342,7 +1342,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                     The cutoff varies for different programs and categories. Below are the cutoff ranks for General Category:
                   </p>
 
-                  <h3 className="text-xl font-bold mb-3">JEE Advanced Cutoff 2025</h3>
+                  <h3 className="text-xl font-bold mb-3">JEE Advanced Cutoff {year}</h3>
                   <div className="overflow-x-auto mb-6">
                     <table className="w-full border-collapse border">
                       <thead>
