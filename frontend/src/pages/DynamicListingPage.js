@@ -1237,8 +1237,8 @@ const DynamicListingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
-        <title>{replaceYear(pageContent?.meta_title) || pageInfo.title} | admissionbuddy</title>
-        <meta name="description" content={replaceYear(pageContent?.meta_description) || pageInfo.description} />
+        <title>{pageContent?.meta_title ? replaceYear(pageContent.meta_title) : pageInfo.title} | admissionbuddy</title>
+        <meta name="description" content={pageContent?.meta_description ? replaceYear(pageContent.meta_description) : pageInfo.description} />
         <link rel="canonical" href={pageContent?.canonical_url || `https://admissionbuddy.co${location.pathname}`} />
         {pageContent?.meta_keywords?.length > 0 && (
           <meta name="keywords" content={pageContent.meta_keywords.join(', ')} />
