@@ -245,7 +245,13 @@ async def get_colleges_by_stream_featured():
     
     for stream in default_streams:
         stream_config = stream_colleges.get(stream, {})
-        college_ids = stream_config.get("college_ids", [])
+        # Handle case where stream_config might be a list instead of dict
+        if isinstance(stream_config, list):
+            college_ids = stream_config
+        elif isinstance(stream_config, dict):
+            college_ids = stream_config.get("college_ids", [])
+        else:
+            college_ids = []
         
         if college_ids:
             colleges = []
