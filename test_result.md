@@ -1298,3 +1298,32 @@
 - `/university/{id}` - Reviews, Q&A, Comments ✅ (via InstitutionDetailPage)
 - `/courses/{slug}` - Reviews, Q&A, Comments ✅
 - `/exams/{id}` - Reviews, Q&A, Comments ✅
+
+## Master Location Data Integration (Dec 21, 2025):
+
+### Task: Connect Master States/Cities Data to Core System
+
+**Files Modified:**
+1. `/app/frontend/src/pages/admin/CollegeForm.js` - Removed references to hardcoded `citiesByState`, now uses useEffect to fetch from API
+2. `/app/frontend/src/components/LocationSearch.js` - Updated to fetch master data and merge with college counts
+3. `/app/frontend/src/components/admin/college-form/LocationSection.js` - Rewrote to fetch master data from API
+4. `/app/frontend/src/pages/admin/SchoolForm.js` - Added master data fetching
+5. `/app/frontend/src/pages/DynamicListingPage.js` - Added master data fetching for filters
+6. `/app/frontend/src/pages/CollegeAdmissionPage.js` - Added master data fetching
+7. `/app/frontend/src/pages/UniversityAdmissionPage.js` - Added master data fetching
+8. `/app/frontend/src/pages/SchoolAdmissionPage.js` - Added master data fetching
+9. `/app/frontend/src/pages/admin/ListingPageForm.js` - Added master data fetching
+10. `/app/frontend/src/pages/admin/ExamDetailForm.js` - Added master data fetching
+11. `/app/frontend/src/hooks/useMasterLocations.js` - Created new reusable hook
+
+**APIs Used:**
+- `/api/locations/all-states` - Returns all 36 Indian states/UTs from master data
+- `/api/locations/all-cities` - Returns all 285 cities from master data, with optional `?state=` filter
+
+**Testing Required:**
+1. Test CollegeForm state/city dropdowns populate from master data
+2. Test SchoolForm state/city dropdowns
+3. Test DynamicListingPage filter dropdowns
+4. Test LocationSearch component on homepage shows states sorted by college count
+5. Verify new cities added via admin panel appear in all forms
+
