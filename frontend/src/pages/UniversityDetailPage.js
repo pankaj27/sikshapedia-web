@@ -87,6 +87,7 @@ const UniversityDetailPage = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: FiHome },
     { id: 'courses', label: 'Courses', icon: FiBook },
+    { id: 'fees', label: 'Fees', icon: FiCalendar },
     { id: 'placements', label: 'Placements', icon: FiBriefcase },
     { id: 'reviews', label: 'Reviews', icon: FiStar },
   ];
