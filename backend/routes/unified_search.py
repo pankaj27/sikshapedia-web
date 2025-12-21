@@ -48,9 +48,17 @@ async def autocomplete_search(
     
     for c in colleges:
         # Build URL with serial_number-slug format
-        slug = c.get("slug", "")
-        serial = c.get("serial_number", "")
-        url_slug = f"{serial}-{slug}" if serial and slug else slug or c.get("id", "")
+        slug = c.get("slug") or ""
+        serial = c.get("serial_number") or ""
+        
+        # Use serial-slug if both exist, otherwise use slug, otherwise use id
+        if serial and slug:
+            url_slug = f"{serial}-{slug}"
+        elif slug:
+            url_slug = slug
+        else:
+            # Skip entries without proper slug
+            continue
         
         results.append({
             "type": "college",
