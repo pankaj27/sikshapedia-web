@@ -181,6 +181,50 @@ const InstituteDashboard = () => {
     }
   };
   
+  const fetchReviewsAndQuestions = async () => {
+    if (!institution?.id) return;
+    try {
+      const [reviewsRes, statsRes, questionsRes] = await Promise.all([
+        api.get(`/reviews/college/${institution.id}?limit=50`),
+        api.get(`/reviews/stats/${institution.id}`),
+        api.get(`/questions/college/${institution.id}?limit=50`)
+      ]);
+      setReviews(reviewsRes.data);
+      setReviewStats(statsRes.data);
+      setQuestions(questionsRes.data);
+    } catch (err) {
+      console.error('Error fetching reviews/questions:', err);
+    }
+  };
+  
+  const handleAnswerQuestion = async (questionId) => {
+    const answer = answerText[questionId];
+    if (!answer?.trim()) return;
+    
+    setSubmittingAnswer(questionId);
+    try {
+      await api.post('/questions/answer', {
+        question_id: questionId,
+        answer: answer.trim(),
+        answered_by: 'institute',
+        institute_name: institution.name
+      });
+      setAnswerText({ ...answerText, [questionId]: '' });
+      fetchReviewsAndQuestions();
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Failed to submit answer');
+    } finally {
+      setSubmittingAnswer(null);
+    }
+  };
+  
+  useEffect(() => {
+    if (activeTab === 'review_link' && institution?.id) {
+      fetchReviewLink();
+      fetchReviewsAndQuestions();
+    }
+  }, [activeTab, institution?.id]);
+  
   const handleLogout = async () => {
     try {
       await api.post('/institute/logout');
