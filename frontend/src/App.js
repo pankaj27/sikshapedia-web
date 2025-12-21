@@ -103,6 +103,7 @@ import BannersManagement from './pages/admin/BannersManagement';
 import TestimonialsManagement from './pages/admin/TestimonialsManagement';
 import FAQsManagement from './pages/admin/FAQsManagement';
 import CitiesManagement from './pages/admin/CitiesManagement';
+import StatesManagement from './pages/admin/StatesManagement';
 import ContactInquiriesManagement from './pages/admin/ContactInquiriesManagement';
 import CoursesManagement from './pages/admin/CoursesManagement';
 import ExamsManagement from './pages/admin/ExamsManagement';
