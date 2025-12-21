@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { FiStar, FiUpload, FiCheckCircle, FiAward } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
+import api from '../api/axios';
 
 import { Link } from '../components/CustomLink';
 const WriteReviewPage = () => {
@@ -8,6 +9,7 @@ const WriteReviewPage = () => {
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
+    instituteId: '',
     course: '',
     rating: 0,
     reviewTitle: '',
@@ -26,6 +28,92 @@ const WriteReviewPage = () => {
     graduationYear: '',
     verificationDocument: null
   });
+
+  // Search and dropdown states
+  const [instituteSearch, setInstituteSearch] = useState('');
+  const [institutes, setInstitutes] = useState([]);
+  const [showInstituteDropdown, setShowInstituteDropdown] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [coursesLoading, setCoursesLoading] = useState(false);
+
+  // Search institutes when user types
+  useEffect(() => {
+    const searchInstitutes = async () => {
+      if (instituteSearch.length < 2) {
+        setInstitutes([]);
+        return;
+      }
+      
+      setSearchLoading(true);
+      try {
+        const type = formData.instituteType || 'college';
+        let endpoint = '/colleges';
+        if (type === 'school') endpoint = '/schools';
+        
+        const response = await api.get(`${endpoint}?search=${encodeURIComponent(instituteSearch)}&limit=10`);
+        const data = Array.isArray(response.data) ? response.data : response.data.colleges || response.data.schools || [];
+        setInstitutes(data);
+      } catch (error) {
+        console.error('Error searching institutes:', error);
+        setInstitutes([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(searchInstitutes, 300);
+    return () => clearTimeout(debounce);
+  }, [instituteSearch, formData.instituteType]);
+
+  // Fetch courses when institute is selected
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (!formData.instituteId) {
+        setCourses([]);
+        return;
+      }
+
+      setCoursesLoading(true);
+      try {
+        const response = await api.get(`/colleges/${formData.instituteId}`);
+        const collegeData = response.data;
+        
+        // Extract courses from college data
+        let coursesData = [];
+        if (collegeData.courses && Array.isArray(collegeData.courses)) {
+          coursesData = collegeData.courses.map(c => c.name || c.course_name || c);
+        } else if (collegeData.programs && Array.isArray(collegeData.programs)) {
+          coursesData = collegeData.programs.map(p => p.name || p);
+        }
+        
+        // If no courses found, use common courses
+        if (coursesData.length === 0) {
+          coursesData = ['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Com', 'M.Com', 'BA', 'MA', 'B.Sc', 'M.Sc', 'BCA', 'MCA', 'MBBS', 'BDS', 'LLB', 'LLM', 'B.Pharm', 'M.Pharm'];
+        }
+        
+        setCourses(coursesData);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        // Fallback courses
+        setCourses(['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Com', 'M.Com', 'BA', 'MA', 'B.Sc', 'M.Sc', 'BCA', 'MCA']);
+      } finally {
+        setCoursesLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, [formData.instituteId]);
+
+  const handleInstituteSelect = (institute) => {
+    setFormData(prev => ({
+      ...prev,
+      instituteName: institute.name,
+      instituteId: institute.id
+    }));
+    setInstituteSearch('');
+    setShowInstituteDropdown(false);
+  };
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
