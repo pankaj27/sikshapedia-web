@@ -158,8 +158,8 @@ const CollegeDetailPage = ({ overrideId }) => {
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
   const [activeTab, setActiveTab] = useState('info');
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
+  const [likes, setLikes] = useState(1);
+  const [dislikes, setDislikes] = useState(1);
   const [userVote, setUserVote] = useState(null); // 'like', 'dislike', or null
   const [isFavorited, setIsFavorited] = useState(false); // Track if college is favorited
   const [showApplyModal, setShowApplyModal] = useState(false);
