@@ -72,6 +72,15 @@ const AdminLayout = ({ children }) => {
       ]
     },
     {
+      id: 'communication',
+      title: 'Communication',
+      icon: FiMail,
+      submenu: [
+        { title: 'Newsletter Subscribers', path: '/admin/newsletter', icon: FiMail, highlight: true },
+        { title: 'Email Settings & Templates', path: '/admin/email-settings', icon: FiSettings, highlight: true, badge: 'NEW' },
+      ]
+    },
+    {
       id: 'admission',
       title: 'Admission Partners',
       icon: FiDollarSign,
