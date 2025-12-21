@@ -1498,7 +1498,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                             {college.nirf_ranking && (
                               <tr className="hover:bg-gray-50">
                                 <td className="border px-4 py-3 text-sm font-semibold">NIRF</td>
-                                <td className="border px-4 py-3 text-sm">2025</td>
+                                <td className="border px-4 py-3 text-sm">{year}</td>
                                 <td className="border px-4 py-3 text-sm">Overall</td>
                                 <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
                               </tr>
@@ -1506,7 +1506,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                             {college.india_today_ranking && (
                               <tr className="hover:bg-gray-50">
                                 <td className="border px-4 py-3 text-sm font-semibold">India Today</td>
-                                <td className="border px-4 py-3 text-sm">2025</td>
+                                <td className="border px-4 py-3 text-sm">{year}</td>
                                 <td className="border px-4 py-3 text-sm">Overall</td>
                                 <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.india_today_ranking}</td>
                               </tr>
