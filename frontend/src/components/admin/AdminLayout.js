@@ -99,6 +99,7 @@ const AdminLayout = ({ children }) => {
         { title: 'News Articles', path: '/admin/news', icon: FiFileText },
         { title: 'Blogs', path: '/admin/blogs', icon: FiFileText },
         { title: 'Newsletter Subscribers', path: '/admin/newsletter', icon: FiMail },
+        { title: 'Email Settings & Templates', path: '/admin/email-settings', icon: FiMail, highlight: true, badge: 'NEW' },
         { title: 'Scholarships', path: '/admin/scholarships', icon: FiDollarSign },
         { title: 'Scholarships Page', path: '/admin/scholarships-listing-settings', icon: FiSettings },
         { title: 'Loans', path: '/admin/loans', icon: FiDollarSign },
