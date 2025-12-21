@@ -303,20 +303,22 @@ const UniversityDetailPage = () => {
                 {activeTab === 'placements' && (
                   <div className="space-y-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">Placement Statistics</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 text-center">
-                        <div className="text-4xl font-bold text-green-600">{university.placement_percentage || '-'}%</div>
-                        <div className="text-sm text-gray-600 mt-1">Placement Rate</div>
+                    <GuestGate title="Placement Data">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 text-center">
+                          <div className="text-4xl font-bold text-green-600">{university.placement_percentage || '-'}%</div>
+                          <div className="text-sm text-gray-600 mt-1">Placement Rate</div>
+                        </div>
+                        <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 text-center">
+                          <div className="text-4xl font-bold text-purple-600">₹{university.highest_package || '-'} LPA</div>
+                          <div className="text-sm text-gray-600 mt-1">Highest Package</div>
+                        </div>
+                        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 text-center">
+                          <div className="text-4xl font-bold text-blue-600">₹{university.average_package || '-'} LPA</div>
+                          <div className="text-sm text-gray-600 mt-1">Average Package</div>
+                        </div>
                       </div>
-                      <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 text-center">
-                        <div className="text-4xl font-bold text-purple-600">₹{university.highest_package || '-'} LPA</div>
-                        <div className="text-sm text-gray-600 mt-1">Highest Package</div>
-                      </div>
-                      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 text-center">
-                        <div className="text-4xl font-bold text-blue-600">₹{university.average_package || '-'} LPA</div>
-                        <div className="text-sm text-gray-600 mt-1">Average Package</div>
-                      </div>
-                    </div>
+                    </GuestGate>
                   </div>
                 )}
 
