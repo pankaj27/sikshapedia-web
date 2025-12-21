@@ -301,6 +301,55 @@ const UniversityDetailPage = () => {
                   </div>
                 )}
 
+                {activeTab === 'fees' && (
+                  <div className="space-y-6">
+                    <h2 className="text-xl font-bold text-gray-800 mb-4">Fee Structure</h2>
+                    <GuestGate title="Fee Details">
+                      <div className="bg-white rounded-lg border overflow-hidden">
+                        <table className="w-full">
+                          <thead className="bg-gray-50">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Course/Program</th>
+                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Duration</th>
+                              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Annual Fee</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {university.fee_structure && university.fee_structure.length > 0 ? (
+                              university.fee_structure.map((fee, i) => (
+                                <tr key={i} className="hover:bg-gray-50">
+                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{fee.course || fee.program}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{fee.duration || '-'}</td>
+                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{fee.annual_fee?.toLocaleString() || fee.fee?.toLocaleString() || '-'}</td>
+                                </tr>
+                              ))
+                            ) : (
+                              <>
+                                <tr className="hover:bg-gray-50">
+                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">B.Tech</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">4 Years</td>
+                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{university.avg_fee?.toLocaleString() || '1,50,000'}</td>
+                                </tr>
+                                <tr className="hover:bg-gray-50">
+                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">M.Tech</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">2 Years</td>
+                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{Math.round((university.avg_fee || 150000) * 1.2).toLocaleString()}</td>
+                                </tr>
+                                <tr className="hover:bg-gray-50">
+                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">MBA</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">2 Years</td>
+                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{Math.round((university.avg_fee || 150000) * 1.5).toLocaleString()}</td>
+                                </tr>
+                              </>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">* Fees mentioned are approximate and subject to change. Contact university for exact fees.</p>
+                    </GuestGate>
+                  </div>
+                )}
+
                 {activeTab === 'placements' && (
                   <div className="space-y-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">Placement Statistics</h2>
