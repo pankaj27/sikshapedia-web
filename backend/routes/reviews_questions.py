@@ -236,6 +236,111 @@ async def get_review_stats(college_id: str):
 
 
 # ============================================
+# Review Write Endpoints (Requires Auth)
+# ============================================
+
+@router.post("/reviews", response_model=Review)
+async def create_review(review_data: ReviewCreate, authorization: str = Header(None)):
+    """Create a new review (requires login)"""
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Please login to write a review")
+    
+    user = await get_current_user_from_header(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please login to write a review")
+    
+    # Verify college/institution exists
+    college = await db.colleges.find_one({"id": review_data.college_id})
+    if not college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    # Check for existing review
+    existing_review = await db.reviews.find_one({
+        "college_id": review_data.college_id,
+        "user_id": user["id"]
+    })
+    if existing_review:
+        raise HTTPException(status_code=400, detail="You have already reviewed this college")
+    
+    # Calculate review earnings based on review quality
+    review_earnings = 50.0  # Base earning for review
+    if review_data.review_text and len(review_data.review_text) > 200:
+        review_earnings = 100.0  # Higher earning for detailed reviews
+    
+    # Create review
+    review = Review(
+        college_id=review_data.college_id,
+        user_id=user["id"],
+        user_name=user.get("name", "Anonymous"),
+        rating=review_data.rating,
+        review_text=review_data.review_text,
+        pros=review_data.pros,
+        cons=review_data.cons,
+        placements_rating=review_data.placements_rating,
+        infrastructure_rating=review_data.infrastructure_rating,
+        faculty_rating=review_data.faculty_rating,
+        earnings=review_earnings,
+        status="approved"  # Auto-approve for now
+    )
+    review_dict = review.model_dump()
+    review_dict['created_at'] = review_dict['created_at'].isoformat()
+    
+    await db.reviews.insert_one(review_dict)
+    
+    # Add earnings transaction
+    earning_transaction = EarningTransaction(
+        user_id=user["id"],
+        type="review",
+        amount=review_earnings,
+        description=f"Review for {college['name']}",
+        reference_id=review.id
+    )
+    earn_dict = earning_transaction.model_dump()
+    earn_dict['created_at'] = earn_dict['created_at'].isoformat()
+    await db.earnings.insert_one(earn_dict)
+    
+    # Update user total earnings
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$inc": {"total_earnings": review_earnings}}
+    )
+    
+    # Create notification
+    notification = Notification(
+        user_id=user["id"],
+        type="review_earning",
+        title="Review Earnings Added!",
+        message=f"You earned ₹{review_earnings} for your review. Keep writing quality reviews to earn more!",
+        link="/dashboard"
+    )
+    notif_dict = notification.model_dump()
+    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+    await db.notifications.insert_one(notif_dict)
+    
+    # Update college rating
+    reviews = await db.reviews.find({"college_id": review_data.college_id}).to_list(1000)
+    avg_rating = sum(r['rating'] for r in reviews) / len(reviews) if reviews else 0
+    
+    # Update rating breakdown
+    rating_breakdown = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
+    for r in reviews:
+        rating_str = str(r.get('rating', 3))
+        if rating_str in rating_breakdown:
+            rating_breakdown[rating_str] += 1
+    
+    await db.colleges.update_one(
+        {"id": review_data.college_id},
+        {"$set": {
+            "rating": round(avg_rating, 1),
+            "total_reviews": len(reviews),
+            "rating_breakdown": rating_breakdown
+        }}
+    )
+    
+    return review
+
+
+# ============================================
 # Review Like Endpoints
 # ============================================
 
