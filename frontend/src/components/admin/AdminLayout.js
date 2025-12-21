@@ -161,6 +161,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Questions & Answers', path: '/admin/questions', icon: FiMessageSquare },
         { title: 'Comments', path: '/admin/comments', icon: FiMessageSquare },
         { title: 'Contact Inquiries', path: '/admin/contact-inquiries', icon: FiMessageSquare },
+        { title: 'Lead Forms', path: '/admin/lead-forms', icon: FiMessageSquare },
         { title: 'Counseling Requests', path: '/admin/counseling-sessions', icon: FiMessageSquare },
       ]
     },
