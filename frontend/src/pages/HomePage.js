@@ -254,18 +254,9 @@ const CollegeDuniaHome = () => {
   ];
   const quickActions = (pageSettings?.quick_actions?.length > 0) ? pageSettings.quick_actions : defaultQuickActions;
   
-  // Top Schools from settings - check for empty array too
-  const defaultTopSchools = [
-    { name: 'Delhi Public School (DPS)', location: 'Multiple Locations', board: 'CBSE', rating: 4.8, fees: '2.5L', type: 'Day School', rank: 1 },
-    { name: 'Sanskriti School', location: 'New Delhi', board: 'CBSE', rating: 4.7, fees: '3.2L', type: 'Day School', rank: 5 },
-    { name: 'The Doon School', location: 'Dehradun', board: 'ICSE', rating: 4.9, fees: '8L', type: 'Boarding', rank: 2 },
-    { name: 'Mayo College', location: 'Ajmer', board: 'CBSE', rating: 4.8, fees: '7.5L', type: 'Boarding', rank: 3 },
-    { name: 'Bishop Cotton School', location: 'Shimla', board: 'ICSE', rating: 4.6, fees: '6L', type: 'Boarding', rank: 8 },
-    { name: 'La Martiniere College', location: 'Kolkata', board: 'ICSE', rating: 4.7, fees: '1.5L', type: 'Day School', rank: 6 },
-    { name: 'Modern School', location: 'New Delhi', board: 'CBSE', rating: 4.6, fees: '2.8L', type: 'Day School', rank: 10 },
-    { name: 'Scindia School', location: 'Gwalior', board: 'CBSE', rating: 4.8, fees: '7L', type: 'Boarding', rank: 4 }
-  ];
-  // Use featured schools from API (admin-controlled), fallback to pageSettings, then defaults
+  // Top Schools from settings - NO fallback data (show empty if no data)
+  const defaultTopSchools = [];
+  // Use featured schools from API (admin-controlled), fallback to pageSettings, then empty
   const topSchoolsData = featuredSchools.length > 0 ? featuredSchools : 
     (pageSettings?.top_schools?.length > 0 ? pageSettings.top_schools : defaultTopSchools);
   
