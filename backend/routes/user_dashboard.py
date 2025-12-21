@@ -537,7 +537,8 @@ async def get_referrals(request: Request, db=Depends(get_db)):
     """Get user referrals"""
     user = await get_current_user(request, db)
     
-    referrals = await db.referrals.find(
+    # Query referral_tracking collection (where referrals are stored)
+    referrals = await db.referral_tracking.find(
         {"referrer_id": user["id"]},
         {"_id": 0}
     ).sort("created_at", -1).to_list(100)
