@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FiBuilding, FiMegaphone, FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiCheck, FiX, FiMessageSquare } from 'react-icons/fi';
+import { FiMegaphone, FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiCheck, FiX, FiMessageSquare, FiHome } from 'react-icons/fi';
+import { HiOutlineOfficeBuilding } from 'react-icons/hi';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
 import api from '../../api/axios';
