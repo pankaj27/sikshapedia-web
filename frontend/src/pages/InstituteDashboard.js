@@ -23,6 +23,8 @@ const InstituteDashboard = () => {
   const [admissionBookings, setAdmissionBookings] = useState([]);
   const [selectedAdmissionBooking, setSelectedAdmissionBooking] = useState(null);
   const [admissionComment, setAdmissionComment] = useState('');
+  const [reviewLink, setReviewLink] = useState(null);
+  const [generatingLink, setGeneratingLink] = useState(false);
   
   // Filters
   const [leadSourceFilter, setLeadSourceFilter] = useState('');
