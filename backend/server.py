@@ -2053,6 +2053,7 @@ class ContactInquiry(BaseModel):
     subject: str
     message: str
     status: str = "new"  # new, in_progress, resolved
+    admin_comment: Optional[str] = None  # Admin's response/notes
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # ============================================
