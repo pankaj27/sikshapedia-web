@@ -139,6 +139,10 @@ const DynamicListingPage = () => {
     programType: '',
   });
   
+  // Master location data
+  const [masterStates, setMasterStates] = useState([]);
+  const [masterCities, setMasterCities] = useState([]);
+  
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
   
   // Parse URL using new URL structure
