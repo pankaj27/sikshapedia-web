@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle } from 'react-icons/fi';
+import React, { useState, useEffect, useRef } from 'react';
+import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle, FiX, FiFile } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
 import { useAuth } from '../contexts/AuthContext';
@@ -7,9 +7,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link } from '../components/CustomLink';
 const WriteReviewPage = () => {
   const { user, isAuthenticated } = useAuth();
+  const fileInputRef = useRef(null);
   const [step, setStep] = useState(1);
   const [userProfile, setUserProfile] = useState(null);
   const [showNamePrompt, setShowNamePrompt] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
