@@ -25,28 +25,52 @@ const ReviewQRGenerator = ({
     canvas.width = 600;
     canvas.height = 800;
     
-    // Gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 600, 800);
-    gradient.addColorStop(0, '#f97316');
-    gradient.addColorStop(1, '#ea580c');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 600, 800);
+    // Load favicon image first
+    const faviconImg = new Image();
+    faviconImg.crossOrigin = 'anonymous';
+    faviconImg.onload = () => {
+      drawCanvas(faviconImg);
+    };
+    faviconImg.onerror = () => {
+      // Fallback to drawing without favicon
+      drawCanvas(null);
+    };
+    faviconImg.src = '/favicon.png';
     
-    // White card background
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.roundRect(30, 30, 540, 740, 20);
-    ctx.fill();
-    
-    // admissionbuddy Logo & Branding
-    ctx.fillStyle = '#f97316';
-    ctx.font = 'bold 28px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('🎓 admissionbuddy', 300, 80);
-    
-    ctx.fillStyle = '#6b7280';
-    ctx.font = '14px Arial';
-    ctx.fillText('India\'s Trusted Education Platform', 300, 105);
+    function drawCanvas(logoImg) {
+      // Gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 600, 800);
+      gradient.addColorStop(0, '#f97316');
+      gradient.addColorStop(1, '#ea580c');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 600, 800);
+      
+      // White card background
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      ctx.roundRect(30, 30, 540, 740, 20);
+      ctx.fill();
+      
+      // admissionbuddy Logo & Branding
+      if (logoImg) {
+        // Draw favicon logo
+        ctx.drawImage(logoImg, 190, 50, 32, 32);
+        ctx.fillStyle = '#f97316';
+        ctx.font = 'bold 28px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText('admissionbuddy', 230, 78);
+        ctx.textAlign = 'center';
+      } else {
+        ctx.fillStyle = '#f97316';
+        ctx.font = 'bold 28px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('admissionbuddy', 300, 80);
+      }
+      
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('India\'s Trusted Education Platform', 300, 105);
     
     // Divider line
     ctx.strokeStyle = '#e5e7eb';
