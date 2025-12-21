@@ -181,7 +181,7 @@ const EnhancedStudentDashboard = () => {
                     activeTab === 'saved' ? 'bg-orange-50 text-orange-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <FiBookmark /> Saved Colleges
+                  <FiBookmark /> Saved Institutes
                   <span className="ml-auto text-xs text-gray-500">{savedColleges.length}</span>
                 </button>
                 
@@ -498,7 +498,7 @@ const EnhancedStudentDashboard = () => {
 
             {activeTab === 'saved' && (
               <div>
-                <h1 className="text-3xl font-bold mb-6">Saved Colleges</h1>
+                <h1 className="text-3xl font-bold mb-6">Saved Institutes</h1>
 
                 {savedColleges.length === 0 ? (
                   <div className="bg-white rounded-lg shadow p-12 text-center">
