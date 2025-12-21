@@ -142,6 +142,7 @@ import PaymentHistory from './pages/admin/PaymentHistory';
 import UsersPointsReport from './pages/admin/UsersPointsReport';
 import CounselorsManagement from './pages/admin/CounselorsManagement';
 import AuthPagesManagement from './pages/admin/AuthPagesManagement';
+import LeadFormsManagement from './pages/admin/LeadFormsManagement';
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
 import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
