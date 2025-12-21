@@ -379,11 +379,28 @@ const CollegeDetailPage = ({ overrideId }) => {
     alert('Reply functionality coming soon!');
   };
 
-  const handleFavorite = () => {
+  const handleFavorite = async () => {
     // Check if user is logged in
     if (!requireAuth('add to favorites')) return;
-    // TODO: Add to favorites functionality
-    alert('Added to favorites!');
+    
+    try {
+      const token = localStorage.getItem('token');
+      if (isFavorited) {
+        // Remove from favorites
+        await api.delete(`/user/favorites/${college.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setIsFavorited(false);
+      } else {
+        // Add to favorites
+        await api.post(`/user/favorites/${college.id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setIsFavorited(true);
+      }
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
   };
 
   const handleQALike = () => {
