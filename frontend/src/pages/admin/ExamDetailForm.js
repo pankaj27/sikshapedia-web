@@ -493,6 +493,23 @@ const ExamDetailForm = () => {
     }
   };
 
+  // Fetch master location data
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const statesRes = await api.get('/locations/all-states');
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setMasterStates(activeStates);
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+      }
+    };
+    fetchMasterData();
+  }, []);
+
   // All exam categories matching the listing page
   const streams = [
     'Engineering', 'Medical', 'Management', 'Science', 'Law', 'Pharmacy',
@@ -501,7 +518,10 @@ const ExamDetailForm = () => {
     'Class 10 Exams', 'Hotel Management', 'Veterinary Sciences', 'Vocational Courses',
     'Study Abroad Exams', 'Mass Communications', 'Aviation', 'Animation'
   ];
-  const indianStates = ['All India', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
+  
+  const indianStates = masterStates.length > 0 
+    ? ['All India', ...masterStates]
+    : ['All India', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
 
   if (loading) {
     return (
