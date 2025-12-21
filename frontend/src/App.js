@@ -181,6 +181,7 @@ function App() {
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
             <Route path="/admin/newsletter" element={<NewsletterManagement />} />
+            <Route path="/admin/email-settings" element={<EmailSettings />} />
             <Route path="/admin/reviews" element={<ReviewsModeration />} />
             <Route path="/admin/questions" element={<QuestionsModeration />} />
             <Route path="/admin/comments" element={<CommentsModeration />} />
