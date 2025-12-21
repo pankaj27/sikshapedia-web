@@ -31,7 +31,7 @@ async def get_current_user_from_header(authorization: str = Header(None)):
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         user = await db.users.find_one({"id": payload.get("user_id")}, {"_id": 0})
         return user
-    except:
+    except Exception:
         return None
 
 
