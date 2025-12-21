@@ -107,27 +107,38 @@ export const STATE_NAMES = {
   'west-bengal': 'West Bengal'
 };
 
-// Indian Cities (slug format)
+// Indian Cities (slug format) - from master data
 export const INDIAN_CITIES = [
-  'mumbai', 'delhi', 'new-delhi', 'bangalore', 'bengaluru', 'hyderabad', 'chennai', 'kolkata', 'pune',
-  'ahmedabad', 'jaipur', 'lucknow', 'kanpur', 'nagpur', 'indore', 'thane',
-  'bhopal', 'visakhapatnam', 'patna', 'vadodara', 'ghaziabad', 'ludhiana',
-  'agra', 'nashik', 'faridabad', 'meerut', 'rajkot', 'varanasi', 'srinagar',
-  'aurangabad', 'dhanbad', 'amritsar', 'allahabad', 'prayagraj', 'ranchi', 'howrah',
-  'coimbatore', 'jabalpur', 'gwalior', 'vijayawada', 'jodhpur', 'madurai',
-  'raipur', 'kota', 'chandigarh', 'guwahati', 'solapur', 'hubli', 'mysore', 'mysuru',
-  'tiruchirappalli', 'trichy', 'bareilly', 'aligarh', 'tiruppur', 'moradabad', 'jalandhar',
-  'bhubaneswar', 'salem', 'warangal', 'guntur', 'bhiwandi', 'saharanpur',
-  'gorakhpur', 'bikaner', 'amravati', 'noida', 'greater-noida', 'jamshedpur', 'bhilai',
-  'cuttack', 'firozabad', 'kochi', 'cochin', 'nellore', 'bhavnagar', 'dehradun',
-  'durgapur', 'asansol', 'rourkela', 'nanded', 'kolhapur', 'ajmer',
-  'akola', 'gulbarga', 'jamnagar', 'ujjain', 'loni', 'siliguri', 'jhansi',
-  'ulhasnagar', 'jammu', 'sangli', 'mangalore', 'mangaluru', 'erode', 'belgaum', 'belagavi',
-  'kurnool', 'ambattur', 'rajahmundry', 'tirunelveli', 'malegaon', 'gaya',
-  'udaipur', 'kakinada', 'davanagere', 'kozhikode', 'calicut', 'thiruvananthapuram',
-  'thrissur', 'tirupati', 'rohtak', 'panipat', 'karnal', 'sonipat', 'hisar',
-  'gurugram', 'gurgaon', 'shimla', 'solan', 'dharamshala', 'nainital', 'haridwar', 'rishikesh',
-  'roorkee', 'haldwani', 'kharagpur', 'durgapur', 'barasat', 'kalyani', 'haldia'
+  'agartala', 'agatti', 'agra', 'ahmedabad', 'aizawl', 'ajmer', 'akola', 'alappuzha', 'aligarh', 'allahabad', 
+  'along', 'alwar', 'ambala', 'ambikapur', 'amravati', 'amritsar', 'anand', 'anantapur', 'anantnag', 'arrah', 
+  'asansol', 'aurangabad', 'baddi', 'baharampur', 'balasore', 'bangalore', 'baramulla', 'bardhaman', 'bareilly', 
+  'baripada', 'bathinda', 'begusarai', 'belgaum', 'bellary', 'belonia', 'berhampur', 'bhadrak', 'bhagalpur', 
+  'bharatpur', 'bhavnagar', 'bhilai', 'bhilwara', 'bhopal', 'bhubaneswar', 'bicholim', 'bikaner', 'bilaspur', 
+  'bishnupur', 'bokaro', 'bomdila', 'bongaigaon', 'burhanpur', 'car-nicobar', 'central-delhi', 'champhai', 
+  'chandigarh', 'chennai', 'churachandpur', 'coimbatore', 'cuttack', 'daman', 'darbhanga', 'davangere', 
+  'dehradun', 'deoghar', 'dewas', 'dhanbad', 'dharamshala', 'dharmanagar', 'dhubri', 'dibrugarh', 'dimapur', 
+  'dindigul', 'diphu', 'diu', 'dumka', 'durg', 'durgapur', 'dwarka', 'east-delhi', 'erode', 'faridabad', 
+  'firozpur', 'gandhinagar', 'gangtok', 'gaya', 'ghaziabad', 'giridih', 'gorakhpur', 'greater-noida', 'gulbarga', 
+  'guntur', 'gurugram', 'guwahati', 'gwalior', 'gyalshing', 'haldia', 'haldwani', 'hamirpur', 'haridwar', 
+  'hazaribagh', 'hisar', 'hoshiarpur', 'howrah', 'hubli', 'hyderabad', 'imphal', 'indore', 'itanagar', 
+  'jabalpur', 'jagdalpur', 'jaipur', 'jalandhar', 'jammu', 'jamnagar', 'jamshedpur', 'jharsuguda', 'jodhpur', 
+  'jorhat', 'jowai', 'junagadh', 'kadapa', 'kailashahar', 'kakching', 'kakinada', 'kannur', 'kanpur', 'karaikal', 
+  'kargil', 'karimnagar', 'karnal', 'kashipur', 'kathua', 'katihar', 'kavaratti', 'khammam', 'kharagpur', 'kochi', 
+  'kohima', 'kolasib', 'kolhapur', 'kolkata', 'kollam', 'korba', 'kota', 'kottayam', 'kozhikode', 'kullu', 
+  'kurnool', 'leh', 'lucknow', 'ludhiana', 'lunglei', 'madurai', 'mahbubnagar', 'mahe', 'malappuram', 'malda', 
+  'manali', 'mandi', 'mangalore', 'mangan', 'manipal', 'mapusa', 'margao', 'meerut', 'mehsana', 'minicoy', 
+  'moga', 'mohali', 'mokokchung', 'moradabad', 'morbi', 'mumbai', 'munger', 'mussoorie', 'muzaffarpur', 'mysore', 
+  'nadiad', 'nagaon', 'nagpur', 'naharlagun', 'nainital', 'nalgonda', 'namchi', 'nashik', 'navi-mumbai', 'nellore', 
+  'new-delhi', 'nizamabad', 'noida', 'nongstoin', 'north-delhi', 'palakkad', 'palampur', 'panaji', 'panchkula', 
+  'panipat', 'pasighat', 'pathankot', 'patiala', 'patna', 'ponda', 'port-blair', 'puducherry', 'pulwama', 'pune', 
+  'puri', 'purnia', 'raigarh', 'raipur', 'rajahmundry', 'rajkot', 'rajnandgaon', 'ramagundam', 'ramgarh', 'ranchi', 
+  'rangpo', 'ratlam', 'rewa', 'rishikesh', 'rohini', 'rohtak', 'roorkee', 'rourkela', 'rudrapur', 'sagar', 'saket', 
+  'salem', 'sambalpur', 'sangli', 'satna', 'secunderabad', 'serchhip', 'shillong', 'shimla', 'shimoga', 'sikar', 
+  'silchar', 'siliguri', 'silvassa', 'solan', 'solapur', 'sonipat', 'sopore', 'south-delhi', 'sri-ganganagar', 
+  'srinagar', 'surat', 'tawang', 'tezpur', 'tezu', 'thane', 'thanjavur', 'thiruvananthapuram', 'thoothukudi', 
+  'thoubal', 'thrissur', 'tinsukia', 'tiruchirappalli', 'tirunelveli', 'tirupati', 'tuensang', 'tumkur', 'tura', 
+  'udaipur', 'udhampur', 'udupi', 'ujjain', 'una', 'vadodara', 'varanasi', 'vasco-da-gama', 'vellore', 'vijayawada', 
+  'visakhapatnam', 'warangal', 'west-delhi', 'williamnagar', 'wokha', 'yamunanagar', 'yanam', 'ziro', 'zunheboto'
 ];
 
 // City name mapping (slug to display name)
