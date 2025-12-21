@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiRefreshCw, FiGlobe, FiFileText, FiMapPin, FiCode, FiDownload, FiEye, FiCheck, FiAlertCircle } from 'react-icons/fi';
+import { FiSave, FiRefreshCw, FiGlobe, FiFileText, FiMapPin, FiCode, FiDownload, FiEye, FiCheck, FiAlertCircle, FiEdit2, FiToggleLeft, FiToggleRight, FiInfo, FiZap, FiRotateCcw } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 import AdminLayout from '../../components/admin/AdminLayout';
@@ -10,6 +10,12 @@ const SEOSettings = () => {
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  
+  // Schema state
+  const [schemaReport, setSchemaReport] = useState(null);
+  const [selectedSchema, setSelectedSchema] = useState(null);
+  const [editingSchema, setEditingSchema] = useState(null);
+  const [schemaJsonText, setSchemaJsonText] = useState('');
   
   // Sitemap state
   const [sitemapSettings, setSitemapSettings] = useState({
