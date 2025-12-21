@@ -146,10 +146,6 @@ const InstituteDashboard = () => {
     if (activeTab === 'applications') fetchApplications();
   }, [appStatusFilter]);
   
-  useEffect(() => {
-    if (activeTab === 'review_link' && institution?.id) fetchReviewLink();
-  }, [activeTab, institution?.id]);
-  
   const fetchReviewLink = async () => {
     try {
       const res = await api.get(`/institute/review-link/${institution.id}`);
