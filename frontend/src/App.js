@@ -75,6 +75,8 @@ import CollegesListManagement from './pages/admin/CollegesListManagement';
 import NewsManagement from './pages/admin/NewsManagement';
 import NewsForm from './pages/admin/NewsForm';
 import ReviewsModeration from './pages/admin/ReviewsModeration';
+import QuestionsModeration from './pages/admin/QuestionsModeration';
+import CommentsModeration from './pages/admin/CommentsModeration';
 import StreamsManagement from './pages/admin/StreamsManagement';
 import SubStreamsManagement from './pages/admin/SubStreamsManagement';
 import BoardsManagement from './pages/admin/BoardsManagement';
