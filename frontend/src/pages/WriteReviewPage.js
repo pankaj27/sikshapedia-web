@@ -843,9 +843,9 @@ const WriteReviewPage = () => {
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FiCheckCircle className="text-green-600" size={48} />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-3">Review Submitted Successfully!</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-3">{pageSettings.success_page.title}</h2>
                 <p className="text-gray-600 text-lg">
-                  Thank you for sharing your experience. Your review is being verified and will be published shortly.
+                  {pageSettings.success_page.message}
                 </p>
               </div>
 
@@ -855,31 +855,21 @@ const WriteReviewPage = () => {
                   <FiAward size={32} />
                   <span className="text-4xl font-bold">+{earnedPoints}</span>
                 </div>
-                <p className="text-orange-100">Points Earned!</p>
+                <p className="text-orange-100">{pageSettings.success_page.points_label}</p>
                 <p className="text-sm text-orange-200 mt-2">
-                  ≈ ₹{(earnedPoints * 0.5).toFixed(0)} reward value
+                  {pageSettings.success_page.reward_note.replace('{amount}', (earnedPoints * 0.5).toFixed(0))}
                 </p>
               </div>
 
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
-                <h3 className="font-bold text-lg mb-3">What Happens Next?</h3>
+                <h3 className="font-bold text-lg mb-3">{pageSettings.success_page.next_steps_title}</h3>
                 <div className="space-y-3 text-left">
-                  <div className="flex gap-3">
-                    <span className="text-orange-600 font-bold">1.</span>
-                    <span className="text-gray-700">Our team will verify your review within 48 hours</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="text-orange-600 font-bold">2.</span>
-                    <span className="text-gray-700">You'll receive a verification email once approved</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="text-orange-600 font-bold">3.</span>
-                    <span className="text-gray-700">Points will be added to your account after approval</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="text-orange-600 font-bold">4.</span>
-                    <span className="text-gray-700">Redeem points for cash via UPI once you have 200+ points</span>
-                  </div>
+                  {pageSettings.success_page.next_steps.map((step, index) => (
+                    <div key={index} className="flex gap-3">
+                      <span className="text-orange-600 font-bold">{step.step_number}.</span>
+                      <span className="text-gray-700">{step.text}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -909,11 +899,11 @@ const WriteReviewPage = () => {
                   variant="outline"
                   className="border-orange-500 text-orange-600 hover:bg-orange-50"
                 >
-                  Write Another Review
+                  {pageSettings.success_page.button_write_another}
                 </Button>
                 <Link to="/dashboard?tab=reviews">
                   <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                    View My Reviews
+                    {pageSettings.success_page.button_view_reviews}
                   </Button>
                 </Link>
               </div>
