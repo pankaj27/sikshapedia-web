@@ -195,16 +195,15 @@ export const AskQuestionWidget = ({ context, onClose }) => {
     setError('');
     
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/inquiries`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/contact-inquiries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: email.split('@')[0], // Use email prefix as name
           email: email,
           phone: '',
+          subject: 'Question from Homepage',
           message: question,
-          inquiry_type: 'general_question',
-          context: context || 'homepage'
         })
       });
       
