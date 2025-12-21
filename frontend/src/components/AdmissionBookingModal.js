@@ -429,6 +429,11 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
             <FiX size={20} />
           </button>
           
+          {/* admissionbuddy Logo */}
+          <div className="flex justify-center mb-3">
+            <img src="/favicon.png" alt="admissionbuddy" className="h-10 w-10" />
+          </div>
+          
           {/* Main Heading */}
           <h1 className="text-xl font-bold text-center mb-4">📚 Book Your Seat Now</h1>
           
