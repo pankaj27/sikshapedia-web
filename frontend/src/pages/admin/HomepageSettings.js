@@ -143,6 +143,41 @@ const HomepageSettings = () => {
     show_location_search: true,
     show_latest_news: true,
     
+    // Location Search Settings
+    location_search_title: 'Find Colleges by Location',
+    location_states: [
+      { name: 'Maharashtra', icon: '🏛️', link: '/colleges?state=Maharashtra' },
+      { name: 'Tamil Nadu', icon: '🏛️', link: '/colleges?state=Tamil Nadu' },
+      { name: 'Karnataka', icon: '🏛️', link: '/colleges?state=Karnataka' },
+      { name: 'Delhi', icon: '🏛️', link: '/colleges?state=Delhi' },
+      { name: 'Uttar Pradesh', icon: '🏛️', link: '/colleges?state=Uttar Pradesh' },
+      { name: 'West Bengal', icon: '🏛️', link: '/colleges?state=West Bengal' },
+      { name: 'Gujarat', icon: '🏛️', link: '/colleges?state=Gujarat' },
+      { name: 'Rajasthan', icon: '🏛️', link: '/colleges?state=Rajasthan' },
+      { name: 'Madhya Pradesh', icon: '🏛️', link: '/colleges?state=Madhya Pradesh' },
+      { name: 'Kerala', icon: '🏛️', link: '/colleges?state=Kerala' },
+      { name: 'Telangana', icon: '🏛️', link: '/colleges?state=Telangana' },
+      { name: 'Punjab', icon: '🏛️', link: '/colleges?state=Punjab' }
+    ],
+    location_cities: [
+      { name: 'Mumbai', icon: '🌆', link: '/colleges?city=Mumbai' },
+      { name: 'Delhi', icon: '🌆', link: '/colleges?city=Delhi' },
+      { name: 'Bangalore', icon: '🌆', link: '/colleges?city=Bangalore' },
+      { name: 'Hyderabad', icon: '🌆', link: '/colleges?city=Hyderabad' },
+      { name: 'Chennai', icon: '🌆', link: '/colleges?city=Chennai' },
+      { name: 'Pune', icon: '🌆', link: '/colleges?city=Pune' },
+      { name: 'Kolkata', icon: '🌆', link: '/colleges?city=Kolkata' },
+      { name: 'Ahmedabad', icon: '🌆', link: '/colleges?city=Ahmedabad' }
+    ],
+    location_countries: [
+      { name: 'USA', icon: '🇺🇸', link: '/study-abroad?country=USA' },
+      { name: 'UK', icon: '🇬🇧', link: '/study-abroad?country=UK' },
+      { name: 'Canada', icon: '🇨🇦', link: '/study-abroad?country=Canada' },
+      { name: 'Australia', icon: '🇦🇺', link: '/study-abroad?country=Australia' },
+      { name: 'Germany', icon: '🇩🇪', link: '/study-abroad?country=Germany' },
+      { name: 'Singapore', icon: '🇸🇬', link: '/study-abroad?country=Singapore' }
+    ],
+    
     // CTA
     cta_enabled: true,
     cta_title: 'Start Your Journey Today',
