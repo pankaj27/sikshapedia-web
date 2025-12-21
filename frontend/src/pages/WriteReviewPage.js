@@ -237,6 +237,47 @@ const WriteReviewPage = () => {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
+  // Submit review to backend
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [earnedPoints, setEarnedPoints] = useState(0);
+
+  const handleSubmitReview = async () => {
+    if (!isAuthenticated) {
+      alert('Please login to submit a review');
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const reviewData = {
+        college_id: formData.instituteId,
+        college_name: formData.instituteName,
+        course: formData.course,
+        rating: formData.rating,
+        title: formData.reviewTitle,
+        review: `${formData.likes}\n\nDislikes: ${formData.dislikes}\n\nDetailed Review: ${formData.detailedReview}`,
+        facilities_rating: formData.facilities,
+        graduation_year: formData.graduationYear,
+        is_verified_student: !!formData.verificationDocument,
+        verification_document: formData.verificationDocument,
+        photos: []
+      };
+
+      const response = await api.post('/user/reviews', reviewData);
+      
+      setEarnedPoints(response.data.points_earned || 50);
+      setStep(4);
+    } catch (error) {
+      console.error('Submit error:', error);
+      setSubmitError(error.response?.data?.detail || 'Failed to submit review. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const renderStars = (rating, onRatingChange) => {
     return (
       <div className="flex gap-1">
