@@ -374,27 +374,14 @@ const CollegeDuniaHome = () => {
               {heroSubtitle}
             </p>
             
-            {/* Single Search Input - Compact */}
+            {/* Single Search Input - Compact with Autocomplete */}
             <div className="max-w-3xl mx-auto">
-              <form onSubmit={handleSearch}>
-                <div className="flex gap-2">
-                  <div className="flex-1 relative">
-                    <Input
-                      placeholder="Search for colleges, exams, courses and more.."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-12 text-sm pl-10 pr-4 bg-white border-0 rounded-lg shadow-xl focus:ring-2 focus:ring-orange-500 transition-all"
-                    />
-                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg pointer-events-none" />
-                  </div>
-                  <Button 
-                    type="submit" 
-                    className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 h-12 px-8 text-sm font-bold rounded-lg shadow-xl hover:shadow-2xl transition-all"
-                  >
-                    Search
-                  </Button>
-                </div>
-              </form>
+              <SearchAutocomplete 
+                placeholder="Search for colleges, exams, courses and more..."
+                size="large"
+                className="w-full"
+                inputClassName="h-14 text-base pl-12 pr-4 bg-white border-0 rounded-xl shadow-xl focus:ring-2 focus:ring-orange-500 transition-all"
+              />
             </div>
             
             {/* Need Counselling Button - Compact */}
