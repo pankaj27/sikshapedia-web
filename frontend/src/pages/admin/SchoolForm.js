@@ -41,6 +41,31 @@ const SchoolForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [availableCities, setAvailableCities] = useState([]);
+  
+  // Master location data
+  const [indianStates, setIndianStates] = useState([]);
+  const [allCities, setAllCities] = useState([]);
+
+  // Fetch master location data on mount
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [statesRes, citiesRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities')
+        ]);
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setIndianStates(activeStates);
+        setAllCities((citiesRes.data || []).filter(c => c.status === 'active'));
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+      }
+    };
+    fetchMasterData();
+  }, []);
 
   useEffect(() => {
     if (isEdit) {
@@ -50,12 +75,16 @@ const SchoolForm = () => {
 
   // Update available cities when state changes
   useEffect(() => {
-    if (formData.state) {
-      setAvailableCities(citiesByState[formData.state] || []);
+    if (formData.state && allCities.length > 0) {
+      const stateCities = allCities
+        .filter(c => c.state === formData.state)
+        .map(c => c.name)
+        .sort();
+      setAvailableCities(stateCities);
     } else {
       setAvailableCities([]);
     }
-  }, [formData.state]);
+  }, [formData.state, allCities]);
 
   const fetchSchool = async () => {
     try {
