@@ -91,7 +91,7 @@ const LeadFormsManagement = () => {
             </div>
             <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
               <div className="flex items-center gap-2 mb-1">
-                <FiBuilding className="text-indigo-500" size={16} />
+                <HiOutlineOfficeBuilding className="text-indigo-500" size={16} />
                 <p className="text-sm text-gray-600">Institute Registrations</p>
               </div>
               <p className="text-2xl font-bold text-indigo-600">{stats.by_type?.register_institute || 0}</p>
