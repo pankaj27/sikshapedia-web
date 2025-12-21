@@ -29,7 +29,10 @@ async def get_current_user_from_header(authorization: str = Header(None)):
         token = authorization.replace("Bearer ", "")
         SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        user = await db.users.find_one({"id": payload.get("user_id")}, {"_id": 0})
+        user_id = payload.get("sub")  # Token uses 'sub' for user_id
+        if not user_id:
+            return None
+        user = await db.users.find_one({"id": user_id}, {"_id": 0})
         return user
     except Exception:
         return None
