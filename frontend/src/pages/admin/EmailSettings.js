@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiMail, FiSave, FiRefreshCw, FiEdit2, FiEye, FiTrash2, FiPlus, FiCheck, FiX, FiSettings, FiFileText } from 'react-icons/fi';
 import api from '../../api/axios';
+import AdminLayout from '../../components/admin/AdminLayout';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
