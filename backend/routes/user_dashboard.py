@@ -136,7 +136,7 @@ async def get_dashboard(request: Request, db=Depends(get_db)):
     comments_count = await db.comments.count_documents({"user_id": user_id})
     favorites_count = await db.favorites.count_documents({"user_id": user_id})
     liked_count = await db.likes.count_documents({"user_id": user_id, "entity_type": "college"})
-    referrals_count = await db.referrals.count_documents({"referrer_id": user_id})
+    referrals_count = await db.referral_tracking.count_documents({"referrer_id": user_id})
     
     # Get application status breakdown
     status_breakdown = {}
