@@ -144,6 +144,8 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
   const [submitting, setSubmitting] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(10);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const fetchComments = async () => {
     try {
@@ -158,10 +160,14 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await api.get('/auth/me');
-      setCurrentUserId(res.data.id);
+      const token = localStorage.getItem('token');
+      if (token) {
+        const res = await api.get('/auth/me');
+        setCurrentUserId(res.data.id);
+        setIsLoggedIn(true);
+      }
     } catch (err) {
-      // Not logged in
+      setIsLoggedIn(false);
     }
   };
 
@@ -172,7 +178,17 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
     }
   }, [entityId]);
 
+  const handleCommentInputClick = () => {
+    if (!isLoggedIn) {
+      setShowLoginPrompt(true);
+    }
+  };
+
   const handleSubmitComment = async () => {
+    if (!isLoggedIn) {
+      setShowLoginPrompt(true);
+      return;
+    }
     if (!newComment.trim()) return;
     setSubmitting(true);
     try {
