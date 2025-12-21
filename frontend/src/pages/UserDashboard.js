@@ -995,7 +995,7 @@ const UserDashboard = () => {
                 {liked.length === 0 ? (
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                     <FiHeart className="text-6xl text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-700 mb-2">No Liked Colleges</h3>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">No Liked Institutes</h3>
                     <p className="text-gray-600">Like colleges you&apos;re interested in</p>
                   </div>
                 ) : (
