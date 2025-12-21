@@ -13,6 +13,7 @@ import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import ReviewsSection from '../components/ReviewsSection';
 import QuestionsSection from '../components/QuestionsSection';
+import GuestGate from '../components/GuestGate';
 
 const UniversityDetailPage = () => {
   const { seg1: rawSlug } = useParams();
