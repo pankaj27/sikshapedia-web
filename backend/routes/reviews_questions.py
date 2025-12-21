@@ -198,6 +198,68 @@ async def get_review_stats(college_id: str):
 
 
 # ============================================
+# Review Like Endpoints
+# ============================================
+
+@router.post("/reviews/{review_id}/like")
+async def like_review(review_id: str, authorization: str = Header(None)):
+    """Like a review (requires login)"""
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Please login to like reviews")
+    
+    user = await get_current_user_from_header(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please login to like reviews")
+    
+    review = await db.reviews.find_one({"id": review_id})
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    liked_by = review.get("liked_by", [])
+    user_id = user["id"]
+    
+    if user_id in liked_by:
+        # Already liked - unlike it
+        liked_by.remove(user_id)
+        message = "Review unliked"
+    else:
+        # Like it
+        liked_by.append(user_id)
+        message = "Review liked"
+    
+    await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"liked_by": liked_by, "likes": len(liked_by)}}
+    )
+    
+    return {
+        "success": True, 
+        "message": message, 
+        "likes": len(liked_by),
+        "liked": user_id in liked_by
+    }
+
+
+@router.get("/reviews/{review_id}/likes")
+async def get_review_likes(review_id: str, authorization: str = Header(None)):
+    """Get like count and check if current user liked"""
+    review = await db.reviews.find_one({"id": review_id}, {"_id": 0, "likes": 1, "liked_by": 1})
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    user_liked = False
+    if authorization:
+        user = await get_current_user_from_header(authorization)
+        if user:
+            user_liked = user["id"] in review.get("liked_by", [])
+    
+    return {
+        "likes": review.get("likes", 0),
+        "liked": user_liked
+    }
+
+
+# ============================================
 # Question Endpoints (Public Read)
 # ============================================
 
