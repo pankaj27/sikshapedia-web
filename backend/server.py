@@ -5884,6 +5884,86 @@ async def get_all_cities(state: Optional[str] = None):
     cities = await db.cities.find(query, {"_id": 0}).sort("name", 1).to_list(500)
     return cities
 
+# ============================================
+# Admin State/City Management APIs
+# ============================================
+
+class StateCreate(BaseModel):
+    name: str
+    slug: str
+    country: str = "India"
+    is_union_territory: bool = False
+    status: str = "active"
+
+class CityCreate(BaseModel):
+    name: str
+    slug: str
+    state: str
+    country: str = "India"
+    status: str = "active"
+
+@api_router.post("/admin/states")
+async def create_state(state_data: StateCreate):
+    """Create a new state"""
+    existing = await db.states.find_one({"name": state_data.name})
+    if existing:
+        raise HTTPException(status_code=400, detail="State already exists")
+    
+    state_dict = state_data.model_dump()
+    state_dict["id"] = str(uuid4())
+    await db.states.insert_one(state_dict)
+    return {"success": True, "message": "State created successfully"}
+
+@api_router.put("/admin/states/{state_id}")
+async def update_state(state_id: str, state_data: StateCreate):
+    """Update a state"""
+    result = await db.states.update_one(
+        {"$or": [{"id": state_id}, {"_id": state_id}]},
+        {"$set": state_data.model_dump()}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="State not found")
+    return {"success": True, "message": "State updated successfully"}
+
+@api_router.delete("/admin/states/{state_id}")
+async def delete_state(state_id: str):
+    """Delete a state"""
+    result = await db.states.delete_one({"$or": [{"id": state_id}, {"name": state_id}]})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="State not found")
+    return {"success": True, "message": "State deleted successfully"}
+
+@api_router.post("/admin/cities")
+async def create_city(city_data: CityCreate):
+    """Create a new city"""
+    existing = await db.cities.find_one({"name": city_data.name, "state": city_data.state})
+    if existing:
+        raise HTTPException(status_code=400, detail="City already exists in this state")
+    
+    city_dict = city_data.model_dump()
+    city_dict["id"] = str(uuid4())
+    await db.cities.insert_one(city_dict)
+    return {"success": True, "message": "City created successfully"}
+
+@api_router.put("/admin/cities/{city_id}")
+async def update_city(city_id: str, city_data: CityCreate):
+    """Update a city"""
+    result = await db.cities.update_one(
+        {"$or": [{"id": city_id}, {"_id": city_id}]},
+        {"$set": city_data.model_dump()}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="City not found")
+    return {"success": True, "message": "City updated successfully"}
+
+@api_router.delete("/admin/cities/{city_id}")
+async def delete_city(city_id: str):
+    """Delete a city"""
+    result = await db.cities.delete_one({"$or": [{"id": city_id}, {"name": city_id}]})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="City not found")
+    return {"success": True, "message": "City deleted successfully"}
+
 @api_router.get("/locations/countries")
 async def get_countries():
     """Get all unique countries for study abroad"""
