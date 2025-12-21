@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 import { Link } from '../components/CustomLink';
 const WriteReviewPage = () => {
