@@ -86,6 +86,44 @@ class AnswerCreate(BaseModel):
     institute_name: Optional[str] = None
 
 
+class ReviewCreate(BaseModel):
+    college_id: str
+    rating: int
+    review_title: Optional[str] = None
+    review_text: str
+    course: Optional[str] = None
+    year_of_study: Optional[str] = None
+    ratings: Optional[dict] = {}
+    pros: Optional[str] = None
+    cons: Optional[str] = None
+    placements_rating: Optional[int] = None
+    infrastructure_rating: Optional[int] = None
+    faculty_rating: Optional[int] = None
+
+
+class EarningTransaction(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    type: str  # review, referral
+    amount: float
+    description: str
+    reference_id: str  # review_id or referral_user_id
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class Notification(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    type: str  # admission_alert, exam_alert, application_update, review_earning
+    title: str
+    message: str
+    link: Optional[str] = None
+    read: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
 # ============================================
 # Review Endpoints (Public Read)
 # ============================================
