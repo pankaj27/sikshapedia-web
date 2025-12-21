@@ -78,6 +78,7 @@ const AdminLayout = ({ children }) => {
       submenu: [
         { title: 'Newsletter Subscribers', path: '/admin/newsletter', icon: FiMail, highlight: true },
         { title: 'Email Settings & Templates', path: '/admin/email-settings', icon: FiSettings, highlight: true, badge: 'NEW' },
+        { title: 'Footer Settings', path: '/admin/footer-settings', icon: FiSettings, highlight: true, badge: 'NEW' },
       ]
     },
     {
