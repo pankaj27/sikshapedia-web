@@ -813,7 +813,9 @@ const UserDashboard = () => {
                       <div key={review.id} className="bg-white rounded-xl shadow-sm p-6">
                         <div className="flex items-start justify-between mb-3">
                           <div>
-                            <h3 className="font-bold">{review.college_name}</h3>
+                            <Link to={`/college/${review.college_id || review.entity_id}`} className="font-bold text-blue-600 hover:underline">
+                              {review.college_name || review.entity_name || 'Institute'}
+                            </Link>
                             <div className="flex items-center gap-1 mt-1">
                               {[...Array(5)].map((_, i) => (
                                 <FiStar 
@@ -821,14 +823,15 @@ const UserDashboard = () => {
                                   className={i < review.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'} 
                                 />
                               ))}
+                              <span className="text-sm text-gray-500 ml-2">({review.rating}/5)</span>
                             </div>
                           </div>
                           <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                            +{review.points_earned} pts
+                            +{review.points_earned || 0} pts
                           </span>
                         </div>
-                        <h4 className="font-medium mb-2">{review.title}</h4>
-                        <p className="text-gray-600 text-sm">{review.review}</p>
+                        {review.title && <h4 className="font-medium mb-2">{review.title}</h4>}
+                        <p className="text-gray-700">{review.review || review.content || 'No review text'}</p>
                         <p className="text-xs text-gray-500 mt-3">
                           {new Date(review.created_at).toLocaleDateString()}
                         </p>
