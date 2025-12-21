@@ -81,17 +81,15 @@ const BlogPage = () => {
         setArticles(articlesData);
         setFeaturedArticles(articlesData.slice(0, 3));
       } else {
-        // Fallback to mock data if no data from API
-        const mockArticles = generateMockArticles();
-        setArticles(mockArticles);
-        setFeaturedArticles(mockArticles.slice(0, 3));
+        // No fallback - show empty state
+        setArticles([]);
+        setFeaturedArticles([]);
       }
     } catch (error) {
       console.error('Error fetching articles:', error);
-      // Fallback to mock data
-      const mockArticles = generateMockArticles();
-      setArticles(mockArticles);
-      setFeaturedArticles(mockArticles.slice(0, 3));
+      // No fallback - show empty state
+      setArticles([]);
+      setFeaturedArticles([]);
     } finally {
       setLoading(false);
     }
