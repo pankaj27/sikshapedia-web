@@ -6398,6 +6398,31 @@ async def update_inquiry_status(inquiry_id: str, status: str):
     await db.contact_inquiries.update_one({"id": inquiry_id}, {"$set": {"status": status}})
     return {"success": True}
 
+
+@api_router.put("/contact-inquiries/{inquiry_id}")
+async def update_inquiry(inquiry_id: str, data: dict):
+    """Update a contact inquiry (full update)"""
+    # Remove id from data if present to avoid overwriting
+    update_data = {k: v for k, v in data.items() if k not in ['id', '_id', 'created_at']}
+    result = await db.contact_inquiries.update_one(
+        {"id": inquiry_id}, 
+        {"$set": update_data}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Inquiry not found")
+    
+    updated = await db.contact_inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+    return updated
+
+
+@api_router.delete("/contact-inquiries/{inquiry_id}")
+async def delete_inquiry(inquiry_id: str):
+    """Delete a contact inquiry"""
+    result = await db.contact_inquiries.delete_one({"id": inquiry_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Inquiry not found")
+    return {"success": True}
+
 # ============================================
 # Advertisement Management Routes - MOVED TO routes/advertisements.py
 # ============================================
