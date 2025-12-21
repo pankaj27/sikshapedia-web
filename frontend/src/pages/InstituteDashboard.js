@@ -4,7 +4,7 @@ import {
   FiUsers, FiFileText, FiBarChart2, FiTrendingUp, FiLogOut,
   FiCheckCircle, FiClock, FiXCircle, FiAlertCircle, FiFilter,
   FiPhone, FiMail, FiMapPin, FiEye, FiSearch, FiDollarSign, FiEdit2,
-  FiStar, FiLink, FiShare2
+  FiStar, FiLink, FiShare2, FiHelpCircle, FiMessageCircle
 } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
