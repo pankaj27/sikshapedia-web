@@ -10,7 +10,7 @@ import sys
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://rewardflow-9.preview.emergentagent.com/api"
+BASE_URL = "https://review-buddy-14.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
