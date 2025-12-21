@@ -320,7 +320,8 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                     onFocus={() => setShowCityDropdown(true)}
                     required
                     disabled={!formData.state}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!formData.state ? 'bg-gray-100 cursor-not-allowed text-gray-400' : ''} ${formData.city ? 'text-gray-900 font-medium' : 'text-gray-500'}`}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!formData.state ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    style={{ color: formData.city ? '#111827' : (!formData.state ? '#9CA3AF' : '#6B7280'), fontWeight: formData.city ? '600' : '400' }}
                     placeholder={formData.state ? "Search City..." : "Select state first"}
                   />
                   {showCityDropdown && formData.state && (
@@ -330,7 +331,8 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                           <div
                             key={city}
                             onClick={() => handleCitySelect(city)}
-                            className={`px-3 py-2 cursor-pointer hover:bg-blue-50 text-gray-900 ${formData.city === city ? 'bg-blue-100 font-semibold' : ''}`}
+                            className={`px-3 py-2 cursor-pointer hover:bg-blue-50 ${formData.city === city ? 'bg-blue-100' : ''}`}
+                            style={{ color: '#111827', fontWeight: formData.city === city ? '600' : '500' }}
                           >
                             {city}
                           </div>
