@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle, FiX, FiFile } from 'react-icons/fi';
+import { useSearchParams } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
 import { useAuth } from '../contexts/AuthContext';
