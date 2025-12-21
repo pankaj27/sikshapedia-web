@@ -136,10 +136,11 @@ const SearchAutocomplete = ({
     }
   };
   
-  // Handle result click
+  // Handle result click - use window.location for proper page navigation
   const handleResultClick = (result) => {
     if (result.url) {
-      navigate(result.url);
+      // Use window.location.href for full page navigation to ensure proper component rendering
+      window.location.href = result.url;
     } else if (result.term) {
       setQuery(result.term);
       handleSearch(result.term);
