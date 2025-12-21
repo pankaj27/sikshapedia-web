@@ -1210,8 +1210,9 @@
    - Courses detail pages
    - Exams detail pages
 
-4. **Complete server.py Refactoring (P2)**
-   - Move POST/PATCH/DELETE endpoints for reviews and questions
+4. **Complete server.py Refactoring (P2)** - ✅ COMPLETED
+   - Moved POST /api/reviews endpoint to routes/reviews_questions.py
+   - All review write endpoints now in modular router
 
 5. **Future Tasks (P3+)**
    - Refactor large React components
