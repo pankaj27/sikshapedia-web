@@ -139,6 +139,41 @@ const InstituteDashboard = () => {
     if (activeTab === 'applications') fetchApplications();
   }, [appStatusFilter]);
   
+  useEffect(() => {
+    if (activeTab === 'review_link' && institution?.id) fetchReviewLink();
+  }, [activeTab, institution?.id]);
+  
+  const fetchReviewLink = async () => {
+    try {
+      const res = await api.get(`/institute/review-link/${institution.id}`);
+      if (res.data.has_link) {
+        setReviewLink(res.data);
+      }
+    } catch (err) {
+      console.error('Error fetching review link:', err);
+    }
+  };
+  
+  const generateReviewLink = async () => {
+    setGeneratingLink(true);
+    try {
+      const res = await api.post('/institute/review-link', {
+        institute_id: institution.id,
+        institute_type: institution.type || 'college'
+      });
+      setReviewLink({
+        has_link: true,
+        link_code: res.data.link_code,
+        views: 0,
+        submissions: 0
+      });
+    } catch (err) {
+      alert('Failed to generate review link');
+    } finally {
+      setGeneratingLink(false);
+    }
+  };
+  
   const handleLogout = async () => {
     try {
       await api.post('/institute/logout');
