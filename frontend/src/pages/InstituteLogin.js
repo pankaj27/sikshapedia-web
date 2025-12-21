@@ -18,23 +18,35 @@ const InstituteLogin = () => {
   const [forgotSuccess, setForgotSuccess] = useState(false);
   
   const handleLogin = async (e) => {
-    e.preventDefault();
+    // Ensure we prevent default form submission
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    console.log('[InstituteLogin] handleLogin called');
+    
     if (!loginId || !password) {
       setError('Please enter login ID and password');
       return;
     }
     
-    if (isNavigating) return; // Prevent double submission
+    if (isNavigating) {
+      console.log('[InstituteLogin] Already navigating, skipping');
+      return; // Prevent double submission
+    }
     
     setLoading(true);
     setError('');
     
     try {
+      console.log('[InstituteLogin] Attempting login for:', loginId);
       const response = await api.post('/institute/login', {
         login_id: loginId,
         password: password
       });
       
+      console.log('[InstituteLogin] Login successful');
       localStorage.setItem('institute_token', response.data.session_token);
       localStorage.setItem('institute', JSON.stringify(response.data.institution));
       
@@ -44,9 +56,11 @@ const InstituteLogin = () => {
       
       // Set flag and navigate immediately
       isNavigating = true;
-      document.location.href = '/institute/dashboard';
+      console.log('[InstituteLogin] Redirecting to dashboard');
+      window.location.href = '/institute/dashboard';
       return; // Prevent any further state updates
     } catch (err) {
+      console.error('[InstituteLogin] Login error:', err);
       setError(err.response?.data?.detail || 'Login failed');
       setLoading(false);
     }
