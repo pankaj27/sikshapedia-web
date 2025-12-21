@@ -158,18 +158,31 @@ const CollegeDuniaHome = () => {
 
   const rankingAgencies = pageSettings?.ranking_agencies?.length > 0 ? pageSettings.ranking_agencies : ['India Today', 'NIRF', 'The Week', 'Outlook'];
   
-  // Hero slides - NO hardcoded fallback, only from actual data
-  const defaultHeroSlides = [];
+  // Default hero banner image for when there's no featured data
+  const defaultHeroBanner = 'https://customer-assets.emergentagent.com/job_a835f1be-d3bf-4b1b-ab38-9313543b9491/artifacts/irmkudxi_CukMJz3Fjh.webp';
   
-  // Generate hero slides - only from featured colleges (no fallback)
+  // Hero slides - use default banner when no data
+  const defaultHeroSlides = [
+    { 
+      image: defaultHeroBanner, 
+      type: 'default', 
+      name: '', 
+      rating: 0, 
+      reviews: 0, 
+      location: '',
+      isDefault: true  // Flag to identify default slide
+    }
+  ];
+  
+  // Generate hero slides - prioritize featured colleges, fallback to default banner
   const getHeroSlides = () => {
     // Generate from featured colleges if available
     if (featuredColleges.length > 0) {
       const defaultImages = [
+        defaultHeroBanner,
         'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop',
         'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&h=400&fit=crop'
+        'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop'
       ];
       
       return featuredColleges.slice(0, 4).map((college, idx) => ({
@@ -185,6 +198,7 @@ const CollegeDuniaHome = () => {
       }));
     }
     
+    // Return default banner slide when no featured colleges
     return defaultHeroSlides;
   };
   
