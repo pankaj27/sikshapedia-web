@@ -1222,14 +1222,16 @@ const DynamicListingPage = () => {
   }, [urlInfo, location.pathname]);
 
   // Helper function to replace hardcoded years with dynamic year
+  // This is used ONLY for pageContent from database which may have old hardcoded years
   const replaceYear = (text) => {
     if (!text) return text;
-    // Replace common hardcoded years with the dynamic year
-    // 2025 → current year, 2024 → previous year, 2026 → next year
+    // Only replace 2024 and 2025 with relative years
+    // Don't replace current year or future years
+    const currentRealYear = new Date().getFullYear();
     return text
-      .replace(/2024/g, String(year - 1))  // Previous year
-      .replace(/2025/g, String(year))       // Current admission year
-      .replace(/2026/g, String(year + 1));  // Next year
+      .replace(/2024/g, String(year - 1))  // Replace old hardcoded 2024 with previous year
+      .replace(/2025/g, String(year));      // Replace old hardcoded 2025 with current admission year
+    // Don't replace 2026 or later - those are likely intentional
   };
 
   return (
