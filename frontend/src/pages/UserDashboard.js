@@ -752,9 +752,9 @@ const UserDashboard = () => {
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                     <FiFileText className="text-6xl text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">No Applications Yet</h3>
-                    <p className="text-gray-600 mb-4">Start applying to colleges to track your applications here</p>
+                    <p className="text-gray-600 mb-4">Start applying to institutes to track your applications here</p>
                     <Link to="/colleges">
-                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Colleges</Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Institutes</Button>
                     </Link>
                   </div>
                 ) : (
