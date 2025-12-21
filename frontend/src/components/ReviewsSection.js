@@ -305,7 +305,8 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
   const [showModal, setShowModal] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Initialize with token check to avoid flash of login prompt
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
   const checkLoginStatus = () => {
     // Check for token in localStorage (same as useGuestGate)
