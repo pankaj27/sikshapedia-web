@@ -3998,54 +3998,11 @@ async def create_review(review_data: ReviewCreate, current_user: User = Depends(
 # GET /reviews/college/{college_id} - MOVED TO routes/reviews_questions.py
 
 # ============================================
-# Q&A Routes - Read endpoints MOVED TO routes/reviews_questions.py
-# Write endpoints kept here due to auth dependencies
+# Q&A Routes - MOVED TO routes/reviews_questions.py
 # ============================================
 
-@api_router.post("/questions", response_model=Question)
-async def create_question(question_data: QuestionCreate, current_user: User = Depends(get_current_user)):
-    college = await db.colleges.find_one({"id": question_data.college_id})
-    if not college:
-        raise HTTPException(status_code=404, detail="College not found")
-    
-    question = Question(**question_data.model_dump(), user_id=current_user.id, user_name=current_user.name)
-    question_dict = question.model_dump()
-    question_dict['created_at'] = question_dict['created_at'].isoformat()
-    
-    await db.questions.insert_one(question_dict)
-    return question
-
-# GET /questions/college/{college_id} - MOVED TO routes/reviews_questions.py
-
-@api_router.post("/questions/answer")
-async def create_answer(answer_data: AnswerCreate, current_user: User = Depends(get_current_user)):
-    question = await db.questions.find_one({"id": answer_data.question_id})
-    if not question:
-        raise HTTPException(status_code=404, detail="Question not found")
-    
-    # Check if this is an institute response
-    answered_by = answer_data.dict().get("answered_by") if hasattr(answer_data, "answered_by") else None
-    institute_name = answer_data.dict().get("institute_name") if hasattr(answer_data, "institute_name") else None
-    
-    answer = {
-        "id": str(uuid.uuid4()),
-        "user_id": current_user.id,
-        "user_name": institute_name if answered_by == "institute" else current_user.name,
-        "answer": answer_data.answer,
-        "answered_by": answered_by or "user",
-        "is_official": answered_by == "institute",
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    
-    await db.questions.update_one(
-        {"id": answer_data.question_id},
-        {
-            "$push": {"answers": answer},
-            "$set": {"is_answered": True}
-        }
-    )
-    
-    return {"message": "Answer added successfully", "answer": answer}
+# POST /questions - MOVED TO routes/reviews_questions.py
+# POST /questions/answer - MOVED TO routes/reviews_questions.py
 
 # ============================================
 # Inquiry Routes
