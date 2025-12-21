@@ -81,20 +81,67 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
 
   const fetchStates = async () => {
     try {
-      const response = await api.get('/admission/states');
-      setStates(response.data.states || []);
+      // Use master data API for all states
+      const response = await api.get('/locations/all-states');
+      const activeStates = (response.data || [])
+        .filter(s => s.status === 'active')
+        .map(s => s.name)
+        .sort();
+      setStates(activeStates);
     } catch (err) {
       console.error('Failed to fetch states:', err);
+      // Fallback to old API
+      try {
+        const fallbackResponse = await api.get('/admission/states');
+        setStates(fallbackResponse.data.states || []);
+      } catch (e) {
+        console.error('Fallback also failed:', e);
+      }
     }
   };
 
   const fetchCities = async (state) => {
     try {
-      const response = await api.get(`/admission/cities/${encodeURIComponent(state)}`);
-      setCities(response.data.cities || []);
+      // Use master data API for cities by state
+      const response = await api.get(`/locations/all-cities?state=${encodeURIComponent(state)}`);
+      const activeCities = (response.data || [])
+        .filter(c => c.status === 'active')
+        .map(c => c.name)
+        .sort();
+      setCities(activeCities);
     } catch (err) {
       console.error('Failed to fetch cities:', err);
+      // Fallback to old API
+      try {
+        const fallbackResponse = await api.get(`/admission/cities/${encodeURIComponent(state)}`);
+        setCities(fallbackResponse.data.cities || []);
+      } catch (e) {
+        console.error('Fallback also failed:', e);
+      }
     }
+  };
+
+  // Filter states based on search
+  const filteredStates = states.filter(state => 
+    state.toLowerCase().includes(stateSearch.toLowerCase())
+  );
+
+  // Filter cities based on search
+  const filteredCities = cities.filter(city => 
+    city.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  const handleStateSelect = (state) => {
+    setFormData({ ...formData, state, city: '' });
+    setStateSearch('');
+    setShowStateDropdown(false);
+    setCitySearch('');
+  };
+
+  const handleCitySelect = (city) => {
+    setFormData({ ...formData, city });
+    setCitySearch('');
+    setShowCityDropdown(false);
   };
 
   const fetchInstitutionDetails = async () => {
