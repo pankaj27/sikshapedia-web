@@ -349,13 +349,15 @@ const ExamDetailPage = () => {
       {exam.contentTeam && (
         <div className="bg-white border-b py-3">
           <div className="container mx-auto px-6">
-            <div className="flex items-center gap-3">
-              <img src={exam.contentTeam.profileImage} alt={exam.contentTeam.author} className="w-10 h-10 rounded-full" />
-              <div>
-                <p className="text-sm font-semibold text-gray-800">{exam.contentTeam.author}</p>
-                <p className="text-xs text-gray-600">Updated on - {exam.contentTeam.updatedDate}</p>
-              </div>
-            </div>
+            <AuthorInfo
+              name={exam.contentTeam.author}
+              photo={exam.contentTeam.profileImage}
+              role="Content Writer"
+              updatedAt={exam.contentTeam.updatedDate}
+              showLink={true}
+              size="md"
+              variant="light"
+            />
           </div>
         </div>
       )}
