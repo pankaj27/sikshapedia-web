@@ -852,6 +852,9 @@ const DynamicListingPage = () => {
         const queryParams = buildQueryParams();
         const response = await api.get(`${endpoint}?${queryParams.toString()}`);
         allData = response.data || [];
+        // Add institution_type to each item for proper URL generation
+        const instType = pageInfo.isUniversity ? 'university' : pageInfo.isSchools ? 'school' : 'college';
+        allData = allData.map(item => ({ ...item, institution_type: instType }));
       } else if (pageInfo.institutionTypes && pageInfo.institutionTypes.length > 0) {
         const fetchPromises = pageInfo.institutionTypes.map(async (type) => {
           const queryParams = buildQueryParams(type);
