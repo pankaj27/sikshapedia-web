@@ -249,8 +249,10 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
             <textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
+              onClick={handleCommentInputClick}
               className="w-full border rounded-lg p-3 min-h-[80px] resize-none"
-              placeholder="Share your thoughts, experiences, or ask the community..."
+              placeholder={isLoggedIn ? "Share your thoughts, experiences, or ask the community..." : "Login to post a comment..."}
+              readOnly={!isLoggedIn}
             />
             <div className="flex justify-end mt-2">
               <Button onClick={handleSubmitComment} disabled={submitting || !newComment.trim()} className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2">
