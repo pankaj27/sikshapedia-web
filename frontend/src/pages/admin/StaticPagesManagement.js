@@ -12,6 +12,9 @@ const STATIC_PAGES = [
   { slug: 'terms', name: 'Terms of Service', path: '/terms', icon: '📋' },
   { slug: 'admission-schools', name: 'School Admissions', path: '/admission/schools', icon: '🏫' },
   { slug: 'admission-colleges', name: 'College Admissions', path: '/admission/colleges', icon: '🎓' },
+  { slug: 'admission-universities', name: 'University Admissions', path: '/admission/universities', icon: '🏛️' },
+  { slug: 'compare', name: 'Compare Institutes', path: '/compare', icon: '⚖️' },
+  { slug: 'eligibility-checker', name: 'Eligibility Checker', path: '/eligibility-checker', icon: '✅' },
 ];
 
 const StaticPagesManagement = () => {
