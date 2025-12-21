@@ -90,14 +90,19 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-t-xl flex justify-between items-center">
-          <div>
+        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-t-xl">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-3">
+              <img src="/assets/main-logo.png" alt="admissionbuddy" className="h-8 bg-white rounded px-2 py-1" />
+            </div>
+            <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full transition">
+              <FiX size={20} />
+            </button>
+          </div>
+          <div className="mt-3">
             <h2 className="text-xl font-bold">Register My Institute</h2>
             <p className="text-blue-100 text-sm">Join our network of 5000+ institutes</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full transition">
-            <FiX size={20} />
-          </button>
         </div>
 
         {success ? (
