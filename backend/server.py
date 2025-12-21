@@ -6696,6 +6696,7 @@ try:
     from routes.comments import router as comments_router, set_database as set_comments_db
     from routes.newsletter import router as newsletter_router, set_database as set_newsletter_db
     from routes.email_settings import router as email_settings_router, set_database as set_email_settings_db
+    from routes.write_review_settings import write_review_settings_router
     
     # Set database for modular routers
     set_leads_db(db)
