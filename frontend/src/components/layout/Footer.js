@@ -157,9 +157,18 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  // Close dropdowns when clicking outside
+  const handleModalClick = (e) => {
+    // Don't close dropdowns if clicking inside them
+    if (!e.target.closest('.state-dropdown-container') && !e.target.closest('.city-dropdown-container')) {
+      setShowStateDropdown(false);
+      setShowCityDropdown(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+      <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={e => { e.stopPropagation(); handleModalClick(e); }}>
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-t-xl">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
