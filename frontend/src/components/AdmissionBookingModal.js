@@ -475,11 +475,19 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
     );
   }
 
+  // Close dropdowns when clicking outside
+  const handleModalClick = (e) => {
+    if (!e.target.closest('.state-dropdown-container') && !e.target.closest('.city-dropdown-container')) {
+      setShowStateDropdown(false);
+      setShowCityDropdown(false);
+    }
+  };
+
   return (
     <div className="fixed left-0 right-0 bottom-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style={{ top: '64px' }} onClick={onClose}>
       <div 
-        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" 
-        onClick={e => e.stopPropagation()}
+        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto booking-modal-scroll" 
+        onClick={e => { e.stopPropagation(); handleModalClick(e); }}
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: '#CBD5E1 #F1F5F9'
