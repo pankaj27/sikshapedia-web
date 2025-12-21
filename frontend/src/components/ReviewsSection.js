@@ -230,7 +230,29 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const checkLoginStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        await api.get('/auth/me');
+        setIsLoggedIn(true);
+      }
+    } catch (err) {
+      setIsLoggedIn(false);
+    }
+  };
+
+  const handleWriteReviewClick = () => {
+    if (isLoggedIn) {
+      setShowModal(true);
+    } else {
+      setShowLoginPrompt(true);
+    }
+  };
 
   const fetchReviews = async () => {
     try {
