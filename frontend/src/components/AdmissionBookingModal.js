@@ -20,6 +20,12 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
   const [institutionDetails, setInstitutionDetails] = useState(null);
   const [courses, setCourses] = useState([]);
   
+  // Searchable dropdown states
+  const [stateSearch, setStateSearch] = useState('');
+  const [citySearch, setCitySearch] = useState('');
+  const [showStateDropdown, setShowStateDropdown] = useState(false);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  
   const [formData, setFormData] = useState({
     student_name: '',
     father_name: '',
