@@ -187,7 +187,7 @@ const SearchAutocomplete = ({
       {isOpen && (
         <div 
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[400px] overflow-y-auto"
+          className="absolute z-[9999] w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[400px] overflow-y-auto"
         >
           {/* Loading State */}
           {loading && (
