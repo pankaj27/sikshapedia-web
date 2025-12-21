@@ -278,7 +278,7 @@ const DynamicListingPage = () => {
     }
     
     return {
-      title: 'Top Colleges in India 2025',
+      title: `Top Colleges in India ${year}`,
       description: 'Explore top institutions in India',
       institutionTypes: ['College', 'University'],
       isSchools: false
