@@ -5,7 +5,7 @@ import {
   FiHome, FiUsers, FiBook, FiFileText, FiAward, FiGrid, 
   FiLogOut, FiChevronDown, FiChevronRight, FiBookOpen, FiTag,
   FiSettings, FiDatabase, FiLink, FiDollarSign, FiMessageSquare, FiGlobe, FiShield, FiClock, FiStar, FiImage, FiPlus,
-  FiTrendingUp, FiCreditCard
+  FiTrendingUp, FiCreditCard, FiMail
 } from 'react-icons/fi';
 import api from '../../api/axios';
 
