@@ -393,8 +393,6 @@ const UniversityDetailPage = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
