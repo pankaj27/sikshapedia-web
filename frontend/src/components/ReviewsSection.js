@@ -175,10 +175,6 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
     </>
   );
 };
-      )}
-    </div>
-  );
-};
 
 const WriteReviewModal = ({ isOpen, onClose, entityId, entityType, entityName, onSuccess }) => {
   const [formData, setFormData] = useState({
