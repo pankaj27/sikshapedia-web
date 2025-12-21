@@ -67,15 +67,14 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
 
     setLikeLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await api.post(`/reviews/${review.id}/like`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // axios interceptor already adds Authorization header from localStorage
+      const response = await api.post(`/reviews/${review.id}/like`);
       setLikes(response.data.likes);
       setLiked(response.data.liked);
       if (onLikeUpdate) onLikeUpdate(review.id, response.data.likes);
     } catch (error) {
       console.error('Error liking review:', error);
+      alert('Failed to like review. Please try again.');
     } finally {
       setLikeLoading(false);
     }
