@@ -215,7 +215,7 @@ const AdmissionPartnersList = () => {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <Link to={`/${type === 'schools' ? 'schools' : type === 'universities' ? 'universities' : 'colleges'}/${inst.slug || inst.id}`}>
+                        <Link to={`/${type === 'schools' ? 'schools' : type === 'universities' ? 'university' : 'colleges'}/${inst.slug || inst.id}`}>
                           <Button variant="outline" size="sm" className="flex items-center gap-1">
                             <FiEye size={14} /> View
                           </Button>
