@@ -177,7 +177,7 @@ const LeadFormsManagement = () => {
                   <div className="flex items-center gap-3">
                     {submission.form_type === 'register_institute' ? (
                       <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <FiBuilding className="text-indigo-600" size={20} />
+                        <HiOutlineOfficeBuilding className="text-indigo-600" size={20} />
                       </div>
                     ) : (
                       <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
