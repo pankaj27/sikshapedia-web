@@ -1544,7 +1544,7 @@ const DynamicListingPage = () => {
 
           {/* ROI Section */}
           <section id="roi-colleges">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India ROI Wise 2025</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Colleges in India ROI Wise {year}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 { rank: 1, name: 'IIT BHU', roi: '239.52%' },
