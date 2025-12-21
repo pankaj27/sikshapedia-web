@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { CollegeProvider } from './contexts/CollegeContext';
+import { YearProvider } from './hooks/useYear';
 import LayoutWrapper from './components/LayoutWrapper';
 import ScrollToTop from './components/ScrollToTop';
 import SimpleAutoPopup from './components/SimpleAutoPopup';
