@@ -238,7 +238,8 @@ const SEOSettings = () => {
   const tabs = [
     { id: 'sitemap', label: 'Sitemap Generator', icon: FiGlobe },
     { id: 'robots', label: 'Robots.txt', icon: FiFileText },
-    { id: 'local', label: 'Local SEO', icon: FiMapPin }
+    { id: 'local', label: 'Local SEO', icon: FiMapPin },
+    { id: 'schema', label: 'Schema Markup', icon: FiCode }
   ];
 
   return (
