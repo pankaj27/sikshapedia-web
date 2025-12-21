@@ -128,25 +128,35 @@ const ReviewsModeration = () => {
                 </div>
 
                 {/* Action Buttons */}
-                {(!review.status || review.status === 'pending') && (
-                  <div className="flex gap-2 pt-4 border-t">
-                    <Button
-                      onClick={() => handleApprove(review.id)}
-                      className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white"
-                    >
-                      <FiCheck size={18} />
-                      Approve
-                    </Button>
-                    <Button
-                      onClick={() => handleReject(review.id)}
-                      variant="outline"
-                      className="flex items-center gap-2 border-red-500 text-red-600 hover:bg-red-50"
-                    >
-                      <FiX size={18} />
-                      Reject
-                    </Button>
-                  </div>
-                )}
+                <div className="flex gap-2 pt-4 border-t">
+                  {(!review.status || review.status === 'pending') && (
+                    <>
+                      <Button
+                        onClick={() => handleApprove(review.id)}
+                        className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white"
+                      >
+                        <FiCheck size={18} />
+                        Approve
+                      </Button>
+                      <Button
+                        onClick={() => handleReject(review.id)}
+                        variant="outline"
+                        className="flex items-center gap-2 border-red-500 text-red-600 hover:bg-red-50"
+                      >
+                        <FiX size={18} />
+                        Reject
+                      </Button>
+                    </>
+                  )}
+                  <Button
+                    onClick={() => handleDelete(review.id)}
+                    variant="outline"
+                    className="flex items-center gap-2 border-gray-300 text-gray-600 hover:bg-gray-50 ml-auto"
+                  >
+                    <FiTrash2 size={18} />
+                    Delete
+                  </Button>
+                </div>
               </div>
             ))
           )}
