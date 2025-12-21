@@ -1468,7 +1468,7 @@ const CollegeDetailPage = ({ overrideId }) => {
 
                 {/* RANKING */}
                 <section id="ranking" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Ranking 2025</h2>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Ranking {year}</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     {college.name} has been ranked by various agencies including NIRF, IIRF, India Today, and more. The ranking details are mentioned below:
                   </p>
