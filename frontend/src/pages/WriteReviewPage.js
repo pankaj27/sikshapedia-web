@@ -655,7 +655,7 @@ const WriteReviewPage = () => {
                   </Button>
                   <Button
                     onClick={() => setStep(3)}
-                    disabled={!formData.rating || !formData.reviewTitle || !formData.likes || formData.detailedReview.length < 200}
+                    disabled={!formData.rating || !formData.reviewTitle || !formData.likes || formData.detailedReview.length < pageSettings.points_config.min_review_characters}
                     className="flex-1 bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm disabled:bg-gray-300"
                   >
                     Next: Personal Details
