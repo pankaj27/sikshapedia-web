@@ -1396,3 +1396,24 @@
 4. ✅ Test LocationSearch component on homepage shows states sorted by college count - COMPLETED
 5. ✅ Verify new cities added via admin panel appear in all forms - VERIFIED VIA API
 
+---
+
+## Write a Review Feature E2E Testing (Dec 21, 2025):
+
+### Task: Verify Complete Write Review End-to-End Flow
+
+**Test Cases to Execute:**
+1. Navigate to `/write-review` page
+2. Select institute type (College/University)
+3. Search for and select an institute using searchable dropdown
+4. Verify course dropdown populates after institute selection
+5. Complete Step 2: Ratings (overall + facility ratings) and review text
+6. Complete Step 3: Verify user details are auto-filled from profile
+7. Test ID card file upload functionality
+8. Submit review and verify success message with points earned
+9. Check User Dashboard "My Reviews" section shows the new review
+
+**Test Credentials:**
+- User: `teststudent@test.com` / `test`
+- Admin: `admin@admissionbuddy.co` / `admin123`
+
