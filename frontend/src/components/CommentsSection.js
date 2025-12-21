@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FiMessageCircle, FiUser, FiCalendar, FiSend, FiMoreVertical, FiTrash2, FiFlag } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from './ui/button';
+import LoginPromptModal from './LoginPromptModal';
 
-const CommentCard = ({ comment, onReply, onDelete, currentUserId }) => {
+const CommentCard = ({ comment, onReply, onDelete, currentUserId, isLoggedIn, onLoginRequired }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -27,6 +28,14 @@ const CommentCard = ({ comment, onReply, onDelete, currentUserId }) => {
     if (days === 1) return 'Yesterday';
     if (days < 7) return `${days} days ago`;
     return date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+  };
+
+  const handleReplyClick = () => {
+    if (isLoggedIn) {
+      setShowReplyForm(!showReplyForm);
+    } else {
+      onLoginRequired && onLoginRequired();
+    }
   };
 
   const handleSubmitReply = async () => {
