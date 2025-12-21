@@ -571,11 +571,17 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </button>
                   <button 
                     onClick={handleFavorite}
-                    className="flex items-center gap-2 px-4 py-2 border rounded-lg transition-all border-gray-300 hover:bg-pink-50 hover:border-pink-500"
-                    title="Add to Favorites"
+                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${
+                      isFavorited 
+                        ? 'border-pink-500 bg-pink-50 shadow-md' 
+                        : 'border-gray-300 hover:bg-pink-50 hover:border-pink-500'
+                    }`}
+                    title={isFavorited ? "Remove from Favorites" : "Add to Favorites"}
                   >
-                    <FiHeart className="text-pink-500" size={18} />
-                    <span className="text-sm font-semibold text-gray-700">Save</span>
+                    <FiHeart className={isFavorited ? "text-pink-500 fill-pink-500" : "text-pink-500"} size={18} style={isFavorited ? {fill: '#ec4899'} : {}} />
+                    <span className={`text-sm font-semibold ${isFavorited ? 'text-pink-600' : 'text-gray-700'}`}>
+                      {isFavorited ? 'Saved' : 'Save'}
+                    </span>
                   </button>
                 </div>
               </div>
