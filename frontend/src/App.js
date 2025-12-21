@@ -333,6 +333,9 @@ function App() {
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/profile/edit" element={<EditProfile />} />
+              
+              {/* Review Link Page (Public) */}
+              <Route path="/review/:linkCode" element={<ReviewLinkPage />} />
                   
               {/* ============================================ */}
               {/* Institute Dashboard Routes */}
