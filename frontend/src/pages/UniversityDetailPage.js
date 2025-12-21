@@ -321,9 +321,10 @@ const UniversityDetailPage = () => {
 
                 {activeTab === 'reviews' && (
                   <ReviewsSection 
-                    collegeId={university.id} 
-                    collegeName={university.name}
-                    isUniversity={true}
+                    entityId={university.id} 
+                    entityType="university"
+                    entityName={university.name}
+                    showWriteReview={true}
                   />
                 )}
               </div>
