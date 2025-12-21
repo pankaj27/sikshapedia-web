@@ -369,6 +369,16 @@ const CollegeForm = () => {
   const [uploadingCourseBrochure, setUploadingCourseBrochure] = useState({});
   const [boards, setBoards] = useState([]);
 
+  // Update available cities when state changes (must be after formData declaration)
+  useEffect(() => {
+    if (formData.location?.state && allCities.length > 0) {
+      const stateCities = allCities
+        .filter(c => c.state === formData.location.state)
+        .map(c => c.name);
+      setAvailableCities(stateCities);
+    }
+  }, [formData.location?.state, allCities]);
+
   // Check if institution type is School
   const isSchool = formData.institution_type === 'School';
 
