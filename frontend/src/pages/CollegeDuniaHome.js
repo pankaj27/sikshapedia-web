@@ -52,6 +52,29 @@ const CollegeDuniaHome = () => {
     }
   };
 
+  // Newsletter subscription handler
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) {
+      setNewsletterMessage({ type: 'error', text: 'Please enter your email address' });
+      return;
+    }
+    
+    setNewsletterLoading(true);
+    setNewsletterMessage({ type: '', text: '' });
+    
+    try {
+      const response = await api.post('/newsletter/subscribe', { email: newsletterEmail });
+      setNewsletterMessage({ type: 'success', text: response.data.message });
+      setNewsletterEmail('');
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || 'Failed to subscribe. Please try again.';
+      setNewsletterMessage({ type: 'error', text: errorMsg });
+    } finally {
+      setNewsletterLoading(false);
+    }
+  };
+
   const studyGoals = [
     { name: 'Engineering', icon: '🔧', courses: 'B.Tech, M.Tech', count: '5000+' },
     { name: 'Management', icon: '💼', courses: 'MBA, PGDM', count: '3000+' },
