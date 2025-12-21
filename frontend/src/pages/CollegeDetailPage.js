@@ -1757,16 +1757,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </details>
                     ))}
                   </div>
-
-                  <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-600 mb-3">Didn't find your answer?</p>
-                    <Button 
-                      onClick={handleAskQuestion}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      Ask a Question
-                    </Button>
-                  </div>
                 </section>
 
                 {/* REVIEWS */}
