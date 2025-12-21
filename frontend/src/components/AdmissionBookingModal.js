@@ -604,19 +604,79 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
+                <div className="relative state-dropdown-container">
                   <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
-                  <select name="state" value={formData.state} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <option value="">Select State</option>
-                    {states.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.state || stateSearch}
+                      onChange={(e) => {
+                        setStateSearch(e.target.value);
+                        setShowStateDropdown(true);
+                        if (!e.target.value) {
+                          setFormData({ ...formData, state: '', city: '' });
+                          setCities([]);
+                        }
+                      }}
+                      onFocus={() => setShowStateDropdown(true)}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 ${formData.state ? 'font-medium' : ''}`}
+                      placeholder="Search State..."
+                    />
+                    {showStateDropdown && (
+                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                        {filteredStates.length > 0 ? (
+                          filteredStates.map(state => (
+                            <div
+                              key={state}
+                              onClick={() => handleStateSelect(state)}
+                              className={`px-3 py-2 cursor-pointer hover:bg-orange-50 text-gray-900 ${formData.state === state ? 'bg-orange-100 font-semibold' : ''}`}
+                            >
+                              {state}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="px-3 py-2 text-gray-500">No states found</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div>
+                <div className="relative city-dropdown-container">
                   <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                  <select name="city" value={formData.city} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
-                    <option value="">Select City</option>
-                    {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.city || citySearch}
+                      onChange={(e) => {
+                        setCitySearch(e.target.value);
+                        setShowCityDropdown(true);
+                        if (!e.target.value) {
+                          setFormData({ ...formData, city: '' });
+                        }
+                      }}
+                      onFocus={() => setShowCityDropdown(true)}
+                      disabled={!formData.state}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 ${!formData.state ? 'bg-gray-100 cursor-not-allowed' : ''} ${formData.city ? 'font-medium' : ''}`}
+                      placeholder={formData.state ? "Search City..." : "Select state first"}
+                    />
+                    {showCityDropdown && formData.state && (
+                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                        {filteredCities.length > 0 ? (
+                          filteredCities.map(city => (
+                            <div
+                              key={city}
+                              onClick={() => handleCitySelect(city)}
+                              className={`px-3 py-2 cursor-pointer hover:bg-orange-50 text-gray-900 ${formData.city === city ? 'bg-orange-100 font-semibold' : ''}`}
+                            >
+                              {city}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="px-3 py-2 text-gray-500">No cities found</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">PIN Code *</label>
