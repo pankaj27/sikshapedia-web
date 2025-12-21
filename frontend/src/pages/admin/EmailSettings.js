@@ -423,6 +423,7 @@ const EmailSettings = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </AdminLayout>
   );
 };
 
