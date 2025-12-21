@@ -143,6 +143,8 @@ import AuthPagesManagement from './pages/admin/AuthPagesManagement';
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
 import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
+// Review Link Page
+import ReviewLinkPage from './pages/ReviewLinkPage';
 import './App.css';
 
 function App() {
