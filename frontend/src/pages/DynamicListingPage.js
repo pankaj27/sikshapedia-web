@@ -2340,7 +2340,7 @@ const DynamicListingPage = () => {
                       <div className="bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 rounded-xl border-2 border-green-200 overflow-hidden shadow-lg">
                         <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 flex items-center gap-2">
                           <FiCheckCircle className="text-white" size={14} />
-                          <span className="text-white font-bold text-sm">Admissions Open 2025</span>
+                          <span className="text-white font-bold text-sm">Admissions Open {year}</span>
                           <span className="text-green-100 text-xs ml-auto">Apply Now</span>
                         </div>
                         <div className="p-4">
