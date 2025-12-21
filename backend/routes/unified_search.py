@@ -43,13 +43,14 @@ async def autocomplete_search(
             {"city": search_regex},
             {"state": search_regex}
         ]},
-        {"_id": 0, "id": 1, "name": 1, "city": 1, "state": 1, "slug": 1, "serial_number": 1, "rating": 1}
+        {"_id": 0, "id": 1, "name": 1, "city": 1, "state": 1, "slug": 1, "serial_number": 1, "rating": 1, "institution_type": 1}
     ).limit(limit).to_list(limit)
     
     for c in colleges:
         # Build URL with serial_number-slug format
         slug = c.get("slug") or ""
         serial = c.get("serial_number") or ""
+        institution_type = c.get("institution_type", "College")
         
         # Use serial-slug if both exist, otherwise use slug, otherwise use id
         if serial and slug:
@@ -60,14 +61,28 @@ async def autocomplete_search(
             # Skip entries without proper slug
             continue
         
+        # Determine URL prefix and type based on institution_type
+        if institution_type == "School":
+            url_prefix = "/schools"
+            entity_type = "school"
+            icon = "🏫"
+        elif institution_type == "University":
+            url_prefix = "/university"
+            entity_type = "university"
+            icon = "🎓"
+        else:
+            url_prefix = "/colleges"
+            entity_type = "college"
+            icon = "🏫"
+        
         results.append({
-            "type": "college",
+            "type": entity_type,
             "id": c.get("id"),
             "name": c.get("name"),
             "subtitle": f"{c.get('city', '')}, {c.get('state', '')}".strip(", "),
-            "url": f"/colleges/{url_slug}",
+            "url": f"{url_prefix}/{url_slug}",
             "rating": c.get("rating"),
-            "icon": "🏫"
+            "icon": icon
         })
     
     # Search Universities
