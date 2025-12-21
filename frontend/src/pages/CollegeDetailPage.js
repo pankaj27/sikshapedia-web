@@ -867,7 +867,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                           <tbody>
                             <tr className="hover:bg-gray-50">
                               <td className="border px-4 py-3 text-sm">NIRF</td>
-                              <td className="border px-4 py-3 text-sm">2025</td>
+                              <td className="border px-4 py-3 text-sm">{year}</td>
                               <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 20) + 1}</td>
                             </tr>
                           </tbody>
