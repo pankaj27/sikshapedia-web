@@ -405,6 +405,7 @@ function App() {
           </Routes>
           <FloatingApplyButton />
           </BrowserRouter>
+          </YearProvider>
         </CollegeProvider>
       </AuthProvider>
     </HelmetProvider>
