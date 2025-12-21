@@ -218,6 +218,78 @@ async def reject_review(review_id: str):
     return {"message": "Review rejected", "status": "rejected"}
 
 
+@router.delete("/reviews/{review_id}")
+async def delete_review(review_id: str):
+    """Delete a review (Admin only)"""
+    result = await db.reviews.delete_one({"id": review_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"success": True, "message": "Review deleted"}
+
+
+@router.delete("/questions/{question_id}")
+async def delete_question(question_id: str):
+    """Delete a question (Admin only)"""
+    result = await db.questions.delete_one({"id": question_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {"success": True, "message": "Question deleted"}
+
+
+@router.delete("/questions/{question_id}/answers/{answer_index}")
+async def delete_answer(question_id: str, answer_index: int):
+    """Delete an answer from a question (Admin only)"""
+    question = await db.questions.find_one({"id": question_id})
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    answers = question.get("answers", [])
+    if answer_index < 0 or answer_index >= len(answers):
+        raise HTTPException(status_code=404, detail="Answer not found")
+    
+    answers.pop(answer_index)
+    await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {"answers": answers, "is_answered": len(answers) > 0}}
+    )
+    return {"success": True, "message": "Answer deleted"}
+
+
+# ============================================
+# Institute Reviews/Questions (For Institute Dashboard)
+# ============================================
+
+@router.get("/institute/reviews/{institute_id}")
+async def get_institute_reviews(institute_id: str, status: str = Query(None)):
+    """Get all reviews for an institute (Institute Dashboard)"""
+    query = {"college_id": institute_id}
+    if status:
+        query["status"] = status
+    
+    reviews = await db.reviews.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return reviews
+
+
+@router.get("/institute/questions/{institute_id}")
+async def get_institute_questions(institute_id: str):
+    """Get all questions for an institute (Institute Dashboard)"""
+    questions = await db.questions.find(
+        {"college_id": institute_id}, 
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    return questions
+
+
+@router.get("/admin/questions/pending")
+async def get_pending_questions(limit: int = Query(50, ge=1, le=200)):
+    """Get all questions for admin moderation"""
+    questions = await db.questions.find(
+        {}, 
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(limit)
+    return questions
+
+
 # ============================================
 # Review Link Generation (For Institutes)
 # ============================================
