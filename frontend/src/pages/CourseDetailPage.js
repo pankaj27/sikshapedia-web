@@ -457,6 +457,33 @@ const CourseDetailPage = () => {
                 ))}
               </div>
             </section>
+
+            {/* Reviews Section */}
+            <section id="reviews" className="mt-8">
+              <ReviewsSection 
+                entityId={course?.id || slug} 
+                entityType="course" 
+                entityName={courseName}
+              />
+            </section>
+
+            {/* Questions & Answers */}
+            <section id="questions" className="mt-8">
+              <QuestionsSection 
+                entityId={course?.id || slug} 
+                entityType="course" 
+                entityName={courseName}
+              />
+            </section>
+
+            {/* Comments & Discussion */}
+            <section id="comments" className="mt-8">
+              <CommentsSection 
+                entityId={course?.id || slug} 
+                entityType="course" 
+                entityName={courseName}
+              />
+            </section>
           </div>
 
           {/* Right Sidebar */}
