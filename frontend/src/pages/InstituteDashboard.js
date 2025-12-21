@@ -3,10 +3,12 @@ import { Link } from '../components/CustomLink';
 import { 
   FiUsers, FiFileText, FiBarChart2, FiTrendingUp, FiLogOut,
   FiCheckCircle, FiClock, FiXCircle, FiAlertCircle, FiFilter,
-  FiPhone, FiMail, FiMapPin, FiEye, FiSearch, FiDollarSign, FiEdit2
+  FiPhone, FiMail, FiMapPin, FiEye, FiSearch, FiDollarSign, FiEdit2,
+  FiStar, FiLink, FiShare2
 } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+import ReviewQRGenerator from '../components/ReviewQRGenerator';
 
 const InstituteDashboard = () => {
   const [institution, setInstitution] = useState(null);
