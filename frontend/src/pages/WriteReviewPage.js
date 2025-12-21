@@ -173,6 +173,70 @@ const WriteReviewPage = () => {
     }));
   };
 
+  // Handle file upload
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Only PDF, JPG, and PNG files are allowed');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+
+      const response = await api.post('/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      setUploadedFile({
+        name: file.name,
+        url: response.data.url || response.data.file_url,
+        size: file.size
+      });
+
+      setFormData(prev => ({
+        ...prev,
+        verificationDocument: response.data.url || response.data.file_url
+      }));
+    } catch (error) {
+      console.error('Upload error:', error);
+      // Still show the file locally even if upload fails
+      setUploadedFile({
+        name: file.name,
+        size: file.size,
+        localFile: file
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeUploadedFile = () => {
+    setUploadedFile(null);
+    setFormData(prev => ({ ...prev, verificationDocument: null }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
   const renderStars = (rating, onRatingChange) => {
     return (
       <div className="flex gap-1">
