@@ -18,24 +18,53 @@ const CollegeAdmissionPage = () => {
   const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
 
+  // Master location data
+  const [masterStates, setMasterStates] = useState([]);
+  const [masterCities, setMasterCities] = useState([]);
+
   const collegeTypes = ['All', 'Engineering', 'Medical', 'Management', 'Law', 'Arts & Science'];
   
-  const states = ['All States', 'Delhi', 'Maharashtra', 'Karnataka', 'Gujarat', 'Tamil Nadu', 'Uttar Pradesh', 'West Bengal', 'Rajasthan'];
+  // Fetch master location data
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [statesRes, citiesRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities')
+        ]);
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setMasterStates(activeStates);
+        setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+      }
+    };
+    fetchMasterData();
+  }, []);
   
-  const citiesByState = {
-    'Delhi': ['All Cities', 'New Delhi', 'South Delhi', 'North Delhi'],
-    'Maharashtra': ['All Cities', 'Mumbai', 'Pune', 'Nagpur', 'Nashik'],
-    'Karnataka': ['All Cities', 'Bangalore', 'Mysore', 'Mangalore', 'Manipal'],
-    'Gujarat': ['All Cities', 'Ahmedabad', 'Surat', 'Vadodara', 'Rajkot'],
-    'Tamil Nadu': ['All Cities', 'Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli'],
-    'Uttar Pradesh': ['All Cities', 'Lucknow', 'Kanpur', 'Noida', 'Varanasi'],
-    'West Bengal': ['All Cities', 'Kolkata', 'Siliguri', 'Durgapur'],
-    'Rajasthan': ['All Cities', 'Jaipur', 'Jodhpur', 'Udaipur', 'Kota']
+  const states = masterStates.length > 0 
+    ? ['All States', ...masterStates]
+    : ['All States', 'Delhi', 'Maharashtra', 'Karnataka', 'Gujarat', 'Tamil Nadu', 'Uttar Pradesh', 'West Bengal', 'Rajasthan'];
+  
+  // Get cities for selected state from master data
+  const getAvailableCities = () => {
+    if (selectedState === 'all' || selectedState === 'All States') {
+      return ['All Cities'];
+    }
+    if (masterCities.length > 0) {
+      const stateCities = masterCities
+        .filter(c => c.state === selectedState)
+        .map(c => c.name)
+        .sort();
+      return ['All Cities', ...stateCities];
+    }
+    return ['All Cities'];
   };
   
-  const availableCities = selectedState === 'all' || selectedState === 'All States' 
-    ? ['All Cities'] 
-    : citiesByState[selectedState] || ['All Cities'];
+  const availableCities = getAvailableCities();
 
   useEffect(() => {
     fetchAdmissions();
