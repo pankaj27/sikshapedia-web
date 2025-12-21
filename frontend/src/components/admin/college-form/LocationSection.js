@@ -1,43 +1,59 @@
-import React from 'react';
-import { FiMapPin } from 'react-icons/fi';
-
-// Indian States and Cities data
-const indianStates = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
-  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
-  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-  'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
-  'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu',
-  'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'
-];
-
-const citiesByState = {
-  'Andhra Pradesh': ['Visakhapatnam', 'Vijayawada', 'Guntur', 'Nellore', 'Kurnool', 'Tirupati', 'Rajahmundry', 'Kakinada', 'Kadapa', 'Anantapur'],
-  'Karnataka': ['Bangalore', 'Mysore', 'Mangalore', 'Hubli', 'Belgaum', 'Gulbarga', 'Shimoga', 'Davangere', 'Tumkur', 'Bellary'],
-  'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik', 'Aurangabad', 'Solapur', 'Kolhapur', 'Amravati', 'Navi Mumbai'],
-  'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli', 'Salem', 'Tirunelveli', 'Tiruppur', 'Vellore', 'Erode', 'Thoothukkudi'],
-  'Delhi': ['New Delhi', 'North Delhi', 'South Delhi', 'East Delhi', 'West Delhi', 'Central Delhi'],
-  'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Ghaziabad', 'Agra', 'Varanasi', 'Meerut', 'Allahabad', 'Bareilly', 'Aligarh', 'Noida'],
-  'West Bengal': ['Kolkata', 'Howrah', 'Durgapur', 'Asansol', 'Siliguri', 'Bardhaman', 'Malda', 'Baharampur', 'Habra', 'Kharagpur'],
-  'Telangana': ['Hyderabad', 'Warangal', 'Nizamabad', 'Khammam', 'Karimnagar', 'Ramagundam', 'Mahbubnagar', 'Nalgonda', 'Adilabad', 'Suryapet'],
-  'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Gandhinagar', 'Junagadh', 'Anand', 'Nadiad'],
-  'Rajasthan': ['Jaipur', 'Jodhpur', 'Kota', 'Bikaner', 'Udaipur', 'Ajmer', 'Bhilwara', 'Alwar', 'Sikar', 'Bharatpur'],
-  // Add more states as needed - keeping subset for file size
-};
+import React, { useState, useEffect } from 'react';
+import { FiMapPin, FiLoader } from 'react-icons/fi';
+import api from '../../../api/axios';
 
 /**
  * Location Section Component
- * Reusable component for managing location details
+ * Reusable component for managing location details with master data
  */
 const LocationSection = ({ formData, setFormData, handleChange, availableCities, setAvailableCities }) => {
+  const [masterStates, setMasterStates] = useState([]);
+  const [allCities, setAllCities] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch master data on mount
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [statesRes, citiesRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities')
+        ]);
+        
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setMasterStates(activeStates);
+        
+        const activeCities = (citiesRes.data || [])
+          .filter(c => c.status === 'active');
+        setAllCities(activeCities);
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMasterData();
+  }, []);
+
+  // Update available cities when state changes
+  useEffect(() => {
+    if (formData.location?.state && allCities.length > 0) {
+      const stateCities = allCities
+        .filter(c => c.state === formData.location.state)
+        .map(c => c.name)
+        .sort();
+      if (setAvailableCities) {
+        setAvailableCities(stateCities);
+      }
+    }
+  }, [formData.location?.state, allCities, setAvailableCities]);
+
   const handleStateChange = (e) => {
     const selectedState = e.target.value;
-    const cities = citiesByState[selectedState] || [];
-    if (setAvailableCities) {
-      setAvailableCities(cities);
-    }
     setFormData({
       ...formData,
       location: {
@@ -58,6 +74,11 @@ const LocationSection = ({ formData, setFormData, handleChange, availableCities,
     });
   };
 
+  // Get cities for current state from allCities
+  const currentCities = formData.location?.state 
+    ? allCities.filter(c => c.state === formData.location.state).map(c => c.name).sort()
+    : [];
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -71,9 +92,12 @@ const LocationSection = ({ formData, setFormData, handleChange, availableCities,
             onChange={handleStateChange}
             className="w-full border rounded px-3 py-2"
             required
+            disabled={loading}
           >
-            <option value="">Select State</option>
-            {indianStates.map(state => (
+            <option value="">
+              {loading ? 'Loading states...' : 'Select State'}
+            </option>
+            {masterStates.map(state => (
               <option key={state} value={state}>{state}</option>
             ))}
           </select>
@@ -87,9 +111,12 @@ const LocationSection = ({ formData, setFormData, handleChange, availableCities,
             onChange={(e) => handleLocationChange('city', e.target.value)}
             className="w-full border rounded px-3 py-2"
             required
+            disabled={loading || !formData.location?.state}
           >
-            <option value="">Select City</option>
-            {(availableCities || citiesByState[formData.location?.state] || []).map(city => (
+            <option value="">
+              {!formData.location?.state ? 'Select state first' : 'Select City'}
+            </option>
+            {(availableCities || currentCities).map(city => (
               <option key={city} value={city}>{city}</option>
             ))}
           </select>
@@ -161,6 +188,10 @@ const LocationSection = ({ formData, setFormData, handleChange, availableCities,
     </div>
   );
 };
+
+// Export empty arrays as fallback for backward compatibility
+const indianStates = [];
+const citiesByState = {};
 
 export { indianStates, citiesByState };
 export default LocationSection;
