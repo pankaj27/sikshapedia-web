@@ -156,9 +156,18 @@ const ReviewQRGenerator = ({
             border-bottom: 2px solid #f3f4f6;
           }
           .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             font-size: 28px;
             font-weight: bold;
             color: #f97316;
+          }
+          .brand-logo img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
           }
           .brand-tagline {
             font-size: 12px;
