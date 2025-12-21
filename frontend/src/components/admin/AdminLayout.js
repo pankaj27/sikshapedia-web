@@ -150,6 +150,8 @@ const AdminLayout = ({ children }) => {
         { title: 'Accreditation Levels', path: '/admin/accreditation-levels', icon: FiGrid },
         { title: 'Rankings', path: '/admin/rankings', icon: FiGrid },
         { title: 'Rank Categories', path: '/admin/rank-categories', icon: FiGrid },
+        { title: 'States & UTs', path: '/admin/states', icon: FiGlobe, highlight: true, badge: 'NEW' },
+        { title: 'Cities', path: '/admin/cities', icon: FiGlobe, highlight: true, badge: 'NEW' },
       ]
     },
     {
