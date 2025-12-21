@@ -46,41 +46,12 @@ api.interceptors.request.use(
   }
 );
 
-// Handle auth errors
+// Handle auth errors - DON'T auto-logout, let components handle it
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Get current path for redirect logic
-      const currentPath = getCurrentPath();
-      const isAdminPage = currentPath.startsWith('/admin');
-      const isInstitutePage = currentPath.startsWith('/institute');
-      
-      // Only auto-logout if user was supposed to be authenticated
-      // Don't logout for endpoints that return 401 as "please login" message
-      const errorMessage = error.response?.data?.detail || '';
-      const isTokenExpired = errorMessage.toLowerCase().includes('expired') || 
-                            errorMessage.toLowerCase().includes('invalid token') ||
-                            errorMessage.toLowerCase().includes('could not validate');
-      
-      // Only redirect to login if token is actually expired/invalid
-      // Don't redirect for "please login" type errors from public pages
-      if (isTokenExpired) {
-        if (isAdminPage) {
-          localStorage.removeItem('adminToken');
-          localStorage.removeItem('adminUser');
-          window.location.href = '/admin/login';
-        } else if (isInstitutePage) {
-          localStorage.removeItem('institute_token');
-          localStorage.removeItem('institute');
-          window.location.href = '/institute/login';
-        } else {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          // Don't redirect regular users, just clear token
-        }
-      }
-    }
+    // Just pass through the error, don't auto-logout
+    // Components will handle 401 errors as needed
     return Promise.reject(error);
   }
 );
