@@ -1589,3 +1589,7 @@
 - User: `teststudent@test.com` / `test`
 - Admin: `admin@admissionbuddy.co` / `admin123`
 
+**Fixes Applied (Dec 21, 2025):**
+1. Created test user in correct database (sikshapedia_db)
+2. Added GET `/api/user/profile` endpoint for auto-fill functionality
+
