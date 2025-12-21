@@ -145,6 +145,27 @@ const ListingPageForm = () => {
     { value: 'text_table', label: 'Text + Table', icon: <FiGrid /> }
   ];
 
+  // Fetch master location data
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [statesRes, citiesRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities')
+        ]);
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setMasterStates(activeStates);
+        setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+      }
+    };
+    fetchMasterData();
+  }, []);
+
   useEffect(() => {
     if (isEditing) {
       fetchPage();
