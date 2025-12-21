@@ -144,7 +144,8 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
   const [submitting, setSubmitting] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(10);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Check login status directly from localStorage - no API call needed
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const fetchComments = async () => {
@@ -162,12 +163,15 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
+        setIsLoggedIn(true);
         const res = await api.get('/auth/me');
         setCurrentUserId(res.data.id);
-        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
       }
     } catch (err) {
-      setIsLoggedIn(false);
+      // Keep isLoggedIn true if token exists, just can't get user details
+      console.error('Error fetching user:', err);
     }
   };
 
