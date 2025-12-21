@@ -99,6 +99,22 @@ async def get_all_reviews(
         query["status"] = status
     
     reviews = await db.reviews.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    # Enrich reviews with college/institute names
+    for review in reviews:
+        college_id = review.get("college_id")
+        if college_id:
+            # Try to find in colleges, schools, or universities
+            college = await db.colleges.find_one({"id": college_id}, {"_id": 0, "name": 1})
+            if not college:
+                college = await db.schools.find_one({"id": college_id}, {"_id": 0, "name": 1})
+            if not college:
+                college = await db.universities.find_one({"id": college_id}, {"_id": 0, "name": 1})
+            
+            review["college_name"] = college.get("name") if college else "Unknown Institute"
+        else:
+            review["college_name"] = "N/A"
+    
     return reviews
 
 
