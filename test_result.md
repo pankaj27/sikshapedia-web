@@ -1219,6 +1219,57 @@
    - Create automated tests
    - Remove navigation workarounds
 
+## Like/Dislike/Favorite Button Fixes (Dec 21, 2025):
+
+### ✅ COMPLETED FIXES:
+
+**Issue 1: Like/Dislike/Favorite Button Persistence & Visual Feedback**
+- **Fixed:** CollegeDetailPage.js - Updated the checkUserStatus useEffect to correctly parse backend response
+- **Changes Made:**
+  1. Fixed likes check: Changed `l.college_id` to `l.entity_id` to match backend response format
+  2. Fixed favorites check: Added handling for both array format and object format with `favorites` key
+  3. Added proper state reset when user hasn't liked (`setUserVote(null)`)
+- **Visual Feedback:** Already implemented with green/pink borders and background colors
+
+**Issue 2: UI Text Updates**
+- **Fixed:** EnhancedStudentDashboardV2.js - Changed labels from "College" to "Institute"
+- **Changes Made:**
+  1. "Saved Colleges" → "Saved Institutes" (sidebar and heading)
+  2. "No Saved Colleges" → "No Saved Institutes" (empty state)
+  3. "Browse Colleges" → "Browse Institutes" (button text in empty states)
+
+### ✅ TESTING RESULTS:
+
+1. **Guest User Like Button** - ✅ WORKING
+   - Login Required modal appears when clicking Like button
+   - Message: "Please login or create a free account to like this institution"
+
+2. **Guest User Favorite Button** - ✅ WORKING
+   - Login Required modal appears when clicking Save button
+   - Message: "Please login or create a free account to add to favorites"
+
+3. **Logged-in User Like Persistence** - ✅ WORKING
+   - Like button shows green border and highlight when liked
+   - State persists after page reload
+   - Like count updates correctly
+
+4. **Logged-in User Favorite Persistence** - ✅ WORKING
+   - Save button shows "Saved" with pink heart when favorited
+   - State persists after page reload
+
+5. **Dashboard Integration** - ✅ WORKING
+   - "Liked Institutes" section shows liked colleges with badge count
+   - "Favorite Institutes" section shows favorited colleges with badge count
+   - College details (name, location, logo) display correctly
+
+### API Testing Results:
+- `POST /api/user/like/college/{id}` - ✅ Working
+- `DELETE /api/user/like/college/{id}` - ✅ Working  
+- `GET /api/user/liked` - ✅ Working (returns entity_id)
+- `POST /api/user/favorites/{id}` - ✅ Working
+- `DELETE /api/user/favorites/{id}` - ✅ Working
+- `GET /api/user/favorites` - ✅ Working (returns college_id)
+
 ## UGC Components Applied to Detail Pages (Dec 21, 2025):
 
 ### ✅ COMPLETED:
