@@ -86,7 +86,7 @@ async def autocomplete_search(
             "id": u.get("id"),
             "name": u.get("name"),
             "subtitle": f"{u.get('city', '')}, {u.get('state', '')}".strip(", "),
-            "url": f"/universities/{u.get('slug', u.get('id', ''))}",
+            "url": f"/university/{u.get('slug', u.get('id', ''))}",
             "rating": u.get("rating"),
             "icon": "🎓"
         })
