@@ -76,22 +76,25 @@ const BlogDetailPage = () => {
 
               <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
               
-              <div className="flex items-center gap-6 text-sm text-gray-600 mb-6 pb-6 border-b">
-                <div className="flex items-center gap-2">
-                  <FiUser />
-                  <span>{article.author_name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FiCalendar />
-                  <span>{new Date(article.created_at).toLocaleDateString()}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FiEye />
-                  <span>{article.views} views</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FiHeart />
-                  <span>{article.likes} likes</span>
+              <div className="flex items-center justify-between gap-6 text-sm text-gray-600 mb-6 pb-6 border-b">
+                <AuthorInfo
+                  name={article.author_name}
+                  photo={article.author_photo}
+                  role="Author"
+                  createdAt={article.created_at}
+                  showLink={true}
+                  size="md"
+                  variant="light"
+                />
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <FiEye />
+                    <span>{article.views} views</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiHeart />
+                    <span>{article.likes} likes</span>
+                  </div>
                 </div>
               </div>
 
