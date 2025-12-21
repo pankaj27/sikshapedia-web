@@ -85,6 +85,7 @@ const formatTimeAgo = (dateString) => {
 const DynamicListingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { year } = useYear(); // Get current year from settings
   
   // Check if this is a detail page URL (e.g., /colleges/001-iit-bombay)
   // Detail page URLs have a numeric prefix like "001-" or "1-"
