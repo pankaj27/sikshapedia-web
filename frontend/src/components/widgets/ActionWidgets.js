@@ -186,14 +186,44 @@ export const AskQuestionWidget = ({ context, onClose }) => {
   const [question, setQuestion] = useState('');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Question submitted:', { question, email, context });
-    setSubmitted(true);
-    setTimeout(() => {
-      if (onClose) onClose();
-    }, 2000);
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/inquiries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: email.split('@')[0], // Use email prefix as name
+          email: email,
+          phone: '',
+          message: question,
+          inquiry_type: 'general_question',
+          context: context || 'homepage'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setSubmitted(true);
+        setTimeout(() => {
+          if (onClose) onClose();
+        }, 2000);
+      } else {
+        setError(data.detail || 'Failed to submit. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting question:', err);
+      setError('Failed to submit. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -239,11 +269,15 @@ export const AskQuestionWidget = ({ context, onClose }) => {
           required
           className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
         />
+        {error && (
+          <p className="text-red-200 text-sm">{error}</p>
+        )}
         <button
           type="submit"
-          className="w-full py-2.5 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+          disabled={loading}
+          className="w-full py-2.5 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50"
         >
-          Submit Question
+          {loading ? 'Submitting...' : 'Submit Question'}
         </button>
       </form>
     </div>
