@@ -108,7 +108,7 @@ const QuestionCard = ({ question, onAnswer, isLoggedIn, onLoginRequired }) => {
           </div>
         ) : (
           <button
-            onClick={() => setShowAnswerForm(true)}
+            onClick={handleAnswerClick}
             className="text-blue-600 hover:text-blue-700 text-sm font-medium"
           >
             + Add an Answer
