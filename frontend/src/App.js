@@ -51,6 +51,7 @@ import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import CollegeAdmissionPage from './pages/CollegeAdmissionPage';
 import SchoolAdmissionPage from './pages/SchoolAdmissionPage';
+import UniversityAdmissionPage from './pages/UniversityAdmissionPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
