@@ -587,7 +587,7 @@ const HomepageSettings = () => {
   const addCity = () => {
     setSettings(prev => ({
       ...prev,
-      cities: [...prev.cities, { name: 'New City', image: '' }]
+      cities: [...prev.cities, { name: 'New City', image: '', link: '/colleges?city=' }]
     }));
   };
 
