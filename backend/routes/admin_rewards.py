@@ -15,7 +15,7 @@ router = APIRouter(prefix="/admin/rewards", tags=["Admin Rewards Management"])
 security = HTTPBearer(auto_error=False)
 
 # JWT Configuration
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 ALGORITHM = "HS256"
 
 # Database reference
