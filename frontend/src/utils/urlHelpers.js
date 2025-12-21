@@ -68,20 +68,26 @@ export const INDIAN_STATES = [
   'west-bengal'
 ];
 
-// State name mapping (slug to display name)
 export const STATE_NAMES = {
+  'andaman-and-nicobar-islands': 'Andaman and Nicobar Islands',
   'andhra-pradesh': 'Andhra Pradesh',
   'arunachal-pradesh': 'Arunachal Pradesh',
   'assam': 'Assam',
   'bihar': 'Bihar',
+  'chandigarh': 'Chandigarh',
   'chhattisgarh': 'Chhattisgarh',
+  'dadra-and-nagar-haveli-and-daman-and-diu': 'Dadra and Nagar Haveli and Daman and Diu',
+  'delhi': 'Delhi',
   'goa': 'Goa',
   'gujarat': 'Gujarat',
   'haryana': 'Haryana',
   'himachal-pradesh': 'Himachal Pradesh',
+  'jammu-and-kashmir': 'Jammu and Kashmir',
   'jharkhand': 'Jharkhand',
   'karnataka': 'Karnataka',
   'kerala': 'Kerala',
+  'ladakh': 'Ladakh',
+  'lakshadweep': 'Lakshadweep',
   'madhya-pradesh': 'Madhya Pradesh',
   'maharashtra': 'Maharashtra',
   'manipur': 'Manipur',
@@ -89,6 +95,7 @@ export const STATE_NAMES = {
   'mizoram': 'Mizoram',
   'nagaland': 'Nagaland',
   'odisha': 'Odisha',
+  'puducherry': 'Puducherry',
   'punjab': 'Punjab',
   'rajasthan': 'Rajasthan',
   'sikkim': 'Sikkim',
@@ -97,16 +104,7 @@ export const STATE_NAMES = {
   'tripura': 'Tripura',
   'uttar-pradesh': 'Uttar Pradesh',
   'uttarakhand': 'Uttarakhand',
-  'west-bengal': 'West Bengal',
-  'delhi': 'Delhi',
-  'jammu-kashmir': 'Jammu & Kashmir',
-  'ladakh': 'Ladakh',
-  'chandigarh': 'Chandigarh',
-  'puducherry': 'Puducherry',
-  'andaman-nicobar': 'Andaman & Nicobar',
-  'dadra-nagar-haveli': 'Dadra & Nagar Haveli',
-  'daman-diu': 'Daman & Diu',
-  'lakshadweep': 'Lakshadweep'
+  'west-bengal': 'West Bengal'
 };
 
 // Indian Cities (slug format)
