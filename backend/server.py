@@ -3911,90 +3911,10 @@ async def get_all_credential_reports(current_user: User = Depends(get_current_us
     return reports
 
 # ============================================
-# Review Routes - Read endpoints MOVED TO routes/reviews_questions.py
-# Write endpoints kept here due to auth/earnings dependencies
+# Review Routes - ALL MOVED TO routes/reviews_questions.py
 # ============================================
 
-@api_router.post("/reviews", response_model=Review)
-async def create_review(review_data: ReviewCreate, current_user: User = Depends(get_current_user)):
-    college = await db.colleges.find_one({"id": review_data.college_id})
-    if not college:
-        raise HTTPException(status_code=404, detail="College not found")
-    
-    existing_review = await db.reviews.find_one({
-        "college_id": review_data.college_id,
-        "user_id": current_user.id
-    })
-    if existing_review:
-        raise HTTPException(status_code=400, detail="You have already reviewed this college")
-    
-    # Calculate review earnings based on review quality
-    review_earnings = 50.0  # Base earning for review
-    if review_data.review_text and len(review_data.review_text) > 200:
-        review_earnings = 100.0  # Higher earning for detailed reviews
-    
-    review = Review(
-        **review_data.model_dump(), 
-        user_id=current_user.id, 
-        user_name=current_user.name,
-        earnings=review_earnings,
-        status="approved"  # Auto-approve for now
-    )
-    review_dict = review.model_dump()
-    review_dict['created_at'] = review_dict['created_at'].isoformat()
-    
-    await db.reviews.insert_one(review_dict)
-    
-    # Add earnings transaction
-    earning_transaction = EarningTransaction(
-        user_id=current_user.id,
-        type="review",
-        amount=review_earnings,
-        description=f"Review for {college['name']}",
-        reference_id=review.id
-    )
-    earn_dict = earning_transaction.model_dump()
-    earn_dict['created_at'] = earn_dict['created_at'].isoformat()
-    await db.earnings.insert_one(earn_dict)
-    
-    # Update user total earnings
-    await db.users.update_one(
-        {"id": current_user.id},
-        {"$inc": {"total_earnings": review_earnings}}
-    )
-    
-    # Create notification
-    notification = Notification(
-        user_id=current_user.id,
-        type="review_earning",
-        title="Review Earnings Added!",
-        message=f"You earned ₹{review_earnings} for your review. Keep writing quality reviews to earn more!",
-        link="/dashboard"
-    )
-    notif_dict = notification.model_dump()
-    notif_dict['created_at'] = notif_dict['created_at'].isoformat()
-    await db.notifications.insert_one(notif_dict)
-    
-    # Update college rating
-    reviews = await db.reviews.find({"college_id": review_data.college_id}).to_list(1000)
-    avg_rating = sum(r['rating'] for r in reviews) / len(reviews)
-    
-    # Update rating breakdown
-    rating_breakdown = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
-    for r in reviews:
-        rating_breakdown[str(r['rating'])] += 1
-    
-    await db.colleges.update_one(
-        {"id": review_data.college_id},
-        {"$set": {
-            "rating": round(avg_rating, 1),
-            "total_reviews": len(reviews),
-            "rating_breakdown": rating_breakdown
-        }}
-    )
-    
-    return review
-
+# POST /reviews - MOVED TO routes/reviews_questions.py
 # GET /reviews/college/{college_id} - MOVED TO routes/reviews_questions.py
 
 # ============================================
