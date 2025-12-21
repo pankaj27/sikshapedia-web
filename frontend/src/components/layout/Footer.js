@@ -284,7 +284,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                     placeholder="Search State..."
                   />
                   {showStateDropdown && (
-                    <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    <div className="state-dropdown-container absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                       {filteredStates.length > 0 ? (
                         filteredStates.map(state => (
                           <div
