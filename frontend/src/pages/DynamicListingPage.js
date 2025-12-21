@@ -1400,10 +1400,10 @@ const DynamicListingPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {[
                   { num: '01', title: 'Colleges in India Highlights', id: 'highlights' },
-                  { num: '02', title: 'Top Colleges in India 2025', id: 'top-colleges' },
-                  { num: '03', title: 'Govt Colleges in India 2025', id: 'govt-colleges' },
-                  { num: '04', title: 'Private Colleges in India 2025', id: 'private-colleges' },
-                  { num: '05', title: 'Colleges in India ROI Wise 2025', id: 'roi-colleges' },
+                  { num: '02', title: `Top Colleges in India ${year}`, id: 'top-colleges' },
+                  { num: '03', title: `Govt Colleges in India ${year}`, id: 'govt-colleges' },
+                  { num: '04', title: `Private Colleges in India ${year}`, id: 'private-colleges' },
+                  { num: '05', title: `Colleges in India ROI Wise ${year}`, id: 'roi-colleges' },
                   { num: '06', title: 'Colleges with the Lowest Fees', id: 'lowest-fees' },
                   { num: '07', title: 'Entrance Exams', id: 'exams' },
                   { num: '08', title: 'FAQs', id: 'faqs' },
