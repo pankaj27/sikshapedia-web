@@ -6,8 +6,8 @@ export const OrganizationSchema = () => {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": "admissionbuddy",
-    "url": "https://educationui.preview.emergentagent.com",
-    "logo": "https://educationui.preview.emergentagent.com/admissionbuddy-logo.png",
+    "url": "https://locationdatahub.preview.emergentagent.com",
+    "logo": "https://locationdatahub.preview.emergentagent.com/admissionbuddy-logo.png",
     "description": "Find detailed information about top colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details.",
     "sameAs": [
       "https://www.facebook.com/admissionbuddy",
@@ -36,7 +36,7 @@ export const CollegeSchema = ({ college }) => {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": college.name,
-    "url": `https://educationui.preview.emergentagent.com/colleges/${college.id}`,
+    "url": `https://locationdatahub.preview.emergentagent.com/colleges/${college.id}`,
     "description": college.description,
     "address": {
       "@type": "PostalAddress",
@@ -69,7 +69,7 @@ export const BreadcrumbSchema = ({ items }) => {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": `https://educationui.preview.emergentagent.com${item.url}`
+      "item": `https://locationdatahub.preview.emergentagent.com${item.url}`
     }))
   };
 
@@ -110,10 +110,10 @@ export const WebsiteSchema = () => {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "admissionbuddy",
-    "url": "https://educationui.preview.emergentagent.com",
+    "url": "https://locationdatahub.preview.emergentagent.com",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://educationui.preview.emergentagent.com/colleges?search={search_term_string}",
+      "target": "https://locationdatahub.preview.emergentagent.com/colleges?search={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };
