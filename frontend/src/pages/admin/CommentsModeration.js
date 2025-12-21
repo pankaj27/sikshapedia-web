@@ -120,8 +120,11 @@ const CommentsModeration = () => {
                             <FiFlag size={12} /> Flagged
                           </span>
                         )}
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                          {comment.entity_type}: {comment.entity_id?.slice(0, 8)}...
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
+                          {comment.entity_type_label || comment.entity_type || 'Unknown'}
+                        </span>
+                        <span className="text-sm font-medium text-purple-600">
+                          {comment.entity_name || 'Unknown'}
                         </span>
                       </div>
                       <p className="text-gray-700 mb-3">{comment.text}</p>
