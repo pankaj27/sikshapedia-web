@@ -294,57 +294,57 @@ const CollegeDuniaHome = () => {
           className="h-full"
         >
           {heroSlides.map((slide, idx) => {
+            // Check if this is the default banner slide
+            const isDefaultSlide = slide.isDefault === true;
+            
             // Generate proper URL using serial_number if available, otherwise use slug as-is
-            const institutionUrl = slide.serial_number 
-              ? getInstitutionDetailUrl(
-                  slide.type === 'school' ? 'school' : slide.type === 'university' ? 'university' : 'college',
-                  slide.id || slide.slug,
-                  slide.name,
-                  slide.city || slide.location?.split(',')[0],
-                  slide.serial_number
-                )
-              : `/${slide.type === 'school' ? 'schools' : slide.type === 'university' ? 'universities' : 'colleges'}/${slide.slug}`;
+            const institutionUrl = isDefaultSlide 
+              ? '/' 
+              : slide.serial_number 
+                ? getInstitutionDetailUrl(
+                    slide.type === 'school' ? 'school' : slide.type === 'university' ? 'university' : 'college',
+                    slide.id || slide.slug,
+                    slide.name,
+                    slide.city || slide.location?.split(',')[0],
+                    slide.serial_number
+                  )
+                : `/${slide.type === 'school' ? 'schools' : slide.type === 'university' ? 'universities' : 'colleges'}/${slide.slug}`;
             
             return (
             <SwiperSlide key={idx}>
-              <Link to={institutionUrl} className="block h-full relative z-0">
-                <div className="relative h-full cursor-pointer group">
+              <div className="block h-full relative z-0">
+                <div className="relative h-full group">
                   <img 
                     src={slide.image} 
-                    alt={slide.name} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                    alt={slide.name || 'Education Banner'} 
+                    className="w-full h-full object-cover" 
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
                   
-                  {/* Institution Info Overlay - Smaller */}
-                  <div className="absolute bottom-4 left-4 text-white z-20 max-w-xl">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <span className="px-2 py-0.5 bg-orange-600 text-white text-[10px] font-semibold rounded-full uppercase">
-                        {slide.type}
-                      </span>
-                      <div className="flex items-center gap-0.5 bg-green-600 px-1.5 py-0.5 rounded">
-                        <FiStar className="text-white" size={10} />
-                        <span className="text-[10px] font-bold">{slide.rating}</span>
-                        <span className="text-[9px]">({slide.reviews})</span>
+                  {/* Institution Info Overlay - Only show if not default slide */}
+                  {!isDefaultSlide && slide.name && (
+                    <Link to={institutionUrl} className="absolute bottom-4 left-4 text-white z-20 max-w-xl group cursor-pointer">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="px-2 py-0.5 bg-orange-600 text-white text-[10px] font-semibold rounded-full uppercase">
+                          {slide.type}
+                        </span>
+                        <div className="flex items-center gap-0.5 bg-green-600 px-1.5 py-0.5 rounded">
+                          <FiStar className="text-white" size={10} />
+                          <span className="text-[10px] font-bold">{slide.rating}</span>
+                          <span className="text-[9px]">({slide.reviews})</span>
+                        </div>
                       </div>
-                    </div>
-                    <h2 className="text-base md:text-lg font-medium mb-0.5 drop-shadow-lg group-hover:text-orange-400 transition-colors">
-                      {slide.name}
-                    </h2>
-                    <div className="flex items-center gap-1 text-[11px] text-white/90">
-                      <FiMapPin size={12} />
-                      <span>{slide.location}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Click to View Indicator - Smaller */}
-                  <div className="absolute top-4 right-4 bg-white/10 backdrop-blur-sm px-2.5 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-white text-[11px] font-semibold flex items-center gap-1">
-                      View Details <FiArrowRight size={12} />
-                    </span>
-                  </div>
+                      <h2 className="text-base md:text-lg font-medium mb-0.5 drop-shadow-lg group-hover:text-orange-400 transition-colors">
+                        {slide.name}
+                      </h2>
+                      <div className="flex items-center gap-1 text-[11px] text-white/90">
+                        <FiMapPin size={12} />
+                        <span>{slide.location}</span>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
+              </div>
             </SwiperSlide>
             );
           })}
