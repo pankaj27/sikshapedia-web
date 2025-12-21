@@ -189,6 +189,42 @@ async def get_all_comments_admin(limit: int = 200):
         {"_id": 0}
     ).sort("created_at", -1).limit(limit).to_list(limit)
     
+    # Enrich comments with entity names
+    for comment in comments:
+        entity_id = comment.get("entity_id")
+        entity_type = comment.get("entity_type", "").lower()
+        
+        entity = None
+        entity_type_label = entity_type.capitalize() if entity_type else "Unknown"
+        
+        if entity_id:
+            # Look up based on entity_type
+            if entity_type == "college":
+                entity = await db.colleges.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            elif entity_type == "school":
+                entity = await db.schools.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            elif entity_type == "university":
+                entity = await db.universities.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            elif entity_type == "course":
+                entity = await db.courses.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+                if not entity:
+                    entity = await db.courses.find_one({"slug": entity_id}, {"_id": 0, "name": 1})
+            elif entity_type == "exam":
+                entity = await db.exams.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            
+            # Fallback: try all collections if not found
+            if not entity:
+                for coll_name, label in [("colleges", "College"), ("schools", "School"), 
+                                          ("universities", "University"), ("courses", "Course"), ("exams", "Exam")]:
+                    coll = getattr(db, coll_name)
+                    entity = await coll.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+                    if entity:
+                        entity_type_label = label
+                        break
+        
+        comment["entity_name"] = entity.get("name") if entity else "Unknown"
+        comment["entity_type_label"] = entity_type_label
+    
     return comments
 
 
