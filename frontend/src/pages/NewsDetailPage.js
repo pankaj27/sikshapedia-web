@@ -136,25 +136,17 @@ const NewsDetailPage = () => {
               
               {/* Author Info */}
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  {article.author_image ? (
-                    <img src={article.author_image} alt={article.author} className="w-12 h-12 rounded-full object-cover" />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
-                      <FiUser className="w-6 h-6 text-orange-500" />
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-semibold text-gray-900">{article.author}</p>
-                    <p className="text-sm text-gray-600">{article.author_designation || 'Content Writer'}</p>
-                  </div>
-                </div>
+                <AuthorInfo
+                  name={article.author}
+                  photo={article.author_image}
+                  role={article.author_designation || 'Content Writer'}
+                  updatedAt={article.updated_at || article.published_at}
+                  showLink={true}
+                  size="md"
+                  variant="light"
+                />
                 
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FiCalendar size={16} />
-                    <span>Updated on - {formatDate(article.updated_at || article.published_at)}</span>
-                  </div>
                   {article.views > 0 && (
                     <div className="flex items-center gap-1 text-sm text-gray-600">
                       <FiEye size={16} />
