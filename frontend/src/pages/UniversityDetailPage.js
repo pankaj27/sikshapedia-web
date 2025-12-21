@@ -346,34 +346,36 @@ const UniversityDetailPage = () => {
             {/* Contact Card */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="font-bold text-gray-800 mb-4">Contact Information</h3>
-              <div className="space-y-3">
-                {university.address && (
-                  <div className="flex items-start gap-3">
-                    <FiMapPin className="text-purple-600 mt-1 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">{university.address}</span>
-                  </div>
-                )}
-                {university.phone && (
-                  <div className="flex items-center gap-3">
-                    <FiPhone className="text-purple-600" />
-                    <a href={`tel:${university.phone}`} className="text-sm text-purple-600 hover:underline">{university.phone}</a>
-                  </div>
-                )}
-                {university.email && (
-                  <div className="flex items-center gap-3">
-                    <FiMail className="text-purple-600" />
-                    <a href={`mailto:${university.email}`} className="text-sm text-purple-600 hover:underline">{university.email}</a>
-                  </div>
-                )}
-                {university.website && (
-                  <div className="flex items-center gap-3">
-                    <FiGlobe className="text-purple-600" />
-                    <a href={university.website} target="_blank" rel="noopener noreferrer" className="text-sm text-purple-600 hover:underline">
-                      Visit Website
-                    </a>
-                  </div>
-                )}
-              </div>
+              <GuestGate title="Contact Details">
+                <div className="space-y-3">
+                  {university.address && (
+                    <div className="flex items-start gap-3">
+                      <FiMapPin className="text-purple-600 mt-1 flex-shrink-0" />
+                      <span className="text-sm text-gray-600">{university.address}</span>
+                    </div>
+                  )}
+                  {university.phone && (
+                    <div className="flex items-center gap-3">
+                      <FiPhone className="text-purple-600" />
+                      <a href={`tel:${university.phone}`} className="text-sm text-purple-600 hover:underline">{university.phone}</a>
+                    </div>
+                  )}
+                  {university.email && (
+                    <div className="flex items-center gap-3">
+                      <FiMail className="text-purple-600" />
+                      <a href={`mailto:${university.email}`} className="text-sm text-purple-600 hover:underline">{university.email}</a>
+                    </div>
+                  )}
+                  {university.website && (
+                    <div className="flex items-center gap-3">
+                      <FiGlobe className="text-purple-600" />
+                      <a href={university.website} target="_blank" rel="noopener noreferrer" className="text-sm text-purple-600 hover:underline">
+                        Visit Website
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </GuestGate>
             </div>
 
             {/* Apply Now Card (if admission partner) */}
