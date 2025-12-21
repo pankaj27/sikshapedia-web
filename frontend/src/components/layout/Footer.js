@@ -658,35 +658,35 @@ const Footer = () => {
   };
 
   const topExams = [
-    { name: 'JEE Main', link: '/exams' },
-    { name: 'NEET', link: '/exams' },
-    { name: 'CAT', link: '/exams' },
-    { name: 'CUET', link: '/exams' },
-    { name: 'GATE', link: '/exams' },
-    { name: 'JEE Advanced', link: '/exams' }
+    { name: 'JEE Main', link: '/exams/jee-main' },
+    { name: 'NEET', link: '/exams/neet' },
+    { name: 'CAT', link: '/exams/cat' },
+    { name: 'CUET', link: '/exams/cuet' },
+    { name: 'GATE', link: '/exams/gate' },
+    { name: 'JEE Advanced', link: '/exams/jee-advanced' }
   ];
 
   const topColleges = [
-    { name: 'Engineering Colleges', link: '/engineering' },
-    { name: 'Medical Colleges', link: '/medical' },
-    { name: 'MBA Colleges', link: '/mba' },
-    { name: 'Law Colleges', link: '/law' }
+    { name: 'Engineering Colleges', link: '/colleges/engineering' },
+    { name: 'Medical Colleges', link: '/colleges/medical' },
+    { name: 'MBA Colleges', link: '/colleges/mba' },
+    { name: 'Law Colleges', link: '/colleges/law' }
   ];
 
   const topCourses = [
-    { name: 'B.Tech', link: '/courses' },
-    { name: 'MBA/PGDM', link: '/courses' },
-    { name: 'MBBS', link: '/courses' },
-    { name: 'B.Com', link: '/courses' },
-    { name: 'BA', link: '/courses' },
-    { name: 'B.Sc', link: '/courses' }
+    { name: 'B.Tech', link: '/colleges/btech' },
+    { name: 'MBA/PGDM', link: '/colleges/mba' },
+    { name: 'MBBS', link: '/colleges/mbbs' },
+    { name: 'B.Com', link: '/colleges/bcom' },
+    { name: 'BA', link: '/colleges/ba' },
+    { name: 'B.Sc', link: '/colleges/bsc' }
   ];
 
   const studyAbroad = [
-    { name: 'Study in USA', link: '/study-abroad' },
-    { name: 'Study in UK', link: '/study-abroad' },
-    { name: 'Study in Canada', link: '/study-abroad' },
-    { name: 'Study in Australia', link: '/study-abroad' }
+    { name: 'Study in USA', link: '/colleges/usa' },
+    { name: 'Study in UK', link: '/colleges/uk' },
+    { name: 'Study in Canada', link: '/colleges/canada' },
+    { name: 'Study in Australia', link: '/colleges/australia' }
   ];
 
   const resources = [
