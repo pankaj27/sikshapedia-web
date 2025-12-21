@@ -18,22 +18,53 @@ const SchoolAdmissionPage = () => {
   const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
 
+  // Master location data
+  const [masterStates, setMasterStates] = useState([]);
+  const [masterCities, setMasterCities] = useState([]);
+
   const boards = ['All', 'CBSE', 'ICSE', 'State Board', 'IB', 'IGCSE'];
   
-  const states = ['All States', 'Delhi', 'Maharashtra', 'Uttarakhand', 'Rajasthan', 'Karnataka', 'Tamil Nadu'];
+  // Fetch master location data
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [statesRes, citiesRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities')
+        ]);
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setMasterStates(activeStates);
+        setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+      }
+    };
+    fetchMasterData();
+  }, []);
   
-  const citiesByState = {
-    'Delhi': ['All Cities', 'New Delhi', 'South Delhi', 'North Delhi'],
-    'Maharashtra': ['All Cities', 'Mumbai', 'Pune', 'Nagpur'],
-    'Uttarakhand': ['All Cities', 'Dehradun', 'Nainital', 'Roorkee'],
-    'Rajasthan': ['All Cities', 'Jaipur', 'Jodhpur', 'Udaipur'],
-    'Karnataka': ['All Cities', 'Bangalore', 'Mysore', 'Mangalore'],
-    'Tamil Nadu': ['All Cities', 'Chennai', 'Coimbatore', 'Madurai']
+  const states = masterStates.length > 0 
+    ? ['All States', ...masterStates]
+    : ['All States', 'Delhi', 'Maharashtra', 'Uttarakhand', 'Rajasthan', 'Karnataka', 'Tamil Nadu'];
+  
+  // Get cities for selected state from master data
+  const getAvailableCities = () => {
+    if (selectedState === 'all' || selectedState === 'All States') {
+      return ['All Cities'];
+    }
+    if (masterCities.length > 0) {
+      const stateCities = masterCities
+        .filter(c => c.state === selectedState)
+        .map(c => c.name)
+        .sort();
+      return ['All Cities', ...stateCities];
+    }
+    return ['All Cities'];
   };
   
-  const availableCities = selectedState === 'all' || selectedState === 'All States' 
-    ? ['All Cities'] 
-    : citiesByState[selectedState] || ['All Cities'];
+  const availableCities = getAvailableCities();
 
   useEffect(() => {
     fetchAdmissions();
