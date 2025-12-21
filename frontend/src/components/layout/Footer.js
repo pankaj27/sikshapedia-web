@@ -740,21 +740,43 @@ const Footer = () => {
 
             {/* Social Media Links */}
             <div className="flex items-center gap-4">
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Facebook">
-                <FiFacebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Twitter">
-                <FiTwitter size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Instagram">
-                <FiInstagram size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="LinkedIn">
-                <FiLinkedin size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="YouTube">
-                <FiYoutube size={20} />
-              </a>
+              {footerSettings.social_links && footerSettings.social_links.length > 0 ? (
+                footerSettings.social_links
+                  .filter(link => link.is_active && link.url)
+                  .map(link => {
+                    const Icon = getSocialIcon(link.platform);
+                    return (
+                      <a 
+                        key={link.platform}
+                        href={link.url} 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-orange-500 transition-colors" 
+                        aria-label={link.platform}
+                      >
+                        <Icon size={20} />
+                      </a>
+                    );
+                  })
+              ) : (
+                <>
+                  <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Facebook">
+                    <FiFacebook size={20} />
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Twitter">
+                    <FiTwitter size={20} />
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Instagram">
+                    <FiInstagram size={20} />
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="LinkedIn">
+                    <FiLinkedin size={20} />
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="YouTube">
+                    <FiYoutube size={20} />
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>
