@@ -368,13 +368,55 @@ async def submit_question(question: QuestionSubmit, request: Request, db=Depends
 
 @router.get("/comments")
 async def get_user_comments(request: Request, db=Depends(get_db)):
-    """Get all comments by user"""
+    """Get all comments by user with entity details"""
     user = await get_current_user(request, db)
     
     comments = await db.comments.find(
         {"user_id": user["id"]},
         {"_id": 0}
     ).sort("created_at", -1).to_list(100)
+    
+    # Enrich comments with entity details
+    for comment in comments:
+        entity_type = comment.get("entity_type", "")
+        entity_id = comment.get("entity_id", "")
+        
+        # Try to get entity name based on type
+        if entity_type == "college" and entity_id:
+            college = await db.colleges.find_one({"id": entity_id}, {"_id": 0, "name": 1, "slug": 1})
+            if college:
+                comment["entity_name"] = college.get("name", "College")
+                comment["entity_link"] = f"/college/{entity_id}"
+        elif entity_type == "review" and entity_id:
+            review = await db.reviews.find_one({"id": entity_id}, {"_id": 0, "college_name": 1, "college_id": 1})
+            if review:
+                comment["entity_name"] = f"Review on {review.get('college_name', 'College')}"
+                comment["entity_link"] = f"/college/{review.get('college_id', '')}"
+        elif entity_type == "question" and entity_id:
+            question = await db.questions.find_one({"id": entity_id}, {"_id": 0, "question": 1, "college_id": 1})
+            if question:
+                comment["entity_name"] = f"Q&A: {question.get('question', 'Question')[:50]}..."
+                comment["entity_link"] = f"/college/{question.get('college_id', '')}"
+        elif entity_type == "exam" and entity_id:
+            exam = await db.exams.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            if exam:
+                comment["entity_name"] = exam.get("name", "Exam")
+                comment["entity_link"] = f"/exams/{entity_id}"
+        elif entity_type == "blog" and entity_id:
+            blog = await db.blogs.find_one({"id": entity_id}, {"_id": 0, "title": 1, "slug": 1})
+            if blog:
+                comment["entity_name"] = blog.get("title", "Blog")
+                comment["entity_link"] = f"/blogs/{blog.get('slug', entity_id)}"
+        elif entity_type == "news" and entity_id:
+            news = await db.news.find_one({"id": entity_id}, {"_id": 0, "title": 1, "slug": 1})
+            if news:
+                comment["entity_name"] = news.get("title", "News")
+                comment["entity_link"] = f"/news/{news.get('slug', entity_id)}"
+        
+        # Default if no entity found
+        if "entity_name" not in comment:
+            comment["entity_name"] = entity_type.title() if entity_type else "Post"
+            comment["entity_link"] = "#"
     
     return comments
 
