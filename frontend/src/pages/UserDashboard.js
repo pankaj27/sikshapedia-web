@@ -850,7 +850,7 @@ const UserDashboard = () => {
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">No Favorite Institutes Yet</h3>
                     <p className="text-gray-600 mb-4">Save institutes you&apos;re interested in</p>
                     <Link to="/colleges">
-                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Colleges</Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Institutes</Button>
                     </Link>
                   </div>
                 ) : (
