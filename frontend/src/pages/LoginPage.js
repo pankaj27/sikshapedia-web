@@ -93,7 +93,7 @@ const LoginPage = () => {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-white">
           <Link to="/">
-            <img src={content.logo_url} alt="Admission Buddy" className="h-20 mb-8" />
+            <img src={content.logo_url} alt="admissionbuddy" className="h-20 mb-8" />
           </Link>
           <h1 className="text-4xl font-bold mb-4 text-center">{content.heading}</h1>
           <p className="text-xl text-blue-100 text-center max-w-md">
@@ -134,7 +134,7 @@ const LoginPage = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
             <Link to="/">
-              <img src={content.logo_url} alt="Admission Buddy" className="h-14 mx-auto mb-4" />
+              <img src={content.logo_url} alt="admissionbuddy" className="h-14 mx-auto mb-4" />
             </Link>
           </div>
           

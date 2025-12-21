@@ -495,8 +495,8 @@ const UserDashboard = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/favicon.png" alt="Admission Buddy" className="h-8" />
-              <span className="font-bold text-lg text-gray-900 hidden sm:block">Admission Buddy</span>
+              <img src="/favicon.png" alt="admissionbuddy" className="h-8" />
+              <span className="font-bold text-lg text-gray-900 hidden sm:block">admissionbuddy</span>
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-gray-700 text-sm hidden sm:block">Welcome, {user?.name?.split(' ')[0]}</span>

@@ -215,7 +215,7 @@ const ApplyNowModal = ({
               ) : (
                 <img 
                   src="/favicon.png" 
-                  alt="Admission Buddy" 
+                  alt="admissionbuddy" 
                   className="w-10 h-10 object-contain"
                 />
               )}

@@ -356,7 +356,7 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
         key: orderData.key_id,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'Admission Buddy',
+        name: 'admissionbuddy',
         description: `Admission Fee - ${institution.name}`,
         order_id: orderData.order_id,
         prefill: orderData.prefill,

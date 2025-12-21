@@ -9,7 +9,7 @@ import api from '../../api/axios';
 const formatCityName = (city) => city.charAt(0).toUpperCase() + city.slice(1);
 const SORTED_CITIES = [...INDIAN_CITIES].sort().map(formatCityName);
 
-// Apply Now Widget - with Admission Buddy logo and city dropdown
+// Apply Now Widget - with admissionbuddy logo and city dropdown
 export const ApplyNowWidget = ({ collegeName, collegeLogoUrl, courseName, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -76,7 +76,7 @@ export const ApplyNowWidget = ({ collegeName, collegeLogoUrl, courseName, onClos
             {collegeLogoUrl ? (
               <img src={collegeLogoUrl} alt={collegeName || 'College'} className="w-8 h-8 object-contain" onError={(e) => { e.target.src = '/favicon.png'; }} />
             ) : (
-              <img src="/favicon.png" alt="Admission Buddy" className="w-8 h-8 object-contain" />
+              <img src="/favicon.png" alt="admissionbuddy" className="w-8 h-8 object-contain" />
             )}
           </div>
           <div>

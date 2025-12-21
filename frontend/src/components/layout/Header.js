@@ -132,7 +132,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 gap-4 max-w-full relative">
           {/* Logo */}
           <NavLink to="/" className="flex items-center flex-shrink-0">
-            <img src="/assets/main-logo.png" alt="Admission Buddy" className="h-7" />
+            <img src="/assets/main-logo.png" alt="admissionbuddy" className="h-7" />
           </NavLink>
 
           {/* Select Goal Dropdown - Desktop */}

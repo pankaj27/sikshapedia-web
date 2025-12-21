@@ -64,7 +64,7 @@ const AdmissionPartnersPage = () => {
   return (
     <>
       <Helmet>
-        <title>{pageTitle} | Admission Buddy</title>
+        <title>{pageTitle} | admissionbuddy</title>
         <meta name="description" content={`Find and apply for ${pageTitle.toLowerCase()} at top institutions in India. Book your seat now!`} />
       </Helmet>
 

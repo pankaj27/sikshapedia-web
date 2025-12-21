@@ -11,7 +11,7 @@ import { Link } from '../components/CustomLink';
 // Default content (used while loading or if API fails)
 const DEFAULT_CONTENT = {
   logo_url: "/favicon.png",
-  heading: "Join Admission Buddy",
+  heading: "Join admissionbuddy",
   subheading: "Find your dream college and track your applications all in one place",
   gradient_from: "orange-500",
   gradient_via: "orange-600",
@@ -262,7 +262,7 @@ const UserSignup = () => {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-white">
           <Link to="/">
-            <img src={content.logo_url} alt="Admission Buddy" className="h-20 mb-8" />
+            <img src={content.logo_url} alt="admissionbuddy" className="h-20 mb-8" />
           </Link>
           <h1 className="text-4xl font-bold mb-4 text-center">{content.heading}</h1>
           <p className="text-xl text-orange-100 text-center max-w-md">
@@ -303,7 +303,7 @@ const UserSignup = () => {
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-6">
             <Link to="/">
-              <img src={content.logo_url} alt="Admission Buddy" className="h-14 mx-auto mb-4" />
+              <img src={content.logo_url} alt="admissionbuddy" className="h-14 mx-auto mb-4" />
             </Link>
           </div>
           

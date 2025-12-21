@@ -92,7 +92,7 @@ const InstituteLogin = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/">
-            <img src="/favicon.png" alt="Admission Buddy" className="h-16 mx-auto mb-4" />
+            <img src="/favicon.png" alt="admissionbuddy" className="h-16 mx-auto mb-4" />
           </Link>
           <h1 className="text-2xl font-bold text-white">Institution Portal</h1>
           <p className="text-blue-200 mt-2">Manage your leads and applications</p>
@@ -239,7 +239,7 @@ const InstituteLogin = () => {
         {/* Info Box */}
         <div className="mt-6 bg-blue-800 bg-opacity-50 rounded-xl p-4 text-blue-100 text-sm">
           <p className="font-medium mb-2">🔐 Login Credentials</p>
-          <p>Your login credentials were sent to your registered email and phone when your institution was added to Admission Buddy.</p>
+          <p>Your login credentials were sent to your registered email and phone when your institution was added to admissionbuddy.</p>
         </div>
       </div>
     </div>
