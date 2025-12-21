@@ -134,13 +134,16 @@ const EmailSettings = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <FiRefreshCw className="animate-spin text-3xl text-gray-400" />
-      </div>
+      <AdminLayout>
+        <div className="flex items-center justify-center py-12">
+          <FiRefreshCw className="animate-spin text-3xl text-gray-400" />
+        </div>
+      </AdminLayout>
     );
   }
 
   return (
+    <AdminLayout>
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
