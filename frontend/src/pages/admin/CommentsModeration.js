@@ -178,6 +178,28 @@ const CommentsModeration = () => {
                           )}
                         </Button>
                       )}
+                      {/* Flag/Unflag Button */}
+                      {comment.is_flagged ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleUnflagComment(comment.id)}
+                          className="text-green-600 border-green-200 hover:bg-green-50"
+                        >
+                          <FiFlag size={16} className="mr-1" />
+                          Unflag
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleFlagComment(comment.id)}
+                          className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                        >
+                          <FiFlag size={16} className="mr-1" />
+                          Flag
+                        </Button>
+                      )}
                       <Button
                         variant="outline"
                         size="sm"
