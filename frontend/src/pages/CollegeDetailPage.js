@@ -184,6 +184,16 @@ const CollegeDetailPage = ({ overrideId }) => {
   // Check if user has liked/favorited this college
   useEffect(() => {
     const checkUserStatus = async () => {
+      // Set like/dislike counts from college data
+      if (college) {
+        if (college.likes_count !== undefined) {
+          setLikes(college.likes_count);
+        }
+        if (college.dislikes_count !== undefined) {
+          setDislikes(college.dislikes_count);
+        }
+      }
+      
       const token = localStorage.getItem('token');
       if (!token || !college) return;
       
@@ -209,11 +219,6 @@ const CollegeDetailPage = ({ overrideId }) => {
         const favorites = Array.isArray(favData) ? favData : (favData?.favorites || []);
         const hasFavorited = favorites.some(f => f.college_id === college.id);
         setIsFavorited(hasFavorited);
-        
-        // Set the actual like count from college data if available
-        if (college.likes_count !== undefined) {
-          setLikes(college.likes_count);
-        }
       } catch (error) {
         console.error('Error checking user status:', error);
       }
