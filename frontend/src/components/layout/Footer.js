@@ -349,9 +349,9 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                 value={formData.institute_type}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
               >
-                <option value="">Select Type</option>
+                <option value="" className="text-gray-500">Select Type</option>
                 <option value="School">School</option>
                 <option value="College">College</option>
                 <option value="University">University</option>
@@ -367,7 +367,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                 value={formData.message}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-900"
                 placeholder="Tell us about your requirements..."
               />
             </div>
