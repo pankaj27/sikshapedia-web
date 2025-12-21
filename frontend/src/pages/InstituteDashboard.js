@@ -741,6 +741,99 @@ const InstituteDashboard = () => {
               </>
             )}
             
+            {/* Review Link & QR Code Tab */}
+            {activeTab === 'review_link' && (
+              <>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">Review Link & QR Code</h2>
+                  <p className="text-gray-600">Generate and share review links with students. They can scan the QR or click the link to leave reviews.</p>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* QR Code Generator */}
+                  <div>
+                    {reviewLink?.has_link ? (
+                      <ReviewQRGenerator
+                        reviewLink={`${window.location.origin}/review/${reviewLink.link_code}`}
+                        instituteName={institution?.name || 'Institution'}
+                        instituteLogo={institution?.logo_url}
+                        instituteType={institution?.type || 'College'}
+                      />
+                    ) : (
+                      <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+                        <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <FiLink className="text-orange-600" size={32} />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">Generate Review Link</h3>
+                        <p className="text-gray-600 mb-6">Create a shareable link and QR code for students to submit reviews</p>
+                        <Button 
+                          onClick={generateReviewLink}
+                          disabled={generatingLink}
+                          className="bg-orange-500 hover:bg-orange-600"
+                        >
+                          {generatingLink ? 'Generating...' : 'Generate Review Link'}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Stats & Tips */}
+                  <div className="space-y-6">
+                    {reviewLink?.has_link && (
+                      <div className="bg-white rounded-xl shadow-sm p-6">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Link Statistics</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-blue-50 rounded-lg p-4 text-center">
+                            <p className="text-3xl font-bold text-blue-600">{reviewLink.views || 0}</p>
+                            <p className="text-sm text-gray-600">Total Views</p>
+                          </div>
+                          <div className="bg-green-50 rounded-lg p-4 text-center">
+                            <p className="text-3xl font-bold text-green-600">{reviewLink.submissions || 0}</p>
+                            <p className="text-sm text-gray-600">Reviews Submitted</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6">
+                      <h3 className="text-lg font-bold text-gray-800 mb-4">💡 Tips for More Reviews</h3>
+                      <ul className="space-y-3 text-gray-700">
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-1">•</span>
+                          Print the QR code and display it in classrooms, notice boards
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-1">•</span>
+                          Share the link in alumni WhatsApp groups
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-1">•</span>
+                          Include the QR code in farewell event materials
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-1">•</span>
+                          Send the link to final year students via email
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-1">•</span>
+                          Add to placement brochures and marketing materials
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white rounded-xl shadow-sm p-6">
+                      <h3 className="text-lg font-bold text-gray-800 mb-3">Why Reviews Matter?</h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Authentic student reviews help prospective students make informed decisions. 
+                        Institutions with more positive reviews rank higher in search results and 
+                        attract more quality applications. Reviews build trust and credibility.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+            
             {/* Admission Bookings Tab */}
             {activeTab === 'admission_bookings' && (
               <>
