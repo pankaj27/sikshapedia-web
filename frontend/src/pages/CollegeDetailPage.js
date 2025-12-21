@@ -155,6 +155,7 @@ const CollegeDetailPage = ({ overrideId }) => {
   const { id: paramId } = useParams();
   // Use overrideId if provided (from InstitutionDetailPage), otherwise use URL param
   const id = overrideId || paramId;
+  const { year } = useYear(); // Get current year from settings
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
