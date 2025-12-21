@@ -5,6 +5,46 @@ import api from '../api/axios';
 import { useAuth } from '../contexts/AuthContext';
 
 import { Link } from '../components/CustomLink';
+
+// Default settings (fallback if API fails)
+const defaultSettings = {
+  header: {
+    title: "Write a Review & Earn ₹300*",
+    subtitle: "Share your experience and help thousands of students",
+    badge_texts: ["Verified Reviews", "Earn Rewards", "Help Students"]
+  },
+  points_config: {
+    base_points: 50,
+    detailed_review_bonus: 50,
+    verified_student_bonus: 50,
+    photos_bonus: 30,
+    min_review_characters: 200
+  },
+  success_page: {
+    title: "Review Submitted Successfully!",
+    message: "Thank you for sharing your experience. Your review is being verified and will be published shortly.",
+    points_label: "Points Earned!",
+    reward_note: "≈ ₹{amount} reward value",
+    next_steps_title: "What Happens Next?",
+    next_steps: [
+      { step_number: 1, text: "Our team will verify your review within 48 hours" },
+      { step_number: 2, text: "You'll receive a verification email once approved" },
+      { step_number: 3, text: "Points will be added to your account after approval" },
+      { step_number: 4, text: "Redeem points for cash via UPI once you have 200+ points" }
+    ],
+    button_write_another: "Write Another Review",
+    button_view_reviews: "View My Reviews"
+  },
+  benefits_section: {
+    title: "Why Write a Review?",
+    cards: [
+      { title: "Earn Rewards", description: "Get up to ₹300 for every verified review", icon: "award" },
+      { title: "Help Students", description: "Guide future students in making informed decisions", icon: "check" },
+      { title: "Shape Education", description: "Your feedback helps colleges improve", icon: "star" }
+    ]
+  }
+};
+
 const WriteReviewPage = () => {
   const { user, isAuthenticated } = useAuth();
   const fileInputRef = useRef(null);
@@ -13,6 +53,7 @@ const WriteReviewPage = () => {
   const [showNamePrompt, setShowNamePrompt] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [pageSettings, setPageSettings] = useState(defaultSettings);
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
@@ -43,6 +84,22 @@ const WriteReviewPage = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [courses, setCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
+
+  // Fetch page settings on mount
+  useEffect(() => {
+    const fetchPageSettings = async () => {
+      try {
+        const response = await api.get('/write-review-settings');
+        if (response.data) {
+          setPageSettings(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching page settings:', error);
+        // Use default settings on error
+      }
+    };
+    fetchPageSettings();
+  }, []);
 
   // Fetch user profile on mount
   useEffect(() => {
