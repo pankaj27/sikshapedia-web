@@ -750,20 +750,35 @@ const WriteReviewPage = () => {
                   </p>
                 </div>
 
+                {submitError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                    <FiAlertCircle className="text-red-500" />
+                    <p className="text-sm text-red-700">{submitError}</p>
+                  </div>
+                )}
+
                 <div className="flex gap-3">
                   <Button
                     onClick={() => setStep(2)}
                     variant="outline"
                     className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 h-10 text-sm"
+                    disabled={submitting}
                   >
                     Back
                   </Button>
                   <Button
-                    onClick={() => setStep(4)}
-                    disabled={!formData.name || !formData.email || !formData.graduationYear}
+                    onClick={handleSubmitReview}
+                    disabled={!formData.name || !formData.email || !formData.graduationYear || submitting}
                     className="flex-1 bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm disabled:bg-gray-300"
                   >
-                    Submit Review
+                    {submitting ? (
+                      <span className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Submitting...
+                      </span>
+                    ) : (
+                      'Submit Review'
+                    )}
                   </Button>
                 </div>
               </div>
