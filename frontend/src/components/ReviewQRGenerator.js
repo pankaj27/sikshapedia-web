@@ -253,7 +253,7 @@ const ReviewQRGenerator = ({
       <body>
         <div class="card">
           <div class="brand">
-            <div class="brand-logo">🎓 admissionbuddy</div>
+            <div class="brand-logo"><img src="/favicon.png" alt="AdmissionBuddy" /> admissionbuddy</div>
             <div class="brand-tagline">India's Trusted Education Platform</div>
           </div>
           
