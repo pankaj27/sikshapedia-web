@@ -202,3 +202,167 @@ async def reject_review(review_id: str):
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Review not found")
     return {"message": "Review rejected", "status": "rejected"}
+
+
+# ============================================
+# Review Link Generation (For Institutes)
+# ============================================
+
+class ReviewLinkCreate(BaseModel):
+    institute_id: str
+    institute_type: str  # college, school, university
+
+
+class ReviewLink(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    institute_id: str
+    institute_type: str
+    link_code: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    views: int = 0
+    submissions: int = 0
+
+
+@router.post("/institute/review-link")
+async def generate_review_link(data: ReviewLinkCreate):
+    """Generate a shareable review link for an institute"""
+    # Check if institute exists
+    collection_map = {
+        "college": "colleges",
+        "school": "schools", 
+        "university": "universities"
+    }
+    
+    collection = collection_map.get(data.institute_type)
+    if not collection:
+        raise HTTPException(status_code=400, detail="Invalid institute type")
+    
+    institute = await db[collection].find_one({"id": data.institute_id}, {"_id": 0, "id": 1, "name": 1})
+    if not institute:
+        raise HTTPException(status_code=404, detail="Institute not found")
+    
+    # Check for existing active link
+    existing = await db.review_links.find_one({
+        "institute_id": data.institute_id,
+        "is_active": True
+    }, {"_id": 0})
+    
+    if existing:
+        return {
+            "link_code": existing["link_code"],
+            "institute_name": institute.get("name"),
+            "is_new": False
+        }
+    
+    # Create new link
+    review_link = ReviewLink(
+        institute_id=data.institute_id,
+        institute_type=data.institute_type
+    )
+    
+    link_dict = review_link.model_dump()
+    link_dict["created_at"] = link_dict["created_at"].isoformat()
+    
+    await db.review_links.insert_one(link_dict)
+    
+    return {
+        "link_code": review_link.link_code,
+        "institute_name": institute.get("name"),
+        "is_new": True
+    }
+
+
+@router.get("/institute/review-link/{institute_id}")
+async def get_institute_review_link(institute_id: str):
+    """Get existing review link for an institute"""
+    link = await db.review_links.find_one({
+        "institute_id": institute_id,
+        "is_active": True
+    }, {"_id": 0})
+    
+    if not link:
+        return {"has_link": False}
+    
+    return {
+        "has_link": True,
+        "link_code": link["link_code"],
+        "views": link.get("views", 0),
+        "submissions": link.get("submissions", 0),
+        "created_at": link.get("created_at")
+    }
+
+
+@router.get("/review/{link_code}")
+async def get_review_page_data(link_code: str):
+    """Get institute data for review page (Public)"""
+    link = await db.review_links.find_one({"link_code": link_code, "is_active": True}, {"_id": 0})
+    if not link:
+        raise HTTPException(status_code=404, detail="Review link not found or expired")
+    
+    # Increment view count
+    await db.review_links.update_one(
+        {"link_code": link_code},
+        {"$inc": {"views": 1}}
+    )
+    
+    # Get institute data
+    collection_map = {
+        "college": "colleges",
+        "school": "schools",
+        "university": "universities"
+    }
+    
+    collection = collection_map.get(link["institute_type"])
+    institute = await db[collection].find_one(
+        {"id": link["institute_id"]},
+        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "cover_image": 1, "city": 1, "state": 1, "type": 1}
+    )
+    
+    if not institute:
+        raise HTTPException(status_code=404, detail="Institute not found")
+    
+    return {
+        "institute": institute,
+        "institute_type": link["institute_type"],
+        "link_code": link_code
+    }
+
+
+@router.post("/review/{link_code}/submit")
+async def submit_review_via_link(link_code: str, review_data: dict):
+    """Submit a review via shareable link (requires login)"""
+    link = await db.review_links.find_one({"link_code": link_code, "is_active": True}, {"_id": 0})
+    if not link:
+        raise HTTPException(status_code=404, detail="Review link not found or expired")
+    
+    # Create review
+    review = Review(
+        college_id=link["institute_id"],
+        user_id=review_data.get("user_id", "anonymous"),
+        user_name=review_data.get("user_name", "Anonymous"),
+        rating=review_data.get("rating", 5),
+        review_text=review_data.get("review_text"),
+        pros=review_data.get("pros"),
+        cons=review_data.get("cons"),
+        placements_rating=review_data.get("placements_rating"),
+        infrastructure_rating=review_data.get("infrastructure_rating"),
+        faculty_rating=review_data.get("faculty_rating"),
+        status="pending"  # Needs approval
+    )
+    
+    review_dict = review.model_dump()
+    review_dict["created_at"] = review_dict["created_at"].isoformat()
+    review_dict["source"] = "review_link"
+    review_dict["link_code"] = link_code
+    
+    await db.reviews.insert_one(review_dict)
+    
+    # Increment submission count
+    await db.review_links.update_one(
+        {"link_code": link_code},
+        {"$inc": {"submissions": 1}}
+    )
+    
+    return {"success": True, "message": "Review submitted successfully. It will be visible after approval."}
