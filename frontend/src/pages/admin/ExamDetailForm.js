@@ -136,6 +136,9 @@ const ExamDetailForm = () => {
   const [uploadingFile, setUploadingFile] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
+  // Master location data
+  const [masterStates, setMasterStates] = useState([]);
+
   const canApprove = user?.role === 'super_admin' || user?.role === 'content_manager';
 
   // Fetch quick entry exams for dropdown
