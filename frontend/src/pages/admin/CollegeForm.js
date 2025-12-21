@@ -155,16 +155,6 @@ const CollegeForm = () => {
     fetchMasterData();
   }, []);
 
-  // Update available cities when state changes
-  useEffect(() => {
-    if (formData.location?.state && allCities.length > 0) {
-      const stateCities = allCities
-        .filter(c => c.state === formData.location.state)
-        .map(c => c.name);
-      setAvailableCities(stateCities);
-    }
-  }, [formData.location?.state, allCities]);
-
   const getDefaultFormData = () => ({
     name: '',
     slug: '',
