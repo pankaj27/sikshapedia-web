@@ -55,18 +55,30 @@ api.interceptors.response.use(
       const currentPath = getCurrentPath();
       const isAdminPage = currentPath.startsWith('/admin');
       const isInstitutePage = currentPath.startsWith('/institute');
-      if (isAdminPage) {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        window.location.href = '/admin/login';
-      } else if (isInstitutePage) {
-        localStorage.removeItem('institute_token');
-        localStorage.removeItem('institute');
-        window.location.href = '/institute/login';
-      } else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = '/signup';
+      
+      // Only auto-logout if user was supposed to be authenticated
+      // Don't logout for endpoints that return 401 as "please login" message
+      const errorMessage = error.response?.data?.detail || '';
+      const isTokenExpired = errorMessage.toLowerCase().includes('expired') || 
+                            errorMessage.toLowerCase().includes('invalid token') ||
+                            errorMessage.toLowerCase().includes('could not validate');
+      
+      // Only redirect to login if token is actually expired/invalid
+      // Don't redirect for "please login" type errors from public pages
+      if (isTokenExpired) {
+        if (isAdminPage) {
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminUser');
+          window.location.href = '/admin/login';
+        } else if (isInstitutePage) {
+          localStorage.removeItem('institute_token');
+          localStorage.removeItem('institute');
+          window.location.href = '/institute/login';
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          // Don't redirect regular users, just clear token
+        }
       }
     }
     return Promise.reject(error);
