@@ -5869,6 +5869,21 @@ async def get_cities(state: Optional[str] = None):
     cities = await db.colleges.aggregate(pipeline).to_list(50)
     return [{"city": c["_id"]["city"], "state": c["_id"]["state"], "college_count": c["count"]} for c in cities]
 
+@api_router.get("/locations/all-states")
+async def get_all_states():
+    """Get all states from master data"""
+    states = await db.states.find({}, {"_id": 0}).sort("name", 1).to_list(100)
+    return states
+
+@api_router.get("/locations/all-cities")
+async def get_all_cities(state: Optional[str] = None):
+    """Get all cities from master data"""
+    query = {}
+    if state:
+        query["state"] = state
+    cities = await db.cities.find(query, {"_id": 0}).sort("name", 1).to_list(500)
+    return cities
+
 @api_router.get("/locations/countries")
 async def get_countries():
     """Get all unique countries for study abroad"""
