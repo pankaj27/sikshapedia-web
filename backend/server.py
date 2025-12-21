@@ -6760,6 +6760,7 @@ try:
     app.include_router(email_settings_router)  # Email settings routes - already has /api prefix
     app.include_router(write_review_settings_router, prefix="/api")  # Write review page settings
     app.include_router(year_settings_router, prefix="/api")  # Year configuration settings
+    app.include_router(seo_settings_router, prefix="/api")  # SEO settings (sitemap, robots, local SEO)
     logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities, colleges, courses_exams, study_abroad, taxonomy, reviews_questions, advertisements, comments, newsletter, write_review_settings, year_settings")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
