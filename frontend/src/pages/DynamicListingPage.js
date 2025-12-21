@@ -1455,7 +1455,7 @@ const DynamicListingPage = () => {
 
           {/* TOP COLLEGES TABLE */}
           <section id="top-colleges">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top Colleges in India 2025</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Top Colleges in India {year}</h2>
             <div className="bg-white rounded-lg shadow-md overflow-x-auto border">
               <table className="w-full">
                 <thead className="bg-gray-50">
