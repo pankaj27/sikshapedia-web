@@ -95,6 +95,7 @@ import TagCoursesColleges from './pages/admin/TagCoursesColleges';
 import TagExamsCourses from './pages/admin/TagExamsCourses';
 import NewsletterManagement from './pages/admin/NewsletterManagement';
 import EmailSettings from './pages/admin/EmailSettings';
+import FooterSettings from './pages/admin/FooterSettings';
 import UsersManagement from './pages/admin/UsersManagement';
 import BlogsManagement from './pages/admin/BlogsManagement';
 import BlogForm from './pages/admin/BlogForm';
