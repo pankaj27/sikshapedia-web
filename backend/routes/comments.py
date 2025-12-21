@@ -54,12 +54,13 @@ class ReplyCreate(BaseModel):
 # Helper function to get current user (simplified)
 # ============================================
 
-async def get_current_user_optional(authorization: str = None):
-    """Get current user from token if available"""
+from fastapi import Header
+
+async def get_current_user_from_header(authorization: str = Header(None)):
+    """Get current user from Authorization header"""
     if not authorization:
         return None
     try:
-        # Import from main server
         import jwt
         import os
         token = authorization.replace("Bearer ", "")
@@ -87,15 +88,12 @@ async def get_comments(entity_type: str, entity_id: str, limit: int = 50):
 
 
 @router.post("/comments")
-async def create_comment(comment_data: CommentCreate, authorization: str = None):
+async def create_comment(comment_data: CommentCreate, authorization: str = Header(None)):
     """Create a new comment (requires login)"""
-    from fastapi import Header
-    
-    # Get authorization from header
     if not authorization:
         raise HTTPException(status_code=401, detail="Please login to comment")
     
-    user = await get_current_user_optional(authorization)
+    user = await get_current_user_from_header(authorization)
     if not user:
         raise HTTPException(status_code=401, detail="Please login to comment")
     
