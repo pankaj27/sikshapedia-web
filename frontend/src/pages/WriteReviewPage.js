@@ -482,102 +482,158 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 1: Select Your Institute</h2>
               
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Institute Type <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={formData.instituteType}
-                    onChange={(e) => handleInputChange('instituteType', e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  >
-                    <option value="">Select Institute Type</option>
-                    <option value="college">College/University</option>
-                    <option value="school">School</option>
-                    <option value="coaching">Coaching Institute</option>
-                  </select>
-                </div>
+              {/* Show locked institute info when from QR */}
+              {isFromQR && formData.instituteName ? (
+                <div className="space-y-4">
+                  {/* Locked Institute Display */}
+                  <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <span className="text-2xl">🏫</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs text-orange-600 font-medium uppercase tracking-wide">
+                          {formData.instituteType === 'college' ? 'College/University' : formData.instituteType === 'school' ? 'School' : 'Coaching Institute'}
+                        </p>
+                        <h3 className="text-lg font-bold text-gray-900">{formData.instituteName}</h3>
+                      </div>
+                      <div className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+                        <FiCheckCircle size={12} />
+                        Verified via QR
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600">
+                      You scanned the QR code for this institute. The institute is pre-selected and cannot be changed.
+                    </p>
+                  </div>
 
-                <div className="relative">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Institute Name <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search and select your institute"
-                      value={formData.instituteName || instituteSearch}
-                      onChange={(e) => {
-                        setInstituteSearch(e.target.value);
-                        setShowInstituteDropdown(true);
-                        if (!e.target.value) {
-                          setFormData(prev => ({ ...prev, instituteName: '', instituteId: '' }));
-                        }
-                      }}
-                      onFocus={() => setShowInstituteDropdown(true)}
+                  {/* Course Selection - Still editable */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      Course <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={formData.course}
+                      onChange={(e) => handleInputChange('course', e.target.value)}
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      style={{ color: formData.instituteName ? '#111827' : '#6B7280', fontWeight: formData.instituteName ? '500' : '400' }}
-                    />
-                    {searchLoading && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                      </div>
-                    )}
-                    {showInstituteDropdown && (instituteSearch.length >= 2 || institutes.length > 0) && (
-                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                        {institutes.length > 0 ? (
-                          institutes.map(inst => (
-                            <div
-                              key={inst.id}
-                              onClick={() => handleInstituteSelect(inst)}
-                              className="px-3 py-2 cursor-pointer hover:bg-orange-50 border-b border-gray-100 last:border-0"
-                              style={{ color: '#111827' }}
-                            >
-                              <div className="font-medium">{inst.name}</div>
-                              {inst.location && (
-                                <div className="text-xs text-gray-500">
-                                  {inst.location.city}, {inst.location.state}
-                                </div>
-                              )}
-                            </div>
-                          ))
-                        ) : instituteSearch.length >= 2 && !searchLoading ? (
-                          <div className="px-3 py-3 text-gray-500 text-sm">
-                            No institutes found. Try a different search term.
-                          </div>
-                        ) : null}
-                      </div>
+                      style={{ color: formData.course ? '#111827' : '#6B7280' }}
+                    >
+                      <option value="">Select your course</option>
+                      {courses.map((course, idx) => (
+                        <option key={idx} value={course}>{course}</option>
+                      ))}
+                    </select>
+                    {coursesLoading && (
+                      <p className="text-xs text-orange-500 mt-0.5">Loading courses...</p>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5">Start typing to search from our database</p>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Course <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={formData.course}
-                    onChange={(e) => handleInputChange('course', e.target.value)}
-                    disabled={!formData.instituteId}
-                    className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${!formData.instituteId ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                    style={{ color: formData.course ? '#111827' : '#6B7280' }}
+                  <Button
+                    onClick={() => setStep(2)}
+                    disabled={!formData.course}
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm font-semibold disabled:bg-gray-300"
                   >
-                    <option value="">{formData.instituteId ? 'Select your course' : 'Select institute first'}</option>
-                    {courses.map((course, idx) => (
-                      <option key={idx} value={course}>{course}</option>
-                    ))}
-                  </select>
-                  {coursesLoading && (
-                    <p className="text-xs text-orange-500 mt-0.5">Loading courses...</p>
-                  )}
+                    Continue to Write Review
+                  </Button>
                 </div>
+              ) : (
+                /* Regular institute selection for non-QR flow */
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      Institute Type <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={formData.instituteType}
+                      onChange={(e) => handleInputChange('instituteType', e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    >
+                      <option value="">Select Institute Type</option>
+                      <option value="college">College/University</option>
+                      <option value="school">School</option>
+                      <option value="coaching">Coaching Institute</option>
+                    </select>
+                  </div>
 
-                <Button
-                  onClick={() => setStep(2)}
-                  disabled={!formData.instituteType || !formData.instituteName || !formData.course}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm font-semibold disabled:bg-gray-300"
+                  <div className="relative">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      Institute Name <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search and select your institute"
+                        value={formData.instituteName || instituteSearch}
+                        onChange={(e) => {
+                          setInstituteSearch(e.target.value);
+                          setShowInstituteDropdown(true);
+                          if (!e.target.value) {
+                            setFormData(prev => ({ ...prev, instituteName: '', instituteId: '' }));
+                          }
+                        }}
+                        onFocus={() => setShowInstituteDropdown(true)}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        style={{ color: formData.instituteName ? '#111827' : '#6B7280', fontWeight: formData.instituteName ? '500' : '400' }}
+                      />
+                      {searchLoading && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                      )}
+                      {showInstituteDropdown && (instituteSearch.length >= 2 || institutes.length > 0) && (
+                        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                          {institutes.length > 0 ? (
+                            institutes.map(inst => (
+                              <div
+                                key={inst.id}
+                                onClick={() => handleInstituteSelect(inst)}
+                                className="px-3 py-2 cursor-pointer hover:bg-orange-50 border-b border-gray-100 last:border-0"
+                                style={{ color: '#111827' }}
+                              >
+                                <div className="font-medium">{inst.name}</div>
+                                {inst.location && (
+                                  <div className="text-xs text-gray-500">
+                                    {inst.location.city}, {inst.location.state}
+                                  </div>
+                                )}
+                              </div>
+                            ))
+                          ) : instituteSearch.length >= 2 && !searchLoading ? (
+                            <div className="px-3 py-3 text-gray-500 text-sm">
+                              No institutes found. Try a different search term.
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-0.5">Start typing to search from our database</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      Course <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={formData.course}
+                      onChange={(e) => handleInputChange('course', e.target.value)}
+                      disabled={!formData.instituteId}
+                      className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${!formData.instituteId ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                      style={{ color: formData.course ? '#111827' : '#6B7280' }}
+                    >
+                      <option value="">{formData.instituteId ? 'Select your course' : 'Select institute first'}</option>
+                      {courses.map((course, idx) => (
+                        <option key={idx} value={course}>{course}</option>
+                      ))}
+                    </select>
+                    {coursesLoading && (
+                      <p className="text-xs text-orange-500 mt-0.5">Loading courses...</p>
+                    )}
+                  </div>
+
+                  <Button
+                    onClick={() => setStep(2)}
+                    disabled={!formData.instituteType || !formData.instituteName || !formData.course}
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm font-semibold disabled:bg-gray-300"
                 >
                   Next: Write Review
                 </Button>
