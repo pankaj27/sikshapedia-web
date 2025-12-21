@@ -26,6 +26,13 @@ const InstituteDashboard = () => {
   const [reviewLink, setReviewLink] = useState(null);
   const [generatingLink, setGeneratingLink] = useState(false);
   
+  // Reviews, Questions & Comments data
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [answerText, setAnswerText] = useState({});
+  const [submittingAnswer, setSubmittingAnswer] = useState(null);
+  
   // Filters
   const [leadSourceFilter, setLeadSourceFilter] = useState('');
   const [leadStatusFilter, setLeadStatusFilter] = useState('');
