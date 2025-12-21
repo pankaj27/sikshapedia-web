@@ -490,24 +490,23 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
         onClick={e => { e.stopPropagation(); handleModalClick(e); }}
         style={{
           scrollbarWidth: 'thin',
-          scrollbarColor: '#CBD5E1 #F1F5F9'
+          scrollbarColor: '#94A3B8 transparent'
         }}
       >
         {/* Custom thin scrollbar styles */}
         <style>{`
           .booking-modal-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
           }
           .booking-modal-scroll::-webkit-scrollbar-track {
-            background: #F1F5F9;
-            border-radius: 3px;
+            background: transparent;
           }
           .booking-modal-scroll::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
-            border-radius: 3px;
+            background: #94A3B8;
+            border-radius: 2px;
           }
           .booking-modal-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94A3B8;
+            background: #64748B;
           }
         `}</style>
         {/* Header with Institution Info */}
