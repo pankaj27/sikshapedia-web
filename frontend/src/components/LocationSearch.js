@@ -192,10 +192,10 @@ const LocationSearch = () => {
             {states.map((state, idx) => (
               <button
                 key={idx}
-                onClick={() => handleLocationClick('state', state.name)}
+                onClick={() => handleLocationClick('state', state.name || state.state)}
                 className={`${stateColors[idx % stateColors.length]} p-4 rounded-lg hover:shadow-lg transition-all text-center`}
               >
-                <div className="font-bold text-lg mb-1">{state.name}</div>
+                <div className="font-bold text-lg mb-1">{state.name || state.state}</div>
                 <div className="text-sm">{formatCount(state.count || state.college_count)} Colleges</div>
               </button>
             ))}
