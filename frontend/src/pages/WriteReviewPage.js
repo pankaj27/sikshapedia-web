@@ -48,6 +48,7 @@ const defaultSettings = {
 
 const WriteReviewPage = () => {
   const { user, isAuthenticated } = useAuth();
+  const [searchParams] = useSearchParams();
   const fileInputRef = useRef(null);
   const [step, setStep] = useState(1);
   const [userProfile, setUserProfile] = useState(null);
@@ -55,6 +56,7 @@ const WriteReviewPage = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [pageSettings, setPageSettings] = useState(defaultSettings);
+  const [prefilledFromUrl, setPrefilledFromUrl] = useState(false);
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
@@ -85,6 +87,23 @@ const WriteReviewPage = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [courses, setCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
+
+  // Handle URL params for pre-filling institute info (when coming from college detail page)
+  useEffect(() => {
+    const instituteId = searchParams.get('instituteId');
+    const instituteName = searchParams.get('instituteName');
+    const instituteType = searchParams.get('instituteType');
+
+    if (instituteId && instituteName && !prefilledFromUrl) {
+      setFormData(prev => ({
+        ...prev,
+        instituteId: instituteId,
+        instituteName: instituteName,
+        instituteType: instituteType === 'college' ? 'college' : instituteType === 'school' ? 'school' : 'college'
+      }));
+      setPrefilledFromUrl(true);
+    }
+  }, [searchParams, prefilledFromUrl]);
 
   // Fetch page settings on mount
   useEffect(() => {
