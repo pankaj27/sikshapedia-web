@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch } from 'react-icons/fi';
+import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 import { Link } from '../components/CustomLink';
 const WriteReviewPage = () => {
+  const { user, isAuthenticated } = useAuth();
   const [step, setStep] = useState(1);
+  const [userProfile, setUserProfile] = useState(null);
+  const [showNamePrompt, setShowNamePrompt] = useState(false);
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
@@ -36,6 +40,46 @@ const WriteReviewPage = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [courses, setCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
+
+  // Fetch user profile on mount
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!isAuthenticated) return;
+      
+      try {
+        const response = await api.get('/user/profile');
+        const profile = response.data;
+        setUserProfile(profile);
+        
+        // Pre-fill name and email from profile
+        setFormData(prev => ({
+          ...prev,
+          name: profile.name || profile.full_name || '',
+          email: profile.email || ''
+        }));
+        
+        // Check if name is missing
+        if (!profile.name && !profile.full_name) {
+          setShowNamePrompt(true);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        // If user is logged in via context, use that data
+        if (user) {
+          setFormData(prev => ({
+            ...prev,
+            name: user.name || user.full_name || '',
+            email: user.email || ''
+          }));
+          if (!user.name && !user.full_name) {
+            setShowNamePrompt(true);
+          }
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [isAuthenticated, user]);
 
   // Search institutes when user types
   useEffect(() => {
