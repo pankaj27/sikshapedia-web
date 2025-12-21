@@ -47,7 +47,76 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  
+  // Master location data
+  const [masterStates, setMasterStates] = useState([]);
+  const [masterCities, setMasterCities] = useState([]);
+  const [availableCities, setAvailableCities] = useState([]);
+  const [stateSearch, setStateSearch] = useState('');
+  const [citySearch, setCitySearch] = useState('');
+  const [showStateDropdown, setShowStateDropdown] = useState(false);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
 
+  // Fetch master location data
+  useEffect(() => {
+    const fetchMasterData = async () => {
+      try {
+        const [statesRes, citiesRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities')
+        ]);
+        const activeStates = (statesRes.data || [])
+          .filter(s => s.status === 'active')
+          .map(s => s.name)
+          .sort();
+        setMasterStates(activeStates);
+        setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+      } catch (error) {
+        console.error('Error fetching master locations:', error);
+        // Fallback to hardcoded states
+        setMasterStates(INDIAN_STATES);
+      }
+    };
+    if (isOpen) {
+      fetchMasterData();
+    }
+  }, [isOpen]);
+
+  // Update available cities when state changes
+  useEffect(() => {
+    if (formData.state && masterCities.length > 0) {
+      const stateCities = masterCities
+        .filter(c => c.state === formData.state)
+        .map(c => c.name)
+        .sort();
+      setAvailableCities(stateCities);
+    } else {
+      setAvailableCities([]);
+    }
+  }, [formData.state, masterCities]);
+
+  // Filter states based on search
+  const filteredStates = masterStates.filter(state => 
+    state.toLowerCase().includes(stateSearch.toLowerCase())
+  );
+
+  // Filter cities based on search
+  const filteredCities = availableCities.filter(city => 
+    city.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  const handleStateSelect = (state) => {
+    setFormData({ ...formData, state, city: '' }); // Reset city when state changes
+    setStateSearch('');
+    setShowStateDropdown(false);
+    setCitySearch('');
+  };
+
+  const handleCitySelect = (city) => {
+    setFormData({ ...formData, city });
+    setCitySearch('');
+    setShowCityDropdown(false);
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
