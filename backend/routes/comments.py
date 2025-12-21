@@ -181,6 +181,17 @@ async def flag_comment(comment_id: str):
 # Admin Endpoints
 # ============================================
 
+@router.get("/admin/comments")
+async def get_all_comments_admin(limit: int = 200):
+    """Get all comments for admin (Admin only)"""
+    comments = await db.comments.find(
+        {},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    return comments
+
+
 @router.get("/admin/comments/flagged")
 async def get_flagged_comments(limit: int = 50):
     """Get flagged comments for admin review"""
