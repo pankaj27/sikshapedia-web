@@ -37,6 +37,7 @@ class Comment(BaseModel):
     text: str
     replies: List[dict] = []
     is_flagged: bool = False
+    status: str = "pending"  # pending, approved, rejected
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
