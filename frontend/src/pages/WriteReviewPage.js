@@ -509,6 +509,22 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 3: Personal Details</h2>
               
+              {/* Prompt to save name if missing */}
+              {showNamePrompt && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <FiAlertCircle className="text-orange-500 mt-0.5 flex-shrink-0" size={20} />
+                  <div>
+                    <p className="text-sm font-medium text-orange-800">Complete Your Profile</p>
+                    <p className="text-xs text-orange-700 mt-1">
+                      Your name is not saved in your profile. Please enter your name below and we'll save it to your profile.
+                    </p>
+                    <Link to="/dashboard?tab=profile" className="text-xs text-orange-600 hover:underline mt-1 inline-block">
+                      Go to Profile Settings →
+                    </Link>
+                  </div>
+                </div>
+              )}
+              
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -520,7 +536,13 @@ const WriteReviewPage = () => {
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    style={{ color: '#111827', fontWeight: formData.name ? '500' : '400' }}
                   />
+                  {userProfile?.name && (
+                    <p className="text-xs text-green-600 mt-0.5 flex items-center gap-1">
+                      <FiCheckCircle size={12} /> Auto-filled from your profile
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -532,9 +554,17 @@ const WriteReviewPage = () => {
                     placeholder="your.email@example.com"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    readOnly={!!userProfile?.email}
+                    className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${userProfile?.email ? 'bg-gray-50' : ''}`}
+                    style={{ color: '#111827', fontWeight: formData.email ? '500' : '400' }}
                   />
-                  <p className="text-xs text-gray-500 mt-0.5">We'll send reward details to this email</p>
+                  {userProfile?.email ? (
+                    <p className="text-xs text-green-600 mt-0.5 flex items-center gap-1">
+                      <FiCheckCircle size={12} /> From your profile (cannot be changed)
+                    </p>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-0.5">We'll send reward details to this email</p>
+                  )}
                 </div>
 
                 <div>
