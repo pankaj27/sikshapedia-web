@@ -119,15 +119,15 @@ async def get_write_review_settings():
     return settings
 
 @write_review_settings_router.get("/admin")
-async def get_write_review_settings_admin(current_user: dict = Depends(get_current_user)):
+async def get_write_review_settings_admin(request: Request, current_admin: dict = Depends(get_current_admin)):
     """Get write review page settings (admin endpoint)"""
-    settings = await db.write_review_settings.find_one({"id": "write-review-settings"}, {"_id": 0})
-    if not settings:
+    page_settings = await db.write_review_settings.find_one({"id": "write-review-settings"}, {"_id": 0})
+    if not page_settings:
         return WriteReviewSettings().model_dump()
-    return settings
+    return page_settings
 
 @write_review_settings_router.put("")
-async def update_write_review_settings(settings: WriteReviewSettings, current_user: dict = Depends(get_current_user)):
+async def update_write_review_settings(page_settings: WriteReviewSettings, request: Request, current_admin: dict = Depends(get_current_admin)):
     """Update write review page settings"""
     settings_dict = settings.model_dump()
     settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
