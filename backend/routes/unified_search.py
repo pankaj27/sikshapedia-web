@@ -102,9 +102,15 @@ async def autocomplete_search(
     ).limit(limit).to_list(limit)
     
     for s in schools:
-        slug = s.get("slug", "")
-        serial = s.get("serial_number", "")
-        url_slug = f"{serial}-{slug}" if serial and slug else slug or s.get("id", "")
+        slug = s.get("slug") or ""
+        serial = s.get("serial_number") or ""
+        
+        if serial and slug:
+            url_slug = f"{serial}-{slug}"
+        elif slug:
+            url_slug = slug
+        else:
+            continue
         
         results.append({
             "type": "school",
