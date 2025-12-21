@@ -36,6 +36,26 @@ const CommentsModeration = () => {
     }
   };
 
+  const handleUnflagComment = async (id) => {
+    try {
+      await api.patch(`/admin/comments/${id}/unflag`);
+      setComments(comments.map(c => c.id === id ? { ...c, is_flagged: false } : c));
+    } catch (error) {
+      console.error('Error unflagging comment:', error);
+      alert('Failed to unflag comment.');
+    }
+  };
+
+  const handleFlagComment = async (id) => {
+    try {
+      await api.post(`/comments/${id}/flag`);
+      setComments(comments.map(c => c.id === id ? { ...c, is_flagged: true } : c));
+    } catch (error) {
+      console.error('Error flagging comment:', error);
+      alert('Failed to flag comment.');
+    }
+  };
+
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
