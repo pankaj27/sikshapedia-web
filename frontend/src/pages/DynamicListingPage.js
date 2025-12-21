@@ -1284,30 +1284,13 @@ const DynamicListingPage = () => {
             </div>
             
             {/* Author Info - Compact */}
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-white/20 flex-shrink-0">
-                {pageContent?.updated_by_photo || pageContent?.created_by_photo ? (
-                  <img 
-                    src={pageContent?.updated_by_photo || pageContent?.created_by_photo} 
-                    alt={pageContent?.updated_by_name || 'Author'} 
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold">
-                    <FiUser size={18} />
-                  </div>
-                )}
-              </div>
-              <div>
-                <p className="text-xs text-blue-200">Curated by</p>
-                <p className="font-semibold text-sm">
-                  {pageContent?.updated_by_name || pageContent?.created_by_name || 'Content Team'}
-                </p>
-                <p className="text-xs text-blue-300">
-                  {pageContent?.updated_at ? `Updated ${formatTimeAgo(pageContent.updated_at)}` : 'Updated recently'}
-                </p>
-              </div>
-            </div>
+            <AuthorInfoHero
+              name={pageContent?.updated_by_name || pageContent?.created_by_name}
+              photo={pageContent?.updated_by_photo || pageContent?.created_by_photo}
+              updatedAt={pageContent?.updated_at}
+              createdAt={pageContent?.created_at}
+              label="Curated by"
+            />
           </div>
         </div>
       </div>
