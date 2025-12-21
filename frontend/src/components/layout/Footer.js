@@ -322,7 +322,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                     placeholder={formData.state ? "Search City..." : "Select state first"}
                   />
                   {showCityDropdown && formData.state && (
-                    <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    <div className="city-dropdown-container absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                       {filteredCities.length > 0 ? (
                         filteredCities.map(city => (
                           <div
