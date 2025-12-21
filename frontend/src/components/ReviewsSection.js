@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiStar, FiThumbsUp, FiThumbsDown, FiUser, FiCalendar, FiEdit3 } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from './ui/button';
+import LoginPromptModal from './LoginPromptModal';
 
 const StarRating = ({ rating, size = 16, interactive = false, onChange }) => {
   const [hover, setHover] = useState(0);
