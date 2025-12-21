@@ -145,14 +145,14 @@ const CollegeDuniaHome = () => {
   ];
 
   const cities = pageSettings?.cities?.length > 0 ? pageSettings.cities : [
-    { name: 'Delhi', image: '/assets/cities/New Delhi.svg' },
-    { name: 'Mumbai', image: '/assets/cities/Mumbai.svg' },
-    { name: 'Bangalore', image: '/assets/cities/Bangalore.svg' },
-    { name: 'Hyderabad', image: '/assets/cities/Hyderabad.svg' },
-    { name: 'Chennai', image: '/assets/cities/Chennai.svg' },
-    { name: 'Pune', image: '/assets/cities/Pune.svg' },
-    { name: 'Kolkata', image: '/assets/cities/Kolkata.svg' },
-    { name: 'Bhopal', image: '/assets/cities/Bhopal.svg' }
+    { name: 'Delhi', image: '/assets/cities/New Delhi.svg', link: '/colleges?city=Delhi' },
+    { name: 'Mumbai', image: '/assets/cities/Mumbai.svg', link: '/colleges?city=Mumbai' },
+    { name: 'Bangalore', image: '/assets/cities/Bangalore.svg', link: '/colleges?city=Bangalore' },
+    { name: 'Hyderabad', image: '/assets/cities/Hyderabad.svg', link: '/colleges?city=Hyderabad' },
+    { name: 'Chennai', image: '/assets/cities/Chennai.svg', link: '/colleges?city=Chennai' },
+    { name: 'Pune', image: '/assets/cities/Pune.svg', link: '/colleges?city=Pune' },
+    { name: 'Kolkata', image: '/assets/cities/Kolkata.svg', link: '/colleges?city=Kolkata' },
+    { name: 'Bhopal', image: '/assets/cities/Bhopal.svg', link: '/colleges?city=Bhopal' }
   ];
 
   const rankingAgencies = pageSettings?.ranking_agencies?.length > 0 ? pageSettings.ranking_agencies : ['India Today', 'NIRF', 'The Week', 'Outlook'];
