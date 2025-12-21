@@ -381,6 +381,13 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
         entityName={entityName}
         onSuccess={fetchReviews}
       />
+      
+      <LoginPromptModal
+        isOpen={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        action="write a review"
+        message="Share your experience and help other students make informed decisions"
+      />
     </div>
   );
 };
