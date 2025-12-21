@@ -488,6 +488,37 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
+  const [footerSettings, setFooterSettings] = useState({
+    copyright_text: `© ${new Date().getFullYear()} admissionbuddy. All rights reserved.`,
+    company_name: 'admissionbuddy',
+    social_links: []
+  });
+
+  useEffect(() => {
+    // Fetch footer settings from API
+    const fetchFooterSettings = async () => {
+      try {
+        const response = await api.get('/admin-settings/footer');
+        if (response.data) {
+          setFooterSettings(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching footer settings:', error);
+      }
+    };
+    fetchFooterSettings();
+  }, []);
+
+  const getSocialIcon = (platform) => {
+    switch (platform) {
+      case 'facebook': return FiFacebook;
+      case 'twitter': return FiTwitter;
+      case 'instagram': return FiInstagram;
+      case 'youtube': return FiYoutube;
+      case 'linkedin': return FiLinkedin;
+      default: return FiFacebook;
+    }
+  };
 
   const handleSubscribe = (e) => {
     e.preventDefault();
