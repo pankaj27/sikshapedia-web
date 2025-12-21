@@ -285,7 +285,7 @@ const ReviewLinkPage = () => {
 
         {/* Footer */}
         <p className="text-center text-gray-500 text-sm mt-6">
-          Powered by AdmissionBuddy
+          Powered by admissionbuddy
         </p>
       </div>
     </div>

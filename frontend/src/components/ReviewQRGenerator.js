@@ -38,11 +38,11 @@ const ReviewQRGenerator = ({
     ctx.roundRect(30, 30, 540, 740, 20);
     ctx.fill();
     
-    // AdmissionBuddy Logo & Branding
+    // admissionbuddy Logo & Branding
     ctx.fillStyle = '#f97316';
     ctx.font = 'bold 28px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('🎓 AdmissionBuddy', 300, 80);
+    ctx.fillText('🎓 admissionbuddy', 300, 80);
     
     ctx.fillStyle = '#6b7280';
     ctx.font = '14px Arial';
@@ -244,7 +244,7 @@ const ReviewQRGenerator = ({
       <body>
         <div class="card">
           <div class="brand">
-            <div class="brand-logo">🎓 AdmissionBuddy</div>
+            <div class="brand-logo">🎓 admissionbuddy</div>
             <div class="brand-tagline">India's Trusted Education Platform</div>
           </div>
           
@@ -282,7 +282,7 @@ const ReviewQRGenerator = ({
       try {
         await navigator.share({
           title: `Review ${instituteName}`,
-          text: `Share your experience at ${instituteName} on AdmissionBuddy`,
+          text: `Share your experience at ${instituteName} on admissionbuddy`,
           url: reviewLink
         });
       } catch (err) {
@@ -296,11 +296,11 @@ const ReviewQRGenerator = ({
   return (
     <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-1">
       <div className="bg-white rounded-xl overflow-hidden">
-        {/* Header with AdmissionBuddy Branding */}
+        {/* Header with admissionbuddy Branding */}
         <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-6 py-4 border-b">
           <div className="flex items-center justify-center gap-2">
             <span className="text-2xl">🎓</span>
-            <span className="text-xl font-bold text-orange-600">AdmissionBuddy</span>
+            <span className="text-xl font-bold text-orange-600">admissionbuddy</span>
           </div>
           <p className="text-center text-xs text-gray-500 mt-1">India's Trusted Education Platform</p>
         </div>

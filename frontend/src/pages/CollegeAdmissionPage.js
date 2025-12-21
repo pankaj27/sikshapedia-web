@@ -300,7 +300,7 @@ const CollegeAdmissionPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="College Admissions 2026 - Apply Now | AdmissionBuddy"
+        title="College Admissions 2026 - Apply Now | admissionbuddy"
         description="Get admission alerts for top colleges in India. Engineering, Medical, Management, Law admissions open."
       />
 

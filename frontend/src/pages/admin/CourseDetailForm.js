@@ -33,29 +33,29 @@ const getMenuIconById = (iconId) => {
 };
 
 // Brand name constant
-const BRAND_NAME = 'AdmissionBuddy';
+const BRAND_NAME = 'admissionbuddy';
 
-// Auto-generate alt tag based on context with AdmissionBuddy branding
+// Auto-generate alt tag based on context with admissionbuddy branding
 const generateAltTag = (courseName, context, index) => {
   const name = courseName || 'Course';
   const ctx = context || 'content';
   return `${name} - ${ctx} ${index + 1} | ${BRAND_NAME}`.trim();
 };
 
-// Auto-generate video alt tag with AdmissionBuddy branding
+// Auto-generate video alt tag with admissionbuddy branding
 const generateVideoAlt = (courseName, context, index) => {
   const name = courseName || 'Course';
   const ctx = context || 'video';
   return `${name} - ${ctx} video ${index + 1} | ${BRAND_NAME}`.trim();
 };
 
-// Auto-generate alt tag from caption/title with AdmissionBuddy branding
+// Auto-generate alt tag from caption/title with admissionbuddy branding
 const generateAltFromCaption = (courseName, caption) => {
   const name = courseName || 'Course';
   return caption ? `${name} - ${caption} | ${BRAND_NAME}` : '';
 };
 
-// Auto-generate SEO Meta Tags with AdmissionBuddy branding
+// Auto-generate SEO Meta Tags with admissionbuddy branding
 const generateSeoMetaTags = (courseData) => {
   const name = courseData.name || 'Course';
   const fullName = courseData.full_name || name;
@@ -1145,7 +1145,7 @@ const CourseDetailForm = () => {
                               <input type="text" value={img.caption || ''} onChange={(e) => {
                                 const newImages = [...(formData.description_images || [])];
                                 newImages[index].caption = e.target.value;
-                                // Auto-generate alt tag from title with AdmissionBuddy branding
+                                // Auto-generate alt tag from title with admissionbuddy branding
                                 newImages[index].alt = generateAltFromCaption(formData.name, e.target.value);
                                 setFormData({...formData, description_images: newImages});
                               }} placeholder="Enter image title (alt tag auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
@@ -1204,7 +1204,7 @@ const CourseDetailForm = () => {
                                   <input type="text" value={vid.title || ''} onChange={(e) => {
                                     const newVideos = [...(formData.description_videos || [])];
                                     newVideos[index].title = e.target.value;
-                                    // Auto-generate alt tag from title with AdmissionBuddy branding
+                                    // Auto-generate alt tag from title with admissionbuddy branding
                                     newVideos[index].alt = generateAltFromCaption(formData.name, e.target.value);
                                     setFormData({...formData, description_videos: newVideos});
                                   }} placeholder="Enter title (alt auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
@@ -2934,7 +2934,7 @@ const CourseDetailForm = () => {
                           <input type="text" value={img.caption || ''} onChange={(e) => {
                             const newImages = [...(formData.seo_images || [])];
                             newImages[index].caption = e.target.value;
-                            // Auto-generate alt tag from caption with AdmissionBuddy branding
+                            // Auto-generate alt tag from caption with admissionbuddy branding
                             newImages[index].alt = generateAltFromCaption(formData.name, e.target.value);
                             setFormData({...formData, seo_images: newImages});
                           }} placeholder="Enter caption (alt tag auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />
@@ -3021,7 +3021,7 @@ const CourseDetailForm = () => {
                               <input type="text" value={vid.title || ''} onChange={(e) => {
                                 const newVideos = [...(formData.seo_videos || [])];
                                 newVideos[index].title = e.target.value;
-                                // Auto-generate alt tag from title with AdmissionBuddy branding
+                                // Auto-generate alt tag from title with admissionbuddy branding
                                 newVideos[index].alt = generateAltFromCaption(formData.name, e.target.value);
                                 setFormData({...formData, seo_videos: newVideos});
                               }} placeholder="Enter title (alt auto-generates)" className="w-full border rounded px-2 py-1.5 text-sm" />

@@ -44,7 +44,7 @@ Allocate equal time to all three subjects and maintain consistency in your prepa
 ## Mock Tests
 Take at least 50 mock tests before the actual exam to build speed and accuracy.""",
         "author_id": "admin",
-        "author_name": "AdmissionBuddy Team",
+        "author_name": "admissionbuddy Team",
         "category": "Exams",
         "tags": ["JEE Main", "Engineering", "Preparation", "Study Tips"],
         "views": 1250,
@@ -87,7 +87,7 @@ Ensure the fees align with your budget and check for scholarships.
 ## 7. Alumni Network
 A strong alumni network can open doors to career opportunities.""",
         "author_id": "admin",
-        "author_name": "AdmissionBuddy Team",
+        "author_name": "admissionbuddy Team",
         "category": "Admissions",
         "tags": ["College Selection", "Admissions", "Career Planning"],
         "views": 2100,
@@ -131,7 +131,7 @@ Studying abroad opens doors to world-class education and global career opportuni
 ## Application Process
 Start preparing 12-18 months before intended start date.""",
         "author_id": "admin",
-        "author_name": "AdmissionBuddy Team",
+        "author_name": "admissionbuddy Team",
         "category": "Study Abroad",
         "tags": ["Study Abroad", "International Education", "USA", "UK", "Canada"],
         "views": 3200,
@@ -186,7 +186,7 @@ For students with exceptional sports achievements.
 - Caste certificate (if applicable)
 - Bank details""",
         "author_id": "admin",
-        "author_name": "AdmissionBuddy Team",
+        "author_name": "admissionbuddy Team",
         "category": "Financial Aid",
         "tags": ["Scholarships", "Financial Aid", "NSP", "Education Funding"],
         "views": 1800,
@@ -246,7 +246,7 @@ Opportunities in hospitality industry.
 - Consider long-term goals
 - Take career counseling""",
         "author_id": "admin",
-        "author_name": "AdmissionBuddy Team",
+        "author_name": "admissionbuddy Team",
         "category": "Career",
         "tags": ["Career Planning", "12th Class", "Career Options", "Future"],
         "views": 2800,

@@ -1185,7 +1185,7 @@ const DynamicListingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
-        <title>{pageContent?.meta_title || pageInfo.title} | AdmissionBuddy</title>
+        <title>{pageContent?.meta_title || pageInfo.title} | admissionbuddy</title>
         <meta name="description" content={pageContent?.meta_description || pageInfo.description} />
         <link rel="canonical" href={pageContent?.canonical_url || `https://admissionbuddy.co${location.pathname}`} />
         {pageContent?.meta_keywords?.length > 0 && (
@@ -2398,7 +2398,7 @@ const DynamicListingPage = () => {
                           {/* Logo */}
                           <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border border-gray-200 group-hover:border-blue-300 transition-colors">
                             {inst.logo_url ? (
-                              <img src={inst.logo_url} alt={`${inst.name} logo | AdmissionBuddy`} className="w-full h-full object-contain p-1" />
+                              <img src={inst.logo_url} alt={`${inst.name} logo | admissionbuddy`} className="w-full h-full object-contain p-1" />
                             ) : (
                               <span className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">{inst.name?.charAt(0)}</span>
                             )}

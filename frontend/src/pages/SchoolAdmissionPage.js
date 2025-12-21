@@ -229,7 +229,7 @@ const SchoolAdmissionPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="School Admissions 2026 - Apply Now | AdmissionBuddy"
+        title="School Admissions 2026 - Apply Now | admissionbuddy"
         description="Get admission alerts for top schools in India. CBSE, ICSE, IB school admissions open."
       />
 

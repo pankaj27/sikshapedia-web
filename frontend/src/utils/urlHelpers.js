@@ -1,5 +1,5 @@
 /**
- * URL Helper utilities for AdmissionBuddy
+ * URL Helper utilities for admissionbuddy
  * New URL Structure:
  * 
  * Universities:

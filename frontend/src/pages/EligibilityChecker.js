@@ -300,7 +300,7 @@ const EligibilityChecker = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="College Predictor 2026 - Find Best Colleges | AdmissionBuddy"
+        title="College Predictor 2026 - Find Best Colleges | admissionbuddy"
         description="Find colleges based on your exam scores. College predictor for JEE Main, NEET, CAT, CUET and other exams."
       />
 

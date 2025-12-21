@@ -125,7 +125,7 @@ const EducationLoansPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="Education Loans - Compare Best Student Loans | AdmissionBuddy"
+        title="Education Loans - Compare Best Student Loans | admissionbuddy"
         description="Compare education loans from top banks in India. Find the best interest rates, loan amounts, and repayment terms for studying in India and abroad."
       />
 

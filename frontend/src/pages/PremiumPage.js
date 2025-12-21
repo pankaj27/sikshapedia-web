@@ -78,7 +78,7 @@ const PremiumPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MetaTags title="Go Premium - Unlock All Features | AdmissionBuddy" />
+      <MetaTags title="Go Premium - Unlock All Features | admissionbuddy" />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 text-white py-20">

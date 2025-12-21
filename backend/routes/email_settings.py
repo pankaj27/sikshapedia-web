@@ -18,11 +18,11 @@ def set_database(database):
 # ============================================
 
 class EmailSettings(BaseModel):
-    sender_name: str = "AdmissionBuddy"
+    sender_name: str = "admissionbuddy"
     sender_email: str = "noreply@admissionbuddy.co"
     reply_to_email: str = "support@admissionbuddy.co"
     email_provider: str = "resend"  # resend, sendgrid, smtp
-    footer_text: str = "© 2024 AdmissionBuddy. All rights reserved."
+    footer_text: str = "© 2024 admissionbuddy. All rights reserved."
     logo_url: str = "/assets/main-logo.png"
     primary_color: str = "#f97316"
     
@@ -64,7 +64,7 @@ DEFAULT_TEMPLATES = [
     {
         "template_key": "newsletter_welcome",
         "name": "Newsletter Welcome Email",
-        "subject": "Welcome to AdmissionBuddy Newsletter! 🎓",
+        "subject": "Welcome to admissionbuddy Newsletter! 🎓",
         "variables": ["user_email"],
         "html_content": """
 <!DOCTYPE html>
@@ -378,11 +378,11 @@ async def get_email_settings():
         # Create default settings
         default_settings = {
             "id": str(uuid4()),
-            "sender_name": "AdmissionBuddy",
+            "sender_name": "admissionbuddy",
             "sender_email": "noreply@admissionbuddy.co",
             "reply_to_email": "support@admissionbuddy.co",
             "email_provider": "resend",
-            "footer_text": "© 2024 AdmissionBuddy. All rights reserved.",
+            "footer_text": "© 2024 admissionbuddy. All rights reserved.",
             "logo_url": "/assets/main-logo.png",
             "primary_color": "#f97316",
             "updated_at": datetime.now(timezone.utc).isoformat()
@@ -524,9 +524,9 @@ async def preview_email_template(template_key: str):
     settings = await db.email_settings.find_one({}, {"_id": 0})
     if not settings:
         settings = {
-            "sender_name": "AdmissionBuddy",
+            "sender_name": "admissionbuddy",
             "primary_color": "#f97316",
-            "footer_text": "© 2024 AdmissionBuddy. All rights reserved."
+            "footer_text": "© 2024 admissionbuddy. All rights reserved."
         }
     
     # Sample data for preview
@@ -545,9 +545,9 @@ async def preview_email_template(template_key: str):
         "temp_password": "TempPass123!",
         "lead_source": "Website",
         "message": "I am interested in admission for the upcoming session.",
-        "sender_name": settings.get("sender_name", "AdmissionBuddy"),
+        "sender_name": settings.get("sender_name", "admissionbuddy"),
         "primary_color": settings.get("primary_color", "#f97316"),
-        "footer_text": settings.get("footer_text", "© 2024 AdmissionBuddy"),
+        "footer_text": settings.get("footer_text", "© 2024 admissionbuddy"),
         "website_url": "https://admissionbuddy.co"
     }
     

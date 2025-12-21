@@ -269,7 +269,7 @@ const CollegeDuniaHome = () => {
     (pageSettings?.top_schools?.length > 0 ? pageSettings.top_schools : defaultTopSchools);
   
   // SEO
-  const metaTitle = pageSettings?.meta_title || 'AdmissionBuddy - Top Colleges, Universities & Institutes in India | Admission 2024';
+  const metaTitle = pageSettings?.meta_title || 'admissionbuddy - Top Colleges, Universities & Institutes in India | Admission 2024';
   const metaDescription = pageSettings?.meta_description || 'Find detailed information about 10,000+ colleges, universities, courses, exams in India.';
   const metaKeywords = pageSettings?.meta_keywords?.join(', ') || 'colleges in india, top universities, engineering colleges, medical colleges, MBA colleges';
 

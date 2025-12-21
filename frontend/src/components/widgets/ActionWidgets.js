@@ -445,7 +445,7 @@ export const SponsorAdWidget = ({
         {image && (
           <img 
             src={image} 
-            alt={`${sponsor || 'Partner'} - ${title} | AdmissionBuddy`}
+            alt={`${sponsor || 'Partner'} - ${title} | admissionbuddy`}
             className="w-full h-32 object-cover"
           />
         )}

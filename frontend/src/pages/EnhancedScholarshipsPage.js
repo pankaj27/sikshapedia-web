@@ -143,7 +143,7 @@ const ScholarshipsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="Scholarships - Find & Apply for Education Scholarships | AdmissionBuddy"
+        title="Scholarships - Find & Apply for Education Scholarships | admissionbuddy"
         description="Browse 1000+ scholarships for Indian students. Government, private, merit-based and need-based scholarships. Check eligibility and apply online."
       />
 

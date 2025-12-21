@@ -97,7 +97,7 @@ const StudyMaterialsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="Study Materials - Free Notes, Sample Papers & Mock Tests | AdmissionBuddy"
+        title="Study Materials - Free Notes, Sample Papers & Mock Tests | admissionbuddy"
         description="Download free study materials for JEE, NEET, CAT, GATE, UPSC. Get notes, sample papers, previous year questions, and video lectures."
       />
 

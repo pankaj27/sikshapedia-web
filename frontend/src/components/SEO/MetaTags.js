@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const MetaTags = ({ 
-  title = 'AdmissionBuddy - Top Colleges, Universities & Institutes in India',
+  title = 'admissionbuddy - Top Colleges, Universities & Institutes in India',
   description = 'Find detailed information about top colleges, universities, courses, exams, admissions, rankings, fees, and cutoffs. Compare colleges, read reviews, and make informed decisions.',
   keywords = 'colleges in india, top universities, engineering colleges, medical colleges, MBA colleges, admissions 2024, college rankings, course finder, exam preparation',
   canonical,
@@ -26,7 +26,7 @@ const MetaTags = ({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={fullCanonical} />
       <meta property="og:image" content={`${siteUrl}${ogImage}`} />
-      <meta property="og:site_name" content="AdmissionBuddy" />
+      <meta property="og:site_name" content="admissionbuddy" />
       
       {/* Twitter Card Meta Tags */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -38,7 +38,7 @@ const MetaTags = ({
       <meta name="robots" content="index, follow" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
-      <meta name="author" content="AdmissionBuddy" />
+      <meta name="author" content="admissionbuddy" />
     </Helmet>
   );
 };

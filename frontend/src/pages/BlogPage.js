@@ -59,7 +59,7 @@ const BlogPage = () => {
             title: blog.title,
             excerpt: blog.excerpt || blog.content?.substring(0, 150) + '...',
             category: blog.category || 'General',
-            author_name: blog.author || 'AdmissionBuddy',
+            author_name: blog.author || 'admissionbuddy',
             views: blog.views || 0,
             likes: blog.likes || 0,
             published_date: blog.published_date || blog.created_at,
@@ -248,7 +248,7 @@ const BlogPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title={settings?.meta_title || "Education Blog & Articles | AdmissionBuddy"}
+        title={settings?.meta_title || "Education Blog & Articles | admissionbuddy"}
         description={settings?.meta_description || "Expert advice, tips, and guides for students on admissions, exams, career, and study abroad."}
       />
 

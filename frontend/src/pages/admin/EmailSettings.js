@@ -175,7 +175,7 @@ const EmailSettings = () => {
                     id="sender_name"
                     value={settings.sender_name}
                     onChange={(e) => setSettings({ ...settings, sender_name: e.target.value })}
-                    placeholder="AdmissionBuddy"
+                    placeholder="admissionbuddy"
                   />
                   <p className="text-xs text-gray-500">This name appears in the "From" field</p>
                 </div>
@@ -255,7 +255,7 @@ const EmailSettings = () => {
                   id="footer_text"
                   value={settings.footer_text}
                   onChange={(e) => setSettings({ ...settings, footer_text: e.target.value })}
-                  placeholder="© 2024 AdmissionBuddy. All rights reserved."
+                  placeholder="© 2024 admissionbuddy. All rights reserved."
                   rows={2}
                 />
               </div>

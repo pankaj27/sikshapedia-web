@@ -5,7 +5,7 @@ export const OrganizationSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "AdmissionBuddy",
+    "name": "admissionbuddy",
     "url": "https://educationui.preview.emergentagent.com",
     "logo": "https://educationui.preview.emergentagent.com/admissionbuddy-logo.png",
     "description": "Find detailed information about top colleges, universities, courses, exams in India. Compare colleges, check rankings, fees, cutoffs, and admission details.",
@@ -109,7 +109,7 @@ export const WebsiteSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "AdmissionBuddy",
+    "name": "admissionbuddy",
     "url": "https://educationui.preview.emergentagent.com",
     "potentialAction": {
       "@type": "SearchAction",

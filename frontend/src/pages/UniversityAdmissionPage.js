@@ -242,7 +242,7 @@ const UniversityAdmissionPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
-        title="University Admissions 2026 - Apply Now | AdmissionBuddy"
+        title="University Admissions 2026 - Apply Now | admissionbuddy"
         description="Get admission alerts for top universities in India. Central, State, Deemed university admissions open."
       />
 

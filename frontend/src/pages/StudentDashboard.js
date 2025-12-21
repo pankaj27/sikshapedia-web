@@ -60,7 +60,7 @@ const StudentDashboard = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center">
-              <img src="/admissionbuddy-logo.png" alt="AdmissionBuddy" className="h-10" />
+              <img src="/admissionbuddy-logo.png" alt="admissionbuddy" className="h-10" />
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-gray-700">Welcome, {user?.name}</span>

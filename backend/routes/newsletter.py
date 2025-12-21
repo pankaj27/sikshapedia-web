@@ -97,7 +97,7 @@ async def send_welcome_email(email: str):
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>Welcome to AdmissionBuddy! 🎓</h1>
+                    <h1>Welcome to admissionbuddy! 🎓</h1>
                 </div>
                 <div class="content">
                     <h2>Thanks for subscribing!</h2>
@@ -112,7 +112,7 @@ async def send_welcome_email(email: str):
                     <a href="https://admissionbuddy.co" class="button">Explore Colleges</a>
                 </div>
                 <div class="footer">
-                    <p>© 2024 AdmissionBuddy. All rights reserved.</p>
+                    <p>© 2024 admissionbuddy. All rights reserved.</p>
                     <p>If you didn't subscribe, you can ignore this email.</p>
                 </div>
             </div>
@@ -123,7 +123,7 @@ async def send_welcome_email(email: str):
         await send_email(
             emergent_api_key=emergent_api_key,
             to_email=email,
-            subject="Welcome to AdmissionBuddy Newsletter! 🎓",
+            subject="Welcome to admissionbuddy Newsletter! 🎓",
             html_content=html_content
         )
         print(f"Welcome email sent to {email}")
