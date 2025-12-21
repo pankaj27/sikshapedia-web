@@ -21,6 +21,8 @@ const PAGE_INFO = {
   'admission-schools': { name: 'School Admissions', defaultTitle: 'School Admissions 2026' },
   'admission-colleges': { name: 'College Admissions', defaultTitle: 'College Admissions 2026' },
   'admission-universities': { name: 'University Admissions', defaultTitle: 'University Admissions 2026' },
+  'compare': { name: 'Compare Institutes', defaultTitle: 'Compare Colleges & Institutes' },
+  'eligibility-checker': { name: 'Eligibility Checker', defaultTitle: 'College Eligibility Checker' },
 };
 
 const TABS = [
