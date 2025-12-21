@@ -90,11 +90,13 @@ const WriteReviewPage = () => {
   const [courses, setCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
 
-  // Handle URL params for pre-filling institute info (when coming from college detail page)
+  // Handle URL params for pre-filling institute info (when coming from college detail page or QR code)
   useEffect(() => {
     const instituteId = searchParams.get('instituteId');
     const instituteName = searchParams.get('instituteName');
     const instituteType = searchParams.get('instituteType');
+    const fromQR = searchParams.get('fromQR') === 'true';
+    const linkCode = searchParams.get('linkCode');
 
     if (instituteId && instituteName && !prefilledFromUrl) {
       setFormData(prev => ({
@@ -104,6 +106,14 @@ const WriteReviewPage = () => {
         instituteType: instituteType === 'college' ? 'college' : instituteType === 'school' ? 'school' : 'college'
       }));
       setPrefilledFromUrl(true);
+      
+      // If from QR, lock the institute selection
+      if (fromQR) {
+        setIsFromQR(true);
+        if (linkCode) {
+          setQrLinkCode(linkCode);
+        }
+      }
     }
   }, [searchParams, prefilledFromUrl]);
 
