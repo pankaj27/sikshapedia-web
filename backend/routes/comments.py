@@ -141,12 +141,12 @@ async def reply_to_comment(comment_id: str, reply_data: ReplyCreate, authorizati
 
 
 @router.delete("/comments/{comment_id}")
-async def delete_comment(comment_id: str, authorization: str = None):
+async def delete_comment(comment_id: str, authorization: str = Header(None)):
     """Delete a comment (owner or admin only)"""
     if not authorization:
         raise HTTPException(status_code=401, detail="Please login")
     
-    user = await get_current_user_optional(authorization)
+    user = await get_current_user_from_header(authorization)
     if not user:
         raise HTTPException(status_code=401, detail="Please login")
     
