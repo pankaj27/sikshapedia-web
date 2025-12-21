@@ -259,14 +259,42 @@ export const CounsellingWidget = ({ onClose }) => {
     interest: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Counselling request:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      if (onClose) onClose();
-    }, 2000);
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/lead-forms/counselling-request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          preferred_time: formData.preferredTime,
+          interest: formData.interest
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSubmitted(true);
+        setTimeout(() => {
+          if (onClose) onClose();
+        }, 2000);
+      } else {
+        setError(data.detail || 'Failed to submit. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting counselling request:', err);
+      setError('Failed to submit. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
