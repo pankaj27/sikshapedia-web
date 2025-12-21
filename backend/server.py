@@ -6627,6 +6627,7 @@ try:
     set_advertisements_db(db)
     set_comments_db(db)
     set_newsletter_db(db)
+    set_email_settings_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
