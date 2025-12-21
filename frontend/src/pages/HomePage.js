@@ -913,7 +913,7 @@ const CollegeDuniaHome = () => {
               {cities.map((city, idx) => (
                 <Link
                   key={idx}
-                  to={`/colleges?city=${city.name}`}
+                  to={city.link || `/colleges?city=${city.name}`}
                   className="bg-white rounded-lg p-4 text-center hover:shadow-lg transition group"
                 >
                   <div className="w-16 h-16 mx-auto mb-2 flex items-center justify-center group-hover:scale-110 transition-transform">
