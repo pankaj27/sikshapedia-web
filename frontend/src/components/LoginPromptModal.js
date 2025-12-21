@@ -26,8 +26,8 @@ const LoginPromptModal = ({ isOpen, onClose, action = 'continue', message }) => 
           >
             <FiX size={24} />
           </button>
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FiLogIn size={32} />
+          <div className="flex justify-center mb-4">
+            <img src="/favicon.png" alt="admissionbuddy" className="h-12 w-12" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Login Required</h2>
           <p className="text-white/90">
