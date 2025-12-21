@@ -254,13 +254,13 @@ export const AskQuestionWidget = ({ context, onClose }) => {
         Have a query? Our experts are here to help!
       </p>
       <form onSubmit={handleSubmit} className="space-y-3">
-        <textarea
-          placeholder="Type your question here..."
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+        <input
+          type="text"
+          placeholder="Your Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
-          rows={3}
-          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white resize-none"
+          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
         />
         <input
           type="email"
@@ -269,6 +269,22 @@ export const AskQuestionWidget = ({ context, onClose }) => {
           onChange={(e) => setEmail(e.target.value)}
           required
           className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
+        />
+        <input
+          type="tel"
+          placeholder="Your Phone Number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
+        />
+        <textarea
+          placeholder="Type your question here..."
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          required
+          rows={3}
+          className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white resize-none"
         />
         {error && (
           <p className="text-red-200 text-sm">{error}</p>
