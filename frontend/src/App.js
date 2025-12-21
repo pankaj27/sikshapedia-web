@@ -72,6 +72,7 @@ import TeamManagement from './pages/admin/TeamManagement';
 import PendingApprovals from './pages/admin/PendingApprovals';
 import AddCollege from './pages/admin/AddCollege';
 import CollegeForm from './pages/admin/CollegeForm';
+import UniversityForm from './pages/admin/UniversityForm';
 import SchoolForm from './pages/admin/SchoolForm';
 import CollegesListManagement from './pages/admin/CollegesListManagement';
 import NewsManagement from './pages/admin/NewsManagement';
