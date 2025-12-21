@@ -266,3 +266,54 @@ async def unflag_comment(comment_id: str):
         raise HTTPException(status_code=404, detail="Comment not found")
     
     return {"success": True, "message": "Comment unflagged"}
+
+
+@router.get("/admin/comments/pending")
+async def get_pending_comments(limit: int = 200):
+    """Get pending comments for admin approval"""
+    comments = await db.comments.find(
+        {"status": "pending"},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    # Enrich comments with entity names
+    for comment in comments:
+        entity_id = comment.get("entity_id")
+        entity_type = comment.get("entity_type", "").lower()
+        
+        entity = None
+        if entity_id:
+            if entity_type == "college":
+                entity = await db.colleges.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            elif entity_type == "school":
+                entity = await db.schools.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            elif entity_type == "exam":
+                entity = await db.exams.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+        
+        comment["entity_name"] = entity.get("name", "Unknown") if entity else "Unknown"
+    
+    return comments
+
+
+@router.post("/admin/comments/{comment_id}/approve")
+async def approve_comment(comment_id: str):
+    """Approve a pending comment"""
+    result = await db.comments.update_one(
+        {"id": comment_id},
+        {"$set": {"status": "approved"}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    return {"message": "Comment approved", "status": "approved"}
+
+
+@router.post("/admin/comments/{comment_id}/reject")
+async def reject_comment(comment_id: str):
+    """Reject a pending comment"""
+    result = await db.comments.update_one(
+        {"id": comment_id},
+        {"$set": {"status": "rejected"}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    return {"message": "Comment rejected", "status": "rejected"}
