@@ -469,15 +469,6 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
         </>
       )}
       
-      <WriteReviewModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        entityId={entityId}
-        entityType={entityType}
-        entityName={entityName}
-        onSuccess={fetchReviews}
-      />
-      
       <LoginPromptModal
         isOpen={showLoginPrompt}
         onClose={() => setShowLoginPrompt(false)}
