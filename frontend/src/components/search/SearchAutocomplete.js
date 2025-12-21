@@ -131,7 +131,8 @@ const SearchAutocomplete = ({
   // Navigate to full search page
   const handleSearch = (searchQuery) => {
     if (searchQuery?.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      // Use window.location.href for full page navigation
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
       setIsOpen(false);
     }
   };
