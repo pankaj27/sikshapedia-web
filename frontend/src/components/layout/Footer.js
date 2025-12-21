@@ -265,7 +265,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="relative">
+              <div className="relative state-dropdown-container">
                 <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
                 <div className="relative">
                   <input
@@ -284,7 +284,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                     placeholder="Search State..."
                   />
                   {showStateDropdown && (
-                    <div className="state-dropdown-container absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                       {filteredStates.length > 0 ? (
                         filteredStates.map(state => (
                           <div
@@ -302,7 +302,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                   )}
                 </div>
               </div>
-              <div className="relative">
+              <div className="relative city-dropdown-container">
                 <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
                 <div className="relative">
                   <input
