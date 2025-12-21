@@ -394,8 +394,8 @@ function App() {
               <Route path="/schools/:seg1/:seg2" element={<InstitutionRouter />} />
               
               <Route path="/universities" element={<DynamicListingPage />} />
-              <Route path="/universities/:seg1" element={<InstitutionRouter />} />
-              <Route path="/universities/:seg1/:seg2" element={<InstitutionRouter />} />
+              <Route path="/university/:seg1" element={<InstitutionRouter />} />
+              <Route path="/university/:seg1/:seg2" element={<InstitutionRouter />} />
               
               {/* Legacy routes with stream - handled by DynamicListingPage */}
               <Route path="/colleges/:stream" element={<DynamicListingPage />} />
