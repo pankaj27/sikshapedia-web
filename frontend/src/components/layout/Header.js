@@ -108,6 +108,7 @@ const Header = () => {
   const admissionGoals = [
     { name: 'School Admission', link: '/admission/schools' },
     { name: 'College Admission', link: '/admission/colleges' },
+    { name: 'University Admission', link: '/admission/universities' },
     { name: 'Course', link: '/courses' },
     { name: 'Exam', link: '/exams' },
   ];
