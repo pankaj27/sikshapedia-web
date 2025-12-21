@@ -281,6 +281,8 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
                 onReply={handleReply}
                 onDelete={handleDelete}
                 currentUserId={currentUserId}
+                isLoggedIn={isLoggedIn}
+                onLoginRequired={() => setShowLoginPrompt(true)}
               />
             ))}
           </div>
@@ -294,6 +296,13 @@ const CommentsSection = ({ entityId, entityType = 'college', entityName }) => {
           )}
         </>
       )}
+      
+      <LoginPromptModal
+        isOpen={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        action="post a comment"
+        message="Join the discussion and share your thoughts with the community"
+      />
     </div>
   );
 };
