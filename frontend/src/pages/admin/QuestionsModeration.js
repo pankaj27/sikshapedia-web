@@ -102,6 +102,15 @@ const QuestionsModeration = () => {
                         <FiMessageSquare className="text-blue-600" size={20} />
                         <h3 className="font-bold text-gray-900">{question.question}</h3>
                       </div>
+                      {/* Entity Name */}
+                      <div className="mb-2">
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                          {question.entity_type_label || 'Institution'}
+                        </span>
+                        <span className="ml-2 text-sm font-medium text-blue-600">
+                          {question.entity_name || 'Unknown'}
+                        </span>
+                      </div>
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           <FiUser size={14} /> {question.user_name}
