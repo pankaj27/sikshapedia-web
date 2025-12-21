@@ -1231,8 +1231,19 @@
   3. Added proper state reset when user hasn't liked (`setUserVote(null)`)
 - **Visual Feedback:** Already implemented with green/pink borders and background colors
 
-**Issue 2: UI Text Updates**
-- **Fixed:** EnhancedStudentDashboardV2.js - Changed labels from "College" to "Institute"
+**Issue 2: Login Prompts for Logged-in Users (Ask Question, Add Answer, Comments)**
+- **Root Cause:** Components were initializing `isLoggedIn` state to `false` and relying on API calls to `/auth/me` which could fail
+- **Fixed in:**
+  - `/app/frontend/src/components/QuestionsSection.js`
+  - `/app/frontend/src/components/CommentsSection.js`
+  - `/app/frontend/src/components/ReviewsSection.js`
+- **Changes Made:**
+  1. Initialize `isLoggedIn` with `!!localStorage.getItem('token')` instead of `false`
+  2. Changed `checkLoginStatus` to simple localStorage check instead of API call
+  3. In CommentsSection, set `isLoggedIn` based on token presence before API call
+
+**Issue 3: UI Text Updates**
+- **Fixed:** EnhancedStudentDashboardV2.js, UserDashboard.js - Changed labels from "College" to "Institute"
 - **Changes Made:**
   1. "Saved Colleges" → "Saved Institutes" (sidebar and heading)
   2. "No Saved Colleges" → "No Saved Institutes" (empty state)
