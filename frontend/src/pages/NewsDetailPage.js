@@ -416,15 +416,18 @@ const NewsDetailPage = () => {
                 <div className="bg-white rounded-lg shadow-md p-4">
                   <h3 className="font-bold text-gray-800 mb-3">Related Colleges</h3>
                   <div className="space-y-2">
-                    {article.related_colleges.map((college, idx) => (
-                      <Link
-                        key={idx}
-                        to={`/colleges/${college.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="block px-3 py-2 bg-gray-50 hover:bg-orange-50 rounded text-sm text-gray-700 hover:text-orange-600 transition-colors"
-                      >
-                        {college}
-                      </Link>
-                    ))}
+                    {article.related_colleges.map((college, idx) => {
+                      const collegeName = typeof college === 'object' ? college.name : college;
+                      return (
+                        <Link
+                          key={idx}
+                          to={`/colleges/${collegeName.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="block px-3 py-2 bg-gray-50 hover:bg-orange-50 rounded text-sm text-gray-700 hover:text-orange-600 transition-colors"
+                        >
+                          {collegeName}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               )}
