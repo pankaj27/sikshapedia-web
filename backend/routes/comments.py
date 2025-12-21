@@ -95,7 +95,7 @@ async def get_current_user_from_header(authorization: str = Header(None)):
 async def get_comments(entity_type: str, entity_id: str, limit: int = 50):
     """Get all comments for an entity (Public)"""
     comments = await db.comments.find(
-        {"entity_id": entity_id, "entity_type": entity_type, "is_flagged": False},
+        {"entity_id": entity_id, "entity_type": entity_type, "is_flagged": False, "status": {"$in": ["approved", None]}},
         {"_id": 0}
     ).sort("created_at", -1).limit(limit).to_list(limit)
     
