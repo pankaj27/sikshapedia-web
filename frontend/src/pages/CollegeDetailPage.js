@@ -665,29 +665,16 @@ const CollegeDetailPage = ({ overrideId }) => {
       {/* AUTHOR INFO */}
       <div className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
-              {college?.updated_by_photo || college?.created_by_photo ? (
-                <img 
-                  src={college?.updated_by_photo || college?.created_by_photo} 
-                  alt={college?.updated_by_name || 'Author'} 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
-                  <FiUser size={18} />
-                </div>
-              )}
-            </div>
-            <div>
-              <Link to={`/author/${college?.updated_by_name?.toLowerCase().replace(/\s+/g, '-') || 'content-team'}`} className="text-sm font-semibold text-gray-900 hover:text-orange-600">
-                {college?.updated_by_name || college?.created_by_name || 'Content Team'}
-              </Link>
-              <p className="text-[13px] text-gray-600">
-                Content Writer | {college?.updated_at ? `Updated ${formatTimeAgo(college.updated_at)}` : (college?.created_at ? `Added ${formatTimeAgo(college.created_at)}` : 'Updated recently')}
-              </p>
-            </div>
-          </div>
+          <AuthorInfo
+            name={college?.updated_by_name || college?.created_by_name}
+            photo={college?.updated_by_photo || college?.created_by_photo}
+            role="Content Writer"
+            updatedAt={college?.updated_at}
+            createdAt={college?.created_at}
+            showLink={true}
+            size="md"
+            variant="light"
+          />
         </div>
       </div>
 
