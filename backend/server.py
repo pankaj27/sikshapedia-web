@@ -1006,6 +1006,8 @@ class QuestionCreate(BaseModel):
 class AnswerCreate(BaseModel):
     question_id: str
     answer: str
+    answered_by: Optional[str] = None  # 'user' or 'institute'
+    institute_name: Optional[str] = None
 
 # Notification Models
 class Notification(BaseModel):
