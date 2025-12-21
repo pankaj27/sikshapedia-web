@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiYoutube, FiX, FiCheck, FiLoader } from 'react-icons/fi';
 import { Button } from '../ui/button';
+import api from '../../api/axios';
 
 /**
  * Custom NavLink component that handles navigation with full page reload
