@@ -115,19 +115,8 @@ const SchoolAdmissionPage = () => {
       setAdmissions(transformedData);
     } catch (error) {
       console.error('Error fetching admissions:', error);
-      let filteredData = generateMockAdmissions();
-      
-      if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-        filteredData = filteredData.filter(a => a.location.state === selectedState);
-      }
-      if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-        filteredData = filteredData.filter(a => a.location.city === selectedCity);
-      }
-      if (selectedBoard && selectedBoard !== 'all') {
-        filteredData = filteredData.filter(a => a.board === selectedBoard);
-      }
-      
-      setAdmissions(filteredData);
+      // No fallback - show empty state
+      setAdmissions([]);
     } finally {
       setLoading(false);
     }
