@@ -562,7 +562,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                   >
                     <span className="text-xl">{userVote === 'like' ? '👍' : '👍'}</span>
                     <span className={`text-sm font-semibold ${userVote === 'like' ? 'text-green-600' : 'text-gray-700'}`}>
-                      {likes}
+                      {Math.max(1, likes)}
                     </span>
                   </button>
                   <button 
@@ -575,7 +575,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                   >
                     <span className="text-xl">{userVote === 'dislike' ? '👎' : '👎'}</span>
                     <span className={`text-sm font-semibold ${userVote === 'dislike' ? 'text-red-600' : 'text-gray-700'}`}>
-                      {dislikes}
+                      {Math.max(1, dislikes)}
                     </span>
                   </button>
                   <button 
