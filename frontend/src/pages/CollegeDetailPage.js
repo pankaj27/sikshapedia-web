@@ -1688,87 +1688,29 @@ const CollegeDetailPage = ({ overrideId }) => {
 
                 {/* REVIEWS */}
                 <section id="reviews" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Student Reviews</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    Read what students and alumni have to say about {college.name}:
-                  </p>
+                  <ReviewsSection 
+                    entityId={college?.id} 
+                    entityType="college" 
+                    entityName={college?.name}
+                  />
+                </section>
 
-                  <div className="bg-gray-50 border rounded-lg p-8 text-center mb-6">
-                    <div className="text-6xl mb-4">⭐</div>
-                    <p className="text-gray-600 mb-4">Share your experience and help others!</p>
-                    <Button 
-                      onClick={handleWriteReview}
-                      className="bg-orange-600 hover:bg-orange-700 text-white"
-                    >
-                      Write a Review
-                    </Button>
-                  </div>
+                {/* QUESTIONS & ANSWERS */}
+                <section id="questions" className="mt-8">
+                  <QuestionsSection 
+                    entityId={college?.id} 
+                    entityType="college" 
+                    entityName={college?.name}
+                  />
+                </section>
 
-                  {/* Sample Reviews */}
-                  <div className="space-y-4">
-                    <div className="bg-white border rounded-lg p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
-                          A
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold">Amit Kumar</span>
-                              <div className="flex">
-                                {[...Array(5)].map((_, i) => (
-                                  <FiStar key={i} className="fill-yellow-400 text-yellow-400" size={14} />
-                                ))}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button className="text-sm text-gray-600 hover:text-gray-800">👍 24</button>
-                              <button className="text-sm text-gray-600 hover:text-gray-800">👎 2</button>
-                            </div>
-                          </div>
-                          <p className="text-sm text-gray-700 mb-3">
-                            Excellent infrastructure and experienced faculty. The placement opportunities are outstanding with top companies visiting the campus. Campus life is vibrant with various clubs and activities.
-                          </p>
-                          <p className="text-xs text-gray-500">B.Tech CSE | Class of 2024 | Posted 2 weeks ago</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white border rounded-lg p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold flex-shrink-0">
-                          P
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold">Priya Sharma</span>
-                              <div className="flex">
-                                {[...Array(4)].map((_, i) => (
-                                  <FiStar key={i} className="fill-yellow-400 text-yellow-400" size={14} />
-                                ))}
-                                <FiStar className="text-gray-300" size={14} />
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button className="text-sm text-gray-600 hover:text-gray-800">👍 18</button>
-                              <button className="text-sm text-gray-600 hover:text-gray-800">👎 1</button>
-                            </div>
-                          </div>
-                          <p className="text-sm text-gray-700 mb-3">
-                            Great academic environment with focus on research. Library facilities are excellent. The only downside is the hostel food could be better.
-                          </p>
-                          <p className="text-xs text-gray-500">M.Tech EE | Class of 2025 | Posted 1 month ago</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-center mt-6">
-                      <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
-                        Load More Reviews
-                      </Button>
-                    </div>
-                  </div>
+                {/* COMMENTS & DISCUSSION */}
+                <section id="comments" className="mt-8">
+                  <CommentsSection 
+                    entityId={college?.id} 
+                    entityType="college" 
+                    entityName={college?.name}
+                  />
                 </section>
 
                 {/* LOCATION & MAP */}
