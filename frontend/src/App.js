@@ -135,6 +135,7 @@ import StudyAbroadListingSettings from './pages/admin/StudyAbroadListingSettings
 import HomepageSettings from './pages/admin/HomepageSettings';
 import WriteReviewSettings from './pages/admin/WriteReviewSettings';
 import YearSettings from './pages/admin/YearSettings';
+import SEOSettings from './pages/admin/SEOSettings';
 import ListingPageForm from './pages/admin/ListingPageForm';
 import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
 import AdvertisementManagement from './pages/admin/AdvertisementManagement';
