@@ -34,25 +34,36 @@ async def get_current_user(request: Request, db):
     """Get current authenticated user from JWT token or session"""
     # First try JWT token from Authorization header
     auth_header = request.headers.get("Authorization")
+    print(f"[DEBUG] Auth header: {auth_header[:50] if auth_header else 'None'}...")
+    
     if auth_header and auth_header.startswith("Bearer "):
         token = auth_header.split(" ")[1]
+        print(f"[DEBUG] Token extracted: {token[:30]}...")
         try:
             # Decode JWT token
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             user_id = payload.get("sub")
+            print(f"[DEBUG] JWT decoded, user_id: {user_id}")
             if user_id:
                 user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0, "password": 0})
                 if user:
+                    print(f"[DEBUG] User found: {user.get('name')}")
                     return user
+                else:
+                    print(f"[DEBUG] User NOT found in DB for id: {user_id}")
         except jwt.ExpiredSignatureError:
+            print("[DEBUG] Token expired")
             raise HTTPException(status_code=401, detail="Token has expired")
-        except jwt.exceptions.DecodeError:
+        except jwt.exceptions.DecodeError as e:
+            print(f"[DEBUG] JWT decode error: {e}")
             pass  # Try session-based auth next
-        except Exception:
+        except Exception as e:
+            print(f"[DEBUG] JWT error: {e}")
             pass  # Try session-based auth next
     
     # Fallback to session-based auth (cookies)
     session_token = request.cookies.get("session_token")
+    print(f"[DEBUG] Session token from cookie: {session_token}")
     if not session_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
     
