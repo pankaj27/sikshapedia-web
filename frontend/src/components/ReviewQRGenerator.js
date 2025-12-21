@@ -299,7 +299,7 @@ const ReviewQRGenerator = ({
         {/* Header with admissionbuddy Branding */}
         <div className="bg-gradient-to-r from-orange-50 to-yellow-50 px-6 py-4 border-b">
           <div className="flex items-center justify-center gap-2">
-            <span className="text-2xl">🎓</span>
+            <img src="/favicon.png" alt="AdmissionBuddy" className="w-8 h-8 object-contain" />
             <span className="text-xl font-bold text-orange-600">admissionbuddy</span>
           </div>
           <p className="text-center text-xs text-gray-500 mt-1">India's Trusted Education Platform</p>
