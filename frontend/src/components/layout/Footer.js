@@ -325,7 +325,7 @@ const AdvertiseModal = ({ isOpen, onClose }) => {
         <div className="sticky top-0 bg-gradient-to-r from-orange-600 to-orange-500 text-white p-4 rounded-t-xl">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
-              <img src="/assets/main-logo.png" alt="admissionbuddy" className="h-8 bg-white rounded px-2 py-1" />
+              <img src="/favicon.png" alt="admissionbuddy" className="h-10 w-10" />
             </div>
             <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full transition">
               <FiX size={20} />
