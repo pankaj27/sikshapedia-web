@@ -1379,7 +1379,7 @@ const CollegeDetailPage = ({ overrideId }) => {
 
                 {/* PLACEMENT */}
                 <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement 2024</h2>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement {year - 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">
                     As per the {college.name} Placement report, the average package stood at <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA</strong>. 
                     The institute secured offers from top recruiters across various sectors.
