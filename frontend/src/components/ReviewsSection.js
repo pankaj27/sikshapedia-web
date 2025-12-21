@@ -313,10 +313,10 @@ const WriteReviewModal = ({ isOpen, onClose, entityId, entityType, entityName, o
 };
 
 const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWriteReview = true }) => {
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
   // Initialize with token check to avoid flash of login prompt
@@ -332,13 +332,19 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
   };
 
   const handleWriteReviewClick = () => {
-    // Re-check login status before showing modal
+    // Re-check login status before navigating
     checkLoginStatus();
     const hasSession = localStorage.getItem('token') || 
                       localStorage.getItem('user_token') ||
                       localStorage.getItem('user');
     if (hasSession) {
-      setShowModal(true);
+      // Navigate to write-review page with pre-filled institute info
+      const params = new URLSearchParams({
+        instituteId: entityId,
+        instituteName: entityName,
+        instituteType: entityType
+      });
+      navigate(`/write-review?${params.toString()}`);
     } else {
       setShowLoginPrompt(true);
     }
