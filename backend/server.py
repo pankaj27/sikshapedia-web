@@ -5540,15 +5540,39 @@ async def apply_referral_code(referral_code: str, current_user: User = Depends(g
     await db.users.update_one(
         {"id": referrer['id']},
         {
-            "$inc": {"total_earnings": 200.0, "referral_count": 1}
+            "$inc": {"total_earnings": 200.0, "referral_count": 1, "points": 100}
         }
     )
+    
+    # Add point transaction for referrer
+    referrer_point_txn = {
+        "id": str(uuid.uuid4()),
+        "user_id": referrer['id'],
+        "type": "referral",
+        "points": 100,
+        "description": f"Referral bonus for {current_user.name}",
+        "reference_id": current_user.id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.point_transactions.insert_one(referrer_point_txn)
     
     # Give bonus to referred user
     await db.users.update_one(
         {"id": current_user.id},
-        {"$inc": {"total_earnings": 100.0}}
+        {"$inc": {"total_earnings": 100.0, "points": 50}}
     )
+    
+    # Add point transaction for referred user
+    referred_point_txn = {
+        "id": str(uuid.uuid4()),
+        "user_id": current_user.id,
+        "type": "referral",
+        "points": 50,
+        "description": "Sign-up bonus via referral code",
+        "reference_id": referrer['id'],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.point_transactions.insert_one(referred_point_txn)
     
     referred_earning = EarningTransaction(
         user_id=current_user.id,
