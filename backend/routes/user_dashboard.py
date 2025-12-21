@@ -121,6 +121,14 @@ class CommentSubmit(BaseModel):
     comment: str
     parent_comment_id: Optional[str] = None
 
+# ============ USER PROFILE ============
+
+@router.get("/profile")
+async def get_user_profile(request: Request, db=Depends(get_db)):
+    """Get current user profile"""
+    user = await get_current_user(request, db)
+    return user
+
 # ============ DASHBOARD OVERVIEW ============
 
 @router.get("/dashboard")
