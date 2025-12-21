@@ -129,9 +129,9 @@ async def get_write_review_settings_admin(request: Request, current_admin: dict 
 @write_review_settings_router.put("")
 async def update_write_review_settings(page_settings: WriteReviewSettings, request: Request, current_admin: dict = Depends(get_current_admin)):
     """Update write review page settings"""
-    settings_dict = settings.model_dump()
+    settings_dict = page_settings.model_dump()
     settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
-    settings_dict["updated_by"] = current_user.get("id")
+    settings_dict["updated_by"] = current_admin.get("sub") or current_admin.get("id")
     
     await db.write_review_settings.update_one(
         {"id": "write-review-settings"},
@@ -141,12 +141,12 @@ async def update_write_review_settings(page_settings: WriteReviewSettings, reque
     return settings_dict
 
 @write_review_settings_router.post("/reset")
-async def reset_write_review_settings(current_user: dict = Depends(get_current_user)):
+async def reset_write_review_settings(request: Request, current_admin: dict = Depends(get_current_admin)):
     """Reset write review settings to defaults"""
     default_settings = WriteReviewSettings()
     settings_dict = default_settings.model_dump()
     settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
-    settings_dict["updated_by"] = current_user.get("id")
+    settings_dict["updated_by"] = current_admin.get("sub") or current_admin.get("id")
     
     await db.write_review_settings.update_one(
         {"id": "write-review-settings"},
