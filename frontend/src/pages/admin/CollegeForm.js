@@ -583,10 +583,7 @@ const CollegeForm = () => {
       
       setFormData(normalizedData);
       
-      // Set available cities based on the state
-      if (normalizedData.location?.state) {
-        setAvailableCities(citiesByState[normalizedData.location.state] || []);
-      }
+      // Cities will be set automatically by the useEffect when formData.location.state changes
     } catch (error) {
       console.error('Error fetching college:', error);
       alert('Failed to fetch college details');
@@ -611,9 +608,8 @@ const CollegeForm = () => {
   };
 
   const handleNestedChange = (parent, field, value) => {
-    // Special handling for state change to update available cities
+    // Special handling for state change to reset city (cities will be updated by useEffect)
     if (parent === 'location' && field === 'state') {
-      setAvailableCities(citiesByState[value] || []);
       setFormData({
         ...formData,
         [parent]: { ...formData[parent], [field]: value, city: '' } // Reset city when state changes
