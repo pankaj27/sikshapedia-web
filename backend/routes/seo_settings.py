@@ -480,3 +480,403 @@ async def serve_sitemap_xml(db=Depends(get_db)):
     # Return empty sitemap if not generated
     empty_sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
     return Response(content=empty_sitemap, media_type="application/xml")
+
+
+# ============ SCHEMA MANAGEMENT ============
+
+# Default schema templates for different page types
+DEFAULT_SCHEMAS = {
+    "website": {
+        "name": "Website Schema",
+        "description": "Main website schema for search engines",
+        "pages": ["Homepage"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "AdmissionBuddy",
+            "url": "https://www.admissionbuddy.co",
+            "description": "India's trusted education platform",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.admissionbuddy.co/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+    },
+    "organization": {
+        "name": "Organization Schema",
+        "description": "Business/Organization details for Google Knowledge Panel",
+        "pages": ["All Pages (Footer)"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            "name": "AdmissionBuddy",
+            "url": "https://www.admissionbuddy.co",
+            "logo": "https://www.admissionbuddy.co/logo.png",
+            "description": "India's trusted education platform",
+            "sameAs": []
+        }
+    },
+    "breadcrumb": {
+        "name": "Breadcrumb Schema",
+        "description": "Navigation path shown in search results",
+        "pages": ["All Detail Pages"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.admissionbuddy.co"},
+                {"@type": "ListItem", "position": 2, "name": "{Category}", "item": "{category_url}"},
+                {"@type": "ListItem", "position": 3, "name": "{Page Title}"}
+            ]
+        }
+    },
+    "college": {
+        "name": "College/University Schema",
+        "description": "Educational institution details with ratings",
+        "pages": ["College Detail Pages"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "CollegeOrUniversity",
+            "name": "{college_name}",
+            "description": "{college_description}",
+            "url": "{college_url}",
+            "logo": "{college_logo}",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "{city}",
+                "addressRegion": "{state}",
+                "addressCountry": "India"
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "{rating}",
+                "reviewCount": "{review_count}"
+            }
+        }
+    },
+    "course": {
+        "name": "Course Schema",
+        "description": "Educational course details",
+        "pages": ["Course Detail Pages"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": "{course_name}",
+            "description": "{course_description}",
+            "provider": {
+                "@type": "Organization",
+                "name": "AdmissionBuddy"
+            },
+            "educationalLevel": "{level}",
+            "timeRequired": "{duration}"
+        }
+    },
+    "article": {
+        "name": "Article Schema",
+        "description": "Blog/News article details",
+        "pages": ["Blog Posts", "News Articles"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "{title}",
+            "description": "{description}",
+            "image": "{featured_image}",
+            "author": {
+                "@type": "Person",
+                "name": "{author_name}"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "AdmissionBuddy",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://www.admissionbuddy.co/logo.png"
+                }
+            },
+            "datePublished": "{published_date}",
+            "dateModified": "{modified_date}"
+        }
+    },
+    "faq": {
+        "name": "FAQ Schema",
+        "description": "Frequently Asked Questions - shown as expandable in search",
+        "pages": ["FAQ Sections on Pages"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "{question_1}",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "{answer_1}"
+                    }
+                }
+            ]
+        }
+    },
+    "review": {
+        "name": "Review Schema",
+        "description": "User reviews with star ratings",
+        "pages": ["Review Sections"],
+        "enabled": True,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "Review",
+            "itemReviewed": {
+                "@type": "EducationalOrganization",
+                "name": "{institution_name}"
+            },
+            "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": "{rating}",
+                "bestRating": "5"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "{reviewer_name}"
+            },
+            "reviewBody": "{review_text}"
+        }
+    },
+    "event": {
+        "name": "Event Schema",
+        "description": "Exam dates, admission events",
+        "pages": ["Exam Pages", "Event Pages"],
+        "enabled": False,
+        "schema": {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": "{event_name}",
+            "startDate": "{start_date}",
+            "endDate": "{end_date}",
+            "location": {
+                "@type": "Place",
+                "name": "{location_name}",
+                "address": "{address}"
+            },
+            "organizer": {
+                "@type": "Organization",
+                "name": "{organizer_name}"
+            }
+        }
+    }
+}
+
+class SchemaSettings(BaseModel):
+    schema_type: str
+    enabled: bool
+    schema_data: dict
+    custom_fields: Optional[dict] = None
+
+@router.get("/schemas")
+async def get_all_schemas(db=Depends(get_db)):
+    """Get all schema configurations"""
+    # Get saved schemas from database
+    saved_schemas = await db.seo_settings.find(
+        {"type": "schema"},
+        {"_id": 0}
+    ).to_list(100)
+    
+    # Create a map of saved schemas
+    saved_map = {s["schema_type"]: s for s in saved_schemas}
+    
+    # Merge with defaults
+    result = []
+    for schema_type, default in DEFAULT_SCHEMAS.items():
+        if schema_type in saved_map:
+            # Use saved version
+            saved = saved_map[schema_type]
+            result.append({
+                "schema_type": schema_type,
+                "name": default["name"],
+                "description": default["description"],
+                "pages": default["pages"],
+                "enabled": saved.get("enabled", default["enabled"]),
+                "schema": saved.get("schema_data", default["schema"]),
+                "is_customized": True,
+                "updated_at": saved.get("updated_at")
+            })
+        else:
+            # Use default
+            result.append({
+                "schema_type": schema_type,
+                "name": default["name"],
+                "description": default["description"],
+                "pages": default["pages"],
+                "enabled": default["enabled"],
+                "schema": default["schema"],
+                "is_customized": False
+            })
+    
+    return result
+
+@router.get("/schemas/{schema_type}")
+async def get_schema(schema_type: str, db=Depends(get_db)):
+    """Get specific schema configuration"""
+    # Check saved first
+    saved = await db.seo_settings.find_one(
+        {"type": "schema", "schema_type": schema_type},
+        {"_id": 0}
+    )
+    
+    if saved:
+        default = DEFAULT_SCHEMAS.get(schema_type, {})
+        return {
+            "schema_type": schema_type,
+            "name": default.get("name", schema_type),
+            "description": default.get("description", ""),
+            "pages": default.get("pages", []),
+            "enabled": saved.get("enabled", True),
+            "schema": saved.get("schema_data", default.get("schema", {})),
+            "is_customized": True,
+            "updated_at": saved.get("updated_at")
+        }
+    
+    # Return default
+    if schema_type in DEFAULT_SCHEMAS:
+        default = DEFAULT_SCHEMAS[schema_type]
+        return {
+            "schema_type": schema_type,
+            "name": default["name"],
+            "description": default["description"],
+            "pages": default["pages"],
+            "enabled": default["enabled"],
+            "schema": default["schema"],
+            "is_customized": False
+        }
+    
+    raise HTTPException(status_code=404, detail="Schema type not found")
+
+@router.post("/schemas/{schema_type}")
+async def save_schema(schema_type: str, settings: SchemaSettings, db=Depends(get_db)):
+    """Save schema configuration"""
+    data = {
+        "type": "schema",
+        "schema_type": schema_type,
+        "enabled": settings.enabled,
+        "schema_data": settings.schema_data,
+        "custom_fields": settings.custom_fields,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.seo_settings.update_one(
+        {"type": "schema", "schema_type": schema_type},
+        {"$set": data},
+        upsert=True
+    )
+    
+    return {"message": f"Schema '{schema_type}' saved successfully"}
+
+@router.post("/schemas/{schema_type}/reset")
+async def reset_schema(schema_type: str, db=Depends(get_db)):
+    """Reset schema to default"""
+    await db.seo_settings.delete_one({"type": "schema", "schema_type": schema_type})
+    
+    return {"message": f"Schema '{schema_type}' reset to default"}
+
+@router.get("/schemas/report/summary")
+async def get_schema_report(db=Depends(get_db)):
+    """Get schema implementation report"""
+    # Get all schemas
+    all_schemas = await get_all_schemas(db)
+    
+    # Count enabled/disabled
+    enabled_count = sum(1 for s in all_schemas if s["enabled"])
+    disabled_count = len(all_schemas) - enabled_count
+    customized_count = sum(1 for s in all_schemas if s.get("is_customized"))
+    
+    # Page coverage analysis
+    page_coverage = {
+        "Homepage": ["website", "organization"],
+        "College Pages": ["college", "breadcrumb", "review", "faq"],
+        "Course Pages": ["course", "breadcrumb"],
+        "Blog/News": ["article", "breadcrumb"],
+        "Exam Pages": ["event", "breadcrumb", "faq"],
+        "All Pages": ["organization", "breadcrumb"]
+    }
+    
+    coverage_report = []
+    for page_type, schema_types in page_coverage.items():
+        schemas_on_page = []
+        for st in schema_types:
+            schema = next((s for s in all_schemas if s["schema_type"] == st), None)
+            if schema:
+                schemas_on_page.append({
+                    "type": st,
+                    "name": schema["name"],
+                    "enabled": schema["enabled"]
+                })
+        coverage_report.append({
+            "page_type": page_type,
+            "schemas": schemas_on_page,
+            "enabled_count": sum(1 for s in schemas_on_page if s["enabled"])
+        })
+    
+    return {
+        "summary": {
+            "total_schemas": len(all_schemas),
+            "enabled": enabled_count,
+            "disabled": disabled_count,
+            "customized": customized_count
+        },
+        "schemas": all_schemas,
+        "page_coverage": coverage_report,
+        "recommendations": [
+            {"type": "info", "message": "Organization schema helps with Google Knowledge Panel"},
+            {"type": "info", "message": "FAQ schema can get you featured snippets"},
+            {"type": "tip", "message": "Enable Review schema for star ratings in search results"},
+            {"type": "tip", "message": "Breadcrumb schema improves navigation display in search"}
+        ]
+    }
+
+@router.get("/schemas/validate/{schema_type}")
+async def validate_schema(schema_type: str, db=Depends(get_db)):
+    """Validate schema structure"""
+    schema_data = await get_schema(schema_type, db)
+    
+    errors = []
+    warnings = []
+    
+    schema = schema_data.get("schema", {})
+    
+    # Check required fields
+    if "@context" not in schema:
+        errors.append("Missing @context field")
+    if "@type" not in schema:
+        errors.append("Missing @type field")
+    
+    # Check for placeholder values
+    import json
+    schema_str = json.dumps(schema)
+    if "{" in schema_str and "}" in schema_str:
+        warnings.append("Schema contains placeholder values (e.g., {variable}). These will be replaced dynamically.")
+    
+    # Type-specific validation
+    if schema_type == "organization":
+        if "name" not in schema:
+            errors.append("Organization schema should have 'name' field")
+        if "url" not in schema:
+            warnings.append("Organization schema should have 'url' field")
+    
+    if schema_type == "article":
+        if "headline" not in schema:
+            errors.append("Article schema should have 'headline' field")
+        if "author" not in schema:
+            warnings.append("Article schema should have 'author' field")
+    
+    return {
+        "valid": len(errors) == 0,
+        "errors": errors,
+        "warnings": warnings,
+        "schema_type": schema_type
+    }
