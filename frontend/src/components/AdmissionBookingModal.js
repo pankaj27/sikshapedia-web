@@ -477,7 +477,31 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
 
   return (
     <div className="fixed left-0 right-0 bottom-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style={{ top: '64px' }} onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+      <div 
+        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" 
+        onClick={e => e.stopPropagation()}
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#CBD5E1 #F1F5F9'
+        }}
+      >
+        {/* Custom thin scrollbar styles */}
+        <style>{`
+          .booking-modal-scroll::-webkit-scrollbar {
+            width: 6px;
+          }
+          .booking-modal-scroll::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 3px;
+          }
+          .booking-modal-scroll::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+          }
+          .booking-modal-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+          }
+        `}</style>
         {/* Header with Institution Info */}
         <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-5 sticky top-0 z-10">
           <button onClick={onClose} className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20">
