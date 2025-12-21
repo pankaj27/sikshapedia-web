@@ -291,7 +291,7 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
         infrastructure_rating=review_data.infrastructure_rating,
         faculty_rating=review_data.faculty_rating,
         earnings=review_earnings,
-        status="approved"  # Auto-approve for now
+        status="pending"  # Requires admin approval before showing
     )
     review_dict = review.model_dump()
     review_dict['created_at'] = review_dict['created_at'].isoformat()
