@@ -14,10 +14,12 @@ export const useGuestGate = () => {
 
   useEffect(() => {
     const checkAuth = () => {
+      // Check for user token (the actual key used for authentication)
       const hasSession = document.cookie.includes('session_token') || 
+                        localStorage.getItem('token') ||
                         localStorage.getItem('user_token') ||
                         localStorage.getItem('user');
-      setIsLoggedIn(hasSession);
+      setIsLoggedIn(!!hasSession);
     };
     checkAuth();
     
@@ -26,7 +28,12 @@ export const useGuestGate = () => {
   }, []);
 
   const requireAuth = (action = 'perform this action') => {
-    if (!isLoggedIn) {
+    // Re-check auth status before showing prompt
+    const hasSession = document.cookie.includes('session_token') || 
+                      localStorage.getItem('token') ||
+                      localStorage.getItem('user_token') ||
+                      localStorage.getItem('user');
+    if (!hasSession) {
       setShowPrompt({ action });
       return false;
     }
