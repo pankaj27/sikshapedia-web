@@ -229,19 +229,22 @@ const LocationSearch = () => {
         {/* Countries Content */}
         {activeTab === 'country' && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {countries.map((country, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleLocationClick('country', country.name)}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all text-center group"
-              >
-                <div className="text-4xl mb-2">{countryFlags[country.name] || countryFlags['default']}</div>
-                <div className="font-bold text-lg text-gray-900 group-hover:text-orange-600">
-                  {country.name}
-                </div>
-                <div className="text-sm text-gray-600">{formatCount(country.count || country.university_count)} Universities</div>
-              </button>
-            ))}
+            {countries.map((country, idx) => {
+              const countryName = country.name || country.country;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleLocationClick('country', countryName)}
+                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all text-center group"
+                >
+                  <div className="text-4xl mb-2">{countryFlags[countryName] || countryFlags['default']}</div>
+                  <div className="font-bold text-lg text-gray-900 group-hover:text-orange-600">
+                    {countryName}
+                  </div>
+                  <div className="text-sm text-gray-600">{formatCount(country.count || country.university_count)} Universities</div>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
