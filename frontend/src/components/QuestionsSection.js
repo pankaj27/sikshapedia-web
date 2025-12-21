@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FiHelpCircle, FiMessageSquare, FiUser, FiCalendar, FiChevronDown, FiChevronUp, FiSend } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from './ui/button';
+import LoginPromptModal from './LoginPromptModal';
 
-const QuestionCard = ({ question, onAnswer }) => {
+const QuestionCard = ({ question, onAnswer, isLoggedIn, onLoginRequired }) => {
   const [expanded, setExpanded] = useState(false);
   const [showAnswerForm, setShowAnswerForm] = useState(false);
   const [answer, setAnswer] = useState('');
@@ -13,6 +14,14 @@ const QuestionCard = ({ question, onAnswer }) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+  };
+
+  const handleAnswerClick = () => {
+    if (isLoggedIn) {
+      setShowAnswerForm(true);
+    } else {
+      onLoginRequired && onLoginRequired();
+    }
   };
 
   const handleSubmitAnswer = async () => {
