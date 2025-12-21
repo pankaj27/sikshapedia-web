@@ -9,8 +9,8 @@ import {
   FiCalendar, FiBook, FiStar, FiChevronRight, FiHome, FiArrowLeft
 } from 'react-icons/fi';
 import api from '../api/axios';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 import { Button } from '../components/ui/button';
 import ReviewsSection from '../components/ReviewsSection';
 import QuestionsSection from '../components/QuestionsSection';
