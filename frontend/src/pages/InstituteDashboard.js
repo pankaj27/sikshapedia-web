@@ -792,11 +792,36 @@ const InstituteDashboard = () => {
             {activeTab === 'review_link' && (
               <>
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Review Link & QR Code</h2>
-                  <p className="text-gray-600">Generate and share review links with students. They can scan the QR or click the link to leave reviews.</p>
+                  <h2 className="text-2xl font-bold text-gray-900">Reviews & Engagement</h2>
+                  <p className="text-gray-600">Manage reviews, answer questions, and engage with students.</p>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-6">
+                {/* Stats Overview */}
+                {reviewStats && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-white rounded-xl shadow-sm p-5">
+                      <p className="text-gray-600 text-sm">Total Reviews</p>
+                      <p className="text-3xl font-bold text-orange-600">{reviewStats.total_reviews}</p>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm p-5">
+                      <p className="text-gray-600 text-sm">Average Rating</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-3xl font-bold text-yellow-600">{reviewStats.average_rating || 0}</p>
+                        <FiStar className="fill-yellow-400 text-yellow-400" size={24} />
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm p-5">
+                      <p className="text-gray-600 text-sm">Questions</p>
+                      <p className="text-3xl font-bold text-blue-600">{questions.length}</p>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm p-5">
+                      <p className="text-gray-600 text-sm">Link Views</p>
+                      <p className="text-3xl font-bold text-green-600">{reviewLink?.views || 0}</p>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="grid lg:grid-cols-3 gap-6">
                   {/* QR Code Generator */}
                   <div>
                     {reviewLink?.has_link ? (
@@ -824,57 +849,135 @@ const InstituteDashboard = () => {
                     )}
                   </div>
                   
-                  {/* Stats & Tips */}
-                  <div className="space-y-6">
-                    {reviewLink?.has_link && (
-                      <div className="bg-white rounded-xl shadow-sm p-6">
-                        <h3 className="text-lg font-bold text-gray-800 mb-4">Link Statistics</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-blue-50 rounded-lg p-4 text-center">
-                            <p className="text-3xl font-bold text-blue-600">{reviewLink.views || 0}</p>
-                            <p className="text-sm text-gray-600">Total Views</p>
+                  {/* Reviews Received */}
+                  <div className="bg-white rounded-xl shadow-sm p-6">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                      <FiStar className="text-orange-500" /> Reviews Received
+                    </h3>
+                    {reviews.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <FiStar size={40} className="mx-auto mb-3 text-gray-300" />
+                        <p>No reviews yet</p>
+                        <p className="text-sm mt-1">Share your QR code to get reviews!</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4 max-h-[500px] overflow-y-auto">
+                        {reviews.map((review) => (
+                          <div key={review.id} className="border rounded-lg p-4">
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <p className="font-semibold text-gray-800">{review.user_name}</p>
+                                <div className="flex items-center gap-1">
+                                  {[1,2,3,4,5].map((star) => (
+                                    <FiStar 
+                                      key={star} 
+                                      size={14} 
+                                      className={star <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                              <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                review.status === 'approved' ? 'bg-green-100 text-green-700' :
+                                review.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                'bg-yellow-100 text-yellow-700'
+                              }`}>
+                                {review.status || 'pending'}
+                              </span>
+                            </div>
+                            {review.review_text && (
+                              <p className="text-gray-700 text-sm mb-2">{review.review_text}</p>
+                            )}
+                            {review.pros && (
+                              <p className="text-green-700 text-sm">👍 {review.pros}</p>
+                            )}
+                            {review.cons && (
+                              <p className="text-red-700 text-sm">👎 {review.cons}</p>
+                            )}
+                            <p className="text-xs text-gray-500 mt-2">
+                              {new Date(review.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
+                            </p>
                           </div>
-                          <div className="bg-green-50 rounded-lg p-4 text-center">
-                            <p className="text-3xl font-bold text-green-600">{reviewLink.submissions || 0}</p>
-                            <p className="text-sm text-gray-600">Reviews Submitted</p>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     )}
-                    
-                    <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6">
-                      <h3 className="text-lg font-bold text-gray-800 mb-4">💡 Tips for More Reviews</h3>
-                      <ul className="space-y-3 text-gray-700">
-                        <li className="flex items-start gap-2">
-                          <span className="text-orange-500 mt-1">•</span>
-                          Print the QR code and display it in classrooms, notice boards
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-orange-500 mt-1">•</span>
-                          Share the link in alumni WhatsApp groups
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-orange-500 mt-1">•</span>
-                          Include the QR code in farewell event materials
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-orange-500 mt-1">•</span>
-                          Send the link to final year students via email
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-orange-500 mt-1">•</span>
-                          Add to placement brochures and marketing materials
-                        </li>
-                      </ul>
+                  </div>
+                  
+                  {/* Questions to Answer */}
+                  <div className="bg-white rounded-xl shadow-sm p-6">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                      <FiHelpCircle className="text-blue-500" /> Questions to Answer
+                    </h3>
+                    {questions.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <FiHelpCircle size={40} className="mx-auto mb-3 text-gray-300" />
+                        <p>No questions yet</p>
+                        <p className="text-sm mt-1">Questions from students will appear here</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4 max-h-[500px] overflow-y-auto">
+                        {questions.map((q) => (
+                          <div key={q.id} className="border rounded-lg p-4">
+                            <p className="font-semibold text-gray-800 mb-2">{q.question}</p>
+                            <p className="text-xs text-gray-500 mb-3">
+                              Asked by {q.user_name} • {new Date(q.created_at).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                            </p>
+                            
+                            {/* Existing Answers */}
+                            {q.answers?.length > 0 && (
+                              <div className="mb-3 space-y-2">
+                                {q.answers.map((ans, idx) => (
+                                  <div key={idx} className="bg-blue-50 rounded-lg p-3 text-sm">
+                                    <p className="text-gray-700">{ans.answer}</p>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      {ans.answered_by === 'institute' ? '✓ Official Response' : ans.user_name}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {/* Answer Input */}
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                value={answerText[q.id] || ''}
+                                onChange={(e) => setAnswerText({ ...answerText, [q.id]: e.target.value })}
+                                placeholder="Type your official response..."
+                                className="flex-1 border rounded-lg px-3 py-2 text-sm"
+                                onKeyPress={(e) => e.key === 'Enter' && handleAnswerQuestion(q.id)}
+                              />
+                              <Button 
+                                size="sm" 
+                                onClick={() => handleAnswerQuestion(q.id)}
+                                disabled={submittingAnswer === q.id}
+                                className="bg-blue-600 hover:bg-blue-700"
+                              >
+                                {submittingAnswer === q.id ? '...' : 'Reply'}
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Tips Section */}
+                <div className="mt-6 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6">
+                  <h3 className="text-lg font-bold text-gray-800 mb-4">💡 Tips for Better Engagement</h3>
+                  <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-700">
+                    <div className="flex items-start gap-2">
+                      <span className="text-orange-500">•</span>
+                      <p>Print QR code and display in classrooms, notice boards, and farewell events</p>
                     </div>
-                    
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                      <h3 className="text-lg font-bold text-gray-800 mb-3">Why Reviews Matter?</h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        Authentic student reviews help prospective students make informed decisions. 
-                        Institutions with more positive reviews rank higher in search results and 
-                        attract more quality applications. Reviews build trust and credibility.
-                      </p>
+                    <div className="flex items-start gap-2">
+                      <span className="text-orange-500">•</span>
+                      <p>Respond to questions promptly - it builds trust with prospective students</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-orange-500">•</span>
+                      <p>Share the review link in alumni WhatsApp groups and placement brochures</p>
                     </div>
                   </div>
                 </div>
