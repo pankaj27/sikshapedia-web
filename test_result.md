@@ -1253,25 +1253,18 @@
 
 1. **Guest User Like Button** - ✅ WORKING
    - Login Required modal appears when clicking Like button
-   - Message: "Please login or create a free account to like this institution"
 
-2. **Guest User Favorite Button** - ✅ WORKING
-   - Login Required modal appears when clicking Save button
-   - Message: "Please login or create a free account to add to favorites"
+2. **Logged-in User - Ask Question** - ✅ WORKING
+   - "Ask a Question" modal opens directly without login prompt
 
-3. **Logged-in User Like Persistence** - ✅ WORKING
-   - Like button shows green border and highlight when liked
-   - State persists after page reload
-   - Like count updates correctly
+3. **Logged-in User - Add Answer** - ✅ WORKING
+   - Reply form shows without login prompt
 
-4. **Logged-in User Favorite Persistence** - ✅ WORKING
-   - Save button shows "Saved" with pink heart when favorited
-   - State persists after page reload
+4. **Logged-in User - Post Comment** - ✅ WORKING
+   - Comment textarea accessible, can type and post without login prompt
 
-5. **Dashboard Integration** - ✅ WORKING
-   - "Liked Institutes" section shows liked colleges with badge count
-   - "Favorite Institutes" section shows favorited colleges with badge count
-   - College details (name, location, logo) display correctly
+5. **Logged-in User - Reply to Comment** - ✅ WORKING
+   - Reply link works without login prompt
 
 ### API Testing Results:
 - `POST /api/user/like/college/{id}` - ✅ Working
