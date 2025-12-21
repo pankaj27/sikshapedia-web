@@ -4,6 +4,7 @@ import { FiCalendar, FiUser, FiShare2, FiEye, FiLoader, FiArrowLeft, FiList } fr
 import { Helmet } from 'react-helmet-async';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
+import AuthorInfo from '../components/AuthorInfo';
 
 import { Link } from '../components/CustomLink';
 const NewsDetailPage = () => {
