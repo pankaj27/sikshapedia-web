@@ -318,7 +318,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                     onFocus={() => setShowCityDropdown(true)}
                     required
                     disabled={!formData.state}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!formData.state ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!formData.state ? 'bg-gray-100 cursor-not-allowed text-gray-400' : ''} ${formData.city ? 'text-gray-900 font-medium' : 'text-gray-500'}`}
                     placeholder={formData.state ? "Search City..." : "Select state first"}
                   />
                   {showCityDropdown && formData.state && (
