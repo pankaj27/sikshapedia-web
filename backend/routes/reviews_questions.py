@@ -82,6 +82,7 @@ class Question(BaseModel):
     question: str
     answers: List[dict] = []
     is_answered: bool = False
+    status: str = "pending"  # pending, approved, rejected
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
