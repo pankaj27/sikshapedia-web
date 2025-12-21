@@ -1858,7 +1858,15 @@ const CollegeDetailPage = ({ overrideId }) => {
                           </div>
                         </div>
 
-                        <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                        <Button 
+                          className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                          onClick={() => {
+                            const address = college.location?.address || college.name;
+                            const city = college.location?.city || '';
+                            const searchQuery = encodeURIComponent(`${address}, ${city}`);
+                            window.open(`https://www.google.com/maps/search/?api=1&query=${searchQuery}`, '_blank');
+                          }}
+                        >
                           <FiExternalLink className="mr-2" />
                           Get Directions
                         </Button>
