@@ -112,7 +112,7 @@ const ListingPageForm = () => {
     { value: 'accreditation', label: 'Accreditation Page', example: 'naac-a-plus-colleges' }
   ];
 
-  const indianStates = [
+  const indianStates = masterStates.length > 0 ? masterStates : [
     'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
     'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
     'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
@@ -120,6 +120,15 @@ const ListingPageForm = () => {
     'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
     'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi'
   ];
+
+  // Get cities for a specific state
+  const getCitiesForState = (stateName) => {
+    if (!stateName || masterCities.length === 0) return [];
+    return masterCities
+      .filter(c => c.state === stateName)
+      .map(c => c.name)
+      .sort();
+  };
 
   const streams = [
     'Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 
