@@ -192,6 +192,7 @@ const GenericManagement = ({
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       rows={field.rows || 3}
                       required={field.required}
+                      placeholder={field.placeholder || ''}
                     />
                   ) : field.type === 'select' ? (
                     <select
