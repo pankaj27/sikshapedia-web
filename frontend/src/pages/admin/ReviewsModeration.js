@@ -99,7 +99,7 @@ const ReviewsModeration = () => {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-bold text-gray-900">{review.review_title}</h3>
+                      <h3 className="font-bold text-gray-900">{review.review_title || review.review_text?.slice(0, 50) || 'Review'}</h3>
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
                           <FiStar
@@ -110,9 +110,34 @@ const ReviewsModeration = () => {
                         ))}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 mb-1">By: {review.student_name}</p>
-                    <p className="text-sm text-gray-600 mb-3">College: {review.college_name || 'N/A'}</p>
-                    <p className="text-gray-700">{review.detailed_review}</p>
+                    <p className="text-sm text-gray-600 mb-1">
+                      <span className="font-medium">By:</span> {review.user_name || review.student_name || 'Anonymous'}
+                    </p>
+                    <p className="text-sm text-blue-600 font-medium mb-3">
+                      <span className="text-gray-600 font-normal">Institute:</span> {review.college_name || 'N/A'}
+                    </p>
+                    {review.review_text && (
+                      <p className="text-gray-700 mb-2">{review.review_text}</p>
+                    )}
+                    {review.detailed_review && (
+                      <p className="text-gray-700">{review.detailed_review}</p>
+                    )}
+                    {(review.pros || review.cons) && (
+                      <div className="mt-2 grid grid-cols-2 gap-4 text-sm">
+                        {review.pros && (
+                          <div>
+                            <span className="text-green-600 font-medium">Pros: </span>
+                            <span className="text-gray-600">{review.pros}</span>
+                          </div>
+                        )}
+                        {review.cons && (
+                          <div>
+                            <span className="text-red-600 font-medium">Cons: </span>
+                            <span className="text-gray-600">{review.cons}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="ml-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
