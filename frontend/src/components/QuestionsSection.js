@@ -195,18 +195,13 @@ const QuestionsSection = ({ entityId, entityType = 'college', entityName }) => {
   const [showModal, setShowModal] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Check login status directly from localStorage - no API call needed
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
-  const checkLoginStatus = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        await api.get('/auth/me');
-        setIsLoggedIn(true);
-      }
-    } catch (err) {
-      setIsLoggedIn(false);
-    }
+  const checkLoginStatus = () => {
+    // Simple check for token in localStorage
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
   };
 
   const handleAskQuestionClick = () => {
