@@ -356,11 +356,15 @@ export const CounsellingWidget = ({ onClose }) => {
           onChange={(e) => setFormData({...formData, interest: e.target.value})}
           className="w-full px-3 py-2 rounded-lg bg-white/20 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:border-white"
         />
+        {error && (
+          <p className="text-red-200 text-sm">{error}</p>
+        )}
         <button
           type="submit"
-          className="w-full py-2.5 bg-white text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-colors"
+          disabled={loading}
+          className="w-full py-2.5 bg-white text-purple-600 font-semibold rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50"
         >
-          Request Callback
+          {loading ? 'Submitting...' : 'Request Callback'}
         </button>
       </form>
     </div>
