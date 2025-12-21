@@ -143,6 +143,7 @@ import UsersPointsReport from './pages/admin/UsersPointsReport';
 import CounselorsManagement from './pages/admin/CounselorsManagement';
 import AuthPagesManagement from './pages/admin/AuthPagesManagement';
 import LeadFormsManagement from './pages/admin/LeadFormsManagement';
+import CounsellingRequestsManagement from './pages/admin/CounsellingRequestsManagement';
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
 import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
