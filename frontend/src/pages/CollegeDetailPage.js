@@ -1348,9 +1348,9 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <thead>
                         <tr className="bg-gray-50">
                           <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Opening Rank 2025</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank 2025</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank 2024</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Opening Rank {year}</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank {year}</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank {year - 1}</th>
                         </tr>
                       </thead>
                       <tbody>
