@@ -653,7 +653,7 @@ const CollegeDetailPage = ({ overrideId }) => {
               <div className="flex items-start gap-2">
                 <span className="text-[10px] font-bold text-green-600 bg-green-200 px-2 py-0.5 rounded flex-shrink-0">06 Dec, 2025</span>
                 <p className="text-xs text-gray-800">
-                  <strong>Placement Results 2024</strong> announced with highest package of ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L
+                  <strong>Placement Results {year - 1}</strong> announced with highest package of ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L
                 </p>
               </div>
             </div>
