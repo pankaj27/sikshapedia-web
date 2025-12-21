@@ -307,20 +307,22 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
   const [visibleCount, setVisibleCount] = useState(5);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const checkLoginStatus = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        await api.get('/auth/me');
-        setIsLoggedIn(true);
-      }
-    } catch (err) {
-      setIsLoggedIn(false);
-    }
+  const checkLoginStatus = () => {
+    // Check for token in localStorage (same as useGuestGate)
+    const hasSession = localStorage.getItem('token') || 
+                      localStorage.getItem('user_token') ||
+                      localStorage.getItem('user') ||
+                      document.cookie.includes('session_token');
+    setIsLoggedIn(!!hasSession);
   };
 
   const handleWriteReviewClick = () => {
-    if (isLoggedIn) {
+    // Re-check login status before showing modal
+    checkLoginStatus();
+    const hasSession = localStorage.getItem('token') || 
+                      localStorage.getItem('user_token') ||
+                      localStorage.getItem('user');
+    if (hasSession) {
       setShowModal(true);
     } else {
       setShowLoginPrompt(true);
