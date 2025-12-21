@@ -338,10 +338,6 @@ const WriteReviewPage = () => {
                     <p className="text-xs text-orange-500 mt-0.5">Loading courses...</p>
                   )}
                 </div>
-                    onChange={(e) => handleInputChange('course', e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
 
                 <Button
                   onClick={() => setStep(2)}
