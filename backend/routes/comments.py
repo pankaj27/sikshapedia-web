@@ -111,12 +111,12 @@ async def create_comment(comment_data: CommentCreate, authorization: str = Heade
 
 
 @router.post("/comments/{comment_id}/reply")
-async def reply_to_comment(comment_id: str, reply_data: ReplyCreate, authorization: str = None):
+async def reply_to_comment(comment_id: str, reply_data: ReplyCreate, authorization: str = Header(None)):
     """Reply to a comment (requires login)"""
     if not authorization:
         raise HTTPException(status_code=401, detail="Please login to reply")
     
-    user = await get_current_user_optional(authorization)
+    user = await get_current_user_from_header(authorization)
     if not user:
         raise HTTPException(status_code=401, detail="Please login to reply")
     
