@@ -264,17 +264,57 @@ const WriteReviewPage = () => {
                   </select>
                 </div>
 
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Institute Name <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="Search and select your institute"
-                    value={formData.instituteName}
-                    onChange={(e) => handleInputChange('instituteName', e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search and select your institute"
+                      value={formData.instituteName || instituteSearch}
+                      onChange={(e) => {
+                        setInstituteSearch(e.target.value);
+                        setShowInstituteDropdown(true);
+                        if (!e.target.value) {
+                          setFormData(prev => ({ ...prev, instituteName: '', instituteId: '' }));
+                        }
+                      }}
+                      onFocus={() => setShowInstituteDropdown(true)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      style={{ color: formData.instituteName ? '#111827' : '#6B7280', fontWeight: formData.instituteName ? '500' : '400' }}
+                    />
+                    {searchLoading && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                    {showInstituteDropdown && (instituteSearch.length >= 2 || institutes.length > 0) && (
+                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {institutes.length > 0 ? (
+                          institutes.map(inst => (
+                            <div
+                              key={inst.id}
+                              onClick={() => handleInstituteSelect(inst)}
+                              className="px-3 py-2 cursor-pointer hover:bg-orange-50 border-b border-gray-100 last:border-0"
+                              style={{ color: '#111827' }}
+                            >
+                              <div className="font-medium">{inst.name}</div>
+                              {inst.location && (
+                                <div className="text-xs text-gray-500">
+                                  {inst.location.city}, {inst.location.state}
+                                </div>
+                              )}
+                            </div>
+                          ))
+                        ) : instituteSearch.length >= 2 && !searchLoading ? (
+                          <div className="px-3 py-3 text-gray-500 text-sm">
+                            No institutes found. Try a different search term.
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+                  </div>
                   <p className="text-xs text-gray-500 mt-0.5">Start typing to search from our database</p>
                 </div>
 
@@ -282,10 +322,22 @@ const WriteReviewPage = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Course <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="e.g., B.Tech Computer Science"
+                  <select
                     value={formData.course}
+                    onChange={(e) => handleInputChange('course', e.target.value)}
+                    disabled={!formData.instituteId}
+                    className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 ${!formData.instituteId ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    style={{ color: formData.course ? '#111827' : '#6B7280' }}
+                  >
+                    <option value="">{formData.instituteId ? 'Select your course' : 'Select institute first'}</option>
+                    {courses.map((course, idx) => (
+                      <option key={idx} value={course}>{course}</option>
+                    ))}
+                  </select>
+                  {coursesLoading && (
+                    <p className="text-xs text-orange-500 mt-0.5">Loading courses...</p>
+                  )}
+                </div>
                     onChange={(e) => handleInputChange('course', e.target.value)}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
