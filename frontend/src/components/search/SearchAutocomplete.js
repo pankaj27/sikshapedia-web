@@ -114,7 +114,8 @@ const SearchAutocomplete = ({
       if (selectedIndex >= 0 && items[selectedIndex]) {
         const item = items[selectedIndex];
         if (item.url) {
-          navigate(item.url);
+          // Use window.location.href for proper navigation
+          window.location.href = item.url;
         } else if (item.term) {
           setQuery(item.term);
           handleSearch(item.term);
