@@ -171,19 +171,14 @@ const Header = () => {
             )}
           </div>
 
-          {/* Search Bar - Desktop */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 min-w-0 max-w-3xl mx-4">
-            <div className="relative w-full">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search for Colleges, Exams, Courses and More..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm text-gray-900 placeholder-gray-500"
-              />
-            </div>
-          </form>
+          {/* Search Bar - Desktop with Autocomplete */}
+          <div className="hidden md:flex flex-1 min-w-0 max-w-3xl mx-4">
+            <SearchAutocomplete 
+              placeholder="Search for Colleges, Exams, Courses and More..."
+              className="w-full"
+              inputClassName="text-gray-900"
+            />
+          </div>
 
           {/* Right Side Actions - Desktop */}
           <div className="hidden lg:flex items-center gap-3 relative">
