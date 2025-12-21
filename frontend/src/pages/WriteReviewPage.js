@@ -797,6 +797,18 @@ const WriteReviewPage = () => {
                 </p>
               </div>
 
+              {/* Points Earned Section */}
+              <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 mb-6 text-white">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <FiAward size={32} />
+                  <span className="text-4xl font-bold">+{earnedPoints}</span>
+                </div>
+                <p className="text-orange-100">Points Earned!</p>
+                <p className="text-sm text-orange-200 mt-2">
+                  ≈ ₹{(earnedPoints * 0.5).toFixed(0)} reward value
+                </p>
+              </div>
+
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
                 <h3 className="font-bold text-lg mb-3">What Happens Next?</h3>
                 <div className="space-y-3 text-left">
@@ -810,22 +822,46 @@ const WriteReviewPage = () => {
                   </div>
                   <div className="flex gap-3">
                     <span className="text-orange-600 font-bold">3.</span>
-                    <span className="text-gray-700">Your reward of ₹300 will be processed within 7 days</span>
+                    <span className="text-gray-700">Points will be added to your account after approval</span>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="text-orange-600 font-bold">4.</span>
+                    <span className="text-gray-700">Redeem points for cash via UPI once you have 200+ points</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex gap-3 justify-center">
                 <Button
-                  onClick={() => setStep(1)}
+                  onClick={() => {
+                    setStep(1);
+                    setFormData({
+                      instituteType: '',
+                      instituteName: '',
+                      instituteId: '',
+                      course: '',
+                      rating: 0,
+                      reviewTitle: '',
+                      likes: '',
+                      dislikes: '',
+                      detailedReview: '',
+                      facilities: { infrastructure: 0, faculty: 0, placement: 0, hostel: 0, campus: 0 },
+                      name: userProfile?.name || '',
+                      email: userProfile?.email || '',
+                      graduationYear: '',
+                      verificationDocument: null
+                    });
+                    setUploadedFile(null);
+                    setEarnedPoints(0);
+                  }}
                   variant="outline"
                   className="border-orange-500 text-orange-600 hover:bg-orange-50"
                 >
                   Write Another Review
                 </Button>
-                <Link to="/">
+                <Link to="/dashboard?tab=reviews">
                   <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                    Back to Home
+                    View My Reviews
                   </Button>
                 </Link>
               </div>
