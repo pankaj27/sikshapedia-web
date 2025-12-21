@@ -654,12 +654,52 @@ const WriteReviewPage = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Upload Verification Document (Optional)
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-orange-500 transition-colors cursor-pointer">
-                    <FiUpload className="mx-auto mb-1 text-gray-400" size={24} />
-                    <p className="text-xs text-gray-600 mb-0.5">Click to upload ID Card, Marksheet, or Certificate</p>
-                    <p className="text-xs text-gray-500">PDF, JPG, PNG up to 5MB</p>
-                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
-                  </div>
+                  
+                  {!uploadedFile ? (
+                    <div 
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-orange-500 transition-colors cursor-pointer"
+                    >
+                      {uploading ? (
+                        <>
+                          <div className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
+                          <p className="text-xs text-orange-600">Uploading...</p>
+                        </>
+                      ) : (
+                        <>
+                          <FiUpload className="mx-auto mb-1 text-gray-400" size={24} />
+                          <p className="text-xs text-gray-600 mb-0.5">Click to upload ID Card, Marksheet, or Certificate</p>
+                          <p className="text-xs text-gray-500">PDF, JPG, PNG up to 5MB</p>
+                        </>
+                      )}
+                      <input 
+                        ref={fileInputRef}
+                        type="file" 
+                        className="hidden" 
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={handleFileUpload}
+                      />
+                    </div>
+                  ) : (
+                    <div className="border border-green-300 bg-green-50 rounded-lg p-3 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <FiFile className="text-green-600" size={20} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 truncate max-w-[200px]">{uploadedFile.name}</p>
+                          <p className="text-xs text-gray-500">{formatFileSize(uploadedFile.size)}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={removeUploadedFile}
+                        className="p-1.5 hover:bg-red-100 rounded-full transition-colors"
+                        title="Remove file"
+                      >
+                        <FiX className="text-red-500" size={18} />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3">
