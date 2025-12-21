@@ -13,6 +13,9 @@ import GuestGate, { useGuestGate, LoginPromptModal } from '../components/GuestGa
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import { useCollegeContext } from '../contexts/CollegeContext';
+import ReviewsSection from '../components/ReviewsSection';
+import QuestionsSection from '../components/QuestionsSection';
+import CommentsSection from '../components/CommentsSection';
 
 import { Link } from '../components/CustomLink';
 // Facility icon mapping for icon-based display
