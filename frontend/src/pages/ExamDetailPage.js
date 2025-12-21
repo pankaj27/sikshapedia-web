@@ -828,7 +828,7 @@ const ExamDetailPage = () => {
             <div className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow-md p-8 text-center text-white">
               <p className="text-xs uppercase tracking-wide mb-2 opacity-90">Sponsored</p>
               <h3 className="text-xl font-bold mb-3">Master {exam.name} with Live Classes</h3>
-              <p className="mb-4 opacity-95">Join India's top educators and ace your exam</p>
+              <p className="mb-4 opacity-95">Join India&apos;s top educators and ace your exam</p>
               <div className="flex gap-3 justify-center">
                 <Button className="bg-white text-orange-600 hover:bg-gray-100">
                   Start Free Trial
