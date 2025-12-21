@@ -5,15 +5,12 @@ import CollegeDetailPage from './CollegeDetailPage';
 import { generateSlug } from '../utils/slugify';
 
 /**
- * Wrapper component that handles multiple URL formats:
+ * Wrapper component that handles the URL structure:
+ * /colleges/{number}-{slug} e.g., /colleges/001-iit-bombay
+ * /university/{number}-{slug} e.g., /university/002-mumbai-university
+ * /schools/{number}-{slug} e.g., /schools/003-dps-rampurhat
  * 
- * Supported formats:
- * 1. Direct ID: /colleges/ff787707-1dcb-4b24-86df-4229604fbae4 (UUID)
- * 2. Slug: /colleges/iit-bombay-eng (slug field)
- * 3. Custom ID: /colleges/iit-bombay-002 (custom string ID)
- * 4. Serial number format: /colleges/001-iit-bombay (serial_number-slug)
- * 
- * The component tries multiple resolution strategies to find the institution.
+ * Extracts the numeric ID (serial_number) and finds the institution
  */
 const InstitutionDetailPage = () => {
   const params = useParams();
@@ -36,25 +33,27 @@ const InstitutionDetailPage = () => {
   
   const institutionType = getInstitutionType();
   
-  // Parse URL to extract possible identifiers
+  // Parse URL to extract numeric ID and slug
+  // Format: {number}-{slug} e.g., "001-iit-bombay"
   const parseIdSlug = () => {
-    if (!idSlug) return { rawId: null, numericPrefix: null, slugPart: null };
+    if (!idSlug) return { numericId: null, slug: null, isValidFormat: false };
     
-    // Check for serial number format: {number}-{slug} e.g., "001-iit-bombay"
-    const numericPrefixMatch = idSlug.match(/^(\d+)-(.+)$/);
-    if (numericPrefixMatch) {
+    // Accept format: {number}-{slug} with dash separator
+    // e.g., "001-iit-bombay" -> numericId: "001", slug: "iit-bombay"
+    const numericDashMatch = idSlug.match(/^(\d+)-(.+)$/);
+    if (numericDashMatch) {
       return {
-        rawId: idSlug,
-        numericPrefix: numericPrefixMatch[1],
-        slugPart: numericPrefixMatch[2]
+        numericId: numericDashMatch[1],
+        slug: numericDashMatch[2],
+        isValidFormat: true
       };
     }
     
-    // Not serial number format - could be UUID, slug, or custom ID
+    // Invalid format
     return {
-      rawId: idSlug,
-      numericPrefix: null,
-      slugPart: null
+      numericId: null,
+      slug: null,
+      isValidFormat: false
     };
   };
   
@@ -63,69 +62,34 @@ const InstitutionDetailPage = () => {
       setLoading(true);
       setError(null);
       
-      if (!idSlug) {
-        setError('No institution identifier provided');
+      const { numericId, isValidFormat } = parseIdSlug();
+      
+      // Reject invalid URL format
+      if (!isValidFormat) {
+        setError('Invalid URL format');
         setLoading(false);
         return;
       }
       
-      const { rawId, numericPrefix } = parseIdSlug();
-      
       try {
-        // Strategy 1: Try direct lookup by ID first (fastest)
-        try {
-          const directResponse = await api.get(`/colleges/${rawId}`);
-          if (directResponse.data && directResponse.data.id) {
-            setInstitutionId(directResponse.data.id);
-            setLoading(false);
-            return;
-          }
-        } catch (directErr) {
-          // Direct lookup failed, try other strategies
-          console.log('Direct ID lookup failed, trying other strategies...');
-        }
-        
-        // Strategy 2: Search in institution list by ID, slug, or serial_number
-        const response = await api.get(`/colleges?institution_type=${institutionType}&limit=200`);
-        if (response.data && response.data.length > 0) {
-          let institution = null;
-          
-          // Try matching by ID directly
-          institution = response.data.find(inst => inst.id === rawId);
-          
-          // Try matching by slug
-          if (!institution) {
-            institution = response.data.find(inst => inst.slug === rawId);
-          }
-          
-          // If serial number format, try matching by serial_number
-          if (!institution && numericPrefix) {
-            const serialNum = parseInt(numericPrefix, 10);
-            institution = response.data.find(inst => inst.serial_number === serialNum);
-          }
-          
-          if (institution) {
-            setInstitutionId(institution.id);
-            setLoading(false);
-            return;
+        // Search by serial_number (unique for each institution)
+        if (numericId) {
+          // Fetch institutions filtered by institution_type
+          const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
+          if (response.data && response.data.length > 0) {
+            // Find institution by serial_number (padded numeric ID)
+            const serialNum = parseInt(numericId, 10);
+            const institution = response.data.find(inst => inst.serial_number === serialNum);
+            
+            if (institution) {
+              setInstitutionId(institution.id);
+              setLoading(false);
+              return;
+            }
           }
         }
         
-        // If still not found, try fetching all types (maybe institution_type mismatch)
-        const allResponse = await api.get(`/colleges?limit=500`);
-        if (allResponse.data && allResponse.data.length > 0) {
-          let institution = allResponse.data.find(inst => 
-            inst.id === rawId || inst.slug === rawId
-          );
-          
-          if (institution) {
-            setInstitutionId(institution.id);
-            setLoading(false);
-            return;
-          }
-        }
-        
-        // If not found anywhere
+        // If not found
         setError('Institution not found');
         setLoading(false);
         
