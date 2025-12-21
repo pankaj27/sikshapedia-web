@@ -32,13 +32,18 @@ const TopCollegesByStream = () => {
       const featuredRes = await api.get('/colleges/by-stream-featured').catch(() => null);
       
       if (featuredRes?.data) {
-        // Use admin-selected data
-        const results = streams.map(stream => ({
-          ...stream,
-          colleges: featuredRes.data[stream.name]?.length > 0 
-            ? featuredRes.data[stream.name] 
-            : defaultColleges[stream.name]
-        }));
+        // Use admin-selected data - handle both object and string formats
+        const results = streams.map(stream => {
+          const rawColleges = featuredRes.data[stream.name];
+          let colleges = defaultColleges[stream.name];
+          
+          if (rawColleges?.length > 0) {
+            // Check if data is array of objects or strings
+            colleges = rawColleges.map(c => typeof c === 'object' ? c.name : c);
+          }
+          
+          return { ...stream, colleges };
+        });
         setStreamData(results);
       } else {
         // Fallback: Fetch colleges for each stream from regular endpoint
