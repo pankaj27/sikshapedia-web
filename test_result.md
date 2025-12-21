@@ -973,3 +973,31 @@
 3. ✅ **Frontend can safely implement URL-based title generation** - All data available
 4. ⚠️ **Consider adding test data with numeric prefix IDs** - For complete detail page testing
 5. ✅ **System ready for frontend integration** - All backend endpoints validated
+
+## Login Prompt Feature Testing (Dec 21, 2025):
+
+### Features to Test:
+1. **ReviewsSection** - Login prompt when guest clicks "Write Review"
+2. **QuestionsSection** - Login prompt when guest clicks "Ask Question" or "+ Add an Answer"
+3. **CommentsSection** - Login prompt when guest clicks comment input or "Reply"
+
+### Test Scenarios:
+1. As a **guest user** (no auth token):
+   - Click "Write Review" → Should show LoginPromptModal
+   - Click "Ask Question" → Should show LoginPromptModal
+   - Click on comment textarea → Should show LoginPromptModal
+   - Click "Reply" on any comment → Should show LoginPromptModal
+
+2. As a **logged-in user**:
+   - Click "Write Review" → Should open WriteReviewModal (form)
+   - Click "Ask Question" → Should open AskQuestionModal (form)
+   - Comment textarea should be editable and submit should work
+   - Reply functionality should work
+
+### Test URL:
+- College detail page with UGC sections: `/colleges/{college-id}`
+- Need to find a valid college ID first
+
+### Test Credentials:
+- Admin: admin@admissionbuddy.co / admin123
+- User: Can create new user via signup
