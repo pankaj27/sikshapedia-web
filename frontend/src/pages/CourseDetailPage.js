@@ -284,12 +284,23 @@ const CourseDetailPage = () => {
             
             {/* Overview Section */}
             <section id="overview" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <FiBook className="text-blue-600" size={20} />
-                </span>
-                About {courseName}
-              </h2>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <FiBook className="text-blue-600" size={20} />
+                  </span>
+                  About {courseName}
+                </h2>
+                <AuthorInfo
+                  name={course?.author_name}
+                  photo={course?.author_image}
+                  role={course?.author_role || 'Content Writer'}
+                  updatedAt={course?.updated_at}
+                  createdAt={course?.created_at}
+                  showLink={true}
+                  size="sm"
+                />
+              </div>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-4">{description}</p>
                 <p className="text-gray-700 leading-relaxed">
