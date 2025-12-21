@@ -283,7 +283,7 @@ const DynamicListingPage = () => {
       institutionTypes: ['College', 'University'],
       isSchools: false
     };
-  }, [urlInfo]);
+  }, [urlInfo, year]);
   
   // Active filters based on URL - NEW STRUCTURE
   const activeFilters = useMemo(() => {
