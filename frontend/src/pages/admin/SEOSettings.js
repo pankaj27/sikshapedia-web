@@ -748,6 +748,192 @@ ${schemaPreview ? JSON.stringify(schemaPreview, null, 2) : '// Generated schema 
                 </div>
               </div>
             )}
+
+            {/* Schema Markup Tab */}
+            {activeTab === 'schema' && (
+              <div className="space-y-6">
+                {/* Schema Editor Modal */}
+                {selectedSchema && (
+                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                      <div className="p-4 border-b flex items-center justify-between">
+                        <div>
+                          <h3 className="font-bold text-lg">{selectedSchema.name}</h3>
+                          <p className="text-sm text-gray-500">{selectedSchema.description}</p>
+                        </div>
+                        <button onClick={() => setSelectedSchema(null)} className="text-gray-500 hover:text-gray-700">
+                          ✕
+                        </button>
+                      </div>
+                      <div className="p-4 overflow-auto max-h-[60vh]">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Schema JSON (Edit below)
+                        </label>
+                        <textarea
+                          value={schemaJsonText}
+                          onChange={(e) => setSchemaJsonText(e.target.value)}
+                          className="w-full h-96 px-3 py-2 border rounded-lg text-sm font-mono"
+                          spellCheck={false}
+                        />
+                        <div className="mt-2 p-3 bg-yellow-50 rounded-lg text-sm">
+                          <p className="font-medium text-yellow-800">💡 Dynamic Variables:</p>
+                          <p className="text-yellow-700 text-xs mt-1">
+                            Use placeholders like <code className="bg-yellow-100 px-1">{'{college_name}'}</code>, <code className="bg-yellow-100 px-1">{'{rating}'}</code>, etc. 
+                            These will be replaced with actual data on each page.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="p-4 border-t flex justify-between">
+                        <Button onClick={() => resetSchema(selectedSchema.schema_type)} variant="outline" className="text-red-600">
+                          <FiRotateCcw className="mr-2" size={14} />
+                          Reset to Default
+                        </Button>
+                        <div className="flex gap-2">
+                          <Button onClick={() => setSelectedSchema(null)} variant="outline">
+                            Cancel
+                          </Button>
+                          <Button onClick={saveSchemaEdit} disabled={saving} className="bg-orange-500 hover:bg-orange-600">
+                            <FiSave className="mr-2" size={14} />
+                            {saving ? 'Saving...' : 'Save Schema'}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Summary Cards */}
+                {schemaReport?.summary && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-white rounded-lg border p-4 text-center">
+                      <p className="text-3xl font-bold text-blue-600">{schemaReport.summary.total_schemas}</p>
+                      <p className="text-sm text-gray-500">Total Schemas</p>
+                    </div>
+                    <div className="bg-white rounded-lg border p-4 text-center">
+                      <p className="text-3xl font-bold text-green-600">{schemaReport.summary.enabled}</p>
+                      <p className="text-sm text-gray-500">Enabled</p>
+                    </div>
+                    <div className="bg-white rounded-lg border p-4 text-center">
+                      <p className="text-3xl font-bold text-gray-400">{schemaReport.summary.disabled}</p>
+                      <p className="text-sm text-gray-500">Disabled</p>
+                    </div>
+                    <div className="bg-white rounded-lg border p-4 text-center">
+                      <p className="text-3xl font-bold text-purple-600">{schemaReport.summary.customized}</p>
+                      <p className="text-sm text-gray-500">Customized</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid lg:grid-cols-3 gap-6">
+                  {/* Schema List */}
+                  <div className="lg:col-span-2 space-y-4">
+                    <h3 className="font-semibold text-gray-900">All Schema Types</h3>
+                    
+                    {schemaReport?.schemas?.map(schema => (
+                      <div key={schema.schema_type} className={`bg-white rounded-lg border p-4 ${!schema.enabled ? 'opacity-60' : ''}`}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-medium text-gray-900">{schema.name}</h4>
+                              {schema.is_customized && (
+                                <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full">Customized</span>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-500 mt-1">{schema.description}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <span className="text-xs text-gray-400">Used on:</span>
+                              {schema.pages?.map((page, i) => (
+                                <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{page}</span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => toggleSchema(schema.schema_type, schema.enabled)}
+                              className={`p-2 rounded-lg ${schema.enabled ? 'text-green-600 bg-green-50' : 'text-gray-400 bg-gray-50'}`}
+                              title={schema.enabled ? 'Disable' : 'Enable'}
+                            >
+                              {schema.enabled ? <FiToggleRight size={24} /> : <FiToggleLeft size={24} />}
+                            </button>
+                            <button
+                              onClick={() => openSchemaEditor(schema)}
+                              className="p-2 rounded-lg text-blue-600 bg-blue-50 hover:bg-blue-100"
+                              title="Edit Schema"
+                            >
+                              <FiEdit2 size={18} />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {/* Schema Preview */}
+                        <details className="mt-3">
+                          <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">
+                            View Schema JSON
+                          </summary>
+                          <pre className="mt-2 bg-gray-50 p-3 rounded text-xs overflow-auto max-h-40 border">
+                            {JSON.stringify(schema.schema, null, 2)}
+                          </pre>
+                        </details>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Page Coverage & Tips */}
+                  <div className="space-y-4">
+                    <div className="bg-white rounded-lg border p-4">
+                      <h3 className="font-semibold text-gray-900 mb-3">Page Coverage</h3>
+                      <div className="space-y-3">
+                        {schemaReport?.page_coverage?.map((page, i) => (
+                          <div key={i} className="border-b pb-2 last:border-0">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">{page.page_type}</span>
+                              <span className={`text-xs px-2 py-0.5 rounded ${page.enabled_count > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                {page.enabled_count} active
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {page.schemas?.map((s, j) => (
+                                <span key={j} className={`text-xs px-1.5 py-0.5 rounded ${s.enabled ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
+                                  {s.type}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 p-4">
+                      <h3 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                        <FiZap className="text-blue-600" />
+                        SEO Tips
+                      </h3>
+                      <div className="space-y-2">
+                        {schemaReport?.recommendations?.map((rec, i) => (
+                          <div key={i} className="flex items-start gap-2 text-sm">
+                            <FiInfo className={`mt-0.5 flex-shrink-0 ${rec.type === 'tip' ? 'text-green-600' : 'text-blue-600'}`} size={14} />
+                            <span className="text-gray-700">{rec.message}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-lg border p-4">
+                      <h3 className="font-semibold text-gray-900 mb-2">What is Schema?</h3>
+                      <p className="text-sm text-gray-600">
+                        Schema markup is structured data that helps search engines understand your content.
+                        It enables <strong>rich snippets</strong> like star ratings, FAQs, and breadcrumbs in search results.
+                      </p>
+                      <div className="mt-3 p-3 bg-green-50 rounded-lg">
+                        <p className="text-xs text-green-800">
+                          <strong>Example:</strong> With Review schema, your college pages can show ⭐⭐⭐⭐⭐ ratings directly in Google search results!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
