@@ -293,7 +293,7 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
           <p className="text-gray-600">See what students say about {entityName}</p>
         </div>
         {showWriteReview && (
-          <Button onClick={() => setShowModal(true)} className="bg-orange-500 hover:bg-orange-600 flex items-center gap-2">
+          <Button onClick={handleWriteReviewClick} className="bg-orange-500 hover:bg-orange-600 flex items-center gap-2">
             <FiEdit3 size={16} />
             Write Review
           </Button>
