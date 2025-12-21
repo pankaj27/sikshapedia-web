@@ -227,6 +227,7 @@ const NewsletterManagement = () => {
         </CardContent>
       </Card>
     </div>
+    </AdminLayout>
   );
 };
 
