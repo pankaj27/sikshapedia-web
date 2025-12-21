@@ -96,7 +96,7 @@ const UniversityDetailPage = () => {
           <div className="flex items-center text-sm text-gray-600">
             <a href="/" className="hover:text-purple-600">Home</a>
             <FiChevronRight className="mx-2" size={14} />
-            <a href="/universities" className="hover:text-purple-600">Universities</a>
+            <a href="/university" className="hover:text-purple-600">Universities</a>
             <FiChevronRight className="mx-2" size={14} />
             <span className="text-gray-900">{university.name}</span>
           </div>
