@@ -89,6 +89,7 @@ const AdminLayout = ({ children }) => {
         { title: 'All Bookings', path: '/admin/admission-bookings', icon: FiFileText, highlight: true, badge: 'NEW' },
         { title: 'Partner Colleges', path: '/admin/admission-partners/colleges', icon: FiHome },
         { title: 'Partner Schools', path: '/admin/admission-partners/schools', icon: FiBookOpen },
+        { title: 'Partner Universities', path: '/admin/admission-partners/universities', icon: FiAward },
       ]
     },
     {
