@@ -71,80 +71,81 @@ const ReviewQRGenerator = ({
       ctx.font = '14px Arial';
       ctx.textAlign = 'center';
       ctx.fillText('India\'s Trusted Education Platform', 300, 105);
-    
-    // Divider line
-    ctx.strokeStyle = '#e5e7eb';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(60, 125);
-    ctx.lineTo(540, 125);
-    ctx.stroke();
-    
-    // Institution name
-    ctx.fillStyle = '#1f2937';
-    ctx.font = 'bold 24px Arial';
-    ctx.fillText(instituteName, 300, 170);
-    
-    ctx.fillStyle = '#6b7280';
-    ctx.font = '16px Arial';
-    ctx.fillText(instituteType, 300, 195);
-    
-    // QR Code area with border
-    ctx.fillStyle = '#fff7ed';
-    ctx.beginPath();
-    ctx.roundRect(150, 220, 300, 300, 16);
-    ctx.fill();
-    
-    ctx.strokeStyle = '#fed7aa';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.roundRect(150, 220, 300, 300, 16);
-    ctx.stroke();
-    
-    // Draw QR Code
-    const svg = qrRef.current?.querySelector('svg');
-    if (svg) {
-      const svgData = new XMLSerializer().serializeToString(svg);
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 175, 245, 250, 250);
-        finishDrawing();
-      };
-      img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-    } else {
-      finishDrawing();
-    }
-    
-    function finishDrawing() {
-      // Scan instruction
+      
+      // Divider line
+      ctx.strokeStyle = '#e5e7eb';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(60, 125);
+      ctx.lineTo(540, 125);
+      ctx.stroke();
+      
+      // Institution name
       ctx.fillStyle = '#1f2937';
-      ctx.font = 'bold 22px Arial';
-      ctx.fillText('📱 Scan to Review', 300, 560);
+      ctx.font = 'bold 24px Arial';
+      ctx.fillText(instituteName, 300, 170);
       
       ctx.fillStyle = '#6b7280';
-      ctx.font = '14px Arial';
-      ctx.fillText('Share your experience with future students!', 300, 585);
+      ctx.font = '16px Arial';
+      ctx.fillText(instituteType, 300, 195);
       
-      // Stars decoration
-      ctx.font = '24px Arial';
-      ctx.fillText('⭐ ⭐ ⭐ ⭐ ⭐', 300, 630);
+      // QR Code area with border
+      ctx.fillStyle = '#fff7ed';
+      ctx.beginPath();
+      ctx.roundRect(150, 220, 300, 300, 16);
+      ctx.fill();
       
-      // Footer
-      ctx.fillStyle = '#f97316';
-      ctx.fillRect(30, 700, 540, 70);
+      ctx.strokeStyle = '#fed7aa';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(150, 220, 300, 300, 16);
+      ctx.stroke();
       
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 16px Arial';
-      ctx.fillText('Your feedback helps students make better choices!', 300, 735);
+      // Draw QR Code
+      const svg = qrRef.current?.querySelector('svg');
+      if (svg) {
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 175, 245, 250, 250);
+          finishDrawing();
+        };
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+      } else {
+        finishDrawing();
+      }
       
-      ctx.font = '12px Arial';
-      ctx.fillText('www.admissionbuddy.co', 300, 755);
-      
-      // Download
-      const link = document.createElement('a');
-      link.download = `${instituteName.replace(/\\s+/g, '_')}_Review_QR.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      function finishDrawing() {
+        // Scan instruction
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 22px Arial';
+        ctx.fillText('📱 Scan to Review', 300, 560);
+        
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '14px Arial';
+        ctx.fillText('Share your experience with future students!', 300, 585);
+        
+        // Stars decoration
+        ctx.font = '24px Arial';
+        ctx.fillText('⭐ ⭐ ⭐ ⭐ ⭐', 300, 630);
+        
+        // Footer
+        ctx.fillStyle = '#f97316';
+        ctx.fillRect(30, 700, 540, 70);
+        
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText('Your feedback helps students make better choices!', 300, 735);
+        
+        ctx.font = '12px Arial';
+        ctx.fillText('www.admissionbuddy.co', 300, 755);
+        
+        // Download
+        const link = document.createElement('a');
+        link.download = `${instituteName.replace(/\\s+/g, '_')}_Review_QR.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
     }
   };
 
