@@ -180,6 +180,35 @@ const CollegeDetailPage = ({ overrideId }) => {
     };
   }, [id]);
 
+  // Check if user has liked this college
+  useEffect(() => {
+    const checkLikeStatus = async () => {
+      const token = localStorage.getItem('token');
+      if (!token || !college) return;
+      
+      try {
+        const response = await api.get('/user/liked', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const likedColleges = response.data || [];
+        const hasLiked = likedColleges.some(l => l.college_id === college.id);
+        if (hasLiked) {
+          setUserVote('like');
+        }
+        // Set the actual like count from college data if available
+        if (college.likes_count !== undefined) {
+          setLikes(college.likes_count);
+        }
+      } catch (error) {
+        console.error('Error checking like status:', error);
+      }
+    };
+    
+    if (college) {
+      checkLikeStatus();
+    }
+  }, [college]);
+
   const fetchCollegeDetails = async () => {
     setLoading(true);
     try {
