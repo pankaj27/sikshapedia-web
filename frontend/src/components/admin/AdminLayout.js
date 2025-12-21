@@ -155,13 +155,12 @@ const AdminLayout = ({ children }) => {
       id: 'moderation',
       title: 'Moderation & Inquiries',
       icon: FiMessageSquare,
-      permission: 'manage_reviews',
       submenu: [
         { title: 'Reviews', path: '/admin/reviews', icon: FiMessageSquare },
         { title: 'Questions & Answers', path: '/admin/questions', icon: FiMessageSquare },
         { title: 'Comments', path: '/admin/comments', icon: FiMessageSquare },
         { title: 'Contact Inquiries', path: '/admin/contact-inquiries', icon: FiMessageSquare },
-        { title: 'Lead Forms', path: '/admin/lead-forms', icon: FiMessageSquare },
+        { title: 'Lead Forms', path: '/admin/lead-forms', icon: FiMessageSquare, highlight: true, badge: 'NEW' },
         { title: 'Counseling Requests', path: '/admin/counseling-sessions', icon: FiMessageSquare },
       ]
     },
