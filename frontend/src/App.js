@@ -246,6 +246,7 @@ function App() {
             <Route path="/admin/listing-pages/edit/:id" element={<ListingPageForm />} />
             <Route path="/admin/homepage-settings" element={<HomepageSettings />} />
             <Route path="/admin/write-review-settings" element={<WriteReviewSettings />} />
+            <Route path="/admin/year-settings" element={<YearSettings />} />
             <Route path="/admin/static-pages" element={<StaticPagesManagement />} />
             <Route path="/admin/static-pages/edit/:slug" element={<StaticPageForm />} />
             <Route path="/admin/study-abroad" element={<StudyAbroadManagement />} />
