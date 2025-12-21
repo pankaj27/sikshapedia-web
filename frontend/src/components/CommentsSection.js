@@ -92,7 +92,7 @@ const CommentCard = ({ comment, onReply, onDelete, currentUserId, isLoggedIn, on
           
           <div className="mt-2 flex items-center gap-4">
             <button
-              onClick={() => setShowReplyForm(!showReplyForm)}
+              onClick={handleReplyClick}
               className="text-sm text-purple-600 hover:text-purple-700 font-medium"
             >
               Reply
