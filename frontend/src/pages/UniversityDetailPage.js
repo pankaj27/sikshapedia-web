@@ -16,12 +16,15 @@ import ReviewsSection from '../components/ReviewsSection';
 import QuestionsSection from '../components/QuestionsSection';
 
 const UniversityDetailPage = () => {
-  const { seg1: slug } = useParams();
+  const { seg1: rawSlug } = useParams();
   const navigate = useNavigate();
   const [university, setUniversity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Parse slug - strip numeric prefix if present (e.g., "000-test-university" -> "test-university")
+  const slug = rawSlug?.replace(/^\d+-/, '') || rawSlug;
 
   useEffect(() => {
     fetchUniversity();
@@ -33,7 +36,13 @@ const UniversityDetailPage = () => {
       // First try to fetch by slug
       const res = await api.get('/universities');
       const universities = res.data;
-      const found = universities.find(u => u.slug === slug || u.id === slug);
+      // Match by slug, id, or raw slug with numeric prefix
+      const found = universities.find(u => 
+        u.slug === slug || 
+        u.id === slug || 
+        u.slug === rawSlug || 
+        u.id === rawSlug
+      );
       
       if (found) {
         setUniversity(found);
