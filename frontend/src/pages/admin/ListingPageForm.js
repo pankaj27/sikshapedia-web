@@ -37,6 +37,10 @@ const ListingPageForm = () => {
   const [uploading, setUploading] = useState({});
   const fileInputRefs = useRef({});
 
+  // Master location data
+  const [masterStates, setMasterStates] = useState([]);
+  const [masterCities, setMasterCities] = useState([]);
+
   const [formData, setFormData] = useState({
     url_slug: '',
     page_type: 'india',
