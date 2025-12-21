@@ -7,11 +7,12 @@ from typing import Optional, List
 from datetime import datetime, timezone
 from uuid import uuid4
 import jwt
+import os
 
 router = APIRouter(prefix="/user", tags=["User Dashboard"])
 
 # JWT Configuration (must match server.py)
-SECRET_KEY = "your-secret-key-change-in-production-admissionbuddy2024"
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 ALGORITHM = "HS256"
 
 # Database reference - will be set by main app
