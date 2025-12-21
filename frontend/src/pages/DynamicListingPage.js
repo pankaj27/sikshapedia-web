@@ -421,12 +421,24 @@ const DynamicListingPage = () => {
     'Lakshadweep': ['Kavaratti']
   };
 
-  // Get cities based on selected state
+  // Get cities based on selected state - prefer master data
   const getAvailableCities = () => {
     if (activeFilters.state) {
+      // Use master data if available
+      if (masterCities.length > 0) {
+        const stateCities = masterCities
+          .filter(c => c.state === activeFilters.state)
+          .map(c => c.name)
+          .sort();
+        if (stateCities.length > 0) return stateCities;
+      }
+      // Fallback to hardcoded
       return citiesByState[activeFilters.state] || [];
     }
-    // If no state selected, show major cities from all states
+    // If no state selected, show major cities
+    if (masterCities.length > 0) {
+      return masterCities.slice(0, 14).map(c => c.name);
+    }
     return ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Chandigarh', 'Kochi', 'Bhopal', 'Patna'];
   };
 
