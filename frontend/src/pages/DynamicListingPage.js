@@ -1221,11 +1221,20 @@ const DynamicListingPage = () => {
     return crumbs;
   }, [urlInfo, location.pathname]);
 
+  // Helper function to replace hardcoded years with dynamic year
+  const replaceYear = (text) => {
+    if (!text) return text;
+    return text
+      .replace(/2024/g, String(year - 1))
+      .replace(/2025/g, String(year))
+      .replace(/2026/g, String(year + 1));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
-        <title>{pageContent?.meta_title || pageInfo.title} | admissionbuddy</title>
-        <meta name="description" content={pageContent?.meta_description || pageInfo.description} />
+        <title>{replaceYear(pageContent?.meta_title) || pageInfo.title} | admissionbuddy</title>
+        <meta name="description" content={replaceYear(pageContent?.meta_description) || pageInfo.description} />
         <link rel="canonical" href={pageContent?.canonical_url || `https://admissionbuddy.co${location.pathname}`} />
         {pageContent?.meta_keywords?.length > 0 && (
           <meta name="keywords" content={pageContent.meta_keywords.join(', ')} />
