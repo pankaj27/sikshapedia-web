@@ -251,7 +251,7 @@ const QuestionsSection = ({ entityId, entityType = 'college', entityName }) => {
           <h2 className="text-2xl font-bold text-gray-800">Questions & Answers</h2>
           <p className="text-gray-600">Get answers from students and experts</p>
         </div>
-        <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
+        <Button onClick={handleAskQuestionClick} className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
           <FiHelpCircle size={16} />
           Ask Question
         </Button>
@@ -261,7 +261,7 @@ const QuestionsSection = ({ entityId, entityType = 'college', entityName }) => {
         <div className="text-center py-12 bg-gray-50 rounded-xl">
           <FiHelpCircle className="mx-auto text-gray-300 mb-4" size={48} />
           <p className="text-gray-600 mb-4">No questions yet. Be the first to ask!</p>
-          <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={handleAskQuestionClick} className="bg-blue-600 hover:bg-blue-700">
             Ask the First Question
           </Button>
         </div>
@@ -269,7 +269,13 @@ const QuestionsSection = ({ entityId, entityType = 'college', entityName }) => {
         <>
           <div className="space-y-4">
             {questions.slice(0, visibleCount).map((q) => (
-              <QuestionCard key={q.id} question={q} onAnswer={fetchQuestions} />
+              <QuestionCard 
+                key={q.id} 
+                question={q} 
+                onAnswer={fetchQuestions}
+                isLoggedIn={isLoggedIn}
+                onLoginRequired={() => setShowLoginPrompt(true)}
+              />
             ))}
           </div>
           
