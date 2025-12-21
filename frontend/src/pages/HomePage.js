@@ -16,6 +16,7 @@ import TopExams from '../components/TopExams';
 import { AskQuestionWidget, CounsellingWidget, SponsorAdWidget } from '../components/widgets/ActionWidgets';
 import ApplyNowModal from '../components/ApplyNowModal';
 import { getInstitutionDetailUrl } from '../utils/urlHelpers';
+import SearchAutocomplete from '../components/search/SearchAutocomplete';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
