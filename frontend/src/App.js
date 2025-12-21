@@ -93,6 +93,7 @@ import LoansManagement from './pages/admin/LoansManagement';
 import CommentsManagement from './pages/admin/CommentsManagement';
 import TagCoursesColleges from './pages/admin/TagCoursesColleges';
 import TagExamsCourses from './pages/admin/TagExamsCourses';
+import NewsletterManagement from './pages/admin/NewsletterManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import BlogsManagement from './pages/admin/BlogsManagement';
 import BlogForm from './pages/admin/BlogForm';
