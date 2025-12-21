@@ -217,7 +217,7 @@ const DynamicListingPage = () => {
       }
       
       return {
-        title: `Top ${titleParts.join(' ')} 2025`,
+        title: `Top ${titleParts.join(' ')} ${year}`,
         description: generateMetaDescription(urlInfo),
         institutionTypes: institutionTypes,
         institutionType: urlInfo.institutionType,
@@ -262,7 +262,7 @@ const DynamicListingPage = () => {
       }
       
       return {
-        title: `Top ${titleParts.join(' ')} 2025`,
+        title: `Top ${titleParts.join(' ')} ${year}`,
         description: `Explore top ${typeName.toLowerCase()} with applied filters.`,
         institutionTypes: isSchools ? ['School'] : ['College', 'University'],
         stream: cf.stream || null,
