@@ -95,6 +95,9 @@ const SEOSettings = () => {
         ]);
         setLocalSEO(seoRes.data);
         setSchemaPreview(schemaRes.data);
+      } else if (activeTab === 'schema') {
+        const res = await api.get('/seo/schemas/report/summary');
+        setSchemaReport(res.data);
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -106,6 +109,64 @@ const SEOSettings = () => {
   const showMessage = (type, text) => {
     setMessage({ type, text });
     setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+  };
+
+  // Schema functions
+  const toggleSchema = async (schemaType, currentEnabled) => {
+    try {
+      const schemaData = schemaReport?.schemas?.find(s => s.schema_type === schemaType);
+      await api.post(`/seo/schemas/${schemaType}`, {
+        schema_type: schemaType,
+        enabled: !currentEnabled,
+        schema_data: schemaData?.schema || {}
+      });
+      showMessage('success', `Schema ${!currentEnabled ? 'enabled' : 'disabled'}`);
+      fetchSettings();
+    } catch (error) {
+      showMessage('error', 'Failed to toggle schema');
+    }
+  };
+
+  const openSchemaEditor = (schema) => {
+    setSelectedSchema(schema);
+    setEditingSchema(schema);
+    setSchemaJsonText(JSON.stringify(schema.schema, null, 2));
+  };
+
+  const saveSchemaEdit = async () => {
+    setSaving(true);
+    try {
+      const parsedSchema = JSON.parse(schemaJsonText);
+      await api.post(`/seo/schemas/${editingSchema.schema_type}`, {
+        schema_type: editingSchema.schema_type,
+        enabled: editingSchema.enabled,
+        schema_data: parsedSchema
+      });
+      showMessage('success', 'Schema saved successfully!');
+      setSelectedSchema(null);
+      setEditingSchema(null);
+      fetchSettings();
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        showMessage('error', 'Invalid JSON format');
+      } else {
+        showMessage('error', 'Failed to save schema');
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const resetSchema = async (schemaType) => {
+    if (!window.confirm('Reset this schema to default? Your customizations will be lost.')) return;
+    
+    try {
+      await api.post(`/seo/schemas/${schemaType}/reset`);
+      showMessage('success', 'Schema reset to default');
+      fetchSettings();
+    } catch (error) {
+      showMessage('error', 'Failed to reset schema');
+    }
   };
 
   const saveSitemapSettings = async () => {
