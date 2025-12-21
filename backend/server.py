@@ -6698,6 +6698,7 @@ try:
     from routes.email_settings import router as email_settings_router, set_database as set_email_settings_db
     from routes.write_review_settings import write_review_settings_router
     from routes.year_settings import year_settings_router
+    from routes.seo_settings import router as seo_settings_router, set_database as set_seo_settings_db
     
     # Set database for modular routers
     set_leads_db(db)
