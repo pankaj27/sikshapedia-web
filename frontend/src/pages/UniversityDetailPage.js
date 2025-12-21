@@ -69,7 +69,7 @@ const UniversityDetailPage = () => {
             <FiAward className="mx-auto text-6xl text-gray-300 mb-4" />
             <h1 className="text-2xl font-bold text-gray-800 mb-2">University Not Found</h1>
             <p className="text-gray-600 mb-6">{error || 'The university you are looking for does not exist.'}</p>
-            <Button onClick={() => navigate('/universities')} className="bg-purple-600 hover:bg-purple-700">
+            <Button onClick={() => navigate('/university')} className="bg-purple-600 hover:bg-purple-700">
               <FiArrowLeft className="mr-2" /> Browse Universities
             </Button>
           </div>
