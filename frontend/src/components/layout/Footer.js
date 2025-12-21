@@ -280,7 +280,8 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                     }}
                     onFocus={() => setShowStateDropdown(true)}
                     required
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${formData.state ? 'text-gray-900 font-medium' : 'text-gray-500'}`}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    style={{ color: formData.state ? '#111827' : '#6B7280', fontWeight: formData.state ? '600' : '400' }}
                     placeholder="Search State..."
                   />
                   {showStateDropdown && (
@@ -290,7 +291,8 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                           <div
                             key={state}
                             onClick={() => handleStateSelect(state)}
-                            className={`px-3 py-2 cursor-pointer hover:bg-blue-50 text-gray-900 ${formData.state === state ? 'bg-blue-100 font-semibold' : ''}`}
+                            className={`px-3 py-2 cursor-pointer hover:bg-blue-50 ${formData.state === state ? 'bg-blue-100' : ''}`}
+                            style={{ color: '#111827', fontWeight: formData.state === state ? '600' : '500' }}
                           >
                             {state}
                           </div>
