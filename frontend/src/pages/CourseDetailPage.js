@@ -8,6 +8,7 @@ import { SidebarSponsoredAd } from '../components/SponsoredAds';
 import ReviewsSection from '../components/ReviewsSection';
 import QuestionsSection from '../components/QuestionsSection';
 import CommentsSection from '../components/CommentsSection';
+import AuthorInfo from '../components/AuthorInfo';
 
 import { Link } from '../components/CustomLink';
 const CourseDetailPage = () => {
