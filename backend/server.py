@@ -6271,26 +6271,8 @@ async def delete_ranking(ranking_id: str):
 # Scholarships
 # Scholarships and Loans moved to routes/financial_aid.py
 
-# Comments
-@api_router.get("/comments")
-async def get_comments(limit: int = 100):
-    comments = await db.comments.find({}, {"_id": 0}).limit(limit).to_list(limit)
-    return comments
-
-@api_router.post("/comments", response_model=Comment)
-async def create_comment(comment: Comment):
-    await db.comments.insert_one(comment.model_dump())
-    return comment
-
-@api_router.put("/comments/{comment_id}")
-async def update_comment(comment_id: str, comment: Comment):
-    await db.comments.update_one({"id": comment_id}, {"$set": comment.model_dump()})
-    return comment
-
-@api_router.delete("/comments/{comment_id}")
-async def delete_comment(comment_id: str):
-    await db.comments.delete_one({"id": comment_id})
-    return {"success": True}
+# Comments - MOVED TO routes/comments.py
+# All comment endpoints have been modularized to routes/comments.py
 
 # Course-College Tags
 @api_router.get("/course-college-tags")
