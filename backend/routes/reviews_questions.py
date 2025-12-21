@@ -597,6 +597,44 @@ async def delete_review(review_id: str):
     return {"success": True, "message": "Review deleted"}
 
 
+# ============================================
+# Admin Question Management
+# ============================================
+
+@router.get("/admin/questions/pending")
+async def get_pending_questions(limit: int = Query(50, ge=1, le=200)):
+    """Get pending questions for admin approval"""
+    questions = await db.questions.find(
+        {"status": "pending"}, 
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    return questions
+
+
+@router.post("/admin/questions/{question_id}/approve")
+async def approve_question(question_id: str):
+    """Approve a pending question"""
+    result = await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {"status": "approved"}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {"message": "Question approved", "status": "approved"}
+
+
+@router.post("/admin/questions/{question_id}/reject")
+async def reject_question(question_id: str):
+    """Reject a pending question"""
+    result = await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {"status": "rejected"}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {"message": "Question rejected", "status": "rejected"}
+
+
 @router.delete("/questions/{question_id}")
 async def delete_question(question_id: str):
     """Delete a question (Admin only)"""
