@@ -634,10 +634,11 @@ const WriteReviewPage = () => {
                     onClick={() => setStep(2)}
                     disabled={!formData.instituteType || !formData.instituteName || !formData.course}
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white h-10 text-sm font-semibold disabled:bg-gray-300"
-                >
-                  Next: Write Review
-                </Button>
-              </div>
+                  >
+                    Next: Write Review
+                  </Button>
+                </div>
+              )}
             </div>
           )}
 
