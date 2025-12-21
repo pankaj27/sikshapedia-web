@@ -2095,9 +2095,9 @@ const CollegeDetailPage = ({ overrideId }) => {
                 <h3 className="font-bold text-base mb-4 text-gray-900">Latest News</h3>
                 <div className="space-y-4">
                   {[
-                    { title: 'Admission 2026 Opens', date: 'Dec 12, 2025' },
-                    { title: 'Placement Results Announced', date: 'Dec 6, 2025' },
-                    { title: 'New Course Launch', date: 'Nov 28, 2025' }
+                    { title: `Admission ${year + 1} Opens`, date: `Dec 12, ${year}` },
+                    { title: 'Placement Results Announced', date: `Dec 6, ${year}` },
+                    { title: 'New Course Launch', date: `Nov 28, ${year}` }
                   ].map((news, i) => (
                     <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
                       <Link to="#" className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
