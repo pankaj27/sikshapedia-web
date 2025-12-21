@@ -977,10 +977,24 @@ const UserDashboard = () => {
                   <div className="space-y-4">
                     {comments.map((c) => (
                       <div key={c.id} className="bg-white rounded-xl shadow-sm p-6">
-                        <p className="text-gray-700">{c.comment}</p>
-                        <p className="text-xs text-gray-500 mt-2">
-                          {new Date(c.created_at).toLocaleDateString()}
-                        </p>
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex-1">
+                            {c.entity_name && (
+                              <Link to={c.entity_link || '#'} className="text-sm text-blue-600 hover:underline font-medium">
+                                {c.entity_name}
+                              </Link>
+                            )}
+                          </div>
+                          <span className="text-xs text-gray-500">
+                            {new Date(c.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-gray-800 mt-2">{c.comment || c.content || c.text || 'No comment text'}</p>
+                        {c.entity_type && (
+                          <p className="text-xs text-gray-400 mt-2 capitalize">
+                            Comment on {c.entity_type}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
