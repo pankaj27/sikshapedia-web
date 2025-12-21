@@ -378,7 +378,6 @@ const WriteReviewPage = () => {
                   <span>{badge}</span>
                 </div>
               ))}
-              </div>
             </div>
           </div>
         </div>
