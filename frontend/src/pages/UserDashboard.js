@@ -553,7 +553,7 @@ const UserDashboard = () => {
                   { id: 'reviews', icon: FiStar, label: 'My Reviews', count: dashboard?.stats?.reviews },
                   { id: 'questions', icon: FiHelpCircle, label: 'My Questions', count: dashboard?.stats?.questions },
                   { id: 'comments', icon: FiMessageSquare, label: 'My Comments', count: dashboard?.stats?.comments },
-                  { id: 'favorites', icon: FiBookmark, label: 'Favorites', count: dashboard?.stats?.favorites },
+                  { id: 'favorites', icon: FiBookmark, label: 'Favorite Institutes', count: dashboard?.stats?.favorites },
                   { id: 'liked', icon: FiHeart, label: 'Liked Institutes', count: dashboard?.stats?.liked_colleges },
                   { id: 'referrals', icon: FiGift, label: 'Referrals', count: dashboard?.stats?.referrals },
                   { id: 'earnings', icon: FiDollarSign, label: 'Earnings' },
