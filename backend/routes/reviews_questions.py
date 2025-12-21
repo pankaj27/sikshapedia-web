@@ -61,8 +61,8 @@ class Review(BaseModel):
     user_name: str
     rating: int  # 1-5
     review_text: Optional[str] = None
-    pros: Optional[str] = None
-    cons: Optional[str] = None
+    pros: Optional[Any] = None  # Can be string or list
+    cons: Optional[Any] = None  # Can be string or list
     placements_rating: Optional[int] = None
     infrastructure_rating: Optional[int] = None
     faculty_rating: Optional[int] = None
