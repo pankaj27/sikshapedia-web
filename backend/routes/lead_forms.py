@@ -198,3 +198,102 @@ async def get_submission_stats():
     except Exception as e:
         print(f"Error fetching stats: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch statistics")
+
+
+# Counselling Request Model
+class CounsellingRequestForm(BaseModel):
+    name: str
+    phone: str
+    preferred_time: str  # morning, afternoon, evening
+    interest: Optional[str] = None
+
+
+@router.post("/counselling-request")
+async def submit_counselling_request(form_data: CounsellingRequestForm):
+    """Submit Counselling Request form"""
+    try:
+        database = get_db()
+        
+        submission = {
+            "id": str(uuid.uuid4()),
+            "form_type": "counselling_request",
+            **form_data.model_dump(),
+            "status": "new",  # new, called, completed, no_response
+            "notes": None,
+            "called_at": None,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await database.counselling_requests.insert_one(submission)
+        
+        return {
+            "success": True,
+            "message": "Thank you! A counsellor will call you soon.",
+            "reference_id": submission["id"]
+        }
+    except Exception as e:
+        print(f"Error submitting counselling request: {e}")
+        raise HTTPException(status_code=500, detail="Failed to submit request. Please try again.")
+
+
+@router.get("/admin/counselling-requests")
+async def get_counselling_requests(status: Optional[str] = None, skip: int = 0, limit: int = 50):
+    """Get all counselling requests (admin only)"""
+    try:
+        database = get_db()
+        
+        query = {}
+        if status:
+            query["status"] = status
+        
+        requests = await database.counselling_requests.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+        total = await database.counselling_requests.count_documents(query)
+        
+        return {
+            "requests": requests,
+            "total": total,
+            "skip": skip,
+            "limit": limit
+        }
+    except Exception as e:
+        print(f"Error fetching counselling requests: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch requests")
+
+
+@router.put("/admin/counselling-requests/{request_id}/status")
+async def update_counselling_status(request_id: str, status: str, notes: Optional[str] = None):
+    """Update counselling request status (admin only)"""
+    try:
+        database = get_db()
+        
+        valid_statuses = ["new", "called", "completed", "no_response"]
+        if status not in valid_statuses:
+            raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+        
+        update_data = {
+            "status": status,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        if notes:
+            update_data["notes"] = notes
+        
+        if status == "called":
+            update_data["called_at"] = datetime.now(timezone.utc).isoformat()
+        
+        result = await database.counselling_requests.update_one(
+            {"id": request_id},
+            {"$set": update_data}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Request not found")
+        
+        return {"success": True, "message": f"Status updated to {status}"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error updating request status: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update status")
+
