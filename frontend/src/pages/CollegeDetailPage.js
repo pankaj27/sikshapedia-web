@@ -188,21 +188,25 @@ const CollegeDetailPage = ({ overrideId }) => {
       if (!token || !college) return;
       
       try {
-        // Check liked status
+        // Check liked status - backend returns entity_id not college_id
         const likedResponse = await api.get('/user/liked', {
           headers: { Authorization: `Bearer ${token}` }
         });
         const likedColleges = likedResponse.data || [];
-        const hasLiked = likedColleges.some(l => l.college_id === college.id);
+        const hasLiked = likedColleges.some(l => l.entity_id === college.id);
         if (hasLiked) {
           setUserVote('like');
+        } else {
+          setUserVote(null);
         }
         
-        // Check favorited status
+        // Check favorited status - backend returns college_id
         const favResponse = await api.get('/user/favorites', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const favorites = favResponse.data || [];
+        const favData = favResponse.data;
+        // Handle both array format and object format with favorites key
+        const favorites = Array.isArray(favData) ? favData : (favData?.favorites || []);
         const hasFavorited = favorites.some(f => f.college_id === college.id);
         setIsFavorited(hasFavorited);
         

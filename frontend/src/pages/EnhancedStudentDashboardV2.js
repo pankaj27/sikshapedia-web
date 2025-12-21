@@ -325,9 +325,9 @@ const EnhancedStudentDashboard = () => {
                   <div className="bg-white rounded-lg shadow p-12 text-center">
                     <FiFileText className="text-6xl text-gray-300 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-gray-700 mb-2">No Applications Yet</h3>
-                    <p className="text-gray-600 mb-4">Start applying to colleges to see your applications here</p>
+                    <p className="text-gray-600 mb-4">Start applying to institutes to see your applications here</p>
                     <Link to="/colleges">
-                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Colleges</Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Institutes</Button>
                     </Link>
                   </div>
                 ) : (
@@ -503,10 +503,10 @@ const EnhancedStudentDashboard = () => {
                 {savedColleges.length === 0 ? (
                   <div className="bg-white rounded-lg shadow p-12 text-center">
                     <FiBookmark className="text-6xl text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">No Saved Colleges</h3>
-                    <p className="text-gray-600 mb-4">Start exploring and save colleges you're interested in</p>
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">No Saved Institutes</h3>
+                    <p className="text-gray-600 mb-4">Start exploring and save institutes you're interested in</p>
                     <Link to="/colleges">
-                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Colleges</Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Institutes</Button>
                     </Link>
                   </div>
                 ) : (
