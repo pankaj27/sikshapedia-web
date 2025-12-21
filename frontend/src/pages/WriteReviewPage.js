@@ -623,7 +623,7 @@ const WriteReviewPage = () => {
                     rows="4"
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   ></textarea>
-                  <p className="text-xs text-gray-500 mt-0.5">Minimum 200 characters required</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Minimum {pageSettings.points_config.min_review_characters} characters required</p>
                 </div>
 
                 {/* Facility Ratings */}
