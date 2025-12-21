@@ -426,6 +426,9 @@ const Header = () => {
             <NavLink to="/schools" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               Schools
             </NavLink>
+            <NavLink to="/university" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
+              Top University
+            </NavLink>
             <NavLink to="/colleges/btech" className="text-sm font-medium text-white hover:text-orange-400 whitespace-nowrap transition-colors no-underline" spellCheck="false">
               B.Tech
             </NavLink>
