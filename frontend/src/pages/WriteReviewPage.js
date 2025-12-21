@@ -369,20 +369,15 @@ const WriteReviewPage = () => {
       <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-6">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl font-bold mb-2">Write a Review & Earn ₹300*</h1>
-            <p className="text-base mb-3">Share your experience and help thousands of students</p>
+            <h1 className="text-3xl font-bold mb-2">{pageSettings.header.title}</h1>
+            <p className="text-base mb-3">{pageSettings.header.subtitle}</p>
             <div className="flex items-center justify-center gap-6 text-xs">
-              <div className="flex items-center gap-1.5">
-                <FiCheckCircle size={16} />
-                <span>Verified Reviews</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <FiAward size={16} />
-                <span>Earn Rewards</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <FiCheckCircle size={16} />
-                <span>Help Students</span>
+              {pageSettings.header.badge_texts.map((badge, index) => (
+                <div key={index} className="flex items-center gap-1.5">
+                  {index === 0 ? <FiCheckCircle size={16} /> : index === 1 ? <FiAward size={16} /> : <FiCheckCircle size={16} />}
+                  <span>{badge}</span>
+                </div>
+              ))}
               </div>
             </div>
           </div>
