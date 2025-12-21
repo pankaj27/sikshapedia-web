@@ -345,82 +345,82 @@ const Header = () => {
                   <div className="border-t-2 border-gray-200 my-2"></div>
                   
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🎓 ENGINEERING COURSES</p>
-                  <NavLink to="/btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/btech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Tech - Bachelor of Technology
                   </NavLink>
-                  <NavLink to="/mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/mtech" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Tech - Master of Technology
                   </NavLink>
-                  <NavLink to="/be" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/be" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BE - Bachelor of Engineering
                   </NavLink>
-                  <NavLink to="/me" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/me" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     ME - Master of Engineering
                   </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💼 MANAGEMENT COURSES</p>
-                  <NavLink to="/mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/mba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBA - Master of Business Administration
                   </NavLink>
-                  <NavLink to="/bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BBA - Bachelor of Business Administration
                   </NavLink>
-                  <NavLink to="/pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/pgdm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     PGDM - Post Graduate Diploma in Management
                   </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🏥 MEDICAL COURSES</p>
-                  <NavLink to="/mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/mbbs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MBBS - Bachelor of Medicine & Surgery
                   </NavLink>
-                  <NavLink to="/bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BDS - Bachelor of Dental Surgery
                   </NavLink>
-                  <NavLink to="/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bsc-nursing" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc Nursing - Bachelor of Science in Nursing
                   </NavLink>
-                  <NavLink to="/bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bpharm" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Pharm - Bachelor of Pharmacy
                   </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">📊 COMMERCE COURSES</p>
-                  <NavLink to="/bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Com - Bachelor of Commerce
                   </NavLink>
-                  <NavLink to="/mcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/mcom" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Com - Master of Commerce
                   </NavLink>
-                  <NavLink to="/ca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/ca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     CA - Chartered Accountant
                   </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🔬 SCIENCE COURSES</p>
-                  <NavLink to="/bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bsc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     B.Sc - Bachelor of Science
                   </NavLink>
-                  <NavLink to="/msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/msc" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     M.Sc - Master of Science
                   </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">🎨 ARTS COURSES</p>
-                  <NavLink to="/ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/ba" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BA - Bachelor of Arts
                   </NavLink>
-                  <NavLink to="/ma" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/ma" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MA - Master of Arts
                   </NavLink>
                   
                   <div className="border-t border-gray-200 my-2"></div>
                   <p className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50">💻 COMPUTER COURSES</p>
-                  <NavLink to="/bca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/bca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     BCA - Bachelor of Computer Applications
                   </NavLink>
-                  <NavLink to="/mca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+                  <NavLink to="/colleges/mca" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     MCA - Master of Computer Applications
                   </NavLink>
                 </div>
