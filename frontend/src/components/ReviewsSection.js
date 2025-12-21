@@ -350,7 +350,7 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
           <FiStar className="mx-auto text-gray-300 mb-4" size={48} />
           <p className="text-gray-600 mb-4">No reviews yet. Be the first to review!</p>
           {showWriteReview && (
-            <Button onClick={() => setShowModal(true)} className="bg-orange-500 hover:bg-orange-600">
+            <Button onClick={handleWriteReviewClick} className="bg-orange-500 hover:bg-orange-600">
               Write the First Review
             </Button>
           )}
