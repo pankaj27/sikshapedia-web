@@ -271,6 +271,7 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
 
   useEffect(() => {
     if (entityId) fetchReviews();
+    checkLoginStatus();
   }, [entityId]);
 
   if (loading) {
