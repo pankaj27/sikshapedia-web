@@ -1537,3 +1537,26 @@
 1. Created test user in correct database (sikshapedia_db)
 2. Added GET `/api/user/profile` endpoint for auto-fill functionality
 
+
+---
+
+## University URL Bug Fix (Dec 21, 2025):
+
+### Issue: University Detail Page URL with Numeric Prefix Not Working
+
+**Problem:**
+- URLs like `/university/000-test-university-delhi` were showing "University Not Found"
+- The database stores slugs without numeric prefix (e.g., `test-university-delhi`)
+- The `UniversityDetailPage` was not stripping the numeric prefix before searching
+
+**Fix Applied:**
+- Modified `/app/frontend/src/pages/UniversityDetailPage.js`:
+  - Added logic to strip numeric prefix from URL slug (e.g., `000-test-university` → `test-university`)
+  - Enhanced university matching to check both raw and parsed slugs
+
+**Testing Results:**
+- ✅ `/university/test-university-delhi` - Works (direct slug)
+- ✅ `/university/000-test-university-delhi` - Works (with numeric prefix)
+- ✅ Search autocomplete correctly navigates to university pages
+- ✅ All other university functionality unaffected
+
