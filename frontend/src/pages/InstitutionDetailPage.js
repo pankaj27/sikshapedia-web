@@ -74,8 +74,8 @@ const InstitutionDetailPage = () => {
       try {
         // Search by serial_number (unique for each institution)
         if (numericId) {
-          // Fetch all institutions without type filter - serial_number is unique across all
-          const response = await api.get(`/colleges?limit=200`);
+          // Fetch all institutions including drafts - serial_number is unique across all
+          const response = await api.get(`/colleges?limit=500&include_drafts=true`);
           if (response.data && response.data.length > 0) {
             // Find institution by serial_number (padded numeric ID)
             const serialNum = parseInt(numericId, 10);
