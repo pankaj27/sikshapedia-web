@@ -1687,7 +1687,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </section>
 
                 {/* REVIEWS */}
-                <section id="reviews" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                <section id="reviews" className="mt-8">
                   <ReviewsSection 
                     entityId={college?.id} 
                     entityType="college" 
