@@ -8,8 +8,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   FiMapPin, FiPhone, FiMail, FiGlobe, FiAward, FiUsers, FiBriefcase,
-  FiCalendar, FiBook, FiStar, FiChevronRight, FiHome, FiArrowLeft,
-  FiCheckCircle, FiDownload, FiHeart, FiMessageSquare, FiShare2
+  FiCalendar, FiBook, FiStar, FiChevronRight, FiChevronDown, FiChevronUp,
+  FiHome, FiArrowLeft, FiCheckCircle, FiDownload, FiHeart, FiMessageSquare, FiShare2
 } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
@@ -25,7 +25,8 @@ const UniversityDetailPage = () => {
   const [university, setUniversity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('info');
+  const [showContent, setShowContent] = useState(false); // For SEO content expand/collapse
   
   // Like/Dislike/Favorite states
   const [likes, setLikes] = useState(1);
@@ -218,11 +219,21 @@ const UniversityDetailPage = () => {
     );
   }
 
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: FiHome },
-    { id: 'courses', label: 'Courses', icon: FiBook },
-    { id: 'fees', label: 'Fees', icon: FiCalendar },
-    { id: 'placements', label: 'Placements', icon: FiBriefcase },
+  // Table of Contents for SEO
+  const tableOfContents = [
+    { num: '01', title: `${university.name} Admission 2026 Dates`, id: 'seo-admission-dates' },
+    { num: '02', title: `${university.name} Fees 2026`, id: 'seo-fees' },
+    { num: '03', title: `${university.name} Ranking`, id: 'seo-ranking' },
+    { num: '04', title: `${university.name} Courses`, id: 'seo-courses' },
+    { num: '05', title: `${university.name} Placement`, id: 'seo-placement' },
+    { num: '06', title: `${university.name} Reviews`, id: 'seo-reviews' },
+  ];
+
+  const menuItems = [
+    { id: 'info', label: 'Info', icon: FiHome },
+    { id: 'courses', label: 'Courses & Fees', icon: FiBook },
+    { id: 'admissions', label: 'Admissions', icon: FiCalendar },
+    { id: 'placement', label: 'Placement', icon: FiBriefcase },
     { id: 'reviews', label: 'Reviews', icon: FiMessageSquare },
   ];
 
@@ -376,202 +387,271 @@ const UniversityDetailPage = () => {
         </div>
       </div>
 
-      {/* Stats Bar */}
-      <div className="bg-white border-b shadow-sm">
+      {/* AUTHOR INFO - Above Menu */}
+      <div className="border-b bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <AuthorInfo
+            name={university?.updated_by_name || university?.created_by_name || 'Content Team'}
+            photo={university?.updated_by_photo || university?.created_by_photo}
+            role="Content Writer"
+            updatedAt={university?.updated_at}
+            createdAt={university?.created_at}
+            showLink={true}
+            size="md"
+            variant="light"
+          />
+        </div>
+      </div>
+
+      {/* STICKY NAVIGATION MENU */}
+      <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 py-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{university.total_colleges || '-'}</div>
-              <div className="text-xs text-gray-500">Affiliated Colleges</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{university.total_courses || '-'}</div>
-              <div className="text-xs text-gray-500">Courses Offered</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{university.total_students?.toLocaleString() || '-'}</div>
-              <div className="text-xs text-gray-500">Students</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{university.total_faculty?.toLocaleString() || '-'}</div>
-              <div className="text-xs text-gray-500">Faculty</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{university.placement_percentage || '-'}%</div>
-              <div className="text-xs text-gray-500">Placement Rate</div>
-            </div>
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                  activeTab === item.id 
+                    ? 'border-purple-600 text-purple-600 bg-purple-50' 
+                    : 'border-transparent text-gray-600 hover:text-purple-600 hover:bg-gray-50'
+                }`}
+              >
+                <item.icon size={16} className="text-purple-500" />
+                <span>{item.label}</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Content */}
+      {/* MAIN CONTENT */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex gap-6">
+          {/* LEFT CONTENT */}
           <div className="flex-1">
-            {/* Tabs */}
-            <div className="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
-              <div className="flex border-b overflow-x-auto">
-                {tabs.map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-6 py-4 font-medium whitespace-nowrap transition ${
-                      activeTab === tab.id 
-                        ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50' 
-                        : 'text-gray-600 hover:text-purple-600'
-                    }`}
-                  >
-                    <tab.icon size={18} />
-                    {tab.label}
-                  </button>
-                ))}
+            {/* SEO CONTENT SECTION (Collapsible) */}
+            <div className="mb-6 pb-6 border-b">
+              {/* INTRO PREVIEW - 3 LINES */}
+              <div className="mb-3">
+                <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
+                  {university.name} is a <strong>{university.university_type || 'University'}</strong> established in <strong>{university.established_year || 'N/A'}</strong>. 
+                  As per the data, the university is one of the preferred institutions for students. 
+                  {university.name} Ranking is <strong>#{university.nirf_rank || Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies. 
+                  {university.name} offers various programs with total fees ranging from <strong>₹{((university.avg_fee || 150000) / 100000).toFixed(2)} Lakhs</strong>. 
+                  Admission is based on national-level entrance exams followed by counselling. 
+                  As per {university.name} Placements, the average package was <strong>INR {university.average_package || '8'} LPA</strong>. 
+                  The top recruiters included leading companies from various sectors.
+                </p>
               </div>
 
-              <div className="p-6">
-                {activeTab === 'overview' && (
-                  <div className="space-y-6">
-                    {/* Description */}
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-800 mb-3">About {university.name}</h2>
-                      <p className="text-gray-600 leading-relaxed">
-                        {university.description || `${university.name} is a ${university.university_type || 'prestigious'} university located in ${university.city}, ${university.state}. ${university.established_year ? `Established in ${university.established_year}, it` : 'It'} offers various undergraduate, postgraduate, and doctoral programs across multiple disciplines.`}
-                      </p>
+              {/* READ MORE BUTTON - Show when collapsed */}
+              {!showContent && (
+                <div className="text-center mb-4">
+                  <button
+                    onClick={() => setShowContent(true)}
+                    className="inline-flex items-center gap-2 px-6 py-2 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 text-sm font-medium rounded-full"
+                  >
+                    <span>Read More</span>
+                    <FiChevronDown size={18} />
+                  </button>
+                </div>
+              )}
+
+              {/* SEO EXPANDABLE CONTENT */}
+              {showContent && (
+                <div className="space-y-8">
+                  {/* TABLE OF CONTENTS */}
+                  <div className="bg-gray-50 rounded-lg p-6 border">
+                    <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
+                      {tableOfContents.map((item) => (
+                        <a
+                          key={item.id}
+                          href={`#${item.id}`}
+                          className="text-left text-sm text-purple-600 hover:underline flex gap-2"
+                        >
+                          <span className="font-semibold flex-shrink-0">{item.num}.</span>
+                          <span>{item.title}</span>
+                        </a>
+                      ))}
                     </div>
-
-                    {/* SEO Content Section */}
-                    {university.seo_content && (
-                      <div className="prose max-w-none">
-                        <div dangerouslySetInnerHTML={{ __html: university.seo_content }} />
-                      </div>
-                    )}
-
-                    {/* Streams */}
-                    {university.streams && university.streams.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-3">Streams Offered</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {university.streams.map(stream => (
-                            <span key={stream} className="px-4 py-2 bg-purple-50 text-purple-700 rounded-lg text-sm font-medium">
-                              {stream}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Quick Facts */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-3">Quick Facts</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="text-sm text-gray-500">Type</div>
-                          <div className="font-semibold">{university.university_type || 'University'}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="text-sm text-gray-500">Accreditation</div>
-                          <div className="font-semibold">{university.accreditation || 'N/A'}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="text-sm text-gray-500">Established</div>
-                          <div className="font-semibold">{university.established_year || 'N/A'}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="text-sm text-gray-500">NIRF Rank</div>
-                          <div className="font-semibold">{university.nirf_rank ? `#${university.nirf_rank}` : 'N/A'}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="text-sm text-gray-500">Location</div>
-                          <div className="font-semibold">{university.city}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="text-sm text-gray-500">State</div>
-                          <div className="font-semibold">{university.state}</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Author/Content Team Info */}
-                    <AuthorInfo 
-                      author={university.author}
-                      updatedAt={university.updated_at}
-                      contentTeam={university.content_team}
-                    />
                   </div>
-                )}
 
-                {activeTab === 'courses' && (
+                  {/* FULL INTRO PARAGRAPHS */}
                   <div>
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Courses Offered</h2>
-                    {university.courses && university.courses.length > 0 ? (
-                      <div className="grid gap-4">
-                        {university.courses.map((course, i) => (
-                          <div key={i} className="border rounded-lg p-4 hover:bg-gray-50 transition">
-                            <h3 className="font-semibold">{typeof course === 'string' ? course : course.name}</h3>
-                            {typeof course !== 'string' && course.duration && (
-                              <p className="text-sm text-gray-500">Duration: {course.duration}</p>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500">Course information will be updated soon.</p>
+                    <p className="text-gray-800 leading-relaxed mb-4">
+                      {university.name} is a <strong>{university.university_type || 'University'}</strong> established in <strong>{university.established_year || 'N/A'}</strong>. 
+                      As per the data, the university is one of the preferred institutions for students. 
+                      {university.name} Ranking is <strong>#{university.nirf_rank || Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies.
+                    </p>
+                    <p className="text-gray-800 leading-relaxed mb-4">
+                      {university.name} offers various programs with total fees ranging from <strong>₹{((university.avg_fee || 150000) / 100000).toFixed(2)} Lakhs</strong>. 
+                      Admission is based on national-level entrance exams followed by counselling.
+                    </p>
+                    <p className="text-gray-800 leading-relaxed mb-4">
+                      As per {university.name} Placements, the average package was <strong>INR {university.average_package || '8'} LPA</strong>. 
+                      The top recruiters included leading companies from various sectors.
+                    </p>
+                    {university.description && (
+                      <p className="text-gray-800 leading-relaxed mb-4">
+                        {university.description}
+                      </p>
                     )}
                   </div>
-                )}
 
-                {activeTab === 'fees' && (
-                  <div className="space-y-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Fee Structure</h2>
-                    <GuestGate title="Fee Details">
-                      <div className="bg-white rounded-lg border overflow-hidden">
-                        <table className="w-full">
-                          <thead className="bg-purple-50">
-                            <tr>
-                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Course/Program</th>
-                              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Duration</th>
-                              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Annual Fee</th>
+                  {/* VIDEO PLACEHOLDER */}
+                  <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center border">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-purple-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <div className="w-0 h-0 border-l-8 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
+                      </div>
+                      <p className="text-sm text-gray-600">Video: Complete Guide to {university.name}</p>
+                    </div>
+                  </div>
+
+                  {/* ADMISSION DATES - Guest Gated */}
+                  <section id="seo-admission-dates">
+                    <h2 className="text-2xl font-bold mb-3">{university.name} Admission 2026 Dates</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {university.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The important dates are:
+                    </p>
+                    <GuestGate title="Admission Dates">
+                      <div className="overflow-x-auto mb-6">
+                        <table className="w-full border-collapse border">
+                          <thead>
+                            <tr className="bg-purple-50">
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-gray-100">
-                            {university.fee_structure && university.fee_structure.length > 0 ? (
-                              university.fee_structure.map((fee, i) => (
-                                <tr key={i} className="hover:bg-gray-50">
-                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{fee.course || fee.program}</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600">{fee.duration || '-'}</td>
-                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{fee.annual_fee?.toLocaleString() || fee.fee?.toLocaleString() || '-'}</td>
-                                </tr>
-                              ))
-                            ) : (
-                              <>
-                                <tr className="hover:bg-gray-50">
-                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">B.Tech</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600">4 Years</td>
-                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{university.avg_fee?.toLocaleString() || '1,50,000'}</td>
-                                </tr>
-                                <tr className="hover:bg-gray-50">
-                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">M.Tech</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600">2 Years</td>
-                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{Math.round((university.avg_fee || 150000) * 1.2).toLocaleString()}</td>
-                                </tr>
-                                <tr className="hover:bg-gray-50">
-                                  <td className="px-4 py-3 text-sm font-medium text-gray-900">MBA</td>
-                                  <td className="px-4 py-3 text-sm text-gray-600">2 Years</td>
-                                  <td className="px-4 py-3 text-sm text-right text-gray-900">₹{Math.round((university.avg_fee || 150000) * 1.5).toLocaleString()}</td>
-                                </tr>
-                              </>
-                            )}
+                          <tbody>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">Application Start Date</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">January 2026</td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">Application Deadline</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">March 2026</td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">Exam Date</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">April-May 2026</td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">Result Announcement</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">June 2026</td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
-                      <p className="text-xs text-gray-500 mt-2">* Fees mentioned are approximate and subject to change. Contact university for exact fees.</p>
                     </GuestGate>
-                  </div>
-                )}
+                  </section>
 
-                {activeTab === 'placements' && (
-                  <div className="space-y-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Placement Statistics</h2>
+                  {/* FEES - Guest Gated */}
+                  <section id="seo-fees">
+                    <h2 className="text-2xl font-bold mb-3">{university.name} Fees 2026</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      The fee structure for various courses at {university.name}:
+                    </p>
+                    <GuestGate title="Fee Details">
+                      <div className="overflow-x-auto mb-6">
+                        <table className="w-full border-collapse border">
+                          <thead>
+                            <tr className="bg-purple-50">
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3">
+                                <span className="text-purple-600 font-medium">B.Tech</span>
+                              </td>
+                              <td className="border px-4 py-3 text-sm">4 Years</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">INR {((university.avg_fee || 150000) / 100000).toFixed(2)} Lakhs</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">INR {(((university.avg_fee || 150000) * 4) / 100000).toFixed(2)} Lakhs</td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3">
+                                <span className="text-purple-600 font-medium">M.Tech</span>
+                              </td>
+                              <td className="border px-4 py-3 text-sm">2 Years</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">INR {((university.avg_fee || 150000) * 1.2 / 100000).toFixed(2)} Lakhs</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">INR {(((university.avg_fee || 150000) * 1.2 * 2) / 100000).toFixed(2)} Lakhs</td>
+                            </tr>
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3">
+                                <span className="text-purple-600 font-medium">MBA</span>
+                              </td>
+                              <td className="border px-4 py-3 text-sm">2 Years</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">INR {((university.avg_fee || 150000) * 1.5 / 100000).toFixed(2)} Lakhs</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">INR {(((university.avg_fee || 150000) * 1.5 * 2) / 100000).toFixed(2)} Lakhs</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </GuestGate>
+                  </section>
+
+                  {/* RANKING */}
+                  <section id="seo-ranking">
+                    <h2 className="text-2xl font-bold mb-3">{university.name} Ranking</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {university.name} has been ranked by various agencies:
+                    </p>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Ranking</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm font-medium">NIRF</td>
+                            <td className="border px-4 py-3 text-sm font-semibold">#{university.nirf_rank || 'N/A'}</td>
+                            <td className="border px-4 py-3 text-sm">2025</td>
+                          </tr>
+                          {university.naac_grade && (
+                            <tr className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm font-medium">NAAC</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">{university.naac_grade}</td>
+                              <td className="border px-4 py-3 text-sm">2025</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+
+                  {/* COURSES */}
+                  <section id="seo-courses">
+                    <h2 className="text-2xl font-bold mb-3">{university.name} Courses</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {university.name} offers a wide range of undergraduate, postgraduate, and doctoral programs:
+                    </p>
+                    {university.streams && university.streams.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {university.streams.map(stream => (
+                          <span key={stream} className="px-4 py-2 bg-purple-50 text-purple-700 rounded-lg text-sm font-medium">
+                            {stream}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+
+                  {/* PLACEMENT - Guest Gated */}
+                  <section id="seo-placement">
+                    <h2 className="text-2xl font-bold mb-3">{university.name} Placement</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {university.name} has excellent placement records with top companies visiting the campus.
+                    </p>
                     <GuestGate title="Placement Data">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 text-center">
@@ -587,33 +667,32 @@ const UniversityDetailPage = () => {
                           <div className="text-sm text-gray-600 mt-1">Average Package</div>
                         </div>
                       </div>
-                      
-                      {/* Top Recruiters */}
-                      {university.top_recruiters && university.top_recruiters.length > 0 && (
-                        <div className="mt-6">
-                          <h3 className="text-lg font-semibold text-gray-800 mb-3">Top Recruiters</h3>
-                          <div className="flex flex-wrap gap-3">
-                            {university.top_recruiters.map((recruiter, i) => (
-                              <span key={i} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm">
-                                {recruiter}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </GuestGate>
-                  </div>
-                )}
+                  </section>
 
-                {activeTab === 'reviews' && (
-                  <ReviewsSection 
-                    entityId={university.id} 
-                    entityType="university"
-                    entityName={university.name}
-                    showWriteReview={true}
-                  />
-                )}
-              </div>
+                  {/* REVIEWS */}
+                  <section id="seo-reviews">
+                    <h2 className="text-2xl font-bold mb-3">{university.name} Reviews</h2>
+                    <ReviewsSection 
+                      entityId={university.id} 
+                      entityType="university"
+                      entityName={university.name}
+                      showWriteReview={true}
+                    />
+                  </section>
+
+                  {/* COLLAPSE BUTTON */}
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowContent(false)}
+                      className="inline-flex items-center gap-2 px-6 py-2 border-2 border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-full"
+                    >
+                      <span>Show Less</span>
+                      <FiChevronUp size={18} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Questions Section */}
@@ -624,8 +703,8 @@ const UniversityDetailPage = () => {
             />
           </div>
 
-          {/* Right Sidebar */}
-          <div className="lg:w-80 space-y-6">
+          {/* RIGHT SIDEBAR */}
+          <div className="w-80 flex-shrink-0 space-y-6 hidden lg:block">
             {/* Apply Now Card */}
             <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl shadow-lg p-6 text-white">
               <div className="text-center">
