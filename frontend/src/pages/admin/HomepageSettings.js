@@ -1264,6 +1264,199 @@ const HomepageSettings = () => {
                 ) : <div className="text-center py-6 bg-white rounded-lg border-2 border-dashed"><p className="text-gray-500">No {activeStream} colleges added</p></div>}
               </div>
 
+              {/* Location Search Section */}
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold border-b pb-2 mb-4">📍 Location Search Section</h3>
+                <p className="text-sm text-gray-500 mb-4">Manage the "Find Colleges by Location" section - States, Cities, and Study Abroad countries.</p>
+                
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Section Title</label>
+                  <input
+                    type="text"
+                    value={settings.location_search_title || 'Find Colleges by Location'}
+                    onChange={(e) => handleChange('location_search_title', e.target.value)}
+                    className="w-full border rounded-lg px-4 py-2.5"
+                  />
+                </div>
+
+                {/* States Tab */}
+                <div className="mb-6">
+                  <h4 className="font-medium mb-2">By State</h4>
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-gray-50 p-3 rounded-lg">
+                    {(settings.location_states || []).map((item, index) => (
+                      <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border">
+                        <input
+                          type="text"
+                          value={item.icon}
+                          onChange={(e) => {
+                            const updated = [...settings.location_states];
+                            updated[index].icon = e.target.value;
+                            handleChange('location_states', updated);
+                          }}
+                          className="w-12 border rounded px-2 py-1 text-center"
+                          placeholder="🏛️"
+                        />
+                        <input
+                          type="text"
+                          value={item.name}
+                          onChange={(e) => {
+                            const updated = [...settings.location_states];
+                            updated[index].name = e.target.value;
+                            handleChange('location_states', updated);
+                          }}
+                          className="flex-1 border rounded px-3 py-1"
+                          placeholder="State Name"
+                        />
+                        <input
+                          type="text"
+                          value={item.link}
+                          onChange={(e) => {
+                            const updated = [...settings.location_states];
+                            updated[index].link = e.target.value;
+                            handleChange('location_states', updated);
+                          }}
+                          className="flex-1 border rounded px-3 py-1"
+                          placeholder="/colleges?state=..."
+                        />
+                        <button
+                          onClick={() => {
+                            const updated = settings.location_states.filter((_, i) => i !== index);
+                            handleChange('location_states', updated);
+                          }}
+                          className="p-1.5 hover:bg-red-100 text-red-600 rounded"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleChange('location_states', [...(settings.location_states || []), { name: '', icon: '🏛️', link: '/colleges?state=' }])}
+                    className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  >
+                    <FiPlus size={14} /> Add State
+                  </button>
+                </div>
+
+                {/* Cities Tab */}
+                <div className="mb-6">
+                  <h4 className="font-medium mb-2">By City</h4>
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-gray-50 p-3 rounded-lg">
+                    {(settings.location_cities || []).map((item, index) => (
+                      <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border">
+                        <input
+                          type="text"
+                          value={item.icon}
+                          onChange={(e) => {
+                            const updated = [...settings.location_cities];
+                            updated[index].icon = e.target.value;
+                            handleChange('location_cities', updated);
+                          }}
+                          className="w-12 border rounded px-2 py-1 text-center"
+                          placeholder="🌆"
+                        />
+                        <input
+                          type="text"
+                          value={item.name}
+                          onChange={(e) => {
+                            const updated = [...settings.location_cities];
+                            updated[index].name = e.target.value;
+                            handleChange('location_cities', updated);
+                          }}
+                          className="flex-1 border rounded px-3 py-1"
+                          placeholder="City Name"
+                        />
+                        <input
+                          type="text"
+                          value={item.link}
+                          onChange={(e) => {
+                            const updated = [...settings.location_cities];
+                            updated[index].link = e.target.value;
+                            handleChange('location_cities', updated);
+                          }}
+                          className="flex-1 border rounded px-3 py-1"
+                          placeholder="/colleges?city=..."
+                        />
+                        <button
+                          onClick={() => {
+                            const updated = settings.location_cities.filter((_, i) => i !== index);
+                            handleChange('location_cities', updated);
+                          }}
+                          className="p-1.5 hover:bg-red-100 text-red-600 rounded"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleChange('location_cities', [...(settings.location_cities || []), { name: '', icon: '🌆', link: '/colleges?city=' }])}
+                    className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  >
+                    <FiPlus size={14} /> Add City
+                  </button>
+                </div>
+
+                {/* Countries Tab */}
+                <div className="mb-6">
+                  <h4 className="font-medium mb-2">Study Abroad</h4>
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-gray-50 p-3 rounded-lg">
+                    {(settings.location_countries || []).map((item, index) => (
+                      <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border">
+                        <input
+                          type="text"
+                          value={item.icon}
+                          onChange={(e) => {
+                            const updated = [...settings.location_countries];
+                            updated[index].icon = e.target.value;
+                            handleChange('location_countries', updated);
+                          }}
+                          className="w-12 border rounded px-2 py-1 text-center"
+                          placeholder="🌍"
+                        />
+                        <input
+                          type="text"
+                          value={item.name}
+                          onChange={(e) => {
+                            const updated = [...settings.location_countries];
+                            updated[index].name = e.target.value;
+                            handleChange('location_countries', updated);
+                          }}
+                          className="flex-1 border rounded px-3 py-1"
+                          placeholder="Country Name"
+                        />
+                        <input
+                          type="text"
+                          value={item.link}
+                          onChange={(e) => {
+                            const updated = [...settings.location_countries];
+                            updated[index].link = e.target.value;
+                            handleChange('location_countries', updated);
+                          }}
+                          className="flex-1 border rounded px-3 py-1"
+                          placeholder="/study-abroad?country=..."
+                        />
+                        <button
+                          onClick={() => {
+                            const updated = settings.location_countries.filter((_, i) => i !== index);
+                            handleChange('location_countries', updated);
+                          }}
+                          className="p-1.5 hover:bg-red-100 text-red-600 rounded"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleChange('location_countries', [...(settings.location_countries || []), { name: '', icon: '🌍', link: '/study-abroad?country=' }])}
+                    className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  >
+                    <FiPlus size={14} /> Add Country
+                  </button>
+                </div>
+              </div>
+
               {/* CTA Section */}
               <div className="mt-8">
                 <h3 className="text-lg font-semibold border-b pb-2 mb-4">Call to Action Section</h3>
