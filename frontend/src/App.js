@@ -234,6 +234,7 @@ function App() {
             <Route path="/admin/banners" element={<BannersManagement />} />
             <Route path="/admin/testimonials" element={<TestimonialsManagement />} />
             <Route path="/admin/faqs" element={<FAQsManagement />} />
+            <Route path="/admin/states" element={<StatesManagement />} />
             <Route path="/admin/cities" element={<CitiesManagement />} />
             <Route path="/admin/contact-inquiries" element={<ContactInquiriesManagement />} />
             <Route path="/admin/lead-forms" element={<LeadFormsManagement />} />
