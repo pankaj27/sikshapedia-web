@@ -7,8 +7,14 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime, timezone
 from uuid import uuid4
+import jwt
+import os
 
 router = APIRouter(prefix="/rewards", tags=["Rewards System"])
+
+# JWT Configuration (must match server.py)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
+ALGORITHM = "HS256"
 
 # Database reference - will be set by main app
 _db = None
@@ -39,13 +45,29 @@ POINTS_CONFIG = {
 # ============ AUTH HELPER ============
 
 async def get_current_user(request: Request, db):
-    """Get current authenticated user from session"""
-    session_token = request.cookies.get("session_token")
-    if not session_token:
-        auth_header = request.headers.get("Authorization")
-        if auth_header and auth_header.startswith("Bearer "):
-            session_token = auth_header.split(" ")[1]
+    """Get current authenticated user from JWT token or session"""
+    # First try JWT token from Authorization header
+    auth_header = request.headers.get("Authorization")
     
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ")[1]
+        try:
+            # Decode JWT token
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            user_id = payload.get("sub")
+            if user_id:
+                user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0, "password": 0})
+                if user:
+                    return user
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail="Token has expired")
+        except jwt.exceptions.DecodeError:
+            pass  # Try session-based auth next
+        except Exception:
+            pass  # Try session-based auth next
+    
+    # Fallback to session-based auth (cookies)
+    session_token = request.cookies.get("session_token")
     if not session_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
     
@@ -59,7 +81,7 @@ async def get_current_user(request: Request, db):
     if expires_at < datetime.now(timezone.utc):
         raise HTTPException(status_code=401, detail="Session expired")
     
-    user = await db.users.find_one({"id": session["user_id"]}, {"_id": 0})
+    user = await db.users.find_one({"id": session["user_id"]}, {"_id": 0, "password_hash": 0, "password": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
