@@ -723,7 +723,7 @@
 - ✅ **Dashboard Loading**: Dashboard loads with Overview section and sidebar navigation
 
 **Technical Verification:**
-- API request captured: POST https://dashboard-wizard-8.preview.emergentagent.com/api/institute/login
+- API request captured: POST https://dynamic-admin-5.preview.emergentagent.com/api/institute/login
 - API response: 200 OK
 - "Logging in..." text appears during login process
 - Successful redirect to /institute/dashboard
@@ -1130,7 +1130,7 @@
 - ✅ **Dashboard Loading**: Dashboard loads with all components (Overview, sidebar navigation)
 
 **Technical Verification:**
-- API Request: POST https://dashboard-wizard-8.preview.emergentagent.com/api/institute/login ✅
+- API Request: POST https://dynamic-admin-5.preview.emergentagent.com/api/institute/login ✅
 - API Response: 200 OK ✅
 - Login Process: "Logging in..." text appears during authentication ✅
 - Navigation: Successful redirect from `/institute/login` to `/institute/dashboard` ✅
