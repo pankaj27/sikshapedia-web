@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -7,7 +7,14 @@ import csv
 import io
 from fastapi.responses import StreamingResponse
 
-router = APIRouter(prefix="/newsletter", tags=["Newsletter"])
+router = APIRouter(prefix="/api/newsletter", tags=["Newsletter"])
+
+# Database reference (set by main app)
+db = None
+
+def set_database(database):
+    global db
+    db = database
 
 # Pydantic Models
 class NewsletterSubscribe(BaseModel):
@@ -26,8 +33,9 @@ class NewsletterResponse(BaseModel):
 
 # Subscribe to newsletter
 @router.post("/subscribe", response_model=NewsletterResponse)
-async def subscribe_newsletter(request: Request, data: NewsletterSubscribe):
-    db = request.app.mongodb
+async def subscribe_newsletter(data: NewsletterSubscribe):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
     
     # Check if email already exists
     existing = await db.newsletter_subscribers.find_one({"email": data.email.lower()})
@@ -55,7 +63,7 @@ async def subscribe_newsletter(request: Request, data: NewsletterSubscribe):
     
     # Send welcome email using Resend
     try:
-        await send_welcome_email(request, data.email)
+        await send_welcome_email(data.email)
     except Exception as e:
         print(f"Failed to send welcome email: {e}")
         # Don't fail the subscription if email fails
@@ -63,7 +71,7 @@ async def subscribe_newsletter(request: Request, data: NewsletterSubscribe):
     return NewsletterResponse(success=True, message="Successfully subscribed! Check your email for confirmation.")
 
 # Send welcome email
-async def send_welcome_email(request: Request, email: str):
+async def send_welcome_email(email: str):
     try:
         from emergentintegrations.llm.resend import send_email
         import os
@@ -125,8 +133,9 @@ async def send_welcome_email(request: Request, email: str):
 
 # Unsubscribe from newsletter
 @router.post("/unsubscribe", response_model=NewsletterResponse)
-async def unsubscribe_newsletter(request: Request, data: NewsletterSubscribe):
-    db = request.app.mongodb
+async def unsubscribe_newsletter(data: NewsletterSubscribe):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
     
     result = await db.newsletter_subscribers.update_one(
         {"email": data.email.lower()},
@@ -140,8 +149,9 @@ async def unsubscribe_newsletter(request: Request, data: NewsletterSubscribe):
 
 # Admin: Get all subscribers
 @router.get("/subscribers", response_model=List[NewsletterSubscriber])
-async def get_subscribers(request: Request, status: Optional[str] = None, skip: int = 0, limit: int = 100):
-    db = request.app.mongodb
+async def get_subscribers(status: Optional[str] = None, skip: int = 0, limit: int = 100):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
     
     query = {}
     if status:
@@ -152,8 +162,9 @@ async def get_subscribers(request: Request, status: Optional[str] = None, skip: 
 
 # Admin: Get subscriber count
 @router.get("/subscribers/count")
-async def get_subscriber_count(request: Request):
-    db = request.app.mongodb
+async def get_subscriber_count():
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
     
     total = await db.newsletter_subscribers.count_documents({})
     active = await db.newsletter_subscribers.count_documents({"status": "active"})
@@ -167,8 +178,9 @@ async def get_subscriber_count(request: Request):
 
 # Admin: Delete subscriber
 @router.delete("/subscribers/{subscriber_id}")
-async def delete_subscriber(request: Request, subscriber_id: str):
-    db = request.app.mongodb
+async def delete_subscriber(subscriber_id: str):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
     
     result = await db.newsletter_subscribers.delete_one({"id": subscriber_id})
     
@@ -179,8 +191,9 @@ async def delete_subscriber(request: Request, subscriber_id: str):
 
 # Admin: Export subscribers to CSV
 @router.get("/subscribers/export")
-async def export_subscribers(request: Request, status: Optional[str] = "active"):
-    db = request.app.mongodb
+async def export_subscribers(status: Optional[str] = "active"):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
     
     query = {}
     if status and status != "all":
