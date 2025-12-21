@@ -154,12 +154,18 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
             onClick={handleLike}
             disabled={likeLoading}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+              likeLoading ? 'opacity-50 cursor-wait' : ''
+            } ${
               liked
                 ? 'bg-red-100 text-red-600 hover:bg-red-200'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
-            <FiHeart size={16} className={liked ? 'fill-red-500 text-red-500' : ''} />
+            {likeLoading ? (
+              <span className="animate-spin">⏳</span>
+            ) : (
+              <FiHeart size={16} className={liked ? 'fill-red-500 text-red-500' : ''} />
+            )}
             <span>{likes > 0 ? `${likes} ${likes === 1 ? 'Like' : 'Likes'}` : 'Like'}</span>
           </button>
           <span className="text-xs text-gray-400">
