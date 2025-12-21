@@ -262,43 +262,59 @@ const CollegeDetailPage = ({ overrideId }) => {
     }
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     // Check if user is logged in
     if (!requireAuth('like this institution')) return;
     
-    if (userVote === 'like') {
-      // Remove like
-      setLikes(likes - 1);
-      setUserVote(null);
-    } else if (userVote === 'dislike') {
-      // Change from dislike to like
-      setLikes(likes + 1);
-      setDislikes(dislikes - 1);
-      setUserVote('like');
-    } else {
-      // Add like
-      setLikes(likes + 1);
-      setUserVote('like');
+    try {
+      const token = localStorage.getItem('token');
+      if (userVote === 'like') {
+        // Remove like - call API to unlike
+        await api.delete(`/user/like/college/${college.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setLikes(likes - 1);
+        setUserVote(null);
+      } else {
+        // Add like - call API to like
+        await api.post(`/user/like/college/${college.id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (userVote === 'dislike') {
+          setDislikes(dislikes - 1);
+        }
+        setLikes(likes + 1);
+        setUserVote('like');
+      }
+    } catch (error) {
+      console.error('Error liking college:', error);
     }
   };
 
-  const handleDislike = () => {
+  const handleDislike = async () => {
     // Check if user is logged in
     if (!requireAuth('dislike this institution')) return;
     
-    if (userVote === 'dislike') {
-      // Remove dislike
-      setDislikes(dislikes - 1);
-      setUserVote(null);
-    } else if (userVote === 'like') {
-      // Change from like to dislike
-      setDislikes(dislikes + 1);
-      setLikes(likes - 1);
-      setUserVote('dislike');
-    } else {
-      // Add dislike
-      setDislikes(dislikes + 1);
-      setUserVote('dislike');
+    try {
+      const token = localStorage.getItem('token');
+      if (userVote === 'dislike') {
+        // Remove dislike
+        setDislikes(dislikes - 1);
+        setUserVote(null);
+      } else {
+        // Add dislike
+        if (userVote === 'like') {
+          // Remove the like first
+          await api.delete(`/user/like/college/${college.id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setLikes(likes - 1);
+        }
+        setDislikes(dislikes + 1);
+        setUserVote('dislike');
+      }
+    } catch (error) {
+      console.error('Error disliking college:', error);
     }
   };
 
