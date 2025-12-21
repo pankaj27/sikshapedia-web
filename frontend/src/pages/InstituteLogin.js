@@ -109,7 +109,7 @@ const InstituteLogin = () => {
                 </div>
               )}
               
-              <form onSubmit={handleLogin}>
+              <form onSubmit={handleLogin} action="javascript:void(0);">
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Login ID</label>
                   <div className="relative">
@@ -120,7 +120,6 @@ const InstituteLogin = () => {
                       onChange={(e) => setLoginId(e.target.value.toUpperCase())}
                       placeholder="e.g., AIIM0001"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
                 </div>
@@ -135,14 +134,14 @@ const InstituteLogin = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required
                     />
                   </div>
                 </div>
                 
                 <Button
-                  type="submit"
+                  type="button"
                   disabled={loading}
+                  onClick={handleLogin}
                   className="w-full bg-blue-600 hover:bg-blue-700 py-3 text-lg"
                 >
                   {loading ? (
