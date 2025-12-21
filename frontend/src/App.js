@@ -176,6 +176,8 @@ function App() {
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
             <Route path="/admin/reviews" element={<ReviewsModeration />} />
+            <Route path="/admin/questions" element={<QuestionsModeration />} />
+            <Route path="/admin/comments" element={<CommentsModeration />} />
             <Route path="/admin/streams" element={<StreamsManagement />} />
             <Route path="/admin/sub-streams" element={<SubStreamsManagement />} />
             <Route path="/admin/boards" element={<BoardsManagement />} />
