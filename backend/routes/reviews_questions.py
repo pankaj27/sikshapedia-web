@@ -57,6 +57,8 @@ class Review(BaseModel):
     faculty_rating: Optional[int] = None
     status: str = "pending"  # pending, approved, rejected
     earnings: float = 0.0
+    likes: int = 0  # Like count
+    liked_by: List[str] = []  # List of user IDs who liked
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
