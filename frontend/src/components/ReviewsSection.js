@@ -60,21 +60,29 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
   }, [review.id, isLoggedIn]);
 
   const handleLike = async () => {
-    if (!isLoggedIn) {
+    const token = localStorage.getItem('token');
+    console.log('handleLike - token exists:', !!token);
+    console.log('handleLike - isLoggedIn:', isLoggedIn);
+    
+    if (!isLoggedIn || !token) {
       setShowLoginPrompt(true);
       return;
     }
 
     setLikeLoading(true);
     try {
-      // axios interceptor already adds Authorization header from localStorage
       const response = await api.post(`/reviews/${review.id}/like`);
+      console.log('Like response:', response.data);
       setLikes(response.data.likes);
       setLiked(response.data.liked);
       if (onLikeUpdate) onLikeUpdate(review.id, response.data.likes);
     } catch (error) {
-      console.error('Error liking review:', error);
-      alert('Failed to like review. Please try again.');
+      console.error('Error liking review:', error.response?.data || error.message);
+      if (error.response?.status === 401) {
+        setShowLoginPrompt(true);
+      } else {
+        alert('Failed to like review. Please try again.');
+      }
     } finally {
       setLikeLoading(false);
     }
