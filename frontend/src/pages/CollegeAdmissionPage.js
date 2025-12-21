@@ -130,33 +130,13 @@ const CollegeAdmissionPage = () => {
         
         setAdmissions(admissionsData);
       } else {
-        // Fallback to mock data if no data from API
-        let filteredData = generateMockAdmissions();
-        if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-          filteredData = filteredData.filter(a => a.location.state === selectedState);
-        }
-        if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-          filteredData = filteredData.filter(a => a.location.city === selectedCity);
-        }
-        if (selectedType && selectedType !== 'all') {
-          filteredData = filteredData.filter(a => a.type.toLowerCase() === selectedType.toLowerCase());
-        }
-        setAdmissions(filteredData);
+        // No fallback - show empty state
+        setAdmissions([]);
       }
     } catch (error) {
       console.error('Error fetching admissions:', error);
-      // Fallback to mock data with filtering
-      let filteredData = generateMockAdmissions();
-      
-      if (selectedState && selectedState !== 'all' && selectedState !== 'All States') {
-        filteredData = filteredData.filter(a => a.location.state === selectedState);
-      }
-      if (selectedCity && selectedCity !== 'all' && selectedCity !== 'All Cities') {
-        filteredData = filteredData.filter(a => a.location.city === selectedCity);
-      }
-      if (selectedType && selectedType !== 'all') {
-        filteredData = filteredData.filter(a => a.type.toLowerCase() === selectedType.toLowerCase());
-      }
+      // No fallback - show empty state
+      setAdmissions([]);
       
       setAdmissions(filteredData);
     } finally {
