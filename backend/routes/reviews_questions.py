@@ -1,6 +1,6 @@
 """Reviews and Q&A API"""
 from fastapi import APIRouter, HTTPException, Query, Depends, Header
-from typing import Optional, List
+from typing import Optional, List, Any
 from datetime import datetime, timezone
 from pydantic import BaseModel, Field, ConfigDict
 import uuid
