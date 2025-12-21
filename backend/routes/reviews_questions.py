@@ -443,9 +443,9 @@ async def get_college_questions(
     skip: int = Query(0, ge=0), 
     limit: int = Query(20, ge=1, le=100)
 ):
-    """Get all questions for a college (Public)"""
+    """Get all approved questions for a college (Public)"""
     questions = await db.questions.find(
-        {"college_id": college_id}, 
+        {"college_id": college_id, "status": {"$in": ["approved", None]}},  # Include legacy questions without status
         {"_id": 0}
     ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
     
