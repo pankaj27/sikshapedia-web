@@ -22,11 +22,22 @@ def set_database(database):
 # ============================================
 
 async def get_current_user_from_header(authorization: str = Header(None)):
-    """Get current user from Authorization header"""
+    """Get current user from Authorization header - supports both JWT and session tokens"""
     if not authorization:
         return None
     try:
         token = authorization.replace("Bearer ", "")
+        
+        # Check if it's a session token (from Google OAuth)
+        if token.startswith("session_"):
+            # Lookup session in database
+            session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+            if not session:
+                return None
+            user = await db.users.find_one({"id": session["user_id"]}, {"_id": 0})
+            return user
+        
+        # Otherwise, treat as JWT token
         SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         user_id = payload.get("sub")  # Token uses 'sub' for user_id
