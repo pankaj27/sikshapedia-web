@@ -57,6 +57,8 @@ const WriteReviewPage = () => {
   const [uploading, setUploading] = useState(false);
   const [pageSettings, setPageSettings] = useState(defaultSettings);
   const [prefilledFromUrl, setPrefilledFromUrl] = useState(false);
+  const [isFromQR, setIsFromQR] = useState(false);
+  const [qrLinkCode, setQrLinkCode] = useState('');
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
