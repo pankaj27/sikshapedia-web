@@ -401,16 +401,18 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
   if (!user) {
     return (
       <div className="fixed left-0 right-0 bottom-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style={{ top: '64px' }} onClick={onClose}>
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
-          <div className="text-center">
-            <FiAlertCircle className="mx-auto text-orange-500 mb-4" size={48} />
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-6 text-center text-white">
+            <img src="/favicon.png" alt="admissionbuddy" className="h-12 w-12 mx-auto mb-3" />
             <h2 className="text-xl font-bold mb-2">Login Required</h2>
-            <p className="text-gray-600 mb-4">Please login or register to book admission.</p>
+            <p className="text-white/90">Please login or register to book admission.</p>
+          </div>
+          <div className="p-6">
             <div className="flex gap-3 justify-center">
-              <Button onClick={() => window.location.href = '/login'} className="bg-orange-500 hover:bg-orange-600">
+              <Button onClick={() => window.location.href = '/login'} className="bg-orange-500 hover:bg-orange-600 px-8">
                 Login
               </Button>
-              <Button onClick={() => window.location.href = '/signup'} variant="outline">
+              <Button onClick={() => window.location.href = '/signup'} variant="outline" className="px-8">
                 Register
               </Button>
             </div>
