@@ -1,13 +1,40 @@
 """Write Review Page Settings - Admin controllable content"""
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request, HTTPException
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 from datetime import datetime, timezone
+import jwt
+import os
 
 from core.database import db
-from core.auth import get_current_user
+from core.config import settings
 
 write_review_settings_router = APIRouter(prefix="/write-review-settings", tags=["Write Review Settings"])
+
+# Helper function for admin authentication
+async def get_current_admin(request: Request):
+    """Get current authenticated admin user"""
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    token = auth_header.split(" ")[1]
+    
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        # Check if admin role
+        if payload.get("role") != "admin":
+            # Also check if it's a user token - look up the user
+            user_id = payload.get("sub")
+            user = await db.users.find_one({"id": user_id}, {"_id": 0})
+            if user and user.get("role") == "admin":
+                return user
+            raise HTTPException(status_code=403, detail="Admin access required")
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 # ============================================
 # Models
