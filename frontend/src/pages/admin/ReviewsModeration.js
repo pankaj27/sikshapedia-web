@@ -57,6 +57,14 @@ const ReviewsModeration = () => {
     return review.status === filter;
   });
 
+  // Calculate stats
+  const stats = {
+    total: reviews.length,
+    pending: reviews.filter(r => r.status === 'pending' || !r.status).length,
+    approved: reviews.filter(r => r.status === 'approved').length,
+    rejected: reviews.filter(r => r.status === 'rejected').length
+  };
+
   return (
     <AdminLayout>
       <div className="p-6">
@@ -64,6 +72,26 @@ const ReviewsModeration = () => {
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Reviews Moderation</h1>
           <p className="text-sm text-gray-600 mt-1">Approve or reject user reviews</p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-4 gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+            <p className="text-sm text-gray-600">Total Reviews</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.total}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+            <p className="text-sm text-gray-600">Pending</p>
+            <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+            <p className="text-sm text-gray-600">Approved</p>
+            <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+            <p className="text-sm text-gray-600">Rejected</p>
+            <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
+          </div>
         </div>
 
         {/* Filter Tabs */}
@@ -78,7 +106,7 @@ const ReviewsModeration = () => {
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab.charAt(0).toUpperCase() + tab.slice(1)} ({tab === 'all' ? stats.total : stats[tab]})
             </button>
           ))}
         </div>
