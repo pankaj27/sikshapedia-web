@@ -305,6 +305,25 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
         {"$inc": {"total_earnings": review_earnings}}
     )
     
+    # Also add points (for rewards system)
+    review_points = 50 if len(review_data.review_text or "") <= 200 else 100
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$inc": {"points": review_points}}
+    )
+    
+    # Add point transaction for rewards tracking
+    point_transaction = {
+        "id": str(uuid.uuid4()),
+        "user_id": user["id"],
+        "type": "review",
+        "points": review_points,
+        "description": f"Review for {college['name']}",
+        "reference_id": review.id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.point_transactions.insert_one(point_transaction)
+    
     # Create notification
     notification = Notification(
         user_id=user["id"],
