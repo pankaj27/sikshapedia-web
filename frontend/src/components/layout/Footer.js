@@ -290,7 +290,7 @@ const RegisterInstituteModal = ({ isOpen, onClose }) => {
                           <div
                             key={state}
                             onClick={() => handleStateSelect(state)}
-                            className={`px-3 py-2 cursor-pointer hover:bg-blue-50 ${formData.state === state ? 'bg-blue-100 font-medium' : ''}`}
+                            className={`px-3 py-2 cursor-pointer hover:bg-blue-50 text-gray-900 ${formData.state === state ? 'bg-blue-100 font-semibold' : ''}`}
                           >
                             {state}
                           </div>
