@@ -60,6 +60,7 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
   }, [review.id, isLoggedIn]);
 
   const handleLike = async () => {
+    console.log('handleLike called, isLoggedIn:', isLoggedIn);
     if (!isLoggedIn) {
       setShowLoginPrompt(true);
       return;
@@ -68,9 +69,11 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
     setLikeLoading(true);
     try {
       const token = localStorage.getItem('token');
+      console.log('Calling API with review.id:', review.id);
       const response = await api.post(`/reviews/${review.id}/like`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log('API response:', response.data);
       setLikes(response.data.likes);
       setLiked(response.data.liked);
       if (onLikeUpdate) onLikeUpdate(review.id, response.data.likes);
