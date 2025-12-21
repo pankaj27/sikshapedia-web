@@ -14,6 +14,13 @@ const ContactInquiriesManagement = () => {
         { value: 'resolved', label: 'Resolved' },
       ]
     },
+    { 
+      key: 'admin_comment', 
+      label: 'Admin Comment / Response', 
+      type: 'textarea',
+      required: false,
+      placeholder: 'Enter your response or notes about this inquiry...'
+    },
   ];
 
   const displayFields = [
@@ -23,8 +30,17 @@ const ContactInquiriesManagement = () => {
     { key: 'subject', label: 'Subject' },
     { 
       key: 'message', 
-      label: 'Message',
+      label: 'Question',
       render: (value) => value?.substring(0, 50) + (value?.length > 50 ? '...' : '')
+    },
+    { 
+      key: 'admin_comment', 
+      label: 'Response',
+      render: (value) => value ? (
+        <span className="text-green-700">{value.substring(0, 40)}{value.length > 40 ? '...' : ''}</span>
+      ) : (
+        <span className="text-gray-400 italic">No response yet</span>
+      )
     },
     { 
       key: 'status', 
