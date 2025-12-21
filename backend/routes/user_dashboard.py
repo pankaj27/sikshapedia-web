@@ -32,16 +32,13 @@ async def get_db():
 
 async def get_current_user(request: Request, db):
     """Get current authenticated user from JWT token or session"""
-    import jwt
-    
     # First try JWT token from Authorization header
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
         token = auth_header.split(" ")[1]
         try:
             # Decode JWT token
-            SECRET_KEY = "your-secret-key-change-in-production-admissionbuddy2024"
-            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             user_id = payload.get("sub")
             if user_id:
                 user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0, "password": 0})
