@@ -183,6 +183,8 @@ export const ApplyNowWidget = ({ collegeName, collegeLogoUrl, courseName, onClos
 
 // Ask a Question Widget
 export const AskQuestionWidget = ({ context, onClose }) => {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [question, setQuestion] = useState('');
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -199,9 +201,9 @@ export const AskQuestionWidget = ({ context, onClose }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: email.split('@')[0], // Use email prefix as name
+          name: name || email.split('@')[0],
           email: email,
-          phone: '',
+          phone: phone,
           subject: 'Question from Homepage',
           message: question,
         })
