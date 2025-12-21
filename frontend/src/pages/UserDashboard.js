@@ -381,7 +381,10 @@ const UserDashboard = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
     } catch (error) {
       console.error('Error fetching dashboard:', error);
-      if (error.response?.status === 401) {
+      // Only logout if the error message indicates invalid/expired token
+      const errorMsg = error.response?.data?.detail || '';
+      if (error.response?.status === 401 && 
+          (errorMsg.includes('expired') || errorMsg.includes('Invalid') || errorMsg.includes('Not authenticated'))) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/signup');
