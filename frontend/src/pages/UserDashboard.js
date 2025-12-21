@@ -842,7 +842,7 @@ const UserDashboard = () => {
             {/* Favorites Tab */}
             {activeTab === 'favorites' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-bold">Favorite Colleges</h2>
+                <h2 className="text-xl font-bold">Favorite Institutes</h2>
                 
                 {favorites.length === 0 ? (
                   <div className="bg-white rounded-xl shadow-sm p-12 text-center">
