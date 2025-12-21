@@ -450,18 +450,39 @@ const CollegeDuniaHome = () => {
       {/* Newsletter Subscription */}
       <section className="py-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Stay Updated with Latest Admissions</h2>
-          <p className="text-xl mb-8 text-orange-100">Get alerts for admission dates, exams, and more</p>
-          <form className="max-w-2xl mx-auto flex gap-3">
+          <FiMail className="text-5xl mx-auto mb-4 opacity-90" />
+          <h2 className="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
+          <p className="text-xl mb-8 text-orange-100">Get the latest updates on college admissions, exams, and education news</p>
+          
+          {newsletterMessage.text && (
+            <div className={`max-w-2xl mx-auto mb-4 p-3 rounded-lg flex items-center justify-center gap-2 ${
+              newsletterMessage.type === 'success' ? 'bg-green-500/20 text-green-100' : 'bg-red-500/20 text-red-100'
+            }`}>
+              {newsletterMessage.type === 'success' && <FiCheck className="text-xl" />}
+              {newsletterMessage.text}
+            </div>
+          )}
+          
+          <form onSubmit={handleNewsletterSubmit} className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
             <Input
               type="email"
-              placeholder="Enter your email"
-              className="h-12 bg-white text-gray-900"
+              placeholder="Enter your email address"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              className="h-12 bg-white text-gray-900 flex-1"
+              disabled={newsletterLoading}
             />
-            <Button size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-gray-100 px-8">
-              Subscribe
+            <Button 
+              type="submit"
+              size="lg" 
+              variant="secondary" 
+              className="bg-white text-orange-600 hover:bg-gray-100 px-8 h-12"
+              disabled={newsletterLoading}
+            >
+              {newsletterLoading ? 'Subscribing...' : 'Subscribe'}
             </Button>
           </form>
+          <p className="text-sm text-orange-200 mt-4">Join 10,000+ students getting admission updates</p>
         </div>
       </section>
 
