@@ -213,6 +213,82 @@ async def get_question(question_id: str):
 
 
 # ============================================
+# Question Write Endpoints (Requires Auth)
+# ============================================
+
+@router.post("/questions", response_model=Question)
+async def create_question(question_data: QuestionCreate, authorization: str = Header(None)):
+    """Create a new question (requires login)"""
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Please login to ask a question")
+    
+    user = await get_current_user_from_header(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please login to ask a question")
+    
+    # Verify college exists
+    college = await db.colleges.find_one({"id": question_data.college_id})
+    if not college:
+        raise HTTPException(status_code=404, detail="College not found")
+    
+    question = Question(
+        college_id=question_data.college_id,
+        question=question_data.question,
+        user_id=user["id"],
+        user_name=user.get("name", "Anonymous")
+    )
+    question_dict = question.model_dump()
+    question_dict['created_at'] = question_dict['created_at'].isoformat()
+    
+    await db.questions.insert_one(question_dict)
+    return question
+
+
+@router.post("/questions/answer")
+async def create_answer(answer_data: AnswerCreate, authorization: str = Header(None)):
+    """Add an answer to a question (requires login)"""
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Please login to answer")
+    
+    user = await get_current_user_from_header(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please login to answer")
+    
+    question = await db.questions.find_one({"id": answer_data.question_id})
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    # Determine user name based on who's answering
+    user_name = user.get("name", "Anonymous")
+    is_institute_answer = False
+    
+    if answer_data.answered_by == "institute" and answer_data.institute_name:
+        user_name = answer_data.institute_name
+        is_institute_answer = True
+    
+    answer = {
+        "id": str(uuid.uuid4()),
+        "user_id": user["id"],
+        "user_name": user_name,
+        "answer": answer_data.answer,
+        "answered_by": answer_data.answered_by or "user",
+        "is_official": is_institute_answer,
+        "is_institute_answer": is_institute_answer,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.questions.update_one(
+        {"id": answer_data.question_id},
+        {
+            "$push": {"answers": answer},
+            "$set": {"is_answered": True}
+        }
+    )
+    
+    return {"message": "Answer added successfully", "answer": answer}
+
+
+# ============================================
 # Admin Review Management
 # ============================================
 
