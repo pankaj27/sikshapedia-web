@@ -181,7 +181,7 @@ const LeadFormsManagement = () => {
                       </div>
                     ) : (
                       <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                        <FiMegaphone className="text-orange-600" size={20} />
+                        <HiOutlineSpeakerphone className="text-orange-600" size={20} />
                       </div>
                     )}
                     <div>
