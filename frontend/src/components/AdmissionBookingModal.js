@@ -619,7 +619,8 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
                         }
                       }}
                       onFocus={() => setShowStateDropdown(true)}
-                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 ${formData.state ? 'font-medium' : ''}`}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      style={{ color: formData.state ? '#111827' : '#6B7280', fontWeight: formData.state ? '600' : '400' }}
                       placeholder="Search State..."
                     />
                     {showStateDropdown && (
@@ -629,7 +630,8 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
                             <div
                               key={state}
                               onClick={() => handleStateSelect(state)}
-                              className={`px-3 py-2 cursor-pointer hover:bg-orange-50 text-gray-900 ${formData.state === state ? 'bg-orange-100 font-semibold' : ''}`}
+                              className={`px-3 py-2 cursor-pointer hover:bg-orange-50 ${formData.state === state ? 'bg-orange-100' : ''}`}
+                              style={{ color: '#111827', fontWeight: formData.state === state ? '600' : '500' }}
                             >
                               {state}
                             </div>
@@ -656,7 +658,8 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
                       }}
                       onFocus={() => setShowCityDropdown(true)}
                       disabled={!formData.state}
-                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 ${!formData.state ? 'bg-gray-100 cursor-not-allowed' : ''} ${formData.city ? 'font-medium' : ''}`}
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${!formData.state ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                      style={{ color: formData.city ? '#111827' : '#6B7280', fontWeight: formData.city ? '600' : '400' }}
                       placeholder={formData.state ? "Search City..." : "Select state first"}
                     />
                     {showCityDropdown && formData.state && (
@@ -666,7 +669,8 @@ const AdmissionBookingModal = ({ isOpen, onClose, institution, institutionType =
                             <div
                               key={city}
                               onClick={() => handleCitySelect(city)}
-                              className={`px-3 py-2 cursor-pointer hover:bg-orange-50 text-gray-900 ${formData.city === city ? 'bg-orange-100 font-semibold' : ''}`}
+                              className={`px-3 py-2 cursor-pointer hover:bg-orange-50 ${formData.city === city ? 'bg-orange-100' : ''}`}
+                              style={{ color: '#111827', fontWeight: formData.city === city ? '600' : '500' }}
                             >
                               {city}
                             </div>
