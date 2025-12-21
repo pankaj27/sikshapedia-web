@@ -1,9 +1,11 @@
 """Reviews and Q&A API"""
-from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi import APIRouter, HTTPException, Query, Depends, Header
 from typing import Optional, List
 from datetime import datetime, timezone
 from pydantic import BaseModel, Field, ConfigDict
 import uuid
+import jwt
+import os
 
 router = APIRouter(prefix="/api", tags=["Reviews & Q&A"])
 
@@ -14,7 +16,29 @@ def set_database(database):
     global db
     db = database
 
+
+# ============================================
+# Auth Helper
+# ============================================
+
+async def get_current_user_from_header(authorization: str = Header(None)):
+    """Get current user from Authorization header"""
+    if not authorization:
+        return None
+    try:
+        token = authorization.replace("Bearer ", "")
+        SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user = await db.users.find_one({"id": payload.get("user_id")}, {"_id": 0})
+        return user
+    except:
+        return None
+
+
+# ============================================
 # Models
+# ============================================
+
 class Review(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -32,6 +56,7 @@ class Review(BaseModel):
     earnings: float = 0.0
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+
 class Question(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -42,6 +67,18 @@ class Question(BaseModel):
     answers: List[dict] = []
     is_answered: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class QuestionCreate(BaseModel):
+    college_id: str
+    question: str
+
+
+class AnswerCreate(BaseModel):
+    question_id: str
+    answer: str
+    answered_by: Optional[str] = "user"  # user or institute
+    institute_name: Optional[str] = None
 
 
 # ============================================
