@@ -59,11 +59,9 @@ const UniversityDetailPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full"></div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -71,7 +69,6 @@ const UniversityDetailPage = () => {
   if (error || !university) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <div className="bg-white rounded-xl p-8 shadow-lg">
             <FiAward className="mx-auto text-6xl text-gray-300 mb-4" />
@@ -82,7 +79,6 @@ const UniversityDetailPage = () => {
             </Button>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
