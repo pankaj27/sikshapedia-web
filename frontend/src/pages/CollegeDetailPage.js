@@ -181,32 +181,42 @@ const CollegeDetailPage = ({ overrideId }) => {
     };
   }, [id]);
 
-  // Check if user has liked this college
+  // Check if user has liked/favorited this college
   useEffect(() => {
-    const checkLikeStatus = async () => {
+    const checkUserStatus = async () => {
       const token = localStorage.getItem('token');
       if (!token || !college) return;
       
       try {
-        const response = await api.get('/user/liked', {
+        // Check liked status
+        const likedResponse = await api.get('/user/liked', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const likedColleges = response.data || [];
+        const likedColleges = likedResponse.data || [];
         const hasLiked = likedColleges.some(l => l.college_id === college.id);
         if (hasLiked) {
           setUserVote('like');
         }
+        
+        // Check favorited status
+        const favResponse = await api.get('/user/favorites', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const favorites = favResponse.data || [];
+        const hasFavorited = favorites.some(f => f.college_id === college.id);
+        setIsFavorited(hasFavorited);
+        
         // Set the actual like count from college data if available
         if (college.likes_count !== undefined) {
           setLikes(college.likes_count);
         }
       } catch (error) {
-        console.error('Error checking like status:', error);
+        console.error('Error checking user status:', error);
       }
     };
     
     if (college) {
-      checkLikeStatus();
+      checkUserStatus();
     }
   }, [college]);
 
