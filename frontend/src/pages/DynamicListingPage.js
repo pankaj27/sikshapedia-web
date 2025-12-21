@@ -1266,7 +1266,7 @@ const DynamicListingPage = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
-                {replaceYear(pageContent?.page_title) || pageInfo.title}
+                {pageContent?.page_title ? replaceYear(pageContent.page_title) : pageInfo.title}
               </h1>
               {pageContent?.page_subtitle && (
                 <p className="text-blue-200 text-sm md:text-base max-w-2xl">{replaceYear(pageContent.page_subtitle)}</p>
