@@ -48,6 +48,20 @@ class Question(BaseModel):
 # Review Endpoints (Public Read)
 # ============================================
 
+@router.get("/reviews")
+async def get_all_reviews(
+    status: str = Query(None),
+    limit: int = Query(100, ge=1, le=500)
+):
+    """Get all reviews (Admin - for moderation)"""
+    query = {}
+    if status:
+        query["status"] = status
+    
+    reviews = await db.reviews.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    return reviews
+
+
 @router.get("/reviews/college/{college_id}", response_model=List[Review])
 async def get_college_reviews(
     college_id: str, 
