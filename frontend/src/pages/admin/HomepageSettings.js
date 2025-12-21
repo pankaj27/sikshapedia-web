@@ -2045,7 +2045,7 @@ const HomepageSettings = () => {
               <div>
                 <div className="flex justify-between items-center mb-3">
                   <div>
-                    <h2 className="text-lg font-semibold">Cities</h2>
+                    <h2 className="text-lg font-semibold">Top Study Destinations</h2>
                     <input
                       type="text"
                       value={settings.cities_title}
@@ -2058,10 +2058,13 @@ const HomepageSettings = () => {
                     <FiPlus className="mr-1" /> Add City
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {settings.cities?.map((city, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex gap-2 items-center">
+                      <div className="flex gap-2 items-center mb-2">
+                        {city.image && (
+                          <img src={city.image} alt={city.name} className="w-10 h-10 object-contain rounded" />
+                        )}
                         <input
                           type="text"
                           value={city.name}
@@ -2073,12 +2076,48 @@ const HomepageSettings = () => {
                           <FiTrash2 />
                         </button>
                       </div>
+                      <div className="flex gap-2 items-center mb-2">
+                        <input
+                          type="text"
+                          value={city.image || ''}
+                          onChange={(e) => updateCity(index, 'image', e.target.value)}
+                          className="flex-1 border rounded px-3 py-1.5 text-sm"
+                          placeholder="Image URL"
+                        />
+                        <label className="text-xs text-blue-600 cursor-pointer hover:underline whitespace-nowrap">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                const formData = new FormData();
+                                formData.append('file', file);
+                                try {
+                                  const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, {
+                                    method: 'POST',
+                                    body: formData
+                                  });
+                                  const data = await res.json();
+                                  if (data.url) {
+                                    updateCity(index, 'image', data.url);
+                                  }
+                                } catch (err) {
+                                  console.error('Upload failed:', err);
+                                }
+                              }
+                            }}
+                          />
+                          📤 Upload
+                        </label>
+                      </div>
                       <input
                         type="text"
-                        value={city.image}
-                        onChange={(e) => updateCity(index, 'image', e.target.value)}
-                        className="w-full border rounded px-3 py-1.5 text-sm mt-2"
-                        placeholder="Image URL"
+                        value={city.link || ''}
+                        onChange={(e) => updateCity(index, 'link', e.target.value)}
+                        className="w-full border rounded px-3 py-1.5 text-sm"
+                        placeholder="Link URL (e.g., /colleges?city=Delhi)"
                       />
                     </div>
                   ))}
