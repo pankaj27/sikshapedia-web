@@ -6699,6 +6699,7 @@ try:
     from routes.write_review_settings import write_review_settings_router
     from routes.year_settings import year_settings_router
     from routes.seo_settings import router as seo_settings_router, set_database as set_seo_settings_db
+    from routes.unified_search import router as unified_search_router, set_database as set_unified_search_db
     
     # Set database for modular routers
     set_leads_db(db)
