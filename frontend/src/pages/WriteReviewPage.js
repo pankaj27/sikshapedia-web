@@ -917,29 +917,17 @@ const WriteReviewPage = () => {
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8">Why Write a Review?</h2>
+            <h2 className="text-3xl font-bold text-center mb-8">{pageSettings.benefits_section.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FiAward size={32} />
+              {pageSettings.benefits_section.cards.map((card, index) => (
+                <div key={index} className="text-center">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    {card.icon === 'award' ? <FiAward size={32} /> : card.icon === 'check' ? <FiCheckCircle size={32} /> : <FiStar size={32} />}
+                  </div>
+                  <h3 className="font-bold mb-2">{card.title}</h3>
+                  <p className="text-sm opacity-90">{card.description}</p>
                 </div>
-                <h3 className="font-bold mb-2">Earn Rewards</h3>
-                <p className="text-sm opacity-90">Get up to ₹300 for every verified review</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FiCheckCircle size={32} />
-                </div>
-                <h3 className="font-bold mb-2">Help Students</h3>
-                <p className="text-sm opacity-90">Guide future students in making informed decisions</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <FiStar size={32} />
-                </div>
-                <h3 className="font-bold mb-2">Shape Education</h3>
-                <p className="text-sm opacity-90">Your feedback helps colleges improve</p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
