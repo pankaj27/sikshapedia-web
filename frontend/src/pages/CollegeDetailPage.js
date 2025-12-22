@@ -1124,10 +1124,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </section>
                     )}
 
-                    {/* FAQs - FROM TOC #09 */}
-                    <section id="seo-faqs">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} FAQs</h2>
-                      {college.seo_faqs && college.seo_faqs.length > 0 ? (
+                    {/* FAQs - FROM TOC #09 - Only show if data exists */}
+                    {college.seo_faqs && college.seo_faqs.length > 0 && (
+                      <section id="seo-faqs">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} FAQs</h2>
                         <div className="space-y-3">
                           {college.seo_faqs.map((faq, idx) => (
                             <div key={idx} className="bg-gray-50 rounded-lg p-4 border">
@@ -1136,10 +1136,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                             </div>
                           ))}
                         </div>
-                      ) : (
-                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg text-center">FAQs will be added soon.</p>
-                      )}
-                    </section>
+                      </section>
+                    )}
                   </div>
 
                   {/* READ LESS BUTTON - Show at the end when expanded */}
