@@ -695,7 +695,7 @@ const CollegeDetailPage = ({ overrideId }) => {
       <div className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <AuthorInfo
-            name={college?.updated_by_name || college?.created_by_name}
+            name={college?.updated_by_name || college?.created_by_name || 'Content Team'}
             photo={college?.updated_by_photo || college?.created_by_photo}
             role="Content Writer"
             updatedAt={college?.updated_at}
@@ -704,6 +704,39 @@ const CollegeDetailPage = ({ overrideId }) => {
             size="md"
             variant="light"
           />
+        </div>
+      </div>
+
+      {/* STICKY NAVIGATION MENU */}
+      <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+            {menuItems.map((item) => (
+              college?.menu_config?.use_custom_menu ? (
+                <Link
+                  key={item.id}
+                  to={getSectionUrl(item.id)}
+                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50`}
+                >
+                  <span className="text-orange-500">{getMenuIcon(item.id)}</span>
+                  <span>{item.label}</span>
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === item.id
+                      ? 'border-orange-600 text-orange-600 bg-orange-50'
+                      : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className={activeTab === item.id ? 'text-orange-600' : 'text-gray-500'}>{getMenuIcon(item.id)}</span>
+                  <span>{item.label}</span>
+                </button>
+              )
+            ))}
+          </div>
         </div>
       </div>
 
