@@ -821,14 +821,15 @@ const CollegeDetailPage = ({ overrideId }) => {
                   {/* ALL DETAILED CONTENT SECTIONS - NOW INSIDE EXPANDABLE AREA */}
                   <div className="space-y-8">
                     {/* ADMISSION DATES - Guest Gated */}
-                    <section id="seo-admission-dates">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1} Dates</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        Important admission dates for {college.name}:
-                      </p>
+                    {/* ADMISSION DATES - Only show if data exists */}
+                    {college?.admission_dates && college.admission_dates.length > 0 && (
+                      <section id="seo-admission-dates">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1} Dates</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          Important admission dates for {college.name}:
+                        </p>
 
-                      <GuestGate title="Admission Dates">
-                        {college?.admission_dates && college.admission_dates.length > 0 ? (
+                        <GuestGate title="Admission Dates">
                           <div className="overflow-x-auto mb-6">
                             <table className="w-full border-collapse border">
                               <thead>
@@ -847,21 +848,19 @@ const CollegeDetailPage = ({ overrideId }) => {
                               </tbody>
                             </table>
                           </div>
-                        ) : (
-                          <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Admission dates will be updated soon.</p>
-                        )}
-                      </GuestGate>
-                    </section>
+                        </GuestGate>
+                      </section>
+                    )}
 
-                    {/* FEES - FROM TOC #02 - Guest Gated */}
-                    <section id="seo-fees">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Fees {year + 1}</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        The fee structure for various courses at {college.name}:
-                      </p>
+                    {/* FEES - Only show if courses exist */}
+                    {college?.courses && college.courses.length > 0 && (
+                      <section id="seo-fees">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Fees {year + 1}</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          The fee structure for various courses at {college.name}:
+                        </p>
 
-                      <GuestGate title="Fee Details">
-                        {college?.courses && college.courses.length > 0 ? (
+                        <GuestGate title="Fee Details">
                           <div className="overflow-x-auto mb-6">
                             <table className="w-full border-collapse border">
                               <thead>
@@ -892,11 +891,9 @@ const CollegeDetailPage = ({ overrideId }) => {
                               </tbody>
                             </table>
                           </div>
-                        ) : (
-                          <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Fee details will be updated soon.</p>
-                        )}
-                      </GuestGate>
-                    </section>
+                        </GuestGate>
+                      </section>
+                    )}
 
                     {/* RANKING - FROM TOC #03 */}
                     <section id="seo-ranking">
