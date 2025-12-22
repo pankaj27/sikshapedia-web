@@ -1543,8 +1543,12 @@ const HomepageSettings = () => {
                                     const formData = new FormData();
                                     formData.append('file', file);
                                     try {
-                                      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, {
+                                      const token = localStorage.getItem('token');
+                                      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image?type=content`, {
                                         method: 'POST',
+                                        headers: {
+                                          'Authorization': `Bearer ${token}`
+                                        },
                                         body: formData
                                       });
                                       const data = await res.json();
