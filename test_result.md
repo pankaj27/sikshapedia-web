@@ -24,15 +24,27 @@ Testing the new Simplified Institution Form with drag-and-drop content builder.
 - Admin: admin@admissionbuddy.co / admin123
 
 ## Test URLs
+- College Form (with Visual Block Editor): /admin/colleges/new
 - College Simple Form: /admin/colleges/simple/new
 - University Simple Form: /admin/universities/simple/new
 - School Simple Form: /admin/schools/simple/new
 
+## Current Testing Focus
+**Visual Block Editor in CollegeForm.js** - Testing the new content block system in the "SEO Content" section:
+1. Add TOC Section using "+ About", "+ Fee Structure", etc. buttons
+2. Inside each TOC section, test the block toolbar: Text, Image, Table, Video, Quick Facts, Key Stats, List
+3. **Image Block** - Test file upload via "Choose File" button and URL paste
+4. **Table Block** - Add/delete rows and columns, edit cells
+5. **Quick Facts Block** - Add/delete facts, edit labels and values
+6. **Key Stats Block** - Test color selection, stat cards
+7. Test block reordering (up/down arrows)
+8. Test block deletion
+9. Test saving the form with blocks and verify data persists
+
 ## Notes
-- New simplified form maintains all original features but with better UX
-- 4-step wizard: Basic Info → Content → Menu & TOC → SEO
-- Content blocks: Text Section, Table, Image, Video (all with drag-and-drop)
-- Auto Table of Contents generation from text section headings
+- Visual Block Editor replaces raw HTML textarea
+- Each content block is an editable card with move/delete controls
+- Image upload uses /api/upload/image?type=content endpoint
 
 ---
 
