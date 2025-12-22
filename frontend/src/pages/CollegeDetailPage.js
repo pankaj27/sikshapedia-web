@@ -20,6 +20,45 @@ import CommentsSection from '../components/CommentsSection';
 import AuthorInfo from '../components/AuthorInfo';
 
 import { Link } from '../components/CustomLink';
+
+// Helper function to convert YouTube URLs to embed format
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  
+  // Already an embed URL
+  if (url.includes('youtube.com/embed/')) {
+    return url;
+  }
+  
+  // Extract video ID from various YouTube URL formats
+  let videoId = null;
+  
+  // youtu.be/VIDEO_ID format
+  const shortUrlMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (shortUrlMatch) {
+    videoId = shortUrlMatch[1];
+  }
+  
+  // youtube.com/watch?v=VIDEO_ID format
+  const watchUrlMatch = url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/);
+  if (watchUrlMatch) {
+    videoId = watchUrlMatch[1];
+  }
+  
+  // youtube.com/v/VIDEO_ID format
+  const vUrlMatch = url.match(/youtube\.com\/v\/([a-zA-Z0-9_-]+)/);
+  if (vUrlMatch) {
+    videoId = vUrlMatch[1];
+  }
+  
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  
+  // Return original URL if not a YouTube URL (might be Vimeo or other)
+  return url;
+};
+
 // Facility icon mapping for icon-based display
 const facilityIconMap = {
   // Library & Academic
