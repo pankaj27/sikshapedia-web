@@ -895,109 +895,131 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </section>
                     )}
 
-                    {/* RANKING - FROM TOC #03 */}
-                    <section id="seo-ranking">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        {college.name} has been ranked by various agencies:
-                      </p>
+                    {/* RANKING - Only show if rankings or nirf_ranking exists */}
+                    {(college?.rankings?.length > 0 || college?.nirf_ranking) && (
+                      <section id="seo-ranking">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          {college.name} has been ranked by various agencies:
+                        </p>
 
-                      {college?.rankings && college.rankings.length > 0 ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-gray-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.rankings.map((ranking, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
-                                  <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
-                                  <td className="border px-4 py-3 text-sm">{ranking.year || year}</td>
-                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
+                        {college?.rankings && college.rankings.length > 0 ? (
+                          <div className="overflow-x-auto">
+                            <table className="w-full border-collapse border">
+                              <thead>
+                                <tr className="bg-gray-50">
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : college?.nirf_ranking ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-gray-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm">NIRF</td>
-                                <td className="border px-4 py-3 text-sm">{year}</td>
-                                <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Ranking details will be updated soon.</p>
-                      )}
-                    </section>
+                              </thead>
+                              <tbody>
+                                {college.rankings.map((ranking, idx) => (
+                                  <tr key={idx} className="hover:bg-gray-50">
+                                    <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
+                                    <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
+                                    <td className="border px-4 py-3 text-sm">{ranking.year || year}</td>
+                                    <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : (
+                          <div className="overflow-x-auto">
+                            <table className="w-full border-collapse border">
+                              <thead>
+                                <tr className="bg-gray-50">
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm">NIRF</td>
+                                  <td className="border px-4 py-3 text-sm">{year}</td>
+                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </section>
+                    )}
 
-                    {/* ADMISSION - FROM TOC #04 */}
-                    <section id="seo-admission">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        Admission process and eligibility criteria for {college.name}:
-                      </p>
-                      {college?.admission_process ? (
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                          <h3 className="font-bold mb-2">Admission Criteria</h3>
-                          <p className="text-sm text-gray-700">{college.admission_process}</p>
-                        </div>
-                      ) : college?.courses && college.courses.length > 0 ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-orange-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).map((course, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm font-medium">{course.name}</td>
-                                  <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
-                                  <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                    {/* ADMISSION - Only show if admission_process exists or courses have eligibility */}
+                    {(college?.admission_process || college?.courses?.some(c => typeof c === 'object' && (c.eligibility || c.selection_criteria))) && (
+                      <section id="seo-admission">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          Admission process and eligibility criteria for {college.name}:
+                        </p>
+                        {college?.admission_process ? (
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                            <h3 className="font-bold mb-2">Admission Criteria</h3>
+                            <p className="text-sm text-gray-700">{college.admission_process}</p>
+                          </div>
+                        ) : (
+                          <div className="overflow-x-auto">
+                            <table className="w-full border-collapse border">
+                              <thead>
+                                <tr className="bg-orange-50">
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Admission details will be updated soon.</p>
-                      )}
-                    </section>
+                              </thead>
+                              <tbody>
+                                {college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).map((course, idx) => (
+                                  <tr key={idx} className="hover:bg-gray-50">
+                                    <td className="border px-4 py-3 text-sm font-medium">{course.name}</td>
+                                    <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
+                                    <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </section>
+                    )}
 
                     {/* Content Middle Ad */}
                     <div className="my-6">
                       <AdBanner pageName="college-detail" position="content-middle" />
                     </div>
 
-                    {/* CUTOFF - FROM TOC #05 */}
-                    <section id="seo-cutoff">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        Latest cutoff ranks for various programs:
-                      </p>
-                      {college?.cutoff_data && college.cutoff_data.length > 0 ? (
+                    {/* CUTOFF - Only show if cutoff_data exists */}
+                    {college?.cutoff_data && college.cutoff_data.length > 0 && (
+                      <section id="seo-cutoff">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          Latest cutoff ranks for various programs:
+                        </p>
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-orange-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {college.cutoff_data.map((item, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
+                                  <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
+                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.cutoff || item.rank}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    )}
                         <div className="overflow-x-auto">
                           <table className="w-full border-collapse border">
                             <thead>
