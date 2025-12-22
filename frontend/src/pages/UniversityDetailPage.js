@@ -5,7 +5,7 @@
  * NOW FULLY DYNAMIC - All data from database, conditional rendering for empty sections
  * Note: Header and Footer are provided by LayoutWrapper - do not add them here
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   FiMapPin, FiPhone, FiMail, FiGlobe, FiAward, FiUsers, FiBriefcase,
