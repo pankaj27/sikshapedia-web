@@ -15,6 +15,8 @@ const HomepageSettings = () => {
   const [activeTab, setActiveTab] = useState('hero');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState(null); // Track which item is uploading
+  const [uploadMessage, setUploadMessage] = useState({ type: '', text: '' }); // Upload feedback
   
   // Search states for college and school autocomplete
   const [collegeSearchQuery, setCollegeSearchQuery] = useState('');
