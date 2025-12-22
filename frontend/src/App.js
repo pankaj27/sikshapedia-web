@@ -274,6 +274,9 @@ function App() {
             <Route path="/admin/seo-settings" element={<SEOSettings />} />
             <Route path="/admin/static-pages" element={<StaticPagesManagement />} />
             <Route path="/admin/static-pages/edit/:slug" element={<StaticPageForm />} />
+            <Route path="/admin/advanced-content" element={<AdvancedContentManagement />} />
+            <Route path="/admin/advanced-content/new" element={<AdvancedContentForm />} />
+            <Route path="/admin/advanced-content/edit/:id" element={<AdvancedContentForm />} />
             <Route path="/admin/study-abroad" element={<StudyAbroadManagement />} />
             <Route path="/admin/study-abroad/new" element={<StudyAbroadForm />} />
             <Route path="/admin/study-abroad/edit/:id" element={<StudyAbroadForm />} />
