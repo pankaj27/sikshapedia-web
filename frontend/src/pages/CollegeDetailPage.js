@@ -1658,9 +1658,9 @@ const CollegeDetailPage = ({ overrideId }) => {
                     
                     {/* Dynamic Questions Component */}
                     <QuestionsSection
-                      collegeId={college.id}
-                      collegeName={college.name}
-                      collegeSlug={college.slug}
+                      entityId={college.id}
+                      entityType="college"
+                      entityName={college.name}
                     />
                   </div>
                 </section>
