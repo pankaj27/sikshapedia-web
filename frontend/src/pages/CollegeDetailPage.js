@@ -683,24 +683,39 @@ const CollegeDetailPage = ({ overrideId }) => {
       <div className="bg-gray-50 border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-blue-50 border-l-4 border-blue-600 p-3 rounded">
-              <div className="flex items-start gap-2">
-                <span className="text-[10px] font-bold text-blue-600 bg-blue-200 px-2 py-0.5 rounded flex-shrink-0">12 Dec, 2025</span>
-                <p className="text-xs text-gray-800">
-                  <strong>Admission 2026</strong> applications are now open. Apply before the deadline.
-                </p>
-              </div>
+          {college?.updates && college.updates.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {college.updates.slice(0, 2).map((update, idx) => (
+                <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
+                  <div className="flex items-start gap-2">
+                    <span className={`text-[10px] font-bold ${idx === 0 ? 'text-blue-600 bg-blue-200' : 'text-green-600 bg-green-200'} px-2 py-0.5 rounded flex-shrink-0`}>
+                      {update.date || new Date(update.created_at || Date.now()).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </span>
+                    <p className="text-xs text-gray-800">
+                      <strong>{update.title}</strong> {update.description || update.content || ''}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="bg-green-50 border-l-4 border-green-600 p-3 rounded">
-              <div className="flex items-start gap-2">
-                <span className="text-[10px] font-bold text-green-600 bg-green-200 px-2 py-0.5 rounded flex-shrink-0">06 Dec, 2025</span>
-                <p className="text-xs text-gray-800">
-                  <strong>Placement Results {year - 1}</strong> announced with highest package of ₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L
-                </p>
-              </div>
+          ) : college?.announcements && college.announcements.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {college.announcements.slice(0, 2).map((announcement, idx) => (
+                <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
+                  <div className="flex items-start gap-2">
+                    <span className={`text-[10px] font-bold ${idx === 0 ? 'text-blue-600 bg-blue-200' : 'text-green-600 bg-green-200'} px-2 py-0.5 rounded flex-shrink-0`}>
+                      {announcement.date ? new Date(announcement.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}
+                    </span>
+                    <p className="text-xs text-gray-800">
+                      <strong>{announcement.title}</strong> {announcement.content || ''}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">No updates available at the moment.</p>
+          )}
         </div>
       </div>
 
