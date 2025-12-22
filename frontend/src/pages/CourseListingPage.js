@@ -10,6 +10,7 @@ const CourseListingPage = () => {
   const [courses, setCourses] = useState([]);
   const [apiCourses, setApiCourses] = useState([]); // Courses from API
   const [filteredCourses, setFilteredCourses] = useState([]);
+  const [topColleges, setTopColleges] = useState([]); // Top colleges from API
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeWidget, setActiveWidget] = useState(null);
@@ -18,19 +19,21 @@ const CourseListingPage = () => {
     type: 'Full Time'
   });
 
-  // Fetch courses from API
+  // Fetch courses and top colleges from API
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
-        // Fetch from both quick entry and detailed courses
-        const [quickResponse, detailResponse] = await Promise.all([
+        // Fetch from courses and colleges
+        const [quickResponse, detailResponse, collegesResponse] = await Promise.all([
           api.get('/courses'),
-          api.get('/courses-detail')
+          api.get('/courses-detail'),
+          api.get('/colleges?limit=6&is_featured=true')
         ]);
         
         // Merge and format courses
         const quickCourses = quickResponse.data || [];
         const detailCourses = detailResponse.data || [];
+        const colleges = collegesResponse.data?.colleges || collegesResponse.data || [];
         
         // Filter by stream if provided
         let filtered = [...quickCourses];
@@ -45,13 +48,14 @@ const CourseListingPage = () => {
         
         setApiCourses(detailCourses);
         setCourses(filtered.length > 0 ? filtered : quickCourses.slice(0, 20));
+        setTopColleges(colleges);
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
-    fetchCourses();
+    fetchData();
   }, [stream]);
 
   // Sample engineering courses data
