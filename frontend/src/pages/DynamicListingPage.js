@@ -427,7 +427,7 @@ const DynamicListingPage = () => {
   };
 
   // Get cities based on selected state - prefer master data
-  const getAvailableCities = () => {
+  const getAvailableCities = useMemo(() => {
     if (activeFilters.state) {
       // Use master data if available
       if (masterCities.length > 0) {
@@ -445,7 +445,7 @@ const DynamicListingPage = () => {
       return masterCities.map(c => c.name).sort();
     }
     return ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Chandigarh', 'Kochi', 'Bhopal', 'Patna'];
-  };
+  }, [masterCities, activeFilters.state]);
 
   // Filter options
   const filterOptions = {
