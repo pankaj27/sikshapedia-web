@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight, FiHeart, FiStar, FiAward, FiFileText } from 'react-icons/fi';
+import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight, FiHeart, FiStar, FiAward } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
@@ -8,7 +8,7 @@ import SearchableSelect from '../components/SearchableSelect';
 import { Link } from '../components/CustomLink';
 
 // Import centralized data from constants
-import { INDIA_CITIES, ALL_INDIA_COURSES, ALL_INDIA_EXAMS } from '../constants/indiaData';
+import { INDIA_CITIES, ALL_INDIA_COURSES } from '../constants/indiaData';
 
 // Default content (used while loading or if API fails)
 const DEFAULT_CONTENT = {
@@ -56,12 +56,10 @@ const UserSignup = () => {
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [course, setCourse] = useState('');
-  const [exam, setExam] = useState('');
   const [referralCode, setReferralCode] = useState('');
   
-  // All courses and exams for dropdown (using centralized data as fallback)
+  // All courses for dropdown (using centralized data as fallback)
   const [courses, setCourses] = useState(ALL_INDIA_COURSES);
-  const [exams, setExams] = useState(ALL_INDIA_EXAMS);
   
   // Pre-fill from Google auth or referral
   const googleEmail = searchParams.get('email');
@@ -81,9 +79,8 @@ const UserSignup = () => {
       setReferralCode(refCode);
     }
     
-    // Fetch courses, exams, and content
+    // Fetch courses and content
     fetchCourses();
-    fetchExams();
     fetchContent();
   }, [googleEmail, googleName, refCode]);
   
@@ -108,20 +105,6 @@ const UserSignup = () => {
       }
     } catch (err) {
       console.error('Error fetching courses:', err);
-      // Fallback already set via useState initialization
-    }
-  };
-  
-  const fetchExams = async () => {
-    try {
-      const response = await api.get('/exams');
-      const apiExams = response.data.map(e => typeof e === 'object' ? e.name : e);
-      // Use API exams if available, otherwise keep the centralized list
-      if (apiExams.length > 0) {
-        setExams(apiExams);
-      }
-    } catch (err) {
-      console.error('Error fetching exams:', err);
       // Fallback already set via useState initialization
     }
   };
@@ -218,7 +201,6 @@ const UserSignup = () => {
         phone,
         city,
         course,
-        exam: exam || null,
         referral_code: referralCode || null
       });
       
@@ -521,20 +503,6 @@ const UserSignup = () => {
                     value={course}
                     onChange={setCourse}
                     placeholder="Select course"
-                    className="rounded-xl"
-                  />
-                </div>
-                
-                {/* Exam Preparing For */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Exam Preparing For <span className="text-gray-400">(Optional)</span>
-                  </label>
-                  <SearchableSelect
-                    options={exams}
-                    value={exam}
-                    onChange={setExam}
-                    placeholder="Select exam (e.g., JEE, NEET, CAT)"
                     className="rounded-xl"
                   />
                 </div>
