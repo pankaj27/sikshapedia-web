@@ -807,6 +807,27 @@ const UniversityDetailPage = () => {
 
           {/* RIGHT SIDEBAR */}
           <div className="w-80 flex-shrink-0 space-y-6 hidden lg:block">
+            {/* ADMISSION PARTNER - BOOK YOUR SEAT */}
+            {university.is_admission_partner && (
+              <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl shadow-lg p-6 text-white">
+                <div className="text-center">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/20 rounded-full text-sm font-semibold mb-3">
+                    🎓 Admission Partner
+                  </span>
+                  <h3 className="font-bold text-xl mb-2">Admission Open!</h3>
+                  <p className="text-sm text-green-100 mb-4">Book your seat at {university.name}</p>
+                  <button 
+                    onClick={() => setShowApplyModal(true)}
+                    className="w-full bg-white text-green-600 hover:bg-green-50 font-bold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2"
+                  >
+                    <FiCheckCircle size={18} />
+                    <span>🎓 Book Your Seat</span>
+                  </button>
+                  <p className="text-xs text-green-100 mt-3">Limited seats available. Apply now!</p>
+                </div>
+              </div>
+            )}
+
             {/* Apply Now Card */}
             <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl shadow-lg p-6 text-white">
               <div className="text-center">
