@@ -3531,9 +3531,12 @@ async def upload_image(
     except Exception as e:
         raise HTTPException(status_code=401, detail="Invalid token")
     
-    # Validate file type
-    if not file.content_type or not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="Only image files are allowed")
+    # Validate file type - allow images and SVG
+    allowed_types = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"]
+    is_svg = file.content_type == "image/svg+xml"
+    
+    if not file.content_type or (not file.content_type.startswith("image/") and file.content_type not in allowed_types):
+        raise HTTPException(status_code=400, detail="Only image files are allowed (JPG, PNG, GIF, WebP, SVG)")
     
     # Validate type parameter
     valid_types = ["logo", "banner", "campus", "content", "seo", "profile"]
@@ -3543,14 +3546,20 @@ async def upload_image(
     # Read file content
     file_content = await file.read()
     
-    # Optimize image (resize and compress)
-    try:
-        optimized_content = optimize_image(file_content, type)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to process image: {str(e)}")
+    # For SVG files, skip optimization and keep original format
+    if is_svg:
+        optimized_content = file_content
+        file_extension = ".svg"
+    else:
+        # Optimize image (resize and compress)
+        try:
+            optimized_content = optimize_image(file_content, type)
+            file_extension = ".jpg"
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Failed to process image: {str(e)}")
     
-    # Generate unique filename (always use .jpg for optimized images)
-    unique_filename = f"{uuid.uuid4()}.jpg"
+    # Generate unique filename
+    unique_filename = f"{uuid.uuid4()}{file_extension}"
     
     # Determine upload directory
     type_to_dir = {
