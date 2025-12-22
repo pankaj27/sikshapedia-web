@@ -57,78 +57,23 @@ const CourseFinderPage = () => {
   const programTypeOptions = ['Full Time', 'Part Time', 'Both'];
 
   // Sample courses data
-  const courses = [
-    {
-      id: 1,
-      name: 'Bachelor of Commerce [B.Com]',
-      duration: '3 Years',
-      type: 'Degree',
-      mode: 'On Campus',
-      level: 'Graduation',
-      programType: 'Full Time',
-      eligibility: '10+2',
-      exam: 'TS DOST',
-      description: 'BCom is a 3-year undergraduate course for students who have cleared 12th standard with a major in Commerce. The full form of BCom is Bachelor of Commerce. BCom Admissions are based on merit as well as entrance exams such as CUET, PU CET, NPAT, etc.',
-      jobRoles: ['Chartered Accountant', 'Accounting Analyst', 'Equity Analyst', 'Financial Analyst'],
-      collegesCount: 3574
-    },
-    {
-      id: 2,
-      name: 'Bachelor of Computer Applications [BCA]',
-      duration: '3 Years',
-      type: 'Degree',
-      mode: 'On Campus',
-      level: 'Graduation',
-      programType: 'Full Time',
-      eligibility: '10+2',
-      exam: 'CUET',
-      description: 'BCA – Bachelor of Computer Applications – is a 3-year long degree that can be pursued after completion of 10+2. BCA is available in Regular, Distance, and online format.',
-      jobRoles: ['Software Developer', 'Technical Analyst'],
-      collegesCount: 3390
-    },
-    {
-      id: 3,
-      name: 'Bachelor of Business Administration [BBA]',
-      duration: '3 Years',
-      type: 'Degree',
-      mode: 'On Campus',
-      level: 'Graduation',
-      programType: 'Full Time',
-      eligibility: '10+2',
-      exam: 'CUET',
-      description: 'The Bachelor of Business Administration (BBA) course is a 3-year undergraduate program ideal for students exploring careers in business management.',
-      jobRoles: ['Financial Analyst', 'Marketing Executive', 'Business Analyst', 'Risk Control Analyst'],
-      collegesCount: 3220
-    },
-    {
-      id: 4,
-      name: 'Master of Business Administration [MBA]',
-      duration: '2 Years',
-      type: 'Degree',
-      mode: 'On Campus',
-      level: 'Post Graduation',
-      programType: 'Full Time',
-      eligibility: 'Graduation',
-      exam: 'CAT',
-      description: 'An MBA is a master\'s degree in business and management. It teaches how to run a business, lead people, and make important decisions.',
-      jobRoles: ['Human Resources Manager', 'Operations Manager', 'Marketing Manager', 'Relationship Manager'],
-      collegesCount: 2739
-    },
-    {
-      id: 5,
-      name: 'Bachelor of Technology [B.Tech] (Computer Science and Engineering)',
-      duration: '4 Years',
-      type: 'Degree',
-      mode: 'On Campus',
-      level: 'Graduation',
-      programType: 'Full Time',
-      eligibility: '10+2',
-      exam: 'JEE Main',
-      description: 'BTech CSE is a 4 year UG course that studies practical and theoretical knowledge of computer hardware and software.',
-      jobRoles: ['Project Coordinator', 'Applications Engineer', 'Solutions Engineer', 'Senior SAP Consultant'],
-      collegesCount: 2428
-    }
-  ];
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch courses from API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await api.get('/courses?limit=20');
+        setCourses(response.data || []);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const toggleFilter = (category, value) => {
     setSelectedFilters(prev => ({
