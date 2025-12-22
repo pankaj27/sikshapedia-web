@@ -135,6 +135,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Counselors', path: '/admin/counselors', icon: FiUsers, badge: 'NEW' },
         { title: 'Listing Pages', path: '/admin/listing-pages', icon: FiGlobe, highlight: true, badge: 'URLs' },
         { title: 'Static Pages', path: '/admin/static-pages', icon: FiFileText, badge: 'NEW' },
+        { title: 'Advanced Content Builder', path: '/admin/advanced-content', icon: FiLayout, highlight: true, badge: 'P0' },
         { title: 'Study Abroad', path: '/admin/study-abroad', icon: FiGlobe, badge: 'NEW' },
         { title: 'Study Abroad Settings', path: '/admin/study-abroad-listing-settings', icon: FiSettings },
       ]
