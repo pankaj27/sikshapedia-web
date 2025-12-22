@@ -286,6 +286,8 @@ class InstitutionCreationTester:
             "institution_type": "University",
             "type": "Government",
             "established_year": 1961,
+            "average_fees": 600000.0,
+            "description": "IIT Delhi is one of India's premier engineering institutes, renowned for its cutting-edge research and excellent academic programs.",
             "location": {
                 "state": "Delhi",
                 "city": "New Delhi",
@@ -318,18 +320,21 @@ class InstitutionCreationTester:
             "courses": [
                 {
                     "name": "B.Tech",
+                    "degree_type": "UG",
                     "duration": "4 Years",
                     "fees": 800000,
                     "eligibility": "JEE Advanced rank"
                 },
                 {
                     "name": "M.Tech",
+                    "degree_type": "PG",
                     "duration": "2 Years",
                     "fees": 400000,
                     "eligibility": "GATE score"
                 },
                 {
                     "name": "PhD",
+                    "degree_type": "Doctorate",
                     "duration": "5 Years",
                     "fees": 50000,
                     "eligibility": "Master's degree"
