@@ -62,6 +62,7 @@ class University(BaseModel):
 
 @router.get("/universities", response_model=List[University])
 async def get_universities(
+    search: Optional[str] = None,
     city: Optional[str] = None,
     state: Optional[str] = None,
     university_type: Optional[str] = None,
@@ -72,30 +73,60 @@ async def get_universities(
     limit: int = Query(50, ge=1, le=1000),
     skip: int = Query(0, ge=0)
 ):
-    """Get all universities with optional filters"""
-    query = {}
+    """Get all universities with optional filters - queries colleges collection with institution_type=University"""
+    query = {
+        "institution_type": "University",
+        "status": "published"
+    }
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}}
+        ]
     if city:
-        query["city"] = {"$regex": city, "$options": "i"}
+        city_query = [
+            {"city": {"$regex": city, "$options": "i"}},
+            {"location.city": {"$regex": city, "$options": "i"}}
+        ]
+        if "$or" in query:
+            query["$and"] = [{"$or": query.pop("$or")}, {"$or": city_query}]
+        else:
+            query["$or"] = city_query
     if state:
-        query["state"] = {"$regex": state, "$options": "i"}
+        state_query = [
+            {"state": {"$regex": state, "$options": "i"}},
+            {"location.state": {"$regex": state, "$options": "i"}}
+        ]
+        if "$and" in query:
+            query["$and"].append({"$or": state_query})
+        elif "$or" in query:
+            query["$and"] = [{"$or": query.pop("$or")}, {"$or": state_query}]
+        else:
+            query["$or"] = state_query
     if university_type:
-        query["university_type"] = university_type
+        query["type"] = university_type
     if accreditation:
-        query["accreditation"] = accreditation
+        query["accreditations"] = {"$regex": accreditation, "$options": "i"}
     if stream:
         query["streams"] = {"$regex": stream, "$options": "i"}
     if course:
-        # Search in courses array - can be list of strings or list of dicts
-        query["$or"] = [
+        course_query = [
             {"courses": {"$regex": course, "$options": "i"}},
             {"courses.name": {"$regex": course, "$options": "i"}},
             {"courses.degree_type": {"$regex": course, "$options": "i"}}
         ]
+        if "$and" in query:
+            query["$and"].append({"$or": course_query})
+        elif "$or" in query:
+            query["$and"] = [{"$or": query.pop("$or")}, {"$or": course_query}]
+        else:
+            query["$or"] = course_query
     
-    sort_field = "rating" if sort == "rating" else "nirf_rank" if sort == "ranking" else "name"
+    sort_field = "rating" if sort == "rating" else "nirf_ranking" if sort == "ranking" else "name"
     sort_order = -1 if sort == "rating" else 1
     
-    universities = await db.universities.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
+    # Query from colleges collection with institution_type filter
+    universities = await db.colleges.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
     return universities
 
 
