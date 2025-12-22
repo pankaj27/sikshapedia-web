@@ -2544,18 +2544,58 @@ const CollegeForm = () => {
                                   {/* IMAGE BLOCK */}
                                   {block.type === 'image' && (
                                     <div className="space-y-3">
-                                      <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                                        <p className="text-xs text-purple-700 mb-2 font-medium">📤 To upload image: Use any image hosting service (Imgur, Cloudinary, Google Drive) and paste the URL below</p>
-                                      </div>
-                                      <div className="grid grid-cols-2 gap-3">
-                                        <div className="col-span-2">
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">Image URL <span className="text-red-500">*</span></label>
-                                          <input type="text" value={block.url || ''} onChange={(e) => {
-                                            const newToc = [...(formData.seo_toc || [])];
-                                            newToc[index].blocks[blockIndex].url = e.target.value;
-                                            setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 rounded-lg px-3 py-2 text-sm" placeholder="https://example.com/image.jpg" />
+                                      {/* Image Upload Section */}
+                                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
+                                        <p className="text-sm font-bold text-purple-800 mb-3">📤 Upload Image</p>
+                                        <div className="flex flex-wrap gap-3 items-center">
+                                          {/* File Upload Button */}
+                                          <label className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg cursor-pointer font-medium text-sm transition-all ${
+                                            uploadingContentImage[`${index}-${blockIndex}`] 
+                                              ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+                                              : 'bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg'
+                                          }`}>
+                                            {uploadingContentImage[`${index}-${blockIndex}`] ? (
+                                              <>
+                                                <FiLoader className="animate-spin" size={18} />
+                                                Uploading...
+                                              </>
+                                            ) : (
+                                              <>
+                                                <FiUpload size={18} />
+                                                Choose File
+                                              </>
+                                            )}
+                                            <input 
+                                              type="file" 
+                                              accept="image/*" 
+                                              className="hidden" 
+                                              disabled={uploadingContentImage[`${index}-${blockIndex}`]}
+                                              onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                  handleContentImageUpload(e.target.files[0], index, blockIndex);
+                                                }
+                                              }}
+                                            />
+                                          </label>
+                                          <span className="text-xs text-gray-500">or</span>
+                                          {/* URL Input */}
+                                          <div className="flex-1 min-w-[200px]">
+                                            <input type="text" value={block.url || ''} onChange={(e) => {
+                                              const newToc = [...(formData.seo_toc || [])];
+                                              newToc[index].blocks[blockIndex].url = e.target.value;
+                                              setFormData({...formData, seo_toc: newToc});
+                                            }} className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Paste image URL here..." />
+                                          </div>
                                         </div>
+                                        {block.url && (
+                                          <div className="mt-2 flex items-center gap-2 text-xs text-green-600">
+                                            <FiCheck /> Image loaded successfully
+                                          </div>
+                                        )}
+                                      </div>
+                                      
+                                      {/* SEO Fields */}
+                                      <div className="grid grid-cols-2 gap-3">
                                         <div>
                                           <label className="block text-xs font-medium text-gray-700 mb-1">🔍 Alt Text (SEO) <span className="text-red-500">*</span></label>
                                           <input type="text" value={block.alt || ''} onChange={(e) => {
@@ -2595,6 +2635,7 @@ const CollegeForm = () => {
                                           </select>
                                         </div>
                                       </div>
+                                      
                                       {/* Image Preview */}
                                       {block.url && (
                                         <div className="border-2 border-dashed border-purple-300 rounded-lg p-3 bg-purple-50">
