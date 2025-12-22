@@ -5048,6 +5048,10 @@ class APITester:
         # **SPECIFIC TEST FOR ACCREDITATIONS FIX:**
         self.test_admin_college_accreditations_fix()
         
+        # **NEW: Comprehensive Institution Creation Tests (Review Request):**
+        self.test_institution_creation_comprehensive()
+        self.test_created_institutions_verification()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
