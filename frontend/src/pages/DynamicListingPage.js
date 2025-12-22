@@ -725,7 +725,9 @@ const DynamicListingPage = () => {
         if (fallback2.data && fallback2.data.length > 0) {
           setFeaturedColleges(fallback2.data);
         }
-      } catch (e2) {}
+      } catch (e2) {
+        // Ignore error silently
+      }
     }
   };
   
@@ -771,7 +773,9 @@ const DynamicListingPage = () => {
         if (fallback2.data && fallback2.data.length > 0) {
           setAdmissionOpenColleges(fallback2.data);
         }
-      } catch (e2) {}
+      } catch (e2) {
+        // Ignore error silently
+      }
     }
   };
   
