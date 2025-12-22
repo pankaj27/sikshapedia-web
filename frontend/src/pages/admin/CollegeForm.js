@@ -3305,6 +3305,82 @@ const CollegeForm = () => {
           removeUpdate={removeUpdate}
         />
 
+        {/* Announcements / Latest News Section */}
+        <CollapsibleSection title="Announcements / Latest News (Sidebar)" icon="📢" defaultOpen={false}>
+          <p className="text-sm text-gray-600 mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+            📢 These announcements appear in the <strong>&quot;Latest News&quot;</strong> sidebar section on the college detail page.
+          </p>
+          
+          <div className="space-y-4">
+            {(formData.announcements || []).map((announcement, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-4 border">
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-sm font-semibold text-gray-700">Announcement #{index + 1}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeAnnouncement(index)}
+                    className="text-red-500 hover:text-red-700 text-sm"
+                  >
+                    ✕ Remove
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Title *</label>
+                    <input
+                      type="text"
+                      value={announcement.title || ''}
+                      onChange={(e) => updateAnnouncement(index, 'title', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                      placeholder="e.g., Admission 2025 Opens"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Date</label>
+                    <input
+                      type="date"
+                      value={announcement.date || ''}
+                      onChange={(e) => updateAnnouncement(index, 'date', e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                    />
+                  </div>
+                </div>
+                
+                <div className="mt-3">
+                  <label className="block text-sm font-medium mb-1">Link (Optional)</label>
+                  <input
+                    type="url"
+                    value={announcement.link || ''}
+                    onChange={(e) => updateAnnouncement(index, 'link', e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                    placeholder="https://example.com/news-article"
+                  />
+                </div>
+                
+                <div className="mt-3">
+                  <label className="block text-sm font-medium mb-1">Content (Optional)</label>
+                  <textarea
+                    value={announcement.content || ''}
+                    onChange={(e) => updateAnnouncement(index, 'content', e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+                    rows="2"
+                    placeholder="Brief description of the announcement..."
+                  />
+                </div>
+              </div>
+            ))}
+            
+            <button
+              type="button"
+              onClick={addAnnouncement}
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              <span className="text-lg">+</span> Add Announcement
+            </button>
+          </div>
+        </CollapsibleSection>
+
         {/* FAQs Section - Extracted Component */}
         <FAQsSection 
           formData={formData} 
