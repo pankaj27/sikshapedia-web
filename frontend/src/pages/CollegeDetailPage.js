@@ -812,13 +812,11 @@ const CollegeDetailPage = ({ overrideId }) => {
               {/* INTRO PREVIEW - 3 LINES */}
               <div className="mb-3">
                 <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
-                  {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
-                  As per the data, the college is one of the preferred institutions for students. 
-                  {college.name} Ranking is <strong>#{Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies. 
-                  {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>. 
-                  Admission is based on national-level entrance exams followed by counselling. 
-                  As per {college.name} Placements, the average package was <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>. 
-                  The top recruiters included leading companies from various sectors.
+                  {college.name} is a <strong>{college.type || college.institution_type}</strong> established in <strong>{college.established_year || college.established || 'N/A'}</strong>. 
+                  {college.description ? college.description : `As per the data, ${college.name} is one of the preferred institutions for students.`}
+                  {college.nirf_ranking && <> {college.name} Ranking is <strong>#{college.nirf_ranking}</strong> in NIRF rankings.</>}
+                  {college.average_fees && <> {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>.</>}
+                  {college.placement?.average && <> As per {college.name} Placements, the average package was <strong>INR {(college.placement.average / 100000).toFixed(1)} LPA</strong>.</>}
                 </p>
               </div>
 
@@ -858,18 +856,23 @@ const CollegeDetailPage = ({ overrideId }) => {
                   {/* FULL INTRO PARAGRAPHS */}
                   <div>
                     <p className="text-gray-800 leading-relaxed mb-4">
-                      {college.name} is a <strong>{college.type}</strong> established in <strong>{college.established || 'N/A'}</strong>. 
-                      As per the data, the college is one of the preferred institutions for students. 
-                      {college.name} Ranking is <strong>#{Math.floor(Math.random() * 50) + 1}</strong> in the category by various ranking agencies.
+                      {college.name} is a <strong>{college.type || college.institution_type}</strong> established in <strong>{college.established_year || college.established || 'N/A'}</strong>. 
+                      {college.description || `As per the data, ${college.name} is one of the preferred institutions for students.`}
+                      {college.nirf_ranking && <> {college.name} Ranking is <strong>#{college.nirf_ranking}</strong> in NIRF rankings.</>}
                     </p>
-                    <p className="text-gray-800 leading-relaxed mb-4">
-                      {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>. 
-                      Admission is based on national-level entrance exams followed by counselling.
-                    </p>
-                    <p className="text-gray-800 leading-relaxed mb-4">
-                      As per {college.name} Placements, the average package was <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '15'} LPA</strong>. 
-                      The top recruiters included leading companies from various sectors.
-                    </p>
+                    {college.average_fees && (
+                      <p className="text-gray-800 leading-relaxed mb-4">
+                        {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>.
+                        {college.courses?.length > 0 && <> The institute offers {college.courses.length} courses across various disciplines.</>}
+                      </p>
+                    )}
+                    {college.placement && (
+                      <p className="text-gray-800 leading-relaxed mb-4">
+                        As per {college.name} Placements, the average package was <strong>INR {college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'} LPA</strong>
+                        {college.placement.highest && <> with the highest package reaching <strong>INR {(college.placement.highest / 100000).toFixed(1)} LPA</strong></>}.
+                        {college.placement.top_recruiters?.length > 0 && <> Top recruiters include {college.placement.top_recruiters.slice(0, 3).join(', ')}.</>}
+                      </p>
+                    )}
                   </div>
 
                   {/* VIDEO - Only show if video URL exists */}
