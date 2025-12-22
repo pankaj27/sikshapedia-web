@@ -905,7 +905,15 @@ const CollegeDuniaHome = () => {
                   className="bg-white rounded-lg p-4 text-center hover:shadow-lg transition group"
                 >
                   <div className="w-16 h-16 mx-auto mb-2 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <img src={city.image} alt={city.name} className="w-14 h-14 object-contain" />
+                    <img 
+                      src={city.image} 
+                      alt={city.name} 
+                      className="object-contain"
+                      style={{ 
+                        width: `${city.iconSize || 56}px`, 
+                        height: `${city.iconSize || 56}px` 
+                      }}
+                    />
                   </div>
                   <h3 className="font-semibold text-sm group-hover:text-orange-600 transition">{city.name}</h3>
                 </Link>
