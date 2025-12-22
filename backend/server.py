@@ -6779,7 +6779,8 @@ try:
     app.include_router(seo_settings_router, prefix="/api")  # SEO settings (sitemap, robots, local SEO)
     app.include_router(unified_search_router, prefix="/api")  # Unified search with autocomplete
     app.include_router(eligibility_router, prefix="/api")  # Eligibility checker / College predictor
-    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities, colleges, courses_exams, study_abroad, taxonomy, reviews_questions, advertisements, comments, newsletter, write_review_settings, year_settings, eligibility")
+    app.include_router(advanced_content_router)  # Advanced content builder - already has /api prefix
+    logging.info("✅ Modular routes loaded: auth, blogs, news, admin_settings, leads, financial_aid, homepage_settings, sponsored_ads, user_auth, user_dashboard, institute, admission_booking, rewards, admin_rewards, lead_forms, admin_counselors, admin_auth_pages, listing_pages, schools, universities, colleges, courses_exams, study_abroad, taxonomy, reviews_questions, advertisements, comments, newsletter, write_review_settings, year_settings, eligibility, advanced_content")
 except ImportError as e:
     logging.warning(f"⚠️ Modular routes not loaded: {e}")
 
