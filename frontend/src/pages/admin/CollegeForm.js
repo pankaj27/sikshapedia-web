@@ -2838,79 +2838,6 @@ const CollegeForm = () => {
                           )}
                         </div>
                       </div>
-                          >
-                            📋 Quick Facts
-                          </button>
-                          
-                          {/* Insert Key Statistics */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const statsHtml = `\n<div class="key-statistics" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:16px 0;">\n  <div style="background:linear-gradient(135deg,#fef3c7,#fde68a); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#92400e;">5000+</div>\n    <div style="color:#a16207; font-size:14px;">Students</div>\n  </div>\n  <div style="background:linear-gradient(135deg,#d1fae5,#a7f3d0); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#065f46;">95%</div>\n    <div style="color:#047857; font-size:14px;">Placement Rate</div>\n  </div>\n  <div style="background:linear-gradient(135deg,#dbeafe,#bfdbfe); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#1e40af;">200+</div>\n    <div style="color:#1d4ed8; font-size:14px;">Faculty</div>\n  </div>\n  <div style="background:linear-gradient(135deg,#fce7f3,#fbcfe8); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#9d174d;">₹12 LPA</div>\n    <div style="color:#be185d; font-size:14px;">Avg. Package</div>\n  </div>\n</div>\n`;
-                              const newToc = [...(formData.seo_toc || [])];
-                              newToc[index].content = (newToc[index].content || '') + statsHtml;
-                              setFormData({...formData, seo_toc: newToc});
-                            }}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg text-xs font-medium hover:bg-yellow-200"
-                          >
-                            📈 Key Statistics
-                          </button>
-                          
-                          {/* Insert List */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const listHtml = `\n<ul style="margin:16px 0; padding-left:20px;">\n  <li style="margin-bottom:8px;">Item 1</li>\n  <li style="margin-bottom:8px;">Item 2</li>\n  <li style="margin-bottom:8px;">Item 3</li>\n</ul>\n`;
-                              const newToc = [...(formData.seo_toc || [])];
-                              newToc[index].content = (newToc[index].content || '') + listHtml;
-                              setFormData({...formData, seo_toc: newToc});
-                            }}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-200"
-                          >
-                            📝 List
-                          </button>
-                          
-                          {/* Insert Highlight Box */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const highlightHtml = `\n<div style="background:linear-gradient(135deg,#fef9c3,#fef08a); border-left:4px solid #eab308; border-radius:8px; padding:16px; margin:16px 0;">\n  <strong style="color:#a16207;">💡 Important:</strong>\n  <p style="margin:8px 0 0 0; color:#713f12;">Your highlight text here...</p>\n</div>\n`;
-                              const newToc = [...(formData.seo_toc || [])];
-                              newToc[index].content = (newToc[index].content || '') + highlightHtml;
-                              setFormData({...formData, seo_toc: newToc});
-                            }}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-amber-100 text-amber-700 rounded-lg text-xs font-medium hover:bg-amber-200"
-                          >
-                            💡 Highlight
-                          </button>
-                        </div>
-                        
-                        {/* Content Textarea */}
-                        <textarea
-                          value={item.content || ''}
-                          onChange={(e) => {
-                            const newToc = [...(formData.seo_toc || [])];
-                            newToc[index].content = e.target.value;
-                            setFormData({...formData, seo_toc: newToc});
-                          }}
-                          placeholder="Write content or use Insert buttons above to add:&#10;• Images (with URL)&#10;• Tables (custom rows/columns)&#10;• YouTube Videos&#10;• Quick Facts&#10;• Key Statistics&#10;• Lists&#10;• Highlight boxes"
-                          rows="10"
-                          className="w-full border-0 px-3 py-2 text-sm focus:outline-none focus:ring-0 font-mono"
-                          style={{minHeight: '200px'}}
-                        />
-                      </div>
-
-                      {/* Preview Box */}
-                      <div className="bg-gray-100 rounded-lg p-3 border">
-                        <p className="text-xs font-bold text-gray-600 mb-2">👁️ Live Preview:</p>
-                        <div className="bg-white rounded p-3 border text-sm max-h-64 overflow-y-auto">
-                          <h3 className="font-bold text-gray-800 text-lg border-b pb-2 mb-3">{item.title || 'Section Title'}</h3>
-                          <div 
-                            className="prose prose-sm max-w-none"
-                            dangerouslySetInnerHTML={{__html: item.content || '<p class="text-gray-400">Content preview will appear here...</p>'}}
-                          />
-                        </div>
-                      </div>
                     </div>
                   </div>
                 ))}
@@ -2922,7 +2849,7 @@ const CollegeForm = () => {
                 onClick={() => {
                   setFormData({
                     ...formData,
-                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]
+                    seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', blocks: [] }]
                   });
                 }}
                 className="text-sm text-purple-700 hover:bg-purple-100 px-4 py-2 rounded-lg border-2 border-purple-300 flex items-center gap-2 font-medium"
