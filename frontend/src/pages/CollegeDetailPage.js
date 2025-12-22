@@ -1456,38 +1456,22 @@ const CollegeDetailPage = ({ overrideId }) => {
                         </div>
                       )}
                     </div>
-                  )}
 
-                  <h3 className="text-xl font-bold mb-3">Placement Statistics</h3>
-                  <div className="overflow-x-auto mb-6">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">{year - 1}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(college.placement?.students_participated || college.placements?.students_participated) && (
-                          <tr className="hover:bg-gray-50">
-                            <td className="border px-4 py-3 text-sm">Students Participated</td>
-                            <td className="border px-4 py-3 text-sm font-semibold">
-                              {college.placement?.students_participated || college.placements?.students_participated}
-                            </td>
-                          </tr>
-                        )}
-                        {(college.placement?.companies_participated || college.placements?.companies_participated) && (
-                          <tr className="hover:bg-gray-50">
-                            <td className="border px-4 py-3 text-sm">Companies Participated</td>
-                            <td className="border px-4 py-3 text-sm font-semibold">
-                              {college.placement?.companies_participated || college.placements?.companies_participated}
-                            </td>
-                          </tr>
-                        )}
-                        {(college.placement?.total_offers || college.placements?.total_offers) && (
-                          <tr className="hover:bg-gray-50">
-                            <td className="border px-4 py-3 text-sm">Total Offers</td>
-                            <td className="border px-4 py-3 text-sm font-semibold">
+                      {college.placement?.top_recruiters && college.placement.top_recruiters.length > 0 && (
+                        <div className="mt-4">
+                          <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {college.placement.top_recruiters.map((r, idx) => (
+                              <span key={idx} className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-full">{r}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Placement details will be updated soon.</p>
+                  )}
+                </section>
                               {college.placement?.total_offers || college.placements?.total_offers}
                             </td>
                           </tr>
