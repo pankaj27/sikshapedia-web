@@ -1053,48 +1053,44 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </section>
                     )}
 
-                    {/* VS OTHER COLLEGES - FROM TOC #07 */}
-                    <section id="seo-comparison">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} vs Other Colleges</h2>
-                      {college?.similar_colleges && college.similar_colleges.length > 0 ? (
-                        <>
-                          <p className="text-gray-700 text-sm mb-4">
-                            Comparison with similar institutes:
-                          </p>
-                          <div className="overflow-x-auto">
-                            <table className="w-full border-collapse border">
-                              <thead>
-                                <tr className="bg-gray-50">
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">{college.name}</th>
-                                  {college.similar_colleges.slice(0, 2).map((sc, idx) => (
-                                    <th key={idx} className="border px-4 py-3 text-left text-sm font-bold">{sc.name}</th>
-                                  ))}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm font-semibold">Location</td>
-                                  <td className="border px-4 py-3 text-sm">{college.location?.city || college.city}, {college.location?.state || college.state}</td>
-                                  {college.similar_colleges.slice(0, 2).map((sc, idx) => (
-                                    <td key={idx} className="border px-4 py-3 text-sm">{sc.city || sc.location?.city}, {sc.state || sc.location?.state}</td>
-                                  ))}
-                                </tr>
-                                <tr className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm font-semibold">Avg. Fees</td>
-                                  <td className="border px-4 py-3 text-sm">₹{(college.average_fees / 100000).toFixed(2)}L</td>
-                                  {college.similar_colleges.slice(0, 2).map((sc, idx) => (
-                                    <td key={idx} className="border px-4 py-3 text-sm">{sc.average_fees ? `₹${(sc.average_fees / 100000).toFixed(2)}L` : '-'}</td>
-                                  ))}
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </>
-                      ) : (
-                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Comparison data will be available soon.</p>
-                      )}
-                    </section>
+                    {/* VS OTHER COLLEGES - FROM TOC #07 - Only show if data exists */}
+                    {college?.similar_colleges && college.similar_colleges.length > 0 && (
+                      <section id="seo-comparison">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} vs Other Colleges</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          Comparison with similar institutes:
+                        </p>
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-gray-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">{college.name}</th>
+                                {college.similar_colleges.slice(0, 2).map((sc, idx) => (
+                                  <th key={idx} className="border px-4 py-3 text-left text-sm font-bold">{sc.name}</th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm font-semibold">Location</td>
+                                <td className="border px-4 py-3 text-sm">{college.location?.city || college.city}, {college.location?.state || college.state}</td>
+                                {college.similar_colleges.slice(0, 2).map((sc, idx) => (
+                                  <td key={idx} className="border px-4 py-3 text-sm">{sc.city || sc.location?.city}, {sc.state || sc.location?.state}</td>
+                                ))}
+                              </tr>
+                              <tr className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm font-semibold">Avg. Fees</td>
+                                <td className="border px-4 py-3 text-sm">₹{(college.average_fees / 100000).toFixed(2)}L</td>
+                                {college.similar_colleges.slice(0, 2).map((sc, idx) => (
+                                  <td key={idx} className="border px-4 py-3 text-sm">{sc.average_fees ? `₹${(sc.average_fees / 100000).toFixed(2)}L` : '-'}</td>
+                                ))}
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    )}
 
                     {/* CAMPUS & FACILITIES - FROM TOC #08 */}
                     <section id="seo-facilities">
