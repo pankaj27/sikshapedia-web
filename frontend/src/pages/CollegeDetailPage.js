@@ -1596,14 +1596,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                       No scholarship information available
                     </div>
                   )}
-
-                  {/* Q&A */}
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
-                    <p className="text-sm font-bold mb-2">Ques. How to apply for scholarships at {college.name}?</p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Ans.</strong> Students can apply for scholarships through the institute's portal. Most scholarships are automatically considered based on JEE rank and family income.
-                    </p>
-                  </div>
                 </section>
 
                 {/* FACILITIES */}
