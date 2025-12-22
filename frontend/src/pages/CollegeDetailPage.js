@@ -860,38 +860,88 @@ const CollegeDetailPage = ({ overrideId }) => {
                         {college.name} has been ranked by various agencies:
                       </p>
 
-                      <div className="overflow-x-auto">
-                        <table className="w-full border-collapse border">
-                          <thead>
-                            <tr className="bg-gray-50">
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="hover:bg-gray-50">
-                              <td className="border px-4 py-3 text-sm">NIRF</td>
-                              <td className="border px-4 py-3 text-sm">{year}</td>
-                              <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{Math.floor(Math.random() * 20) + 1}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      {college?.rankings && college.rankings.length > 0 ? (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-gray-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {college.rankings.map((ranking, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
+                                  <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
+                                  <td className="border px-4 py-3 text-sm">{ranking.year || year}</td>
+                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : college?.nirf_ranking ? (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-gray-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm">NIRF</td>
+                                <td className="border px-4 py-3 text-sm">{year}</td>
+                                <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Ranking details will be updated soon.</p>
+                      )}
                     </section>
 
                     {/* ADMISSION - FROM TOC #04 */}
                     <section id="seo-admission">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026</h2>
+                      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         Admission process and eligibility criteria for {college.name}:
                       </p>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                        <h3 className="font-bold mb-2">Admission Criteria</h3>
-                        <p className="text-sm text-gray-700">
-                          Admission is based on merit in national level entrance exams followed by counselling rounds.
-                        </p>
-                      </div>
+                      {college?.admission_process ? (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                          <h3 className="font-bold mb-2">Admission Criteria</h3>
+                          <p className="text-sm text-gray-700">{college.admission_process}</p>
+                        </div>
+                      ) : college?.courses && college.courses.length > 0 ? (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-orange-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).map((course, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm font-medium">{course.name}</td>
+                                  <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
+                                  <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Admission details will be updated soon.</p>
+                      )}
                     </section>
 
                     {/* Content Middle Ad */}
@@ -905,33 +955,68 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <p className="text-gray-700 text-sm mb-4">
                         Latest cutoff ranks for various programs:
                       </p>
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                        <p className="text-sm text-gray-700">Cutoff details will be updated soon after official announcement.</p>
-                      </div>
+                      {college?.cutoff_data && college.cutoff_data.length > 0 ? (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-orange-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {college.cutoff_data.map((item, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
+                                  <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
+                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.cutoff || item.rank}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                          <p className="text-sm text-gray-700">Cutoff details will be updated soon after official announcement.</p>
+                        </div>
+                      )}
                     </section>
 
                     {/* PLACEMENT - FROM TOC #06 - Guest Gated */}
                     <section id="seo-placement">
                       <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        As per {college.name} Placement report, the average package stood at INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA.
-                      </p>
-                      <GuestGate title="Placement Data">
-                        <div className="grid grid-cols-3 gap-4">
-                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                            <div className="text-2xl font-bold text-green-600">₹{college.placement?.highest ? (college.placement.highest / 100000).toFixed(1) : '50'}L</div>
-                            <div className="text-xs text-gray-600">Highest</div>
-                          </div>
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                            <div className="text-2xl font-bold text-blue-600">₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'}L</div>
-                            <div className="text-xs text-gray-600">Average</div>
-                          </div>
-                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-                            <div className="text-2xl font-bold text-purple-600">95%</div>
-                            <div className="text-xs text-gray-600">Placed</div>
-                          </div>
-                        </div>
-                      </GuestGate>
+                      {college?.placement ? (
+                        <>
+                          <p className="text-gray-700 text-sm mb-4">
+                            As per {college.name} Placement report, the average package stood at ₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'} LPA.
+                          </p>
+                          <GuestGate title="Placement Data">
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                                <div className="text-2xl font-bold text-green-600">₹{college.placement.highest ? (college.placement.highest / 100000).toFixed(1) : '-'}L</div>
+                                <div className="text-xs text-gray-600">Highest Package</div>
+                              </div>
+                              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                                <div className="text-2xl font-bold text-blue-600">₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'}L</div>
+                                <div className="text-xs text-gray-600">Average Package</div>
+                              </div>
+                              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
+                                <div className="text-2xl font-bold text-purple-600">{college.placement.percentage || '-'}%</div>
+                                <div className="text-xs text-gray-600">Placement Rate</div>
+                              </div>
+                            </div>
+                            {college.placement.top_recruiters && college.placement.top_recruiters.length > 0 && (
+                              <div className="mt-4">
+                                <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
+                                <p className="text-sm text-gray-700">{college.placement.top_recruiters.join(', ')}</p>
+                              </div>
+                            )}
+                          </GuestGate>
+                        </>
+                      ) : (
+                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Placement details will be updated soon.</p>
+                      )}
                     </section>
 
                     {/* VS OTHER COLLEGES - FROM TOC #07 */}
