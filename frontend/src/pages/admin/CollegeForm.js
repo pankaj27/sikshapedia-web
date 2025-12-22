@@ -2430,8 +2430,10 @@ const CollegeForm = () => {
                           {/* Add Key Stats Block */}
                           <button type="button" onClick={() => {
                             const newToc = [...(formData.seo_toc || [])];
+                            const collegeName = formData.name || 'College';
                             newToc[index].blocks = [...(newToc[index].blocks || []), {
                               id: `block-${Date.now()}`, type: 'stats',
+                              title: `${collegeName} Key Statistics - AdmissionBuddy`,
                               items: [
                                 { label: 'Students', value: '', color: 'yellow' },
                                 { label: 'Placement Rate', value: '', color: 'green' },
@@ -2447,8 +2449,12 @@ const CollegeForm = () => {
                           {/* Add List Block */}
                           <button type="button" onClick={() => {
                             const newToc = [...(formData.seo_toc || [])];
+                            const collegeName = formData.name || 'College';
+                            const sectionTitle = item.title || 'Information';
                             newToc[index].blocks = [...(newToc[index].blocks || []), {
-                              id: `block-${Date.now()}`, type: 'list', title: '', listType: 'bullet',
+                              id: `block-${Date.now()}`, type: 'list', 
+                              title: `${collegeName} ${sectionTitle} - AdmissionBuddy`, 
+                              listType: 'bullet',
                               items: ['', '', '']
                             }];
                             setFormData({...formData, seo_toc: newToc});
