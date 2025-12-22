@@ -1022,32 +1022,44 @@ const CollegeDetailPage = ({ overrideId }) => {
                     {/* VS OTHER COLLEGES - FROM TOC #07 */}
                     <section id="seo-comparison">
                       <h2 className="text-2xl font-bold mb-3">{college.name} vs Other Colleges</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        Comparison with other top institutes:
-                      </p>
-                      <div className="overflow-x-auto">
-                        <table className="w-full border-collapse border">
-                          <thead>
-                            <tr className="bg-gray-50">
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">{college.name}</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">College 2</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="hover:bg-gray-50">
-                              <td className="border px-4 py-3 text-sm font-semibold">Established</td>
-                              <td className="border px-4 py-3 text-sm">{college.established}</td>
-                              <td className="border px-4 py-3 text-sm">1961</td>
-                            </tr>
-                            <tr className="hover:bg-gray-50">
-                              <td className="border px-4 py-3 text-sm font-semibold">Fees</td>
-                              <td className="border px-4 py-3 text-sm">INR {(college.average_fees / 100000).toFixed(2)}L</td>
-                              <td className="border px-4 py-3 text-sm">INR 2.28L</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      {college?.similar_colleges && college.similar_colleges.length > 0 ? (
+                        <>
+                          <p className="text-gray-700 text-sm mb-4">
+                            Comparison with similar institutes:
+                          </p>
+                          <div className="overflow-x-auto">
+                            <table className="w-full border-collapse border">
+                              <thead>
+                                <tr className="bg-gray-50">
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">{college.name}</th>
+                                  {college.similar_colleges.slice(0, 2).map((sc, idx) => (
+                                    <th key={idx} className="border px-4 py-3 text-left text-sm font-bold">{sc.name}</th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm font-semibold">Location</td>
+                                  <td className="border px-4 py-3 text-sm">{college.location?.city || college.city}, {college.location?.state || college.state}</td>
+                                  {college.similar_colleges.slice(0, 2).map((sc, idx) => (
+                                    <td key={idx} className="border px-4 py-3 text-sm">{sc.city || sc.location?.city}, {sc.state || sc.location?.state}</td>
+                                  ))}
+                                </tr>
+                                <tr className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm font-semibold">Avg. Fees</td>
+                                  <td className="border px-4 py-3 text-sm">₹{(college.average_fees / 100000).toFixed(2)}L</td>
+                                  {college.similar_colleges.slice(0, 2).map((sc, idx) => (
+                                    <td key={idx} className="border px-4 py-3 text-sm">{sc.average_fees ? `₹${(sc.average_fees / 100000).toFixed(2)}L` : '-'}</td>
+                                  ))}
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Comparison data will be available soon.</p>
+                      )}
                     </section>
 
                     {/* CAMPUS & FACILITIES - FROM TOC #08 */}
@@ -1080,24 +1092,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                           })}
                         </div>
                       ) : (
-                        /* Default facilities when no data */
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                          {[
-                            { name: 'Library', icon: HiOutlineLibrary, color: 'bg-blue-500' },
-                            { name: 'Sports Complex', icon: MdOutlineSportsBasketball, color: 'bg-orange-500' },
-                            { name: 'Hostel', icon: MdOutlineBed, color: 'bg-teal-500' },
-                            { name: 'Cafeteria', icon: MdOutlineLocalCafe, color: 'bg-amber-500' },
-                            { name: 'WiFi Campus', icon: MdOutlineWifi, color: 'bg-blue-400' },
-                            { name: 'Medical', icon: MdOutlineLocalHospital, color: 'bg-red-500' },
-                            { name: 'Gymnasium', icon: MdOutlineFitnessCenter, color: 'bg-red-600' },
-                            { name: 'Auditorium', icon: MdOutlineTheaters, color: 'bg-purple-500' }
-                          ].map((item, idx) => (
-                            <div 
-                              key={idx} 
-                              className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-                            >
-                              <div className={`w-14 h-14 ${item.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-                                <item.icon className="text-white" size={26} />
+                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg text-center">Facilities information will be updated soon.</p>
+                      )}
                               </div>
                               <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
                                 {item.name}
