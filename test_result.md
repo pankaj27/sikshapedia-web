@@ -1346,6 +1346,53 @@ const fetchCourses = async () => {
 
 ## Agent Communication (Dec 20, 2025):
 
+### 🔗 USER SIGNUP FORM TESTING COMPLETED (Dec 22, 2025):
+**Agent:** testing  
+**Message:** User Signup Form comprehensive testing has been completed with a **CRITICAL ISSUE IDENTIFIED**.
+
+**Test Results Summary:**
+- ❌ **"School" Option Missing**: The main test requirement FAILED - "School" does not appear in the course dropdown
+- ✅ **All Other Components Working**: Form navigation, pre-fill, city dropdown, validation, mobile responsiveness all functional
+- ✅ **Other Courses Available**: B.Tech, MBA, MBBS, and 100+ other courses work correctly
+
+**Root Cause Identified:**
+1. **Frontend Constants**: `ALL_INDIA_COURSES` includes "School" at line 33 ✅
+2. **Backend API Issue**: `/api/courses` endpoint does NOT include "School" ❌
+3. **Override Logic**: Frontend replaces constants with API data, removing "School" ❌
+
+**Technical Details:**
+- **File**: `/app/frontend/src/pages/UserSignup.js` lines 98-110
+- **Issue**: `setCourses(apiCourses)` replaces `ALL_INDIA_COURSES` with backend data
+- **Backend Response**: 100+ courses returned but "School" missing from database
+- **User Impact**: School-interested users cannot complete signup
+
+**Immediate Action Required:**
+1. **HIGH PRIORITY**: Add "School" to backend `/api/courses` endpoint
+2. **Alternative**: Modify frontend to merge API data with constants
+3. **Verification**: Test that "School" appears and is selectable after fix
+
+**What Works Correctly:**
+- ✅ Page loading and navigation (Step 1 → Step 3)
+- ✅ Pre-fill functionality (name: "School Test User", email: "schooltest@example.com")
+- ✅ City dropdown (Mumbai selection working)
+- ✅ Form validation ("Please fill all required fields")
+- ✅ Mobile responsiveness (375x667 viewport)
+- ✅ All other course options (B.Tech, MBA, MBBS visible and selectable)
+
+**Testing Methodology:**
+- Comprehensive Playwright automation with 8 test scenarios
+- Desktop (1920x1080) and mobile (375x667) testing
+- Real user flow simulation with URL parameters
+- Screenshot documentation of each test step
+- Backend API verification via curl testing
+
+**Current Status Assessment:**
+- **User Impact**: HIGH - School admissions users blocked from signup
+- **Business Impact**: HIGH - Missing key user segment (school students/parents)
+- **Technical Debt**: MEDIUM - Simple backend data addition required
+
+**Status:** User Signup Form has **CRITICAL FUNCTIONALITY ISSUE** that must be resolved before deployment. The "School" course option is completely missing from the dropdown, preventing school-interested users from completing registration.
+
 ### 🔗 WRITE REVIEW FEATURE RE-TESTING COMPLETED (Dec 21, 2025):
 **Agent:** testing  
 **Message:** Write Review Feature end-to-end re-testing has been completed after fixes were applied. Significant improvements have been made to the authentication system and overall functionality.
