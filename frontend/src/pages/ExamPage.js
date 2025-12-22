@@ -297,37 +297,30 @@ const ExamPage = () => {
             <AdBanner pageName="exams" position="sidebar" />
 
             {/* News Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-rose-500 to-pink-500 px-5 py-4">
-                <h2 className="text-white font-bold flex items-center gap-2">
-                  <FiBell className="w-5 h-5" />
-                  Latest Exam Updates
-                </h2>
-              </div>
-              <div className="p-4 space-y-4">
-                {[
-                  { title: 'JEE Main 2026 Registration Started', date: '14 Dec 2025', tag: 'NEW' },
-                  { title: 'NEET 2025 Exam Date Announced', date: '12 Dec 2025', tag: 'UPDATE' },
-                  { title: 'CUET 2025 Registration Opens', date: '10 Dec 2025', tag: 'NEW' },
-                  { title: 'CAT 2025 Results Declared', date: '08 Dec 2025', tag: 'RESULT' }
-                ].map((news, idx) => (
-                  <div key={idx} className="group cursor-pointer">
-                    <div className="flex items-start gap-2">
-                      <span className={`flex-shrink-0 px-1.5 py-0.5 text-[10px] font-bold rounded ${
-                        news.tag === 'NEW' ? 'bg-green-100 text-green-700' :
-                        news.tag === 'RESULT' ? 'bg-blue-100 text-blue-700' :
-                        'bg-orange-100 text-orange-700'
-                      }`}>
-                        {news.tag}
-                      </span>
-                      <div className="flex-1">
-                        <h3 className="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition line-clamp-2">
-                          {news.title}
-                        </h3>
-                        <p className="text-xs text-gray-500 mt-1">{news.date}</p>
+            {/* Latest Exam Updates - Only show if we have news/updates from API */}
+            {latestNews && latestNews.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-rose-500 to-pink-500 px-5 py-4">
+                  <h2 className="text-white font-bold flex items-center gap-2">
+                    <FiBell className="w-5 h-5" />
+                    Latest Exam Updates
+                  </h2>
+                </div>
+                <div className="p-4 space-y-4">
+                  {latestNews.slice(0, 4).map((news, idx) => (
+                    <div key={idx} className="group cursor-pointer">
+                      <div className="flex items-start gap-2">
+                        <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-bold rounded bg-green-100 text-green-700">
+                          NEWS
+                        </span>
+                        <div className="flex-1">
+                          <h3 className="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition line-clamp-2">
+                            {news.title}
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-1">{news.date || news.published_date}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
                 ))}
                 <Link 
                   to="/exam-news" 
