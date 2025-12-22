@@ -1857,66 +1857,35 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </div>
                   </div>
 
-                  {/* Nearby Places */}
-                  <div className="mt-6 bg-gray-50 border rounded-lg p-6">
-                    <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">🏥</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Hospital</p>
-                          <p className="text-xs text-gray-600">City Hospital - 1.5 km</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">🏦</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Bank</p>
-                          <p className="text-xs text-gray-600">SBI Bank - 800 m</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">🏪</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Market</p>
-                          <p className="text-xs text-gray-600">Shopping Complex - 2 km</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">🚉</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Metro Station</p>
-                          <p className="text-xs text-gray-600">Central Metro - 2 km</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">✈️</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Airport</p>
-                          <p className="text-xs text-gray-600">International Airport - 15 km</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">🍽️</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">Restaurants</p>
-                          <p className="text-xs text-gray-600">Food Court - 500 m</p>
-                        </div>
+                  {/* Nearby Places - Dynamic from college.nearby_places */}
+                  {college?.nearby_places && college.nearby_places.length > 0 ? (
+                    <div className="mt-6 bg-gray-50 border rounded-lg p-6">
+                      <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {college.nearby_places.map((place, idx) => {
+                          const icons = { hospital: '🏥', bank: '🏦', market: '🏪', metro: '🚉', airport: '✈️', restaurant: '🍽️', bus: '🚌', train: '🚂', atm: '🏧', pharmacy: '💊' };
+                          const colors = { hospital: 'bg-blue-100', bank: 'bg-green-100', market: 'bg-purple-100', metro: 'bg-orange-100', airport: 'bg-red-100', restaurant: 'bg-yellow-100', bus: 'bg-teal-100', train: 'bg-indigo-100', atm: 'bg-pink-100', pharmacy: 'bg-cyan-100' };
+                          const placeType = (place.type || 'market').toLowerCase();
+                          return (
+                            <div key={idx} className="flex items-start gap-3">
+                              <div className={`w-10 h-10 ${colors[placeType] || 'bg-gray-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
+                                <span className="text-xl">{icons[placeType] || '📍'}</span>
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900">{place.name}</p>
+                                <p className="text-xs text-gray-600">{place.distance || '-'}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="mt-6 bg-gray-50 border rounded-lg p-6">
+                      <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
+                      <p className="text-sm text-gray-500">Nearby places information will be updated soon.</p>
+                    </div>
+                  )}
                 </section>
             </div>
           </div>
