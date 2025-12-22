@@ -457,6 +457,7 @@ const CourseDetailPage = () => {
                 ))}
               </div>
             </section>
+            )}
 
             {/* Reviews Section */}
             <section id="reviews" className="mt-8">
