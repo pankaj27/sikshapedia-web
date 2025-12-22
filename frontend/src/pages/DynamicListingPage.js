@@ -1390,42 +1390,21 @@ const DynamicListingPage = () => {
         </div>
       </div>
 
-      {/* CONTENT SECTIONS */}
-      <div className="bg-white py-4 md:py-6">
-        <div className="container mx-auto px-4 md:px-6">
-          
-          {/* INTRO CONTENT - Use admin content if available */}
-          <section className="mb-4">
-            <div className="text-gray-700 text-sm md:text-base leading-relaxed">
-              {pageContent?.introduction ? (
+      {/* CONTENT SECTIONS - Only show if admin content is configured */}
+      {pageContent?.introduction && (
+        <div className="bg-white py-4 md:py-6">
+          <div className="container mx-auto px-4 md:px-6">
+            <section className="mb-4">
+              <div className="text-gray-700 text-sm md:text-base leading-relaxed">
                 <div 
-                  className={`prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
+                  className="prose max-w-none"
                   dangerouslySetInnerHTML={{ __html: pageContent.introduction }}
                 />
-              ) : (
-                <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
-                  India is home to over <strong>{totalCount.toLocaleString()} colleges</strong> offering diverse programs across engineering, medical, management, arts, and more. Whether you are looking for <strong>government colleges</strong> with affordable fees or <strong>private institutions</strong> with world-class facilities, we have comprehensive information to help you make the right choice. The fees of colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
-                </p>
-              )}
-            </div>
-          </section>
-
-          {/* Read More Button */}
-          {!showContent && (
-            <div className="text-center mb-4">
-              <button
-                onClick={() => setShowContent(true)}
-                className="inline-flex items-center gap-2 px-5 py-2 bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 text-sm font-medium rounded-full transition-all"
-              >
-                <span>Read More About Colleges in India</span>
-                <FiChevronDown size={16} />
-              </button>
-            </div>
-          )}
-
-        
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Ad Banner - Above Filters */}
       <div className="bg-white py-4">
