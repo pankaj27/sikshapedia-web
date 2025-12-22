@@ -2614,44 +2614,64 @@ const CollegeForm = () => {
                                       </div>
                                       
                                       {/* SEO Fields */}
-                                      <div className="grid grid-cols-2 gap-3">
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">🔍 Alt Text (SEO) <span className="text-red-500">*</span></label>
-                                          <input type="text" value={block.alt || ''} onChange={(e) => {
+                                      <div className="space-y-3">
+                                        {/* Image Title - Primary Input for Auto SEO */}
+                                        <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-3">
+                                          <label className="block text-sm font-bold text-yellow-800 mb-2">✏️ Image Title <span className="text-red-500">*</span></label>
+                                          <input type="text" value={block.imageTitle || ''} onChange={(e) => {
                                             const newToc = [...(formData.seo_toc || [])];
-                                            newToc[index].blocks[blockIndex].alt = e.target.value;
+                                            const imageTitle = e.target.value;
+                                            const collegeName = formData.name || 'College';
+                                            newToc[index].blocks[blockIndex].imageTitle = imageTitle;
+                                            // Auto-generate SEO fields based on title
+                                            if (imageTitle) {
+                                              newToc[index].blocks[blockIndex].alt = `${imageTitle} - ${collegeName} | AdmissionBuddy`;
+                                              newToc[index].blocks[blockIndex].title = `${imageTitle} - ${collegeName} | AdmissionBuddy.co`;
+                                            }
                                             setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Describe the image for SEO & accessibility" />
-                                          <p className="text-xs text-green-600 mt-1">Important for Google Image Search</p>
+                                          }} className="w-full border-2 border-yellow-400 rounded-lg px-3 py-2.5 text-sm font-medium" placeholder="e.g., Campus Building, Library, Hostel Room, Lab Equipment" />
+                                          <p className="text-xs text-yellow-700 mt-2">💡 Enter image title - SEO Alt & Title will be auto-generated with AdmissionBuddy branding</p>
                                         </div>
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">🏷️ Title Attribute (SEO)</label>
-                                          <input type="text" value={block.title || ''} onChange={(e) => {
-                                            const newToc = [...(formData.seo_toc || [])];
-                                            newToc[index].blocks[blockIndex].title = e.target.value;
-                                            setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Title shown on hover" />
-                                        </div>
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">Caption (below image)</label>
-                                          <input type="text" value={block.caption || ''} onChange={(e) => {
-                                            const newToc = [...(formData.seo_toc || [])];
-                                            newToc[index].blocks[blockIndex].caption = e.target.value;
-                                            setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 rounded-lg px-3 py-2 text-sm" placeholder="Image caption text" />
-                                        </div>
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">Width</label>
-                                          <select value={block.width || '100%'} onChange={(e) => {
-                                            const newToc = [...(formData.seo_toc || [])];
-                                            newToc[index].blocks[blockIndex].width = e.target.value;
-                                            setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 rounded-lg px-3 py-2 text-sm">
-                                            <option value="100%">Full Width (100%)</option>
-                                            <option value="75%">Large (75%)</option>
-                                            <option value="50%">Medium (50%)</option>
-                                            <option value="33%">Small (33%)</option>
-                                          </select>
+                                        
+                                        <div className="grid grid-cols-2 gap-3">
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-700 mb-1">🔍 Alt Text (SEO) <span className="text-green-600 text-xs">(Auto-generated)</span></label>
+                                            <input type="text" value={block.alt || ''} onChange={(e) => {
+                                              const newToc = [...(formData.seo_toc || [])];
+                                              newToc[index].blocks[blockIndex].alt = e.target.value;
+                                              setFormData({...formData, seo_toc: newToc});
+                                            }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Auto-generated from Image Title" />
+                                            <p className="text-xs text-green-600 mt-1">Important for Google Image Search</p>
+                                          </div>
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-700 mb-1">🏷️ Title Attribute (SEO) <span className="text-green-600 text-xs">(Auto-generated)</span></label>
+                                            <input type="text" value={block.title || ''} onChange={(e) => {
+                                              const newToc = [...(formData.seo_toc || [])];
+                                              newToc[index].blocks[blockIndex].title = e.target.value;
+                                              setFormData({...formData, seo_toc: newToc});
+                                            }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Auto-generated from Image Title" />
+                                          </div>
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-700 mb-1">Caption (below image)</label>
+                                            <input type="text" value={block.caption || ''} onChange={(e) => {
+                                              const newToc = [...(formData.seo_toc || [])];
+                                              newToc[index].blocks[blockIndex].caption = e.target.value;
+                                              setFormData({...formData, seo_toc: newToc});
+                                            }} className="w-full border-2 rounded-lg px-3 py-2 text-sm" placeholder="Image caption text" />
+                                          </div>
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-700 mb-1">Width</label>
+                                            <select value={block.width || '100%'} onChange={(e) => {
+                                              const newToc = [...(formData.seo_toc || [])];
+                                              newToc[index].blocks[blockIndex].width = e.target.value;
+                                              setFormData({...formData, seo_toc: newToc});
+                                            }} className="w-full border-2 rounded-lg px-3 py-2 text-sm">
+                                              <option value="100%">Full Width (100%)</option>
+                                              <option value="75%">Large (75%)</option>
+                                              <option value="50%">Medium (50%)</option>
+                                              <option value="33%">Small (33%)</option>
+                                            </select>
+                                          </div>
                                         </div>
                                       </div>
                                       
