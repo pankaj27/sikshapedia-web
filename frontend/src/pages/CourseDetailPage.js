@@ -369,80 +369,85 @@ const CourseDetailPage = () => {
               </div>
             </section>
 
-            {/* Top Colleges Section */}
-            <section id="colleges" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-                  <HiOutlineOfficeBuilding className="text-indigo-600" size={20} />
-                </span>
-                Top Colleges for {courseName}
-              </h2>
-              <div className="space-y-4">
-                {topColleges.map((college, idx) => (
-                  <div key={idx} className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-orange-300 hover:shadow-md transition-all cursor-pointer">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                      {college.rank}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 hover:text-orange-600">{college.name}</h4>
-                      <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
-                        <span className="flex items-center gap-1"><FiMapPin size={12} /> {college.location}</span>
-                        <span className="flex items-center gap-1"><FiStar size={12} className="text-yellow-500" /> {college.rating}</span>
-                        <span>{college.fees}</span>
+            {/* Top Colleges Section - Only show if data exists */}
+            {topColleges.length > 0 && (
+              <section id="colleges" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+                    <HiOutlineOfficeBuilding className="text-indigo-600" size={20} />
+                  </span>
+                  Top Colleges for {courseName}
+                </h2>
+                <div className="space-y-4">
+                  {topColleges.map((college, idx) => (
+                    <div key={idx} className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-orange-300 hover:shadow-md transition-all cursor-pointer">
+                      <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                        {college.rank}
                       </div>
-                    </div>
-                    <button className="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-200 transition-colors">
-                      Apply
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <Link to="/colleges" className="mt-6 inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700">
-                View All Colleges <FiChevronRight />
-              </Link>
-            </section>
-
-            {/* Career Section */}
-            <section id="career" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <FiBriefcase className="text-amber-600" size={20} />
-                </span>
-                Career Options & Salary
-              </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {(Array.isArray(careerOptions) ? careerOptions : []).slice(0, 4).map((career, idx) => (
-                  <div key={idx} className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                    <h4 className="font-semibold text-gray-900 mb-2">{typeof career === 'string' ? career : career.title}</h4>
-                    {typeof career !== 'string' && (
-                      <div className="flex items-center gap-3 text-sm">
-                        <span className="text-green-600 font-medium">{career.salary}</span>
-                        <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-bold">{career.growth}</span>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 hover:text-orange-600">{college.name}</h4>
+                        <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                          <span className="flex items-center gap-1"><FiMapPin size={12} /> {college.location}</span>
+                          {college.rating > 0 && <span className="flex items-center gap-1"><FiStar size={12} className="text-yellow-500" /> {college.rating}</span>}
+                          {college.fees && <span>{college.fees}</span>}
+                        </div>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
+                      <button className="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-200 transition-colors">
+                        Apply
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <Link to="/colleges" className="mt-6 inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700">
+                  View All Colleges <FiChevronRight />
+                </Link>
+              </section>
+            )}
 
-            {/* FAQs Section */}
-            <section id="faqs" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
-                  <HiOutlineLightBulb className="text-teal-600" size={20} />
-                </span>
-                Frequently Asked Questions
-              </h2>
-              <div className="space-y-3">
-                {faqs.map((faq, idx) => (
-                  <div key={idx} className="border border-gray-200 rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
-                    >
-                      <span className="font-medium text-gray-900">{faq.q}</span>
-                      {expandedFaq === idx ? <FiChevronUp className="text-gray-500" /> : <FiChevronDown className="text-gray-500" />}
-                    </button>
+            {/* Career Section - Only show if data exists */}
+            {careerOptions.length > 0 && (
+              <section id="career" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <FiBriefcase className="text-amber-600" size={20} />
+                  </span>
+                  Career Options & Salary
+                </h2>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {careerOptions.slice(0, 4).map((career, idx) => (
+                    <div key={idx} className="p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                      <h4 className="font-semibold text-gray-900 mb-2">{typeof career === 'string' ? career : career.title}</h4>
+                      {typeof career !== 'string' && career.salary && (
+                        <div className="flex items-center gap-3 text-sm">
+                          <span className="text-green-600 font-medium">{career.salary}</span>
+                          {career.growth && <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-bold">{career.growth}</span>}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* FAQs Section - Only show if data exists */}
+            {faqs.length > 0 && (
+              <section id="faqs" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
+                    <HiOutlineLightBulb className="text-teal-600" size={20} />
+                  </span>
+                  Frequently Asked Questions
+                </h2>
+                <div className="space-y-3">
+                  {faqs.map((faq, idx) => (
+                    <div key={idx} className="border border-gray-200 rounded-xl overflow-hidden">
+                      <button
+                        onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
+                        className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+                      >
+                        <span className="font-medium text-gray-900">{faq.q}</span>
+                        {expandedFaq === idx ? <FiChevronUp className="text-gray-500" /> : <FiChevronDown className="text-gray-500" />}
+                      </button>
                     {expandedFaq === idx && (
                       <div className="px-4 pb-4 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-3">
                         {faq.a}
