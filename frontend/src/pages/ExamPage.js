@@ -17,7 +17,7 @@ const ExamPage = () => {
   const [pageSettings, setPageSettings] = useState({
     hero_title: 'Entrance Exams in India 2025-26',
     hero_subtitle: 'Complete guide to 200+ entrance exams for Engineering, Medical, Management, Law & more',
-    hero_search_placeholder: 'Search exams (JEE, NEET, CAT, GATE...)',
+    hero_search_placeholder: 'Search exams...',
     stats: [
       { label: 'Total Exams', value: '200+' },
       { label: 'Categories', value: '24' },
