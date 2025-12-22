@@ -323,12 +323,51 @@ async def get_admission_open_priority_colleges(limit: int = Query(6, ge=1, le=20
 
 @router.get("/colleges/{college_id}")
 async def get_college(college_id: str):
-    """Get a specific college by ID"""
+    """Get a specific college by ID with similar colleges"""
     college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
     if not college:
         raise HTTPException(status_code=404, detail="College not found")
     
     if isinstance(college.get('created_at'), str):
         college['created_at'] = datetime.fromisoformat(college['created_at'])
+    
+    # Fetch similar colleges (same city or state, same institution type, different ID)
+    location = college.get('location', {})
+    city = location.get('city', college.get('city', ''))
+    state = location.get('state', college.get('state', ''))
+    institution_type = college.get('institution_type', 'College')
+    
+    similar_query = {
+        "id": {"$ne": college_id},
+        "status": "published",
+        "$or": [
+            {"location.city": city},
+            {"city": city},
+            {"location.state": state},
+            {"state": state}
+        ]
+    }
+    
+    # Prefer same institution type
+    if institution_type:
+        similar_query["institution_type"] = institution_type
+    
+    similar_colleges = await db.colleges.find(
+        similar_query,
+        {
+            "_id": 0, "id": 1, "name": 1, "slug": 1, "logo_url": 1,
+            "city": 1, "state": 1, "location": 1, "average_fees": 1,
+            "institution_type": 1
+        }
+    ).limit(5).to_list(5)
+    
+    # Normalize city/state fields
+    for sc in similar_colleges:
+        if not sc.get('city') and sc.get('location'):
+            sc['city'] = sc['location'].get('city', '')
+        if not sc.get('state') and sc.get('location'):
+            sc['state'] = sc['location'].get('state', '')
+    
+    college['similar_colleges'] = similar_colleges
     
     return college
