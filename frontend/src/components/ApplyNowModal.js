@@ -311,7 +311,7 @@ const ApplyNowModal = ({
                 <label className="block text-xs font-medium text-gray-700 mb-1">City *</label>
                 <SearchableSelect
                   name="city"
-                  options={SORTED_CITIES}
+                  options={allCities.length > 0 ? allCities : ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune']}
                   value={formData.city}
                   onChange={handleChange}
                   placeholder="Search & select city"
