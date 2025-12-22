@@ -8,7 +8,7 @@ import json
 import sys
 
 # Backend URL from frontend .env
-BASE_URL = "https://edudynamic.preview.emergentagent.com/api"
+BASE_URL = "https://visual-composer-13.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {

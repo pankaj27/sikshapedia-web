@@ -152,7 +152,7 @@
 
 ### ✅ COMPREHENSIVE API HEALTH CHECK COMPLETED:
 **Test Status:** ✅ READY FOR DEPLOYMENT - All critical APIs working correctly
-**Test URL:** https://edudynamic.preview.emergentagent.com/api
+**Test URL:** https://visual-composer-13.preview.emergentagent.com/api
 
 ### 🏗️ CORE DATA APIs - ALL WORKING (4/4 PASS - 100.0%):
 
@@ -801,7 +801,7 @@
 - ✅ **Dashboard Loading**: Dashboard loads with Overview section and sidebar navigation
 
 **Technical Verification:**
-- API request captured: POST https://edudynamic.preview.emergentagent.com/api/institute/login
+- API request captured: POST https://visual-composer-13.preview.emergentagent.com/api/institute/login
 - API response: 200 OK
 - "Logging in..." text appears during login process
 - Successful redirect to /institute/dashboard
@@ -1499,20 +1499,20 @@
 ### 📋 CREATED INSTITUTION DETAILS:
 
 **IIM Ahmedabad:**
-- URL: https://edudynamic.preview.emergentagent.com/colleges/51c74f99-a54e-439a-a46f-76432ed0ee3b
+- URL: https://visual-composer-13.preview.emergentagent.com/colleges/51c74f99-a54e-439a-a46f-76432ed0ee3b
 - Type: College, Private, Established: 1961
 - Location: Ahmedabad, Gujarat
 - Courses: MBA (₹23L), PGPX (₹32L), PhD (₹1L)
 - NIRF Ranking: 1
 
 **The Doon School:**
-- URL: https://edudynamic.preview.emergentagent.com/colleges/0168b962-6df8-4cbe-91f2-18e8f7285374
+- URL: https://visual-composer-13.preview.emergentagent.com/colleges/0168b962-6df8-4cbe-91f2-18e8f7285374
 - Type: School, Private, Established: 1935
 - Location: Dehradun, Uttarakhand
 - Courses: Class 7 (₹12L), Class 8 (₹12L), Class 12 (₹15L)
 
 **IIT Delhi:**
-- URL: https://edudynamic.preview.emergentagent.com/colleges/fba4b2d0-07f8-4e7b-af4a-a23a65adcde6
+- URL: https://visual-composer-13.preview.emergentagent.com/colleges/fba4b2d0-07f8-4e7b-af4a-a23a65adcde6
 - Type: University, Government, Established: 1961
 - Location: New Delhi, Delhi
 - Courses: B.Tech (₹8L), M.Tech (₹4L), PhD (₹0.5L)
@@ -1528,7 +1528,7 @@
 ### 🎯 INSTITUTIONS TESTED:
 
 #### 1. **St. Stephens College (College)** - ✅ VERIFIED CLEAN
-- **URL:** https://edudynamic.preview.emergentagent.com/colleges/005-st-stephens-college-delhi
+- **URL:** https://visual-composer-13.preview.emergentagent.com/colleges/005-st-stephens-college-delhi
 - **Expected Data:** Has courses (5), FAQs (5), NIRF ranking
 - **Verification Results:**
   - ✅ NO hardcoded dates found (no "January 2026", "March 2026", "April-May 2026")
@@ -1540,7 +1540,7 @@
   - ✅ Conditional rendering working: FAQs visible (has data), other sections hidden (no data)
 
 #### 2. **Delhi Public School (School)** - ✅ VERIFIED CLEAN
-- **URL:** https://edudynamic.preview.emergentagent.com/schools/003-delhi-public-school-rohini
+- **URL:** https://visual-composer-13.preview.emergentagent.com/schools/003-delhi-public-school-rohini
 - **Expected Data:** Minimal data - no courses, no FAQs, no placement
 - **Verification Results:**
   - ✅ NO hardcoded dates found
@@ -1553,7 +1553,7 @@
   - ✅ Conditional rendering: Some sections visible (has data), FAQs/Rankings hidden (no data)
 
 #### 3. **JNU University (University)** - ✅ VERIFIED CLEAN
-- **URL:** https://edudynamic.preview.emergentagent.com/university/jawaharlal-nehru-university-delhi
+- **URL:** https://visual-composer-13.preview.emergentagent.com/university/jawaharlal-nehru-university-delhi
 - **Expected Data:** Minimal data - NIRF #2 ranking only
 - **Verification Results:**
   - ✅ NO hardcoded dates found
@@ -1616,7 +1616,7 @@ All 3 institution detail pages have been thoroughly verified and are completely 
 
 ### ✅ COMPREHENSIVE ADMIN FORM TESTING COMPLETED:
 **Test Status:** ✅ MOSTLY WORKING - Admin institute entry form functional with comprehensive field testing
-**Test URL:** https://edudynamic.preview.emergentagent.com/admin/colleges/new
+**Test URL:** https://visual-composer-13.preview.emergentagent.com/admin/colleges/new
 **Login Credentials:** admin@admissionbuddy.co / admin123 ✅ WORKING
 
 ## Admin Institution Creation API Testing Results (Dec 22, 2025):
@@ -1727,7 +1727,7 @@ All 3 institution detail pages have been thoroughly verified and are completely 
 ### 📋 CREATED INSTITUTION DETAILS:
 
 **IIM Ahmedabad:**
-- URL: https://edudynamic.preview.emergentagent.com/colleges/917951b9-cb03-472b-8782-3a8a688303f7
+- URL: https://visual-composer-13.preview.emergentagent.com/colleges/917951b9-cb03-472b-8782-3a8a688303f7
 - API: GET /api/colleges/917951b9-cb03-472b-8782-3a8a688303f7 ✅ Working
 - Type: College, Private, Established: 1961
 - Location: Ahmedabad, Gujarat
@@ -1735,14 +1735,14 @@ All 3 institution detail pages have been thoroughly verified and are completely 
 - NIRF Ranking: 1
 
 **The Doon School:**
-- URL: https://edudynamic.preview.emergentagent.com/colleges/2a9727ee-e671-46fe-b0c0-e64d15adad8b
+- URL: https://visual-composer-13.preview.emergentagent.com/colleges/2a9727ee-e671-46fe-b0c0-e64d15adad8b
 - API: GET /api/colleges/2a9727ee-e671-46fe-b0c0-e64d15adad8b ✅ Working
 - Type: School, Private, Established: 1935
 - Location: Dehradun, Uttarakhand
 - Courses: Class 7 (₹12L), Class 10 (₹12L), Class 12 (₹15L)
 
 **IIT Delhi:**
-- URL: https://edudynamic.preview.emergentagent.com/colleges/cbf08355-ce3c-4817-a92b-af8eac78c881
+- URL: https://visual-composer-13.preview.emergentagent.com/colleges/cbf08355-ce3c-4817-a92b-af8eac78c881
 - API: GET /api/colleges/cbf08355-ce3c-4817-a92b-af8eac78c881 ✅ Working
 - Type: University, Government, Established: 1961
 - Location: New Delhi, Delhi
@@ -2143,7 +2143,7 @@ const fetchCourses = async () => {
 ## UniversityDetailPage Dynamic Rendering Testing Results (Dec 22, 2025):
 
 ### COMPREHENSIVE TESTING COMPLETED - DYNAMIC RENDERING WORKING:
-**Test URL:** https://edudynamic.preview.emergentagent.com/university/jawaharlal-nehru-university-delhi
+**Test URL:** https://visual-composer-13.preview.emergentagent.com/university/jawaharlal-nehru-university-delhi
 **Test Status:** MOSTLY WORKING - UniversityDetailPage successfully implements dynamic conditional rendering
 
 ### TEST RESULTS SUMMARY:
@@ -2490,7 +2490,7 @@ const fetchCourses = async () => {
 - ✅ **Dashboard Loading**: Dashboard loads with all components (Overview, sidebar navigation)
 
 **Technical Verification:**
-- API Request: POST https://edudynamic.preview.emergentagent.com/api/institute/login ✅
+- API Request: POST https://visual-composer-13.preview.emergentagent.com/api/institute/login ✅
 - API Response: 200 OK ✅
 - Login Process: "Logging in..." text appears during authentication ✅
 - Navigation: Successful redirect from `/institute/login` to `/institute/dashboard` ✅
@@ -3025,7 +3025,7 @@ const fetchCourses = async () => {
 ### ✅ ACCREDITATIONS FIX TESTING COMPLETED - ALL TESTS PASSED
 
 **Test Status:** ✅ FULLY WORKING - Admin college form accreditations validation error has been successfully fixed
-**Test URL:** https://edudynamic.preview.emergentagent.com/api
+**Test URL:** https://visual-composer-13.preview.emergentagent.com/api
 
 ### 🎯 TEST RESULTS SUMMARY:
 
@@ -3120,7 +3120,7 @@ const fetchCourses = async () => {
 ## Conditional Rendering Testing Results (Dec 22, 2025):
 
 ### ✅ CONDITIONAL RENDERING TEST COMPLETED:
-**Test URL:** https://edudynamic.preview.emergentagent.com/colleges/88b20434-51f9-484b-8873-022f03c5bbe4
+**Test URL:** https://visual-composer-13.preview.emergentagent.com/colleges/88b20434-51f9-484b-8873-022f03c5bbe4
 **College:** St. Stephens College
 **Test Status:** ✅ CONDITIONAL RENDERING WORKING CORRECTLY
 

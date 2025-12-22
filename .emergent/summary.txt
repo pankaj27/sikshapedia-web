@@ -1,47 +1,56 @@
 <analysis>**original_problem_statement:**
-The user's initial request was to populate data, fix UI bugs, and integrate an email service. The scope evolved significantly to include:
-1.  **UI/UX Unification:** Make the  (used for colleges and schools) and  have a consistent, modern UI.
-2.  **Complete Dynamism:** Remove ALL hardcoded content, placeholder text, and random data generators from the institution detail pages. The user is extremely frustrated by this issue, and it is the highest priority. The frontend must *only* display data that exists in the database.
-3.  **Feature Implementation:** Ensure various data-driven badges (e.g., Admission Partner, No Cost EMI, Featured) and a Book Your Seat sidebar widget appear correctly and conditionally on all detail pages.
-4.  **Form Modification:** Make the  field non-mandatory in the admin institution entry form.
-5.  **Comprehensive Testing:** Create one new college, one school, and one university, populating them with complete data (SEO content, main page content, TOC menus, logos, banners, videos, all badges, widgets, and FAQs) to verify all dynamic features.
+The user's initial goal was to eliminate all hardcoded content from the entire website, a task that has been the primary focus and a major source of frustration. This involved making all institution detail pages, listing pages, and other content pages fully dynamic and data-driven. A bug where newly added detailed courses were not appearing on the frontend was also reported and fixed.
+
+Most recently, after confirming the removal of hardcoded content, the user requested a new, complex feature:
+-   A comprehensive admin form with a content builder.
+-   **Features Required:**
+    -   Drag-and-drop functionality for content blocks (tables, images, videos).
+    -   A dynamic Table of Contents that connects to the content.
+    -   Dynamic menu creation with SEO options.
+    -   Widget and badge management.
+    -   A dedicated SEO section for page headings, meta descriptions, etc.
+    -   Image gallery, logo, and banner uploaders.
+    -   A separate, configurable SEO content area with its own hide/show and drag-and-drop capabilities.
+    -   A live preview of the frontend page while editing.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application's three main institution detail pages ( and ) have been refactored to be almost fully dynamic and now share a consistent, modern UI. New features like conditional badges (Admission Partner, Featured, etc.) and a Book Your Seat sidebar have been implemented across all pages. The  field in the admin form is now optional.
+The application is now almost entirely free of hardcoded content. All major pages, including institution detail pages (, ), various listing pages (, , , , ), and other content pages (, , ) have been refactored to fetch their content dynamically from the backend. A critical bug preventing detailed courses from displaying was resolved by fixing a database collection name mismatch in the backend API ( vs. ).
 
-The agent has fixed several instances of hardcoded content, including a non-functional video section (by implementing a YouTube URL-to-embed converter), fake  rankings, and static descriptive paragraphs. Three fully-featured test institutions have been successfully created via API calls.
-
-However, the user remains frustrated as some hardcoded fallback text still exists. The agent was in the middle of a final, aggressive purge of all remaining hardcoded content when the session ended.
+The agent has just begun implementing the new complex admin form by installing  and creating the initial component structure for a , , and .
 
 **Last working item**:
--   **Last item agent was working**: The agent was executing the user's explicit and urgent demand to remove all remaining hardcoded content. The immediate task was to refactor , starting with the SEO content section (which was just completed) and then moving on to make the Table of Contents (TOC) menu fully dynamic, so it only shows links to sections for which data actually exists in the database.
+-   **Last item agent was working**: The agent started building a new comprehensive admin form as per the user's latest request. It installed the necessary drag-and-drop libraries () and created the foundational components:
+    -   : For the main drag-and-drop content area.
+    -   : For managing SEO metadata.
+    -   : For showing a live preview of the page being edited.
 -   **Status**: IN PROGRESS
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: Frontend testing agent. After the refactor is complete, the agent must run a comprehensive test. This should include creating a test institution with several empty data fields (e.g., no placement data, no scholarships) and verifying that the corresponding links do not appear in the Table of Contents.
+-   **Which testing method agent to use?**: Frontend testing agent. Once the form is built, a thorough test will be required to verify all drag-and-drop functionality, content creation, and live preview features.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Remove ALL hardcoded content from the entire site (P0)**
-    -   **Description**: This is the user's highest priority and a major source of frustration. Despite multiple fixes, fallback text and other hardcoded elements have persisted. The goal is to make the site 100% data-driven.
-    -   **Attempted fixes**: The agent has iteratively removed hardcoded video titles, random numbers for rankings, and static descriptive paragraphs. The last action was removing a fallback in the SEO section.
+-   **Issue 1: Maximum update depth exceeded React Error (P2)**
+    -   **Description**: A recurring warning appears in the browser console, which was traced to an external script .
+    -   **Attempted fixes**: None in this session.
     -   **Next debug checklist**:
-        1.  Complete the refactor of  to make the Table of Contents () dynamic. The menu should be generated based on which data sections (e.g., , ) are present and not empty.
-        2.  Perform a final  search across  and  for any remaining hardcoded fallback text, especially default sentences like .
-        3.  Refactor any remaining sections that show placeholder messages (e.g., No FAQs available) in the main content area to be completely hidden if the data is missing.
-    -   **Why fix this issue?**: To finally satisfy the user's core requirement for a fully dynamic frontend and resolve their main point of frustration.
-    -   **Status**: IN PROGRESS
+        1.  Investigate  to understand the source of the re-renders.
+        2.  Check if any components are causing state updates within  without proper dependency arrays.
+    -   **Why fix this issue and what will be achieved with this?**: It suggests a potential performance bottleneck or rendering loop from a third-party script that could cause future instability.
+    -   **Status**: NOT STARTED
     -   **Is recurring issue?**: Y
     -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on other issue**: None
 
 **In progress Task List**:
--   **Task 1: Complete the removal of hardcoded content (P0)**
-    -   **Description**: Finalize the process of making the institution detail pages 100% dynamic.
-    -   **Where to resume**: In , the agent has just fixed the SEO content area. The next step is to refactor the hardcoded  array to be dynamically generated based on the availability of data for each section.
-    -   **What will be achieved with this?**: The detail pages will be completely free of hardcoded content, finally meeting the user's explicit and repeated demands.
+-   **Task 1: Build the Comprehensive Admin Content Builder Form (P0)**
+    -   **Description**: Implement the full set of features requested by the user for the new admin form, including drag-and-drop content, dynamic menus, SEO management, and a live preview.
+    -   **Where to resume**: The basic component files have been created (, , ). The next step is to create a main example page () that integrates these components and starts building out the UI and logic for each feature.
+    -   **What will be achieved with this?**: A powerful, user-friendly interface for managing complex page content, fulfilling the user's new feature request.
     -   **Status**: IN PROGRESS
     -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on something**: No
 
 **Upcoming and Future Tasks**
 *   **Upcoming Tasks:**
@@ -49,64 +58,74 @@ However, the user remains frustrated as some hardcoded fallback text still exist
     *   **(P2)** Generate Missing Listing Pages: Use  to create Type Pages and Accreditation Pages.
     *   **(P3)** Seed Data for Leads & Applications: Populate  and  collections with test data.
 *   **Future Tasks:**
-    *   Refactor large components like  into smaller, reusable sub-components to reduce code duplication and improve maintainability.
-    *   Consolidate routing so a single detail page component handles all institution types.
+    *   Refactor large components like  into smaller, reusable sub-components.
+    *   Consolidate routing into a single detail page component.
     *   Create a dedicated automated test suite for dynamic routing and listing functionality.
     *   Investigate replacing  workarounds with a proper React Router  solution.
 
 **Completed work in this session**
--   **UI Unification:** Successfully updated  to match the UI of , creating a consistent design across all institution detail pages.
--   **Fully Dynamic University Page:** Rewrote , removing all its hardcoded content and making it fetch data dynamically from the backend.
--   **Badges and Sidebar Implemented:** Added several conditional badges (Admission Partner, No Cost EMI, Featured) and the Book Your Seat sidebar to both  and .
--   **Hardcoded Content Fixes:**
-    -   Fixed a broken video embed by creating a  helper function in  to convert any YouTube link into the correct iframe  format.
-    -   Removed hardcoded  for rankings and static placeholder paragraphs in the SEO content section.
--   **Admin Form Update:** Made the  field non-mandatory in .
--   **Data Seeding:** Successfully created and verified three new, fully-featured institutions (a College, a School, and a University) using direct API calls.
+-   **Complete Hardcoded Content Removal (Site-Wide):**
+    -   **Institution Detail Pages:** Removed all hardcoded fallback text, ratings, and static content from  and . Made the Table of Contents and Recognized by sections fully dynamic.
+    -   **Listing Pages:** Removed all hardcoded SEO content blocks, Quick Compare tables, and other static text from , , , , and .
+    -   **Content Pages:** Purged hardcoded data from , , , and . Replaced mock data functions with API calls or empty arrays.
+    -   **Components:** Removed hardcoded college lists from  and hardcoded exam links from the , making them fetch data from the API.
+-   **Bug Fix: Detailed Courses Not Appearing:**
+    -   **Identified Root Cause:** Found a mismatch between the database collection name () and the name used in the backend API ().
+    -   **Resolved:** Corrected the collection name in all relevant endpoints in  and restarted the backend.
+    -   **Verified:** Confirmed via API  and frontend screenshot that the 5 detailed courses from the database are now appearing correctly.
 
 **Earlier issues found/mentioned but not fixed**
 -   **Issue 1: Maximum update depth exceeded React Error**
-    -   **Debug checklist**: A recurring warning in the browser console, traced to an external script .
-    -   **Why to solve this issue and what will be achieved with this?**: It suggests a potential performance bottleneck or rendering loop from a third-party script that could cause future instability.
+    -   **Debug checklist**: This is a recurring warning in the browser console, traced to an external script . It was noted in the previous summary and remains unfixed.
+    -   **Why to solve this issue and what will be achieved with this?**: Resolving this would prevent potential performance issues and application instability caused by excessive re-renders.
     -   **Should Test frontend/backend/both after fix**: Frontend
     -   **Is recurring issue?**: Y
+
+**Known issue recurrence from previous fork**
+-   **Issue recurrence in previous fork**: The primary recurring issue was the agent repeatedly failing to perform a comprehensive removal of all hardcoded content, leading to multiple frustrating iterations for the user.
+-   **Recurrence count**: High (occurred throughout the session).
+-   **Status**: RESOLVED (Agent finally performed a systematic, site-wide cleanup based on explicit user instructions).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Component UI Unification:** Refactoring a component's JSX and styling to visually match another for design consistency across the application.
--   **URL Transformation:** Creating and using a client-side helper function () to parse various URL formats and convert them into a standardized format required by an  for embedding.
--   **Robust Conditional Rendering:** Improving conditional checks from simple existence () to more specific validation () to correctly hide sections when the data object exists but is empty.
--   **API-Based Data Seeding:** Utilizing  with  and  requests to directly create and update database records for testing, a necessary workaround when automated testing tools fail.
+-   **Site-Wide Refactoring:** Performed a systematic search () and replacement of hardcoded content across dozens of files to enforce a data-driven architecture.
+-   **Backend Debugging:** Diagnosed a critical bug by comparing API endpoint code (, ) with direct database queries, identifying a collection name typo ( vs ).
+-   **Drag-and-Drop Implementation:** Installed  and its dependencies to begin building a complex content builder component.
+-   **Dynamic Component Population:** Modified static components like the  to fetch their content (e.g., list of exams) from an API endpoint instead of using hardcoded arrays.
 
 **key DB schema**
--   ** collection:** Fields used for new features include , , , , , and .
+-   ** collection:** This collection holds the data for detailed courses. It was the source of a bug because the API was incorrectly trying to read from a non-existent  collection.
 
 **changes in tech stack**
--   None.
+-   **Frontend:** Added , , and  for drag-and-drop functionality.
 
 **All files of reference**
--   : The central file for this session. It renders both College and School pages and is the target of the final hardcoding removal.
--   : Served as the UI template and was also made fully dynamic.
--   : Modified to make a form field optional.
+*   **/app/backend/routes/courses_exams.py**: Modified to fix the database collection name bug.
+*   **/app/frontend/src/components/admin/ContentBuilder.js**: New file for the drag-and-drop form feature.
+*   **/app/frontend/src/components/admin/SEOSection.js**: New file for the drag-and-drop form feature.
+*   **/app/frontend/src/components/admin/LivePreview.js**: New file for the drag-and-drop form feature.
+*   **Numerous files under  and **: Almost every major page and several components were edited to remove hardcoded content. Key examples include , , , , and .
 
 **Areas that need refactoring**:
--   ** & **: These components are now very large and have significant code duplication (e.g., rendering logic for badges, sidebars, and content sections). This logic should be extracted into smaller, reusable components and custom hooks to improve maintainability.
--   **Routing Architecture**: The use of two separate detail page components (, ) plus a router component () is overly complex. This should be consolidated into a single, more powerful detail page component.
+-   The large detail page components (, ) still have significant code duplication and would benefit from being broken down into smaller, reusable components.
+-   The routing architecture could be simplified by using a single, more robust detail page component instead of separate ones for each institution type.
+-   The filter options in  are still defined as static arrays in the code. Ideally, these should be fetched from the backend to make them dynamically manageable.
 
 **key api endpoints**
--   : Used with  to create test institutions.
--   : Used with  to update test institutions (e.g., change status from draft to published).
+-   : This endpoint was fixed. It now correctly queries the  collection and returns the list of detailed courses.
+-   : This endpoint is now used by the  component to dynamically populate the Top Exams list.
 
 **Critical Info for New Agent**
--   **User Frustration is HIGH:** The user is extremely tired of finding hardcoded content. Your absolute top priority is to finish the task of removing ALL placeholder text, fallback sentences, and static data. The application must only display data that comes directly from the backend database.
--   ** is Shared:** Remember that  serves both college and school pages. Any changes here will affect both.
--   **API for Seeding:** For creating test data, use  to make direct API calls. The testing agent proved unreliable. New institutions must be updated from  to  to be visible on public pages.
--   **YouTube Helper:** A  function now exists in . This is a prime candidate for being moved to a shared  file and used in other components if needed.
+-   **New Feature Focus:** The user's priority has shifted from fixing old issues to building a new, complex admin content builder. You must start by creating an example page that uses the newly created , , and  components.
+-   **Hardcoded Content Sensitivity:** The user is extremely sensitive to any hardcoded content. Although a massive cleanup was just performed, you must ensure any new feature is 100% data-driven and avoid introducing any new static text, placeholders, or mock data.
+-   **Database Collection Naming:** Be aware of the  vs.  issue. Double-check collection names in the backend code if data appears to be missing from the frontend.
+
+**documents and test_reports created in this job**
+-   : Updated by the agent after running frontend tests to confirm hardcoded content removal.
 
 **Last 10 User Messages and any pending HUMAN messages**
--   
 -   
 -   
 -   
@@ -120,7 +139,7 @@ However, the user remains frustrated as some hardcoded fallback text still exist
 **Project Health Check:**
 -   **Broken**: None.
 -   **Mocked**: Razorpay payments.
--   **Needs Attention**: Resend email integration requires user-side DNS configuration. Significant code duplication exists in the detail page components, which needs refactoring.
+-   **Needs Attention**: Resend email integration requires user-side DNS configuration. Significant code duplication exists in the detail page components.
 
 **3rd Party Integrations**
 -   **Razorpay** (Payments) — Mocked.
@@ -128,15 +147,17 @@ However, the user remains frustrated as some hardcoded fallback text still exist
 -   **Twilio** (WhatsApp notifications)
 -   **Emergent-managed Google Auth** (User Authentication)
 -   **qrcode.react** (Frontend QR Code Generation)
+-   **@dnd-kit/core** (Drag and Drop) — Newly added.
 
 **Testing status**
--   **Testing agent used after significant changes**: YES, but it failed to create data correctly, leading the agent to use  instead.
+-   **Testing agent used after significant changes**: YES, was used initially for the detail pages.
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None
--   **Known regressions**: None
+-   **Test files created**: None.
+-   **Known regressions**: None.
 
 **Credentials to test flow:**
 -   **Admin**:  / 
 
 **What agent forgot to execute**
--   The agent repeatedly failed to perform a comprehensive removal of all hardcoded content, leading to multiple frustrating iterations for the user on the same core issue. The agent's checks were not thorough enough, missing fallback text and random data generators until the user pointed them out explicitly.</analysis>
+-   The agent's initial attempts to remove hardcoded content were not thorough, requiring multiple rounds of user feedback to find and remove all instances from across the entire site.
+-   The recurring Maximum update depth exceeded React warning was identified in the previous session and again in this one but was not investigated or fixed.</analysis>
