@@ -483,241 +483,213 @@ const CollegeDetailPage = ({ overrideId }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-white pt-2">
+    <div className="min-h-screen bg-gray-50 pt-2">
       {/* Top Ad Banner */}
       <AdBanner pageName="college-detail" position="top" />
 
       {/* BREADCRUMB */}
-      <div className="border-b">
-        <div className="max-w-7xl mx-auto px-4 py-2">
-          <div className="flex items-center gap-2 text-xs text-gray-600">
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center text-sm text-gray-600">
             <Link to="/" className="hover:text-orange-600">Home</Link>
-            <span>/</span>
+            <FiChevronRight className="mx-2" size={14} />
             <Link to="/colleges" className="hover:text-orange-600">Colleges</Link>
-            <span>/</span>
+            <FiChevronRight className="mx-2" size={14} />
             <span className="text-gray-900">{college.name}</span>
           </div>
         </div>
       </div>
 
-      {/* BANNER IMAGE */}
-      {college.banner_url && (
-        <div className="w-full h-48 md:h-64 lg:h-72 overflow-hidden">
-          <img 
-            src={college.banner_url} 
-            alt={college.banner_alt || `${college.name} Campus Banner`}
-            className="w-full h-full object-cover"
-            onError={(e) => { e.target.style.display = 'none'; }}
-          />
+      {/* Hero Section with Banner */}
+      <div className="relative">
+        {/* Banner Image */}
+        <div className="h-48 md:h-64 bg-gradient-to-r from-orange-500 to-orange-600 overflow-hidden">
+          {college.banner_url ? (
+            <img 
+              src={college.banner_url} 
+              alt={college.banner_alt || `${college.name} Banner`}
+              className="w-full h-full object-cover"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700"></div>
+          )}
         </div>
-      )}
-
-      {/* HEADER */}
-      <div className="border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex gap-6">
-            <div className="flex-shrink-0">
-              {(college.logo_url || college.images?.[0]) ? (
-                <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-28 h-28 rounded border object-cover" />
-              ) : (
-                <div className="w-28 h-28 rounded bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-4xl font-bold">
-                  {college.name.charAt(0)}
-                </div>
-              )}
-            </div>
-
-            <div className="flex-1">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{college.name}</h1>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                    <div className="flex items-center gap-1">
-                      <FiMapPin className="text-orange-600" size={14} />
-                      <span>{college.location?.city}, {college.location?.state}</span>
-                    </div>
-                    <span>|</span>
-                    <span className="font-medium">{college.type}</span>
-                    <span>|</span>
-                    <span>Estd. {college.established_year || college.established || 'N/A'}</span>
+        
+        {/* College Info Card - Overlapping Banner */}
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="relative -mt-16 md:-mt-20 bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Logo */}
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-xl shadow border flex items-center justify-center flex-shrink-0 -mt-16 md:-mt-20">
+                {(college.logo_url || college.images?.[0]) ? (
+                  <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-20 h-20 md:w-28 md:h-28 object-contain rounded-lg" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-3xl md:text-4xl font-bold">{college.name?.charAt(0)}</span>
                   </div>
-                  
-                  {/* Recognized by & Affiliated to */}
-                  {(college.recognized_by?.length > 0 || college.affiliated_to) && (
-                    <div className="flex flex-wrap items-center gap-3 mb-3">
-                      {college.recognized_by?.length > 0 && (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold text-gray-700">Recognized by:</span>
-                            <div className="flex items-center gap-2">
-                              {college.recognized_by.map((org, idx) => (
-                                <span key={idx} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">{org}</span>
-                              ))}
-                            </div>
-                          </div>
-                          {college.affiliated_to && <span className="text-gray-400">|</span>}
-                        </>
-                      )}
-                      {college.affiliated_to && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-semibold text-gray-700">Affiliated to:</span>
-                          <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">{college.affiliated_to}</span>
-                        </div>
-                      )}
-                    </div>
+                )}
+              </div>
+              
+              {/* Info */}
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  {college.is_verified && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">
+                      <FiCheckCircle size={12} /> Verified
+                    </span>
                   )}
-                  
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <FiStar 
-                            key={i} 
-                            className={`${i < Math.floor(college.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                            size={18}
-                          />
-                        ))}
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
+                    {college.type || college.institution_type || 'College'}
+                  </span>
+                  {college.accreditations?.length > 0 && (
+                    <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">
+                      {college.accreditations[0]}
+                    </span>
+                  )}
+                  {college.nirf_ranking && (
+                    <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-medium">
+                      NIRF #{college.nirf_ranking}
+                    </span>
+                  )}
+                </div>
+                
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{college.name}</h1>
+                
+                <div className="flex flex-wrap items-center gap-3 text-gray-600 text-sm mb-4">
+                  <span className="flex items-center gap-1">
+                    <FiMapPin size={14} />
+                    {college.location?.city || college.city}, {college.location?.state || college.state}
+                  </span>
+                  {(college.established_year || college.established) && (
+                    <>
+                      <span className="text-gray-300">|</span>
+                      <span>Est. {college.established_year || college.established}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* Recognized by & Affiliated to */}
+                {(college.recognized_by?.length > 0 || college.affiliated_to) && (
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    {college.recognized_by?.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-500">Recognized by:</span>
+                        <div className="flex items-center gap-1">
+                          {college.recognized_by.map((org, idx) => (
+                            <span key={idx} className="px-2 py-0.5 bg-blue-50 text-blue-600 text-xs font-medium rounded">{org}</span>
+                          ))}
+                        </div>
                       </div>
-                      <span className="font-bold text-lg">{college.rating || '4.5'}</span>
-                      {college.reviews_count > 0 && <span className="text-gray-600 text-sm">({college.reviews_count} Reviews)</span>}
+                    )}
+                    {college.affiliated_to && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-500">Affiliated to:</span>
+                        <span className="px-2 py-0.5 bg-orange-50 text-orange-600 text-xs font-medium rounded">{college.affiliated_to}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Rating */}
+                <div className="flex flex-wrap items-center gap-4 mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <FiStar 
+                          key={i} 
+                          className={`${i < Math.floor(college.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                          size={18}
+                        />
+                      ))}
                     </div>
-                    
-                    <Button 
-                      className="bg-orange-600 hover:bg-orange-700 text-white"
-                      onClick={() => setShowApplyModal(true)}
-                    >
-                      <FiCheckCircle className="mr-2" size={16} />
-                      Apply Now
-                    </Button>
-                    <Button variant="outline">
+                    <span className="font-bold text-lg text-gray-900">{college.rating?.toFixed(1) || '4.5'}</span>
+                    <span className="text-gray-500 text-sm">({college.reviews_count || college.total_reviews || 0} Reviews)</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button 
+                    className="bg-orange-600 hover:bg-orange-700 text-white"
+                    onClick={() => setShowApplyModal(true)}
+                  >
+                    <FiCheckCircle className="mr-2" size={16} />
+                    Apply Now
+                  </Button>
+                  {college.brochure_url && (
+                    <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
                       <FiDownload className="mr-2" size={16} />
                       Download Brochure
                     </Button>
-                  </div>
+                  )}
                 </div>
+              </div>
 
-                {/* LIKE/DISLIKE/FAVORITE */}
-                <div className="flex items-center gap-2 ml-4">
-                  <button 
-                    onClick={handleLike}
-                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${
-                      userVote === 'like' 
-                        ? 'border-green-500 bg-green-50 shadow-md' 
-                        : 'border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="text-xl">{userVote === 'like' ? '👍' : '👍'}</span>
-                    <span className={`text-sm font-semibold ${userVote === 'like' ? 'text-green-600' : 'text-gray-700'}`}>
-                      {Math.max(1, likes)}
-                    </span>
-                  </button>
-                  <button 
-                    onClick={handleDislike}
-                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${
-                      userVote === 'dislike' 
-                        ? 'border-red-500 bg-red-50 shadow-md' 
-                        : 'border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="text-xl">{userVote === 'dislike' ? '👎' : '👎'}</span>
-                    <span className={`text-sm font-semibold ${userVote === 'dislike' ? 'text-red-600' : 'text-gray-700'}`}>
-                      {Math.max(1, dislikes)}
-                    </span>
-                  </button>
-                  <button 
-                    onClick={handleFavorite}
-                    className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-all ${
-                      isFavorited 
-                        ? 'border-pink-500 bg-pink-50 shadow-md' 
-                        : 'border-gray-300 hover:bg-pink-50 hover:border-pink-500'
-                    }`}
-                    title={isFavorited ? "Remove from Favorites" : "Add to Favorites"}
-                  >
-                    <FiHeart className={isFavorited ? "text-pink-500 fill-pink-500" : "text-pink-500"} size={18} style={isFavorited ? {fill: '#ec4899'} : {}} />
-                    <span className={`text-sm font-semibold ${isFavorited ? 'text-pink-600' : 'text-gray-700'}`}>
-                      {isFavorited ? 'Saved' : 'Save'}
-                    </span>
-                  </button>
-                </div>
+              {/* Like/Dislike/Favorite Buttons */}
+              <div className="flex lg:flex-col items-center gap-2">
+                <button 
+                  onClick={handleLike}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                    userVote === 'like' 
+                      ? 'bg-green-50 border-green-500 text-green-700' 
+                      : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
+                  }`}
+                >
+                  <span className="text-xl">👍</span>
+                  <span className="text-sm font-semibold">{Math.max(1, likes)}</span>
+                </button>
+                <button 
+                  onClick={handleDislike}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                    userVote === 'dislike' 
+                      ? 'bg-red-50 border-red-500 text-red-700' 
+                      : 'border-gray-200 hover:border-red-300 hover:bg-red-50'
+                  }`}
+                >
+                  <span className="text-xl">👎</span>
+                  <span className="text-sm font-semibold">{Math.max(0, dislikes)}</span>
+                </button>
+                <button 
+                  onClick={handleFavorite}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
+                    isFavorited 
+                      ? 'bg-pink-50 border-pink-500 text-pink-700' 
+                      : 'border-gray-200 hover:border-pink-300 hover:bg-pink-50'
+                  }`}
+                  title={isFavorited ? "Remove from Favorites" : "Add to Favorites"}
+                >
+                  <FiHeart className={isFavorited ? "fill-pink-500 text-pink-500" : "text-pink-500"} size={18} />
+                  <span className="text-sm font-semibold">{isFavorited ? 'Saved' : 'Save'}</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* STICKY NAVIGATION MENU */}
-      <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
-            {menuItems.map((item) => (
-              college?.menu_config?.use_custom_menu ? (
-                // Custom Menu: Link to separate pages with SEO-friendly URLs
-                <Link
-                  key={item.id}
-                  to={getSectionUrl(item.id)}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50`}
-                >
-                  <span className="text-orange-500">{getMenuIcon(item.id)}</span>
-                  <span>{item.label}</span>
-                </Link>
-              ) : (
-                // Default/TOC Menu: Scroll on same page
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-                    activeTab === item.id
-                      ? 'border-orange-600 text-orange-600 bg-orange-50'
-                      : 'border-transparent text-gray-600 hover:text-orange-600 hover:bg-gray-50'
-                  }`}
-                >
-                  <span className={activeTab === item.id ? 'text-orange-600' : 'text-gray-500'}>{getMenuIcon(item.id)}</span>
-                  <span>{item.label}</span>
-                </button>
-              )
-            ))}
+      {/* LATEST UPDATES - Only show if data exists */}
+      {((college?.updates && college.updates.length > 0) || (college?.announcements && college.announcements.length > 0)) && (
+        <div className="bg-gray-50 border-b">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {(college.updates?.length > 0 ? college.updates : college.announcements).slice(0, 2).map((item, idx) => (
+                <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
+                  <div className="flex items-start gap-2">
+                    <span className={`text-[10px] font-bold ${idx === 0 ? 'text-blue-600 bg-blue-200' : 'text-green-600 bg-green-200'} px-2 py-0.5 rounded flex-shrink-0`}>
+                      {item.date ? new Date(item.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}
+                    </span>
+                    <p className="text-xs text-gray-800">
+                      <strong>{item.title}</strong> {item.content || item.description || ''}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* LATEST UPDATES */}
-      <div className="bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
-          {college?.updates && college.updates.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {college.updates.slice(0, 2).map((update, idx) => (
-                <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
-                  <div className="flex items-start gap-2">
-                    <span className={`text-[10px] font-bold ${idx === 0 ? 'text-blue-600 bg-blue-200' : 'text-green-600 bg-green-200'} px-2 py-0.5 rounded flex-shrink-0`}>
-                      {update.date || new Date(update.created_at || Date.now()).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </span>
-                    <p className="text-xs text-gray-800">
-                      <strong>{update.title}</strong> {update.description || update.content || ''}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : college?.announcements && college.announcements.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {college.announcements.slice(0, 2).map((announcement, idx) => (
-                <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
-                  <div className="flex items-start gap-2">
-                    <span className={`text-[10px] font-bold ${idx === 0 ? 'text-blue-600 bg-blue-200' : 'text-green-600 bg-green-200'} px-2 py-0.5 rounded flex-shrink-0`}>
-                      {announcement.date ? new Date(announcement.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}
-                    </span>
-                    <p className="text-xs text-gray-800">
-                      <strong>{announcement.title}</strong> {announcement.content || ''}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">No updates available at the moment.</p>
-          )}
-        </div>
-      </div>
+      )}
 
       {/* AUTHOR INFO */}
       <div className="border-b bg-white">
