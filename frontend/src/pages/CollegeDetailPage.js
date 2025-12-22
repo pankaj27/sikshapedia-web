@@ -1994,26 +1994,31 @@ const CollegeDetailPage = ({ overrideId }) => {
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Similar Colleges</h3>
                 <div className="space-y-4">
-                  {[
-                    { name: 'IIT Delhi', location: 'New Delhi, Delhi', fees: '2.54' },
-                    { name: 'IIT Madras', location: 'Chennai, Tamil Nadu', fees: '2.25' },
-                    { name: 'IIT Kanpur', location: 'Kanpur, Uttar Pradesh', fees: '2.18' }
-                  ].map((item, i) => (
-                    <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
-                      <Link to="#" className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
-                        <div className="flex gap-3">
-                          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded flex items-center justify-center flex-shrink-0">
-                            <span className="text-xl font-bold text-blue-700">{item.name.charAt(0)}</span>
+                  {/* Dynamic Similar Colleges - Same city/state */}
+                  {college?.similar_colleges && college.similar_colleges.length > 0 ? (
+                    college.similar_colleges.slice(0, 3).map((item, i) => (
+                      <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
+                        <Link to={`/colleges/${item.slug}`} className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
+                          <div className="flex gap-3">
+                            {item.logo_url ? (
+                              <img src={item.logo_url} alt={item.name} className="w-16 h-16 rounded object-cover flex-shrink-0" />
+                            ) : (
+                              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl font-bold text-blue-700">{item.name?.charAt(0)}</span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-bold text-gray-900 mb-1 truncate">{item.name}</p>
+                              <p className="text-[11px] text-gray-600 mb-1">{item.city}, {item.state}</p>
+                              {item.average_fees && <p className="text-xs font-semibold text-orange-600">₹{(item.average_fees/100000).toFixed(2)}L Fees</p>}
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-gray-900 mb-1 truncate">{item.name}</p>
-                            <p className="text-[11px] text-gray-600 mb-1">{item.location}</p>
-                            <p className="text-xs font-semibold text-orange-600">₹{item.fees}L Fees</p>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500 text-center py-4">No similar colleges found</p>
+                  )}
                 </div>
               </div>
 
