@@ -81,8 +81,9 @@ const UserSignup = () => {
       setReferralCode(refCode);
     }
     
-    // Fetch courses and content
+    // Fetch courses, exams, and content
     fetchCourses();
+    fetchExams();
     fetchContent();
   }, [googleEmail, googleName, refCode]);
   
