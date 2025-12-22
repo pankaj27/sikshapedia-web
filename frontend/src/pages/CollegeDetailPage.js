@@ -548,7 +548,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                         ))}
                       </div>
                       <span className="font-bold text-lg">{college.rating || '4.5'}</span>
-                      <span className="text-gray-600 text-sm">({college.reviews || 344} Reviews)</span>
+                      {college.reviews_count > 0 && <span className="text-gray-600 text-sm">({college.reviews_count} Reviews)</span>}
                     </div>
                     
                     <Button 
