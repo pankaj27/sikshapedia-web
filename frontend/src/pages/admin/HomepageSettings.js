@@ -1309,7 +1309,7 @@ const HomepageSettings = () => {
                             <label className="text-xs text-blue-600 cursor-pointer hover:underline">
                               <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/*,.svg"
                                 className="hidden"
                                 onChange={async (e) => {
                                   const file = e.target.files[0];
@@ -1423,7 +1423,7 @@ const HomepageSettings = () => {
                             <label className="text-xs text-blue-600 cursor-pointer hover:underline">
                               <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/*,.svg"
                                 className="hidden"
                                 onChange={async (e) => {
                                   const file = e.target.files[0];
@@ -1537,7 +1537,7 @@ const HomepageSettings = () => {
                             <label className="text-xs text-blue-600 cursor-pointer hover:underline">
                               <input
                                 type="file"
-                                accept="image/*"
+                                accept="image/*,.svg"
                                 className="hidden"
                                 onChange={async (e) => {
                                   const file = e.target.files[0];
