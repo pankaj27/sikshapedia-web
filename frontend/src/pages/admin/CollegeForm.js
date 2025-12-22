@@ -1152,11 +1152,25 @@ const CollegeForm = () => {
     setSaving(true);
 
     try {
+      // Transform accreditations from objects to strings for backend compatibility
+      // Backend expects: List[str] e.g. ["NAAC A++", "NBA"]
+      // Frontend stores: [{name, level, description}]
+      const transformedFormData = {
+        ...formData,
+        accreditations: formData.accreditations.map(accr => {
+          if (typeof accr === 'string') return accr;
+          // Combine name and level if both exist
+          const parts = [accr.name];
+          if (accr.level) parts.push(accr.level);
+          return parts.join(' ');
+        }).filter(Boolean) // Remove empty strings
+      };
+
       if (id) {
-        await api.put(`/colleges/${id}`, formData);
+        await api.put(`/colleges/${id}`, transformedFormData);
         alert('College updated successfully!');
       } else {
-        await api.post('/colleges', formData);
+        await api.post('/colleges', transformedFormData);
         alert('College created successfully!');
       }
       navigate('/admin/colleges');
