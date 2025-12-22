@@ -657,14 +657,24 @@ const Footer = () => {
     setEmail('');
   };
 
-  const topExams = [
-    { name: 'JEE Main', link: '/exams/jee-main' },
-    { name: 'NEET', link: '/exams/neet' },
-    { name: 'CAT', link: '/exams/cat' },
-    { name: 'CUET', link: '/exams/cuet' },
-    { name: 'GATE', link: '/exams/gate' },
-    { name: 'JEE Advanced', link: '/exams/jee-advanced' }
-  ];
+  const [topExams, setTopExams] = useState([]);
+
+  // Fetch top exams from API
+  useEffect(() => {
+    const fetchTopExams = async () => {
+      try {
+        const response = await api.get('/exams?limit=6');
+        const exams = response.data || [];
+        setTopExams(exams.slice(0, 6).map(e => ({
+          name: e.name,
+          link: `/exams/${e.slug || e.name?.toLowerCase().replace(/\s+/g, '-')}`
+        })));
+      } catch (error) {
+        console.error('Error fetching exams:', error);
+      }
+    };
+    fetchTopExams();
+  }, []);
 
   const topColleges = [
     { name: 'Engineering Colleges', link: '/colleges/engineering' },
