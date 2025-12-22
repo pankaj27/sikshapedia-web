@@ -32,26 +32,42 @@ async def get_db():
 # ============ AUTH HELPER ============
 
 async def get_current_user(request: Request, db):
-    """Get current authenticated user from JWT token or session"""
-    # First try JWT token from Authorization header
+    """Get current authenticated user from JWT token, session token, or session cookie"""
+    # First try Authorization header
     auth_header = request.headers.get("Authorization")
     
     if auth_header and auth_header.startswith("Bearer "):
         token = auth_header.split(" ")[1]
-        try:
-            # Decode JWT token
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            user_id = payload.get("sub")
-            if user_id:
-                user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0, "password": 0})
+        
+        # Check if it's a session token (starts with "session_")
+        if token.startswith("session_"):
+            # Session-based auth via header
+            session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+            if session:
+                expires_at = datetime.fromisoformat(session["expires_at"])
+                if expires_at.tzinfo is None:
+                    expires_at = expires_at.replace(tzinfo=timezone.utc)
+                if expires_at < datetime.now(timezone.utc):
+                    raise HTTPException(status_code=401, detail="Session expired")
+                
+                user = await db.users.find_one({"id": session["user_id"]}, {"_id": 0, "password_hash": 0, "password": 0})
                 if user:
                     return user
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token has expired")
-        except jwt.exceptions.DecodeError:
-            pass  # Try session-based auth next
-        except Exception:
-            pass  # Try session-based auth next
+        else:
+            # Try JWT token
+            try:
+                payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+                user_id = payload.get("sub")
+                if user_id:
+                    user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0, "password": 0})
+                    if user:
+                        return user
+            except jwt.ExpiredSignatureError:
+                raise HTTPException(status_code=401, detail="Token has expired")
+            except jwt.exceptions.DecodeError:
+                pass  # Try cookie next
+            except Exception:
+                pass  # Try cookie next
     
     # Fallback to session-based auth (cookies)
     session_token = request.cookies.get("session_token")
