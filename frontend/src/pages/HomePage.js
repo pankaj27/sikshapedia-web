@@ -189,8 +189,8 @@ const CollegeDuniaHome = () => {
         image: college.banner_url || college.images?.[0] || defaultImages[idx % defaultImages.length],
         type: (college.institution_type || 'college').toLowerCase(),
         name: college.name,
-        rating: college.rating || 4.5,
-        reviews: college.total_reviews || 1000,
+        rating: college.rating || 0,
+        reviews: college.total_reviews || 0,
         location: `${college.location?.city || ''}, ${college.location?.state || ''}`,
         id: college.id,
         serial_number: college.serial_number,
@@ -667,11 +667,13 @@ const CollegeDuniaHome = () => {
                         )}
                       </div>
                       
-                      {/* Rating Badge */}
-                      <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1">
-                        <FiStar className="text-amber-400 text-xs fill-amber-400" />
-                        <span className="text-xs font-semibold text-gray-800">{college.rating || '4.5'}</span>
-                      </div>
+                      {/* Rating Badge - Only show if rating exists */}
+                      {college.rating > 0 && (
+                        <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1">
+                          <FiStar className="text-amber-400 text-xs fill-amber-400" />
+                          <span className="text-xs font-semibold text-gray-800">{college.rating.toFixed(1)}</span>
+                        </div>
+                      )}
                       
                       {/* College Initial - Bottom Left */}
                       <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white">
