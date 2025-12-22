@@ -1209,28 +1209,33 @@ const SchoolsPage = () => {
                                   </div>
                                 </td>
 
-                                {/* USER REVIEWS */}
+                                {/* USER REVIEWS - Only show if rating exists */}
                                 <td className="px-3 py-3 align-top">
                                   <div>
-                                    <div className="flex items-baseline gap-0.5 mb-0.5">
-                                      <span className="text-base font-bold text-gray-900">{school.rating || '4.5'}</span>
-                                      <span className="text-gray-500 text-[10px]">/5</span>
-                                    </div>
-                                    <div className="flex gap-0.5 mb-1">
-                                      {[...Array(5)].map((_, i) => (
-                                        <FiStar 
-                                          key={i} 
-                                          className={`${i < Math.floor(school.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                                          size={10} 
-                                        />
-                                      ))}
-                                    </div>
-                                    <div className="text-[9px] text-gray-500 mb-1">
-                                      Based on {school.reviews || Math.floor(Math.random() * 500) + 50} User<br />Reviews
-                                    </div>
-                                    <div className="text-[9px] text-gray-700 font-medium">
-                                      Best in {['Infrastructure', 'Placements', 'Academics', 'Faculty', 'Campus Life'][index % 5]}
-                                    </div>
+                                    {school.rating > 0 ? (
+                                      <>
+                                        <div className="flex items-baseline gap-0.5 mb-0.5">
+                                          <span className="text-base font-bold text-gray-900">{school.rating.toFixed(1)}</span>
+                                          <span className="text-gray-500 text-[10px]">/5</span>
+                                        </div>
+                                        <div className="flex gap-0.5 mb-1">
+                                          {[...Array(5)].map((_, i) => (
+                                            <FiStar 
+                                              key={i} 
+                                              className={`${i < Math.floor(school.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                                              size={10} 
+                                            />
+                                          ))}
+                                        </div>
+                                        {school.total_reviews > 0 && (
+                                          <div className="text-[9px] text-gray-500 mb-1">
+                                            Based on {school.total_reviews} User<br />Reviews
+                                          </div>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <div className="text-[10px] text-gray-400">No reviews yet</div>
+                                    )}
                                   </div>
                                 </td>
 
