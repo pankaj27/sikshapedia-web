@@ -1602,38 +1602,34 @@ const CollegeDetailPage = ({ overrideId }) => {
                         );
                       })}
                     </div>
-                  ) : (
-                    <div className="text-center text-gray-500 py-8">
-                      No facility information available
-                    </div>
-                  )}
 
-                  {/* Campus Images */}
-                  {(college.campus_images?.length > 0 || college.images?.length > 1) && (
-                    <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
-                      {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
-                        <div key={i} className="rounded-lg aspect-video overflow-hidden border">
-                          <img src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* CAMPUS VIDEO */}
-                  {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
-                    <div className="mt-8">
-                      <h3 className="text-2xl font-bold mb-4">Campus Video Tour</h3>
-                      <div className="rounded-lg aspect-video overflow-hidden border">
-                        <iframe
-                          src={college.campus_video_url || college.seo_video_url || college.videos?.[0]}
-                          className="w-full h-full"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
+                    {/* Campus Images */}
+                    {(college.campus_images?.length > 0 || college.images?.length > 1) && (
+                      <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
+                        {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
+                          <div key={i} className="rounded-lg aspect-video overflow-hidden border">
+                            <img src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                  )}
-                </section>
+                    )}
+
+                    {/* CAMPUS VIDEO */}
+                    {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
+                      <div className="mt-8">
+                        <h3 className="text-2xl font-bold mb-4">Campus Video Tour</h3>
+                        <div className="rounded-lg aspect-video overflow-hidden border">
+                          <iframe
+                            src={college.campus_video_url || college.seo_video_url || college.videos?.[0]}
+                            className="w-full h-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        </div>
+                      </div>
+                    )}
+                  </section>
+                )}
 
                 {/* Q&A SECTION */}
                 <section id="qna">
