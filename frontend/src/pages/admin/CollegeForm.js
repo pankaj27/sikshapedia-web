@@ -2365,8 +2365,13 @@ const CollegeForm = () => {
                           {/* Add Image Block */}
                           <button type="button" onClick={() => {
                             const newToc = [...(formData.seo_toc || [])];
+                            const collegeName = formData.name || 'College';
+                            const sectionTitle = item.title || 'Section';
                             newToc[index].blocks = [...(newToc[index].blocks || []), {
-                              id: `block-${Date.now()}`, type: 'image', url: '', alt: '', title: '', caption: '', width: '100%'
+                              id: `block-${Date.now()}`, type: 'image', url: '', 
+                              alt: `${collegeName} - ${sectionTitle} | AdmissionBuddy`,
+                              title: `${sectionTitle} Image - ${collegeName} | AdmissionBuddy.co`,
+                              caption: '', width: '100%'
                             }];
                             setFormData({...formData, seo_toc: newToc});
                           }} className="flex items-center gap-1 px-3 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-200">
@@ -2376,9 +2381,12 @@ const CollegeForm = () => {
                           {/* Add Table Block */}
                           <button type="button" onClick={() => {
                             const newToc = [...(formData.seo_toc || [])];
+                            const collegeName = formData.name || 'College';
+                            const sectionTitle = item.title || 'Information';
                             newToc[index].blocks = [...(newToc[index].blocks || []), {
-                              id: `block-${Date.now()}`, type: 'table', title: '', 
-                              headers: ['Column 1', 'Column 2', 'Column 3'],
+                              id: `block-${Date.now()}`, type: 'table', 
+                              title: `${collegeName} ${sectionTitle} Details - AdmissionBuddy`, 
+                              headers: ['Parameter', 'Details', 'Remarks'],
                               rows: [['', '', ''], ['', '', '']]
                             }];
                             setFormData({...formData, seo_toc: newToc});
@@ -2389,8 +2397,12 @@ const CollegeForm = () => {
                           {/* Add Video Block */}
                           <button type="button" onClick={() => {
                             const newToc = [...(formData.seo_toc || [])];
+                            const collegeName = formData.name || 'College';
+                            const sectionTitle = item.title || 'Overview';
                             newToc[index].blocks = [...(newToc[index].blocks || []), {
-                              id: `block-${Date.now()}`, type: 'video', url: '', title: '', description: ''
+                              id: `block-${Date.now()}`, type: 'video', url: '', 
+                              title: `${collegeName} ${sectionTitle} Video | AdmissionBuddy`,
+                              description: `Watch ${sectionTitle.toLowerCase()} video of ${collegeName}. Get complete information about admissions, courses, fees, placements & more at AdmissionBuddy.co`
                             }];
                             setFormData({...formData, seo_toc: newToc});
                           }} className="flex items-center gap-1 px-3 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200">
