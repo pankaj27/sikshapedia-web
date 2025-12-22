@@ -81,8 +81,9 @@ const UserSignup = () => {
       setReferralCode(refCode);
     }
     
-    // Fetch courses and content
+    // Fetch courses, cities and content
     fetchCourses();
+    fetchCities();
     fetchContent();
   }, [googleEmail, googleName, refCode]);
   
@@ -107,6 +108,20 @@ const UserSignup = () => {
       }
     } catch (err) {
       console.error('Error fetching courses:', err);
+      // Fallback already set via useState initialization
+    }
+  };
+  
+  const fetchCities = async () => {
+    try {
+      const response = await api.get('/locations/all-cities');
+      const apiCities = response.data.map(c => typeof c === 'object' ? c.name : c);
+      // Use API cities if available, otherwise keep the centralized list
+      if (apiCities.length > 0) {
+        setCities(apiCities);
+      }
+    } catch (err) {
+      console.error('Error fetching cities:', err);
       // Fallback already set via useState initialization
     }
   };
