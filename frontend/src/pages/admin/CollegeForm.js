@@ -1091,6 +1091,42 @@ const CollegeForm = () => {
     }
   };
 
+  // Handler for uploading images in content blocks
+  const handleContentImageUpload = async (file, tocIndex, blockIndex) => {
+    const uploadKey = `${tocIndex}-${blockIndex}`;
+    setUploadingContentImage(prev => ({ ...prev, [uploadKey]: true }));
+    
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/image?type=content', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const imageUrl = backendUrl + response.data.url;
+        
+        // Update the block's URL
+        const newToc = [...(formData.seo_toc || [])];
+        newToc[tocIndex].blocks[blockIndex].url = imageUrl;
+        setFormData({...formData, seo_toc: newToc});
+        
+        alert('Image uploaded successfully!');
+      }
+    } catch (error) {
+      console.error('Content image upload error:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploadingContentImage(prev => ({ ...prev, [uploadKey]: false }));
+    }
+  };
+
   const updateUpdateSimple = (index, field, value) => {
     const newUpdates = [...formData.updates];
     newUpdates[index][field] = value;
