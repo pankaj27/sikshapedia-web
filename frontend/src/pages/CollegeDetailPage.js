@@ -1898,7 +1898,9 @@ const CollegeDetailPage = ({ overrideId }) => {
                     <FiCheckCircle size={18} />
                     <span>Apply Now</span>
                   </button>
-                  <p className="text-xs text-orange-100 mt-3">Application Deadline: March 2026</p>
+                  {college?.admission_deadline && (
+                    <p className="text-xs text-orange-100 mt-3">Application Deadline: {college.admission_deadline}</p>
+                  )}
                 </div>
               </div>
 
