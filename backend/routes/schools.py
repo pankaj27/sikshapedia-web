@@ -79,28 +79,42 @@ async def get_schools(
     limit: int = Query(50, ge=1, le=1000),
     skip: int = Query(0, ge=0)
 ):
-    """Get all schools with optional filters"""
-    query = {}
+    """Get all schools with optional filters - queries colleges collection with institution_type=School"""
+    query = {
+        "institution_type": "School",
+        "status": "published"
+    }
     if search:
         query["$or"] = [
             {"name": {"$regex": search, "$options": "i"}},
             {"description": {"$regex": search, "$options": "i"}}
         ]
     if city:
-        query["city"] = {"$regex": city, "$options": "i"}
+        query["$or"] = query.get("$or", []) + [
+            {"city": {"$regex": city, "$options": "i"}},
+            {"location.city": {"$regex": city, "$options": "i"}}
+        ]
     if state:
-        query["state"] = {"$regex": state, "$options": "i"}
+        state_query = [
+            {"state": {"$regex": state, "$options": "i"}},
+            {"location.state": {"$regex": state, "$options": "i"}}
+        ]
+        if "$or" in query:
+            query["$and"] = [{"$or": query.pop("$or")}, {"$or": state_query}]
+        else:
+            query["$or"] = state_query
     if board:
         query["board"] = board
     if school_type:
-        query["school_type"] = school_type
+        query["type"] = school_type
     if medium:
         query["medium"] = medium
     
     sort_field = "rating" if sort == "rating" else "name"
     sort_order = -1 if sort == "rating" else 1
     
-    schools = await db.schools.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
+    # Query from colleges collection with institution_type filter
+    schools = await db.colleges.find(query, {"_id": 0}).sort(sort_field, sort_order).skip(skip).limit(limit).to_list(limit)
     
     # Re-sort to put items with display_priority > 0 first
     prioritized = [s for s in schools if s.get('display_priority', 0) > 0]
