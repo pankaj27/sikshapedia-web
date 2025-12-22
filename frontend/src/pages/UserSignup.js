@@ -7,7 +7,7 @@ import { Button } from '../components/ui/button';
 import SearchableSelect from '../components/SearchableSelect';
 import { Link } from '../components/CustomLink';
 
-// Import centralized data from constants
+// Import centralized data from constants (used as fallback)
 import { INDIA_CITIES, ALL_INDIA_COURSES } from '../constants/indiaData';
 
 // Default content (used while loading or if API fails)
