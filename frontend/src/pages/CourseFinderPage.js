@@ -26,15 +26,11 @@ const CourseFinderPage = () => {
     'Rajasthan', 'Gujarat', 'Madhya Pradesh', 'West Bengal', 'Haryana'
   ];
 
-  const cityOptions = [
-    'New Delhi', 'Bangalore', 'Mumbai', 'Chennai', 'Pune', 'Hyderabad', 
-    'Kolkata', 'Jaipur', 'Ahmedabad', 'Bhopal'
-  ];
+  // Use comprehensive city list from constants
+  const cityOptions = INDIA_CITIES;
 
-  const examOptions = [
-    'CUET', 'CUET PG', 'GATE', 'CAT', 'JEE Main', 'MAT', 'CMAT', 'XAT', 
-    'NEET', 'JEE Advanced', 'MHT CET', 'KCET'
-  ];
+  // Use comprehensive exam list from constants
+  const examOptions = ALL_INDIA_EXAMS;
 
   const programTypeOptions = ['Full Time', 'Part Time', 'Both'];
 
