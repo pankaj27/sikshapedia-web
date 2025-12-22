@@ -355,6 +355,7 @@ const CollegeForm = () => {
     cutoff_data: [],
     scholarships: [],
     updates: [],
+    announcements: [], // Latest news/announcements [{title, date, link, content}]
     total_students: 0,
     rating: 0,
     total_reviews: 0
