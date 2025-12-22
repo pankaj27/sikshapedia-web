@@ -1687,13 +1687,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                     {/* CAMPUS VIDEO */}
                     {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
                       <div className="mt-8">
-                        <h3 className="text-2xl font-bold mb-4">Campus Video Tour</h3>
+                        <h3 className="text-2xl font-bold mb-4">{college.video_title || 'Campus Video Tour'}</h3>
                         <div className="rounded-lg aspect-video overflow-hidden border">
                           <iframe
-                            src={college.campus_video_url || college.seo_video_url || college.videos?.[0]}
+                            src={getYouTubeEmbedUrl(college.campus_video_url || college.seo_video_url || college.videos?.[0])}
                             className="w-full h-full"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
+                            title={college.video_title || 'Campus Video Tour'}
                           ></iframe>
                         </div>
                       </div>
