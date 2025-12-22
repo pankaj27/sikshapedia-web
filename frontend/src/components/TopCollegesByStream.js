@@ -14,14 +14,6 @@ const TopCollegesByStream = () => {
     { name: 'Law', icon: '⚖️', color: 'from-purple-500 to-purple-600', query: 'Law' }
   ];
 
-  // Default colleges for fallback
-  const defaultColleges = {
-    'Engineering': ['IIT Bombay', 'IIT Delhi', 'IIT Madras', 'NIT Trichy'],
-    'Medical': ['AIIMS Delhi', 'CMC Vellore', 'JIPMER Puducherry', 'KGMU Lucknow'],
-    'Management': ['IIM Ahmedabad', 'IIM Bangalore', 'IIM Calcutta', 'XLRI Jamshedpur'],
-    'Law': ['NLSIU Bangalore', 'NALSAR Hyderabad', 'NLU Delhi', 'NUJS Kolkata']
-  };
-
   useEffect(() => {
     fetchCollegesByStream();
   }, []);
@@ -35,7 +27,7 @@ const TopCollegesByStream = () => {
         // Use admin-selected data - handle both object and string formats
         const results = streams.map(stream => {
           const rawColleges = featuredRes.data[stream.name];
-          let colleges = defaultColleges[stream.name];
+          let colleges = [];
           
           if (rawColleges?.length > 0) {
             // Check if data is array of objects or strings
