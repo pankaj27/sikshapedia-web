@@ -1,27 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiDownload, FiCalendar, FiFileText, FiInfo, FiBook, FiAward, FiCheckCircle } from 'react-icons/fi';
+import { FiDownload, FiCalendar, FiFileText, FiInfo, FiBook, FiAward, FiCheckCircle, FiLoader } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
+import api from '../api/axios';
 
 import { Link } from '../components/CustomLink';
 const ExamSubPages = () => {
   const { id, section } = useParams();
   const navigate = useNavigate();
+  const [exam, setExam] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Mock exam data
-  const examData = {
-    'jee-main': {
-      name: 'JEE Main',
-      fullName: 'Joint Entrance Examination Main'
-    },
-    'neet': {
-      name: 'NEET',
-      fullName: 'National Eligibility cum Entrance Test'
-    }
-  };
+  // Fetch exam data from API
+  useEffect(() => {
+    const fetchExam = async () => {
+      try {
+        const response = await api.get('/exams-detail');
+        const foundExam = response.data?.find(e => 
+          e.slug === id || e.name?.toLowerCase().replace(/\s+/g, '-') === id
+        );
+        if (foundExam) {
+          setExam({
+            name: foundExam.name,
+            fullName: foundExam.full_name || foundExam.name
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching exam:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExam();
+  }, [id]);
 
-  const exam = examData[id] || examData['jee-main'];
   const activeSection = section || 'question-paper';
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <FiLoader className="w-8 h-8 text-blue-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!exam) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Exam Not Found</h1>
+          <p className="text-gray-600 mb-4">The exam you're looking for doesn't exist.</p>
+          <Link to="/exams" className="text-blue-600 hover:underline">Browse All Exams</Link>
+        </div>
+      </div>
+    );
+  }
 
   const renderContent = () => {
     switch (activeSection) {
