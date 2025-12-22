@@ -777,74 +777,79 @@ const CollegeDetailPage = ({ overrideId }) => {
                   <div className="space-y-8">
                     {/* ADMISSION DATES - Guest Gated */}
                     <section id="seo-admission-dates">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026 Dates</h2>
+                      <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1} Dates</h2>
                       <p className="text-gray-700 text-sm mb-4">
-                        {college.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The important dates are:
+                        Important admission dates for {college.name}:
                       </p>
 
                       <GuestGate title="Admission Dates">
-                        <h3 className="text-xl font-bold mb-3">B.Tech Admission Dates 2026</h3>
-                        <div className="overflow-x-auto mb-6">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-orange-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm">Application Start Date</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">January 2026</td>
-                              </tr>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm">Application Deadline</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">March 2026</td>
-                              </tr>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm">Exam Date</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">April-May 2026</td>
-                              </tr>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm">Result Announcement</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">June 2026</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        {college?.admission_dates && college.admission_dates.length > 0 ? (
+                          <div className="overflow-x-auto mb-6">
+                            <table className="w-full border-collapse border">
+                              <thead>
+                                <tr className="bg-orange-50">
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {college.admission_dates.map((item, idx) => (
+                                  <tr key={idx} className="hover:bg-gray-50">
+                                    <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                                    <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Admission dates will be updated soon.</p>
+                        )}
                       </GuestGate>
                     </section>
 
                     {/* FEES - FROM TOC #02 - Guest Gated */}
                     <section id="seo-fees">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Fees 2026</h2>
+                      <h2 className="text-2xl font-bold mb-3">{college.name} Fees {year + 1}</h2>
                       <p className="text-gray-700 text-sm mb-4">
                         The fee structure for various courses at {college.name}:
                       </p>
 
                       <GuestGate title="Fee Details">
-                        <div className="overflow-x-auto mb-6">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-orange-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3">
-                                  <Link to="#" className="text-blue-600 hover:underline font-medium">B.Tech</Link>
-                                </td>
-                                <td className="border px-4 py-3 text-sm">4 Years</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">INR {(college.average_fees / 100000).toFixed(2)} Lakhs</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">INR {((college.average_fees * 4) / 100000).toFixed(2)} Lakhs</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        {college?.courses && college.courses.length > 0 ? (
+                          <div className="overflow-x-auto mb-6">
+                            <table className="w-full border-collapse border">
+                              <thead>
+                                <tr className="bg-orange-50">
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                                  <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {college.courses.map((course, idx) => {
+                                  const courseName = typeof course === 'string' ? course : course.name;
+                                  const duration = typeof course === 'object' ? course.duration : '';
+                                  const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
+                                  const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
+                                  return (
+                                    <tr key={idx} className="hover:bg-gray-50">
+                                      <td className="border px-4 py-3">
+                                        <span className="text-blue-600 font-medium">{courseName}</span>
+                                      </td>
+                                      <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
+                                      <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
+                                      <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Fee details will be updated soon.</p>
+                        )}
                       </GuestGate>
                     </section>
 
