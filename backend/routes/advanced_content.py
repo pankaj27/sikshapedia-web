@@ -3,10 +3,16 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Any, Dict
 from datetime import datetime, timezone
 from uuid import uuid4
-from database import db
 from routes.auth import get_current_admin_user
 
 router = APIRouter(prefix="/api/advanced-content", tags=["Advanced Content"])
+
+# Database reference (set by main app)
+db = None
+
+def set_database(database):
+    global db
+    db = database
 
 # Pydantic Models
 class LogoBanner(BaseModel):
