@@ -47,171 +47,29 @@ const ExamDetailPage = () => {
     fetchExam();
   }, [id]);
 
-  // Fallback mock exam data for exams not in database
-  const examData = {
-    'jee-main': {
-      name: 'JEE Main',
-      fullName: 'Joint Entrance Examination Main',
-      description: 'JEE Main is a national level entrance exam for admission to engineering colleges across India.',
-      conductor: 'NTA (National Testing Agency)',
-      
-      questionPapers: {
-        '2025': [
-          { date: '2 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '2 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '3 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '3 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '4 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '4 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '22 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '22 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '23 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '23 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
-        ],
-        '2024': [
-          { date: '4 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '4 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '5 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '5 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '6 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '6 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '27 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '27 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '29 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '29 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
-        ],
-        '2023': [
-          { date: '6 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '6 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '8 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '8 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '10 April Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '10 April Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '24 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '24 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '25 Jan Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '25 Jan Shift 2', downloadLink: '#', solutionLink: '#' },
-        ],
-        '2022': [
-          { date: '24 June Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '24 June Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '25 June Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '25 June Shift 2', downloadLink: '#', solutionLink: '#' },
-          { date: '26 June Shift 1', downloadLink: '#', solutionLink: '#' },
-          { date: '26 June Shift 2', downloadLink: '#', solutionLink: '#' },
-        ],
-      },
-      
-      examInfo: {
-        examMode: 'Computer Based Test (CBT)',
-        examDuration: '3 Hours',
-        totalQuestions: '90 Questions',
-        totalMarks: '300 Marks',
-        examLevel: 'National Level',
-        examFrequency: 'Twice a Year (January & April)',
-        eligibility: '10+2 with Physics, Chemistry & Mathematics',
-        officialWebsite: 'jeemain.nta.nic.in'
-      },
-      
-      keyHighlights: [
-        'In JEE Main 2025, 20-25% questions were more higher-order thinking skills (HOTS) and application-based',
-        'In JEE Main 2024, Maths was difficult with an increase in algebra based problems',
-        'In JEE Main 2023, Calculus and Coordinate Geometry questions were tricky'
-      ],
-      
-      contentTeam: {
-        author: 'Content Team',
-        profileImage: '',
-        updatedDate: ''
-      },
-      
-      tableOfContents: [
-        { id: 'overview', title: 'JEE Main Question Paper 2025' },
-        { id: '2024', title: 'JEE Main Question Paper 2024' },
-        { id: '2023', title: 'JEE Main Question Paper 2023' },
-        { id: '2022', title: 'JEE Main Question Paper 2022' },
-        { id: 'chapterwise', title: 'Download JEE Main PYQs ChapterWise' },
-        { id: 'pattern', title: 'JEE Main Paper Pattern' },
-        { id: 'studynotes', title: 'JEE Main Study Notes' }
-      ],
-      
-      videos: []
-    },
-    'neet': {
-      name: 'NEET',
-      fullName: 'National Eligibility cum Entrance Test',
-      description: 'NEET is the single entrance exam for admission to medical colleges across India.',
-      conductor: 'NTA (National Testing Agency)',
-      
-      questionPapers: {
-        '2025': [
-          { date: '4 May 2025', downloadLink: '#', solutionLink: '#' },
-        ],
-        '2024': [
-          { date: '5 May 2024', downloadLink: '#', solutionLink: '#' },
-        ],
-        '2023': [
-          { date: '7 May 2023', downloadLink: '#', solutionLink: '#' },
-        ],
-        '2022': [
-          { date: '17 July 2022', downloadLink: '#', solutionLink: '#' },
-        ],
-      },
-      
-      examInfo: {
-        examMode: 'Pen & Paper Based (Offline)',
-        examDuration: '3 Hours 20 Minutes',
-        totalQuestions: '200 Questions',
-        totalMarks: '720 Marks',
-        examLevel: 'National Level',
-        examFrequency: 'Once a Year',
-        eligibility: '10+2 with Physics, Chemistry & Biology',
-        officialWebsite: 'neet.nta.nic.in'
-      },
-      
-      keyHighlights: [
-        'Physics section tends to be calculation-intensive',
-        'Chemistry has a good balance of organic, inorganic and physical chemistry',
-        'Biology questions are mostly NCERT-based'
-      ]
-    }
-  };
-
-  // Use API data if available, otherwise fallback to mock data
-  const mockExam = examData[id] || examData['jee-main'];
-  
-  // Transform API data to match expected format
+  // Transform API data - No fallback mock data
   const exam = examFromApi ? {
     name: examFromApi.name,
     fullName: examFromApi.full_name || examFromApi.name,
-    description: examFromApi.description || `${examFromApi.name} is an entrance examination.`,
-    conductor: examFromApi.conducting_body || 'Various',
+    description: examFromApi.description || '',
+    conductor: examFromApi.conducting_body || '',
     questionPapers: examFromApi.question_papers?.reduce((acc, paper) => {
       const year = paper.year || '2024';
       if (!acc[year]) acc[year] = [];
       acc[year].push({ date: paper.name, downloadLink: paper.file_url || paper.external_link || '#', solutionLink: '#' });
       return acc;
-    }, {}) || mockExam.questionPapers,
+    }, {}) || {},
     examInfo: {
-      examMode: examFromApi.exam_mode ? `${examFromApi.exam_mode} Based Test` : mockExam.examInfo?.examMode || 'Computer Based Test',
-      examDuration: examFromApi.exam_duration || mockExam.examInfo?.examDuration || '3 Hours',
-      totalQuestions: examFromApi.num_questions ? `${examFromApi.num_questions} Questions` : mockExam.examInfo?.totalQuestions || '-',
-      totalMarks: examFromApi.total_marks ? `${examFromApi.total_marks} Marks` : mockExam.examInfo?.totalMarks || '-',
-      examLevel: examFromApi.exam_level || mockExam.examInfo?.examLevel || 'National Level',
-      examFrequency: mockExam.examInfo?.examFrequency || 'Once a Year',
-      eligibility: mockExam.examInfo?.eligibility || '10+2 with required subjects',
-      officialWebsite: examFromApi.official_website || mockExam.examInfo?.officialWebsite || '#'
+      examMode: examFromApi.exam_mode ? `${examFromApi.exam_mode} Based Test` : '',
+      examDuration: examFromApi.exam_duration || '',
+      totalQuestions: examFromApi.num_questions ? `${examFromApi.num_questions} Questions` : '',
+      totalMarks: examFromApi.total_marks ? `${examFromApi.total_marks} Marks` : '',
+      examLevel: examFromApi.exam_level || '',
+      examFrequency: examFromApi.exam_frequency || '',
+      eligibility: examFromApi.eligibility || '',
+      officialWebsite: examFromApi.official_website || ''
     },
-    // Use custom key_summary if available, otherwise auto-generate
-    keyHighlights: (examFromApi.key_summary && examFromApi.key_summary.length > 0) 
-      ? examFromApi.key_summary 
-      : (mockExam.keyHighlights || [
-          `${examFromApi.name} is conducted by ${examFromApi.conducting_body || 'the examining authority'}`,
-          examFromApi.exam_mode ? `Exam Mode: ${examFromApi.exam_mode}` : null,
-          examFromApi.exam_duration ? `Duration: ${examFromApi.exam_duration}` : null,
-          examFromApi.total_marks ? `Total Marks: ${examFromApi.total_marks}` : null,
-          examFromApi.num_questions ? `Total Questions: ${examFromApi.num_questions}` : null,
-        ].filter(Boolean)),
+    keyHighlights: examFromApi.key_summary || [],
     menuConfig: examFromApi.menu_config,
     sidebarWidgets: examFromApi.sidebar_widgets,
     metaTitle: examFromApi.meta_title,
@@ -240,7 +98,7 @@ const ExamDetailPage = () => {
     seoVideoTitle: examFromApi.seo_video_title,
     seoVideoDescription: examFromApi.seo_video_description,
     seoFaqs: examFromApi.seo_faqs || []
-  } : mockExam;
+  } : null;
 
   // Show loading state
   if (loading) {
@@ -248,6 +106,33 @@ const ExamDetailPage = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <FiLoader className="w-8 h-8 text-blue-600 animate-spin" />
         <span className="ml-3 text-gray-600">Loading exam details...</span>
+      </div>
+    );
+  }
+
+  // Show not found state when exam doesn't exist
+  if (!exam) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-white border-b py-2">
+          <div className="container mx-auto px-6">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+              <span>/</span>
+              <Link to="/exams" className="hover:text-orange-600 transition-colors">Exams</Link>
+              <span>/</span>
+              <span className="text-gray-900 font-medium">{id}</span>
+            </div>
+          </div>
+        </div>
+        <div className="container mx-auto px-6 py-16 text-center">
+          <FiFileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Exam Not Found</h1>
+          <p className="text-gray-600 mb-6">The exam you're looking for doesn't exist in our database yet.</p>
+          <Link to="/exams" className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+            Browse All Exams
+          </Link>
+        </div>
       </div>
     );
   }
