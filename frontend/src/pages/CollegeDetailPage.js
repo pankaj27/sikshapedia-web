@@ -475,8 +475,8 @@ const CollegeDetailPage = ({ overrideId }) => {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
             <div className="flex-shrink-0">
-              {college.images?.[0] ? (
-                <img src={college.images[0]} alt={college.name} className="w-28 h-28 rounded border object-cover" />
+              {(college.logo_url || college.images?.[0]) ? (
+                <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-28 h-28 rounded border object-cover" />
               ) : (
                 <div className="w-28 h-28 rounded bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-4xl font-bold">
                   {college.name.charAt(0)}
