@@ -120,50 +120,61 @@ const CoursesDetailManagement = lazy(() => import('./pages/admin/CoursesDetailMa
 const ExamDetailForm = lazy(() => import('./pages/admin/ExamDetailForm'));
 const ExamsDetailManagement = lazy(() => import('./pages/admin/ExamsDetailManagement'));
 const LoansListingSettings = lazy(() => import('./pages/admin/LoansListingSettings'));
-import ScholarshipsListingSettings from './pages/admin/ScholarshipsListingSettings';
-import StudyMaterialsListingSettings from './pages/admin/StudyMaterialsListingSettings';
-import StudyMaterialsManagement from './pages/admin/StudyMaterialsManagement';
-import ScholarshipForm from './pages/admin/ScholarshipForm';
-import LoanForm from './pages/admin/LoanForm';
-import ExamListingSettings from './pages/admin/ExamListingSettings';
-import CourseListingSettings from './pages/admin/CourseListingSettings';
-import NewsListingSettings from './pages/admin/NewsListingSettings';
-import BlogListingSettings from './pages/admin/BlogListingSettings';
-import CoursePagesManagement from './pages/admin/CoursePagesManagement';
-import CoursePageForm from './pages/admin/CoursePageForm';
-import ListingPagesManagement from './pages/admin/ListingPagesManagement';
-import StaticPagesManagement from './pages/admin/StaticPagesManagement';
-import StaticPageForm from './pages/admin/StaticPageForm';
-import StudyAbroadManagement from './pages/admin/StudyAbroadManagement';
-import StudyAbroadForm from './pages/admin/StudyAbroadForm';
-import StudyAbroadListingSettings from './pages/admin/StudyAbroadListingSettings';
-import HomepageSettings from './pages/admin/HomepageSettings';
-import WriteReviewSettings from './pages/admin/WriteReviewSettings';
-import YearSettings from './pages/admin/YearSettings';
-import SEOSettings from './pages/admin/SEOSettings';
-import ListingPageForm from './pages/admin/ListingPageForm';
-import SponsoredAdsManagement from './pages/admin/SponsoredAdsManagement';
-import AdvertisementManagement from './pages/admin/AdvertisementManagement';
-import LeadsList from './pages/admin/LeadsList';
-import LeadSettings from './pages/admin/LeadSettings';
-import AdmissionBookingsManagement from './pages/admin/AdmissionBookingsManagement';
-import AdmissionPartnersList from './pages/admin/AdmissionPartnersList';
-import RewardsDashboard from './pages/admin/RewardsDashboard';
-import PendingReviews from './pages/admin/PendingReviews';
-import PendingAnswers from './pages/admin/PendingAnswers';
-import RedemptionManagement from './pages/admin/RedemptionManagement';
-import PaymentHistory from './pages/admin/PaymentHistory';
-import UsersPointsReport from './pages/admin/UsersPointsReport';
-import CounselorsManagement from './pages/admin/CounselorsManagement';
-import AuthPagesManagement from './pages/admin/AuthPagesManagement';
-import LeadFormsManagement from './pages/admin/LeadFormsManagement';
-import CounsellingRequestsManagement from './pages/admin/CounsellingRequestsManagement';
+const ScholarshipsListingSettings = lazy(() => import('./pages/admin/ScholarshipsListingSettings'));
+const StudyMaterialsListingSettings = lazy(() => import('./pages/admin/StudyMaterialsListingSettings'));
+const StudyMaterialsManagement = lazy(() => import('./pages/admin/StudyMaterialsManagement'));
+const ScholarshipForm = lazy(() => import('./pages/admin/ScholarshipForm'));
+const LoanForm = lazy(() => import('./pages/admin/LoanForm'));
+const ExamListingSettings = lazy(() => import('./pages/admin/ExamListingSettings'));
+const CourseListingSettings = lazy(() => import('./pages/admin/CourseListingSettings'));
+const NewsListingSettings = lazy(() => import('./pages/admin/NewsListingSettings'));
+const BlogListingSettings = lazy(() => import('./pages/admin/BlogListingSettings'));
+const CoursePagesManagement = lazy(() => import('./pages/admin/CoursePagesManagement'));
+const CoursePageForm = lazy(() => import('./pages/admin/CoursePageForm'));
+const ListingPagesManagement = lazy(() => import('./pages/admin/ListingPagesManagement'));
+const StaticPagesManagement = lazy(() => import('./pages/admin/StaticPagesManagement'));
+const StaticPageForm = lazy(() => import('./pages/admin/StaticPageForm'));
+const StudyAbroadManagement = lazy(() => import('./pages/admin/StudyAbroadManagement'));
+const StudyAbroadForm = lazy(() => import('./pages/admin/StudyAbroadForm'));
+const StudyAbroadListingSettings = lazy(() => import('./pages/admin/StudyAbroadListingSettings'));
+const HomepageSettings = lazy(() => import('./pages/admin/HomepageSettings'));
+const WriteReviewSettings = lazy(() => import('./pages/admin/WriteReviewSettings'));
+const YearSettings = lazy(() => import('./pages/admin/YearSettings'));
+const SEOSettings = lazy(() => import('./pages/admin/SEOSettings'));
+const ListingPageForm = lazy(() => import('./pages/admin/ListingPageForm'));
+const SponsoredAdsManagement = lazy(() => import('./pages/admin/SponsoredAdsManagement'));
+const AdvertisementManagement = lazy(() => import('./pages/admin/AdvertisementManagement'));
+const LeadsList = lazy(() => import('./pages/admin/LeadsList'));
+const LeadSettings = lazy(() => import('./pages/admin/LeadSettings'));
+const AdmissionBookingsManagement = lazy(() => import('./pages/admin/AdmissionBookingsManagement'));
+const AdmissionPartnersList = lazy(() => import('./pages/admin/AdmissionPartnersList'));
+const RewardsDashboard = lazy(() => import('./pages/admin/RewardsDashboard'));
+const PendingReviews = lazy(() => import('./pages/admin/PendingReviews'));
+const PendingAnswers = lazy(() => import('./pages/admin/PendingAnswers'));
+const RedemptionManagement = lazy(() => import('./pages/admin/RedemptionManagement'));
+const PaymentHistory = lazy(() => import('./pages/admin/PaymentHistory'));
+const UsersPointsReport = lazy(() => import('./pages/admin/UsersPointsReport'));
+const CounselorsManagement = lazy(() => import('./pages/admin/CounselorsManagement'));
+const AuthPagesManagement = lazy(() => import('./pages/admin/AuthPagesManagement'));
+const LeadFormsManagement = lazy(() => import('./pages/admin/LeadFormsManagement'));
+const CounsellingRequestsManagement = lazy(() => import('./pages/admin/CounsellingRequestsManagement'));
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
-import AdmissionPartnersPage from './pages/AdmissionPartnersPage';
+const AdmissionPartnersPage = lazy(() => import('./pages/AdmissionPartnersPage'));
 // Review Link Page
-import ReviewLinkPage from './pages/ReviewLinkPage';
+const ReviewLinkPage = lazy(() => import('./pages/ReviewLinkPage'));
+const UniversityDetailPage = lazy(() => import('./pages/UniversityDetailPage'));
 import './App.css';
+
+// Loading spinner component for lazy loaded routes
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="text-center">
+      <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p className="text-gray-600 text-sm">Loading...</p>
+    </div>
+  </div>
+);
 
 function App() {
   return (
