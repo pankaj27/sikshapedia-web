@@ -1207,13 +1207,25 @@ const DynamicListingPage = () => {
     if (newStream) segments.push(newStream);
     if (newCourse) segments.push(newCourse);
     
-    // Handle query params for type and accreditation
+    // Handle query params for type, accreditation, degree, exam, affiliation, recognition
     const queryParams = new URLSearchParams(location.search);
     if (filterToRemove === 'collegeType') {
       queryParams.delete('type');
     }
     if (filterToRemove === 'accreditation') {
       queryParams.delete('accreditation');
+    }
+    if (filterToRemove === 'degreeType') {
+      queryParams.delete('degree');
+    }
+    if (filterToRemove === 'examAccepted') {
+      queryParams.delete('exam');
+    }
+    if (filterToRemove === 'affiliation') {
+      queryParams.delete('affiliation');
+    }
+    if (filterToRemove === 'recognition') {
+      queryParams.delete('recognition');
     }
     
     const newPath = '/' + segments.join('/');
