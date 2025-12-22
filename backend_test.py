@@ -4680,7 +4680,13 @@ class APITester:
             
             # Show some exam types if available
             if exam_types_count > 0:
-                sample_types = [exam_type.get("name", "Unknown") for exam_type in response[:3]]
+                # Handle both string and dict formats
+                sample_types = []
+                for exam_type in response[:3]:
+                    if isinstance(exam_type, dict):
+                        sample_types.append(exam_type.get("name", "Unknown"))
+                    else:
+                        sample_types.append(str(exam_type))
                 self.log_test("Exam Types Sample", True, f"Sample types: {', '.join(sample_types)}")
         else:
             self.log_test("GET /api/eligibility/exam-types", False, f"Status: {status}", response)
