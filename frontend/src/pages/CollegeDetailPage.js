@@ -1020,32 +1020,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                         </div>
                       </section>
                     )}
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-orange-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.cutoff_data.map((item, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
-                                  <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
-                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.cutoff || item.rank}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                          <p className="text-sm text-gray-700">Cutoff details will be updated soon after official announcement.</p>
-                        </div>
-                      )}
-                    </section>
 
                     {/* PLACEMENT - FROM TOC #06 - Guest Gated */}
                     <section id="seo-placement">
