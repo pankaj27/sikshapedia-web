@@ -18,20 +18,44 @@ def set_database(database):
 
 # Security
 security = HTTPBearer()
-JWT_SECRET = os.environ.get("SECRET_KEY", "your-secret-key-change-in-production")
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key-change-in-production")
+ALGORITHM = "HS256"
 
-async def verify_admin_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Verify admin JWT token"""
+def verify_token(token: str):
     try:
-        token = credentials.credentials
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        if payload.get("role") != "admin":
-            raise HTTPException(status_code=403, detail="Admin access required")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
+    except jwt.exceptions.DecodeError:
         raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+async def get_current_admin_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get current admin user - same pattern as main server"""
+    token = credentials.credentials
+    payload = verify_token(token)
+    user_id = payload.get("sub")
+    role = payload.get("role", "student")
+    
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+    
+    # Check if user is admin
+    if role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    # First try admins collection
+    admin = await db.admins.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+    if admin is None:
+        # Fallback: Check users collection for users with admin role
+        admin = await db.users.find_one({"id": user_id, "role": "admin"}, {"_id": 0, "password_hash": 0})
+    
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Admin not found")
+    
+    return admin
 
 # Pydantic Models
 class LogoBanner(BaseModel):
