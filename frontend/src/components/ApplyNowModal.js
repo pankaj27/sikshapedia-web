@@ -1,16 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FiX, FiUser, FiMail, FiPhone, FiMapPin, FiBook, FiSend, FiLoader, FiCheck, FiMessageCircle } from 'react-icons/fi';
 import api from '../api/axios';
-import { INDIAN_CITIES } from '../utils/urlHelpers';
 import SearchableSelect from './SearchableSelect';
-
-// Format city name for display (capitalize first letter)
-const formatCityName = (city) => {
-  return city.charAt(0).toUpperCase() + city.slice(1);
-};
-
-// Sorted cities for dropdown
-const SORTED_CITIES = [...INDIAN_CITIES].sort().map(formatCityName);
 
 // School classes for school forms
 const SCHOOL_CLASSES = [
@@ -45,19 +36,21 @@ const ApplyNowModal = ({
   const [error, setError] = useState('');
   const [courses, setCourses] = useState([]);
   const [allCourses, setAllCourses] = useState([]);  // All courses for general form
+  const [allCities, setAllCities] = useState([]);  // All cities from API
   const [settings, setSettings] = useState(null);
   
   // Memoize collegeCourses to prevent infinite loops - use stable reference
   const collegeCourseString = collegeCourses.join(',');
   const memoizedCollegeCourses = useMemo(() => collegeCourses, [collegeCourseString]);
 
-  // Fetch lead settings and all courses on mount
+  // Fetch lead settings, courses and cities on mount
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [settingsRes, coursesRes] = await Promise.all([
+        const [settingsRes, coursesRes, citiesRes] = await Promise.all([
           api.get('/lead-settings'),
-          api.get('/courses')  // Fetch all courses for general form
+          api.get('/courses'),  // Fetch all courses for general form
+          api.get('/locations/all-cities')  // Fetch all cities from master data
         ]);
         setSettings(settingsRes.data);
         // Extract course names from courses data
@@ -68,6 +61,13 @@ const ApplyNowModal = ({
         // Add "School Admission" at the beginning for general form
         const uniqueCourses = [...new Set(courseNames)];
         setAllCourses(['School Admission', ...uniqueCourses]);
+        
+        // Extract city names from cities data
+        const cityNames = citiesRes.data
+          .map(c => c.name)
+          .filter(Boolean)
+          .sort();
+        setAllCities(cityNames);
       } catch (err) {
         console.error('Failed to fetch initial data:', err);
       }
