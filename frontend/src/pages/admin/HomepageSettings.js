@@ -2072,12 +2072,24 @@ const HomepageSettings = () => {
                     <FiPlus className="mr-1" /> Add City
                   </Button>
                 </div>
+                
+                {/* Upload Status Message */}
+                {uploadMessage.text && (
+                  <div className={`mb-3 p-2 rounded text-sm ${
+                    uploadMessage.type === 'success' 
+                      ? 'bg-green-100 text-green-700 border border-green-300' 
+                      : 'bg-red-100 text-red-700 border border-red-300'
+                  }`}>
+                    {uploadMessage.text}
+                  </div>
+                )}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {settings.cities?.map((city, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex gap-2 items-center mb-2">
                         {city.image && (
-                          <img src={city.image} alt={city.name} className="w-10 h-10 object-contain rounded" />
+                          <img src={city.image} alt={city.name} className="w-10 h-10 object-contain rounded border" />
                         )}
                         <input
                           type="text"
