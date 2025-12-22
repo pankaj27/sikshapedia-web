@@ -59,8 +59,9 @@ const UserSignup = () => {
   const [exam, setExam] = useState('');
   const [referralCode, setReferralCode] = useState('');
   
-  // All courses for dropdown
-  const [courses, setCourses] = useState([]);
+  // All courses and exams for dropdown (using centralized data as fallback)
+  const [courses, setCourses] = useState(ALL_INDIA_COURSES);
+  const [exams, setExams] = useState(ALL_INDIA_EXAMS);
   
   // Pre-fill from Google auth or referral
   const googleEmail = searchParams.get('email');
