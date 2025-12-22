@@ -2064,12 +2064,12 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'affiliation' ? null : 'affiliation')}
                   className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
-                    filters.affiliation 
+                    activeFilters.affiliation 
                       ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
                       : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:bg-blue-50'
                   }`}
                 >
-                  {filters.affiliation ? filters.affiliation.split(' ')[0] : 'Affiliation'}
+                  {activeFilters.affiliation ? activeFilters.affiliation.split(' ')[0] : 'Affiliation'}
                   <FiChevronDown size={14} className={activeFilterDropdown === 'affiliation' ? 'rotate-180 transition-transform' : 'transition-transform'} />
                 </button>
                 {activeFilterDropdown === 'affiliation' && (
@@ -2093,7 +2093,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.affiliation.map((option) => (
-                        <button key={option} onClick={() => handleFilterSelect('affiliation', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.affiliation === option && '✓'}</button>
+                        <button key={option} onClick={() => handleFilterSelect('affiliation', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${activeFilters.affiliation === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {activeFilters.affiliation === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
@@ -2105,12 +2105,12 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'recognition' ? null : 'recognition')}
                   className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
-                    filters.recognition 
+                    activeFilters.recognition 
                       ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
                       : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:bg-blue-50'
                   }`}
                 >
-                  {filters.recognition ? filters.recognition.split(' ')[0] : 'Recognition'}
+                  {activeFilters.recognition ? activeFilters.recognition.split(' ')[0] : 'Recognition'}
                   <FiChevronDown size={14} className={activeFilterDropdown === 'recognition' ? 'rotate-180 transition-transform' : 'transition-transform'} />
                 </button>
                 {activeFilterDropdown === 'recognition' && (
@@ -2134,7 +2134,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.recognition.map((option) => (
-                        <button key={option} onClick={() => handleFilterSelect('recognition', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.recognition === option && '✓'}</button>
+                        <button key={option} onClick={() => handleFilterSelect('recognition', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${activeFilters.recognition === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {activeFilters.recognition === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
