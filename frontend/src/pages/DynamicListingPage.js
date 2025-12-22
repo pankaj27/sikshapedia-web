@@ -608,7 +608,7 @@ const DynamicListingPage = () => {
     ],
     
     state: allStates,
-    city: getAvailableCities(),
+    city: getAvailableCities,
     
     // College Type
     collegeType: ['Government', 'Private', 'Deemed', 'Autonomous', 'Public-Private', 'Aided'],
