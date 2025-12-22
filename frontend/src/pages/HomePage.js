@@ -906,7 +906,7 @@ const CollegeDuniaHome = () => {
                 >
                   <div className="w-16 h-16 mx-auto mb-2 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <img 
-                      src={city.image} 
+                      src={city.image?.startsWith('/api/') ? `${process.env.REACT_APP_BACKEND_URL}${city.image}` : city.image} 
                       alt={city.name} 
                       className="object-contain"
                       style={{ 
