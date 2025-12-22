@@ -908,10 +908,14 @@ const CollegeDuniaHome = () => {
                     <img 
                       src={city.image?.startsWith('/api/') ? `${process.env.REACT_APP_BACKEND_URL}${city.image}` : city.image} 
                       alt={city.name} 
-                      className="object-contain"
+                      className="max-w-full max-h-full object-contain"
                       style={{ 
                         width: `${city.iconSize || 56}px`, 
-                        height: `${city.iconSize || 56}px` 
+                        height: `${city.iconSize || 56}px`,
+                        objectFit: 'contain'
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
                       }}
                     />
                   </div>
