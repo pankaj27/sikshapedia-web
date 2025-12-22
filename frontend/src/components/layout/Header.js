@@ -256,7 +256,7 @@ const Header = () => {
                 </button>
                 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border py-2 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border py-2 z-[99999]">
                     <div className="px-4 py-3 border-b">
                       <p className="font-semibold text-gray-900">{user.name}</p>
                       <p className="text-sm text-gray-500 truncate">{user.email}</p>
