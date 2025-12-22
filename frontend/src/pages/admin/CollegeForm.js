@@ -2700,22 +2700,41 @@ const CollegeForm = () => {
                                           setFormData({...formData, seo_toc: newToc});
                                         }} className="w-full border-2 rounded-lg px-3 py-2 text-sm" placeholder="https://www.youtube.com/watch?v=..." />
                                       </div>
+                                      
+                                      {/* Video Title - Primary Input for Auto SEO */}
+                                      <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-3">
+                                        <label className="block text-sm font-bold text-yellow-800 mb-2">✏️ Video Title <span className="text-red-500">*</span></label>
+                                        <input type="text" value={block.videoTitle || ''} onChange={(e) => {
+                                          const newToc = [...(formData.seo_toc || [])];
+                                          const videoTitle = e.target.value;
+                                          const collegeName = formData.name || 'College';
+                                          newToc[index].blocks[blockIndex].videoTitle = videoTitle;
+                                          // Auto-generate SEO fields based on title
+                                          if (videoTitle) {
+                                            newToc[index].blocks[blockIndex].title = `${videoTitle} - ${collegeName} | AdmissionBuddy`;
+                                            newToc[index].blocks[blockIndex].description = `Watch ${videoTitle.toLowerCase()} of ${collegeName}. Get complete information about admissions, courses, fees, placements & more at AdmissionBuddy.co`;
+                                          }
+                                          setFormData({...formData, seo_toc: newToc});
+                                        }} className="w-full border-2 border-yellow-400 rounded-lg px-3 py-2.5 text-sm font-medium" placeholder="e.g., Campus Tour, Student Life, Placement Drive, Virtual Classroom" />
+                                        <p className="text-xs text-yellow-700 mt-2">💡 Enter video title - SEO Title & Description will be auto-generated with AdmissionBuddy branding</p>
+                                      </div>
+                                      
                                       <div className="grid grid-cols-2 gap-3">
                                         <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">🏷️ Video Title (SEO)</label>
+                                          <label className="block text-xs font-medium text-gray-700 mb-1">🏷️ Video Title (SEO) <span className="text-green-600 text-xs">(Auto-generated)</span></label>
                                           <input type="text" value={block.title || ''} onChange={(e) => {
                                             const newToc = [...(formData.seo_toc || [])];
                                             newToc[index].blocks[blockIndex].title = e.target.value;
                                             setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Title for SEO" />
+                                          }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Auto-generated from Video Title" />
                                         </div>
                                         <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">📝 Description (SEO)</label>
+                                          <label className="block text-xs font-medium text-gray-700 mb-1">📝 Description (SEO) <span className="text-green-600 text-xs">(Auto-generated)</span></label>
                                           <input type="text" value={block.description || ''} onChange={(e) => {
                                             const newToc = [...(formData.seo_toc || [])];
                                             newToc[index].blocks[blockIndex].description = e.target.value;
                                             setFormData({...formData, seo_toc: newToc});
-                                          }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Brief description" />
+                                          }} className="w-full border-2 border-green-200 bg-green-50 rounded-lg px-3 py-2 text-sm" placeholder="Auto-generated from Video Title" />
                                         </div>
                                       </div>
                                       {/* Video Preview */}
