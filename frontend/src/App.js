@@ -185,6 +185,7 @@ function App() {
           <BrowserRouter>
             <ScrollToTop />
             <SimpleAutoPopup />
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Admin Routes - Without Layout */}
             <Route path="/admin/login" element={<AdminLogin />} />
