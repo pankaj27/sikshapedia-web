@@ -833,15 +833,21 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </p>
                   </div>
 
-                  {/* VIDEO */}
-                  <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center border">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-orange-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <div className="w-0 h-0 border-l-8 border-l-white border-t-6 border-t-transparent border-b-6 border-b-transparent ml-1"></div>
+                  {/* VIDEO - Only show if video URL exists */}
+                  {(college?.campus_video_url || college?.seo_video_url || college?.videos?.[0]) && (
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold mb-3">{college.video_title || `${college.name} Video`}</h3>
+                      <div className="rounded-lg aspect-video overflow-hidden border">
+                        <iframe
+                          src={college.campus_video_url || college.seo_video_url || college.videos?.[0]}
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          title={college.video_title || `${college.name} Video`}
+                        ></iframe>
                       </div>
-                      <p className="text-sm text-gray-600">Video: Complete Guide to {college.name}</p>
                     </div>
-                  </div>
+                  )}
 
                   {/* ALL DETAILED CONTENT SECTIONS - NOW INSIDE EXPANDABLE AREA */}
                   <div className="space-y-8">
