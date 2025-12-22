@@ -2034,24 +2034,38 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </div>
 
-              {/* LATEST NEWS */}
+              {/* LATEST NEWS - Dynamic from college announcements */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Latest News</h3>
                 <div className="space-y-4">
-                  {[
-                    { title: `Admission ${year + 1} Opens`, date: `Dec 12, ${year}` },
-                    { title: 'Placement Results Announced', date: `Dec 6, ${year}` },
-                    { title: 'New Course Launch', date: `Nov 28, ${year}` }
-                  ].map((news, i) => (
-                    <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
-                      <Link to="#" className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
-                        <p className="text-sm text-blue-600 hover:underline font-medium mb-1 line-clamp-2">
-                          {college.name} {news.title}
-                        </p>
-                        <p className="text-[11px] text-gray-500">{news.date}</p>
-                      </Link>
-                    </div>
-                  ))}
+                  {college?.announcements && college.announcements.length > 0 ? (
+                    college.announcements.slice(0, 3).map((news, i) => (
+                      <div key={i} className={`${i !== college.announcements.slice(0, 3).length - 1 ? 'pb-4 border-b border-gray-200' : ''}`}>
+                        <Link to={news.link || '#'} className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
+                          <p className="text-sm text-blue-600 hover:underline font-medium mb-1 line-clamp-2">
+                            {news.title}
+                          </p>
+                          <p className="text-[11px] text-gray-500">{news.date || new Date(news.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    // Fallback to generated news
+                    [
+                      { title: `Admission ${year + 1} Opens`, date: `Dec 12, ${year}` },
+                      { title: 'Placement Results Announced', date: `Dec 6, ${year}` },
+                      { title: 'New Course Launch', date: `Nov 28, ${year}` }
+                    ].map((news, i) => (
+                      <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
+                        <Link to="#" className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
+                          <p className="text-sm text-blue-600 hover:underline font-medium mb-1 line-clamp-2">
+                            {college.name} {news.title}
+                          </p>
+                          <p className="text-[11px] text-gray-500">{news.date}</p>
+                        </Link>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
