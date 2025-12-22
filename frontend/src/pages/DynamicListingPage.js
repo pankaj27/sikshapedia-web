@@ -2001,18 +2001,18 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'degreeType' ? null : 'degreeType')}
                   className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
-                    filters.degreeType 
+                    activeFilters.degreeType 
                       ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
                       : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:bg-blue-50'
                   }`}
                 >
-                  {filters.degreeType || 'Degree Type'}
+                  {activeFilters.degreeType || 'Degree Type'}
                   <FiChevronDown size={14} className={activeFilterDropdown === 'degreeType' ? 'rotate-180 transition-transform' : 'transition-transform'} />
                 </button>
                 {activeFilterDropdown === 'degreeType' && (
                   <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-lg shadow-xl border py-2 z-50 max-h-60 overflow-y-auto">
                     {filterOptions.degreeType.map((option) => (
-                      <button key={option} onClick={() => handleFilterSelect('degreeType', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.degreeType === option && '✓'}</button>
+                      <button key={option} onClick={() => handleFilterSelect('degreeType', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${activeFilters.degreeType === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {activeFilters.degreeType === option && '✓'}</button>
                     ))}
                   </div>
                 )}
