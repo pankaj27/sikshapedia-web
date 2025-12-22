@@ -127,7 +127,7 @@ const defaultPageConfigs = {
     benefits: ['Leadership Skills', 'High Salary', 'Entrepreneurship', 'Global Network', 'Diverse Careers'],
     faqs: [
       { q: 'Which is better BBA or B.Com?', a: 'BBA focuses on management and business skills, while B.Com is more accounting/finance focused. Choose based on career goals.' },
-      { q: 'How to get into top MBA colleges?', a: 'Score well in CAT/XAT/GMAT, have good academic record, work experience, and prepare for GD-PI rounds.' },
+      { q: 'How to get into top MBA colleges?', a: 'Score well in management entrance exams, have good academic record, work experience, and prepare for GD-PI rounds.' },
     ],
     popularCourses: ['MBA', 'BBA', 'PGDM', 'BMS', 'BBM', 'Executive MBA'],
     relatedPages: ['/courses/commerce', '/courses/after-12th', '/courses/pg']
