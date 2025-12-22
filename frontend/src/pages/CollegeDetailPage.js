@@ -1649,65 +1649,19 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </Button>
                   </div>
 
-                  {/* Recent Q&A */}
+                  {/* Recent Q&A - Dynamic from Database */}
                   <div className="space-y-4">
-                    <h3 className="font-bold text-lg">Recent Questions</h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-bold text-lg">Recent Questions</h3>
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Data from database</span>
+                    </div>
                     
-                    <div className="bg-white border rounded-lg p-5">
-                      <div className="flex gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                            S
-                          </div>
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-semibold text-gray-900 mb-2">What is the hostel fee structure?</p>
-                          <p className="text-xs text-gray-500 mb-3">Asked by Student123 • 2 days ago</p>
-                          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                            <p className="text-sm text-gray-700 mb-2">
-                              <strong>Answer:</strong> The hostel fee is approximately INR 17,250 per semester which includes accommodation and basic facilities. Mess charges are separate and vary between INR 3,000-4,000 per month.
-                            </p>
-                            <p className="text-xs text-gray-500">Answered by Alumni • 1 day ago</p>
-                          </div>
-                          <div className="flex items-center gap-4 mt-3">
-                            <button onClick={handleReply} className="text-sm text-blue-600 hover:underline">Reply</button>
-                            <button onClick={handleQALike} className="text-sm text-gray-600 hover:text-gray-800">👍 12</button>
-                            <button className="text-sm text-gray-600 hover:text-gray-800">Share</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white border rounded-lg p-5">
-                      <div className="flex gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
-                            R
-                          </div>
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-semibold text-gray-900 mb-2">How is the placement scenario for CSE branch?</p>
-                          <p className="text-xs text-gray-500 mb-3">Asked by Rahul • 5 days ago</p>
-                          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                            <p className="text-sm text-gray-700 mb-2">
-                              <strong>Answer:</strong> CSE branch has excellent placements with average package of 25+ LPA. Top companies like Google, Microsoft, Amazon regularly visit for placements.
-                            </p>
-                            <p className="text-xs text-gray-500">Answered by Current Student • 4 days ago</p>
-                          </div>
-                          <div className="flex items-center gap-4 mt-3">
-                            <button onClick={handleReply} className="text-sm text-blue-600 hover:underline">Reply</button>
-                            <button onClick={handleQALike} className="text-sm text-gray-600 hover:text-gray-800">👍 28</button>
-                            <button className="text-sm text-gray-600 hover:text-gray-800">Share</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-center">
-                      <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
-                        View All Questions
-                      </Button>
-                    </div>
+                    {/* Dynamic Questions Component */}
+                    <QuestionsSection
+                      collegeId={college.id}
+                      collegeName={college.name}
+                      collegeSlug={college.slug}
+                    />
                   </div>
                 </section>
 
