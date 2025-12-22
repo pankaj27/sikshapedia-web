@@ -64,9 +64,11 @@ SUBSCRIPTION_PACKAGES = {
 
 # Resend Email Configuration
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'noreply@admissionbuddy.co')
+REPLY_TO_EMAIL = os.environ.get('REPLY_TO_EMAIL', 'support@admissionbuddy.co')
 if RESEND_API_KEY:
     resend.api_key = RESEND_API_KEY
+    logging.info(f"Resend email configured: sender={SENDER_EMAIL}, reply_to={REPLY_TO_EMAIL}")
 
 # Twilio WhatsApp Configuration
 TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID', '')
