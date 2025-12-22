@@ -230,6 +230,7 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
         "phone": request.phone,
         "city": request.city,
         "course": request.course,
+        "exam": request.exam,
         "referral_code": referral_code,
         "referred_by": referred_by,
         "points": 100 if referred_by else 0,  # Signup bonus if referred
