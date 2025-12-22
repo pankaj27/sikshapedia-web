@@ -240,7 +240,7 @@ const CollegeDuniaHome = () => {
     { rank: 9, name: 'NIT Trichy', location: 'Trichy', rating: 4.5, fees: '1.5L', type: 'Engineering' },
     { rank: 10, name: 'VIT Vellore', location: 'Vellore', rating: 4.4, fees: '3.5L', type: 'Engineering' }
   ];
-  const collegeRankingsData = (pageSettings?.college_rankings_data?.length > 0) ? pageSettings.college_rankings_data : defaultRankingsData;
+  const collegeRankingsData = pageSettings?.college_rankings_data || [];
   const newsletterTitle = pageSettings?.newsletter_title || 'Subscribe to Our Newsletter';
   const newsletterSubtitle = pageSettings?.newsletter_subtitle || 'Get the latest updates on college admissions, exams, and education news';
   
