@@ -1235,47 +1235,47 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-5">
-                    <h3 className="font-bold text-lg mb-3 text-orange-900 flex items-center gap-2">
-                      <span className="text-2xl">🔗</span>
-                      Affiliated to
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-3">
-                        <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <span className="text-xl">🏛️</span>
-                        </div>
-                        <div>
-                          <p className="font-semibold text-sm text-gray-900">Mumbai University</p>
-                          <p className="text-xs text-gray-600">Primary Affiliation</p>
+                  {college?.affiliation && (
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-5">
+                      <h3 className="font-bold text-lg mb-3 text-orange-900 flex items-center gap-2">
+                        <span className="text-2xl">🔗</span>
+                        Affiliated to
+                      </h3>
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-xl">🏛️</span>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm text-gray-900">{college.affiliation}</p>
+                            <p className="text-xs text-gray-600">Primary Affiliation</p>
+                          </div>
                         </div>
                       </div>
-                      <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
-                        <p className="text-xs text-gray-700 leading-relaxed">
-                          The institute is affiliated to Mumbai University and follows its curriculum for undergraduate and postgraduate programs. All degrees are awarded by the university.
-                        </p>
-                      </div>
-                    </div>
 
-                    <div className="mt-4 pt-4 border-t border-orange-300">
-                      <h4 className="font-semibold text-sm text-gray-900 mb-2">Memberships</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">AIU</span>
-                        <span className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">ACU</span>
-                        <span className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">IUAC</span>
-                      </div>
+                      {college?.memberships && college.memberships.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-orange-300">
+                          <h4 className="font-semibold text-sm text-gray-900 mb-2">Memberships</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {college.memberships.map((m, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">{m}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                   <h3 className="font-bold mb-3">Key Highlights</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• <strong>Type:</strong> {college.type}</li>
-                    <li>• <strong>Established:</strong> {college.established || 'N/A'}</li>
-                    <li>• <strong>Location:</strong> {college.location?.city}, {college.location?.state}</li>
-                    <li>• <strong>Average Fees:</strong> ₹{(college.average_fees / 100000).toFixed(2)} Lakhs per year</li>
-                    <li>• <strong>Rating:</strong> {college.rating || '4.5'}/5 ({college.reviews || 344} Reviews)</li>
+                    <li>• <strong>Type:</strong> {college.type || '-'}</li>
+                    <li>• <strong>Established:</strong> {college.established_year || college.established || '-'}</li>
+                    <li>• <strong>Location:</strong> {college.location?.city || college.city}, {college.location?.state || college.state}</li>
+                    <li>• <strong>Average Fees:</strong> ₹{college.average_fees ? (college.average_fees / 100000).toFixed(2) : '-'} Lakhs per year</li>
+                    {college.rating && <li>• <strong>Rating:</strong> {college.rating}/5</li>}
+                    {college.total_students && <li>• <strong>Students:</strong> {college.total_students.toLocaleString()}</li>}
                   </ul>
                 </div>
               </section>
