@@ -5,7 +5,7 @@ import { FiSearch, FiChevronDown, FiX } from 'react-icons/fi';
  * SearchableSelect - A dropdown with search functionality
  * @param {Array} options - Array of options (strings or {value, label} objects)
  * @param {string} value - Selected value
- * @param {function} onChange - Callback when value changes
+ * @param {function} onChange - Callback when value changes (receives value directly OR event object)
  * @param {string} placeholder - Placeholder text
  * @param {string} searchPlaceholder - Search input placeholder
  * @param {React.ReactNode} icon - Icon to show on the left
@@ -50,25 +50,46 @@ const SearchableSelect = ({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   // Focus search input when dropdown opens
   useEffect(() => {
     if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
+      // Small delay to ensure dropdown is rendered before focusing
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
     }
   }, [isOpen]);
 
   const handleSelect = (optionValue) => {
-    onChange({ target: { name, value: optionValue } });
+    // Support both direct value setter and event-based onChange
+    if (typeof onChange === 'function') {
+      // Check if onChange expects an event object (form-style) or direct value
+      // Try direct value first (simpler pattern)
+      onChange(optionValue);
+    }
     setIsOpen(false);
     setSearch('');
   };
 
   const handleClear = (e) => {
     e.stopPropagation();
-    onChange({ target: { name, value: '' } });
+    e.preventDefault();
+    if (typeof onChange === 'function') {
+      onChange('');
+    }
+  };
+
+  const handleToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -77,32 +98,36 @@ const SearchableSelect = ({
       <input
         type="hidden"
         name={name}
-        value={value}
+        value={value || ''}
         required={required}
       />
       
       {/* Trigger Button */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white hover:border-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-left ${
+        onClick={handleToggle}
+        onTouchEnd={handleToggle}
+        className={`w-full flex items-center gap-2 px-4 py-3 text-sm border border-gray-200 rounded-xl bg-gray-50 hover:border-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:bg-white transition-all text-left ${
           !value ? 'text-gray-400' : 'text-gray-900'
         }`}
       >
         {icon && <span className="text-gray-400 flex-shrink-0">{icon}</span>}
         <span className="flex-1 truncate">{displayLabel || placeholder}</span>
         {value && (
-          <FiX 
-            className="w-4 h-4 text-gray-400 hover:text-gray-600 flex-shrink-0" 
+          <span 
+            className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-gray-600 flex-shrink-0 cursor-pointer" 
             onClick={handleClear}
-          />
+            onTouchEnd={handleClear}
+          >
+            <FiX className="w-4 h-4" />
+          </span>
         )}
         <FiChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-[100] w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
           {/* Search Input */}
           <div className="p-2 border-b border-gray-100">
             <div className="relative">
@@ -113,13 +138,17 @@ const SearchableSelect = ({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
               />
             </div>
           </div>
 
           {/* Options List */}
-          <div className="max-h-48 overflow-y-auto">
+          <div className="max-h-60 overflow-y-auto overscroll-contain">
             {filteredOptions.length === 0 ? (
               <div className="px-3 py-4 text-sm text-gray-500 text-center">
                 No results found
@@ -130,7 +159,11 @@ const SearchableSelect = ({
                   key={idx}
                   type="button"
                   onClick={() => handleSelect(opt.value)}
-                  className={`w-full px-3 py-2 text-sm text-left hover:bg-orange-50 transition-colors ${
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleSelect(opt.value);
+                  }}
+                  className={`w-full px-4 py-3 text-sm text-left hover:bg-orange-50 active:bg-orange-100 transition-colors ${
                     value === opt.value ? 'bg-orange-100 text-orange-700 font-medium' : 'text-gray-700'
                   }`}
                 >
