@@ -1092,13 +1092,13 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </section>
                     )}
 
-                    {/* CAMPUS & FACILITIES - FROM TOC #08 */}
-                    <section id="seo-facilities">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
-                      <p className="text-gray-700 text-sm mb-4">
-                        {college.name} campus provides world-class facilities:
-                      </p>
-                      {college.facilities && college.facilities.length > 0 ? (
+                    {/* CAMPUS & FACILITIES - FROM TOC #08 - Only show if data exists */}
+                    {college.facilities && college.facilities.length > 0 && (
+                      <section id="seo-facilities">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          {college.name} campus provides world-class facilities:
+                        </p>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                           {college.facilities.map((facility, idx) => {
                             const isObject = typeof facility === 'object';
@@ -1121,10 +1121,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                             );
                           })}
                         </div>
-                      ) : (
-                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg text-center">Facilities information will be updated soon.</p>
-                      )}
-                    </section>
+                      </section>
+                    )}
 
                     {/* FAQs - FROM TOC #09 */}
                     <section id="seo-faqs">
