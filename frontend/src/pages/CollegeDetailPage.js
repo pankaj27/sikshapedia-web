@@ -860,6 +860,25 @@ const CollegeDetailPage = ({ overrideId }) => {
               {/* SEO EXPANDABLE CONTENT - Only database content */}
               {showContent && (
                 <div className="space-y-8">
+                  {/* TABLE OF CONTENTS - Only show if there are items */}
+                  {tableOfContents.length > 0 && (
+                    <div className="bg-gray-50 rounded-lg p-6 border">
+                      <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
+                        {tableOfContents.map((item) => (
+                          <a
+                            key={item.id}
+                            href={`#${item.id}`}
+                            className="text-left text-sm text-orange-600 hover:underline flex gap-2"
+                          >
+                            <span className="font-semibold flex-shrink-0">{item.num}.</span>
+                            <span>{item.title}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* SEO FULL CONTENT - If exists in database */}
                   {college.seo_full_content && (
                     <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
