@@ -67,7 +67,7 @@ class School(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-@router.get("/schools", response_model=List[School])
+@router.get("/schools")
 async def get_schools(
     search: Optional[str] = None,
     city: Optional[str] = None,
