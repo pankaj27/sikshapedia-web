@@ -140,7 +140,7 @@ const CollegeDuniaHome = () => {
 
   const programs = pageSettings?.programs?.length > 0 ? pageSettings.programs : [
     { title: 'College Ranking', subtitle: 'Find Top Colleges', icon: 'FiAward', color: 'bg-orange-100', iconColor: 'text-orange-600', link: '/colleges' },
-    { title: 'Exams', subtitle: 'JEE, NEET, CAT', icon: 'FiFileText', color: 'bg-blue-100', iconColor: 'text-blue-600', link: '/exams' },
+    { title: 'Exams', subtitle: 'Entrance Exams', icon: 'FiFileText', color: 'bg-blue-100', iconColor: 'text-blue-600', link: '/exams' },
     { title: 'Compare Colleges', subtitle: 'Side by Side', icon: 'FiBarChart2', color: 'bg-green-100', iconColor: 'text-green-600', link: '/compare' },
     { title: 'Course Finder', subtitle: 'Find Best Courses', icon: 'FiCompass', color: 'bg-purple-100', iconColor: 'text-purple-600', link: '/course-finder' }
   ];

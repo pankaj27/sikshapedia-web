@@ -132,7 +132,7 @@ const EligibilityChecker = () => {
     <div className="min-h-screen bg-gray-50">
       <MetaTags 
         title="College Predictor 2026 - Find Best Colleges | admissionbuddy"
-        description="Find colleges based on your exam scores. College predictor for JEE Main, NEET, CAT, CUET and other exams."
+        description="Find colleges based on your exam scores. College predictor for various entrance exams."
       />
 
       {/* Hero Section */}
@@ -142,7 +142,7 @@ const EligibilityChecker = () => {
             College Predictor 2026
           </h1>
           <p className="text-sm md:text-base text-center text-purple-100 mb-4">
-            For JEE Main, NEET, CUET and other top Universities and Exams
+            For various entrance exams and top Universities
           </p>
 
           {/* Filters */}
