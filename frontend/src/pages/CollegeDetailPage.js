@@ -1570,21 +1570,16 @@ const CollegeDetailPage = ({ overrideId }) => {
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <div className="text-center text-gray-500 py-8">
-                      No scholarship information available
-                    </div>
-                  )}
-                </section>
+                  </section>
+                )}
 
-                {/* FACILITIES */}
-                <section id="facilities" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
-                  </p>
-
-                  {college.facilities && college.facilities.length > 0 ? (
+                {/* FACILITIES - Only show if data exists */}
+                {college?.facilities && college.facilities.length > 0 && (
+                  <section id="facilities" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
+                    </p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                       {college.facilities.map((facility, idx) => {
                         const isObject = typeof facility === 'object';
