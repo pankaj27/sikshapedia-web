@@ -2089,7 +2089,17 @@ const HomepageSettings = () => {
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex gap-2 items-center mb-2">
                         {city.image && (
-                          <img src={city.image} alt={city.name} className="w-10 h-10 object-contain rounded border" />
+                          <div className="relative">
+                            <img 
+                              src={city.image} 
+                              alt={city.name} 
+                              className="object-contain rounded border bg-white"
+                              style={{ 
+                                width: `${city.iconSize || 40}px`, 
+                                height: `${city.iconSize || 40}px` 
+                              }}
+                            />
+                          </div>
                         )}
                         <input
                           type="text"
@@ -2102,6 +2112,23 @@ const HomepageSettings = () => {
                           <FiTrash2 />
                         </button>
                       </div>
+                      
+                      {/* Icon Size Slider - only show if image exists */}
+                      {city.image && (
+                        <div className="flex items-center gap-2 mb-2 bg-white p-2 rounded border">
+                          <span className="text-xs text-gray-500 whitespace-nowrap">Icon Size:</span>
+                          <input
+                            type="range"
+                            min="20"
+                            max="80"
+                            value={city.iconSize || 40}
+                            onChange={(e) => updateCity(index, 'iconSize', parseInt(e.target.value))}
+                            className="flex-1 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                          />
+                          <span className="text-xs text-gray-600 w-8">{city.iconSize || 40}px</span>
+                        </div>
+                      )}
+                      
                       <div className="flex gap-2 items-center mb-2">
                         <input
                           type="text"
@@ -2113,7 +2140,7 @@ const HomepageSettings = () => {
                         <label className={`text-xs cursor-pointer hover:underline whitespace-nowrap flex items-center gap-1 ${uploadingIndex === `city-${index}` ? 'text-gray-400' : 'text-blue-600'}`}>
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/*,.svg"
                             className="hidden"
                             disabled={uploadingIndex === `city-${index}`}
                             onChange={async (e) => {
