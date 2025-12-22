@@ -123,34 +123,17 @@ const CourseDetailPage = () => {
     ? course.related_courses 
     : defaultRelatedCourses;
 
-  // Top Colleges - from API or default
-  const defaultTopColleges = [
-    { name: 'Indian Institute of Technology, Delhi', location: 'New Delhi', rating: 4.8, fees: '₹2.5L/year', rank: '#1' },
-    { name: 'Indian Institute of Technology, Bombay', location: 'Mumbai', rating: 4.7, fees: '₹2.8L/year', rank: '#2' },
-    { name: 'Indian Institute of Technology, Madras', location: 'Chennai', rating: 4.7, fees: '₹2.6L/year', rank: '#3' },
-    { name: 'BITS Pilani', location: 'Pilani, Rajasthan', rating: 4.5, fees: '₹4.5L/year', rank: '#4' },
-    { name: 'NIT Trichy', location: 'Tiruchirappalli', rating: 4.4, fees: '₹1.5L/year', rank: '#5' },
-  ];
-  const topColleges = course.top_colleges && course.top_colleges.length > 0 ? course.top_colleges : defaultTopColleges;
+  // Top Colleges - only from API, no fallback
+  const topColleges = course.top_colleges || [];
 
   // Age Limit - from API or default
   const ageLimit = course.age_limit || 'No upper age limit for most institutions';
 
-  // Sample career options
-  const careerOptions = course.career_options || [
-    { title: 'Software Developer', salary: '₹6-15 LPA', growth: '+25%' },
-    { title: 'Data Analyst', salary: '₹5-12 LPA', growth: '+30%' },
-    { title: 'Project Manager', salary: '₹10-25 LPA', growth: '+20%' },
-    { title: 'Research Scientist', salary: '₹8-20 LPA', growth: '+15%' },
-  ];
+  // Career options - only from API, no fallback
+  const careerOptions = course.career_options || [];
 
-  // FAQs
-  const faqs = [
-    { q: `What is ${courseName}?`, a: `${fullName} is a ${degreeType} level program that spans ${duration}. It provides comprehensive education in the field with both theoretical knowledge and practical skills.` },
-    { q: `What is the eligibility for ${courseName}?`, a: eligibility },
-    { q: `What are the career options after ${courseName}?`, a: `Graduates can pursue careers in various sectors including corporate, government, research, and entrepreneurship with attractive salary packages.` },
-    { q: `What is the average fee for ${courseName}?`, a: `The average fee ranges from ₹${Math.round(avgFees * 0.5).toLocaleString()} to ₹${Math.round(avgFees * 1.5).toLocaleString()} depending on the institution.` },
-  ];
+  // FAQs - only use if course has FAQs from database
+  const faqs = course.faqs || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
