@@ -330,6 +330,7 @@ const ExamPage = () => {
                 </Link>
               </div>
             </div>
+            )}
           </aside>
 
           {/* Main Content Area */}
