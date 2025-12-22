@@ -4,13 +4,8 @@ import ApplyNowModal from './ApplyNowModal';
 
 /**
  * SimpleAutoPopup - Shows Apply Now popup only on homepage, once per session
- * Currently DISABLED for deployment - enable in admin settings when ready
  */
 const SimpleAutoPopup = () => {
-  // DISABLED FOR DEPLOYMENT - Remove this return when ready to enable popup
-  return null;
-  
-  // Keeping code below for when you want to re-enable
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
   
