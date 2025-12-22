@@ -11,6 +11,13 @@ export { default as StatusBadge } from './StatusBadge';
 export { default as StatusFilter } from './StatusFilter';
 export { default as ContentApprovalActions } from './ContentApprovalActions';
 
+// Simplified Components for Data Entry
+export { default as SimpleContentBuilder } from './SimpleContentBuilder';
+export { default as SimpleMenuConfig } from './SimpleMenuConfig';
+export { default as ContentBuilder } from './ContentBuilder';
+export { default as SEOSection } from './SEOSection';
+export { default as LivePreview } from './LivePreview';
+
 // College Form Sections
 export * from './college-form';
 
