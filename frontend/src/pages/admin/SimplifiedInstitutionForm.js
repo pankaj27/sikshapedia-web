@@ -675,10 +675,11 @@ const SimplifiedInstitutionForm = ({ entityType = 'college' }) => {
         alert('Saved successfully!');
         if (!isEditing) {
           const data = await response.json();
-          navigate(`/admin/${entityType}s/edit/${data.id}`);
+          navigate(`/admin/${entityType}s/simple/edit/${data.id}`);
         }
       } else {
-        alert('Failed to save. Please try again.');
+        const errorData = await response.json().catch(() => ({}));
+        alert(`Failed to save: ${errorData.detail || 'Please try again.'}`);
       }
     } catch (error) {
       console.error('Error saving:', error);
