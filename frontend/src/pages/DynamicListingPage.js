@@ -438,9 +438,9 @@ const DynamicListingPage = () => {
       // Fallback to hardcoded
       return citiesByState[activeFilters.state] || [];
     }
-    // If no state selected, show major cities
+    // If no state selected, show all cities from master data (sorted alphabetically)
     if (masterCities.length > 0) {
-      return masterCities.slice(0, 14).map(c => c.name);
+      return masterCities.map(c => c.name).sort();
     }
     return ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Chandigarh', 'Kochi', 'Bhopal', 'Patna'];
   };
