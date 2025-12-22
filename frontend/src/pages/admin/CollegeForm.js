@@ -2299,14 +2299,153 @@ const CollegeForm = () => {
                         </div>
                       </div>
                       
-                      {/* Content Area */}
-                      <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-3">
-                        <label className="block text-xs font-bold text-orange-800 mb-2">
-                          📄 Section Content <span className="text-red-500">*</span>
-                          <span className="font-normal text-orange-600 ml-2">
-                            (When user clicks &quot;{item.title || 'Section'}&quot; in TOC, they see this content)
-                          </span>
-                        </label>
+                      {/* Content Area with Insert Tools */}
+                      <div className="bg-orange-50 border-2 border-orange-200 rounded-lg overflow-hidden">
+                        <div className="bg-orange-100 px-3 py-2 border-b border-orange-200">
+                          <label className="block text-xs font-bold text-orange-800">
+                            📄 Section Content <span className="text-red-500">*</span>
+                            <span className="font-normal text-orange-600 ml-2">
+                              (When user clicks &quot;{item.title || 'Section'}&quot; in TOC, they see this content)
+                            </span>
+                          </label>
+                        </div>
+                        
+                        {/* Insert Toolbar */}
+                        <div className="bg-white px-3 py-2 border-b border-orange-200 flex flex-wrap gap-2">
+                          <span className="text-xs text-gray-500 py-1">Insert:</span>
+                          
+                          {/* Insert Image */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const url = prompt('Enter Image URL:', 'https://');
+                              const alt = prompt('Enter Image Alt Text (for SEO):', '');
+                              const caption = prompt('Enter Image Caption (optional):', '');
+                              if (url && url !== 'https://') {
+                                const imgHtml = `\n<figure class="content-image">\n  <img src="${url}" alt="${alt || ''}" style="max-width:100%; border-radius:8px;" />\n  ${caption ? `<figcaption style="text-align:center; font-size:14px; color:#666; margin-top:8px;">${caption}</figcaption>` : ''}\n</figure>\n`;
+                                const newToc = [...(formData.seo_toc || [])];
+                                newToc[index].content = (newToc[index].content || '') + imgHtml;
+                                setFormData({...formData, seo_toc: newToc});
+                              }
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-200"
+                          >
+                            🖼️ Image
+                          </button>
+                          
+                          {/* Insert Table */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const rows = prompt('Number of rows:', '3');
+                              const cols = prompt('Number of columns:', '3');
+                              if (rows && cols) {
+                                const r = parseInt(rows) || 3;
+                                const c = parseInt(cols) || 3;
+                                let tableHtml = '\n<table style="width:100%; border-collapse:collapse; margin:16px 0;">\n  <thead>\n    <tr style="background:#f3f4f6;">\n';
+                                for (let j = 0; j < c; j++) {
+                                  tableHtml += `      <th style="border:1px solid #ddd; padding:10px; text-align:left;">Header ${j + 1}</th>\n`;
+                                }
+                                tableHtml += '    </tr>\n  </thead>\n  <tbody>\n';
+                                for (let i = 0; i < r; i++) {
+                                  tableHtml += '    <tr>\n';
+                                  for (let j = 0; j < c; j++) {
+                                    tableHtml += `      <td style="border:1px solid #ddd; padding:10px;">Data</td>\n`;
+                                  }
+                                  tableHtml += '    </tr>\n';
+                                }
+                                tableHtml += '  </tbody>\n</table>\n';
+                                const newToc = [...(formData.seo_toc || [])];
+                                newToc[index].content = (newToc[index].content || '') + tableHtml;
+                                setFormData({...formData, seo_toc: newToc});
+                              }
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-teal-100 text-teal-700 rounded-lg text-xs font-medium hover:bg-teal-200"
+                          >
+                            📊 Table
+                          </button>
+                          
+                          {/* Insert Video */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const url = prompt('Enter YouTube Video URL:', 'https://www.youtube.com/watch?v=');
+                              if (url) {
+                                const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+                                if (match) {
+                                  const videoId = match[1];
+                                  const videoHtml = `\n<div class="video-embed" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; margin:16px 0; border-radius:8px;">\n  <iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>\n</div>\n`;
+                                  const newToc = [...(formData.seo_toc || [])];
+                                  newToc[index].content = (newToc[index].content || '') + videoHtml;
+                                  setFormData({...formData, seo_toc: newToc});
+                                } else {
+                                  alert('Invalid YouTube URL. Please use format: https://www.youtube.com/watch?v=VIDEO_ID');
+                                }
+                              }
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-xs font-medium hover:bg-red-200"
+                          >
+                            🎬 Video
+                          </button>
+                          
+                          {/* Insert Quick Facts */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const factsHtml = `\n<div class="quick-facts" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe); border-radius:12px; padding:20px; margin:16px 0;">\n  <h4 style="color:#0369a1; margin-bottom:12px; font-size:18px;">📋 Quick Facts</h4>\n  <ul style="list-style:none; padding:0; margin:0;">\n    <li style="padding:8px 0; border-bottom:1px solid #bae6fd; display:flex; justify-content:space-between;"><span style="color:#64748b;">Established</span><strong style="color:#0c4a6e;">1990</strong></li>\n    <li style="padding:8px 0; border-bottom:1px solid #bae6fd; display:flex; justify-content:space-between;"><span style="color:#64748b;">Institute Type</span><strong style="color:#0c4a6e;">Private</strong></li>\n    <li style="padding:8px 0; border-bottom:1px solid #bae6fd; display:flex; justify-content:space-between;"><span style="color:#64748b;">Approved By</span><strong style="color:#0c4a6e;">AICTE, UGC</strong></li>\n    <li style="padding:8px 0; border-bottom:1px solid #bae6fd; display:flex; justify-content:space-between;"><span style="color:#64748b;">Accreditation</span><strong style="color:#0c4a6e;">NAAC A+</strong></li>\n    <li style="padding:8px 0; display:flex; justify-content:space-between;"><span style="color:#64748b;">Campus Size</span><strong style="color:#0c4a6e;">50 Acres</strong></li>\n  </ul>\n</div>\n`;
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = (newToc[index].content || '') + factsHtml;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-200"
+                          >
+                            📋 Quick Facts
+                          </button>
+                          
+                          {/* Insert Key Statistics */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const statsHtml = `\n<div class="key-statistics" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:16px 0;">\n  <div style="background:linear-gradient(135deg,#fef3c7,#fde68a); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#92400e;">5000+</div>\n    <div style="color:#a16207; font-size:14px;">Students</div>\n  </div>\n  <div style="background:linear-gradient(135deg,#d1fae5,#a7f3d0); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#065f46;">95%</div>\n    <div style="color:#047857; font-size:14px;">Placement Rate</div>\n  </div>\n  <div style="background:linear-gradient(135deg,#dbeafe,#bfdbfe); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#1e40af;">200+</div>\n    <div style="color:#1d4ed8; font-size:14px;">Faculty</div>\n  </div>\n  <div style="background:linear-gradient(135deg,#fce7f3,#fbcfe8); border-radius:12px; padding:20px; text-align:center;">\n    <div style="font-size:32px; font-weight:bold; color:#9d174d;">₹12 LPA</div>\n    <div style="color:#be185d; font-size:14px;">Avg. Package</div>\n  </div>\n</div>\n`;
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = (newToc[index].content || '') + statsHtml;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg text-xs font-medium hover:bg-yellow-200"
+                          >
+                            📈 Key Statistics
+                          </button>
+                          
+                          {/* Insert List */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const listHtml = `\n<ul style="margin:16px 0; padding-left:20px;">\n  <li style="margin-bottom:8px;">Item 1</li>\n  <li style="margin-bottom:8px;">Item 2</li>\n  <li style="margin-bottom:8px;">Item 3</li>\n</ul>\n`;
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = (newToc[index].content || '') + listHtml;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium hover:bg-gray-200"
+                          >
+                            📝 List
+                          </button>
+                          
+                          {/* Insert Highlight Box */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const highlightHtml = `\n<div style="background:linear-gradient(135deg,#fef9c3,#fef08a); border-left:4px solid #eab308; border-radius:8px; padding:16px; margin:16px 0;">\n  <strong style="color:#a16207;">💡 Important:</strong>\n  <p style="margin:8px 0 0 0; color:#713f12;">Your highlight text here...</p>\n</div>\n`;
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].content = (newToc[index].content || '') + highlightHtml;
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-amber-100 text-amber-700 rounded-lg text-xs font-medium hover:bg-amber-200"
+                          >
+                            💡 Highlight
+                          </button>
+                        </div>
+                        
+                        {/* Content Textarea */}
                         <textarea
                           value={item.content || ''}
                           onChange={(e) => {
@@ -2314,23 +2453,22 @@ const CollegeForm = () => {
                             newToc[index].content = e.target.value;
                             setFormData({...formData, seo_toc: newToc});
                           }}
-                          placeholder="Write the detailed content for this section...&#10;&#10;You can use HTML tags like:&#10;<p>Paragraph</p>&#10;<ul><li>List item</li></ul>&#10;<strong>Bold text</strong>"
-                          rows="6"
-                          className="w-full border-2 border-orange-200 rounded-lg px-3 py-2 text-sm focus:border-orange-500"
+                          placeholder="Write content or use Insert buttons above to add:&#10;• Images (with URL)&#10;• Tables (custom rows/columns)&#10;• YouTube Videos&#10;• Quick Facts&#10;• Key Statistics&#10;• Lists&#10;• Highlight boxes"
+                          rows="10"
+                          className="w-full border-0 px-3 py-2 text-sm focus:outline-none focus:ring-0 font-mono"
+                          style={{minHeight: '200px'}}
                         />
                       </div>
 
                       {/* Preview Box */}
                       <div className="bg-gray-100 rounded-lg p-3 border">
-                        <p className="text-xs font-bold text-gray-600 mb-2">👁️ Preview (How it appears on website):</p>
-                        <div className="bg-white rounded p-2 border text-sm">
-                          <p className="text-blue-600 underline cursor-pointer mb-2">
-                            → TOC Link: <strong>{item.title || 'Section Title'}</strong>
-                          </p>
-                          <div className="border-l-4 border-purple-500 pl-3">
-                            <h3 className="font-bold text-gray-800" id={item.anchor}>{item.title || 'Section Title'}</h3>
-                            <p className="text-gray-600 text-xs mt-1">{item.content ? item.content.substring(0, 100) + '...' : 'Content appears here...'}</p>
-                          </div>
+                        <p className="text-xs font-bold text-gray-600 mb-2">👁️ Live Preview:</p>
+                        <div className="bg-white rounded p-3 border text-sm max-h-64 overflow-y-auto">
+                          <h3 className="font-bold text-gray-800 text-lg border-b pb-2 mb-3">{item.title || 'Section Title'}</h3>
+                          <div 
+                            className="prose prose-sm max-w-none"
+                            dangerouslySetInnerHTML={{__html: item.content || '<p class="text-gray-400">Content preview will appear here...</p>'}}
+                          />
                         </div>
                       </div>
                     </div>
