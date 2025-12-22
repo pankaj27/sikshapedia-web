@@ -1531,6 +1531,136 @@ All 3 institution detail pages have been thoroughly verified and are completely 
 **Test URL:** https://campus-connect-428.preview.emergentagent.com/admin/colleges/new
 **Login Credentials:** admin@admissionbuddy.co / admin123 ✅ WORKING
 
+## Admin Institution Creation API Testing Results (Dec 22, 2025):
+
+### ✅ COMPREHENSIVE INSTITUTION CREATION TESTING COMPLETED:
+**Test Status:** ✅ FULLY WORKING - All 3 institutions successfully created via API with complete data
+**Test Date:** December 22, 2025
+**Admin Authentication:** ✅ WORKING (admin@admissionbuddy.co)
+
+#### ✅ CREATED INSTITUTIONS (3/3 SUCCESS):
+
+1. **IIM Ahmedabad (College with TOC Menu)** - ✅ CREATED
+   - Institution ID: 917951b9-cb03-472b-8782-3a8a688303f7
+   - Institution Type: College
+   - Type: Private
+   - Location: Ahmedabad, Gujarat
+   - Established: 1961
+   - NIRF Ranking: 1
+   - Average Fees: ₹23,00,000
+   - Courses: 3 (MBA, PGPX, PhD)
+   - Facilities: 4 (Library, Hostel, Cafeteria, Sports Complex)
+   - Placement Stats: 1 (Highest: ₹75L, Average: ₹32L, Rate: 98%)
+   - Contact: +91-79-66324600, info@iima.ac.in
+   - Status: ✅ Successfully created and accessible via API
+
+2. **The Doon School (School with Default Menu)** - ✅ CREATED
+   - Institution ID: 2a9727ee-e671-46fe-b0c0-e64d15adad8b
+   - Institution Type: School
+   - Type: Private
+   - Location: Dehradun, Uttarakhand
+   - Established: 1935
+   - Average Fees: ₹12,00,000
+   - Courses: 3 (Class 7, Class 10, Class 12)
+   - Facilities: 4 (Library, Hostel, Swimming Pool, Cricket Ground)
+   - Contact: +91-135-2526400, info@doonschool.com
+   - Status: ✅ Successfully created and accessible via API
+
+3. **IIT Delhi (University with Custom Menu)** - ✅ CREATED
+   - Institution ID: cbf08355-ce3c-4817-a92b-af8eac78c881
+   - Institution Type: University
+   - Type: Government
+   - Location: New Delhi, Delhi
+   - Established: 1961
+   - NIRF Ranking: 2
+   - Average Fees: ₹8,00,000
+   - Courses: 3 (B.Tech, M.Tech, PhD)
+   - Facilities: 4 (Library, Hostel, Sports Complex, Research Labs)
+   - Placement Stats: 1 (Highest: ₹2Cr, Average: ₹18L, Rate: 95%)
+   - Contact: +91-11-26591785, info@iitd.ac.in
+   - Status: ✅ Successfully created and accessible via API
+
+#### ✅ VERIFICATION RESULTS:
+
+**✅ API Creation Success:** All 3 institutions created successfully via POST /api/colleges
+**✅ Complete Data Structure:** All required fields present (courses, facilities, contact info, media URLs)
+**✅ Individual Access:** All institutions accessible via GET /api/colleges/{id}
+**✅ Authentication Working:** Admin login API (/api/auth/admin-login) functional
+**✅ Data Integrity:** All specified data (names, locations, courses, fees) correctly stored
+
+#### ⚠️ FRONTEND ISSUES IDENTIFIED:
+
+1. **Frontend Loading Issues:** React infinite re-render errors prevent UI testing
+   - Issue: "Loading..." spinner appears indefinitely on admin and public pages
+   - Impact: Cannot test admin form UI or public institution pages
+   - Root Cause: React useEffect dependency issues causing infinite loops
+
+2. **Public Page Access:** Institution detail pages not loading via frontend
+   - Issue: Pages stuck on loading screen
+   - Impact: Cannot verify public display of created institutions
+   - Backend: APIs working correctly, frontend rendering blocked
+
+#### 📊 TESTING STATISTICS:
+- **Institution Creation Tests:** 3/3 PASSED (100%)
+- **API Authentication:** 1/1 PASSED (100%)
+- **Data Structure Validation:** 3/3 PASSED (100%)
+- **Backend Functionality:** 3/3 PASSED (100%)
+- **Frontend UI Testing:** 0/3 PASSED (0% - blocked by React errors)
+
+#### 🎯 VERIFICATION STEPS COMPLETED:
+
+**✅ All Required Data Present:**
+- Institution details (name, type, location, contact)
+- Logo and banner URLs configured
+- Courses with fees (3 per institution)
+- Placement data (for colleges/universities)
+- Facilities lists
+- Rankings (NIRF for IIM and IIT)
+
+**✅ Institution Types Verified:**
+- College: IIM Ahmedabad ✅
+- School: The Doon School ✅
+- University: IIT Delhi ✅
+
+**✅ Menu Configurations (As Requested):**
+- IIM Ahmedabad: TOC Menu (auto_from_toc: true) - ⚠️ Not testable via UI
+- The Doon School: Default Menu (use_custom_menu: false) - ⚠️ Not testable via UI
+- IIT Delhi: Custom Menu (use_custom_menu: true) - ⚠️ Not testable via UI
+
+#### 🔧 RECOMMENDATIONS FOR MAIN AGENT:
+
+1. **✅ Institution Creation API Working** - All 3 institutions successfully created
+2. **✅ Complete Data Structure Supported** - All required fields accepted and stored
+3. **✅ Backend APIs Functional** - All endpoints working correctly
+4. **❌ URGENT: Fix Frontend React Issues** - Resolve infinite re-render loops
+5. **✅ Public API Access Working** - All institutions can be accessed via API
+6. **⚠️ Menu Configuration Testing Blocked** - Cannot verify UI menu types due to frontend issues
+
+### 📋 CREATED INSTITUTION DETAILS:
+
+**IIM Ahmedabad:**
+- URL: https://campus-connect-428.preview.emergentagent.com/colleges/917951b9-cb03-472b-8782-3a8a688303f7
+- API: GET /api/colleges/917951b9-cb03-472b-8782-3a8a688303f7 ✅ Working
+- Type: College, Private, Established: 1961
+- Location: Ahmedabad, Gujarat
+- Courses: MBA (₹23L), PGPX (₹32L), PhD (₹1L)
+- NIRF Ranking: 1
+
+**The Doon School:**
+- URL: https://campus-connect-428.preview.emergentagent.com/colleges/2a9727ee-e671-46fe-b0c0-e64d15adad8b
+- API: GET /api/colleges/2a9727ee-e671-46fe-b0c0-e64d15adad8b ✅ Working
+- Type: School, Private, Established: 1935
+- Location: Dehradun, Uttarakhand
+- Courses: Class 7 (₹12L), Class 10 (₹12L), Class 12 (₹15L)
+
+**IIT Delhi:**
+- URL: https://campus-connect-428.preview.emergentagent.com/colleges/cbf08355-ce3c-4817-a92b-af8eac78c881
+- API: GET /api/colleges/cbf08355-ce3c-4817-a92b-af8eac78c881 ✅ Working
+- Type: University, Government, Established: 1961
+- Location: New Delhi, Delhi
+- Courses: B.Tech (₹8L), M.Tech (₹4L), PhD (₹0.5L)
+- NIRF Ranking: 2
+
 ### 🏫 SCHOOL CREATION FORM TESTING - FULLY WORKING (100%):
 
 **Test Scenario 1: Delhi Public School, Rohini**
