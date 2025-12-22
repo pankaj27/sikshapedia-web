@@ -153,6 +153,19 @@ const DynamicListingPage = () => {
   // Parse URL using new URL structure
   const urlInfo = useMemo(() => parseInstitutionUrl(location.pathname), [location.pathname]);
   
+  // Parse query parameters for secondary filters (type, accreditation, degree, exam, affiliation, recognition)
+  const queryFilters = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return {
+      collegeType: params.get('type') || null,
+      accreditation: params.get('accreditation') || null,
+      degreeType: params.get('degree') || null,
+      examAccepted: params.get('exam') || null,
+      affiliation: params.get('affiliation') || null,
+      recognition: params.get('recognition') || null,
+    };
+  }, [location.search]);
+  
   // Accreditation display names mapping
   const ACCREDITATION_DISPLAY = {
     'naac-a-plus-plus': 'NAAC A++',
