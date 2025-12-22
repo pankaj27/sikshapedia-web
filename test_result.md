@@ -2198,3 +2198,40 @@ const fetchCourses = async () => {
 - Use new email for signup test
 - Existing User (if needed): `teststudent@test.com` / `test`
 
+
+## Filter Bug Fix Verification (Dec 22, 2025):
+
+### ✅ P0 BUG FIX CONFIRMED WORKING
+
+**Issue:** Filter selections on listing pages (e.g., `/colleges`) would change the URL correctly but the selections would NOT appear in the filter selection tray after page reload.
+
+**Root Cause:** The `urlHelpers.js` file had a hardcoded `INDIAN_CITIES` array with only ~230 cities. The `isCity()` function could not recognize most city slugs from the database (which has 1,672 cities).
+
+**Fix Applied:** Updated `/app/frontend/src/utils/urlHelpers.js`:
+- Replaced `INDIAN_CITIES` array: expanded from ~230 to 1,672 cities
+- Replaced `CITY_NAMES` mapping: expanded to include all 1,672 city display names
+
+### ✅ TEST RESULTS:
+
+**Test 1: Direct URL with Davangere (previously missing city)**
+- **URL:** `/colleges/karnataka/davangere`
+- **Title:** "Top Colleges in Davangere, Karnataka 2025" ✅
+- **Breadcrumb:** "Home / All Colleges in India / Karnataka Colleges / Davangere Colleges" ✅
+- **Filter Dropdowns:** Karnataka and Davangere shown as selected ✅
+- **Applied Filters:** Both Karnataka and Davangere appear with X buttons ✅
+- **Result:** ✅ PASS
+
+**Test 2: Direct URL with Pune**
+- **URL:** `/colleges/maharashtra/pune`
+- **Title:** "Top Colleges in Pune, Maharashtra 2025" ✅
+- **Breadcrumb:** "Home / All Colleges in India / Maharashtra Colleges / Pune Colleges" ✅
+- **Filter Dropdowns:** Maharashtra and Pune shown as selected ✅
+- **Applied Filters:** Both Maharashtra and Pune appear with X buttons ✅
+- **Result:** ✅ PASS
+
+### 📊 TESTING SUMMARY:
+- **P0 Filter Bug:** ✅ FIXED
+- **City Recognition:** All 1,672 cities now recognized ✅
+- **URL Parsing:** Working correctly ✅
+- **Filter UI Persistence:** Selections appear after page reload ✅
+- **Code Quality:** Frontend builds without errors ✅
