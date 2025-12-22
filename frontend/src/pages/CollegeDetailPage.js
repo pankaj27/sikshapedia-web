@@ -1665,16 +1665,25 @@ const CollegeDetailPage = ({ overrideId }) => {
                   {/* Ask Question Form */}
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
                     <h3 className="font-bold text-lg mb-4">Ask Your Question</h3>
+                    {questionSubmitted && (
+                      <div className="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4">
+                        ✅ Your question has been submitted successfully!
+                      </div>
+                    )}
                     <textarea
-                      placeholder="Type your question here..."
+                      value={questionText}
+                      onChange={(e) => setQuestionText(e.target.value)}
+                      placeholder="Type your question about this institution..."
                       className="w-full border border-gray-300 rounded-lg p-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                       rows="3"
+                      disabled={submittingQuestion}
                     ></textarea>
                     <Button 
                       onClick={handleAskQuestion}
-                      className="bg-orange-600 hover:bg-orange-700 text-white"
+                      disabled={submittingQuestion || !questionText.trim()}
+                      className="bg-orange-600 hover:bg-orange-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Submit Question
+                      {submittingQuestion ? 'Submitting...' : 'Submit Question'}
                     </Button>
                   </div>
                 </section>
