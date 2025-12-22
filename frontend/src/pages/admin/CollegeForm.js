@@ -542,7 +542,20 @@ const CollegeForm = () => {
         videos: Array.isArray(collegeData.videos) ? collegeData.videos : [],
         highlights: Array.isArray(collegeData.highlights) ? collegeData.highlights : [],
         admission_dates: Array.isArray(collegeData.admission_dates) ? collegeData.admission_dates : [],
-        accreditations: Array.isArray(collegeData.accreditations) ? collegeData.accreditations : [],
+        // Convert string accreditations from backend to object format for form
+        // Backend sends: ["NAAC A++", "NBA"] -> Form needs: [{name: "NAAC", level: "A++", description: ""}]
+        accreditations: Array.isArray(collegeData.accreditations) 
+          ? collegeData.accreditations.map(accr => {
+              if (typeof accr === 'object' && accr !== null) return accr;
+              // Parse string format "NAAC A++" -> {name: "NAAC", level: "A++"}
+              const parts = String(accr).split(' ');
+              return {
+                name: parts[0] || '',
+                level: parts.slice(1).join(' ') || '',
+                description: ''
+              };
+            })
+          : [],
         approvals: Array.isArray(collegeData.approvals) ? collegeData.approvals : [],
         cutoff_data: Array.isArray(collegeData.cutoff_data) ? collegeData.cutoff_data : [],
         scholarships: Array.isArray(collegeData.scholarships) ? collegeData.scholarships : [],
