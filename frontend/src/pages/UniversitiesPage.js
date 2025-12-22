@@ -362,12 +362,12 @@ const UniversitiesPage = () => {
                   ].map((college, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
                       <td className="px-3 py-2">
-                        <Link to={`/universities/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{university.name}</Link>
+                        <Link to={`/universities/${idx + 1}`} className="text-blue-600 hover:underline text-sm font-medium">{college.name}</Link>
                       </td>
-                      <td className="px-3 py-2 text-sm text-gray-700">{university.seats}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{university.fees}</td>
-                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{university.placement}</td>
-                      <td className="px-3 py-2 text-xs text-gray-600">{university.recruiters}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{college.seats}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-gray-900">{college.fees}</td>
+                      <td className="px-3 py-2 text-sm font-semibold text-green-600">{college.placement}</td>
+                      <td className="px-3 py-2 text-xs text-gray-600">{college.recruiters}</td>
                     </tr>
                   ))}
                 </tbody>
