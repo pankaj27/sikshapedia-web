@@ -2188,85 +2188,58 @@ const CollegeForm = () => {
             <div className="border-2 border-purple-300 rounded-lg p-4 bg-purple-50">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-purple-800">📑 Table of Contents</label>
-                  <p className="text-xs text-purple-600">Build a clickable TOC that links to content sections below</p>
+                  <label className="block text-sm font-medium text-purple-800">📑 Table of Contents + Content Sections</label>
+                  <p className="text-xs text-purple-600">Each section you add here appears in TOC AND has its content below</p>
                 </div>
                 <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
                   {formData.seo_toc?.length || 0} sections
                 </span>
               </div>
 
+              {/* HOW IT WORKS - Explanation Box */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 mb-4">
+                <p className="text-sm font-bold text-blue-800 mb-2">📌 How TOC Connection Works:</p>
+                <div className="grid grid-cols-2 gap-4 text-xs">
+                  <div className="bg-white rounded p-2 border border-blue-200">
+                    <p className="font-bold text-blue-700 mb-1">1. Table of Contents (Clickable Menu)</p>
+                    <div className="bg-gray-100 p-2 rounded font-mono text-xs">
+                      • About<br/>
+                      • Admission Process<br/>
+                      • Fee Structure
+                    </div>
+                    <p className="text-gray-500 mt-1">User sees this menu and clicks on a topic</p>
+                  </div>
+                  <div className="bg-white rounded p-2 border border-blue-200">
+                    <p className="font-bold text-blue-700 mb-1">2. Content Sections (Linked by Anchor ID)</p>
+                    <div className="bg-gray-100 p-2 rounded font-mono text-xs">
+                      <span className="text-green-600">&lt;section id=&quot;about&quot;&gt;</span><br/>
+                      &nbsp;&nbsp;Content here...<br/>
+                      <span className="text-green-600">&lt;/section&gt;</span>
+                    </div>
+                    <p className="text-gray-500 mt-1">Page scrolls to this section when clicked</p>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-600 mt-2 font-medium">
+                  🔗 The <strong>Anchor ID</strong> (e.g., &quot;about&quot;, &quot;admission-process&quot;) is the KEY that connects TOC link to content section!
+                </p>
+              </div>
+
               {/* TOC Items */}
-              <div className="space-y-3 mb-4">
+              <div className="space-y-4 mb-4">
                 {(formData.seo_toc || []).map((item, index) => (
-                  <div key={index} className="bg-white rounded-lg border-2 border-purple-200 p-3">
-                    <div className="flex items-start gap-3">
-                      <div className="flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-800 rounded-full font-bold text-sm flex-shrink-0">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="block text-xs text-gray-600 mb-1">Section Title *</label>
-                            <input
-                              type="text"
-                              value={item.title || ''}
-                              onChange={(e) => {
-                                const newToc = [...(formData.seo_toc || [])];
-                                newToc[index].title = e.target.value;
-                                // Auto-generate anchor from title
-                                newToc[index].anchor = e.target.value
-                                  .toLowerCase()
-                                  .replace(/[^a-z0-9\s]/g, '')
-                                  .replace(/\s+/g, '-')
-                                  .substring(0, 50);
-                                setFormData({...formData, seo_toc: newToc});
-                              }}
-                              placeholder="e.g., Admission Process"
-                              className="w-full border-2 border-purple-200 rounded px-2 py-1.5 text-sm"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs text-gray-600 mb-1">Anchor ID (auto)</label>
-                            <input
-                              type="text"
-                              value={item.anchor || ''}
-                              onChange={(e) => {
-                                const newToc = [...(formData.seo_toc || [])];
-                                newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
-                                setFormData({...formData, seo_toc: newToc});
-                              }}
-                              placeholder="admission-process"
-                              className="w-full border rounded px-2 py-1.5 text-sm font-mono bg-gray-50"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs text-gray-600 mb-1">Section Content *</label>
-                          <textarea
-                            value={item.content || ''}
-                            onChange={(e) => {
-                              const newToc = [...(formData.seo_toc || [])];
-                              newToc[index].content = e.target.value;
-                              setFormData({...formData, seo_toc: newToc});
-                            }}
-                            placeholder="Write the content for this section... You can use HTML tags."
-                            rows="4"
-                            className="w-full border rounded px-2 py-1.5 text-sm"
-                          />
-                        </div>
-                        {/* Copy HTML for this section */}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const html = `<h2 id="${item.anchor}">${item.title}</h2>\n<div class="toc-section">\n${item.content}\n</div>`;
-                            navigator.clipboard.writeText(html);
-                            alert('Section HTML copied!');
-                          }}
-                          className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200"
-                        >
-                          📋 Copy Section HTML
-                        </button>
+                  <div key={index} className="bg-white rounded-lg border-2 border-purple-300 overflow-hidden shadow-sm">
+                    {/* Section Header */}
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="w-7 h-7 bg-white text-purple-600 rounded-full flex items-center justify-center font-bold text-sm">
+                          {index + 1}
+                        </span>
+                        <span className="font-bold">{item.title || 'New Section'}</span>
+                        {item.anchor && (
+                          <span className="bg-purple-400 text-white text-xs px-2 py-0.5 rounded font-mono">
+                            #{item.anchor}
+                          </span>
+                        )}
                       </div>
                       <button
                         type="button"
@@ -2276,10 +2249,90 @@ const CollegeForm = () => {
                             seo_toc: (formData.seo_toc || []).filter((_, i) => i !== index)
                           });
                         }}
-                        className="text-red-500 hover:bg-red-50 p-1.5 rounded"
+                        className="text-white hover:bg-purple-700 p-1.5 rounded"
                       >
-                        <FiTrash2 />
+                        <FiTrash2 size={16} />
                       </button>
+                    </div>
+                    
+                    {/* Section Fields */}
+                    <div className="p-4 space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">
+                            📝 Section Title <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={item.title || ''}
+                            onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].title = e.target.value;
+                              newToc[index].anchor = e.target.value
+                                .toLowerCase()
+                                .replace(/[^a-z0-9\s]/g, '')
+                                .replace(/\s+/g, '-')
+                                .substring(0, 50);
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            placeholder="e.g., About College, Admission Process"
+                            className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-purple-500"
+                          />
+                          <p className="text-xs text-gray-400 mt-1">This appears in Table of Contents</p>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">
+                            🔗 Anchor ID <span className="text-gray-400">(auto-generated)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={item.anchor || ''}
+                            onChange={(e) => {
+                              const newToc = [...(formData.seo_toc || [])];
+                              newToc[index].anchor = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                              setFormData({...formData, seo_toc: newToc});
+                            }}
+                            placeholder="about-college"
+                            className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-mono bg-green-50 focus:border-green-500"
+                          />
+                          <p className="text-xs text-green-600 mt-1">🔑 This ID links TOC → Content</p>
+                        </div>
+                      </div>
+                      
+                      {/* Content Area */}
+                      <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-3">
+                        <label className="block text-xs font-bold text-orange-800 mb-2">
+                          📄 Section Content <span className="text-red-500">*</span>
+                          <span className="font-normal text-orange-600 ml-2">
+                            (When user clicks &quot;{item.title || 'Section'}&quot; in TOC, they see this content)
+                          </span>
+                        </label>
+                        <textarea
+                          value={item.content || ''}
+                          onChange={(e) => {
+                            const newToc = [...(formData.seo_toc || [])];
+                            newToc[index].content = e.target.value;
+                            setFormData({...formData, seo_toc: newToc});
+                          }}
+                          placeholder="Write the detailed content for this section...&#10;&#10;You can use HTML tags like:&#10;<p>Paragraph</p>&#10;<ul><li>List item</li></ul>&#10;<strong>Bold text</strong>"
+                          rows="6"
+                          className="w-full border-2 border-orange-200 rounded-lg px-3 py-2 text-sm focus:border-orange-500"
+                        />
+                      </div>
+
+                      {/* Preview Box */}
+                      <div className="bg-gray-100 rounded-lg p-3 border">
+                        <p className="text-xs font-bold text-gray-600 mb-2">👁️ Preview (How it appears on website):</p>
+                        <div className="bg-white rounded p-2 border text-sm">
+                          <p className="text-blue-600 underline cursor-pointer mb-2">
+                            → TOC Link: <strong>{item.title || 'Section Title'}</strong>
+                          </p>
+                          <div className="border-l-4 border-purple-500 pl-3">
+                            <h3 className="font-bold text-gray-800" id={item.anchor}>{item.title || 'Section Title'}</h3>
+                            <p className="text-gray-600 text-xs mt-1">{item.content ? item.content.substring(0, 100) + '...' : 'Content appears here...'}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -2294,9 +2347,9 @@ const CollegeForm = () => {
                     seo_toc: [...(formData.seo_toc || []), { title: '', anchor: '', content: '' }]
                   });
                 }}
-                className="text-sm text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded border border-purple-300 flex items-center gap-1"
+                className="text-sm text-purple-700 hover:bg-purple-100 px-4 py-2 rounded-lg border-2 border-purple-300 flex items-center gap-2 font-medium"
               >
-                <FiPlus /> Add TOC Section
+                <FiPlus /> Add New TOC Section
               </button>
 
               {/* Quick Add Templates */}
