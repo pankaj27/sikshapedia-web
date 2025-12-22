@@ -1808,3 +1808,28 @@
 - New signup can use any new email
 - Existing User: `teststudent@test.com` / `test`
 
+
+---
+
+## Signup Form Testing with School Option (Dec 22, 2025):
+
+### Task: Test User Signup Form End-to-End
+
+**Changes Made:**
+- Added "School" as a course option in the database
+- Added "School" to the constants file for frontend fallback
+
+**Test Cases to Execute:**
+1. Navigate to `/signup` - verify page loads
+2. Click "Continue with Google" or enter email and send OTP
+3. Navigate directly to step 3 via `/signup?email=test@newuser.com&name=Test%20User`
+4. Test City dropdown - verify cities load and are selectable
+5. Test Course dropdown - verify "School" appears in the list along with other courses
+6. Select "School" from course dropdown
+7. Fill all required fields (Name, Phone, City, Course)
+8. Submit form and verify it works without errors
+
+**Test Credentials:**
+- Use new email for signup test
+- Existing User (if needed): `teststudent@test.com` / `test`
+
