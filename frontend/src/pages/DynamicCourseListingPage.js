@@ -87,7 +87,7 @@ const defaultPageConfigs = {
     benefits: ['High Demand', 'Innovation Driven', 'Global Opportunities', 'Diverse Specializations', 'High Salary'],
     faqs: [
       { q: 'Which engineering branch is best?', a: 'CSE, ECE, and Mechanical are popular. Choose based on interest, job market, and future growth.' },
-      { q: 'What is the eligibility for B.Tech?', a: '10+2 with PCM, minimum 50% marks, and clearing JEE Main/State entrance exams.' },
+      { q: 'What is the eligibility for B.Tech?', a: '10+2 with PCM, minimum 50% marks, and clearing entrance exams.' },
     ],
     popularCourses: ['B.Tech CSE', 'B.Tech ECE', 'B.Tech Mechanical', 'B.Tech Civil', 'B.Tech EEE', 'M.Tech'],
     relatedPages: ['/courses/after-12th', '/courses/diploma', '/courses/pg']
@@ -106,7 +106,7 @@ const defaultPageConfigs = {
     duration: '4-5.5 Years',
     benefits: ['Noble Profession', 'Job Security', 'High Respect', 'Global Opportunities', 'Life-Saving Impact'],
     faqs: [
-      { q: 'How to become a doctor in India?', a: 'Complete 10+2 with PCB, clear NEET, get admission in MBBS, complete internship, and register with MCI.' },
+      { q: 'How to become a doctor in India?', a: 'Complete 10+2 with PCB, clear medical entrance exam, get admission in MBBS, complete internship, and register with NMC.' },
       { q: 'What are alternative medical courses?', a: 'BAMS (Ayurveda), BHMS (Homeopathy), BDS (Dental), B.Pharm, Nursing are good alternatives.' },
     ],
     popularCourses: ['MBBS', 'BDS', 'BAMS', 'BHMS', 'B.Sc Nursing', 'B.Pharm', 'BUMS'],
