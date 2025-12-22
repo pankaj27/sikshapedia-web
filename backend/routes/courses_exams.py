@@ -267,7 +267,8 @@ async def get_courses(
     if degree_type:
         query["degree_type"] = degree_type
     
-    courses = await db.courses.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    # Sort by display_priority (descending) so high priority items like "School" appear first
+    courses = await db.courses.find(query, {"_id": 0}).sort("display_priority", -1).skip(skip).limit(limit).to_list(limit)
     
     for course in courses:
         if isinstance(course.get('created_at'), str):
