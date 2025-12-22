@@ -6480,11 +6480,11 @@ async def delete_faq(faq_id: str):
 
 # Cities
 @api_router.get("/cities")
-async def get_cities(featured: Optional[bool] = None):
+async def get_cities(featured: Optional[bool] = None, limit: int = 1000):
     query = {}
     if featured is not None:
         query["is_featured"] = featured
-    cities = await db.cities.find(query, {"_id": 0}).sort("display_order", 1).to_list(100)
+    cities = await db.cities.find(query, {"_id": 0}).sort("name", 1).to_list(limit)
     return cities
 
 @api_router.post("/cities", response_model=City)
