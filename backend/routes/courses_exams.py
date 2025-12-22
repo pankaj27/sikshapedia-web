@@ -358,7 +358,7 @@ async def get_courses_detail(
     if degree_type:
         query["degree_type"] = degree_type
     
-    courses = await db.courses_detail.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    courses = await db.courses_detailed.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
     
     for course in courses:
         if isinstance(course.get('created_at'), str):
@@ -370,7 +370,10 @@ async def get_courses_detail(
 @router.get("/courses-detail/{course_id}", response_model=CourseDetail)
 async def get_course_detail(course_id: str):
     """Get a specific detailed course page"""
-    course = await db.courses_detail.find_one({"id": course_id}, {"_id": 0})
+    course = await db.courses_detailed.find_one(
+        {"$or": [{"id": course_id}, {"slug": course_id}]}, 
+        {"_id": 0}
+    )
     if not course:
         raise HTTPException(status_code=404, detail="Course detail not found")
     
@@ -387,9 +390,9 @@ async def create_course_detail(course_data: dict):
         course_data['id'] = str(uuid.uuid4())
     
     course_data['created_at'] = datetime.now(timezone.utc).isoformat()
-    await db.courses_detail.insert_one(course_data)
+    await db.courses_detailed.insert_one(course_data)
     
-    created = await db.courses_detail.find_one({"id": course_data['id']}, {"_id": 0})
+    created = await db.courses_detailed.find_one({"id": course_data['id']}, {"_id": 0})
     return CourseDetail(**created)
 
 
