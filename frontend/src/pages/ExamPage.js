@@ -298,7 +298,7 @@ const ExamPage = () => {
 
             {/* News Card */}
             {/* Latest Exam Updates - Only show if we have news/updates from API */}
-            {latestNews && latestNews.length > 0 && (
+            {pageSettings.news_items && pageSettings.news_items.length > 0 && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="bg-gradient-to-r from-rose-500 to-pink-500 px-5 py-4">
                   <h2 className="text-white font-bold flex items-center gap-2">
@@ -307,7 +307,7 @@ const ExamPage = () => {
                   </h2>
                 </div>
                 <div className="p-4 space-y-4">
-                  {latestNews.slice(0, 4).map((news, idx) => (
+                  {pageSettings.news_items.slice(0, 4).map((news, idx) => (
                     <div key={idx} className="group cursor-pointer">
                       <div className="flex items-start gap-2">
                         <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-bold rounded bg-green-100 text-green-700">
