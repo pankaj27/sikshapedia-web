@@ -525,6 +525,20 @@ const UserSignup = () => {
                   />
                 </div>
                 
+                {/* Exam Preparing For */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Exam Preparing For <span className="text-gray-400">(Optional)</span>
+                  </label>
+                  <SearchableSelect
+                    options={exams}
+                    value={exam}
+                    onChange={setExam}
+                    placeholder="Select exam (e.g., JEE, NEET, CAT)"
+                    className="rounded-xl"
+                  />
+                </div>
+                
                 {/* Referral Code */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
