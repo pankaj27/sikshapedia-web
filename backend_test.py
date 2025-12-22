@@ -4827,6 +4827,166 @@ class APITester:
         
         print("=" * 80)
 
+    def test_admin_college_accreditations_fix(self):
+        """Test the fix for admin college form accreditations validation error"""
+        print("🏫 Testing Admin College Accreditations Fix...")
+        
+        if not self.admin_token:
+            self.log_test("Admin College Accreditations Fix", False, "No admin token available")
+            return
+        
+        # Test data for creating a college with accreditations
+        college_data = {
+            "name": "Test College for Accreditation Bug",
+            "slug": "test-college-accreditation-bug",
+            "location": {
+                "state": "Maharashtra",
+                "city": "Mumbai",
+                "address": "Test Address, Mumbai",
+                "pincode": "400001"
+            },
+            "established_year": 2020,
+            "type": "Government",
+            "affiliation": "University of Mumbai",
+            "nirf_ranking": None,
+            "average_fees": 50000.0,
+            "courses": [],
+            "facilities": ["Library", "Computer Lab", "Sports Complex"],
+            "contact_info": {
+                "phone": "+91-9876543210",
+                "email": "info@testcollege.edu.in",
+                "website": "https://testcollege.edu.in"
+            },
+            "logo_url": "https://via.placeholder.com/200x200?text=Test+College",
+            "logo_title": "Test College Logo",
+            "logo_alt": "Test College for Accreditation Bug Logo",
+            "banner_url": "https://via.placeholder.com/800x400?text=Test+College+Banner",
+            "banner_title": "Test College Banner",
+            "banner_alt": "Test College Campus Banner",
+            "images": [],
+            "description": "This is a test college created to verify the accreditations field validation fix.",
+            "highlights": ["Quality Education", "Experienced Faculty", "Modern Infrastructure"],
+            "accreditations": ["NAAC A++", "NBA Accredited", "UGC Recognized"],  # This should be List[str]
+            "placement_stats": []
+        }
+        
+        # Test 1: Create college with correct accreditations format (List[str])
+        success, response, status = self.make_request("POST", "/colleges", college_data, token=self.admin_token)
+        if success and "id" in response:
+            college_id = response["id"]
+            college_name = response.get("name", "Unknown")
+            accreditations = response.get("accreditations", [])
+            
+            # Verify accreditations are stored correctly
+            if isinstance(accreditations, list) and all(isinstance(acc, str) for acc in accreditations):
+                self.log_test("Create College with List[str] Accreditations", True, 
+                             f"College created successfully: {college_name}, Accreditations: {accreditations}")
+                self.test_college_id = college_id
+            else:
+                self.log_test("Create College with List[str] Accreditations", False, 
+                             f"Accreditations not stored as List[str]: {type(accreditations)}")
+                self.test_college_id = college_id
+        else:
+            self.log_test("Create College with List[str] Accreditations", False, 
+                         f"Status: {status}", response)
+            self.test_college_id = None
+        
+        # Test 2: Verify the created college can be retrieved
+        if self.test_college_id:
+            success, response, status = self.make_request("GET", f"/colleges/{self.test_college_id}")
+            if success and "id" in response:
+                retrieved_accreditations = response.get("accreditations", [])
+                if retrieved_accreditations == college_data["accreditations"]:
+                    self.log_test("Retrieve College with Accreditations", True, 
+                                 f"Accreditations retrieved correctly: {retrieved_accreditations}")
+                else:
+                    self.log_test("Retrieve College with Accreditations", False, 
+                                 f"Accreditations mismatch. Expected: {college_data['accreditations']}, Got: {retrieved_accreditations}")
+            else:
+                self.log_test("Retrieve College with Accreditations", False, f"Status: {status}", response)
+        
+        # Test 3: Test with invalid accreditations format (should fail validation)
+        invalid_college_data = college_data.copy()
+        invalid_college_data["name"] = "Test College Invalid Accreditations"
+        invalid_college_data["slug"] = "test-college-invalid-accreditations"
+        # This is the old format that was causing the bug - array of objects instead of strings
+        invalid_college_data["accreditations"] = [
+            {"name": "NAAC", "level": "A++", "description": ""},
+            {"name": "NBA", "level": "Accredited", "description": ""}
+        ]
+        
+        success, response, status = self.make_request("POST", "/colleges", invalid_college_data, token=self.admin_token)
+        if not success and status == 422:  # Validation error
+            # Check if the error message mentions accreditations validation
+            error_detail = str(response)
+            if "accreditations" in error_detail.lower() and "string" in error_detail.lower():
+                self.log_test("Reject Invalid Accreditations Format", True, 
+                             f"Correctly rejected array of objects format with validation error")
+            else:
+                self.log_test("Reject Invalid Accreditations Format", True, 
+                             f"Rejected with validation error (status 422)")
+        else:
+            self.log_test("Reject Invalid Accreditations Format", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 4: Test with empty accreditations (should be allowed)
+        empty_accreditations_data = college_data.copy()
+        empty_accreditations_data["name"] = "Test College Empty Accreditations"
+        empty_accreditations_data["slug"] = "test-college-empty-accreditations"
+        empty_accreditations_data["accreditations"] = []
+        
+        success, response, status = self.make_request("POST", "/colleges", empty_accreditations_data, token=self.admin_token)
+        if success and "id" in response:
+            empty_accreditations = response.get("accreditations", [])
+            if isinstance(empty_accreditations, list) and len(empty_accreditations) == 0:
+                self.log_test("Create College with Empty Accreditations", True, 
+                             f"College created successfully with empty accreditations list")
+            else:
+                self.log_test("Create College with Empty Accreditations", False, 
+                             f"Empty accreditations not handled correctly: {empty_accreditations}")
+        else:
+            self.log_test("Create College with Empty Accreditations", False, 
+                         f"Status: {status}", response)
+        
+        # Test 5: Test updating college accreditations
+        if self.test_college_id:
+            update_data = {
+                "accreditations": ["NAAC A++", "NBA Accredited", "UGC Recognized", "AICTE Approved"]
+            }
+            
+            success, response, status = self.make_request("PUT", f"/colleges/{self.test_college_id}", 
+                                                        update_data, token=self.admin_token)
+            if success and "accreditations" in response:
+                updated_accreditations = response.get("accreditations", [])
+                if updated_accreditations == update_data["accreditations"]:
+                    self.log_test("Update College Accreditations", True, 
+                                 f"Accreditations updated successfully: {updated_accreditations}")
+                else:
+                    self.log_test("Update College Accreditations", False, 
+                                 f"Accreditations not updated correctly. Expected: {update_data['accreditations']}, Got: {updated_accreditations}")
+            else:
+                self.log_test("Update College Accreditations", False, f"Status: {status}", response)
+        
+        # Test 6: Verify accreditations field in college listing
+        success, response, status = self.make_request("GET", "/colleges?limit=5")
+        if success and isinstance(response, list) and len(response) > 0:
+            # Check if any college has accreditations field
+            colleges_with_accreditations = 0
+            for college in response:
+                if "accreditations" in college:
+                    accreditations = college["accreditations"]
+                    if isinstance(accreditations, list) and all(isinstance(acc, str) for acc in accreditations):
+                        colleges_with_accreditations += 1
+            
+            if colleges_with_accreditations > 0:
+                self.log_test("Accreditations in College Listing", True, 
+                             f"Found {colleges_with_accreditations} colleges with properly formatted accreditations")
+            else:
+                self.log_test("Accreditations in College Listing", True, 
+                             "No colleges with accreditations found (acceptable)")
+        else:
+            self.log_test("Accreditations in College Listing", False, f"Status: {status}", response)
+
     def run_all_tests(self):
         """Run all test suites focusing on Deployment Health Check first"""
         print("🚀 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
