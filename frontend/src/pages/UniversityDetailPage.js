@@ -527,10 +527,10 @@ const UniversityDetailPage = () => {
               <div className="mb-3">
                 <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
                   {university.name} is a <strong>{university.type || 'University'}</strong> established in <strong>{university.established_year || university.established || 'N/A'}</strong>. 
-                  As per the data, the university is one of the preferred institutions for students. 
                   {university.nirf_ranking && <>{university.name} Ranking is <strong>#{university.nirf_ranking}</strong> in the category by NIRF. </>}
                   {university.average_fees && <>{university.name} offers various programs with total fees ranging from <strong>₹{(university.average_fees / 100000).toFixed(2)} Lakhs</strong>. </>}
                   {university.placement?.average && <>As per {university.name} Placements, the average package was <strong>INR {(university.placement.average / 100000).toFixed(1)} LPA</strong>.</>}
+                  {university.description && <> {university.description}</>}
                 </p>
               </div>
 
@@ -572,8 +572,7 @@ const UniversityDetailPage = () => {
                   {/* FULL INTRO */}
                   <div>
                     <p className="text-gray-800 leading-relaxed mb-4">
-                      {university.name} is a <strong>{university.type || 'University'}</strong> established in <strong>{university.established_year || university.established || 'N/A'}</strong>. 
-                      As per the data, the university is one of the preferred institutions for students.
+                      {university.name} is a <strong>{university.type || 'University'}</strong> established in <strong>{university.established_year || university.established || 'N/A'}</strong>.
                       {university.nirf_ranking && <> {university.name} Ranking is <strong>#{university.nirf_ranking}</strong> in the category by NIRF.</>}
                     </p>
                     {university.description && (
