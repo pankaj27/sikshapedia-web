@@ -6743,6 +6743,7 @@ try:
     set_email_settings_db(db)
     set_seo_settings_db(db)
     set_unified_search_db(db)
+    set_advanced_content_db(db)
     
     # Include routers with /api prefix
     app.include_router(auth_router, prefix="/api")
