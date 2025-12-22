@@ -5045,6 +5045,9 @@ class APITester:
         self.test_admission_booking_system()
         self.test_admission_document_upload()
         
+        # **SPECIFIC TEST FOR ACCREDITATIONS FIX:**
+        self.test_admin_college_accreditations_fix()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
