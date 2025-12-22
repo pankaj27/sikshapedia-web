@@ -878,7 +878,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <h3 className="text-lg font-bold mb-3">{college.video_title || `${college.name} Video`}</h3>
                       <div className="rounded-lg aspect-video overflow-hidden border">
                         <iframe
-                          src={college.campus_video_url || college.seo_video_url || college.videos?.[0]}
+                          src={getYouTubeEmbedUrl(college.campus_video_url || college.seo_video_url || college.videos?.[0])}
                           className="w-full h-full"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
