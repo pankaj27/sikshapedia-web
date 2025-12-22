@@ -6713,6 +6713,7 @@ try:
     from routes.seo_settings import router as seo_settings_router, set_database as set_seo_settings_db
     from routes.unified_search import router as unified_search_router, set_database as set_unified_search_db
     from routes.eligibility import router as eligibility_router
+    from routes.advanced_content import router as advanced_content_router
     
     # Set database for modular routers
     set_leads_db(db)
