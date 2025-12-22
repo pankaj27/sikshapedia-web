@@ -552,9 +552,8 @@ const ExamPage = () => {
                   university levels across various streams.
                 </p>
                 <p className="mt-3">
-                  Major national-level exams include JEE Main, JEE Advanced, NEET, CAT, GATE, CLAT, and UPSC CSE. 
-                  Each exam has unique eligibility criteria, application processes, and syllabus. Use our 
-                  comprehensive guides to prepare effectively.
+                  India conducts numerous entrance exams annually. Each exam has unique eligibility criteria, 
+                  application processes, and syllabus. Use our comprehensive guides to prepare effectively.
                 </p>
               </div>
             </div>
