@@ -325,7 +325,7 @@ const CourseDetailPage = () => {
               <div className="space-y-4">
                 {[
                   { title: 'Educational Qualification', desc: eligibility },
-                  { title: 'Entrance Exam', desc: course.entrance_exams?.join(', ') || 'JEE Main / State Level Entrance Exams' },
+                  { title: 'Entrance Exam', desc: course.entrance_exams?.join(', ') || '' },
                   { title: 'Age Limit', desc: ageLimit },
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
