@@ -29,6 +29,9 @@ export const INDIA_STATES = [
 
 // All Courses in India - Comprehensive List
 export const ALL_INDIA_COURSES = [
+  // School Education
+  "School",
+  
   // Engineering & Technology
   "B.Tech", "B.E.", "M.Tech", "M.E.", "B.Tech in Computer Science", "B.Tech in IT", 
   "B.Tech in Electronics", "B.Tech in Electrical", "B.Tech in Mechanical", "B.Tech in Civil",
