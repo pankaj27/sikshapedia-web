@@ -1650,7 +1650,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </div>
                 </section>
 
-                {/* FAQ SECTION */}
+                {/* FAQ SECTION - Dynamic from college.seo_faqs */}
                 <section id="faq">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Frequently Asked Questions (FAQs)</h2>
                   <p className="text-gray-700 text-sm mb-4">
@@ -1658,50 +1658,23 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </p>
 
                   <div className="space-y-3">
-                    {[
-                      {
-                        question: 'What is the admission process for B.Tech?',
-                        answer: 'Admission to B.Tech is through JEE Advanced followed by JoSAA counselling. Candidates must have 75% marks in 10+2 with PCM.'
-                      },
-                      {
-                        question: 'What are the hostel facilities available?',
-                        answer: 'The institute has 17 hostels with separate facilities for boys and girls. Each hostel has mess, recreation room, and 24/7 security. Hostel fee is approximately INR 17,250 per semester.'
-                      },
-                      {
-                        question: 'What is the fee structure for different courses?',
-                        answer: 'B.Tech: ₹2.00 Lakhs per year, M.Tech: ₹72,000 per year, MBA: ₹7.68 Lakhs per year. Additional charges for hostel and mess are separate.'
-                      },
-                      {
-                        question: 'How are the placement opportunities?',
-                        answer: 'The institute has excellent placement record with average package of INR 23.5 LPA and highest package going up to INR 50+ LPA. Top companies like Google, Microsoft, Amazon visit regularly.'
-                      },
-                      {
-                        question: 'What scholarships are available?',
-                        answer: 'Various scholarships including Merit Cum Means Scholarship, SC/ST/OBC scholarships, Aditya Birla Scholarship, and INSPIRE Scholarship are available for deserving students.'
-                      },
-                      {
-                        question: 'Is there any entrance exam for MBA admission?',
-                        answer: 'Yes, admission to MBA program is through CAT exam followed by Group Discussion and Personal Interview rounds.'
-                      },
-                      {
-                        question: 'What is the student-faculty ratio?',
-                        answer: 'The institute maintains an excellent student-faculty ratio of approximately 10:1 ensuring personalized attention and quality education.'
-                      },
-                      {
-                        question: 'Are there research opportunities for students?',
-                        answer: 'Yes, the institute provides extensive research opportunities with state-of-the-art labs and funding support for innovative projects.'
-                      }
-                    ].map((faq, index) => (
-                      <details key={index} className="bg-white border rounded-lg">
-                        <summary className="font-semibold text-gray-900 p-5 cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-between">
-                          <span className="flex-1">Ques. {faq.question}</span>
-                          <FiChevronDown className="text-orange-600 flex-shrink-0" />
-                        </summary>
-                        <div className="px-5 pb-5 text-sm text-gray-700 border-t pt-4">
-                          <p><strong>Ans.</strong> {faq.answer}</p>
-                        </div>
-                      </details>
-                    ))}
+                    {college?.seo_faqs && college.seo_faqs.length > 0 ? (
+                      college.seo_faqs.map((faq, index) => (
+                        <details key={index} className="bg-white border rounded-lg">
+                          <summary className="font-semibold text-gray-900 p-5 cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-between">
+                            <span className="flex-1">Ques. {faq.question}</span>
+                            <FiChevronDown className="text-orange-600 flex-shrink-0" />
+                          </summary>
+                          <div className="px-5 pb-5 text-sm text-gray-700 border-t pt-4">
+                            <p><strong>Ans.</strong> {faq.answer}</p>
+                          </div>
+                        </details>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500 text-center py-8 bg-gray-50 rounded-lg">
+                        No FAQs available for this institution yet.
+                      </p>
+                    )}
                   </div>
                 </section>
 
