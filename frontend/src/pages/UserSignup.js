@@ -56,6 +56,7 @@ const UserSignup = () => {
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [course, setCourse] = useState('');
+  const [exam, setExam] = useState('');
   const [referralCode, setReferralCode] = useState('');
   
   // All courses for dropdown
