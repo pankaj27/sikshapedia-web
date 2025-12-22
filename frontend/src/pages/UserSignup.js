@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight, FiHeart, FiStar, FiAward } from 'react-icons/fi';
+import { FiMail, FiUser, FiPhone, FiMapPin, FiBook, FiGift, FiLoader, FiCheckCircle, FiArrowRight, FiHeart, FiStar, FiAward, FiFileText } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
 import SearchableSelect from '../components/SearchableSelect';
-
 import { Link } from '../components/CustomLink';
+
+// Import centralized data from constants
+import { INDIA_CITIES, ALL_INDIA_COURSES, ALL_INDIA_EXAMS } from '../constants/indiaData';
 
 // Default content (used while loading or if API fails)
 const DEFAULT_CONTENT = {
@@ -38,91 +40,6 @@ const ICON_MAP = {
   heart: FiHeart,
   award: FiAward
 };
-
-// All India Cities
-const INDIA_CITIES = [
-  "Agra", "Ahmedabad", "Ajmer", "Aligarh", "Allahabad", "Amritsar", "Aurangabad",
-  "Bangalore", "Bareilly", "Bhopal", "Bhubaneswar", "Bikaner", "Chandigarh", "Chennai",
-  "Coimbatore", "Cuttack", "Dehradun", "Delhi", "Dhanbad", "Durgapur", "Faridabad",
-  "Ghaziabad", "Gorakhpur", "Gurgaon", "Guwahati", "Gwalior", "Hubli", "Hyderabad",
-  "Indore", "Jabalpur", "Jaipur", "Jalandhar", "Jammu", "Jamshedpur", "Jodhpur",
-  "Kanpur", "Kochi", "Kolkata", "Kota", "Lucknow", "Ludhiana", "Madurai", "Mangalore",
-  "Meerut", "Mumbai", "Mysore", "Nagpur", "Nashik", "Navi Mumbai", "Noida", "Patna",
-  "Pondicherry", "Pune", "Raipur", "Rajkot", "Ranchi", "Salem", "Siliguri", "Srinagar",
-  "Surat", "Thane", "Thiruvananthapuram", "Tiruchirappalli", "Tiruppur", "Udaipur",
-  "Vadodara", "Varanasi", "Vijayawada", "Visakhapatnam", "Warangal"
-];
-
-// All Courses in India - Comprehensive List
-const ALL_INDIA_COURSES = [
-  // Engineering & Technology
-  "B.Tech", "B.E.", "M.Tech", "M.E.", "B.Tech in Computer Science", "B.Tech in IT", 
-  "B.Tech in Electronics", "B.Tech in Electrical", "B.Tech in Mechanical", "B.Tech in Civil",
-  "B.Tech in Chemical", "B.Tech in Aerospace", "B.Tech in Biotechnology", "B.Tech in AI/ML",
-  "B.Tech in Data Science", "B.Tech in Robotics", "Diploma in Engineering", "Polytechnic",
-  
-  // Medical & Healthcare
-  "MBBS", "BDS", "BAMS", "BHMS", "B.Pharm", "D.Pharm", "M.Pharm", "Pharm.D",
-  "B.Sc Nursing", "M.Sc Nursing", "GNM", "ANM", "BPT", "MPT", "BUMS", "BNYS",
-  "B.Sc MLT", "B.Sc Radiology", "MD", "MS", "DM", "MCh",
-  
-  // Management & Business
-  "MBA", "BBA", "BMS", "BBM", "PGDM", "Executive MBA", "MBA in Finance", "MBA in Marketing",
-  "MBA in HR", "MBA in Operations", "MBA in IT", "MBA in Healthcare", "BCA", "MCA",
-  "B.Com", "M.Com", "B.Com (Hons)", "CA", "CS", "CMA", "CFA",
-  
-  // Law
-  "LLB", "BA LLB", "BBA LLB", "B.Com LLB", "B.Sc LLB", "LLM", "Integrated LLB",
-  
-  // Arts & Humanities
-  "BA", "MA", "BA (Hons)", "BA English", "BA Hindi", "BA History", "BA Political Science",
-  "BA Economics", "BA Psychology", "BA Sociology", "BA Philosophy", "BA Journalism",
-  "BA Mass Communication", "BJMC", "MJMC",
-  
-  // Science
-  "B.Sc", "M.Sc", "B.Sc (Hons)", "B.Sc Physics", "B.Sc Chemistry", "B.Sc Mathematics",
-  "B.Sc Biology", "B.Sc Biotechnology", "B.Sc Microbiology", "B.Sc Zoology", "B.Sc Botany",
-  "B.Sc Computer Science", "B.Sc IT", "B.Sc Agriculture", "B.Sc Forestry", "B.Sc Statistics",
-  
-  // Design & Architecture
-  "B.Arch", "M.Arch", "B.Des", "M.Des", "B.Des Fashion", "B.Des Interior", "B.Des Product",
-  "B.Des Graphic", "B.Des Animation", "B.Plan", "M.Plan",
-  
-  // Hotel Management & Hospitality
-  "BHM", "BHMCT", "Diploma in Hotel Management", "B.Sc Hospitality", "MBA in Hospitality",
-  
-  // Education & Teaching
-  "B.Ed", "M.Ed", "D.El.Ed", "B.P.Ed", "M.P.Ed", "BA B.Ed", "B.Sc B.Ed",
-  
-  // Fine Arts & Performing Arts
-  "BFA", "MFA", "B.Mus", "M.Mus", "BPA", "MPA", "B.Sc Film Making",
-  
-  // Agriculture & Veterinary
-  "B.Sc Agriculture", "M.Sc Agriculture", "BVSc", "MVSc", "B.Sc Horticulture", "B.Sc Fisheries",
-  
-  // Aviation & Maritime
-  "B.Sc Aviation", "Commercial Pilot License", "Diploma in Aviation", "Marine Engineering",
-  "Nautical Science", "B.Sc Nautical Science",
-  
-  // Paramedical
-  "DMLT", "BMLT", "B.Sc OT Technology", "B.Sc Dialysis Technology", "B.Sc Cardiac Care",
-  
-  // Vocational & Skill-based
-  "ITI", "Diploma Courses", "Certificate Courses", "Vocational Training",
-  
-  // Other Professional Courses
-  "B.Sc Defense Studies", "BA Defense Studies", "B.Sc Forensic Science", "B.Sc Criminology",
-  "B.Sc Event Management", "B.Sc Sports Management", "B.Voc", "Integrated Courses",
-  
-  // After 10th Courses
-  "10th Pass Courses", "Diploma after 10th", "ITI after 10th", "Polytechnic after 10th",
-  
-  // After 12th Courses
-  "12th Pass Courses", "UG Courses", "Graduation Courses",
-  
-  // Short-term & Certificate
-  "Short-term Courses", "Certificate Programs", "Online Courses", "Distance Learning"
-];
 
 const UserSignup = () => {
   const [searchParams] = useSearchParams();
