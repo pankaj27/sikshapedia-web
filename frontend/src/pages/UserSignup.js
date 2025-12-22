@@ -101,12 +101,27 @@ const UserSignup = () => {
     try {
       const response = await api.get('/courses');
       const apiCourses = response.data.map(c => typeof c === 'object' ? c.name : c);
-      // Use API courses if available, otherwise use default list
-      setCourses(apiCourses.length > 0 ? apiCourses : ALL_INDIA_COURSES);
+      // Use API courses if available, otherwise keep the centralized list
+      if (apiCourses.length > 0) {
+        setCourses(apiCourses);
+      }
     } catch (err) {
       console.error('Error fetching courses:', err);
-      // Fallback to default courses list
-      setCourses(ALL_INDIA_COURSES);
+      // Fallback already set via useState initialization
+    }
+  };
+  
+  const fetchExams = async () => {
+    try {
+      const response = await api.get('/exams');
+      const apiExams = response.data.map(e => typeof e === 'object' ? e.name : e);
+      // Use API exams if available, otherwise keep the centralized list
+      if (apiExams.length > 0) {
+        setExams(apiExams);
+      }
+    } catch (err) {
+      console.error('Error fetching exams:', err);
+      // Fallback already set via useState initialization
     }
   };
   
