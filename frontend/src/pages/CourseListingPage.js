@@ -457,35 +457,33 @@ const CourseListingPage = () => {
             )}
 
             {/* Top Colleges Section */}
-            <div className="mt-12 bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Top Colleges In India</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { name: 'IIT Bombay - Indian Institute of Technology', location: 'Mumbai, Maharashtra', rating: '4.5' },
-                  { name: 'IIT Delhi - Indian Institute of Technology', location: 'New Delhi, Delhi NCR', rating: '4.4' },
-                  { name: 'IIT Madras - Indian Institute of Technology', location: 'Chennai, Tamil Nadu', rating: '4.5' },
-                  { name: 'IIT Kanpur - Indian Institute of Technology', location: 'Kanpur, Uttar Pradesh', rating: '4.3' },
-                  { name: 'BITS Pilani - Birla Institute of Technology', location: 'Pilani, Rajasthan', rating: '4.2' },
-                  { name: 'NIT Trichy - National Institute of Technology', location: 'Tiruchirappalli, Tamil Nadu', rating: '4.1' }
-                ].map((college, idx) => (
-                  <Link key={idx} to={`/colleges/${idx + 1}`} className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-all">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-orange-600 font-bold">{idx + 1}</span>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-gray-900 hover:text-blue-600">{college.name}</h3>
-                      <p className="text-xs text-gray-500">{college.location}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">★ {college.rating}</span>
+            {/* Top Colleges Section - Only show if we have top colleges data */}
+            {topColleges && topColleges.length > 0 && (
+              <div className="mt-12 bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Top Colleges In India</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {topColleges.slice(0, 6).map((college, idx) => (
+                    <Link key={college.id || idx} to={`/colleges/${college.slug || college.id}`} className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-all">
+                      <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-orange-600 font-bold">{idx + 1}</span>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold text-gray-900 hover:text-blue-600">{college.name}</h3>
+                        <p className="text-xs text-gray-500">{college.location?.city}, {college.location?.state}</p>
+                        {college.rating > 0 && (
+                          <div className="flex items-center gap-1 mt-1">
+                            <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">★ {college.rating.toFixed(1)}</span>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <Link to="/colleges" className="inline-flex items-center gap-1 mt-4 text-sm text-orange-600 hover:text-orange-700 font-medium">
+                  View all colleges <FiChevronRight size={14} />
+                </Link>
               </div>
-              <Link to="/colleges" className="inline-flex items-center gap-1 mt-4 text-sm text-orange-600 hover:text-orange-700 font-medium">
-                View all colleges <FiChevronRight size={14} />
-              </Link>
-            </div>
+            )}
           </main>
         </div>
       </div>
