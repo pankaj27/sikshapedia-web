@@ -101,6 +101,13 @@ const UniversityDetailPage = () => {
     fetchUniversity();
   }, [fetchUniversity]);
 
+  useEffect(() => {
+    if (university && isLoggedIn) {
+      checkUserInteractions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [university?.id, isLoggedIn]);
+
   const checkUserInteractions = async () => {
     try {
       const token = localStorage.getItem('token');
