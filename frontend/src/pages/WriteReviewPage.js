@@ -462,7 +462,10 @@ const WriteReviewPage = () => {
             {/* Middle Ad */}
             <div className="bg-white rounded-lg border-2 border-orange-300 p-3 text-center">
               <p className="text-xs text-orange-600 uppercase mb-2">Sponsored</p>
-              <img src="https://via.placeholder.com/200x150?text=Ad+Space" alt="Ad" className="w-full rounded mb-2" />
+              {/* Ad placeholder - would be replaced with actual ad content */}
+              <div className="w-full h-[150px] bg-gray-100 rounded mb-2 flex items-center justify-center">
+                <span className="text-gray-400 text-sm">Advertisement</span>
+              </div>
               <p className="text-xs text-gray-600">Your ad here</p>
             </div>
 
