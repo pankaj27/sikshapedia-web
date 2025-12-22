@@ -102,8 +102,8 @@ async def get_eligibility_exams(
     Returns exams with their input types (rank/marks/percentile) and configuration.
     """
     try:
-        # Build query
-        query = {'is_active': True}
+        # Build query - don't require is_active as field may not exist
+        query = {}
         if type:
             query['type'] = {'$regex': type, '$options': 'i'}
         if level:
