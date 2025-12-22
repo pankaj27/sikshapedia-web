@@ -481,177 +481,22 @@ const DynamicListingPage = () => {
     if (masterCities.length > 0) {
       return masterCities.map(c => c.name).sort();
     }
-    return ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Chandigarh', 'Kochi', 'Bhopal', 'Patna'];
+    return [];
   }, [masterCities, activeFilters.state]);
 
-  // Filter options
+  // Filter options - Empty by default, should be populated from database
   const filterOptions = {
-    // Stream/Sub Stream
-    subStream: [
-      'Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 'Commerce',
-      'Pharmacy', 'Architecture', 'Design', 'Agriculture', 'Education', 'Nursing',
-      'Dental', 'Hotel Management', 'Mass Communication', 'Computer Applications',
-      'Aviation', 'Animation', 'Fashion Design', 'Interior Design'
-    ],
-    
-    // Courses
-    course: [
-      // Engineering
-      'B.Tech', 'B.E', 'M.Tech', 'M.E', 'Diploma in Engineering',
-      // Medical
-      'MBBS', 'BDS', 'BAMS', 'BHMS', 'B.Pharm', 'D.Pharm', 'M.Pharm', 'Pharm.D',
-      // Management
-      'MBA', 'BBA', 'PGDM', 'BMS', 'BBM', 'Executive MBA',
-      // Commerce
-      'B.Com', 'M.Com', 'CA', 'CS', 'CMA', 'BBA LLB',
-      // Science
-      'B.Sc', 'M.Sc', 'B.Sc Nursing', 'B.Sc Agriculture',
-      // Arts
-      'BA', 'MA', 'BA LLB', 'BFA', 'MFA',
-      // Computer
-      'BCA', 'MCA', 'B.Sc IT', 'B.Sc Computer Science',
-      // Law
-      'LLB', 'LLM', 'BA LLB', 'BBA LLB', 'B.Com LLB',
-      // Others
-      'B.Arch', 'M.Arch', 'B.Des', 'M.Des', 'BJMC', 'MJMC', 'BHM', 'B.Ed', 'M.Ed'
-    ],
-    
-    // Degree Type
-    degreeType: [
-      'Undergraduate (UG)', 'Postgraduate (PG)', 'Doctorate (PhD)', 
-      'Diploma', 'Certificate', 'Integrated', 'Executive'
-    ],
-    
-    // Exams Accepted
-    examAccepted: [
-      // Engineering
-      'JEE Main', 'JEE Advanced', 'BITSAT', 'VITEEE', 'SRMJEEE', 'MET', 'COMEDK',
-      // Medical
-      'NEET UG', 'NEET PG', 'AIIMS', 'JIPMER', 'PGIMER',
-      // Management
-      'CAT', 'MAT', 'XAT', 'CMAT', 'GMAT', 'NMAT', 'SNAP', 'ATMA',
-      // Law
-      'CLAT', 'AILET', 'LSAT', 'MH CET Law',
-      // Design
-      'NID DAT', 'NIFT', 'UCEED', 'CEED',
-      // Others
-      'CUET', 'GATE', 'UGC NET', 'GPAT', 'NATA', 'State CET'
-    ],
-    
-    // Affiliation - Indian Affiliation Bodies
-    affiliation: [
-      // Central Bodies
-      'UGC (University Grants Commission)',
-      'AICTE (All India Council for Technical Education)',
-      'MCI (Medical Council of India)',
-      'NMC (National Medical Commission)',
-      'BCI (Bar Council of India)',
-      'PCI (Pharmacy Council of India)',
-      'DCI (Dental Council of India)',
-      'INC (Indian Nursing Council)',
-      'NCTE (National Council for Teacher Education)',
-      'COA (Council of Architecture)',
-      'ICAR (Indian Council of Agricultural Research)',
-      'VCI (Veterinary Council of India)',
-      'CCH (Central Council of Homoeopathy)',
-      'CCIM (Central Council of Indian Medicine)',
-      // University Types
-      'Central University',
-      'State University',
-      'Deemed University',
-      'Private University',
-      'Autonomous Institution',
-      // Premier Institutes
-      'IIT (Indian Institute of Technology)',
-      'IIM (Indian Institute of Management)',
-      'NIT (National Institute of Technology)',
-      'IIIT (Indian Institute of Information Technology)',
-      'AIIMS (All India Institute of Medical Sciences)',
-      'IISER (Indian Institute of Science Education and Research)',
-      'IISc (Indian Institute of Science)',
-      'NIFT (National Institute of Fashion Technology)',
-      'NID (National Institute of Design)',
-      'NLSIU (National Law School)'
-    ],
-    
-    // Recognition - Indian Recognition Bodies
-    recognition: [
-      // Government Recognition
-      'UGC Recognized',
-      'AICTE Approved',
-      'Government of India Recognized',
-      'State Government Recognized',
-      'Ministry of Education Recognized',
-      'MHRD Approved',
-      // Rankings
-      'NIRF Ranked',
-      'NIRF Top 10',
-      'NIRF Top 25',
-      'NIRF Top 50',
-      'NIRF Top 100',
-      'NIRF Top 200',
-      // International Rankings
-      'QS World University Ranking',
-      'Times Higher Education Ranking',
-      'ARWU (Shanghai Ranking)',
-      'US News Global Ranking',
-      // Special Recognition
-      'Institute of National Importance',
-      'Institute of Eminence (IoE)',
-      'Category I University',
-      'Category II University',
-      '12B Status',
-      '2(f) Status',
-      'EQUIS Accredited',
-      'AACSB Accredited',
-      'AMBA Accredited'
-    ],
-    
-    // Accreditation - Indian Accreditation Bodies
-    accreditation: [
-      // NAAC Grades
-      'NAAC A++ (Highest)',
-      'NAAC A+',
-      'NAAC A',
-      'NAAC B++',
-      'NAAC B+',
-      'NAAC B',
-      'NAAC C',
-      // NBA Accreditation
-      'NBA Accredited (Tier 1)',
-      'NBA Accredited (Tier 2)',
-      'NBA Accredited',
-      // Other Accreditations
-      'NABH (National Accreditation Board for Hospitals)',
-      'NABL (National Accreditation Board for Laboratories)',
-      'QCI (Quality Council of India)',
-      // International Accreditations
-      'ABET Accredited',
-      'AACSB Accredited',
-      'EQUIS Accredited',
-      'AMBA Accredited',
-      'ACBSP Accredited',
-      'EFMD Accredited',
-      // ISO Certifications
-      'ISO 9001:2015',
-      'ISO 14001:2015',
-      'ISO 21001:2018 (Education)',
-      // Medical Accreditations
-      'WFME Recognized',
-      'MCI/NMC Approved',
-      // Other
-      'Washington Accord Signatory',
-      'IACBE Accredited'
-    ],
-    
+    subStream: [],
+    course: [],
+    degreeType: [],
+    examAccepted: [],
+    affiliation: [],
+    recognition: [],
+    collegeType: [],
+    accreditation: [],
     state: allStates,
     city: getAvailableCities,
-    
-    // College Type
-    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous', 'Public-Private', 'Aided'],
-    
-    // Program Type
-    programType: ['Full Time', 'Part Time', 'Distance Learning', 'Online', 'Weekend', 'Evening']
+    programType: []
   };
 
   // Close dropdowns when clicking outside
