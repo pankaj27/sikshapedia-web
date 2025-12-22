@@ -1005,17 +1005,7 @@ const DynamicListingPage = () => {
 
   // Build URL with query parameters for secondary filters
   const buildUrlWithQueryParams = (basePath, newFilter = null) => {
-    const queryParams = new URLSearchParams();
-    
-    // Preserve existing query filters from URL
-    const existingQueryFilters = urlInfo.queryFilters || {};
-    
-    // Add existing query filters
-    if (existingQueryFilters.course) queryParams.set('course', existingQueryFilters.course);
-    if (existingQueryFilters.degreeType) queryParams.set('degree', existingQueryFilters.degreeType);
-    if (existingQueryFilters.examAccepted) queryParams.set('exam', existingQueryFilters.examAccepted);
-    if (existingQueryFilters.affiliation) queryParams.set('affiliation', existingQueryFilters.affiliation);
-    if (existingQueryFilters.recognition) queryParams.set('recognition', existingQueryFilters.recognition);
+    const queryParams = new URLSearchParams(location.search);
     
     // Add new filter if provided
     if (newFilter) {
