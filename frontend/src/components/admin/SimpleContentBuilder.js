@@ -367,7 +367,7 @@ const TableBlock = ({ data, onChange }) => {
                   </td>
                 ))}
                 <td className="border-t border-teal-200 p-1 text-center">
-                  {localData.rows.length > 1 && (
+                  {rows.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeRow(rowIndex)}
