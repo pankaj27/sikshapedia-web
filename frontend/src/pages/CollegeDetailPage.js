@@ -1282,133 +1282,107 @@ const CollegeDetailPage = ({ overrideId }) => {
 
               {/* COURSES & FEES - Hide when using TOC menu */}
                 <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees 2026</h2>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">
-                    {college.name} offers various undergraduate and postgraduate programs. The fee structure for different courses is mentioned below:
+                    {college.name} offers various programs. The fee structure is mentioned below:
                   </p>
 
-                  <div className="overflow-x-auto mb-6">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-orange-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3">
-                            <Link to="#" className="text-blue-600 hover:underline font-medium">B.Tech</Link>
-                          </td>
-                          <td className="border px-4 py-3 text-sm">4 Years</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR {(college.average_fees / 100000).toFixed(2)} Lakhs</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR {((college.average_fees * 4) / 100000).toFixed(2)} Lakhs</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3">
-                            <Link to="#" className="text-blue-600 hover:underline font-medium">M.Tech</Link>
-                          </td>
-                          <td className="border px-4 py-3 text-sm">2 Years</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR 72,000</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR 1.44 Lakhs</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3">
-                            <Link to="#" className="text-blue-600 hover:underline font-medium">MBA</Link>
-                          </td>
-                          <td className="border px-4 py-3 text-sm">2 Years</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR 7.68 Lakhs</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">INR 15.36 Lakhs</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Q&A */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <p className="text-sm font-bold mb-2">Ques. Is pursuing a degree at {college.name} worth the investment?</p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Ans.</strong> Yes, {college.name} offers quality education with excellent placement opportunities, experienced faculty, and state-of-the-art infrastructure. The ROI is quite competitive.
-                    </p>
-                  </div>
+                  {college?.courses && college.courses.length > 0 ? (
+                    <div className="overflow-x-auto mb-6">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-orange-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {college.courses.map((course, idx) => {
+                            const courseName = typeof course === 'string' ? course : course.name;
+                            const duration = typeof course === 'object' ? course.duration : '';
+                            const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
+                            const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
+                            return (
+                              <tr key={idx} className="hover:bg-gray-50">
+                                <td className="border px-4 py-3">
+                                  <span className="text-blue-600 font-medium">{courseName}</span>
+                                </td>
+                                <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Course details will be updated soon.</p>
+                  )}
                 </section>
 
                 {/* ADMISSIONS */}
                 <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Admission 2026</h2>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">
-                    {college.name} offers admission to various programs through national-level entrance exams followed by counselling rounds. The eligibility criteria and selection process are mentioned below:
+                    Admission details and eligibility criteria for {college.name}:
                   </p>
 
-                  <h3 className="text-xl font-bold mb-3">Admission Dates 2026</h3>
-                  <div className="overflow-x-auto mb-6">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-orange-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Application Start Date</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">January 2026</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Application Deadline</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">March 2026</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Exam Date</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">April-May 2026</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Result Announcement</td>
-                          <td className="border px-4 py-3 text-sm font-semibold">June 2026</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  {college?.admission_dates && college.admission_dates.length > 0 && (
+                    <>
+                      <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
+                      <div className="overflow-x-auto mb-6">
+                        <table className="w-full border-collapse border">
+                          <thead>
+                            <tr className="bg-orange-50">
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {college.admission_dates.map((item, idx) => (
+                              <tr key={idx} className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </>
+                  )}
 
-                  <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
-                  <div className="overflow-x-auto mb-6">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm font-semibold">B.Tech</td>
-                          <td className="border px-4 py-3 text-sm">10+2 with 75% in PCM</td>
-                          <td className="border px-4 py-3 text-sm">JEE Advanced + JoSAA Counselling</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm font-semibold">M.Tech</td>
-                          <td className="border px-4 py-3 text-sm">BE/B.Tech with 60% marks</td>
-                          <td className="border px-4 py-3 text-sm">GATE + COAP Counselling</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm font-semibold">MBA</td>
-                          <td className="border px-4 py-3 text-sm">Bachelor's degree with 60%</td>
-                          <td className="border px-4 py-3 text-sm">CAT + GD/PI</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  {college?.courses && college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0 && (
+                    <>
+                      <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
+                      <div className="overflow-x-auto mb-6">
+                        <table className="w-full border-collapse border">
+                          <thead>
+                            <tr className="bg-gray-50">
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                              <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {college.courses.filter(c => typeof c === 'object').map((course, idx) => (
+                              <tr key={idx} className="hover:bg-gray-50">
+                                <td className="border px-4 py-3 text-sm font-semibold">{course.name}</td>
+                                <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
+                                <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </>
+                  )}
 
-                  {/* Q&A */}
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                    <p className="text-sm font-bold mb-2">Ques. What is the admission process for {college.name}?</p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Ans.</strong> Admission is primarily through entrance exams. The process includes application submission, entrance exam, cutoff determination, counselling, and document verification.
-                    </p>
-                  </div>
+                  {!college?.admission_dates?.length && !college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length && (
+                    <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Admission details will be updated soon.</p>
+                  )}
                 </section>
 
                 {/* CUTOFF */}
