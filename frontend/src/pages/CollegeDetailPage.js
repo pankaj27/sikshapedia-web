@@ -1094,14 +1094,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                       ) : (
                         <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg text-center">Facilities information will be updated soon.</p>
                       )}
-                              </div>
-                              <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
-                                {item.name}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
                     </section>
 
                     {/* FAQs - FROM TOC #09 */}
@@ -1117,9 +1109,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center text-gray-500 py-4">
-                          No FAQs available
-                        </div>
+                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg text-center">FAQs will be added soon.</p>
                       )}
                     </section>
                   </div>
