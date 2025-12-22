@@ -1347,67 +1347,65 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </section>
                 )}
 
-                {/* ADMISSIONS */}
-                <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    Admission details and eligibility criteria for {college.name}:
-                  </p>
+                {/* ADMISSIONS - Only show if there's admission data */}
+                {(college?.admission_dates?.length > 0 || college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0) && (
+                  <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      Admission details and eligibility criteria for {college.name}:
+                    </p>
 
-                  {college?.admission_dates && college.admission_dates.length > 0 && (
-                    <>
-                      <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
-                      <div className="overflow-x-auto mb-6">
-                        <table className="w-full border-collapse border">
-                          <thead>
-                            <tr className="bg-orange-50">
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {college.admission_dates.map((item, idx) => (
-                              <tr key={idx} className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                    {college?.admission_dates && college.admission_dates.length > 0 && (
+                      <>
+                        <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
+                        <div className="overflow-x-auto mb-6">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-orange-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </>
-                  )}
+                            </thead>
+                            <tbody>
+                              {college.admission_dates.map((item, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                                  <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </>
+                    )}
 
-                  {college?.courses && college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0 && (
-                    <>
-                      <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
-                      <div className="overflow-x-auto mb-6">
-                        <table className="w-full border-collapse border">
-                          <thead>
-                            <tr className="bg-gray-50">
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
-                              <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {college.courses.filter(c => typeof c === 'object').map((course, idx) => (
-                              <tr key={idx} className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm font-semibold">{course.name}</td>
-                                <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
-                                <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                    {college?.courses && college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0 && (
+                      <>
+                        <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
+                        <div className="overflow-x-auto mb-6">
+                          <table className="w-full border-collapse border">
+                            <thead>
+                              <tr className="bg-gray-50">
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                                <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </>
-                  )}
-
-                  {!college?.admission_dates?.length && !college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length && (
-                    <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Admission details will be updated soon.</p>
-                  )}
-                </section>
+                            </thead>
+                            <tbody>
+                              {college.courses.filter(c => typeof c === 'object').map((course, idx) => (
+                                <tr key={idx} className="hover:bg-gray-50">
+                                  <td className="border px-4 py-3 text-sm font-semibold">{course.name}</td>
+                                  <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
+                                  <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </>
+                    )}
+                  </section>
+                )}
 
                 {/* CUTOFF */}
                 <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
