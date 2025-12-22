@@ -377,11 +377,41 @@ const CollegeDetailPage = ({ overrideId }) => {
     alert('Review form coming soon!');
   };
 
-  const handleAskQuestion = () => {
+  const [questionText, setQuestionText] = useState('');
+  const [submittingQuestion, setSubmittingQuestion] = useState(false);
+  const [questionSubmitted, setQuestionSubmitted] = useState(false);
+
+  const handleAskQuestion = async () => {
     // Check if user is logged in
     if (!requireAuth('ask a question')) return;
-    // TODO: Submit question functionality
-    alert('Question submission coming soon!');
+    
+    if (!questionText.trim()) {
+      alert('Please enter your question');
+      return;
+    }
+    
+    setSubmittingQuestion(true);
+    try {
+      const token = localStorage.getItem('token');
+      await api.post('/questions', {
+        college_id: college.id,
+        question: questionText.trim()
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setQuestionText('');
+      setQuestionSubmitted(true);
+      setTimeout(() => setQuestionSubmitted(false), 5000);
+      
+      // Refresh the page to show new question
+      window.location.reload();
+    } catch (error) {
+      console.error('Error submitting question:', error);
+      alert('Failed to submit question. Please try again.');
+    } finally {
+      setSubmittingQuestion(false);
+    }
   };
 
   const handleReply = () => {
