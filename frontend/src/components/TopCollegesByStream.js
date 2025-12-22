@@ -48,7 +48,7 @@ const TopCollegesByStream = () => {
                 colleges: response.data?.slice(0, 4).map(c => c.name) || defaultColleges[stream.name]
               };
             } catch (error) {
-              return { ...stream, colleges: defaultColleges[stream.name] };
+              return { ...stream, colleges: [] };
             }
           })
         );
@@ -56,7 +56,7 @@ const TopCollegesByStream = () => {
       }
     } catch (error) {
       console.error('Error fetching colleges by stream:', error);
-      setStreamData(streams.map(s => ({ ...s, colleges: defaultColleges[s.name] })));
+      setStreamData(streams.map(s => ({ ...s, colleges: [] })));
     } finally {
       setLoading(false);
     }
