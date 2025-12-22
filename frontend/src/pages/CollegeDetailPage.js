@@ -1818,11 +1818,17 @@ const CollegeDetailPage = ({ overrideId }) => {
 
                         <div className="pt-4 border-t">
                           <h4 className="font-bold text-sm mb-2 text-gray-900">How to Reach</h4>
-                          <div className="space-y-2 text-sm text-gray-600">
-                            <p>• <strong>By Metro:</strong> Nearest metro station is 2 km away</p>
-                            <p>• <strong>By Bus:</strong> Well connected by local buses</p>
-                            <p>• <strong>By Train:</strong> {college.location?.city} Railway Station - 5 km</p>
-                          </div>
+                          {college?.how_to_reach ? (
+                            <div className="space-y-2 text-sm text-gray-600">
+                              {college.how_to_reach.by_metro && <p>• <strong>By Metro:</strong> {college.how_to_reach.by_metro}</p>}
+                              {college.how_to_reach.by_bus && <p>• <strong>By Bus:</strong> {college.how_to_reach.by_bus}</p>}
+                              {college.how_to_reach.by_train && <p>• <strong>By Train:</strong> {college.how_to_reach.by_train}</p>}
+                              {college.how_to_reach.by_road && <p>• <strong>By Road:</strong> {college.how_to_reach.by_road}</p>}
+                              {college.how_to_reach.by_air && <p>• <strong>By Air:</strong> {college.how_to_reach.by_air}</p>}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500">Transportation details will be updated soon.</p>
+                          )}
                         </div>
 
                         <Button 
