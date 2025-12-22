@@ -914,6 +914,7 @@ class College(BaseModel):
     
     # Updates & News
     updates: List = []  # Can be List[Dict] or empty
+    announcements: List = []  # Latest news/announcements [{title, date, link, content}]
     
     # Students
     total_students: Optional[int] = None
