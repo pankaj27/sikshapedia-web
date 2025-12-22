@@ -1407,14 +1407,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </section>
                 )}
 
-                {/* CUTOFF */}
-                <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    The cutoff varies for different programs and categories:
-                  </p>
+                {/* CUTOFF - Only show if cutoff data exists */}
+                {college?.cutoff_data && college.cutoff_data.length > 0 && (
+                  <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      The cutoff varies for different programs and categories:
+                    </p>
 
-                  {college?.cutoff_data && college.cutoff_data.length > 0 ? (
                     <div className="overflow-x-auto mb-6">
                       <table className="w-full border-collapse border">
                         <thead>
@@ -1437,10 +1437,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                         </tbody>
                       </table>
                     </div>
-                  ) : (
-                    <p className="text-sm text-gray-500 bg-yellow-50 border border-yellow-200 p-4 rounded-lg">Cutoff details will be updated soon after official announcement.</p>
-                  )}
-                </section>
+                  </section>
+                )}
 
                 {/* PLACEMENT */}
                 <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
