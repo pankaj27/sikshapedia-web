@@ -1317,7 +1317,7 @@ const HomepageSettings = () => {
                                     const formData = new FormData();
                                     formData.append('file', file);
                                     try {
-                                      const token = localStorage.getItem('token');
+                                      const token = localStorage.getItem('adminToken');
                                       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image?type=content`, {
                                         method: 'POST',
                                         headers: {
@@ -1431,7 +1431,7 @@ const HomepageSettings = () => {
                                     const formData = new FormData();
                                     formData.append('file', file);
                                     try {
-                                      const token = localStorage.getItem('token');
+                                      const token = localStorage.getItem('adminToken');
                                       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image?type=content`, {
                                         method: 'POST',
                                         headers: {
@@ -1545,7 +1545,7 @@ const HomepageSettings = () => {
                                     const formData = new FormData();
                                     formData.append('file', file);
                                     try {
-                                      const token = localStorage.getItem('token');
+                                      const token = localStorage.getItem('adminToken');
                                       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image?type=content`, {
                                         method: 'POST',
                                         headers: {
