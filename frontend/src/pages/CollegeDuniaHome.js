@@ -88,7 +88,7 @@ const CollegeDuniaHome = () => {
 
   const programs = [
     { title: 'College Ranking', subtitle: 'Find Top Colleges', icon: '🏆', color: 'bg-orange-100' },
-    { title: 'Exams', subtitle: 'JEE, NEET, CAT', icon: '📝', color: 'bg-blue-100' },
+    { title: 'Exams', subtitle: 'Entrance Exams', icon: '📝', color: 'bg-blue-100' },
     { title: 'Compare Colleges', subtitle: 'Side by Side', icon: '⚖️', color: 'bg-green-100' },
     { title: 'Course Finder', subtitle: 'Find Best Courses', icon: '🎓', color: 'bg-purple-100' }
   ];
