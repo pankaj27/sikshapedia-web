@@ -311,9 +311,13 @@ const DynamicListingPage = () => {
       city: null,
       collegeType: null,
       accreditation: null,
+      degreeType: null,
+      examAccepted: null,
+      affiliation: null,
+      recognition: null,
     };
     
-    // Use pageInfo filters from new URL structure
+    // Use pageInfo filters from new URL structure (path-based filters)
     if (pageInfo.filters) {
       if (pageInfo.filters.stream) {
         active.stream = pageInfo.filters.stream;
@@ -362,8 +366,28 @@ const DynamicListingPage = () => {
       active.accreditation = ACCREDITATION_DISPLAY[pageInfo.accreditation] || toDisplayName(pageInfo.accreditation);
     }
     
+    // Parse query parameters for secondary filters (type, accreditation, degree, exam, affiliation, recognition)
+    if (queryFilters.collegeType && !active.collegeType) {
+      active.collegeType = TYPE_DISPLAY[queryFilters.collegeType] || toDisplayName(queryFilters.collegeType);
+    }
+    if (queryFilters.accreditation && !active.accreditation) {
+      active.accreditation = ACCREDITATION_DISPLAY[queryFilters.accreditation] || toDisplayName(queryFilters.accreditation);
+    }
+    if (queryFilters.degreeType) {
+      active.degreeType = toDisplayName(queryFilters.degreeType);
+    }
+    if (queryFilters.examAccepted) {
+      active.examAccepted = toDisplayName(queryFilters.examAccepted);
+    }
+    if (queryFilters.affiliation) {
+      active.affiliation = toDisplayName(queryFilters.affiliation);
+    }
+    if (queryFilters.recognition) {
+      active.recognition = toDisplayName(queryFilters.recognition);
+    }
+    
     return active;
-  }, [pageInfo]);
+  }, [pageInfo, queryFilters]);
   
   // Fetch master location data
   useEffect(() => {
