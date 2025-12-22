@@ -2182,7 +2182,7 @@ const DynamicListingPage = () => {
             </div>
             
             {/* Applied Filters Row - Only show if filters are active */}
-            {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation || filters.course || filters.degreeType || filters.examAccepted || filters.affiliation || filters.recognition) && (
+            {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation || activeFilters.course || activeFilters.degreeType || activeFilters.examAccepted || activeFilters.affiliation || activeFilters.recognition) && (
               <>
                 <div className="border-t border-gray-200 my-3"></div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -2234,35 +2234,35 @@ const DynamicListingPage = () => {
                     </span>
                   )}
                   
-                  {/* Degree Type filter */}
-                  {filters.degreeType && (
+                  {/* Degree Type filter - from URL query params */}
+                  {activeFilters.degreeType && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-pink-100 text-pink-700 rounded-lg text-xs font-medium">
-                      {filters.degreeType}
-                      <button onClick={() => setFilters(prev => ({ ...prev, degreeType: '' }))} className="hover:bg-pink-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      {activeFilters.degreeType}
+                      <button onClick={() => removeUrlFilter('degreeType')} className="hover:bg-pink-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
-                  {/* Exam Accepted filter */}
-                  {filters.examAccepted && (
+                  {/* Exam Accepted filter - from URL query params */}
+                  {activeFilters.examAccepted && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg text-xs font-medium">
-                      {filters.examAccepted}
-                      <button onClick={() => setFilters(prev => ({ ...prev, examAccepted: '' }))} className="hover:bg-yellow-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      {activeFilters.examAccepted}
+                      <button onClick={() => removeUrlFilter('examAccepted')} className="hover:bg-yellow-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
-                  {/* Affiliation filter */}
-                  {filters.affiliation && (
+                  {/* Affiliation filter - from URL query params */}
+                  {activeFilters.affiliation && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-100 text-cyan-700 rounded-lg text-xs font-medium">
-                      {filters.affiliation.split(' ')[0]}
-                      <button onClick={() => setFilters(prev => ({ ...prev, affiliation: '' }))} className="hover:bg-cyan-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      {activeFilters.affiliation}
+                      <button onClick={() => removeUrlFilter('affiliation')} className="hover:bg-cyan-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                   
-                  {/* Recognition filter */}
-                  {filters.recognition && (
+                  {/* Recognition filter - from URL query params */}
+                  {activeFilters.recognition && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-100 text-rose-700 rounded-lg text-xs font-medium">
-                      {filters.recognition.split(' ')[0]}
-                      <button onClick={() => setFilters(prev => ({ ...prev, recognition: '' }))} className="hover:bg-rose-200 rounded-full p-0.5"><FiX size={12} /></button>
+                      {activeFilters.recognition}
+                      <button onClick={() => removeUrlFilter('recognition')} className="hover:bg-rose-200 rounded-full p-0.5"><FiX size={12} /></button>
                     </span>
                   )}
                 </div>
