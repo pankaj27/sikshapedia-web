@@ -816,7 +816,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                   {college.description ? college.description : `As per the data, ${college.name} is one of the preferred institutions for students.`}
                   {college.nirf_ranking && <> {college.name} Ranking is <strong>#{college.nirf_ranking}</strong> in NIRF rankings.</>}
                   {college.average_fees && <> {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>.</>}
-                  {college.placement?.average && <> As per {college.name} Placements, the average package was <strong>INR {(college.placement.average / 100000).toFixed(1)} LPA</strong>.</>}
+                  {college.placement?.average > 0 && <> As per {college.name} Placements, the average package was <strong>INR {(college.placement.average / 100000).toFixed(1)} LPA</strong>.</>}
                 </p>
               </div>
 
