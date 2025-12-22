@@ -1548,14 +1548,13 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </div>
                 </section>
 
-                {/* SCHOLARSHIP */}
-                <section id="scholarship" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships 2026</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    {college.name} offers various scholarships to support students financially. The details are mentioned below:
-                  </p>
-
-                  {college.scholarships && college.scholarships.length > 0 ? (
+                {/* SCHOLARSHIP - Only show if data exists */}
+                {college?.scholarships && college.scholarships.length > 0 && (
+                  <section id="scholarship" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships {year + 1}</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {college.name} offers various scholarships to support students financially. The details are mentioned below:
+                    </p>
                     <div className="space-y-4">
                       {college.scholarships.map((scholarship, idx) => (
                         <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-6">
