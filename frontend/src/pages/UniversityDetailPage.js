@@ -378,22 +378,24 @@ const UniversityDetailPage = () => {
                   )}
                 </div>
 
-                {/* Rating */}
-                <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <FiStar 
-                          key={i} 
-                          className={`${i < Math.floor(university.rating || 4.5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                          size={18}
-                        />
-                      ))}
+                {/* Rating - Only show if rating exists */}
+                {university.rating > 0 && (
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <FiStar 
+                            key={i} 
+                            className={`${i < Math.floor(university.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                            size={18}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-bold text-lg text-gray-900">{university.rating.toFixed(1)}</span>
+                      <span className="text-gray-500 text-sm">({university.total_reviews || 0} Reviews)</span>
                     </div>
-                    <span className="font-bold text-lg text-gray-900">{university.rating?.toFixed(1) || '4.5'}</span>
-                    <span className="text-gray-500 text-sm">({university.total_reviews || 0} Reviews)</span>
                   </div>
-                </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap items-center gap-3">
