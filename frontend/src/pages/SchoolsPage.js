@@ -217,37 +217,6 @@ const SchoolsPage = () => {
       </div>
 
       {/* ALL CONTENT SECTIONS */}
-      <div className="bg-white py-2">
-        <div className="container mx-auto px-6">
-          
-          {/* INTRO CONTENT - First 3 lines always visible */}
-          <section className="mb-2">
-            <div className="text-gray-700 text-sm leading-relaxed">
-              <p className={`${!showContent ? 'line-clamp-3' : ''}`}>
-                India has over <strong>4359 colleges</strong>, including <strong>3623 private colleges</strong> and <strong>676 government colleges</strong>. 
-                Admissions in India are done mainly through <strong>JEE Main</strong>. Direct admission in colleges in India depends on merit based on 12th-class marks. 
-                The fees of the colleges vary from <strong>₹4,400 at AU Allahabad</strong> to <strong>₹37.8 Lakh at ICAS Manipal</strong>, 
-                while the Median Package ranges from ₹17 LPA at IIT Roorkee to ₹21.60 LPA at IIT Guwahati.
-              </p>
-            </div>
-          </section>
-
-          {/* Read More Button - Show when collapsed - Compact */}
-          {!showContent && (
-            <div className="text-center mb-2">
-              <button
-                onClick={() => setShowContent(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-xs font-medium rounded-full transition-colors"
-              >
-                <span>Read More</span>
-                <FiChevronDown size={14} />
-              </button>
-            </div>
-          )}
-
-        </div>
-      </div>
-
       {/* Featured & Admissions Open Sponsored Sections */}
       <div className="bg-white py-4">
         <div className="container mx-auto px-6">
