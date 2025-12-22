@@ -120,9 +120,9 @@ const ExamDetailPage = () => {
       ],
       
       contentTeam: {
-        author: 'Shivam Yadav',
-        profileImage: 'https://via.placeholder.com/40',
-        updatedDate: 'Nov 18, 2025'
+        author: 'Content Team',
+        profileImage: '',
+        updatedDate: ''
       },
       
       tableOfContents: [
@@ -135,10 +135,7 @@ const ExamDetailPage = () => {
         { id: 'studynotes', title: 'JEE Main Study Notes' }
       ],
       
-      videos: [
-        { title: 'JEE Main 2025 Strategy', thumbnail: 'https://via.placeholder.com/300x180', duration: '15:30' },
-        { title: 'How to Solve Previous Year Papers', thumbnail: 'https://via.placeholder.com/300x180', duration: '12:45' }
-      ]
+      videos: []
     },
     'neet': {
       name: 'NEET',
