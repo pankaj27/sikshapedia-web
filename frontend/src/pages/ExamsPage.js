@@ -103,7 +103,7 @@ const ExamsPage = () => {
                 <div className="relative flex-1">
                   <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <Input
-                    placeholder="Search exams (JEE, NEET, CAT, GATE...)"
+                    placeholder="Search exams..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="h-14 pl-12 pr-4 bg-white text-gray-900 rounded-xl border-0 shadow-lg text-base"
