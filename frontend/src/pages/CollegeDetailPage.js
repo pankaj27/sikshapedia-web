@@ -1021,41 +1021,37 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </section>
                     )}
 
-                    {/* PLACEMENT - FROM TOC #06 - Guest Gated */}
-                    <section id="seo-placement">
-                      <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
-                      {college?.placement ? (
-                        <>
-                          <p className="text-gray-700 text-sm mb-4">
-                            As per {college.name} Placement report, the average package stood at ₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'} LPA.
-                          </p>
-                          <GuestGate title="Placement Data">
-                            <div className="grid grid-cols-3 gap-4">
-                              <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                                <div className="text-2xl font-bold text-green-600">₹{college.placement.highest ? (college.placement.highest / 100000).toFixed(1) : '-'}L</div>
-                                <div className="text-xs text-gray-600">Highest Package</div>
-                              </div>
-                              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                                <div className="text-2xl font-bold text-blue-600">₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'}L</div>
-                                <div className="text-xs text-gray-600">Average Package</div>
-                              </div>
-                              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-                                <div className="text-2xl font-bold text-purple-600">{college.placement.percentage || '-'}%</div>
-                                <div className="text-xs text-gray-600">Placement Rate</div>
-                              </div>
+                    {/* PLACEMENT - FROM TOC #06 - Guest Gated - Only show if data exists */}
+                    {college?.placement && (
+                      <section id="seo-placement">
+                        <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
+                        <p className="text-gray-700 text-sm mb-4">
+                          As per {college.name} Placement report, the average package stood at ₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'} LPA.
+                        </p>
+                        <GuestGate title="Placement Data">
+                          <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                              <div className="text-2xl font-bold text-green-600">₹{college.placement.highest ? (college.placement.highest / 100000).toFixed(1) : '-'}L</div>
+                              <div className="text-xs text-gray-600">Highest Package</div>
                             </div>
-                            {college.placement.top_recruiters && college.placement.top_recruiters.length > 0 && (
-                              <div className="mt-4">
-                                <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
-                                <p className="text-sm text-gray-700">{college.placement.top_recruiters.join(', ')}</p>
-                              </div>
-                            )}
-                          </GuestGate>
-                        </>
-                      ) : (
-                        <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Placement details will be updated soon.</p>
-                      )}
-                    </section>
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                              <div className="text-2xl font-bold text-blue-600">₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'}L</div>
+                              <div className="text-xs text-gray-600">Average Package</div>
+                            </div>
+                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
+                              <div className="text-2xl font-bold text-purple-600">{college.placement.percentage || '-'}%</div>
+                              <div className="text-xs text-gray-600">Placement Rate</div>
+                            </div>
+                          </div>
+                          {college.placement.top_recruiters && college.placement.top_recruiters.length > 0 && (
+                            <div className="mt-4">
+                              <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
+                              <p className="text-sm text-gray-700">{college.placement.top_recruiters.join(', ')}</p>
+                            </div>
+                          )}
+                        </GuestGate>
+                      </section>
+                    )}
 
                     {/* VS OTHER COLLEGES - FROM TOC #07 */}
                     <section id="seo-comparison">
