@@ -880,6 +880,32 @@ const CollegeForm = () => {
     setFormData({ ...formData, updates: formData.updates.filter((_, i) => i !== index) });
   };
 
+  // Announcements management (Latest News for sidebar)
+  const addAnnouncement = () => {
+    setFormData({
+      ...formData,
+      announcements: [...(formData.announcements || []), { 
+        title: '', 
+        date: new Date().toISOString().split('T')[0], 
+        link: '', 
+        content: '' 
+      }]
+    });
+  };
+
+  const updateAnnouncement = (index, field, value) => {
+    const newAnnouncements = [...(formData.announcements || [])];
+    newAnnouncements[index] = { ...newAnnouncements[index], [field]: value };
+    setFormData({ ...formData, announcements: newAnnouncements });
+  };
+
+  const removeAnnouncement = (index) => {
+    setFormData({ 
+      ...formData, 
+      announcements: (formData.announcements || []).filter((_, i) => i !== index) 
+    });
+  };
+
   const addScholarship = () => {
     setFormData({
       ...formData,
