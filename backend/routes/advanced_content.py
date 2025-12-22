@@ -158,13 +158,13 @@ def serialize_content(content: dict) -> dict:
 
 # Get all advanced content pages
 @router.get("", response_model=List[AdvancedContentResponse])
-async def get_all_advanced_content(admin = Depends(get_current_admin_user)):
+async def get_all_advanced_content(admin = Depends(verify_admin_token)):
     contents = await db.advanced_content.find({}, {"_id": 0}).to_list(1000)
     return [serialize_content(c) for c in contents]
 
 # Get single advanced content page
 @router.get("/{content_id}", response_model=AdvancedContentResponse)
-async def get_advanced_content(content_id: str, admin = Depends(get_current_admin_user)):
+async def get_advanced_content(content_id: str, admin = Depends(verify_admin_token)):
     content = await db.advanced_content.find_one({"id": content_id}, {"_id": 0})
     if not content:
         raise HTTPException(status_code=404, detail="Content not found")
@@ -172,7 +172,7 @@ async def get_advanced_content(content_id: str, admin = Depends(get_current_admi
 
 # Create new advanced content page
 @router.post("", response_model=AdvancedContentResponse)
-async def create_advanced_content(data: AdvancedContentCreate, admin = Depends(get_current_admin_user)):
+async def create_advanced_content(data: AdvancedContentCreate, admin = Depends(verify_admin_token)):
     content_id = str(uuid4())
     now = datetime.now(timezone.utc).isoformat()
     
@@ -203,7 +203,7 @@ async def create_advanced_content(data: AdvancedContentCreate, admin = Depends(g
 
 # Update advanced content page
 @router.put("/{content_id}", response_model=AdvancedContentResponse)
-async def update_advanced_content(content_id: str, data: AdvancedContentCreate, admin = Depends(get_current_admin_user)):
+async def update_advanced_content(content_id: str, data: AdvancedContentCreate, admin = Depends(verify_admin_token)):
     existing = await db.advanced_content.find_one({"id": content_id})
     if not existing:
         raise HTTPException(status_code=404, detail="Content not found")
@@ -236,7 +236,7 @@ async def update_advanced_content(content_id: str, data: AdvancedContentCreate, 
 
 # Delete advanced content page
 @router.delete("/{content_id}")
-async def delete_advanced_content(content_id: str, admin = Depends(get_current_admin_user)):
+async def delete_advanced_content(content_id: str, admin = Depends(verify_admin_token)):
     existing = await db.advanced_content.find_one({"id": content_id})
     if not existing:
         raise HTTPException(status_code=404, detail="Content not found")
