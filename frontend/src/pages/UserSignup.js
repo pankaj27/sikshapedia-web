@@ -218,6 +218,7 @@ const UserSignup = () => {
         phone,
         city,
         course,
+        exam: exam || null,
         referral_code: referralCode || null
       });
       
