@@ -471,10 +471,10 @@ const CollegeDetailPage = ({ overrideId }) => {
   }
 
   const tableOfContents = [
-    { num: '01', title: `${college.name} Admission 2026 Dates`, id: 'seo-admission-dates' },
-    { num: '02', title: `${college.name} Fees 2026`, id: 'seo-fees' },
+    { num: '01', title: `${college.name} Admission ${year + 1} Dates`, id: 'seo-admission-dates' },
+    { num: '02', title: `${college.name} Fees ${year + 1}`, id: 'seo-fees' },
     { num: '03', title: `${college.name} Ranking`, id: 'seo-ranking' },
-    { num: '04', title: `${college.name} Admission 2026`, id: 'seo-admission' },
+    { num: '04', title: `${college.name} Admission ${year + 1}`, id: 'seo-admission' },
     { num: '05', title: `${college.name} Cutoff`, id: 'seo-cutoff' },
     { num: '06', title: `${college.name} Placement`, id: 'seo-placement' },
     { num: '07', title: `${college.name} vs Other Colleges`, id: 'seo-comparison' },
