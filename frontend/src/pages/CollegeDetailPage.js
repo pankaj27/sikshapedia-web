@@ -1440,17 +1440,16 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </section>
                 )}
 
-                {/* PLACEMENT */}
-                <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
-                  
-                  {(college.placement || college.placements) ? (
-                    <>
-                      <p className="text-gray-700 text-sm mb-4">
-                        As per the {college.name} Placement report, the average package stood at <strong>₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : college.placements?.average ? (college.placements.average / 100000).toFixed(1) : '-'} LPA</strong>.
-                      </p>
+                {/* PLACEMENT - Only show if placement data exists */}
+                {(college.placement || college.placements) && (
+                  <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
+                    
+                    <p className="text-gray-700 text-sm mb-4">
+                      As per the {college.name} Placement report, the average package stood at <strong>₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : college.placements?.average ? (college.placements.average / 100000).toFixed(1) : '-'} LPA</strong>.
+                    </p>
 
-                      <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="grid grid-cols-3 gap-4 mb-6">
                       {(college.placement?.highest || college.placements?.highest) && (
                         <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
                           <div className="text-3xl font-bold text-green-600 mb-2">
@@ -1477,21 +1476,18 @@ const CollegeDetailPage = ({ overrideId }) => {
                       )}
                     </div>
 
-                      {college.placement?.top_recruiters && college.placement.top_recruiters.length > 0 && (
-                        <div className="mt-4">
-                          <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {college.placement.top_recruiters.map((r, idx) => (
-                              <span key={idx} className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-full">{r}</span>
-                            ))}
-                          </div>
+                    {college.placement?.top_recruiters && college.placement.top_recruiters.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {college.placement.top_recruiters.map((r, idx) => (
+                            <span key={idx} className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-full">{r}</span>
+                          ))}
                         </div>
-                      )}
-                    </>
-                  ) : (
-                    <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Placement details will be updated soon.</p>
-                  )}
-                </section>
+                      </div>
+                    )}
+                  </section>
+                )}
 
                 {/* RANKING */}
                 <section id="ranking" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
