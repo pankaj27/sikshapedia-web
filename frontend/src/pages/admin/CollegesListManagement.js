@@ -82,6 +82,9 @@ const CollegesListManagement = () => {
             <Button variant="outline" size="sm" onClick={() => {}}>
               <FiDownload className="w-4 h-4 mr-1" /> Export
             </Button>
+            <Button variant="outline" size="sm" onClick={() => navigate('/admin/colleges/simple/new')} className="border-green-500 text-green-600 hover:bg-green-50">
+              <FiPlus className="w-4 h-4 mr-1" /> Simple Form
+            </Button>
             <Button size="sm" onClick={() => navigate('/admin/colleges/add')} className="bg-orange-600 hover:bg-orange-700 text-white">
               <FiPlus className="w-4 h-4 mr-1" /> Add New
             </Button>
