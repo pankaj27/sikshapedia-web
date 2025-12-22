@@ -60,6 +60,8 @@ const UserSignup = () => {
   
   // All courses for dropdown (using centralized data as fallback)
   const [courses, setCourses] = useState(ALL_INDIA_COURSES);
+  // All cities for dropdown (using centralized data as fallback)
+  const [cities, setCities] = useState(INDIA_CITIES);
   
   // Pre-fill from Google auth or referral
   const googleEmail = searchParams.get('email');
