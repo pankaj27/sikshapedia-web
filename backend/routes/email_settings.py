@@ -586,3 +586,130 @@ async def reset_templates_to_defaults():
         await db.email_templates.insert_one(template_doc)
     
     return {"success": True, "message": "Templates reset to defaults"}
+
+
+# ============================================
+# Test Email Endpoint
+# ============================================
+
+class TestEmailRequest(BaseModel):
+    recipient_email: EmailStr
+    template_key: Optional[str] = None  # Optional: use a template
+
+@router.post("/test")
+async def send_test_email(request: TestEmailRequest):
+    """Send a test email to verify Resend configuration"""
+    import os
+    import asyncio
+    import resend
+    
+    RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+    SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'noreply@admissionbuddy.co')
+    REPLY_TO_EMAIL = os.environ.get('REPLY_TO_EMAIL', 'support@admissionbuddy.co')
+    
+    if not RESEND_API_KEY:
+        raise HTTPException(status_code=500, detail="RESEND_API_KEY not configured")
+    
+    resend.api_key = RESEND_API_KEY
+    
+    # Get template if specified
+    html_content = None
+    subject = "🧪 Test Email from AdmissionBuddy"
+    
+    if request.template_key and db:
+        template = await db.email_templates.find_one({"template_key": request.template_key}, {"_id": 0})
+        if template:
+            settings = await db.email_settings.find_one({}, {"_id": 0}) or {}
+            
+            # Replace variables with sample data
+            sample_data = {
+                "user_name": "Test User",
+                "user_email": request.recipient_email,
+                "user_phone": "+91 9876543210",
+                "college_name": "IIT Delhi",
+                "course_name": "B.Tech Computer Science",
+                "inquiry_id": "TEST-001",
+                "reset_link": "https://admissionbuddy.co/reset?token=test",
+                "expiry_time": "24 hours",
+                "institute_name": "Test Institute",
+                "institute_id": "INST-TEST",
+                "login_email": "admin@test.com",
+                "temp_password": "TestPass123!",
+                "lead_source": "Email Test",
+                "message": "This is a test message.",
+                "sender_name": settings.get("sender_name", "AdmissionBuddy"),
+                "primary_color": settings.get("primary_color", "#f97316"),
+                "footer_text": settings.get("footer_text", "© 2024 AdmissionBuddy"),
+                "website_url": "https://admissionbuddy.co"
+            }
+            
+            html_content = template["html_content"]
+            subject = template["subject"]
+            
+            for key, value in sample_data.items():
+                html_content = html_content.replace(f"{{{{{key}}}}}", str(value))
+                subject = subject.replace(f"{{{{{key}}}}}", str(value))
+    
+    if not html_content:
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: linear-gradient(135deg, #f97316, #ea580c); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+                .content {{ background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }}
+                .success {{ background: #d1fae5; color: #065f46; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; }}
+                .footer {{ text-align: center; margin-top: 20px; color: #666; font-size: 12px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🧪 Test Email</h1>
+                </div>
+                <div class="content">
+                    <div class="success">
+                        <strong>✅ Resend Configuration Working!</strong>
+                    </div>
+                    <p>This is a test email from AdmissionBuddy to verify your Resend email configuration.</p>
+                    <p><strong>Configuration Details:</strong></p>
+                    <ul>
+                        <li>Sender: {SENDER_EMAIL}</li>
+                        <li>Reply-To: {REPLY_TO_EMAIL}</li>
+                        <li>Recipient: {request.recipient_email}</li>
+                    </ul>
+                    <p>If you received this email, your Resend integration is working correctly! 🎉</p>
+                </div>
+                <div class="footer">
+                    <p>© 2024 AdmissionBuddy. All rights reserved.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    try:
+        params = {
+            "from": f"AdmissionBuddy <{SENDER_EMAIL}>",
+            "to": [request.recipient_email],
+            "subject": subject,
+            "html": html_content,
+            "reply_to": REPLY_TO_EMAIL
+        }
+        
+        # Run sync SDK in thread to keep FastAPI non-blocking
+        email_response = await asyncio.to_thread(resend.Emails.send, params)
+        
+        email_id = email_response.get("id") if isinstance(email_response, dict) else getattr(email_response, 'id', None)
+        
+        return {
+            "success": True,
+            "message": f"Test email sent to {request.recipient_email}",
+            "email_id": email_id,
+            "sender": SENDER_EMAIL,
+            "reply_to": REPLY_TO_EMAIL
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
