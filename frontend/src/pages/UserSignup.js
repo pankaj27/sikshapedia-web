@@ -97,7 +97,7 @@ const UserSignup = () => {
   
   const fetchCourses = async () => {
     try {
-      const response = await api.get('/courses');
+      const response = await api.get('/courses?limit=500');
       const apiCourses = response.data.map(c => typeof c === 'object' ? c.name : c);
       // Use API courses if available, otherwise keep the centralized list
       if (apiCourses.length > 0) {
