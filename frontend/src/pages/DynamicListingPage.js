@@ -120,6 +120,8 @@ const DynamicListingPage = () => {
   const [admissionOpenColleges, setAdmissionOpenColleges] = useState([]); // Admissions Open colleges
   const [applyModalOpen, setApplyModalOpen] = useState(false);
   const [selectedCollege, setSelectedCollege] = useState(null);
+  const [cityFilterSearch, setCityFilterSearch] = useState(''); // Search text for city filter
+  const [stateFilterSearch, setStateFilterSearch] = useState(''); // Search text for state filter
   
   // Ref for infinite scroll observer
   const loadMoreRef = useRef(null);
