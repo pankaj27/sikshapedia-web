@@ -1,141 +1,126 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to populate the application with data, centralize data fetching, and fix UI bugs. The scope expanded to:
-1.  **Fix Critical Bugs:**
-    *   Fix a validation error on the admin college entry form preventing saves.
-    *   Fix school and university listing pages (, ) which were showing no data.
-2.  **Implement New Features & Enhancements:**
-    *   Integrate the Resend email API for sending transactional emails.
-    *   Make the entire college detail page () fully dynamic, removing all hardcoded content (Q&A, banners, logos, courses, fees, admissions data, rankings, placements, FAQs, news, similar colleges, and location info).
-    *   Ensure that sections on the college detail page are completely hidden if their corresponding data is not present in the database, instead of showing placeholder messages.
-3.  **Data Seeding & Testing:**
-    *   Comprehensively test the institute entry form by creating one of each institution type (School, University, College) with complete data.
-    *   Verify that the newly created institutions and their data appear correctly on the frontend.
+The user's initial request was to populate data, fix UI bugs, and integrate an email service. The scope evolved significantly to include:
+1.  **UI/UX Unification:** Make the  (used for colleges and schools) and  have a consistent, modern UI.
+2.  **Complete Dynamism:** Remove ALL hardcoded content, placeholder text, and random data generators from the institution detail pages. The user is extremely frustrated by this issue, and it is the highest priority. The frontend must *only* display data that exists in the database.
+3.  **Feature Implementation:** Ensure various data-driven badges (e.g., Admission Partner, No Cost EMI, Featured) and a Book Your Seat sidebar widget appear correctly and conditionally on all detail pages.
+4.  **Form Modification:** Make the  field non-mandatory in the admin institution entry form.
+5.  **Comprehensive Testing:** Create one new college, one school, and one university, populating them with complete data (SEO content, main page content, TOC menus, logos, banners, videos, all badges, widgets, and FAQs) to verify all dynamic features.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is now significantly more dynamic and data-driven. The critical bug preventing the admin from saving colleges has been fixed. A full Resend email integration is in place, though it requires user-side DNS configuration to be production-ready. All institution types (Schools, Universities, Colleges) now correctly display on their respective listing pages, all drawing from a single, unified  database collection.
+The application's three main institution detail pages ( and ) have been refactored to be almost fully dynamic and now share a consistent, modern UI. New features like conditional badges (Admission Partner, Featured, etc.) and a Book Your Seat sidebar have been implemented across all pages. The  field in the admin form is now optional.
 
-The  has been completely overhauled. It no longer contains any hardcoded placeholder content. Every section—from the main banner and logo down to admissions, placements, rankings, FAQs, and news—is dynamically populated from the database. Crucially, sections for which no data exists are now hidden from the view entirely, creating a cleaner and more honest user experience.
+The agent has fixed several instances of hardcoded content, including a non-functional video section (by implementing a YouTube URL-to-embed converter), fake  rankings, and static descriptive paragraphs. Three fully-featured test institutions have been successfully created via API calls.
+
+However, the user remains frustrated as some hardcoded fallback text still exists. The agent was in the middle of a final, aggressive purge of all remaining hardcoded content when the session ended.
 
 **Last working item**:
--   **Last item agent was working**: The agent's final task was to implement conditional rendering on . The user explicitly requested that any section on the page for which there is no data in the database should be completely hidden, rather than displaying a data will be updated soon message. The agent wrapped every dynamic section in a conditional check (e.g., ) to achieve this.
--   **Status**: USER VERIFICATION PENDING
--   **Agent Testing Done**: Y
--   **Which testing method agent to use?**: manual testing by curl. The agent should verify by fetching a college record that has some data fields empty (e.g., no  data) and taking a screenshot to confirm that the corresponding section does not render on the page.
+-   **Last item agent was working**: The agent was executing the user's explicit and urgent demand to remove all remaining hardcoded content. The immediate task was to refactor , starting with the SEO content section (which was just completed) and then moving on to make the Table of Contents (TOC) menu fully dynamic, so it only shows links to sections for which data actually exists in the database.
+-   **Status**: IN PROGRESS
+-   **Agent Testing Done**: N
+-   **Which testing method agent to use?**: Frontend testing agent. After the refactor is complete, the agent must run a comprehensive test. This should include creating a test institution with several empty data fields (e.g., no placement data, no scholarships) and verifying that the corresponding links do not appear in the Table of Contents.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   None.
+-   **Issue 1: Remove ALL hardcoded content from the entire site (P0)**
+    -   **Description**: This is the user's highest priority and a major source of frustration. Despite multiple fixes, fallback text and other hardcoded elements have persisted. The goal is to make the site 100% data-driven.
+    -   **Attempted fixes**: The agent has iteratively removed hardcoded video titles, random numbers for rankings, and static descriptive paragraphs. The last action was removing a fallback in the SEO section.
+    -   **Next debug checklist**:
+        1.  Complete the refactor of  to make the Table of Contents () dynamic. The menu should be generated based on which data sections (e.g., , ) are present and not empty.
+        2.  Perform a final  search across  and  for any remaining hardcoded fallback text, especially default sentences like .
+        3.  Refactor any remaining sections that show placeholder messages (e.g., No FAQs available) in the main content area to be completely hidden if the data is missing.
+    -   **Why fix this issue?**: To finally satisfy the user's core requirement for a fully dynamic frontend and resolve their main point of frustration.
+    -   **Status**: IN PROGRESS
+    -   **Is recurring issue?**: Y
+    -   **Should Test frontend/backend/both after fix?**: Frontend
 
 **In progress Task List**:
--   None.
+-   **Task 1: Complete the removal of hardcoded content (P0)**
+    -   **Description**: Finalize the process of making the institution detail pages 100% dynamic.
+    -   **Where to resume**: In , the agent has just fixed the SEO content area. The next step is to refactor the hardcoded  array to be dynamically generated based on the availability of data for each section.
+    -   **What will be achieved with this?**: The detail pages will be completely free of hardcoded content, finally meeting the user's explicit and repeated demands.
+    -   **Status**: IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?**: Frontend
 
 **Upcoming and Future Tasks**
-
 *   **Upcoming Tasks:**
-    *   **(P0) DNS Configuration for Resend:** Guide the user on how to add the necessary DKIM and SPF records to their domain's DNS settings. This is critical to prevent their emails from bouncing or being marked as spam.
-    *   **(P1)** Generate Missing Listing Pages: Use the  functionality to create the Type Pages and Accreditation Pages.
-    *   **(P2)** Seed Data for Leads & Applications: Populate the  and  collections with test data to fully test the Institute Dashboard's Leads and Applications tabs.
+    *   **(P1) DNS Configuration for Resend:** Guide the user on adding DKIM/SPF records to their domain's DNS settings to ensure email deliverability.
+    *   **(P2)** Generate Missing Listing Pages: Use  to create Type Pages and Accreditation Pages.
+    *   **(P3)** Seed Data for Leads & Applications: Populate  and  collections with test data.
 *   **Future Tasks:**
-    *   Refactor  to use a dynamic approach instead of a large, hardcoded array.
-    *   Break down large React components like  and  into smaller, more manageable sub-components.
-    *   Create a dedicated automated test suite for the dynamic routing and listing functionality.
+    *   Refactor large components like  into smaller, reusable sub-components to reduce code duplication and improve maintainability.
+    *   Consolidate routing so a single detail page component handles all institution types.
+    *   Create a dedicated automated test suite for dynamic routing and listing functionality.
     *   Investigate replacing  workarounds with a proper React Router  solution.
-    *   Improve the application's search functionality with fuzzy matching.
-    *   Add a Recent Searches history feature for users.
-    *   Add a cropping/editing tool for uploaded SVGs in the admin panel to give admins more control over visuals.
 
 **Completed work in this session**
--   **Bug Fix (Admin College Form):**
-    -   Fixed the critical validation error in  by ensuring the  field is submitted as an array of strings, not objects.
--   **Feature (Resend Email Integration):**
-    -   Successfully integrated the Resend API for sending emails.
-    -   Configured , , and  in the backend  file.
-    -   Created a centralized and reusable email service in .
-    -   Added a test endpoint  to allow for easy verification of the email configuration.
--   **Feature (Fully Dynamic College Detail Page):**
-    -   Removed all hardcoded data from , including Q&A, FAQs, courses, fees, news, rankings, placements, and more.
-    -   All sections now dynamically pull data from the MongoDB  collection.
-    -   Implemented conditional rendering to completely hide sections if their corresponding data fields are empty or not present, as requested by the user.
--   **Bug Fix (Institution Listing Pages):**
-    -   Fixed the  and  pages, which were previously empty.
-    -   Modified the backend routes (, ) to correctly query the central  collection using an  filter.
--   **Data Seeding & Verification:**
-    -   Created three distinct institutions (a school, a university, and a college) via API calls to test the data pipeline.
-    -   Verified that these institutions and their data display correctly on both the admin panel and public-facing listing pages.
+-   **UI Unification:** Successfully updated  to match the UI of , creating a consistent design across all institution detail pages.
+-   **Fully Dynamic University Page:** Rewrote , removing all its hardcoded content and making it fetch data dynamically from the backend.
+-   **Badges and Sidebar Implemented:** Added several conditional badges (Admission Partner, No Cost EMI, Featured) and the Book Your Seat sidebar to both  and .
+-   **Hardcoded Content Fixes:**
+    -   Fixed a broken video embed by creating a  helper function in  to convert any YouTube link into the correct iframe  format.
+    -   Removed hardcoded  for rankings and static placeholder paragraphs in the SEO content section.
+-   **Admin Form Update:** Made the  field non-mandatory in .
+-   **Data Seeding:** Successfully created and verified three new, fully-featured institutions (a College, a School, and a University) using direct API calls.
 
 **Earlier issues found/mentioned but not fixed**
 -   **Issue 1: Maximum update depth exceeded React Error**
-    -   **Debug checklist**: This recurring warning appears in the browser console on multiple pages and has been traced to an external script, .
-    -   **Why to solve this issue and what will be achieved with this?**: While not breaking functionality, this error suggests a potential performance bottleneck or rendering loop from a third-party script that could cause instability in the future.
-    -   **Should Test frontend/backend/both after fix**: frontend
+    -   **Debug checklist**: A recurring warning in the browser console, traced to an external script .
+    -   **Why to solve this issue and what will be achieved with this?**: It suggests a potential performance bottleneck or rendering loop from a third-party script that could cause future instability.
+    -   **Should Test frontend/backend/both after fix**: Frontend
     -   **Is recurring issue?**: Y
-
-**Known issue recurrence from previous fork**
--   None.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Conditional Rendering:** Using JavaScript's  operator within JSX to decide whether to render a component or an entire section, based on the presence and validity of its data (e.g., ).
--   **Third-Party API Integration:** Integrating the Resend API by managing keys in , creating a dedicated backend service for abstraction, and adding a test endpoint for verification.
--   **Data-Driven UI:** Transitioning a component from static, hardcoded HTML to a fully dynamic view that adapts its structure and content based on data fetched from an API.
--   **Backend Route Consolidation:** Modifying backend API routes (, ) to query a single, centralized data collection () by applying a filter, which simplifies data management.
--   **Data Transformation:** Transforming data structures on the client-side between what the API provides (e.g., array of strings) and what the UI components require (e.g., array of objects for a form).
+-   **Component UI Unification:** Refactoring a component's JSX and styling to visually match another for design consistency across the application.
+-   **URL Transformation:** Creating and using a client-side helper function () to parse various URL formats and convert them into a standardized format required by an  for embedding.
+-   **Robust Conditional Rendering:** Improving conditional checks from simple existence () to more specific validation () to correctly hide sections when the data object exists but is empty.
+-   **API-Based Data Seeding:** Utilizing  with  and  requests to directly create and update database records for testing, a necessary workaround when automated testing tools fail.
 
 **key DB schema**
--   ** collection:**
-    -   :  - A new field was added to store latest news and announcement objects, each typically containing a , Mon Dec 22 11:14:54 UTC 2025, and .
+-   ** collection:** Fields used for new features include , , , , , and .
 
 **changes in tech stack**
--   **Resend:** The Resend email service was integrated as the primary email provider.
+-   None.
 
 **All files of reference**
--   : This was the central focus of the session, undergoing a complete transformation to become fully dynamic.
--   : File where the critical form submission bug was fixed and new UI sections were added.
--   : The new, reusable service created for handling all email-sending logic.
--   : One of the backend routes that was fixed to serve data from the correct collection.
--   : The other backend route fixed for the same purpose.
--   : The main FastAPI file where Pydantic models were updated to include new fields like .
+-   : The central file for this session. It renders both College and School pages and is the target of the final hardcoding removal.
+-   : Served as the UI template and was also made fully dynamic.
+-   : Modified to make a form field optional.
 
 **Areas that need refactoring**:
--   ****: This component is now very large and handles the logic for rendering over a dozen different sections. It is a prime candidate for being broken down into smaller, self-contained components (e.g., , , ), each responsible for its own data fetching and rendering logic.
--   **Backend Routes for Institutions**: The  and  files still exist but now simply query the  collection. A better long-term solution would be to deprecate these files and consolidate all institution-fetching logic into , using a query parameter like  to differentiate.
+-   ** & **: These components are now very large and have significant code duplication (e.g., rendering logic for badges, sidebars, and content sections). This logic should be extracted into smaller, reusable components and custom hooks to improve maintainability.
+-   **Routing Architecture**: The use of two separate detail page components (, ) plus a router component () is overly complex. This should be consolidated into a single, more powerful detail page component.
 
 **key api endpoints**
--    (New): Sends a test email to verify the Resend integration.
--    (Modified): Endpoint was fixed to return a list of schools by querying the  collection.
--    (Modified): Endpoint was fixed to return a list of universities by querying the  collection.
--   : Heavily used to seed the database with dynamic content like announcements, courses, and FAQs for testing purposes.
--   : Modified to include  in its response.
+-   : Used with  to create test institutions.
+-   : Used with  to update test institutions (e.g., change status from draft to published).
 
 **Critical Info for New Agent**
--   The most important next step is to guide the user through configuring their DNS for the  domain. Without proper DKIM/SPF records, all emails sent via Resend will likely be flagged as spam or bounce.
--   The user is very focused on ensuring the frontend has no hardcoded data. Before making any changes, double-check that new features pull their content from the backend.
--   The architecture now uses a single  collection for all institution types (College, School, University). When adding or querying data, be sure to use the  field correctly.
--   The  is now 100% dynamic. If a user reports missing content, the first step should be to check the database entry for that college, not the React code.
-
-**documents and test_reports created in this job**
--   None.
+-   **User Frustration is HIGH:** The user is extremely tired of finding hardcoded content. Your absolute top priority is to finish the task of removing ALL placeholder text, fallback sentences, and static data. The application must only display data that comes directly from the backend database.
+-   ** is Shared:** Remember that  serves both college and school pages. Any changes here will affect both.
+-   **API for Seeding:** For creating test data, use  to make direct API calls. The testing agent proved unreliable. New institutions must be updated from  to  to be visible on public pages.
+-   **YouTube Helper:** A  function now exists in . This is a prime candidate for being moved to a shared  file and used in other components if needed.
 
 **Last 10 User Messages and any pending HUMAN messages**
 -   
 -   
 -   
 -   
--    (User points to the hardcoded Ask Your Question form)
 -   
 -   
 -   
 -   
--    (User points out hardcoded FAQs and Popular Courses)
+-   
+-   
 
 **Project Health Check:**
--   **Broken**: No features are currently broken.
--   **Mocked**: Razorpay payments remain mocked.
--   **Needs Attention**: The Resend email integration is not production-ready. It requires DNS configuration from the user to ensure proper email delivery.
+-   **Broken**: None.
+-   **Mocked**: Razorpay payments.
+-   **Needs Attention**: Resend email integration requires user-side DNS configuration. Significant code duplication exists in the detail page components, which needs refactoring.
 
 **3rd Party Integrations**
 -   **Razorpay** (Payments) — Mocked.
@@ -145,16 +130,13 @@ The  has been completely overhauled. It no longer contains any hardcoded placeho
 -   **qrcode.react** (Frontend QR Code Generation)
 
 **Testing status**
--   **Testing agent used after significant changes**: YES
+-   **Testing agent used after significant changes**: YES, but it failed to create data correctly, leading the agent to use  instead.
 -   **Troubleshoot agent used after agent stuck in loop**: NO
 -   **Test files created**: None
 -   **Known regressions**: None
 
 **Credentials to test flow:**
 -   **Admin**:  / 
--   **Institute**:  / 
--   **User**:  /  (This user was created during the session for testing).
 
 **What agent forgot to execute**
--   The agent initially missed the user's implicit requirement to hide empty sections, instead showing placeholder text. This was corrected after the user pointed it out again.
--   The agent did not fully address the user's structural question about the Table of Contents menu connecting to the SEO content area versus the main page content. The focus shifted to removing hardcoded data, and the architectural refinement was left for the future.</analysis>
+-   The agent repeatedly failed to perform a comprehensive removal of all hardcoded content, leading to multiple frustrating iterations for the user on the same core issue. The agent's checks were not thorough enough, missing fallback text and random data generators until the user pointed them out explicitly.</analysis>
