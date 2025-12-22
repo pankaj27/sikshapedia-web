@@ -1389,42 +1389,35 @@ const CollegeDetailPage = ({ overrideId }) => {
                 <section id="cutoff" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                   <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
                   <p className="text-gray-700 text-sm mb-4">
-                    The cutoff varies for different programs and categories. Below are the cutoff ranks for General Category:
+                    The cutoff varies for different programs and categories:
                   </p>
 
-                  <h3 className="text-xl font-bold mb-3">JEE Advanced Cutoff {year}</h3>
-                  <div className="overflow-x-auto mb-6">
-                    <table className="w-full border-collapse border">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Opening Rank {year}</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank {year}</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank {year - 1}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Computer Science Engineering</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-green-600">1</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-blue-600">66</td>
-                          <td className="border px-4 py-3 text-sm">68</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Electrical Engineering</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-green-600">100</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-blue-600">418</td>
-                          <td className="border px-4 py-3 text-sm">464</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="border px-4 py-3 text-sm">Mechanical Engineering</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-green-600">800</td>
-                          <td className="border px-4 py-3 text-sm font-bold text-blue-600">1766</td>
-                          <td className="border px-4 py-3 text-sm">1685</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  {college?.cutoff_data && college.cutoff_data.length > 0 ? (
+                    <div className="overflow-x-auto mb-6">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Course/Program</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {college.cutoff_data.map((item, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
+                              <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
+                              <td className="border px-4 py-3 text-sm font-bold text-blue-600">{item.cutoff || item.rank}</td>
+                              <td className="border px-4 py-3 text-sm">{item.year || year}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 bg-yellow-50 border border-yellow-200 p-4 rounded-lg">Cutoff details will be updated soon after official announcement.</p>
+                  )}
                 </section>
 
                 {/* PLACEMENT */}
