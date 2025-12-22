@@ -2098,14 +2098,17 @@ const HomepageSettings = () => {
                           className="flex-1 border rounded px-3 py-1.5 text-sm"
                           placeholder="Image URL"
                         />
-                        <label className="text-xs text-blue-600 cursor-pointer hover:underline whitespace-nowrap">
+                        <label className={`text-xs cursor-pointer hover:underline whitespace-nowrap flex items-center gap-1 ${uploadingIndex === `city-${index}` ? 'text-gray-400' : 'text-blue-600'}`}>
                           <input
                             type="file"
                             accept="image/*"
                             className="hidden"
+                            disabled={uploadingIndex === `city-${index}`}
                             onChange={async (e) => {
                               const file = e.target.files[0];
                               if (file) {
+                                setUploadingIndex(`city-${index}`);
+                                setUploadMessage({ type: '', text: '' });
                                 const formData = new FormData();
                                 formData.append('file', file);
                                 try {
@@ -2120,14 +2123,29 @@ const HomepageSettings = () => {
                                   const data = await res.json();
                                   if (data.url) {
                                     updateCity(index, 'image', data.url);
+                                    setUploadMessage({ type: 'success', text: `✓ Image uploaded for ${city.name || 'city'}!` });
+                                  } else {
+                                    setUploadMessage({ type: 'error', text: data.detail || 'Upload failed' });
                                   }
                                 } catch (err) {
                                   console.error('Upload failed:', err);
+                                  setUploadMessage({ type: 'error', text: 'Upload failed. Please try again.' });
+                                } finally {
+                                  setUploadingIndex(null);
+                                  setTimeout(() => setUploadMessage({ type: '', text: '' }), 3000);
                                 }
                               }
                             }}
                           />
-                          📤 Upload
+                          {uploadingIndex === `city-${index}` ? (
+                            <span className="flex items-center gap-1">
+                              <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                              </svg>
+                              Uploading...
+                            </span>
+                          ) : '📤 Upload'}
                         </label>
                       </div>
                       <input
