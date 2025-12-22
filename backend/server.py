@@ -5881,7 +5881,7 @@ async def get_all_cities(state: Optional[str] = None):
     query = {}
     if state:
         query["state"] = state
-    cities = await db.cities.find(query, {"_id": 0}).sort("name", 1).to_list(500)
+    cities = await db.cities.find(query, {"_id": 0}).sort("name", 1).to_list(5000)
     return cities
 
 # ============================================
