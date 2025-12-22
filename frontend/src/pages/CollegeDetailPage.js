@@ -866,10 +866,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                         {college.courses?.length > 0 && <> The institute offers {college.courses.length} courses across various disciplines.</>}
                       </p>
                     )}
-                    {college.placement && (
+                    {college.placement?.average > 0 && (
                       <p className="text-gray-800 leading-relaxed mb-4">
-                        As per {college.name} Placements, the average package was <strong>INR {college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'} LPA</strong>
-                        {college.placement.highest && <> with the highest package reaching <strong>INR {(college.placement.highest / 100000).toFixed(1)} LPA</strong></>}.
+                        As per {college.name} Placements, the average package was <strong>INR {(college.placement.average / 100000).toFixed(1)} LPA</strong>
+                        {college.placement.highest > 0 && <> with the highest package reaching <strong>INR {(college.placement.highest / 100000).toFixed(1)} LPA</strong></>}.
                         {college.placement.top_recruiters?.length > 0 && <> Top recruiters include {college.placement.top_recruiters.slice(0, 3).join(', ')}.</>}
                       </p>
                     )}
