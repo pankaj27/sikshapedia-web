@@ -1306,14 +1306,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </section>
 
-              {/* COURSES & FEES - Hide when using TOC menu */}
-                <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    {college.name} offers various programs. The fee structure is mentioned below:
-                  </p>
+              {/* COURSES & FEES - Hide when using TOC menu OR when no courses */}
+                {college?.courses && college.courses.length > 0 && (
+                  <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      {college.name} offers various programs. The fee structure is mentioned below:
+                    </p>
 
-                  {college?.courses && college.courses.length > 0 ? (
                     <div className="overflow-x-auto mb-6">
                       <table className="w-full border-collapse border">
                         <thead>
@@ -1344,10 +1344,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                         </tbody>
                       </table>
                     </div>
-                  ) : (
-                    <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Course details will be updated soon.</p>
-                  )}
-                </section>
+                  </section>
+                )}
 
                 {/* ADMISSIONS */}
                 <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
