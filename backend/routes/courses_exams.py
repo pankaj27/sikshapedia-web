@@ -399,15 +399,15 @@ async def create_course_detail(course_data: dict):
 @router.put("/courses-detail/{course_id}", response_model=CourseDetail)
 async def update_course_detail(course_id: str, course_data: dict):
     """Update a detailed course page (admin only)"""
-    existing = await db.courses_detail.find_one({"id": course_id}, {"_id": 0})
+    existing = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
     if not existing:
         raise HTTPException(status_code=404, detail="Course detail not found")
     
     course_data.pop('id', None)
     course_data['updated_at'] = datetime.now(timezone.utc).isoformat()
     
-    await db.courses_detail.update_one({"id": course_id}, {"$set": course_data})
-    updated = await db.courses_detail.find_one({"id": course_id}, {"_id": 0})
+    await db.courses_detailed.update_one({"id": course_id}, {"$set": course_data})
+    updated = await db.courses_detailed.find_one({"id": course_id}, {"_id": 0})
     
     return CourseDetail(**updated)
 
@@ -415,7 +415,7 @@ async def update_course_detail(course_id: str, course_data: dict):
 @router.delete("/courses-detail/{course_id}")
 async def delete_course_detail(course_id: str):
     """Delete a detailed course page (admin only)"""
-    result = await db.courses_detail.delete_one({"id": course_id})
+    result = await db.courses_detailed.delete_one({"id": course_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Course detail not found")
     
