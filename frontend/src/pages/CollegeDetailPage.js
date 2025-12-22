@@ -1472,27 +1472,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                     <p className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">Placement details will be updated soon.</p>
                   )}
                 </section>
-                              {college.placement?.total_offers || college.placements?.total_offers}
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {(college.placement?.top_recruiters || college.placements?.top_recruiters)?.length > 0 && (
-                    <>
-                      <h3 className="text-xl font-bold mb-3">Top Recruiters</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {(college.placement?.top_recruiters || college.placements?.top_recruiters).map((company, idx) => (
-                          <span key={idx} className="px-4 py-2 bg-gray-100 border rounded-lg text-sm font-medium text-gray-700">
-                            {company}
-                          </span>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </section>
 
                 {/* RANKING */}
                 <section id="ranking" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
