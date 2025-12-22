@@ -106,9 +106,8 @@ const NewsPage = () => {
     slug: item.slug || item.id
   }));
 
-  // Trending tags from settings or defaults
-  const defaultTrendingTags = ['CAT 2025', 'JEE Main', 'NEET UG', 'GATE 2026', 'UPSC', 'IIT Admission', 'MBA Colleges', 'CUET', 'NTA', 'Engineering'];
-  const trendingTags = settings?.trending_tags || defaultTrendingTags;
+  // Trending tags - only from settings, no defaults
+  const trendingTags = settings?.trending_tags || [];
 
   const filteredNews = activeCategory === 'all' 
     ? news 
