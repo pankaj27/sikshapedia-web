@@ -386,9 +386,9 @@ const TableBlock = ({ data, onChange }) => {
 
       {/* Table Stats */}
       <div className="flex gap-4 text-sm text-gray-500">
-        <span>{localData.headers.length} columns</span>
+        <span>{headers.length} columns</span>
         <span>•</span>
-        <span>{localData.rows.length} rows</span>
+        <span>{rows.length} rows</span>
       </div>
     </div>
   );
