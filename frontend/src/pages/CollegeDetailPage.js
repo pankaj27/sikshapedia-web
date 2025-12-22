@@ -470,6 +470,18 @@ const CollegeDetailPage = ({ overrideId }) => {
         </div>
       </div>
 
+      {/* BANNER IMAGE */}
+      {college.banner_url && (
+        <div className="w-full h-48 md:h-64 lg:h-72 overflow-hidden">
+          <img 
+            src={college.banner_url} 
+            alt={college.banner_alt || `${college.name} Campus Banner`}
+            className="w-full h-full object-cover"
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
+        </div>
+      )}
+
       {/* HEADER */}
       <div className="border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
