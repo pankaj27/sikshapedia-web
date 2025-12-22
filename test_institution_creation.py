@@ -108,6 +108,8 @@ class InstitutionCreationTester:
             "institution_type": "College",
             "type": "Private",
             "established_year": 1961,
+            "average_fees": 2300000.0,
+            "description": "IIM Ahmedabad is one of India's premier management institutes, known for its rigorous academic programs and excellent placement records.",
             "location": {
                 "state": "Gujarat",
                 "city": "Ahmedabad",
@@ -134,18 +136,21 @@ class InstitutionCreationTester:
             "courses": [
                 {
                     "name": "MBA",
+                    "degree_type": "PG",
                     "duration": "2 Years",
                     "fees": 2300000,
                     "eligibility": "Graduate with CAT score"
                 },
                 {
                     "name": "PGPX",
+                    "degree_type": "PG",
                     "duration": "1 Year", 
                     "fees": 3200000,
                     "eligibility": "8+ years work experience"
                 },
                 {
                     "name": "PhD",
+                    "degree_type": "Doctorate",
                     "duration": "4 Years",
                     "fees": 100000,
                     "eligibility": "Master's degree"
