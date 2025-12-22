@@ -1046,7 +1046,7 @@ class APITester:
         success, response, status = self.make_request("POST", "/institute/login", INSTITUTE_CREDENTIALS)
         if success and "session_token" in response:
             self.institute_session_token = response["session_token"]
-            institution_info = response.get('institution', {})
+            institution_info = response.get('institution', {}) or {}
             needs_password_change = response.get('needs_password_change', False)
             self.log_test("POST /institute/login (valid credentials)", True, 
                          f"Login successful, Institution: {institution_info.get('name', 'N/A')}, Needs password change: {needs_password_change}")
