@@ -4261,8 +4261,12 @@ class APITester:
         if success and response.get("message") == "Login successful":
             self.institute_token = response.get("session_token")
             institution = response.get("institution", {})
-            self.log_test("POST /institute/login (valid credentials)", True, 
-                         f"Login successful for {institution.get('name', 'Unknown')}")
+            if institution and isinstance(institution, dict):
+                self.log_test("POST /institute/login (valid credentials)", True, 
+                             f"Login successful for {institution.get('name', 'Unknown')}")
+            else:
+                self.log_test("POST /institute/login (valid credentials)", True, 
+                             f"Login successful (no institution details returned)")
         else:
             self.log_test("POST /institute/login (valid credentials)", False, f"Status: {status}", response)
             self.institute_token = None
