@@ -453,7 +453,7 @@ class InstitutionCreationTester:
                 
                 # Check placement data for colleges/universities
                 if created_inst["type"] in ["College", "University"]:
-                    placement_data = response.get("placement", {})
+                    placement_data = response.get("placement", {}) or {}
                     has_placement = placement_data.get("highest_package") and placement_data.get("average_package")
                     if has_placement: verification_details.append("Placement Data")
                 
