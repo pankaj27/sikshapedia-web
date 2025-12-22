@@ -1348,7 +1348,7 @@ const fetchCourses = async () => {
 
 ### 🔗 USER SIGNUP FORM TESTING COMPLETED (Dec 22, 2025):
 **Agent:** testing  
-**Message:** User Signup Form comprehensive testing has been completed with a **CRITICAL ISSUE IDENTIFIED**.
+**Message:** User Signup Form comprehensive testing has been completed with a **CRITICAL ISSUE CONFIRMED**.
 
 **Test Results Summary:**
 - ❌ **"School" Option Missing**: The main test requirement FAILED - "School" does not appear in the course dropdown
@@ -1373,8 +1373,8 @@ const fetchCourses = async () => {
 
 **What Works Correctly:**
 - ✅ Page loading and navigation (Step 1 → Step 3)
-- ✅ Pre-fill functionality (name: "School Test User", email: "schooltest@example.com")
-- ✅ City dropdown (Mumbai selection working)
+- ✅ Pre-fill functionality (name: "Final Test", email: "finaltest@example.com")
+- ✅ City dropdown (Mumbai/Delhi selection working)
 - ✅ Form validation ("Please fill all required fields")
 - ✅ Mobile responsiveness (375x667 viewport)
 - ✅ All other course options (B.Tech, MBA, MBBS visible and selectable)
@@ -1392,6 +1392,56 @@ const fetchCourses = async () => {
 - **Technical Debt**: MEDIUM - Simple backend data addition required
 
 **Status:** User Signup Form has **CRITICAL FUNCTIONALITY ISSUE** that must be resolved before deployment. The "School" course option is completely missing from the dropdown, preventing school-interested users from completing registration.
+
+### 🔗 USER SIGNUP FORM RE-TESTING COMPLETED (Dec 22, 2025):
+**Agent:** testing  
+**Message:** User Signup Form re-testing has been completed with **CRITICAL ISSUE STILL PRESENT**.
+
+**Comprehensive Test Results:**
+- ✅ **Page Loading**: "Almost There!" step 3 loads correctly with URL parameters
+- ✅ **Pre-filled Fields**: Name "Final Test" and email "finaltest@example.com" correctly populated
+- ✅ **Phone Number Field**: Accepts input (9876543210) correctly
+- ✅ **City Dropdown**: Functional - Mumbai/Delhi options available and selectable
+- ❌ **CRITICAL FAILURE**: "School" option completely missing from Course dropdown
+- ✅ **Other Courses**: B.Tech, MBA, MBBS, and 100+ other courses available
+- ✅ **Form Validation**: Works correctly when required fields are empty
+- ✅ **Mobile Responsiveness**: All functionality works on 375x667 viewport
+
+**Backend API Verification:**
+- **API Endpoint**: `/api/courses?limit=500` returns 100+ courses
+- **Search Result**: `grep -i "school"` returns NO results
+- **Confirmation**: "School" is definitively NOT in the backend database
+- **Frontend Constants**: "School" exists in `ALL_INDIA_COURSES` at line 33
+- **Override Issue**: Frontend `fetchCourses()` replaces constants with API data
+
+**Technical Root Cause:**
+```javascript
+// UserSignup.js lines 98-110
+const fetchCourses = async () => {
+  try {
+    const response = await api.get('/courses?limit=500');
+    const apiCourses = response.data.map(c => typeof c === 'object' ? c.name : c);
+    if (apiCourses.length > 0) {
+      setCourses(apiCourses);  // ← This removes "School" from constants
+    }
+  } catch (err) {
+    // Fallback to constants only on API failure
+  }
+};
+```
+
+**Impact Assessment:**
+- **Functionality**: 87.5% working (7/8 test cases pass)
+- **Critical Issue**: School-interested users cannot complete signup
+- **Business Impact**: Missing entire school admissions user segment
+- **User Experience**: Form appears broken for school users
+
+**Immediate Fix Required:**
+1. **Backend Solution**: Add "School" course to `/api/courses` endpoint database
+2. **Frontend Solution**: Modify `fetchCourses()` to merge API data with constants
+3. **Verification**: Ensure "School" appears and is selectable in dropdown
+
+**Status:** User Signup Form has **CRITICAL FUNCTIONALITY ISSUE** preventing school users from completing registration. All other form components work correctly.
 
 ### 🔗 WRITE REVIEW FEATURE RE-TESTING COMPLETED (Dec 21, 2025):
 **Agent:** testing  
