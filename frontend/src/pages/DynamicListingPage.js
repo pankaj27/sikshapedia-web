@@ -2023,12 +2023,12 @@ const DynamicListingPage = () => {
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'examAccepted' ? null : 'examAccepted')}
                   className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
-                    filters.examAccepted 
+                    activeFilters.examAccepted 
                       ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
                       : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:bg-blue-50'
                   }`}
                 >
-                  {filters.examAccepted || 'Exam Accepted'}
+                  {activeFilters.examAccepted || 'Exam Accepted'}
                   <FiChevronDown size={14} className={activeFilterDropdown === 'examAccepted' ? 'rotate-180 transition-transform' : 'transition-transform'} />
                 </button>
                 {activeFilterDropdown === 'examAccepted' && (
@@ -2052,7 +2052,7 @@ const DynamicListingPage = () => {
                     </div>
                     <div className="filter-options max-h-48 overflow-y-auto py-1">
                       {filterOptions.examAccepted.map((option) => (
-                        <button key={option} onClick={() => handleFilterSelect('examAccepted', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${filters.examAccepted === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {filters.examAccepted === option && '✓'}</button>
+                        <button key={option} onClick={() => handleFilterSelect('examAccepted', option)} className={`block w-full text-left px-4 py-2 text-sm hover:bg-orange-50 hover:text-orange-600 ${activeFilters.examAccepted === option ? 'bg-orange-50 text-orange-600 font-medium' : 'text-gray-700'}`}>{option} {activeFilters.examAccepted === option && '✓'}</button>
                       ))}
                     </div>
                   </div>
