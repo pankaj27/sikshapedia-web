@@ -48,17 +48,7 @@ const UniversityDetailPage = () => {
   // Parse slug - strip numeric prefix if present
   const slug = rawSlug?.replace(/^\d+-/, '') || rawSlug;
 
-  useEffect(() => {
-    fetchUniversity();
-  }, [slug]);
-
-  useEffect(() => {
-    if (university && isLoggedIn) {
-      checkUserInteractions();
-    }
-  }, [university, isLoggedIn]);
-
-  const fetchUniversity = async () => {
+  const fetchUniversity = useCallback(async () => {
     setLoading(true);
     try {
       // Try to fetch from colleges endpoint (universities are stored there with institution_type)
@@ -105,7 +95,11 @@ const UniversityDetailPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug, rawSlug]);
+
+  useEffect(() => {
+    fetchUniversity();
+  }, [fetchUniversity]);
 
   const checkUserInteractions = async () => {
     try {
