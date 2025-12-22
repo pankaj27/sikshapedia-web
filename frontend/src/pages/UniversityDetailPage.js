@@ -119,7 +119,9 @@ const UniversityDetailPage = () => {
         const liked = likedResponse.data || [];
         const hasLiked = liked.some(l => l.entity_id === university.id);
         if (hasLiked) setUserVote('like');
-      } catch (e) {}
+      } catch (e) {
+        // Ignore error silently
+      }
 
       try {
         const favResponse = await api.get('/user/favorites', {
@@ -128,7 +130,9 @@ const UniversityDetailPage = () => {
         const favorites = favResponse.data || [];
         const hasFavorited = favorites.some(f => f.college_id === university.id || f.entity_id === university.id);
         setIsFavorited(hasFavorited);
-      } catch (e) {}
+      } catch (e) {
+        // Ignore error silently
+      }
     } catch (error) {
       console.error('Error checking user interactions:', error);
     }
