@@ -209,6 +209,8 @@ class InstitutionCreationTester:
             "institution_type": "School",
             "type": "Private",
             "established_year": 1935,
+            "average_fees": 1300000.0,
+            "description": "The Doon School is one of India's most prestigious boarding schools, known for its holistic education and character building.",
             "location": {
                 "state": "Uttarakhand",
                 "city": "Dehradun",
@@ -234,16 +236,19 @@ class InstitutionCreationTester:
             "courses": [
                 {
                     "name": "Class 7",
+                    "degree_type": "Secondary",
                     "duration": "1 Year",
                     "fees": 1200000
                 },
                 {
                     "name": "Class 8",
+                    "degree_type": "Secondary",
                     "duration": "1 Year",
                     "fees": 1200000
                 },
                 {
                     "name": "Class 12",
+                    "degree_type": "Senior Secondary",
                     "duration": "1 Year",
                     "fees": 1500000
                 }
