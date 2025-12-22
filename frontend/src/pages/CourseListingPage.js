@@ -367,7 +367,7 @@ const CourseListingPage = () => {
             <div className="space-y-4">
               {filteredCourses.map((course, idx) => {
                 const courseSlug = course.slug || course.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-                const collegeCounts = course.total_colleges || course.collegesCount || Math.floor(Math.random() * 2000) + 100;
+                const collegeCounts = course.total_colleges || course.collegesCount || 0;
                 
                 return (
                   <div key={course.id || idx} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all p-6 border border-gray-200">
