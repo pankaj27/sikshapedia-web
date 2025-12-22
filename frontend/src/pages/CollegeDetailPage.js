@@ -1948,33 +1948,38 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </div>
 
-              {/* POPULAR COURSES */}
+              {/* POPULAR COURSES - Dynamic from college.courses */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Popular Full Time Courses</h3>
                 <div className="space-y-4">
-                  {[
-                    { name: 'B.Tech', views: '14.4K', fees: college.average_fees },
-                    { name: 'M.Tech', views: '14.4K', fees: 144000 },
-                    { name: 'MBA', views: '14.4K', fees: 768000 }
-                  ].map((course, i) => (
-                    <div key={course.name} className={`pb-4 ${i !== 2 ? 'border-b border-gray-200' : ''}`}>
-                      <div className="flex items-start justify-between mb-2">
-                        <Link to="#" className="text-sm font-bold text-blue-600 hover:underline">
-                          {course.name}
-                        </Link>
-                        <span className="text-[11px] text-gray-500">({course.views} Views)</span>
-                      </div>
-                      <p className="text-xs text-gray-700 mb-3 font-medium">
-                        ₹{(course.fees / 100000).toFixed(2)} Lakhs
-                      </p>
-                      <button 
-                        onClick={() => setShowApplyModal(true)}
-                        className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold py-2.5 rounded transition-colors"
-                      >
-                        Apply Now
-                      </button>
-                    </div>
-                  ))}
+                  {college?.courses && college.courses.length > 0 ? (
+                    college.courses.slice(0, 5).map((course, i) => {
+                      const courseName = typeof course === 'string' ? course : course.name || 'Course';
+                      const courseFees = typeof course === 'object' ? (course.first_year_fee || course.total_fee || college.average_fees) : college.average_fees;
+                      return (
+                        <div key={i} className={`pb-4 ${i !== Math.min(college.courses.length, 5) - 1 ? 'border-b border-gray-200' : ''}`}>
+                          <div className="flex items-start justify-between mb-2">
+                            <Link to="#courses" className="text-sm font-bold text-blue-600 hover:underline">
+                              {courseName}
+                            </Link>
+                          </div>
+                          {courseFees > 0 && (
+                            <p className="text-xs text-gray-700 mb-3 font-medium">
+                              ₹{(courseFees / 100000).toFixed(2)} Lakhs
+                            </p>
+                          )}
+                          <button 
+                            onClick={() => setShowApplyModal(true)}
+                            className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold py-2.5 rounded transition-colors"
+                          >
+                            Apply Now
+                          </button>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-sm text-gray-500 text-center py-4">No courses available</p>
+                  )}
                 </div>
               </div>
 
