@@ -328,6 +328,26 @@ const UniversityDetailPage = () => {
                       <FiCheckCircle size={12} /> Verified
                     </span>
                   )}
+                  {university.is_admission_partner && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-semibold">
+                      🎓 Admission Partner
+                    </span>
+                  )}
+                  {university.is_admission_open && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-semibold animate-pulse">
+                      📢 Admission Open
+                    </span>
+                  )}
+                  {university.is_no_cost_emi && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-semibold">
+                      💳 No Cost EMI
+                    </span>
+                  )}
+                  {university.is_featured && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-semibold">
+                      ⭐ Featured
+                    </span>
+                  )}
                   <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-medium">
                     {university.type || university.institution_type || 'University'}
                   </span>
