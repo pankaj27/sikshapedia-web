@@ -428,6 +428,7 @@ function App() {
               <Route path="/:locationOrStream" element={<DynamicListingPage />} />
             </Route>
           </Routes>
+          </Suspense>
           <FloatingApplyButton />
           </BrowserRouter>
           </YearProvider>
