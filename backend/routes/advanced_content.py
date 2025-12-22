@@ -18,7 +18,7 @@ def set_database(database):
 
 # Security
 security = HTTPBearer()
-JWT_SECRET = os.environ.get("JWT_SECRET", "your-secret-key-change-in-production")
+JWT_SECRET = os.environ.get("SECRET_KEY", "your-secret-key-change-in-production")
 
 async def verify_admin_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Verify admin JWT token"""
