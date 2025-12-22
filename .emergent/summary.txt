@@ -1,78 +1,68 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to eliminate all hardcoded content from the entire website, a task that has been the primary focus and a major source of frustration. This involved making all institution detail pages, listing pages, and other content pages fully dynamic and data-driven. A bug where newly added detailed courses were not appearing on the frontend was also reported and fixed.
+The user's primary goal is to overhaul the existing, overly complex institution entry forms (, , etc.). The current forms are difficult for data entry operators.
 
-Most recently, after confirming the removal of hardcoded content, the user requested a new, complex feature:
--   A comprehensive admin form with a content builder.
--   **Features Required:**
-    -   Drag-and-drop functionality for content blocks (tables, images, videos).
-    -   A dynamic Table of Contents that connects to the content.
-    -   Dynamic menu creation with SEO options.
-    -   Widget and badge management.
-    -   A dedicated SEO section for page headings, meta descriptions, etc.
-    -   Image gallery, logo, and banner uploaders.
-    -   A separate, configurable SEO content area with its own hide/show and drag-and-drop capabilities.
-    -   A live preview of the frontend page while editing.
+PRODUCT REQUIREMENTS:
+1.  **Simplify Content Editing:** Replace the basic HTML  in the form's SEO Content section with a user-friendly, visual, drag-and-drop block editor.
+2.  **Rich Content Blocks:** This editor must support, at a minimum:
+    *   **Image Blocks:** With a proper file uploader (not just a URL field) and inputs for  tags and SEO titles.
+    *   **Video Blocks:** For embedding videos (e.g., from YouTube) with fields for SEO tags.
+    *   **Table Blocks:** A visual editor to create and modify tables.
+    *   **Quick Facts / Key Statistics Blocks:** Pre-styled, editable components.
+3.  **Simplify Menu Configuration:** The user found the Default Menu, Auto from TOC, and Custom Menu options confusing. They requested removing the Default and TOC options, leaving only a simplified Custom Menu system.
+4.  **Content-per-Menu-Item:** The form structure should be redesigned so that each custom menu item has its own dedicated content area, rather than all content being in one large block.
+5.  **Add Missing Fields:** The main Info Page of the form needs fields for **Contact Details** and a **Google Map** location.
+6.  **Clarify TOC Functionality:** The user was confused about how the Table of Contents (TOC) links to content sections. This needs to be made intuitive within the UI.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is now almost entirely free of hardcoded content. All major pages, including institution detail pages (, ), various listing pages (, , , , ), and other content pages (, , ) have been refactored to fetch their content dynamically from the backend. A critical bug preventing detailed courses from displaying was resolved by fixing a database collection name mismatch in the backend API ( vs. ).
+The agent attempted two solutions that were rejected by the user: a new  and a . The agent has now correctly pivoted to modifying the original, complex .
 
-The agent has just begun implementing the new complex admin form by installing  and creating the initial component structure for a , , and .
+The SEO Content section within this form has been the focus of recent work. An initial attempt to add HTML-insertion buttons was made, but the user rightly pointed out its flaws (no image upload, hard to edit raw HTML).
+
+Currently, the agent is in the process of replacing this flawed implementation with a proper **Visual Block Editor**. The foundational code for this new editor has been inserted into , and the agent was in the middle of removing the old  and HTML insertion logic.
 
 **Last working item**:
--   **Last item agent was working**: The agent started building a new comprehensive admin form as per the user's latest request. It installed the necessary drag-and-drop libraries () and created the foundational components:
-    -   : For the main drag-and-drop content area.
-    -   : For managing SEO metadata.
-    -   : For showing a live preview of the page being edited.
+-   **Last item agent was working**: Refactoring the SEO Content section in  to implement a **Visual Block Editor**. The goal is to replace the basic  and Insert HTML buttons with a system where each piece of content (image, table, text) is an editable, self-contained card.
 -   **Status**: IN PROGRESS
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: Frontend testing agent. Once the form is built, a thorough test will be required to verify all drag-and-drop functionality, content creation, and live preview features.
+-   **Which testing method agent to use?**: Frontend testing agent. This is a major UI/UX change and requires thorough testing of the new block editor, including creating, editing, reordering, and deleting different block types, as well as image uploads and saving the structured data.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
 -   **Issue 1: Maximum update depth exceeded React Error (P2)**
-    -   **Description**: A recurring warning appears in the browser console, which was traced to an external script .
-    -   **Attempted fixes**: None in this session.
-    -   **Next debug checklist**:
-        1.  Investigate  to understand the source of the re-renders.
-        2.  Check if any components are causing state updates within  without proper dependency arrays.
-    -   **Why fix this issue and what will be achieved with this?**: It suggests a potential performance bottleneck or rendering loop from a third-party script that could cause future instability.
+    -   **Description**: A recurring warning in the browser console, traced to an external script .
     -   **Status**: NOT STARTED
     -   **Is recurring issue?**: Y
     -   **Should Test frontend/backend/both after fix?**: Frontend
-    -   **Blocked on other issue**: None
 
 **In progress Task List**:
--   **Task 1: Build the Comprehensive Admin Content Builder Form (P0)**
-    -   **Description**: Implement the full set of features requested by the user for the new admin form, including drag-and-drop content, dynamic menus, SEO management, and a live preview.
-    -   **Where to resume**: The basic component files have been created (, , ). The next step is to create a main example page () that integrates these components and starts building out the UI and logic for each feature.
-    -   **What will be achieved with this?**: A powerful, user-friendly interface for managing complex page content, fulfilling the user's new feature request.
+-   **Task 1: Complete the Visual Block Editor Implementation in  (P0)**
+    -   **Description**: The user needs a fully functional visual editor instead of a raw HTML textarea.
+    -   **Where to resume**: The agent has inserted the basic structure for the Visual Block Editor into  and started removing the old code. The next step is to finalize the removal of the old HTML-based implementation and build out the functionality for each visual block (Image, Table, Video, etc.).
+    -   **What will be achieved with this?**: A user-friendly, modern content editor that allows non-technical users to upload images, create tables, and manage complex page content without writing HTML.
     -   **Status**: IN PROGRESS
     -   **Should Test frontend/backend/both after fix?**: Frontend
     -   **Blocked on something**: No
 
 **Upcoming and Future Tasks**
 *   **Upcoming Tasks:**
-    *   **(P1) DNS Configuration for Resend:** Guide the user on adding DKIM/SPF records to their domain's DNS settings to ensure email deliverability.
-    *   **(P2)** Generate Missing Listing Pages: Use  to create Type Pages and Accreditation Pages.
-    *   **(P3)** Seed Data for Leads & Applications: Populate  and  collections with test data.
+    *   **(P1) Implement Image Upload Functionality:** Create the backend endpoint and frontend logic to handle image uploads for the new Visual Block Editor.
+    *   **(P1) Finalize Editable Blocks:** Build the editable card UI for each block type (Table, Video, Quick Facts) within the new editor.
+    *   **(P2) Clean Up Obsolete Forms:** Decide with the user whether to delete the now-unused  and .
+    *   **(P2) DNS Configuration for Resend:** Guide the user on adding DKIM/SPF records to their domain's DNS settings.
+    *   **(P3)** Generate Missing Listing Pages: Use  to create Type Pages and Accreditation Pages.
 *   **Future Tasks:**
-    *   Refactor large components like  into smaller, reusable sub-components.
-    *   Consolidate routing into a single detail page component.
-    *   Create a dedicated automated test suite for dynamic routing and listing functionality.
+    *   Refactor the very large  into smaller, reusable sub-components after the block editor is stable.
+    *   Create a dedicated automated test suite for the new content editor.
     *   Investigate replacing  workarounds with a proper React Router  solution.
 
 **Completed work in this session**
--   **Complete Hardcoded Content Removal (Site-Wide):**
-    -   **Institution Detail Pages:** Removed all hardcoded fallback text, ratings, and static content from  and . Made the Table of Contents and Recognized by sections fully dynamic.
-    -   **Listing Pages:** Removed all hardcoded SEO content blocks, Quick Compare tables, and other static text from , , , , and .
-    -   **Content Pages:** Purged hardcoded data from , , , and . Replaced mock data functions with API calls or empty arrays.
-    -   **Components:** Removed hardcoded college lists from  and hardcoded exam links from the , making them fetch data from the API.
--   **Bug Fix: Detailed Courses Not Appearing:**
-    -   **Identified Root Cause:** Found a mismatch between the database collection name () and the name used in the backend API ().
-    -   **Resolved:** Corrected the collection name in all relevant endpoints in  and restarted the backend.
-    -   **Verified:** Confirmed via API  and frontend screenshot that the 5 detailed courses from the database are now appearing correctly.
+-   **Clarified TOC Functionality:** Improved the UI in  to include a clear explanation of how the Anchor ID connects the Table of Contents items to their corresponding content sections.
+-   **Attempted and Discarded Alternative Solutions:**
+    -   Created a new  with a comprehensive feature set. This was abandoned as the user wanted to fix the existing form.
+    -   Created a  as a cleaner alternative. This was also superseded by the user's request to focus on improving the original .
+-   **Added Insert HTML Toolbar:** Briefly implemented a toolbar in  to insert HTML snippets for rich content. This was a stepping stone to the current, more robust Visual Block Editor approach.
 
 **Earlier issues found/mentioned but not fixed**
 -   **Issue 1: Maximum update depth exceeded React Error**
@@ -81,53 +71,34 @@ The agent has just begun implementing the new complex admin form by installing  
     -   **Should Test frontend/backend/both after fix**: Frontend
     -   **Is recurring issue?**: Y
 
-**Known issue recurrence from previous fork**
--   **Issue recurrence in previous fork**: The primary recurring issue was the agent repeatedly failing to perform a comprehensive removal of all hardcoded content, leading to multiple frustrating iterations for the user.
--   **Recurrence count**: High (occurred throughout the session).
--   **Status**: RESOLVED (Agent finally performed a systematic, site-wide cleanup based on explicit user instructions).
-
 **Code Architecture**
 
 
 **Key Technical Concepts**
--   **Site-Wide Refactoring:** Performed a systematic search () and replacement of hardcoded content across dozens of files to enforce a data-driven architecture.
--   **Backend Debugging:** Diagnosed a critical bug by comparing API endpoint code (, ) with direct database queries, identifying a collection name typo ( vs ).
--   **Drag-and-Drop Implementation:** Installed  and its dependencies to begin building a complex content builder component.
--   **Dynamic Component Population:** Modified static components like the  to fetch their content (e.g., list of exams) from an API endpoint instead of using hardcoded arrays.
-
-**key DB schema**
--   ** collection:** This collection holds the data for detailed courses. It was the source of a bug because the API was incorrectly trying to read from a non-existent  collection.
-
-**changes in tech stack**
--   **Frontend:** Added , , and  for drag-and-drop functionality.
+-   **Iterative Development based on User Feedback:** The agent went through several implementation cycles (new advanced form -> new simplified form -> modifying original form) to align with the user's evolving understanding of their own requirements.
+-   **Visual Block Editor Architecture:** The current approach involves moving from a single HTML string in the database to a structured array of content blocks. Each object in the array will represent a block (e.g., ) which is then rendered as an editable component in the UI.
+-   **UI/UX Improvement:** Added explanatory text and visual aids to the existing  to demystify the connection between the Table of Contents and content sections.
 
 **All files of reference**
-*   **/app/backend/routes/courses_exams.py**: Modified to fix the database collection name bug.
-*   **/app/frontend/src/components/admin/ContentBuilder.js**: New file for the drag-and-drop form feature.
-*   **/app/frontend/src/components/admin/SEOSection.js**: New file for the drag-and-drop form feature.
-*   **/app/frontend/src/components/admin/LivePreview.js**: New file for the drag-and-drop form feature.
-*   **Numerous files under  and **: Almost every major page and several components were edited to remove hardcoded content. Key examples include , , , , and .
+*   **/app/frontend/src/pages/admin/CollegeForm.js**: The primary file being worked on. It's being refactored to include a visual block editor.
+*   **/app/frontend/src/pages/admin/SimplifiedInstitutionForm.js**: A recently created form that is likely now obsolete.
+*   **/app/frontend/src/pages/admin/AdvancedContentForm.js**: An earlier created form that is also likely obsolete.
+*   **/app/frontend/src/pages/admin/CollegesListManagement.js**: Modified to add a button linking to the simplified form.
 
 **Areas that need refactoring**:
--   The large detail page components (, ) still have significant code duplication and would benefit from being broken down into smaller, reusable components.
--   The routing architecture could be simplified by using a single, more robust detail page component instead of separate ones for each institution type.
--   The filter options in  are still defined as static arrays in the code. Ideally, these should be fetched from the backend to make them dynamically manageable.
-
-**key api endpoints**
--   : This endpoint was fixed. It now correctly queries the  collection and returns the list of detailed courses.
--   : This endpoint is now used by the  component to dynamically populate the Top Exams list.
+-   **** is extremely large (over 6000 lines) and brittle. Once the new block editor is stable, the entire component should be broken down into smaller, manageable child components.
+-   The project now contains several pages and components (, , etc.) that were created for abandoned approaches. These should be reviewed and likely deleted to reduce code clutter.
 
 **Critical Info for New Agent**
--   **New Feature Focus:** The user's priority has shifted from fixing old issues to building a new, complex admin content builder. You must start by creating an example page that uses the newly created , , and  components.
--   **Hardcoded Content Sensitivity:** The user is extremely sensitive to any hardcoded content. Although a massive cleanup was just performed, you must ensure any new feature is 100% data-driven and avoid introducing any new static text, placeholders, or mock data.
--   **Database Collection Naming:** Be aware of the  vs.  issue. Double-check collection names in the backend code if data appears to be missing from the frontend.
+-   **STOP creating new forms.** The user's explicit goal is to fix and improve the **existing **. Do not get sidetracked into building parallel solutions.
+-   **The Visual Block Editor is the correct path.** The user has rejected solutions involving raw HTML. The goal is a user-friendly, card-based editor where each content block (image, table, etc.) is a distinct, editable unit.
+-   **Focus on **. All efforts should be concentrated on completing the refactor of the SEO Content section within this file.
+-   **Image Upload is a key missing piece.** The user explicitly needs to upload images, not just paste URLs. This will require both frontend and backend work.
 
 **documents and test_reports created in this job**
--   : Updated by the agent after running frontend tests to confirm hardcoded content removal.
+-   : Updated multiple times by the agent to test the various forms it created.
 
 **Last 10 User Messages and any pending HUMAN messages**
--   
--   
 -   
 -   
 -   
@@ -139,18 +110,18 @@ The agent has just begun implementing the new complex admin form by installing  
 **Project Health Check:**
 -   **Broken**: None.
 -   **Mocked**: Razorpay payments.
--   **Needs Attention**: Resend email integration requires user-side DNS configuration. Significant code duplication exists in the detail page components.
+-   **Needs Attention**: The project has several large, newly created but now-obsolete components (, ) that should be cleaned up. The core  is extremely large and needs significant refactoring.
 
 **3rd Party Integrations**
--   **Razorpay** (Payments) — Mocked.
--   **Resend** (Email notifications) — Integrated but requires user DNS configuration.
--   **Twilio** (WhatsApp notifications)
--   **Emergent-managed Google Auth** (User Authentication)
--   **qrcode.react** (Frontend QR Code Generation)
--   **@dnd-kit/core** (Drag and Drop) — Newly added.
+-   **@dnd-kit/core**: For drag-and-drop functionality, essential for the new block editor.
+-   Razorpay (Payments) — Mocked.
+-   Resend (Email notifications) — Integrated but requires user DNS configuration.
+-   Twilio (WhatsApp notifications)
+-   Emergent-managed Google Auth (User Authentication)
+-   qrcode.react (Frontend QR Code Generation)
 
 **Testing status**
--   **Testing agent used after significant changes**: YES, was used initially for the detail pages.
+-   **Testing agent used after significant changes**: YES, it was used to test the intermediate .
 -   **Troubleshoot agent used after agent stuck in loop**: NO
 -   **Test files created**: None.
 -   **Known regressions**: None.
@@ -159,5 +130,5 @@ The agent has just begun implementing the new complex admin form by installing  
 -   **Admin**:  / 
 
 **What agent forgot to execute**
--   The agent's initial attempts to remove hardcoded content were not thorough, requiring multiple rounds of user feedback to find and remove all instances from across the entire site.
--   The recurring Maximum update depth exceeded React warning was identified in the previous session and again in this one but was not investigated or fixed.</analysis>
+-   The agent initially misunderstood the user's core request, leading it to build two separate, incorrect forms before focusing on the correct task of modifying the existing .
+-   The recurring Maximum update depth exceeded React warning has been identified multiple times but has not been investigated or fixed.</analysis>
