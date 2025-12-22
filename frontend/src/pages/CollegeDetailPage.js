@@ -1833,8 +1833,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </div>
                   </div>
 
-                  {/* Nearby Places - Dynamic from college.nearby_places */}
-                  {college?.nearby_places && college.nearby_places.length > 0 ? (
+                  {/* Nearby Places - Only show if data exists */}
+                  {college?.nearby_places && college.nearby_places.length > 0 && (
                     <div className="mt-6 bg-gray-50 border rounded-lg p-6">
                       <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1855,11 +1855,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                           );
                         })}
                       </div>
-                    </div>
-                  ) : (
-                    <div className="mt-6 bg-gray-50 border rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
-                      <p className="text-sm text-gray-500">Nearby places information will be updated soon.</p>
                     </div>
                   )}
                 </section>
