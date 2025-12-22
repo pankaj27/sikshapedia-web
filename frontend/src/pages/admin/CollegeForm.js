@@ -1162,7 +1162,25 @@ const CollegeForm = () => {
       navigate('/admin/colleges');
     } catch (error) {
       console.error('Error saving college:', error);
-      alert(`Failed to save college: ${error.response?.data?.detail || error.message}`);
+      // Handle validation errors properly
+      let errorMessage = 'Unknown error';
+      if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        if (Array.isArray(detail)) {
+          // Pydantic validation errors come as array
+          errorMessage = detail.map(err => {
+            const field = err.loc ? err.loc.join('.') : 'field';
+            return `${field}: ${err.msg}`;
+          }).join('\n');
+        } else if (typeof detail === 'string') {
+          errorMessage = detail;
+        } else {
+          errorMessage = JSON.stringify(detail);
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      alert(`Failed to save college:\n${errorMessage}`);
     } finally {
       setSaving(false);
     }
