@@ -1237,6 +1237,113 @@
 - Basic page loading and navigation
 - Form elements in admin panels
 
+## User Signup Form Testing Results (Dec 22, 2025):
+
+### ❌ CRITICAL ISSUE IDENTIFIED: "School" Option Missing from Course Dropdown
+
+**Test Status:** ❌ FAILED - "School" option not available in course dropdown
+**Test URL:** http://localhost:3000/signup
+
+### 🔍 COMPREHENSIVE TEST RESULTS:
+
+#### ✅ WORKING COMPONENTS:
+1. **Initial Signup Page Load** - ✅ WORKING
+   - "Create Account" heading displays correctly
+   - Page loads without errors
+   - Professional orange/white theme consistent
+
+2. **Step 3 Navigation (Details Step)** - ✅ WORKING
+   - URL parameters work: `/signup?email=schooltest@example.com&name=School%20Test%20User`
+   - "Almost There!" step loads correctly
+   - Name pre-filled: "School Test User" ✅
+   - Email pre-filled: "schooltest@example.com" ✅
+
+3. **City Dropdown Functionality** - ✅ WORKING
+   - Dropdown opens correctly
+   - Search functionality works (tested with "Mumbai")
+   - City selection works properly
+   - Mumbai successfully selected and displayed
+
+4. **Other Course Options** - ✅ WORKING
+   - B.Tech option visible: ✅
+   - MBA option visible: ✅
+   - MBBS option visible: ✅
+   - All major courses available except "School"
+
+5. **Form Validation** - ✅ WORKING
+   - Validation error appears: "Please fill all required fields"
+   - Phone number field validation working
+
+6. **Mobile Responsiveness** - ✅ WORKING
+   - Mobile viewport (375x667) renders correctly
+   - City dropdown works on mobile
+   - Course dropdown opens on mobile (but same "School" issue)
+
+#### ❌ CRITICAL ISSUE FOUND:
+
+**"School" Option Missing from Course Dropdown:**
+- ✅ Frontend constants include "School" in `ALL_INDIA_COURSES` array
+- ❌ Backend API `/api/courses` does NOT include "School" 
+- ❌ Frontend fetches from backend and replaces constants with API data
+- ❌ Result: "School" option completely missing from dropdown
+- ❌ Search for "School" shows "No results found"
+
+### 🔧 ROOT CAUSE ANALYSIS:
+
+**File:** `/app/frontend/src/pages/UserSignup.js` (lines 98-110)
+**Issue:** Backend API override logic removes "School" option
+
+```javascript
+const fetchCourses = async () => {
+  try {
+    const response = await api.get('/courses');
+    const apiCourses = response.data.map(c => typeof c === 'object' ? c.name : c);
+    // Use API courses if available, otherwise keep the centralized list
+    if (apiCourses.length > 0) {
+      setCourses(apiCourses);  // ← This replaces ALL_INDIA_COURSES
+    }
+  } catch (err) {
+    // Fallback already set via useState initialization
+  }
+};
+```
+
+**Backend API Response:** `/api/courses` returns 100+ courses but excludes "School"
+**Frontend Constants:** `ALL_INDIA_COURSES` includes "School" at line 33
+
+### 📊 TESTING STATISTICS:
+- **Total Test Cases**: 8/8 executed
+- **UI Components Working**: 7/8 (87.5%)
+- **Critical Functionality Issues**: 1 (School option missing)
+- **Form Validation**: Working correctly
+- **Mobile Responsiveness**: Working correctly
+- **Pre-fill Functionality**: Working correctly
+
+### 🎯 EXPECTED vs ACTUAL BEHAVIOR:
+- **Expected**: "School" appears in course dropdown and is selectable
+- **Actual**: "School" option completely missing, shows "No results found"
+- **Impact**: Users interested in school admissions cannot complete signup
+
+### 🔧 RECOMMENDATIONS FOR MAIN AGENT:
+
+**HIGH PRIORITY - IMMEDIATE FIX REQUIRED:**
+
+1. **Backend Fix**: Add "School" to the `/api/courses` endpoint response
+   - OR modify the course fetching logic to merge API data with constants
+   - OR ensure "School" is included in the database courses table
+
+2. **Frontend Fix Options:**
+   - Modify `fetchCourses()` to merge API courses with `ALL_INDIA_COURSES`
+   - Add "School" to the beginning of API courses array
+   - Implement fallback logic to ensure "School" is always available
+
+3. **Verification Required:**
+   - Test that "School" appears in dropdown after fix
+   - Verify "School" can be selected and form submits successfully
+   - Ensure other courses remain available
+
+**Status:** User Signup Form has **CRITICAL FUNCTIONALITY ISSUE** - "School" option missing from course dropdown. This prevents school-interested users from completing registration.
+
 ## Agent Communication (Dec 20, 2025):
 
 ### 🔗 WRITE REVIEW FEATURE RE-TESTING COMPLETED (Dec 21, 2025):
