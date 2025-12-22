@@ -539,6 +539,26 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <FiCheckCircle size={12} /> Verified
                     </span>
                   )}
+                  {college.is_admission_partner && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-semibold">
+                      🎓 Admission Partner
+                    </span>
+                  )}
+                  {college.is_admission_open && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-semibold animate-pulse">
+                      📢 Admission Open
+                    </span>
+                  )}
+                  {college.is_no_cost_emi && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-semibold">
+                      💳 No Cost EMI
+                    </span>
+                  )}
+                  {college.is_featured && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-semibold">
+                      ⭐ Featured
+                    </span>
+                  )}
                   <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
                     {college.type || college.institution_type || 'College'}
                   </span>
