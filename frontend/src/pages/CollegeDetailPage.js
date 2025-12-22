@@ -1422,14 +1422,15 @@ const CollegeDetailPage = ({ overrideId }) => {
 
                 {/* PLACEMENT */}
                 <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement {year - 1}</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    As per the {college.name} Placement report, the average package stood at <strong>INR {college.placement?.average ? (college.placement.average / 100000).toFixed(1) : '23.5'} LPA</strong>. 
-                    The institute secured offers from top recruiters across various sectors.
-                  </p>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
+                  
+                  {(college.placement || college.placements) ? (
+                    <>
+                      <p className="text-gray-700 text-sm mb-4">
+                        As per the {college.name} Placement report, the average package stood at <strong>₹{college.placement?.average ? (college.placement.average / 100000).toFixed(1) : college.placements?.average ? (college.placements.average / 100000).toFixed(1) : '-'} LPA</strong>.
+                      </p>
 
-                  {(college.placement || college.placements) && (
-                    <div className="grid grid-cols-3 gap-4 mb-6">
+                      <div className="grid grid-cols-3 gap-4 mb-6">
                       {(college.placement?.highest || college.placements?.highest) && (
                         <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
                           <div className="text-3xl font-bold text-green-600 mb-2">
