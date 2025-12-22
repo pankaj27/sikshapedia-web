@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field
 from typing import Optional, List, Any, Dict
 from datetime import datetime, timezone
 from uuid import uuid4
-from routes.auth import get_current_admin_user
+import jwt
+import os
 
 router = APIRouter(prefix="/api/advanced-content", tags=["Advanced Content"])
 
@@ -13,6 +15,23 @@ db = None
 def set_database(database):
     global db
     db = database
+
+# Security
+security = HTTPBearer()
+JWT_SECRET = os.environ.get("JWT_SECRET", "your-secret-key-change-in-production")
+
+async def verify_admin_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Verify admin JWT token"""
+    try:
+        token = credentials.credentials
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        if payload.get("role") != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 # Pydantic Models
 class LogoBanner(BaseModel):
