@@ -44,6 +44,7 @@ class UserSignupRequest(BaseModel):
     phone: str
     city: str
     course: str
+    exam: Optional[str] = None
     referral_code: Optional[str] = None
 
 class OTPRequest(BaseModel):
