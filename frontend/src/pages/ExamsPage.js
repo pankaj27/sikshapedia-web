@@ -138,23 +138,25 @@ const ExamsPage = () => {
         </div>
       </section>
 
-      {/* Quick Exam Categories */}
-      <section className="bg-white border-b shadow-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-hide">
-            <span className="text-gray-600 font-medium whitespace-nowrap text-sm">Popular:</span>
-            {['JEE Main', 'NEET', 'CAT', 'GATE', 'CLAT', 'UPSC', 'GMAT', 'XAT'].map((exam) => (
-              <Link
-                key={exam}
-                to={`/exams/${exam.toLowerCase().replace(' ', '-')}`}
-                className="px-4 py-2 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-700 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition"
-              >
-                {exam}
-              </Link>
-            ))}
+      {/* Quick Exam Categories - Only show if we have popular exams from API */}
+      {exams.length > 0 && (
+        <section className="bg-white border-b shadow-sm">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center gap-2 py-4 overflow-x-auto scrollbar-hide">
+              <span className="text-gray-600 font-medium whitespace-nowrap text-sm">Popular:</span>
+              {exams.slice(0, 8).map((exam) => (
+                <Link
+                  key={exam.id || exam.name}
+                  to={`/exams/${exam.slug || exam.name?.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="px-4 py-2 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-700 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap transition"
+                >
+                  {exam.name}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Main Content */}
       <section className="py-8">
@@ -440,11 +442,6 @@ const ExamsPage = () => {
                 India conducts numerous entrance examinations every year for admissions to various undergraduate, 
                 postgraduate, and doctoral programs. These exams are conducted at national, state, and university 
                 levels across streams like Engineering, Medical, Management, Law, Design, and more.
-              </p>
-              <p className="text-gray-600 leading-relaxed mt-4">
-                Major national-level exams include JEE Main, JEE Advanced, NEET, CAT, GATE, CLAT, and UPSC CSE. 
-                Each exam has its own eligibility criteria, application process, exam pattern, and cutoff requirements. 
-                Stay updated with the latest exam dates, syllabus, and preparation tips on this page.
               </p>
             </div>
           </div>
