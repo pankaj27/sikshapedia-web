@@ -181,9 +181,13 @@ const UserSignup = () => {
   const fetchCourses = async () => {
     try {
       const response = await api.get('/courses');
-      setCourses(response.data.map(c => typeof c === 'object' ? c.name : c));
+      const apiCourses = response.data.map(c => typeof c === 'object' ? c.name : c);
+      // Use API courses if available, otherwise use default list
+      setCourses(apiCourses.length > 0 ? apiCourses : ALL_INDIA_COURSES);
     } catch (err) {
       console.error('Error fetching courses:', err);
+      // Fallback to default courses list
+      setCourses(ALL_INDIA_COURSES);
     }
   };
   
