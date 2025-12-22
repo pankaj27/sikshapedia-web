@@ -561,6 +561,7 @@ const CollegeForm = () => {
         cutoff_data: Array.isArray(collegeData.cutoff_data) ? collegeData.cutoff_data : [],
         scholarships: Array.isArray(collegeData.scholarships) ? collegeData.scholarships : [],
         updates: Array.isArray(collegeData.updates) ? collegeData.updates : [],
+        announcements: Array.isArray(collegeData.announcements) ? collegeData.announcements : [],
         seo_faqs: Array.isArray(collegeData.seo_faqs) ? collegeData.seo_faqs : [],
         seo_intro: collegeData.seo_intro || '',
         seo_full_content: collegeData.seo_full_content || '',
