@@ -2999,17 +2999,16 @@ const CollegeForm = () => {
 
         {/* Accreditation */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold mb-4">Accreditation</h2>
+          <h2 className="text-xl font-bold mb-4">Accreditation (Optional)</h2>
           <div className="space-y-4">
             {formData.accreditations.map((accr, index) => (
               <div key={index} className="border rounded-lg p-4 bg-gray-50">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Accreditation Name *</label>
+                    <label className="block text-sm font-medium mb-1">Accreditation Name</label>
                     <select
                       value={typeof accr === 'string' ? '' : (accr.name || '')}
                       onChange={(e) => updateAccreditation(index, 'name', e.target.value)}
-                      required
                       className="w-full border rounded px-3 py-2"
                     >
                       <option value="">Select Accreditation</option>
@@ -3021,11 +3020,10 @@ const CollegeForm = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Accreditation Level *</label>
+                    <label className="block text-sm font-medium mb-1">Accreditation Level</label>
                     <select
                       value={typeof accr === 'string' ? '' : (accr.level || '')}
                       onChange={(e) => updateAccreditation(index, 'level', e.target.value)}
-                      required
                       className="w-full border rounded px-3 py-2"
                     >
                       <option value="">Select Level</option>
