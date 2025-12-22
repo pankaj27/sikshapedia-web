@@ -1664,16 +1664,16 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </div>
                 </section>
 
-                {/* FAQ SECTION - Dynamic from college.seo_faqs */}
-                <section id="faq">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Frequently Asked Questions (FAQs)</h2>
-                  <p className="text-gray-700 text-sm mb-4">
-                    Find answers to commonly asked questions about {college.name}:
-                  </p>
+                {/* FAQ SECTION - Only show if data exists */}
+                {college?.seo_faqs && college.seo_faqs.length > 0 && (
+                  <section id="faq">
+                    <h2 className="text-2xl font-bold mb-3">{college.name} Frequently Asked Questions (FAQs)</h2>
+                    <p className="text-gray-700 text-sm mb-4">
+                      Find answers to commonly asked questions about {college.name}:
+                    </p>
 
-                  <div className="space-y-3">
-                    {college?.seo_faqs && college.seo_faqs.length > 0 ? (
-                      college.seo_faqs.map((faq, index) => (
+                    <div className="space-y-3">
+                      {college.seo_faqs.map((faq, index) => (
                         <details key={index} className="bg-white border rounded-lg">
                           <summary className="font-semibold text-gray-900 p-5 cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-between">
                             <span className="flex-1">Ques. {faq.question}</span>
@@ -1683,14 +1683,10 @@ const CollegeDetailPage = ({ overrideId }) => {
                             <p><strong>Ans.</strong> {faq.answer}</p>
                           </div>
                         </details>
-                      ))
-                    ) : (
-                      <p className="text-sm text-gray-500 text-center py-8 bg-gray-50 rounded-lg">
-                        No FAQs available for this institution yet.
-                      </p>
-                    )}
-                  </div>
-                </section>
+                      ))}
+                    </div>
+                  </section>
+                )}
 
                 {/* REVIEWS */}
                 <section id="reviews" className="mt-8">
