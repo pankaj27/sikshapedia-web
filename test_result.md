@@ -1771,3 +1771,40 @@
 - ✅ Search autocomplete correctly navigates to university pages
 - ✅ All other university functionality unaffected
 
+
+---
+
+## Data Centralization - Course & Exam Lists (Dec 22, 2025):
+
+### Task: Centralize Data Sources and Add Exam Quick Entry
+
+**Changes Made:**
+1. **UserSignup.js** - Refactored to use centralized constants:
+   - Removed duplicate `INDIA_CITIES` and `ALL_INDIA_COURSES` arrays
+   - Now imports from `/constants/indiaData.js`
+   - Added new "Exam Preparing For" dropdown (optional field)
+   - Updated form submission to include `exam` field
+
+2. **Backend user_auth.py** - Updated UserSignupRequest model:
+   - Added optional `exam` field to the Pydantic model
+   - User document now stores the selected exam
+
+3. **constants/indiaData.js** - Centralized data file (already created):
+   - Contains `INDIA_CITIES`, `INDIA_STATES`
+   - Contains `ALL_INDIA_COURSES`, `ALL_INDIA_EXAMS`
+   - Exports all arrays for reuse across components
+
+**Test Cases to Execute:**
+1. Navigate to `/signup` - page loads correctly
+2. Simulate Google auth redirect to details step (`/signup?email=test@test.com&name=Test`)
+3. Verify all dropdowns work: City, Course, Exam
+4. Verify Exam dropdown shows comprehensive list (JEE, NEET, CAT, etc.)
+5. Verify Course dropdown shows comprehensive list
+6. Complete signup flow with exam selection
+7. Verify `/course-finder` page still works with centralized data
+8. Test mobile responsiveness of signup form
+
+**Test Credentials:**
+- New signup can use any new email
+- Existing User: `teststudent@test.com` / `test`
+
