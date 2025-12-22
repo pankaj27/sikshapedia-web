@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiX, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { Button } from '../components/ui/button';
-import { ALL_INDIA_EXAMS, INDIA_CITIES } from '../constants/indiaData';
+import { ALL_INDIA_EXAMS, INDIA_CITIES, INDIA_STATES } from '../constants/indiaData';
+import api from '../api/axios';
 
 import { Link } from '../components/CustomLink';
 const CourseFinderPage = () => {
@@ -14,23 +15,44 @@ const CourseFinderPage = () => {
     programTypes: []
   });
   const [openFilterPanel, setOpenFilterPanel] = useState(null);
+  
+  // State and city data from API
+  const [stateOptions, setStateOptions] = useState(INDIA_STATES);
+  const [cityOptions, setCityOptions] = useState(INDIA_CITIES);
+  const [examOptions, setExamOptions] = useState(ALL_INDIA_EXAMS);
+  
+  // Fetch states, cities and exams from API
+  useEffect(() => {
+    const fetchLocationData = async () => {
+      try {
+        const [statesRes, citiesRes, examsRes] = await Promise.all([
+          api.get('/locations/all-states'),
+          api.get('/locations/all-cities'),
+          api.get('/exams?limit=500')
+        ]);
+        
+        if (statesRes.data?.length > 0) {
+          setStateOptions(statesRes.data.map(s => s.name));
+        }
+        if (citiesRes.data?.length > 0) {
+          setCityOptions(citiesRes.data.map(c => c.name));
+        }
+        if (examsRes.data?.length > 0) {
+          setExamOptions(examsRes.data.map(e => e.name));
+        }
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+        // Fallback to constants already set
+      }
+    };
+    fetchLocationData();
+  }, []);
 
   // Filter data
   const courseOptions = [
     'ME/M.Tech', 'MBA/PGDM', 'B.Sc', 'M.Sc', 'BE/B.Tech', 'BA', 'MA', 'BBA/BMS', 
     'B.Com', 'BCA', 'MCA', 'B.Ed', 'MD', 'B.Des', 'M.Des', 'LLB', 'LLM'
   ];
-
-  const stateOptions = [
-    'Maharashtra', 'Delhi NCR', 'Uttar Pradesh', 'Tamil Nadu', 'Karnataka', 
-    'Rajasthan', 'Gujarat', 'Madhya Pradesh', 'West Bengal', 'Haryana'
-  ];
-
-  // Use comprehensive city list from constants
-  const cityOptions = INDIA_CITIES;
-
-  // Use comprehensive exam list from constants
-  const examOptions = ALL_INDIA_EXAMS;
 
   const programTypeOptions = ['Full Time', 'Part Time', 'Both'];
 
