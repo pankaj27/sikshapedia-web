@@ -326,17 +326,17 @@ const TableBlock = ({ data, onChange }) => {
         <table className="w-full">
           <thead>
             <tr className="bg-teal-100">
-              {localData.headers.map((header, colIndex) => (
+              {headers.map((header, colIndex) => (
                 <th key={colIndex} className="border-r border-teal-200 last:border-r-0 p-2">
                   <div className="flex items-center gap-1">
                     <input
                       type="text"
-                      value={header}
+                      value={header || ''}
                       onChange={(e) => updateHeader(colIndex, e.target.value)}
                       className="w-full px-2 py-1 bg-white border border-teal-300 rounded text-sm font-semibold text-center"
                       placeholder="Header"
                     />
-                    {localData.headers.length > 1 && (
+                    {headers.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeColumn(colIndex)}
@@ -353,13 +353,13 @@ const TableBlock = ({ data, onChange }) => {
             </tr>
           </thead>
           <tbody>
-            {localData.rows.map((row, rowIndex) => (
+            {rows.map((row, rowIndex) => (
               <tr key={rowIndex} className="hover:bg-teal-50">
-                {row.map((cell, colIndex) => (
+                {(row || []).map((cell, colIndex) => (
                   <td key={colIndex} className="border-t border-r border-teal-200 last:border-r-0 p-2">
                     <input
                       type="text"
-                      value={cell}
+                      value={cell || ''}
                       onChange={(e) => updateCell(rowIndex, colIndex, e.target.value)}
                       className="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:border-teal-400 focus:outline-none"
                       placeholder="Enter data"
