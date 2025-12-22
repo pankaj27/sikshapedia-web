@@ -807,21 +807,27 @@ const CollegeDetailPage = ({ overrideId }) => {
         <div className="flex gap-6">
           {/* LEFT CONTENT */}
           <div className="flex-1">
-            {/* SEO CONTENT SECTION (Collapsible) */}
+            {/* SEO CONTENT SECTION (Collapsible) - 100% DYNAMIC */}
             <div className="mb-6 pb-6 border-b">
-              {/* INTRO PREVIEW - 3 LINES */}
+              {/* INTRO PREVIEW - Only show data that exists */}
               <div className="mb-3">
                 <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
-                  {college.name} is a <strong>{college.type || college.institution_type}</strong> established in <strong>{college.established_year || college.established || 'N/A'}</strong>. 
-                  {college.description ? college.description : `As per the data, ${college.name} is one of the preferred institutions for students.`}
-                  {college.nirf_ranking && <> {college.name} Ranking is <strong>#{college.nirf_ranking}</strong> in NIRF rankings.</>}
-                  {college.average_fees && <> {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>.</>}
-                  {college.placement?.average > 0 && <> As per {college.name} Placements, the average package was <strong>INR {(college.placement.average / 100000).toFixed(1)} LPA</strong>.</>}
+                  {college.seo_intro ? (
+                    college.seo_intro
+                  ) : college.description ? (
+                    college.description
+                  ) : (
+                    <>
+                      {college.name} is a {college.type || college.institution_type || 'institution'}
+                      {(college.established_year || college.established) && <> established in {college.established_year || college.established}</>}.
+                      {college.location?.city && college.location?.state && <> Located in {college.location.city}, {college.location.state}.</>}
+                    </>
+                  )}
                 </p>
               </div>
 
-              {/* READ MORE BUTTON - Show when collapsed */}
-              {!showContent && (
+              {/* READ MORE BUTTON - Show when collapsed and there's more content to show */}
+              {!showContent && (college.seo_full_content || college.courses?.length > 0 || college.seo_faqs?.length > 0 || college.admission_dates?.length > 0 || college.placement?.average > 0) && (
                 <div className="text-center mb-4">
                   <button
                     onClick={() => setShowContent(true)}
@@ -833,67 +839,73 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               )}
 
-              {/* SEO EXPANDABLE CONTENT */}
+              {/* SEO EXPANDABLE CONTENT - Only database content */}
               {showContent && (
                 <div className="space-y-8">
-                  {/* TABLE OF CONTENTS */}
-                  <div className="bg-gray-50 rounded-lg p-6 border">
-                    <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
-                    <div className="grid grid-cols-3 gap-x-4 gap-y-2">
-                      {tableOfContents.map((item) => (
-                        <a
-                          key={item.id}
-                          href={`#${item.id}`}
-                          className="text-left text-sm text-blue-600 hover:underline flex gap-2"
-                        >
-                          <span className="font-semibold flex-shrink-0">{item.num}.</span>
-                          <span>{item.title}</span>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* FULL INTRO PARAGRAPHS */}
-                  <div>
-                    <p className="text-gray-800 leading-relaxed mb-4">
-                      {college.name} is a <strong>{college.type || college.institution_type}</strong> established in <strong>{college.established_year || college.established || 'N/A'}</strong>. 
-                      {college.description || `As per the data, ${college.name} is one of the preferred institutions for students.`}
-                      {college.nirf_ranking && <> {college.name} Ranking is <strong>#{college.nirf_ranking}</strong> in NIRF rankings.</>}
-                    </p>
-                    {college.average_fees && (
-                      <p className="text-gray-800 leading-relaxed mb-4">
-                        {college.name} offers various programs with total fees ranging from <strong>₹{(college.average_fees / 100000).toFixed(2)} Lakhs</strong>.
-                        {college.courses?.length > 0 && <> The institute offers {college.courses.length} courses across various disciplines.</>}
-                      </p>
-                    )}
-                    {college.placement?.average > 0 && (
-                      <p className="text-gray-800 leading-relaxed mb-4">
-                        As per {college.name} Placements, the average package was <strong>INR {(college.placement.average / 100000).toFixed(1)} LPA</strong>
-                        {college.placement.highest > 0 && <> with the highest package reaching <strong>INR {(college.placement.highest / 100000).toFixed(1)} LPA</strong></>}.
-                        {college.placement.top_recruiters?.length > 0 && <> Top recruiters include {college.placement.top_recruiters.slice(0, 3).join(', ')}.</>}
-                      </p>
-                    )}
-                  </div>
+                  {/* SEO FULL CONTENT - If exists in database */}
+                  {college.seo_full_content && (
+                    <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
+                  )}
 
                   {/* VIDEO - Only show if video URL exists */}
                   {(college?.campus_video_url || college?.seo_video_url || college?.videos?.[0]) && (
                     <div className="mb-6">
-                      <h3 className="text-lg font-bold mb-3">{college.video_title || `${college.name} Video`}</h3>
+                      <h3 className="text-lg font-bold mb-3">{college.campus_video_title || college.seo_video_title || `${college.name} Video`}</h3>
+                      {(college.campus_video_description || college.seo_video_description) && (
+                        <p className="text-gray-600 text-sm mb-3">{college.campus_video_description || college.seo_video_description}</p>
+                      )}
                       <div className="rounded-lg aspect-video overflow-hidden border">
                         <iframe
                           src={getYouTubeEmbedUrl(college.campus_video_url || college.seo_video_url || college.videos?.[0])}
                           className="w-full h-full"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
-                          title={college.video_title || `${college.name} Video`}
+                          title={college.campus_video_title || college.seo_video_title || `${college.name} Video`}
                         ></iframe>
                       </div>
                     </div>
                   )}
 
+                  {/* SEO IMAGES - Only show if exists */}
+                  {college.seo_images?.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {college.seo_images.map((img, idx) => (
+                        <div key={idx} className="rounded-lg overflow-hidden border">
+                          <img src={typeof img === 'string' ? img : img.url} alt={typeof img === 'object' ? img.alt : `${college.name} Image ${idx + 1}`} className="w-full h-48 object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* SEO TABLES - Only show if exists */}
+                  {college.seo_tables?.length > 0 && college.seo_tables.map((table, idx) => (
+                    <div key={idx} className="overflow-x-auto">
+                      {table.title && <h3 className="text-lg font-bold mb-3">{table.title}</h3>}
+                      <table className="w-full border-collapse border">
+                        {table.headers && (
+                          <thead>
+                            <tr className="bg-orange-50">
+                              {table.headers.map((header, hIdx) => (
+                                <th key={hIdx} className="border px-4 py-3 text-left text-sm font-bold">{header}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                        )}
+                        <tbody>
+                          {table.rows?.map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-gray-50">
+                              {row.map((cell, cIdx) => (
+                                <td key={cIdx} className="border px-4 py-3 text-sm">{cell}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
+
                   {/* ALL DETAILED CONTENT SECTIONS - NOW INSIDE EXPANDABLE AREA */}
                   <div className="space-y-8">
-                    {/* ADMISSION DATES - Guest Gated */}
                     {/* ADMISSION DATES - Only show if data exists */}
                     {college?.admission_dates && college.admission_dates.length > 0 && (
                       <section id="seo-admission-dates">
