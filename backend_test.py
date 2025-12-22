@@ -4818,33 +4818,46 @@ class APITester:
         print("=" * 80)
 
     def run_all_tests(self):
-        """Run all test suites focusing on User and Institute Dashboard APIs"""
-        print("🚀 TESTING USER & INSTITUTE AUTHENTICATION AND DASHBOARD SYSTEM")
+        """Run all test suites focusing on Deployment Health Check first"""
+        print("🚀 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
         print(f"🌐 Base URL: {BASE_URL}")
         print("=" * 80)
         
-        # Core authentication first
+        # **PRIORITY: DEPLOYMENT HEALTH CHECK TESTS**
+        self.test_deployment_health_check()
+        self.test_eligibility_checker_apis()
+        self.test_authentication_endpoints_deployment()
+        self.test_lead_submission()
+        
+        # Generate deployment readiness report first
+        self.generate_deployment_readiness_report()
+        
+        print("\n" + "=" * 80)
+        print("🔄 CONTINUING WITH COMPREHENSIVE TESTING...")
+        print("=" * 80)
+        
+        # Core authentication
         self.test_authentication()
         
-        # **NEW: URL ROUTING SYSTEM TESTS (Review Request):**
+        # **URL ROUTING SYSTEM TESTS:**
         self.test_url_routing_system()
         self.test_url_routing_title_generation()
         
-        # **1. User Authentication APIs:**
+        # **User Authentication APIs:**
         self.test_user_auth_send_otp()
         self.test_user_auth_verify_otp()
         
-        # **2. Institute Authentication APIs:**
+        # **Institute Authentication APIs:**
         self.test_institute_auth_invalid_credentials()
         self.test_institute_auth_valid_credentials()
         self.test_institute_forgot_password()
         
-        # **3. Institute Dashboard APIs (if login successful):**
+        # **Institute Dashboard APIs:**
         self.test_institute_dashboard_data()
         self.test_institute_leads_api()
         self.test_institute_applications_api()
         
-        # **NEW: Institute Login and Dashboard Flow Test (Review Request):**
+        # **Institute Login and Dashboard Flow Test:**
         self.test_institute_login_and_dashboard()
         
         # Legacy User and Institute Dashboard API Tests
@@ -4858,13 +4871,13 @@ class APITester:
         self.test_blog_routes()
         self.test_news_routes()
         
-        # **4. Admission Partner Booking System Tests:**
+        # **Admission Partner Booking System Tests:**
         self.test_admission_booking_system()
         self.test_admission_document_upload()
         
         # Summary
         print("=" * 80)
-        print("📊 TEST SUMMARY")
+        print("📊 COMPREHENSIVE TEST SUMMARY")
         print("=" * 80)
         
         total_tests = len(self.test_results)
