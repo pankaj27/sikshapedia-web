@@ -217,11 +217,19 @@ const TextBlock = ({ data, onChange }) => {
 // TABLE BLOCK COMPONENT (Simplified)
 // ===========================================
 const TableBlock = ({ data, onChange }) => {
-  const [localData, setLocalData] = useState(data || {
-    title: '',
-    headers: ['Column 1', 'Column 2', 'Column 3'],
-    rows: [['', '', ''], ['', '', '']]
-  });
+  // Initialize with default values, ensuring headers and rows are always arrays
+  const getInitialData = () => {
+    if (data && data.headers && data.rows) {
+      return data;
+    }
+    return {
+      title: data?.title || '',
+      headers: ['Column 1', 'Column 2', 'Column 3'],
+      rows: [['', '', ''], ['', '', '']]
+    };
+  };
+
+  const [localData, setLocalData] = useState(getInitialData);
 
   const updateData = (newData) => {
     setLocalData(newData);
@@ -229,42 +237,55 @@ const TableBlock = ({ data, onChange }) => {
   };
 
   const addRow = () => {
-    const newRows = [...localData.rows, new Array(localData.headers.length).fill('')];
+    const headers = localData.headers || [];
+    const newRows = [...(localData.rows || []), new Array(headers.length).fill('')];
     updateData({ ...localData, rows: newRows });
   };
 
   const addColumn = () => {
-    const newHeaders = [...localData.headers, `Column ${localData.headers.length + 1}`];
-    const newRows = localData.rows.map(row => [...row, '']);
+    const headers = localData.headers || [];
+    const rows = localData.rows || [];
+    const newHeaders = [...headers, `Column ${headers.length + 1}`];
+    const newRows = rows.map(row => [...(row || []), '']);
     updateData({ ...localData, headers: newHeaders, rows: newRows });
   };
 
   const removeRow = (rowIndex) => {
-    if (localData.rows.length > 1) {
-      const newRows = localData.rows.filter((_, i) => i !== rowIndex);
+    const rows = localData.rows || [];
+    if (rows.length > 1) {
+      const newRows = rows.filter((_, i) => i !== rowIndex);
       updateData({ ...localData, rows: newRows });
     }
   };
 
   const removeColumn = (colIndex) => {
-    if (localData.headers.length > 1) {
-      const newHeaders = localData.headers.filter((_, i) => i !== colIndex);
-      const newRows = localData.rows.map(row => row.filter((_, i) => i !== colIndex));
+    const headers = localData.headers || [];
+    const rows = localData.rows || [];
+    if (headers.length > 1) {
+      const newHeaders = headers.filter((_, i) => i !== colIndex);
+      const newRows = rows.map(row => (row || []).filter((_, i) => i !== colIndex));
       updateData({ ...localData, headers: newHeaders, rows: newRows });
     }
   };
 
   const updateCell = (rowIndex, colIndex, value) => {
-    const newRows = [...localData.rows];
+    const rows = localData.rows || [];
+    const newRows = [...rows];
+    if (!newRows[rowIndex]) newRows[rowIndex] = [];
     newRows[rowIndex][colIndex] = value;
     updateData({ ...localData, rows: newRows });
   };
 
   const updateHeader = (colIndex, value) => {
-    const newHeaders = [...localData.headers];
+    const headers = localData.headers || [];
+    const newHeaders = [...headers];
     newHeaders[colIndex] = value;
     updateData({ ...localData, headers: newHeaders });
   };
+
+  // Ensure we always have valid arrays for rendering
+  const headers = localData.headers || ['Column 1', 'Column 2', 'Column 3'];
+  const rows = localData.rows || [['', '', ''], ['', '', '']];
 
   return (
     <div className="space-y-4">
