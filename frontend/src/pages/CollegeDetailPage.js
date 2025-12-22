@@ -1648,21 +1648,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                       Submit Question
                     </Button>
                   </div>
-
-                  {/* Recent Q&A - Dynamic from Database */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-lg">Recent Questions</h3>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Data from database</span>
-                    </div>
-                    
-                    {/* Dynamic Questions Component */}
-                    <QuestionsSection
-                      entityId={college.id}
-                      entityType="college"
-                      entityName={college.name}
-                    />
-                  </div>
                 </section>
 
                 {/* FAQ SECTION */}
