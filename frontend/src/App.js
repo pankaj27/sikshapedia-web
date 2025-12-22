@@ -160,6 +160,7 @@ const LeadFormsManagement = lazy(() => import('./pages/admin/LeadFormsManagement
 const CounsellingRequestsManagement = lazy(() => import('./pages/admin/CounsellingRequestsManagement'));
 const AdvancedContentForm = lazy(() => import('./pages/admin/AdvancedContentForm'));
 const AdvancedContentManagement = lazy(() => import('./pages/admin/AdvancedContentManagement'));
+const SimplifiedInstitutionForm = lazy(() => import('./pages/admin/SimplifiedInstitutionForm'));
 import FloatingApplyButton from './components/FloatingApplyButton';
 // Admission Partner Pages
 const AdmissionPartnersPage = lazy(() => import('./pages/AdmissionPartnersPage'));
