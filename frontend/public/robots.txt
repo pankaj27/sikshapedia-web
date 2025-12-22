@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://search-buddy-6.preview.emergentagent.com/sitemap.xml
+Sitemap: https://collegefinder-boost.preview.emergentagent.com/sitemap.xml
