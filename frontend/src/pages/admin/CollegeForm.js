@@ -2412,8 +2412,9 @@ const CollegeForm = () => {
                           {/* Add Quick Facts Block */}
                           <button type="button" onClick={() => {
                             const newToc = [...(formData.seo_toc || [])];
+                            const collegeName = formData.name || 'College';
                             newToc[index].blocks = [...(newToc[index].blocks || []), {
-                              id: `block-${Date.now()}`, type: 'facts', title: 'Quick Facts',
+                              id: `block-${Date.now()}`, type: 'facts', title: `${collegeName} Quick Facts - AdmissionBuddy`,
                               items: [
                                 { label: 'Established', value: '' },
                                 { label: 'Institute Type', value: '' },
