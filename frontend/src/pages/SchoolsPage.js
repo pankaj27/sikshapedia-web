@@ -331,10 +331,7 @@ const SchoolsPage = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
                     >
                       <option value="">All Exams</option>
-                      <option value="jee-main">JEE Main (1730)</option>
-                      <option value="neet">NEET (612)</option>
-                      <option value="cat">CAT (876)</option>
-                      <option value="gate">GATE (545)</option>
+                      {/* Exam options populated dynamically */}
                     </select>
                   </div>
 
