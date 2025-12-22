@@ -504,7 +504,7 @@ const UserSignup = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">City *</label>
                   <SearchableSelect
-                    options={INDIA_CITIES}
+                    options={cities}
                     value={city}
                     onChange={setCity}
                     placeholder="Select your city"
