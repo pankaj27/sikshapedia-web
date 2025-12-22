@@ -368,6 +368,7 @@ const CollegeForm = () => {
   const [uploadingCampusBulk, setUploadingCampusBulk] = useState(false);
   const [uploadingBrochure, setUploadingBrochure] = useState(false);
   const [uploadingCourseBrochure, setUploadingCourseBrochure] = useState({});
+  const [uploadingContentImage, setUploadingContentImage] = useState({});
   const [boards, setBoards] = useState([]);
 
   // Update available cities when state changes (must be after formData declaration)
