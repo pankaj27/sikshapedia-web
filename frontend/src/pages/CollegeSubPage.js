@@ -636,7 +636,7 @@ const CollegeSubPage = () => {
               ) : (
                 <div className="bg-white rounded-xl shadow-lg p-8 text-center">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Section Not Found</h2>
-                  <p className="text-gray-600 mb-6">The requested section "{section}" does not exist.</p>
+                  <p className="text-gray-600 mb-6">The requested section &quot;{section}&quot; does not exist.</p>
                   <Link 
                     to={basePath}
                     className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600"
