@@ -393,13 +393,15 @@ const DynamicListingPage = () => {
     return active;
   }, [pageInfo, queryFilters]);
   
-  // Fetch master location data
+  // Fetch master location data AND streams/courses
   useEffect(() => {
     const fetchMasterData = async () => {
       try {
-        const [statesRes, citiesRes] = await Promise.all([
+        const [statesRes, citiesRes, streamsRes, coursesRes] = await Promise.all([
           api.get('/locations/all-states'),
-          api.get('/locations/all-cities')
+          api.get('/locations/all-cities'),
+          api.get('/streams'),
+          api.get('/courses')
         ]);
         const activeStates = (statesRes.data || [])
           .filter(s => s.status === 'active')
@@ -407,8 +409,22 @@ const DynamicListingPage = () => {
           .sort();
         setMasterStates(activeStates);
         setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+        
+        // Set streams - filter active ones and extract names
+        const activeStreams = (streamsRes.data || [])
+          .filter(s => s.is_active !== false)
+          .map(s => s.name)
+          .sort();
+        setMasterStreams(activeStreams);
+        
+        // Set courses - filter active ones and extract names
+        const activeCourses = (coursesRes.data || [])
+          .filter(c => c.is_active !== false)
+          .map(c => c.name)
+          .sort();
+        setMasterCourses(activeCourses);
       } catch (error) {
-        console.error('Error fetching master locations:', error);
+        console.error('Error fetching master data:', error);
       }
     };
     fetchMasterData();
