@@ -1846,18 +1846,33 @@ const CollegeForm = () => {
                 {saving && formData.status === 'draft' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiFileText className="w-4 h-4 mr-2" />}
                 Save Draft
               </Button>
-              <Button 
-                type="button"
-                disabled={saving}
-                onClick={() => {
-                  setFormData(prev => ({...prev, status: 'published'}));
-                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
-                }}
-                className="bg-green-600 hover:bg-green-700 text-white"
-              >
-                {saving && formData.status === 'published' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
-                Save & Publish
-              </Button>
+              {canDirectPublish ? (
+                <Button 
+                  type="button"
+                  disabled={saving}
+                  onClick={() => {
+                    setFormData(prev => ({...prev, status: 'published'}));
+                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                  }}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  {saving && formData.status === 'published' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
+                  Save & Publish
+                </Button>
+              ) : (
+                <Button 
+                  type="button"
+                  disabled={saving}
+                  onClick={() => {
+                    setFormData(prev => ({...prev, status: 'pending'}));
+                    setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {saving && formData.status === 'pending' ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSend className="w-4 h-4 mr-2" />}
+                  Submit for Review
+                </Button>
+              )}
             </div>
           </div>
         </div>
