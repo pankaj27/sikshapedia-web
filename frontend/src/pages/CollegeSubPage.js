@@ -85,12 +85,12 @@ const CollegeSubPage = () => {
   const [invalidFormat, setInvalidFormat] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   
-  // Determine institution type from URL (plural paths)
+  // Determine institution type from URL (handles both singular and plural paths)
   const getInstitutionType = () => {
     const path = location.pathname;
-    if (path.startsWith('/colleges/')) return 'College';
-    if (path.startsWith('/universities/')) return 'University';
-    if (path.startsWith('/schools/')) return 'School';
+    if (path.startsWith('/colleges/') || path.startsWith('/college/')) return 'College';
+    if (path.startsWith('/university/') || path.startsWith('/universities/')) return 'University';
+    if (path.startsWith('/schools/') || path.startsWith('/school/')) return 'School';
     return 'College';
   };
   
