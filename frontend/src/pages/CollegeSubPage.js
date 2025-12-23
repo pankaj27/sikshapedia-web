@@ -305,9 +305,10 @@ const CollegeSubPage = () => {
         </div>
 
         {/* Content Area with Sidebar */}
-        <div className="max-w-7xl mx-auto px-4 py-8 flex gap-8">
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex gap-8">
+            {/* Main Content - takes remaining space */}
+            <div className="flex-1 min-w-0">
               {currentSection ? (
                 <div className="bg-white rounded-xl shadow-lg p-8">
                   {/* Page Heading (H1) */}
