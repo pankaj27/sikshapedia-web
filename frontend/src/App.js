@@ -197,18 +197,12 @@ function App() {
             <Route path="/admin/colleges/add" element={<CollegeForm />} />
             <Route path="/admin/colleges/new" element={<CollegeForm />} />
             <Route path="/admin/colleges/edit/:id" element={<CollegeForm />} />
-            <Route path="/admin/colleges/simple/new" element={<SimplifiedInstitutionForm entityType="college" />} />
-            <Route path="/admin/colleges/simple/edit/:id" element={<SimplifiedInstitutionForm entityType="college" />} />
             <Route path="/admin/universities/new" element={<UniversityForm />} />
             <Route path="/admin/universities/edit/:id" element={<UniversityForm />} />
-            <Route path="/admin/universities/simple/new" element={<SimplifiedInstitutionForm entityType="university" />} />
-            <Route path="/admin/universities/simple/edit/:id" element={<SimplifiedInstitutionForm entityType="university" />} />
             <Route path="/admin/schools" element={<CollegesListManagement type="schools" />} />
             <Route path="/admin/schools/add" element={<SchoolForm />} />
             <Route path="/admin/schools/new" element={<SchoolForm />} />
             <Route path="/admin/schools/edit/:id" element={<SchoolForm />} />
-            <Route path="/admin/schools/simple/new" element={<SimplifiedInstitutionForm entityType="school" />} />
-            <Route path="/admin/schools/simple/edit/:id" element={<SimplifiedInstitutionForm entityType="school" />} />
             <Route path="/admin/news" element={<NewsManagement />} />
             <Route path="/admin/news/new" element={<NewsForm />} />
             <Route path="/admin/news/edit/:id" element={<NewsForm />} />
