@@ -5628,6 +5628,9 @@ class APITester:
         self.test_institution_creation_comprehensive()
         self.test_created_institutions_verification()
         
+        # **NEW: Quick Facts and Key Statistics Test (Review Request):**
+        self.test_quick_facts_and_key_statistics()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
