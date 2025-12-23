@@ -840,13 +840,12 @@ const CollegeDetailPage = ({ overrideId }) => {
               {showContent && (
                 <div className="space-y-8">
                   
-                  {/* TABLE OF CONTENTS - Navigation Links */}
-                  {(college.seo_toc?.length > 0 || tableOfContents.length > 0) && (
+                  {/* TABLE OF CONTENTS - Only from SEO Content (Visual Block Editor) */}
+                  {college.seo_toc?.length > 0 && (
                     <div className="bg-gray-50 rounded-lg p-6 border">
                       <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                        {/* SEO TOC Sections (from Visual Block Editor) */}
-                        {college.seo_toc?.map((section, idx) => (
+                        {college.seo_toc.map((section, idx) => (
                           <a
                             key={`seo-${idx}`}
                             href={`#${section.anchor || `seo-section-${idx}`}`}
@@ -854,17 +853,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                           >
                             <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
                             <span>{section.title}</span>
-                          </a>
-                        ))}
-                        {/* Dynamic TOC items (from menu tab content) */}
-                        {tableOfContents.map((item, idx) => (
-                          <a
-                            key={item.id}
-                            href={`#${item.id.replace('seo-', '')}`}
-                            className="text-left text-sm text-orange-600 hover:underline flex gap-2"
-                          >
-                            <span className="font-semibold flex-shrink-0">{String((college.seo_toc?.length || 0) + idx + 1).padStart(2, '0')}.</span>
-                            <span>{item.title}</span>
                           </a>
                         ))}
                       </div>
