@@ -4673,50 +4673,7 @@ const CollegeForm = () => {
  
 
  
-            
-            <div className="bg-white border rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-semibold text-gray-800 flex items-center gap-2">
-                  <FiLayers className="text-gray-600" /> Additional Menu Items (Custom Pages)
-                  </h4>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newItems = [...(formData.menu_config?.items || []), {
-                        id: `custom-${Date.now()}`,
-                        label: 'New Item',
-                        icon: 'default',
-                        enabled: true,
-                        order: (formData.menu_config?.items?.length || 0) + 1,
-                        content: '',
-                        page_heading: '',
-                        search_heading: '',
-                        meta_title: '',
-                        meta_description: '',
-                        meta_keywords: '',
-                        og_title: '',
-                        og_description: '',
-                        toc: [],
-                        tables: [],
-                        images: [],
-                        videos: [],
-                        faqs: [],
-                        widgets: {
-                          quick_facts: { enabled: true },
-                          quick_nav: { enabled: true },
-                          contact_cta: { enabled: true, title: 'Need Help?', subtitle: 'Get free counseling' }
-                        }
-                      }];
-                      setFormData({
-                        ...formData,
-                        menu_config: { ...formData.menu_config, items: newItems }
-                      });
-                    }}
-                    className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200 flex items-center gap-1"
-                  >
-                    <FiPlus size={12} /> Add Item
-                  </button>
-                </div>
+ 
 
                 <div className="space-y-2">
                   {(formData.menu_config?.items || [])
