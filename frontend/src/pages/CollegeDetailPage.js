@@ -2066,37 +2066,43 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                                   <p className="text-sm text-gray-600">
                                     {college.location?.city}, {college.location?.state}
                                   </p>
-                                  <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
+                                  {college.location?.pincode && (
+                                    <p className="text-sm text-gray-600">India - {college.location.pincode}</p>
+                                  )}
                                 </div>
                               </div>
 
+                              {college.contact_info?.phone && (
                               <div className="flex gap-3">
                                 <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
                                 <div>
                                   <p className="text-sm text-gray-700 font-medium">Phone</p>
-                                  <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
+                                  <p className="text-sm text-gray-600">{college.contact_info.phone}</p>
                                 </div>
                               </div>
+                              )}
 
+                              {college.contact_info?.email && (
                               <div className="flex gap-3">
                                 <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
                                 <div>
                                   <p className="text-sm text-gray-700 font-medium">Email</p>
-                                  <p className="text-sm text-gray-600">
-                                    {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
-                                  </p>
+                                  <p className="text-sm text-gray-600">{college.contact_info.email}</p>
                                 </div>
                               </div>
+                              )}
 
+                              {college.contact_info?.website && (
                               <div className="flex gap-3">
                                 <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
                                 <div>
                                   <p className="text-sm text-gray-700 font-medium">Website</p>
-                                  <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
-                                    {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
+                                  <a href={college.contact_info.website} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                                    {college.contact_info.website}
                                   </a>
                                 </div>
                               </div>
+                              )}
                             </div>
                           </GuestGate>
                         </div>
