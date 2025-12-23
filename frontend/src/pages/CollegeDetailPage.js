@@ -286,6 +286,49 @@ const CollegeDetailPage = ({ overrideId }) => {
     }
   };
 
+  // Fetch similar colleges based on same city/state/type
+  useEffect(() => {
+    const fetchSimilarColleges = async () => {
+      if (!college) return;
+      
+      try {
+        // Fetch colleges from the same city first, then state, then type
+        const response = await api.get('/institutions', {
+          params: {
+            limit: 10,
+            city: college.city,
+            state: college.state
+          }
+        });
+        
+        let colleges = response.data;
+        // Handle both array and object response formats
+        if (!Array.isArray(colleges)) {
+          colleges = colleges.institutions || colleges.data || [];
+        }
+        
+        // Filter out the current college and prioritize by matching criteria
+        const filtered = colleges
+          .filter(c => c.id !== college.id)
+          .map(c => ({
+            ...c,
+            score: (c.city === college.city ? 3 : 0) + 
+                   (c.state === college.state ? 2 : 0) + 
+                   (c.type === college.type ? 1 : 0) +
+                   (c.institution_type === college.institution_type ? 1 : 0)
+          }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 5);
+        
+        setSimilarColleges(filtered);
+      } catch (error) {
+        console.error('Error fetching similar colleges:', error);
+      }
+    };
+    
+    fetchSimilarColleges();
+  }, [college]);
+
   // Generate SEO-friendly URL for menu sections
   // Format: /colleges/012-aiims-delhi/admissions
   const getSectionUrl = useMemo(() => {
