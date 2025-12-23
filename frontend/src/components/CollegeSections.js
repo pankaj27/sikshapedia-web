@@ -134,7 +134,7 @@ const getYouTubeEmbedUrl = (url) => {
 // These are EXACT copies of the rendering logic from CollegeDetailPage.js
 // to ensure content consistency between main page and sub-pages
 
-// COURSES SECTION - EXACT same as main page
+// COURSES SECTION - EXACT same as main page (with GuestGate for fee data)
 export const CoursesSection = ({ college }) => {
   if (!college?.courses || college.courses.length === 0) return null;
   
@@ -145,36 +145,38 @@ export const CoursesSection = ({ college }) => {
         {college.name} offers various programs. The fee structure is mentioned below:
       </p>
 
-      <div className="overflow-x-auto mb-6">
-        <table className="w-full border-collapse border">
-          <thead>
-            <tr className="bg-orange-50">
-              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
-            </tr>
-          </thead>
-          <tbody>
-            {college.courses.map((course, idx) => {
-              const courseName = typeof course === 'string' ? course : course.name;
-              const duration = typeof course === 'object' ? course.duration : '';
-              const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
-              const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
-              return (
-                <tr key={idx} className="hover:bg-gray-50">
-                  <td className="border px-4 py-3">
-                    <span className="text-blue-600 font-medium">{courseName}</span>
-                  </td>
-                  <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
-                  <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
-                  <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <GuestGate title="Fee Details">
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full border-collapse border">
+            <thead>
+              <tr className="bg-orange-50">
+                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+              </tr>
+            </thead>
+            <tbody>
+              {college.courses.map((course, idx) => {
+                const courseName = typeof course === 'string' ? course : course.name;
+                const duration = typeof course === 'object' ? course.duration : '';
+                const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
+                const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
+                return (
+                  <tr key={idx} className="hover:bg-gray-50">
+                    <td className="border px-4 py-3">
+                      <span className="text-blue-600 font-medium">{courseName}</span>
+                    </td>
+                    <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
+                    <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
+                    <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </GuestGate>
     </div>
   );
 };
