@@ -2151,14 +2151,37 @@ const CollegeForm = () => {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">Description *</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-                rows="4"
-                className="w-full border rounded px-3 py-2"
+              <p className="text-xs text-gray-500 mb-2">
+                Use the toolbar to format text: Bold, Italic, Colors, Links, Images, Videos, Lists
+              </p>
+              
+              {/* Rich Text Editor for Description */}
+              <RichTextEditor
+                value={formData.description || ''}
+                onChange={(content) => setFormData(prev => ({...prev, description: content}))}
+                placeholder="Write detailed description about the institution..."
               />
+              
+              {/* Emoji Quick Insert for Description */}
+              <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+                <p className="text-xs font-medium text-yellow-800 mb-1">😀 Quick Emojis (click to copy):</p>
+                <div className="flex flex-wrap gap-1">
+                  {['🎓', '📚', '🏫', '✅', '⭐', '🏆', '💼', '📍', '📞', '📧', '🌐', '👨‍🎓', '👩‍🎓', '📈', '💰', '🎯', '✨', '🔥', '💡', '👍'].map((emoji, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(emoji);
+                        alert(`${emoji} copied! Paste in editor with Ctrl+V.`);
+                      }}
+                      className="text-lg hover:bg-yellow-200 rounded p-1 transition-colors"
+                      title={`Click to copy ${emoji}`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Table Builder for Description */}
