@@ -258,30 +258,113 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
         <WidgetCard
           emoji="📣"
           title="Ad Banner"
-          description="Promotional banner space"
+          description="Promotional banner space in sidebar"
           enabled={formData.sidebar_widgets?.ad_banner?.enabled ?? false}
           onToggle={(e) => updateWidget('ad_banner', 'enabled', e.target.checked)}
         >
           <div className="space-y-3">
             <div>
               <label className="block text-xs text-gray-600 mb-1">Banner Image URL</label>
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={formData.sidebar_widgets?.ad_banner?.image_url || ''}
+                  onChange={(e) => updateWidget('ad_banner', 'image_url', e.target.value)}
+                  placeholder="Enter banner image URL or upload"
+                  className="flex-1 border rounded px-2 py-1 text-sm"
+                />
+                <label className="px-3 py-1 bg-blue-500 text-white text-xs rounded cursor-pointer hover:bg-blue-600">
+                  Upload
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        try {
+                          const formDataUpload = new FormData();
+                          formDataUpload.append('file', file);
+                          formDataUpload.append('upload_type', 'banner');
+                          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/banner`, {
+                            method: 'POST',
+                            body: formDataUpload
+                          });
+                          const data = await response.json();
+                          if (data.url) {
+                            updateWidget('ad_banner', 'image_url', data.url);
+                          }
+                        } catch (err) {
+                          console.error('Upload failed:', err);
+                          alert('Failed to upload banner image');
+                        }
+                      }
+                    }}
+                  />
+                </label>
+              </div>
+              {formData.sidebar_widgets?.ad_banner?.image_url && (
+                <img 
+                  src={formData.sidebar_widgets.ad_banner.image_url} 
+                  alt="Banner Preview" 
+                  className="mt-2 w-full h-24 object-cover rounded border"
+                />
+              )}
+            </div>
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">Banner Title (optional)</label>
               <input
-                type="url"
-                value={formData.sidebar_widgets?.ad_banner?.image_url || ''}
-                onChange={(e) => updateWidget('ad_banner', 'image_url', e.target.value)}
-                placeholder="Enter banner image URL"
+                type="text"
+                value={formData.sidebar_widgets?.ad_banner?.title || ''}
+                onChange={(e) => updateWidget('ad_banner', 'title', e.target.value)}
+                placeholder="e.g., Special Offer!"
                 className="w-full border rounded px-2 py-1 text-sm"
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1">Link URL</label>
+              <label className="block text-xs text-gray-600 mb-1">Banner Description (optional)</label>
               <input
-                type="url"
-                value={formData.sidebar_widgets?.ad_banner?.link_url || ''}
-                onChange={(e) => updateWidget('ad_banner', 'link_url', e.target.value)}
-                placeholder="Enter click destination URL"
+                type="text"
+                value={formData.sidebar_widgets?.ad_banner?.description || ''}
+                onChange={(e) => updateWidget('ad_banner', 'description', e.target.value)}
+                placeholder="e.g., Get 20% off on application fees"
                 className="w-full border rounded px-2 py-1 text-sm"
               />
+            </div>
+            <div className="border-t pt-3 mt-3">
+              <label className="flex items-center gap-2 text-sm mb-2">
+                <input 
+                  type="checkbox" 
+                  checked={formData.sidebar_widgets?.ad_banner?.show_cta_button ?? true}
+                  onChange={(e) => updateWidget('ad_banner', 'show_cta_button', e.target.checked)} 
+                  className="rounded" 
+                />
+                Show CTA Button
+              </label>
+              {formData.sidebar_widgets?.ad_banner?.show_cta_button && (
+                <div className="space-y-2 pl-4">
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">CTA Button Text</label>
+                    <input
+                      type="text"
+                      value={formData.sidebar_widgets?.ad_banner?.cta_text || 'Learn More'}
+                      onChange={(e) => updateWidget('ad_banner', 'cta_text', e.target.value)}
+                      placeholder="e.g., Apply Now, Learn More"
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">CTA Button URL</label>
+                    <input
+                      type="url"
+                      value={formData.sidebar_widgets?.ad_banner?.cta_url || ''}
+                      onChange={(e) => updateWidget('ad_banner', 'cta_url', e.target.value)}
+                      placeholder="https://example.com/offer"
+                      className="w-full border rounded px-2 py-1 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </WidgetCard>
