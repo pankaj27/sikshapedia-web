@@ -161,7 +161,6 @@ import FloatingApplyButton from './components/FloatingApplyButton';
 const AdmissionPartnersPage = lazy(() => import('./pages/AdmissionPartnersPage'));
 // Review Link Page
 const ReviewLinkPage = lazy(() => import('./pages/ReviewLinkPage'));
-const UniversityDetailPage = lazy(() => import('./pages/UniversityDetailPage'));
 import './App.css';
 
 // Loading spinner component for lazy loaded routes
