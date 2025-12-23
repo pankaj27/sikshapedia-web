@@ -404,11 +404,7 @@ function App() {
               <Route path="/schools/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
               <Route path="/schools/:seg1/:seg2/:seg3/:seg4" element={<DynamicListingPage />} />
               
-              {/* Universities routes - both singular and plural */}
-              <Route path="/universities" element={<DynamicListingPage />} />
-              <Route path="/universities/:seg1" element={<InstitutionRouter />} />
-              <Route path="/universities/:seg1/:seg2" element={<InstitutionRouter />} />
-              <Route path="/universities/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
+              {/* University routes - singular form only (correct URL structure) */}
               <Route path="/university" element={<DynamicListingPage />} />
               <Route path="/university/:seg1" element={<InstitutionRouter />} />
               <Route path="/university/:seg1/:seg2" element={<InstitutionRouter />} />
