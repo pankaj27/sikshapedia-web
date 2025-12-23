@@ -647,73 +647,25 @@ const CollegeSubPage = () => {
                 </div>
               )}
             </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1 space-y-6">
-              {/* Quick Navigation */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <FiBookmark className="text-orange-500" size={18} /> Quick Navigation
-                </h3>
-                <div className="space-y-2">
-                  {menuItems.map((item, index) => (
-                    <Link
-                      key={index}
-                      to={`${basePath}/${item.id}`}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                        section === item.id
-                          ? 'bg-orange-100 text-orange-700 font-semibold'
-                          : 'hover:bg-gray-100 text-gray-600'
-                      }`}
-                    >
-                      <span className={section === item.id ? 'text-orange-600' : 'text-gray-400'}>{getMenuIcon(item.id)}</span>
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* College Quick Facts */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <HiOutlineOfficeBuilding className="text-orange-500" size={18} /> Quick Facts
-                </h3>
-                <div className="space-y-3 text-sm">
-                  {college.established && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Established</span>
-                      <span className="font-semibold">{college.established}</span>
-                    </div>
-                  )}
-                  {college.institution_type && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Type</span>
-                      <span className="font-semibold">{college.institution_type}</span>
-                    </div>
-                  )}
-                  {college.ownership && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Ownership</span>
-                      <span className="font-semibold">{college.ownership}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Contact CTA */}
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
-                <h3 className="font-bold mb-2 flex items-center gap-2">
-                  <FiHelpCircle size={18} /> Need Help?
-                </h3>
-                <p className="text-sm text-orange-100 mb-4">Get free counseling from our experts</p>
-                <button className="w-full bg-white text-orange-600 py-2 rounded-lg font-semibold hover:bg-orange-50 flex items-center justify-center gap-2">
-                  <FiPhone size={16} /> Contact Us
-                </button>
-              </div>
-            </div>
           </div>
         </div>
+        
+        {/* Shared Sidebar from Main Page */}
+        <CollegeSidebar 
+          college={college}
+          onApplyClick={() => setShowApplyModal(true)}
+          onBookingClick={() => {}}
+        />
       </div>
+      
+      {/* Apply Now Modal */}
+      <ApplyNowModal
+        isOpen={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        collegeName={college?.name}
+        collegeId={college?.id}
+        courses={college?.courses || []}
+      />
     </>
   );
 };
