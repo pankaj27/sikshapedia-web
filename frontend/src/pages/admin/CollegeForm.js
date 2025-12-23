@@ -4658,26 +4658,14 @@ const CollegeForm = () => {
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
         {/* STEP 3: CONTENT BASED ON MENU MODE                                              */}
         {/* ═══════════════════════════════════════════════════════════════════════════════ */}
-        <div className={`text-white px-4 py-3 rounded-lg shadow-md mt-6 ${
-          formData.menu_config?.use_custom_menu 
-            ? 'bg-gradient-to-r from-orange-600 to-red-600' 
-            : formData.menu_config?.auto_from_toc 
-              ? 'bg-gradient-to-r from-green-600 to-teal-600' 
-              : 'bg-gradient-to-r from-gray-700 to-gray-800'
-        }`}>
+        {/* STEP 3: ADD CONTENT                                                             */}
+        {/* ═══════════════════════════════════════════════════════════════════════════════ */}
+        <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-white px-4 py-3 rounded-lg shadow-md mt-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-lg" style={{
-              color: formData.menu_config?.use_custom_menu ? '#ea580c' : formData.menu_config?.auto_from_toc ? '#059669' : '#374151'
-            }}>3</div>
+            <div className="w-8 h-8 bg-white text-gray-700 rounded-full flex items-center justify-center font-bold text-lg">3</div>
             <div>
               <h2 className="text-lg font-bold">Step 3: Add Content</h2>
-              <p className="text-sm opacity-90">
-                {formData.menu_config?.use_custom_menu 
-                  ? 'Build custom pages for each menu item' 
-                  : formData.menu_config?.auto_from_toc 
-                    ? 'Define TOC sections with content' 
-                    : 'Fill standard sections (Courses, Placements, FAQs, etc.)'}
-              </p>
+              <p className="text-sm opacity-90">Fill content for each enabled menu section</p>
             </div>
           </div>
         </div>
