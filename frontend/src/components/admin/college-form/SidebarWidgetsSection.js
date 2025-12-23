@@ -286,6 +286,93 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
           </div>
         </WidgetCard>
 
+        {/* Career Counseling Widget */}
+        <WidgetCard
+          emoji="💼"
+          title="Career Counseling"
+          description="Book session for career guidance"
+          enabled={formData.sidebar_widgets?.career_counseling?.enabled ?? true}
+          onToggle={(e) => updateWidget('career_counseling', 'enabled', e.target.checked)}
+        >
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">Widget Title</label>
+              <input
+                type="text"
+                value={formData.sidebar_widgets?.career_counseling?.title || 'Career Counseling'}
+                onChange={(e) => updateWidget('career_counseling', 'title', e.target.value)}
+                className="w-full border rounded px-2 py-1 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">Subtitle</label>
+              <input
+                type="text"
+                value={formData.sidebar_widgets?.career_counseling?.subtitle || 'Get personalized career guidance from experts'}
+                onChange={(e) => updateWidget('career_counseling', 'subtitle', e.target.value)}
+                className="w-full border rounded px-2 py-1 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">Button Text</label>
+              <input
+                type="text"
+                value={formData.sidebar_widgets?.career_counseling?.button_text || 'Book Session'}
+                onChange={(e) => updateWidget('career_counseling', 'button_text', e.target.value)}
+                className="w-full border rounded px-2 py-1 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">Booking Type</label>
+              <select
+                value={formData.sidebar_widgets?.career_counseling?.booking_type || 'link'}
+                onChange={(e) => updateWidget('career_counseling', 'booking_type', e.target.value)}
+                className="w-full border rounded px-2 py-1 text-sm"
+              >
+                <option value="link">External Link (URL)</option>
+                <option value="phone">Phone Call</option>
+                <option value="whatsapp">WhatsApp</option>
+              </select>
+            </div>
+            {formData.sidebar_widgets?.career_counseling?.booking_type === 'link' && (
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">Booking URL</label>
+                <input
+                  type="url"
+                  value={formData.sidebar_widgets?.career_counseling?.booking_url || ''}
+                  onChange={(e) => updateWidget('career_counseling', 'booking_url', e.target.value)}
+                  placeholder="https://calendly.com/your-link"
+                  className="w-full border rounded px-2 py-1 text-sm"
+                />
+              </div>
+            )}
+            {formData.sidebar_widgets?.career_counseling?.booking_type === 'phone' && (
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">Phone Number</label>
+                <input
+                  type="tel"
+                  value={formData.sidebar_widgets?.career_counseling?.booking_phone || ''}
+                  onChange={(e) => updateWidget('career_counseling', 'booking_phone', e.target.value)}
+                  placeholder="+91 98765 43210"
+                  className="w-full border rounded px-2 py-1 text-sm"
+                />
+              </div>
+            )}
+            {formData.sidebar_widgets?.career_counseling?.booking_type === 'whatsapp' && (
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">WhatsApp Number</label>
+                <input
+                  type="tel"
+                  value={formData.sidebar_widgets?.career_counseling?.booking_whatsapp || ''}
+                  onChange={(e) => updateWidget('career_counseling', 'booking_whatsapp', e.target.value)}
+                  placeholder="919876543210 (without + or spaces)"
+                  className="w-full border rounded px-2 py-1 text-sm"
+                />
+              </div>
+            )}
+          </div>
+        </WidgetCard>
+
         {/* Social Share Widget */}
         <WidgetCard
           emoji="🔗"
