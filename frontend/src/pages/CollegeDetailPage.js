@@ -1981,7 +1981,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </section>
                 )}
 
-                {/* REVIEWS */}
+                {/* REVIEWS - Only show if menu enabled */}
+                {isMenuEnabled('reviews') && (
                 <section id="reviews" className="mt-8">
                   <ReviewsSection 
                     entityId={college?.id} 
@@ -1989,6 +1990,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                     entityName={college?.name}
                   />
                 </section>
+                )}
 
                 {/* QUESTIONS & ANSWERS */}
                 <section id="questions" className="mt-8">
