@@ -1693,8 +1693,10 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
               
-              {/* Recognition Filter */}
+              {/* Recognition Filter - Hide for Schools */}
+              {filterConfig.showRecognition && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'recognition' ? null : 'recognition')}
