@@ -2213,14 +2213,75 @@ const CollegeForm = () => {
               <p className="text-xs text-gray-500 mb-2">
                 This is the short introduction (3-4 lines) that appears before the &quot;Read More&quot; button
               </p>
-              <textarea
-                name="seo_intro"
-                value={formData.seo_intro}
-                onChange={handleChange}
-                rows="3"
-                placeholder="e.g., [College Name] is a premier engineering institution established in [Year]. As per the data, the college is one of the preferred institutions for students..."
-                className="w-full border rounded px-3 py-2"
-              />
+              
+              {/* Rich Text Editor Toolbar Info */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-3 mb-3">
+                <p className="text-xs font-bold text-blue-800 mb-2">✨ Rich Text Editor Features:</p>
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">📝 <strong>Bold</strong> / <em>Italic</em></span>
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">🔗 Links</span>
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">🎨 Text Colors</span>
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">🖼️ Images</span>
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">🎬 Videos</span>
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">📋 Lists</span>
+                  <span className="bg-white px-2 py-1 rounded border border-blue-200">😀 Emojis (copy-paste)</span>
+                </div>
+              </div>
+              
+              {/* React Quill Rich Text Editor */}
+              <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+                <ReactQuill
+                  theme="snow"
+                  value={formData.seo_intro || ''}
+                  onChange={(content) => {
+                    setFormData(prev => ({...prev, seo_intro: content}));
+                  }}
+                  placeholder="e.g., [College Name] is a premier engineering institution established in [Year]. As per the data, the college is one of the preferred institutions for students..."
+                  modules={{
+                    toolbar: [
+                      [{ 'header': [1, 2, 3, false] }],
+                      ['bold', 'italic', 'underline', 'strike'],
+                      [{ 'color': [] }, { 'background': [] }],
+                      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                      ['link', 'image', 'video'],
+                      [{ 'align': [] }],
+                      ['blockquote', 'code-block'],
+                      ['clean']
+                    ]
+                  }}
+                  formats={[
+                    'header',
+                    'bold', 'italic', 'underline', 'strike',
+                    'color', 'background',
+                    'list', 'bullet',
+                    'link', 'image', 'video',
+                    'align',
+                    'blockquote', 'code-block'
+                  ]}
+                  style={{ minHeight: '150px' }}
+                />
+              </div>
+              
+              {/* Emoji Quick Insert */}
+              <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+                <p className="text-xs font-medium text-yellow-800 mb-1">😀 Quick Emojis (click to copy):</p>
+                <div className="flex flex-wrap gap-1">
+                  {['🎓', '📚', '🏫', '✅', '⭐', '🏆', '💼', '📍', '📞', '📧', '🌐', '👨‍🎓', '👩‍🎓', '📈', '💰', '🎯', '✨', '🔥', '💡', '👍'].map((emoji, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(emoji);
+                        alert(`${emoji} copied! Paste it in the editor.`);
+                      }}
+                      className="text-lg hover:bg-yellow-200 rounded p-1 transition-colors"
+                      title={`Click to copy ${emoji}`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Table of Contents Builder */}
