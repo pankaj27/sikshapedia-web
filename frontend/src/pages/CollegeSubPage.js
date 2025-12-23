@@ -334,267 +334,42 @@ const CollegeSubPage = () => {
                     <h2 className="text-xl text-gray-600 mb-4 -mt-4">{currentSection.search_heading}</h2>
                   )}
                   
-                  {/* SECTION-SPECIFIC CONTENT */}
+                  {/* SECTION-SPECIFIC CONTENT - Using shared components (SAME as main page) */}
+                  
                   {/* INFO Section */}
-                  {section === 'info' && (
-                    <div className="space-y-6">
-                      {college.description && (
-                        <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: college.description }} />
-                      )}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                        {college.established_year && (
-                          <div className="bg-orange-50 p-4 rounded-lg text-center">
-                            <p className="text-2xl font-bold text-orange-600">{college.established_year}</p>
-                            <p className="text-sm text-gray-600">Established</p>
-                          </div>
-                        )}
-                        {college.total_students && (
-                          <div className="bg-blue-50 p-4 rounded-lg text-center">
-                            <p className="text-2xl font-bold text-blue-600">{college.total_students?.toLocaleString()}</p>
-                            <p className="text-sm text-gray-600">Students</p>
-                          </div>
-                        )}
-                        {college.type && (
-                          <div className="bg-green-50 p-4 rounded-lg text-center">
-                            <p className="text-2xl font-bold text-green-600">{college.type}</p>
-                            <p className="text-sm text-gray-600">Type</p>
-                          </div>
-                        )}
-                        {college.average_fees && (
-                          <div className="bg-purple-50 p-4 rounded-lg text-center">
-                            <p className="text-2xl font-bold text-purple-600">₹{(college.average_fees / 100000).toFixed(1)}L</p>
-                            <p className="text-sm text-gray-600">Avg. Fees</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                  {section === 'info' && <InfoSection college={college} />}
 
                   {/* COURSES Section */}
-                  {section === 'courses' && (
-                    <div className="space-y-4">
-                      {college.courses && college.courses.length > 0 ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse">
-                            <thead>
-                              <tr className="bg-orange-50">
-                                <th className="border p-3 text-left">Course Name</th>
-                                <th className="border p-3 text-left">Duration</th>
-                                <th className="border p-3 text-right">1st Year Fee</th>
-                                <th className="border p-3 text-right">Total Fee</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.courses.map((course, idx) => (
-                                <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                  <td className="border p-3 font-medium">{course.name}</td>
-                                  <td className="border p-3">{course.duration}</td>
-                                  <td className="border p-3 text-right">₹{course.first_year_fee?.toLocaleString() || '-'}</td>
-                                  <td className="border p-3 text-right font-semibold">₹{course.total_fee?.toLocaleString() || '-'}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">Course information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'courses' && <CoursesSection college={college} />}
 
                   {/* ADMISSION Section */}
-                  {section === 'admission' && (
-                    <div className="space-y-6">
-                      {college.admission_dates && college.admission_dates.length > 0 && (
-                        <div>
-                          <h3 className="text-xl font-semibold mb-4">Important Dates</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {college.admission_dates.map((date, idx) => (
-                              <div key={idx} className="bg-blue-50 p-4 rounded-lg flex justify-between items-center">
-                                <span className="font-medium">{date.event}</span>
-                                <span className="text-blue-600 font-semibold">{date.date}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {college.admission_process && (
-                        <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: college.admission_process }} />
-                      )}
-                      {!college.admission_dates?.length && !college.admission_process && (
-                        <p className="text-gray-500 italic">Admission information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'admission' && <AdmissionSection college={college} />}
 
                   {/* PLACEMENT Section */}
-                  {section === 'placement' && (
-                    <div className="space-y-6">
-                      {(college.placement || college.placements) && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {(college.placement?.highest || college.placements?.highest_package) && (
-                            <div className="bg-green-50 p-6 rounded-lg text-center">
-                              <p className="text-3xl font-bold text-green-600">
-                                ₹{((college.placement?.highest || college.placements?.highest_package) / 100000).toFixed(1)}L
-                              </p>
-                              <p className="text-gray-600">Highest Package</p>
-                            </div>
-                          )}
-                          {(college.placement?.average || college.placements?.average_package) && (
-                            <div className="bg-blue-50 p-6 rounded-lg text-center">
-                              <p className="text-3xl font-bold text-blue-600">
-                                ₹{((college.placement?.average || college.placements?.average_package) / 100000).toFixed(1)}L
-                              </p>
-                              <p className="text-gray-600">Average Package</p>
-                            </div>
-                          )}
-                          {(college.placement?.median || college.placements?.median_package) && (
-                            <div className="bg-purple-50 p-6 rounded-lg text-center">
-                              <p className="text-3xl font-bold text-purple-600">
-                                ₹{((college.placement?.median || college.placements?.median_package) / 100000).toFixed(1)}L
-                              </p>
-                              <p className="text-gray-600">Median Package</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      {!college.placement && !college.placements && (
-                        <p className="text-gray-500 italic">Placement information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'placement' && <PlacementSection college={college} />}
 
                   {/* RANKING Section */}
-                  {section === 'ranking' && (
-                    <div className="space-y-4">
-                      {college.rankings && college.rankings.length > 0 ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse">
-                            <thead>
-                              <tr className="bg-yellow-50">
-                                <th className="border p-3 text-left">Agency</th>
-                                <th className="border p-3 text-left">Category</th>
-                                <th className="border p-3 text-center">Year</th>
-                                <th className="border p-3 text-center">Rank</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.rankings.map((ranking, idx) => (
-                                <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                  <td className="border p-3 font-medium">{ranking.agency}</td>
-                                  <td className="border p-3">{ranking.category || '-'}</td>
-                                  <td className="border p-3 text-center">{ranking.year}</td>
-                                  <td className="border p-3 text-center font-bold text-orange-600">#{ranking.rank}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">Ranking information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'ranking' && <RankingSection college={college} />}
 
                   {/* CUTOFF Section */}
-                  {section === 'cutoff' && (
-                    <div className="space-y-4">
-                      {college.cutoff_data && college.cutoff_data.length > 0 ? (
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse">
-                            <thead>
-                              <tr className="bg-red-50">
-                                <th className="border p-3 text-left">Course</th>
-                                <th className="border p-3 text-left">Category</th>
-                                <th className="border p-3 text-center">Year</th>
-                                <th className="border p-3 text-center">Cutoff</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.cutoff_data.map((cutoff, idx) => (
-                                <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                  <td className="border p-3 font-medium">{cutoff.course}</td>
-                                  <td className="border p-3">{cutoff.category}</td>
-                                  <td className="border p-3 text-center">{cutoff.year}</td>
-                                  <td className="border p-3 text-center font-bold">{cutoff.cutoff}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">Cutoff information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'cutoff' && <CutoffSection college={college} />}
 
                   {/* SCHOLARSHIP Section */}
-                  {section === 'scholarship' && (
-                    <div className="space-y-4">
-                      {college.scholarships && college.scholarships.length > 0 ? (
-                        <div className="grid gap-4">
-                          {college.scholarships.map((scholarship, idx) => (
-                            <div key={idx} className="bg-green-50 p-4 rounded-lg border border-green-200">
-                              <h4 className="font-semibold text-lg text-green-800">{scholarship.name}</h4>
-                              {scholarship.amount && <p className="text-green-600 font-medium">Amount: ₹{scholarship.amount.toLocaleString()}</p>}
-                              {scholarship.eligibility && <p className="text-gray-600 mt-2">{scholarship.eligibility}</p>}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">Scholarship information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'scholarship' && <ScholarshipSection college={college} />}
 
                   {/* FACILITIES Section */}
-                  {section === 'facilities' && (
-                    <div className="space-y-4">
-                      {college.facilities && college.facilities.length > 0 ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                          {college.facilities.map((facility, idx) => (
-                            <div key={idx} className="bg-gray-50 p-4 rounded-lg text-center">
-                              <span className="text-2xl">🏢</span>
-                              <p className="font-medium mt-2">{typeof facility === 'string' ? facility : facility.name}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">Facilities information coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'facilities' && <FacilitiesSection college={college} />}
 
                   {/* GALLERY Section */}
-                  {section === 'gallery' && (
-                    <div className="space-y-4">
-                      {college.gallery && college.gallery.length > 0 ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {college.gallery.map((image, idx) => (
-                            <div key={idx} className="aspect-video rounded-lg overflow-hidden">
-                              <img 
-                                src={image.url || image} 
-                                alt={image.caption || `Gallery ${idx + 1}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-gray-500 italic">Gallery images coming soon.</p>
-                      )}
-                    </div>
-                  )}
+                  {section === 'gallery' && <GallerySection college={college} />}
 
                   {/* REVIEWS Section */}
                   {section === 'reviews' && (
-                    <div className="space-y-4">
-                      <p className="text-gray-600">Student reviews and ratings for {college.name}.</p>
-                      {/* Reviews component would go here */}
-                      <div className="bg-gray-50 p-6 rounded-lg text-center">
-                        <p className="text-gray-500">Reviews section - Coming soon</p>
-                      </div>
-                    </div>
+                    <ReviewsSection 
+                      entityId={college?.id} 
+                      entityType="college" 
+                      entityName={college?.name}
+                    />
                   )}
 
                   {/* Custom Content from menu_config */}
