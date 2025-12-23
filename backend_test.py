@@ -5366,6 +5366,203 @@ class APITester:
             else:
                 self.log_test(f"Book Your Seat Sidebar: {inst_name}", False, f"Could not verify - Status: {status}")
 
+    def test_quick_facts_and_key_statistics(self):
+        """Test Quick Facts and Key Statistics display on College Detail Page"""
+        print("📊 Testing Quick Facts and Key Statistics Display...")
+        
+        # Test the specific college from the review request
+        college_id = "4827bb3b-eb49-4089-909d-1e82edcc185b"  # IIM Ahmedabad
+        
+        # Test 1: Get college detail with Quick Facts data
+        success, response, status = self.make_request("GET", f"/colleges/{college_id}")
+        if success and isinstance(response, dict) and "id" in response:
+            college_name = response.get("name", "Unknown")
+            self.log_test("GET College Detail for Quick Facts", True, 
+                         f"Retrieved college: {college_name}")
+            
+            # Test 2: Verify Quick Facts Widget Configuration
+            sidebar_widgets = response.get("sidebar_widgets", {})
+            quick_facts = sidebar_widgets.get("quick_facts", {})
+            
+            if quick_facts.get("enabled") == True:
+                self.log_test("Quick Facts Widget Enabled", True, 
+                             "Quick Facts widget is enabled in sidebar")
+            else:
+                self.log_test("Quick Facts Widget Enabled", False, 
+                             f"Quick Facts widget enabled: {quick_facts.get('enabled')}")
+            
+            # Test 3: Verify Quick Facts Data Structure
+            required_quick_facts_config = [
+                "show_established", "show_type", "show_approval", 
+                "show_student_count", "show_faculty_count"
+            ]
+            
+            config_present = all(key in quick_facts for key in required_quick_facts_config)
+            if config_present:
+                self.log_test("Quick Facts Configuration Structure", True, 
+                             f"All required config fields present: {list(quick_facts.keys())}")
+            else:
+                missing = [key for key in required_quick_facts_config if key not in quick_facts]
+                self.log_test("Quick Facts Configuration Structure", False, 
+                             f"Missing config fields: {missing}")
+            
+            # Test 4: Verify College Data for Quick Facts Display
+            expected_data = {
+                "established_year": 2020,
+                "type": "Private",
+                "approvals": ["AICTE"],
+                "accreditations": ["NAAC"]
+            }
+            
+            data_matches = True
+            data_details = []
+            
+            # Check established year
+            actual_established = response.get("established_year")
+            if actual_established == expected_data["established_year"]:
+                data_details.append(f"✅ Established: {actual_established}")
+            else:
+                data_details.append(f"❌ Established: Expected {expected_data['established_year']}, Got {actual_established}")
+                data_matches = False
+            
+            # Check type
+            actual_type = response.get("type", "")
+            if actual_type.lower() == expected_data["type"].lower():
+                data_details.append(f"✅ Type: {actual_type}")
+            else:
+                data_details.append(f"❌ Type: Expected {expected_data['type']}, Got {actual_type}")
+                data_matches = False
+            
+            # Check approvals
+            actual_approvals = response.get("approvals", [])
+            approval_match = any(approval.upper() == "AICTE" for approval in actual_approvals)
+            if approval_match:
+                data_details.append(f"✅ Approved by: {actual_approvals}")
+            else:
+                data_details.append(f"❌ Approved by: Expected AICTE in {actual_approvals}")
+                data_matches = False
+            
+            # Check accreditations
+            actual_accreditations = response.get("accreditations", [])
+            accreditation_match = any(acc.upper() == "NAAC" for acc in actual_accreditations)
+            if accreditation_match:
+                data_details.append(f"✅ Accredited by: {actual_accreditations}")
+            else:
+                data_details.append(f"❌ Accredited by: Expected NAAC in {actual_accreditations}")
+                data_matches = False
+            
+            self.log_test("Quick Facts Data Validation", data_matches, 
+                         "; ".join(data_details))
+            
+            # Test 5: Verify Important Dates Widget
+            important_dates = sidebar_widgets.get("important_dates", {})
+            if important_dates.get("enabled") == True:
+                dates_list = important_dates.get("dates", [])
+                if len(dates_list) > 0:
+                    self.log_test("Important Dates 2026 Section", True, 
+                                 f"Important Dates enabled with {len(dates_list)} dates")
+                    
+                    # Verify date structure
+                    valid_dates = 0
+                    for date_item in dates_list:
+                        if all(key in date_item for key in ["title", "date", "description"]):
+                            valid_dates += 1
+                    
+                    if valid_dates == len(dates_list):
+                        self.log_test("Important Dates Structure", True, 
+                                     f"All {valid_dates} dates have proper structure")
+                    else:
+                        self.log_test("Important Dates Structure", False, 
+                                     f"Only {valid_dates}/{len(dates_list)} dates have proper structure")
+                else:
+                    self.log_test("Important Dates 2026 Section", False, 
+                                 "Important Dates enabled but no dates configured")
+            else:
+                self.log_test("Important Dates 2026 Section", False, 
+                             f"Important Dates enabled: {important_dates.get('enabled')}")
+            
+            # Test 6: Verify Content Structure (About section, Read More)
+            description = response.get("description", "")
+            seo_intro = response.get("seo_intro", "")
+            seo_full_content = response.get("seo_full_content", "")
+            
+            if len(description) > 0 or len(seo_intro) > 0:
+                self.log_test("About Section Content", True, 
+                             f"Description: {len(description)} chars, SEO Intro: {len(seo_intro)} chars")
+            else:
+                self.log_test("About Section Content", False, 
+                             "No description or SEO intro content found")
+            
+            if len(seo_full_content) > 0:
+                self.log_test("Read More Content", True, 
+                             f"SEO Full Content: {len(seo_full_content)} chars")
+            else:
+                self.log_test("Read More Content", False, 
+                             "No SEO full content for Read More section")
+            
+            # Test 7: Verify Menu Configuration (for page structure)
+            menu_config = response.get("menu_config", {})
+            use_custom_menu = menu_config.get("use_custom_menu", False)
+            auto_from_toc = menu_config.get("auto_from_toc", True)
+            menu_items = menu_config.get("items", [])
+            
+            if not use_custom_menu and auto_from_toc:
+                self.log_test("Menu Configuration", True, 
+                             "Using auto-generated menu from TOC (default behavior)")
+            elif use_custom_menu and len(menu_items) > 0:
+                self.log_test("Menu Configuration", True, 
+                             f"Using custom menu with {len(menu_items)} items")
+            else:
+                self.log_test("Menu Configuration", False, 
+                             f"Menu config unclear: custom={use_custom_menu}, auto={auto_from_toc}, items={len(menu_items)}")
+            
+            # Test 8: Test College by Slug (alternative access method)
+            college_slug = response.get("slug")
+            if college_slug:
+                success_slug, response_slug, status_slug = self.make_request("GET", f"/colleges?slug={college_slug}")
+                if success_slug and isinstance(response_slug, list) and len(response_slug) > 0:
+                    self.log_test("College Access by Slug", True, 
+                                 f"College accessible via slug: {college_slug}")
+                else:
+                    self.log_test("College Access by Slug", False, 
+                                 f"College not accessible via slug: {college_slug}")
+            else:
+                self.log_test("College Access by Slug", False, "No slug found for college")
+                
+        else:
+            self.log_test("GET College Detail for Quick Facts", False, 
+                         f"Status: {status}", response)
+        
+        # Test 9: Test URL Pattern Matching (for frontend routing)
+        # The frontend URL uses format: /colleges/015-indian-institute-of-management-ahmedabad
+        # But backend uses UUID, so test if there's a mapping or redirect
+        original_url_id = "015-indian-institute-of-management-ahmedabad"
+        success, response, status = self.make_request("GET", f"/colleges/{original_url_id}")
+        
+        if success:
+            self.log_test("Original URL Pattern Support", True, 
+                         "Backend supports original URL pattern")
+        elif status == 404:
+            self.log_test("Original URL Pattern Support", False, 
+                         "Backend does not support original URL pattern - frontend needs to handle mapping")
+        else:
+            self.log_test("Original URL Pattern Support", False, 
+                         f"Unexpected status: {status}")
+        
+        # Test 10: Verify API Response Time (performance test)
+        import time
+        start_time = time.time()
+        success, response, status = self.make_request("GET", f"/colleges/{college_id}")
+        end_time = time.time()
+        response_time = (end_time - start_time) * 1000  # Convert to milliseconds
+        
+        if response_time < 1000:  # Less than 1 second
+            self.log_test("API Response Time", True, 
+                         f"Response time: {response_time:.2f}ms (< 1000ms)")
+        else:
+            self.log_test("API Response Time", False, 
+                         f"Response time: {response_time:.2f}ms (> 1000ms)")
+
     def run_all_tests(self):
         """Run all test suites focusing on Deployment Health Check first"""
         print("🚀 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
