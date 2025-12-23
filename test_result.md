@@ -158,14 +158,16 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Quick Facts Widget Display"
-    - "Key Statistics Rendering"
-    - "Important Dates 2026 Section"
-    - "About Section Content Structure"
-  stuck_tasks: []
+    - "Fix React Infinite Re-render Errors"
+    - "Content Consistency Testing"
+  stuck_tasks:
+    - "Quick Facts Display on College Detail Page"
+    - "Content Consistency Between Main Page and Sub-pages"
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
     - agent: "testing"
       message: "Backend API testing completed successfully for Quick Facts and Key Statistics functionality. All core features are working correctly. The college data has been updated to match test requirements (Established: 2020, Type: Private, Approved by: AICTE, Accredited by: NAAC). Only minor issue is URL pattern compatibility - frontend needs to handle mapping from SEO-friendly URLs to UUIDs."
+    - agent: "testing"
+      message: "CRITICAL FRONTEND ISSUE FOUND: React components have infinite re-render loops causing 'Maximum update depth exceeded' errors. This prevents pages from loading properly. The error occurs in useEffect hooks with setState calls that don't have proper dependency arrays or have dependencies that change on every render. Content consistency testing cannot be completed until these React errors are fixed. Backend data is correct and available at /colleges/15-indian-institute-of-management-ahmedabad."
