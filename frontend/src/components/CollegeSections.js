@@ -505,9 +505,13 @@ export const FacilitiesSection = ({ college }) => {
   );
 };
 
-// GALLERY SECTION - EXACT same as main page
+// GALLERY SECTION - Connected to Media Section (campus_images)
 export const GallerySection = ({ college }) => {
-  const galleryImages = college?.gallery || college?.images || [];
+  // Priority: campus_images (media section) > gallery > images
+  const galleryImages = college?.campus_images?.length > 0 
+    ? college.campus_images 
+    : (college?.gallery?.length > 0 ? college.gallery : college?.images || []);
+  
   if (galleryImages.length === 0) return null;
   
   return (
@@ -517,15 +521,33 @@ export const GallerySection = ({ college }) => {
         Take a virtual tour of {college.name} campus:
       </p>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {galleryImages.map((image, idx) => (
-          <div key={idx} className="aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border">
-            <img 
-              src={typeof image === 'string' ? image : image.url} 
-              alt={typeof image === 'object' && image.caption ? image.caption : `${college.name} - Image ${idx + 1}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
+        {galleryImages.map((image, idx) => {
+          // Handle both string URLs and object format { url, title, alt }
+          const imageUrl = typeof image === 'string' ? image : image.url;
+          const imageAlt = typeof image === 'object' 
+            ? (image.alt || image.title || image.caption || `${college.name} - Image ${idx + 1}`)
+            : `${college.name} - Image ${idx + 1}`;
+          const imageTitle = typeof image === 'object' ? (image.title || '') : '';
+          
+          if (!imageUrl) return null;
+          
+          return (
+            <div key={idx} className="group aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border relative">
+              <img 
+                src={imageUrl} 
+                alt={imageAlt}
+                title={imageTitle}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              {/* Show title overlay on hover */}
+              {imageTitle && (
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="text-white text-sm font-medium truncate">{imageTitle}</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
