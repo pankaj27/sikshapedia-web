@@ -134,6 +134,61 @@ const getYouTubeEmbedUrl = (url) => {
 // These are EXACT copies of the rendering logic from CollegeDetailPage.js
 // to ensure content consistency between main page and sub-pages
 
+// INFO SECTION - School-specific info (Board, Medium, Classes, Streams)
+export const InfoSection = ({ college }) => {
+  const isSchool = college?.institution_type === 'School';
+  const hasSchoolInfo = isSchool && (college.board || college.medium || college.classes_offered?.length > 0 || college.streams_offered?.length > 0);
+  
+  if (!hasSchoolInfo && !college?.description) return null;
+  
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
+      
+      {/* School-Specific Info */}
+      {hasSchoolInfo && (
+        <div className="flex flex-wrap items-center gap-4 mb-4 p-4 bg-blue-50 rounded-lg">
+          {college.board && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Board:</span>
+              <span className="px-3 py-1 bg-white text-blue-700 text-sm font-medium rounded border border-blue-200">{college.board}</span>
+            </div>
+          )}
+          {college.medium && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Medium:</span>
+              <span className="px-3 py-1 bg-white text-green-700 text-sm font-medium rounded border border-green-200">{college.medium}</span>
+            </div>
+          )}
+          {college.classes_offered?.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Classes:</span>
+              <span className="px-3 py-1 bg-white text-purple-700 text-sm font-medium rounded border border-purple-200">
+                {college.classes_offered[0]} to {college.classes_offered[college.classes_offered.length - 1]}
+              </span>
+            </div>
+          )}
+          {college.streams_offered?.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Streams:</span>
+              <div className="flex items-center gap-1 flex-wrap">
+                {college.streams_offered.map((stream, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-white text-orange-700 text-sm font-medium rounded border border-orange-200">{stream}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Description */}
+      {college.description && (
+        <p className="text-gray-700 text-sm leading-relaxed">{college.description}</p>
+      )}
+    </div>
+  );
+};
+
 // COURSES SECTION - EXACT same as main page (with GuestGate for fee data)
 export const CoursesSection = ({ college }) => {
   if (!college?.courses || college.courses.length === 0) return null;
