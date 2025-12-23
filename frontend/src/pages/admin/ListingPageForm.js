@@ -148,13 +148,14 @@ const ListingPageForm = () => {
     { value: 'text_table', label: 'Text + Table', icon: <FiGrid /> }
   ];
 
-  // Fetch master location data
+  // Fetch master location data and streams
   useEffect(() => {
     const fetchMasterData = async () => {
       try {
-        const [statesRes, citiesRes] = await Promise.all([
+        const [statesRes, citiesRes, streamsRes] = await Promise.all([
           api.get('/locations/all-states'),
-          api.get('/locations/all-cities')
+          api.get('/locations/all-cities'),
+          api.get('/streams')
         ]);
         const activeStates = (statesRes.data || [])
           .filter(s => s.status === 'active')
@@ -162,8 +163,15 @@ const ListingPageForm = () => {
           .sort();
         setMasterStates(activeStates);
         setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+        
+        // Set streams from API
+        const activeStreams = (streamsRes.data || [])
+          .filter(s => s.is_active !== false)
+          .map(s => s.name)
+          .sort();
+        setMasterStreams(activeStreams);
       } catch (error) {
-        console.error('Error fetching master locations:', error);
+        console.error('Error fetching master data:', error);
       }
     };
     fetchMasterData();
