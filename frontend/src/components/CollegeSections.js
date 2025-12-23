@@ -642,7 +642,7 @@ export const InfoSection = ({ college }) => {
   );
 };
 
-// LOCATION SECTION - EXACT same as main page (with GuestGate for contact details)
+// LOCATION SECTION - EXACT same as main page (with GuestGate for ALL address & contact details)
 export const LocationSection = ({ college }) => {
   return (
     <div>
@@ -652,59 +652,62 @@ export const LocationSection = ({ college }) => {
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Address Details */}
+        {/* Address Details - ALL BLURRED for guest users */}
         <div className="lg:col-span-1">
           <div className="bg-white border rounded-lg p-6 space-y-4">
             <div>
               <h3 className="font-bold text-lg mb-3 text-gray-900">Address</h3>
-              <div className="space-y-3">
-                <div className="flex gap-3">
-                  <FiMapPin className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                  <div>
-                    <p className="text-sm text-gray-700 font-medium">{college.name}</p>
-                    <p className="text-sm text-gray-600">
-                      {college.location?.address || `${college.location?.city}, ${college.location?.state}`}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {college.location?.city}, {college.location?.state}
-                    </p>
-                    <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
+              
+              {/* ENTIRE Address & Contact Details - Blurred for non-registered users */}
+              <GuestGate title="Address & Contact Details">
+                <div className="space-y-3">
+                  {/* Address */}
+                  <div className="flex gap-3">
+                    <FiMapPin className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                    <div>
+                      <p className="text-sm text-gray-700 font-medium">{college.name}</p>
+                      <p className="text-sm text-gray-600">
+                        {college.location?.address || `${college.location?.city}, ${college.location?.state}`}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {college.location?.city}, {college.location?.state}
+                      </p>
+                      <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <div className="flex gap-3">
+                    <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                    <div>
+                      <p className="text-sm text-gray-700 font-medium">Phone</p>
+                      <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  <div className="flex gap-3">
+                    <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                    <div>
+                      <p className="text-sm text-gray-700 font-medium">Email</p>
+                      <p className="text-sm text-gray-600">
+                        {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Website */}
+                  <div className="flex gap-3">
+                    <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                    <div>
+                      <p className="text-sm text-gray-700 font-medium">Website</p>
+                      <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                        {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
+                      </a>
+                    </div>
                   </div>
                 </div>
-
-                {/* Contact Details - Blurred for non-registered users */}
-                <GuestGate title="Contact Details">
-                  <div className="space-y-3">
-                    <div className="flex gap-3">
-                      <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                      <div>
-                        <p className="text-sm text-gray-700 font-medium">Phone</p>
-                        <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-3">
-                      <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                      <div>
-                        <p className="text-sm text-gray-700 font-medium">Email</p>
-                        <p className="text-sm text-gray-600">
-                          {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-3">
-                      <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                      <div>
-                        <p className="text-sm text-gray-700 font-medium">Website</p>
-                        <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
-                          {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </GuestGate>
-              </div>
+              </GuestGate>
             </div>
 
             {/* How to Reach - Only show if data exists */}
