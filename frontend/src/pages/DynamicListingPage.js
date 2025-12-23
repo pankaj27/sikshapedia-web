@@ -1736,8 +1736,10 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
               
-              {/* Accreditation Filter - SEO URL */}
+              {/* Accreditation Filter - SEO URL - Hide for Schools */}
+              {filterConfig.showAccreditation && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'accreditation' ? null : 'accreditation')}
@@ -1777,6 +1779,7 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
             </div>
             
             {/* Applied Filters Row - Only show if filters are active */}
