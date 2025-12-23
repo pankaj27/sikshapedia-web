@@ -1300,12 +1300,13 @@ const ListingPageForm = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Introduction</label>
-                <SimpleRichTextEditor
+                <FullRichTextEditor
                   value={formData.introduction}
                   onChange={(value) => handleChange('introduction', value)}
                   placeholder="Write an introduction paragraph with formatting..."
+                  pageName={formData.page_title || 'Listing Page'}
                 />
-                <p className="text-xs text-gray-500 mt-1">Use the toolbar for formatting: Bold, Italic, Lists, Links, Headings</p>
+                <p className="text-xs text-gray-500 mt-1">Use the toolbar for formatting: Bold, Italic, Lists, Links, Images, Videos, Headings</p>
               </div>
             </div>
           </CollapsibleSection>
