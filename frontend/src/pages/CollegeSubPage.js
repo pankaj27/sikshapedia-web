@@ -653,6 +653,7 @@ const CollegeSubPage = () => {
               college={college}
               onApplyClick={() => setShowApplyModal(true)}
               onBookingClick={() => {}}
+              sectionWidgets={currentSection?.sidebar_widgets}
             />
           </div>
         </div>
