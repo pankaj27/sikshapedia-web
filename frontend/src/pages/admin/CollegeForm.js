@@ -382,24 +382,59 @@ const RichTextEditor = ({ value, onChange, placeholder, collegeName }) => {
 
   const handleImageInsert = ({ url, alt, title, position }) => {
     if (editor) {
-      // Determine alignment style
-      const alignStyle = position === 'left' ? 'float: left; margin-right: 1rem;' 
-        : position === 'right' ? 'float: right; margin-left: 1rem;' 
-        : 'display: block; margin: 0 auto;';
+      // Determine alignment style based on position
+      let alignStyle = '';
+      if (position === 'left') {
+        alignStyle = 'float: left; margin-right: 1rem; max-width: 50%;';
+      } else if (position === 'right') {
+        alignStyle = 'float: right; margin-left: 1rem; max-width: 50%;';
+      } else if (position === 'full') {
+        alignStyle = 'display: block; width: 100%;';
+      } else {
+        alignStyle = 'display: block; margin: 0 auto; max-width: 80%;';
+      }
       
       // Insert image with SEO attributes and position
-      const imgHtml = `<img src="${url}" alt="${alt || ''}" title="${title || ''}" style="${alignStyle} max-width: 100%; border-radius: 8px;" />`;
+      const imgHtml = `<img src="${url}" alt="${alt || ''}" title="${title || ''}" style="${alignStyle} border-radius: 8px;" />`;
       editor.chain().focus().insertContent(imgHtml).run();
     }
   };
 
-  const handleVideoInsert = ({ url, alt, title }) => {
+  const handleVideoInsert = ({ url, alt, title, position }) => {
     if (editor) {
-      // Insert YouTube video
-      editor.chain().focus().setYoutubeVideo({ src: url }).run();
-      // Add a caption paragraph after video for SEO
-      if (alt || title) {
-        editor.chain().focus().insertContent(`<p><em>${alt || title}</em></p>`).run();
+      // Determine wrapper style based on position
+      let wrapperStyle = '';
+      let videoWidth = '560';
+      let videoHeight = '315';
+      
+      if (position === 'left') {
+        wrapperStyle = 'float: left; margin-right: 1rem; max-width: 50%;';
+        videoWidth = '100%';
+      } else if (position === 'right') {
+        wrapperStyle = 'float: right; margin-left: 1rem; max-width: 50%;';
+        videoWidth = '100%';
+      } else if (position === 'full') {
+        wrapperStyle = 'width: 100%;';
+        videoWidth = '100%';
+        videoHeight = '450';
+      } else {
+        wrapperStyle = 'margin: 0 auto; max-width: 80%;';
+        videoWidth = '100%';
+      }
+      
+      // Extract video ID from YouTube URL
+      const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
+      
+      if (videoId) {
+        const videoHtml = `<div style="${wrapperStyle}"><iframe width="${videoWidth}" height="${videoHeight}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius: 8px; aspect-ratio: 16/9;"></iframe></div>`;
+        editor.chain().focus().insertContent(videoHtml).run();
+        
+        // Add a caption paragraph after video for SEO
+        if (alt || title) {
+          editor.chain().focus().insertContent(`<p style="text-align: center;"><em>${alt || title}</em></p>`).run();
+        }
+      } else {
+        alert('Invalid YouTube URL. Please use a valid YouTube video URL.');
       }
     }
   };
