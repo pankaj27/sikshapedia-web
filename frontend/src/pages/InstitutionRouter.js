@@ -126,9 +126,9 @@ const InstitutionRouter = () => {
     return listingPatterns.some(pattern => normalizedSlug === pattern);
   };
 
-  // Check if this is a university or school route (handle both singular and plural)
-  const isUniversityRoute = location.pathname.startsWith('/university/') || location.pathname.startsWith('/universities/');
-  const isSchoolRoute = location.pathname.startsWith('/schools/') || location.pathname.startsWith('/school/');
+  // Check if this is a university or school route (singular form only)
+  const isUniversityRoute = location.pathname.startsWith('/university/');
+  const isSchoolRoute = location.pathname.startsWith('/schools/');
   const isNonCollegeRoute = isUniversityRoute || isSchoolRoute;
   
   // Check if seg1 looks like a detail page ID (starts with numbers followed by hyphen)
