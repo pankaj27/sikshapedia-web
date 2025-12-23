@@ -629,7 +629,7 @@ const CollegeForm = () => {
   const getDefaultFormData = () => ({
     name: '',
     slug: '',
-    institution_type: 'College', // College, School, University
+    institution_type: getInstitutionTypeFromURL(), // College, School, University - auto-detected from URL
     // Badges & Status
     is_verified: false,
     is_preferred: false,
