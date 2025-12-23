@@ -831,19 +831,23 @@ const CollegeDetailPage = ({ overrideId }) => {
             <div className="mb-6 pb-6 border-b">
               {/* INTRO PREVIEW - Only show data that exists */}
               <div className="mb-3">
-                <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
-                  {college.seo_intro ? (
-                    college.seo_intro
-                  ) : college.description ? (
-                    college.description
-                  ) : (
-                    <>
-                      {college.name} is a {college.type || college.institution_type || 'institution'}
-                      {(college.established_year || college.established) && <> established in {college.established_year || college.established}</>}.
-                      {college.location?.city && college.location?.state && <> Located in {college.location.city}, {college.location.state}.</>}
-                    </>
-                  )}
-                </p>
+                {college.seo_intro ? (
+                  <div 
+                    className={`text-gray-800 leading-relaxed prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
+                    dangerouslySetInnerHTML={{ __html: college.seo_intro }}
+                  />
+                ) : college.description ? (
+                  <div 
+                    className={`text-gray-800 leading-relaxed prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
+                    dangerouslySetInnerHTML={{ __html: college.description }}
+                  />
+                ) : (
+                  <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
+                    {college.name} is a {college.type || college.institution_type || 'institution'}
+                    {(college.established_year || college.established) && <> established in {college.established_year || college.established}</>}.
+                    {college.location?.city && college.location?.state && <> Located in {college.location.city}, {college.location.state}.</>}
+                  </p>
+                )}
               </div>
 
               {/* READ MORE BUTTON - Show when collapsed and there's SEO content */}
