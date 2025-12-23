@@ -1068,6 +1068,37 @@ const CollegeDetailPage = ({ overrideId }) => {
             {/* ===== MENU TAB CONTENT SECTIONS (Always Visible - NOT in Read More) ===== */}
             <div className="space-y-8 mt-8">
               
+              {/* DESCRIPTION & HIGHLIGHTS - Main Content Area (AFTER Read More) */}
+              {(college.description || (college.highlights && college.highlights.length > 0)) && (
+                <section id="about-description" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-4">About {college.name}</h2>
+                  
+                  {/* Description */}
+                  {college.description && (
+                    <div className="text-gray-800 leading-relaxed prose max-w-none mb-4" 
+                      dangerouslySetInnerHTML={{ __html: college.description }} 
+                    />
+                  )}
+                  
+                  {/* Highlights */}
+                  {college.highlights && college.highlights.length > 0 && (
+                    <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-lg p-5">
+                      <h3 className="font-bold text-lg mb-3 text-orange-800 flex items-center gap-2">
+                        <span className="text-2xl">⭐</span>
+                        Key Highlights
+                      </h3>
+                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {college.highlights.map((highlight, idx) => (
+                          <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                            <span className="text-orange-500 mt-1">✓</span>
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </section>
+              )}
               {/* ADMISSION DATES - Menu Tab Content */}
               {college?.admission_dates && college.admission_dates.length > 0 && (
                 <section id="admission-dates" className="scroll-mt-40">
