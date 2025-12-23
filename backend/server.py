@@ -3857,6 +3857,16 @@ async def update_college(college_id: str, college_data: dict, current_user: User
     if not existing_college:
         raise HTTPException(status_code=404, detail="College not found")
     
+    # Get admin role to check permissions
+    admin = await db.admins.find_one({"id": current_user.id}, {"_id": 0})
+    admin_role = admin.get("role", "data_entry") if admin else "data_entry"
+    
+    # Prevent data_entry users from directly publishing
+    requested_status = college_data.get('status', existing_college.get('status', 'draft'))
+    if requested_status == 'published' and admin_role == 'data_entry':
+        # Data entry cannot publish directly - change to pending
+        college_data['status'] = 'pending'
+    
     # Update the college with user tracking
     college_data['total_courses'] = len(college_data.get('courses', []))
     college_data['updated_by'] = current_user.id
