@@ -1049,6 +1049,7 @@ const CollegeForm = () => {
           public_transport: ''
         },
         contact_info: collegeData.contact_info || { phone: '', email: '', website: '' },
+        social_links: collegeData.social_links || { facebook: '', twitter: '', instagram: '', linkedin: '', youtube: '' },
         placement: {
           highest: collegeData.placement?.highest || 0,
           average: collegeData.placement?.average || 0,
