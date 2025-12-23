@@ -85,9 +85,12 @@ const InstitutionDetailPage = () => {
       }
       
       try {
+        // Determine the correct API endpoint based on institution type
+        const apiEndpoint = institutionType === 'School' ? '/schools' : '/colleges';
+        
         // If slug-only format, try to fetch by slug directly
         if (isSlugOnly && slug) {
-          const response = await api.get(`/colleges/${slug}`);
+          const response = await api.get(`${apiEndpoint}/${slug}`);
           if (response.data && response.data.id) {
             setInstitutionId(response.data.id);
             setLoading(false);
@@ -98,7 +101,7 @@ const InstitutionDetailPage = () => {
         // Search by serial_number (numeric prefix format)
         if (numericId) {
           // Fetch all institutions including drafts - serial_number is unique across all
-          const response = await api.get(`/colleges?limit=500&include_drafts=true`);
+          const response = await api.get(`${apiEndpoint}?limit=500&include_drafts=true`);
           if (response.data && response.data.length > 0) {
             // Find institution by serial_number (padded numeric ID)
             const serialNum = parseInt(numericId, 10);
