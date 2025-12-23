@@ -6,6 +6,18 @@ import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, 
 import api from '../api/axios';
 import CollegeSidebar from '../components/CollegeSidebar';
 import ApplyNowModal from '../components/ApplyNowModal';
+import { 
+  CoursesSection, 
+  AdmissionSection, 
+  CutoffSection, 
+  PlacementSection, 
+  RankingSection, 
+  ScholarshipSection, 
+  FacilitiesSection, 
+  GallerySection,
+  InfoSection 
+} from '../components/CollegeSections';
+import ReviewsSection from '../components/ReviewsSection';
 
 import { Link } from '../components/CustomLink';
 // Icon mapping for professional icons
