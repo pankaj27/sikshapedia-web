@@ -6868,6 +6868,63 @@ const CollegeForm = () => {
               />
             </div>
           </div>
+          
+          {/* Social Media Links */}
+          <div className="mt-4 pt-4 border-t">
+            <h4 className="font-medium text-sm mb-3">Social Media Links</h4>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-medium mb-1 text-blue-600">Facebook</label>
+                <input
+                  type="url"
+                  value={formData.social_links?.facebook || ''}
+                  onChange={(e) => handleNestedChange('social_links', 'facebook', e.target.value)}
+                  placeholder="https://facebook.com/..."
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium mb-1 text-black">Twitter / X</label>
+                <input
+                  type="url"
+                  value={formData.social_links?.twitter || ''}
+                  onChange={(e) => handleNestedChange('social_links', 'twitter', e.target.value)}
+                  placeholder="https://twitter.com/..."
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium mb-1 text-pink-600">Instagram</label>
+                <input
+                  type="url"
+                  value={formData.social_links?.instagram || ''}
+                  onChange={(e) => handleNestedChange('social_links', 'instagram', e.target.value)}
+                  placeholder="https://instagram.com/..."
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium mb-1 text-blue-700">LinkedIn</label>
+                <input
+                  type="url"
+                  value={formData.social_links?.linkedin || ''}
+                  onChange={(e) => handleNestedChange('social_links', 'linkedin', e.target.value)}
+                  placeholder="https://linkedin.com/..."
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium mb-1 text-red-600">YouTube</label>
+                <input
+                  type="url"
+                  value={formData.social_links?.youtube || ''}
+                  onChange={(e) => handleNestedChange('social_links', 'youtube', e.target.value)}
+                  placeholder="https://youtube.com/..."
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Media & Resources */}
