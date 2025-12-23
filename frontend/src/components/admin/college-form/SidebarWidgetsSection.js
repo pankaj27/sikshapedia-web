@@ -361,7 +361,7 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">CTA Button URL</label>
                     <input
-                      type="url"
+                      type="text"
                       value={formData.sidebar_widgets?.ad_banner?.cta_url || ''}
                       onChange={(e) => updateWidget('ad_banner', 'cta_url', e.target.value)}
                       placeholder="https://example.com/offer"
