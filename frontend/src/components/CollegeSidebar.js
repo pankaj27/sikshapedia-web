@@ -15,7 +15,7 @@ const CollegeSidebar = ({
     <aside className="w-80 flex-shrink-0 hidden lg:block">
       <div className="sticky top-24 space-y-4">
         {/* Sponsor Ad - Sidebar */}
-        <AdBanner pageName="college-detail" position="sidebar" />
+        <SidebarSponsoredAd placementId="college-detail-sidebar" />
         
         {/* ADMISSION PARTNER - BOOK YOUR SEAT */}
         {college.is_admission_partner && AdmissionPartnerBadge && (
