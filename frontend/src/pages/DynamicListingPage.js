@@ -1583,8 +1583,10 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
               
-              {/* Degree Type Filter */}
+              {/* Degree Type Filter - Hide for Schools */}
+              {filterConfig.showDegreeType && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'degreeType' ? null : 'degreeType')}
@@ -1605,8 +1607,10 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
               
-              {/* Exam Accepted Filter */}
+              {/* Exam Accepted Filter - Hide for Schools */}
+              {filterConfig.showExamAccepted && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'examAccepted' ? null : 'examAccepted')}
