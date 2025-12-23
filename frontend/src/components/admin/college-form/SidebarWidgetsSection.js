@@ -467,6 +467,7 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
           {formData.sidebar_widgets?.fee_summary?.enabled && <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">💰 Fee Summary</span>}
           {formData.sidebar_widgets?.contact_card?.enabled && <span className="px-2 py-1 bg-pink-100 text-pink-800 text-xs rounded">📞 Contact Card</span>}
           {formData.sidebar_widgets?.counselor_cta?.enabled && <span className="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded">👨‍💼 Counselor CTA</span>}
+          {formData.sidebar_widgets?.career_counseling?.enabled && <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">💼 Career Counseling</span>}
           {formData.sidebar_widgets?.ad_banner?.enabled && <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">📣 Ad Banner</span>}
           {formData.sidebar_widgets?.social_share?.enabled && <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded">🔗 Social Share</span>}
           {formData.sidebar_widgets?.rating_widget?.enabled && <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded">⭐ Rating</span>}
