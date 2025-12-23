@@ -15,7 +15,8 @@ import {
   ScholarshipSection, 
   FacilitiesSection, 
   GallerySection,
-  InfoSection 
+  InfoSection,
+  LocationSection 
 } from '../components/CollegeSections';
 import ReviewsSection from '../components/ReviewsSection';
 
