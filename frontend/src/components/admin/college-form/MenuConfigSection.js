@@ -84,10 +84,10 @@ const generateSEO = (collegeName, menuItem) => {
 const MenuConfigSection = ({ formData, setFormData }) => {
   const [expandedMenu, setExpandedMenu] = useState(null);
   
-  // Get or initialize menu config
-  const getMenuConfig = () => {
-    if (!formData.menu_config?.items) {
-      return MENU_ITEMS.map((item, index) => ({
+  // Initialize menu config if not present
+  React.useEffect(() => {
+    if (!formData.menu_config?.items || formData.menu_config.items.length === 0) {
+      const defaultItems = MENU_ITEMS.map((item, index) => ({
         id: item.id,
         label: item.label,
         icon: item.id,
@@ -101,11 +101,28 @@ const MenuConfigSection = ({ formData, setFormData }) => {
         og_title: '',
         og_description: ''
       }));
+      setFormData(prev => ({
+        ...prev,
+        menu_config: { ...prev.menu_config, items: defaultItems }
+      }));
     }
-    return formData.menu_config.items;
-  };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
-  const menuItems = getMenuConfig();
+  // Get menu items (with fallback)
+  const menuItems = formData.menu_config?.items || MENU_ITEMS.map((item, index) => ({
+    id: item.id,
+    label: item.label,
+    icon: item.id,
+    enabled: true,
+    order: index,
+    content: '',
+    page_heading: '',
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    og_title: '',
+    og_description: ''
+  }));
   
   // Update a specific menu item
   const updateMenuItem = (menuId, updates) => {
