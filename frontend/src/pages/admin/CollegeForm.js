@@ -374,14 +374,16 @@ const RichTextEditor = ({ value, onChange, placeholder, collegeName }) => {
     }
   }, [value, editor]);
 
-  const handleImageInsert = ({ url, alt, title }) => {
+  const handleImageInsert = ({ url, alt, title, position }) => {
     if (editor) {
-      // Insert image with SEO attributes
-      editor.chain().focus().setImage({ 
-        src: url, 
-        alt: alt || '',
-        title: title || ''
-      }).run();
+      // Determine alignment style
+      const alignStyle = position === 'left' ? 'float: left; margin-right: 1rem;' 
+        : position === 'right' ? 'float: right; margin-left: 1rem;' 
+        : 'display: block; margin: 0 auto;';
+      
+      // Insert image with SEO attributes and position
+      const imgHtml = `<img src="${url}" alt="${alt || ''}" title="${title || ''}" style="${alignStyle} max-width: 100%; border-radius: 8px;" />`;
+      editor.chain().focus().insertContent(imgHtml).run();
     }
   };
 
