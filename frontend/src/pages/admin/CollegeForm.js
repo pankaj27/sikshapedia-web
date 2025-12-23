@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Image/Video Insert Modal Component
 const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
