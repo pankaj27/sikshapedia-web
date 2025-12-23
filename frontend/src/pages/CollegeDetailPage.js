@@ -2153,17 +2153,99 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </div>
 
-              {/* ADVERTISEMENT 1 */}
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
-                <div className="text-center">
-                  <div className="text-4xl mb-3">🎓</div>
-                  <h3 className="font-bold text-lg mb-2">Get Expert Guidance</h3>
-                  <p className="text-sm text-orange-100 mb-4">Connect with our counselors for FREE admission guidance</p>
-                  <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors">
-                    Talk to Expert
-                  </button>
+              {/* IMPORTANT DATES WIDGET - From sidebar_widgets configuration */}
+              {college?.sidebar_widgets?.important_dates?.enabled && college?.sidebar_widgets?.important_dates?.dates?.length > 0 && (
+                <div className="bg-white border rounded-lg shadow-sm p-5">
+                  <h3 className="font-bold text-base mb-4 text-gray-900 flex items-center gap-2">
+                    <FiCalendar className="text-orange-500" />
+                    Important Dates
+                  </h3>
+                  <div className="space-y-3">
+                    {college.sidebar_widgets.important_dates.dates.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-3 pb-3 border-b last:border-0 last:pb-0">
+                        <div className="bg-orange-100 text-orange-600 rounded-lg p-2 text-center min-w-[50px]">
+                          <div className="text-xs font-bold">{new Date(item.date).toLocaleDateString('en-IN', { month: 'short' })}</div>
+                          <div className="text-lg font-bold">{new Date(item.date).getDate()}</div>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-sm text-gray-900">{item.title}</div>
+                          {item.description && <div className="text-xs text-gray-500">{item.description}</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* QUICK FACTS WIDGET - From sidebar_widgets configuration */}
+              {college?.sidebar_widgets?.quick_facts?.enabled && (
+                <div className="bg-white border rounded-lg shadow-sm p-5">
+                  <h3 className="font-bold text-base mb-4 text-gray-900 flex items-center gap-2">
+                    <FiInfo className="text-blue-500" />
+                    Quick Facts
+                  </h3>
+                  <div className="space-y-2">
+                    {college.sidebar_widgets.quick_facts.show_established && college.established_year && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Established</span>
+                        <span className="font-semibold">{college.established_year}</span>
+                      </div>
+                    )}
+                    {college.sidebar_widgets.quick_facts.show_type && college.type && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Type</span>
+                        <span className="font-semibold">{college.type}</span>
+                      </div>
+                    )}
+                    {college.sidebar_widgets.quick_facts.show_approval && college.approved_by && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Approved By</span>
+                        <span className="font-semibold">{college.approved_by}</span>
+                      </div>
+                    )}
+                    {college.sidebar_widgets.quick_facts.show_student_count && college.total_students > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Total Students</span>
+                        <span className="font-semibold">{college.total_students.toLocaleString()}</span>
+                      </div>
+                    )}
+                    {college.sidebar_widgets.quick_facts.show_faculty_count && college.faculty_count > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Faculty</span>
+                        <span className="font-semibold">{college.faculty_count}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* COUNSELOR CTA - From sidebar_widgets configuration */}
+              {college?.sidebar_widgets?.counselor_cta?.enabled && (
+                <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">🎓</div>
+                    <h3 className="font-bold text-lg mb-2">{college.sidebar_widgets.counselor_cta.title || 'Need Help?'}</h3>
+                    <p className="text-sm text-orange-100 mb-4">{college.sidebar_widgets.counselor_cta.subtitle || 'Talk to our expert counselor'}</p>
+                    <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors">
+                      Talk to Expert
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* ADVERTISEMENT 1 - Show only if counselor_cta is disabled */}
+              {!college?.sidebar_widgets?.counselor_cta?.enabled && (
+                <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">🎓</div>
+                    <h3 className="font-bold text-lg mb-2">Get Expert Guidance</h3>
+                    <p className="text-sm text-orange-100 mb-4">Connect with our counselors for FREE admission guidance</p>
+                    <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors">
+                      Talk to Expert
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* POPULAR COURSES - Dynamic from college.courses */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
