@@ -2393,7 +2393,9 @@ const CollegeDetailPage = ({ overrideId }) => {
                     className="block"
                   >
                     <img 
-                      src={college.sidebar_widgets.ad_banner.image_url} 
+                      src={college.sidebar_widgets.ad_banner.image_url.startsWith('/') 
+                        ? `${process.env.REACT_APP_BACKEND_URL}${college.sidebar_widgets.ad_banner.image_url}` 
+                        : college.sidebar_widgets.ad_banner.image_url} 
                       alt={college.sidebar_widgets.ad_banner.title || 'Advertisement'} 
                       className="w-full h-auto"
                     />
