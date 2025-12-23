@@ -385,6 +385,7 @@ const ListingPageForm = () => {
     content_sections: [], // [{title, content, type, media_url, media_alt, order}]
     tables: [], // [{title, headers, rows}]
     table_of_contents: [], // [{title, anchor}]
+    seo_toc: [], // Advanced TOC with blocks [{title, anchor, blocks: [{type, content, ...}]}]
     faqs: [], // [{question, answer}]
     related_pages: [], // [{title, url}]
     widgets: {
@@ -401,6 +402,9 @@ const ListingPageForm = () => {
     created_at: '',
     updated_at: ''
   });
+
+  // State for content image uploading
+  const [uploadingContentImage, setUploadingContentImage] = useState({});
 
   // Get current user from localStorage
   const getCurrentUser = () => {
