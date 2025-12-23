@@ -2344,13 +2344,12 @@ const DynamicListingPage = () => {
                       </div>
                       
                       {/* Mobile Stats & CTA */}
-                      <div className="md:hidden mt-4 pt-4 border-t border-gray-100">
+                      <div className="md:hidden mt-3 pt-3 border-t border-gray-100">
                         <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-3 text-xs">
+                          <div className="flex items-center gap-2 text-xs">
                             {inst.average_fees > 0 && (
-                              <span className="text-gray-700">
-                                <span className="text-gray-500">Fees: </span>
-                                <strong>₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}</strong>
+                              <span className="text-gray-700 bg-gray-50 px-2 py-1 rounded">
+                                ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}
                               </span>
                             )}
                             {inst.rating > 0 && (
@@ -2359,18 +2358,20 @@ const DynamicListingPage = () => {
                               </span>
                             )}
                           </div>
-                          <button
-                            onClick={(e) => { e.preventDefault(); setSelectedCollege(inst); setApplyModalOpen(true); }}
-                            className="px-3 py-2 bg-orange-500 text-white rounded-lg text-xs font-medium"
-                          >
-                            Apply
-                          </button>
-                          <Link 
-                            to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                            className="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium"
-                          >
-                            View →
-                          </Link>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              onClick={(e) => { e.preventDefault(); setSelectedCollege(inst); setApplyModalOpen(true); }}
+                              className="px-3 py-1.5 bg-orange-500 text-white rounded-lg text-xs font-medium"
+                            >
+                              Apply
+                            </button>
+                            <Link 
+                              to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
+                              className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium"
+                            >
+                              View →
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </div>
