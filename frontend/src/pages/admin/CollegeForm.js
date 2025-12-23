@@ -1296,21 +1296,31 @@ const CollegeForm = () => {
   const updateFacility = (index, field, value) => {
     const newFacilities = [...formData.facilities];
     
+    // Ensure the facility at index is an object, not a string
+    if (typeof newFacilities[index] === 'string') {
+      newFacilities[index] = { name: newFacilities[index], icon: '', description: '' };
+    }
+    
     // If facility name is being changed, auto-fill icon and description
     if (field === 'name') {
       const selectedFacility = availableFacilities.find(f => f.name === value);
       if (selectedFacility) {
         newFacilities[index] = {
-          ...newFacilities[index],
           name: value,
           icon: selectedFacility.icon || '',
           description: selectedFacility.description || ''
         };
       } else {
-        newFacilities[index][field] = value;
+        newFacilities[index] = {
+          ...newFacilities[index],
+          [field]: value
+        };
       }
     } else {
-      newFacilities[index][field] = value;
+      newFacilities[index] = {
+        ...newFacilities[index],
+        [field]: value
+      };
     }
     
     setFormData({ ...formData, facilities: newFacilities });
