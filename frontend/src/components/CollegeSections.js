@@ -287,7 +287,7 @@ export const CutoffSection = ({ college }) => {
   );
 };
 
-// PLACEMENT SECTION - EXACT same as main page
+// PLACEMENT SECTION - EXACT same as main page (with GuestGate for placement data)
 export const PlacementSection = ({ college }) => {
   const placement = college?.placement || college?.placements;
   if (!placement) return null;
@@ -304,46 +304,48 @@ export const PlacementSection = ({ college }) => {
         As per the {college.name} Placement report, the average package stood at <strong>₹{averagePackage ? (averagePackage / 100000).toFixed(1) : '-'} LPA</strong>.
       </p>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {highestPackage > 0 && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-            <div className="text-3xl font-bold text-green-600 mb-2">
-              ₹{(highestPackage / 100000).toFixed(1)}L
+      <GuestGate title="Placement Data">
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          {highestPackage > 0 && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+              <div className="text-3xl font-bold text-green-600 mb-2">
+                ₹{(highestPackage / 100000).toFixed(1)}L
+              </div>
+              <div className="text-sm text-gray-600">Highest Package</div>
             </div>
-            <div className="text-sm text-gray-600">Highest Package</div>
-          </div>
-        )}
-        {averagePackage > 0 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-            <div className="text-3xl font-bold text-blue-600 mb-2">
-              ₹{(averagePackage / 100000).toFixed(1)}L
+          )}
+          {averagePackage > 0 && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+              <div className="text-3xl font-bold text-blue-600 mb-2">
+                ₹{(averagePackage / 100000).toFixed(1)}L
+              </div>
+              <div className="text-sm text-gray-600">Average Package</div>
             </div>
-            <div className="text-sm text-gray-600">Average Package</div>
-          </div>
-        )}
-        {placementRate > 0 && (
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
-              {placementRate}%
+          )}
+          {placementRate > 0 && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
+              <div className="text-3xl font-bold text-purple-600 mb-2">
+                {placementRate}%
+              </div>
+              <div className="text-sm text-gray-600">Placement Rate</div>
             </div>
-            <div className="text-sm text-gray-600">Placement Rate</div>
-          </div>
-        )}
-      </div>
-
-      {placement.top_recruiters && placement.top_recruiters.length > 0 && (
-        <div className="mt-4">
-          <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
-          <div className="flex flex-wrap gap-2">
-            {(typeof placement.top_recruiters === 'string' 
-              ? placement.top_recruiters.split(',') 
-              : placement.top_recruiters
-            ).map((r, idx) => (
-              <span key={idx} className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-full">{typeof r === 'string' ? r.trim() : r}</span>
-            ))}
-          </div>
+          )}
         </div>
-      )}
+
+        {placement.top_recruiters && placement.top_recruiters.length > 0 && (
+          <div className="mt-4">
+            <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
+            <div className="flex flex-wrap gap-2">
+              {(typeof placement.top_recruiters === 'string' 
+                ? placement.top_recruiters.split(',') 
+                : placement.top_recruiters
+              ).map((r, idx) => (
+                <span key={idx} className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-full">{typeof r === 'string' ? r.trim() : r}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </GuestGate>
     </div>
   );
 };
