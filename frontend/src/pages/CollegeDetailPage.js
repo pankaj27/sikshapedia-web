@@ -1328,7 +1328,7 @@ const CollegeDetailPage = ({ overrideId }) => {
               {/* CUTOFF - Menu Tab Content */}
               {college?.cutoff_data && college.cutoff_data.length > 0 && (
                 <section id="cutoff" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff</h2>
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {college.cutoff_data[0]?.year || new Date().getFullYear()}</h2>
                   <p className="text-gray-700 text-sm mb-4">Latest cutoff ranks for various programs:</p>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse border">
@@ -1336,7 +1336,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                         <tr className="bg-orange-50">
                           <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
                           <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Opening Rank</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1344,7 +1345,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                           <tr key={idx} className="hover:bg-gray-50">
                             <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
                             <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
-                            <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.cutoff || item.rank}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-blue-600">{item.opening_rank || item.cutoff || '-'}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.closing_rank_current || item.rank || '-'}</td>
                           </tr>
                         ))}
                       </tbody>
