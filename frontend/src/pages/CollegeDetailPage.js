@@ -1058,324 +1058,6 @@ const CollegeDetailPage = ({ overrideId }) => {
                       </div>
                     </section>
                   )}
-                    {/* ADMISSION DATES - Only show if data exists */}
-                    {college?.admission_dates && college.admission_dates.length > 0 && (
-                      <section id="seo-admission-dates">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1} Dates</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          Important admission dates for {college.name}:
-                        </p>
-
-                        <GuestGate title="Admission Dates">
-                          <div className="overflow-x-auto mb-6">
-                            <table className="w-full border-collapse border">
-                              <thead>
-                                <tr className="bg-orange-50">
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {college.admission_dates.map((item, idx) => (
-                                  <tr key={idx} className="hover:bg-gray-50">
-                                    <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
-                                    <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </GuestGate>
-                      </section>
-                    )}
-
-                    {/* FEES - Only show if courses exist */}
-                    {college?.courses && college.courses.length > 0 && (
-                      <section id="seo-fees">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Fees {year + 1}</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          The fee structure for various courses at {college.name}:
-                        </p>
-
-                        <GuestGate title="Fee Details">
-                          <div className="overflow-x-auto mb-6">
-                            <table className="w-full border-collapse border">
-                              <thead>
-                                <tr className="bg-orange-50">
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {college.courses.map((course, idx) => {
-                                  const courseName = typeof course === 'string' ? course : course.name;
-                                  const duration = typeof course === 'object' ? course.duration : '';
-                                  const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
-                                  const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
-                                  return (
-                                    <tr key={idx} className="hover:bg-gray-50">
-                                      <td className="border px-4 py-3">
-                                        <span className="text-blue-600 font-medium">{courseName}</span>
-                                      </td>
-                                      <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
-                                      <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
-                                      <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-                          </div>
-                        </GuestGate>
-                      </section>
-                    )}
-
-                    {/* RANKING - Only show if rankings or nirf_ranking exists */}
-                    {(college?.rankings?.length > 0 || college?.nirf_ranking) && (
-                      <section id="seo-ranking">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          {college.name} has been ranked by various agencies:
-                        </p>
-
-                        {college?.rankings && college.rankings.length > 0 ? (
-                          <div className="overflow-x-auto">
-                            <table className="w-full border-collapse border">
-                              <thead>
-                                <tr className="bg-gray-50">
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {college.rankings.map((ranking, idx) => (
-                                  <tr key={idx} className="hover:bg-gray-50">
-                                    <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
-                                    <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
-                                    <td className="border px-4 py-3 text-sm">{ranking.year || year}</td>
-                                    <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        ) : (
-                          <div className="overflow-x-auto">
-                            <table className="w-full border-collapse border">
-                              <thead>
-                                <tr className="bg-gray-50">
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm">NIRF</td>
-                                  <td className="border px-4 py-3 text-sm">{year}</td>
-                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-                      </section>
-                    )}
-
-                    {/* ADMISSION - Only show if admission_process exists or courses have eligibility */}
-                    {(college?.admission_process || college?.courses?.some(c => typeof c === 'object' && (c.eligibility || c.selection_criteria))) && (
-                      <section id="seo-admission">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          Admission process and eligibility criteria for {college.name}:
-                        </p>
-                        {college?.admission_process ? (
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
-                            <h3 className="font-bold mb-2">Admission Criteria</h3>
-                            <p className="text-sm text-gray-700">{college.admission_process}</p>
-                          </div>
-                        ) : (
-                          <div className="overflow-x-auto">
-                            <table className="w-full border-collapse border">
-                              <thead>
-                                <tr className="bg-orange-50">
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
-                                  <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).map((course, idx) => (
-                                  <tr key={idx} className="hover:bg-gray-50">
-                                    <td className="border px-4 py-3 text-sm font-medium">{course.name}</td>
-                                    <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
-                                    <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-                      </section>
-                    )}
-
-                    {/* Content Middle Ad */}
-                    <div className="my-6">
-                      <AdBanner pageName="college-detail" position="content-middle" />
-                    </div>
-
-                    {/* CUTOFF - Only show if cutoff_data exists */}
-                    {college?.cutoff_data && college.cutoff_data.length > 0 && (
-                      <section id="seo-cutoff">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          Latest cutoff ranks for various programs:
-                        </p>
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-orange-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {college.cutoff_data.map((item, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50">
-                                  <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
-                                  <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
-                                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.cutoff || item.rank}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </section>
-                    )}
-
-                    {/* PLACEMENT - FROM TOC #06 - Guest Gated - Only show if data exists */}
-                    {college?.placement && (
-                      <section id="seo-placement">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          As per {college.name} Placement report, the average package stood at ₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'} LPA.
-                        </p>
-                        <GuestGate title="Placement Data">
-                          <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                              <div className="text-2xl font-bold text-green-600">₹{college.placement.highest ? (college.placement.highest / 100000).toFixed(1) : '-'}L</div>
-                              <div className="text-xs text-gray-600">Highest Package</div>
-                            </div>
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                              <div className="text-2xl font-bold text-blue-600">₹{college.placement.average ? (college.placement.average / 100000).toFixed(1) : '-'}L</div>
-                              <div className="text-xs text-gray-600">Average Package</div>
-                            </div>
-                            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
-                              <div className="text-2xl font-bold text-purple-600">{college.placement.percentage || '-'}%</div>
-                              <div className="text-xs text-gray-600">Placement Rate</div>
-                            </div>
-                          </div>
-                          {college.placement.top_recruiters && college.placement.top_recruiters.length > 0 && (
-                            <div className="mt-4">
-                              <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
-                              <p className="text-sm text-gray-700">{college.placement.top_recruiters.join(', ')}</p>
-                            </div>
-                          )}
-                        </GuestGate>
-                      </section>
-                    )}
-
-                    {/* VS OTHER COLLEGES - FROM TOC #07 - Only show if data exists */}
-                    {college?.similar_colleges && college.similar_colleges.length > 0 && (
-                      <section id="seo-comparison">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} vs Other Colleges</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          Comparison with similar institutes:
-                        </p>
-                        <div className="overflow-x-auto">
-                          <table className="w-full border-collapse border">
-                            <thead>
-                              <tr className="bg-gray-50">
-                                <th className="border px-4 py-3 text-left text-sm font-bold">Particulars</th>
-                                <th className="border px-4 py-3 text-left text-sm font-bold">{college.name}</th>
-                                {college.similar_colleges.slice(0, 2).map((sc, idx) => (
-                                  <th key={idx} className="border px-4 py-3 text-left text-sm font-bold">{sc.name}</th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm font-semibold">Location</td>
-                                <td className="border px-4 py-3 text-sm">{college.location?.city || college.city}, {college.location?.state || college.state}</td>
-                                {college.similar_colleges.slice(0, 2).map((sc, idx) => (
-                                  <td key={idx} className="border px-4 py-3 text-sm">{sc.city || sc.location?.city}, {sc.state || sc.location?.state}</td>
-                                ))}
-                              </tr>
-                              <tr className="hover:bg-gray-50">
-                                <td className="border px-4 py-3 text-sm font-semibold">Avg. Fees</td>
-                                <td className="border px-4 py-3 text-sm">₹{(college.average_fees / 100000).toFixed(2)}L</td>
-                                {college.similar_colleges.slice(0, 2).map((sc, idx) => (
-                                  <td key={idx} className="border px-4 py-3 text-sm">{sc.average_fees ? `₹${(sc.average_fees / 100000).toFixed(2)}L` : '-'}</td>
-                                ))}
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </section>
-                    )}
-
-                    {/* CAMPUS & FACILITIES - FROM TOC #08 - Only show if data exists */}
-                    {college.facilities && college.facilities.length > 0 && (
-                      <section id="seo-facilities">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
-                        <p className="text-gray-700 text-sm mb-4">
-                          {college.name} campus provides world-class facilities:
-                        </p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                          {college.facilities.map((facility, idx) => {
-                            const isObject = typeof facility === 'object';
-                            const facilityName = isObject ? facility.name : facility;
-                            const facilityData = getFacilityIcon(facilityName);
-                            const IconComponent = facilityData.icon;
-                            
-                            return (
-                              <div 
-                                key={idx} 
-                                className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-                              >
-                                <div className={`w-14 h-14 ${facilityData.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-                                  <IconComponent className="text-white" size={26} />
-                                </div>
-                                <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
-                                  {facilityData.label}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </section>
-                    )}
-
-                    {/* FAQs - FROM TOC #09 - Only show if data exists */}
-                    {college.seo_faqs && college.seo_faqs.length > 0 && (
-                      <section id="seo-faqs">
-                        <h2 className="text-2xl font-bold mb-3">{college.name} FAQs</h2>
-                        <div className="space-y-3">
-                          {college.seo_faqs.map((faq, idx) => (
-                            <div key={idx} className="bg-gray-50 rounded-lg p-4 border">
-                              <p className="font-bold text-sm mb-2">Ques. {faq.question}</p>
-                              <p className="text-sm text-gray-700"><strong>Ans.</strong> {faq.answer}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </section>
-                    )}
-                  </div>
 
                   {/* READ LESS BUTTON - Show at the end when expanded */}
                   <div className="text-center mt-6">
@@ -1388,6 +1070,282 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </button>
                   </div>
                 </div>
+              )}
+            </div>
+
+            {/* ===== MENU TAB CONTENT SECTIONS (Always Visible - NOT in Read More) ===== */}
+            <div className="space-y-8 mt-8">
+              
+              {/* ADMISSION DATES - Menu Tab Content */}
+              {college?.admission_dates && college.admission_dates.length > 0 && (
+                <section id="admission-dates" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Important Dates {new Date().getFullYear() + 1}</h2>
+                  <p className="text-gray-700 text-sm mb-4">Key dates for admission process:</p>
+                  <GuestGate title="Admission Dates">
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-orange-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {college.admission_dates.map((item, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                              <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </GuestGate>
+                </section>
+              )}
+
+              {/* COURSES & FEES - Menu Tab Content */}
+              {college?.courses && college.courses.length > 0 && (
+                <section id="courses-fees" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {new Date().getFullYear() + 1}</h2>
+                  <p className="text-gray-700 text-sm mb-4">Fee structure for various courses:</p>
+                  <GuestGate title="Fee Details">
+                    <div className="overflow-x-auto mb-6">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-orange-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {college.courses.map((course, idx) => {
+                            const courseName = typeof course === 'string' ? course : course.name;
+                            const duration = typeof course === 'object' ? course.duration : '';
+                            const firstYearFee = typeof course === 'object' ? (course.first_year_fee || college.average_fees) : college.average_fees;
+                            const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
+                            return (
+                              <tr key={idx} className="hover:bg-gray-50">
+                                <td className="border px-4 py-3"><span className="text-blue-600 font-medium">{courseName}</span></td>
+                                <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
+                                <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </GuestGate>
+                </section>
+              )}
+
+              {/* RANKING - Menu Tab Content */}
+              {(college?.rankings?.length > 0 || college?.nirf_ranking) && (
+                <section id="ranking" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
+                  <p className="text-gray-700 text-sm mb-4">{college.name} has been ranked by various agencies:</p>
+                  {college?.rankings && college.rankings.length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {college.rankings.map((ranking, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
+                              <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
+                              <td className="border px-4 py-3 text-sm">{ranking.year || new Date().getFullYear()}</td>
+                              <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm">NIRF</td>
+                            <td className="border px-4 py-3 text-sm">{new Date().getFullYear()}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {/* ADMISSION PROCESS - Menu Tab Content */}
+              {(college?.admission_process || college?.courses?.some(c => typeof c === 'object' && (c.eligibility || c.selection_criteria))) && (
+                <section id="admission" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Admission {new Date().getFullYear() + 1}</h2>
+                  <p className="text-gray-700 text-sm mb-4">Admission process and eligibility criteria:</p>
+                  {college?.admission_process ? (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+                      <h3 className="font-bold mb-2">Admission Criteria</h3>
+                      <p className="text-sm text-gray-700">{college.admission_process}</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border">
+                        <thead>
+                          <tr className="bg-orange-50">
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                            <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).map((course, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="border px-4 py-3 text-sm font-medium">{course.name}</td>
+                              <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
+                              <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {/* CUTOFF - Menu Tab Content */}
+              {college?.cutoff_data && college.cutoff_data.length > 0 && (
+                <section id="cutoff" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff</h2>
+                  <p className="text-gray-700 text-sm mb-4">Latest cutoff ranks for various programs:</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border">
+                      <thead>
+                        <tr className="bg-orange-50">
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {college.cutoff_data.map((item, idx) => (
+                          <tr key={idx} className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
+                            <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.cutoff || item.rank}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              )}
+
+              {/* PLACEMENT - Menu Tab Content */}
+              {college?.placement && (
+                <section id="placement" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement {new Date().getFullYear()}</h2>
+                  <p className="text-gray-700 text-sm mb-4">Placement statistics and top recruiters:</p>
+                  <GuestGate title="Placement Data">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                      <div className="bg-green-50 rounded-lg p-4 text-center border border-green-200">
+                        <div className="text-2xl font-bold text-green-700">₹{(college.placement.highest / 100000).toFixed(1)}L</div>
+                        <div className="text-sm text-gray-600">Highest Package</div>
+                      </div>
+                      <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200">
+                        <div className="text-2xl font-bold text-blue-700">₹{(college.placement.average / 100000).toFixed(1)}L</div>
+                        <div className="text-sm text-gray-600">Average Package</div>
+                      </div>
+                      <div className="bg-orange-50 rounded-lg p-4 text-center border border-orange-200">
+                        <div className="text-2xl font-bold text-orange-700">{college.placement.percentage || 85}%</div>
+                        <div className="text-sm text-gray-600">Placement Rate</div>
+                      </div>
+                      <div className="bg-purple-50 rounded-lg p-4 text-center border border-purple-200">
+                        <div className="text-2xl font-bold text-purple-700">{college.placement.students_participated || '500+'}</div>
+                        <div className="text-sm text-gray-600">Students Placed</div>
+                      </div>
+                    </div>
+                    {college.placement.top_recruiters && (
+                      <div className="bg-gray-50 rounded-lg p-4 border">
+                        <h4 className="font-bold mb-3">Top Recruiters</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {(typeof college.placement.top_recruiters === 'string' 
+                            ? college.placement.top_recruiters.split(',') 
+                            : college.placement.top_recruiters
+                          ).map((company, idx) => (
+                            <span key={idx} className="px-3 py-1 bg-white border rounded-full text-sm">{company.trim()}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </GuestGate>
+                </section>
+              )}
+
+              {/* SCHOLARSHIP - Menu Tab Content */}
+              {college?.scholarships && college.scholarships.length > 0 && (
+                <section id="scholarship" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships</h2>
+                  <p className="text-gray-700 text-sm mb-4">Available scholarships for students:</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border">
+                      <thead>
+                        <tr className="bg-green-50">
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Scholarship Name</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {college.scholarships.map((scholarship, idx) => (
+                          <tr key={idx} className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm font-medium">{scholarship.name}</td>
+                            <td className="border px-4 py-3 text-sm">{scholarship.eligibility || '-'}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-green-600">{scholarship.amount || '-'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              )}
+
+              {/* FACILITIES - Menu Tab Content */}
+              {college.facilities && college.facilities.length > 0 && (
+                <section id="facilities" className="scroll-mt-40">
+                  <h2 className="text-2xl font-bold mb-3">{college.name} Facilities</h2>
+                  <p className="text-gray-700 text-sm mb-4">Campus provides world-class facilities:</p>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+                    {college.facilities.map((facility, idx) => {
+                      const facilityStr = typeof facility === 'string' ? facility : facility.name;
+                      const facilityData = facilityIconMap[facilityStr?.toLowerCase()] || { icon: FiGrid, label: facilityStr, color: 'bg-gray-500' };
+                      const IconComponent = facilityData.icon;
+                      return (
+                        <div key={idx} className="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-lg border hover:shadow-md transition-shadow group">
+                          <div className={`w-12 h-12 ${facilityData.color} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                            <IconComponent className="text-white" size={26} />
+                          </div>
+                          <span className="text-sm font-medium text-gray-700 text-center">{facilityData.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
               )}
             </div>
 
