@@ -1044,8 +1044,20 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </div>
                   ))}
 
-                  {/* ALL DETAILED CONTENT SECTIONS - NOW INSIDE EXPANDABLE AREA */}
-                  <div className="space-y-8">
+                  {/* SEO FAQs - Only in Read More if exists */}
+                  {college.seo_faqs && college.seo_faqs.length > 0 && (
+                    <section id="seo-faqs-content">
+                      <h2 className="text-2xl font-bold mb-3">Frequently Asked Questions</h2>
+                      <div className="space-y-3">
+                        {college.seo_faqs.map((faq, idx) => (
+                          <div key={idx} className="bg-gray-50 rounded-lg p-4 border">
+                            <p className="font-bold text-sm mb-2">Q. {faq.question}</p>
+                            <p className="text-sm text-gray-700"><strong>Ans.</strong> {faq.answer}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
                     {/* ADMISSION DATES - Only show if data exists */}
                     {college?.admission_dates && college.admission_dates.length > 0 && (
                       <section id="seo-admission-dates">
