@@ -2408,6 +2408,7 @@ const CollegeForm = () => {
                 value={formData.description || ''}
                 onChange={(content) => setFormData(prev => ({...prev, description: content}))}
                 placeholder="Write detailed description about the institution..."
+                collegeName={formData.name}
               />
               
               {/* Emoji Quick Insert for Description */}
