@@ -1698,7 +1698,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       </>
                     )}
 
-                    {college?.courses && college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0 && (
+                    {college?.courses && college.courses.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).length > 0 && (
                       <>
                         <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
                         <div className="overflow-x-auto mb-6">
@@ -1711,11 +1711,11 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                               </tr>
                             </thead>
                             <tbody>
-                              {college.courses.filter(c => typeof c === 'object').map((course, idx) => (
+                              {college.courses.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).map((course, idx) => (
                                 <tr key={idx} className="hover:bg-gray-50">
                                   <td className="border px-4 py-3 text-sm font-semibold">{course.name}</td>
-                                  <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
-                                  <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                                  <td className="border px-4 py-3 text-sm">{course.eligibility}</td>
+                                  <td className="border px-4 py-3 text-sm">{course.selection_criteria}</td>
                                 </tr>
                               ))}
                             </tbody>
