@@ -24,10 +24,21 @@ import api from '../../api/axios';
 // Image/Video Insert Modal Component
 const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
   const [url, setUrl] = useState('');
+  const [mediaTitle, setMediaTitle] = useState(''); // Image Title or Video Title
   const [altText, setAltText] = useState('');
-  const [title, setTitle] = useState('');
+  const [seoTitle, setSeoTitle] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
+
+  // Auto-generate SEO fields when media title changes
+  const handleMediaTitleChange = (newTitle) => {
+    setMediaTitle(newTitle);
+    if (newTitle) {
+      const college = collegeName || 'Institution';
+      setAltText(`${newTitle} - ${college} | AdmissionBuddy`);
+      setSeoTitle(`${newTitle} - ${college} | AdmissionBuddy.co`);
+    }
+  };
 
   const handleFileUpload = async (file) => {
     setUploading(true);
@@ -48,16 +59,6 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
         const imageUrl = backendUrl + response.data.url;
         setUploadedUrl(imageUrl);
         setUrl(imageUrl);
-        
-        // Auto-generate SEO alt and title if empty
-        if (!altText) {
-          const fileName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ');
-          setAltText(`${fileName} - ${collegeName || 'Institution'} | AdmissionBuddy`);
-        }
-        if (!title) {
-          const fileName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ');
-          setTitle(`${fileName} - ${collegeName || 'Institution'} | AdmissionBuddy.co`);
-        }
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -69,158 +70,138 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
 
   const handleInsert = () => {
     if (!url) {
-      alert('Please provide an image/video URL');
+      alert(`Please provide ${type === 'image' ? 'an image' : 'a video'} URL`);
       return;
     }
-    onInsert({ url, alt: altText, title });
+    onInsert({ url, alt: altText, title: seoTitle });
     // Reset form
     setUrl('');
+    setMediaTitle('');
     setAltText('');
-    setTitle('');
+    setSeoTitle('');
     setUploadedUrl('');
     onClose();
   };
 
-  const handleUrlChange = (newUrl) => {
-    setUrl(newUrl);
-    // Auto-generate SEO tags for YouTube videos
-    if (type === 'video' && newUrl && newUrl.includes('youtube')) {
-      if (!altText) {
-        setAltText(`Video - ${collegeName || 'Institution'} | AdmissionBuddy`);
-      }
-      if (!title) {
-        setTitle(`Video - ${collegeName || 'Institution'} | AdmissionBuddy.co`);
-      }
-    }
+  const handleClose = () => {
+    // Reset form on close
+    setUrl('');
+    setMediaTitle('');
+    setAltText('');
+    setSeoTitle('');
+    setUploadedUrl('');
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className={`px-6 py-4 ${type === 'image' ? 'bg-purple-600' : 'bg-red-600'} text-white`}>
-          <h3 className="text-lg font-bold flex items-center gap-2">
+        <div className={`px-5 py-3 ${type === 'image' ? 'bg-purple-600' : 'bg-red-600'} text-white`}>
+          <h3 className="text-base font-bold flex items-center gap-2">
             {type === 'image' ? '🖼️ Insert Image with SEO' : '🎬 Insert YouTube Video with SEO'}
           </h3>
-          <p className="text-sm opacity-90">Add {type} with proper SEO tags for better ranking</p>
         </div>
         
-        <div className="p-6 space-y-4">
+        <div className="p-4 space-y-3">
           {/* Image Upload Option */}
           {type === 'image' && (
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
-              <p className="text-sm font-bold text-purple-800 mb-3">📤 Upload Image</p>
-              <label className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg cursor-pointer font-medium text-sm transition-all ${
-                uploading 
-                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
-                  : 'bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg'
-              }`}>
-                {uploading ? (
-                  <>
-                    <FiLoader className="animate-spin" size={18} />
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <FiUpload size={18} />
-                    Choose File
-                  </>
-                )}
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="hidden" 
-                  disabled={uploading}
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      handleFileUpload(e.target.files[0]);
-                    }
-                  }}
-                />
-              </label>
-              {uploadedUrl && (
-                <div className="mt-2 flex items-center gap-2 text-xs text-green-600">
-                  <FiCheck /> Image uploaded successfully!
-                </div>
-              )}
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+              <div className="flex items-center justify-between">
+                <label className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer font-medium text-sm ${
+                  uploading 
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+                    : 'bg-purple-600 text-white hover:bg-purple-700'
+                }`}>
+                  {uploading ? (
+                    <><FiLoader className="animate-spin" size={16} /> Uploading...</>
+                  ) : (
+                    <><FiUpload size={16} /> Upload Image</>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" disabled={uploading}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleFileUpload(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </label>
+                {uploadedUrl && <span className="text-xs text-green-600 flex items-center gap-1"><FiCheck /> Uploaded!</span>}
+              </div>
             </div>
           )}
           
           {/* URL Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               {type === 'image' ? '🔗 Image URL' : '🔗 YouTube URL'} *
             </label>
             <input
               type="text"
               value={url}
-              onChange={(e) => handleUrlChange(e.target.value)}
+              onChange={(e) => setUrl(e.target.value)}
               placeholder={type === 'image' ? 'https://example.com/image.jpg' : 'https://www.youtube.com/watch?v=...'}
               className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
           
-          {/* SEO Fields */}
-          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
-            <p className="text-sm font-bold text-green-800 mb-3">🔍 SEO Tags (Auto-generated with AdmissionBuddy branding)</p>
-            
-            <div className="space-y-3">
+          {/* Image/Video Title - Primary Input for Auto SEO */}
+          <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-3">
+            <label className="block text-sm font-bold text-yellow-800 mb-1">
+              ✏️ {type === 'image' ? 'Image' : 'Video'} Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={mediaTitle}
+              onChange={(e) => handleMediaTitleChange(e.target.value)}
+              placeholder={type === 'image' ? 'e.g., Campus Building, Library, Hostel' : 'e.g., Campus Tour, Student Life, Placement'}
+              className="w-full border-2 border-yellow-400 rounded-lg px-3 py-2 text-sm font-medium"
+            />
+            <p className="text-xs text-yellow-700 mt-1">💡 SEO Alt & Title auto-generated with AdmissionBuddy branding</p>
+          </div>
+          
+          {/* SEO Fields (Auto-generated) */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <p className="text-xs font-bold text-green-800 mb-2">🔍 SEO Tags <span className="text-green-600">(Auto-generated)</span></p>
+            <div className="space-y-2">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Alt Text (SEO) *</label>
-                <input
-                  type="text"
-                  value={altText}
-                  onChange={(e) => setAltText(e.target.value)}
-                  placeholder={`e.g., Campus Building - ${collegeName || 'College'} | AdmissionBuddy`}
-                  className="w-full border-2 border-green-300 bg-white rounded-lg px-3 py-2 text-sm"
-                />
-                <p className="text-xs text-green-600 mt-1">Important for Google Image/Video Search</p>
+                <label className="block text-xs text-gray-600 mb-1">Alt Text</label>
+                <input type="text" value={altText} onChange={(e) => setAltText(e.target.value)}
+                  className="w-full border border-green-300 bg-white rounded px-2 py-1.5 text-xs" 
+                  placeholder="Auto-generated from title" />
               </div>
-              
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Title Attribute (SEO)</label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder={`e.g., Campus Building - ${collegeName || 'College'} | AdmissionBuddy.co`}
-                  className="w-full border-2 border-green-300 bg-white rounded-lg px-3 py-2 text-sm"
-                />
+                <label className="block text-xs text-gray-600 mb-1">Title Attribute</label>
+                <input type="text" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)}
+                  className="w-full border border-green-300 bg-white rounded px-2 py-1.5 text-xs"
+                  placeholder="Auto-generated from title" />
               </div>
             </div>
           </div>
           
-          {/* Preview */}
+          {/* Preview - Smaller size */}
           {url && type === 'image' && (
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-3">
-              <p className="text-xs text-gray-500 mb-2">Preview:</p>
-              <img src={url} alt={altText || 'Preview'} className="max-h-32 mx-auto rounded" 
+            <div className="border border-dashed border-gray-300 rounded-lg p-2 bg-gray-50">
+              <p className="text-xs text-gray-500 mb-1">Preview:</p>
+              <img src={url} alt={altText || 'Preview'} className="max-h-20 max-w-full mx-auto rounded object-contain" 
                 onError={(e) => { e.target.style.display = 'none'; }} />
             </div>
           )}
         </div>
         
         {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
-          >
+        <div className="px-4 py-3 bg-gray-50 flex justify-end gap-2 border-t">
+          <button type="button" onClick={handleClose}
+            className="px-3 py-1.5 text-gray-600 hover:text-gray-800 text-sm font-medium">
             Cancel
           </button>
-          <button
-            type="button"
-            onClick={handleInsert}
-            disabled={!url}
-            className={`px-6 py-2 rounded-lg font-medium text-white ${
-              url 
-                ? (type === 'image' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-red-600 hover:bg-red-700')
+          <button type="button" onClick={handleInsert} disabled={!url}
+            className={`px-4 py-1.5 rounded-lg text-sm font-medium text-white ${
+              url ? (type === 'image' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-red-600 hover:bg-red-700')
                 : 'bg-gray-300 cursor-not-allowed'
-            }`}
-          >
+            }`}>
             Insert {type === 'image' ? 'Image' : 'Video'}
           </button>
         </div>
