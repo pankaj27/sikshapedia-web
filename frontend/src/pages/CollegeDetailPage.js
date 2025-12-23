@@ -352,6 +352,16 @@ const CollegeDetailPage = ({ overrideId }) => {
   };
 
   const menuItems = getMenuItems();
+  
+  // Helper function to check if a menu section is enabled
+  const isMenuEnabled = (menuId) => {
+    const menuConfig = college?.menu_config;
+    if (!menuConfig?.items || menuConfig.items.length === 0) {
+      return true; // Default: all enabled if no config
+    }
+    const menuItem = menuConfig.items.find(item => item.id === menuId);
+    return menuItem ? menuItem.enabled : true;
+  };
 
   const scrollToSection = (sectionId) => {
     setActiveTab(sectionId);
