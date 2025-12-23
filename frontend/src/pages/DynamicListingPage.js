@@ -1352,7 +1352,7 @@ const DynamicListingPage = () => {
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold text-gray-800 text-sm flex items-center gap-2">
                 <FiFilter className="text-blue-600" />
-                Filter Colleges
+                {filterConfig.label}
               </h3>
               {(activeFilters.stream || activeFilters.state || activeFilters.city || activeFilters.collegeType || activeFilters.accreditation) && (
                 <button 
