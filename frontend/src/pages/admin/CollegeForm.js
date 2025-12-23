@@ -2655,6 +2655,7 @@ const CollegeForm = () => {
                 value={formData.seo_intro || ''}
                 onChange={(content) => setFormData(prev => ({...prev, seo_intro: content}))}
                 placeholder="Write your SEO intro here..."
+                collegeName={formData.name}
               />
               
               {/* Emoji Quick Insert */}
