@@ -1240,53 +1240,58 @@ const CollegeDetailPage = ({ overrideId }) => {
               )}
 
               {/* RANKING - Menu Tab Content */}
-              {(college?.rankings?.length > 0 || college?.nirf_ranking) && (
+              {(college?.rankings?.length > 0 || college?.nirf_ranking || college?.india_today_ranking || college?.outlook_ranking) && (
                 <section id="ranking" className="scroll-mt-40">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Ranking</h2>
                   <p className="text-gray-700 text-sm mb-4">{college.name} has been ranked by various agencies:</p>
-                  {college?.rankings && college.rankings.length > 0 ? (
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse border">
-                        <thead>
-                          <tr className="bg-gray-50">
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {college.rankings.map((ranking, idx) => (
-                            <tr key={idx} className="hover:bg-gray-50">
-                              <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
-                              <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
-                              <td className="border px-4 py-3 text-sm">{ranking.year || new Date().getFullYear()}</td>
-                              <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse border">
-                        <thead>
-                          <tr className="bg-gray-50">
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* Quick Rankings - NIRF, India Today, Outlook */}
+                        {college.nirf_ranking > 0 && (
                           <tr className="hover:bg-gray-50">
-                            <td className="border px-4 py-3 text-sm">NIRF</td>
+                            <td className="border px-4 py-3 text-sm font-medium">NIRF</td>
+                            <td className="border px-4 py-3 text-sm">Overall</td>
                             <td className="border px-4 py-3 text-sm">{new Date().getFullYear()}</td>
                             <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
                           </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
+                        )}
+                        {college.india_today_ranking > 0 && (
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm font-medium">India Today</td>
+                            <td className="border px-4 py-3 text-sm">Overall</td>
+                            <td className="border px-4 py-3 text-sm">{new Date().getFullYear()}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-blue-600">#{college.india_today_ranking}</td>
+                          </tr>
+                        )}
+                        {college.outlook_ranking > 0 && (
+                          <tr className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm font-medium">Outlook</td>
+                            <td className="border px-4 py-3 text-sm">Overall</td>
+                            <td className="border px-4 py-3 text-sm">{new Date().getFullYear()}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-purple-600">#{college.outlook_ranking}</td>
+                          </tr>
+                        )}
+                        {/* Detailed Rankings from rankings array */}
+                        {college?.rankings?.map((ranking, idx) => (
+                          <tr key={idx} className="hover:bg-gray-50">
+                            <td className="border px-4 py-3 text-sm">{ranking.agency}</td>
+                            <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
+                            <td className="border px-4 py-3 text-sm">{ranking.year || new Date().getFullYear()}</td>
+                            <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{ranking.rank}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </section>
               )}
 
