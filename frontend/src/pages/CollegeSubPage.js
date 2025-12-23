@@ -140,11 +140,32 @@ const CollegeSubPage = () => {
         const response = await api.get(`/colleges/${resolvedId}`);
         setCollege(response.data);
         
-        // Find the current section from menu_config
-        if (response.data.menu_config?.use_custom_menu) {
-          const menuItems = response.data.menu_config.items || [];
-          const found = menuItems.find(item => item.id === section);
+        // Find the current section from menu_config items
+        const menuItems = response.data.menu_config?.items || [];
+        const found = menuItems.find(item => item.id === section);
+        
+        // If found in menu_config, use it; otherwise create a default section object
+        if (found) {
           setCurrentSection(found);
+        } else {
+          // Create default section for standard sections
+          const defaultLabels = {
+            'info': 'Info',
+            'courses': 'Courses & Fees',
+            'gallery': 'Gallery',
+            'reviews': 'Reviews',
+            'admission': 'Admissions',
+            'cutoff': 'Cutoff',
+            'placement': 'Placement',
+            'ranking': 'Ranking',
+            'scholarship': 'Scholarship',
+            'facilities': 'Facilities'
+          };
+          setCurrentSection({
+            id: section,
+            label: defaultLabels[section] || section,
+            enabled: true
+          });
         }
       } catch (error) {
         console.error('Error fetching college:', error);
