@@ -354,10 +354,11 @@ async def google_session(request: GoogleSessionRequest, response: Response, db=D
     # REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
     
     # Fetch session data from Emergent Auth
+    auth_service_url = os.environ.get("AUTH_SERVICE_URL", "https://demobackend.emergentagent.com")
     async with httpx.AsyncClient() as client:
         try:
             res = await client.get(
-                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+                f"{auth_service_url}/auth/v1/env/oauth/session-data",
                 headers={"X-Session-ID": request.session_id}
             )
             if res.status_code != 200:
