@@ -2213,48 +2213,48 @@ const DynamicListingPage = () => {
                     )}
                     
                     {/* Regular College Card */}
-                    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all group">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-blue-200 transition-all duration-200 group">
                     {/* Top Badge Bar */}
                     {(inst.is_featured || inst.is_admission_open || inst.nirf_ranking || inst.is_admission_partner || inst.is_no_cost_emi) && (
-                      <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-2 flex items-center gap-2 flex-wrap border-b border-gray-100">
+                      <div className="bg-gradient-to-r from-slate-50 to-gray-50 px-3 md:px-4 py-2 flex items-center gap-1.5 md:gap-2 flex-wrap border-b border-gray-100">
                         {inst.nirf_ranking && (
-                          <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
-                            #Rank {inst.nirf_ranking} in India
+                          <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                            🏆 Rank #{inst.nirf_ranking}
                           </span>
                         )}
                         {inst.is_featured && (
-                          <span className="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded flex items-center gap-1">
+                          <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
                             <FiStar size={10} className="fill-current" /> Featured
                           </span>
                         )}
                         {inst.is_admission_partner && (
-                          <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded">
-                            🤝 Admission Partner
+                          <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            🤝 Partner
                           </span>
                         )}
                         {inst.is_no_cost_emi && (
-                          <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
-                            💳 No Cost EMI
+                          <span className="text-xs font-medium text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
+                            💳 EMI
                           </span>
                         )}
                         {inst.is_admission_open && (
-                          <span className="text-xs font-medium text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">
-                            Admissions Open
+                          <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                            ✓ Open
                           </span>
                         )}
                       </div>
                     )}
                     
-                    <div className="p-4 md:p-5">
-                      <div className="flex flex-col md:flex-row gap-4">
+                    <div className="p-3 md:p-4">
+                      <div className="flex flex-col md:flex-row gap-3 md:gap-4">
                         {/* Logo & Basic Info */}
-                        <div className="flex gap-4 flex-1">
+                        <div className="flex gap-3 flex-1">
                           {/* Logo */}
-                          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border border-gray-200 group-hover:border-blue-300 transition-colors">
+                          <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-gray-100 group-hover:border-blue-200 transition-colors shadow-sm">
                             {inst.logo_url ? (
-                              <img src={inst.logo_url} alt={`${inst.name} logo | admissionbuddy`} className="w-full h-full object-contain p-1" />
+                              <img src={inst.logo_url} alt={`${inst.name} logo`} className="w-full h-full object-contain p-1.5" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<span class="text-xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">${inst.name?.charAt(0) || 'C'}</span>`; }} />
                             ) : (
-                              <span className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">{inst.name?.charAt(0)}</span>
+                              <span className="text-xl md:text-2xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">{inst.name?.charAt(0)}</span>
                             )}
                           </div>
                           
@@ -2262,46 +2262,45 @@ const DynamicListingPage = () => {
                           <div className="flex-1 min-w-0">
                             <Link 
                               to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                              className="font-bold text-base md:text-lg text-gray-900 hover:text-blue-600 line-clamp-2 transition-colors"
+                              className="font-semibold text-sm md:text-base text-gray-900 hover:text-blue-600 line-clamp-2 transition-colors leading-snug"
                             >
                               {inst.name}
                             </Link>
-                            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mt-1.5 flex-wrap">
+                            <div className="flex items-center gap-1.5 md:gap-2 text-xs text-gray-500 mt-1 flex-wrap">
                               <span className="flex items-center gap-1">
-                                <FiMapPin size={12} className="text-gray-400" />
-                                {inst.location?.city}{inst.location?.state ? `, ${inst.location.state}` : ''}
+                                <FiMapPin size={11} className="text-gray-400" />
+                                <span className="truncate max-w-[120px] md:max-w-none">{inst.location?.city}{inst.location?.state ? `, ${inst.location.state}` : ''}</span>
                               </span>
                               {inst.type && (
-                                <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                                  inst.type === 'Government' ? 'bg-blue-100 text-blue-700' : 
-                                  inst.type === 'Private' ? 'bg-purple-100 text-purple-700' : 
-                                  'bg-gray-100 text-gray-700'
+                                <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                                  inst.type === 'Government' ? 'bg-blue-50 text-blue-600' : 
+                                  inst.type === 'Private' ? 'bg-purple-50 text-purple-600' : 
+                                  'bg-gray-50 text-gray-600'
                                 }`}>
                                   {inst.type}
                                 </span>
                               )}
                               {inst.is_verified && (
-                                <span className="flex items-center gap-0.5 text-blue-600 text-xs">
-                                  <FiCheckCircle size={12} /> Verified
+                                <span className="flex items-center gap-0.5 text-green-600 text-xs">
+                                  <FiCheckCircle size={11} />
                                 </span>
                               )}
                             </div>
                             
                             {/* Stats Row - Desktop */}
-                            <div className="hidden md:flex items-center gap-6 mt-3 text-sm">
+                            <div className="hidden md:flex items-center gap-4 mt-2.5 text-sm">
                               {inst.average_fees > 0 && (
-                                <div>
-                                  <span className="text-gray-500">Fees:</span>
-                                  <span className="ml-1 font-bold text-gray-900">
-                                    ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}/yr
+                                <div className="flex items-center gap-1">
+                                  <span className="text-gray-400 text-xs">Fees:</span>
+                                  <span className="font-semibold text-gray-800">
+                                    ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}
                                   </span>
                                 </div>
                               )}
                               {inst.rating > 0 && (
                                 <div className="flex items-center gap-1">
-                                  <span className="text-gray-500">Rating:</span>
-                                  <span className="font-bold text-gray-900">{inst.rating.toFixed(1)}</span>
                                   <FiStar size={12} className="text-yellow-500 fill-current" />
+                                  <span className="font-semibold text-gray-800">{inst.rating.toFixed(1)}</span>
                                 </div>
                               )}
                             </div>
@@ -2309,36 +2308,36 @@ const DynamicListingPage = () => {
                         </div>
                         
                         {/* Rating & Actions - Desktop */}
-                        <div className="hidden md:flex flex-col items-end justify-between gap-2 min-w-[140px]">
+                        <div className="hidden md:flex flex-col items-end justify-between gap-2 min-w-[130px]">
                           {inst.rating > 0 && (
-                            <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 px-3 py-1.5 rounded-lg border border-green-200">
-                              <FiStar size={16} className="fill-current text-green-500" />
-                              <span className="font-bold text-lg">{inst.rating.toFixed(1)}</span>
+                            <div className="flex items-center gap-1.5 bg-green-50 text-green-700 px-2.5 py-1.5 rounded-lg border border-green-200">
+                              <FiStar size={14} className="fill-current text-green-500" />
+                              <span className="font-bold text-base">{inst.rating.toFixed(1)}</span>
                               <span className="text-xs text-green-600">/5</span>
                             </div>
                           )}
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5">
                             <button 
                               onClick={() => toggleCompare(inst.id)}
-                              className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                              className={`p-2 rounded-lg text-xs font-medium transition-all ${
                                 compareList.includes(inst.id) 
                                   ? 'bg-blue-100 text-blue-700 border border-blue-300' 
-                                  : 'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-600 border border-transparent'
+                                  : 'bg-gray-50 text-gray-500 hover:bg-blue-50 hover:text-blue-600 border border-gray-200'
                               }`}
                             >
                               <FiBookmark size={14} className={compareList.includes(inst.id) ? 'fill-current' : ''} />
                             </button>
                             <button
                               onClick={(e) => { e.preventDefault(); setSelectedCollege(inst); setApplyModalOpen(true); }}
-                              className="px-3 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-xs font-medium hover:from-orange-600 hover:to-orange-700 transition-all flex items-center gap-1 shadow-sm"
+                              className="px-3 py-2 bg-orange-500 text-white rounded-lg text-xs font-medium hover:bg-orange-600 transition-all flex items-center gap-1"
                             >
-                              <FiSend size={12} /> Apply
+                              <FiSend size={11} /> Apply
                             </button>
                             <Link 
                               to={getInstitutionDetailUrl(inst.institution_type || 'college', inst.id, inst.name, inst.location?.city, inst.serial_number)}
-                              className="px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-xs font-medium hover:from-blue-700 hover:to-blue-800 transition-all flex items-center gap-1 shadow-sm"
+                              className="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all flex items-center gap-1"
                             >
-                              View <FiArrowRight size={12} />
+                              View <FiArrowRight size={11} />
                             </Link>
                           </div>
                         </div>
