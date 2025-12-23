@@ -2014,49 +2014,53 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <div className="bg-white border rounded-lg p-6 space-y-4">
                         <div>
                           <h3 className="font-bold text-lg mb-3 text-gray-900">Address</h3>
-                          <div className="space-y-3">
-                            <div className="flex gap-3">
-                              <FiMapPin className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                              <div>
-                                <p className="text-sm text-gray-700 font-medium">{college.name}</p>
-                                <p className="text-sm text-gray-600">
-                                  {college.location?.address || `${college.location?.city}, ${college.location?.state}`}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  {college.location?.city}, {college.location?.state}
-                                </p>
-                                <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
+                          
+                          {/* ENTIRE Address & Contact Details - Blurred for non-registered users */}
+                          <GuestGate title="Address & Contact Details">
+                            <div className="space-y-3">
+                              <div className="flex gap-3">
+                                <FiMapPin className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                                <div>
+                                  <p className="text-sm text-gray-700 font-medium">{college.name}</p>
+                                  <p className="text-sm text-gray-600">
+                                    {college.location?.address || `${college.location?.city}, ${college.location?.state}`}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {college.location?.city}, {college.location?.state}
+                                  </p>
+                                  <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="flex gap-3">
-                              <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                              <div>
-                                <p className="text-sm text-gray-700 font-medium">Phone</p>
-                                <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
+                              <div className="flex gap-3">
+                                <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                                <div>
+                                  <p className="text-sm text-gray-700 font-medium">Phone</p>
+                                  <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="flex gap-3">
-                              <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                              <div>
-                                <p className="text-sm text-gray-700 font-medium">Email</p>
-                                <p className="text-sm text-gray-600">
-                                  {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
-                                </p>
+                              <div className="flex gap-3">
+                                <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                                <div>
+                                  <p className="text-sm text-gray-700 font-medium">Email</p>
+                                  <p className="text-sm text-gray-600">
+                                    {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="flex gap-3">
-                              <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
-                              <div>
-                                <p className="text-sm text-gray-700 font-medium">Website</p>
-                                <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
-                                  {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
-                                </a>
+                              <div className="flex gap-3">
+                                <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                                <div>
+                                  <p className="text-sm text-gray-700 font-medium">Website</p>
+                                  <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                                    {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
+                                  </a>
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          </GuestGate>
                         </div>
 
                         {/* How to Reach - Only show if data exists */}
