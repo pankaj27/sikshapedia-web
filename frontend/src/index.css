@@ -196,3 +196,29 @@ code {
     scrollbar-width: thin;
     scrollbar-color: #fb923c #f1f1f1;
 }
+
+/* React Quill Rich Text Editor Styles */
+.ql-container {
+  min-height: 120px;
+  font-size: 14px;
+}
+
+.ql-editor {
+  min-height: 120px;
+}
+
+.ql-toolbar.ql-snow {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #f9fafb;
+}
+
+.ql-container.ql-snow {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.ql-editor.ql-blank::before {
+  font-style: normal;
+  color: #9ca3af;
+}
