@@ -784,6 +784,16 @@ const CollegeForm = () => {
         phone: '',
         show_callback_form: true
       },
+      career_counseling: {
+        enabled: true,
+        title: 'Career Counseling',
+        subtitle: 'Get personalized career guidance from experts',
+        booking_type: 'link', // 'link', 'phone', 'whatsapp', 'form'
+        booking_url: '',
+        booking_phone: '',
+        booking_whatsapp: '',
+        button_text: 'Book Session'
+      },
       ad_banner: {
         enabled: false,
         position: 'top',
