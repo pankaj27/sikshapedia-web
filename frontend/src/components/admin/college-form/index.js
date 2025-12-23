@@ -9,3 +9,4 @@ export { default as CutoffSection } from './CutoffSection';
 export { default as SidebarWidgetsSection } from './SidebarWidgetsSection';
 export { default as SeoMetaSection } from './SeoMetaSection';
 export { default as LocationSection, indianStates, citiesByState } from './LocationSection';
+export { default as MenuConfigSection } from './MenuConfigSection';
