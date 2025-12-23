@@ -479,7 +479,7 @@ import { Button } from '../../components/ui/button';
 import SearchableSelect from '../../components/ui/SearchableSelect';
 import ContentApprovalActions from '../../components/admin/ContentApprovalActions';
 import StatusBadge from '../../components/admin/StatusBadge';
-import { PlacementSection, ScholarshipsSection, FacilitiesSection, UpdatesSection, FAQsSection, CoursesSection, AdmissionSection, CutoffSection, SidebarWidgetsSection, SeoMetaSection } from '../../components/admin/college-form';
+import { PlacementSection, ScholarshipsSection, FacilitiesSection, UpdatesSection, FAQsSection, CoursesSection, AdmissionSection, CutoffSection, SidebarWidgetsSection, SeoMetaSection, MenuConfigSection } from '../../components/admin/college-form';
 
 // Menu icon options with professional icons
 const menuIconOptions = [
