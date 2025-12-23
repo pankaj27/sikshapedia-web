@@ -1404,12 +1404,16 @@ const CollegeDetailPage = ({ overrideId }) => {
               {/* INFO SECTION - Show when NOT using auto_from_toc */}
               <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                 <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
-                <p className="text-gray-800 leading-relaxed mb-4">
-                  {college.seo_intro || `${college.name} is a premier ${college.type} institution established in ${college.established_year || college.established || 'N/A'} and located in ${college.location?.city}, ${college.location?.state}.`}
-                </p>
+                {college.seo_intro ? (
+                  <div className="text-gray-800 leading-relaxed mb-4 prose max-w-none" dangerouslySetInnerHTML={{ __html: college.seo_intro }} />
+                ) : (
+                  <p className="text-gray-800 leading-relaxed mb-4">
+                    {college.name} is a premier {college.type} institution established in {college.established_year || college.established || 'N/A'} and located in {college.location?.city}, {college.location?.state}.
+                  </p>
+                )}
                 {college.seo_full_content && (
                   <div className="text-gray-700 leading-relaxed prose max-w-none mb-4">
-                    <div dangerouslySetInnerHTML={{ __html: college.seo_full_content.replace(/\n/g, '<br/>') }} />
+                    <div dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
                   </div>
                 )}
 
