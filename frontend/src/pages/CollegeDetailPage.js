@@ -1099,6 +1099,59 @@ const CollegeDetailPage = ({ overrideId }) => {
                   )}
                 </section>
               )}
+
+              {/* QUICK FACTS & KEY STATISTICS - Main Content Area (AFTER Description & Highlights) */}
+              {college.seo_toc?.some(section => section.blocks?.some(block => block.type === 'facts' || block.type === 'stats')) && (
+                <section id="quick-facts-stats" className="scroll-mt-40">
+                  {college.seo_toc.map((section, sectionIdx) => (
+                    section.blocks?.filter(block => block.type === 'facts' || block.type === 'stats').map((block, blockIdx) => (
+                      <div key={`${sectionIdx}-${blockIdx}`} className="mb-6">
+                        {/* Quick Facts Block */}
+                        {block.type === 'facts' && (
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5">
+                            <h3 className="font-bold text-lg mb-4 text-blue-800 flex items-center gap-2">
+                              <span className="text-2xl">📋</span>
+                              {block.title || `${college.name} Quick Facts`}
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              {block.items?.map((fact, fi) => (
+                                <div key={fi} className="bg-white rounded-lg p-3 shadow-sm">
+                                  <div className="text-xs text-gray-500 uppercase tracking-wide">{fact.label}</div>
+                                  <div className="font-bold text-gray-900 mt-1">{fact.value}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Key Statistics Block */}
+                        {block.type === 'stats' && (
+                          <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-5">
+                            <h3 className="font-bold text-lg mb-4 text-purple-800 flex items-center gap-2">
+                              <span className="text-2xl">📈</span>
+                              {block.title || `${college.name} Key Statistics`}
+                            </h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              {block.items?.map((stat, si) => (
+                                <div key={si} className={`rounded-lg p-4 text-center shadow-sm ${
+                                  stat.color === 'yellow' ? 'bg-yellow-100 border border-yellow-300' :
+                                  stat.color === 'green' ? 'bg-green-100 border border-green-300' :
+                                  stat.color === 'blue' ? 'bg-blue-100 border border-blue-300' :
+                                  stat.color === 'pink' ? 'bg-pink-100 border border-pink-300' : 'bg-white border border-gray-200'
+                                }`}>
+                                  <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                                  <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ))}
+                </section>
+              )}
+
               {/* ADMISSION DATES - Menu Tab Content */}
               {college?.admission_dates && college.admission_dates.length > 0 && (
                 <section id="admission-dates" className="scroll-mt-40">
