@@ -749,29 +749,6 @@ const CollegeDetailPage = ({ overrideId }) => {
         </div>
       </div>
 
-      {/* LATEST UPDATES - Only show if data exists */}
-      {((college?.updates && college.updates.length > 0) || (college?.announcements && college.announcements.length > 0)) && (
-        <div className="bg-gray-50 border-b">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {(college.updates?.length > 0 ? college.updates : college.announcements).slice(0, 2).map((item, idx) => (
-                <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
-                  <div className="flex items-start gap-2">
-                    <span className={`text-[10px] font-bold ${idx === 0 ? 'text-blue-600 bg-blue-200' : 'text-green-600 bg-green-200'} px-2 py-0.5 rounded flex-shrink-0`}>
-                      {item.date ? new Date(item.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}
-                    </span>
-                    <p className="text-xs text-gray-800">
-                      <strong>{item.title}</strong> {item.content || item.description || ''}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* AUTHOR INFO */}
       <div className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
