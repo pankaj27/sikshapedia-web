@@ -399,15 +399,16 @@ const DynamicListingPage = () => {
     return active;
   }, [pageInfo, queryFilters]);
   
-  // Fetch master location data AND streams/courses
+  // Fetch master location data AND streams/courses/exams
   useEffect(() => {
     const fetchMasterData = async () => {
       try {
-        const [statesRes, citiesRes, streamsRes, coursesRes] = await Promise.all([
+        const [statesRes, citiesRes, streamsRes, coursesRes, examsRes] = await Promise.all([
           api.get('/locations/all-states'),
           api.get('/locations/all-cities'),
           api.get('/streams'),
-          api.get('/courses?limit=500')  // Fetch more courses
+          api.get('/courses?limit=500'),
+          api.get('/exams?limit=500')
         ]);
         const activeStates = (statesRes.data || [])
           .filter(s => s.status === 'active')
@@ -424,11 +425,26 @@ const DynamicListingPage = () => {
         setMasterStreams(activeStreams);
         
         // Set courses - filter active ones and extract names (excluding 'School' type)
-        const activeCourses = (coursesRes.data || [])
+        const coursesData = coursesRes.data || [];
+        const activeCourses = coursesData
           .filter(c => c.is_active !== false && c.name !== 'School')
           .map(c => c.name)
           .sort();
         setMasterCourses(activeCourses);
+        
+        // Extract unique degree types from courses
+        const degreeTypes = [...new Set(coursesData
+          .filter(c => c.degree_type)
+          .map(c => c.degree_type)
+        )].sort();
+        setMasterDegreeTypes(degreeTypes);
+        
+        // Set exams - extract names
+        const activeExams = (examsRes.data || [])
+          .filter(e => e.is_active !== false)
+          .map(e => e.name)
+          .sort();
+        setMasterExams(activeExams);
       } catch (error) {
         console.error('Error fetching master data:', error);
       }
