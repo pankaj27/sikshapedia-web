@@ -1393,7 +1393,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                       <thead>
                         <tr className="bg-green-50">
                           <th className="border px-4 py-3 text-left text-sm font-bold">Scholarship Name</th>
-                          <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                          <th className="border px-4 py-3 text-left text-sm font-bold">Description</th>
                           <th className="border px-4 py-3 text-left text-sm font-bold">Amount</th>
                         </tr>
                       </thead>
@@ -1401,7 +1401,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                         {college.scholarships.map((scholarship, idx) => (
                           <tr key={idx} className="hover:bg-gray-50">
                             <td className="border px-4 py-3 text-sm font-medium">{scholarship.name}</td>
-                            <td className="border px-4 py-3 text-sm">{scholarship.eligibility || '-'}</td>
+                            <td className="border px-4 py-3 text-sm">{scholarship.description || scholarship.details || '-'}</td>
                             <td className="border px-4 py-3 text-sm font-bold text-green-600">{scholarship.amount || '-'}</td>
                           </tr>
                         ))}
