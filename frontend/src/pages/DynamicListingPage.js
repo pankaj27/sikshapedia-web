@@ -1650,8 +1650,10 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
               
-              {/* Affiliation Filter */}
+              {/* Affiliation Filter - Hide for Schools */}
+              {filterConfig.showAffiliation && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'affiliation' ? null : 'affiliation')}
