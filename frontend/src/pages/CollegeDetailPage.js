@@ -1101,12 +1101,85 @@ const CollegeDetailPage = ({ overrideId }) => {
               )}
 
               {/* QUICK FACTS & KEY STATISTICS - Main Content Area (AFTER Description & Highlights) */}
+              {/* Render from description_tables (Quick Facts / Key Statistics tables from form) */}
+              {college.description_tables?.length > 0 && (
+                <section id="quick-facts-stats" className="scroll-mt-40 space-y-6">
+                  {college.description_tables.map((table, tableIdx) => (
+                    <div key={tableIdx}>
+                      {/* Quick Facts Table */}
+                      {table.title?.toLowerCase().includes('quick facts') && (
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5">
+                          <h3 className="font-bold text-lg mb-4 text-blue-800 flex items-center gap-2">
+                            <span className="text-2xl">📋</span>
+                            {table.title || `${college.name} Quick Facts`}
+                          </h3>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {table.rows?.map((row, ri) => (
+                              <div key={ri} className="bg-white rounded-lg p-3 shadow-sm">
+                                <div className="text-xs text-gray-500 uppercase tracking-wide">{row[0]}</div>
+                                <div className="font-bold text-gray-900 mt-1">{row[1]}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Key Statistics Table */}
+                      {table.title?.toLowerCase().includes('key statistics') && (
+                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-5">
+                          <h3 className="font-bold text-lg mb-4 text-purple-800 flex items-center gap-2">
+                            <span className="text-2xl">📈</span>
+                            {table.title || `${college.name} Key Statistics`}
+                          </h3>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {table.rows?.map((row, ri) => (
+                              <div key={ri} className="bg-white rounded-lg p-4 text-center shadow-sm border border-purple-100">
+                                <div className="text-2xl font-bold text-gray-900">{row[1]}</div>
+                                <div className="text-sm text-gray-600 mt-1">{row[0]}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Other tables (not Quick Facts or Key Statistics) */}
+                      {!table.title?.toLowerCase().includes('quick facts') && !table.title?.toLowerCase().includes('key statistics') && (
+                        <div className="bg-white border rounded-lg overflow-hidden">
+                          {table.title && <h3 className="font-bold text-lg p-4 bg-gray-50 border-b">{table.title}</h3>}
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead>
+                                <tr className="bg-orange-50">
+                                  {table.headers?.map((header, hi) => (
+                                    <th key={hi} className="border-b px-4 py-3 text-left text-sm font-bold">{header}</th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {table.rows?.map((row, ri) => (
+                                  <tr key={ri} className="hover:bg-gray-50">
+                                    {row.map((cell, ci) => (
+                                      <td key={ci} className="border-b px-4 py-3 text-sm">{cell}</td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </section>
+              )}
+              
+              {/* Also render facts/stats blocks from SEO TOC if they exist */}
               {college.seo_toc?.some(section => section.blocks?.some(block => block.type === 'facts' || block.type === 'stats')) && (
-                <section id="quick-facts-stats" className="scroll-mt-40">
+                <section className="scroll-mt-40 space-y-6">
                   {college.seo_toc.map((section, sectionIdx) => (
                     section.blocks?.filter(block => block.type === 'facts' || block.type === 'stats').map((block, blockIdx) => (
-                      <div key={`${sectionIdx}-${blockIdx}`} className="mb-6">
-                        {/* Quick Facts Block */}
+                      <div key={`${sectionIdx}-${blockIdx}`}>
+                        {/* Quick Facts Block from SEO TOC */}
                         {block.type === 'facts' && (
                           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5">
                             <h3 className="font-bold text-lg mb-4 text-blue-800 flex items-center gap-2">
@@ -1124,7 +1197,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                           </div>
                         )}
                         
-                        {/* Key Statistics Block */}
+                        {/* Key Statistics Block from SEO TOC */}
                         {block.type === 'stats' && (
                           <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-5">
                             <h3 className="font-bold text-lg mb-4 text-purple-800 flex items-center gap-2">
