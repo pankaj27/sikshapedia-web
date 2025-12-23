@@ -526,7 +526,7 @@ const DynamicListingPage = () => {
     return [];
   }, [masterCities, activeFilters.state]);
 
-  // Filter options - Populate from master data
+  // Filter options - Populate from master data with sensible fallbacks
   const filterOptions = {
     subStream: masterStreams.length > 0 ? masterStreams : [
       'Engineering & Technology', 'Medical & Health Sciences', 'Management & Business',
@@ -535,14 +535,30 @@ const DynamicListingPage = () => {
     course: masterCourses.length > 0 ? masterCourses : [
       'B.Tech', 'MBA', 'MBBS', 'BBA', 'B.Com', 'BA', 'B.Sc', 'BCA', 'LLB', 'B.Ed'
     ],
-    degreeType: [],
-    examAccepted: [],
-    affiliation: [],
-    recognition: [],
-    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous', 'Aided'],
-    accreditation: ['NAAC A++', 'NAAC A+', 'NAAC A', 'NAAC B++', 'NAAC B+', 'NAAC B', 'NBA Accredited'],
+    degreeType: masterDegreeTypes.length > 0 ? masterDegreeTypes : [
+      'Bachelor', 'Master', 'Doctorate', 'Diploma', 'PG Diploma', 'Certificate'
+    ],
+    examAccepted: masterExams.length > 0 ? masterExams : [
+      'JEE Main', 'JEE Advanced', 'NEET', 'CAT', 'MAT', 'XAT', 'GATE', 'CLAT', 
+      'CUET', 'BITSAT', 'VITEEE', 'MHT CET', 'KCET', 'COMEDK'
+    ],
+    affiliation: [
+      'UGC', 'AICTE', 'University Affiliated', 'Autonomous', 'State University',
+      'Central University', 'Deemed University', 'Private University'
+    ],
+    recognition: [
+      'UGC Recognized', 'AICTE Approved', 'NAAC Accredited', 'NBA Accredited',
+      'Government Recognized', 'AIU Member', 'ISO Certified'
+    ],
+    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous', 'Aided', 'Public-Private'],
+    accreditation: [
+      'NAAC A++', 'NAAC A+', 'NAAC A', 'NAAC B++', 'NAAC B+', 'NAAC B', 'NAAC C',
+      'NBA Accredited', 'NIRF Ranked', 'QS Ranked', 'ABET Accredited'
+    ],
     state: allStates,
     city: getAvailableCities,
+    programType: ['Full Time', 'Part Time', 'Distance', 'Online', 'Weekend', 'Executive']
+  };
     programType: []
   };
 
