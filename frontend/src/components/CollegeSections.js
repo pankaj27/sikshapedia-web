@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiGrid } from 'react-icons/fi';
+import { FiGrid, FiMapPin, FiPhone, FiMail, FiGlobe, FiExternalLink } from 'react-icons/fi';
 import { HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
 import { 
   MdOutlineSportsBasketball, MdOutlinePool, MdOutlineFitnessCenter, 
@@ -9,6 +9,8 @@ import {
   MdOutlineLocalLaundryService, MdOutlineSecurity, MdOutlineLocalCafe 
 } from 'react-icons/md';
 import { FiCpu, FiMonitor, FiTruck, FiSun, FiShield, FiPackage, FiHeart } from 'react-icons/fi';
+import GuestGate from './GuestGate';
+import { Button } from './ui/button';
 
 // Current year for dynamic display
 const year = new Date().getFullYear();
