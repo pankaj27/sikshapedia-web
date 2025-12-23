@@ -2439,17 +2439,53 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </div>
 
-              {/* ADVERTISEMENT 3 */}
-              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
-                <div className="text-center">
-                  <div className="text-4xl mb-3">💼</div>
-                  <h3 className="font-bold text-lg mb-2">Career Counseling</h3>
-                  <p className="text-sm text-green-100 mb-4">Get personalized career guidance from experts</p>
-                  <button className="w-full bg-white text-green-600 hover:bg-green-50 font-bold py-2.5 rounded transition-colors">
-                    Book Session
-                  </button>
+              {/* CAREER COUNSELING WIDGET - From sidebar_widgets configuration */}
+              {college?.sidebar_widgets?.career_counseling?.enabled !== false && (
+                <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">💼</div>
+                    <h3 className="font-bold text-lg mb-2">
+                      {college?.sidebar_widgets?.career_counseling?.title || 'Career Counseling'}
+                    </h3>
+                    <p className="text-sm text-green-100 mb-4">
+                      {college?.sidebar_widgets?.career_counseling?.subtitle || 'Get personalized career guidance from experts'}
+                    </p>
+                    {college?.sidebar_widgets?.career_counseling?.booking_type === 'link' && college?.sidebar_widgets?.career_counseling?.booking_url ? (
+                      <a 
+                        href={college.sidebar_widgets.career_counseling.booking_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-white text-green-600 hover:bg-green-50 font-bold py-2.5 rounded transition-colors text-center"
+                      >
+                        {college?.sidebar_widgets?.career_counseling?.button_text || 'Book Session'}
+                      </a>
+                    ) : college?.sidebar_widgets?.career_counseling?.booking_type === 'phone' && college?.sidebar_widgets?.career_counseling?.booking_phone ? (
+                      <a 
+                        href={`tel:${college.sidebar_widgets.career_counseling.booking_phone}`}
+                        className="block w-full bg-white text-green-600 hover:bg-green-50 font-bold py-2.5 rounded transition-colors text-center"
+                      >
+                        📞 {college?.sidebar_widgets?.career_counseling?.button_text || 'Call Now'}
+                      </a>
+                    ) : college?.sidebar_widgets?.career_counseling?.booking_type === 'whatsapp' && college?.sidebar_widgets?.career_counseling?.booking_whatsapp ? (
+                      <a 
+                        href={`https://wa.me/${college.sidebar_widgets.career_counseling.booking_whatsapp}?text=Hi, I would like to book a career counseling session for ${college.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-white text-green-600 hover:bg-green-50 font-bold py-2.5 rounded transition-colors text-center"
+                      >
+                        💬 {college?.sidebar_widgets?.career_counseling?.button_text || 'Chat on WhatsApp'}
+                      </a>
+                    ) : (
+                      <button 
+                        onClick={() => alert('Please configure booking settings in the admin panel')}
+                        className="w-full bg-white text-green-600 hover:bg-green-50 font-bold py-2.5 rounded transition-colors"
+                      >
+                        {college?.sidebar_widgets?.career_counseling?.button_text || 'Book Session'}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* LATEST NEWS - Dynamic from college announcements */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
