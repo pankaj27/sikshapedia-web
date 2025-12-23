@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiSave, FiArrowLeft, FiPlus, FiTrash2, FiChevronDown, FiChevronUp, FiImage, FiVideo, FiGrid, FiList, FiMessageSquare, FiHelpCircle, FiMove, FiUpload, FiLink, FiBold, FiItalic, FiUnderline as FiUnderlineIcon } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiPlus, FiTrash2, FiChevronDown, FiChevronUp, FiImage, FiVideo, FiGrid, FiList, FiMessageSquare, FiHelpCircle, FiMove, FiUpload, FiLink, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLoader, FiCheck } from 'react-icons/fi';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Youtube from '@tiptap/extension-youtube';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Underline from '@tiptap/extension-underline';
@@ -14,8 +16,154 @@ import AdminLayout from '../../components/admin/AdminLayout';
 import ContentApprovalActions from '../../components/admin/ContentApprovalActions';
 import StatusBadge from '../../components/admin/StatusBadge';
 
-// Simple Rich Text Toolbar
-const SimpleRichTextToolbar = ({ editor }) => {
+// Media Insert Modal (Image/Video with SEO)
+const MediaInsertModal = ({ type, isOpen, onClose, onInsert, pageName }) => {
+  const [url, setUrl] = useState('');
+  const [mediaTitle, setMediaTitle] = useState('');
+  const [altText, setAltText] = useState('');
+  const [seoTitle, setSeoTitle] = useState('');
+  const [position, setPosition] = useState('center');
+  const [uploading, setUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState('');
+
+  const handleMediaTitleChange = (newTitle) => {
+    setMediaTitle(newTitle);
+    if (newTitle) {
+      const page = pageName || 'Listing Page';
+      setAltText(`${newTitle} - ${page} | AdmissionBuddy`);
+      setSeoTitle(`${newTitle} - ${page} | AdmissionBuddy.co`);
+    }
+  };
+
+  const handleFileUpload = async (file) => {
+    setUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/image?type=content', uploadFormData, {
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+      });
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const imageUrl = backendUrl + response.data.url;
+        setUploadedUrl(imageUrl);
+        setUrl(imageUrl);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleInsert = () => {
+    if (!url) {
+      alert(`Please provide ${type === 'image' ? 'an image' : 'a video'} URL`);
+      return;
+    }
+    onInsert({ url, alt: altText, title: seoTitle, position });
+    setUrl(''); setMediaTitle(''); setAltText(''); setSeoTitle(''); setPosition('center'); setUploadedUrl('');
+    onClose();
+  };
+
+  const handleClose = () => {
+    setUrl(''); setMediaTitle(''); setAltText(''); setSeoTitle(''); setPosition('center'); setUploadedUrl('');
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden max-h-[90vh] overflow-y-auto">
+        <div className={`px-5 py-3 ${type === 'image' ? 'bg-purple-600' : 'bg-red-600'} text-white`}>
+          <h3 className="text-base font-bold flex items-center gap-2">
+            {type === 'image' ? '🖼️ Insert Image with SEO' : '🎬 Insert YouTube Video with SEO'}
+          </h3>
+        </div>
+        <div className="p-4 space-y-3">
+          {type === 'image' && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+              <div className="flex items-center justify-between">
+                <label className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer font-medium text-sm ${
+                  uploading ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-purple-600 text-white hover:bg-purple-700'
+                }`}>
+                  {uploading ? <><FiLoader className="animate-spin" size={16} /> Uploading...</> : <><FiUpload size={16} /> Upload Image</>}
+                  <input type="file" accept="image/*" className="hidden" disabled={uploading}
+                    onChange={(e) => { if (e.target.files && e.target.files[0]) handleFileUpload(e.target.files[0]); }} />
+                </label>
+                {uploadedUrl && <span className="text-xs text-green-600 flex items-center gap-1"><FiCheck /> Uploaded!</span>}
+              </div>
+            </div>
+          )}
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">{type === 'image' ? '🔗 Image URL' : '🔗 YouTube URL'} *</label>
+            <input type="text" value={url} onChange={(e) => setUrl(e.target.value)}
+              placeholder={type === 'image' ? 'https://example.com/image.jpg' : 'https://www.youtube.com/watch?v=...'}
+              className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
+          </div>
+          <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-3">
+            <label className="block text-sm font-bold text-yellow-800 mb-1">✏️ {type === 'image' ? 'Image' : 'Video'} Title <span className="text-red-500">*</span></label>
+            <input type="text" value={mediaTitle} onChange={(e) => handleMediaTitleChange(e.target.value)}
+              placeholder={type === 'image' ? 'e.g., Campus Building, Library' : 'e.g., Campus Tour, Student Life'}
+              className="w-full border-2 border-yellow-400 rounded-lg px-3 py-2 text-sm font-medium" />
+            <p className="text-xs text-yellow-700 mt-1">💡 SEO Alt & Title auto-generated with AdmissionBuddy branding</p>
+          </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <label className="block text-xs font-bold text-blue-800 mb-2">📍 {type === 'image' ? 'Image' : 'Video'} Position</label>
+            <div className="grid grid-cols-4 gap-2">
+              {['left', 'center', 'right', 'full'].map(pos => (
+                <button key={pos} type="button" onClick={() => setPosition(pos)}
+                  className={`py-2 px-2 rounded-lg text-xs font-medium border-2 transition-all ${
+                    position === pos ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                  }`}>
+                  {pos === 'left' ? '⬅️ Left' : pos === 'right' ? '➡️ Right' : pos === 'full' ? '↔️ Full' : '⬆️ Center'}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <p className="text-xs font-bold text-green-800 mb-2">🔍 SEO Tags <span className="text-green-600">(Auto-generated)</span></p>
+            <div className="space-y-2">
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">Alt Text</label>
+                <input type="text" value={altText} onChange={(e) => setAltText(e.target.value)}
+                  className="w-full border border-green-300 bg-white rounded px-2 py-1.5 text-xs" placeholder="Auto-generated" />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-600 mb-1">Title Attribute</label>
+                <input type="text" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)}
+                  className="w-full border border-green-300 bg-white rounded px-2 py-1.5 text-xs" placeholder="Auto-generated" />
+              </div>
+            </div>
+          </div>
+          {url && type === 'image' && (
+            <div className="border border-dashed border-gray-300 rounded-lg p-2 bg-gray-50">
+              <p className="text-xs text-gray-500 mb-1">Preview ({position}):</p>
+              <div className={`flex ${position === 'left' ? 'justify-start' : position === 'right' ? 'justify-end' : 'justify-center'}`}>
+                <img src={url} alt={altText || 'Preview'} className="max-h-20 max-w-full rounded object-contain" onError={(e) => { e.target.style.display = 'none'; }} />
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="px-4 py-3 bg-gray-50 flex justify-end gap-2 border-t">
+          <button type="button" onClick={handleClose} className="px-3 py-1.5 text-gray-600 hover:text-gray-800 text-sm font-medium">Cancel</button>
+          <button type="button" onClick={handleInsert} disabled={!url}
+            className={`px-4 py-1.5 rounded-lg text-sm font-medium text-white ${
+              url ? (type === 'image' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-red-600 hover:bg-red-700') : 'bg-gray-300 cursor-not-allowed'
+            }`}>
+            Insert {type === 'image' ? 'Image' : 'Video'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Rich Text Toolbar with all features
+const RichTextToolbar = ({ editor, pageName, onOpenImageModal, onOpenVideoModal }) => {
   if (!editor) return null;
 
   const addLink = () => {
@@ -29,18 +177,15 @@ const SimpleRichTextToolbar = ({ editor }) => {
     <div className="flex flex-wrap gap-1 p-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
       {/* Text Formatting */}
       <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Bold">
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`} title="Bold">
         <FiBold size={16} />
       </button>
       <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Italic">
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`} title="Italic">
         <FiItalic size={16} />
       </button>
       <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Underline">
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`} title="Underline">
         <FiUnderlineIcon size={16} />
       </button>
       
@@ -60,53 +205,60 @@ const SimpleRichTextToolbar = ({ editor }) => {
       
       {/* Lists */}
       <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Bullet List">
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`} title="Bullet List">
         <FiList size={16} />
       </button>
       <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Numbered List">
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-blue-100 text-blue-700' : ''}`} title="Numbered List">
         <span className="text-xs font-bold">1.</span>
       </button>
       
       <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
       
-      {/* Link */}
+      {/* Link, Image, Video */}
       <button type="button" onClick={addLink}
-        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Add Link">
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`} title="Add Link">
         <FiLink size={16} />
+      </button>
+      <button type="button" onClick={onOpenImageModal}
+        className="p-2 rounded hover:bg-gray-200 bg-purple-50 hover:bg-purple-100" title="Add Image with SEO">
+        <FiImage size={16} className="text-purple-600" />
+      </button>
+      <button type="button" onClick={onOpenVideoModal}
+        className="p-2 rounded hover:bg-gray-200 bg-red-50 hover:bg-red-100" title="Add YouTube Video with SEO">
+        <FiVideo size={16} className="text-red-600" />
       </button>
       
       <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
       
       {/* Headings */}
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 2 }) ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Heading">
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 2 }) ? 'bg-blue-100 text-blue-700' : ''}`} title="Heading">
         H2
       </button>
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 3 }) ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Subheading">
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 3 }) ? 'bg-blue-100 text-blue-700' : ''}`} title="Subheading">
         H3
       </button>
       <button type="button" onClick={() => editor.chain().focus().setParagraph().run()}
-        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs ${editor.isActive('paragraph') ? 'bg-blue-100 text-blue-700' : ''}`}
-        title="Paragraph">
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs ${editor.isActive('paragraph') ? 'bg-blue-100 text-blue-700' : ''}`} title="Paragraph">
         P
       </button>
     </div>
   );
 };
 
-// Simple Rich Text Editor Component
-const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
+// Full Rich Text Editor with Image/Video modals
+const FullRichTextEditor = ({ value, onChange, placeholder, pageName }) => {
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  
   const editor = useEditor({
     extensions: [
       StarterKit,
       Link.configure({ openOnClick: false }),
+      Image.configure({ HTMLAttributes: { class: 'rounded-lg max-w-full' } }),
+      Youtube.configure({ width: 480, height: 320 }),
       TextStyle,
       Color,
       Underline,
@@ -117,21 +269,64 @@ const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
     },
   });
 
-  // Update editor content when value changes externally
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value || '');
     }
   }, [value, editor]);
 
+  const handleImageInsert = ({ url, alt, title, position }) => {
+    if (editor) {
+      let alignStyle = position === 'left' ? 'float: left; margin-right: 1rem; max-width: 50%;' :
+                       position === 'right' ? 'float: right; margin-left: 1rem; max-width: 50%;' :
+                       position === 'full' ? 'display: block; width: 100%;' :
+                       'display: block; margin: 0 auto; max-width: 80%;';
+      const imgHtml = `<img src="${url}" alt="${alt || ''}" title="${title || ''}" style="${alignStyle} border-radius: 8px;" />`;
+      editor.chain().focus().insertContent(imgHtml).run();
+    }
+  };
+
+  const handleVideoInsert = ({ url, alt, title, position }) => {
+    if (editor) {
+      let wrapperStyle = position === 'left' ? 'float: left; margin-right: 1rem; max-width: 50%;' :
+                         position === 'right' ? 'float: right; margin-left: 1rem; max-width: 50%;' :
+                         position === 'full' ? 'width: 100%;' :
+                         'margin: 0 auto; max-width: 80%;';
+      let videoWidth = '100%';
+      let videoHeight = position === 'full' ? '450' : '315';
+      
+      const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
+      
+      if (videoId) {
+        const videoHtml = `<div style="${wrapperStyle}"><iframe width="${videoWidth}" height="${videoHeight}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius: 8px; aspect-ratio: 16/9;"></iframe></div>`;
+        editor.chain().focus().insertContent(videoHtml).run();
+        if (alt || title) {
+          editor.chain().focus().insertContent(`<p style="text-align: center;"><em>${alt || title}</em></p>`).run();
+        }
+      } else {
+        alert('Invalid YouTube URL. Please use a valid YouTube video URL.');
+      }
+    }
+  };
+
   return (
-    <div className="border rounded-lg overflow-hidden">
-      <SimpleRichTextToolbar editor={editor} />
-      <EditorContent 
-        editor={editor} 
-        className="prose max-w-none p-3 min-h-[150px] focus:outline-none"
-      />
-    </div>
+    <>
+      <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+        <RichTextToolbar 
+          editor={editor} 
+          pageName={pageName}
+          onOpenImageModal={() => setImageModalOpen(true)}
+          onOpenVideoModal={() => setVideoModalOpen(true)}
+        />
+        <EditorContent 
+          editor={editor} 
+          className="prose max-w-none p-3 min-h-[150px] focus:outline-none"
+        />
+      </div>
+      
+      <MediaInsertModal type="image" isOpen={imageModalOpen} onClose={() => setImageModalOpen(false)} onInsert={handleImageInsert} pageName={pageName} />
+      <MediaInsertModal type="video" isOpen={videoModalOpen} onClose={() => setVideoModalOpen(false)} onInsert={handleVideoInsert} pageName={pageName} />
+    </>
   );
 };
 
