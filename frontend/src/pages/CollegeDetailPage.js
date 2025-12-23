@@ -715,10 +715,17 @@ const CollegeDetailPage = ({ overrideId }) => {
                     Apply Now
                   </Button>
                   {college.brochure_url && (
-                    <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
-                      <FiDownload className="mr-2" size={16} />
-                      Download Brochure
-                    </Button>
+                    <a 
+                      href={college.brochure_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      download
+                    >
+                      <Button variant="outline" className="border-orange-600 text-orange-600 hover:bg-orange-50">
+                        <FiDownload className="mr-2" size={16} />
+                        Download Brochure
+                      </Button>
+                    </a>
                   )}
                 </div>
               </div>
