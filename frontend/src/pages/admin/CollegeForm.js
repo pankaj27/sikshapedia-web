@@ -80,6 +80,7 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
     setMediaTitle('');
     setAltText('');
     setSeoTitle('');
+    setPosition('center');
     setUploadedUrl('');
     onClose();
   };
@@ -90,6 +91,7 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
     setMediaTitle('');
     setAltText('');
     setSeoTitle('');
+    setPosition('center');
     setUploadedUrl('');
     onClose();
   };
