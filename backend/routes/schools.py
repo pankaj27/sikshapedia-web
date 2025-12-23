@@ -152,7 +152,7 @@ async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
     return featured_schools
 
 
-@router.get("/schools/{school_id}", response_model=School)
+@router.get("/schools/{school_id}")
 async def get_school(school_id: str):
     """Get a specific school by ID or slug"""
     # First try to find by ID in colleges collection (schools with institution_type='School')
@@ -165,7 +165,14 @@ async def get_school(school_id: str):
         school = await db.schools.find_one({"$or": [{"id": school_id}, {"slug": school_id}]}, {"_id": 0})
     if not school:
         raise HTTPException(status_code=404, detail="School not found")
-    return School(**school)
+    
+    # Convert datetime to string if present
+    if school.get('created_at'):
+        school['created_at'] = school['created_at'].isoformat() if hasattr(school['created_at'], 'isoformat') else str(school['created_at'])
+    if school.get('updated_at'):
+        school['updated_at'] = school['updated_at'].isoformat() if hasattr(school['updated_at'], 'isoformat') else str(school['updated_at'])
+    
+    return school
 
 
 @router.post("/schools", response_model=School)
