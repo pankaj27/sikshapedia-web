@@ -88,13 +88,18 @@ const InstitutionDetailPage = () => {
         // Determine the correct API endpoint based on institution type
         const apiEndpoint = institutionType === 'School' ? '/schools' : '/colleges';
         
-        // If slug-only format, try to fetch by slug directly
-        if (isSlugOnly && slug) {
-          const response = await api.get(`${apiEndpoint}/${slug}`);
-          if (response.data && response.data.id) {
-            setInstitutionId(response.data.id);
-            setLoading(false);
-            return;
+        // First try to fetch by slug directly (works for both numeric prefix and slug-only format)
+        if (slug) {
+          try {
+            const response = await api.get(`${apiEndpoint}/${slug}`);
+            if (response.data && response.data.id) {
+              setInstitutionId(response.data.id);
+              setLoading(false);
+              return;
+            }
+          } catch (slugErr) {
+            // Slug fetch failed, try serial_number lookup
+            console.log('Slug fetch failed, trying serial_number lookup');
           }
         }
         
