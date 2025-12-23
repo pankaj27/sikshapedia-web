@@ -191,10 +191,12 @@ const formatTimeAgo = (dateString) => {
   return `${Math.floor(diffInSeconds / 31536000)} years ago`;
 };
 
-const CollegeDetailPage = ({ overrideId }) => {
+const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
   const { id: paramId } = useParams();
   // Use overrideId if provided (from InstitutionDetailPage), otherwise use URL param
   const id = overrideId || paramId;
+  // Determine API endpoint based on institution type
+  const apiEndpoint = institutionType === 'School' ? '/schools' : '/colleges';
   const { year } = useYear(); // Get current year from settings
   const [college, setCollege] = useState(null);
   const [loading, setLoading] = useState(true);
