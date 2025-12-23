@@ -364,6 +364,9 @@ const CollegeSubPage = () => {
                   {/* GALLERY Section */}
                   {section === 'gallery' && <GallerySection college={college} />}
 
+                  {/* LOCATION Section */}
+                  {section === 'location' && <LocationSection college={college} />}
+
                   {/* REVIEWS Section */}
                   {section === 'reviews' && (
                     <ReviewsSection 
@@ -374,7 +377,7 @@ const CollegeSubPage = () => {
                   )}
 
                   {/* Custom Content from menu_config */}
-                  {currentSection.content && !['info', 'courses', 'admission', 'placement', 'ranking', 'cutoff', 'scholarship', 'facilities', 'gallery', 'reviews'].includes(section) && (
+                  {currentSection.content && !['info', 'courses', 'admission', 'placement', 'ranking', 'cutoff', 'scholarship', 'facilities', 'gallery', 'location', 'reviews'].includes(section) && (
                     <div 
                       className="prose prose-lg max-w-none text-gray-700 mb-8"
                       dangerouslySetInnerHTML={{ __html: currentSection.content.replace(/\n/g, '<br/>') }}
