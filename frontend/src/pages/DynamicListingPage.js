@@ -1373,7 +1373,8 @@ const DynamicListingPage = () => {
                 All Filters
               </button>
               
-              {/* Stream Filter */}
+              {/* Stream Filter - Hide for Schools */}
+              {filterConfig.showStream && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'subStream' ? null : 'subStream')}
@@ -1402,6 +1403,7 @@ const DynamicListingPage = () => {
                   </div>
                 )}
               </div>
+              )}
               
               {/* State Filter */}
               <div className="relative">
