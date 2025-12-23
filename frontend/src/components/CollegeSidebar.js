@@ -132,7 +132,7 @@ const CollegeSidebar = ({
         )}
 
         {/* SOCIAL LINKS WIDGET */}
-        {college?.social_links && (college.social_links.facebook || college.social_links.twitter || college.social_links.instagram || college.social_links.linkedin || college.social_links.youtube) && (
+        {showWidget('social_links') && college?.social_links && (college.social_links.facebook || college.social_links.twitter || college.social_links.instagram || college.social_links.linkedin || college.social_links.youtube) && (
           <div className="bg-white border rounded-lg shadow-sm p-5">
             <h3 className="font-bold text-base mb-4 text-gray-900">Follow {college.name}</h3>
             <div className="flex flex-wrap gap-2">
@@ -171,7 +171,7 @@ const CollegeSidebar = ({
         )}
 
         {/* AD BANNER WIDGET */}
-        {college?.sidebar_widgets?.ad_banner?.enabled && college?.sidebar_widgets?.ad_banner?.image_url && (
+        {showWidget('ad_banner') && college?.sidebar_widgets?.ad_banner?.enabled && college?.sidebar_widgets?.ad_banner?.image_url && (
           <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
             {college.sidebar_widgets.ad_banner.cta_url ? (
               <a 
