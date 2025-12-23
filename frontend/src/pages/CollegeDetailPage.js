@@ -1838,8 +1838,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </div>
                 </section>
 
-                {/* SCHOLARSHIP - Only show if data exists */}
-                {college?.scholarships && college.scholarships.length > 0 && (
+                {/* SCHOLARSHIP - Only show if data exists AND menu is enabled */}
+                {isMenuEnabled('scholarship') && college?.scholarships && college.scholarships.length > 0 && (
                   <section id="scholarship" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                     <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships {year + 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
