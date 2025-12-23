@@ -7,9 +7,18 @@ const CollegeSidebar = ({
   college, 
   onApplyClick, 
   onBookingClick,
-  AdmissionPartnerBadge 
+  AdmissionPartnerBadge,
+  sectionWidgets // Widget visibility settings from menu_config
 }) => {
   if (!college) return null;
+
+  // Helper to check if a widget should be shown
+  // If sectionWidgets is not provided (main page), show all widgets
+  // If sectionWidgets is provided, check if the widget is enabled (default true)
+  const showWidget = (widgetName) => {
+    if (!sectionWidgets) return true; // Main page shows all
+    return sectionWidgets[widgetName] !== false; // Sub-page respects settings
+  };
 
   return (
     <aside className="w-80 flex-shrink-0 hidden lg:block">
@@ -18,7 +27,7 @@ const CollegeSidebar = ({
         <SidebarSponsoredAd placementId="college-detail-sidebar" />
         
         {/* ADMISSION PARTNER - BOOK YOUR SEAT */}
-        {college.is_admission_partner && AdmissionPartnerBadge && (
+        {showWidget('apply_now') && college.is_admission_partner && AdmissionPartnerBadge && (
           <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-white shadow-lg">
             <div className="text-center">
               <AdmissionPartnerBadge size="lg" className="mb-3 justify-center" />
