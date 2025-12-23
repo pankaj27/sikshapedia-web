@@ -1,6 +1,6 @@
 import React from 'react';
-import { FiCalendar, FiInfo, FiDownload, FiCheckCircle, FiPhone } from 'react-icons/fi';
-import { AdBanner } from './SponsoredAds';
+import { FiCalendar, FiInfo, FiDownload, FiCheckCircle } from 'react-icons/fi';
+import { SidebarSponsoredAd } from './SponsoredAds';
 
 // Shared Sidebar Component for College Detail and Sub-pages
 const CollegeSidebar = ({ 
