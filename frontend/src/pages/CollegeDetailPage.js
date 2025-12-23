@@ -2109,23 +2109,64 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </div>
                   </div>
 
-                  {/* Nearby Places - Only show if data exists */}
-                  {college?.nearby_places && college.nearby_places.length > 0 && (
+                  {/* Nearby Places / Landmarks - Only show if data exists */}
+                  {((college?.nearby_places && college.nearby_places.length > 0) || (college?.location?.nearby_places && college.location.nearby_places.length > 0)) && (
                     <div className="mt-6 bg-gray-50 border rounded-lg p-6">
-                      <h3 className="font-bold text-lg mb-4">Nearby Places</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {college.nearby_places.map((place, idx) => {
-                          const icons = { hospital: '🏥', bank: '🏦', market: '🏪', metro: '🚉', airport: '✈️', restaurant: '🍽️', bus: '🚌', train: '🚂', atm: '🏧', pharmacy: '💊' };
-                          const colors = { hospital: 'bg-blue-100', bank: 'bg-green-100', market: 'bg-purple-100', metro: 'bg-orange-100', airport: 'bg-red-100', restaurant: 'bg-yellow-100', bus: 'bg-teal-100', train: 'bg-indigo-100', atm: 'bg-pink-100', pharmacy: 'bg-cyan-100' };
-                          const placeType = (place.type || 'market').toLowerCase();
+                      <h3 className="font-bold text-lg mb-4">Nearby Places / Landmarks</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {(college.nearby_places || college.location?.nearby_places || []).map((place, idx) => {
+                          // Handle both string format ("METRO - 2 KM") and object format ({type, name, distance})
+                          const isString = typeof place === 'string';
+                          let placeName, placeDistance, placeType;
+                          
+                          if (isString) {
+                            // Parse string format: "METRO - 2 KM" or "AIRPORT-10 KM"
+                            const parts = place.split(/[-–]/);
+                            placeName = parts[0]?.trim() || place;
+                            placeDistance = parts.slice(1).join('-').trim() || '';
+                            placeType = placeName.toLowerCase();
+                          } else {
+                            placeName = place.name || '';
+                            placeDistance = place.distance || '';
+                            placeType = (place.type || placeName || '').toLowerCase();
+                          }
+                          
+                          // Icon and color mapping
+                          const iconMap = { 
+                            hospital: '🏥', bank: '🏦', market: '🏪', metro: '🚉', airport: '✈️', 
+                            restaurant: '🍽️', bus: '🚌', train: '🚂', station: '🚂', atm: '🏧', 
+                            pharmacy: '💊', mall: '🏬', school: '🏫', college: '🎓', temple: '🛕',
+                            church: '⛪', mosque: '🕌', park: '🌳', cinema: '🎬', hotel: '🏨'
+                          };
+                          const colorMap = { 
+                            hospital: 'bg-red-100', bank: 'bg-green-100', market: 'bg-purple-100', 
+                            metro: 'bg-orange-100', airport: 'bg-blue-100', restaurant: 'bg-yellow-100', 
+                            bus: 'bg-teal-100', train: 'bg-indigo-100', station: 'bg-indigo-100',
+                            atm: 'bg-pink-100', pharmacy: 'bg-cyan-100', mall: 'bg-violet-100',
+                            school: 'bg-amber-100', college: 'bg-emerald-100', temple: 'bg-orange-100',
+                            church: 'bg-gray-100', mosque: 'bg-green-100', park: 'bg-lime-100',
+                            cinema: 'bg-fuchsia-100', hotel: 'bg-sky-100'
+                          };
+                          
+                          // Find matching icon/color by checking if placeType contains any key
+                          let icon = '📍';
+                          let color = 'bg-gray-100';
+                          for (const key of Object.keys(iconMap)) {
+                            if (placeType.includes(key)) {
+                              icon = iconMap[key];
+                              color = colorMap[key];
+                              break;
+                            }
+                          }
+                          
                           return (
-                            <div key={idx} className="flex items-start gap-3">
-                              <div className={`w-10 h-10 ${colors[placeType] || 'bg-gray-100'} rounded-full flex items-center justify-center flex-shrink-0`}>
-                                <span className="text-xl">{icons[placeType] || '📍'}</span>
+                            <div key={idx} className="flex items-center gap-3 p-3 bg-white rounded-lg border hover:shadow-sm transition-shadow">
+                              <div className={`w-10 h-10 ${color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                                <span className="text-xl">{icon}</span>
                               </div>
                               <div>
-                                <p className="text-sm font-semibold text-gray-900">{place.name}</p>
-                                <p className="text-xs text-gray-600">{place.distance || '-'}</p>
+                                <p className="text-sm font-semibold text-gray-900">{placeName}</p>
+                                {placeDistance && <p className="text-xs text-gray-600">{placeDistance}</p>}
                               </div>
                             </div>
                           );
