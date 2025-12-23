@@ -1407,7 +1407,7 @@ const CollegeDetailPage = ({ overrideId }) => {
               )}
 
               {/* SCHOLARSHIP - Menu Tab Content */}
-              {college?.scholarships && college.scholarships.length > 0 && (
+              {isMenuEnabled('scholarship') && college?.scholarships && college.scholarships.length > 0 && (
                 <section id="scholarship" className="scroll-mt-40">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships</h2>
                   <p className="text-gray-700 text-sm mb-4">Available scholarships for students:</p>
@@ -1435,7 +1435,7 @@ const CollegeDetailPage = ({ overrideId }) => {
               )}
 
               {/* FACILITIES - Menu Tab Content */}
-              {college.facilities && college.facilities.length > 0 && (
+              {isMenuEnabled('facilities') && college.facilities && college.facilities.length > 0 && (
                 <section id="facilities" className="scroll-mt-40">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Facilities</h2>
                   <p className="text-gray-700 text-sm mb-4">Campus provides world-class facilities:</p>
