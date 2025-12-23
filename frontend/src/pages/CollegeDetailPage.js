@@ -1667,7 +1667,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 )}
 
                 {/* ADMISSIONS - Only show if menu enabled AND there's admission data */}
-                {isMenuEnabled('admission') && (college?.admission_dates?.length > 0 || college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0) && (
+                {isMenuEnabled('admission') && (college?.admission_dates?.length > 0 || college?.courses?.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).length > 0) && (
                   <section id="admission" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                     <h2 className="text-2xl font-bold mb-3">{college.name} Admission {year + 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
