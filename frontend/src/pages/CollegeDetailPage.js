@@ -2451,15 +2451,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </div>
 
-              {/* SIMILAR COLLEGES */}
+              {/* SIMILAR COLLEGES - Auto-populated based on same city/state/type */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
                 <h3 className="font-bold text-base mb-4 text-gray-900">Similar Colleges</h3>
                 <div className="space-y-4">
-                  {/* Dynamic Similar Colleges - Same city/state */}
-                  {college?.similar_colleges && college.similar_colleges.length > 0 ? (
-                    college.similar_colleges.slice(0, 3).map((item, i) => (
+                  {similarColleges && similarColleges.length > 0 ? (
+                    similarColleges.slice(0, 3).map((item, i) => (
                       <div key={i} className={`${i !== 2 ? 'pb-4 border-b border-gray-200' : ''}`}>
-                        <Link to={`/colleges/${item.slug}`} className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
+                        <Link to={getInstitutionDetailUrl(item.institution_type || 'college', item.id, item.name, item.city, item.serial_number)} className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
                           <div className="flex gap-3">
                             {item.logo_url ? (
                               <img src={item.logo_url} alt={item.name} className="w-16 h-16 rounded object-cover flex-shrink-0" />
@@ -2471,7 +2470,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-bold text-gray-900 mb-1 truncate">{item.name}</p>
                               <p className="text-[11px] text-gray-600 mb-1">{item.city}, {item.state}</p>
-                              {item.average_fees && <p className="text-xs font-semibold text-orange-600">₹{(item.average_fees/100000).toFixed(2)}L Fees</p>}
+                              {item.type && <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{item.type}</span>}
                             </div>
                           </div>
                         </Link>
