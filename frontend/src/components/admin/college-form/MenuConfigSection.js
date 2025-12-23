@@ -83,9 +83,12 @@ const generateSEO = (collegeName, menuItem) => {
 
 const MenuConfigSection = ({ formData, setFormData }) => {
   const [expandedMenu, setExpandedMenu] = useState(null);
+  const [initialized, setInitialized] = useState(false);
   
-  // Initialize menu config if not present
+  // Initialize menu config if not present (runs once on mount)
   React.useEffect(() => {
+    if (initialized) return;
+    
     if (!formData.menu_config?.items || formData.menu_config.items.length === 0) {
       const defaultItems = MENU_ITEMS.map((item, index) => ({
         id: item.id,
@@ -106,7 +109,8 @@ const MenuConfigSection = ({ formData, setFormData }) => {
         menu_config: { ...prev.menu_config, items: defaultItems }
       }));
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setInitialized(true);
+  }, [formData.menu_config?.items, setFormData, initialized]);
   
   // Get menu items (with fallback)
   const menuItems = formData.menu_config?.items || MENU_ITEMS.map((item, index) => ({
