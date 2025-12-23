@@ -1176,6 +1176,30 @@ const DynamicListingPage = () => {
     return crumbs;
   }, [urlInfo, location.pathname]);
 
+  // Determine institution type for filter labels and visibility
+  const filterConfig = useMemo(() => {
+    const isSchools = urlInfo.institutionType === 'schools';
+    const isUniversity = urlInfo.institutionType === 'university';
+    
+    return {
+      label: isSchools ? 'Filter Schools' : isUniversity ? 'Filter Universities' : 'Filter Colleges',
+      showStream: !isSchools, // Hide stream for schools
+      showCourse: !isSchools, // Hide course for schools
+      showDegreeType: !isSchools, // Hide degree type for schools
+      showExamAccepted: !isSchools, // Hide exam accepted for schools
+      showCollegeType: true, // Show for all (Government/Private)
+      showAccreditation: !isSchools, // Hide accreditation for schools
+      showAffiliation: !isSchools, // Hide affiliation for schools
+      showRecognition: !isSchools, // Hide recognition for schools
+      showState: true, // Show for all
+      showCity: true, // Show for all
+      // School-specific filters (future enhancement)
+      showBoard: isSchools,
+      showMedium: isSchools,
+      showClasses: isSchools,
+    };
+  }, [urlInfo.institutionType]);
+
   // Helper function to replace hardcoded years with dynamic year
   // This is used ONLY for pageContent from database which may have old hardcoded years
   const replaceYear = (text) => {
