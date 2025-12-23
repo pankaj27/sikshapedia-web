@@ -155,8 +155,8 @@ const InstitutionDetailPage = () => {
     );
   }
   
-  // Pass the ID to CollegeDetailPage (which handles the actual data fetching)
-  return <CollegeDetailPage overrideId={institutionId} />;
+  // Pass the ID and institution type to CollegeDetailPage (which handles the actual data fetching)
+  return <CollegeDetailPage overrideId={institutionId} institutionType={institutionType} />;
 };
 
 export default InstitutionDetailPage;
