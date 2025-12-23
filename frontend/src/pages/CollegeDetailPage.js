@@ -557,87 +557,90 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
       {/* Hero Section with Banner */}
       <div className="relative">
         {/* Banner Image */}
-        <div className="h-48 md:h-64 bg-gradient-to-r from-orange-500 to-orange-600 overflow-hidden">
+        <div className="h-40 md:h-56 lg:h-64 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 overflow-hidden">
           {college.banner_url ? (
             <img 
               src={college.banner_url} 
               alt={college.banner_alt || `${college.name} Banner`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover opacity-90"
               onError={(e) => { e.target.style.display = 'none'; }}
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700"></div>
+            <div className="w-full h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 relative">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+            </div>
           )}
         </div>
         
         {/* College Info Card - Overlapping Banner */}
         <div className="max-w-7xl mx-auto px-4">
-          <div className="relative -mt-16 md:-mt-20 bg-white rounded-xl shadow-lg p-6 mb-6">
-            <div className="flex flex-col lg:flex-row gap-6">
+          <div className="relative -mt-20 md:-mt-24 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 md:p-6 mb-6">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {/* Logo */}
-              <div className="w-24 h-24 md:w-32 md:h-32 bg-white rounded-xl shadow border flex items-center justify-center flex-shrink-0 -mt-16 md:-mt-20">
+              <div className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white rounded-xl shadow-lg border-2 border-gray-100 flex items-center justify-center flex-shrink-0 -mt-12 md:-mt-16 lg:-mt-20 overflow-hidden">
                 {(college.logo_url || college.images?.[0]) ? (
-                  <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-20 h-20 md:w-28 md:h-28 object-contain rounded-lg" />
+                  <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-full h-full object-contain p-2" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white text-3xl md:text-4xl font-bold">{college.name?.charAt(0)}</span>
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <span className="text-white text-2xl md:text-3xl lg:text-4xl font-bold">{college.name?.charAt(0)}</span>
                   </div>
                 )}
               </div>
               
               {/* Info */}
-              <div className="flex-1">
-                <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className="flex-1 min-w-0">
+                {/* Badges Row */}
+                <div className="flex flex-wrap items-center gap-1.5 md:gap-2 mb-3">
                   {college.is_verified && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium border border-green-200">
                       <FiCheckCircle size={12} /> Verified
                     </span>
                   )}
                   {college.is_admission_partner && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium border border-emerald-200">
                       🎓 Admission Partner
                     </span>
                   )}
                   {college.is_admission_open && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-semibold animate-pulse">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200">
                       📢 Admission Open
                     </span>
                   )}
                   {college.is_no_cost_emi && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium border border-purple-200">
                       💳 No Cost EMI
                     </span>
                   )}
                   {college.is_featured && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium border border-amber-200">
                       ⭐ Featured
                     </span>
                   )}
-                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
                     {college.type || college.institution_type || 'College'}
                   </span>
                   {college.accreditations?.length > 0 && (
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">
+                    <span className="px-2 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs font-medium border border-yellow-200">
                       {college.accreditations[0]}
                     </span>
                   )}
                   {college.nirf_ranking && (
-                    <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-medium">
+                    <span className="px-2 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-medium border border-orange-200">
                       NIRF #{college.nirf_ranking}
                     </span>
                   )}
                 </div>
                 
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{college.name}</h1>
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">{college.name}</h1>
                 
-                <div className="flex flex-wrap items-center gap-3 text-gray-600 text-sm mb-4">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 text-gray-500 text-sm mb-3">
                   <span className="flex items-center gap-1">
-                    <FiMapPin size={14} />
+                    <FiMapPin size={14} className="text-gray-400" />
                     {college.location?.city || college.city}, {college.location?.state || college.state}
                   </span>
                   {(college.established_year || college.established) && (
                     <>
-                      <span className="text-gray-300">|</span>
+                      <span className="text-gray-300">•</span>
                       <span>Est. {college.established_year || college.established}</span>
                     </>
                   )}
