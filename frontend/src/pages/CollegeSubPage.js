@@ -96,25 +96,34 @@ const CollegeSubPage = () => {
   
   const institutionType = getInstitutionType();
   
-  // Parse the idSlug - ONLY accepts new format: {number}-{slug}
-  // Old format like "aiims-delhi-001" is NOT supported
+  // Parse the idSlug - accepts both formats:
+  // 1. {number}-{slug} e.g., "001-iit-bombay"
+  // 2. slug-only e.g., "iim-ahmedabad"
   const parseIdSlug = (slug) => {
-    if (!slug) return { numericId: null, slugPart: null, isValidFormat: false };
+    if (!slug) return { numericId: null, slugPart: null, isValidFormat: false, isSlugOnly: false };
+    
+    // Check for numeric prefix format: {number}-{slug}
     const match = slug.match(/^(\d+)-(.+)$/);
     if (match) {
-      return { numericId: parseInt(match[1], 10), slugPart: match[2], isValidFormat: true };
+      return { numericId: parseInt(match[1], 10), slugPart: match[2], isValidFormat: true, isSlugOnly: false };
     }
-    // Invalid format - old URLs are no longer supported
-    return { numericId: null, slugPart: null, isValidFormat: false };
+    
+    // Accept slug-only format (no numeric prefix)
+    if (slug && !slug.match(/^\d+$/)) {
+      return { numericId: null, slugPart: slug, isValidFormat: true, isSlugOnly: true };
+    }
+    
+    // Invalid format
+    return { numericId: null, slugPart: null, isValidFormat: false, isSlugOnly: false };
   };
 
   // Resolve the idSlug to actual college ID
   useEffect(() => {
     const resolveInstitution = async () => {
-      // Parse the new idSlug format
-      const { numericId, isValidFormat } = parseIdSlug(idSlug);
+      // Parse the idSlug format
+      const { numericId, slugPart, isValidFormat, isSlugOnly } = parseIdSlug(idSlug);
       
-      // Reject invalid URL format (old URLs like "aiims-delhi-001")
+      // Reject invalid URL format
       if (!isValidFormat) {
         setInvalidFormat(true);
         setResolvedId(null);
@@ -124,7 +133,16 @@ const CollegeSubPage = () => {
       setInvalidFormat(false);
       
       try {
-        // Search by serial_number only
+        // If slug-only format, try to fetch by slug directly
+        if (isSlugOnly && slugPart) {
+          const response = await api.get(`/colleges/${slugPart}`);
+          if (response.data && response.data.id) {
+            setResolvedId(response.data.id);
+            return;
+          }
+        }
+        
+        // Search by serial_number (numeric prefix format)
         if (numericId) {
           const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
           if (response.data && response.data.length > 0) {
