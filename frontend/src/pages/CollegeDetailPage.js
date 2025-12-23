@@ -1517,7 +1517,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               )}
 
-              {/* INFO SECTION - Show when NOT using auto_from_toc */}
+              {/* INFO SECTION - Show when NOT using auto_from_toc AND menu is enabled */}
+              {isMenuEnabled('info') && (
               <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                 
                 {college.seo_full_content && (
