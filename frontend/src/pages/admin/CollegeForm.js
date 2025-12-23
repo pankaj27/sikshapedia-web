@@ -560,6 +560,15 @@ const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null,
 const CollegeForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = window.location.pathname;
+  
+  // Auto-detect institution type from URL
+  const getInstitutionTypeFromURL = () => {
+    if (location.includes('/admin/schools')) return 'School';
+    if (location.includes('/admin/universities')) return 'University';
+    return 'College';
+  };
+  
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [recognitions, setRecognitions] = useState([]);
