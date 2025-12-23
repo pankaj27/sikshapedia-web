@@ -165,6 +165,39 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
             <p className="text-xs text-yellow-700 mt-1">💡 SEO Alt & Title auto-generated with AdmissionBuddy branding</p>
           </div>
           
+          {/* Image Position Option */}
+          {type === 'image' && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <label className="block text-xs font-bold text-blue-800 mb-2">📍 Image Position</label>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setPosition('left')}
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border-2 transition-all ${
+                    position === 'left' 
+                      ? 'bg-blue-600 text-white border-blue-600' 
+                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                  }`}>
+                  ⬅️ Left
+                </button>
+                <button type="button" onClick={() => setPosition('center')}
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border-2 transition-all ${
+                    position === 'center' 
+                      ? 'bg-blue-600 text-white border-blue-600' 
+                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                  }`}>
+                  ⬆️ Center
+                </button>
+                <button type="button" onClick={() => setPosition('right')}
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border-2 transition-all ${
+                    position === 'right' 
+                      ? 'bg-blue-600 text-white border-blue-600' 
+                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                  }`}>
+                  ➡️ Right
+                </button>
+              </div>
+            </div>
+          )}
+          
           {/* SEO Fields (Auto-generated) */}
           <div className="bg-green-50 border border-green-200 rounded-lg p-3">
             <p className="text-xs font-bold text-green-800 mb-2">🔍 SEO Tags <span className="text-green-600">(Auto-generated)</span></p>
@@ -184,12 +217,14 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
             </div>
           </div>
           
-          {/* Preview - Smaller size */}
+          {/* Preview - Smaller size with position indicator */}
           {url && type === 'image' && (
             <div className="border border-dashed border-gray-300 rounded-lg p-2 bg-gray-50">
-              <p className="text-xs text-gray-500 mb-1">Preview:</p>
-              <img src={url} alt={altText || 'Preview'} className="max-h-20 max-w-full mx-auto rounded object-contain" 
-                onError={(e) => { e.target.style.display = 'none'; }} />
+              <p className="text-xs text-gray-500 mb-1">Preview ({position}):</p>
+              <div className={`flex ${position === 'left' ? 'justify-start' : position === 'right' ? 'justify-end' : 'justify-center'}`}>
+                <img src={url} alt={altText || 'Preview'} className="max-h-20 max-w-full rounded object-contain" 
+                  onError={(e) => { e.target.style.display = 'none'; }} />
+              </div>
             </div>
           )}
         </div>
