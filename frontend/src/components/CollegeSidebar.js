@@ -305,9 +305,10 @@ const CollegeSidebar = ({
             )}
           </div>
         </div>
+        )}
 
         {/* DOWNLOAD BROCHURE */}
-        {college.brochure_url && (
+        {showWidget('download_brochure') && college.brochure_url && (
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
             <div className="text-center">
               <FiDownload size={32} className="mx-auto mb-3" />
@@ -328,7 +329,7 @@ const CollegeSidebar = ({
         )}
 
         {/* SIMILAR COLLEGES */}
-        {college.similar_colleges && college.similar_colleges.length > 0 && (
+        {showWidget('similar_colleges') && college.similar_colleges && college.similar_colleges.length > 0 && (
           <div className="bg-white border rounded-lg shadow-sm p-5">
             <h3 className="font-bold text-base mb-4 text-gray-900">Similar Colleges</h3>
             <div className="space-y-3">
