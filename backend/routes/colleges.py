@@ -331,12 +331,13 @@ async def get_college(college_id: str):
     if isinstance(college.get('created_at'), str):
         college['created_at'] = datetime.fromisoformat(college['created_at'])
     
-    # Fetch similar colleges (same city or state, same institution type, different ID)
+    # Fetch similar colleges (same city or state, prioritize same institution type, different ID)
     location = college.get('location', {})
     city = location.get('city', college.get('city', ''))
     state = location.get('state', college.get('state', ''))
     institution_type = college.get('institution_type', 'College')
     
+    # First try to find colleges of same type in same location
     similar_query = {
         "id": {"$ne": college_id},
         "status": "published",
@@ -348,18 +349,34 @@ async def get_college(college_id: str):
         ]
     }
     
-    # Prefer same institution type
-    if institution_type:
-        similar_query["institution_type"] = institution_type
-    
+    # First query: same institution type
+    same_type_query = {**similar_query, "institution_type": institution_type}
     similar_colleges = await db.colleges.find(
-        similar_query,
+        same_type_query,
         {
             "_id": 0, "id": 1, "name": 1, "slug": 1, "logo_url": 1,
             "city": 1, "state": 1, "location": 1, "average_fees": 1,
-            "institution_type": 1
+            "institution_type": 1, "serial_number": 1
         }
     ).limit(5).to_list(5)
+    
+    # If not enough results, fall back to any institution type in same location
+    if len(similar_colleges) < 3:
+        any_type_colleges = await db.colleges.find(
+            similar_query,
+            {
+                "_id": 0, "id": 1, "name": 1, "slug": 1, "logo_url": 1,
+                "city": 1, "state": 1, "location": 1, "average_fees": 1,
+                "institution_type": 1, "serial_number": 1
+            }
+        ).limit(5).to_list(5)
+        
+        # Merge results, avoiding duplicates
+        existing_ids = {c.get('id') for c in similar_colleges}
+        for c in any_type_colleges:
+            if c.get('id') not in existing_ids and len(similar_colleges) < 5:
+                similar_colleges.append(c)
+                existing_ids.add(c.get('id'))
     
     # Normalize city/state fields
     for sc in similar_colleges:
