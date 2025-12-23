@@ -1596,6 +1596,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </ul>
                 </div>
               </section>
+              )}
 
               {/* COURSES & FEES - Hide when menu disabled OR when no courses */}
                 {isMenuEnabled('courses') && college?.courses && college.courses.length > 0 && (
