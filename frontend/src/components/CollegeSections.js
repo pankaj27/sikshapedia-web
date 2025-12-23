@@ -223,19 +223,16 @@ export const CutoffSection = ({ college }) => {
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {year}</h2>
-      <p className="text-gray-700 text-sm mb-4">
-        The cutoff varies for different programs and categories:
-      </p>
-
-      <div className="overflow-x-auto mb-6">
+      <h2 className="text-2xl font-bold mb-3">{college.name} Cutoff {college.cutoff_data[0]?.year || year}</h2>
+      <p className="text-gray-700 text-sm mb-4">Latest cutoff ranks for various programs:</p>
+      <div className="overflow-x-auto">
         <table className="w-full border-collapse border">
           <thead>
-            <tr className="bg-gray-50">
-              <th className="border px-4 py-3 text-left text-sm font-bold">Course/Program</th>
+            <tr className="bg-orange-50">
+              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
               <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+              <th className="border px-4 py-3 text-left text-sm font-bold">Opening Rank</th>
+              <th className="border px-4 py-3 text-left text-sm font-bold">Closing Rank</th>
             </tr>
           </thead>
           <tbody>
@@ -243,8 +240,8 @@ export const CutoffSection = ({ college }) => {
               <tr key={idx} className="hover:bg-gray-50">
                 <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
                 <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
-                <td className="border px-4 py-3 text-sm font-bold text-blue-600">{item.cutoff || item.rank}</td>
-                <td className="border px-4 py-3 text-sm">{item.year || year}</td>
+                <td className="border px-4 py-3 text-sm font-bold text-blue-600">{item.opening_rank || item.cutoff || '-'}</td>
+                <td className="border px-4 py-3 text-sm font-bold text-orange-600">{item.closing_rank_current || item.rank || '-'}</td>
               </tr>
             ))}
           </tbody>
