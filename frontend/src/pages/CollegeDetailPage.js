@@ -1838,6 +1838,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                     </table>
                   </div>
                 </section>
+                )}
 
                 {/* SCHOLARSHIP - Only show if data exists AND menu is enabled */}
                 {isMenuEnabled('scholarship') && college?.scholarships && college.scholarships.length > 0 && (
