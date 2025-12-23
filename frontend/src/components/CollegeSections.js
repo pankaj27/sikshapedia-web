@@ -613,10 +613,49 @@ export const GallerySection = ({ college }) => {
   );
 };
 
-// INFO SECTION - EXACT same as main page
+// INFO SECTION - EXACT same as main page (with School-specific info)
 export const InfoSection = ({ college }) => {
+  const isSchool = college?.institution_type === 'School';
+  const hasSchoolInfo = isSchool && (college.board || college.medium || college.classes_offered?.length > 0 || college.streams_offered?.length > 0);
+  
   return (
     <div>
+      {/* School-Specific Info - Board, Medium, Classes, Streams */}
+      {hasSchoolInfo && (
+        <div className="flex flex-wrap items-center gap-4 mb-6 p-4 bg-blue-50 rounded-lg">
+          {college.board && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Board:</span>
+              <span className="px-3 py-1 bg-white text-blue-700 text-sm font-medium rounded border border-blue-200">{college.board}</span>
+            </div>
+          )}
+          {college.medium && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Medium:</span>
+              <span className="px-3 py-1 bg-white text-green-700 text-sm font-medium rounded border border-green-200">{college.medium}</span>
+            </div>
+          )}
+          {college.classes_offered?.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Classes:</span>
+              <span className="px-3 py-1 bg-white text-purple-700 text-sm font-medium rounded border border-purple-200">
+                {college.classes_offered[0]} to {college.classes_offered[college.classes_offered.length - 1]}
+              </span>
+            </div>
+          )}
+          {college.streams_offered?.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600">Streams:</span>
+              <div className="flex items-center gap-1 flex-wrap">
+                {college.streams_offered.map((stream, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-white text-orange-700 text-sm font-medium rounded border border-orange-200">{stream}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {college.seo_full_content && (
         <div className="text-gray-700 leading-relaxed prose max-w-none mb-4">
           <div dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
