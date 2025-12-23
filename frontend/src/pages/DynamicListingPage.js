@@ -148,6 +148,10 @@ const DynamicListingPage = () => {
   const [masterStates, setMasterStates] = useState([]);
   const [masterCities, setMasterCities] = useState([]);
   
+  // Master streams and courses data
+  const [masterStreams, setMasterStreams] = useState([]);
+  const [masterCourses, setMasterCourses] = useState([]);
+  
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
   
   // Parse URL using new URL structure
