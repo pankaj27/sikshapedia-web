@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Youtube from '@tiptap/extension-youtube';
+import TextStyle from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import Underline from '@tiptap/extension-underline';
 import { 
   FiSave, FiX, FiPlus, FiTrash2, FiEdit, FiUpload, FiLoader, FiChevronDown, FiChevronRight, FiChevronUp,
   FiBook, FiMonitor, FiActivity, FiSearch, FiUsers, FiCast, FiVideo, FiDatabase,
@@ -10,10 +16,154 @@ import {
   FiCreditCard, FiMail, FiWifi, FiBattery, FiShield, FiBriefcase, FiTrendingUp,
   FiAward, FiMusic, FiBookOpen, FiPrinter, FiFilm, FiPackage, FiFeather, FiUnlock,
   FiInfo, FiFileText, FiBarChart2, FiDollarSign, FiMessageSquare, FiBookmark, FiImage, FiCalendar, FiHelpCircle, FiStar, FiLayers,
-  FiSend, FiClock, FiCheck, FiAlertCircle
+  FiSend, FiClock, FiCheck, FiAlertCircle, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLink, FiList, FiAlignLeft
 } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
+
+// Rich Text Editor Toolbar Component
+const RichTextToolbar = ({ editor }) => {
+  if (!editor) return null;
+
+  const addLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  const addImage = () => {
+    const url = window.prompt('Enter image URL:');
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
+
+  const addVideo = () => {
+    const url = window.prompt('Enter YouTube URL:');
+    if (url) {
+      editor.chain().focus().setYoutubeVideo({ src: url }).run();
+    }
+  };
+
+  const setColor = (color) => {
+    editor.chain().focus().setColor(color).run();
+  };
+
+  return (
+    <div className="flex flex-wrap gap-1 p-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
+      {/* Text Formatting */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bold">
+        <FiBold size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Italic">
+        <FiItalic size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Underline">
+        <FiUnderlineIcon size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Colors */}
+      <div className="flex items-center gap-1">
+        <span className="text-xs text-gray-500 px-1">Color:</span>
+        {['#000000', '#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6'].map(color => (
+          <button key={color} type="button" onClick={() => setColor(color)}
+            className="w-5 h-5 rounded border border-gray-300 hover:scale-110 transition-transform"
+            style={{ backgroundColor: color }} title={color} />
+        ))}
+      </div>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Lists */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bullet List">
+        <FiList size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Numbered List">
+        <span className="text-xs font-bold">1.</span>
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Link, Image, Video */}
+      <button type="button" onClick={addLink}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Add Link">
+        <FiLink size={16} />
+      </button>
+      <button type="button" onClick={addImage}
+        className="p-2 rounded hover:bg-gray-200" title="Add Image">
+        <FiImage size={16} />
+      </button>
+      <button type="button" onClick={addVideo}
+        className="p-2 rounded hover:bg-gray-200" title="Add YouTube Video">
+        <FiVideo size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Headings */}
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 2 }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Heading">
+        H2
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 3 }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Subheading">
+        H3
+      </button>
+    </div>
+  );
+};
+
+// Rich Text Editor Component
+const RichTextEditor = ({ value, onChange, placeholder }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      Image,
+      Youtube.configure({ width: 480, height: 320 }),
+      TextStyle,
+      Color,
+      Underline,
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  // Update editor content when value changes externally
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+      <RichTextToolbar editor={editor} />
+      <EditorContent 
+        editor={editor} 
+        className="prose max-w-none p-3 min-h-[120px] focus:outline-none"
+      />
+    </div>
+  );
+};
 
 import { Button } from '../../components/ui/button';
 import SearchableSelect from '../../components/ui/SearchableSelect';
