@@ -864,8 +864,13 @@ class College(BaseModel):
         # Ad Banner Widget
         "ad_banner": {
             "enabled": False,
-            "position": "top",  # top, middle, bottom
-            "ad_code": ""
+            "image_url": "",
+            "title": "",
+            "description": "",
+            "show_cta_button": True,
+            "cta_text": "Learn More",
+            "cta_url": "",
+            "link_url": ""
         },
         # Social Share Widget
         "social_share": {
