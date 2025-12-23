@@ -1076,7 +1076,13 @@ const CollegeDetailPage = ({ overrideId }) => {
                   {/* Description */}
                   {college.description && (
                     <div className="text-gray-800 leading-relaxed prose max-w-none mb-4" 
-                      dangerouslySetInnerHTML={{ __html: college.description }} 
+                      dangerouslySetInnerHTML={{ 
+                        __html: college.description
+                          .replace(/&lt;/g, '<')
+                          .replace(/&gt;/g, '>')
+                          .replace(/&amp;/g, '&')
+                          .replace(/&quot;/g, '"')
+                      }} 
                     />
                   )}
                   
