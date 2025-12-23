@@ -1104,14 +1104,13 @@ const ListingPageForm = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Introduction (HTML supported)</label>
-                <textarea
+                <label className="block text-sm font-medium mb-1">Introduction</label>
+                <SimpleRichTextEditor
                   value={formData.introduction}
-                  onChange={(e) => handleChange('introduction', e.target.value)}
-                  placeholder="Write an introduction paragraph... Use <strong>, <a href>, <ul>, <li> for formatting"
-                  className="w-full border rounded px-3 py-2 font-mono text-sm"
-                  rows={6}
+                  onChange={(value) => handleChange('introduction', value)}
+                  placeholder="Write an introduction paragraph with formatting..."
                 />
+                <p className="text-xs text-gray-500 mt-1">Use the toolbar for formatting: Bold, Italic, Lists, Links, Headings</p>
               </div>
             </div>
           </CollapsibleSection>
