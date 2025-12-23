@@ -48,9 +48,9 @@ const InstitutionRouter = () => {
   // Examples: "001-iit-bombay", "1-college-name", "123-some-college"
   const isNumericPrefixId = seg1 && /^\d+-/.test(seg1);
   
-  // Check if seg1 is a known listing pattern
+  // Check if seg1 is a known listing pattern (exact match only)
   const isListingPattern = seg1 && LISTING_PATTERNS.some(pattern => 
-    seg1.toLowerCase() === pattern || seg1.toLowerCase().includes(pattern)
+    seg1.toLowerCase() === pattern
   );
   
   // Check if seg2 is a known sub-page section
