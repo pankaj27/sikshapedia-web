@@ -206,6 +206,7 @@ const CollegeDetailPage = ({ overrideId }) => {
   const [isFavorited, setIsFavorited] = useState(false); // Track if college is favorited
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [similarColleges, setSimilarColleges] = useState([]); // Auto-populated similar colleges
   
   // Guest gate hook for action restrictions
   const { isLoggedIn, requireAuth, showPrompt, closePrompt } = useGuestGate();
