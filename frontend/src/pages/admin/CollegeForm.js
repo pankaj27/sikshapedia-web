@@ -5385,8 +5385,8 @@ const CollegeForm = () => {
         {/* Bottom Save Button (Duplicate for convenience) */}
         <div className="sticky bottom-0 bg-white border-t py-4 px-6 flex justify-between items-center shadow-lg">
           <div className="flex items-center gap-2 text-sm">
-            <span className={`px-3 py-1 rounded-full font-medium ${formData.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-              {formData.status === 'published' ? '📢 Published' : '📝 Draft'}
+            <span className={`px-3 py-1 rounded-full font-medium ${formData.status === 'published' ? 'bg-green-100 text-green-700' : formData.status === 'pending' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>
+              {formData.status === 'published' ? '📢 Published' : formData.status === 'pending' ? '⏳ Pending Review' : '📝 Draft'}
             </span>
             {formData.name && <span className="text-gray-500">— {formData.name}</span>}
           </div>
@@ -5406,18 +5406,33 @@ const CollegeForm = () => {
             >
               <FiFileText className="w-4 h-4 mr-2" /> Save Draft
             </Button>
-            <Button 
-              type="button" 
-              disabled={saving} 
-              onClick={() => {
-                setFormData(prev => ({...prev, status: 'published'}));
-                setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              {saving ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
-              {saving ? 'Publishing...' : 'Save & Publish'}
-            </Button>
+            {canDirectPublish ? (
+              <Button 
+                type="button" 
+                disabled={saving} 
+                onClick={() => {
+                  setFormData(prev => ({...prev, status: 'published'}));
+                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                {saving ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSave className="w-4 h-4 mr-2" />}
+                {saving ? 'Publishing...' : 'Save & Publish'}
+              </Button>
+            ) : (
+              <Button 
+                type="button" 
+                disabled={saving} 
+                onClick={() => {
+                  setFormData(prev => ({...prev, status: 'pending'}));
+                  setTimeout(() => document.getElementById('institution-form').requestSubmit(), 100);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {saving ? <FiLoader className="w-4 h-4 animate-spin mr-2" /> : <FiSend className="w-4 h-4 mr-2" />}
+                {saving ? 'Submitting...' : 'Submit for Review'}
+              </Button>
+            )}
           </div>
         </div>
       </form>
