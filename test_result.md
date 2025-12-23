@@ -1,7 +1,12 @@
 # Test Result Documentation
 
 ## Current Testing Focus
-Testing the Quick Facts and Key Statistics display on the College Detail Page.
+Testing content consistency between main CollegeDetailPage and menu sub-pages (CollegeSubPage).
+
+## Test Scope
+1. Verify that the content displayed on sub-pages (e.g., /courses, /placement, /facilities) matches the main page
+2. Ensure shared CollegeSections.js components render identically
+3. Verify sidebar appears correctly on sub-pages
 
 ## Test Cases Executed
 
