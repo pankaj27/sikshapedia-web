@@ -512,8 +512,10 @@ export const FacilitiesSection = ({ college }) => {
   );
 };
 
-// GALLERY SECTION - Connected to Media Section (campus_images)
+// GALLERY SECTION - Connected to Media Section (campus_images) with Lightbox
 export const GallerySection = ({ college }) => {
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  
   // Priority: campus_images (media section) > gallery > images
   const galleryImages = college?.campus_images?.length > 0 
     ? college.campus_images 
@@ -521,41 +523,128 @@ export const GallerySection = ({ college }) => {
   
   if (galleryImages.length === 0) return null;
   
+  // Get image data helper
+  const getImageData = (image, idx) => {
+    const imageUrl = typeof image === 'string' ? image : image.url;
+    const imageAlt = typeof image === 'object' 
+      ? (image.alt || image.title || image.caption || `${college.name} - Image ${idx + 1}`)
+      : `${college.name} - Image ${idx + 1}`;
+    const imageTitle = typeof image === 'object' ? (image.title || `Image ${idx + 1}`) : `Image ${idx + 1}`;
+    return { imageUrl, imageAlt, imageTitle };
+  };
+  
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">{college.name} Gallery</h2>
       <p className="text-gray-700 text-sm mb-4">
-        Take a virtual tour of {college.name} campus:
+        Take a virtual tour of {college.name} campus. Click on any image to enlarge:
       </p>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {galleryImages.map((image, idx) => {
-          // Handle both string URLs and object format { url, title, alt }
-          const imageUrl = typeof image === 'string' ? image : image.url;
-          const imageAlt = typeof image === 'object' 
-            ? (image.alt || image.title || image.caption || `${college.name} - Image ${idx + 1}`)
-            : `${college.name} - Image ${idx + 1}`;
-          const imageTitle = typeof image === 'object' ? (image.title || '') : '';
+          const { imageUrl, imageAlt, imageTitle } = getImageData(image, idx);
           
           if (!imageUrl) return null;
           
           return (
-            <div key={idx} className="group aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border relative">
-              <img 
-                src={imageUrl} 
-                alt={imageAlt}
-                title={imageTitle}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              {/* Show title overlay on hover */}
-              {imageTitle && (
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p className="text-white text-sm font-medium truncate">{imageTitle}</p>
+            <div key={idx} className="group">
+              {/* Clickable Image Card */}
+              <div 
+                className="aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all border cursor-pointer relative"
+                onClick={() => setSelectedImage({ url: imageUrl, alt: imageAlt, title: imageTitle, index: idx })}
+              >
+                <img 
+                  src={imageUrl} 
+                  alt={imageAlt}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                {/* Zoom icon overlay on hover */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <div className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                    </svg>
+                  </div>
                 </div>
-              )}
+              </div>
+              {/* Always visible image title */}
+              <p className="mt-2 text-sm font-medium text-gray-700 truncate">{imageTitle}</p>
             </div>
           );
         })}
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          {/* Close button */}
+          <button 
+            className="absolute top-4 right-4 text-white hover:text-gray-300 z-50"
+            onClick={() => setSelectedImage(null)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Previous button */}
+          {selectedImage.index > 0 && (
+            <button 
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 z-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                const prevIdx = selectedImage.index - 1;
+                const prevImage = galleryImages[prevIdx];
+                const { imageUrl, imageAlt, imageTitle } = getImageData(prevImage, prevIdx);
+                setSelectedImage({ url: imageUrl, alt: imageAlt, title: imageTitle, index: prevIdx });
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
+          {/* Next button */}
+          {selectedImage.index < galleryImages.length - 1 && (
+            <button 
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 z-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                const nextIdx = selectedImage.index + 1;
+                const nextImage = galleryImages[nextIdx];
+                const { imageUrl, imageAlt, imageTitle } = getImageData(nextImage, nextIdx);
+                setSelectedImage({ url: imageUrl, alt: imageAlt, title: imageTitle, index: nextIdx });
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+
+          {/* Image container */}
+          <div 
+            className="max-w-5xl max-h-[85vh] flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={selectedImage.url} 
+              alt={selectedImage.alt}
+              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+            />
+            {/* Image title below enlarged image */}
+            <div className="mt-4 text-center">
+              <p className="text-white text-lg font-medium">{selectedImage.title}</p>
+              <p className="text-gray-400 text-sm mt-1">
+                {selectedImage.index + 1} of {galleryImages.length}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
