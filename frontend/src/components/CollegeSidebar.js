@@ -226,7 +226,7 @@ const CollegeSidebar = ({
         )}
 
         {/* COUNSELOR CTA */}
-        {college?.sidebar_widgets?.counselor_cta?.enabled && (
+        {showWidget('counselor_cta') && college?.sidebar_widgets?.counselor_cta?.enabled && (
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
             <div className="text-center">
               <div className="text-4xl mb-3">🎓</div>
@@ -253,8 +253,8 @@ const CollegeSidebar = ({
           </div>
         )}
 
-        {/* DEFAULT COUNSELOR CTA - Show only if counselor_cta is disabled */}
-        {!college?.sidebar_widgets?.counselor_cta?.enabled && (
+        {/* DEFAULT COUNSELOR CTA - Show only if counselor_cta is disabled or showWidget allows */}
+        {showWidget('counselor_cta') && !college?.sidebar_widgets?.counselor_cta?.enabled && (
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
             <div className="text-center">
               <div className="text-4xl mb-3">🎓</div>
@@ -273,6 +273,7 @@ const CollegeSidebar = ({
         )}
 
         {/* POPULAR COURSES */}
+        {showWidget('popular_courses') && (
         <div className="bg-white border rounded-lg shadow-sm p-5">
           <h3 className="font-bold text-base mb-4 text-gray-900">Popular Full Time Courses</h3>
           <div className="space-y-4">
