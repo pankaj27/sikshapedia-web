@@ -210,7 +210,7 @@ const CollegeSubPage = () => {
         <div className="text-center">
           <div className="text-6xl mb-4">🎓</div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">College not found</h1>
-          <p className="text-gray-600 mb-4">The institution you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-4">The institution you are looking for does not exist.</p>
           <Link to="/colleges" className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors inline-block">
             Browse All Colleges
           </Link>
@@ -235,7 +235,7 @@ const CollegeSubPage = () => {
   // Determine the base URL path for links (use plural form)
   const typePathMap = { 'College': 'colleges', 'University': 'universities', 'School': 'schools' };
   const typePath = typePathMap[institutionType] || 'colleges';
-  const currentSlug = idSlug || id; // Use idSlug if available, fallback to id
+  const currentSlug = idSlug || college.id; // Use idSlug if available, fallback to college.id
   const basePath = `/${typePath}/${currentSlug}`;
 
   return (
