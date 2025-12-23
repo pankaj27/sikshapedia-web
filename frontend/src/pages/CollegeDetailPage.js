@@ -1863,8 +1863,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </section>
                 )}
 
-                {/* FACILITIES - Only show if data exists */}
-                {college?.facilities && college.facilities.length > 0 && (
+                {/* FACILITIES - Only show if data exists AND menu is enabled */}
+                {isMenuEnabled('facilities') && college?.facilities && college.facilities.length > 0 && (
                   <section id="facilities" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                     <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
                     <p className="text-gray-700 text-sm mb-4">
