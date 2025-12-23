@@ -701,20 +701,20 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   </div>
                 )}
 
-                {/* Rating - Only show if rating exists */}
-                {college.rating > 0 && (
+                {/* Rating - Only show if there are actual user reviews */}
+                {(college.reviews_count > 0 || college.total_reviews > 0) && college.average_rating > 0 && (
                   <div className="flex flex-wrap items-center gap-4 mb-4">
                     <div className="flex items-center gap-2">
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
                           <FiStar 
                             key={i} 
-                            className={`${i < Math.floor(college.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                            className={`${i < Math.floor(college.average_rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
                             size={18}
                           />
                         ))}
                       </div>
-                      <span className="font-bold text-lg text-gray-900">{college.rating.toFixed(1)}</span>
+                      <span className="font-bold text-lg text-gray-900">{college.average_rating.toFixed(1)}</span>
                       <span className="text-gray-500 text-sm">({college.reviews_count || college.total_reviews || 0} Reviews)</span>
                     </div>
                   </div>
