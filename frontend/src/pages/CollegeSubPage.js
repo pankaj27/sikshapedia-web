@@ -647,14 +647,15 @@ const CollegeSubPage = () => {
                 </div>
               )}
             </div>
-          </div>
         
-        {/* Shared Sidebar from Main Page */}
-        <CollegeSidebar 
-          college={college}
-          onApplyClick={() => setShowApplyModal(true)}
-          onBookingClick={() => {}}
-        />
+            {/* Shared Sidebar from Main Page - on the RIGHT */}
+            <CollegeSidebar 
+              college={college}
+              onApplyClick={() => setShowApplyModal(true)}
+              onBookingClick={() => {}}
+            />
+          </div>
+        </div>
       </div>
       
       {/* Apply Now Modal */}
