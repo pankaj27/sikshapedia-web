@@ -165,38 +165,44 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
             <p className="text-xs text-yellow-700 mt-1">💡 SEO Alt & Title auto-generated with AdmissionBuddy branding</p>
           </div>
           
-          {/* Image Position Option */}
-          {type === 'image' && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <label className="block text-xs font-bold text-blue-800 mb-2">📍 Image Position</label>
-              <div className="flex gap-2">
-                <button type="button" onClick={() => setPosition('left')}
-                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border-2 transition-all ${
-                    position === 'left' 
-                      ? 'bg-blue-600 text-white border-blue-600' 
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                  }`}>
-                  ⬅️ Left
-                </button>
-                <button type="button" onClick={() => setPosition('center')}
-                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border-2 transition-all ${
-                    position === 'center' 
-                      ? 'bg-blue-600 text-white border-blue-600' 
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                  }`}>
-                  ⬆️ Center
-                </button>
-                <button type="button" onClick={() => setPosition('right')}
-                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border-2 transition-all ${
-                    position === 'right' 
-                      ? 'bg-blue-600 text-white border-blue-600' 
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                  }`}>
-                  ➡️ Right
-                </button>
-              </div>
+          {/* Position Option - For both Image and Video */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <label className="block text-xs font-bold text-blue-800 mb-2">📍 {type === 'image' ? 'Image' : 'Video'} Position</label>
+            <div className="grid grid-cols-4 gap-2">
+              <button type="button" onClick={() => setPosition('left')}
+                className={`py-2 px-2 rounded-lg text-xs font-medium border-2 transition-all ${
+                  position === 'left' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                }`}>
+                ⬅️ Left
+              </button>
+              <button type="button" onClick={() => setPosition('center')}
+                className={`py-2 px-2 rounded-lg text-xs font-medium border-2 transition-all ${
+                  position === 'center' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                }`}>
+                ⬆️ Center
+              </button>
+              <button type="button" onClick={() => setPosition('right')}
+                className={`py-2 px-2 rounded-lg text-xs font-medium border-2 transition-all ${
+                  position === 'right' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                }`}>
+                ➡️ Right
+              </button>
+              <button type="button" onClick={() => setPosition('full')}
+                className={`py-2 px-2 rounded-lg text-xs font-medium border-2 transition-all ${
+                  position === 'full' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
+                }`}>
+                ↔️ Full
+              </button>
             </div>
-          )}
+          </div>
           
           {/* SEO Fields (Auto-generated) */}
           <div className="bg-green-50 border border-green-200 rounded-lg p-3">
