@@ -267,7 +267,7 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
               <label className="block text-xs text-gray-600 mb-1">Banner Image URL</label>
               <div className="flex gap-2">
                 <input
-                  type="url"
+                  type="text"
                   value={formData.sidebar_widgets?.ad_banner?.image_url || ''}
                   onChange={(e) => updateWidget('ad_banner', 'image_url', e.target.value)}
                   placeholder="Enter banner image URL or upload"
