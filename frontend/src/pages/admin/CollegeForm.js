@@ -324,12 +324,19 @@ const RichTextToolbar = ({ editor, collegeName, onOpenImageModal, onOpenVideoMod
 };
 
 // Rich Text Editor Component
-const RichTextEditor = ({ value, onChange, placeholder }) => {
+const RichTextEditor = ({ value, onChange, placeholder, collegeName }) => {
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  
   const editor = useEditor({
     extensions: [
       StarterKit,
       Link.configure({ openOnClick: false }),
-      Image,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'rounded-lg max-w-full',
+        },
+      }),
       Youtube.configure({ width: 480, height: 320 }),
       TextStyle,
       Color,
@@ -348,14 +355,61 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
     }
   }, [value, editor]);
 
+  const handleImageInsert = ({ url, alt, title }) => {
+    if (editor) {
+      // Insert image with SEO attributes
+      editor.chain().focus().setImage({ 
+        src: url, 
+        alt: alt || '',
+        title: title || ''
+      }).run();
+    }
+  };
+
+  const handleVideoInsert = ({ url, alt, title }) => {
+    if (editor) {
+      // Insert YouTube video
+      editor.chain().focus().setYoutubeVideo({ src: url }).run();
+      // Add a caption paragraph after video for SEO
+      if (alt || title) {
+        editor.chain().focus().insertContent(`<p><em>${alt || title}</em></p>`).run();
+      }
+    }
+  };
+
   return (
-    <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
-      <RichTextToolbar editor={editor} />
-      <EditorContent 
-        editor={editor} 
-        className="prose max-w-none p-3 min-h-[120px] focus:outline-none"
+    <>
+      <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+        <RichTextToolbar 
+          editor={editor} 
+          collegeName={collegeName}
+          onOpenImageModal={() => setImageModalOpen(true)}
+          onOpenVideoModal={() => setVideoModalOpen(true)}
+        />
+        <EditorContent 
+          editor={editor} 
+          className="prose max-w-none p-3 min-h-[120px] focus:outline-none"
+        />
+      </div>
+      
+      {/* Image Insert Modal */}
+      <MediaInsertModal
+        type="image"
+        isOpen={imageModalOpen}
+        onClose={() => setImageModalOpen(false)}
+        onInsert={handleImageInsert}
+        collegeName={collegeName}
       />
-    </div>
+      
+      {/* Video Insert Modal */}
+      <MediaInsertModal
+        type="video"
+        isOpen={videoModalOpen}
+        onClose={() => setVideoModalOpen(false)}
+        onInsert={handleVideoInsert}
+        collegeName={collegeName}
+      />
+    </>
   );
 };
 
