@@ -648,21 +648,21 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
                 {/* Recognized by & Affiliated to */}
                 {(college.recognized_by?.length > 0 || college.affiliated_to) && (
-                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                  <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-3 p-2.5 bg-gray-50 rounded-lg">
                     {college.recognized_by?.length > 0 && (
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-500">Recognized by:</span>
-                        <div className="flex items-center gap-1">
+                        <span className="text-xs font-medium text-gray-500">Recognized:</span>
+                        <div className="flex items-center gap-1 flex-wrap">
                           {college.recognized_by.map((org, idx) => (
-                            <span key={idx} className="px-2 py-0.5 bg-blue-50 text-blue-600 text-xs font-medium rounded">{org}</span>
+                            <span key={idx} className="px-2 py-0.5 bg-white text-blue-600 text-xs font-medium rounded border border-blue-100">{org}</span>
                           ))}
                         </div>
                       </div>
                     )}
                     {college.affiliated_to && (
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-500">Affiliated to:</span>
-                        <span className="px-2 py-0.5 bg-orange-50 text-orange-600 text-xs font-medium rounded">{college.affiliated_to}</span>
+                        <span className="text-xs font-medium text-gray-500">Affiliated:</span>
+                        <span className="px-2 py-0.5 bg-white text-orange-600 text-xs font-medium rounded border border-orange-100">{college.affiliated_to}</span>
                       </div>
                     )}
                   </div>
