@@ -64,7 +64,7 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload image. Please try again.');
-66|    } finally {
+    } finally {
       setUploading(false);
     }
   };
