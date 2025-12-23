@@ -2373,6 +2373,22 @@ const CollegeForm = () => {
               />
             </div>
             
+            <div>
+              <label className="block text-sm font-medium mb-1">Rating (0-5)</label>
+              <input
+                type="number"
+                name="rating"
+                value={formData.rating || 0}
+                onChange={handleChange}
+                min="0"
+                max="5"
+                step="0.1"
+                className="w-full border rounded px-3 py-2"
+                placeholder="e.g., 4.5"
+              />
+              <p className="text-xs text-gray-500 mt-1">Leave 0 to hide rating on detail page</p>
+            </div>
+            
             {/* Streams Selection - Hidden for Schools */}
             {!isSchool && (
               <div className="col-span-2">
