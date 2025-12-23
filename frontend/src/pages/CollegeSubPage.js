@@ -70,6 +70,7 @@ const CollegeSubPage = () => {
   const [currentSection, setCurrentSection] = useState(null);
   const [resolvedId, setResolvedId] = useState(null);
   const [invalidFormat, setInvalidFormat] = useState(false);
+  const [showApplyModal, setShowApplyModal] = useState(false);
   
   // Determine institution type from URL (plural paths)
   const getInstitutionType = () => {
