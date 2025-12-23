@@ -1618,7 +1618,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     <li>• <strong>Established:</strong> {college.established_year || college.established || '-'}</li>
                     <li>• <strong>Location:</strong> {college.location?.city || college.city}, {college.location?.state || college.state}</li>
                     <li>• <strong>Average Fees:</strong> ₹{college.average_fees ? (college.average_fees / 100000).toFixed(2) : '-'} Lakhs per year</li>
-                    {college.rating && <li>• <strong>Rating:</strong> {college.rating}/5</li>}
+                    {college.average_rating > 0 && (college.reviews_count > 0 || college.total_reviews > 0) && <li>• <strong>Rating:</strong> {college.average_rating.toFixed(1)}/5 ({college.reviews_count || college.total_reviews} reviews)</li>}
                     {college.total_students && <li>• <strong>Students:</strong> {college.total_students.toLocaleString()}</li>}
                   </ul>
                 </div>
