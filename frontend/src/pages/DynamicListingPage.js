@@ -1520,7 +1520,7 @@ const DynamicListingPage = () => {
                 )}
               </div>
               
-              {/* College Type Filter */}
+              {/* College/School/University Type Filter */}
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'collegeType' ? null : 'collegeType')}
@@ -1530,7 +1530,7 @@ const DynamicListingPage = () => {
                       : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:bg-blue-50'
                   }`}
                 >
-                  {activeFilters.collegeType || 'Type Of College'}
+                  {activeFilters.collegeType || (urlInfo.institutionType === 'schools' ? 'Type Of School' : urlInfo.institutionType === 'university' ? 'Type Of University' : 'Type Of College')}
                   <FiChevronDown size={14} className={activeFilterDropdown === 'collegeType' ? 'rotate-180 transition-transform' : 'transition-transform'} />
                 </button>
                 {activeFilterDropdown === 'collegeType' && (
@@ -1542,7 +1542,8 @@ const DynamicListingPage = () => {
                 )}
               </div>
               
-              {/* Course Filter */}
+              {/* Course Filter - Hide for Schools */}
+              {filterConfig.showCourse && (
               <div className="relative">
                 <button 
                   onClick={() => setActiveFilterDropdown(activeFilterDropdown === 'course' ? null : 'course')}
