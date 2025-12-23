@@ -1331,6 +1331,154 @@ const DynamicListingPage = () => {
                   dangerouslySetInnerHTML={{ __html: pageContent.introduction }}
                 />
               </div>
+              
+              {/* READ MORE BUTTON - Show when collapsed and there's SEO TOC content */}
+              {!showContent && (pageContent.seo_toc?.length > 0) && (
+                <div className="text-center mt-4">
+                  <button
+                    onClick={() => setShowContent(true)}
+                    className="inline-flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium rounded-full transition-all"
+                  >
+                    <span>Read More</span>
+                    <FiChevronDown size={18} />
+                  </button>
+                </div>
+              )}
+              
+              {/* EXPANDED SEO CONTENT - Show when Read More is clicked */}
+              {showContent && pageContent.seo_toc?.length > 0 && (
+                <div className="mt-6 space-y-8">
+                  {/* TABLE OF CONTENTS */}
+                  <div className="bg-gray-50 rounded-lg p-6 border">
+                    <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
+                      {pageContent.seo_toc.map((section, idx) => (
+                        <a
+                          key={`toc-${idx}`}
+                          href={`#${section.anchor || `section-${idx}`}`}
+                          className="text-left text-sm text-orange-600 hover:underline flex gap-2"
+                        >
+                          <span className="font-semibold flex-shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
+                          <span>{section.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* SEO TOC SECTIONS (Visual Block Editor Content) */}
+                  <div className="space-y-8">
+                    {pageContent.seo_toc.map((tocSection, sectionIdx) => (
+                      <section key={sectionIdx} id={tocSection.anchor || `section-${sectionIdx}`} className="scroll-mt-40">
+                        <h2 className="text-2xl font-bold mb-4 text-gray-900">{tocSection.title}</h2>
+                        
+                        {/* Render blocks */}
+                        {tocSection.blocks?.map((block, blockIdx) => (
+                          <div key={blockIdx} className="mb-4">
+                            {/* Text Block */}
+                            {block.type === 'text' && (
+                              <div className="prose max-w-none">
+                                {block.heading && <h3 className="text-xl font-semibold mb-2">{block.heading}</h3>}
+                                <div dangerouslySetInnerHTML={{ __html: block.content || '' }} />
+                              </div>
+                            )}
+                            
+                            {/* Image Block */}
+                            {block.type === 'image' && block.url && (
+                              <figure style={{ width: block.width || '100%' }} className="mx-auto">
+                                <img src={block.url} alt={block.alt || ''} title={block.title || ''} className="rounded-lg w-full" />
+                                {block.caption && <figcaption className="text-center text-sm text-gray-600 mt-2">{block.caption}</figcaption>}
+                              </figure>
+                            )}
+                            
+                            {/* Video Block */}
+                            {block.type === 'video' && block.url && (() => {
+                              const match = block.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+                              if (match) {
+                                return (
+                                  <div className="relative" style={{ paddingBottom: '56.25%' }}>
+                                    <iframe
+                                      src={`https://www.youtube.com/embed/${match[1]}`}
+                                      className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                      title={block.title || 'Video'}
+                                      allowFullScreen
+                                    />
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
+                            
+                            {/* Table Block */}
+                            {block.type === 'table' && (
+                              <div className="overflow-x-auto">
+                                {block.title && <h4 className="font-semibold mb-2">{block.title}</h4>}
+                                <table className="w-full border-collapse border border-gray-200">
+                                  <thead className="bg-gray-50">
+                                    <tr>
+                                      {block.headers?.map((h, hi) => (
+                                        <th key={hi} className="border border-gray-200 px-4 py-2 text-left font-semibold">{h}</th>
+                                      ))}
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {block.rows?.map((row, ri) => (
+                                      <tr key={ri} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                        {row?.map((cell, ci) => (
+                                          <td key={ci} className="border border-gray-200 px-4 py-2">{cell}</td>
+                                        ))}
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            )}
+                            
+                            {/* List Block */}
+                            {block.type === 'list' && (
+                              <div>
+                                {block.title && <h4 className="font-semibold mb-2">{block.title}</h4>}
+                                {block.listType === 'number' ? (
+                                  <ol className="list-decimal list-inside space-y-1">
+                                    {block.items?.map((item, li) => (
+                                      <li key={li} className="text-gray-700">{item}</li>
+                                    ))}
+                                  </ol>
+                                ) : block.listType === 'check' ? (
+                                  <ul className="space-y-1">
+                                    {block.items?.map((item, li) => (
+                                      <li key={li} className="flex items-start gap-2 text-gray-700">
+                                        <FiCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
+                                        {item}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <ul className="list-disc list-inside space-y-1">
+                                    {block.items?.map((item, li) => (
+                                      <li key={li} className="text-gray-700">{item}</li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </section>
+                    ))}
+                  </div>
+                  
+                  {/* READ LESS BUTTON */}
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowContent(false)}
+                      className="inline-flex items-center gap-2 px-6 py-2 border-2 border-gray-400 text-gray-600 hover:bg-gray-50 text-sm font-medium rounded-full transition-all"
+                    >
+                      <span>Read Less</span>
+                      <FiChevronUp size={18} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </section>
           </div>
         </div>
