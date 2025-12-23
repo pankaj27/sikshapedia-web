@@ -1596,8 +1596,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </section>
 
-              {/* COURSES & FEES - Hide when using TOC menu OR when no courses */}
-                {college?.courses && college.courses.length > 0 && (
+              {/* COURSES & FEES - Hide when menu disabled OR when no courses */}
+                {isMenuEnabled('courses') && college?.courses && college.courses.length > 0 && (
                   <section id="courses" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                     <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
                     <p className="text-gray-700 text-sm mb-4">
