@@ -40,6 +40,9 @@ const ListingPageForm = () => {
   // Master location data
   const [masterStates, setMasterStates] = useState([]);
   const [masterCities, setMasterCities] = useState([]);
+  
+  // Master streams data
+  const [masterStreams, setMasterStreams] = useState([]);
 
   const [formData, setFormData] = useState({
     url_slug: '',
