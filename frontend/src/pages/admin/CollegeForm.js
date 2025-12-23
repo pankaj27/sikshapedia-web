@@ -1023,6 +1023,11 @@ const CollegeForm = () => {
         rankings: Array.isArray(collegeData.rankings) ? collegeData.rankings : [],
         streams: Array.isArray(collegeData.streams) ? collegeData.streams : [],
         courses: Array.isArray(collegeData.courses) ? collegeData.courses : [],
+        // School-specific fields
+        classes_offered: Array.isArray(collegeData.classes_offered) ? collegeData.classes_offered : [],
+        streams_offered: Array.isArray(collegeData.streams_offered) ? collegeData.streams_offered : [],
+        medium: collegeData.medium || '',
+        board: collegeData.board || '',
         facilities: Array.isArray(collegeData.facilities) 
           ? collegeData.facilities.map(f => typeof f === 'string' 
               ? { name: f, icon: '', description: '' } 
