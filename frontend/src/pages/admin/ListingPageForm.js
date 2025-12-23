@@ -1,12 +1,139 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiSave, FiArrowLeft, FiPlus, FiTrash2, FiChevronDown, FiChevronUp, FiImage, FiVideo, FiGrid, FiList, FiMessageSquare, FiHelpCircle, FiMove, FiUpload, FiLink } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiPlus, FiTrash2, FiChevronDown, FiChevronUp, FiImage, FiVideo, FiGrid, FiList, FiMessageSquare, FiHelpCircle, FiMove, FiUpload, FiLink, FiBold, FiItalic, FiUnderline as FiUnderlineIcon } from 'react-icons/fi';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import Underline from '@tiptap/extension-underline';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import AdminLayout from '../../components/admin/AdminLayout';
 import ContentApprovalActions from '../../components/admin/ContentApprovalActions';
 import StatusBadge from '../../components/admin/StatusBadge';
+
+// Simple Rich Text Toolbar
+const SimpleRichTextToolbar = ({ editor }) => {
+  if (!editor) return null;
+
+  const addLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (url) {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  };
+
+  return (
+    <div className="flex flex-wrap gap-1 p-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
+      {/* Text Formatting */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bold">
+        <FiBold size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Italic">
+        <FiItalic size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('underline') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Underline">
+        <FiUnderlineIcon size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Colors */}
+      <div className="flex items-center gap-1">
+        <span className="text-xs text-gray-500 px-1">Color:</span>
+        {['#000000', '#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6'].map(color => (
+          <button key={color} type="button" onClick={() => editor.chain().focus().setColor(color).run()}
+            className="w-5 h-5 rounded border border-gray-300 hover:scale-110 transition-transform"
+            style={{ backgroundColor: color }} title={color} />
+        ))}
+      </div>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Lists */}
+      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Bullet List">
+        <FiList size={16} />
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Numbered List">
+        <span className="text-xs font-bold">1.</span>
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Link */}
+      <button type="button" onClick={addLink}
+        className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Add Link">
+        <FiLink size={16} />
+      </button>
+      
+      <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+      
+      {/* Headings */}
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 2 }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Heading">
+        H2
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs font-bold ${editor.isActive('heading', { level: 3 }) ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Subheading">
+        H3
+      </button>
+      <button type="button" onClick={() => editor.chain().focus().setParagraph().run()}
+        className={`px-2 py-1 rounded hover:bg-gray-200 text-xs ${editor.isActive('paragraph') ? 'bg-blue-100 text-blue-700' : ''}`}
+        title="Paragraph">
+        P
+      </button>
+    </div>
+  );
+};
+
+// Simple Rich Text Editor Component
+const SimpleRichTextEditor = ({ value, onChange, placeholder }) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: false }),
+      TextStyle,
+      Color,
+      Underline,
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  // Update editor content when value changes externally
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '');
+    }
+  }, [value, editor]);
+
+  return (
+    <div className="border rounded-lg overflow-hidden">
+      <SimpleRichTextToolbar editor={editor} />
+      <EditorContent 
+        editor={editor} 
+        className="prose max-w-none p-3 min-h-[150px] focus:outline-none"
+      />
+    </div>
+  );
+};
 
 const CollapsibleSection = ({ title, children, defaultOpen = false, icon = null }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
