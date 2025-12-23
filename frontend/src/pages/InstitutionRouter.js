@@ -56,8 +56,13 @@ const InstitutionRouter = () => {
   // Check if seg2 is a known sub-page section
   const isSubPageSection = seg2 && SUB_PAGE_SECTIONS.includes(seg2.toLowerCase());
   
-  // For universities, use the same InstitutionDetailPage (which uses CollegeDetailPage)
+  // For universities, check if it's a listing pattern first
   if (isUniversityRoute && seg1) {
+    // If it's a known listing pattern (state, stream, etc.), show listing page
+    if (isListingPattern && !seg2) {
+      return <DynamicListingPage />;
+    }
+    // Otherwise it's a university detail page
     if (seg2) {
       return <CollegeSubPage />;
     }
