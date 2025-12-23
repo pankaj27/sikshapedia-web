@@ -57,9 +57,12 @@ const InstitutionRouter = () => {
   // Check if seg2 is a known sub-page section
   const isSubPageSection = seg2 && SUB_PAGE_SECTIONS.includes(seg2.toLowerCase());
   
-  // For universities, any slug is a potential detail page
+  // For universities, use the same InstitutionDetailPage (which uses CollegeDetailPage)
   if (isUniversityRoute && seg1) {
-    return <UniversityDetailPage />;
+    if (seg2) {
+      return <CollegeSubPage />;
+    }
+    return <InstitutionDetailPage />;
   }
   
   // If it's a numeric prefix format (e.g., 001-iit-bombay)
