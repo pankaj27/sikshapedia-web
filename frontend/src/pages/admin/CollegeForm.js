@@ -562,6 +562,13 @@ const CollegeForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = window.location.pathname;
+  const { user } = useAuth();
+  
+  // Check if user can directly publish (super_admin or content_manager)
+  const canDirectPublish = useMemo(() => {
+    const role = user?.role || '';
+    return ['super_admin', 'admin', 'content_manager'].includes(role);
+  }, [user?.role]);
   
   // Auto-detect institution type from URL
   const getInstitutionTypeFromURL = () => {
