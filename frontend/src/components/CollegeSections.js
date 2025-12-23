@@ -612,3 +612,117 @@ export const InfoSection = ({ college }) => {
     </div>
   );
 };
+
+// LOCATION SECTION - EXACT same as main page (with GuestGate for contact details)
+export const LocationSection = ({ college }) => {
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Location & Address</h2>
+      <p className="text-gray-700 text-sm mb-4">
+        Find {college.name} on the map and get complete address details:
+      </p>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Address Details */}
+        <div className="lg:col-span-1">
+          <div className="bg-white border rounded-lg p-6 space-y-4">
+            <div>
+              <h3 className="font-bold text-lg mb-3 text-gray-900">Address</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <FiMapPin className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                  <div>
+                    <p className="text-sm text-gray-700 font-medium">{college.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {college.location?.address || `${college.location?.city}, ${college.location?.state}`}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {college.location?.city}, {college.location?.state}
+                    </p>
+                    <p className="text-sm text-gray-600">India - {college.location?.pincode || '400076'}</p>
+                  </div>
+                </div>
+
+                {/* Contact Details - Blurred for non-registered users */}
+                <GuestGate title="Contact Details">
+                  <div className="space-y-3">
+                    <div className="flex gap-3">
+                      <FiPhone className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                      <div>
+                        <p className="text-sm text-gray-700 font-medium">Phone</p>
+                        <p className="text-sm text-gray-600">{college.contact_info?.phone || '+91 22-2576-7000'}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <FiMail className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                      <div>
+                        <p className="text-sm text-gray-700 font-medium">Email</p>
+                        <p className="text-sm text-gray-600">
+                          {college.contact_info?.email || `info@${college.name.toLowerCase().replace(/\s+/g, '')}.edu`}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <FiGlobe className="text-orange-600 flex-shrink-0 mt-1" size={18} />
+                      <div>
+                        <p className="text-sm text-gray-700 font-medium">Website</p>
+                        <a href={college.contact_info?.website || '#'} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+                          {college.contact_info?.website || `www.${college.name.toLowerCase().replace(/\s+/g, '')}.ac.in`}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </GuestGate>
+              </div>
+            </div>
+
+            {/* How to Reach - Only show if data exists */}
+            {college?.how_to_reach && (college.how_to_reach.by_metro || college.how_to_reach.by_bus || college.how_to_reach.by_train || college.how_to_reach.by_road || college.how_to_reach.by_air) && (
+              <div className="pt-4 border-t">
+                <h4 className="font-bold text-sm mb-2 text-gray-900">How to Reach</h4>
+                <div className="space-y-2 text-sm text-gray-600">
+                  {college.how_to_reach.by_metro && <p>• <strong>By Metro:</strong> {college.how_to_reach.by_metro}</p>}
+                  {college.how_to_reach.by_bus && <p>• <strong>By Bus:</strong> {college.how_to_reach.by_bus}</p>}
+                  {college.how_to_reach.by_train && <p>• <strong>By Train:</strong> {college.how_to_reach.by_train}</p>}
+                  {college.how_to_reach.by_road && <p>• <strong>By Road:</strong> {college.how_to_reach.by_road}</p>}
+                  {college.how_to_reach.by_air && <p>• <strong>By Air:</strong> {college.how_to_reach.by_air}</p>}
+                </div>
+              </div>
+            )}
+
+            <Button 
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+              onClick={() => {
+                const address = college.location?.address || college.name;
+                const city = college.location?.city || '';
+                const searchQuery = encodeURIComponent(`${address}, ${city}`);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${searchQuery}`, '_blank');
+              }}
+            >
+              <FiExternalLink className="mr-2" />
+              Get Directions
+            </Button>
+          </div>
+        </div>
+
+        {/* Google Map - Takes 2 columns */}
+        <div className="lg:col-span-2">
+          <div className="bg-white border rounded-lg overflow-hidden h-full min-h-[400px]">
+            <iframe
+              title="College Location Map"
+              src={college.location?.map_embed_url || `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.0!2d72.9!3d19.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA2JzAwLjAiTiA3MsKwNTQnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890`}
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: '400px' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
