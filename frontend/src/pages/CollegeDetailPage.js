@@ -665,6 +665,42 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   </div>
                 )}
 
+                {/* School-Specific Info - Board, Medium, Classes, Streams */}
+                {college.institution_type === 'School' && (college.board || college.medium || college.classes_offered?.length > 0 || college.streams_offered?.length > 0) && (
+                  <div className="flex flex-wrap items-center gap-4 mb-4 p-3 bg-blue-50 rounded-lg">
+                    {college.board && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-500">Board:</span>
+                        <span className="px-2 py-0.5 bg-white text-blue-700 text-xs font-medium rounded border border-blue-200">{college.board}</span>
+                      </div>
+                    )}
+                    {college.medium && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-500">Medium:</span>
+                        <span className="px-2 py-0.5 bg-white text-green-700 text-xs font-medium rounded border border-green-200">{college.medium}</span>
+                      </div>
+                    )}
+                    {college.classes_offered?.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-500">Classes:</span>
+                        <span className="px-2 py-0.5 bg-white text-purple-700 text-xs font-medium rounded border border-purple-200">
+                          {college.classes_offered[0]} to {college.classes_offered[college.classes_offered.length - 1]}
+                        </span>
+                      </div>
+                    )}
+                    {college.streams_offered?.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-gray-500">Streams:</span>
+                        <div className="flex items-center gap-1 flex-wrap">
+                          {college.streams_offered.map((stream, idx) => (
+                            <span key={idx} className="px-2 py-0.5 bg-white text-orange-700 text-xs font-medium rounded border border-orange-200">{stream}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Rating - Only show if rating exists */}
                 {college.rating > 0 && (
                   <div className="flex flex-wrap items-center gap-4 mb-4">
