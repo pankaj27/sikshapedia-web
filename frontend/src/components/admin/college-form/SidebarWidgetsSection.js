@@ -283,16 +283,21 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
                       const file = e.target.files[0];
                       if (file) {
                         try {
+                          const token = localStorage.getItem('token');
                           const formDataUpload = new FormData();
                           formDataUpload.append('file', file);
-                          formDataUpload.append('upload_type', 'banner');
-                          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/banner`, {
+                          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image?type=banner`, {
                             method: 'POST',
+                            headers: {
+                              'Authorization': `Bearer ${token}`
+                            },
                             body: formDataUpload
                           });
                           const data = await response.json();
                           if (data.url) {
                             updateWidget('ad_banner', 'image_url', data.url);
+                          } else {
+                            alert('Failed to upload: ' + (data.detail || 'Unknown error'));
                           }
                         } catch (err) {
                           console.error('Upload failed:', err);
