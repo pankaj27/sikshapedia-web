@@ -1730,8 +1730,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                   </section>
                 )}
 
-                {/* PLACEMENT - Only show if placement data exists */}
-                {(college.placement || college.placements) && (
+                {/* PLACEMENT - Only show if menu enabled AND placement data exists */}
+                {isMenuEnabled('placement') && (college.placement || college.placements) && (
                   <section id="placement" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                     <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
                     
