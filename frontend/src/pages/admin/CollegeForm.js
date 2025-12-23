@@ -3563,16 +3563,37 @@ const CollegeForm = () => {
             <div>
               <label className="block text-sm font-medium mb-1">SEO Full Content</label>
               <p className="text-xs text-gray-500 mb-2">
-                Detailed content that appears after clicking &quot;Read More&quot; (multiple paragraphs with HTML formatting)
+                Detailed content that appears after clicking &quot;Read More&quot; (multiple paragraphs with rich formatting)
               </p>
-              <textarea
-                name="seo_full_content"
-                value={formData.seo_full_content}
-                onChange={handleChange}
-                rows="10"
-                placeholder="Add multiple paragraphs with detailed information about the college. You can include HTML tags like <strong>, <p>, <ul>, <li>, etc."
-                className="w-full border rounded px-3 py-2 font-mono text-sm"
+              
+              {/* Rich Text Editor for SEO Full Content */}
+              <RichTextEditor
+                value={formData.seo_full_content || ''}
+                onChange={(content) => setFormData(prev => ({...prev, seo_full_content: content}))}
+                placeholder="Add multiple paragraphs with detailed information about the college..."
+                collegeName={formData.name}
               />
+              
+              {/* Emoji Quick Insert */}
+              <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+                <p className="text-xs font-medium text-yellow-800 mb-1">😀 Quick Emojis (click to copy):</p>
+                <div className="flex flex-wrap gap-1">
+                  {['🎓', '📚', '🏫', '✅', '⭐', '🏆', '💼', '📍', '📞', '📧', '🌐', '👨‍🎓', '👩‍🎓', '📈', '💰', '🎯', '✨', '🔥', '💡', '👍'].map((emoji, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(emoji);
+                        alert(`${emoji} copied! Paste in editor with Ctrl+V.`);
+                      }}
+                      className="text-lg hover:bg-yellow-200 rounded p-1 transition-colors"
+                      title={`Click to copy ${emoji}`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Table Builder */}
