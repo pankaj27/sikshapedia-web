@@ -21,28 +21,222 @@ import {
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../../api/axios';
 
+// Image/Video Insert Modal Component
+const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
+  const [url, setUrl] = useState('');
+  const [altText, setAltText] = useState('');
+  const [title, setTitle] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState('');
+
+  const handleFileUpload = async (file) => {
+    setUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/image?type=content', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const imageUrl = backendUrl + response.data.url;
+        setUploadedUrl(imageUrl);
+        setUrl(imageUrl);
+        
+        // Auto-generate SEO alt and title if empty
+        if (!altText) {
+          const fileName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ');
+          setAltText(`${fileName} - ${collegeName || 'Institution'} | AdmissionBuddy`);
+        }
+        if (!title) {
+          const fileName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ');
+          setTitle(`${fileName} - ${collegeName || 'Institution'} | AdmissionBuddy.co`);
+        }
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleInsert = () => {
+    if (!url) {
+      alert('Please provide an image/video URL');
+      return;
+    }
+    onInsert({ url, alt: altText, title });
+    // Reset form
+    setUrl('');
+    setAltText('');
+    setTitle('');
+    setUploadedUrl('');
+    onClose();
+  };
+
+  const handleUrlChange = (newUrl) => {
+    setUrl(newUrl);
+    // Auto-generate SEO tags for YouTube videos
+    if (type === 'video' && newUrl && newUrl.includes('youtube')) {
+      if (!altText) {
+        setAltText(`Video - ${collegeName || 'Institution'} | AdmissionBuddy`);
+      }
+      if (!title) {
+        setTitle(`Video - ${collegeName || 'Institution'} | AdmissionBuddy.co`);
+      }
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+        {/* Header */}
+        <div className={`px-6 py-4 ${type === 'image' ? 'bg-purple-600' : 'bg-red-600'} text-white`}>
+          <h3 className="text-lg font-bold flex items-center gap-2">
+            {type === 'image' ? '🖼️ Insert Image with SEO' : '🎬 Insert YouTube Video with SEO'}
+          </h3>
+          <p className="text-sm opacity-90">Add {type} with proper SEO tags for better ranking</p>
+        </div>
+        
+        <div className="p-6 space-y-4">
+          {/* Image Upload Option */}
+          {type === 'image' && (
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
+              <p className="text-sm font-bold text-purple-800 mb-3">📤 Upload Image</p>
+              <label className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg cursor-pointer font-medium text-sm transition-all ${
+                uploading 
+                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+                  : 'bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg'
+              }`}>
+                {uploading ? (
+                  <>
+                    <FiLoader className="animate-spin" size={18} />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <FiUpload size={18} />
+                    Choose File
+                  </>
+                )}
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  disabled={uploading}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleFileUpload(e.target.files[0]);
+                    }
+                  }}
+                />
+              </label>
+              {uploadedUrl && (
+                <div className="mt-2 flex items-center gap-2 text-xs text-green-600">
+                  <FiCheck /> Image uploaded successfully!
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* URL Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {type === 'image' ? '🔗 Image URL' : '🔗 YouTube URL'} *
+            </label>
+            <input
+              type="text"
+              value={url}
+              onChange={(e) => handleUrlChange(e.target.value)}
+              placeholder={type === 'image' ? 'https://example.com/image.jpg' : 'https://www.youtube.com/watch?v=...'}
+              className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+          
+          {/* SEO Fields */}
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+            <p className="text-sm font-bold text-green-800 mb-3">🔍 SEO Tags (Auto-generated with AdmissionBuddy branding)</p>
+            
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Alt Text (SEO) *</label>
+                <input
+                  type="text"
+                  value={altText}
+                  onChange={(e) => setAltText(e.target.value)}
+                  placeholder={`e.g., Campus Building - ${collegeName || 'College'} | AdmissionBuddy`}
+                  className="w-full border-2 border-green-300 bg-white rounded-lg px-3 py-2 text-sm"
+                />
+                <p className="text-xs text-green-600 mt-1">Important for Google Image/Video Search</p>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Title Attribute (SEO)</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder={`e.g., Campus Building - ${collegeName || 'College'} | AdmissionBuddy.co`}
+                  className="w-full border-2 border-green-300 bg-white rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Preview */}
+          {url && type === 'image' && (
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-3">
+              <p className="text-xs text-gray-500 mb-2">Preview:</p>
+              <img src={url} alt={altText || 'Preview'} className="max-h-32 mx-auto rounded" 
+                onError={(e) => { e.target.style.display = 'none'; }} />
+            </div>
+          )}
+        </div>
+        
+        {/* Footer */}
+        <div className="px-6 py-4 bg-gray-50 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleInsert}
+            disabled={!url}
+            className={`px-6 py-2 rounded-lg font-medium text-white ${
+              url 
+                ? (type === 'image' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-red-600 hover:bg-red-700')
+                : 'bg-gray-300 cursor-not-allowed'
+            }`}
+          >
+            Insert {type === 'image' ? 'Image' : 'Video'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Rich Text Editor Toolbar Component
-const RichTextToolbar = ({ editor }) => {
+const RichTextToolbar = ({ editor, collegeName, onOpenImageModal, onOpenVideoModal }) => {
   if (!editor) return null;
 
   const addLink = () => {
     const url = window.prompt('Enter URL:');
     if (url) {
       editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-    }
-  };
-
-  const addImage = () => {
-    const url = window.prompt('Enter image URL:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
-
-  const addVideo = () => {
-    const url = window.prompt('Enter YouTube URL:');
-    if (url) {
-      editor.chain().focus().setYoutubeVideo({ src: url }).run();
     }
   };
 
@@ -103,13 +297,13 @@ const RichTextToolbar = ({ editor }) => {
         title="Add Link">
         <FiLink size={16} />
       </button>
-      <button type="button" onClick={addImage}
-        className="p-2 rounded hover:bg-gray-200" title="Add Image">
-        <FiImage size={16} />
+      <button type="button" onClick={onOpenImageModal}
+        className="p-2 rounded hover:bg-gray-200 bg-purple-50 hover:bg-purple-100" title="Add Image with SEO">
+        <FiImage size={16} className="text-purple-600" />
       </button>
-      <button type="button" onClick={addVideo}
-        className="p-2 rounded hover:bg-gray-200" title="Add YouTube Video">
-        <FiVideo size={16} />
+      <button type="button" onClick={onOpenVideoModal}
+        className="p-2 rounded hover:bg-gray-200 bg-red-50 hover:bg-red-100" title="Add YouTube Video with SEO">
+        <FiVideo size={16} className="text-red-600" />
       </button>
       
       <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
