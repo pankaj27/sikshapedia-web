@@ -2249,6 +2249,71 @@ const CollegeForm = () => {
                 </>
               )}
             </div>
+
+            {/* School-Specific Fields: Medium, Classes, Streams */}
+            {isSchool && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Medium of Instruction *</label>
+                  <select
+                    name="medium"
+                    value={formData.medium}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2"
+                    required
+                  >
+                    <option value="">Select Medium</option>
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English & Hindi">English & Hindi</option>
+                    <option value="Regional">Regional Language</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Classes Offered *</label>
+                  <div className="flex flex-wrap gap-2 p-2 border rounded max-h-32 overflow-y-auto">
+                    {['Nursery', 'LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((cls) => (
+                      <label key={cls} className="flex items-center gap-1 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={formData.classes_offered?.includes(cls)}
+                          onChange={(e) => {
+                            const newClasses = e.target.checked
+                              ? [...(formData.classes_offered || []), cls]
+                              : (formData.classes_offered || []).filter(c => c !== cls);
+                            setFormData({ ...formData, classes_offered: newClasses });
+                          }}
+                          className="rounded"
+                        />
+                        {cls}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Streams Offered (11th-12th)</label>
+                  <div className="flex flex-wrap gap-2 p-2 border rounded">
+                    {['Science', 'Commerce', 'Humanities', 'Arts', 'Vocational'].map((stream) => (
+                      <label key={stream} className="flex items-center gap-1 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={formData.streams_offered?.includes(stream)}
+                          onChange={(e) => {
+                            const newStreams = e.target.checked
+                              ? [...(formData.streams_offered || []), stream]
+                              : (formData.streams_offered || []).filter(s => s !== stream);
+                            setFormData({ ...formData, streams_offered: newStreams });
+                          }}
+                          className="rounded"
+                        />
+                        {stream}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
             <div>
               <label className="block text-sm font-medium mb-1">Campus Size</label>
               <input
