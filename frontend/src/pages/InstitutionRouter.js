@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import DynamicListingPage from './DynamicListingPage';
 import InstitutionDetailPage from './InstitutionDetailPage';
 import CollegeSubPage from './CollegeSubPage';
-import api from '../services/api';
+import api from '../api/axios';
 
 /**
  * Smart router component that determines whether to show a listing page, detail page, or sub-page
