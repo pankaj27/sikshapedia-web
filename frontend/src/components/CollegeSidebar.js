@@ -46,6 +46,7 @@ const CollegeSidebar = ({
         )}
         
         {/* APPLY NOW BUTTON */}
+        {showWidget('apply_now') && (
         <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-lg p-6 text-white shadow-lg">
           <div className="text-center">
             <h3 className="font-bold text-xl mb-2">Apply to {college.name}</h3>
@@ -62,9 +63,10 @@ const CollegeSidebar = ({
             )}
           </div>
         </div>
+        )}
 
         {/* IMPORTANT DATES WIDGET */}
-        {college?.sidebar_widgets?.important_dates?.enabled && college?.sidebar_widgets?.important_dates?.dates?.length > 0 && (
+        {showWidget('important_dates') && college?.sidebar_widgets?.important_dates?.enabled && college?.sidebar_widgets?.important_dates?.dates?.length > 0 && (
           <div className="bg-white border rounded-lg shadow-sm p-5">
             <h3 className="font-bold text-base mb-4 text-gray-900 flex items-center gap-2">
               <FiCalendar className="text-orange-500" />
@@ -88,7 +90,7 @@ const CollegeSidebar = ({
         )}
 
         {/* QUICK FACTS WIDGET */}
-        {college?.sidebar_widgets?.quick_facts?.enabled && (
+        {showWidget('quick_facts') && college?.sidebar_widgets?.quick_facts?.enabled && (
           <div className="bg-white border rounded-lg shadow-sm p-5">
             <h3 className="font-bold text-base mb-4 text-gray-900 flex items-center gap-2">
               <FiInfo className="text-blue-500" />
