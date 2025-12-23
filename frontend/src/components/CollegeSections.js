@@ -181,7 +181,7 @@ export const CoursesSection = ({ college }) => {
   );
 };
 
-// ADMISSION SECTION - EXACT same as main page
+// ADMISSION SECTION - EXACT same as main page (with GuestGate for admission dates)
 export const AdmissionSection = ({ college }) => {
   const hasAdmissionDates = college?.admission_dates?.length > 0;
   const hasEligibility = college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0;
@@ -198,24 +198,26 @@ export const AdmissionSection = ({ college }) => {
       {hasAdmissionDates && (
         <>
           <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
-          <div className="overflow-x-auto mb-6">
-            <table className="w-full border-collapse border">
-              <thead>
-                <tr className="bg-orange-50">
-                  <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                  <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
-                </tr>
-              </thead>
-              <tbody>
-                {college.admission_dates.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
-                    <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+          <GuestGate title="Admission Dates">
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full border-collapse border">
+                <thead>
+                  <tr className="bg-orange-50">
+                    <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                    <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {college.admission_dates.map((item, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50">
+                      <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                      <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </GuestGate>
         </>
       )}
 
