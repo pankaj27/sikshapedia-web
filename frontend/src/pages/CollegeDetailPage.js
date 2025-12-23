@@ -277,7 +277,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
   const fetchCollegeDetails = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/colleges/${id}`);
+      const response = await api.get(`${apiEndpoint}/${id}`);
       setCollege(response.data);
       // Set college data in context for AutoApplyPopup to use
       setCollegeData(response.data);
