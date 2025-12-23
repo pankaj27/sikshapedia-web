@@ -475,14 +475,21 @@ export const FacilitiesSection = ({ college }) => {
         })}
       </div>
 
-      {/* Campus Images */}
+      {/* Campus Images from Media Section */}
       {(college.campus_images?.length > 0 || college.images?.length > 1) && (
         <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
-          {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
-            <div key={i} className="rounded-lg aspect-video overflow-hidden border">
-              <img src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
-            </div>
-          ))}
+          {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => {
+            const imageUrl = typeof img === 'string' ? img : img.url;
+            const imageAlt = typeof img === 'object' 
+              ? (img.alt || img.title || `Campus ${i + 1}`) 
+              : `Campus ${i + 1}`;
+            if (!imageUrl) return null;
+            return (
+              <div key={i} className="rounded-lg aspect-video overflow-hidden border">
+                <img src={imageUrl} alt={imageAlt} className="w-full h-full object-cover" />
+              </div>
+            );
+          })}
         </div>
       )}
 
