@@ -76,7 +76,6 @@ const TeamManagement = lazy(() => import('./pages/admin/TeamManagement'));
 const PendingApprovals = lazy(() => import('./pages/admin/PendingApprovals'));
 const AddCollege = lazy(() => import('./pages/admin/AddCollege'));
 const CollegeForm = lazy(() => import('./pages/admin/CollegeForm'));
-const CollegeForm = lazy(() => import('./pages/admin/CollegeForm'));
 const CollegesListManagement = lazy(() => import('./pages/admin/CollegesListManagement'));
 const NewsManagement = lazy(() => import('./pages/admin/NewsManagement'));
 const NewsForm = lazy(() => import('./pages/admin/NewsForm'));
