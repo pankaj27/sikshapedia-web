@@ -152,6 +152,12 @@ const DynamicListingPage = () => {
   const [masterStreams, setMasterStreams] = useState([]);
   const [masterCourses, setMasterCourses] = useState([]);
   
+  // Master exams data
+  const [masterExams, setMasterExams] = useState([]);
+  
+  // Master degree types (from courses)
+  const [masterDegreeTypes, setMasterDegreeTypes] = useState([]);
+  
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
   
   // Parse URL using new URL structure
