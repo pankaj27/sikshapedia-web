@@ -2376,6 +2376,44 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               )}
 
+              {/* AD BANNER WIDGET - From sidebar_widgets configuration */}
+              {college?.sidebar_widgets?.ad_banner?.enabled && college?.sidebar_widgets?.ad_banner?.image_url && (
+                <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
+                  <a 
+                    href={college.sidebar_widgets.ad_banner.cta_url || college.sidebar_widgets.ad_banner.link_url || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <img 
+                      src={college.sidebar_widgets.ad_banner.image_url} 
+                      alt={college.sidebar_widgets.ad_banner.title || 'Advertisement'} 
+                      className="w-full h-auto"
+                    />
+                  </a>
+                  {(college.sidebar_widgets.ad_banner.title || college.sidebar_widgets.ad_banner.description || college.sidebar_widgets.ad_banner.show_cta_button) && (
+                    <div className="p-4">
+                      {college.sidebar_widgets.ad_banner.title && (
+                        <h4 className="font-bold text-gray-900 mb-1">{college.sidebar_widgets.ad_banner.title}</h4>
+                      )}
+                      {college.sidebar_widgets.ad_banner.description && (
+                        <p className="text-sm text-gray-600 mb-3">{college.sidebar_widgets.ad_banner.description}</p>
+                      )}
+                      {college.sidebar_widgets.ad_banner.show_cta_button && college.sidebar_widgets.ad_banner.cta_url && (
+                        <a 
+                          href={college.sidebar_widgets.ad_banner.cta_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block w-full text-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded transition-colors"
+                        >
+                          {college.sidebar_widgets.ad_banner.cta_text || 'Learn More'}
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* COUNSELOR CTA - From sidebar_widgets configuration */}
               {college?.sidebar_widgets?.counselor_cta?.enabled && (
                 <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
