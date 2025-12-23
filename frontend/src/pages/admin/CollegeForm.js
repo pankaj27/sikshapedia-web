@@ -677,6 +677,9 @@ const CollegeForm = () => {
     recognized_by: [],
     affiliated_to: '',
     board: '', // For schools - CBSE, ICSE, State Board, etc.
+    medium: '', // For schools - English, Hindi, Regional
+    classes_offered: [], // For schools - Nursery, KG, 1-12
+    streams_offered: [], // For schools - Science, Commerce, Humanities
     memberships: [],
     nirf_ranking: null,
     india_today_ranking: null,
