@@ -647,7 +647,6 @@ const CollegeSubPage = () => {
               )}
             </div>
           </div>
-        </div>
         
         {/* Shared Sidebar from Main Page */}
         <CollegeSidebar 
