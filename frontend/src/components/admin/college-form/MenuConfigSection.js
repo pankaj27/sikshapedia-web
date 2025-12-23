@@ -361,6 +361,132 @@ const MenuConfigSection = ({ formData, setFormData }) => {
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                       />
                     </div>
+                    
+                    {/* Sidebar Widgets Control */}
+                    <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <h6 className="font-medium text-blue-800 mb-3 flex items-center gap-2">
+                        📌 Sidebar Widgets for this Page
+                      </h6>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {/* Apply Now */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.apply_now !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, apply_now: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Apply Now</span>
+                        </label>
+                        
+                        {/* Quick Facts */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.quick_facts !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, quick_facts: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Quick Facts</span>
+                        </label>
+                        
+                        {/* Counselor CTA */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.counselor_cta !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, counselor_cta: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Need Help?</span>
+                        </label>
+                        
+                        {/* Popular Courses */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.popular_courses !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, popular_courses: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Popular Courses</span>
+                        </label>
+                        
+                        {/* Download Brochure */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.download_brochure !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, download_brochure: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Download Brochure</span>
+                        </label>
+                        
+                        {/* Similar Colleges */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.similar_colleges !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, similar_colleges: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Similar Colleges</span>
+                        </label>
+                        
+                        {/* Important Dates */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.important_dates !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, important_dates: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Important Dates</span>
+                        </label>
+                        
+                        {/* Social Links */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.social_links !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, social_links: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Social Links</span>
+                        </label>
+                        
+                        {/* Ad Banner */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.sidebar_widgets?.ad_banner !== false}
+                            onChange={(e) => updateMenuItem(menuDef.id, { 
+                              sidebar_widgets: { ...item.sidebar_widgets, ad_banner: e.target.checked }
+                            })}
+                            className="rounded text-blue-600"
+                          />
+                          <span className="text-sm">Ad Banner</span>
+                        </label>
+                      </div>
+                      <p className="text-xs text-blue-600 mt-2">Uncheck to hide widgets on this page</p>
+                    </div>
                   </div>
                   
                   {/* Preview */}
