@@ -195,10 +195,10 @@ const CollegeSubPage = () => {
     );
   }
 
-  // Get menu items
-  const menuItems = college.menu_config?.use_custom_menu 
-    ? (college.menu_config.items || []).filter(item => item.enabled).sort((a, b) => a.order - b.order)
-    : [];
+  // Get menu items - use new simplified menu_config
+  const menuItems = (college.menu_config?.items || [])
+    .filter(item => item.enabled)
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   // Get SEO values with fallbacks
   const pageTitle = currentSection?.meta_title || `${currentSection?.label || section} - ${college.name}`;
