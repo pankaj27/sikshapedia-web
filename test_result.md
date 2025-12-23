@@ -125,15 +125,30 @@ backend:
 frontend:
   - task: "Quick Facts Display on College Detail Page"
     implemented: true
-    working: "NA"
+    working: false
     file: "CollegeDetail.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "testing"
           comment: "Frontend testing not performed - backend APIs are ready and working correctly"
+        - working: false
+          agent: "testing"
+          comment: "CRITICAL: Frontend has infinite re-render loops causing 'Maximum update depth exceeded' errors. React components are stuck in setState cycles in useEffect hooks. Pages fail to load properly due to these errors. Content consistency testing cannot be completed until these React errors are fixed."
+
+  - task: "Content Consistency Between Main Page and Sub-pages"
+    implemented: true
+    working: false
+    file: "CollegeDetailPage.js, CollegeSubPage.js, CollegeSections.js"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "FAILED: Cannot test content consistency due to React infinite re-render errors. Frontend pages are not loading properly. The URL pattern /colleges/15-indian-institute-of-management-ahmedabad is correct and backend data is available, but frontend crashes with 'Maximum update depth exceeded' errors preventing proper page rendering."
 
 metadata:
   created_by: "testing_agent"
