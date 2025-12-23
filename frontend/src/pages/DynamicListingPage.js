@@ -504,16 +504,21 @@ const DynamicListingPage = () => {
     return [];
   }, [masterCities, activeFilters.state]);
 
-  // Filter options - Empty by default, should be populated from database
+  // Filter options - Populate from master data
   const filterOptions = {
-    subStream: [],
-    course: [],
+    subStream: masterStreams.length > 0 ? masterStreams : [
+      'Engineering & Technology', 'Medical & Health Sciences', 'Management & Business',
+      'Arts & Humanities', 'Science', 'Commerce', 'Law', 'Education', 'Design'
+    ],
+    course: masterCourses.length > 0 ? masterCourses : [
+      'B.Tech', 'MBA', 'MBBS', 'BBA', 'B.Com', 'BA', 'B.Sc', 'BCA', 'LLB', 'B.Ed'
+    ],
     degreeType: [],
     examAccepted: [],
     affiliation: [],
     recognition: [],
-    collegeType: [],
-    accreditation: [],
+    collegeType: ['Government', 'Private', 'Deemed', 'Autonomous', 'Aided'],
+    accreditation: ['NAAC A++', 'NAAC A+', 'NAAC A', 'NAAC B++', 'NAAC B+', 'NAAC B', 'NBA Accredited'],
     state: allStates,
     city: getAvailableCities,
     programType: []
