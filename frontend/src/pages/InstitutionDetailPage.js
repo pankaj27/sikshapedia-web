@@ -34,9 +34,9 @@ const InstitutionDetailPage = () => {
   const institutionType = getInstitutionType();
   
   // Parse URL to extract numeric ID and slug
-  // Format: {number}-{slug} e.g., "001-iit-bombay"
+  // Format: {number}-{slug} e.g., "001-iit-bombay" OR slug-only e.g., "iit-bombay"
   const parseIdSlug = () => {
-    if (!idSlug) return { numericId: null, slug: null, isValidFormat: false };
+    if (!idSlug) return { numericId: null, slug: null, isValidFormat: false, isSlugOnly: false };
     
     // Accept format: {number}-{slug} with dash separator
     // e.g., "001-iit-bombay" -> numericId: "001", slug: "iit-bombay"
@@ -45,15 +45,28 @@ const InstitutionDetailPage = () => {
       return {
         numericId: numericDashMatch[1],
         slug: numericDashMatch[2],
-        isValidFormat: true
+        isValidFormat: true,
+        isSlugOnly: false
       };
     }
     
-    // Invalid format
+    // Accept slug-only format (no numeric prefix)
+    // e.g., "iit-bombay", "iim-ahmedabad"
+    if (idSlug && !idSlug.match(/^\d+$/)) {
+      return {
+        numericId: null,
+        slug: idSlug,
+        isValidFormat: true,
+        isSlugOnly: true
+      };
+    }
+    
+    // Invalid format (just a number or empty)
     return {
       numericId: null,
       slug: null,
-      isValidFormat: false
+      isValidFormat: false,
+      isSlugOnly: false
     };
   };
   
@@ -62,7 +75,7 @@ const InstitutionDetailPage = () => {
       setLoading(true);
       setError(null);
       
-      const { numericId, isValidFormat } = parseIdSlug();
+      const { numericId, slug, isValidFormat, isSlugOnly } = parseIdSlug();
       
       // Reject invalid URL format
       if (!isValidFormat) {
@@ -72,7 +85,17 @@ const InstitutionDetailPage = () => {
       }
       
       try {
-        // Search by serial_number (unique for each institution)
+        // If slug-only format, try to fetch by slug directly
+        if (isSlugOnly && slug) {
+          const response = await api.get(`/colleges/${slug}`);
+          if (response.data && response.data.id) {
+            setInstitutionId(response.data.id);
+            setLoading(false);
+            return;
+          }
+        }
+        
+        // Search by serial_number (numeric prefix format)
         if (numericId) {
           // Fetch all institutions including drafts - serial_number is unique across all
           const response = await api.get(`/colleges?limit=500&include_drafts=true`);
