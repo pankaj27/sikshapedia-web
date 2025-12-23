@@ -559,8 +559,6 @@ const DynamicListingPage = () => {
     city: getAvailableCities,
     programType: ['Full Time', 'Part Time', 'Distance', 'Online', 'Weekend', 'Executive']
   };
-    programType: []
-  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
