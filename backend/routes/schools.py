@@ -154,8 +154,15 @@ async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
 
 @router.get("/schools/{school_id}", response_model=School)
 async def get_school(school_id: str):
-    """Get a specific school by ID"""
-    school = await db.schools.find_one({"id": school_id}, {"_id": 0})
+    """Get a specific school by ID or slug"""
+    # First try to find by ID in colleges collection (schools with institution_type='School')
+    school = await db.colleges.find_one(
+        {"$or": [{"id": school_id}, {"slug": school_id}], "institution_type": "School"}, 
+        {"_id": 0}
+    )
+    if not school:
+        # Fallback to schools collection
+        school = await db.schools.find_one({"$or": [{"id": school_id}, {"slug": school_id}]}, {"_id": 0})
     if not school:
         raise HTTPException(status_code=404, detail="School not found")
     return School(**school)
