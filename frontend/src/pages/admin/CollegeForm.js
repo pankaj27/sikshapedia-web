@@ -1011,7 +1011,11 @@ const CollegeForm = () => {
         rankings: Array.isArray(collegeData.rankings) ? collegeData.rankings : [],
         streams: Array.isArray(collegeData.streams) ? collegeData.streams : [],
         courses: Array.isArray(collegeData.courses) ? collegeData.courses : [],
-        facilities: Array.isArray(collegeData.facilities) ? collegeData.facilities : [],
+        facilities: Array.isArray(collegeData.facilities) 
+          ? collegeData.facilities.map(f => typeof f === 'string' 
+              ? { name: f, icon: '', description: '' } 
+              : { name: f.name || '', icon: f.icon || '', description: f.description || '' })
+          : [],
         campus_images: Array.isArray(collegeData.campus_images) ? collegeData.campus_images : [],
         images: Array.isArray(collegeData.images) ? collegeData.images : [],
         videos: Array.isArray(collegeData.videos) ? collegeData.videos : [],
