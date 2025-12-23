@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { FiHome, FiInfo, FiBook, FiFileText, FiBarChart2, FiBriefcase, FiAward, FiDollarSign, FiMessageSquare, FiBookmark, FiImage, FiUsers, FiCalendar, FiMapPin, FiHelpCircle, FiPhone } from 'react-icons/fi';
 import { HiOutlineAcademicCap, HiOutlineOfficeBuilding, HiOutlineCurrencyRupee, HiOutlineLibrary } from 'react-icons/hi';
 import api from '../api/axios';
+import CollegeSidebar from '../components/CollegeSidebar';
+import ApplyNowModal from '../components/ApplyNowModal';
 
 import { Link } from '../components/CustomLink';
 // Icon mapping for professional icons
