@@ -401,7 +401,7 @@ const DynamicListingPage = () => {
           api.get('/locations/all-states'),
           api.get('/locations/all-cities'),
           api.get('/streams'),
-          api.get('/courses')
+          api.get('/courses?limit=500')  // Fetch more courses
         ]);
         const activeStates = (statesRes.data || [])
           .filter(s => s.status === 'active')
@@ -417,9 +417,9 @@ const DynamicListingPage = () => {
           .sort();
         setMasterStreams(activeStreams);
         
-        // Set courses - filter active ones and extract names
+        // Set courses - filter active ones and extract names (excluding 'School' type)
         const activeCourses = (coursesRes.data || [])
-          .filter(c => c.is_active !== false)
+          .filter(c => c.is_active !== false && c.name !== 'School')
           .map(c => c.name)
           .sort();
         setMasterCourses(activeCourses);
