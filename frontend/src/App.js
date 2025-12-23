@@ -410,6 +410,12 @@ function App() {
               <Route path="/university/:seg1/:seg2" element={<InstitutionRouter />} />
               <Route path="/university/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
               
+              {/* Redirect plural /universities/ to singular /university/ */}
+              <Route path="/universities" element={<Navigate to="/university" replace />} />
+              <Route path="/universities/:seg1" element={<UniversitiesRedirect />} />
+              <Route path="/universities/:seg1/:seg2" element={<UniversitiesRedirect />} />
+              <Route path="/universities/:seg1/:seg2/:seg3" element={<UniversitiesRedirect />} />
+              
               {/* Legacy routes with stream - handled by DynamicListingPage */}
               <Route path="/colleges/:stream" element={<DynamicListingPage />} />
               <Route path="/schools/:stream" element={<DynamicListingPage />} />
