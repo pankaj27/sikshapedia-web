@@ -2484,17 +2484,25 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               </div>
 
-              {/* ADVERTISEMENT 2 */}
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
-                <div className="text-center">
-                  <div className="text-4xl mb-3">📚</div>
-                  <h3 className="font-bold text-lg mb-2">Download Brochure</h3>
-                  <p className="text-sm text-blue-100 mb-4">Get complete course details and admission information</p>
-                  <button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-bold py-2.5 rounded transition-colors">
-                    Download Now
-                  </button>
+              {/* DOWNLOAD BROCHURE WIDGET - Connected to brochure_url */}
+              {college.brochure_url && (
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">📚</div>
+                    <h3 className="font-bold text-lg mb-2">Download Brochure</h3>
+                    <p className="text-sm text-blue-100 mb-4">Get complete course details and admission information</p>
+                    <a 
+                      href={college.brochure_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="block w-full bg-white text-blue-600 hover:bg-blue-50 font-bold py-2.5 rounded transition-colors text-center"
+                    >
+                      Download Now
+                    </a>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* SIMILAR COLLEGES - Auto-populated based on same city/state/type */}
               <div className="bg-white border rounded-lg shadow-sm p-5">
