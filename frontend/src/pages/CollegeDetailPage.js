@@ -509,8 +509,9 @@ const CollegeDetailPage = ({ overrideId }) => {
     );
   }
 
-  // Table of Contents - Only from SEO Content (Visual Block Editor)
-  // Auto-generated items (Fees, Ranking, Placement, etc.) are removed
+  // ⚠️ IMPORTANT: Table of Contents is NEVER auto-generated
+  // TOC only shows items manually created in SEO Content → Visual Block Editor (seo_toc)
+  // DO NOT add auto-generated items like Fees, Ranking, Placement, etc.
 
   return (
     <div className="min-h-screen bg-gray-50 pt-2">
