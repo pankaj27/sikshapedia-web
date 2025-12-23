@@ -763,7 +763,7 @@ const ListingPageForm = () => {
     setFormData(prev => ({ ...prev, content_sections: updated }));
   };
 
-  // Table of Contents handlers
+  // Table of Contents handlers (legacy simple TOC)
   const addTocItem = () => {
     setFormData(prev => ({
       ...prev,
@@ -785,6 +785,34 @@ const ListingPageForm = () => {
       ...prev,
       table_of_contents: prev.table_of_contents.filter((_, i) => i !== index)
     }));
+  };
+
+  // Advanced TOC with Visual Block Editor - Image Upload Handler
+  const handleContentImageUpload = async (file, tocIndex, blockIndex) => {
+    const uploadKey = `${tocIndex}-${blockIndex}`;
+    setUploadingContentImage(prev => ({ ...prev, [uploadKey]: true }));
+    
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      const token = localStorage.getItem('adminToken');
+      const response = await api.post('/upload/image?type=content', uploadFormData, {
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+        const imageUrl = backendUrl + response.data.url;
+        const newToc = [...(formData.seo_toc || [])];
+        newToc[tocIndex].blocks[blockIndex].url = imageUrl;
+        setFormData({...formData, seo_toc: newToc});
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploadingContentImage(prev => ({ ...prev, [uploadKey]: false }));
+    }
   };
 
   // FAQ handlers
