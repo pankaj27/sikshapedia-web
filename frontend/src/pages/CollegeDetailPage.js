@@ -509,35 +509,8 @@ const CollegeDetailPage = ({ overrideId }) => {
     );
   }
 
-  // Dynamic Table of Contents - only show items with actual data
-  const tableOfContents = [];
-  if (college?.admission_dates?.length > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Admission ${year + 1} Dates`, id: 'seo-admission-dates' });
-  }
-  if (college?.courses?.length > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Fees ${year + 1}`, id: 'seo-fees' });
-  }
-  if (college?.rankings?.length > 0 || college?.nirf_ranking) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Ranking`, id: 'seo-ranking' });
-  }
-  if (college?.admission_process || college?.eligibility_criteria) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Admission ${year + 1}`, id: 'seo-admission' });
-  }
-  if (college?.cutoffs?.length > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Cutoff`, id: 'seo-cutoff' });
-  }
-  if (college?.placement?.average > 0 || college?.placements?.average > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Placement`, id: 'seo-placement' });
-  }
-  if (college?.comparison_colleges?.length > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} vs Other Colleges`, id: 'seo-comparison' });
-  }
-  if (college?.facilities?.length > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} Campus & Facilities`, id: 'seo-facilities' });
-  }
-  if (college?.seo_faqs?.length > 0) {
-    tableOfContents.push({ num: String(tableOfContents.length + 1).padStart(2, '0'), title: `${college.name} FAQs`, id: 'seo-faqs' });
-  }
+  // Table of Contents - Only from SEO Content (Visual Block Editor)
+  // Auto-generated items (Fees, Ranking, Placement, etc.) are removed
 
   return (
     <div className="min-h-screen bg-gray-50 pt-2">
