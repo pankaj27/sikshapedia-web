@@ -181,7 +181,7 @@ export const CoursesSection = ({ college }) => {
   );
 };
 
-// ADMISSION SECTION - EXACT same as main page (with GuestGate for admission dates)
+// ADMISSION SECTION - EXACT same as main page (NO GuestGate - visible to all)
 export const AdmissionSection = ({ college }) => {
   const hasAdmissionDates = college?.admission_dates?.length > 0;
   const hasEligibility = college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0;
@@ -198,54 +198,50 @@ export const AdmissionSection = ({ college }) => {
       {hasAdmissionDates && (
         <>
           <h3 className="text-xl font-bold mb-3">Admission Dates {year + 1}</h3>
-          <GuestGate title="Admission Dates">
-            <div className="overflow-x-auto mb-6">
-              <table className="w-full border-collapse border">
-                <thead>
-                  <tr className="bg-orange-50">
-                    <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
-                    <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full border-collapse border">
+              <thead>
+                <tr className="bg-orange-50">
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Events</th>
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Dates</th>
+                </tr>
+              </thead>
+              <tbody>
+                {college.admission_dates.map((item, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50">
+                    <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
+                    <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {college.admission_dates.map((item, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50">
-                      <td className="border px-4 py-3 text-sm">{item.event || item.title}</td>
-                      <td className="border px-4 py-3 text-sm font-semibold">{item.date}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </GuestGate>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
 
       {hasEligibility && (
         <>
           <h3 className="text-xl font-bold mb-3">Eligibility & Selection Criteria</h3>
-          <GuestGate title="Eligibility & Selection Criteria">
-            <div className="overflow-x-auto mb-6">
-              <table className="w-full border-collapse border">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                    <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
-                    <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full border-collapse border">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+                  <th className="border px-4 py-3 text-left text-sm font-bold">Selection Criteria</th>
+                </tr>
+              </thead>
+              <tbody>
+                {college.courses.filter(c => typeof c === 'object').map((course, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50">
+                    <td className="border px-4 py-3 text-sm font-semibold">{course.name}</td>
+                    <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
+                    <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {college.courses.filter(c => typeof c === 'object').map((course, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50">
-                      <td className="border px-4 py-3 text-sm font-semibold">{course.name}</td>
-                      <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
-                      <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </GuestGate>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </div>
