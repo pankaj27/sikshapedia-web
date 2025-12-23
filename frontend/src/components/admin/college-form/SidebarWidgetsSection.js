@@ -283,7 +283,7 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
                       const file = e.target.files[0];
                       if (file) {
                         try {
-                          const token = localStorage.getItem('token');
+                          const token = localStorage.getItem('adminToken');
                           const formDataUpload = new FormData();
                           formDataUpload.append('file', file);
                           const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image?type=banner`, {
