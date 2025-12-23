@@ -810,63 +810,6 @@ const CollegeDetailPage = ({ overrideId }) => {
         </div>
       </div>
 
-      {/* LATEST UPDATES AND NEWS - Below Menu */}
-      {((college?.updates && college.updates.length > 0) || (college?.announcements && college.announcements.length > 0)) && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-y border-blue-100">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">📢</span>
-              </div>
-              <h3 className="font-bold text-lg text-gray-900">Latest Updates & News</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[...(college.updates || []), ...(college.announcements || [])].slice(0, 6).map((item, idx) => {
-                const isUpdate = college.updates?.includes(item);
-                return (
-                  <div 
-                    key={idx} 
-                    className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 ${isUpdate ? 'bg-orange-100' : 'bg-blue-100'} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                        <span className="text-lg">{isUpdate ? '📰' : '📣'}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${isUpdate ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
-                            {isUpdate ? (item.type === 'news' ? 'News' : 'Update') : 'Announcement'}
-                          </span>
-                          {item.date && (
-                            <span className="text-xs text-gray-500">
-                              {new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </span>
-                          )}
-                        </div>
-                        <h4 className="font-semibold text-sm text-gray-900 truncate">{item.title}</h4>
-                        {item.content && (
-                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">{item.content}</p>
-                        )}
-                        {item.link && (
-                          <a 
-                            href={item.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-xs text-blue-600 hover:underline mt-1 inline-block"
-                          >
-                            Read more →
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* MAIN CONTENT */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Sponsor Ad - Content Top */}
