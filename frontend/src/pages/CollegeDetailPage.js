@@ -846,8 +846,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </p>
               </div>
 
-              {/* READ MORE BUTTON - Show when collapsed and there's more content to show */}
-              {!showContent && (college.seo_full_content || college.courses?.length > 0 || college.seo_faqs?.length > 0 || college.admission_dates?.length > 0 || college.placement?.average > 0) && (
+              {/* READ MORE BUTTON - Show when collapsed and there's SEO content */}
+              {!showContent && (college.seo_full_content || college.seo_toc?.length > 0 || college.seo_images?.length > 0 || college.seo_tables?.length > 0) && (
                 <div className="text-center mb-4">
                   <button
                     onClick={() => setShowContent(true)}
@@ -859,31 +859,132 @@ const CollegeDetailPage = ({ overrideId }) => {
                 </div>
               )}
 
-              {/* SEO EXPANDABLE CONTENT - Only database content */}
+              {/* SEO EXPANDABLE CONTENT - ONLY SEO Content (NOT Menu Tab Content) */}
               {showContent && (
                 <div className="space-y-8">
-                  {/* TABLE OF CONTENTS - Only show if there are items */}
-                  {tableOfContents.length > 0 && (
-                    <div className="bg-gray-50 rounded-lg p-6 border">
-                      <h3 className="font-bold text-lg mb-4">Table of Contents</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                        {tableOfContents.map((item) => (
-                          <a
-                            key={item.id}
-                            href={`#${item.id}`}
-                            className="text-left text-sm text-orange-600 hover:underline flex gap-2"
-                          >
-                            <span className="font-semibold flex-shrink-0">{item.num}.</span>
-                            <span>{item.title}</span>
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
+                  
                   {/* SEO FULL CONTENT - If exists in database */}
                   {college.seo_full_content && (
                     <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
+                  )}
+
+                  {/* SEO TOC SECTIONS (Visual Block Editor Content) */}
+                  {college.seo_toc?.length > 0 && (
+                    <div className="space-y-8">
+                      {college.seo_toc.map((tocSection, sectionIdx) => (
+                        <section key={sectionIdx} id={tocSection.anchor || `seo-section-${sectionIdx}`} className="scroll-mt-40">
+                          <h2 className="text-2xl font-bold mb-4 text-gray-900">{tocSection.title}</h2>
+                          
+                          {/* Render blocks */}
+                          {tocSection.blocks?.map((block, blockIdx) => (
+                            <div key={blockIdx} className="mb-4">
+                              {/* Text Block */}
+                              {block.type === 'text' && (
+                                <div className="prose max-w-none">
+                                  {block.heading && <h3 className="text-xl font-semibold mb-2">{block.heading}</h3>}
+                                  <div dangerouslySetInnerHTML={{ __html: block.content || '' }} />
+                                </div>
+                              )}
+                              
+                              {/* Image Block */}
+                              {block.type === 'image' && block.url && (
+                                <figure style={{ width: block.width || '100%' }} className="mx-auto">
+                                  <img src={block.url} alt={block.alt || ''} title={block.title || ''} className="rounded-lg w-full" />
+                                  {block.caption && <figcaption className="text-center text-sm text-gray-600 mt-2">{block.caption}</figcaption>}
+                                </figure>
+                              )}
+                              
+                              {/* Video Block */}
+                              {block.type === 'video' && block.url && (
+                                <div className="aspect-video rounded-lg overflow-hidden">
+                                  <iframe
+                                    src={block.url.includes('youtube.com/watch') 
+                                      ? `https://www.youtube.com/embed/${block.url.split('v=')[1]?.split('&')[0]}`
+                                      : block.url}
+                                    className="w-full h-full"
+                                    allowFullScreen
+                                    title={block.title || 'Video'}
+                                  />
+                                </div>
+                              )}
+                              
+                              {/* Table Block */}
+                              {block.type === 'table' && (
+                                <div className="overflow-x-auto">
+                                  {block.title && <h4 className="font-semibold mb-2">{block.title}</h4>}
+                                  <table className="w-full border-collapse border">
+                                    <thead>
+                                      <tr className="bg-orange-50">
+                                        {block.headers?.map((header, hi) => (
+                                          <th key={hi} className="border px-4 py-3 text-left text-sm font-bold">{header}</th>
+                                        ))}
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {block.rows?.map((row, ri) => (
+                                        <tr key={ri} className="hover:bg-gray-50">
+                                          {row.map((cell, ci) => (
+                                            <td key={ci} className="border px-4 py-3 text-sm">{cell}</td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              )}
+                              
+                              {/* Quick Facts Block */}
+                              {block.type === 'facts' && (
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                  {block.title && <h4 className="font-bold text-blue-800 mb-3">{block.title}</h4>}
+                                  <div className="grid grid-cols-2 gap-3">
+                                    {block.items?.map((fact, fi) => (
+                                      <div key={fi} className="flex justify-between">
+                                        <span className="text-gray-600">{fact.label}</span>
+                                        <span className="font-semibold">{fact.value}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Key Stats Block */}
+                              {block.type === 'stats' && (
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                  {block.items?.map((stat, si) => (
+                                    <div key={si} className={`rounded-lg p-4 text-center ${
+                                      stat.color === 'yellow' ? 'bg-yellow-100' :
+                                      stat.color === 'green' ? 'bg-green-100' :
+                                      stat.color === 'blue' ? 'bg-blue-100' :
+                                      stat.color === 'pink' ? 'bg-pink-100' : 'bg-gray-100'
+                                    }`}>
+                                      <div className="text-2xl font-bold">{stat.value}</div>
+                                      <div className="text-sm text-gray-600">{stat.label}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                              
+                              {/* List Block */}
+                              {block.type === 'list' && (
+                                <div>
+                                  {block.title && <h4 className="font-semibold mb-2">{block.title}</h4>}
+                                  {block.listType === 'numbered' ? (
+                                    <ol className="list-decimal list-inside space-y-1">
+                                      {block.items?.map((item, li) => <li key={li}>{item}</li>)}
+                                    </ol>
+                                  ) : (
+                                    <ul className="list-disc list-inside space-y-1">
+                                      {block.items?.map((item, li) => <li key={li}>{item}</li>)}
+                                    </ul>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </section>
+                      ))}
+                    </div>
                   )}
 
                   {/* VIDEO - Only show if video URL exists */}
