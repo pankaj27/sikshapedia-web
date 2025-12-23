@@ -1397,13 +1397,36 @@ const CollegeDetailPage = ({ overrideId }) => {
               {/* INFO SECTION - Show when NOT using auto_from_toc */}
               <section id="info" className={college?.menu_config?.auto_from_toc ? 'hidden' : ''}>
                 <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
-                {college.seo_intro ? (
+                
+                {/* Description */}
+                {college.description ? (
+                  <div className="text-gray-800 leading-relaxed mb-4 prose max-w-none" dangerouslySetInnerHTML={{ __html: college.description }} />
+                ) : college.seo_intro ? (
                   <div className="text-gray-800 leading-relaxed mb-4 prose max-w-none" dangerouslySetInnerHTML={{ __html: college.seo_intro }} />
                 ) : (
                   <p className="text-gray-800 leading-relaxed mb-4">
                     {college.name} is a premier {college.type} institution established in {college.established_year || college.established || 'N/A'} and located in {college.location?.city}, {college.location?.state}.
                   </p>
                 )}
+                
+                {/* Highlights */}
+                {college.highlights && college.highlights.length > 0 && (
+                  <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-lg p-5 mb-6">
+                    <h3 className="font-bold text-lg mb-3 text-orange-800 flex items-center gap-2">
+                      <span className="text-2xl">⭐</span>
+                      Key Highlights
+                    </h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {college.highlights.map((highlight, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                          <span className="text-orange-500 mt-1">✓</span>
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
                 {college.seo_full_content && (
                   <div className="text-gray-700 leading-relaxed prose max-w-none mb-4">
                     <div dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
