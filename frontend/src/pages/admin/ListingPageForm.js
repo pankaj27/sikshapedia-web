@@ -133,7 +133,7 @@ const ListingPageForm = () => {
       .sort();
   };
 
-  const streams = [
+  const streams = masterStreams.length > 0 ? masterStreams : [
     'Engineering', 'Medical', 'Management', 'Law', 'Arts', 'Science', 
     'Commerce', 'Education', 'Pharmacy', 'Architecture', 'Design',
     'Agriculture', 'Nursing', 'Dental', 'Hotel Management'
