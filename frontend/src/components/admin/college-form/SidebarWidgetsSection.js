@@ -340,13 +340,13 @@ const SidebarWidgetsSection = ({ formData, setFormData }) => {
               <label className="flex items-center gap-2 text-sm mb-2">
                 <input 
                   type="checkbox" 
-                  checked={formData.sidebar_widgets?.ad_banner?.show_cta_button ?? true}
+                  checked={formData.sidebar_widgets?.ad_banner?.show_cta_button !== false}
                   onChange={(e) => updateWidget('ad_banner', 'show_cta_button', e.target.checked)} 
                   className="rounded" 
                 />
                 Show CTA Button
               </label>
-              {formData.sidebar_widgets?.ad_banner?.show_cta_button && (
+              {formData.sidebar_widgets?.ad_banner?.show_cta_button !== false && (
                 <div className="space-y-2 pl-4">
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">CTA Button Text</label>
