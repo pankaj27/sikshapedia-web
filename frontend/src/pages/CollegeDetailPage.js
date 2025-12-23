@@ -803,51 +803,21 @@ const CollegeDetailPage = ({ overrideId }) => {
           <div className="flex-1">
             {/* SEO CONTENT SECTION (Collapsible) - 100% DYNAMIC */}
             <div className="mb-6 pb-6 border-b">
-              {/* DESCRIPTION - From Description & Highlights Section */}
-              {college.description && (
-                <div className="mb-4">
+              {/* SEO INTRO PREVIEW */}
+              <div className="mb-3">
+                {college.seo_intro ? (
                   <div 
-                    className="text-gray-800 leading-relaxed prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: college.description }}
+                    className={`text-gray-800 leading-relaxed prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
+                    dangerouslySetInnerHTML={{ __html: college.seo_intro }}
                   />
-                </div>
-              )}
-              
-              {/* HIGHLIGHTS - From Description & Highlights Section */}
-              {college.highlights && college.highlights.length > 0 && (
-                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-lg p-5 mb-4">
-                  <h3 className="font-bold text-lg mb-3 text-orange-800 flex items-center gap-2">
-                    <span className="text-2xl">⭐</span>
-                    Key Highlights
-                  </h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {college.highlights.map((highlight, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="text-orange-500 mt-1">✓</span>
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              
-              {/* SEO INTRO PREVIEW - Only show if no description exists */}
-              {!college.description && (
-                <div className="mb-3">
-                  {college.seo_intro ? (
-                    <div 
-                      className={`text-gray-800 leading-relaxed prose max-w-none ${!showContent ? 'line-clamp-3' : ''}`}
-                      dangerouslySetInnerHTML={{ __html: college.seo_intro }}
-                    />
-                  ) : (
-                    <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
-                      {college.name} is a {college.type || college.institution_type || 'institution'}
-                      {(college.established_year || college.established) && <> established in {college.established_year || college.established}</>}.
-                      {college.location?.city && college.location?.state && <> Located in {college.location.city}, {college.location.state}.</>}
-                    </p>
-                  )}
-                </div>
-              )}
+                ) : (
+                  <p className={`text-gray-800 leading-relaxed ${!showContent ? 'line-clamp-3' : ''}`}>
+                    {college.name} is a {college.type || college.institution_type || 'institution'}
+                    {(college.established_year || college.established) && <> established in {college.established_year || college.established}</>}.
+                    {college.location?.city && college.location?.state && <> Located in {college.location.city}, {college.location.state}.</>}
+                  </p>
+                )}
+              </div>
 
               {/* READ MORE BUTTON - Show when collapsed and there's SEO content */}
               {!showContent && (college.seo_full_content || college.seo_toc?.length > 0 || college.seo_images?.length > 0 || college.seo_tables?.length > 0) && (
