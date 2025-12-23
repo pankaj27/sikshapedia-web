@@ -1,19 +1,149 @@
 import React from 'react';
+import { FiGrid } from 'react-icons/fi';
+import { HiOutlineLibrary, HiOutlineSparkles } from 'react-icons/hi';
+import { 
+  MdOutlineSportsBasketball, MdOutlinePool, MdOutlineFitnessCenter, 
+  MdOutlineLocalHospital, MdOutlineRestaurant, MdOutlineLocalParking, 
+  MdOutlineAtm, MdOutlineTheaters, MdOutlinePark, MdOutlineAir, 
+  MdOutlineBed, MdOutlineScience, MdOutlineComputer, MdOutlineWifi, 
+  MdOutlineLocalLaundryService, MdOutlineSecurity, MdOutlineLocalCafe 
+} from 'react-icons/md';
+import { FiCpu, FiMonitor, FiTruck, FiSun, FiShield, FiPackage, FiHeart } from 'react-icons/fi';
 
-// Current year for dates
+// Current year for dynamic display
 const year = new Date().getFullYear();
 
-// COURSES SECTION - Exact same as main page
+// Facility icon mapping - EXACT SAME as CollegeDetailPage.js
+const facilityIconMap = {
+  // Library & Academic
+  'library': { icon: HiOutlineLibrary, color: 'bg-blue-500', label: 'Library' },
+  'digital library': { icon: MdOutlineComputer, color: 'bg-blue-600', label: 'Digital Library' },
+  'research labs': { icon: MdOutlineScience, color: 'bg-purple-500', label: 'Research Labs' },
+  'computer lab': { icon: MdOutlineComputer, color: 'bg-indigo-500', label: 'Computer Lab' },
+  'incubation center': { icon: FiCpu, color: 'bg-violet-500', label: 'Incubation Center' },
+  
+  // Sports & Fitness
+  'sports': { icon: MdOutlineSportsBasketball, color: 'bg-orange-500', label: 'Sports' },
+  'sports complex': { icon: MdOutlineSportsBasketball, color: 'bg-orange-500', label: 'Sports Complex' },
+  'swimming pool': { icon: MdOutlinePool, color: 'bg-cyan-500', label: 'Swimming Pool' },
+  'gymnasium': { icon: MdOutlineFitnessCenter, color: 'bg-red-500', label: 'Gymnasium' },
+  'gym': { icon: MdOutlineFitnessCenter, color: 'bg-red-500', label: 'Gym' },
+  'playground': { icon: MdOutlinePark, color: 'bg-green-500', label: 'Playground' },
+  
+  // Accommodation
+  'hostel': { icon: MdOutlineBed, color: 'bg-teal-500', label: 'Hostel' },
+  'hostels': { icon: MdOutlineBed, color: 'bg-teal-500', label: 'Hostels' },
+  'boys hostel': { icon: MdOutlineBed, color: 'bg-blue-500', label: 'Boys Hostel' },
+  'girls hostel': { icon: MdOutlineBed, color: 'bg-pink-500', label: 'Girls Hostel' },
+  
+  // Food & Dining
+  'cafeteria': { icon: MdOutlineLocalCafe, color: 'bg-amber-500', label: 'Cafeteria' },
+  'canteen': { icon: MdOutlineRestaurant, color: 'bg-amber-600', label: 'Canteen' },
+  'mess': { icon: MdOutlineRestaurant, color: 'bg-yellow-600', label: 'Mess' },
+  'food court': { icon: MdOutlineRestaurant, color: 'bg-orange-400', label: 'Food Court' },
+  
+  // Healthcare
+  'hospital': { icon: MdOutlineLocalHospital, color: 'bg-red-600', label: 'Hospital' },
+  'medical': { icon: MdOutlineLocalHospital, color: 'bg-red-500', label: 'Medical Facility' },
+  'health center': { icon: FiHeart, color: 'bg-rose-500', label: 'Health Center' },
+  
+  // Technology & IT
+  'wifi': { icon: MdOutlineWifi, color: 'bg-blue-400', label: 'WiFi Campus' },
+  'wi-fi': { icon: MdOutlineWifi, color: 'bg-blue-400', label: 'WiFi Campus' },
+  'it infrastructure': { icon: FiMonitor, color: 'bg-slate-600', label: 'IT Infrastructure' },
+  'smart classrooms': { icon: FiMonitor, color: 'bg-indigo-600', label: 'Smart Classrooms' },
+  
+  // Services
+  'laundry': { icon: MdOutlineLocalLaundryService, color: 'bg-cyan-600', label: 'Laundry' },
+  'parking': { icon: MdOutlineLocalParking, color: 'bg-gray-600', label: 'Parking' },
+  'atm': { icon: MdOutlineAtm, color: 'bg-green-600', label: 'ATM' },
+  'bank': { icon: MdOutlineAtm, color: 'bg-emerald-600', label: 'Bank' },
+  'transport': { icon: FiTruck, color: 'bg-slate-500', label: 'Transport' },
+  'bus service': { icon: FiTruck, color: 'bg-slate-500', label: 'Bus Service' },
+  
+  // Recreation & Culture
+  'auditorium': { icon: MdOutlineTheaters, color: 'bg-purple-600', label: 'Auditorium' },
+  'theater': { icon: MdOutlineTheaters, color: 'bg-purple-500', label: 'Theater' },
+  'cultural center': { icon: HiOutlineSparkles, color: 'bg-pink-600', label: 'Cultural Center' },
+  
+  // Safety & Security
+  'security': { icon: MdOutlineSecurity, color: 'bg-gray-700', label: '24/7 Security' },
+  '24x7 security': { icon: MdOutlineSecurity, color: 'bg-gray-700', label: '24/7 Security' },
+  'cctv': { icon: FiShield, color: 'bg-slate-700', label: 'CCTV Surveillance' },
+  
+  // Environment
+  'air conditioning': { icon: MdOutlineAir, color: 'bg-sky-500', label: 'Air Conditioning' },
+  'ac': { icon: MdOutlineAir, color: 'bg-sky-500', label: 'Air Conditioning' },
+  'solar power': { icon: FiSun, color: 'bg-yellow-500', label: 'Solar Power' },
+  'green campus': { icon: MdOutlinePark, color: 'bg-green-600', label: 'Green Campus' },
+  
+  // Default
+  'default': { icon: FiPackage, color: 'bg-gray-500', label: 'Facility' }
+};
+
+// Helper function to get facility icon and color - EXACT SAME as CollegeDetailPage.js
+const getFacilityIcon = (facilityName) => {
+  const name = facilityName?.toLowerCase().trim() || '';
+  
+  // Check for exact match first
+  if (facilityIconMap[name]) {
+    return facilityIconMap[name];
+  }
+  
+  // Check for partial matches
+  for (const key of Object.keys(facilityIconMap)) {
+    if (name.includes(key) || key.includes(name)) {
+      return facilityIconMap[key];
+    }
+  }
+  
+  return { ...facilityIconMap['default'], label: facilityName };
+};
+
+// Helper function to convert YouTube URLs to embed format
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  
+  // Already an embed URL
+  if (url.includes('youtube.com/embed/')) {
+    return url;
+  }
+  
+  // Extract video ID from various YouTube URL formats
+  let videoId = null;
+  
+  const shortUrlMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (shortUrlMatch) videoId = shortUrlMatch[1];
+  
+  const watchUrlMatch = url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/);
+  if (watchUrlMatch) videoId = watchUrlMatch[1];
+  
+  const vUrlMatch = url.match(/youtube\.com\/v\/([a-zA-Z0-9_-]+)/);
+  if (vUrlMatch) videoId = vUrlMatch[1];
+  
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  
+  return url;
+};
+
+// ================== SHARED SECTION COMPONENTS ==================
+// These are EXACT copies of the rendering logic from CollegeDetailPage.js
+// to ensure content consistency between main page and sub-pages
+
+// COURSES SECTION - EXACT same as main page
 export const CoursesSection = ({ college }) => {
   if (!college?.courses || college.courses.length === 0) return null;
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Courses and Fees {year}</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Courses & Fees {year + 1}</h2>
       <p className="text-gray-700 text-sm mb-4">
-        {college.name} offers various undergraduate and postgraduate programs. Here are the courses with their fee structure:
+        {college.name} offers various programs. The fee structure is mentioned below:
       </p>
-      <div className="overflow-x-auto">
+
+      <div className="overflow-x-auto mb-6">
         <table className="w-full border-collapse border">
           <thead>
             <tr className="bg-orange-50">
@@ -47,7 +177,7 @@ export const CoursesSection = ({ college }) => {
   );
 };
 
-// ADMISSION SECTION - Exact same as main page
+// ADMISSION SECTION - EXACT same as main page
 export const AdmissionSection = ({ college }) => {
   const hasAdmissionDates = college?.admission_dates?.length > 0;
   const hasEligibility = college?.courses?.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).length > 0;
@@ -114,7 +244,7 @@ export const AdmissionSection = ({ college }) => {
   );
 };
 
-// CUTOFF SECTION - Exact same as main page
+// CUTOFF SECTION - EXACT same as main page
 export const CutoffSection = ({ college }) => {
   if (!college?.cutoff_data || college.cutoff_data.length === 0) return null;
   
@@ -124,23 +254,24 @@ export const CutoffSection = ({ college }) => {
       <p className="text-gray-700 text-sm mb-4">
         The cutoff varies for different programs and categories:
       </p>
+
       <div className="overflow-x-auto mb-6">
         <table className="w-full border-collapse border">
           <thead>
-            <tr className="bg-orange-50">
-              <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
+            <tr className="bg-gray-50">
+              <th className="border px-4 py-3 text-left text-sm font-bold">Course/Program</th>
               <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
               <th className="border px-4 py-3 text-left text-sm font-bold">Cutoff</th>
+              <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
             </tr>
           </thead>
           <tbody>
-            {college.cutoff_data.map((cutoff, idx) => (
+            {college.cutoff_data.map((item, idx) => (
               <tr key={idx} className="hover:bg-gray-50">
-                <td className="border px-4 py-3 text-sm font-semibold">{cutoff.course || cutoff.program}</td>
-                <td className="border px-4 py-3 text-sm">{cutoff.category}</td>
-                <td className="border px-4 py-3 text-sm">{cutoff.year}</td>
-                <td className="border px-4 py-3 text-sm font-bold text-orange-600">{cutoff.cutoff || cutoff.rank || cutoff.score}</td>
+                <td className="border px-4 py-3 text-sm">{item.course || item.program}</td>
+                <td className="border px-4 py-3 text-sm">{item.category || 'General'}</td>
+                <td className="border px-4 py-3 text-sm font-bold text-blue-600">{item.cutoff || item.rank}</td>
+                <td className="border px-4 py-3 text-sm">{item.year || year}</td>
               </tr>
             ))}
           </tbody>
@@ -150,156 +281,123 @@ export const CutoffSection = ({ college }) => {
   );
 };
 
-// PLACEMENT SECTION - Exact same as main page
+// PLACEMENT SECTION - EXACT same as main page
 export const PlacementSection = ({ college }) => {
   const placement = college?.placement || college?.placements;
   if (!placement) return null;
   
   const highestPackage = placement.highest || placement.highest_package;
   const averagePackage = placement.average || placement.average_package;
-  const medianPackage = placement.median || placement.median_package;
-  const placementRate = placement.placement_rate || placement.percentage;
+  const placementRate = placement.percentage || placement.placement_rate;
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Placement {year}</h2>
-      <p className="text-gray-700 text-sm mb-4">
-        {college.name} has excellent placement records with top companies recruiting from campus:
-      </p>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Placement</h2>
       
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <p className="text-gray-700 text-sm mb-4">
+        As per the {college.name} Placement report, the average package stood at <strong>₹{averagePackage ? (averagePackage / 100000).toFixed(1) : '-'} LPA</strong>.
+      </p>
+
+      <div className="grid grid-cols-3 gap-4 mb-6">
         {highestPackage > 0 && (
-          <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200 text-center">
-            <p className="text-2xl font-bold text-green-700">₹{(highestPackage / 100000).toFixed(1)} LPA</p>
-            <p className="text-sm text-green-600">Highest Package</p>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              ₹{(highestPackage / 100000).toFixed(1)}L
+            </div>
+            <div className="text-sm text-gray-600">Highest Package</div>
           </div>
         )}
         {averagePackage > 0 && (
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 text-center">
-            <p className="text-2xl font-bold text-blue-700">₹{(averagePackage / 100000).toFixed(1)} LPA</p>
-            <p className="text-sm text-blue-600">Average Package</p>
-          </div>
-        )}
-        {medianPackage > 0 && (
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200 text-center">
-            <p className="text-2xl font-bold text-purple-700">₹{(medianPackage / 100000).toFixed(1)} LPA</p>
-            <p className="text-sm text-purple-600">Median Package</p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              ₹{(averagePackage / 100000).toFixed(1)}L
+            </div>
+            <div className="text-sm text-gray-600">Average Package</div>
           </div>
         )}
         {placementRate > 0 && (
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200 text-center">
-            <p className="text-2xl font-bold text-orange-700">{placementRate}%</p>
-            <p className="text-sm text-orange-600">Placement Rate</p>
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">
+              {placementRate}%
+            </div>
+            <div className="text-sm text-gray-600">Placement Rate</div>
           </div>
         )}
       </div>
-      
-      {/* Top Recruiters */}
+
       {placement.top_recruiters && placement.top_recruiters.length > 0 && (
-        <>
-          <h3 className="text-xl font-bold mb-3">Top Recruiters</h3>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {placement.top_recruiters.map((recruiter, idx) => (
-              <span key={idx} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
-                {recruiter}
-              </span>
+        <div className="mt-4">
+          <h4 className="font-bold text-sm mb-2">Top Recruiters:</h4>
+          <div className="flex flex-wrap gap-2">
+            {(typeof placement.top_recruiters === 'string' 
+              ? placement.top_recruiters.split(',') 
+              : placement.top_recruiters
+            ).map((r, idx) => (
+              <span key={idx} className="px-3 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-full">{typeof r === 'string' ? r.trim() : r}</span>
             ))}
           </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-// RANKING SECTION - Exact same as main page
-export const RankingSection = ({ college }) => {
-  // Combine rankings from different sources
-  const allRankings = [];
-  
-  if (college?.rankings && college.rankings.length > 0) {
-    college.rankings.forEach(r => allRankings.push(r));
-  }
-  if (college?.nirf_ranking) {
-    allRankings.push({ agency: 'NIRF', rank: college.nirf_ranking, year: year, category: 'Overall' });
-  }
-  if (college?.naac_grade) {
-    allRankings.push({ agency: 'NAAC', rank: college.naac_grade, year: year, category: 'Grade' });
-  }
-  
-  // Remove duplicates
-  const uniqueRankings = allRankings.filter((r, idx, self) => 
-    idx === self.findIndex(t => t.agency === r.agency && t.year === r.year)
-  );
-  
-  return (
-    <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Rankings & Accreditations</h2>
-      <p className="text-gray-700 text-sm mb-4">
-        {college.name} is recognized by various ranking agencies:
-      </p>
-      
-      {uniqueRankings.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border">
-            <thead>
-              <tr className="bg-orange-50">
-                <th className="border px-4 py-3 text-left text-sm font-bold">Agency/Body</th>
-                <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
-                <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
-                <th className="border px-4 py-3 text-left text-sm font-bold">Rank/Grade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {uniqueRankings.map((ranking, idx) => (
-                <tr key={idx} className="hover:bg-gray-50">
-                  <td className="border px-4 py-3 text-sm font-semibold">{ranking.agency}</td>
-                  <td className="border px-4 py-3 text-sm">{ranking.category || '-'}</td>
-                  <td className="border px-4 py-3 text-sm">{ranking.year}</td>
-                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">
-                    {typeof ranking.rank === 'number' ? `#${ranking.rank}` : ranking.rank}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
-      ) : (
-        <p className="text-gray-500">No ranking data available</p>
       )}
     </div>
   );
 };
 
-// SCHOLARSHIP SECTION - Exact same as main page
-export const ScholarshipSection = ({ college }) => {
-  if (!college?.scholarships || college.scholarships.length === 0) return null;
-  
+// RANKING SECTION - EXACT same as main page
+export const RankingSection = ({ college }) => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Ranking {year}</h2>
       <p className="text-gray-700 text-sm mb-4">
-        {college.name} offers various scholarships to deserving students:
+        {college.name} has been ranked by various agencies including NIRF, IIRF, India Today, and more. The ranking details are mentioned below:
       </p>
+
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border">
           <thead>
-            <tr className="bg-green-50">
-              <th className="border px-4 py-3 text-left text-sm font-bold">Scholarship Name</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Amount</th>
-              <th className="border px-4 py-3 text-left text-sm font-bold">Eligibility</th>
+            <tr className="bg-gray-50">
+              <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
+              <th className="border px-4 py-3 text-left text-sm font-bold">Year</th>
+              <th className="border px-4 py-3 text-left text-sm font-bold">Category</th>
+              <th className="border px-4 py-3 text-left text-sm font-bold">Rank</th>
             </tr>
           </thead>
           <tbody>
-            {college.scholarships.map((scholarship, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
-                <td className="border px-4 py-3 text-sm font-semibold text-green-700">{scholarship.name}</td>
-                <td className="border px-4 py-3 text-sm font-semibold">
-                  {scholarship.amount ? `₹${scholarship.amount.toLocaleString()}` : scholarship.percentage ? `${scholarship.percentage}%` : '-'}
-                </td>
-                <td className="border px-4 py-3 text-sm">{scholarship.eligibility || '-'}</td>
-              </tr>
-            ))}
+            {college.rankings && college.rankings.length > 0 ? (
+              college.rankings.map((rank, idx) => (
+                <tr key={idx} className="hover:bg-gray-50">
+                  <td className="border px-4 py-3 text-sm font-semibold">{rank.agency || rank.source}</td>
+                  <td className="border px-4 py-3 text-sm">{rank.year}</td>
+                  <td className="border px-4 py-3 text-sm">{rank.category || 'Overall'}</td>
+                  <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{rank.rank}</td>
+                </tr>
+              ))
+            ) : (
+              <>
+                {college.nirf_ranking && (
+                  <tr className="hover:bg-gray-50">
+                    <td className="border px-4 py-3 text-sm font-semibold">NIRF</td>
+                    <td className="border px-4 py-3 text-sm">{year}</td>
+                    <td className="border px-4 py-3 text-sm">Overall</td>
+                    <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
+                  </tr>
+                )}
+                {college.india_today_ranking && (
+                  <tr className="hover:bg-gray-50">
+                    <td className="border px-4 py-3 text-sm font-semibold">India Today</td>
+                    <td className="border px-4 py-3 text-sm">{year}</td>
+                    <td className="border px-4 py-3 text-sm">Overall</td>
+                    <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.india_today_ranking}</td>
+                  </tr>
+                )}
+                {!college.nirf_ranking && !college.india_today_ranking && (
+                  <tr>
+                    <td colSpan="4" className="border px-4 py-3 text-sm text-center text-gray-500">
+                      No ranking data available
+                    </td>
+                  </tr>
+                )}
+              </>
+            )}
           </tbody>
         </table>
       </div>
@@ -307,41 +405,102 @@ export const ScholarshipSection = ({ college }) => {
   );
 };
 
-// FACILITIES SECTION - Exact same as main page
-export const FacilitiesSection = ({ college }) => {
-  if (!college?.facilities || college.facilities.length === 0) return null;
-  
-  const facilityIcons = {
-    'Library': '📚', 'Hostel': '🏠', 'Sports': '⚽', 'Gym': '🏋️', 'Cafeteria': '🍽️',
-    'WiFi': '📶', 'Labs': '🔬', 'Auditorium': '🎭', 'Medical': '🏥', 'Transport': '🚌',
-    'Parking': '🅿️', 'ATM': '🏧', 'Bank': '🏦', 'default': '🏢'
-  };
+// SCHOLARSHIP SECTION - EXACT same as main page
+export const ScholarshipSection = ({ college }) => {
+  if (!college?.scholarships || college.scholarships.length === 0) return null;
   
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Scholarships {year + 1}</h2>
       <p className="text-gray-700 text-sm mb-4">
-        {college.name} provides world-class facilities for students:
+        {college.name} offers various scholarships to support students financially. The details are mentioned below:
       </p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {college.facilities.map((facility, idx) => {
-          const facilityName = typeof facility === 'string' ? facility : facility.name;
-          const icon = facilityIcons[facilityName] || facilityIcons['default'];
-          return (
-            <div key={idx} className="bg-gray-50 p-4 rounded-lg text-center hover:bg-gray-100 transition-colors">
-              <span className="text-3xl">{icon}</span>
-              <p className="mt-2 text-sm font-medium text-gray-700">{facilityName}</p>
-            </div>
-          );
-        })}
+      <div className="space-y-4">
+        {college.scholarships.map((scholarship, idx) => (
+          <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h3 className="font-bold text-lg mb-2">{scholarship.name || scholarship.title}</h3>
+            <p className="text-sm text-gray-700">
+              {scholarship.description || scholarship.details}
+            </p>
+            {scholarship.amount && (
+              <p className="text-sm font-semibold text-blue-600 mt-2">
+                Amount: ₹{scholarship.amount.toLocaleString()}
+              </p>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-// GALLERY SECTION
+// FACILITIES SECTION - EXACT same as main page (with icons)
+export const FacilitiesSection = ({ college }) => {
+  if (!college?.facilities || college.facilities.length === 0) return null;
+  
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-3">{college.name} Campus & Facilities</h2>
+      <p className="text-gray-700 text-sm mb-4">
+        {college.name} campus provides world-class facilities and infrastructure for students. Major facilities are highlighted below:
+      </p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {college.facilities.map((facility, idx) => {
+          const isObject = typeof facility === 'object';
+          const facilityName = isObject ? facility.name : facility;
+          const facilityData = getFacilityIcon(facilityName);
+          const IconComponent = facilityData.icon;
+          
+          return (
+            <div 
+              key={idx} 
+              className="group flex flex-col items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
+            >
+              <div className={`w-14 h-14 ${facilityData.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
+                <IconComponent className="text-white" size={26} />
+              </div>
+              <span className="text-sm font-medium text-gray-700 text-center group-hover:text-orange-600 transition-colors">
+                {facilityData.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Campus Images */}
+      {(college.campus_images?.length > 0 || college.images?.length > 1) && (
+        <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
+          {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
+            <div key={i} className="rounded-lg aspect-video overflow-hidden border">
+              <img src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* CAMPUS VIDEO */}
+      {(college.campus_video_url || college.seo_video_url || college.videos?.[0]) && (
+        <div className="mt-8">
+          <h3 className="text-2xl font-bold mb-4">{college.video_title || 'Campus Video Tour'}</h3>
+          <div className="rounded-lg aspect-video overflow-hidden border">
+            <iframe
+              src={getYouTubeEmbedUrl(college.campus_video_url || college.seo_video_url || college.videos?.[0])}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title={college.video_title || 'Campus Video Tour'}
+            ></iframe>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// GALLERY SECTION - EXACT same as main page
 export const GallerySection = ({ college }) => {
-  if (!college?.gallery || college.gallery.length === 0) return null;
+  const galleryImages = college?.gallery || college?.images || [];
+  if (galleryImages.length === 0) return null;
   
   return (
     <div>
@@ -350,8 +509,8 @@ export const GallerySection = ({ college }) => {
         Take a virtual tour of {college.name} campus:
       </p>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {college.gallery.map((image, idx) => (
-          <div key={idx} className="aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+        {galleryImages.map((image, idx) => (
+          <div key={idx} className="aspect-video rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border">
             <img 
               src={typeof image === 'string' ? image : image.url} 
               alt={typeof image === 'object' && image.caption ? image.caption : `${college.name} - Image ${idx + 1}`}
@@ -364,57 +523,84 @@ export const GallerySection = ({ college }) => {
   );
 };
 
-// INFO SECTION
+// INFO SECTION - EXACT same as main page
 export const InfoSection = ({ college }) => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-3">About {college.name}</h2>
-      
-      {/* Description */}
-      {college.description && (
-        <div 
-          className="prose prose-lg max-w-none text-gray-700 mb-6"
-          dangerouslySetInnerHTML={{ __html: college.description }}
-        />
+      {college.seo_full_content && (
+        <div className="text-gray-700 leading-relaxed prose max-w-none mb-4">
+          <div dangerouslySetInnerHTML={{ __html: college.seo_full_content }} />
+        </div>
       )}
-      
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        {college.established_year && (
-          <div className="bg-orange-50 p-4 rounded-lg text-center border border-orange-200">
-            <p className="text-2xl font-bold text-orange-600">{college.established_year}</p>
-            <p className="text-sm text-gray-600">Established</p>
-          </div>
-        )}
-        {college.total_students > 0 && (
-          <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
-            <p className="text-2xl font-bold text-blue-600">{college.total_students?.toLocaleString()}</p>
-            <p className="text-sm text-gray-600">Students</p>
-          </div>
-        )}
-        {college.type && (
-          <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
-            <p className="text-2xl font-bold text-green-600">{college.type}</p>
-            <p className="text-sm text-gray-600">Type</p>
-          </div>
-        )}
-        {college.average_fees > 0 && (
-          <div className="bg-purple-50 p-4 rounded-lg text-center border border-purple-200">
-            <p className="text-2xl font-bold text-purple-600">₹{(college.average_fees / 100000).toFixed(1)}L</p>
-            <p className="text-sm text-gray-600">Avg. Fees</p>
-          </div>
-        )}
+
+      {/* Recognized by & Affiliated to - Detailed Section */}
+      {(college?.recognized_by?.length > 0 || college?.affiliation) && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {college?.recognized_by?.length > 0 && (
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-5">
+              <h3 className="font-bold text-lg mb-3 text-blue-900 flex items-center gap-2">
+                <span className="text-2xl">✅</span>
+                Recognized by
+              </h3>
+              <div className="space-y-3">
+                {college.recognized_by.map((org, idx) => (
+                  <div key={idx} className="flex items-start gap-3">
+                    <div className="w-12 h-12 bg-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl">🎓</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-gray-900">{org}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {college?.affiliation && (
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-5">
+              <h3 className="font-bold text-lg mb-3 text-orange-900 flex items-center gap-2">
+                <span className="text-2xl">🔗</span>
+                Affiliated to
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-xl">🏛️</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm text-gray-900">{college.affiliation}</p>
+                    <p className="text-xs text-gray-600">Primary Affiliation</p>
+                  </div>
+                </div>
+              </div>
+
+              {college?.memberships && college.memberships.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-orange-300">
+                  <h4 className="font-semibold text-sm text-gray-900 mb-2">Memberships</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {college.memberships.map((m, idx) => (
+                      <span key={idx} className="px-2 py-1 bg-white border border-orange-300 text-xs rounded">{m}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <h3 className="font-bold mb-3">Key Highlights</h3>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li>• <strong>Type:</strong> {college.type || '-'}</li>
+          <li>• <strong>Established:</strong> {college.established_year || college.established || '-'}</li>
+          <li>• <strong>Location:</strong> {college.location?.city || college.city}, {college.location?.state || college.state}</li>
+          <li>• <strong>Average Fees:</strong> ₹{college.average_fees ? (college.average_fees / 100000).toFixed(2) : '-'} Lakhs per year</li>
+          {college.rating && <li>• <strong>Rating:</strong> {college.rating}/5</li>}
+          {college.total_students && <li>• <strong>Students:</strong> {college.total_students.toLocaleString()}</li>}
+        </ul>
       </div>
-      
-      {/* Key Highlights */}
-      <h3 className="text-xl font-bold mb-3">Key Highlights</h3>
-      <ul className="list-disc pl-5 space-y-1 text-gray-700">
-        {college.approved_by && <li><strong>Approved By:</strong> {college.approved_by}</li>}
-        {college.affiliated_to && <li><strong>Affiliated To:</strong> {college.affiliated_to}</li>}
-        {college.campus_size && <li><strong>Campus Size:</strong> {college.campus_size}</li>}
-        {college.faculty_count > 0 && <li><strong>Faculty:</strong> {college.faculty_count} members</li>}
-        {college.rating > 0 && <li><strong>Rating:</strong> {college.rating}/5</li>}
-      </ul>
     </div>
   );
 };
