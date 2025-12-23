@@ -27,6 +27,7 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
   const [mediaTitle, setMediaTitle] = useState(''); // Image Title or Video Title
   const [altText, setAltText] = useState('');
   const [seoTitle, setSeoTitle] = useState('');
+  const [position, setPosition] = useState('center'); // left, center, right
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
 
@@ -63,7 +64,7 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
     } catch (error) {
       console.error('Upload error:', error);
       alert('Failed to upload image. Please try again.');
-    } finally {
+66|    } finally {
       setUploading(false);
     }
   };
@@ -73,7 +74,7 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
       alert(`Please provide ${type === 'image' ? 'an image' : 'a video'} URL`);
       return;
     }
-    onInsert({ url, alt: altText, title: seoTitle });
+    onInsert({ url, alt: altText, title: seoTitle, position });
     // Reset form
     setUrl('');
     setMediaTitle('');
