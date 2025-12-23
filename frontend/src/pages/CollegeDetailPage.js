@@ -1255,8 +1255,8 @@ const CollegeDetailPage = ({ overrideId }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* Quick Rankings - NIRF, India Today, Outlook */}
-                        {college.nirf_ranking > 0 && (
+                        {/* Quick Rankings - Only show if NOT already in detailed rankings */}
+                        {college.nirf_ranking > 0 && !college?.rankings?.some(r => r.agency?.toLowerCase() === 'nirf') && (
                           <tr className="hover:bg-gray-50">
                             <td className="border px-4 py-3 text-sm font-medium">NIRF</td>
                             <td className="border px-4 py-3 text-sm">Overall</td>
@@ -1264,7 +1264,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                             <td className="border px-4 py-3 text-sm font-bold text-orange-600">#{college.nirf_ranking}</td>
                           </tr>
                         )}
-                        {college.india_today_ranking > 0 && (
+                        {college.india_today_ranking > 0 && !college?.rankings?.some(r => r.agency?.toLowerCase().includes('india today')) && (
                           <tr className="hover:bg-gray-50">
                             <td className="border px-4 py-3 text-sm font-medium">India Today</td>
                             <td className="border px-4 py-3 text-sm">Overall</td>
@@ -1272,7 +1272,7 @@ const CollegeDetailPage = ({ overrideId }) => {
                             <td className="border px-4 py-3 text-sm font-bold text-blue-600">#{college.india_today_ranking}</td>
                           </tr>
                         )}
-                        {college.outlook_ranking > 0 && (
+                        {college.outlook_ranking > 0 && !college?.rankings?.some(r => r.agency?.toLowerCase().includes('outlook')) && (
                           <tr className="hover:bg-gray-50">
                             <td className="border px-4 py-3 text-sm font-medium">Outlook</td>
                             <td className="border px-4 py-3 text-sm">Overall</td>
