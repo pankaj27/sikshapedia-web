@@ -2428,9 +2428,23 @@ const CollegeDetailPage = ({ overrideId }) => {
                     <div className="text-4xl mb-3">🎓</div>
                     <h3 className="font-bold text-lg mb-2">{college.sidebar_widgets.counselor_cta.title || 'Need Help?'}</h3>
                     <p className="text-sm text-orange-100 mb-4">{college.sidebar_widgets.counselor_cta.subtitle || 'Talk to our expert counselor'}</p>
-                    <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors">
-                      Talk to Expert
-                    </button>
+                    {college.sidebar_widgets.counselor_cta.phone ? (
+                      <a 
+                        href={`tel:${college.sidebar_widgets.counselor_cta.phone}`}
+                        className="block w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors text-center"
+                      >
+                        📞 Talk to Expert
+                      </a>
+                    ) : (
+                      <a 
+                        href={`https://wa.me/919830122122?text=Hi, I need help with admission for ${college.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors text-center"
+                      >
+                        Talk to Expert
+                      </a>
+                    )}
                   </div>
                 </div>
               )}
@@ -2442,9 +2456,14 @@ const CollegeDetailPage = ({ overrideId }) => {
                     <div className="text-4xl mb-3">🎓</div>
                     <h3 className="font-bold text-lg mb-2">Get Expert Guidance</h3>
                     <p className="text-sm text-orange-100 mb-4">Connect with our counselors for FREE admission guidance</p>
-                    <button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors">
+                    <a 
+                      href="https://wa.me/919830122122?text=Hi, I need help with college admission"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full bg-white text-orange-600 hover:bg-orange-50 font-bold py-2.5 rounded transition-colors text-center"
+                    >
                       Talk to Expert
-                    </button>
+                    </a>
                   </div>
                 </div>
               )}
