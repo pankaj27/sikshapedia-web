@@ -173,6 +173,13 @@ const PageLoader = () => (
   </div>
 );
 
+// Redirect component for /universities/* to /university/*
+const UniversitiesRedirect = () => {
+  const path = window.location.pathname;
+  const newPath = path.replace('/universities/', '/university/');
+  return <Navigate to={newPath} replace />;
+};
+
 function App() {
   return (
     <HelmetProvider>
