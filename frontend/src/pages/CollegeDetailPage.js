@@ -1331,7 +1331,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               )}
 
               {/* ADMISSION PROCESS - Menu Tab Content */}
-              {(college?.admission_process || college?.courses?.some(c => typeof c === 'object' && (c.eligibility || c.selection_criteria))) && (
+              {(college?.admission_process || college?.courses?.some(c => typeof c === 'object' && c.eligibility && c.selection_criteria)) && (
                 <section id="admission" className="scroll-mt-40">
                   <h2 className="text-2xl font-bold mb-3">{college.name} Admission {new Date().getFullYear() + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">Admission process and eligibility criteria:</p>
@@ -1340,7 +1340,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       <h3 className="font-bold mb-2">Admission Criteria</h3>
                       <p className="text-sm text-gray-700">{college.admission_process}</p>
                     </div>
-                  ) : (
+                  ) : college?.courses?.some(c => typeof c === 'object' && c.eligibility && c.selection_criteria) ? (
                     <div className="overflow-x-auto">
                       <table className="w-full border-collapse border">
                         <thead>
@@ -1351,17 +1351,17 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {college.courses.filter(c => typeof c === 'object' && (c.eligibility || c.selection_criteria)).map((course, idx) => (
+                          {college.courses.filter(c => typeof c === 'object' && c.eligibility && c.selection_criteria).map((course, idx) => (
                             <tr key={idx} className="hover:bg-gray-50">
                               <td className="border px-4 py-3 text-sm font-medium">{course.name}</td>
-                              <td className="border px-4 py-3 text-sm">{course.eligibility || '-'}</td>
-                              <td className="border px-4 py-3 text-sm">{course.selection_criteria || '-'}</td>
+                              <td className="border px-4 py-3 text-sm">{course.eligibility}</td>
+                              <td className="border px-4 py-3 text-sm">{course.selection_criteria}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-                  )}
+                  ) : null}
                 </section>
               )}
 
