@@ -186,9 +186,46 @@ const CollegeDuniaHome = () => {
     }
   ];
   
-  // Generate hero slides - prioritize featured colleges, fallback to default banner
+  // Generate hero slides - prioritize admin-configured slides, then featured colleges, fallback to default
   const getHeroSlides = () => {
-    // Generate from featured colleges if available
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    // PRIORITY 1: Admin-configured hero slides from Homepage Settings
+    if (pageSettings?.hero_slides && pageSettings.hero_slides.length > 0) {
+      const configuredSlides = pageSettings.hero_slides
+        // Filter by is_active
+        .filter(slide => slide.is_active !== false)
+        // Filter by date range (if set)
+        .filter(slide => {
+          // If no dates set, show always
+          if (!slide.start_date && !slide.end_date) return true;
+          // Check start date
+          if (slide.start_date && today < slide.start_date) return false;
+          // Check end date
+          if (slide.end_date && today > slide.end_date) return false;
+          return true;
+        })
+        // Sort by priority (lower number = higher priority)
+        .sort((a, b) => (a.priority || 999) - (b.priority || 999))
+        // Map to expected format
+        .map(slide => ({
+          image: slide.image || defaultHeroBanner,
+          type: slide.type || 'college',
+          name: slide.name || '',
+          rating: slide.rating || 0,
+          reviews: slide.reviews || 0,
+          location: slide.location || '',
+          slug: slide.slug || '',
+          id: slide.institute_id || '',
+          isConfigured: true // Flag to identify admin-configured slide
+        }));
+      
+      if (configuredSlides.length > 0) {
+        return configuredSlides;
+      }
+    }
+    
+    // PRIORITY 2: Generate from featured colleges if available
     if (featuredColleges.length > 0) {
       const defaultImages = [
         defaultHeroBanner,
@@ -210,7 +247,7 @@ const CollegeDuniaHome = () => {
       }));
     }
     
-    // Return default banner slide when no featured colleges
+    // PRIORITY 3: Return default banner slide when no featured colleges
     return defaultHeroSlides;
   };
   
