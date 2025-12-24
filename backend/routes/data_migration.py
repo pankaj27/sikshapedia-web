@@ -458,6 +458,14 @@ async def fix_broken_images():
             "success": True,
             "message": f"Fixed {len(fixed)} broken image references",
             "fixed": fixed,
+            "note": "Broken image URLs have been cleared. Please re-upload images through the admin panel."
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
 
 
 @router.get("/data-migration/fix-double-urls")
