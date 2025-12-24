@@ -299,6 +299,8 @@ test_plan:
   test_priority: "high_first"
 
 agent_communication:
+    - agent: "main"
+      message: "✅ P0 ADVERTISEMENT FLOW VERIFIED: Image upload, auto-population, and display working correctly when user is authenticated. Root cause was missing adminToken in localStorage (session issue). Code verified working: (1) Login stores adminToken, (2) Upload uses token for auth, (3) Image URL auto-populates in form, (4) Banner displays with image on frontend."
     - agent: "testing"
       message: "✅ P0 & P1 CRITICAL FIXES VERIFIED: Both priority fixes are working correctly. P0: Featured Colleges API properly excludes Schools (found 2 featured institutions: 1 University, 1 College, 0 Schools). P1: Role-Based Access Control functioning - admin has all 9 permissions, unauthorized access properly rejected. Backend APIs are solid and ready."
     - agent: "testing"
