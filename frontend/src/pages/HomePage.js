@@ -806,12 +806,21 @@ const CollegeDuniaHome = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {topSchoolsData.map((school, idx) => (
               <div key={idx} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 h-[320px] flex flex-col">
-                {/* Modern Header */}
-                <div className="relative h-24 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500">
-                  <div className="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10" />
+                {/* Modern Header with Banner */}
+                <div className="relative h-24 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 overflow-hidden">
+                  {/* Banner Image - show if available */}
+                  {school.banner_url && (
+                    <img 
+                      src={school.banner_url} 
+                      alt={school.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-black/20" />
                   
                   {/* Top Badges - Modern Pills */}
-                  <div className="absolute top-3 left-3 flex gap-1.5">
+                  <div className="absolute top-3 left-3 flex gap-1.5 z-10">
                     {school.rank && (
                       <span className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-semibold text-gray-800">
                         #{school.rank} Rank
@@ -823,14 +832,26 @@ const CollegeDuniaHome = () => {
                   </div>
                   
                   {/* Rating Badge */}
-                  <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1">
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1 z-10">
                     <FiStar className="text-amber-400 text-xs fill-amber-400" />
                     <span className="text-xs font-semibold text-gray-800">{school.rating}</span>
                   </div>
                   
-                  {/* School Icon - Bottom Left */}
-                  <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white">
-                    <FiBook className="text-xl text-emerald-600" />
+                  {/* School Logo - Bottom Left */}
+                  <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white overflow-hidden z-10">
+                    {school.logo_url ? (
+                      <img 
+                        src={school.logo_url} 
+                        alt={`${school.name} logo`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { 
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = '<span class="text-xl text-emerald-600"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>';
+                        }}
+                      />
+                    ) : (
+                      <FiBook className="text-xl text-emerald-600" />
+                    )}
                   </div>
                 </div>
 
