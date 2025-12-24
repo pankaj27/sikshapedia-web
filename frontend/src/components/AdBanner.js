@@ -77,20 +77,25 @@ const AdBanner = ({ pageName, position = 'top' }) => {
               className="w-full cursor-pointer group"
               onClick={() => handleAdClick(ad)}
             >
-              <div className="relative overflow-hidden">
+              <div className="relative overflow-hidden rounded-lg">
                 {/* Background - Use image if available, else gradient */}
                 {ad.image_url ? (
-                  <div className="relative">
+                  <div className="relative" style={{ minHeight: '80px' }}>
                     <img
                       src={ad.image_url}
                       alt={ad.title || 'Advertisement'}
                       className="w-full h-auto object-cover"
-                      style={{ minHeight: '100px', maxHeight: '250px' }}
+                      style={{ minHeight: '80px', maxHeight: '200px' }}
+                      onError={(e) => {
+                        // Hide broken image and show gradient fallback
+                        e.target.style.display = 'none';
+                        e.target.parentElement.classList.add('bg-gradient-to-r', 'from-blue-600', 'via-blue-700', 'to-indigo-700');
+                      }}
                     />
                     {/* Overlay with gradient for text readability */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent">
-                      <div className="relative flex items-center h-full px-4 py-3 sm:py-4">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6">
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent flex items-center">
+                      <div className="px-4 py-3 sm:py-4 w-full">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-6">
                           <div className="text-left">
                             <h3 className="text-white font-bold text-base sm:text-lg drop-shadow-lg">
                               {ad.title || 'Special Offer'}
@@ -111,11 +116,11 @@ const AdBanner = ({ pageName, position = 'top' }) => {
                       </div>
                     </div>
                     {/* Sponsored label */}
-                    <div className="absolute top-1 right-2 text-[10px] text-white/80 font-medium bg-black/30 px-1.5 py-0.5 rounded">Ad</div>
+                    <div className="absolute top-2 right-2 text-[10px] text-white/90 font-medium bg-black/40 px-2 py-0.5 rounded">Ad</div>
                   </div>
                 ) : (
                   /* Fallback gradient background when no image */
-                  <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700">
+                  <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 relative" style={{ minHeight: '80px' }}>
                     {/* Background pattern */}
                     <div className="absolute inset-0 opacity-10">
                       <div className="absolute inset-0" style={{
@@ -123,29 +128,27 @@ const AdBanner = ({ pageName, position = 'top' }) => {
                       }} />
                     </div>
                     
-                    <div className="relative flex items-center justify-center px-4 py-3 sm:py-4">
-                      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
-                        <div className="text-center sm:text-left">
-                          <h3 className="text-white font-bold text-base sm:text-lg">
-                            {ad.title || 'Special Offer'}
-                          </h3>
-                          {ad.description && (
-                            <p className="text-blue-100 text-xs sm:text-sm mt-0.5">{ad.description}</p>
-                          )}
-                        </div>
-                        {ad.link_url && (
-                          <span className="inline-flex items-center px-4 py-1.5 sm:py-2 bg-white text-blue-700 font-semibold text-xs sm:text-sm rounded-full shadow-lg group-hover:bg-blue-50 transition-colors whitespace-nowrap">
-                            Learn More
-                            <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </span>
+                    <div className="relative flex items-center justify-between px-4 py-3 sm:py-4">
+                      <div className="text-left">
+                        <h3 className="text-white font-bold text-base sm:text-lg">
+                          {ad.title || 'Special Offer'}
+                        </h3>
+                        {ad.description && (
+                          <p className="text-blue-100 text-xs sm:text-sm mt-0.5">{ad.description}</p>
                         )}
                       </div>
+                      {ad.link_url && (
+                        <span className="inline-flex items-center px-4 py-1.5 sm:py-2 bg-white text-blue-700 font-semibold text-xs sm:text-sm rounded-full shadow-lg group-hover:bg-blue-50 transition-colors whitespace-nowrap">
+                          Learn More
+                          <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </span>
+                      )}
                     </div>
                     
                     {/* Sponsored label */}
-                    <div className="absolute top-1 right-2 text-[10px] text-white/60 font-medium">Ad</div>
+                    <div className="absolute top-2 right-2 text-[10px] text-white/70 font-medium bg-black/30 px-2 py-0.5 rounded">Ad</div>
                   </div>
                 )}
               </div>
