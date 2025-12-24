@@ -752,11 +752,13 @@ const AdvertisementsManagement = () => {
                     >
                       {availablePositions.map(pos => (
                         <option key={pos.value} value={pos.value}>
-                          {pos.label} - {pos.description}
+                          {pos.label} ({pos.recommended}) - {pos.description}
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-gray-500 mt-1">Select where the ad should appear on the page</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Select position • Recommended size: <strong>{getRecommendedSize()}</strong>
+                    </p>
                   </div>
 
                   <div>
