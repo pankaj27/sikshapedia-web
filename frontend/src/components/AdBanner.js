@@ -77,44 +77,77 @@ const AdBanner = ({ pageName, position = 'top' }) => {
               className="w-full cursor-pointer group"
               onClick={() => handleAdClick(ad)}
             >
-              <div className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 overflow-hidden">
-                {/* Background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute inset-0" style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                  }} />
-                </div>
-                
-                <div className="relative flex items-center justify-center px-4 py-3 sm:py-4">
-                  {ad.image_url && (
+              <div className="relative overflow-hidden">
+                {/* Background - Use image if available, else gradient */}
+                {ad.image_url ? (
+                  <div className="relative">
                     <img
                       src={ad.image_url}
                       alt={ad.title || 'Advertisement'}
-                      className="hidden sm:block h-10 w-auto mr-4 rounded"
+                      className="w-full h-auto object-cover"
+                      style={{ minHeight: '100px', maxHeight: '250px' }}
                     />
-                  )}
-                  <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
-                    <div className="text-center sm:text-left">
-                      <h3 className="text-white font-bold text-base sm:text-lg">
-                        {ad.title || 'Special Offer'}
-                      </h3>
-                      {ad.description && (
-                        <p className="text-blue-100 text-xs sm:text-sm mt-0.5">{ad.description}</p>
-                      )}
+                    {/* Overlay with gradient for text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent">
+                      <div className="relative flex items-center h-full px-4 py-3 sm:py-4">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-6">
+                          <div className="text-left">
+                            <h3 className="text-white font-bold text-base sm:text-lg drop-shadow-lg">
+                              {ad.title || 'Special Offer'}
+                            </h3>
+                            {ad.description && (
+                              <p className="text-white/90 text-xs sm:text-sm mt-0.5 drop-shadow">{ad.description}</p>
+                            )}
+                          </div>
+                          {ad.link_url && (
+                            <span className="inline-flex items-center px-4 py-1.5 sm:py-2 bg-white text-blue-700 font-semibold text-xs sm:text-sm rounded-full shadow-lg group-hover:bg-blue-50 transition-colors whitespace-nowrap">
+                              Learn More
+                              <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    {ad.link_url && (
-                      <span className="inline-flex items-center px-4 py-1.5 sm:py-2 bg-white text-blue-700 font-semibold text-xs sm:text-sm rounded-full shadow-lg group-hover:bg-blue-50 transition-colors whitespace-nowrap">
-                        Learn More
-                        <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </span>
-                    )}
+                    {/* Sponsored label */}
+                    <div className="absolute top-1 right-2 text-[10px] text-white/80 font-medium bg-black/30 px-1.5 py-0.5 rounded">Ad</div>
                   </div>
-                </div>
-                
-                {/* Sponsored label */}
-                <div className="absolute top-1 right-2 text-[10px] text-white/60 font-medium">Ad</div>
+                ) : (
+                  /* Fallback gradient background when no image */
+                  <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700">
+                    {/* Background pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute inset-0" style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                      }} />
+                    </div>
+                    
+                    <div className="relative flex items-center justify-center px-4 py-3 sm:py-4">
+                      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
+                        <div className="text-center sm:text-left">
+                          <h3 className="text-white font-bold text-base sm:text-lg">
+                            {ad.title || 'Special Offer'}
+                          </h3>
+                          {ad.description && (
+                            <p className="text-blue-100 text-xs sm:text-sm mt-0.5">{ad.description}</p>
+                          )}
+                        </div>
+                        {ad.link_url && (
+                          <span className="inline-flex items-center px-4 py-1.5 sm:py-2 bg-white text-blue-700 font-semibold text-xs sm:text-sm rounded-full shadow-lg group-hover:bg-blue-50 transition-colors whitespace-nowrap">
+                            Learn More
+                            <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Sponsored label */}
+                    <div className="absolute top-1 right-2 text-[10px] text-white/60 font-medium">Ad</div>
+                  </div>
+                )}
               </div>
             </div>
           )}
