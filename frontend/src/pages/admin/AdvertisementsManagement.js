@@ -233,7 +233,7 @@ const AdvertisementsManagement = () => {
       uploadFormData.append('file', imageFile);
       uploadFormData.append('folder', 'advertisements');
 
-      const response = await api.post('/upload', uploadFormData, {
+      const response = await api.post('/upload/image', uploadFormData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
@@ -242,10 +242,13 @@ const AdvertisementsManagement = () => {
         setShowImageTools(false);
         setImageFile(null);
         setImagePreview(null);
+        setOriginalImageSize(null);
+        setCompressedImageSize(null);
         alert('Image uploaded successfully!');
       }
     } catch (error) {
-      alert('Failed to upload image');
+      console.error('Upload error:', error);
+      alert('Failed to upload image. Please try again.');
     } finally {
       setImageUploading(false);
     }
