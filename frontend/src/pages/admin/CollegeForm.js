@@ -1641,8 +1641,12 @@ const CollegeForm = () => {
       });
       
       if (response.data.success) {
-        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const imageUrl = backendUrl + response.data.url;
+        // Only prepend backendUrl for relative URLs
+        let imageUrl = response.data.url;
+        if (imageUrl && !imageUrl.startsWith('http')) {
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+          imageUrl = backendUrl + imageUrl;
+        }
         
         // Update the block's URL
         const newToc = [...(formData.seo_toc || [])];
