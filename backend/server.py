@@ -3568,6 +3568,40 @@ async def upload_image(
     # Read file content
     file_content = await file.read()
     
+    # Use Cloudinary if enabled (RECOMMENDED for production)
+    if CLOUDINARY_ENABLED:
+        try:
+            # Upload to Cloudinary
+            folder = f"sikshapedia/{type}s"  # e.g., sikshapedia/logos, sikshapedia/banners
+            
+            upload_result = cloudinary.uploader.upload(
+                file_content,
+                folder=folder,
+                resource_type="auto",
+                format="auto" if not is_svg else None,
+                quality="auto:good",
+                fetch_format="auto"
+            )
+            
+            # Return the secure Cloudinary URL
+            file_url = upload_result.get('secure_url')
+            public_id = upload_result.get('public_id')
+            
+            logging.info(f"☁️ Image uploaded to Cloudinary: {public_id}")
+            
+            return {
+                "success": True,
+                "url": file_url,
+                "public_id": public_id,
+                "filename": upload_result.get('original_filename', ''),
+                "type": type,
+                "storage": "cloudinary"
+            }
+        except Exception as e:
+            logging.error(f"Cloudinary upload failed: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Cloud upload failed: {str(e)}")
+    
+    # Fallback to local storage (for development only)
     # For SVG files, skip optimization and keep original format
     if is_svg:
         optimized_content = file_content
@@ -3608,7 +3642,8 @@ async def upload_image(
         "success": True,
         "url": file_url,
         "filename": unique_filename,
-        "type": type
+        "type": type,
+        "storage": "local"
     }
 
 
