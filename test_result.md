@@ -1,7 +1,18 @@
 # Test Result Documentation
 
 ## Current Testing Focus
-Testing content consistency between main CollegeDetailPage and menu sub-pages (CollegeSubPage).
+Testing P0 (Data Mixing Fix) and P1 (Role-Based Access Control) fixes.
+
+### P0: Featured Colleges API Fix
+- Fixed `/api/colleges/featured` to filter out Schools from "Top Universities & Colleges" section
+- Schools are now stored in `colleges` collection with `institution_type: "School"` but excluded from featured endpoint
+- Added filter: `{"institution_type": {"$nin": ["School", "school"]}}`
+
+### P1: Role-Based Access Control on ListingPageForm
+- Added role-based access control to `ListingPageForm.js`
+- super_admin, admin, content_manager roles see "Create & Publish" / "Update & Publish" button
+- data_entry role sees "Submit for Review" button instead
+- Content submitted by data_entry gets `status: 'pending'` for approval workflow
 
 ## Test Scope
 1. Verify that the content displayed on sub-pages (e.g., /courses, /placement, /facilities) matches the main page
