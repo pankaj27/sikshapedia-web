@@ -12,6 +12,10 @@ from typing import List, Optional, Dict, Any, Union
 import uuid
 from datetime import datetime, timezone, timedelta
 
+# Cloudinary for cloud image storage
+import cloudinary
+import cloudinary.uploader
+
 # Fix bcrypt/passlib compatibility issue - must be before passlib import
 import bcrypt
 if not hasattr(bcrypt, "__about__"):
