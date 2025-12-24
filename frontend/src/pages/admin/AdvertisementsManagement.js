@@ -245,8 +245,8 @@ const AdvertisementsManagement = () => {
       if (response.data?.url) {
         // Make sure we have a full URL
         let uploadedUrl = response.data.url;
-        if (uploadedUrl.startsWith('/')) {
-          // Convert relative URL to absolute using the backend URL
+        // Only prepend backendUrl for relative URLs (not absolute URLs like Cloudinary)
+        if (uploadedUrl && !uploadedUrl.startsWith('http')) {
           const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
           uploadedUrl = backendUrl + uploadedUrl;
         }
