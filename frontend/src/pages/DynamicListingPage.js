@@ -1279,52 +1279,113 @@ const DynamicListingPage = () => {
         </div>
       </div>
 
-      {/* QUICK ACTION CARDS */}
-      <div className="bg-white border-b shadow-sm">
-        <div className="container mx-auto px-4 md:px-6 py-4">
-          <div className="grid grid-cols-3 gap-3 md:gap-4">
-            <Link to="/write-review" className="group">
-              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                    <FiEdit3 className="text-xl md:text-2xl" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm md:text-base truncate">Write a Review</h3>
-                    <p className="text-[10px] md:text-xs text-orange-100">Get Upto ₹300*</p>
-                  </div>
+      {/* QUICK ACTION CARDS - Dynamic from Admin Settings */}
+      {quickActionSettings?.is_enabled && quickActionSettings?.cards?.filter(c => c.is_enabled).length > 0 && (
+        (() => {
+          // Check if should show on this page type
+          const showOnPage = 
+            (pageInfo.institutionType === 'college' && quickActionSettings.show_on_college_listing) ||
+            (pageInfo.institutionType === 'school' && quickActionSettings.show_on_school_listing) ||
+            (pageInfo.institutionType === 'university' && quickActionSettings.show_on_university_listing);
+          
+          if (!showOnPage) return null;
+          
+          const getIconComponent = (iconName) => {
+            const icons = { edit: FiEdit3, grid: FiGrid, target: FiTarget, star: FiStar, book: FiBookOpen, award: FiAward, heart: FiHeart };
+            return icons[iconName] || FiStar;
+          };
+          
+          const enabledCards = quickActionSettings.cards.filter(c => c.is_enabled).sort((a, b) => (a.order || 0) - (b.order || 0));
+          
+          return (
+            <div className="bg-white border-b shadow-sm">
+              <div className="container mx-auto px-4 md:px-6 py-4">
+                <div className={`grid grid-cols-${Math.min(enabledCards.length, 3)} gap-3 md:gap-4`}>
+                  {enabledCards.map(card => {
+                    // Advertisement Slot
+                    if (card.is_ad_slot && card.ad_image_url) {
+                      return (
+                        <a key={card.id} href={card.ad_click_url || '#'} target="_blank" rel="noopener noreferrer" className="group">
+                          <div className="rounded-xl overflow-hidden h-full hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                            <img src={card.ad_image_url} alt={card.ad_alt_text || 'Advertisement'} className="w-full h-16 md:h-20 object-cover" />
+                          </div>
+                        </a>
+                      );
+                    }
+                    
+                    // Regular Action Card
+                    const IconComponent = getIconComponent(card.icon);
+                    return (
+                      <Link key={card.id} to={card.link || '/'} className="group">
+                        <div className={`bg-gradient-to-br from-${card.gradient_from || 'blue-500'} to-${card.gradient_to || 'cyan-500'} rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full`}>
+                          <div className="flex items-center gap-2 md:gap-3">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                              <IconComponent className="text-xl md:text-2xl" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-bold text-sm md:text-base truncate">{card.title}</h3>
+                              <p className="text-[10px] md:text-xs opacity-80">{card.subtitle}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
-            </Link>
-            <Link to="/course-finder" className="group">
-              <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                    <FiGrid className="text-xl md:text-2xl" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm md:text-base truncate">Course Finder</h3>
-                    <p className="text-[10px] md:text-xs text-blue-100">Find Your Course</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            <Link to="/college-predictor" className="group">
-              <div className="bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                    <FiTarget className="text-xl md:text-2xl" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm md:text-base truncate">Predictor</h3>
-                    <p className="text-[10px] md:text-xs text-emerald-100">Admission Chances</p>
+            </div>
+          );
+        })()
+      )}
+      
+      {/* Fallback: Show default cards if settings not loaded */}
+      {!quickActionSettings && (
+        <div className="bg-white border-b shadow-sm">
+          <div className="container mx-auto px-4 md:px-6 py-4">
+            <div className="grid grid-cols-3 gap-3 md:gap-4">
+              <Link to="/write-review" className="group">
+                <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                      <FiEdit3 className="text-xl md:text-2xl" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-sm md:text-base truncate">Write a Review</h3>
+                      <p className="text-[10px] md:text-xs text-orange-100">Get Upto ₹300*</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+              <Link to="/course-finder" className="group">
+                <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                      <FiGrid className="text-xl md:text-2xl" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-sm md:text-base truncate">Course Finder</h3>
+                      <p className="text-[10px] md:text-xs text-blue-100">Find Your Course</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+              <Link to="/college-predictor" className="group">
+                <div className="bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                      <FiTarget className="text-xl md:text-2xl" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-sm md:text-base truncate">Predictor</h3>
+                      <p className="text-[10px] md:text-xs text-emerald-100">Admission Chances</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* CONTENT SECTIONS - Only show if admin content is configured */}
       {pageContent?.introduction && (
