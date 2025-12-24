@@ -318,7 +318,7 @@ const ApplyNowModal = ({
                   name="city"
                   options={allCities.length > 0 ? allCities : ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune']}
                   value={formData.city}
-                  onChange={handleChange}
+                  onChange={(value) => handleSelectChange('city', value)}
                   placeholder="Search & select city"
                   searchPlaceholder="Type to search cities..."
                   icon={<FiMapPin className="w-4 h-4" />}
@@ -336,7 +336,7 @@ const ApplyNowModal = ({
                   name="course_interested"
                   options={courses.length > 0 ? courses : allCourses}
                   value={formData.course_interested}
-                  onChange={handleChange}
+                  onChange={(value) => handleSelectChange('course_interested', value)}
                   placeholder={isSchool ? "Search & select class" : "Search & select course"}
                   searchPlaceholder={isSchool ? "Type to search classes..." : "Type to search courses..."}
                   icon={<FiBook className="w-4 h-4" />}
