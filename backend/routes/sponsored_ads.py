@@ -241,10 +241,22 @@ async def get_sponsored_ads_by_url(url: str = Query(...), section_type: str = Qu
     if not config:
         return []
     
-    custom_placement_id = f"custom_{url.replace('/', '_')}_{section_type}"
+    # Normalize URL - remove leading/trailing slashes and replace remaining slashes
+    normalized_url = url.strip('/').replace('/', '_')
+    custom_placement_id = f"custom_{normalized_url}_{section_type}"
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     
+    # Also check for legacy format with double underscore (from leading slash)
+    legacy_placement_id = f"custom__{normalized_url}_{section_type}"
+    
+    # Check both formats
+    placement_to_use = None
     if custom_placement_id in config.get("placements", {}):
+        placement_to_use = custom_placement_id
+    elif legacy_placement_id in config.get("placements", {}):
+        placement_to_use = legacy_placement_id
+    
+    if placement_to_use:
         active_items = []
         for entry in config["placements"].get(custom_placement_id, []):
             if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
