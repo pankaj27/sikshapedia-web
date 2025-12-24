@@ -234,7 +234,16 @@ async def get_featured_priority_colleges(limit: int = Query(6, ge=1, le=20)):
     
     priority_colleges.sort(key=lambda x: x[1], reverse=True)
     priority_colleges = [c[0] for c in priority_colleges]
-    regular_colleges.sort(key=lambda x: x.get('nirf_ranking') or 9999)
+    # Ensure nirf_ranking is converted to int for proper sorting
+    def get_nirf_rank(x):
+        rank = x.get('nirf_ranking')
+        if rank is None:
+            return 9999
+        try:
+            return int(rank)
+        except (ValueError, TypeError):
+            return 9999
+    regular_colleges.sort(key=get_nirf_rank)
     
     result = priority_colleges + regular_colleges
     return result[:limit]
@@ -321,7 +330,16 @@ async def get_admission_open_priority_colleges(limit: int = Query(6, ge=1, le=20
     
     priority_colleges.sort(key=lambda x: x[1], reverse=True)
     priority_colleges = [c[0] for c in priority_colleges]
-    regular_colleges.sort(key=lambda x: x.get('nirf_ranking') or 9999)
+    # Ensure nirf_ranking is converted to int for proper sorting
+    def get_nirf_rank(x):
+        rank = x.get('nirf_ranking')
+        if rank is None:
+            return 9999
+        try:
+            return int(rank)
+        except (ValueError, TypeError):
+            return 9999
+    regular_colleges.sort(key=get_nirf_rank)
     
     result = priority_colleges + regular_colleges
     return result[:limit]
