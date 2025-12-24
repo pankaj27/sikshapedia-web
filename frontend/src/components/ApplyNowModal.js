@@ -113,6 +113,11 @@ const ApplyNowModal = ({
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Handler for SearchableSelect components that pass value directly
+  const handleSelectChange = (fieldName, value) => {
+    setFormData(prev => ({ ...prev, [fieldName]: value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
