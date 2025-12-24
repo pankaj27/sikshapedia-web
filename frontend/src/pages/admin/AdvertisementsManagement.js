@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FiPlus, FiEdit, FiTrash2, FiSearch, FiBarChart2, FiEye, FiMousePointer } from 'react-icons/fi';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { FiPlus, FiEdit, FiTrash2, FiSearch, FiBarChart2, FiEye, FiMousePointer, FiUpload, FiMinimize2, FiMaximize2, FiTarget } from 'react-icons/fi';
 import { Button } from '../../components/ui/button';
 import api from '../../api/axios';
 
