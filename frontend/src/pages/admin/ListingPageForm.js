@@ -658,6 +658,48 @@ const ListingPageForm = () => {
     handleSubmit(e, true);
   };
 
+  // Submit for review (for data_entry users who can't publish directly)
+  const handleSubmitForReview = async (e) => {
+    e.preventDefault();
+    if (!formData.url_slug) {
+      alert('URL Slug is required');
+      return;
+    }
+
+    try {
+      setSaving(true);
+      const currentUser = getCurrentUser();
+      
+      const dataToSave = {
+        ...formData,
+        is_published: false,
+        status: 'pending', // Set status to pending for review
+        updated_by: currentUser.id,
+        updated_by_name: currentUser.name
+      };
+      
+      // Add created_by info for new pages
+      if (!isEditing) {
+        dataToSave.created_by = currentUser.id;
+        dataToSave.created_by_name = currentUser.name;
+        dataToSave.created_by_email = currentUser.email;
+      }
+      
+      if (isEditing) {
+        await api.put(`/listing-pages/${id}`, dataToSave);
+      } else {
+        await api.post('/listing-pages', dataToSave);
+      }
+      alert('Content submitted for review successfully!');
+      navigate('/admin/listing-pages');
+    } catch (error) {
+      console.error('Error submitting for review:', error);
+      alert(error.response?.data?.detail || 'Failed to submit for review');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // Image Upload handler
   const handleImageUpload = async (sectionIndex, file) => {
     if (!file) return;
