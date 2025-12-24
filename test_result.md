@@ -193,6 +193,8 @@ metadata:
 
 test_plan:
   current_focus:
+    - "P0: Featured Colleges API Fix"
+    - "P1: Role-Based Access Control"
     - "Fix React Infinite Re-render Errors"
     - "Content Consistency Testing"
   stuck_tasks:
