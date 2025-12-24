@@ -102,14 +102,14 @@ const CollegeDuniaHome = () => {
         api.get('/schools/featured?limit=8').catch(() => ({ data: [] })),
         api.get('/stats'),
         api.get('/sponsored-ads-multi/home_featured?limit=6').catch(() => ({ data: [] })),
-        api.get('/sponsored-ads-multi/home_banner?limit=1').catch(() => ({ data: [] })),
+        api.get('/sponsored-ads-multi/home_banner?limit=10').catch(() => ({ data: [] })),
         api.get('/homepage-settings').catch(() => ({ data: null }))
       ]);
       setFeaturedColleges(collegesRes.data);
       setFeaturedSchools(schoolsRes.data || []);
       setStats(statsRes.data);
       setSponsoredFeatured(sponsoredRes.data || []);
-      setHomeBannerAd(bannerRes.data?.[0] || null);
+      setHomeBannerAds(bannerRes.data || []);
       if (settingsRes.data) {
         setPageSettings(settingsRes.data);
       }
