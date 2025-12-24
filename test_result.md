@@ -1,18 +1,32 @@
 # Test Result Documentation
 
 ## Current Testing Focus
-Testing P0 (Data Mixing Fix) and P1 (Role-Based Access Control) fixes.
+Testing Enhanced Hero Slider with Institute Search functionality.
 
-### P0: Featured Colleges API Fix
-- Fixed `/api/colleges/featured` to filter out Schools from "Top Universities & Colleges" section
-- Schools are now stored in `colleges` collection with `institution_type: "School"` but excluded from featured endpoint
-- Added filter: `{"institution_type": {"$nin": ["School", "school"]}}`
+### Feature: Enhanced Hero Slider Admin Control
+- Added `/api/institutes/search` endpoint to search all institutes (colleges, schools, universities)
+- Added `/api/institutes/{id}` endpoint to get institute details
+- Updated `HomepageSettings.js` with new UI:
+  - Institute search dropdown with type filter (All/College/School/University)
+  - Auto-populate: banner image, name, type, location, rating, slug from selected institute
+  - Priority field (lower = higher priority)
+  - Start Date & End Date for scheduling
+  - Active/Inactive toggle
+  - Move up/down buttons for reordering
+  - Preview of banner image
+- Updated `HomePage.js`:
+  - Prioritizes admin-configured slides from homepage settings
+  - Filters by is_active, start_date, end_date
+  - Sorts by priority
 
-### P1: Role-Based Access Control on ListingPageForm
-- Added role-based access control to `ListingPageForm.js`
-- super_admin, admin, content_manager roles see "Create & Publish" / "Update & Publish" button
-- data_entry role sees "Submit for Review" button instead
-- Content submitted by data_entry gets `status: 'pending'` for approval workflow
+### API Endpoints to Test:
+1. `GET /api/institutes/search?search=<query>&type=<all|college|school|university>&limit=<n>`
+2. `GET /api/institutes/<id>`
+3. `GET /api/homepage-settings` (should include hero_slides with new fields)
+4. `POST /api/homepage-settings` (save hero_slides with new structure)
+
+### Admin Credentials:
+- admin@admissionbuddy.co / admin123
 
 ## Test Scope
 1. Verify that the content displayed on sub-pages (e.g., /courses, /placement, /facilities) matches the main page
