@@ -265,10 +265,15 @@ const AdvertisementManagement = () => {
     try {
       const formDataUpload = new FormData();
       formDataUpload.append('file', imageFile);
-      formDataUpload.append('folder', 'advertisements');
 
-      const response = await api.post('/upload/image', formDataUpload, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      // Get admin token
+      const token = localStorage.getItem('adminToken');
+
+      const response = await api.post('/upload/image?type=banner', formDataUpload, {
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (response.data?.url) {
