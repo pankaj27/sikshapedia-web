@@ -29,18 +29,21 @@ const BANNER_SIZES = [
   { id: 'custom', name: 'Custom Size' },
 ];
 
-// Placement Positions
+// Placement Positions with Recommended Image Sizes
 const PLACEMENTS = [
-  { id: 'header_banner', name: 'Header Banner' },
-  { id: 'sidebar_top', name: 'Sidebar - Top' },
-  { id: 'sidebar_middle', name: 'Sidebar - Middle' },
-  { id: 'content_top', name: 'Content - Top' },
-  { id: 'content_middle', name: 'Content - Middle' },
-  { id: 'content_bottom', name: 'Content - Bottom' },
-  { id: 'footer_banner', name: 'Footer Banner' },
-  { id: 'featured', name: 'Featured Section' },
-  { id: 'admission', name: 'Admissions Open Section' },
-  { id: 'sponsored', name: 'Sponsored Section' },
+  { id: 'header_banner', name: 'Header Banner', recommended: '1920x200', description: 'Full-width banner at page top' },
+  { id: 'sidebar_top', name: 'Sidebar - Top', recommended: '300x250', description: 'Top of sidebar area' },
+  { id: 'sidebar_middle', name: 'Sidebar - Middle', recommended: '300x250', description: 'Middle of sidebar area' },
+  { id: 'content_top', name: 'Content - Top', recommended: '728x90', description: 'Leaderboard above content' },
+  { id: 'content_middle', name: 'Content - Middle', recommended: '728x90', description: 'Between content sections' },
+  { id: 'content_bottom', name: 'Content - Bottom', recommended: '728x90', description: 'Leaderboard below content' },
+  { id: 'footer_banner', name: 'Footer Banner', recommended: '1920x150', description: 'Full-width banner at page bottom' },
+  { id: 'featured', name: 'Featured Section', recommended: '400x300', description: 'Featured/spotlight area' },
+  { id: 'admission', name: 'Admissions Open Section', recommended: '600x400', description: 'Admission promotion cards' },
+  { id: 'sponsored', name: 'Sponsored Section', recommended: '350x250', description: 'Sponsored content cards' },
+  { id: 'homepage_hero', name: 'Homepage Hero Slider', recommended: '1920x600', description: 'Main hero banner slider' },
+  { id: 'mobile_banner', name: 'Mobile Banner', recommended: '320x100', description: 'Mobile-optimized banner' },
+  { id: 'popup', name: 'Popup/Modal', recommended: '600x400', description: 'Popup advertisement' },
 ];
 
 const AdvertisementManagement = () => {
