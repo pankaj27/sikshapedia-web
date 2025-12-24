@@ -1295,13 +1295,20 @@ const DynamicListingPage = () => {
             return icons[iconName] || FiStar;
           };
           
+          // Map gradient names to actual CSS colors
+          const gradientColors = {
+            'orange-500': '#f97316', 'red-500': '#ef4444', 'blue-500': '#3b82f6', 'cyan-500': '#06b6d4',
+            'emerald-500': '#10b981', 'teal-500': '#14b8a6', 'purple-500': '#a855f7', 'pink-500': '#ec4899',
+            'yellow-500': '#eab308', 'indigo-500': '#6366f1', 'rose-500': '#f43f5e', 'green-500': '#22c55e'
+          };
+          
           const enabledCards = quickActionSettings.cards.filter(c => c.is_enabled).sort((a, b) => (a.order || 0) - (b.order || 0));
           
           return (
             <div className="bg-white border-b shadow-sm">
               <div className="container mx-auto px-4 md:px-6 py-4">
-                <div className={`grid grid-cols-${Math.min(enabledCards.length, 3)} gap-3 md:gap-4`}>
-                  {enabledCards.map(card => {
+                <div className="grid grid-cols-3 gap-3 md:gap-4">
+                  {enabledCards.slice(0, 3).map(card => {
                     // Advertisement Slot
                     if (card.is_ad_slot && card.ad_image_url) {
                       return (
@@ -1313,11 +1320,17 @@ const DynamicListingPage = () => {
                       );
                     }
                     
-                    // Regular Action Card
+                    // Regular Action Card with inline gradient
                     const IconComponent = getIconComponent(card.icon);
+                    const fromColor = gradientColors[card.gradient_from] || '#3b82f6';
+                    const toColor = gradientColors[card.gradient_to] || '#06b6d4';
+                    
                     return (
                       <Link key={card.id} to={card.link || '/'} className="group">
-                        <div className={`bg-gradient-to-br from-${card.gradient_from || 'blue-500'} to-${card.gradient_to || 'cyan-500'} rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full`}>
+                        <div 
+                          style={{ background: `linear-gradient(to bottom right, ${fromColor}, ${toColor})` }}
+                          className="rounded-xl p-3 md:p-4 text-white hover:shadow-xl hover:-translate-y-0.5 transition-all h-full"
+                        >
                           <div className="flex items-center gap-2 md:gap-3">
                             <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center">
                               <IconComponent className="text-xl md:text-2xl" />
