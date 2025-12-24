@@ -126,6 +126,7 @@ const AdminLayout = ({ children }) => {
         { title: 'Write Review Settings', path: '/admin/write-review-settings', icon: FiStar, highlight: true, badge: 'NEW' },
         { title: 'Year Settings', path: '/admin/year-settings', icon: FiCalendar, highlight: true, badge: 'NEW' },
         { title: 'SEO Settings', path: '/admin/seo-settings', icon: FiGlobe, highlight: true, badge: 'NEW' },
+        { title: 'Quick Action Cards', path: '/admin/quick-action-cards', icon: FiGrid, highlight: true, badge: 'NEW' },
         { title: 'Sponsored Ads', path: '/admin/sponsored-ads', icon: FiStar, highlight: true },
         { title: 'Ad Manager', path: '/admin/advertisements', icon: FiImage, highlight: true, badge: 'NEW' },
         { title: 'Banners & Sliders', path: '/admin/banners', icon: FiGrid },
