@@ -849,7 +849,7 @@ const CollegeDuniaHome = () => {
                   </div>
                   
                   {/* School Logo - Bottom Left */}
-                  <div className="absolute -bottom-4 left-4 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border-2 border-white overflow-hidden z-10">
+                  <div className="absolute -bottom-4 left-4 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border-2 border-gray-100 overflow-hidden z-20">
                     {school.logo_url ? (
                       <img 
                         src={school.logo_url} 
@@ -866,7 +866,7 @@ const CollegeDuniaHome = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 pt-6 flex-1 flex flex-col">
+                <div className="p-4 pt-6 flex-1 flex flex-col relative z-0">
                   <h3 
                     onClick={() => {
                       const schoolUrl = school.serial_number 
