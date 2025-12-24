@@ -654,7 +654,16 @@ const SponsoredAdsManagement = () => {
                       
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-900 text-sm line-clamp-1">{item.item_name}</h4>
+                        <div className="mb-1">
+                          <label className="text-xs text-gray-500">Display Name</label>
+                          <input
+                            type="text"
+                            value={item.item_name || ''}
+                            onChange={(e) => updateItem(idx, 'item_name', e.target.value)}
+                            className="w-full text-sm font-semibold text-gray-900 border rounded px-2 py-1"
+                            placeholder="Enter display name"
+                          />
+                        </div>
                         {item.item_location && <p className="text-xs text-gray-500">{item.item_location}</p>}
                         
                         {/* Dates */}
