@@ -3574,13 +3574,20 @@ async def upload_image(
             # Upload to Cloudinary
             folder = f"sikshapedia/{type}s"  # e.g., sikshapedia/logos, sikshapedia/banners
             
+            # Build upload options
+            upload_options = {
+                "folder": folder,
+                "resource_type": "auto",
+                "quality": "auto:good",
+            }
+            
+            # Don't use format conversion for SVG
+            if not is_svg:
+                upload_options["format"] = "jpg"  # Convert to jpg for optimization
+            
             upload_result = cloudinary.uploader.upload(
                 file_content,
-                folder=folder,
-                resource_type="auto",
-                format="auto" if not is_svg else None,
-                quality="auto:good",
-                fetch_format="auto"
+                **upload_options
             )
             
             # Return the secure Cloudinary URL
