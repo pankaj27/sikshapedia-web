@@ -1492,6 +1492,14 @@ const DynamicListingPage = () => {
         </div>
       </div>
 
+      {/* Sponsored Ads Section - URL Aware */}
+      <div className="bg-gray-50 py-4">
+        <div className="container mx-auto px-4 md:px-6">
+          <UrlAwareSponsoredSection sectionType="featured" />
+          <UrlAwareSponsoredSection sectionType="admission" />
+        </div>
+      </div>
+
       {/* COLLEGE LISTING SECTION */}
       <div className="bg-gray-100 py-6">
         <div className="container mx-auto px-4 md:px-6">
