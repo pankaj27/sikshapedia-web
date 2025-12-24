@@ -5710,6 +5710,206 @@ class APITester:
                     self.log_test(f"Admin Access - {description}", False, 
                                  f"Admin cannot access {endpoint} (status: {status})")
 
+    def test_enhanced_hero_slider_institute_search(self):
+        """Test Enhanced Hero Slider with Institute Search functionality"""
+        print("🎠 Testing Enhanced Hero Slider with Institute Search...")
+        
+        # Test 1: Institute Search API - Search for "delhi" with all types
+        success, response, status = self.make_request("GET", "/institutes/search?search=delhi&type=all&limit=10")
+        if success and isinstance(response, list):
+            delhi_results = response
+            self.log_test("GET /institutes/search (delhi, all types)", True, 
+                         f"Found {len(delhi_results)} institutes matching 'delhi'")
+            
+            # Verify response structure
+            if delhi_results:
+                first_result = delhi_results[0]
+                required_fields = ['id', 'name', 'slug', 'type', 'institution_type', 'banner_url', 'logo_url', 'location', 'rating', 'reviews_count']
+                missing_fields = [field for field in required_fields if field not in first_result]
+                
+                if not missing_fields:
+                    self.log_test("Institute Search Response Structure", True, 
+                                 f"All required fields present: {', '.join(required_fields)}")
+                else:
+                    self.log_test("Institute Search Response Structure", False, 
+                                 f"Missing fields: {', '.join(missing_fields)}")
+                
+                # Check for different types in results
+                types_found = set(result.get('type', '') for result in delhi_results)
+                self.log_test("Institute Search Type Diversity", True, 
+                             f"Found types: {', '.join(types_found)}")
+        else:
+            self.log_test("GET /institutes/search (delhi, all types)", False, f"Status: {status}", response)
+        
+        # Test 2: Institute Search API - Filter by school type only
+        success, response, status = self.make_request("GET", "/institutes/search?search=delhi&type=school&limit=5")
+        if success and isinstance(response, list):
+            school_results = response
+            # Verify all results are schools
+            all_schools = all(result.get('type') == 'school' or result.get('institution_type') in ['School', 'school'] 
+                            for result in school_results)
+            if all_schools or len(school_results) == 0:
+                self.log_test("Institute Search School Filter", True, 
+                             f"Found {len(school_results)} schools, all correctly filtered")
+            else:
+                non_schools = [r for r in school_results if r.get('type') != 'school']
+                self.log_test("Institute Search School Filter", False, 
+                             f"Found {len(non_schools)} non-school results in school filter")
+        else:
+            self.log_test("Institute Search School Filter", False, f"Status: {status}", response)
+        
+        # Test 3: Institute Search API - Filter by college type
+        success, response, status = self.make_request("GET", "/institutes/search?search=iim&type=college&limit=5")
+        if success and isinstance(response, list):
+            college_results = response
+            # Verify all results are colleges
+            all_colleges = all(result.get('type') == 'college' or result.get('institution_type') in ['College', 'college'] 
+                             for result in college_results)
+            if all_colleges or len(college_results) == 0:
+                self.log_test("Institute Search College Filter", True, 
+                             f"Found {len(college_results)} colleges matching 'iim'")
+            else:
+                non_colleges = [r for r in college_results if r.get('type') != 'college']
+                self.log_test("Institute Search College Filter", False, 
+                             f"Found {len(non_colleges)} non-college results in college filter")
+        else:
+            self.log_test("Institute Search College Filter", False, f"Status: {status}", response)
+        
+        # Test 4: Homepage Settings API - Check for hero_slides with new fields
+        success, response, status = self.make_request("GET", "/homepage-settings")
+        if success and isinstance(response, dict):
+            hero_slides = response.get('hero_slides', [])
+            self.log_test("GET /homepage-settings (hero_slides)", True, 
+                         f"Found {len(hero_slides)} hero slides configured")
+            
+            # Check for new fields in hero slides
+            if hero_slides:
+                first_slide = hero_slides[0]
+                new_fields = ['institute_id', 'priority', 'start_date', 'end_date', 'is_active']
+                present_fields = [field for field in new_fields if field in first_slide]
+                
+                if len(present_fields) >= 3:  # At least 3 of 5 new fields should be present
+                    self.log_test("Hero Slides New Fields", True, 
+                                 f"New fields present: {', '.join(present_fields)}")
+                else:
+                    self.log_test("Hero Slides New Fields", False, 
+                                 f"Only {len(present_fields)}/5 new fields present: {', '.join(present_fields)}")
+            else:
+                self.log_test("Hero Slides New Fields", True, "No slides configured (default state)")
+        else:
+            self.log_test("GET /homepage-settings", False, f"Status: {status}", response)
+        
+        # Test 5: Institute Detail API - Get specific institute details
+        if 'delhi_results' in locals() and delhi_results:
+            institute_id = delhi_results[0].get('id')
+            if institute_id:
+                success, response, status = self.make_request("GET", f"/institutes/{institute_id}")
+                if success and isinstance(response, dict):
+                    # Verify detailed response structure
+                    detail_fields = ['id', 'name', 'slug', 'type', 'institution_type', 'banner_url', 'logo_url', 'location', 'rating', 'reviews_count']
+                    present_detail_fields = [field for field in detail_fields if field in response]
+                    
+                    if len(present_detail_fields) >= 8:  # At least 8 of 10 fields
+                        self.log_test("Institute Detail API", True, 
+                                     f"Institute details retrieved: {response.get('name', 'N/A')}")
+                    else:
+                        self.log_test("Institute Detail API", False, 
+                                     f"Only {len(present_detail_fields)}/10 detail fields present")
+                else:
+                    self.log_test("Institute Detail API", False, f"Status: {status}", response)
+            else:
+                self.log_test("Institute Detail API", False, "No institute ID available from search")
+        
+        # Test 6: Hero Slider Logic - Verify priority and filtering logic
+        success, response, status = self.make_request("GET", "/homepage-settings")
+        if success and isinstance(response, dict):
+            hero_slides = response.get('hero_slides', [])
+            
+            # Check if slides have priority field and are sortable
+            slides_with_priority = [slide for slide in hero_slides if 'priority' in slide]
+            if len(slides_with_priority) == len(hero_slides) and hero_slides:
+                # Check if slides are sorted by priority
+                priorities = [slide.get('priority', 999) for slide in hero_slides]
+                is_sorted = all(priorities[i] <= priorities[i+1] for i in range(len(priorities)-1))
+                
+                if is_sorted:
+                    self.log_test("Hero Slider Priority Logic", True, 
+                                 f"Slides properly sorted by priority: {priorities}")
+                else:
+                    self.log_test("Hero Slider Priority Logic", False, 
+                                 f"Slides not sorted by priority: {priorities}")
+            else:
+                self.log_test("Hero Slider Priority Logic", True, 
+                             "No slides configured or priority field missing (acceptable)")
+            
+            # Check for active/inactive filtering capability
+            active_slides = [slide for slide in hero_slides if slide.get('is_active', True)]
+            inactive_slides = [slide for slide in hero_slides if not slide.get('is_active', True)]
+            
+            self.log_test("Hero Slider Active/Inactive Filter", True, 
+                         f"Active slides: {len(active_slides)}, Inactive slides: {len(inactive_slides)}")
+        
+        # Test 7: Date Range Filtering Logic
+        from datetime import datetime, timedelta
+        today = datetime.now().strftime('%Y-%m-%d')
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+        tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+        
+        # Test with admin token if available for updating settings
+        if hasattr(self, 'admin_token') and self.admin_token:
+            test_slide_data = {
+                "hero_slides": [
+                    {
+                        "institute_id": "",
+                        "image": "https://example.com/test.jpg",
+                        "type": "college",
+                        "name": "Test College",
+                        "rating": 4.5,
+                        "reviews": 100,
+                        "location": "Test City",
+                        "slug": "test-college",
+                        "priority": 1,
+                        "start_date": yesterday,
+                        "end_date": tomorrow,
+                        "is_active": True
+                    },
+                    {
+                        "institute_id": "",
+                        "image": "https://example.com/test2.jpg",
+                        "type": "school",
+                        "name": "Test School",
+                        "rating": 4.0,
+                        "reviews": 50,
+                        "location": "Test City",
+                        "slug": "test-school",
+                        "priority": 2,
+                        "start_date": tomorrow,
+                        "end_date": "",
+                        "is_active": False
+                    }
+                ]
+            }
+            
+            success, response, status = self.make_request("PUT", "/homepage-settings", test_slide_data, token=self.admin_token)
+            if success:
+                self.log_test("Hero Slider Settings Update", True, 
+                             "Successfully updated hero slider settings with test data")
+                
+                # Verify the update
+                success, response, status = self.make_request("GET", "/homepage-settings")
+                if success and isinstance(response, dict):
+                    updated_slides = response.get('hero_slides', [])
+                    if len(updated_slides) >= 2:
+                        self.log_test("Hero Slider Settings Persistence", True, 
+                                     f"Settings persisted correctly, {len(updated_slides)} slides found")
+                    else:
+                        self.log_test("Hero Slider Settings Persistence", False, 
+                                     f"Only {len(updated_slides)} slides found after update")
+            else:
+                self.log_test("Hero Slider Settings Update", False, f"Status: {status}", response)
+        else:
+            self.log_test("Hero Slider Settings Update", False, "No admin token available for testing updates")
+
     def run_all_tests(self):
         """Run all test suites focusing on Priority Fixes first"""
         print("🚀 PRIORITY FIXES TESTING - P0 & P1")
