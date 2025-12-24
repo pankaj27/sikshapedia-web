@@ -243,13 +243,15 @@ const AdvertisementsManagement = () => {
       });
 
       if (response.data?.url) {
-        setFormData(prev => ({ ...prev, image_url: response.data.url }));
+        const uploadedUrl = response.data.url;
+        setFormData(prev => ({ ...prev, image_url: uploadedUrl }));
         setShowImageTools(false);
         setImageFile(null);
         setImagePreview(null);
         setOriginalImageSize(null);
         setCompressedImageSize(null);
-        alert('Image uploaded successfully!');
+        // Show success with URL
+        console.log('Image uploaded successfully:', uploadedUrl);
       }
     } catch (error) {
       console.error('Upload error:', error);
