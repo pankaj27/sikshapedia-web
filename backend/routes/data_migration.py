@@ -297,81 +297,92 @@ async def seed_database():
     Can only be called once - will fail if admin already exists.
     Works with both GET and POST requests.
     """
-    from passlib.context import CryptContext
-    import uuid
-    
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    
-    # Check if admin already exists
-    existing_admin = await db.admins.find_one({"email": "admin@admissionbuddy.co"})
-    if existing_admin:
+    try:
+        from passlib.context import CryptContext
+        import uuid
+        
+        # Check if db is available
+        if db is None:
+            return {"success": False, "error": "Database not initialized"}
+        
+        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        
+        # Check if admin already exists
+        existing_admin = await db.admins.find_one({"email": "admin@admissionbuddy.co"})
+        if existing_admin:
+            return {
+                "success": False,
+                "message": "Database already seeded. Admin user exists.",
+                "admin_email": "admin@admissionbuddy.co"
+            }
+        
+        created = []
+        
+        # Create admin user
+        admin_data = {
+            "id": str(uuid.uuid4()),
+            "email": "admin@admissionbuddy.co",
+            "password": pwd_context.hash("admin123"),
+            "name": "Super Admin",
+            "role": "super_admin",
+            "is_active": True,
+            "permissions": [
+                "manage_colleges", "manage_schools", "manage_courses",
+                "manage_exams", "manage_users", "manage_leads",
+                "manage_content", "manage_settings", "manage_admins"
+            ],
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.admins.insert_one(admin_data)
+        created.append("admin user")
+        
+        # Create lead settings
+        if not await db.lead_settings.find_one({}):
+            await db.lead_settings.insert_one({
+                "id": str(uuid.uuid4()),
+                "general_form_heading": "Get Free Counselling",
+                "cta_button_text": "Apply Now",
+                "cta_button_color": "#f97316",
+                "show_floating_cta": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+            created.append("lead settings")
+        
+        # Create homepage settings
+        if not await db.homepage_settings.find_one({}):
+            await db.homepage_settings.insert_one({
+                "id": str(uuid.uuid4()),
+                "site_name": "Admission Buddy",
+                "hero_title": "Find Your Perfect College",
+                "show_hero_search": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+            created.append("homepage settings")
+        
+        # Create year settings
+        if not await db.year_settings.find_one({}):
+            await db.year_settings.insert_one({
+                "id": str(uuid.uuid4()),
+                "current_academic_year": "2025-26",
+                "admission_year": "2025",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+            created.append("year settings")
+        
+        return {
+            "success": True,
+            "message": "Database seeded successfully",
+            "created": created,
+            "admin_credentials": {
+                "email": "admin@admissionbuddy.co",
+                "password": "admin123"
+            }
+        }
+    except Exception as e:
         return {
             "success": False,
-            "message": "Database already seeded. Admin user exists.",
-            "admin_email": "admin@admissionbuddy.co"
+            "error": str(e),
+            "error_type": type(e).__name__
         }
-    
-    created = []
-    
-    # Create admin user
-    admin_data = {
-        "id": str(uuid.uuid4()),
-        "email": "admin@admissionbuddy.co",
-        "password": pwd_context.hash("admin123"),
-        "name": "Super Admin",
-        "role": "super_admin",
-        "is_active": True,
-        "permissions": [
-            "manage_colleges", "manage_schools", "manage_courses",
-            "manage_exams", "manage_users", "manage_leads",
-            "manage_content", "manage_settings", "manage_admins"
-        ],
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": datetime.now(timezone.utc).isoformat()
-    }
-    await db.admins.insert_one(admin_data)
-    created.append("admin user")
-    
-    # Create lead settings
-    if not await db.lead_settings.find_one({}):
-        await db.lead_settings.insert_one({
-            "id": str(uuid.uuid4()),
-            "general_form_heading": "Get Free Counselling",
-            "cta_button_text": "Apply Now",
-            "cta_button_color": "#f97316",
-            "show_floating_cta": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-        created.append("lead settings")
-    
-    # Create homepage settings
-    if not await db.homepage_settings.find_one({}):
-        await db.homepage_settings.insert_one({
-            "id": str(uuid.uuid4()),
-            "site_name": "Admission Buddy",
-            "hero_title": "Find Your Perfect College",
-            "show_hero_search": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-        created.append("homepage settings")
-    
-    # Create year settings
-    if not await db.year_settings.find_one({}):
-        await db.year_settings.insert_one({
-            "id": str(uuid.uuid4()),
-            "current_academic_year": "2025-26",
-            "admission_year": "2025",
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-        created.append("year settings")
-    
-    return {
-        "success": True,
-        "message": "Database seeded successfully",
-        "created": created,
-        "admin_credentials": {
-            "email": "admin@admissionbuddy.co",
-            "password": "admin123"
-        }
-    }
 
