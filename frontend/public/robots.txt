@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://educfilter.preview.emergentagent.com/sitemap.xml
+Sitemap: https://listing-editor.preview.emergentagent.com/sitemap.xml

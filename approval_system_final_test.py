@@ -8,7 +8,7 @@ import json
 import sys
 from typing import Dict, Any, Optional
 
-BASE_URL = "https://educfilter.preview.emergentagent.com/api"
+BASE_URL = "https://listing-editor.preview.emergentagent.com/api"
 ADMIN_CREDENTIALS = {"email": "admin@admissionbuddy.co", "password": "admin123"}
 
 class FinalApprovalTester:

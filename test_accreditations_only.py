@@ -9,7 +9,7 @@ import sys
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://educfilter.preview.emergentagent.com/api"
+BASE_URL = "https://listing-editor.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
