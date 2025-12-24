@@ -267,7 +267,7 @@ const AdvertisementManagement = () => {
       formDataUpload.append('file', imageFile);
       formDataUpload.append('folder', 'advertisements');
 
-      const response = await api.post('/upload', formDataUpload, {
+      const response = await api.post('/upload/image', formDataUpload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
