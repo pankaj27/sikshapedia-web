@@ -405,6 +405,9 @@ const ListingPageForm = () => {
 
   // State for content image uploading
   const [uploadingContentImage, setUploadingContentImage] = useState({});
+  
+  // User role state for RBAC
+  const [userRole, setUserRole] = useState(null);
 
   // Get current user from localStorage
   const getCurrentUser = () => {
@@ -417,13 +420,22 @@ const ListingPageForm = () => {
       const token = localStorage.getItem('adminToken');
       if (token) {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return { id: payload.sub, name: payload.name || 'Admin', email: payload.email || '' };
+        return { id: payload.sub, name: payload.name || 'Admin', email: payload.email || '', role: payload.role || 'data_entry' };
       }
     } catch (e) {
       console.log('Could not get user info');
     }
-    return { id: 'admin', name: 'Admin User', email: 'admin@admissionbuddy.co' };
+    return { id: 'admin', name: 'Admin User', email: 'admin@admissionbuddy.co', role: 'data_entry' };
   };
+  
+  // Check if user can publish directly (super_admin or content_manager)
+  const canPublish = userRole === 'super_admin' || userRole === 'content_manager';
+  
+  // Fetch user role on mount
+  useEffect(() => {
+    const user = getCurrentUser();
+    setUserRole(user.role || 'data_entry');
+  }, []);
 
   const pageTypes = [
     { value: 'india', label: 'India Page', example: 'colleges' },
