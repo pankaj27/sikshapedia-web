@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiSave, FiArrowLeft, FiPlus, FiTrash2, FiChevronDown, FiChevronUp, FiImage, FiVideo, FiGrid, FiList, FiMessageSquare, FiHelpCircle, FiMove, FiUpload, FiLink, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLoader, FiCheck } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiPlus, FiTrash2, FiChevronDown, FiChevronUp, FiImage, FiVideo, FiGrid, FiList, FiMessageSquare, FiHelpCircle, FiMove, FiUpload, FiLink, FiBold, FiItalic, FiUnderline as FiUnderlineIcon, FiLoader, FiCheck, FiSend } from 'react-icons/fi';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
