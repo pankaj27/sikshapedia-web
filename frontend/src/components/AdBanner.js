@@ -189,12 +189,18 @@ const AdBanner = ({ pageName, position = 'top' }) => {
               onClick={() => handleAdClick(ad)}
             >
               <div className="relative">
-                {ad.image_url && (
+                {ad.image_url ? (
                   <img
                     src={ad.image_url}
                     alt={ad.title || 'Advertisement'}
-                    className="w-full h-32 object-cover"
+                    className="w-full h-auto object-cover"
+                    style={{ minHeight: '120px', maxHeight: '200px' }}
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
+                ) : (
+                  <div className="w-full h-32 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-white/80">{ad.title?.charAt(0) || 'A'}</span>
+                  </div>
                 )}
                 <span className="absolute top-2 left-2 px-2 py-0.5 bg-black/50 text-white text-[10px] font-medium rounded">Ad</span>
               </div>
