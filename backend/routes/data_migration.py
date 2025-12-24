@@ -529,13 +529,3 @@ async def fix_double_urls():
             "error": str(e),
             "error_type": type(e).__name__
         }
-
-            "note": "Broken image URLs have been cleared. Please re-upload images through the admin panel."
-        }
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "error_type": type(e).__name__
-        }
-
