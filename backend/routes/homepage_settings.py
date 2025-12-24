@@ -174,11 +174,50 @@ class HomepageSettings(BaseModel):
     hero_subtitle: str = "Explore 10,000+ Colleges, Universities & Schools across India"
     hero_bg_gradient: str = "from-purple-900 via-indigo-900 to-blue-900"
     
-    # Hero Slides (Banner Carousel)
+    # Hero Slides (Banner Carousel) - Enhanced with institute search
     hero_slides: List[Dict[str, Any]] = [
-        {"image": "https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop", "type": "college", "name": "IIT Bombay", "rating": 4.8, "reviews": 2847, "location": "Mumbai, Maharashtra", "slug": "iit-bombay-002"},
-        {"image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop", "type": "school", "name": "Delhi Public School", "rating": 4.6, "reviews": 1523, "location": "New Delhi, Delhi", "slug": "dps-rk-puram-001"},
-        {"image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop", "type": "university", "name": "Delhi University", "rating": 4.5, "reviews": 3256, "location": "New Delhi, Delhi", "slug": "delhi-university-001"}
+        {
+            "institute_id": "",           # Link to actual institute (for auto-fill)
+            "image": "https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=400&fit=crop", 
+            "type": "college", 
+            "name": "IIT Bombay", 
+            "rating": 4.8, 
+            "reviews": 2847, 
+            "location": "Mumbai, Maharashtra", 
+            "slug": "iit-bombay-002",
+            "priority": 1,                # Display order (lower = first)
+            "start_date": "",             # Optional: scheduling start (YYYY-MM-DD)
+            "end_date": "",               # Optional: scheduling end (YYYY-MM-DD)
+            "is_active": True             # Enable/disable slide
+        },
+        {
+            "institute_id": "",
+            "image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&h=400&fit=crop", 
+            "type": "school", 
+            "name": "Delhi Public School", 
+            "rating": 4.6, 
+            "reviews": 1523, 
+            "location": "New Delhi, Delhi", 
+            "slug": "dps-rk-puram-001",
+            "priority": 2,
+            "start_date": "",
+            "end_date": "",
+            "is_active": True
+        },
+        {
+            "institute_id": "",
+            "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&h=400&fit=crop", 
+            "type": "university", 
+            "name": "Delhi University", 
+            "rating": 4.5, 
+            "reviews": 3256, 
+            "location": "New Delhi, Delhi", 
+            "slug": "delhi-university-001",
+            "priority": 3,
+            "start_date": "",
+            "end_date": "",
+            "is_active": True
+        }
     ]
     
     # Quick Actions Section
