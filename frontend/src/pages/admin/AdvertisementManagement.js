@@ -815,18 +815,223 @@ const AdvertisementManagement = () => {
               {/* Ad Type Specific Fields */}
               {formData.ad_type === 'banner' && (
                 <div className="bg-blue-50 p-4 rounded-lg space-y-4">
-                  <h3 className="font-semibold text-blue-800">Banner Ad Settings</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Image URL *</label>
+                  <h3 className="font-semibold text-blue-800 flex items-center gap-2">
+                    <FiImage /> Banner Ad Settings
+                  </h3>
+                  
+                  {/* Placement Selection with Recommended Sizes */}
+                  <div className="bg-white p-3 rounded-lg border border-blue-200">
+                    <label className="block text-sm font-medium mb-2">Placement Position</label>
+                    <select
+                      value={formData.placement_position}
+                      onChange={(e) => setFormData({...formData, placement_position: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg mb-2"
+                    >
+                      {PLACEMENTS.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.name} - Recommended: {p.recommended}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="flex items-center gap-2 text-sm text-blue-700 bg-blue-100 p-2 rounded">
+                      <FiTarget size={14} />
+                      <span>
+                        <strong>Recommended size:</strong> {getRecommendedSize()} pixels
+                        {PLACEMENTS.find(p => p.id === formData.placement_position)?.description && (
+                          <span className="text-blue-600 ml-1">
+                            - {PLACEMENTS.find(p => p.id === formData.placement_position)?.description}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Image Upload Section */}
+                  <div className="bg-white p-4 rounded-lg border border-blue-200">
+                    <label className="block text-sm font-medium mb-2">Banner Image *</label>
+                    
+                    {/* Upload Zone */}
+                    <div
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={() => imageInputRef.current?.click()}
+                      className="border-2 border-dashed border-blue-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                    >
+                      <input
+                        ref={imageInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => e.target.files[0] && handleImageSelect(e.target.files[0])}
+                        className="hidden"
+                      />
+                      <FiUpload className="mx-auto text-blue-500 mb-2" size={32} />
+                      <p className="text-sm text-gray-600">
+                        <span className="text-blue-600 font-medium">Click to upload</span> or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                    </div>
+
+                    {/* Image Tools (Compressor & Resizer) */}
+                    {showImageTools && imagePreview && (
+                      <div className="mt-4 space-y-4">
+                        {/* Preview & Original Info */}
+                        <div className="flex gap-4">
+                          <div className="flex-shrink-0">
+                            <p className="text-xs text-gray-500 mb-1">Preview:</p>
+                            <img 
+                              src={imagePreview} 
+                              alt="Preview" 
+                              className="max-h-40 rounded border shadow-sm"
+                            />
+                          </div>
+                          <div className="flex-1 text-sm">
+                            <p className="font-medium text-gray-700 mb-2">Image Information</p>
+                            {originalImageSize && (
+                              <div className="space-y-1 text-gray-600">
+                                <p>📁 File: {originalImageSize.name}</p>
+                                <p>📐 Original: {originalImageSize.width} × {originalImageSize.height} px</p>
+                                <p>💾 Original Size: {formatFileSize(originalImageSize.size)}</p>
+                                {compressedImageSize && (
+                                  <>
+                                    <p className="text-green-600">
+                                      ✅ Processed: {compressedImageSize.width} × {compressedImageSize.height} px
+                                    </p>
+                                    <p className="text-green-600">
+                                      💾 New Size: {formatFileSize(compressedImageSize.size)} 
+                                      <span className="ml-1">
+                                        ({Math.round((1 - compressedImageSize.size / originalImageSize.size) * 100)}% reduced)
+                                      </span>
+                                    </p>
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Resize Controls */}
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="text-sm font-medium flex items-center gap-1">
+                              <FiMaximize2 size={14} /> Resize Image
+                            </p>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={applyRecommendedSize}
+                              className="text-xs"
+                            >
+                              Use Recommended ({getRecommendedSize()})
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs text-gray-500 mb-1">Width (px)</label>
+                              <input
+                                type="number"
+                                value={resizeWidth}
+                                onChange={(e) => setResizeWidth(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-lg text-sm"
+                                placeholder="Width"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-gray-500 mb-1">Height (px)</label>
+                              <input
+                                type="number"
+                                value={resizeHeight}
+                                onChange={(e) => setResizeHeight(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-lg text-sm"
+                                placeholder="Height"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Compression Controls */}
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <p className="text-sm font-medium flex items-center gap-1 mb-2">
+                            <FiMinimize2 size={14} /> Compress Image
+                          </p>
+                          <div className="flex items-center gap-4">
+                            <div className="flex-1">
+                              <label className="block text-xs text-gray-500 mb-1">
+                                Quality: {compressionQuality}%
+                              </label>
+                              <input
+                                type="range"
+                                min="10"
+                                max="100"
+                                value={compressionQuality}
+                                onChange={(e) => setCompressionQuality(parseInt(e.target.value))}
+                                className="w-full"
+                              />
+                              <div className="flex justify-between text-xs text-gray-400">
+                                <span>Small file</span>
+                                <span>High quality</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={applyImageProcessing}
+                            disabled={imageUploading}
+                            className="flex-1"
+                          >
+                            {imageUploading ? 'Processing...' : '🔄 Apply Changes'}
+                          </Button>
+                          <Button
+                            type="button"
+                            onClick={uploadImage}
+                            disabled={imageUploading}
+                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            {imageUploading ? 'Uploading...' : '⬆️ Upload Image'}
+                          </Button>
+                        </div>
+
+                        {/* Cancel */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowImageTools(false);
+                            setImageFile(null);
+                            setImagePreview(null);
+                            setOriginalImageSize(null);
+                            setCompressedImageSize(null);
+                          }}
+                          className="text-sm text-gray-500 hover:text-gray-700"
+                        >
+                          ✕ Cancel and clear
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Or use URL */}
+                    <div className="mt-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex-1 border-t border-gray-300"></div>
+                        <span className="text-xs text-gray-500">OR enter URL directly</span>
+                        <div className="flex-1 border-t border-gray-300"></div>
+                      </div>
                       <input
                         type="url"
                         value={formData.image_url}
                         onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                        className="w-full px-3 py-2 border rounded-lg"
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
                         placeholder="https://example.com/banner.jpg"
                       />
                     </div>
+                  </div>
+
+                  {/* Other Banner Settings */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">Banner Size</label>
                       <select
@@ -839,7 +1044,7 @@ const AdvertisementManagement = () => {
                         ))}
                       </select>
                     </div>
-                    <div className="md:col-span-2">
+                    <div>
                       <label className="block text-sm font-medium mb-1">Alt Text</label>
                       <input
                         type="text"
@@ -850,12 +1055,35 @@ const AdvertisementManagement = () => {
                       />
                     </div>
                   </div>
-                  {formData.image_url && (
+
+                  {/* Current Image Preview */}
+                  {formData.image_url && !showImageTools && (
                     <div className="mt-2">
-                      <p className="text-sm text-gray-600 mb-1">Preview:</p>
+                      <p className="text-sm text-gray-600 mb-1">Current Image:</p>
                       <img src={formData.image_url} alt="Preview" className="max-h-32 rounded border" />
                     </div>
                   )}
+
+                  {/* Position-wise Size Reference */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                    <p className="text-sm font-medium text-yellow-800 mb-2">📐 Recommended Image Sizes by Position:</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-yellow-700">
+                      {PLACEMENTS.slice(0, 6).map(p => (
+                        <div key={p.id} className="flex justify-between">
+                          <span>{p.name}:</span>
+                          <span className="font-mono font-medium">{p.recommended}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-yellow-700 mt-1">
+                      {PLACEMENTS.slice(6).map(p => (
+                        <div key={p.id} className="flex justify-between">
+                          <span>{p.name}:</span>
+                          <span className="font-mono font-medium">{p.recommended}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
 
