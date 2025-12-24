@@ -187,31 +187,33 @@ const DataMigration = () => {
               <p className="text-sm text-gray-600">Upload JSON to restore data</p>
             </div>
           </div>
-          <label className="block">
-            <input
-              type="file"
-              accept=".json"
-              onChange={handleImport}
-              disabled={importing}
-              className="hidden"
-            />
-            <Button
-              as="span"
-              disabled={importing}
-              className="w-full bg-blue-600 hover:bg-blue-700 cursor-pointer"
-            >
-              {importing ? (
-                <>
-                  <span className="animate-spin mr-2">⏳</span>
-                  Importing...
-                </>
-              ) : (
-                <>
-                  <FiUpload className="mr-2" />
-                  Select JSON File to Import
-                </>
-              )}
-            </Button>
+          <input
+            type="file"
+            id="import-file-input"
+            accept=".json"
+            onChange={handleImport}
+            disabled={importing}
+            className="hidden"
+          />
+          <label 
+            htmlFor="import-file-input"
+            className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white font-medium cursor-pointer transition-colors ${
+              importing 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            {importing ? (
+              <>
+                <span className="animate-spin">⏳</span>
+                Importing...
+              </>
+            ) : (
+              <>
+                <FiUpload />
+                Select JSON File to Import
+              </>
+            )}
           </label>
           <p className="text-xs text-red-500 mt-2">⚠️ Import will replace existing data!</p>
         </div>
