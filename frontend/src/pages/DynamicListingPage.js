@@ -405,12 +405,13 @@ const DynamicListingPage = () => {
   useEffect(() => {
     const fetchMasterData = async () => {
       try {
-        const [statesRes, citiesRes, streamsRes, coursesRes, examsRes] = await Promise.all([
+        const [statesRes, citiesRes, streamsRes, coursesRes, examsRes, quickActionRes] = await Promise.all([
           api.get('/locations/all-states'),
           api.get('/locations/all-cities'),
           api.get('/streams'),
           api.get('/courses?limit=500'),
-          api.get('/exams?limit=500')
+          api.get('/exams?limit=500'),
+          api.get('/quick-action-cards-settings')
         ]);
         const activeStates = (statesRes.data || [])
           .filter(s => s.status === 'active')
@@ -418,6 +419,9 @@ const DynamicListingPage = () => {
           .sort();
         setMasterStates(activeStates);
         setMasterCities((citiesRes.data || []).filter(c => c.status === 'active'));
+        
+        // Set quick action cards settings
+        setQuickActionSettings(quickActionRes.data || null);
         
         // Set streams - filter active ones and extract names
         const activeStreams = (streamsRes.data || [])
