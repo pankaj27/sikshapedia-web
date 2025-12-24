@@ -57,8 +57,12 @@ const MediaInsertModal = ({ type, isOpen, onClose, onInsert, collegeName }) => {
       });
       
       if (response.data.success) {
-        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const imageUrl = backendUrl + response.data.url;
+        // Only prepend backendUrl for relative URLs (not for cloudinary or other absolute URLs)
+        let imageUrl = response.data.url;
+        if (imageUrl && !imageUrl.startsWith('http')) {
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+          imageUrl = backendUrl + imageUrl;
+        }
         setUploadedUrl(imageUrl);
         setUrl(imageUrl);
       }
