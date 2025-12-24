@@ -136,18 +136,36 @@ async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
     # Get schools from homepage settings (in specified order)
     if featured_ids:
         for school_id in featured_ids[:limit]:
+            # Check schools collection first
             school = await db.schools.find_one({"id": school_id}, {"_id": 0})
+            if not school:
+                # Also check colleges collection for schools stored there
+                school = await db.colleges.find_one(
+                    {"id": school_id, "institution_type": {"$in": ["School", "school"]}}, 
+                    {"_id": 0}
+                )
             if school:
                 featured_schools.append(school)
     
-    # If not enough, fill with top rated schools
+    # If not enough, fill with schools from both collections
     if len(featured_schools) < limit:
         existing_ids = [s.get('id') for s in featured_schools]
-        additional = await db.schools.find(
+        
+        # Get from schools collection
+        additional_schools = await db.schools.find(
             {"id": {"$nin": existing_ids}}, 
             {"_id": 0}
         ).sort("rating", -1).limit(limit - len(featured_schools)).to_list(limit - len(featured_schools))
-        featured_schools.extend(additional)
+        featured_schools.extend(additional_schools)
+        
+        # Also get from colleges collection (schools stored there)
+        if len(featured_schools) < limit:
+            existing_ids = [s.get('id') for s in featured_schools]
+            additional_from_colleges = await db.colleges.find(
+                {"id": {"$nin": existing_ids}, "institution_type": {"$in": ["School", "school"]}}, 
+                {"_id": 0}
+            ).sort("rating", -1).limit(limit - len(featured_schools)).to_list(limit - len(featured_schools))
+            featured_schools.extend(additional_from_colleges)
     
     return featured_schools
 
