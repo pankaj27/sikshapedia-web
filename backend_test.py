@@ -5986,6 +5986,9 @@ class APITester:
         # **NEW: Quick Facts and Key Statistics Test (Review Request):**
         self.test_quick_facts_and_key_statistics()
         
+        # **NEW: Enhanced Hero Slider with Institute Search Test (Review Request):**
+        self.test_enhanced_hero_slider_institute_search()
+        
         # Summary
         print("=" * 80)
         print("📊 COMPREHENSIVE TEST SUMMARY")
