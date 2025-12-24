@@ -2,7 +2,7 @@
 Homepage Settings Routes
 Manages all homepage configuration and section visibility
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
@@ -17,6 +17,148 @@ def set_database(database):
     """Set the database instance from main app"""
     global db
     db = database
+
+
+# ============================================
+# Institute Search API (for Hero Slider)
+# ============================================
+
+@homepage_settings_router.get("/institutes/search")
+async def search_institutes(
+    search: str = Query(..., min_length=2),
+    type: Optional[str] = Query(None, description="Filter by type: college, school, university, or all"),
+    limit: int = Query(10, ge=1, le=50)
+):
+    """
+    Search all institutes (colleges, schools, universities) for hero slider selection.
+    Returns banner_url, name, type, location, rating, slug automatically.
+    """
+    results = []
+    search_query = {"$regex": search, "$options": "i"}
+    
+    # Projection for minimal but complete data
+    projection = {
+        "_id": 0, "id": 1, "name": 1, "slug": 1, 
+        "banner_url": 1, "logo_url": 1,
+        "institution_type": 1, "type": 1,
+        "location": 1, "city": 1, "state": 1,
+        "rating": 1, "reviews_count": 1
+    }
+    
+    # Search colleges (if type is college, all, or not specified)
+    if not type or type in ["college", "all"]:
+        colleges = await db.colleges.find(
+            {"name": search_query, "institution_type": {"$in": ["College", "college", None]}},
+            projection
+        ).limit(limit).to_list(limit)
+        
+        for c in colleges:
+            location = c.get('location', {})
+            city = location.get('city', c.get('city', '')) if isinstance(location, dict) else c.get('city', '')
+            state = location.get('state', c.get('state', '')) if isinstance(location, dict) else c.get('state', '')
+            
+            results.append({
+                "id": c.get("id"),
+                "name": c.get("name"),
+                "slug": c.get("slug", ""),
+                "type": "college",
+                "institution_type": c.get("institution_type", "College"),
+                "banner_url": c.get("banner_url", ""),
+                "logo_url": c.get("logo_url", ""),
+                "location": f"{city}, {state}".strip(", ") if city or state else "",
+                "city": city,
+                "state": state,
+                "rating": c.get("rating", 0),
+                "reviews_count": c.get("reviews_count", 0)
+            })
+    
+    # Search schools
+    if not type or type in ["school", "all"]:
+        schools = await db.colleges.find(
+            {"name": search_query, "institution_type": {"$in": ["School", "school"]}},
+            projection
+        ).limit(limit).to_list(limit)
+        
+        for s in schools:
+            location = s.get('location', {})
+            city = location.get('city', s.get('city', '')) if isinstance(location, dict) else s.get('city', '')
+            state = location.get('state', s.get('state', '')) if isinstance(location, dict) else s.get('state', '')
+            
+            results.append({
+                "id": s.get("id"),
+                "name": s.get("name"),
+                "slug": s.get("slug", ""),
+                "type": "school",
+                "institution_type": "School",
+                "banner_url": s.get("banner_url", ""),
+                "logo_url": s.get("logo_url", ""),
+                "location": f"{city}, {state}".strip(", ") if city or state else "",
+                "city": city,
+                "state": state,
+                "rating": s.get("rating", 0),
+                "reviews_count": s.get("reviews_count", 0)
+            })
+    
+    # Search universities
+    if not type or type in ["university", "all"]:
+        universities = await db.colleges.find(
+            {"name": search_query, "institution_type": {"$in": ["University", "university"]}},
+            projection
+        ).limit(limit).to_list(limit)
+        
+        for u in universities:
+            location = u.get('location', {})
+            city = location.get('city', u.get('city', '')) if isinstance(location, dict) else u.get('city', '')
+            state = location.get('state', u.get('state', '')) if isinstance(location, dict) else u.get('state', '')
+            
+            results.append({
+                "id": u.get("id"),
+                "name": u.get("name"),
+                "slug": u.get("slug", ""),
+                "type": "university",
+                "institution_type": "University",
+                "banner_url": u.get("banner_url", ""),
+                "logo_url": u.get("logo_url", ""),
+                "location": f"{city}, {state}".strip(", ") if city or state else "",
+                "city": city,
+                "state": state,
+                "rating": u.get("rating", 0),
+                "reviews_count": u.get("reviews_count", 0)
+            })
+    
+    # Sort by name and limit
+    results.sort(key=lambda x: x.get("name", ""))
+    return results[:limit]
+
+
+@homepage_settings_router.get("/institutes/{institute_id}")
+async def get_institute_details(institute_id: str):
+    """Get full details of an institute by ID for hero slider"""
+    institute = await db.colleges.find_one({"id": institute_id}, {"_id": 0})
+    if not institute:
+        raise HTTPException(status_code=404, detail="Institute not found")
+    
+    location = institute.get('location', {})
+    city = location.get('city', institute.get('city', '')) if isinstance(location, dict) else institute.get('city', '')
+    state = location.get('state', institute.get('state', '')) if isinstance(location, dict) else institute.get('state', '')
+    
+    inst_type = institute.get("institution_type", "College")
+    type_lower = "school" if inst_type in ["School", "school"] else "university" if inst_type in ["University", "university"] else "college"
+    
+    return {
+        "id": institute.get("id"),
+        "name": institute.get("name"),
+        "slug": institute.get("slug", ""),
+        "type": type_lower,
+        "institution_type": inst_type,
+        "banner_url": institute.get("banner_url", ""),
+        "logo_url": institute.get("logo_url", ""),
+        "location": f"{city}, {state}".strip(", ") if city or state else "",
+        "city": city,
+        "state": state,
+        "rating": institute.get("rating", 0),
+        "reviews_count": institute.get("reviews_count", 0)
+    }
 
 # ============================================
 # Pydantic Model
