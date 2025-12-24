@@ -848,13 +848,13 @@ const CollegeDuniaHome = () => {
                     <span className="text-xs font-semibold text-gray-800">{school.rating}</span>
                   </div>
                   
-                  {/* School Logo - Bottom Left */}
-                  <div className="absolute -bottom-4 left-4 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border-2 border-gray-100 overflow-hidden z-20">
+                  {/* School Logo - Inside Banner, Bottom Left */}
+                  <div className="absolute bottom-2 left-3 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border border-gray-200 overflow-hidden">
                     {school.logo_url ? (
                       <img 
                         src={school.logo_url} 
                         alt={`${school.name} logo`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain p-1"
                         onError={(e) => { 
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -866,7 +866,7 @@ const CollegeDuniaHome = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 pt-6 flex-1 flex flex-col relative z-0">
+                <div className="p-4 flex-1 flex flex-col">
                   <h3 
                     onClick={() => {
                       const schoolUrl = school.serial_number 
