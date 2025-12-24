@@ -867,7 +867,15 @@ const CollegeDuniaHome = () => {
 
                 {/* Content */}
                 <div className="p-4 pt-6 flex-1 flex flex-col">
-                  <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-emerald-600 transition-colors cursor-pointer">
+                  <h3 
+                    onClick={() => {
+                      const schoolUrl = school.serial_number 
+                        ? `/schools/${school.serial_number}-${school.slug || school.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`
+                        : `/schools/${school.slug || school.id}`;
+                      window.location.href = schoolUrl;
+                    }}
+                    className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-emerald-600 transition-colors cursor-pointer"
+                  >
                     {school.name}
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
