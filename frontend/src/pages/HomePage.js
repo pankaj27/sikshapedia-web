@@ -53,7 +53,8 @@ const CollegeDuniaHome = () => {
   const [featuredColleges, setFeaturedColleges] = useState([]);
   const [featuredSchools, setFeaturedSchools] = useState([]); // Featured schools from admin
   const [sponsoredFeatured, setSponsoredFeatured] = useState([]); // Sponsored ads from admin
-  const [homeBannerAd, setHomeBannerAd] = useState(null); // Home banner sponsor ad
+  const [homeBannerAds, setHomeBannerAds] = useState([]); // Home banner sponsor ads (multiple)
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0); // Current banner ad index for rotation
   const [stats, setStats] = useState({ total_colleges: 0, total_reviews: 0 });
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
