@@ -873,7 +873,7 @@ const CollegeDuniaHome = () => {
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
                     <FiMapPin className="text-[10px]" />
-                    {school.location}
+                    {school.location_display || school.city || (typeof school.location === 'object' ? `${school.location?.city || ''}, ${school.location?.state || ''}`.trim().replace(/^,\s*|,\s*$/g, '') : school.location) || 'India'}
                   </p>
                   
                   {/* Stats Row - Modern */}
