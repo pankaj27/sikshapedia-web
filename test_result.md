@@ -1,7 +1,29 @@
 # Test Result Documentation
 
 ## Current Testing Focus
-Testing Enhanced Hero Slider with Institute Search functionality.
+Testing Advertisement Management End-to-End Flow - Image Upload and Display.
+
+### Feature: Advertisement Management System
+- **Issue**: Image upload was failing with 401 Unauthorized error
+- **Root Cause**: Admin token was not being properly passed in the upload API request
+- **Resolution**: The code was already correct; the issue was the session not being authenticated. When properly logged in, the upload works correctly.
+
+### Verified Functionality:
+1. Admin login creates `adminToken` in localStorage
+2. Image upload with resize/compression controls work
+3. Image URL auto-populates in form after successful upload
+4. Banner ads display with images on frontend (college detail page)
+
+### Test Steps for Advertisement Flow:
+1. Login to admin panel (`/admin/login` with admin@admissionbuddy.co / admin123)
+2. Navigate to `/admin/advertisements`
+3. Click "Create Advertisement" or edit existing ad
+4. Upload image using drag-drop or file selection
+5. Apply resize/compression if needed
+6. Click "Upload" button
+7. Verify Image URL field is auto-populated
+8. Complete form and save
+9. Visit target page (e.g., college detail) to verify ad displays with image
 
 ### Feature: Enhanced Hero Slider Admin Control
 - Added `/api/institutes/search` endpoint to search all institutes (colleges, schools, universities)
