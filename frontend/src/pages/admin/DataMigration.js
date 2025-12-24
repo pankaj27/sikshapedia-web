@@ -58,7 +58,10 @@ const DataMigration = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    if (!window.confirm('⚠️ WARNING: This will REPLACE all existing data with the imported data. Are you sure you want to continue?')) {
+    // Show confirmation dialog
+    const confirmed = window.confirm('⚠️ WARNING: This will REPLACE all existing data with the imported data. Are you sure you want to continue?');
+    
+    if (!confirmed) {
       event.target.value = '';
       return;
     }
@@ -74,14 +77,18 @@ const DataMigration = () => {
       const response = await api.post('/data-migration/import', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        timeout: 120000 // 2 minute timeout for large imports
       });
 
       setImportResult(response.data);
       fetchSummary(); // Refresh summary after import
+      alert('✅ Import completed successfully!');
     } catch (err) {
-      setError('Failed to import data. Please check the file format.');
-      console.error(err);
+      const errorMsg = err.response?.data?.detail || 'Failed to import data. Please check the file format.';
+      setError(errorMsg);
+      alert('❌ Import failed: ' + errorMsg);
+      console.error('Import error:', err);
     } finally {
       setImporting(false);
       event.target.value = '';
