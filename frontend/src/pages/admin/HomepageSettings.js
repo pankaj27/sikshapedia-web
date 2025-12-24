@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiSave, FiPlus, FiTrash2, FiHome, FiSettings, FiSearch, FiGrid, FiImage, FiEye, FiEyeOff, FiChevronUp, FiChevronDown, FiStar } from 'react-icons/fi';
+import { FiSave, FiPlus, FiTrash2, FiHome, FiSettings, FiSearch, FiGrid, FiImage, FiEye, FiEyeOff, FiChevronUp, FiChevronDown, FiStar, FiCalendar, FiCheck } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
 import AdminLayout from '../../components/admin/AdminLayout';
@@ -17,6 +17,12 @@ const HomepageSettings = () => {
   const [saving, setSaving] = useState(false);
   const [uploadingIndex, setUploadingIndex] = useState(null); // Track which item is uploading
   const [uploadMessage, setUploadMessage] = useState({ type: '', text: '' }); // Upload feedback
+  
+  // Hero Slider Institute Search States
+  const [slideSearchQuery, setSlideSearchQuery] = useState({});  // { index: 'search query' }
+  const [slideSearchResults, setSlideSearchResults] = useState({}); // { index: [results] }
+  const [showSlideDropdown, setShowSlideDropdown] = useState({}); // { index: true/false }
+  const [slideTypeFilter, setSlideTypeFilter] = useState({}); // { index: 'all'/'college'/'school'/'university' }
   
   // Search states for college and school autocomplete
   const [collegeSearchQuery, setCollegeSearchQuery] = useState('');
