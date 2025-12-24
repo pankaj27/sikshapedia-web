@@ -2357,18 +2357,25 @@ const ListingPageForm = () => {
             </Button>
           </CollapsibleSection>
 
-          {/* Submit */}
+          {/* Submit - Role-based buttons */}
           <div className="flex justify-between items-center mt-6 sticky bottom-4 bg-white p-4 rounded-lg shadow-lg border">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              {formData.is_published ? (
-                <span className="flex items-center gap-1 text-green-600">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Will be Published
-                </span>
+              {canPublish ? (
+                formData.is_published ? (
+                  <span className="flex items-center gap-1 text-green-600">
+                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                    Will be Published
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 text-yellow-600">
+                    <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                    Draft
+                  </span>
+                )
               ) : (
-                <span className="flex items-center gap-1 text-yellow-600">
-                  <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                  Draft
+                <span className="flex items-center gap-1 text-blue-600">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  Submit for Review (requires approval)
                 </span>
               )}
             </div>
@@ -2386,10 +2393,23 @@ const ListingPageForm = () => {
                 <FiSave className="mr-2" />
                 Save as Draft
               </Button>
-              <Button type="submit" disabled={saving} className="bg-orange-600 hover:bg-orange-700">
-                <FiSave className="mr-2" />
-                {saving ? 'Saving...' : (isEditing ? 'Update & Publish' : 'Create & Publish')}
-              </Button>
+              {/* Show different buttons based on user role */}
+              {canPublish ? (
+                <Button type="submit" disabled={saving} className="bg-orange-600 hover:bg-orange-700">
+                  <FiSave className="mr-2" />
+                  {saving ? 'Saving...' : (isEditing ? 'Update & Publish' : 'Create & Publish')}
+                </Button>
+              ) : (
+                <Button 
+                  type="button" 
+                  disabled={saving}
+                  onClick={handleSubmitForReview}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <FiSend className="mr-2" />
+                  {saving ? 'Submitting...' : 'Submit for Review'}
+                </Button>
+              )}
             </div>
           </div>
         </form>
