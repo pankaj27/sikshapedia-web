@@ -127,3 +127,4 @@ zipp==3.23.0
 resend==2.19.0
 twilio==9.9.0
 razorpay==1.4.1
+cloudinary==1.44.1
