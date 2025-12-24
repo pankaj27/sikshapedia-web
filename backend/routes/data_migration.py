@@ -386,3 +386,84 @@ async def seed_database():
             "error_type": type(e).__name__
         }
 
+
+
+@router.get("/data-migration/fix-broken-images")
+@router.post("/data-migration/fix-broken-images")
+async def fix_broken_images():
+    """
+    Fix broken image URLs by clearing URLs that point to old preview domains.
+    Users can then re-upload images through the admin panel.
+    """
+    try:
+        if db is None:
+            return {"success": False, "error": "Database not initialized"}
+        
+        fixed = []
+        
+        # Collections and their image fields
+        collections_to_fix = {
+            "colleges": ["logo_url", "banner_url", "campus_images"],
+            "schools": ["logo_url", "banner_url", "campus_images"],
+            "universities": ["logo_url", "banner_url", "campus_images"],
+            "advertisements": ["image_url"],
+        }
+        
+        broken_patterns = [
+            "preview.emergentagent.com",
+            "/api/static/uploads/",
+            "/static/uploads/",
+            "listing-editor.preview",
+        ]
+        
+        for collection_name, fields in collections_to_fix.items():
+            collection = db[collection_name]
+            cursor = collection.find({})
+            
+            async for doc in cursor:
+                update_data = {}
+                
+                for field in fields:
+                    url = doc.get(field, '')
+                    
+                    # Handle string URLs
+                    if isinstance(url, str) and url:
+                        for pattern in broken_patterns:
+                            if pattern in url:
+                                update_data[field] = ""
+                                fixed.append(f"{collection_name}.{field}: {doc.get('name', doc.get('id', 'unknown'))}")
+                                break
+                    
+                    # Handle array of URLs (like campus_images)
+                    elif isinstance(url, list):
+                        new_urls = []
+                        changed = False
+                        for u in url:
+                            is_broken = any(p in str(u) for p in broken_patterns)
+                            if not is_broken:
+                                new_urls.append(u)
+                            else:
+                                changed = True
+                        if changed:
+                            update_data[field] = new_urls
+                            fixed.append(f"{collection_name}.{field} (array): {doc.get('name', 'unknown')}")
+                
+                if update_data:
+                    await collection.update_one(
+                        {"_id": doc["_id"]},
+                        {"$set": update_data}
+                    )
+        
+        return {
+            "success": True,
+            "message": f"Fixed {len(fixed)} broken image references",
+            "fixed": fixed,
+            "note": "Broken image URLs have been cleared. Please re-upload images through the admin panel."
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+
