@@ -733,9 +733,20 @@ const CollegeDuniaHome = () => {
                         </div>
                       )}
                       
-                      {/* College Initial - Bottom Left */}
-                      <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white">
-                        <span className="text-xl font-bold bg-gradient-to-br from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                      {/* College Logo - Bottom Left */}
+                      <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white overflow-hidden">
+                        {college.logo_url ? (
+                          <img 
+                            src={college.logo_url} 
+                            alt={`${college.name} logo`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { 
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <span className={`text-xl font-bold bg-gradient-to-br from-indigo-600 to-purple-600 bg-clip-text text-transparent ${college.logo_url ? 'hidden' : ''}`}>
                           {college.name.charAt(0)}
                         </span>
                       </div>
