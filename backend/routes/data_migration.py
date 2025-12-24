@@ -458,6 +458,70 @@ async def fix_broken_images():
             "success": True,
             "message": f"Fixed {len(fixed)} broken image references",
             "fixed": fixed,
+
+
+@router.get("/data-migration/fix-double-urls")
+@router.post("/data-migration/fix-double-urls")
+async def fix_double_urls():
+    """
+    Fix URLs that have been doubled like:
+    https://admissionbuddy.cohttps://res.cloudinary.com/...
+    Should become: https://res.cloudinary.com/...
+    """
+    try:
+        if db is None:
+            return {"success": False, "error": "Database not initialized"}
+        
+        fixed = []
+        
+        collections_to_fix = {
+            "colleges": ["logo_url", "banner_url"],
+            "schools": ["logo_url", "banner_url"],
+            "universities": ["logo_url", "banner_url"],
+            "advertisements": ["image_url"],
+        }
+        
+        for collection_name, fields in collections_to_fix.items():
+            collection = db[collection_name]
+            cursor = collection.find({})
+            
+            async for doc in cursor:
+                update_data = {}
+                
+                for field in fields:
+                    url = doc.get(field, '')
+                    
+                    if isinstance(url, str) and url:
+                        # Fix double URL pattern
+                        if 'admissionbuddy.cohttps://' in url:
+                            fixed_url = url.split('https://')[-1]
+                            fixed_url = 'https://' + fixed_url
+                            update_data[field] = fixed_url
+                            fixed.append(f"{collection_name}.{field}: {doc.get('name', 'unknown')}")
+                        elif 'admissionbuddy.cohttp://' in url:
+                            fixed_url = url.split('http://')[-1]
+                            fixed_url = 'http://' + fixed_url
+                            update_data[field] = fixed_url
+                            fixed.append(f"{collection_name}.{field}: {doc.get('name', 'unknown')}")
+                
+                if update_data:
+                    await collection.update_one(
+                        {"_id": doc["_id"]},
+                        {"$set": update_data}
+                    )
+        
+        return {
+            "success": True,
+            "message": f"Fixed {len(fixed)} double URL references",
+            "fixed": fixed
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+
             "note": "Broken image URLs have been cleared. Please re-upload images through the admin panel."
         }
     except Exception as e:
