@@ -330,7 +330,8 @@ async def get_sponsored_ads_by_placement(placement_id: str, limit: int = Query(6
             content_type = entry.get("content_type", "college")
             item_id = entry.get("item_id")
             
-            if content_type == "college":
+            # Handle different content types - banner defaults to college lookup
+            if content_type == "college" or content_type == "banner":
                 item = await db.colleges.find_one({"id": item_id}, {"_id": 0})
             elif content_type == "school":
                 item = await db.schools.find_one({"id": item_id}, {"_id": 0})
@@ -341,7 +342,8 @@ async def get_sponsored_ads_by_placement(placement_id: str, limit: int = Query(6
             elif content_type == "exam":
                 item = await db.exams_detailed.find_one({"id": item_id}, {"_id": 0})
             else:
-                item = None
+                # Fallback: try colleges collection
+                item = await db.colleges.find_one({"id": item_id}, {"_id": 0})
             
             if item:
                 item['_sponsored_order'] = entry.get("serial_order", 999)
