@@ -81,6 +81,17 @@ const CollegeDuniaHome = () => {
     return () => clearInterval(interval);
   }, []); // Empty dependency - interval runs once
 
+  // Auto-rotate banner ads every 3 seconds
+  useEffect(() => {
+    if (homeBannerAds.length <= 1) return;
+    
+    const bannerInterval = setInterval(() => {
+      setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % homeBannerAds.length);
+    }, 3000); // Change every 3 seconds
+    
+    return () => clearInterval(bannerInterval);
+  }, [homeBannerAds.length]);
+
   // Icon component mapper
   const iconComponents = {
     FiTool, FiBriefcase, FiActivity, FiTrendingUp, FiFeather, FiCpu, FiShield, FiLayout,
