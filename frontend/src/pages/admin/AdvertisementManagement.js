@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from '../../components/CustomLink';
 import { 
   FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiEye, FiPause, FiPlay, 
   FiBarChart2, FiDollarSign, FiImage, FiVideo, FiFileText, FiCode,
   FiTarget, FiCalendar, FiClock, FiTrendingUp, FiMousePointer,
-  FiSave, FiX, FiSearch, FiFilter, FiRefreshCw
+  FiSave, FiX, FiSearch, FiFilter, FiRefreshCw, FiUpload, FiMinimize2, FiMaximize2
 } from 'react-icons/fi';
 import api from '../../api/axios';
 import { Button } from '../../components/ui/button';
