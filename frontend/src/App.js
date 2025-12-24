@@ -142,6 +142,7 @@ const SEOSettings = lazy(() => import('./pages/admin/SEOSettings'));
 const ListingPageForm = lazy(() => import('./pages/admin/ListingPageForm'));
 const SponsoredAdsManagement = lazy(() => import('./pages/admin/SponsoredAdsManagement'));
 const AdvertisementManagement = lazy(() => import('./pages/admin/AdvertisementManagement'));
+const QuickActionCardsSettings = lazy(() => import('./pages/admin/QuickActionCardsSettings'));
 const LeadsList = lazy(() => import('./pages/admin/LeadsList'));
 const LeadSettings = lazy(() => import('./pages/admin/LeadSettings'));
 const AdmissionBookingsManagement = lazy(() => import('./pages/admin/AdmissionBookingsManagement'));
