@@ -86,14 +86,185 @@ const AdvertisementsManagement = () => {
   ];
 
   const availablePositions = [
-    { value: 'top', label: 'Top Banner', description: 'Above page content' },
-    { value: 'content-top', label: 'Content Top', description: 'Inside main content area (top)' },
-    { value: 'content-middle', label: 'Content Middle', description: 'Middle of main content area' },
-    { value: 'content-bottom', label: 'Content Bottom', description: 'Inside main content area (bottom)' },
-    { value: 'sidebar', label: 'Sidebar', description: 'Right sidebar area' },
-    { value: 'popup', label: 'Popup', description: 'Overlay popup' },
-    { value: 'floating', label: 'Floating', description: 'Fixed floating banner' },
+    { value: 'top', label: 'Top Banner', description: 'Above page content', recommended: '1920x200' },
+    { value: 'content-top', label: 'Content Top', description: 'Inside main content area (top)', recommended: '728x90' },
+    { value: 'content-middle', label: 'Content Middle', description: 'Middle of main content area', recommended: '728x90' },
+    { value: 'content-bottom', label: 'Content Bottom', description: 'Inside main content area (bottom)', recommended: '728x90' },
+    { value: 'sidebar', label: 'Sidebar', description: 'Right sidebar area', recommended: '300x250' },
+    { value: 'popup', label: 'Popup', description: 'Overlay popup', recommended: '600x400' },
+    { value: 'floating', label: 'Floating', description: 'Fixed floating banner', recommended: '320x100' },
+    { value: 'homepage-hero', label: 'Homepage Hero', description: 'Main hero slider', recommended: '1920x600' },
+    { value: 'footer', label: 'Footer Banner', description: 'Page footer area', recommended: '1920x150' },
+    { value: 'mobile', label: 'Mobile Banner', description: 'Mobile-optimized', recommended: '320x100' },
   ];
+
+  // Image Upload States
+  const [imageUploading, setImageUploading] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [originalImageSize, setOriginalImageSize] = useState(null);
+  const [compressedImageSize, setCompressedImageSize] = useState(null);
+  const [resizeWidth, setResizeWidth] = useState('');
+  const [resizeHeight, setResizeHeight] = useState('');
+  const [compressionQuality, setCompressionQuality] = useState(80);
+  const [showImageTools, setShowImageTools] = useState(false);
+  const imageInputRef = useRef(null);
+
+  // Get recommended size for selected position
+  const getRecommendedSize = useCallback(() => {
+    const pos = availablePositions.find(p => p.value === formData.position);
+    return pos?.recommended || '728x90';
+  }, [formData.position]);
+
+  // Image compression function
+  const compressImage = useCallback((file, quality = 80, maxWidth = null, maxHeight = null) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (maxWidth && width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          if (maxHeight && height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve({
+                  blob,
+                  width,
+                  height,
+                  size: blob.size,
+                  dataUrl: canvas.toDataURL('image/jpeg', quality / 100)
+                });
+              } else {
+                reject(new Error('Failed to compress'));
+              }
+            },
+            'image/jpeg',
+            quality / 100
+          );
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }, []);
+
+  // Handle image file selection
+  const handleImageSelect = useCallback(async (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Please select a valid image file');
+      return;
+    }
+
+    setImageFile(file);
+    setOriginalImageSize({ size: file.size, name: file.name });
+
+    const img = new Image();
+    img.onload = () => {
+      setOriginalImageSize(prev => ({ ...prev, width: img.width, height: img.height }));
+      setResizeWidth(img.width.toString());
+      setResizeHeight(img.height.toString());
+    };
+    img.src = URL.createObjectURL(file);
+
+    const reader = new FileReader();
+    reader.onload = (e) => setImagePreview(e.target.result);
+    reader.readAsDataURL(file);
+
+    setShowImageTools(true);
+  }, []);
+
+  // Handle drag and drop
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer.files;
+    if (files.length > 0) handleImageSelect(files[0]);
+  }, [handleImageSelect]);
+
+  // Apply compression and resize
+  const applyImageProcessing = useCallback(async () => {
+    if (!imageFile) return;
+    setImageUploading(true);
+    try {
+      const width = resizeWidth ? parseInt(resizeWidth) : null;
+      const height = resizeHeight ? parseInt(resizeHeight) : null;
+      const result = await compressImage(imageFile, compressionQuality, width, height);
+      
+      setCompressedImageSize({ size: result.size, width: result.width, height: result.height });
+      setImagePreview(result.dataUrl);
+      setImageFile(new File([result.blob], imageFile.name, { type: 'image/jpeg' }));
+    } catch (error) {
+      alert('Failed to process image');
+    } finally {
+      setImageUploading(false);
+    }
+  }, [imageFile, resizeWidth, resizeHeight, compressionQuality, compressImage]);
+
+  // Upload image to server
+  const uploadImage = useCallback(async () => {
+    if (!imageFile) return;
+    setImageUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', imageFile);
+      uploadFormData.append('folder', 'advertisements');
+
+      const response = await api.post('/upload', uploadFormData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (response.data?.url) {
+        setFormData(prev => ({ ...prev, image_url: response.data.url }));
+        setShowImageTools(false);
+        setImageFile(null);
+        setImagePreview(null);
+        alert('Image uploaded successfully!');
+      }
+    } catch (error) {
+      alert('Failed to upload image');
+    } finally {
+      setImageUploading(false);
+    }
+  }, [imageFile]);
+
+  // Apply recommended size
+  const applyRecommendedSize = useCallback(() => {
+    const size = getRecommendedSize();
+    const [width, height] = size.split('x');
+    setResizeWidth(width);
+    setResizeHeight(height);
+  }, [getRecommendedSize]);
+
+  // Format file size
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  };
 
   useEffect(() => {
     fetchAdvertisements();
