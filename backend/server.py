@@ -6829,6 +6829,7 @@ try:
     from routes.unified_search import router as unified_search_router, set_database as set_unified_search_db
     from routes.eligibility import router as eligibility_router
     from routes.advanced_content import router as advanced_content_router, set_database as set_advanced_content_db
+    from routes.data_migration import router as data_migration_router, set_database as set_data_migration_db
     
     # Set database for modular routers
     set_leads_db(db)
