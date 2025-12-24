@@ -448,29 +448,50 @@ const CollegeDuniaHome = () => {
               );
             })}
 
-            {/* Sponsor Ad Card - Dynamic from Admin */}
-            {homeBannerAd ? (
-              <Link 
-                to={getInstitutionDetailUrl(homeBannerAd.institution_type || 'college', homeBannerAd.id, homeBannerAd.name, homeBannerAd.location?.city, homeBannerAd.serial_number)}
-                className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden hover:from-gray-700 hover:to-gray-800 transition-all"
-              >
-                <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center overflow-hidden">
-                    {homeBannerAd.logo_url ? (
-                      <img src={homeBannerAd.logo_url} alt={homeBannerAd.name} className="w-full h-full object-contain" />
-                    ) : (
-                      <HiOutlineSparkles size={20} className="text-yellow-400" />
-                    )}
+            {/* Sponsor Ad Card - Dynamic from Admin with Auto-Rotation */}
+            {homeBannerAds.length > 0 ? (
+              <div className="relative">
+                {homeBannerAds.map((ad, index) => (
+                  <Link 
+                    key={ad.id}
+                    to={getInstitutionDetailUrl(ad.institution_type || 'college', ad.id, ad.name, ad.location?.city, ad.serial_number)}
+                    className={`relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden hover:from-gray-700 hover:to-gray-800 transition-all duration-500 ${
+                      index === currentBannerIndex ? 'block' : 'hidden'
+                    }`}
+                  >
+                    <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        {ad.logo_url ? (
+                          <img src={ad.logo_url} alt={ad.name} className="w-full h-full object-contain" />
+                        ) : (
+                          <HiOutlineSparkles size={20} className="text-yellow-400" />
+                        )}
+                      </div>
+                      <div className="text-left flex-1 min-w-0">
+                        <h3 className="font-bold text-sm line-clamp-1">{ad.name}</h3>
+                        <p className="text-xs text-gray-400">
+                          {ad.type || 'Featured'} • {ad.location?.city || 'India'}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+                {/* Dots indicator for multiple ads */}
+                {homeBannerAds.length > 1 && (
+                  <div className="flex justify-center gap-1 mt-2">
+                    {homeBannerAds.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentBannerIndex(index)}
+                        className={`w-1.5 h-1.5 rounded-full transition-all ${
+                          index === currentBannerIndex ? 'bg-yellow-500 w-3' : 'bg-gray-400'
+                        }`}
+                      />
+                    ))}
                   </div>
-                  <div className="text-left">
-                    <h3 className="font-bold text-sm line-clamp-1">{homeBannerAd.name}</h3>
-                    <p className="text-xs text-gray-400">
-                      {homeBannerAd.type || 'Featured'} • {homeBannerAd.location?.city || 'India'}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+                )}
+              </div>
             ) : (
               <div className="relative p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-xl shadow-md overflow-hidden">
                 <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-yellow-500 text-yellow-900 text-[8px] font-bold rounded uppercase">Ad</span>
