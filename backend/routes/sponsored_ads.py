@@ -256,11 +256,27 @@ async def get_sponsored_ads_by_url(url: str = Query(...), section_type: str = Qu
     elif legacy_placement_id in config.get("placements", {}):
         placement_to_use = legacy_placement_id
     
+    async def get_item_by_type(entry):
+        """Helper to get item from correct collection based on content_type"""
+        content_type = entry.get("content_type", "college")
+        item_id = entry.get("item_id")
+        
+        if content_type == "school":
+            return await db.schools.find_one({"id": item_id}, {"_id": 0})
+        elif content_type == "university":
+            return await db.colleges.find_one({"id": item_id, "institution_type": "University"}, {"_id": 0})
+        elif content_type == "course":
+            return await db.courses_detailed.find_one({"id": item_id}, {"_id": 0})
+        elif content_type == "exam":
+            return await db.exams_detailed.find_one({"id": item_id}, {"_id": 0})
+        else:  # default to college
+            return await db.colleges.find_one({"id": item_id}, {"_id": 0})
+    
     if placement_to_use:
         active_items = []
         for entry in config["placements"].get(placement_to_use, []):
             if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
-                item = await db.colleges.find_one({"id": entry.get("item_id")}, {"_id": 0})
+                item = await get_item_by_type(entry)
                 if item:
                     active_items.append({**item, "serial_number": entry.get("serial_order", 0)})
         if active_items:
@@ -278,7 +294,7 @@ async def get_sponsored_ads_by_url(url: str = Query(...), section_type: str = Qu
         active_items = []
         for entry in config["placements"].get(fallback_placement, []):
             if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
-                item = await db.colleges.find_one({"id": entry.get("item_id")}, {"_id": 0})
+                item = await get_item_by_type(entry)
                 if item:
                     active_items.append({**item, "serial_number": entry.get("serial_order", 0)})
         return sorted(active_items, key=lambda x: x.get("serial_number", 0))
