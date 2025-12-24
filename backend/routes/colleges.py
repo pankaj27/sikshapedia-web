@@ -160,8 +160,11 @@ async def get_colleges(
 
 @router.get("/colleges/featured")
 async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Optional[str] = Query(None)):
-    """Get featured colleges for homepage display"""
+    """Get featured colleges for homepage display - excludes Schools"""
     projection = COLLEGE_MINIMAL_PROJECTION if fields == "minimal" else {"_id": 0}
+    
+    # Filter to exclude Schools - only show Colleges and Universities
+    institution_filter = {"institution_type": {"$nin": ["School", "school"]}}
     
     settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
     featured_ids = settings.get("featured_colleges_ids", []) if settings else []
@@ -170,14 +173,17 @@ async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Opt
     
     if featured_ids:
         for college_id in featured_ids[:limit]:
-            college = await db.colleges.find_one({"id": college_id, "status": "published"}, projection)
+            college = await db.colleges.find_one(
+                {"id": college_id, "status": "published", **institution_filter}, 
+                projection
+            )
             if college:
                 featured_colleges.append(college)
     
     if len(featured_colleges) < limit:
         existing_ids = [c.get('id') for c in featured_colleges]
         additional = await db.colleges.find(
-            {"status": "published", "is_featured": True, "id": {"$nin": existing_ids}}, 
+            {"status": "published", "is_featured": True, "id": {"$nin": existing_ids}, **institution_filter}, 
             projection
         ).sort("featured_at", -1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
         featured_colleges.extend(additional)
@@ -185,7 +191,7 @@ async def get_featured_colleges(limit: int = Query(12, ge=1, le=50), fields: Opt
     if len(featured_colleges) < limit:
         existing_ids = [c.get('id') for c in featured_colleges]
         additional = await db.colleges.find(
-            {"status": "published", "id": {"$nin": existing_ids}}, 
+            {"status": "published", "id": {"$nin": existing_ids}, **institution_filter}, 
             projection
         ).sort("nirf_ranking", 1).limit(limit - len(featured_colleges)).to_list(limit - len(featured_colleges))
         featured_colleges.extend(additional)
