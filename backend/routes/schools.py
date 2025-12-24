@@ -125,7 +125,7 @@ async def get_schools(
     return schools
 
 
-@router.get("/schools/featured", response_model=List[School])
+@router.get("/schools/featured")
 async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
     """Get featured schools for homepage - prioritizes manually selected schools from homepage settings"""
     settings = await db.homepage_settings.find_one({"id": "homepage-settings"}, {"_id": 0})
@@ -145,6 +145,8 @@ async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
                     {"_id": 0}
                 )
             if school:
+                # Normalize data to ensure consistent format for frontend
+                school = normalize_school_data(school)
                 featured_schools.append(school)
     
     # If not enough, fill with schools from both collections
@@ -156,7 +158,8 @@ async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
             {"id": {"$nin": existing_ids}}, 
             {"_id": 0}
         ).sort("rating", -1).limit(limit - len(featured_schools)).to_list(limit - len(featured_schools))
-        featured_schools.extend(additional_schools)
+        for s in additional_schools:
+            featured_schools.append(normalize_school_data(s))
         
         # Also get from colleges collection (schools stored there)
         if len(featured_schools) < limit:
@@ -165,9 +168,53 @@ async def get_featured_schools(limit: int = Query(8, ge=1, le=50)):
                 {"id": {"$nin": existing_ids}, "institution_type": {"$in": ["School", "school"]}}, 
                 {"_id": 0}
             ).sort("rating", -1).limit(limit - len(featured_schools)).to_list(limit - len(featured_schools))
-            featured_schools.extend(additional_from_colleges)
+            for s in additional_from_colleges:
+                featured_schools.append(normalize_school_data(s))
     
     return featured_schools
+
+
+def normalize_school_data(school):
+    """Normalize school data for consistent frontend display"""
+    # Extract location info
+    location = school.get('location', {})
+    
+    # Ensure key fields are at root level
+    normalized = {**school}
+    
+    # Add city/state at root level if missing
+    if 'city' not in normalized and isinstance(location, dict):
+        normalized['city'] = location.get('city', '')
+    if 'state' not in normalized and isinstance(location, dict):
+        normalized['state'] = location.get('state', '')
+    
+    # Add school_type if missing
+    if 'school_type' not in normalized:
+        normalized['school_type'] = normalized.get('type', 'Day')
+    
+    # Calculate fees if missing
+    if 'fees' not in normalized:
+        courses = normalized.get('courses', [])
+        if courses and len(courses) > 0:
+            avg_fee = sum(c.get('fees', 0) for c in courses if c.get('fees')) / len(courses)
+            normalized['fees'] = f"{int(avg_fee/100000)}L" if avg_fee >= 100000 else f"{int(avg_fee/1000)}K"
+        else:
+            normalized['fees'] = '2L'
+    
+    # Location string for display
+    if 'location' not in normalized or not isinstance(normalized.get('location'), str):
+        city = normalized.get('city', location.get('city', ''))
+        state = normalized.get('state', location.get('state', ''))
+        if city or state:
+            normalized['location_display'] = f"{city}, {state}".strip(', ')
+    
+    # Extract rank from rankings if present
+    if 'rank' not in normalized and normalized.get('rankings'):
+        rankings = normalized.get('rankings', [])
+        if rankings and len(rankings) > 0:
+            normalized['rank'] = rankings[0].get('rank')
+    
+    return normalized
 
 
 @router.get("/schools/{school_id}")
