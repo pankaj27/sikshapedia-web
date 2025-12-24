@@ -258,7 +258,7 @@ async def get_sponsored_ads_by_url(url: str = Query(...), section_type: str = Qu
     
     if placement_to_use:
         active_items = []
-        for entry in config["placements"].get(custom_placement_id, []):
+        for entry in config["placements"].get(placement_to_use, []):
             if entry.get("is_active") and entry.get("start_date", "") <= now <= entry.get("end_date", ""):
                 item = await db.colleges.find_one({"id": entry.get("item_id")}, {"_id": 0})
                 if item:
