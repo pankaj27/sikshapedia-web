@@ -267,13 +267,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "P0: Featured Colleges API Fix"
-    - "P1: Role-Based Access Control"
-    - "Fix React Infinite Re-render Errors"
-    - "Content Consistency Testing"
-  stuck_tasks:
-    - "Quick Facts Display on College Detail Page"
-    - "Content Consistency Between Main Page and Sub-pages"
+    - "Enhanced Hero Slider Institute Search API"
+    - "Institute Detail API"
+    - "Homepage Settings Hero Slides Enhancement"
+    - "Hero Slider Priority and Filtering Logic"
+    - "Hero Slider Settings Persistence"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
@@ -284,3 +283,5 @@ agent_communication:
       message: "Backend API testing completed successfully for Quick Facts and Key Statistics functionality. All core features are working correctly. The college data has been updated to match test requirements (Established: 2020, Type: Private, Approved by: AICTE, Accredited by: NAAC). Only minor issue is URL pattern compatibility - frontend needs to handle mapping from SEO-friendly URLs to UUIDs."
     - agent: "testing"
       message: "CRITICAL FRONTEND ISSUE FOUND: React components have infinite re-render loops causing 'Maximum update depth exceeded' errors. This prevents pages from loading properly. The error occurs in useEffect hooks with setState calls that don't have proper dependency arrays or have dependencies that change on every render. Content consistency testing cannot be completed until these React errors are fixed. Backend data is correct and available at /colleges/15-indian-institute-of-management-ahmedabad."
+    - agent: "testing"
+      message: "✅ ENHANCED HERO SLIDER TESTING COMPLETE: All Enhanced Hero Slider with Institute Search functionality is working correctly. Institute Search API (/institutes/search) supports type filtering (all/college/school/university) and returns proper data structure. Institute Detail API (/institutes/{id}) retrieves complete institute information. Homepage Settings API includes new hero_slides fields (institute_id, priority, start_date, end_date, is_active). Priority sorting and active/inactive filtering logic implemented correctly. Settings persistence working - PUT/GET operations successful. All 6 Enhanced Hero Slider tasks are PASSING."
