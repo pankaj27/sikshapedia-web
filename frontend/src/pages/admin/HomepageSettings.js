@@ -533,10 +533,22 @@ const HomepageSettings = () => {
 
   // Hero Slides
   const addSlide = () => {
+    const newPriority = (settings.hero_slides?.length || 0) + 1;
     setSettings(prev => ({
       ...prev,
       hero_slides: [...prev.hero_slides, { 
-        image: '', type: 'college', name: '', rating: 4.5, reviews: 0, location: '', slug: '' 
+        institute_id: '',
+        image: '', 
+        type: 'college', 
+        name: '', 
+        rating: 4.5, 
+        reviews: 0, 
+        location: '', 
+        slug: '',
+        priority: newPriority,
+        start_date: '',
+        end_date: '',
+        is_active: true
       }]
     }));
   };
@@ -549,6 +561,68 @@ const HomepageSettings = () => {
 
   const removeSlide = (index) => {
     handleChange('hero_slides', settings.hero_slides.filter((_, i) => i !== index));
+    // Clean up search states
+    setSlideSearchQuery(prev => { const n = {...prev}; delete n[index]; return n; });
+    setSlideSearchResults(prev => { const n = {...prev}; delete n[index]; return n; });
+    setShowSlideDropdown(prev => { const n = {...prev}; delete n[index]; return n; });
+  };
+
+  // Search institutes for hero slider
+  const searchInstitutes = async (index, query) => {
+    setSlideSearchQuery(prev => ({ ...prev, [index]: query }));
+    
+    if (!query || query.length < 2) {
+      setSlideSearchResults(prev => ({ ...prev, [index]: [] }));
+      setShowSlideDropdown(prev => ({ ...prev, [index]: false }));
+      return;
+    }
+    
+    try {
+      const typeFilter = slideTypeFilter[index] || 'all';
+      const response = await api.get(`/institutes/search?search=${encodeURIComponent(query)}&type=${typeFilter}&limit=10`);
+      setSlideSearchResults(prev => ({ ...prev, [index]: response.data || [] }));
+      setShowSlideDropdown(prev => ({ ...prev, [index]: true }));
+    } catch (error) {
+      console.error('Error searching institutes:', error);
+    }
+  };
+
+  // Select institute for hero slider
+  const selectInstituteForSlide = (index, institute) => {
+    const newSlides = [...settings.hero_slides];
+    newSlides[index] = {
+      ...newSlides[index],
+      institute_id: institute.id,
+      name: institute.name,
+      slug: institute.slug || '',
+      type: institute.type,
+      location: institute.location || '',
+      rating: institute.rating || 0,
+      reviews: institute.reviews_count || 0,
+      image: institute.banner_url || newSlides[index].image || ''
+    };
+    handleChange('hero_slides', newSlides);
+    
+    // Clear search
+    setSlideSearchQuery(prev => ({ ...prev, [index]: '' }));
+    setSlideSearchResults(prev => ({ ...prev, [index]: [] }));
+    setShowSlideDropdown(prev => ({ ...prev, [index]: false }));
+  };
+
+  // Move slide up/down for priority
+  const moveSlide = (index, direction) => {
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= settings.hero_slides.length) return;
+    
+    const newSlides = [...settings.hero_slides];
+    [newSlides[index], newSlides[newIndex]] = [newSlides[newIndex], newSlides[index]];
+    
+    // Update priorities
+    newSlides.forEach((slide, i) => {
+      slide.priority = i + 1;
+    });
+    
+    handleChange('hero_slides', newSlides);
   };
 
   // Study Goals
