@@ -1685,8 +1685,12 @@ const CollegeForm = () => {
       });
       
       if (response.data.success) {
-        const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
-        const fullUrl = backendUrl + response.data.url;
+        // Only prepend backendUrl for relative URLs
+        let fullUrl = response.data.url;
+        if (fullUrl && !fullUrl.startsWith('http')) {
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+          fullUrl = backendUrl + fullUrl;
+        }
         
         setFormData(prev => ({
           ...prev,
