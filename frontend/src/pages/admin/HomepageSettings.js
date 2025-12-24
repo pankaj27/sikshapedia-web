@@ -948,49 +948,173 @@ const HomepageSettings = () => {
                 </div>
               </div>
 
-              {/* Hero Slides */}
+              {/* Hero Slides - Enhanced with Institute Search */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-semibold">Hero Slider Images</h3>
+                  <div>
+                    <h3 className="text-lg font-semibold">Hero Slider Images</h3>
+                    <p className="text-sm text-gray-500">Search and select institutes - banner, name, location auto-filled</p>
+                  </div>
                   <Button variant="outline" size="sm" onClick={addSlide}>
                     <FiPlus className="mr-1" /> Add Slide
                   </Button>
                 </div>
                 <div className="space-y-4">
                   {settings.hero_slides?.map((slide, index) => (
-                    <div key={index} className="p-4 bg-gray-50 rounded-lg">
-                      <div className="flex justify-between items-start mb-3">
-                        <span className="font-medium">Slide {index + 1}</span>
-                        <button onClick={() => removeSlide(index)} className="text-red-500 hover:text-red-700">
-                          <FiTrash2 />
-                        </button>
+                    <div key={index} className={`p-4 rounded-lg border-2 ${slide.is_active !== false ? 'bg-white border-green-200' : 'bg-gray-100 border-gray-300'}`}>
+                      {/* Slide Header */}
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                            #{slide.priority || index + 1}
+                          </span>
+                          <span className="font-medium text-gray-700">
+                            {slide.name || 'New Slide'}
+                          </span>
+                          {slide.institute_id && (
+                            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs flex items-center gap-1">
+                              <FiCheck size={12} /> Linked
+                            </span>
+                          )}
+                          <span className={`px-2 py-0.5 rounded text-xs ${
+                            slide.type === 'college' ? 'bg-blue-100 text-blue-700' :
+                            slide.type === 'school' ? 'bg-orange-100 text-orange-700' :
+                            'bg-purple-100 text-purple-700'
+                          }`}>
+                            {slide.type?.charAt(0).toUpperCase() + slide.type?.slice(1) || 'College'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {/* Move buttons */}
+                          <button 
+                            onClick={() => moveSlide(index, 'up')} 
+                            disabled={index === 0}
+                            className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                            title="Move up"
+                          >
+                            <FiChevronUp size={18} />
+                          </button>
+                          <button 
+                            onClick={() => moveSlide(index, 'down')} 
+                            disabled={index === settings.hero_slides.length - 1}
+                            className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                            title="Move down"
+                          >
+                            <FiChevronDown size={18} />
+                          </button>
+                          {/* Active toggle */}
+                          <button 
+                            onClick={() => updateSlide(index, 'is_active', !slide.is_active)}
+                            className={`p-1.5 rounded ${slide.is_active !== false ? 'text-green-600 bg-green-50' : 'text-gray-400 bg-gray-100'}`}
+                            title={slide.is_active !== false ? 'Active' : 'Inactive'}
+                          >
+                            {slide.is_active !== false ? <FiEye size={16} /> : <FiEyeOff size={16} />}
+                          </button>
+                          <button onClick={() => removeSlide(index)} className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded">
+                            <FiTrash2 size={16} />
+                          </button>
+                        </div>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="md:col-span-3">
-                          <label className="block text-xs text-gray-500 mb-1">Image URL</label>
+
+                      {/* Institute Search */}
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                        <label className="block text-sm font-medium text-blue-800 mb-2">
+                          🔍 Search Institute (Auto-fills all details)
+                        </label>
+                        <div className="flex gap-2 mb-2">
+                          <select
+                            value={slideTypeFilter[index] || 'all'}
+                            onChange={(e) => setSlideTypeFilter(prev => ({ ...prev, [index]: e.target.value }))}
+                            className="border rounded px-3 py-2 text-sm bg-white"
+                          >
+                            <option value="all">All Types</option>
+                            <option value="college">Colleges</option>
+                            <option value="school">Schools</option>
+                            <option value="university">Universities</option>
+                          </select>
+                          <div className="relative flex-1">
+                            <input
+                              type="text"
+                              value={slideSearchQuery[index] || ''}
+                              onChange={(e) => searchInstitutes(index, e.target.value)}
+                              onFocus={() => slideSearchResults[index]?.length > 0 && setShowSlideDropdown(prev => ({ ...prev, [index]: true }))}
+                              className="w-full border rounded px-3 py-2 text-sm"
+                              placeholder="Type institute name to search..."
+                            />
+                            {/* Dropdown Results */}
+                            {showSlideDropdown[index] && slideSearchResults[index]?.length > 0 && (
+                              <div className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                {slideSearchResults[index].map((inst) => (
+                                  <div
+                                    key={inst.id}
+                                    onClick={() => selectInstituteForSlide(index, inst)}
+                                    className="p-3 hover:bg-blue-50 cursor-pointer border-b last:border-b-0"
+                                  >
+                                    <div className="flex justify-between items-start">
+                                      <div>
+                                        <p className="font-medium text-gray-800">{inst.name}</p>
+                                        <p className="text-xs text-gray-500">{inst.location}</p>
+                                      </div>
+                                      <div className="flex items-center gap-2">
+                                        <span className={`px-2 py-0.5 rounded text-xs ${
+                                          inst.type === 'college' ? 'bg-blue-100 text-blue-700' :
+                                          inst.type === 'school' ? 'bg-orange-100 text-orange-700' :
+                                          'bg-purple-100 text-purple-700'
+                                        }`}>
+                                          {inst.type}
+                                        </span>
+                                        {inst.rating > 0 && (
+                                          <span className="text-xs text-yellow-600 flex items-center gap-0.5">
+                                            <FiStar size={10} /> {inst.rating}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {inst.banner_url && (
+                                      <p className="text-xs text-green-600 mt-1">✓ Has banner image</p>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {slide.institute_id && (
+                          <p className="text-xs text-green-700">
+                            ✓ Linked to: {slide.name} ({slide.type})
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Auto-filled Details (Editable) */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                        <div className="lg:col-span-2">
+                          <label className="block text-xs text-gray-500 mb-1">Banner Image URL</label>
                           <input
                             type="text"
-                            value={slide.image}
+                            value={slide.image || ''}
                             onChange={(e) => updateSlide(index, 'image', e.target.value)}
                             className="w-full border rounded px-3 py-2 text-sm"
-                            placeholder="https://..."
+                            placeholder="Auto-filled from institute or enter URL"
                           />
                         </div>
                         <div>
                           <label className="block text-xs text-gray-500 mb-1">Name</label>
                           <input
                             type="text"
-                            value={slide.name}
+                            value={slide.name || ''}
                             onChange={(e) => updateSlide(index, 'name', e.target.value)}
-                            className="w-full border rounded px-3 py-2 text-sm"
+                            className="w-full border rounded px-3 py-2 text-sm bg-gray-50"
+                            readOnly={!!slide.institute_id}
                           />
                         </div>
                         <div>
                           <label className="block text-xs text-gray-500 mb-1">Type</label>
                           <select
-                            value={slide.type}
+                            value={slide.type || 'college'}
                             onChange={(e) => updateSlide(index, 'type', e.target.value)}
-                            className="w-full border rounded px-3 py-2 text-sm"
+                            className="w-full border rounded px-3 py-2 text-sm bg-gray-50"
+                            disabled={!!slide.institute_id}
                           >
                             <option value="college">College</option>
                             <option value="school">School</option>
@@ -1001,16 +1125,17 @@ const HomepageSettings = () => {
                           <label className="block text-xs text-gray-500 mb-1">Location</label>
                           <input
                             type="text"
-                            value={slide.location}
+                            value={slide.location || ''}
                             onChange={(e) => updateSlide(index, 'location', e.target.value)}
-                            className="w-full border rounded px-3 py-2 text-sm"
+                            className="w-full border rounded px-3 py-2 text-sm bg-gray-50"
+                            readOnly={!!slide.institute_id}
                           />
                         </div>
                         <div>
                           <label className="block text-xs text-gray-500 mb-1">Rating</label>
                           <input
                             type="number"
-                            value={slide.rating}
+                            value={slide.rating || 0}
                             onChange={(e) => updateSlide(index, 'rating', parseFloat(e.target.value) || 0)}
                             className="w-full border rounded px-3 py-2 text-sm"
                             step="0.1"
@@ -1019,19 +1144,82 @@ const HomepageSettings = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-xs text-gray-500 mb-1">Slug (URL)</label>
+                          <label className="block text-xs text-gray-500 mb-1">URL Slug</label>
                           <input
                             type="text"
-                            value={slide.slug}
+                            value={slide.slug || ''}
                             onChange={(e) => updateSlide(index, 'slug', e.target.value)}
+                            className="w-full border rounded px-3 py-2 text-sm bg-gray-50"
+                            readOnly={!!slide.institute_id}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">Priority</label>
+                          <input
+                            type="number"
+                            value={slide.priority || index + 1}
+                            onChange={(e) => updateSlide(index, 'priority', parseInt(e.target.value) || 1)}
                             className="w-full border rounded px-3 py-2 text-sm"
+                            min="1"
                           />
                         </div>
                       </div>
+
+                      {/* Scheduling */}
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <label className="block text-sm font-medium text-yellow-800 mb-2 flex items-center gap-2">
+                          <FiCalendar size={14} /> Schedule Display (Optional)
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">Start Date</label>
+                            <input
+                              type="date"
+                              value={slide.start_date || ''}
+                              onChange={(e) => updateSlide(index, 'start_date', e.target.value)}
+                              className="w-full border rounded px-3 py-2 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">End Date</label>
+                            <input
+                              type="date"
+                              value={slide.end_date || ''}
+                              onChange={(e) => updateSlide(index, 'end_date', e.target.value)}
+                              className="w-full border rounded px-3 py-2 text-sm"
+                            />
+                          </div>
+                        </div>
+                        <p className="text-xs text-yellow-700 mt-2">
+                          Leave empty to show always. Set dates to schedule when this slide should appear.
+                        </p>
+                      </div>
+
+                      {/* Preview */}
+                      {slide.image && (
+                        <div className="mt-3">
+                          <label className="block text-xs text-gray-500 mb-1">Preview</label>
+                          <div className="relative rounded-lg overflow-hidden h-24">
+                            <img 
+                              src={slide.image} 
+                              alt={slide.name || 'Preview'}
+                              className="w-full h-full object-cover"
+                              onError={(e) => { e.target.style.display = 'none'; }}
+                            />
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                              <p className="text-white text-sm font-medium">{slide.name}</p>
+                              <p className="text-white/80 text-xs">{slide.location}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                   {settings.hero_slides?.length === 0 && (
-                    <p className="text-gray-500 text-center py-4">No slides added. Click "Add Slide" to add hero images.</p>
+                    <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                      <FiImage className="mx-auto text-gray-400 mb-2" size={32} />
+                      <p className="text-gray-500">No slides added. Click "Add Slide" to add hero images.</p>
+                    </div>
                   )}
                 </div>
               </div>
