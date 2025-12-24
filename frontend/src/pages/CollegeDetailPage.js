@@ -577,7 +577,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
           <div className="relative -mt-20 md:-mt-24 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 md:p-6 mb-6">
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {/* Logo */}
-              <div className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white rounded-xl shadow-lg border-2 border-gray-100 flex items-center justify-center flex-shrink-0 -mt-12 md:-mt-16 lg:-mt-20 overflow-hidden">
+              <div className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white rounded-xl shadow-lg border-2 border-gray-100 flex items-center justify-center flex-shrink-0 -mt-10 md:-mt-14 lg:-mt-16 overflow-hidden">
                 {(college.logo_url || college.images?.[0]) ? (
                   <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-full h-full object-contain p-2" />
                 ) : (
