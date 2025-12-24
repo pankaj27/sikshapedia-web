@@ -289,11 +289,13 @@ async def import_single_collection(
 
 
 @router.post("/data-migration/seed")
+@router.get("/data-migration/seed")
 async def seed_database():
     """
     Create initial admin user and basic settings for fresh database.
     This endpoint does NOT require authentication (for fresh deployments).
     Can only be called once - will fail if admin already exists.
+    Works with both GET and POST requests.
     """
     from passlib.context import CryptContext
     import uuid
