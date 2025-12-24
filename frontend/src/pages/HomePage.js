@@ -849,7 +849,7 @@ const CollegeDuniaHome = () => {
                   </div>
                   
                   {/* School Logo - Bottom Left */}
-                  <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white overflow-hidden z-10">
+                  <div className="absolute -bottom-4 left-4 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border-2 border-white overflow-hidden z-10">
                     {school.logo_url ? (
                       <img 
                         src={school.logo_url} 
@@ -857,17 +857,16 @@ const CollegeDuniaHome = () => {
                         className="w-full h-full object-cover"
                         onError={(e) => { 
                           e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = '<span class="text-xl text-emerald-600"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>';
+                          e.target.nextSibling.style.display = 'flex';
                         }}
                       />
-                    ) : (
-                      <FiBook className="text-xl text-emerald-600" />
-                    )}
+                    ) : null}
+                    <FiBook className={`text-lg text-emerald-600 ${school.logo_url ? 'hidden' : ''}`} />
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-4 pt-8 flex-1 flex flex-col">
+                <div className="p-4 pt-6 flex-1 flex flex-col">
                   <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 group-hover:text-emerald-600 transition-colors cursor-pointer">
                     {school.name}
                   </h3>
