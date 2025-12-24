@@ -243,14 +243,19 @@ const AdvertisementsManagement = () => {
       });
 
       if (response.data?.url) {
-        const uploadedUrl = response.data.url;
+        // Make sure we have a full URL
+        let uploadedUrl = response.data.url;
+        if (uploadedUrl.startsWith('/')) {
+          // Convert relative URL to absolute using the backend URL
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || '';
+          uploadedUrl = backendUrl + uploadedUrl;
+        }
         setFormData(prev => ({ ...prev, image_url: uploadedUrl }));
         setShowImageTools(false);
         setImageFile(null);
         setImagePreview(null);
         setOriginalImageSize(null);
         setCompressedImageSize(null);
-        // Show success with URL
         console.log('Image uploaded successfully:', uploadedUrl);
       }
     } catch (error) {
