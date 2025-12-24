@@ -428,8 +428,8 @@ const ListingPageForm = () => {
     return { id: 'admin', name: 'Admin User', email: 'admin@admissionbuddy.co', role: 'data_entry' };
   };
   
-  // Check if user can publish directly (super_admin or content_manager)
-  const canPublish = userRole === 'super_admin' || userRole === 'content_manager';
+  // Check if user can publish directly (super_admin, admin, or content_manager)
+  const canPublish = userRole === 'super_admin' || userRole === 'admin' || userRole === 'content_manager';
   
   // Fetch user role on mount
   useEffect(() => {
