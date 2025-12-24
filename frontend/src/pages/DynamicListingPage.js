@@ -123,6 +123,7 @@ const DynamicListingPage = () => {
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [cityFilterSearch, setCityFilterSearch] = useState(''); // Search text for city filter
   const [stateFilterSearch, setStateFilterSearch] = useState(''); // Search text for state filter
+  const [quickActionSettings, setQuickActionSettings] = useState(null); // Quick action cards settings
   
   // Ref for infinite scroll observer
   const loadMoreRef = useRef(null);
