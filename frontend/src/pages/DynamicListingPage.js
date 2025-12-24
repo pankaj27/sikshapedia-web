@@ -6,6 +6,7 @@ import { FiMapPin, FiFilter, FiSearch, FiChevronDown, FiChevronUp, FiStar, FiBoo
 import api from '../api/axios';
 import { useYear } from '../hooks/useYear';
 import { AuthorInfoHero } from '../components/AuthorInfo';
+import { UrlAwareSponsoredSection } from '../components/SponsoredAds';
 import { 
   parseInstitutionUrl, 
   generatePageTitle, 
