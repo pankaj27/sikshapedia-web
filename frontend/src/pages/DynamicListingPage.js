@@ -1283,10 +1283,11 @@ const DynamicListingPage = () => {
       {quickActionSettings?.is_enabled && quickActionSettings?.cards?.filter(c => c.is_enabled).length > 0 && (
         (() => {
           // Check if should show on this page type
+          const instType = (pageInfo.institutionType || '').toLowerCase();
           const showOnPage = 
-            (pageInfo.institutionType === 'college' && quickActionSettings.show_on_college_listing) ||
-            (pageInfo.institutionType === 'school' && quickActionSettings.show_on_school_listing) ||
-            (pageInfo.institutionType === 'university' && quickActionSettings.show_on_university_listing);
+            ((instType === 'college' || instType === 'colleges') && quickActionSettings.show_on_college_listing) ||
+            ((instType === 'school' || instType === 'schools') && quickActionSettings.show_on_school_listing) ||
+            ((instType === 'university' || instType === 'universities') && quickActionSettings.show_on_university_listing);
           
           if (!showOnPage) return null;
           
