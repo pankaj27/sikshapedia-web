@@ -5564,9 +5564,17 @@ class APITester:
                          f"Response time: {response_time:.2f}ms (> 1000ms)")
 
     def run_all_tests(self):
-        """Run all test suites focusing on Deployment Health Check first"""
-        print("🚀 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
+        """Run all test suites focusing on Priority Fixes first"""
+        print("🚀 PRIORITY FIXES TESTING - P0 & P1")
         print(f"🌐 Base URL: {BASE_URL}")
+        print("=" * 80)
+        
+        # **PRIORITY: P0 & P1 FIXES FROM REVIEW REQUEST**
+        self.test_p0_featured_colleges_fix()
+        self.test_p1_role_based_access_control()
+        
+        print("\n" + "=" * 80)
+        print("🔄 DEPLOYMENT HEALTH CHECK - BACKEND API TESTING")
         print("=" * 80)
         
         # **PRIORITY: DEPLOYMENT HEALTH CHECK TESTS**
