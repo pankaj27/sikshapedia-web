@@ -717,12 +717,21 @@ const AdvertisementsManagement = () => {
                       type="url"
                       value={formData.image_url}
                       onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                      className="w-full border rounded px-3 py-2"
+                      className={`w-full border rounded px-3 py-2 ${formData.image_url ? 'border-green-400 bg-green-50' : ''}`}
                       placeholder="https://example.com/ad-image.jpg"
                     />
-                    {formData.image_url && !showImageTools && (
-                      <div className="mt-2">
-                        <img src={formData.image_url} alt="Current" className="max-h-20 rounded border" />
+                    {formData.image_url && (
+                      <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded">
+                        <p className="text-xs text-green-700 font-medium mb-1">✅ Image URL Set:</p>
+                        <p className="text-xs text-green-600 break-all">{formData.image_url}</p>
+                        <div className="mt-2">
+                          <img 
+                            src={formData.image_url} 
+                            alt="Preview" 
+                            className="max-h-24 rounded border"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        </div>
                       </div>
                     )}
                   </div>
