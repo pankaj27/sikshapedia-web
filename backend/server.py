@@ -4394,6 +4394,102 @@ async def update_study_materials_listing_settings(settings: StudyMaterialsListin
 
 
 # ============================================
+# Quick Action Cards Settings (for Listing Pages)
+# ============================================
+
+class QuickActionCard(BaseModel):
+    """Individual quick action card configuration"""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = "Action"
+    subtitle: str = "Description"
+    link: str = "/"
+    icon: str = "edit"  # edit, grid, target, star, book, award, heart, etc.
+    gradient_from: str = "orange-500"
+    gradient_to: str = "red-500"
+    text_color: str = "white"
+    is_enabled: bool = True
+    order: int = 0
+    # Optional: Replace with advertisement
+    is_ad_slot: bool = False
+    ad_image_url: Optional[str] = None
+    ad_click_url: Optional[str] = None
+    ad_alt_text: Optional[str] = None
+
+class QuickActionCardsSettings(BaseModel):
+    """Settings for Quick Action Cards on listing pages"""
+    model_config = ConfigDict(extra="allow")
+    id: str = "quick-action-cards"
+    
+    # Global toggle
+    is_enabled: bool = True
+    
+    # Cards configuration
+    cards: List[QuickActionCard] = [
+        QuickActionCard(
+            id="write-review",
+            title="Write a Review",
+            subtitle="Get Upto ₹300*",
+            link="/write-review",
+            icon="edit",
+            gradient_from="orange-500",
+            gradient_to="red-500",
+            order=1
+        ),
+        QuickActionCard(
+            id="course-finder",
+            title="Course Finder",
+            subtitle="Find Your Course",
+            link="/course-finder",
+            icon="grid",
+            gradient_from="blue-500",
+            gradient_to="cyan-500",
+            order=2
+        ),
+        QuickActionCard(
+            id="predictor",
+            title="Predictor",
+            subtitle="Admission Chances",
+            link="/college-predictor",
+            icon="target",
+            gradient_from="emerald-500",
+            gradient_to="teal-500",
+            order=3
+        )
+    ]
+    
+    # Display settings
+    show_on_college_listing: bool = True
+    show_on_school_listing: bool = True
+    show_on_university_listing: bool = True
+    show_on_exam_listing: bool = False
+    show_on_course_listing: bool = False
+    
+    # Timestamps
+    updated_at: Optional[datetime] = None
+    updated_by: Optional[str] = None
+
+@api_router.get("/quick-action-cards-settings")
+async def get_quick_action_cards_settings():
+    """Get quick action cards configuration"""
+    settings = await db.quick_action_cards_settings.find_one({"id": "quick-action-cards"}, {"_id": 0})
+    if not settings:
+        return QuickActionCardsSettings().model_dump()
+    return settings
+
+@api_router.put("/quick-action-cards-settings")
+async def update_quick_action_cards_settings(settings: QuickActionCardsSettings):
+    """Update quick action cards configuration (admin only)"""
+    settings_dict = settings.model_dump()
+    settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.quick_action_cards_settings.update_one(
+        {"id": "quick-action-cards"},
+        {"$set": settings_dict},
+        upsert=True
+    )
+    return {"success": True, "message": "Quick action cards settings saved", "data": settings_dict}
+
+
+# ============================================
 # Study Materials CRUD
 # ============================================
 
