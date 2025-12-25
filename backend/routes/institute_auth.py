@@ -232,12 +232,21 @@ async def create_institute_credentials(db, institution_id: str, institution_name
 
 @router.post("/login")
 async def institute_login(request_data: InstituteLoginRequest, response: Response, db=Depends(get_db)):
-    """Institute login"""
-    # Find credentials
+    """Institute login - accepts either Login ID or Email"""
+    login_input = request_data.login_id.strip()
+    
+    # Try to find by login_id first, then by email (case-insensitive)
     cred = await db.institute_credentials.find_one(
-        {"login_id": request_data.login_id},
+        {"login_id": login_input},
         {"_id": 0}
     )
+    
+    # If not found by login_id, try email (case-insensitive)
+    if not cred:
+        cred = await db.institute_credentials.find_one(
+            {"email": {"$regex": f"^{login_input}$", "$options": "i"}},
+            {"_id": 0}
+        )
     
     if not cred:
         raise HTTPException(status_code=401, detail="Invalid login ID or password")
@@ -262,7 +271,7 @@ async def institute_login(request_data: InstituteLoginRequest, response: Respons
     
     # Update last login
     await db.institute_credentials.update_one(
-        {"login_id": request_data.login_id},
+        {"institution_id": cred["institution_id"]},
         {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}}
     )
     
