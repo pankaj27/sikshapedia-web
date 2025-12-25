@@ -575,6 +575,14 @@ const InstituteDashboard = () => {
                           
                           {/* Actions */}
                           <div className="flex flex-wrap gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleViewActivities(lead)}
+                              className="text-gray-600 border-gray-300"
+                            >
+                              📋 History
+                            </Button>
                             {lead.status === 'new' && (
                               <Button
                                 size="sm"
@@ -616,6 +624,66 @@ const InstituteDashboard = () => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+                
+                {/* Activity Log Modal */}
+                {selectedLead && (
+                  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-hidden">
+                      <div className="p-4 border-b flex items-center justify-between bg-gray-50">
+                        <div>
+                          <h3 className="font-bold text-lg">Activity History</h3>
+                          <p className="text-sm text-gray-600">{selectedLead.name}</p>
+                        </div>
+                        <button
+                          onClick={() => setSelectedLead(null)}
+                          className="text-gray-500 hover:text-gray-700 text-2xl"
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <div className="p-4 overflow-y-auto max-h-[60vh]">
+                        {loadingActivities ? (
+                          <div className="text-center py-8">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+                          </div>
+                        ) : leadActivities.length === 0 ? (
+                          <div className="text-center py-8 text-gray-500">
+                            <p>No activity history yet</p>
+                            <p className="text-sm mt-1">Updates will appear here when status changes</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {leadActivities.map((activity) => (
+                              <div key={activity.id} className="border-l-4 border-blue-500 pl-4 py-2">
+                                <div className="flex items-center gap-2 text-sm">
+                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                    activity.performed_by_type === 'admin' 
+                                      ? 'bg-purple-100 text-purple-700' 
+                                      : 'bg-green-100 text-green-700'
+                                  }`}>
+                                    {activity.performed_by_type === 'admin' ? '👤 Admin' : '🏢 Institute'}
+                                  </span>
+                                  <span className="text-gray-500">
+                                    {new Date(activity.created_at).toLocaleString()}
+                                  </span>
+                                </div>
+                                <p className="font-medium mt-1">
+                                  Status: <span className="text-red-500">{activity.old_value}</span>
+                                  {' → '}
+                                  <span className="text-green-500">{activity.new_value}</span>
+                                </p>
+                                <p className="text-sm text-gray-600">By: {activity.performed_by}</p>
+                                {activity.notes && (
+                                  <p className="text-sm text-gray-500 mt-1 italic">"{activity.notes}"</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
               </>
