@@ -233,7 +233,7 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
         "exam": request.exam,
         "referral_code": referral_code,
         "referred_by": referred_by,
-        "points": 100 if referred_by else 0,  # Signup bonus if referred
+        "points": 0,  # Points added separately via referral process
         "profile_photo_url": None,
         "role": "user",
         "is_verified": True,
