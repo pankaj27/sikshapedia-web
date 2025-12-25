@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { FiCheck, FiX, FiStar, FiImage, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiCheck, FiX, FiStar, FiImage, FiChevronLeft, FiChevronRight, FiFileText, FiExternalLink } from 'react-icons/fi';
 import api from '../../api/axios';
 
 const PendingReviews = () => {
