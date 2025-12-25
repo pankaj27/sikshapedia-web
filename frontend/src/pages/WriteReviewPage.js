@@ -1,11 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle, FiX, FiFile } from 'react-icons/fi';
-import { useSearchParams } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
 import { useAuth } from '../contexts/AuthContext';
 
 import { Link } from '../components/CustomLink';
+
+// Helper to read URL params ONCE (not reactive)
+const getUrlParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    instituteId: params.get('instituteId'),
+    instituteName: params.get('instituteName'),
+    instituteType: params.get('instituteType'),
+    fromQR: params.get('fromQR') === 'true',
+    linkCode: params.get('linkCode')
+  };
+};
 
 // Default settings (fallback if API fails)
 const defaultSettings = {
