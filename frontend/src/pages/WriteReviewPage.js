@@ -294,34 +294,50 @@ const WriteReviewPage = () => {
 
       setCoursesLoading(true);
       try {
-        const response = await api.get(`/colleges/${formData.instituteId}`);
-        const collegeData = response.data;
-        
-        // Extract courses from college data
-        let coursesData = [];
-        if (collegeData.courses && Array.isArray(collegeData.courses)) {
-          coursesData = collegeData.courses.map(c => c.name || c.course_name || c);
-        } else if (collegeData.programs && Array.isArray(collegeData.programs)) {
-          coursesData = collegeData.programs.map(p => p.name || p);
+        // Determine correct endpoint based on institute type
+        let endpoint = '/colleges';
+        if (formData.instituteType === 'school') {
+          endpoint = '/schools';
+        } else if (formData.instituteType === 'university') {
+          endpoint = '/universities';
         }
         
-        // If no courses found, use common courses
+        const response = await api.get(`${endpoint}/${formData.instituteId}`);
+        const instituteData = response.data;
+        
+        // Extract courses from institute data
+        let coursesData = [];
+        if (instituteData.courses && Array.isArray(instituteData.courses)) {
+          coursesData = instituteData.courses.map(c => c.name || c.course_name || c);
+        } else if (instituteData.programs && Array.isArray(instituteData.programs)) {
+          coursesData = instituteData.programs.map(p => p.name || p);
+        }
+        
+        // If no courses found, use common courses based on type
         if (coursesData.length === 0) {
-          coursesData = ['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Com', 'M.Com', 'BA', 'MA', 'B.Sc', 'M.Sc', 'BCA', 'MCA', 'MBBS', 'BDS', 'LLB', 'LLM', 'B.Pharm', 'M.Pharm'];
+          if (formData.instituteType === 'school') {
+            coursesData = ['Science Stream', 'Commerce Stream', 'Humanities', 'Arts Stream', 'Vocational'];
+          } else {
+            coursesData = ['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Com', 'M.Com', 'BA', 'MA', 'B.Sc', 'M.Sc', 'BCA', 'MCA', 'MBBS', 'BDS', 'LLB', 'LLM', 'B.Pharm', 'M.Pharm', 'PhD'];
+          }
         }
         
         setCourses(coursesData);
       } catch (error) {
         console.error('Error fetching courses:', error);
-        // Fallback courses
-        setCourses(['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Com', 'M.Com', 'BA', 'MA', 'B.Sc', 'M.Sc', 'BCA', 'MCA']);
+        // Fallback courses based on institute type
+        if (formData.instituteType === 'school') {
+          setCourses(['Science Stream', 'Commerce Stream', 'Humanities', 'Arts Stream', 'Vocational']);
+        } else {
+          setCourses(['B.Tech', 'M.Tech', 'MBA', 'BBA', 'B.Com', 'M.Com', 'BA', 'MA', 'B.Sc', 'M.Sc', 'BCA', 'MCA', 'PhD']);
+        }
       } finally {
         setCoursesLoading(false);
       }
     };
 
     fetchCourses();
-  }, [formData.instituteId]);
+  }, [formData.instituteId, formData.instituteType]);
 
   const handleInstituteSelect = (institute) => {
     // Auto-detect institute type from the search result
