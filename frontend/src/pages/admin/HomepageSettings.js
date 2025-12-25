@@ -645,6 +645,35 @@ const HomepageSettings = () => {
     handleChange('study_goals', settings.study_goals.filter((_, i) => i !== index));
   };
 
+  // Quick Links
+  const addQuickLink = () => {
+    setSettings(prev => ({
+      ...prev,
+      quick_links: [...(prev.quick_links || []), { 
+        name: 'New Link', icon: 'FiLink', link: '/', bg_color: 'bg-gray-100', icon_color: 'text-gray-600' 
+      }]
+    }));
+  };
+
+  const updateQuickLink = (index, field, value) => {
+    const newLinks = [...(settings.quick_links || [])];
+    newLinks[index] = { ...newLinks[index], [field]: value };
+    handleChange('quick_links', newLinks);
+  };
+
+  const removeQuickLink = (index) => {
+    handleChange('quick_links', (settings.quick_links || []).filter((_, i) => i !== index));
+  };
+
+  const moveQuickLink = (index, direction) => {
+    const newLinks = [...(settings.quick_links || [])];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex >= 0 && newIndex < newLinks.length) {
+      [newLinks[index], newLinks[newIndex]] = [newLinks[newIndex], newLinks[index]];
+      handleChange('quick_links', newLinks);
+    }
+  };
+
   // Programs
   const addProgram = () => {
     setSettings(prev => ({
