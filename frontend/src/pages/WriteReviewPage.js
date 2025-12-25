@@ -174,7 +174,7 @@ const WriteReviewPage = () => {
     fetchUserProfile();
   }, [isAuthenticated, user]);
 
-  // Search institutes when user types
+  // Search institutes when user types - search ALL types at once
   useEffect(() => {
     const searchInstitutes = async () => {
       if (instituteSearch.length < 2) {
@@ -184,16 +184,20 @@ const WriteReviewPage = () => {
       
       setSearchLoading(true);
       try {
-        const type = formData.instituteType || 'college';
-        let endpoint = '/colleges';
-        if (type === 'school') endpoint = '/schools';
-        
-        const response = await api.get(`${endpoint}?search=${encodeURIComponent(instituteSearch)}&limit=10`);
-        const data = Array.isArray(response.data) ? response.data : response.data.colleges || response.data.schools || [];
+        // Use unified search API to search all institute types
+        const response = await api.get(`/institutes/search?search=${encodeURIComponent(instituteSearch)}&type=all&limit=15`);
+        const data = Array.isArray(response.data) ? response.data : [];
         setInstitutes(data);
       } catch (error) {
         console.error('Error searching institutes:', error);
-        setInstitutes([]);
+        // Fallback to colleges endpoint
+        try {
+          const fallbackResponse = await api.get(`/colleges?search=${encodeURIComponent(instituteSearch)}&limit=10`);
+          const fallbackData = Array.isArray(fallbackResponse.data) ? fallbackResponse.data : fallbackResponse.data.colleges || [];
+          setInstitutes(fallbackData.map(c => ({ ...c, type: 'college' })));
+        } catch {
+          setInstitutes([]);
+        }
       } finally {
         setSearchLoading(false);
       }
@@ -201,7 +205,7 @@ const WriteReviewPage = () => {
 
     const debounce = setTimeout(searchInstitutes, 300);
     return () => clearTimeout(debounce);
-  }, [instituteSearch, formData.instituteType]);
+  }, [instituteSearch]);
 
   // Fetch courses when institute is selected
   useEffect(() => {
