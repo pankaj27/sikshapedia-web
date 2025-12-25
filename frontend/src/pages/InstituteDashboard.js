@@ -420,10 +420,10 @@ const InstituteDashboard = () => {
                   </div>
                   <div className="bg-white rounded-xl shadow-sm p-5">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-gray-600 text-sm">Applications</span>
-                      <FiFileText className="text-orange-600 text-xl" />
+                      <span className="text-gray-600 text-sm">Reviews</span>
+                      <FiStar className="text-yellow-500 text-xl" />
                     </div>
-                    <p className="text-3xl font-bold text-orange-600">{dashboard?.applications?.total || 0}</p>
+                    <p className="text-3xl font-bold text-yellow-500">{dashboard?.reviews?.total || 0}</p>
                   </div>
                 </div>
                 
@@ -437,29 +437,6 @@ const InstituteDashboard = () => {
                           {dashboard?.leads?.status_breakdown?.[status] || 0}
                         </p>
                         <p className="text-xs text-gray-600 capitalize mt-1">{status}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Application Status */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h3 className="text-lg font-bold mb-4">Application Status</h3>
-                  <div className="grid grid-cols-4 gap-4">
-                    {['submitted', 'under_review', 'accepted', 'rejected'].map((status) => (
-                      <div key={status} className={`text-center p-4 rounded-lg ${
-                        status === 'submitted' ? 'bg-blue-50' :
-                        status === 'under_review' ? 'bg-yellow-50' :
-                        status === 'accepted' ? 'bg-green-50' : 'bg-red-50'
-                      }`}>
-                        <p className={`text-2xl font-bold ${
-                          status === 'submitted' ? 'text-blue-600' :
-                          status === 'under_review' ? 'text-yellow-600' :
-                          status === 'accepted' ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {dashboard?.applications?.status_breakdown?.[status] || 0}
-                        </p>
-                        <p className="text-xs text-gray-600 capitalize mt-1">{status.replace('_', ' ')}</p>
                       </div>
                     ))}
                   </div>
