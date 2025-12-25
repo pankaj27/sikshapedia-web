@@ -161,6 +161,27 @@ async def get_university(university_id: str):
     
     if not university:
         raise HTTPException(status_code=404, detail="University not found")
+    
+    # Fetch actual review stats from reviews collection
+    review_stats = await db.reviews.aggregate([
+        {"$match": {"college_id": university.get('id'), "status": "approved"}},
+        {"$group": {
+            "_id": None,
+            "total_reviews": {"$sum": 1},
+            "average_rating": {"$avg": "$rating"}
+        }}
+    ]).to_list(1)
+    
+    if review_stats:
+        university['reviews_count'] = review_stats[0].get('total_reviews', 0)
+        university['total_reviews'] = review_stats[0].get('total_reviews', 0)
+        avg_rating = review_stats[0].get('average_rating', 0)
+        university['average_rating'] = round(avg_rating, 1) if avg_rating else 0
+    else:
+        university['reviews_count'] = 0
+        university['total_reviews'] = 0
+        university['average_rating'] = 0
+    
     return university
 
 
