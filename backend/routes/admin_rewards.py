@@ -201,7 +201,23 @@ async def process_review(
     # Award points if approved
     if action.action == "approve":
         user_id = review.get("user_id")
-        points_earned = review.get("points_earned", POINTS_CONFIG["review_base"])
+        
+        # Calculate points dynamically
+        review_text = review.get("review") or review.get("review_text") or ""
+        base_points = POINTS_CONFIG["review_base"]  # 50 pts
+        detailed_bonus = POINTS_CONFIG["review_detailed"] if len(review_text) >= 200 else 0  # +50 for 200+ chars
+        verified_bonus = POINTS_CONFIG["review_verified"] if review.get("verification_document") else 0  # +50 for verified
+        
+        points_earned = base_points + detailed_bonus + verified_bonus
+        
+        # Update review with calculated points and verified status
+        await db.reviews.update_one(
+            {"id": review_id},
+            {"$set": {
+                "points_earned": points_earned,
+                "is_verified_student": bool(review.get("verification_document"))
+            }}
+        )
         
         # Update user points
         await db.users.update_one(
@@ -210,12 +226,18 @@ async def process_review(
         )
         
         # Create point transaction
+        description_parts = [f"Review approved for {review.get('college_name', 'college')}"]
+        if detailed_bonus > 0:
+            description_parts.append("(+50 detailed bonus)")
+        if verified_bonus > 0:
+            description_parts.append("(+50 verified bonus)")
+        
         await db.point_transactions.insert_one({
             "id": f"pt_{uuid4().hex[:12]}",
             "user_id": user_id,
             "type": "review",
             "points": points_earned,
-            "description": f"Review approved for {review.get('college_name', 'college')}",
+            "description": " ".join(description_parts),
             "reference_id": review_id,
             "status": "completed",
             "created_at": datetime.now(timezone.utc).isoformat()
@@ -259,7 +281,12 @@ async def process_review(
         
         return {
             "message": "Review approved and points awarded",
-            "points_awarded": points_earned
+            "points_awarded": points_earned,
+            "breakdown": {
+                "base": base_points,
+                "detailed_bonus": detailed_bonus,
+                "verified_bonus": verified_bonus
+            }
         }
     else:
         return {"message": "Review rejected"}
