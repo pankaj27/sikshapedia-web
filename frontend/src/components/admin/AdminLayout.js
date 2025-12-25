@@ -169,6 +169,14 @@ const AdminLayout = ({ children }) => {
       ]
     },
     {
+      id: 'institutes',
+      title: 'Institute Management',
+      icon: FiBookOpen,
+      submenu: [
+        { title: 'Institute Credentials', path: '/admin/institute-credentials', icon: FiLock, badge: 'NEW' },
+      ]
+    },
+    {
       id: 'moderation',
       title: 'Moderation & Inquiries',
       icon: FiMessageSquare,
