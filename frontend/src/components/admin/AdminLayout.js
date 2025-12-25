@@ -188,7 +188,6 @@ const AdminLayout = ({ children }) => {
       submenu: [
         { title: 'Dashboard', path: '/admin/rewards', icon: FiTrendingUp, badge: 'NEW' },
         { title: 'Pending Reviews', path: '/admin/rewards/pending-reviews', icon: FiMessageSquare },
-        { title: 'Pending Answers', path: '/admin/rewards/pending-answers', icon: FiFileText },
         { title: 'Redemptions', path: '/admin/rewards/redemptions', icon: FiDollarSign },
         { title: 'Payment History', path: '/admin/rewards/payments', icon: FiCreditCard },
         { title: 'User Points Report', path: '/admin/rewards/users-report', icon: FiUsers },
