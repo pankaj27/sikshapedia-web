@@ -273,12 +273,15 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
     if existing_review:
         raise HTTPException(status_code=400, detail="You have already reviewed this college")
     
-    # Calculate review earnings based on review quality
+    # Calculate potential review earnings based on review quality (awarded on approval)
     review_earnings = 50.0  # Base earning for review
     if review_data.review_text and len(review_data.review_text) > 200:
         review_earnings = 100.0  # Higher earning for detailed reviews
     
-    # Create review
+    # Calculate potential points (awarded on approval)
+    review_points = 50 if len(review_data.review_text or "") <= 200 else 100
+    
+    # Create review with pending status - points/earnings awarded ONLY after admin approval
     review = Review(
         college_id=review_data.college_id,
         user_id=user["id"],
@@ -291,81 +294,31 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
         infrastructure_rating=review_data.infrastructure_rating,
         faculty_rating=review_data.faculty_rating,
         earnings=review_earnings,
-        status="pending"  # Requires admin approval before showing
+        status="pending"  # Requires admin approval before points are awarded
     )
     review_dict = review.model_dump()
     review_dict['created_at'] = review_dict['created_at'].isoformat()
+    review_dict['college_name'] = college.get('name', 'Unknown Institute')
+    review_dict['points_earned'] = review_points  # Store for later awarding
+    review_dict['review_title'] = review_data.review_title
+    review_dict['course'] = review_data.course
     
     await db.reviews.insert_one(review_dict)
     
-    # Add earnings transaction
-    earning_transaction = EarningTransaction(
-        user_id=user["id"],
-        type="review",
-        amount=review_earnings,
-        description=f"Review for {college['name']}",
-        reference_id=review.id
-    )
-    earn_dict = earning_transaction.model_dump()
-    earn_dict['created_at'] = earn_dict['created_at'].isoformat()
-    await db.earnings.insert_one(earn_dict)
+    # NOTE: Points and earnings are NOT awarded here
+    # They will be awarded when admin approves the review via /reviews/{id}/approve
     
-    # Update user total earnings
-    await db.users.update_one(
-        {"id": user["id"]},
-        {"$inc": {"total_earnings": review_earnings}}
-    )
-    
-    # Also add points (for rewards system)
-    review_points = 50 if len(review_data.review_text or "") <= 200 else 100
-    await db.users.update_one(
-        {"id": user["id"]},
-        {"$inc": {"points": review_points}}
-    )
-    
-    # Add point transaction for rewards tracking
-    point_transaction = {
-        "id": str(uuid.uuid4()),
-        "user_id": user["id"],
-        "type": "review",
-        "points": review_points,
-        "description": f"Review for {college['name']}",
-        "reference_id": review.id,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    await db.point_transactions.insert_one(point_transaction)
-    
-    # Create notification
+    # Create notification about submission (not earnings yet)
     notification = Notification(
         user_id=user["id"],
-        type="review_earning",
-        title="Review Earnings Added!",
-        message=f"You earned ₹{review_earnings} for your review. Keep writing quality reviews to earn more!",
-        link="/dashboard"
+        type="review_submitted",
+        title="Review Submitted for Approval!",
+        message=f"Your review for {college['name']} has been submitted. You'll earn {review_points} points once approved!",
+        link="/dashboard?tab=reviews"
     )
     notif_dict = notification.model_dump()
     notif_dict['created_at'] = notif_dict['created_at'].isoformat()
     await db.notifications.insert_one(notif_dict)
-    
-    # Update college rating
-    reviews = await db.reviews.find({"college_id": review_data.college_id}).to_list(1000)
-    avg_rating = sum(r['rating'] for r in reviews) / len(reviews) if reviews else 0
-    
-    # Update rating breakdown
-    rating_breakdown = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
-    for r in reviews:
-        rating_str = str(r.get('rating', 3))
-        if rating_str in rating_breakdown:
-            rating_breakdown[rating_str] += 1
-    
-    await db.colleges.update_one(
-        {"id": review_data.college_id},
-        {"$set": {
-            "rating": round(avg_rating, 1),
-            "total_reviews": len(reviews),
-            "rating_breakdown": rating_breakdown
-        }}
-    )
     
     return review
 
