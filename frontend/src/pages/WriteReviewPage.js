@@ -19,7 +19,8 @@ const defaultSettings = {
     detailed_review_bonus: 50,
     verified_student_bonus: 50,
     photos_bonus: 30,
-    min_review_characters: 200
+    min_review_characters: 50,
+    bonus_review_characters: 200
   },
   success_page: {
     title: "Review Submitted Successfully!",
