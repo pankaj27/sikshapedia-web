@@ -77,6 +77,18 @@ frontend:
         agent: "testing"
         comment: "Frontend testing not performed - backend APIs support all required functionality for status badges and points display"
 
+  - task: "Write Review Institute Type Auto-Detection (/write-review)"
+    implemented: true
+    working: false
+    file: "frontend/src/pages/WriteReviewPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE: College detection not displaying '🎓 College' text/emoji properly - only shows blue container styling without text. School detection (🏫 School with green styling) and University detection (🏛️ University with purple styling) working correctly with '(Auto-detected)' labels. Institute search dropdown functional. Login page has multiple email fields causing strict mode violation preventing full review submission testing. Auto-detection logic needs fix for College type display."
+
 metadata:
   created_by: "main_agent"
   version: "1.1"
