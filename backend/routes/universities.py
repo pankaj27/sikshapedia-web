@@ -130,13 +130,38 @@ async def get_universities(
     return universities
 
 
-@router.get("/universities/{university_id}", response_model=University)
+@router.get("/universities/{university_id}")
 async def get_university(university_id: str):
-    """Get a specific university by ID"""
-    university = await db.universities.find_one({"id": university_id}, {"_id": 0})
+    """Get a specific university by ID, slug, or serial_number - queries colleges collection with institution_type=University"""
+    # Check if university_id is a numeric serial_number
+    serial_num = None
+    try:
+        serial_num = int(university_id)
+    except ValueError:
+        pass
+    
+    # Build query conditions
+    query_conditions = []
+    if serial_num is not None:
+        query_conditions.append({"serial_number": serial_num})
+    
+    # Also try to find by ID or slug
+    query_conditions.append({"id": university_id})
+    query_conditions.append({"slug": university_id})
+    
+    # Query from colleges collection with institution_type=University
+    base_query = {"institution_type": "University"}
+    
+    university = None
+    for condition in query_conditions:
+        query = {**base_query, **condition}
+        university = await db.colleges.find_one(query, {"_id": 0})
+        if university:
+            break
+    
     if not university:
         raise HTTPException(status_code=404, detail="University not found")
-    return University(**university)
+    return university
 
 
 @router.post("/universities", response_model=University)
