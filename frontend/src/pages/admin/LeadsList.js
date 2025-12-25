@@ -420,6 +420,13 @@ const LeadsList = () => {
                           >
                             <FiEdit2 className="w-4 h-4" />
                           </button>
+                          <button
+                            onClick={() => openAssignModal(lead)}
+                            className="p-1.5 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded"
+                            title="Assign to Institute"
+                          >
+                            <FiHome className="w-4 h-4" />
+                          </button>
                           <a
                             href={`https://wa.me/91${lead.mobile.replace(/\D/g, '')}`}
                             target="_blank"
