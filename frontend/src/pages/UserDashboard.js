@@ -883,8 +883,8 @@ const UserDashboard = () => {
                 
                 <div className="bg-gradient-to-r from-orange-500 to-pink-600 rounded-xl p-8 text-white text-center">
                   <FiGift className="text-5xl mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold mb-2">Invite Friends & Earn ₹200</h3>
-                  <p className="opacity-90 mb-6">Share your referral link and earn ₹200 for each friend who signs up!</p>
+                  <h3 className="text-2xl font-bold mb-2">Invite Friends & Earn 100 Points</h3>
+                  <p className="opacity-90 mb-6">Share your referral link and earn 100 points for each friend who signs up!</p>
                   
                   <div className="bg-white bg-opacity-20 rounded-lg p-4 mb-4">
                     <p className="text-sm opacity-75 mb-2">Your Referral Code</p>
