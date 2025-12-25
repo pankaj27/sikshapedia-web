@@ -243,11 +243,11 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
     
     await db.users.insert_one(user)
     
-    # Process referral - give immediate rewards to both users
+    # Process referral - give POINTS ONLY (no direct cash)
     if referred_by:
         referrer = await db.users.find_one({"id": referred_by}, {"_id": 0})
         
-        # Create referral tracking record (completed immediately)
+        # Create referral tracking record
         await db.referral_tracking.insert_one({
             "id": f"ref_{uuid4().hex[:12]}",
             "referrer_id": referred_by,
@@ -256,27 +256,14 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
             "referred_user_name": request.name,
             "referred_user_email": request.email,
             "status": "completed",
-            "earnings_amount": 200.0,
-            "earnings_paid": True,
             "created_at": datetime.now(timezone.utc).isoformat()
         })
         
-        # Give referrer their bonus (200 cash + 100 points)
+        # Give referrer 100 points (no cash)
         await db.users.update_one(
             {"id": referred_by},
-            {"$inc": {"total_earnings": 200.0, "points": 100, "referral_count": 1}}
+            {"$inc": {"points": 100, "referral_count": 1}}
         )
-        
-        # Add earning record for referrer
-        await db.earnings.insert_one({
-            "id": f"earn_{uuid4().hex[:12]}",
-            "user_id": referred_by,
-            "type": "referral",
-            "amount": 200.0,
-            "description": f"Referral bonus for {request.name}",
-            "reference_id": user_id,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
         
         # Add point transaction for referrer
         await db.point_transactions.insert_one({
@@ -289,18 +276,7 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
             "created_at": datetime.now(timezone.utc).isoformat()
         })
         
-        # Add earning record for referred user (signup bonus)
-        await db.earnings.insert_one({
-            "id": f"earn_{uuid4().hex[:12]}",
-            "user_id": user_id,
-            "type": "referral",
-            "amount": 100.0,
-            "description": "Signup bonus via referral",
-            "reference_id": referred_by,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-        
-        # Add point transaction for referred user
+        # Add point transaction for referred user (50 points signup bonus)
         await db.point_transactions.insert_one({
             "id": f"pt_{uuid4().hex[:12]}",
             "user_id": user_id,
@@ -311,10 +287,10 @@ async def complete_signup(request: UserSignupRequest, response: Response, db=Dep
             "created_at": datetime.now(timezone.utc).isoformat()
         })
         
-        # Update referred user with total_earnings
+        # Update referred user points
         await db.users.update_one(
             {"id": user_id},
-            {"$set": {"total_earnings": 100.0}}
+            {"$inc": {"points": 50}}
         )
     
     # Create session
