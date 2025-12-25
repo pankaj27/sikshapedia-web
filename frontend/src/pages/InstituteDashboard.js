@@ -361,7 +361,6 @@ const InstituteDashboard = () => {
                 {[
                   { id: 'overview', icon: FiBarChart2, label: 'Overview' },
                   { id: 'leads', icon: FiUsers, label: 'Leads', count: dashboard?.leads?.total },
-                  { id: 'applications', icon: FiFileText, label: 'Applications', count: dashboard?.applications?.total },
                   { id: 'admission_bookings', icon: FiDollarSign, label: 'Admission Bookings', highlight: true },
                   { id: 'review_link', icon: FiStar, label: 'Reviews & QR', highlight: true },
                   { id: 'analytics', icon: FiTrendingUp, label: 'Ad Analytics' },
