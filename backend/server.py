@@ -3769,6 +3769,64 @@ async def upload_brochure(
         "file_type": file_ext
     }
 
+@api_router.post("/upload/user-document")
+async def upload_user_document(
+    file: UploadFile = File(...)
+):
+    """Upload a verification document for reviews (any authenticated user)"""
+    # Validate file type - allow images and PDF
+    allowed_types = ["image/jpeg", "image/png", "image/jpg", "application/pdf"]
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Only JPG, PNG, and PDF files are allowed")
+    
+    # Validate file size (5MB max)
+    file_content = await file.read()
+    if len(file_content) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File size must be less than 5MB")
+    
+    # Generate unique filename
+    file_ext = file.filename.split(".")[-1].lower() if "." in file.filename else "jpg"
+    unique_filename = f"doc_{uuid.uuid4().hex[:12]}.{file_ext}"
+    
+    # Use Cloudinary if enabled
+    if CLOUDINARY_ENABLED:
+        try:
+            import cloudinary.uploader
+            await file.seek(0)
+            result = cloudinary.uploader.upload(
+                file_content,
+                folder="sikshapedia/user_documents",
+                resource_type="auto",
+                public_id=unique_filename.rsplit(".", 1)[0]
+            )
+            file_url = result.get("secure_url", result.get("url"))
+            return {
+                "success": True,
+                "url": file_url,
+                "file_url": file_url,
+                "filename": unique_filename
+            }
+        except Exception as e:
+            print(f"Cloudinary upload error: {e}")
+            # Fall through to local storage
+    
+    # Local storage fallback
+    upload_dir = Path(__file__).parent / "static" / "uploads" / "user_documents"
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    
+    file_path = upload_dir / unique_filename
+    with open(file_path, "wb") as f:
+        f.write(file_content)
+    
+    file_url = f"/api/static/uploads/user_documents/{unique_filename}"
+    
+    return {
+        "success": True,
+        "url": file_url,
+        "file_url": file_url,
+        "filename": unique_filename
+    }
+
 @api_router.get("/admin/stats")
 async def get_admin_stats(current_user: User = Depends(get_current_user)):
     """Get platform statistics for admin dashboard"""
