@@ -159,7 +159,24 @@ const InstituteCredentialsReport = () => {
                       <td className="px-4 py-4">
                         <div>
                           <p className="font-medium text-gray-900">{cred.institution_name}</p>
-                          <p className="text-xs text-gray-500">ID: {cred.institution_id}</p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-mono bg-blue-50 text-blue-700 px-2 py-1 rounded font-semibold">
+                            {cred.login_id || cred.institution_id}
+                          </span>
+                          <button
+                            onClick={() => copyToClipboard(cred.login_id || cred.institution_id, `loginid-${cred.id}`)}
+                            className="text-gray-400 hover:text-gray-600"
+                            title="Copy Login ID"
+                          >
+                            {copiedId === `loginid-${cred.id}` ? (
+                              <FiCheck className="w-4 h-4 text-green-500" />
+                            ) : (
+                              <FiCopy className="w-4 h-4" />
+                            )}
+                          </button>
                         </div>
                       </td>
                       <td className="px-4 py-4">
