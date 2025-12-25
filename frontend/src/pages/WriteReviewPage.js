@@ -77,7 +77,8 @@ const WriteReviewPage = () => {
   // Read URL params once on component mount (not reactive to avoid infinite loops)
   const urlParamsRef = useRef(getUrlParams());
   const fileInputRef = useRef(null);
-  const [step, setStep] = useState(1);
+  const formContainerRef = useRef(null);
+  const [step, setStepState] = useState(1);
   const [userProfile, setUserProfile] = useState(null);
   const [showNamePrompt, setShowNamePrompt] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -86,6 +87,14 @@ const WriteReviewPage = () => {
   const [prefilledFromUrl, setPrefilledFromUrl] = useState(false);
   const [isFromQR, setIsFromQR] = useState(false);
   const [qrLinkCode, setQrLinkCode] = useState('');
+  
+  // Helper to change step and scroll to top
+  const setStep = (newStep) => {
+    setStepState(newStep);
+    // Scroll to top of page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
   const [formData, setFormData] = useState({
     instituteType: '',
     instituteName: '',
