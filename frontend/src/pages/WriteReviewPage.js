@@ -264,13 +264,19 @@ const WriteReviewPage = () => {
   const handleInstituteSelect = (institute) => {
     // Auto-detect institute type from the search result
     const rawType = (institute.type || institute.institution_type || '').toLowerCase();
+    const nameLower = (institute.name || '').toLowerCase();
     
-    // Determine normalized type
+    // Determine normalized type - check rawType first, then name
     let normalizedType = 'college'; // default
-    if (rawType.includes('school')) {
+    
+    if (rawType.includes('school') || nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
       normalizedType = 'school';
-    } else if (rawType.includes('coaching')) {
+    } else if (rawType.includes('university') || nameLower.includes('university') || nameLower.includes('vishwavidyalaya')) {
+      normalizedType = 'university';
+    } else if (rawType.includes('coaching') || nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
       normalizedType = 'coaching';
+    } else if (rawType.includes('college') || nameLower.includes('college') || nameLower.includes('institute')) {
+      normalizedType = 'college';
     }
     
     console.log('Selected institute:', institute.name, 'Raw type:', rawType, 'Normalized:', normalizedType);
