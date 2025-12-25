@@ -1070,11 +1070,42 @@ class APITester:
                 return
         
         # Test 2: Get a college ID for testing
-        success, response, status = self.make_request("GET", "/colleges?limit=1")
+        success, response, status = self.make_request("GET", "/colleges?limit=5")
         if success and isinstance(response, list) and len(response) > 0:
-            self.test_college_id = response[0].get("id")
-            self.test_college_name = response[0].get("name", "Test College")
-            self.log_test("Get Test College for Review", True, f"Using college: {self.test_college_name}")
+            # Try to find a college that the user hasn't reviewed yet
+            self.test_college_id = None
+            self.test_college_name = None
+            
+            for college in response:
+                college_id = college.get("id")
+                college_name = college.get("name", "Test College")
+                
+                # Check if user already has a review for this college
+                existing_review_check = self.make_request("GET", f"/reviews?limit=100")
+                if existing_review_check[0]:  # If successful
+                    reviews = existing_review_check[1]
+                    user_has_review = any(
+                        review.get("college_id") == college_id and 
+                        review.get("user_id") == self.test_user_id 
+                        for review in reviews if isinstance(reviews, list)
+                    )
+                    
+                    if not user_has_review:
+                        self.test_college_id = college_id
+                        self.test_college_name = college_name
+                        break
+            
+            if self.test_college_id:
+                self.log_test("Get Test College for Review", True, f"Using college: {self.test_college_name}")
+            else:
+                # If all colleges have reviews, delete existing reviews for testing
+                if success and isinstance(response, list) and len(response) > 0:
+                    self.test_college_id = response[0].get("id")
+                    self.test_college_name = response[0].get("name", "Test College")
+                    self.log_test("Get Test College for Review", True, f"Using college: {self.test_college_name} (may have existing review)")
+                else:
+                    self.log_test("Get Test College for Review", False, "No colleges available for testing")
+                    return
         else:
             self.log_test("Get Test College for Review", False, "No colleges available for testing")
             return
