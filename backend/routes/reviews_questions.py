@@ -279,7 +279,11 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
         review_earnings = 100.0  # Higher earning for detailed reviews
     
     # Calculate potential points (awarded on approval)
-    review_points = 50 if len(review_data.review_text or "") <= 200 else 100
+    # Base: 50 points, Bonus: +50 for 200+ characters
+    review_text_length = len(review_data.review_text or "")
+    review_points = 50  # Base points
+    if review_text_length >= 200:
+        review_points = 100  # Base (50) + Bonus (50) for detailed review
     
     # Create review with pending status - points/earnings awarded ONLY after admin approval
     review = Review(
