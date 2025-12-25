@@ -2218,11 +2218,9 @@ const DynamicListingPage = () => {
                                       {featured.nirf_ranking && (
                                         <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">NIRF #{featured.nirf_ranking}</span>
                                       )}
-                                      {featured.rating > 0 && (
-                                        <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded flex items-center gap-0.5">
-                                          <FiStar size={10} className="fill-current" /> {featured.rating.toFixed(1)}
-                                        </span>
-                                      )}
+                                      <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded flex items-center gap-0.5">
+                                        <FiStar size={10} className="fill-current" /> {(featured.rating || 0).toFixed(1)}
+                                      </span>
                                     </div>
                                     <span className="text-xs text-orange-600 font-medium mt-2 inline-block">Apply Now →</span>
                                   </div>
