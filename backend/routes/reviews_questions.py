@@ -631,7 +631,7 @@ async def reject_review(review_id: str, reject_data: RejectReviewRequest = None)
     
     rejection_reason = reject_data.reason if reject_data else None
     
-    result = await db.reviews.update_one(
+    await db.reviews.update_one(
         {"id": review_id},
         {"$set": {
             "status": "rejected",
