@@ -100,11 +100,24 @@ const WriteReviewPage = () => {
     const linkCode = searchParams.get('linkCode');
 
     if (instituteId && instituteName && !prefilledFromUrl) {
+      // Auto-detect type from institute name if not provided in URL
+      let detectedType = instituteType;
+      if (!detectedType) {
+        const nameLower = instituteName.toLowerCase();
+        if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya')) {
+          detectedType = 'school';
+        } else if (nameLower.includes('coaching') || nameLower.includes('academy') || nameLower.includes('classes')) {
+          detectedType = 'coaching';
+        } else {
+          detectedType = 'college';
+        }
+      }
+      
       setFormData(prev => ({
         ...prev,
         instituteId: instituteId,
         instituteName: instituteName,
-        instituteType: instituteType === 'college' ? 'college' : instituteType === 'school' ? 'school' : 'college'
+        instituteType: detectedType === 'college' ? 'college' : detectedType === 'school' ? 'school' : detectedType === 'coaching' ? 'coaching' : 'college'
       }));
       setPrefilledFromUrl(true);
       
