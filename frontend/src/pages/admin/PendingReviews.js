@@ -166,15 +166,22 @@ const PendingReviews = () => {
                     )}
 
                     {/* Points Info */}
-                    <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-4 text-sm flex-wrap">
                       <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">
-                        🎯 {review.points_earned || 50} points will be awarded
+                        🎯 Base: 50 pts {(review.review?.length || review.review_text?.length || 0) >= 200 && '+ 50 bonus'}
                       </span>
-                      {review.is_verified_student && (
-                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-                          ✓ Verified Student
+                      {review.verification_document && (
+                        <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+                          📄 +50 verified bonus (on approval)
                         </span>
                       )}
+                      <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-semibold">
+                        Total: {
+                          50 + 
+                          ((review.review?.length || review.review_text?.length || 0) >= 200 ? 50 : 0) +
+                          (review.verification_document ? 50 : 0)
+                        } pts
+                      </span>
                       <span className="text-gray-400">
                         {new Date(review.created_at).toLocaleDateString()}
                       </span>
