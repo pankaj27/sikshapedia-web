@@ -435,8 +435,14 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
   const handleWriteReview = () => {
     // Check if user is logged in
     if (!requireAuth('write a review')) return;
-    // TODO: Navigate to review form or open review modal
-    alert('Review form coming soon!');
+    
+    // Navigate to review form with new URL format
+    // Format: /write-review?type=school&serial=017&slug=delhi-public-school
+    const instType = (college.institution_type || 'college').toLowerCase();
+    const serial = college.serial_number || '';
+    const slug = college.slug || college.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
+    
+    window.location.href = `/write-review?type=${instType}&serial=${serial}&slug=${slug}`;
   };
 
   const [questionText, setQuestionText] = useState('');
