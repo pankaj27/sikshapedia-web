@@ -138,7 +138,13 @@ const WriteReviewPage = () => {
       // Fetch instituteId using serial number
       const fetchInstituteId = async () => {
         try {
-          const endpoint = type === 'school' ? '/schools' : '/colleges';
+          // Determine correct endpoint based on institute type
+          let endpoint = '/colleges';
+          if (type === 'school') {
+            endpoint = '/schools';
+          } else if (type === 'university') {
+            endpoint = '/universities';
+          }
           const response = await api.get(`${endpoint}/${parseInt(serial, 10)}`);
           if (response.data?.id) {
             setFormData(prev => ({
