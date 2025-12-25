@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import CollegeDetailPage from './CollegeDetailPage';
@@ -22,16 +22,18 @@ const InstitutionDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Determine institution type from URL (plural paths)
-  const getInstitutionType = () => {
+  // Use ref to prevent infinite loops
+  const resolvedRef = useRef(false);
+  const lastIdSlug = useRef(null);
+  
+  // Memoize institution type to prevent recalculation
+  const institutionType = useMemo(() => {
     const path = location.pathname;
     if (path.startsWith('/colleges/')) return 'College';
     if (path.startsWith('/university/')) return 'University';
     if (path.startsWith('/schools/')) return 'School';
     return 'College';
-  };
-  
-  const institutionType = getInstitutionType();
+  }, [location.pathname]);
   
   // Parse URL to extract numeric ID and slug
   // Format: {number}-{slug} e.g., "001-iit-bombay" OR slug-only e.g., "iit-bombay"
