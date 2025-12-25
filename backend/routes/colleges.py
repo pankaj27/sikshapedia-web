@@ -56,6 +56,28 @@ async def assign_serial_numbers():
     return {"message": f"Assigned serial numbers to {updated_count} colleges", "updated": updated_count}
 
 
+@router.get("/colleges/search")
+async def search_colleges(
+    q: str = Query(..., min_length=2, description="Search query"),
+    limit: int = Query(10, ge=1, le=50)
+):
+    """Quick search for colleges/schools/universities by name - for admin assignment"""
+    query = {
+        "$or": [
+            {"name": {"$regex": q, "$options": "i"}},
+            {"slug": {"$regex": q, "$options": "i"}}
+        ]
+    }
+    
+    projection = {
+        "_id": 0, "id": 1, "name": 1, "institution_type": 1, 
+        "location": 1, "city": 1, "state": 1, "slug": 1
+    }
+    
+    results = await db.colleges.find(query, projection).limit(limit).to_list(limit)
+    return results
+
+
 @router.get("/colleges")
 async def get_colleges(
     skip: int = Query(0, ge=0),
