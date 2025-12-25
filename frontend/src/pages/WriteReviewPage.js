@@ -761,6 +761,8 @@ const WriteReviewPage = () => {
                     className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 ${
                       formData.detailedReview.length >= 200 
                         ? 'border-green-300 focus:ring-green-500 bg-green-50' 
+                        : formData.detailedReview.length >= 50
+                        ? 'border-blue-300 focus:ring-blue-500'
                         : 'border-gray-300 focus:ring-orange-500'
                     }`}
                   ></textarea>
