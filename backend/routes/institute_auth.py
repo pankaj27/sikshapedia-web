@@ -536,6 +536,8 @@ async def update_lead_status(lead_id: str, update: LeadStatusUpdate, request: Re
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
     
+    old_status = lead.get("status", "new")
+    
     update_data = {
         "status": update.status,
         "updated_at": datetime.now(timezone.utc).isoformat()
@@ -545,7 +547,42 @@ async def update_lead_status(lead_id: str, update: LeadStatusUpdate, request: Re
     
     await db.leads.update_one({"id": lead_id}, {"$set": update_data})
     
+    # Create activity log entry
+    activity = {
+        "id": f"activity_{uuid4().hex[:12]}",
+        "lead_id": lead_id,
+        "action": "status_change",
+        "old_value": old_status,
+        "new_value": update.status,
+        "notes": update.notes,
+        "performed_by": institution.get("name", "Institute"),
+        "performed_by_type": "institute",
+        "performed_by_id": institution.get("id"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.lead_activities.insert_one(activity)
+    
     return {"message": "Lead updated successfully"}
+
+@router.get("/leads/{lead_id}/activities")
+async def get_lead_activities(lead_id: str, request: Request, db=Depends(get_db)):
+    """Get activity log for a lead"""
+    institution = await get_current_institute(request, db)
+    
+    # Verify lead belongs to institute
+    lead = await db.leads.find_one(
+        {"id": lead_id, "college_id": institution["id"]},
+        {"_id": 0, "id": 1}
+    )
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    activities = await db.lead_activities.find(
+        {"lead_id": lead_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return activities
 
 # ============ APPLICATIONS MANAGEMENT ============
 
