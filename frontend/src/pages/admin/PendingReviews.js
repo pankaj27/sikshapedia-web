@@ -114,20 +114,28 @@ const PendingReviews = () => {
 
                     {/* Pros & Cons */}
                     <div className="grid grid-cols-2 gap-4 mb-3">
-                      {review.pros && review.pros.length > 0 && (
+                      {review.pros && (
                         <div>
                           <p className="text-sm font-medium text-green-600 mb-1">✓ Pros</p>
-                          <ul className="text-sm text-gray-600 list-disc list-inside">
-                            {review.pros.map((pro, i) => <li key={i}>{pro}</li>)}
-                          </ul>
+                          {Array.isArray(review.pros) ? (
+                            <ul className="text-sm text-gray-600 list-disc list-inside">
+                              {review.pros.map((pro, i) => <li key={i}>{pro}</li>)}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-600">{review.pros}</p>
+                          )}
                         </div>
                       )}
-                      {review.cons && review.cons.length > 0 && (
+                      {review.cons && (
                         <div>
                           <p className="text-sm font-medium text-red-600 mb-1">✗ Cons</p>
-                          <ul className="text-sm text-gray-600 list-disc list-inside">
-                            {review.cons.map((con, i) => <li key={i}>{con}</li>)}
-                          </ul>
+                          {Array.isArray(review.cons) ? (
+                            <ul className="text-sm text-gray-600 list-disc list-inside">
+                              {review.cons.map((con, i) => <li key={i}>{con}</li>)}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-600">{review.cons}</p>
+                          )}
                         </div>
                       )}
                     </div>
