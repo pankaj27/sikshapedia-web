@@ -206,16 +206,18 @@ async def create_institute_credentials(db, institution_id: str, institution_name
         if phone:
             background_tasks.add_task(send_credentials_whatsapp, phone, institution_name, login_id, password)
     
-    # Store credential record for report (without password hash)
+    # Store credential record for report (with temp password for admin reference)
     credential_report = {
         "id": f"cred_report_{uuid4().hex[:12]}",
         "institution_id": institution_id,
         "institution_name": institution_name,
+        "login_email": email,  # Using email as login
         "login_id": login_id,
-        "email": email,
-        "phone": phone,
-        "sent_via_email": bool(email),
-        "sent_via_whatsapp": bool(phone),
+        "temp_password": password,  # Store for admin report
+        "contact_email": email,
+        "contact_phone": phone,
+        "email_sent": bool(email),
+        "whatsapp_sent": bool(phone),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.credential_reports.insert_one(credential_report)
