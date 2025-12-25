@@ -651,6 +651,49 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 2: Write Your Review</h2>
               
+              {/* Live Points Calculator */}
+              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-xl p-4 mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                    <span className="text-xl">🎯</span> Points You'll Earn
+                  </h3>
+                  <div className="text-2xl font-bold text-orange-600">
+                    {formData.detailedReview.length >= 200 ? '100' : '50'} pts
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="flex items-center gap-2">
+                      <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
+                      <span className="text-gray-700">Write a review</span>
+                    </span>
+                    <span className="font-semibold text-green-600">+50 pts</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="flex items-center gap-2">
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
+                        formData.detailedReview.length >= 200 
+                          ? 'bg-green-500 text-white' 
+                          : 'bg-gray-200 text-gray-500'
+                      }`}>
+                        {formData.detailedReview.length >= 200 ? '✓' : '○'}
+                      </span>
+                      <span className={formData.detailedReview.length >= 200 ? 'text-gray-700' : 'text-gray-500'}>
+                        Detailed review (200+ chars)
+                      </span>
+                    </span>
+                    <span className={`font-semibold ${formData.detailedReview.length >= 200 ? 'text-green-600' : 'text-gray-400'}`}>
+                      +50 pts
+                    </span>
+                  </div>
+                </div>
+                {formData.detailedReview.length < 200 && (
+                  <p className="text-xs text-orange-600 mt-3 bg-orange-100 px-3 py-1.5 rounded-lg">
+                    💡 Write {200 - formData.detailedReview.length} more characters to unlock +50 bonus points!
+                  </p>
+                )}
+              </div>
+              
               <div className="space-y-4">
                 {/* Overall Rating */}
                 <div>
@@ -704,7 +747,7 @@ const WriteReviewPage = () => {
                   ></textarea>
                 </div>
 
-                {/* Detailed Review */}
+                {/* Detailed Review with Progress Bar */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Detailed Review <span className="text-red-500">*</span>
@@ -714,9 +757,49 @@ const WriteReviewPage = () => {
                     value={formData.detailedReview}
                     onChange={(e) => handleInputChange('detailedReview', e.target.value)}
                     rows="4"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 ${
+                      formData.detailedReview.length >= 200 
+                        ? 'border-green-300 focus:ring-green-500 bg-green-50' 
+                        : 'border-gray-300 focus:ring-orange-500'
+                    }`}
                   ></textarea>
-                  <p className="text-xs text-gray-500 mt-0.5">Minimum {pageSettings.points_config.min_review_characters} characters required</p>
+                  
+                  {/* Character Progress Bar */}
+                  <div className="mt-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className={`text-xs font-medium ${
+                        formData.detailedReview.length >= 200 ? 'text-green-600' : 'text-gray-600'
+                      }`}>
+                        {formData.detailedReview.length >= 200 ? (
+                          <span className="flex items-center gap-1">
+                            ✅ Bonus unlocked! +50 pts
+                          </span>
+                        ) : (
+                          <span>📝 {formData.detailedReview.length}/200 characters</span>
+                        )}
+                      </span>
+                      {formData.detailedReview.length < 200 && (
+                        <span className="text-xs text-orange-600 font-medium">
+                          +50 bonus at 200!
+                        </span>
+                      )}
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          formData.detailedReview.length >= 200 
+                            ? 'bg-green-500' 
+                            : 'bg-orange-500'
+                        }`}
+                        style={{ width: `${Math.min((formData.detailedReview.length / 200) * 100, 100)}%` }}
+                      ></div>
+                    </div>
+                    {formData.detailedReview.length >= 200 && (
+                      <p className="text-xs text-green-600 mt-1">
+                        🎉 Great job! Your detailed review qualifies for bonus points.
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Facility Ratings */}
