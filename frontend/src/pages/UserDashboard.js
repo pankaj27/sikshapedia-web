@@ -799,6 +799,11 @@ const UserDashboard = () => {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-bold">My Reviews</h2>
+                  <Link to="/write-review">
+                    <Button className="bg-orange-600 hover:bg-orange-700 flex items-center gap-2">
+                      <FiPlus /> Write Review
+                    </Button>
+                  </Link>
                 </div>
                 
                 {reviews.length === 0 ? (
@@ -806,37 +811,124 @@ const UserDashboard = () => {
                     <FiStar className="text-6xl text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">No Reviews Yet</h3>
                     <p className="text-gray-600 mb-4">Write reviews to earn points and help other students</p>
+                    <Link to="/write-review">
+                      <Button className="bg-orange-600 hover:bg-orange-700">Write Your First Review</Button>
+                    </Link>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {reviews.map((review) => (
-                      <div key={review.id} className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-start justify-between mb-3">
-                          <div>
-                            <Link to={`/college/${review.college_id || review.entity_id}`} className="font-bold text-blue-600 hover:underline">
-                              {review.college_name || review.entity_name || 'Institute'}
-                            </Link>
-                            <div className="flex items-center gap-1 mt-1">
-                              {[...Array(5)].map((_, i) => (
-                                <FiStar 
-                                  key={i} 
-                                  className={i < review.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'} 
-                                />
-                              ))}
-                              <span className="text-sm text-gray-500 ml-2">({review.rating}/5)</span>
+                    {reviews.map((review) => {
+                      // Determine status styling
+                      const statusConfig = {
+                        pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: '⏳ Pending Review' },
+                        approved: { bg: 'bg-green-100', text: 'text-green-800', label: '✅ Approved' },
+                        rejected: { bg: 'bg-red-100', text: 'text-red-800', label: '❌ Rejected' },
+                      };
+                      const status = statusConfig[review.status] || statusConfig.pending;
+                      
+                      return (
+                        <div key={review.id} className={`bg-white rounded-xl shadow-sm border-l-4 ${
+                          review.status === 'approved' ? 'border-green-500' : 
+                          review.status === 'rejected' ? 'border-red-500' : 
+                          'border-yellow-500'
+                        }`}>
+                          <div className="p-6">
+                            {/* Header with Status */}
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3 mb-2">
+                                  <Link to={`/colleges/${review.college_id || review.entity_id}`} className="font-bold text-lg text-blue-600 hover:underline">
+                                    {review.college_name || review.entity_name || 'Institute'}
+                                  </Link>
+                                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}>
+                                    {status.label}
+                                  </span>
+                                </div>
+                                {review.course && (
+                                  <p className="text-sm text-gray-600 mb-2">Course: {review.course}</p>
+                                )}
+                                <div className="flex items-center gap-1">
+                                  {[...Array(5)].map((_, i) => (
+                                    <FiStar 
+                                      key={i} 
+                                      className={`${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} 
+                                      size={18}
+                                    />
+                                  ))}
+                                  <span className="text-sm text-gray-600 ml-2 font-medium">{review.rating}/5</span>
+                                </div>
+                              </div>
+                              {review.status === 'approved' && (
+                                <div className="text-right">
+                                  <span className="px-3 py-1 bg-green-500 text-white rounded-full text-sm font-bold">
+                                    +{review.points_earned || 50} pts
+                                  </span>
+                                  <p className="text-xs text-green-600 mt-1">Points Earned!</p>
+                                </div>
+                              )}
+                              {review.status === 'pending' && (
+                                <div className="text-right">
+                                  <span className="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-sm">
+                                    ~{review.points_earned || 50} pts
+                                  </span>
+                                  <p className="text-xs text-gray-500 mt-1">Pending approval</p>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Review Title */}
+                            {review.review_title && (
+                              <h4 className="font-semibold text-gray-800 mb-2">"{review.review_title}"</h4>
+                            )}
+                            
+                            {/* Pros & Cons */}
+                            {(review.pros || review.cons) && (
+                              <div className="grid md:grid-cols-2 gap-4 mb-3">
+                                {review.pros && (
+                                  <div className="bg-green-50 rounded-lg p-3">
+                                    <p className="text-sm font-semibold text-green-700 mb-1">👍 Pros</p>
+                                    <p className="text-sm text-gray-700">{review.pros}</p>
+                                  </div>
+                                )}
+                                {review.cons && (
+                                  <div className="bg-red-50 rounded-lg p-3">
+                                    <p className="text-sm font-semibold text-red-700 mb-1">👎 Cons</p>
+                                    <p className="text-sm text-gray-700">{review.cons}</p>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            
+                            {/* Review Text */}
+                            {review.review_text && (
+                              <p className="text-gray-700 mb-3">{review.review_text}</p>
+                            )}
+                            
+                            {/* Rejection Reason */}
+                            {review.status === 'rejected' && review.rejection_reason && (
+                              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+                                <p className="text-sm font-semibold text-red-700 mb-1">Rejection Reason:</p>
+                                <p className="text-sm text-red-600">{review.rejection_reason}</p>
+                              </div>
+                            )}
+                            
+                            {/* Footer */}
+                            <div className="flex items-center justify-between pt-3 border-t">
+                              <p className="text-xs text-gray-500">
+                                Submitted on {new Date(review.created_at).toLocaleDateString('en-IN', { 
+                                  day: 'numeric', month: 'short', year: 'numeric' 
+                                })}
+                              </p>
+                              {review.is_verified_student && (
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full flex items-center gap-1">
+                                  <FiCheckCircle size={12} /> Verified Student
+                                </span>
+                              )}
                             </div>
                           </div>
-                          <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                            +{review.points_earned || 0} pts
-                          </span>
                         </div>
-                        {review.title && <h4 className="font-medium mb-2">{review.title}</h4>}
-                        <p className="text-gray-700">{review.review || review.content || 'No review text'}</p>
-                        <p className="text-xs text-gray-500 mt-3">
-                          {new Date(review.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
