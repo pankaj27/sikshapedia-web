@@ -247,10 +247,16 @@ const WriteReviewPage = () => {
   }, [formData.instituteId]);
 
   const handleInstituteSelect = (institute) => {
+    // Auto-detect institute type from the search result
+    const detectedType = institute.type || institute.institution_type || 'college';
+    const normalizedType = detectedType.toLowerCase().includes('school') ? 'school' : 
+                          detectedType.toLowerCase().includes('university') ? 'college' : 'college';
+    
     setFormData(prev => ({
       ...prev,
       instituteName: institute.name,
-      instituteId: institute.id
+      instituteId: institute.id,
+      instituteType: normalizedType  // Auto-set type
     }));
     setInstituteSearch('');
     setShowInstituteDropdown(false);
