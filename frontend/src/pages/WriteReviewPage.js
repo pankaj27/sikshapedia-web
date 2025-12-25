@@ -96,51 +96,55 @@ const WriteReviewPage = () => {
 
   // Handle URL params for pre-filling institute info (when coming from college detail page or QR code)
   useEffect(() => {
-    // Only run once
+    // Only run once using ref
     if (urlParamsProcessed.current) return;
     
     const instituteId = searchParams.get('instituteId');
     const instituteName = searchParams.get('instituteName');
+    
+    // Early return if no params
+    if (!instituteId || !instituteName) return;
+    
+    // Mark as processed IMMEDIATELY before any state updates
+    urlParamsProcessed.current = true;
+    
     const instituteType = searchParams.get('instituteType');
     const fromQR = searchParams.get('fromQR') === 'true';
     const linkCode = searchParams.get('linkCode');
-
-    if (instituteId && instituteName) {
-      urlParamsProcessed.current = true; // Mark as processed FIRST to prevent re-runs
+    
+    // Auto-detect type from institute name if not provided in URL
+    let detectedType = instituteType;
+    if (!detectedType || detectedType === '' || detectedType === 'null') {
+      const nameLower = (instituteName || '').toLowerCase();
       
-      // Auto-detect type from institute name if not provided in URL
-      let detectedType = instituteType;
-      if (!detectedType || detectedType === '' || detectedType === 'null') {
-        const nameLower = (instituteName || '').toLowerCase();
-        
-        if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
-          detectedType = 'school';
-        } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
-          detectedType = 'university';
-        } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
-          detectedType = 'coaching';
-        } else {
-          detectedType = 'college';
-        }
-      }
-      
-      setFormData(prev => ({
-        ...prev,
-        instituteId: instituteId,
-        instituteName: instituteName,
-        instituteType: detectedType
-      }));
-      setPrefilledFromUrl(true);
-      
-      // If from QR, lock the institute selection
-      if (fromQR) {
-        setIsFromQR(true);
-        if (linkCode) {
-          setQrLinkCode(linkCode);
-        }
+      if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
+        detectedType = 'school';
+      } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
+        detectedType = 'university';
+      } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
+        detectedType = 'coaching';
+      } else {
+        detectedType = 'college';
       }
     }
-  }, []); // Empty dependency array - run only once on mount
+    
+    setFormData(prev => ({
+      ...prev,
+      instituteId: instituteId,
+      instituteName: instituteName,
+      instituteType: detectedType
+    }));
+    setPrefilledFromUrl(true);
+    
+    // If from QR, lock the institute selection
+    if (fromQR) {
+      setIsFromQR(true);
+      if (linkCode) {
+        setQrLinkCode(linkCode);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Fetch page settings on mount
   useEffect(() => {
