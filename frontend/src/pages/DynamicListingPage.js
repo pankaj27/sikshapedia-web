@@ -2399,7 +2399,7 @@ const DynamicListingPage = () => {
                           {inst.rating > 0 && (
                             <div className="flex items-center gap-1.5 bg-green-50 text-green-700 px-2.5 py-1.5 rounded-lg border border-green-200">
                               <FiStar size={14} className="fill-current text-green-500" />
-                              <span className="font-bold text-base">{inst.rating.toFixed(1)}</span>
+                              <span className="font-bold text-base">{(inst.rating || 0).toFixed(1)}</span>
                               <span className="text-xs text-green-600">/5</span>
                             </div>
                           )}
