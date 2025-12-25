@@ -2024,8 +2024,10 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 <section id="reviews" className="mt-8">
                   <ReviewsSection 
                     entityId={college?.id} 
-                    entityType="college" 
+                    entityType={college?.institution_type || 'college'} 
                     entityName={college?.name}
+                    serialNumber={college?.serial_number}
+                    slug={college?.slug || college?.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}
                   />
                 </section>
                 )}
