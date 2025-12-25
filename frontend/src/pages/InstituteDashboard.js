@@ -631,7 +631,7 @@ const InstituteDashboard = () => {
                                 </p>
                                 <p className="text-sm text-gray-600">By: {activity.performed_by}</p>
                                 {activity.notes && (
-                                  <p className="text-sm text-gray-500 mt-1 italic">"{activity.notes}"</p>
+                                  <p className="text-sm text-gray-500 mt-1 italic">&ldquo;{activity.notes}&rdquo;</p>
                                 )}
                               </div>
                             ))}
