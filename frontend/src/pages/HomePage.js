@@ -725,13 +725,11 @@ const CollegeDuniaHome = () => {
                         )}
                       </div>
                       
-                      {/* Rating Badge - Only show if rating exists */}
-                      {college.rating > 0 && (
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1">
-                          <FiStar className="text-amber-400 text-xs fill-amber-400" />
-                          <span className="text-xs font-semibold text-gray-800">{college.rating.toFixed(1)}</span>
-                        </div>
-                      )}
+                      {/* Rating Badge - Always show like school cards */}
+                      <div className="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-1 z-10">
+                        <FiStar className="text-amber-400 text-xs fill-amber-400" />
+                        <span className="text-xs font-semibold text-gray-800">{(college.rating || 0).toFixed(1)}</span>
+                      </div>
                       
                       {/* College Logo - Bottom Left */}
                       <div className="absolute -bottom-5 left-4 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-white overflow-hidden">
