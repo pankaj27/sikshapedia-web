@@ -73,7 +73,15 @@ const InstitutionDetailPage = () => {
   };
   
   useEffect(() => {
+    // Prevent re-running for the same idSlug
+    if (resolvedRef.current && lastIdSlug.current === idSlug) {
+      return;
+    }
+    
     const resolveInstitution = async () => {
+      // Mark as resolving
+      lastIdSlug.current = idSlug;
+      
       setLoading(true);
       setError(null);
       
@@ -83,6 +91,7 @@ const InstitutionDetailPage = () => {
       if (!isValidFormat) {
         setError('Invalid URL format');
         setLoading(false);
+        resolvedRef.current = true;
         return;
       }
       
@@ -97,6 +106,7 @@ const InstitutionDetailPage = () => {
             if (response.data && response.data.id) {
               setInstitutionId(response.data.id);
               setLoading(false);
+              resolvedRef.current = true;
               return;
             }
           } catch (slugErr) {
@@ -117,6 +127,7 @@ const InstitutionDetailPage = () => {
             if (institution) {
               setInstitutionId(institution.id);
               setLoading(false);
+              resolvedRef.current = true;
               return;
             }
           }
@@ -125,16 +136,18 @@ const InstitutionDetailPage = () => {
         // If not found
         setError('Institution not found');
         setLoading(false);
+        resolvedRef.current = true;
         
       } catch (err) {
         console.error('Error resolving institution:', err);
         setError('Failed to load institution');
         setLoading(false);
+        resolvedRef.current = true;
       }
     };
     
     resolveInstitution();
-  }, [idSlug, location.pathname, institutionType]);
+  }, [idSlug, institutionType]);
   
   if (loading) {
     return (
