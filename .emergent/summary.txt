@@ -1,0 +1,153 @@
+<analysis>**original_problem_statement:**
+The user's primary goal is to complete and fix the Write a Review feature. This involves a multi-step form with several requirements:
+1.  **Form Fields & Logic:** The form must include Pros and Cons fields. It should have a graduation year dropdown going back to 1990.
+2.  **Points System:** Users should see a live calculator showing the points they'll earn. A base of 50 points is given for any review, with a +50 point bonus for reviews over 200 characters. This 200-character requirement should be an optional bonus, not a mandatory minimum to proceed. A smaller minimum (e.g., 50 characters) should be enforced. Points should only be awarded after an admin approves the review.
+3.  **Institute Auto-Detection:** The form must automatically detect the institute type (School, College, University) based on user search or URL parameters, removing the need for manual selection.
+4.  **Navigation Flow:** When a user clicks Write a Review from an institute's detail page (e.g., ), the review form must open and be correctly pre-filled with that institute's details.
+5.  **Bug Fixes:** The user has reported numerous bugs during development, including a critical, app-wide infinite loop causing pages to get stuck on Loading....
+
+**User's preferred language**: English
+
+**what currently exists?**
+The application is a full-stack React/FastAPI educational portal. The agent has implemented most of the user's feature requests for the review system, including the UI for the live points calculator, the logic for optional bonus points, and the auto-detection of institute types. However, the project is currently in a broken state due to a critical, recurring infinite loop bug. This bug appears on pages that use URL parameters, causing them to hang indefinitely on a Loading... screen. The agent has identified this as a likely platform-level issue with Emergent's own  script, which conflicts with React's state management, particularly the  hook.
+
+**Last working item**:
+-   **Last item agent was working**: Fixing the navigation flow from an institute's detail page to the review form. The agent was implementing a new URL structure () to pass institute data cleanly and avoid the problematic  hook that was causing infinite loops.
+-   **Status**: IN PROGRESS
+-   **Agent Testing Done**: N (The last test failed, with the page getting stuck on Loading...).
+-   **Which testing method agent to use?**: Manual testing using the screenshot tool to debug the Loading... state. Once fixed, use the frontend testing agent to verify the complete end-to-end review flow.
+-   **User Testing Done**: N
+
+**All Pending/In progress Issue list**:
+-   **Issue 1: Critical infinite loop causes pages to hang on Loading... (P0)**
+-   **Issue 2: The Write a Review page is not loading after the latest changes (P0)**
+-   **Issue 3: The end-to-end review flow is untested (P1)**
+
+**Issues Detail:**
+-   **Issue 1: Critical infinite loop causes pages to hang on Loading... (P0)**
+    -   **Description**: Multiple pages, including  and , enter an infinite re-render loop when they process URL parameters. This freezes the page on a Loading... screen. The browser console shows a Maximum update depth exceeded error originating from the platform's  script.
+    -   **Attempted fixes**: The agent tried multiple workarounds, including removing the  hook, memoizing values with , and creating a custom URL parameter parser. The  also confirmed this is a known pattern of platform conflict. The last attempt was to refactor the navigation flow to use a simpler query string.
+    -   **Next debug checklist**:
+        1.  Verify the latest code changes in  that use the new  helper function. Check for any syntax errors or logical flaws.
+        2.  Check the browser console logs for  to see the exact error causing the freeze.
+        3.  Isolate the problem: Does  load correctly without any URL parameters? If not, the last change introduced a new bug. If yes, the issue is in the new parameter handling logic.
+    -   **Why fix this issue and what will be achieved with this?**: This is a critical, app-wide blocker. Fixing it will make the application usable again and unblock all other tasks.
+    -   **Status**: IN PROGRESS
+    -   **Is recurring issue?**: Y
+    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on other issue**: This issue blocks all other pending issues and tasks.
+
+-   **Issue 2: The Write a Review page is not loading after the latest changes (P0)**
+    -   **Description**: This is a direct symptom of Issue #1. After refactoring the  to accept new URL parameters (, , ) and updating the link from , the page now hangs on Loading....
+    -   **Status**: IN PROGRESS
+    -   **Blocked on other issue**: Issue 1
+
+-   **Issue 3: The end-to-end review flow is untested (P1)**
+    -   **Description**: Because of the persistent infinite loop bug, a full test of the review lifecycle (create -> submit -> admin approve -> user sees status/points) has not been possible.
+    -   **Status**: BLOCKED
+    -   **Blocked on other issue**: Issue 1
+
+**In progress Task List**:
+-   **Task 1: Complete and stabilize the Write a Review feature (P0)**
+    -   **Where to resume**: Debugging  to resolve the Loading... state.
+    -   **What will be achieved with this?**: A fully functional and stable review system that meets all user requirements.
+    -   **Status**: IN PROGRESS
+    -   **Blocked on something**: Issue 1 (The infinite loop bug).
+
+**Upcoming and Future Tasks**
+-   **Upcoming Tasks:**
+    -   **(P1)** Guide the user through a full production deployment and data migration, as this was a major pain point from the previous session.
+    -   **(P2)** Fully test the advanced TOC editor's Add Section functionality in .
+-   **Future Tasks:**
+    -   Refactor large components like .
+    -   Create an automated test suite for critical user flows.
+    -   Replace  workarounds with a better solution if the platform routing issues are resolved.
+
+**Completed work in this session**
+-   **Review Form UI/UX Overhaul:**
+    -   Added a live points calculator and character progress bar to .
+    -   Changed review length requirement to 50 chars minimum and 200+ for an optional bonus.
+    -   Extended the graduation year dropdown to go back to 1990.
+-   **Institute Auto-Detection:**
+    -   Implemented logic in  to auto-detect and display institute type (School, College, University) with unique icons and colors, removing manual selection.
+-   **Bug Fixes:**
+    -   Fixed a  crash on the admin's  page.
+    -   Identified the root cause of the Loading... screen as a platform-level infinite loop bug and implemented several workarounds.
+    -   Refactored the URL flow for review creation to be more robust.
+
+**Earlier issues found/mentioned but not fixed**
+-   The root cause of the **platform-level infinite loop bug** remains unfixed, as it lies within Emergent's external  script. All work has been focused on creating workarounds.
+
+**Known issue recurrence from previous fork**
+-   **Issue recurrence in previous fork**: The previous session involved extensive debugging of production-only issues (database, images, server crashes), which severely eroded user trust.
+-   **Recurrence count**: 1. The current session has been dominated by another critical, hard-to-debug issue (the infinite loop), causing similar user frustration and blocking progress.
+-   **Status**: IN PROGRESS
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+-   **React Hook Debugging**: Extensive debugging of  infinite loops caused by unstable dependencies from hooks like . Workarounds involved using  and custom, single-run URL parsers.
+-   **Platform-Level Bug Identification**: Diagnosing a critical bug originating from an external platform script () rather than application code, and learning to build workarounds.
+-   **Robust URL/State Management**: Refactoring the application's routing and state derivation from URLs to be more resilient against re-renders.
+
+**key DB schema**
+-   **reviews**: 
+-   **schools / colleges / universities**: 
+
+**changes in tech stack**
+-   None.
+
+**All files of reference**
+-   : The main file that is currently broken.
+-   : Also affected by the infinite loop.
+-   : The source of navigation to the review form.
+-   : The router component that directs to detail pages.
+
+**Areas that need refactoring**:
+-   Any component using the  hook should be audited and likely refactored to prevent triggering the platform bug.
+
+**key api endpoints**
+-   : Now accepts a numeric serial number to fetch a school.
+-   : Now accepts a  in the payload.
+
+**Critical Info for New Agent**
+-   **USER IS EXTREMELY FRUSTRATED**: The user feels their time and money (points) are being wasted on a bug that has persisted for many interactions. You must be direct, empathetic, and prioritize fixing the blocker. Over-communicate your plan before acting. The user has made threats out of frustration.
+-   **CRITICAL PLATFORM BUG**: There is a confirmed infinite re-render loop caused by the  platform script. It is triggered by components that react to URL parameter changes. Your primary goal is to stabilize the application by working around this bug.
+-   **DO NOT TRUST HOT-RELOADING**: The previous agent frequently had to perform a full frontend restart (frontend: stopped
+frontend: started) for changes to take effect. Assume you will need to do the same after every significant code change.
+
+**documents and test_reports created in this job**
+-   /app/test_result.md
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.  
+2.  
+3.  
+4.  
+5.  
+6.  
+7.  
+8.   (User uploaded screenshot of eslint build error)
+9.  
+10. 
+
+**Project Health Check:**
+-   **Broken**: The core Write a Review flow and several institute detail pages are non-functional due to a recurring infinite loop bug.
+
+**3rd Party Integrations**
+-   Cloudinary
+-   Resend
+-   browser-image-compression
+
+**Testing status**
+-   **Testing agent used after significant changes**: YES, but tests are currently failing/blocked by the infinite loop bug.
+-   **Troubleshoot agent used after agent stuck in loop**: YES, it helped identify the issue as a platform bug.
+-   **Test files created**: None.
+-   **Known regressions**: Pages that were previously working () have been broken and fixed multiple times during attempts to resolve the root infinite loop issue.
+
+**Credentials to test flow:**
+N/A
+
+**What agent forgot to execute**
+- The agent was in the middle of debugging the latest fix attempt when the session ended. The immediate next step is to analyze the console logs for the hanging page to see why the new URL parameter logic is failing.</analysis>
