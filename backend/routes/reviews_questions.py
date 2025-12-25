@@ -311,6 +311,11 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
     review_dict['points_earned'] = review_points  # Store for later awarding
     review_dict['review_title'] = review_data.review_title
     review_dict['course'] = review_data.course
+    review_dict['graduation_year'] = review_data.graduation_year
+    review_dict['verification_document'] = review_data.verification_document
+    review_dict['is_verified_student'] = review_data.is_verified_student
+    review_dict['facilities_rating'] = review_data.facilities_rating
+    review_dict['photos'] = review_data.photos or []
     
     await db.reviews.insert_one(review_dict)
     
