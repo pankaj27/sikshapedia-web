@@ -90,18 +90,6 @@ const InstituteDashboard = () => {
     }
   };
   
-  const fetchApplications = async () => {
-    try {
-      let url = '/institute/applications';
-      if (appStatusFilter) url += `?status=${appStatusFilter}`;
-      
-      const response = await api.get(url);
-      setApplications(response.data);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-    }
-  };
-  
   const fetchAdAnalytics = async () => {
     try {
       const response = await api.get('/institute/ad-analytics');
