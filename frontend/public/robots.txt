@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://campusads.preview.emergentagent.com/sitemap.xml
+Sitemap: https://approval-flow-49.preview.emergentagent.com/sitemap.xml

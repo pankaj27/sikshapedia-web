@@ -6,7 +6,7 @@ Test to verify the collection name mismatch issue
 import requests
 import json
 
-BASE_URL = "https://campusads.preview.emergentagent.com/api"
+BASE_URL = "https://approval-flow-49.preview.emergentagent.com/api"
 ADMIN_CREDENTIALS = {"email": "admin@admissionbuddy.co", "password": "admin123"}
 
 def test_collection_mismatch():
