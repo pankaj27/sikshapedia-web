@@ -374,7 +374,11 @@ const LeadsList = () => {
                       <td className="px-4 py-3">
                         <div>
                           <p className="text-sm font-medium text-gray-800">{lead.course_interested}</p>
-                          <p className="text-xs text-gray-500">{lead.college_name || 'General'}</p>
+                          {lead.college_name ? (
+                            <p className="text-xs text-green-600 font-medium">{lead.college_name}</p>
+                          ) : (
+                            <p className="text-xs text-orange-500 font-medium">⚠️ Unassigned</p>
+                          )}
                         </div>
                       </td>
                       <td className="px-4 py-3">
