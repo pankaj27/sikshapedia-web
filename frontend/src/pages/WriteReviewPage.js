@@ -103,26 +103,12 @@ const WriteReviewPage = () => {
   const [courses, setCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
 
-  // Use ref to track if URL params have been processed (prevents infinite loop)
-  const urlParamsProcessed = useRef(false);
-
-  // Handle URL params for pre-filling institute info (when coming from college detail page or QR code)
+  // Handle URL params for pre-filling institute info (runs ONCE on mount)
   useEffect(() => {
-    // Only run once using ref
-    if (urlParamsProcessed.current) return;
-    
-    const instituteId = searchParams.get('instituteId');
-    const instituteName = searchParams.get('instituteName');
+    const { instituteId, instituteName, instituteType, fromQR, linkCode } = urlParamsRef.current;
     
     // Early return if no params
     if (!instituteId || !instituteName) return;
-    
-    // Mark as processed IMMEDIATELY before any state updates
-    urlParamsProcessed.current = true;
-    
-    const instituteType = searchParams.get('instituteType');
-    const fromQR = searchParams.get('fromQR') === 'true';
-    const linkCode = searchParams.get('linkCode');
     
     // Auto-detect type from institute name if not provided in URL
     let detectedType = instituteType;
