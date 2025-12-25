@@ -99,11 +99,15 @@ const WriteReviewPage = () => {
     const fromQR = searchParams.get('fromQR') === 'true';
     const linkCode = searchParams.get('linkCode');
 
+    console.log('URL Params:', { instituteId, instituteName, instituteType, fromQR, prefilledFromUrl });
+
     if (instituteId && instituteName && !prefilledFromUrl) {
       // Auto-detect type from institute name if not provided in URL
       let detectedType = instituteType;
-      if (!detectedType) {
-        const nameLower = instituteName.toLowerCase();
+      if (!detectedType || detectedType === '') {
+        const nameLower = (instituteName || '').toLowerCase();
+        console.log('Detecting type from name:', nameLower);
+        
         if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
           detectedType = 'school';
         } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
@@ -113,6 +117,7 @@ const WriteReviewPage = () => {
         } else {
           detectedType = 'college';
         }
+        console.log('Detected type:', detectedType);
       }
       
       setFormData(prev => ({
