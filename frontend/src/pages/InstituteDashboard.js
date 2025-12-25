@@ -40,7 +40,6 @@ const InstituteDashboard = () => {
   // Filters
   const [leadSourceFilter, setLeadSourceFilter] = useState('');
   const [leadStatusFilter, setLeadStatusFilter] = useState('');
-  const [appStatusFilter, setAppStatusFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
