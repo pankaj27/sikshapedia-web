@@ -97,7 +97,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin Reviews Moderation Page"
+    - "Write Review Institute Type Auto-Detection"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
