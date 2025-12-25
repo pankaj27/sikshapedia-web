@@ -161,10 +161,6 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
                 <span className="font-semibold text-green-600">+50 pts</span>
               </li>
               <li className="flex items-center justify-between">
-                <span>Add photos</span>
-                <span className="font-semibold text-green-600">+30 pts</span>
-              </li>
-              <li className="flex items-center justify-between">
                 <span>Verified student bonus</span>
                 <span className="font-semibold text-green-600">+50 pts</span>
               </li>
