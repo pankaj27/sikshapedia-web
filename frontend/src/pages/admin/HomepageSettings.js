@@ -2004,6 +2004,103 @@ const HomepageSettings = () => {
           {/* Content Blocks Tab */}
           {activeTab === 'content' && (
             <div className="space-y-8">
+              {/* Quick Links */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <div>
+                    <h2 className="text-lg font-semibold flex items-center gap-2">
+                      <FiLink className="text-purple-600" />
+                      Quick Links Bar
+                    </h2>
+                    <p className="text-sm text-gray-500">Links shown below the hero section (Top Colleges, Top Schools, etc.)</p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={addQuickLink}>
+                    <FiPlus className="mr-1" /> Add Link
+                  </Button>
+                </div>
+                <div className="space-y-3">
+                  {(settings.quick_links || []).map((link, index) => (
+                    <div key={index} className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                      <div className="flex gap-3 items-center">
+                        <span className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">{index + 1}</span>
+                        <input
+                          type="text"
+                          value={link.name || ''}
+                          onChange={(e) => updateQuickLink(index, 'name', e.target.value)}
+                          className="flex-1 border rounded px-3 py-2 text-sm"
+                          placeholder="Link Name (e.g., Top Schools)"
+                        />
+                        <input
+                          type="text"
+                          value={link.link || ''}
+                          onChange={(e) => updateQuickLink(index, 'link', e.target.value)}
+                          className="flex-1 border rounded px-3 py-2 text-sm font-mono"
+                          placeholder="URL (e.g., /schools)"
+                        />
+                        <select
+                          value={link.icon || 'FiLink'}
+                          onChange={(e) => updateQuickLink(index, 'icon', e.target.value)}
+                          className="border rounded px-2 py-2 text-sm"
+                        >
+                          <option value="FiBookOpen">📚 Book</option>
+                          <option value="FiBook">📖 Book Alt</option>
+                          <option value="FiFileText">📄 File</option>
+                          <option value="FiTrendingUp">📈 Trending</option>
+                          <option value="FiZap">⚡ Zap</option>
+                          <option value="FiLink">🔗 Link</option>
+                          <option value="FiGlobe">🌐 Globe</option>
+                          <option value="FiAward">🏆 Award</option>
+                        </select>
+                        <button onClick={() => moveQuickLink(index, 'up')} disabled={index === 0} className="p-2 hover:bg-purple-100 rounded disabled:opacity-30">
+                          <FiChevronUp />
+                        </button>
+                        <button onClick={() => moveQuickLink(index, 'down')} disabled={index === (settings.quick_links || []).length - 1} className="p-2 hover:bg-purple-100 rounded disabled:opacity-30">
+                          <FiChevronDown />
+                        </button>
+                        <button onClick={() => removeQuickLink(index)} className="p-2 text-red-500 hover:bg-red-50 rounded">
+                          <FiTrash2 />
+                        </button>
+                      </div>
+                      <div className="mt-2 flex gap-3">
+                        <select
+                          value={link.bg_color || 'bg-gray-100'}
+                          onChange={(e) => updateQuickLink(index, 'bg_color', e.target.value)}
+                          className="border rounded px-2 py-1 text-xs flex-1"
+                        >
+                          <option value="bg-blue-100">Blue BG</option>
+                          <option value="bg-red-100">Red BG</option>
+                          <option value="bg-green-100">Green BG</option>
+                          <option value="bg-purple-100">Purple BG</option>
+                          <option value="bg-pink-100">Pink BG</option>
+                          <option value="bg-indigo-100">Indigo BG</option>
+                          <option value="bg-orange-100">Orange BG</option>
+                          <option value="bg-yellow-100">Yellow BG</option>
+                        </select>
+                        <select
+                          value={link.icon_color || 'text-gray-600'}
+                          onChange={(e) => updateQuickLink(index, 'icon_color', e.target.value)}
+                          className="border rounded px-2 py-1 text-xs flex-1"
+                        >
+                          <option value="text-blue-600">Blue Icon</option>
+                          <option value="text-red-600">Red Icon</option>
+                          <option value="text-green-600">Green Icon</option>
+                          <option value="text-purple-600">Purple Icon</option>
+                          <option value="text-pink-600">Pink Icon</option>
+                          <option value="text-indigo-600">Indigo Icon</option>
+                          <option value="text-orange-600">Orange Icon</option>
+                          <option value="text-yellow-600">Yellow Icon</option>
+                        </select>
+                      </div>
+                    </div>
+                  ))}
+                  {(!settings.quick_links || settings.quick_links.length === 0) && (
+                    <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed">
+                      <p className="text-gray-500">No quick links added. Click "Add Link" to create one.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Study Goals */}
               <div>
                 <div className="flex justify-between items-center mb-3">
