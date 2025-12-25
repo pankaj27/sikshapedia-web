@@ -54,7 +54,7 @@ class PointsConfig(BaseModel):
     detailed_review_bonus: int = 50  # For reviews with 200+ chars
     verified_student_bonus: int = 50
     photos_bonus: int = 30
-    min_review_characters: int = 200
+    min_review_characters: int = 50  # Minimum chars required (50), bonus at 200
 
 class HeaderSettings(BaseModel):
     title: str = "Write a Review & Earn ₹300*"
