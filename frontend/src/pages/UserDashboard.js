@@ -625,7 +625,7 @@ const UserDashboard = () => {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <h3 className="text-lg font-semibold mb-1">Your Referral Code</h3>
-                      <p className="text-sm opacity-90 mb-3">Share with friends and earn ₹200 for each referral!</p>
+                      <p className="text-sm opacity-90 mb-3">Share with friends and earn 100 points for each referral!</p>
                       <div className="flex items-center gap-3">
                         <code className="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-xl font-bold tracking-wider">
                           {dashboard?.referral_code || 'LOADING...'}
