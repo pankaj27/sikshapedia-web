@@ -2437,7 +2437,7 @@ const DynamicListingPage = () => {
                             )}
                             {inst.rating > 0 && (
                               <span className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
-                                <FiStar size={10} className="fill-current" /> {inst.rating.toFixed(1)}
+                                <FiStar size={10} className="fill-current" /> {(inst.rating || 0).toFixed(1)}
                               </span>
                             )}
                           </div>
