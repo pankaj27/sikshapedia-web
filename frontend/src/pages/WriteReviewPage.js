@@ -143,7 +143,6 @@ const WriteReviewPage = () => {
         setQrLinkCode(linkCode);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Fetch page settings on mount
