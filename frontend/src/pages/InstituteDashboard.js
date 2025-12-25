@@ -164,7 +164,7 @@ const InstituteDashboard = () => {
     try {
       const res = await api.post('/institute/review-link', {
         institute_id: institution.id,
-        institute_type: institution.type || 'college'
+        institute_type: institution.institution_type || institution.type || 'college'
       });
       setReviewLink({
         has_link: true,
@@ -173,6 +173,7 @@ const InstituteDashboard = () => {
         submissions: 0
       });
     } catch (err) {
+      console.error('Error generating review link:', err);
       alert('Failed to generate review link');
     } finally {
       setGeneratingLink(false);
