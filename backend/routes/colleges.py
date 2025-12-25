@@ -347,9 +347,23 @@ async def get_admission_open_priority_colleges(limit: int = Query(6, ge=1, le=20
 
 @router.get("/colleges/{college_id}")
 async def get_college(college_id: str):
-    """Get a specific college by ID or slug with similar colleges"""
-    # First try to find by ID
-    college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
+    """Get a specific college by ID, slug, or serial_number with similar colleges"""
+    college = None
+    
+    # Check if college_id is a numeric serial_number
+    serial_num = None
+    try:
+        serial_num = int(college_id)
+    except ValueError:
+        pass
+    
+    # First try by serial_number if numeric
+    if serial_num is not None:
+        college = await db.colleges.find_one({"serial_number": serial_num}, {"_id": 0})
+    
+    # Try to find by ID
+    if not college:
+        college = await db.colleges.find_one({"id": college_id}, {"_id": 0})
     
     # If not found by ID, try to find by slug
     if not college:
