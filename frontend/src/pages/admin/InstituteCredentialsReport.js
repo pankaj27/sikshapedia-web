@@ -54,10 +54,10 @@ const InstituteCredentialsReport = () => {
   });
 
   const exportToCSV = () => {
-    const headers = ['Institution Name', 'Institution ID', 'Login Email', 'Password', 'Contact Email', 'Contact Phone', 'Created At'];
+    const headers = ['Institution Name', 'Login ID', 'Login Email', 'Password', 'Contact Email', 'Contact Phone', 'Created At'];
     const rows = filteredCredentials.map(cred => [
       cred.institution_name || '',
-      cred.institution_id || '',
+      cred.login_id || cred.institution_id || '',
       cred.login_email || '',
       cred.temp_password || '',
       cred.contact_email || '',
