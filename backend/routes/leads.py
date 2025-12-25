@@ -9,6 +9,7 @@ from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional, List
 from datetime import datetime, timezone
 import uuid
+from uuid import uuid4
 import os
 import logging
 import jwt
