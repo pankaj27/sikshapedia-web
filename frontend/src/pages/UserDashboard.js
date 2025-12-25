@@ -1151,7 +1151,7 @@ const UserDashboard = () => {
                             {new Date(ref.created_at).toLocaleDateString()}
                           </p>
                         </div>
-                        <span className="text-green-600 font-bold">+₹{ref.points_earned}</span>
+                        <span className="text-green-600 font-bold">+{ref.points_earned || 100} pts</span>
                       </div>
                     ))}
                   </div>
