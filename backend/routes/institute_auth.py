@@ -483,6 +483,11 @@ async def get_institute_dashboard(request: Request, db=Depends(get_db)):
         {"_id": 0, "impressions": 1, "clicks": 1, "conversions": 1}
     ) or {"impressions": 0, "clicks": 0, "conversions": 0}
     
+    # Get reviews count for institution
+    total_reviews = await db.reviews.count_documents({"college_id": inst_id, "status": "approved"})
+    # Also count pending reviews
+    pending_reviews = await db.reviews.count_documents({"college_id": inst_id, "status": "pending"})
+    
     return {
         "institution": institution,
         "leads": {
@@ -494,6 +499,11 @@ async def get_institute_dashboard(request: Request, db=Depends(get_db)):
         "applications": {
             "total": total_applications,
             "status_breakdown": app_status
+        },
+        "reviews": {
+            "total": total_reviews + pending_reviews,
+            "approved": total_reviews,
+            "pending": pending_reviews
         },
         "ad_analytics": ad_stats,
         "recent_leads": recent_leads,
