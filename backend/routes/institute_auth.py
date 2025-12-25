@@ -442,9 +442,10 @@ async def get_institute_dashboard(request: Request, db=Depends(get_db)):
     
     # Get leads with source breakdown
     total_leads = await db.leads.count_documents({"college_id": inst_id})
+    # Include listing_page, contact_form and other organic sources
     organic_leads = await db.leads.count_documents({
         "college_id": inst_id,
-        "source": {"$in": ["organic", "apply_now", "admission_form", "inquiry", None]}
+        "source": {"$in": ["organic", "apply_now", "admission_form", "inquiry", "listing_page", "contact_form", "website", None]}
     })
     ad_leads = await db.leads.count_documents({
         "college_id": inst_id,
