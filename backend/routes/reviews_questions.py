@@ -618,15 +618,48 @@ async def approve_review(review_id: str):
     return {"message": "Review approved", "status": "approved", "points_awarded": review_points}
 
 
+class RejectReviewRequest(BaseModel):
+    reason: Optional[str] = None
+
+
 @router.patch("/reviews/{review_id}/reject")
-async def reject_review(review_id: str):
-    """Reject a review (Admin only)"""
+async def reject_review(review_id: str, reject_data: RejectReviewRequest = None):
+    """Reject a review with optional reason (Admin only)"""
+    review = await db.reviews.find_one({"id": review_id}, {"_id": 0})
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    
+    rejection_reason = reject_data.reason if reject_data else None
+    
     result = await db.reviews.update_one(
         {"id": review_id},
-        {"$set": {"status": "rejected"}}
+        {"$set": {
+            "status": "rejected",
+            "rejection_reason": rejection_reason,
+            "rejected_at": datetime.now(timezone.utc).isoformat()
+        }}
     )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Review not found")
+    
+    # Notify user about rejection
+    user_id = review.get("user_id")
+    college_name = review.get("college_name", "Institute")
+    
+    if user_id:
+        message = f"Your review for {college_name} was not approved."
+        if rejection_reason:
+            message += f" Reason: {rejection_reason}"
+        
+        notification = Notification(
+            user_id=user_id,
+            type="review_rejected",
+            title="Review Not Approved",
+            message=message,
+            link="/dashboard?tab=reviews"
+        )
+        notif_dict = notification.model_dump()
+        notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+        await db.notifications.insert_one(notif_dict)
+    
     return {"message": "Review rejected", "status": "rejected"}
 
 
