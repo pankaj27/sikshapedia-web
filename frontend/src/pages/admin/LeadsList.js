@@ -32,6 +32,13 @@ const LeadsList = () => {
   // Edit modal
   const [editingLead, setEditingLead] = useState(null);
   const [editForm, setEditForm] = useState({ status: '', notes: '' });
+  
+  // Assign to Institute modal
+  const [assigningLead, setAssigningLead] = useState(null);
+  const [institutes, setInstitutes] = useState([]);
+  const [instituteSearch, setInstituteSearch] = useState('');
+  const [loadingInstitutes, setLoadingInstitutes] = useState(false);
+  const [selectedInstitute, setSelectedInstitute] = useState(null);
 
   useEffect(() => {
     fetchLeads();
