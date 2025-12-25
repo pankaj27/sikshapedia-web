@@ -346,10 +346,10 @@ const WriteReviewPage = () => {
         college_name: formData.instituteName,
         course: formData.course,
         rating: formData.rating,
-        title: formData.reviewTitle,
+        review_title: formData.reviewTitle,
         pros: formData.likes,
         cons: formData.dislikes,
-        review: formData.detailedReview,
+        review_text: formData.detailedReview,
         facilities_rating: formData.facilities,
         graduation_year: formData.graduationYear,
         is_verified_student: !!formData.verificationDocument,
@@ -357,7 +357,7 @@ const WriteReviewPage = () => {
         photos: []
       };
 
-      const response = await api.post('/user/reviews', reviewData);
+      const response = await api.post('/reviews', reviewData);
       
       setEarnedPoints(response.data.points_earned || 50);
       setStep(4);
