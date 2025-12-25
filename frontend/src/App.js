@@ -410,7 +410,7 @@ function App() {
               <Route path="/colleges/:seg1/:seg2/:seg3/:seg4" element={<DynamicListingPage />} />
               
               <Route path="/schools" element={<DynamicListingPage />} />
-              <Route path="/schools/:seg1" element={<InstitutionRouter />} />
+              <Route path="/schools/:idSlug" element={<InstitutionDetailPage />} />
               <Route path="/schools/:seg1/:seg2" element={<InstitutionRouter />} />
               <Route path="/schools/:seg1/:seg2/:seg3" element={<DynamicListingPage />} />
               <Route path="/schools/:seg1/:seg2/:seg3/:seg4" element={<DynamicListingPage />} />
