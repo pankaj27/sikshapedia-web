@@ -677,28 +677,28 @@ const WriteReviewPage = () => {
                 {/* What You Liked */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    What did you like? <span className="text-red-500">*</span>
+                    <span className="text-green-600">👍 Pros</span> - What did you like? <span className="text-red-500">*</span>
                   </label>
                   <textarea
-                    placeholder="Highlight the positive aspects"
+                    placeholder="Highlight the positive aspects - good faculty, placements, infrastructure, etc."
                     value={formData.likes}
                     onChange={(e) => handleInputChange('likes', e.target.value)}
                     rows="3"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   ></textarea>
                 </div>
 
-                {/* What Needs Improvement */}
+                {/* Cons - What Needs Improvement */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    What needs improvement?
+                    <span className="text-red-600">👎 Cons</span> - What needs improvement?
                   </label>
                   <textarea
-                    placeholder="Areas for improvement"
+                    placeholder="Areas for improvement - facilities, management, etc."
                     value={formData.dislikes}
                     onChange={(e) => handleInputChange('dislikes', e.target.value)}
                     rows="3"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   ></textarea>
                 </div>
 
