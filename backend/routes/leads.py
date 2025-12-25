@@ -452,6 +452,55 @@ async def get_lead_activities_admin(
     
     return activities
 
+@leads_router.patch("/leads/{lead_id}/assign")
+async def assign_lead_to_institute(
+    lead_id: str,
+    assignment: dict,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Assign a lead to an institute (Admin only)"""
+    payload = verify_admin_token(credentials)
+    
+    college_id = assignment.get("college_id")
+    college_name = assignment.get("college_name")
+    
+    if not college_id or not college_name:
+        raise HTTPException(status_code=400, detail="college_id and college_name are required")
+    
+    # Get old lead data for activity log
+    old_lead = await db.leads.find_one({"id": lead_id}, {"_id": 0})
+    if not old_lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    old_college = old_lead.get("college_name", "Unassigned")
+    
+    # Update the lead with the new institute
+    update_dict = {
+        "college_id": college_id,
+        "college_name": college_name,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.leads.update_one({"id": lead_id}, {"$set": update_dict})
+    
+    # Create activity log entry
+    activity = {
+        "id": f"activity_{uuid4().hex[:12]}",
+        "lead_id": lead_id,
+        "action": "institute_assignment",
+        "old_value": old_college,
+        "new_value": college_name,
+        "notes": f"Lead assigned to {college_name}",
+        "performed_by": payload.get("name", "Admin"),
+        "performed_by_type": "admin",
+        "performed_by_id": payload.get("sub"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.lead_activities.insert_one(activity)
+    
+    lead = await db.leads.find_one({"id": lead_id}, {"_id": 0})
+    return {"success": True, "message": f"Lead assigned to {college_name}", "lead": lead}
+
 @leads_router.delete("/leads/{lead_id}")
 async def delete_lead(lead_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Delete a lead (Admin only)"""
