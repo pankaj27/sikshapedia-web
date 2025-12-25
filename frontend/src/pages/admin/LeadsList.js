@@ -134,6 +134,58 @@ const LeadsList = () => {
     setEditForm({ status: lead.status, notes: lead.notes || '' });
   };
 
+  // Search institutes for assignment
+  const searchInstitutes = async (query) => {
+    if (!query || query.length < 2) {
+      setInstitutes([]);
+      return;
+    }
+    setLoadingInstitutes(true);
+    try {
+      const response = await api.get(`/colleges/search?q=${encodeURIComponent(query)}&limit=10`);
+      setInstitutes(response.data || []);
+    } catch (err) {
+      console.error('Failed to search institutes:', err);
+      setInstitutes([]);
+    } finally {
+      setLoadingInstitutes(false);
+    }
+  };
+
+  // Handle institute search with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (instituteSearch) {
+        searchInstitutes(instituteSearch);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [instituteSearch]);
+
+  const openAssignModal = (lead) => {
+    setAssigningLead(lead);
+    setInstituteSearch('');
+    setInstitutes([]);
+    setSelectedInstitute(null);
+  };
+
+  const handleAssignToInstitute = async () => {
+    if (!assigningLead || !selectedInstitute) return;
+    try {
+      await api.patch(`/leads/${assigningLead.id}/assign`, {
+        college_id: selectedInstitute.id,
+        college_name: selectedInstitute.name
+      });
+      setAssigningLead(null);
+      setSelectedInstitute(null);
+      fetchLeads();
+      alert(`Lead assigned to ${selectedInstitute.name} successfully!`);
+    } catch (err) {
+      console.error('Failed to assign lead:', err);
+      alert('Failed to assign lead to institute');
+    }
+  };
+
   const getStatusBadge = (status) => {
     const option = STATUS_OPTIONS.find(o => o.value === status) || STATUS_OPTIONS[0];
     return (
