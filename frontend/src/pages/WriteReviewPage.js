@@ -93,20 +93,20 @@ const WriteReviewPage = () => {
 
   // Handle URL params for pre-filling institute info (when coming from college detail page or QR code)
   useEffect(() => {
+    // Only run once on mount
+    if (prefilledFromUrl) return;
+    
     const instituteId = searchParams.get('instituteId');
     const instituteName = searchParams.get('instituteName');
     const instituteType = searchParams.get('instituteType');
     const fromQR = searchParams.get('fromQR') === 'true';
     const linkCode = searchParams.get('linkCode');
 
-    console.log('URL Params:', { instituteId, instituteName, instituteType, fromQR, prefilledFromUrl });
-
-    if (instituteId && instituteName && !prefilledFromUrl) {
+    if (instituteId && instituteName) {
       // Auto-detect type from institute name if not provided in URL
       let detectedType = instituteType;
-      if (!detectedType || detectedType === '') {
+      if (!detectedType || detectedType === '' || detectedType === 'null') {
         const nameLower = (instituteName || '').toLowerCase();
-        console.log('Detecting type from name:', nameLower);
         
         if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
           detectedType = 'school';
@@ -117,7 +117,6 @@ const WriteReviewPage = () => {
         } else {
           detectedType = 'college';
         }
-        console.log('Detected type:', detectedType);
       }
       
       setFormData(prev => ({
@@ -136,7 +135,7 @@ const WriteReviewPage = () => {
         }
       }
     }
-  }, [searchParams, prefilledFromUrl]);
+  }, [searchParams]); // Removed prefilledFromUrl from deps to prevent infinite loop
 
   // Fetch page settings on mount
   useEffect(() => {
