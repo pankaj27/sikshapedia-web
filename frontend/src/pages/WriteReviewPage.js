@@ -91,50 +91,56 @@ const WriteReviewPage = () => {
   const [courses, setCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
 
-  // Extract URL params once and memoize
-  const urlInstituteId = searchParams.get('instituteId');
-  const urlInstituteName = searchParams.get('instituteName');
-  const urlInstituteType = searchParams.get('instituteType');
-  const urlFromQR = searchParams.get('fromQR') === 'true';
-  const urlLinkCode = searchParams.get('linkCode');
+  // Use ref to track if URL params have been processed (prevents infinite loop)
+  const urlParamsProcessed = useRef(false);
 
   // Handle URL params for pre-filling institute info (when coming from college detail page or QR code)
   useEffect(() => {
-    // Only run once when URL params exist
-    if (prefilledFromUrl || !urlInstituteId || !urlInstituteName) return;
+    // Only run once
+    if (urlParamsProcessed.current) return;
     
-    // Auto-detect type from institute name if not provided in URL
-    let detectedType = urlInstituteType;
-    if (!detectedType || detectedType === '' || detectedType === 'null') {
-      const nameLower = (urlInstituteName || '').toLowerCase();
+    const instituteId = searchParams.get('instituteId');
+    const instituteName = searchParams.get('instituteName');
+    const instituteType = searchParams.get('instituteType');
+    const fromQR = searchParams.get('fromQR') === 'true';
+    const linkCode = searchParams.get('linkCode');
+
+    if (instituteId && instituteName) {
+      urlParamsProcessed.current = true; // Mark as processed FIRST to prevent re-runs
       
-      if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
-        detectedType = 'school';
-      } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
-        detectedType = 'university';
-      } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
-        detectedType = 'coaching';
-      } else {
-        detectedType = 'college';
+      // Auto-detect type from institute name if not provided in URL
+      let detectedType = instituteType;
+      if (!detectedType || detectedType === '' || detectedType === 'null') {
+        const nameLower = (instituteName || '').toLowerCase();
+        
+        if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
+          detectedType = 'school';
+        } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
+          detectedType = 'university';
+        } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
+          detectedType = 'coaching';
+        } else {
+          detectedType = 'college';
+        }
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        instituteId: instituteId,
+        instituteName: instituteName,
+        instituteType: detectedType
+      }));
+      setPrefilledFromUrl(true);
+      
+      // If from QR, lock the institute selection
+      if (fromQR) {
+        setIsFromQR(true);
+        if (linkCode) {
+          setQrLinkCode(linkCode);
+        }
       }
     }
-    
-    setFormData(prev => ({
-      ...prev,
-      instituteId: urlInstituteId,
-      instituteName: urlInstituteName,
-      instituteType: detectedType
-    }));
-    setPrefilledFromUrl(true);
-    
-    // If from QR, lock the institute selection
-    if (urlFromQR) {
-      setIsFromQR(true);
-      if (urlLinkCode) {
-        setQrLinkCode(urlLinkCode);
-      }
-    }
-  }, [urlInstituteId, urlInstituteName, urlInstituteType, urlFromQR, urlLinkCode, prefilledFromUrl]);
+  }, []); // Empty dependency array - run only once on mount
 
   // Fetch page settings on mount
   useEffect(() => {
