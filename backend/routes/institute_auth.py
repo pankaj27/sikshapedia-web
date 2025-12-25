@@ -525,7 +525,7 @@ async def get_institute_leads(
     query = {"college_id": institution["id"]}
     if source:
         if source == "organic":
-            query["source"] = {"$in": ["organic", "apply_now", "admission_form", "inquiry", None]}
+            query["source"] = {"$in": ["organic", "apply_now", "admission_form", "inquiry", "listing_page", "contact_form", "website", None]}
         elif source == "ad":
             query["source"] = {"$in": ["sponsored_ad", "advertisement", "ad_campaign"]}
     if status:
