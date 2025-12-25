@@ -108,6 +108,7 @@ const TestimonialsManagement = lazy(() => import('./pages/admin/TestimonialsMana
 const FAQsManagement = lazy(() => import('./pages/admin/FAQsManagement'));
 const CitiesManagement = lazy(() => import('./pages/admin/CitiesManagement'));
 const StatesManagement = lazy(() => import('./pages/admin/StatesManagement'));
+const InstituteCredentialsReport = lazy(() => import('./pages/admin/InstituteCredentialsReport'));
 const ContactInquiriesManagement = lazy(() => import('./pages/admin/ContactInquiriesManagement'));
 const CoursesManagement = lazy(() => import('./pages/admin/CoursesManagement'));
 const ExamsManagement = lazy(() => import('./pages/admin/ExamsManagement'));
