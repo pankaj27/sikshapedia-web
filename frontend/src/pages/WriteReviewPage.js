@@ -248,9 +248,17 @@ const WriteReviewPage = () => {
 
   const handleInstituteSelect = (institute) => {
     // Auto-detect institute type from the search result
-    const detectedType = institute.type || institute.institution_type || 'college';
-    const normalizedType = detectedType.toLowerCase().includes('school') ? 'school' : 
-                          detectedType.toLowerCase().includes('university') ? 'college' : 'college';
+    const rawType = (institute.type || institute.institution_type || '').toLowerCase();
+    
+    // Determine normalized type
+    let normalizedType = 'college'; // default
+    if (rawType.includes('school')) {
+      normalizedType = 'school';
+    } else if (rawType.includes('coaching')) {
+      normalizedType = 'coaching';
+    }
+    
+    console.log('Selected institute:', institute.name, 'Raw type:', rawType, 'Normalized:', normalizedType);
     
     setFormData(prev => ({
       ...prev,
