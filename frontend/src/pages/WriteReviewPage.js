@@ -670,9 +670,13 @@ const WriteReviewPage = () => {
                             formData.instituteType === 'coaching' ? '📚 Coaching Institute' :
                             '🎓 College'
                           }
-                          }
                         </span>
-                        <span className="text-xs text-blue-500">(Auto-detected)</span>
+                        <span className={`text-xs ${
+                          formData.instituteType === 'school' ? 'text-green-500' :
+                          formData.instituteType === 'university' ? 'text-purple-500' :
+                          formData.instituteType === 'coaching' ? 'text-orange-500' :
+                          'text-blue-500'
+                        }`}>(Auto-detected)</span>
                       </div>
                     </div>
                   )}
