@@ -219,15 +219,25 @@ def normalize_school_data(school):
 
 @router.get("/schools/{school_id}")
 async def get_school(school_id: str):
-    """Get a specific school by ID or slug"""
-    # First try to find by ID in colleges collection (schools with institution_type='School')
+    """Get a specific school by ID, slug, or serial_number"""
+    # Check if school_id is a numeric serial_number
+    serial_num = None
+    if school_id.isdigit():
+        serial_num = int(school_id)
+    
+    # Build query conditions
+    query_conditions = [{"id": school_id}, {"slug": school_id}]
+    if serial_num is not None:
+        query_conditions.append({"serial_number": serial_num})
+    
+    # First try to find by ID/slug/serial_number in colleges collection (schools with institution_type='School')
     school = await db.colleges.find_one(
-        {"$or": [{"id": school_id}, {"slug": school_id}], "institution_type": "School"}, 
+        {"$or": query_conditions, "institution_type": "School"}, 
         {"_id": 0}
     )
     if not school:
         # Fallback to schools collection
-        school = await db.schools.find_one({"$or": [{"id": school_id}, {"slug": school_id}]}, {"_id": 0})
+        school = await db.schools.find_one({"$or": query_conditions}, {"_id": 0})
     if not school:
         raise HTTPException(status_code=404, detail="School not found")
     
