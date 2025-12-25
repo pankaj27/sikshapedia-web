@@ -6156,6 +6156,9 @@ class APITester:
         # **Institute Login and Dashboard Flow Test:**
         self.test_institute_login_and_dashboard()
         
+        # **Review System Testing (Points Allocation Fix):**
+        self.test_review_system()
+        
         # Legacy User and Institute Dashboard API Tests
         self.test_user_authentication_otp_flow()
         self.test_user_dashboard_apis_unauthorized()
