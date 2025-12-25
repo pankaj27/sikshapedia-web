@@ -289,10 +289,12 @@ const CourseFinderPage = () => {
 
                   <p className="text-sm text-gray-700 mb-4 line-clamp-3">{course.description}</p>
 
-                  <div className="mb-4">
-                    <span className="text-sm font-semibold text-gray-700">Popular Job Roles: </span>
-                    <span className="text-sm text-gray-600">{course.jobRoles.join(', ')}</span>
-                  </div>
+                  {course.jobRoles && course.jobRoles.length > 0 && (
+                    <div className="mb-4">
+                      <span className="text-sm font-semibold text-gray-700">Popular Job Roles: </span>
+                      <span className="text-sm text-gray-600">{course.jobRoles.join(', ')}</span>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between">
                     <Link 
