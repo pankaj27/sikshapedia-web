@@ -531,14 +531,36 @@ const WriteReviewPage = () => {
               {isFromQR && formData.instituteName ? (
                 <div className="space-y-4">
                   {/* Locked Institute Display */}
-                  <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4">
+                  <div className={`border-2 rounded-lg p-4 ${
+                    formData.instituteType === 'school' ? 'bg-green-50 border-green-200' :
+                    formData.instituteType === 'university' ? 'bg-purple-50 border-purple-200' :
+                    formData.instituteType === 'coaching' ? 'bg-orange-50 border-orange-200' :
+                    'bg-blue-50 border-blue-200'
+                  }`}>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <span className="text-2xl">🏫</span>
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                        formData.instituteType === 'school' ? 'bg-green-100' :
+                        formData.instituteType === 'university' ? 'bg-purple-100' :
+                        formData.instituteType === 'coaching' ? 'bg-orange-100' :
+                        'bg-blue-100'
+                      }`}>
+                        <span className="text-2xl">{
+                          formData.instituteType === 'school' ? '🏫' :
+                          formData.instituteType === 'university' ? '🏛️' :
+                          formData.instituteType === 'coaching' ? '📚' :
+                          '🎓'
+                        }</span>
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-orange-600 font-medium uppercase tracking-wide">
-                          {formData.instituteType === 'college' ? 'College/University' : formData.instituteType === 'school' ? 'School' : 'Coaching Institute'}
+                        <p className={`text-xs font-medium uppercase tracking-wide ${
+                          formData.instituteType === 'school' ? 'text-green-600' :
+                          formData.instituteType === 'university' ? 'text-purple-600' :
+                          formData.instituteType === 'coaching' ? 'text-orange-600' :
+                          'text-blue-600'
+                        }`}>
+                          {formData.instituteType === 'school' ? 'School' : 
+                           formData.instituteType === 'university' ? 'University' : 
+                           formData.instituteType === 'coaching' ? 'Coaching Institute' : 'College'}
                         </p>
                         <h3 className="text-lg font-bold text-gray-900">{formData.instituteName}</h3>
                       </div>
