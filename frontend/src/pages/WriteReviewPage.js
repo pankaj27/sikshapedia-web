@@ -555,36 +555,21 @@ const WriteReviewPage = () => {
               ) : (
                 /* Regular institute selection for non-QR flow */
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                      Institute Type <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      value={formData.instituteType}
-                      onChange={(e) => handleInputChange('instituteType', e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    >
-                      <option value="">Select Institute Type</option>
-                      <option value="college">College/University</option>
-                      <option value="school">School</option>
-                      <option value="coaching">Coaching Institute</option>
-                    </select>
-                  </div>
-
+                  {/* Institute Name Search - Primary field now */}
                   <div className="relative">
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                      Institute Name <span className="text-red-500">*</span>
+                      Search Your Institute <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
                         type="text"
-                        placeholder="Search and select your institute"
+                        placeholder="Type college, school or university name..."
                         value={formData.instituteName || instituteSearch}
                         onChange={(e) => {
                           setInstituteSearch(e.target.value);
                           setShowInstituteDropdown(true);
                           if (!e.target.value) {
-                            setFormData(prev => ({ ...prev, instituteName: '', instituteId: '' }));
+                            setFormData(prev => ({ ...prev, instituteName: '', instituteId: '', instituteType: '' }));
                           }
                         }}
                         onFocus={() => setShowInstituteDropdown(true)}
@@ -606,10 +591,20 @@ const WriteReviewPage = () => {
                                 className="px-3 py-2 cursor-pointer hover:bg-orange-50 border-b border-gray-100 last:border-0"
                                 style={{ color: '#111827' }}
                               >
-                                <div className="font-medium">{inst.name}</div>
-                                {inst.location && (
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium">{inst.name}</span>
+                                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                    inst.type === 'school' ? 'bg-green-100 text-green-700' :
+                                    inst.type === 'university' ? 'bg-purple-100 text-purple-700' :
+                                    'bg-blue-100 text-blue-700'
+                                  }`}>
+                                    {inst.type === 'school' ? 'School' : 
+                                     inst.type === 'university' ? 'University' : 'College'}
+                                  </span>
+                                </div>
+                                {(inst.location || inst.city) && (
                                   <div className="text-xs text-gray-500">
-                                    {inst.location.city}, {inst.location.state}
+                                    {inst.location?.city || inst.city}{inst.location?.state || inst.state ? `, ${inst.location?.state || inst.state}` : ''}
                                   </div>
                                 )}
                               </div>
@@ -622,8 +617,24 @@ const WriteReviewPage = () => {
                         </div>
                       )}
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5">Start typing to search from our database</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Search colleges, schools, and universities</p>
                   </div>
+
+                  {/* Show auto-detected institute type after selection */}
+                  {formData.instituteName && formData.instituteType && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-blue-700">
+                          <span className="font-medium">Institute Type:</span> {
+                            formData.instituteType === 'school' ? '🏫 School' :
+                            formData.instituteType === 'coaching' ? '📚 Coaching Institute' :
+                            '🎓 College/University'
+                          }
+                        </span>
+                        <span className="text-xs text-blue-500">(Auto-detected)</span>
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">
