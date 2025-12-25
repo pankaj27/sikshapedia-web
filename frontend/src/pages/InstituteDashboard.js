@@ -111,10 +111,27 @@ const InstituteDashboard = () => {
     }
   };
   
+  const fetchLeadActivities = async (leadId) => {
+    setLoadingActivities(true);
+    try {
+      const response = await api.get(`/institute/leads/${leadId}/activities`);
+      setLeadActivities(response.data);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+      setLeadActivities([]);
+    } finally {
+      setLoadingActivities(false);
+    }
+  };
+  
+  const handleViewActivities = (lead) => {
+    setSelectedLead(lead);
+    fetchLeadActivities(lead.id);
+  };
+  
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     if (tab === 'leads') fetchLeads();
-    if (tab === 'applications') fetchApplications();
     if (tab === 'analytics') fetchAdAnalytics();
     if (tab === 'admission_bookings') fetchAdmissionBookings();
   };
