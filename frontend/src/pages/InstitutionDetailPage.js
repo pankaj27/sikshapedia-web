@@ -99,7 +99,23 @@ const InstitutionDetailPage = () => {
         // Determine the correct API endpoint based on institution type
         const apiEndpoint = institutionType === 'School' ? '/schools' : '/colleges';
         
-        // First try to fetch by slug directly (works for both numeric prefix and slug-only format)
+        // If we have a numeric ID, try that first (fastest lookup)
+        if (numericId) {
+          try {
+            const response = await api.get(`${apiEndpoint}/${numericId}`);
+            if (response.data && response.data.id) {
+              setInstitutionId(response.data.id);
+              setLoading(false);
+              resolvedRef.current = true;
+              return;
+            }
+          } catch (numericErr) {
+            // Numeric ID fetch failed, try full slug
+            console.log('Numeric ID fetch failed, trying slug');
+          }
+        }
+        
+        // Try to fetch by slug directly
         if (slug) {
           try {
             const response = await api.get(`${apiEndpoint}/${slug}`);
@@ -110,26 +126,23 @@ const InstitutionDetailPage = () => {
               return;
             }
           } catch (slugErr) {
-            // Slug fetch failed, try serial_number lookup
-            console.log('Slug fetch failed, trying serial_number lookup');
+            // Slug fetch failed, try full URL path as slug
+            console.log('Slug fetch failed, trying full idSlug');
           }
         }
         
-        // Search by serial_number (numeric prefix format)
-        if (numericId) {
-          // Fetch all institutions including drafts - serial_number is unique across all
-          const response = await api.get(`${apiEndpoint}?limit=500&include_drafts=true`);
-          if (response.data && response.data.length > 0) {
-            // Find institution by serial_number (padded numeric ID)
-            const serialNum = parseInt(numericId, 10);
-            const institution = response.data.find(inst => inst.serial_number === serialNum);
-            
-            if (institution) {
-              setInstitutionId(institution.id);
+        // Try full idSlug as fallback (for slug-only URLs)
+        if (idSlug && idSlug !== slug && idSlug !== numericId) {
+          try {
+            const response = await api.get(`${apiEndpoint}/${idSlug}`);
+            if (response.data && response.data.id) {
+              setInstitutionId(response.data.id);
               setLoading(false);
               resolvedRef.current = true;
               return;
             }
+          } catch (idSlugErr) {
+            console.log('Full idSlug fetch failed');
           }
         }
         
