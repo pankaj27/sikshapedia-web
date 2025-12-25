@@ -67,6 +67,8 @@ class APITester:
                 response = self.session.post(url, json=data, headers=req_headers, timeout=30)
             elif method.upper() == "PUT":
                 response = self.session.put(url, json=data, headers=req_headers, timeout=30)
+            elif method.upper() == "PATCH":
+                response = self.session.patch(url, json=data, headers=req_headers, timeout=30)
             elif method.upper() == "DELETE":
                 response = self.session.delete(url, headers=req_headers, timeout=30)
             else:
