@@ -253,6 +253,7 @@ function App() {
             <Route path="/admin/tag-courses-colleges" element={<TagCoursesColleges />} />
             <Route path="/admin/tag-exams-courses" element={<TagExamsCourses />} />
             <Route path="/admin/users" element={<UsersManagement />} />
+            <Route path="/admin/institute-credentials" element={<InstituteCredentialsReport />} />
             <Route path="/admin/blogs" element={<BlogsManagement />} />
             <Route path="/admin/blogs/new" element={<BlogForm />} />
             <Route path="/admin/blogs/edit/:id" element={<BlogForm />} />
