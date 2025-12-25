@@ -769,17 +769,20 @@ const WriteReviewPage = () => {
                   <div className="mt-2">
                     <div className="flex items-center justify-between mb-1">
                       <span className={`text-xs font-medium ${
-                        formData.detailedReview.length >= 200 ? 'text-green-600' : 'text-gray-600'
+                        formData.detailedReview.length >= 200 ? 'text-green-600' : 
+                        formData.detailedReview.length >= 50 ? 'text-blue-600' : 'text-gray-600'
                       }`}>
                         {formData.detailedReview.length >= 200 ? (
                           <span className="flex items-center gap-1">
                             ✅ Bonus unlocked! +50 pts
                           </span>
+                        ) : formData.detailedReview.length >= 50 ? (
+                          <span>✓ {formData.detailedReview.length}/200 characters (minimum met)</span>
                         ) : (
-                          <span>📝 {formData.detailedReview.length}/200 characters</span>
+                          <span>📝 {formData.detailedReview.length}/50 min characters</span>
                         )}
                       </span>
-                      {formData.detailedReview.length < 200 && (
+                      {formData.detailedReview.length < 200 && formData.detailedReview.length >= 50 && (
                         <span className="text-xs text-orange-600 font-medium">
                           +50 bonus at 200!
                         </span>
@@ -790,6 +793,8 @@ const WriteReviewPage = () => {
                         className={`h-2 rounded-full transition-all duration-300 ${
                           formData.detailedReview.length >= 200 
                             ? 'bg-green-500' 
+                            : formData.detailedReview.length >= 50
+                            ? 'bg-blue-500'
                             : 'bg-orange-500'
                         }`}
                         style={{ width: `${Math.min((formData.detailedReview.length / 200) * 100, 100)}%` }}
@@ -798,6 +803,11 @@ const WriteReviewPage = () => {
                     {formData.detailedReview.length >= 200 && (
                       <p className="text-xs text-green-600 mt-1">
                         🎉 Great job! Your detailed review qualifies for bonus points.
+                      </p>
+                    )}
+                    {formData.detailedReview.length < 50 && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Minimum 50 characters required to proceed
                       </p>
                     )}
                   </div>
