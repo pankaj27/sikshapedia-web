@@ -48,6 +48,7 @@ const InstituteCredentialsReport = () => {
     return (
       cred.institution_name?.toLowerCase().includes(search) ||
       cred.login_email?.toLowerCase().includes(search) ||
+      cred.login_id?.toLowerCase().includes(search) ||
       cred.institution_id?.toLowerCase().includes(search)
     );
   });
