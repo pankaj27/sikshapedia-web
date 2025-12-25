@@ -148,6 +148,23 @@ const PendingReviews = () => {
                       </div>
                     )}
 
+                    {/* Verification Document */}
+                    {review.verification_document && (
+                      <div className="flex items-center gap-2 mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <FiFileText className="w-5 h-5 text-blue-600" />
+                        <span className="text-sm font-medium text-blue-700">Verification Document Uploaded</span>
+                        <a 
+                          href={review.verification_document} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="ml-auto flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                        >
+                          <FiExternalLink className="w-4 h-4" />
+                          View Document
+                        </a>
+                      </div>
+                    )}
+
                     {/* Points Info */}
                     <div className="flex items-center gap-4 text-sm">
                       <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full">
