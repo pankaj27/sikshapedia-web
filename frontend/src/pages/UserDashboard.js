@@ -641,55 +641,6 @@ const UserDashboard = () => {
                     </div>
                   </div>
                 </div>
-                
-                {/* Application Status */}
-                {dashboard?.application_status_breakdown && (
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h3 className="text-lg font-bold mb-4">Application Status</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {Object.entries(dashboard.application_status_breakdown).map(([status, count]) => (
-                        <div key={status} className={`text-center p-4 rounded-lg ${
-                          status === 'submitted' ? 'bg-blue-50' :
-                          status === 'under_review' ? 'bg-yellow-50' :
-                          status === 'accepted' ? 'bg-green-50' : 'bg-red-50'
-                        }`}>
-                          <p className={`text-2xl font-bold ${
-                            status === 'submitted' ? 'text-blue-600' :
-                            status === 'under_review' ? 'text-yellow-600' :
-                            status === 'accepted' ? 'text-green-600' : 'text-red-600'
-                          }`}>{count}</p>
-                          <p className="text-sm text-gray-600 mt-1 capitalize">{status.replace('_', ' ')}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Recent Applications */}
-                {dashboard?.recent_applications?.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-bold">Recent Applications</h3>
-                      <Button variant="ghost" size="sm" onClick={() => handleTabChange('applications')}>
-                        View All →
-                      </Button>
-                    </div>
-                    <div className="space-y-3">
-                      {dashboard.recent_applications.slice(0, 3).map((app) => (
-                        <div key={app.id} className="flex items-center justify-between p-4 border rounded-lg hover:shadow-md transition">
-                          <div>
-                            <p className="font-semibold">{app.college_name}</p>
-                            <p className="text-sm text-gray-600">{app.course}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {new Date(app.created_at).toLocaleDateString()}
-                            </p>
-                          </div>
-                          {getStatusBadge(app.status)}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             )}
             
