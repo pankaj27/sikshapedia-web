@@ -250,23 +250,7 @@ const InstituteDashboard = () => {
     }
   };
   
-  const handleApplicationStatusUpdate = async (appId, status) => {
-    try {
-      await api.patch(`/institute/applications/${appId}`, { status });
-      fetchApplications();
-      fetchDashboard();
-    } catch (error) {
-      alert('Failed to update application');
-    }
-  };
-  
-  const getStatusBadge = (status, type = 'application') => {
-    const appBadges = {
-      submitted: { bg: 'bg-blue-100', text: 'text-blue-800', icon: FiClock },
-      under_review: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: FiAlertCircle },
-      accepted: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle },
-      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle }
-    };
+  const getStatusBadge = (status, type = 'lead') => {
     const leadBadges = {
       new: { bg: 'bg-blue-100', text: 'text-blue-800', icon: FiClock },
       contacted: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: FiPhone },
