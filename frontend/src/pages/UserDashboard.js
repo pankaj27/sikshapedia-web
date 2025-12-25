@@ -175,10 +175,6 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
                 <span>Successful referral</span>
                 <span className="font-semibold text-green-600">+100 pts</span>
               </li>
-              <li className="flex items-center justify-between">
-                <span>Answer approved</span>
-                <span className="font-semibold text-green-600">+10 pts</span>
-              </li>
             </ul>
             <div className="mt-4 p-3 bg-purple-50 rounded-lg">
               <p className="text-sm text-purple-700">
