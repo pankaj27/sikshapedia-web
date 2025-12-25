@@ -13,7 +13,9 @@ import { generateSlug } from '../utils/slugify';
  * Extracts the numeric ID and finds the institution
  */
 const InstitutionDetailPage = () => {
-  const { idSlug } = useParams();
+  const params = useParams();
+  // Support both idSlug (direct route) and seg1 (from InstitutionRouter)
+  const idSlug = params.idSlug || params.seg1;
   const location = useLocation();
   const navigate = useNavigate();
   const [institutionId, setInstitutionId] = useState(null);
