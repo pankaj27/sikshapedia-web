@@ -526,6 +526,96 @@ const LeadsList = () => {
             </div>
           </div>
         )}
+
+        {/* Assign to Institute Modal */}
+        {assigningLead && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setAssigningLead(null)}>
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
+              <h3 className="text-lg font-semibold mb-2">Assign Lead to Institute</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Assigning: <span className="font-medium">{assigningLead.name}</span>
+                {assigningLead.college_name && (
+                  <span className="text-orange-600 ml-2">(Currently: {assigningLead.college_name})</span>
+                )}
+              </p>
+              
+              <div className="space-y-4">
+                {/* Institute Search */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Search Institute</label>
+                  <div className="relative">
+                    <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={instituteSearch}
+                      onChange={(e) => setInstituteSearch(e.target.value)}
+                      placeholder="Type to search schools, colleges, universities..."
+                      className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Search Results */}
+                {loadingInstitutes && (
+                  <div className="text-center py-4">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-500 mx-auto"></div>
+                  </div>
+                )}
+                
+                {!loadingInstitutes && institutes.length > 0 && (
+                  <div className="max-h-60 overflow-y-auto border rounded-lg divide-y">
+                    {institutes.map((inst) => (
+                      <button
+                        key={inst.id}
+                        onClick={() => setSelectedInstitute(inst)}
+                        className={`w-full text-left px-4 py-3 hover:bg-purple-50 transition ${
+                          selectedInstitute?.id === inst.id ? 'bg-purple-100 border-l-4 border-purple-500' : ''
+                        }`}
+                      >
+                        <p className="font-medium text-gray-800">{inst.name}</p>
+                        <p className="text-xs text-gray-500">
+                          {inst.institution_type} • {inst.location?.city || inst.city || 'N/A'}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {!loadingInstitutes && instituteSearch.length >= 2 && institutes.length === 0 && (
+                  <p className="text-center text-gray-500 py-4">No institutes found</p>
+                )}
+
+                {/* Selected Institute */}
+                {selectedInstitute && (
+                  <div className="bg-purple-50 rounded-lg p-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-purple-600 font-medium">Selected Institute:</p>
+                      <p className="font-semibold text-gray-800">{selectedInstitute.name}</p>
+                    </div>
+                    <FiArrowRight className="text-purple-500" />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  onClick={() => setAssigningLead(null)}
+                  className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAssignToInstitute}
+                  disabled={!selectedInstitute}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <FiHome className="w-4 h-4" />
+                  Assign to Institute
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );
