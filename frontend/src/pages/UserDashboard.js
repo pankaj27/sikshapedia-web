@@ -549,7 +549,6 @@ const UserDashboard = () => {
                   { id: 'overview', icon: FiBarChart2, label: 'Overview' },
                   { id: 'profile', icon: FiUser, label: 'My Profile' },
                   { id: 'admissions', icon: FiCheckCircle, label: 'Admission Bookings', highlight: true },
-                  { id: 'applications', icon: FiFileText, label: 'Applications', count: dashboard?.stats?.applications },
                   { id: 'reviews', icon: FiStar, label: 'My Reviews', count: dashboard?.stats?.reviews },
                   { id: 'questions', icon: FiHelpCircle, label: 'My Questions', count: dashboard?.stats?.questions },
                   { id: 'comments', icon: FiMessageSquare, label: 'My Comments', count: dashboard?.stats?.comments },
