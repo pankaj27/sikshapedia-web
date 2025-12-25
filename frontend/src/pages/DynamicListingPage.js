@@ -2435,11 +2435,9 @@ const DynamicListingPage = () => {
                                 ₹{inst.average_fees >= 100000 ? `${(inst.average_fees / 100000).toFixed(1)}L` : `${(inst.average_fees / 1000).toFixed(0)}K`}
                               </span>
                             )}
-                            {inst.rating > 0 && (
-                              <span className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
-                                <FiStar size={10} className="fill-current" /> {(inst.rating || 0).toFixed(1)}
-                              </span>
-                            )}
+                            <span className="flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded">
+                              <FiStar size={10} className="fill-current" /> {(inst.rating || 0).toFixed(1)}
+                            </span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <button
