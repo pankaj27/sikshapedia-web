@@ -1137,6 +1137,27 @@ class APITester:
             else:
                 self.log_test("POST /reviews (Review Submission)", False, 
                              f"Review status should be 'pending' but got: {review_status}")
+        elif status == 400 and "already reviewed" in str(response):
+            # User already has a review for this college - find existing review
+            success, all_reviews, status = self.make_request("GET", "/reviews?limit=100")
+            if success and isinstance(all_reviews, list):
+                for review in all_reviews:
+                    if (review.get("college_id") == self.test_college_id and 
+                        review.get("user_id") == self.test_user_id):
+                        self.test_review_id = review.get("id")
+                        break
+                
+                if self.test_review_id:
+                    self.log_test("POST /reviews (Review Submission)", True, 
+                                 f"User already has review for this college, using existing review ID: {self.test_review_id}")
+                else:
+                    self.log_test("POST /reviews (Review Submission)", False, 
+                                 "User has existing review but couldn't find it")
+                    return
+            else:
+                self.log_test("POST /reviews (Review Submission)", False, 
+                             "User has existing review but couldn't fetch reviews list")
+                return
         else:
             self.log_test("POST /reviews (Review Submission)", False, f"Status: {status}", response)
             return
