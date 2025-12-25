@@ -74,20 +74,50 @@ const InstitutionDetailPage = () => {
       }
       
       try {
-        // Search by serial_number (unique for each institution)
-        if (numericId) {
-          // Fetch institutions filtered by institution_type
-          const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
-          if (response.data && response.data.length > 0) {
-            // Find institution by serial_number (padded numeric ID)
-            const serialNum = parseInt(numericId, 10);
-            const institution = response.data.find(inst => inst.serial_number === serialNum);
-            
-            if (institution) {
-              setInstitutionId(institution.id);
+        const apiEndpoint = institutionType === 'School' ? '/schools' : '/colleges';
+        
+        // For slug-only format, try to fetch directly by slug
+        if (isSlugOnly && slug) {
+          try {
+            const slugResponse = await api.get(`${apiEndpoint}/${slug}`);
+            if (slugResponse.data?.id) {
+              setInstitutionId(slugResponse.data.id);
               setLoading(false);
               return;
             }
+          } catch (e) {
+            // Slug not found, continue to error
+          }
+        }
+        
+        // For numeric prefix format, first try by serial_number
+        if (numericId) {
+          try {
+            // Try direct API lookup by serial number
+            const numResponse = await api.get(`${apiEndpoint}/${parseInt(numericId, 10)}`);
+            if (numResponse.data?.id) {
+              setInstitutionId(numResponse.data.id);
+              setLoading(false);
+              return;
+            }
+          } catch (e) {
+            // Serial number lookup failed, try fallback
+          }
+          
+          // Fallback: Fetch all and find by serial_number
+          try {
+            const response = await api.get(`/colleges?institution_type=${institutionType}&limit=500`);
+            if (response.data?.length > 0) {
+              const serialNum = parseInt(numericId, 10);
+              const institution = response.data.find(inst => inst.serial_number === serialNum);
+              if (institution) {
+                setInstitutionId(institution.id);
+                setLoading(false);
+                return;
+              }
+            }
+          } catch (e) {
+            // Fallback failed
           }
         }
         
