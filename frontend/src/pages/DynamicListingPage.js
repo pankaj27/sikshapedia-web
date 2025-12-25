@@ -2394,13 +2394,11 @@ const DynamicListingPage = () => {
                         
                         {/* Rating & Actions - Desktop */}
                         <div className="hidden md:flex flex-col items-end justify-between gap-2 min-w-[130px]">
-                          {inst.rating > 0 && (
-                            <div className="flex items-center gap-1.5 bg-green-50 text-green-700 px-2.5 py-1.5 rounded-lg border border-green-200">
-                              <FiStar size={14} className="fill-current text-green-500" />
-                              <span className="font-bold text-base">{(inst.rating || 0).toFixed(1)}</span>
-                              <span className="text-xs text-green-600">/5</span>
-                            </div>
-                          )}
+                          <div className="flex items-center gap-1.5 bg-green-50 text-green-700 px-2.5 py-1.5 rounded-lg border border-green-200">
+                            <FiStar size={14} className="fill-current text-green-500" />
+                            <span className="font-bold text-base">{(inst.rating || 0).toFixed(1)}</span>
+                            <span className="text-xs text-green-600">/5</span>
+                          </div>
                           <div className="flex items-center gap-1.5">
                             <button 
                               onClick={() => toggleCompare(inst.id)}
