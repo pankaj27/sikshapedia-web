@@ -518,14 +518,104 @@ async def get_pending_reviews(limit: int = Query(50, ge=1, le=200)):
 
 @router.patch("/reviews/{review_id}/approve")
 async def approve_review(review_id: str):
-    """Approve a review (Admin only)"""
-    result = await db.reviews.update_one(
-        {"id": review_id},
-        {"$set": {"status": "approved"}}
-    )
-    if result.matched_count == 0:
+    """Approve a review and award points to user (Admin only)"""
+    # Get the review first
+    review = await db.reviews.find_one({"id": review_id}, {"_id": 0})
+    if not review:
         raise HTTPException(status_code=404, detail="Review not found")
-    return {"message": "Review approved", "status": "approved"}
+    
+    # Check if already approved (prevent double points)
+    if review.get("status") == "approved":
+        return {"message": "Review already approved", "status": "approved"}
+    
+    # Update review status
+    await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"status": "approved", "approved_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Now award points and earnings to the user
+    user_id = review.get("user_id")
+    review_points = review.get("points_earned", 50)
+    review_earnings = review.get("earnings", 50.0)
+    college_name = review.get("college_name", "Institute")
+    
+    if user_id:
+        # Add earnings transaction
+        earning_transaction = EarningTransaction(
+            user_id=user_id,
+            type="review",
+            amount=review_earnings,
+            description=f"Review for {college_name} (Approved)",
+            reference_id=review_id
+        )
+        earn_dict = earning_transaction.model_dump()
+        earn_dict['created_at'] = earn_dict['created_at'].isoformat()
+        await db.earnings.insert_one(earn_dict)
+        
+        # Update user total earnings
+        await db.users.update_one(
+            {"id": user_id},
+            {"$inc": {"total_earnings": review_earnings}}
+        )
+        
+        # Add points to user
+        await db.users.update_one(
+            {"id": user_id},
+            {"$inc": {"points": review_points}}
+        )
+        
+        # Add point transaction for rewards tracking
+        point_transaction = {
+            "id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "type": "review",
+            "points": review_points,
+            "description": f"Review for {college_name} (Approved)",
+            "reference_id": review_id,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.point_transactions.insert_one(point_transaction)
+        
+        # Create notification about approval and earnings
+        notification = Notification(
+            user_id=user_id,
+            type="review_approved",
+            title="Review Approved! Points Earned!",
+            message=f"Your review for {college_name} has been approved. You earned {review_points} points!",
+            link="/dashboard?tab=reviews"
+        )
+        notif_dict = notification.model_dump()
+        notif_dict['created_at'] = notif_dict['created_at'].isoformat()
+        await db.notifications.insert_one(notif_dict)
+    
+    # Update college rating (only count approved reviews)
+    college_id = review.get("college_id")
+    if college_id:
+        approved_reviews = await db.reviews.find(
+            {"college_id": college_id, "status": "approved"}
+        ).to_list(1000)
+        
+        if approved_reviews:
+            avg_rating = sum(r['rating'] for r in approved_reviews) / len(approved_reviews)
+            
+            # Update rating breakdown
+            rating_breakdown = {"5": 0, "4": 0, "3": 0, "2": 0, "1": 0}
+            for r in approved_reviews:
+                rating_str = str(r.get('rating', 3))
+                if rating_str in rating_breakdown:
+                    rating_breakdown[rating_str] += 1
+            
+            await db.colleges.update_one(
+                {"id": college_id},
+                {"$set": {
+                    "rating": round(avg_rating, 1),
+                    "total_reviews": len(approved_reviews),
+                    "rating_breakdown": rating_breakdown
+                }}
+            )
+    
+    return {"message": "Review approved", "status": "approved", "points_awarded": review_points}
 
 
 @router.patch("/reviews/{review_id}/reject")
