@@ -60,7 +60,8 @@ const defaultSettings = {
 
 const WriteReviewPage = () => {
   const { user, isAuthenticated } = useAuth();
-  const [searchParams] = useSearchParams();
+  // Read URL params once on component mount (not reactive to avoid infinite loops)
+  const urlParamsRef = useRef(getUrlParams());
   const fileInputRef = useRef(null);
   const [step, setStep] = useState(1);
   const [userProfile, setUserProfile] = useState(null);
