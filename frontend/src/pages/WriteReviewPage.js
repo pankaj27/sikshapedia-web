@@ -119,40 +119,72 @@ const WriteReviewPage = () => {
 
   // Handle URL params for pre-filling institute info (runs ONCE on mount)
   useEffect(() => {
-    const { instituteId, instituteName, instituteType, fromQR, linkCode } = urlParamsRef.current;
+    const { type, serial, slug, instituteId, instituteName, instituteType, fromQR, linkCode } = urlParamsRef.current;
     
-    // Early return if no params
-    if (!instituteId || !instituteName) return;
-    
-    // Auto-detect type from institute name if not provided in URL
-    let detectedType = instituteType;
-    if (!detectedType || detectedType === '' || detectedType === 'null') {
-      const nameLower = (instituteName || '').toLowerCase();
+    // NEW FORMAT: ?type=school&serial=017&slug=delhi-public-school
+    if (type && serial && slug) {
+      const displayName = slugToName(slug);
       
-      if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
-        detectedType = 'school';
-      } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
-        detectedType = 'university';
-      } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
-        detectedType = 'coaching';
-      } else {
-        detectedType = 'college';
-      }
+      // Set initial data from URL (name and type available immediately)
+      setFormData(prev => ({
+        ...prev,
+        instituteName: displayName,
+        instituteType: type,
+        instituteId: '' // Will be fetched via API
+      }));
+      setPrefilledFromUrl(true);
+      setIsFromQR(true); // Lock the institute selection
+      
+      // Fetch instituteId using serial number
+      const fetchInstituteId = async () => {
+        try {
+          const endpoint = type === 'school' ? '/schools' : '/colleges';
+          const response = await api.get(`${endpoint}/${parseInt(serial, 10)}`);
+          if (response.data?.id) {
+            setFormData(prev => ({
+              ...prev,
+              instituteId: response.data.id
+            }));
+          }
+        } catch (err) {
+          console.error('Failed to fetch institute by serial:', err);
+        }
+      };
+      fetchInstituteId();
+      return;
     }
     
-    setFormData(prev => ({
-      ...prev,
-      instituteId: instituteId,
-      instituteName: instituteName,
-      instituteType: detectedType
-    }));
-    setPrefilledFromUrl(true);
-    
-    // If from QR, lock the institute selection
-    if (fromQR) {
-      setIsFromQR(true);
-      if (linkCode) {
-        setQrLinkCode(linkCode);
+    // LEGACY FORMAT: ?instituteId=xxx&instituteName=xxx
+    if (instituteId && instituteName) {
+      // Auto-detect type from institute name if not provided
+      let detectedType = instituteType;
+      if (!detectedType || detectedType === '' || detectedType === 'null') {
+        const nameLower = (instituteName || '').toLowerCase();
+        
+        if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
+          detectedType = 'school';
+        } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
+          detectedType = 'university';
+        } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
+          detectedType = 'coaching';
+        } else {
+          detectedType = 'college';
+        }
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        instituteId: instituteId,
+        instituteName: instituteName,
+        instituteType: detectedType
+      }));
+      setPrefilledFromUrl(true);
+      
+      if (fromQR) {
+        setIsFromQR(true);
+        if (linkCode) {
+          setQrLinkCode(linkCode);
+        }
       }
     }
   }, []);
