@@ -397,10 +397,6 @@ const UserDashboard = () => {
   const fetchTabData = async (tab) => {
     try {
       switch (tab) {
-        case 'applications':
-          const appsRes = await api.get('/user/applications');
-          setApplications(appsRes.data);
-          break;
         case 'admissions':
           const admissionsRes = await api.get('/admission/my-bookings');
           setAdmissionBookings(admissionsRes.data.bookings || []);
