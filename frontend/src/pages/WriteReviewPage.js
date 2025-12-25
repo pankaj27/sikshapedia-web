@@ -6,10 +6,24 @@ import { useAuth } from '../contexts/AuthContext';
 
 import { Link } from '../components/CustomLink';
 
+// Helper to convert slug to display name
+const slugToName = (slug) => {
+  if (!slug) return '';
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 // Helper to read URL params ONCE (not reactive)
 const getUrlParams = () => {
   const params = new URLSearchParams(window.location.search);
   return {
+    // New format: type, serial, slug
+    type: params.get('type'),
+    serial: params.get('serial'),
+    slug: params.get('slug'),
+    // Legacy format: instituteId, instituteName
     instituteId: params.get('instituteId'),
     instituteName: params.get('instituteName'),
     instituteType: params.get('instituteType'),
