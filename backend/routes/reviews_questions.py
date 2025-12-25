@@ -104,12 +104,17 @@ class ReviewCreate(BaseModel):
     review_text: str
     course: Optional[str] = None
     year_of_study: Optional[str] = None
+    graduation_year: Optional[str] = None
     ratings: Optional[dict] = {}
     pros: Optional[str] = None
     cons: Optional[str] = None
     placements_rating: Optional[int] = None
     infrastructure_rating: Optional[int] = None
     faculty_rating: Optional[int] = None
+    facilities_rating: Optional[dict] = None
+    verification_document: Optional[str] = None
+    is_verified_student: Optional[bool] = False
+    photos: Optional[list] = []
 
 
 class EarningTransaction(BaseModel):
