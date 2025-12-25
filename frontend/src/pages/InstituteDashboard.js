@@ -291,17 +291,6 @@ const InstituteDashboard = () => {
     );
   });
   
-  // Filter applications by search
-  const filteredApplications = applications.filter(app => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      app.student_name?.toLowerCase().includes(q) ||
-      app.email?.toLowerCase().includes(q) ||
-      app.phone?.includes(q)
-    );
-  });
-  
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
