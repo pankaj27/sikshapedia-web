@@ -592,10 +592,10 @@ const UserDashboard = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-gray-600 text-sm">Applications</span>
-                      <FiFileText className="text-blue-600" />
+                      <span className="text-gray-600 text-sm">Admissions</span>
+                      <FiCheckCircle className="text-blue-600" />
                     </div>
-                    <p className="text-2xl font-bold text-blue-600">{dashboard?.stats?.applications || 0}</p>
+                    <p className="text-2xl font-bold text-blue-600">{dashboard?.stats?.admissions || 0}</p>
                   </div>
                   <div className="bg-white rounded-xl shadow-sm p-4">
                     <div className="flex items-center justify-between mb-2">
