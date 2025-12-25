@@ -801,18 +801,9 @@ class ReviewLink(BaseModel):
 @router.post("/institute/review-link")
 async def generate_review_link(data: ReviewLinkCreate):
     """Generate a shareable review link for an institute"""
+    # All institutes are stored in colleges collection with different institution_type
     # Check if institute exists
-    collection_map = {
-        "college": "colleges",
-        "school": "schools", 
-        "university": "universities"
-    }
-    
-    collection = collection_map.get(data.institute_type)
-    if not collection:
-        raise HTTPException(status_code=400, detail="Invalid institute type")
-    
-    institute = await db[collection].find_one({"id": data.institute_id}, {"_id": 0, "id": 1, "name": 1})
+    institute = await db.colleges.find_one({"id": data.institute_id}, {"_id": 0, "id": 1, "name": 1, "institution_type": 1})
     if not institute:
         raise HTTPException(status_code=404, detail="Institute not found")
     
@@ -832,11 +823,12 @@ async def generate_review_link(data: ReviewLinkCreate):
     # Create new link
     review_link = ReviewLink(
         institute_id=data.institute_id,
-        institute_type=data.institute_type
+        institute_type=data.institute_type or institute.get("institution_type", "college").lower()
     )
     
     link_dict = review_link.model_dump()
     link_dict["created_at"] = link_dict["created_at"].isoformat()
+    link_dict["institute_name"] = institute.get("name")
     
     await db.review_links.insert_one(link_dict)
     
