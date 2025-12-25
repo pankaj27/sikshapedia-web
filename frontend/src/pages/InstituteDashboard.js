@@ -18,13 +18,17 @@ const InstituteDashboard = () => {
   
   // Tab data
   const [leads, setLeads] = useState([]);
-  const [applications, setApplications] = useState([]);
   const [adAnalytics, setAdAnalytics] = useState(null);
   const [admissionBookings, setAdmissionBookings] = useState([]);
   const [selectedAdmissionBooking, setSelectedAdmissionBooking] = useState(null);
   const [admissionComment, setAdmissionComment] = useState('');
   const [reviewLink, setReviewLink] = useState(null);
   const [generatingLink, setGeneratingLink] = useState(false);
+  
+  // Activity Log
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [leadActivities, setLeadActivities] = useState([]);
+  const [loadingActivities, setLoadingActivities] = useState(false);
   
   // Reviews, Questions & Comments data
   const [reviews, setReviews] = useState([]);
