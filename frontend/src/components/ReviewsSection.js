@@ -332,12 +332,10 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, serialNu
   };
 
   const handleWriteReviewClick = () => {
-    // Re-check login status before navigating
-    checkLoginStatus();
-    const hasSession = localStorage.getItem('token') || 
-                      localStorage.getItem('user_token') ||
-                      localStorage.getItem('user');
-    if (hasSession) {
+    // Check login status at click time (most reliable)
+    const token = localStorage.getItem('token');
+    
+    if (token) {
       // Use new URL format if serial and slug available, otherwise legacy format
       if (serialNumber && slug) {
         const instType = (entityType || 'college').toLowerCase();
@@ -349,7 +347,7 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, serialNu
           instituteName: entityName,
           instituteType: entityType
         });
-        navigate(`/write-review?${params.toString()}`);
+        window.location.href = `/write-review?${params.toString()}`;
       }
     } else {
       setShowLoginPrompt(true);
