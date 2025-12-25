@@ -872,25 +872,21 @@ async def get_review_page_data(link_code: str):
         {"$inc": {"views": 1}}
     )
     
-    # Get institute data
-    collection_map = {
-        "college": "colleges",
-        "school": "schools",
-        "university": "universities"
-    }
-    
-    collection = collection_map.get(link["institute_type"])
-    institute = await db[collection].find_one(
+    # All institutes are stored in colleges collection with different institution_type
+    institute = await db.colleges.find_one(
         {"id": link["institute_id"]},
-        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "cover_image": 1, "city": 1, "state": 1, "type": 1}
+        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "cover_image": 1, "city": 1, "state": 1, "institution_type": 1, "serial_number": 1, "slug": 1}
     )
     
     if not institute:
         raise HTTPException(status_code=404, detail="Institute not found")
     
+    # Determine institute type from database
+    inst_type = (institute.get("institution_type") or link.get("institute_type") or "college").lower()
+    
     return {
         "institute": institute,
-        "institute_type": link["institute_type"],
+        "institute_type": inst_type,
         "link_code": link_code
     }
 
