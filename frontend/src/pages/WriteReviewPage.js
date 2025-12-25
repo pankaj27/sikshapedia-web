@@ -651,13 +651,25 @@ const WriteReviewPage = () => {
 
                   {/* Show auto-detected institute type after selection */}
                   {formData.instituteName && formData.instituteType && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div className={`border rounded-lg p-3 ${
+                      formData.instituteType === 'school' ? 'bg-green-50 border-green-200' :
+                      formData.instituteType === 'university' ? 'bg-purple-50 border-purple-200' :
+                      formData.instituteType === 'coaching' ? 'bg-orange-50 border-orange-200' :
+                      'bg-blue-50 border-blue-200'
+                    }`}>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-blue-700">
+                        <span className={`text-sm ${
+                          formData.instituteType === 'school' ? 'text-green-700' :
+                          formData.instituteType === 'university' ? 'text-purple-700' :
+                          formData.instituteType === 'coaching' ? 'text-orange-700' :
+                          'text-blue-700'
+                        }`}>
                           <span className="font-medium">Institute Type:</span> {
                             formData.instituteType === 'school' ? '🏫 School' :
+                            formData.instituteType === 'university' ? '🏛️ University' :
                             formData.instituteType === 'coaching' ? '📚 Coaching Institute' :
-                            '🎓 College/University'
+                            '🎓 College'
+                          }
                           }
                         </span>
                         <span className="text-xs text-blue-500">(Auto-detected)</span>
