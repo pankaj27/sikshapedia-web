@@ -32,27 +32,31 @@ const InstitutionDetailPage = () => {
   const institutionType = getInstitutionType();
   
   // Parse URL to extract numeric ID and slug
-  // ONLY accepts new format: {number}-{slug} e.g., "012-aiims-delhi"
-  // Old format like "aiims-delhi-001" is NOT supported
+  // Accepts both formats:
+  // - New format: {number}-{slug} e.g., "012-aiims-delhi" 
+  // - Slug-only format: e.g., "dps-mathura-road"
   const parseIdSlug = () => {
-    if (!idSlug) return { numericId: null, slug: null, isValidFormat: false };
+    if (!idSlug) return { numericId: null, slug: null, isValidFormat: false, isSlugOnly: false };
     
-    // ONLY accept format: {number}-{slug} with dash separator
+    // Format: {number}-{slug} with dash separator
     // e.g., "012-aiims-delhi" -> numericId: "012", slug: "aiims-delhi"
     const numericDashMatch = idSlug.match(/^(\d+)-(.+)$/);
     if (numericDashMatch) {
       return {
         numericId: numericDashMatch[1],
         slug: numericDashMatch[2],
-        isValidFormat: true
+        isValidFormat: true,
+        isSlugOnly: false
       };
     }
     
-    // Invalid format - old URLs like "aiims-delhi-001" are no longer supported
+    // Slug-only format (for backward compatibility)
+    // e.g., "dps-mathura-road"
     return {
       numericId: null,
-      slug: null,
-      isValidFormat: false
+      slug: idSlug,
+      isValidFormat: true,
+      isSlugOnly: true
     };
   };
   
@@ -61,9 +65,8 @@ const InstitutionDetailPage = () => {
       setLoading(true);
       setError(null);
       
-      const { numericId, isValidFormat } = parseIdSlug();
+      const { numericId, slug, isValidFormat, isSlugOnly } = parseIdSlug();
       
-      // Reject invalid URL format (old URLs like "aiims-delhi-001")
       if (!isValidFormat) {
         setError('Invalid URL format');
         setLoading(false);
