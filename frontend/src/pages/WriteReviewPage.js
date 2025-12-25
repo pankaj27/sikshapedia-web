@@ -830,7 +830,7 @@ const WriteReviewPage = () => {
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="">Select Year</option>
-                    {[2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018].map(year => (
+                    {Array.from({ length: 2026 - 1990 }, (_, i) => 2025 - i).map(year => (
                       <option key={year} value={year}>{year}</option>
                     ))}
                   </select>
