@@ -259,8 +259,7 @@ const InstituteDashboard = () => {
       rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle }
     };
     
-    const badges = type === 'lead' ? leadBadges : appBadges;
-    const badge = badges[status] || badges.submitted || badges.new;
+    const badge = leadBadges[status] || leadBadges.new;
     const Icon = badge.icon;
     
     return (
