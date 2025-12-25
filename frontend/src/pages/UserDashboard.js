@@ -686,64 +686,6 @@ const UserDashboard = () => {
               </div>
             )}
             
-            {/* Applications Tab */}
-            {activeTab === 'applications' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">My Applications</h2>
-                  <Link to="/colleges">
-                    <Button className="bg-orange-600 hover:bg-orange-700 flex items-center gap-2">
-                      <FiPlus /> Apply to College
-                    </Button>
-                  </Link>
-                </div>
-                
-                {applications.length === 0 ? (
-                  <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                    <FiFileText className="text-6xl text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-700 mb-2">No Applications Yet</h3>
-                    <p className="text-gray-600 mb-4">Start applying to institutes to track your applications here</p>
-                    <Link to="/colleges">
-                      <Button className="bg-orange-600 hover:bg-orange-700">Browse Institutes</Button>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {applications.map((app) => (
-                      <div key={app.id} className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <h3 className="text-lg font-bold">{app.college_name}</h3>
-                            <p className="text-gray-600">{app.course}</p>
-                            <p className="text-sm text-gray-500">Application #{app.application_number}</p>
-                          </div>
-                          {getStatusBadge(app.status)}
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                          <div>
-                            <p className="text-gray-600">Student Name</p>
-                            <p className="font-medium">{app.student_name}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600">Phone</p>
-                            <p className="font-medium">{app.phone}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600">City</p>
-                            <p className="font-medium">{app.city}</p>
-                          </div>
-                          <div>
-                            <p className="text-gray-600">Applied On</p>
-                            <p className="font-medium">{new Date(app.created_at).toLocaleDateString()}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-            
             {/* Reviews Tab */}
             {activeTab === 'reviews' && (
               <div className="space-y-6">
