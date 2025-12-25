@@ -312,7 +312,7 @@ const WriteReviewModal = ({ isOpen, onClose, entityId, entityType, entityName, o
   );
 };
 
-const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWriteReview = true }) => {
+const ReviewsSection = ({ entityId, entityType = 'college', entityName, serialNumber, slug, showWriteReview = true }) => {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState(null);
@@ -338,13 +338,19 @@ const ReviewsSection = ({ entityId, entityType = 'college', entityName, showWrit
                       localStorage.getItem('user_token') ||
                       localStorage.getItem('user');
     if (hasSession) {
-      // Navigate to write-review page with pre-filled institute info
-      const params = new URLSearchParams({
-        instituteId: entityId,
-        instituteName: entityName,
-        instituteType: entityType
-      });
-      navigate(`/write-review?${params.toString()}`);
+      // Use new URL format if serial and slug available, otherwise legacy format
+      if (serialNumber && slug) {
+        const instType = (entityType || 'college').toLowerCase();
+        window.location.href = `/write-review?type=${instType}&serial=${serialNumber}&slug=${slug}`;
+      } else {
+        // Legacy format fallback
+        const params = new URLSearchParams({
+          instituteId: entityId,
+          instituteName: entityName,
+          instituteType: entityType
+        });
+        navigate(`/write-review?${params.toString()}`);
+      }
     } else {
       setShowLoginPrompt(true);
     }
