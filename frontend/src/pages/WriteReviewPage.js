@@ -104,9 +104,11 @@ const WriteReviewPage = () => {
       let detectedType = instituteType;
       if (!detectedType) {
         const nameLower = instituteName.toLowerCase();
-        if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya')) {
+        if (nameLower.includes('school') || nameLower.includes('vidyalaya') || nameLower.includes('vidya mandir')) {
           detectedType = 'school';
-        } else if (nameLower.includes('coaching') || nameLower.includes('academy') || nameLower.includes('classes')) {
+        } else if (nameLower.includes('university') || nameLower.includes('vishwavidyalaya') || nameLower.includes('vishwa vidyalaya')) {
+          detectedType = 'university';
+        } else if (nameLower.includes('coaching') || nameLower.includes('classes') || nameLower.includes('tutorial')) {
           detectedType = 'coaching';
         } else {
           detectedType = 'college';
@@ -117,7 +119,7 @@ const WriteReviewPage = () => {
         ...prev,
         instituteId: instituteId,
         instituteName: instituteName,
-        instituteType: detectedType === 'college' ? 'college' : detectedType === 'school' ? 'school' : detectedType === 'coaching' ? 'coaching' : 'college'
+        instituteType: detectedType
       }));
       setPrefilledFromUrl(true);
       
