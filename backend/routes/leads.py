@@ -399,7 +399,11 @@ async def update_lead(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """Update lead status/notes (Admin only)"""
-    verify_admin_token(credentials)
+    payload = verify_admin_token(credentials)
+    
+    # Get old lead data for activity log
+    old_lead = await db.leads.find_one({"id": lead_id}, {"_id": 0, "status": 1})
+    old_status = old_lead.get("status", "new") if old_lead else "new"
     
     allowed_fields = ["status", "notes", "assigned_to", "contacted_at", "converted_at"]
     update_dict = {k: v for k, v in update_data.items() if k in allowed_fields}
@@ -414,8 +418,39 @@ async def update_lead(
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail="Lead not found")
     
+    # Create activity log entry
+    if update_dict.get("status") and update_dict.get("status") != old_status:
+        activity = {
+            "id": f"activity_{uuid4().hex[:12]}",
+            "lead_id": lead_id,
+            "action": "status_change",
+            "old_value": old_status,
+            "new_value": update_dict.get("status"),
+            "notes": update_dict.get("notes"),
+            "performed_by": payload.get("name", "Admin"),
+            "performed_by_type": "admin",
+            "performed_by_id": payload.get("sub"),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.lead_activities.insert_one(activity)
+    
     lead = await db.leads.find_one({"id": lead_id}, {"_id": 0})
     return lead
+
+@leads_router.get("/leads/{lead_id}/activities")
+async def get_lead_activities_admin(
+    lead_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get activity log for a lead (Admin)"""
+    verify_admin_token(credentials)
+    
+    activities = await db.lead_activities.find(
+        {"lead_id": lead_id},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return activities
 
 @leads_router.delete("/leads/{lead_id}")
 async def delete_lead(lead_id: str, credentials: HTTPAuthorizationCredentials = Depends(security)):
