@@ -265,10 +265,16 @@ async def create_review(review_data: ReviewCreate, authorization: str = Header(N
     if not user:
         raise HTTPException(status_code=401, detail="Please login to write a review")
     
-    # Verify college/institution exists
+    # Verify college/institution exists - check all institution types
     college = await db.colleges.find_one({"id": review_data.college_id})
     if not college:
-        raise HTTPException(status_code=404, detail="College not found")
+        # Try schools collection
+        college = await db.schools.find_one({"id": review_data.college_id})
+    if not college:
+        # Try universities collection
+        college = await db.universities.find_one({"id": review_data.college_id})
+    if not college:
+        raise HTTPException(status_code=404, detail="Institute not found")
     
     # Check for existing review
     existing_review = await db.reviews.find_one({
