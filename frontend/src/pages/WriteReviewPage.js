@@ -75,6 +75,19 @@ const defaultSettings = {
 
 const WriteReviewPage = () => {
   const { user, isAuthenticated } = useAuth();
+  const { isLoggedIn, requireAuth, showPrompt, closePrompt } = useGuestGate();
+  
+  // Show login prompt immediately if not logged in
+  useEffect(() => {
+    if (!isLoggedIn && !isAuthenticated) {
+      // Small delay to ensure the page has loaded
+      const timer = setTimeout(() => {
+        requireAuth('write a review');
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoggedIn, isAuthenticated]);
+  
   // Read URL params once on component mount (not reactive to avoid infinite loops)
   const urlParamsRef = useRef(getUrlParams());
   const fileInputRef = useRef(null);
