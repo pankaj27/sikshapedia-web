@@ -15,17 +15,17 @@ news_router = APIRouter(prefix="/news", tags=["News"])
 # ============================================
 
 class News(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
-    slug: str
-    category: str
-    author: str
+    slug: Optional[str] = None
+    category: Optional[str] = None
+    author: Optional[str] = None
     author_image: Optional[str] = None
     author_designation: Optional[str] = None
-    image: str
-    excerpt: str
-    content: str
+    image: Optional[str] = None
+    excerpt: Optional[str] = None
+    content: Optional[str] = None
     video: Optional[Dict[str, Any]] = None
     gallery: List[Dict[str, Any]] = []
     toc: List[Dict[str, Any]] = []
@@ -36,12 +36,17 @@ class News(BaseModel):
     views: int = 0
     featured: bool = False
     published: bool = True
+    status: str = "draft"  # draft, pending, published
     published_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: Optional[datetime] = None
+    created_by: Optional[str] = None
+    created_by_name: Optional[str] = None
+    updated_by: Optional[str] = None
+    updated_by_name: Optional[str] = None
 
 class NewsListingPageSettings(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = "news-listing-page"
     hero_title: str = "Education News"
     hero_subtitle: str = "Stay updated with the latest education news"
