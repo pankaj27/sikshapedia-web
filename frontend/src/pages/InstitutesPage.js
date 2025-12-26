@@ -78,13 +78,22 @@ const InstitutesPage = () => {
   const filteredInstitutes = useMemo(() => {
     let filtered = institutes;
     
-    // Filter by tab
+    // Filter by tab - check both _type (set by us) and institution_type (from DB)
     if (activeTab === 'colleges') {
-      filtered = filtered.filter(i => i._type === 'college' || i.institution_type?.toLowerCase() === 'college');
+      filtered = filtered.filter(i => {
+        const type = (i._type || i.institution_type || '').toLowerCase();
+        return type === 'college' || type === 'colleges';
+      });
     } else if (activeTab === 'schools') {
-      filtered = filtered.filter(i => i._type === 'school' || i.institution_type?.toLowerCase() === 'school');
+      filtered = filtered.filter(i => {
+        const type = (i._type || i.institution_type || '').toLowerCase();
+        return type === 'school' || type === 'schools';
+      });
     } else if (activeTab === 'universities') {
-      filtered = filtered.filter(i => i._type === 'university' || i.institution_type?.toLowerCase() === 'university');
+      filtered = filtered.filter(i => {
+        const type = (i._type || i.institution_type || '').toLowerCase();
+        return type === 'university' || type === 'universities';
+      });
     }
     
     // Filter by search
