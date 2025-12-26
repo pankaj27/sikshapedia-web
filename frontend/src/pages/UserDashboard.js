@@ -836,26 +836,35 @@ const UserDashboard = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {favorites.map((fav) => (
-                      <div key={fav.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
-                        <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center">
-                          {fav.college?.logo_url ? (
-                            <img src={fav.college.logo_url} alt="" className="w-12 h-12 object-contain" />
-                          ) : (
-                            <FiBookmark className="text-orange-600 text-2xl" />
-                          )}
+                    {favorites.map((fav) => {
+                      // Determine correct route based on institution type
+                      const instType = (fav.college?.institution_type || 'college').toLowerCase();
+                      const routePrefix = instType === 'school' ? '/schools' : instType === 'university' ? '/universities' : '/colleges';
+                      const instituteLink = fav.college?.slug 
+                        ? `${routePrefix}/${fav.college.serial_number}/${fav.college.slug}`
+                        : `${routePrefix}/${fav.college_id}`;
+                      
+                      return (
+                        <div key={fav.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
+                          <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center">
+                            {fav.college?.logo_url ? (
+                              <img src={fav.college.logo_url} alt="" className="w-12 h-12 object-contain" />
+                            ) : (
+                              <FiBookmark className="text-orange-600 text-2xl" />
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold">{fav.college_name}</h3>
+                            <p className="text-sm text-gray-600">{fav.college?.location?.city}</p>
+                          </div>
+                          <Link to={instituteLink}>
+                            <Button variant="ghost" size="sm">
+                              <FiExternalLink />
+                            </Button>
+                          </Link>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{fav.college_name}</h3>
-                          <p className="text-sm text-gray-600">{fav.college?.location?.city}</p>
-                        </div>
-                        <Link to={`/colleges/${fav.college_id}`}>
-                          <Button variant="ghost" size="sm">
-                            <FiExternalLink />
-                          </Button>
-                        </Link>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
