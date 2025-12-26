@@ -117,7 +117,7 @@ def test_user_dashboard():
     else:
         print(f"❌ GET /user/questions failed: {status} - {response}")
     
-    # Test 6: GET /api/user/liked
+    # Test 5: GET /api/user/liked
     success, response, status = make_request("GET", "/user/liked", token=user_token)
     if success and isinstance(response, list):
         print(f"✅ GET /user/liked successful: {len(response)} liked items")
