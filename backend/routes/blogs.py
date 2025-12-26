@@ -15,25 +15,30 @@ blogs_router = APIRouter(prefix="/blogs", tags=["Blogs"])
 # ============================================
 
 class Blog(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
-    slug: str
-    category: str
-    author: str
+    slug: Optional[str] = None
+    category: Optional[str] = None
+    author: Optional[str] = None
     author_image: Optional[str] = None
-    featured_image: str
-    excerpt: str
-    content: str
+    featured_image: Optional[str] = None
+    excerpt: Optional[str] = None
+    content: Optional[str] = None
     tags: List[str] = []
     views: int = 0
     likes: int = 0
     is_featured: bool = False
+    status: str = "draft"  # draft, pending, published
     published_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_by: Optional[str] = None
+    created_by_name: Optional[str] = None
+    updated_by: Optional[str] = None
+    updated_by_name: Optional[str] = None
 
 class BlogListingPageSettings(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = "blog-listing-page"
     hero_title: str = "Our Blog"
     hero_subtitle: str = "Insights, tips and guides for students and parents"
