@@ -5,11 +5,30 @@ import api from '../../api/axios';
 import AdminLayout from '../../components/admin/AdminLayout';
 
 const SEOSettings = () => {
-  const [activeTab, setActiveTab] = useState('sitemap');
+  const [activeTab, setActiveTab] = useState('tracking');
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  
+  // Tracking & Tags state
+  const [trackingSettings, setTrackingSettings] = useState({
+    google_analytics_id: '',
+    google_search_console_verification: '',
+    google_tag_manager_id: '',
+    facebook_pixel_id: '',
+    microsoft_clarity_id: '',
+    custom_head_scripts: '',
+    custom_body_scripts: '',
+    meta_tags: {
+      default_title: '',
+      default_description: '',
+      default_keywords: '',
+      og_image: '',
+      twitter_card: 'summary_large_image',
+      twitter_site: ''
+    }
+  });
   
   // Schema state
   const [schemaReport, setSchemaReport] = useState(null);
