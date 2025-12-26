@@ -1313,6 +1313,13 @@ const WriteReviewPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Login Prompt Modal for non-logged-in users */}
+      <LoginPromptModal 
+        isOpen={!!showPrompt} 
+        onClose={closePrompt} 
+        action={showPrompt?.action || 'write a review'} 
+      />
     </div>
   );
 };
