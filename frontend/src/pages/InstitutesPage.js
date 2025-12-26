@@ -245,71 +245,157 @@ const InstitutesPage = () => {
                   key={institute.id || idx}
                   to={getInstituteLink(institute)}
                   className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all overflow-hidden group ${
-                    viewMode === 'list' ? 'flex items-center' : ''
+                    viewMode === 'list' ? 'flex' : ''
                   }`}
                 >
-                  {/* Image */}
-                  <div className={`bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center ${
-                    viewMode === 'grid' ? 'h-40' : 'w-32 h-32 flex-shrink-0'
+                  {/* Banner/Image Section */}
+                  <div className={`relative ${
+                    viewMode === 'grid' ? 'h-44' : 'w-48 h-full flex-shrink-0'
                   }`}>
-                    {institute.logo_url ? (
+                    {/* Banner Image */}
+                    {institute.banner_url || institute.cover_image ? (
                       <img 
                         loading="lazy"
-                        src={institute.logo_url} 
+                        src={institute.banner_url || institute.cover_image} 
                         alt={institute.name}
-                        className="w-20 h-20 object-contain"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span className="text-4xl font-bold text-blue-300">
-                        {institute.name?.charAt(0)}
-                      </span>
+                      <div className="w-full h-full bg-gradient-to-br from-blue-100 via-indigo-50 to-purple-100" />
                     )}
+                    
+                    {/* Logo Overlay */}
+                    <div className="absolute bottom-3 left-3">
+                      <div className="w-16 h-16 bg-white rounded-lg shadow-md flex items-center justify-center p-1 border">
+                        {institute.logo_url ? (
+                          <img 
+                            loading="lazy"
+                            src={institute.logo_url} 
+                            alt={institute.name}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <span className="text-2xl font-bold text-blue-500">
+                            {institute.name?.charAt(0)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Type Badge - Top Right */}
+                    <div className="absolute top-3 right-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold shadow-sm ${
+                        institute._type === 'school' ? 'bg-green-500 text-white' :
+                        institute._type === 'university' ? 'bg-purple-500 text-white' :
+                        'bg-blue-500 text-white'
+                      }`}>
+                        {institute._type === 'school' ? '🏫 School' :
+                         institute._type === 'university' ? '🎓 University' : '📚 College'}
+                      </span>
+                    </div>
+                    
+                    {/* Featured/Verified Badges - Top Left */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-1">
+                      {institute.is_featured && (
+                        <span className="px-2 py-0.5 bg-amber-500 text-white text-xs font-semibold rounded-full flex items-center gap-1">
+                          <FiStar size={10} className="fill-current" /> Featured
+                        </span>
+                      )}
+                      {institute.is_verified && (
+                        <span className="px-2 py-0.5 bg-green-600 text-white text-xs font-semibold rounded-full flex items-center gap-1">
+                          <FiCheck size={10} /> Verified
+                        </span>
+                      )}
+                      {institute.admission_open && (
+                        <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-semibold rounded-full animate-pulse">
+                          Admissions Open
+                        </span>
+                      )}
+                    </div>
                   </div>
                   
-                  {/* Content */}
+                  {/* Content Section */}
                   <div className="p-4 flex-1">
-                    {/* Type Badge */}
-                    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium mb-2 ${
-                      institute._type === 'school' ? 'bg-green-100 text-green-700' :
-                      institute._type === 'university' ? 'bg-purple-100 text-purple-700' :
-                      'bg-blue-100 text-blue-700'
-                    }`}>
-                      {institute._type === 'school' ? 'School' :
-                       institute._type === 'university' ? 'University' : 'College'}
-                    </span>
-                    
                     {/* Name */}
-                    <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">
+                    <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2 text-lg">
                       {institute.name}
                     </h3>
                     
                     {/* Location */}
                     <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
-                      <FiMapPin size={14} />
+                      <FiMapPin size={14} className="text-gray-400" />
                       <span>
                         {institute.location?.city}
                         {institute.location?.state && `, ${institute.location.state}`}
                       </span>
                     </div>
                     
-                    {/* Stats */}
-                    <div className="flex items-center gap-3 text-sm">
-                      {institute.rating > 0 && (
-                        <span className="flex items-center gap-1 text-amber-600">
-                          <FiStar size={14} className="fill-current" />
-                          {institute.rating?.toFixed(1)}
+                    {/* Rating & Reviews */}
+                    <div className="flex items-center gap-3 mb-3">
+                      {(institute.rating > 0 || institute.review_stats?.average_rating > 0) && (
+                        <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded">
+                          <FiStar size={14} className="text-amber-500 fill-current" />
+                          <span className="font-semibold text-amber-700">
+                            {(institute.rating || institute.review_stats?.average_rating || 0).toFixed(1)}
+                          </span>
+                        </div>
+                      )}
+                      {(institute.reviews_count > 0 || institute.review_stats?.total_reviews > 0) && (
+                        <span className="text-sm text-gray-500">
+                          ({institute.reviews_count || institute.review_stats?.total_reviews || 0} reviews)
                         </span>
                       )}
+                    </div>
+                    
+                    {/* Additional Badges */}
+                    <div className="flex flex-wrap gap-2 mb-3">
                       {institute.type && (
-                        <span className={`px-2 py-0.5 rounded text-xs ${
-                          institute.type === 'Government' ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-600'
+                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          institute.type === 'Government' ? 'bg-blue-100 text-blue-700' : 
+                          institute.type === 'Private' ? 'bg-purple-100 text-purple-700' :
+                          'bg-gray-100 text-gray-600'
                         }`}>
                           {institute.type}
                         </span>
                       )}
                       {institute.nirf_ranking && (
-                        <span className="text-green-600 text-xs">
+                        <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">
                           NIRF #{institute.nirf_ranking}
+                        </span>
+                      )}
+                      {institute.naac_grade && (
+                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-medium">
+                          NAAC {institute.naac_grade}
+                        </span>
+                      )}
+                      {institute.accreditation && (
+                        <span className="px-2 py-0.5 bg-teal-100 text-teal-700 rounded text-xs font-medium">
+                          {institute.accreditation}
+                        </span>
+                      )}
+                      {institute.established_year && (
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-medium">
+                          Est. {institute.established_year}
+                        </span>
+                      )}
+                    </div>
+                    
+                    {/* Courses/Programs Preview */}
+                    {institute.courses && institute.courses.length > 0 && (
+                      <div className="text-xs text-gray-500 mb-2">
+                        <span className="font-medium">Courses:</span> {institute.courses.slice(0, 3).map(c => c.name || c).join(', ')}
+                        {institute.courses.length > 3 && ` +${institute.courses.length - 3} more`}
+                      </div>
+                    )}
+                    
+                    {/* CTA */}
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t">
+                      <span className="text-blue-600 font-medium text-sm group-hover:underline">
+                        View Details →
+                      </span>
+                      {institute.admission_open && (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                          Apply Now
                         </span>
                       )}
                     </div>
