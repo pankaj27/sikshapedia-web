@@ -137,12 +137,10 @@ const LocationSearch = () => {
   ];
 
   const handleLocationClick = (type, value) => {
-    // Use correct URL format: /colleges/{state}/ or /colleges/{city}/
+    // Navigate to combined institutes page for states/cities
     const slug = value.toLowerCase().replace(/\s+/g, '-');
-    if (type === 'state') {
-      window.location.href = `/colleges/${slug}/`;
-    } else if (type === 'city') {
-      window.location.href = `/colleges/${slug}/`;
+    if (type === 'state' || type === 'city') {
+      window.location.href = `/institutes/${slug}`;
     } else if (type === 'country') {
       window.location.href = `/study-abroad/${slug}/`;
     }
