@@ -236,6 +236,7 @@ const SEOSettings = () => {
   };
 
   const tabs = [
+    { id: 'tracking', label: 'Tracking & Tags', icon: FiCode },
     { id: 'sitemap', label: 'Sitemap Generator', icon: FiGlobe },
     { id: 'robots', label: 'Robots.txt', icon: FiFileText },
     { id: 'local', label: 'Local SEO', icon: FiMapPin },
