@@ -95,7 +95,10 @@ const SEOSettings = () => {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      if (activeTab === 'sitemap') {
+      if (activeTab === 'tracking') {
+        const res = await api.get('/seo/tracking-settings');
+        if (res.data) setTrackingSettings(prev => ({ ...prev, ...res.data }));
+      } else if (activeTab === 'sitemap') {
         const [settingsRes, previewRes, statsRes] = await Promise.all([
           api.get('/seo/sitemap/settings'),
           api.get('/seo/sitemap/preview'),
