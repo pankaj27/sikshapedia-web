@@ -2118,7 +2118,7 @@ const DynamicListingPage = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">
-                    {loading ? 'Loading...' : `${totalCount.toLocaleString()} ${pageInfo.isSchools ? 'Schools' : 'Colleges'}`}
+                    {loading ? 'Loading...' : `${totalCount.toLocaleString()} ${pageInfo.isSchools ? 'Schools' : pageInfo.isUniversity ? 'Universities' : 'Colleges'}`}
                   </h3>
                   <p className="text-xs text-gray-500">Ranked by popularity & reviews</p>
                 </div>
