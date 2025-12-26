@@ -245,6 +245,18 @@ const SEOSettings = () => {
     }
   };
 
+  const saveTrackingSettings = async () => {
+    setSaving(true);
+    try {
+      await api.post('/seo/tracking-settings', trackingSettings);
+      showMessage('success', 'Tracking & Tags settings saved successfully!');
+    } catch (error) {
+      showMessage('error', 'Failed to save tracking settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const downloadSitemap = () => {
     if (sitemapPreview?.content) {
       const blob = new Blob([sitemapPreview.content], { type: 'application/xml' });
