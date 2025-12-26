@@ -17,19 +17,22 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
   const [redemptions, setRedemptions] = useState([]);
   const [showRedeemModal, setShowRedeemModal] = useState(false);
   const [redeemPoints, setRedeemPoints] = useState('');
-  const [upiId, setUpiId] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(''); // 'upi' or 'bank'
+  const [userProfile, setUserProfile] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [summaryRes, redemptionsRes] = await Promise.all([
+        const [summaryRes, redemptionsRes, profileRes] = await Promise.all([
           api.get('/rewards/points-summary'),
-          api.get('/rewards/redemptions')
+          api.get('/rewards/redemptions'),
+          api.get('/user/profile')
         ]);
         setPointsSummary(summaryRes.data);
         setRedemptions(redemptionsRes.data.redemptions || []);
+        setUserProfile(profileRes.data);
       } catch (error) {
         console.error('Error fetching earnings data:', error);
       } finally {
@@ -44,8 +47,19 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
       alert('Minimum 200 points required for redemption');
       return;
     }
-    if (!upiId || !upiId.includes('@')) {
-      alert('Please enter a valid UPI ID');
+    if (!paymentMethod) {
+      alert('Please select a payment method');
+      return;
+    }
+    
+    // Validate payment details based on selected method
+    const paymentDetails = userProfile?.payment_details || {};
+    if (paymentMethod === 'upi' && !paymentDetails.upi_id) {
+      alert('No UPI ID found in your profile. Please update your profile first.');
+      return;
+    }
+    if (paymentMethod === 'bank' && (!paymentDetails.bank_name || !paymentDetails.account_number)) {
+      alert('Bank details not found in your profile. Please update your profile first.');
       return;
     }
 
@@ -53,12 +67,19 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
     try {
       await api.post('/rewards/redeem', {
         points: parseInt(redeemPoints),
-        upi_id: upiId
+        payment_method: paymentMethod,
+        upi_id: paymentMethod === 'upi' ? paymentDetails.upi_id : null,
+        bank_details: paymentMethod === 'bank' ? {
+          bank_name: paymentDetails.bank_name,
+          account_number: paymentDetails.account_number,
+          ifsc_code: paymentDetails.ifsc_code,
+          account_holder: paymentDetails.account_holder_name
+        } : null
       });
       alert('Redemption request submitted! You will receive payment within 24-48 hours.');
       setShowRedeemModal(false);
       setRedeemPoints('');
-      setUpiId('');
+      setPaymentMethod('');
       // Refresh data
       const [summaryRes, redemptionsRes] = await Promise.all([
         api.get('/rewards/points-summary'),
@@ -77,6 +98,11 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
   const currentPoints = pointsSummary?.current_points || dashboard?.stats?.points || 0;
   const cashValue = currentPoints * 0.5;
   const canRedeem = currentPoints >= 200;
+  
+  // Get saved payment details
+  const paymentDetails = userProfile?.payment_details || {};
+  const hasUpi = !!paymentDetails.upi_id;
+  const hasBank = !!(paymentDetails.bank_name && paymentDetails.account_number);
 
   if (loading) {
     return (
