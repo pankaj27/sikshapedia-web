@@ -494,7 +494,7 @@ async def get_favorites(request: Request, db=Depends(get_db)):
     college_ids = [f["college_id"] for f in favorites]
     colleges = await db.colleges.find(
         {"id": {"$in": college_ids}},
-        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "location": 1, "institution_type": 1}
+        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "location": 1, "institution_type": 1, "slug": 1, "serial_number": 1}
     ).to_list(100)
     
     colleges_map = {c["id"]: c for c in colleges}
