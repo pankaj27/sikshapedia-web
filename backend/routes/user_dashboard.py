@@ -373,13 +373,26 @@ async def submit_review(review: ReviewSubmit, request: Request, db=Depends(get_d
 
 @router.get("/questions")
 async def get_user_questions(request: Request, db=Depends(get_db)):
-    """Get all questions by user"""
+    """Get all questions by user with institute details"""
     user = await get_current_user(request, db)
     
     questions = await db.questions.find(
         {"user_id": user["id"]},
         {"_id": 0}
     ).sort("created_at", -1).to_list(100)
+    
+    # Enrich questions with college/institute details
+    for question in questions:
+        college_id = question.get("college_id")
+        if college_id:
+            college = await db.colleges.find_one(
+                {"id": college_id},
+                {"_id": 0, "name": 1, "slug": 1, "institution_type": 1, "serial_number": 1}
+            )
+            if college:
+                question["college_name"] = college.get("name", "Institute")
+                question["institution_type"] = college.get("institution_type", "college")
+                question["serial_number"] = college.get("serial_number")
     
     return questions
 
