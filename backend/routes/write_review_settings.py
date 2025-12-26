@@ -85,7 +85,7 @@ class BenefitsSection(BaseModel):
     ]
 
 class WriteReviewSettings(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields to pass through
     id: str = "write-review-settings"
     
     # Header Section
