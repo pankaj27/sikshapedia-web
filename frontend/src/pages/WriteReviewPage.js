@@ -3,6 +3,7 @@ import { FiStar, FiUpload, FiCheckCircle, FiAward, FiSearch, FiAlertCircle, FiX,
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
 import { useAuth } from '../contexts/AuthContext';
+import { useGuestGate, LoginPromptModal } from '../components/GuestGate';
 
 import { Link } from '../components/CustomLink';
 
