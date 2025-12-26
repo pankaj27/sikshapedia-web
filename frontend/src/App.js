@@ -399,6 +399,9 @@ function App() {
               {/* SEO-FRIENDLY DYNAMIC ROUTES - Must come LAST */}
               {/* These are catch-all routes that match patterns */}
               {/* ============================================ */}
+              
+              {/* Combined Institutes Page - All types in one location */}
+              <Route path="/institutes/:location" element={<InstitutesPage />} />
                   
               {/* NEW URL STRUCTURE - Institution Listings */}
               {/* /university, /colleges, /schools base routes */}
