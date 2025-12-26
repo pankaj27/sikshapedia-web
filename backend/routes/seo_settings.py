@@ -880,3 +880,81 @@ async def validate_schema(schema_type: str, db=Depends(get_db)):
         "warnings": warnings,
         "schema_type": schema_type
     }
+
+# ============ TRACKING & TAGS ENDPOINTS ============
+
+class TrackingSettings(BaseModel):
+    google_analytics_id: Optional[str] = None
+    google_search_console_verification: Optional[str] = None
+    google_tag_manager_id: Optional[str] = None
+    facebook_pixel_id: Optional[str] = None
+    microsoft_clarity_id: Optional[str] = None
+    custom_head_scripts: Optional[str] = None
+    custom_body_scripts: Optional[str] = None
+    meta_tags: dict = {}
+
+@router.get("/tracking-settings")
+async def get_tracking_settings(db=Depends(get_db)):
+    """Get tracking and tags settings (Google Analytics, Search Console, Meta Tags, etc.)"""
+    settings = await db.seo_settings.find_one({"type": "tracking"}, {"_id": 0})
+    
+    if not settings:
+        # Return default settings
+        return {
+            "google_analytics_id": "",
+            "google_search_console_verification": "",
+            "google_tag_manager_id": "",
+            "facebook_pixel_id": "",
+            "microsoft_clarity_id": "",
+            "custom_head_scripts": "",
+            "custom_body_scripts": "",
+            "meta_tags": {
+                "default_title": "",
+                "default_description": "",
+                "default_keywords": "",
+                "og_image": "",
+                "twitter_card": "summary_large_image",
+                "twitter_site": ""
+            }
+        }
+    
+    # Remove type field from response
+    settings.pop("type", None)
+    return settings
+
+@router.post("/tracking-settings")
+async def save_tracking_settings(settings: TrackingSettings, db=Depends(get_db)):
+    """Save tracking and tags settings"""
+    data = {
+        "type": "tracking",
+        **settings.dict(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.seo_settings.update_one(
+        {"type": "tracking"},
+        {"$set": data},
+        upsert=True
+    )
+    
+    return {"message": "Tracking settings saved successfully"}
+
+@router.get("/tracking-settings/public")
+async def get_public_tracking_settings(db=Depends(get_db)):
+    """Get tracking settings for public website injection (no auth required)"""
+    settings = await db.seo_settings.find_one({"type": "tracking"}, {"_id": 0})
+    
+    if not settings:
+        return {}
+    
+    # Return only the tracking IDs and scripts needed for frontend
+    return {
+        "google_analytics_id": settings.get("google_analytics_id", ""),
+        "google_search_console_verification": settings.get("google_search_console_verification", ""),
+        "google_tag_manager_id": settings.get("google_tag_manager_id", ""),
+        "facebook_pixel_id": settings.get("facebook_pixel_id", ""),
+        "microsoft_clarity_id": settings.get("microsoft_clarity_id", ""),
+        "custom_head_scripts": settings.get("custom_head_scripts", ""),
+        "custom_body_scripts": settings.get("custom_body_scripts", ""),
+        "meta_tags": settings.get("meta_tags", {})
+    }
