@@ -2475,7 +2475,7 @@ const DynamicListingPage = () => {
                 <div className="text-center">
                   <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 rounded-full text-gray-600">
                     <FiCheckCircle className="text-green-500" size={18} />
-                    <span className="font-medium">You&apos;ve seen all {totalCount.toLocaleString()} colleges</span>
+                    <span className="font-medium">You&apos;ve seen all {totalCount.toLocaleString()} {pageInfo.isSchools ? 'schools' : pageInfo.isUniversity ? 'universities' : 'colleges'}</span>
                   </div>
                 </div>
               )}
