@@ -771,6 +771,17 @@ const DynamicListingPage = () => {
           }
         }
         
+        // Handle query string filters (from URL ?state=X&city=Y)
+        if (queryFilters.state && !pageInfo.filters?.state) {
+          queryParams.append('state', queryFilters.state);
+        }
+        if (queryFilters.city && !pageInfo.filters?.city) {
+          queryParams.append('city', queryFilters.city);
+        }
+        if (queryFilters.course && !pageInfo.filters?.course) {
+          queryParams.append('course', queryFilters.course);
+        }
+        
         // Fallback to direct pageInfo fields
         if (pageInfo.state && !pageInfo.filters?.state) {
           queryParams.append('state', toDisplayName(pageInfo.state));
