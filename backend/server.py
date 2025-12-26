@@ -1490,7 +1490,7 @@ class News(BaseModel):
     gallery_images: List[Dict] = []  # [{url, alt, caption}]
     
     # Author Info
-    author: str
+    author: Optional[str] = None
     author_image: Optional[str] = None
     author_designation: Optional[str] = None
     
