@@ -419,6 +419,17 @@ async def submit_question(question: QuestionSubmit, request: Request, db=Depends
 
 # ============ COMMENTS ============
 
+# Helper function to generate institution URL
+def generate_institution_url(inst_type, serial_number, name):
+    """Generate proper institution URL: /{type}/{serial-padded}-{slug}"""
+    import re
+    type_path = "university" if inst_type and inst_type.lower() == "university" else \
+                "schools" if inst_type and inst_type.lower() == "school" else "colleges"
+    serial_padded = str(serial_number).zfill(3) if serial_number else "000"
+    # Generate slug from name
+    slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-') if name else "institute"
+    return f"/{type_path}/{serial_padded}-{slug}"
+
 @router.get("/comments")
 async def get_user_comments(request: Request, db=Depends(get_db)):
     """Get all comments by user with entity details"""
@@ -436,25 +447,64 @@ async def get_user_comments(request: Request, db=Depends(get_db)):
         
         # Try to get entity name based on type
         if entity_type == "college" and entity_id:
-            college = await db.colleges.find_one({"id": entity_id}, {"_id": 0, "name": 1, "slug": 1})
+            college = await db.colleges.find_one(
+                {"id": entity_id}, 
+                {"_id": 0, "name": 1, "slug": 1, "institution_type": 1, "serial_number": 1}
+            )
             if college:
                 comment["entity_name"] = college.get("name", "College")
-                comment["entity_link"] = f"/college/{entity_id}"
+                comment["institution_type"] = college.get("institution_type", "college")
+                comment["serial_number"] = college.get("serial_number")
+                comment["entity_link"] = generate_institution_url(
+                    college.get("institution_type"),
+                    college.get("serial_number"),
+                    college.get("name")
+                )
         elif entity_type == "review" and entity_id:
             review = await db.reviews.find_one({"id": entity_id}, {"_id": 0, "college_name": 1, "college_id": 1})
             if review:
+                college_id = review.get('college_id', '')
+                college = await db.colleges.find_one(
+                    {"id": college_id}, 
+                    {"_id": 0, "name": 1, "institution_type": 1, "serial_number": 1}
+                ) if college_id else None
                 comment["entity_name"] = f"Review on {review.get('college_name', 'College')}"
-                comment["entity_link"] = f"/college/{review.get('college_id', '')}"
+                if college:
+                    comment["institution_type"] = college.get("institution_type", "college")
+                    comment["serial_number"] = college.get("serial_number")
+                    comment["entity_link"] = generate_institution_url(
+                        college.get("institution_type"),
+                        college.get("serial_number"),
+                        college.get("name")
+                    )
+                else:
+                    comment["entity_link"] = "#"
         elif entity_type == "question" and entity_id:
             question = await db.questions.find_one({"id": entity_id}, {"_id": 0, "question": 1, "college_id": 1})
             if question:
+                college_id = question.get('college_id', '')
+                college = await db.colleges.find_one(
+                    {"id": college_id}, 
+                    {"_id": 0, "name": 1, "institution_type": 1, "serial_number": 1}
+                ) if college_id else None
                 comment["entity_name"] = f"Q&A: {question.get('question', 'Question')[:50]}..."
-                comment["entity_link"] = f"/college/{question.get('college_id', '')}"
+                if college:
+                    comment["institution_type"] = college.get("institution_type", "college")
+                    comment["serial_number"] = college.get("serial_number")
+                    comment["entity_link"] = generate_institution_url(
+                        college.get("institution_type"),
+                        college.get("serial_number"),
+                        college.get("name")
+                    )
+                else:
+                    comment["entity_link"] = "#"
         elif entity_type == "exam" and entity_id:
-            exam = await db.exams.find_one({"id": entity_id}, {"_id": 0, "name": 1})
+            exam = await db.exams.find_one({"id": entity_id}, {"_id": 0, "name": 1, "slug": 1, "serial_number": 1})
             if exam:
                 comment["entity_name"] = exam.get("name", "Exam")
-                comment["entity_link"] = f"/exams/{entity_id}"
+                serial = str(exam.get("serial_number", "")).zfill(3) if exam.get("serial_number") else ""
+                slug = exam.get("slug", entity_id)
+                comment["entity_link"] = f"/exams/{serial}-{slug}" if serial else f"/exams/{slug}"
         elif entity_type == "blog" and entity_id:
             blog = await db.blogs.find_one({"id": entity_id}, {"_id": 0, "title": 1, "slug": 1})
             if blog:
