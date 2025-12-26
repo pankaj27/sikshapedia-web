@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://reviewform-bug.preview.emergentagent.com/sitemap.xml
+Sitemap: https://edureview-fixes.preview.emergentagent.com/sitemap.xml
