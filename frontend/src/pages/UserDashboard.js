@@ -706,12 +706,15 @@ const UserDashboard = () => {
                       };
                       const status = statusConfig[review.status] || statusConfig.pending;
                       
-                      // Determine correct route based on institution type
+                      // Use the standard URL helper for consistent link generation
                       const instType = (review.institution_type || review.institute_type || 'college').toLowerCase();
-                      const routePrefix = instType === 'school' ? '/schools' : instType === 'university' ? '/universities' : '/colleges';
-                      const instituteLink = review.college_slug 
-                        ? `${routePrefix}/${review.serial_number}/${review.college_slug}`
-                        : `${routePrefix}/${review.college_id || review.entity_id}`;
+                      const instituteLink = getInstitutionDetailUrl(
+                        instType,
+                        review.college_id || review.entity_id,
+                        review.college_name || review.entity_name || 'Institute',
+                        null,
+                        review.serial_number
+                      );
                       
                       return (
                         <div key={review.id} className={`bg-white rounded-xl shadow-sm border-l-4 ${
