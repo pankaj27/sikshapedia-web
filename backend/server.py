@@ -322,21 +322,23 @@ class Exam(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ExamCreate(BaseModel):
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     name: str
-    slug: str
-    full_name: str
-    description: str
-    conducting_body: str
-    exam_level: str
-    exam_type: str
-    streams: List[str]
-    exam_mode: str
-    exam_duration: str
-    total_marks: int
-    num_questions: int
-    exam_pattern: Dict
-    eligibility: Dict
-    application_fee: Dict
+    slug: Optional[str] = None
+    full_name: Optional[str] = None
+    description: Optional[str] = None
+    conducting_body: Optional[str] = None
+    exam_level: Optional[str] = None
+    exam_type: Optional[str] = None
+    streams: List[str] = []
+    exam_mode: Optional[str] = None
+    exam_duration: Optional[str] = None
+    total_marks: Optional[int] = None
+    num_questions: Optional[int] = None
+    exam_pattern: Optional[Dict] = None
+    eligibility: Optional[Dict] = None
+    application_fee: Optional[Dict] = None
+    status: str = "draft"
 
 # Exam Detailed Model (for comprehensive exam entry form)
 class ExamDetailedWidget(BaseModel):
