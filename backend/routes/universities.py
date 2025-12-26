@@ -16,14 +16,14 @@ def set_database(database):
 
 # University Model
 class University(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     slug: str
-    university_type: str  # Central, State, Private, Deemed
-    accreditation: str  # NAAC A++, NAAC A+, etc.
-    city: str
-    state: str
+    university_type: Optional[str] = None  # Central, State, Private, Deemed
+    accreditation: Optional[str] = None  # NAAC A++, NAAC A+, etc.
+    city: Optional[str] = None
+    state: Optional[str] = None
     address: Optional[str] = None
     established_year: Optional[int] = None
     
@@ -56,6 +56,15 @@ class University(BaseModel):
     phone: Optional[str] = None
     email: Optional[str] = None
     website: Optional[str] = None
+    
+    # Additional fields for consistency with College model
+    admission_process: Optional[str] = None
+    admission_dates: Optional[List] = None
+    cutoff_data: List = []
+    placement: Optional[Dict] = None
+    courses: List = []
+    facilities: List = []
+    status: str = "draft"
     
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
