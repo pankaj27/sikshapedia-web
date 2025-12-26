@@ -953,6 +953,7 @@ class College(BaseModel):
     updated_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CollegeCreate(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     name: str
     slug: str
     location: Dict
@@ -960,10 +961,10 @@ class CollegeCreate(BaseModel):
     type: str
     affiliation: Optional[str] = None
     nirf_ranking: Optional[int] = None
-    average_fees: float
-    courses: List[Course] = []
-    facilities: List[str] = []
-    contact_info: Dict
+    average_fees: float = 0
+    courses: List = []  # Accept any format (List[Course] or List[Dict])
+    facilities: List = []  # Accept both List[str] and List[Dict]
+    contact_info: Dict = {}
     logo_url: Optional[str] = None
     logo_title: Optional[str] = None
     logo_alt: Optional[str] = None
@@ -971,10 +972,10 @@ class CollegeCreate(BaseModel):
     banner_title: Optional[str] = None
     banner_alt: Optional[str] = None
     images: List[str] = []
-    description: str
+    description: str = ""
     highlights: List[str] = []
     accreditations: List[str] = []
-    placement_stats: List[PlacementStats] = []
+    placement_stats: List = []
 
 # Review Models
 class Review(BaseModel):
