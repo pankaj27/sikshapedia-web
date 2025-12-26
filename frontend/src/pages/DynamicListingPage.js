@@ -606,7 +606,7 @@ const DynamicListingPage = () => {
       fetchFeaturedColleges();
       fetchAdmissionOpenColleges();
     }
-  }, [pageInfo?.institutionType, pageInfo?.state, pageInfo?.city, pageInfo?.stream, pageInfo?.course, filters.search, sortBy]);
+  }, [pageInfo?.institutionType, pageInfo?.state, pageInfo?.city, pageInfo?.stream, pageInfo?.course, filters.search, sortBy, queryFilters.state, queryFilters.city, queryFilters.course]);
   
   // Fetch featured/sponsored colleges (from admin-managed multi-placement ads)
   const fetchFeaturedColleges = async () => {
