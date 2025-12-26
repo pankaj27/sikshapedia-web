@@ -15,7 +15,7 @@ BASE_URL = "https://edureview-fixes.preview.emergentagent.com/api"
 # Test credentials
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
-    "password": "admin123"
+    "password": "Admin@123"  # Updated to match working credentials
 }
 
 USER_CREDENTIALS = {
