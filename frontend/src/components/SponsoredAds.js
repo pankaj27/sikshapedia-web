@@ -262,10 +262,15 @@ export const UrlAwareSponsoredSection = ({
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Determine institution type from URL
+  const isSchools = location.pathname.startsWith('/schools');
+  const isUniversity = location.pathname.startsWith('/university');
+  const institutionLabel = isSchools ? 'Schools' : isUniversity ? 'Universities' : 'Colleges';
+
   // Default styles based on section type
   const defaultStyles = {
     featured: {
-      title: 'Featured Colleges',
+      title: `Featured ${institutionLabel}`,
       subtitle: 'Sponsored recommendations',
       bgColor: 'from-orange-50 via-amber-50 to-yellow-50',
       headerColor: 'from-orange-500 to-amber-500',
@@ -279,7 +284,7 @@ export const UrlAwareSponsoredSection = ({
       icon: FiCheckCircle
     },
     sponsored: {
-      title: 'Sponsored Colleges',
+      title: `Sponsored ${institutionLabel}`,
       subtitle: 'Featured partners',
       bgColor: 'from-blue-50 via-indigo-50 to-purple-50',
       headerColor: 'from-blue-600 to-indigo-600',
