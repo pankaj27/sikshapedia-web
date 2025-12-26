@@ -1258,7 +1258,7 @@ const DynamicListingPage = () => {
               )}
               <div className="flex items-center gap-4 mt-3 text-sm">
                 <span className="bg-white/10 px-3 py-1 rounded-full">
-                  <strong>{totalCount.toLocaleString()}</strong> Colleges Found
+                  <strong>{totalCount.toLocaleString()}</strong> {isSchools ? 'Schools' : isUniversity ? 'Universities' : 'Colleges'} Found
                 </span>
                 <span className="hidden md:inline-flex items-center gap-1.5">
                   <FiCheckCircle className="text-green-400" />
