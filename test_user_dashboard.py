@@ -191,7 +191,7 @@ def test_user_dashboard():
             else:
                 print(f"❌ POST /reviews (University) failed: {status} - {response}")
     
-    # Test 8: GET /api/write-review-settings
+    # Test 7: GET /api/write-review-settings
     success, response, status = make_request("GET", "/write-review-settings")
     if success and isinstance(response, dict):
         min_chars = response.get("min_review_characters")
