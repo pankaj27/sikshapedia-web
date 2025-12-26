@@ -42,47 +42,31 @@ def make_request(method, endpoint, data=None, token=None):
 def test_user_dashboard():
     print("👤 Testing User Dashboard APIs...")
     
-    # Test 1: Try to login with admin credentials first to see if they work
-    admin_data = {
-        "email": "admin@admissionbuddy.co",
-        "password": "Admin@123"
-    }
-    
-    success, response, status = make_request("POST", "/auth/login", admin_data)
-    if success and "access_token" in response:
-        admin_token = response["access_token"]
-        print(f"✅ Admin login successful: {response.get('user', {}).get('name')}")
-    else:
-        print(f"❌ Admin login failed: {status} - {response}")
-        return
-    
-    # Test 2: Try to login with user credentials
+    # Test 1: Try to create a test user first
     user_data = {
-        "email": "mail.nirmalsarkar@gmail.com",
-        "password": "Admin@123"
+        "email": "testuser.dashboard@example.com",
+        "password": "TestPass123",
+        "name": "Test Dashboard User"
     }
     
-    success, response, status = make_request("POST", "/auth/login", user_data)
+    success, response, status = make_request("POST", "/auth/register", user_data)
     if success and "access_token" in response:
         user_token = response["access_token"]
         user_id = response.get("user", {}).get("id")
-        print(f"✅ User login successful: {response.get('user', {}).get('name')}")
+        print(f"✅ User registration successful: {response.get('user', {}).get('name')}")
     else:
-        print(f"❌ User login failed: {status} - {response}")
-        # Try to create the user
-        register_data = {
-            "email": "mail.nirmalsarkar@gmail.com",
-            "password": "Admin@123",
-            "name": "Nirmalendu Sarkar"
+        # Try to login if user already exists
+        login_data = {
+            "email": user_data["email"],
+            "password": user_data["password"]
         }
-        
-        success, response, status = make_request("POST", "/auth/register", register_data)
+        success, response, status = make_request("POST", "/auth/login", login_data)
         if success and "access_token" in response:
             user_token = response["access_token"]
             user_id = response.get("user", {}).get("id")
-            print(f"✅ User registration successful: {response.get('user', {}).get('name')}")
+            print(f"✅ User login successful: {response.get('user', {}).get('name')}")
         else:
-            print(f"❌ User registration failed: {status} - {response}")
+            print(f"❌ User login/registration failed: {status} - {response}")
             return
     
     # Test 3: PUT /api/user/profile - Update profile with UPI/Bank details
