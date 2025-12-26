@@ -193,6 +193,7 @@ function App() {
           <BrowserRouter>
             <ScrollToTop />
             <SimpleAutoPopup />
+            <TrackingScripts />
           <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Admin Routes - Without Layout */}
