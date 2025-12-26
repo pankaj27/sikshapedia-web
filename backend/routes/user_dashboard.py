@@ -153,7 +153,7 @@ async def update_user_profile(request: Request, db=Depends(get_db)):
     # Get the update data from request body
     try:
         profile_data = await request.json()
-    except:
+    except Exception:
         raise HTTPException(status_code=400, detail="Invalid request body")
     
     # Build update dict - handle payment_details specially
