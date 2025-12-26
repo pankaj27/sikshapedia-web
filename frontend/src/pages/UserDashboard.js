@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi';
 import api from '../api/axios';
 import { Button } from '../components/ui/button';
+import { getInstitutionDetailUrl } from '../utils/urlHelpers';
 
 // Earnings Tab Component with Redemption
 const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
