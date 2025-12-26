@@ -2292,7 +2292,7 @@ const DynamicListingPage = () => {
                           </div>
                           <div className="text-center mt-4">
                             <Link to="/admissions-open" className="text-sm text-green-600 hover:text-green-700 font-medium inline-flex items-center gap-1">
-                              View All Colleges with Open Admissions <FiArrowRight size={14} />
+                              View All {pageInfo.isSchools ? 'Schools' : pageInfo.isUniversity ? 'Universities' : 'Colleges'} with Open Admissions <FiArrowRight size={14} />
                             </Link>
                           </div>
                         </div>
