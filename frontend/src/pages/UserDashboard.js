@@ -705,6 +705,13 @@ const UserDashboard = () => {
                       };
                       const status = statusConfig[review.status] || statusConfig.pending;
                       
+                      // Determine correct route based on institution type
+                      const instType = (review.institution_type || review.institute_type || 'college').toLowerCase();
+                      const routePrefix = instType === 'school' ? '/schools' : instType === 'university' ? '/universities' : '/colleges';
+                      const instituteLink = review.college_slug 
+                        ? `${routePrefix}/${review.serial_number}/${review.college_slug}`
+                        : `${routePrefix}/${review.college_id || review.entity_id}`;
+                      
                       return (
                         <div key={review.id} className={`bg-white rounded-xl shadow-sm border-l-4 ${
                           review.status === 'approved' ? 'border-green-500' : 
@@ -716,7 +723,7 @@ const UserDashboard = () => {
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-2">
-                                  <Link to={`/colleges/${review.college_id || review.entity_id}`} className="font-bold text-lg text-blue-600 hover:underline">
+                                  <Link to={instituteLink} className="font-bold text-lg text-blue-600 hover:underline">
                                     {review.college_name || review.entity_name || 'Institute'}
                                   </Link>
                                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}>
