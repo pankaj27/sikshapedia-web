@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Query, Request, UploadFile, File, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -11,6 +12,31 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr, field_validator
 from typing import List, Optional, Dict, Any, Union
 import uuid
 from datetime import datetime, timezone, timedelta
+from functools import lru_cache
+import time
+
+# Simple in-memory cache for frequently accessed data
+class SimpleCache:
+    def __init__(self, ttl_seconds=60):
+        self._cache = {}
+        self._ttl = ttl_seconds
+    
+    def get(self, key):
+        if key in self._cache:
+            value, timestamp = self._cache[key]
+            if time.time() - timestamp < self._ttl:
+                return value
+            del self._cache[key]
+        return None
+    
+    def set(self, key, value):
+        self._cache[key] = (value, time.time())
+    
+    def clear(self):
+        self._cache = {}
+
+# Global cache instance (60 second TTL)
+api_cache = SimpleCache(ttl_seconds=60)
 
 # Cloudinary for cloud image storage
 import cloudinary
