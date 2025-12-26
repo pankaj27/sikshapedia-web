@@ -281,7 +281,7 @@ const CollegeSubPage = () => {
         <meta property="og:description" content={ogDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${window.location.origin}${basePath}/${section}`} />
-        {college.logo_url && <meta property="og:image" content={college.logo_url.startsWith('/api') ? `${window.location.origin}${college.logo_url}` : `${window.location.origin}/api${college.logo_url}`} />}
+        {college.logo_url && <meta property="og:image" content={college.logo_url.startsWith('http') ? college.logo_url : `${window.location.origin}${college.logo_url}`} />}
         <link rel="canonical" href={`${window.location.origin}${basePath}/${section}`} />
       </Helmet>
 
