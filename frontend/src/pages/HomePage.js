@@ -500,7 +500,7 @@ const CollegeDuniaHome = () => {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center overflow-hidden">
                         {ad.logo_url ? (
-                          <img src={ad.logo_url} alt={ad.name} className="w-full h-full object-contain" />
+                          <img loading="lazy" src={ad.logo_url} alt={ad.name} className="w-full h-full object-contain" />
                         ) : (
                           <HiOutlineSparkles size={20} className="text-yellow-400" />
                         )}
@@ -1083,7 +1083,7 @@ const CollegeDuniaHome = () => {
                     <div className="flex items-start gap-4">
                       <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-orange-200 group-hover:border-orange-400 transition-colors">
                         {college.logo_url ? (
-                          <img src={college.logo_url} alt={college.name} className="w-full h-full object-contain p-1" />
+                          <img loading="lazy" src={college.logo_url} alt={college.name} className="w-full h-full object-contain p-1" />
                         ) : (
                           <span className="text-2xl font-bold text-orange-600">{college.name?.charAt(0)}</span>
                         )}
