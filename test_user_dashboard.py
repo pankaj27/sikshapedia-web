@@ -133,7 +133,7 @@ def test_user_dashboard():
     else:
         print(f"❌ GET /user/liked failed: {status} - {response}")
     
-    # Test 7: Test review submission for different institution types
+    # Test 6: Test review submission for different institution types
     # Get some institutions first
     success, response, status = make_request("GET", "/colleges?limit=10")
     if success and isinstance(response, list):
