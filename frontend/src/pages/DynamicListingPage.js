@@ -2177,7 +2177,7 @@ const DynamicListingPage = () => {
                       <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 overflow-hidden shadow-lg">
                         <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-2 flex items-center gap-2">
                           <FiStar className="text-white fill-current" size={14} />
-                          <span className="text-white font-bold text-sm">Featured Colleges</span>
+                          <span className="text-white font-bold text-sm">Featured {pageInfo.isSchools ? 'Schools' : pageInfo.isUniversity ? 'Universities' : 'Colleges'}</span>
                           <span className="text-orange-100 text-xs ml-auto">Sponsored</span>
                         </div>
                         <div className="p-4">
@@ -2229,8 +2229,8 @@ const DynamicListingPage = () => {
                             ))}
                           </div>
                           <div className="text-center mt-4">
-                            <Link to="/featured-colleges" className="text-sm text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-1">
-                              View All Featured Colleges <FiArrowRight size={14} />
+                            <Link to={pageInfo.isSchools ? '/schools' : pageInfo.isUniversity ? '/university' : '/featured-colleges'} className="text-sm text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-1">
+                              View All Featured {pageInfo.isSchools ? 'Schools' : pageInfo.isUniversity ? 'Universities' : 'Colleges'} <FiArrowRight size={14} />
                             </Link>
                           </div>
                         </div>
