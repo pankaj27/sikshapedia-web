@@ -133,24 +133,26 @@ const CollegeSubPage = () => {
       setInvalidFormat(false);
       
       try {
+        // Use the appropriate API endpoint based on institution type
+        const apiEndpoint = institutionType === 'School' ? '/schools' : 
+                          institutionType === 'University' ? '/universities' : '/colleges';
+        
         // If slug-only format, try to fetch by slug directly
         if (isSlugOnly && slugPart) {
-          const response = await api.get(`/colleges/${slugPart}`);
+          const response = await api.get(`${apiEndpoint}/${slugPart}`);
           if (response.data && response.data.id) {
             setResolvedId(response.data.id);
             return;
           }
         }
         
-        // Search by serial_number (numeric prefix format)
+        // If numeric prefix format, fetch by serial_number directly
+        // The backend now supports fetching by serial_number: /colleges/{serial_number}
         if (numericId) {
-          const response = await api.get(`/colleges?institution_type=${institutionType}&limit=100`);
-          if (response.data && response.data.length > 0) {
-            const institution = response.data.find(inst => inst.serial_number === numericId);
-            if (institution) {
-              setResolvedId(institution.id);
-              return;
-            }
+          const response = await api.get(`${apiEndpoint}/${numericId}`);
+          if (response.data && response.data.id) {
+            setResolvedId(response.data.id);
+            return;
           }
         }
         
