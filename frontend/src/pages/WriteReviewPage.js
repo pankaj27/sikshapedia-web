@@ -332,9 +332,20 @@ const WriteReviewPage = () => {
         // Extract courses from institute data
         let coursesData = [];
         if (instituteData.courses && Array.isArray(instituteData.courses)) {
-          coursesData = instituteData.courses.map(c => c.name || c.course_name || c);
+          coursesData = instituteData.courses.map(c => {
+            // Handle different course data formats
+            if (typeof c === 'string') return c;
+            if (c.name) return c.name;
+            if (c.course_name) return c.course_name;
+            if (c.title) return c.title;
+            return null;
+          }).filter(Boolean); // Remove null values
         } else if (instituteData.programs && Array.isArray(instituteData.programs)) {
-          coursesData = instituteData.programs.map(p => p.name || p);
+          coursesData = instituteData.programs.map(p => {
+            if (typeof p === 'string') return p;
+            if (p.name) return p.name;
+            return null;
+          }).filter(Boolean);
         }
         
         // If no courses found, use common courses based on type
