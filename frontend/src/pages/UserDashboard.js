@@ -945,16 +945,30 @@ const UserDashboard = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {questions.map((q) => (
-                      <div key={q.id} className="bg-white rounded-xl shadow-sm p-6">
-                        <h3 className="font-bold">{q.title}</h3>
-                        <p className="text-gray-600 mt-2">{q.question}</p>
-                        <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-                          <span>{q.answers_count} answers</span>
-                          <span>{new Date(q.created_at).toLocaleDateString()}</span>
+                    {questions.map((q) => {
+                      // Generate institute link using the helper
+                      const instType = (q.institution_type || 'college').toLowerCase();
+                      const instituteLink = q.serial_number && q.college_name 
+                        ? getInstitutionDetailUrl(instType, q.college_id, q.college_name, null, q.serial_number)
+                        : '#';
+                      
+                      return (
+                        <div key={q.id} className="bg-white rounded-xl shadow-sm p-6">
+                          {/* Institute Name */}
+                          {q.college_name && (
+                            <Link to={instituteLink} className="text-sm text-blue-600 hover:underline font-medium mb-2 block">
+                              {q.college_name}
+                            </Link>
+                          )}
+                          <h3 className="font-bold">{q.title}</h3>
+                          <p className="text-gray-600 mt-2">{q.question}</p>
+                          <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
+                            <span>{q.answers_count || 0} answers</span>
+                            <span>{new Date(q.created_at).toLocaleDateString()}</span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
