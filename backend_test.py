@@ -1034,6 +1034,150 @@ class APITester:
                 self.log_test("Comprehensive Settings Update", False, 
                              f"Status: {status}", response)
 
+    def test_user_dashboard_apis(self):
+        """Test User Dashboard APIs - Profile update, reviews, questions, liked"""
+        print("👤 Testing User Dashboard APIs (Session Changes)...")
+        
+        # Store test data for cleanup
+        self.test_review_id = None
+        self.test_user_id = None
+        
+        # Test 1: Create a test user first
+        test_user_data = {
+            "email": "mail.nirmalsarkar@gmail.com",
+            "password": "testpass123",
+            "name": "Nirmalendu Sarkar"
+        }
+        
+        # Try to login with existing user credentials
+        success, response, status = self.make_request("POST", "/auth/login", test_user_data)
+        if success and "access_token" in response:
+            self.test_user_token = response["access_token"]
+            self.test_user_id = response.get("user", {}).get("id")
+            self.log_test("Login Test User for Dashboard", True, f"User logged in: {response.get('user', {}).get('name')}")
+        else:
+            self.log_test("Login Test User for Dashboard", False, f"Status: {status}", response)
+            self.test_user_token = None
+            return
+        
+        # Test 2: PUT /api/user/profile - Update profile with UPI/Bank details
+        if self.test_user_token:
+            profile_update_data = {
+                "payment_details": {
+                    "upi_id": "test@paytm",
+                    "bank_name": "Test Bank",
+                    "account_number": "1234567890",
+                    "ifsc_code": "TEST0001234",
+                    "account_holder_name": "Nirmalendu Sarkar"
+                }
+            }
+            
+            success, response, status = self.make_request("PUT", "/user/profile", profile_update_data, token=self.test_user_token)
+            if success and "payment_details" in response:
+                payment_details = response.get("payment_details", {})
+                upi_updated = payment_details.get("upi_id") == "test@paytm"
+                bank_updated = payment_details.get("bank_name") == "Test Bank"
+                
+                if upi_updated and bank_updated:
+                    self.log_test("PUT /user/profile (UPI/Bank update)", True, 
+                                 f"Payment details updated: UPI={payment_details.get('upi_id')}, Bank={payment_details.get('bank_name')}")
+                else:
+                    self.log_test("PUT /user/profile (UPI/Bank update)", False, 
+                                 f"Payment details not updated correctly: {payment_details}")
+            else:
+                self.log_test("PUT /user/profile (UPI/Bank update)", False, f"Status: {status}", response)
+        
+        # Test 3: GET /api/user/reviews - Should return institution_type and serial_number
+        if self.test_user_token:
+            success, response, status = self.make_request("GET", "/user/reviews", token=self.test_user_token)
+            if success and isinstance(response, list):
+                reviews_count = len(response)
+                
+                # Check if reviews have required fields
+                has_required_fields = True
+                missing_fields = []
+                
+                for review in response:
+                    if "institution_type" not in review:
+                        has_required_fields = False
+                        missing_fields.append("institution_type")
+                    if "serial_number" not in review:
+                        has_required_fields = False
+                        missing_fields.append("serial_number")
+                    if "college_name" not in review:
+                        has_required_fields = False
+                        missing_fields.append("college_name")
+                
+                if has_required_fields or reviews_count == 0:
+                    self.log_test("GET /user/reviews (with institution details)", True, 
+                                 f"Retrieved {reviews_count} reviews with required fields")
+                else:
+                    unique_missing = list(set(missing_fields))
+                    self.log_test("GET /user/reviews (with institution details)", False, 
+                                 f"Missing fields in reviews: {unique_missing}")
+            else:
+                self.log_test("GET /user/reviews (with institution details)", False, f"Status: {status}", response)
+        
+        # Test 4: GET /api/user/questions - Should return college_name, institution_type, serial_number
+        if self.test_user_token:
+            success, response, status = self.make_request("GET", "/user/questions", token=self.test_user_token)
+            if success and isinstance(response, list):
+                questions_count = len(response)
+                
+                # Check if questions have required fields
+                has_required_fields = True
+                missing_fields = []
+                
+                for question in response:
+                    if "college_name" not in question:
+                        has_required_fields = False
+                        missing_fields.append("college_name")
+                    if "institution_type" not in question:
+                        has_required_fields = False
+                        missing_fields.append("institution_type")
+                    if "serial_number" not in question:
+                        has_required_fields = False
+                        missing_fields.append("serial_number")
+                
+                if has_required_fields or questions_count == 0:
+                    self.log_test("GET /user/questions (with college details)", True, 
+                                 f"Retrieved {questions_count} questions with required fields")
+                else:
+                    unique_missing = list(set(missing_fields))
+                    self.log_test("GET /user/questions (with college details)", False, 
+                                 f"Missing fields in questions: {unique_missing}")
+            else:
+                self.log_test("GET /user/questions (with college details)", False, f"Status: {status}", response)
+        
+        # Test 5: GET /api/user/liked - Should return institution_type and serial_number
+        if self.test_user_token:
+            success, response, status = self.make_request("GET", "/user/liked", token=self.test_user_token)
+            if success and isinstance(response, list):
+                liked_count = len(response)
+                
+                # Check if liked items have required fields
+                has_required_fields = True
+                missing_fields = []
+                
+                for liked_item in response:
+                    college = liked_item.get("college", {})
+                    if "institution_type" not in college:
+                        has_required_fields = False
+                        missing_fields.append("institution_type")
+                    if "serial_number" not in college:
+                        has_required_fields = False
+                        missing_fields.append("serial_number")
+                
+                if has_required_fields or liked_count == 0:
+                    self.log_test("GET /user/liked (with institution details)", True, 
+                                 f"Retrieved {liked_count} liked items with required fields")
+                else:
+                    unique_missing = list(set(missing_fields))
+                    self.log_test("GET /user/liked (with institution details)", False, 
+                                 f"Missing fields in liked items: {unique_missing}")
+            else:
+                self.log_test("GET /user/liked (with institution details)", False, f"Status: {status}", response)
+
     def test_review_system(self):
         """Test Review System - Points allocation, approval, rejection"""
         print("⭐ Testing Review System (Points Allocation Fix)...")
