@@ -612,7 +612,7 @@ async def remove_favorite(college_id: str, request: Request, db=Depends(get_db))
 
 @router.get("/liked")
 async def get_liked_colleges(request: Request, db=Depends(get_db)):
-    """Get liked colleges"""
+    """Get liked colleges with full details for URL generation"""
     user = await get_current_user(request, db)
     
     likes = await db.likes.find(
@@ -620,11 +620,11 @@ async def get_liked_colleges(request: Request, db=Depends(get_db)):
         {"_id": 0}
     ).sort("created_at", -1).to_list(100)
     
-    # Get college details
+    # Get college details including serial_number and institution_type for URL generation
     college_ids = [like_item["entity_id"] for like_item in likes]
     colleges = await db.colleges.find(
         {"id": {"$in": college_ids}},
-        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "location": 1}
+        {"_id": 0, "id": 1, "name": 1, "logo_url": 1, "location": 1, "institution_type": 1, "serial_number": 1}
     ).to_list(100)
     
     colleges_map = {c["id"]: c for c in colleges}
