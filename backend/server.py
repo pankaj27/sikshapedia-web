@@ -3939,14 +3939,15 @@ async def create_college(college_data: CollegeCreate, background_tasks: Backgrou
     admin_role = admin.get("role", "data_entry") if admin else "data_entry"
     
     # Super admin/content_manager can publish directly, data_entry creates as draft/pending
-    requested_status = college_data.model_dump().get('status', 'draft')
+    college_dict_input = college_data.model_dump()
+    requested_status = college_dict_input.pop('status', 'draft')  # Remove status from dict to avoid duplicate
     if requested_status == 'published' and admin_role == 'data_entry':
         initial_status = 'pending'  # Data entry cannot publish directly
     else:
         initial_status = requested_status if admin_role in ['super_admin', 'admin', 'content_manager'] else 'draft'
     
     college = College(
-        **college_data.model_dump(), 
+        **college_dict_input, 
         total_courses=len(college_data.courses), 
         serial_number=next_serial,
         status=initial_status,
