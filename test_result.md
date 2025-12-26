@@ -1,166 +1,52 @@
-# Test Results - Write Review Feature
+# Test Results - December 26, 2025
 
-## Test Date: December 25, 2025
+## Changes Made in This Session
 
-## Current Session Testing Goals:
-1. Test Write Review navigation flow from institute detail page ✅ COMPLETED
-2. Test Write Review form with pre-filled institute data ✅ COMPLETED
-3. Test complete review submission flow ✅ COMPLETED
+### 1. Review System Backend Fix
+- File: `/app/backend/routes/reviews_questions.py`
+- Fix: Added checks for schools and universities collections (not just colleges)
 
-## Test Scenarios Executed:
+### 2. WriteReviewPage Updates
+- File: `/app/frontend/src/pages/WriteReviewPage.js`
+- Added login prompt for non-logged-in users
+- Fixed message when coming from institute page (Pre-selected vs QR)
+- Fixed course dropdown object rendering issue
 
-### Scenario 1: Navigation from Institute Detail Page to Write Review ✅ PASSED
-- ✅ Navigate to `/schools/017-delhi-public-school` - Successfully loaded school detail page
-- ✅ Found and clicked Reviews tab to access Reviews section
-- ✅ Found "Write Review" button in Reviews section
-- ❌ Direct navigation from Reviews section shows login modal (authentication issue)
-- ✅ Direct URL navigation works: `/write-review?type=school&serial=17&slug=dps-mathura-road`
-- ✅ Institute is pre-filled correctly with "Dps Mathura Road"
-- ✅ Institute shows "SCHOOL" type with school icon (🏫)
-- ✅ "Verified via QR" badge is visible and correctly displayed
-- ✅ Institute selection is locked (cannot be changed)
+### 3. User Dashboard Fixes
+- File: `/app/frontend/src/pages/UserDashboard.js`
+- My Reviews: Fixed institute links using getInstitutionDetailUrl
+- My Questions: Added institute name display with clickable links
+- My Favorites: Made college name clickable
+- My Liked Institutes: Made college name clickable with proper URL format
+- Redeem Points: Added Bank/UPI payment method selection
 
-### Scenario 2: Complete Review Submission Flow (logged-in user) ✅ PASSED
-- ✅ Login as admin user successful
-- ✅ Navigate to Write Review page with pre-filled institute data
-- ✅ Course dropdown works and contains options (Science Stream, Commerce Stream, Humanities)
-- ✅ Successfully filled out review details:
-  - ✅ Rating: 4 stars (clickable star interface works)
-  - ✅ Title: "Great School" (character counter shows 12/100)
-  - ✅ Pros: "Excellent teachers and facilities" (textarea works correctly)
-  - ✅ Cons: "Can improve parking" (textarea works correctly)
-  - ✅ Detailed review: 314 characters for bonus points
-- ✅ Points calculator shows correct calculation (100 pts total)
-- ✅ Personal details step shows pre-filled name and email
-- ✅ Graduation year dropdown works and includes years back to 1990
-- ✅ Verification document upload section is present
-- ✅ Submit Review button becomes enabled when all required fields are filled
+### 4. Backend User Dashboard
+- File: `/app/backend/routes/user_dashboard.py`
+- Added PUT /profile endpoint for updating profile
+- Enhanced /reviews endpoint with institution_type and serial_number
+- Enhanced /questions endpoint with college details
+- Enhanced /comments endpoint with proper URL generation
+- Enhanced /liked endpoint with institution_type and serial_number
+- Added generate_institution_url helper function
 
-### Scenario 3: Points Calculator Live Update ✅ PASSED
-- ✅ Base 50 points shown initially in points calculator widget
-- ✅ Typed 314 characters in detailed review (200+ requirement met)
-- ✅ Bonus +50 points appear correctly (total shows 100 pts)
-- ✅ Progress bar turns green at 200+ characters
-- ✅ Bonus message displays: "🎉 Great job! Your detailed review qualifies for bonus points."
-- ✅ Character counter shows progress correctly
+### 5. Homepage Settings Admin
+- File: `/app/frontend/src/pages/admin/HomepageSettings.js`
+- Added fallback for missing city icons
 
-## Test Credentials Used:
-- Admin User: admin@admissionbuddy.co / admin123 ✅ WORKING
+## Test Credentials
+- Admin: admin@admissionbuddy.co / Admin@123
+- User: mail.nirmalsarkar@gmail.com (Nirmalendu Sarkar)
 
-## Detailed Test Results:
+## API Endpoints to Test
+1. PUT /api/user/profile - Update profile with UPI/Bank details
+2. GET /api/user/reviews - Should return institution_type and serial_number
+3. GET /api/user/questions - Should return college_name and details
+4. GET /api/user/liked - Should return institution_type and serial_number
+5. POST /api/reviews - Should work for schools and universities
+6. GET /api/write-review-settings - Check min_review_characters setting
 
-### Navigation Flow Test Results:
-1. ✅ School detail page loads correctly at `/schools/017-delhi-public-school`
-2. ✅ Reviews tab is accessible and clickable
-3. ✅ Write Review button is visible in Reviews section
-4. ⚠️ Authentication issue: Write Review button shows login modal even when logged in
-5. ✅ Direct URL navigation works perfectly with correct parameters
-
-### Form Field Test Results:
-1. ✅ Institute pre-fill works correctly
-2. ✅ Course dropdown populated with appropriate options
-3. ✅ Rating system (5 stars) works correctly
-4. ✅ Review Title field with character counter (100 max)
-5. ✅ Pros field (textarea) works correctly
-6. ✅ Cons field (textarea) works correctly  
-7. ✅ Detailed Review field with live character counting and progress bar
-8. ✅ Facility rating stars for Infrastructure, Faculty, Placements, Hostel, Campus Life
-9. ✅ Name field (pre-filled from profile)
-10. ✅ Email field (pre-filled and read-only)
-11. ✅ Graduation Year dropdown (2025 down to 1990)
-12. ✅ Verification Document upload area with file type restrictions
-
-### Points Calculator Test Results:
-1. ✅ Shows base 50 points initially
-2. ✅ Updates to 100 points when detailed review exceeds 200 characters
-3. ✅ Progress bar visual feedback works correctly
-4. ✅ Bonus message appears at 200+ characters
-5. ✅ Real-time character counting works
-
-## Issues Found:
-1. ⚠️ **Minor Authentication Issue**: Write Review button in Reviews section shows login modal even when user is logged in. However, direct URL navigation works correctly.
-
-## Overall Assessment: ✅ PASSED
-The Write Review feature is working correctly with all major functionality implemented and tested successfully. The minor authentication issue with the button click does not prevent users from accessing the feature via direct URL navigation.
-
----
-
-## Code Audit and Fix - December 26, 2025
-
-### Critical Bug Found and Fixed:
-**Issue:** Review and Question submission APIs were only checking the `colleges` collection for institute verification. This caused "College not found" errors when trying to review schools or universities.
-
-**Fix Applied in `/app/backend/routes/reviews_questions.py`:**
-1. **Line ~269 (create_review endpoint):** Now checks `colleges`, `schools`, and `universities` collections
-2. **Line ~459 (create_question endpoint):** Now checks `colleges`, `schools`, and `universities` collections
-
-### Code Changes Summary:
-```python
-# Before (only checked colleges):
-college = await db.colleges.find_one({"id": review_data.college_id})
-if not college:
-    raise HTTPException(status_code=404, detail="College not found")
-
-# After (checks all institution types):
-college = await db.colleges.find_one({"id": review_data.college_id})
-if not college:
-    college = await db.schools.find_one({"id": review_data.college_id})
-if not college:
-    college = await db.universities.find_one({"id": review_data.college_id})
-if not college:
-    raise HTTPException(status_code=404, detail="Institute not found")
-```
-
-### Files Modified:
-- `/app/backend/routes/reviews_questions.py`
-
-### Testing Status:
-- Backend server restarted successfully ✅
-- Frontend Write Review page loads correctly ✅
-- Institute search form working ✅
-- Full E2E test completed ✅
-
-### Backend API Testing Results (December 26, 2025):
-
-#### Review System Institute Verification Fix - COMPREHENSIVE TESTING COMPLETED ✅
-
-**Test Summary:**
-- **Total Tests:** 12
-- **Passed:** 11 (91.7% success rate)
-- **Failed:** 1 (minor admin approval test - not critical)
-
-**Critical Fix Verification:**
-✅ **College Review Submission** - API correctly finds colleges in `colleges` collection
-✅ **School Review Submission** - API correctly finds schools in `schools` collection (FIXED)
-✅ **University Review Submission** - API correctly finds universities in `universities` collection (FIXED)
-✅ **Invalid Institute ID** - API correctly returns 404 "Institute not found" when ID doesn't exist in any collection
-
-**Question Submission Fix Verification:**
-✅ **College Question Submission** - API correctly finds colleges in `colleges` collection
-✅ **School Question Submission** - API correctly finds schools in `schools` collection (FIXED)
-✅ **University Question Submission** - API correctly finds universities in `universities` collection (FIXED)
-✅ **Invalid Institute ID for Questions** - API correctly returns 404 "Institute not found" when ID doesn't exist in any collection
-
-**API Endpoints Tested:**
-- `POST /api/reviews` - Create review (all institution types) ✅
-- `GET /api/reviews` - Get all reviews ✅
-- `GET /api/reviews/college/{college_id}` - Get reviews for specific institute ✅
-- `POST /api/questions` - Create question (all institution types) ✅
-- `PATCH /api/reviews/{review_id}/approve` - Admin approve review (admin auth working) ✅
-
-**Key Fix Confirmed:**
-The review and question submission APIs now correctly check all three collections (`colleges`, `schools`, `universities`) instead of only checking the `colleges` collection. This eliminates the "College not found" errors when reviewing schools or universities.
-
-**Test Credentials Used:**
-- Admin: admin@admissionbuddy.co / admin123 ✅ WORKING
-- User: reviewtester@example.com / testpass123 ✅ WORKING
-
-**Database Verification:**
-- Found 1 College: Indian Institute of Management Ahmedabad
-- Found 1 School: Delhi Public School, Mathura Road  
-- Found 1 University: Delhi University
-- All institution types can be reviewed and questioned successfully
-
-### Overall Assessment: ✅ REVIEW SYSTEM FIX SUCCESSFUL
-The critical bug has been resolved. Users can now successfully submit reviews and questions for schools and universities without encountering "College not found" errors. The API correctly searches across all three institution collections as intended.
+## Frontend Pages to Test
+1. /write-review - Login prompt should appear for non-logged users
+2. /dashboard - My Reviews, Questions, Liked sections with clickable links
+3. /dashboard - Redeem Points form with Bank/UPI selection
 
