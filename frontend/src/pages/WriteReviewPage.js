@@ -615,8 +615,8 @@ const WriteReviewPage = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">Step 1: Select Your Institute</h2>
               
-              {/* Show locked institute info when from QR */}
-              {isFromQR && formData.instituteName ? (
+              {/* Show locked institute info when from QR or Institute Page */}
+              {(isFromQR || isFromInstitutePage) && formData.instituteName ? (
                 <div className="space-y-4">
                   {/* Locked Institute Display */}
                   <div className={`border-2 rounded-lg p-4 ${
@@ -654,11 +654,13 @@ const WriteReviewPage = () => {
                       </div>
                       <div className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
                         <FiCheckCircle size={12} />
-                        Verified via QR
+                        {isFromQR ? 'Verified via QR' : 'Pre-selected'}
                       </div>
                     </div>
                     <p className="text-xs text-gray-600">
-                      You scanned the QR code for this institute. The institute is pre-selected and cannot be changed.
+                      {isFromQR 
+                        ? 'You scanned the QR code for this institute. The institute is pre-selected and cannot be changed.'
+                        : 'You are reviewing this institute from its detail page. The institute is pre-selected and cannot be changed.'}
                     </p>
                   </div>
 
