@@ -580,7 +580,7 @@ const UserDashboard = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/favicon.png" alt="admissionbuddy" className="h-8" />
+              <img loading="lazy" src="/favicon.png" alt="admissionbuddy" className="h-8" />
               <span className="font-bold text-lg text-gray-900 hidden sm:block">admissionbuddy</span>
             </Link>
             <div className="flex items-center gap-4">
@@ -952,7 +952,7 @@ const UserDashboard = () => {
                         <div key={fav.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
                           <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center">
                             {fav.college?.logo_url ? (
-                              <img src={fav.college.logo_url} alt="" className="w-12 h-12 object-contain" />
+                              <img loading="lazy" src={fav.college.logo_url} alt="" className="w-12 h-12 object-contain" />
                             ) : (
                               <FiBookmark className="text-orange-600 text-2xl" />
                             )}

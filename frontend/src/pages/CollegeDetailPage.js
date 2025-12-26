@@ -585,7 +585,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* Logo */}
               <div className="w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-white rounded-xl shadow-lg border-2 border-gray-100 flex items-center justify-center flex-shrink-0 -mt-10 md:-mt-14 lg:-mt-16 overflow-hidden">
                 {(college.logo_url || college.images?.[0]) ? (
-                  <img src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-full h-full object-contain p-2" />
+                  <img loading="lazy" src={college.logo_url || college.images[0]} alt={college.logo_alt || college.name} className="w-full h-full object-contain p-2" />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                     <span className="text-white text-2xl md:text-3xl lg:text-4xl font-bold">{college.name?.charAt(0)}</span>
@@ -945,7 +945,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                               {/* Image Block */}
                               {block.type === 'image' && block.url && (
                                 <figure style={{ width: block.width || '100%' }} className="mx-auto">
-                                  <img src={block.url} alt={block.alt || ''} title={block.title || ''} className="rounded-lg w-full" />
+                                  <img loading="lazy" src={block.url} alt={block.alt || ''} title={block.title || ''} className="rounded-lg w-full" />
                                   {block.caption && <figcaption className="text-center text-sm text-gray-600 mt-2">{block.caption}</figcaption>}
                                 </figure>
                               )}
@@ -1067,7 +1067,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {college.seo_images.map((img, idx) => (
                         <div key={idx} className="rounded-lg overflow-hidden border">
-                          <img src={typeof img === 'string' ? img : img.url} alt={typeof img === 'object' ? img.alt : `${college.name} Image ${idx + 1}`} className="w-full h-48 object-cover" />
+                          <img loading="lazy" src={typeof img === 'string' ? img : img.url} alt={typeof img === 'object' ? img.alt : `${college.name} Image ${idx + 1}`} className="w-full h-48 object-cover" />
                         </div>
                       ))}
                     </div>
@@ -1938,7 +1938,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       <div className="grid grid-cols-3 gap-4 mt-6 mb-8">
                         {(college.campus_images || college.images.slice(1)).slice(0, 6).map((img, i) => (
                           <div key={i} className="rounded-lg aspect-video overflow-hidden border">
-                            <img src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
+                            <img loading="lazy" src={img} alt={`Campus ${i + 1}`} className="w-full h-full object-cover" />
                           </div>
                         ))}
                       </div>
@@ -2624,7 +2624,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                         <Link to={getInstitutionDetailUrl(item.institution_type || 'college', item.id, item.name, item.city, item.serial_number)} className="block hover:bg-gray-50 p-2 rounded -mx-2 transition-colors">
                           <div className="flex gap-3">
                             {item.logo_url ? (
-                              <img src={item.logo_url} alt={item.name} className="w-16 h-16 rounded object-cover flex-shrink-0" />
+                              <img loading="lazy" src={item.logo_url} alt={item.name} className="w-16 h-16 rounded object-cover flex-shrink-0" />
                             ) : (
                               <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded flex items-center justify-center flex-shrink-0">
                                 <span className="text-xl font-bold text-blue-700">{item.name?.charAt(0)}</span>

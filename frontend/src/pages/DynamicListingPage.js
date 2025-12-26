@@ -1315,7 +1315,7 @@ const DynamicListingPage = () => {
                       return (
                         <a key={card.id} href={card.ad_click_url || '#'} target="_blank" rel="noopener noreferrer" className="group">
                           <div className="rounded-xl overflow-hidden h-full hover:shadow-xl hover:-translate-y-0.5 transition-all">
-                            <img src={card.ad_image_url} alt={card.ad_alt_text || 'Advertisement'} className="w-full h-16 md:h-20 object-cover" />
+                            <img loading="lazy" src={card.ad_image_url} alt={card.ad_alt_text || 'Advertisement'} className="w-full h-16 md:h-20 object-cover" />
                           </div>
                         </a>
                       );
@@ -1466,7 +1466,7 @@ const DynamicListingPage = () => {
                             {/* Image Block */}
                             {block.type === 'image' && block.url && (
                               <figure style={{ width: block.width || '100%' }} className="mx-auto">
-                                <img src={block.url} alt={block.alt || ''} title={block.title || ''} className="rounded-lg w-full" />
+                                <img loading="lazy" src={block.url} alt={block.alt || ''} title={block.title || ''} className="rounded-lg w-full" />
                                 {block.caption && <figcaption className="text-center text-sm text-gray-600 mt-2">{block.caption}</figcaption>}
                               </figure>
                             )}
@@ -2195,7 +2195,7 @@ const DynamicListingPage = () => {
                                     'bg-gradient-to-br from-emerald-100 to-emerald-200'
                                   }`}>
                                     {featured.logo_url ? (
-                                      <img src={featured.logo_url} alt={featured.name} className="w-full h-full object-contain p-1" />
+                                      <img loading="lazy" src={featured.logo_url} alt={featured.name} className="w-full h-full object-contain p-1" />
                                     ) : (
                                       <span className={`text-lg font-bold ${
                                         fIdx === 0 ? 'text-blue-600' :
@@ -2260,7 +2260,7 @@ const DynamicListingPage = () => {
                                     'bg-gradient-to-br from-emerald-100 to-emerald-200'
                                   }`}>
                                     {college.logo_url ? (
-                                      <img src={college.logo_url} alt={college.name} className="w-full h-full object-contain p-1" />
+                                      <img loading="lazy" src={college.logo_url} alt={college.name} className="w-full h-full object-contain p-1" />
                                     ) : (
                                       <span className={`text-lg font-bold ${
                                         aIdx === 0 ? 'text-green-600' :
@@ -2339,7 +2339,7 @@ const DynamicListingPage = () => {
                           {/* Logo */}
                           <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-gray-100 group-hover:border-blue-200 transition-colors shadow-sm">
                             {inst.logo_url ? (
-                              <img src={inst.logo_url} alt={`${inst.name} logo`} className="w-full h-full object-contain p-1.5" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<span class="text-xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">${inst.name?.charAt(0) || 'C'}</span>`; }} />
+                              <img loading="lazy" src={inst.logo_url} alt={`${inst.name} logo`} className="w-full h-full object-contain p-1.5" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<span class="text-xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">${inst.name?.charAt(0) || 'C'}</span>`; }} />
                             ) : (
                               <span className="text-xl md:text-2xl font-bold bg-gradient-to-br from-blue-600 to-indigo-600 bg-clip-text text-transparent">{inst.name?.charAt(0)}</span>
                             )}
