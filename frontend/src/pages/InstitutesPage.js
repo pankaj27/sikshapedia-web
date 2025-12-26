@@ -31,35 +31,38 @@ const InstitutesPage = () => {
     const fetchInstitutes = async () => {
       setLoading(true);
       try {
-        // Fetch from all three endpoints in parallel
-        const [collegesRes, schoolsRes, universitiesRes] = await Promise.all([
-          api.get(`/colleges?state=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] })),
-          api.get(`/schools?state=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] })),
-          api.get(`/universities?state=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] }))
-        ]);
-
-        const colleges = (collegesRes.data || []).map(c => ({ ...c, _type: 'college' }));
-        const schools = (schoolsRes.data || []).map(s => ({ ...s, _type: 'school' }));
-        const universities = (universitiesRes.data || []).map(u => ({ ...u, _type: 'university' }));
-
-        // Also try fetching by city if state returns nothing
-        if (colleges.length === 0 && schools.length === 0 && universities.length === 0) {
-          const [collegesCityRes, schoolsCityRes, universitiesCityRes] = await Promise.all([
-            api.get(`/colleges?city=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] })),
-            api.get(`/schools?city=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] })),
-            api.get(`/universities?city=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] }))
-          ]);
-          
-          colleges.push(...(collegesCityRes.data || []).map(c => ({ ...c, _type: 'college' })));
-          schools.push(...(schoolsCityRes.data || []).map(s => ({ ...s, _type: 'school' })));
-          universities.push(...(universitiesCityRes.data || []).map(u => ({ ...u, _type: 'university' })));
-        }
-
-        const allInstitutes = [...colleges, ...schools, ...universities];
+        // Fetch all institutions from /colleges endpoint (it contains all types)
+        // The institution_type field determines if it's College, School, or University
+        let allInstitutes = [];
         
-        setInstitutes(allInstitutes);
+        // Try by state first
+        const stateRes = await api.get(`/colleges?state=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] }));
+        allInstitutes = stateRes.data || [];
+        
+        // If no results, try by city
+        if (allInstitutes.length === 0) {
+          const cityRes = await api.get(`/colleges?city=${encodeURIComponent(locationName)}&limit=100`).catch(() => ({ data: [] }));
+          allInstitutes = cityRes.data || [];
+        }
+        
+        // Categorize by institution_type
+        const categorized = allInstitutes.map(inst => {
+          const instType = (inst.institution_type || 'college').toLowerCase();
+          return {
+            ...inst,
+            _type: instType === 'school' || instType === 'schools' ? 'school' :
+                   instType === 'university' || instType === 'universities' ? 'university' : 'college'
+          };
+        });
+        
+        // Count by type
+        const colleges = categorized.filter(i => i._type === 'college');
+        const schools = categorized.filter(i => i._type === 'school');
+        const universities = categorized.filter(i => i._type === 'university');
+        
+        setInstitutes(categorized);
         setCounts({
-          all: allInstitutes.length,
+          all: categorized.length,
           colleges: colleges.length,
           schools: schools.length,
           universities: universities.length
