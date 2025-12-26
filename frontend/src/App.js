@@ -17,6 +17,7 @@ import CollegeDetailPage from './pages/CollegeDetailPage';
 const CollegeSubPage = lazy(() => import('./pages/CollegeSubPage'));
 const SchoolsPage = lazy(() => import('./pages/SchoolsPage'));
 const UniversitiesPage = lazy(() => import('./pages/UniversitiesPage'));
+const InstitutesPage = lazy(() => import('./pages/InstitutesPage'));
 const ExamsPage = lazy(() => import('./pages/ExamsPage'));
 const ExamPage = lazy(() => import('./pages/ExamPage'));
 const NewsPage = lazy(() => import('./pages/NewsPage'));
