@@ -702,7 +702,9 @@ const WriteReviewPage = () => {
                     >
                       <option value="">Select your course</option>
                       {courses.map((course, idx) => (
-                        <option key={idx} value={course}>{course}</option>
+                        <option key={idx} value={typeof course === 'string' ? course : course?.name || ''}>
+                          {typeof course === 'string' ? course : course?.name || 'Unknown Course'}
+                        </option>
                       ))}
                     </select>
                     {coursesLoading && (
@@ -831,7 +833,9 @@ const WriteReviewPage = () => {
                     >
                       <option value="">{formData.instituteId ? 'Select your course' : 'Select institute first'}</option>
                       {courses.map((course, idx) => (
-                        <option key={idx} value={course}>{course}</option>
+                        <option key={idx} value={typeof course === 'string' ? course : course?.name || ''}>
+                          {typeof course === 'string' ? course : course?.name || 'Unknown Course'}
+                        </option>
                       ))}
                     </select>
                     {coursesLoading && (
