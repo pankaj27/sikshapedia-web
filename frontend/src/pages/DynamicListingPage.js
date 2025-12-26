@@ -400,6 +400,16 @@ const DynamicListingPage = () => {
     if (queryFilters.recognition) {
       active.recognition = toDisplayName(queryFilters.recognition);
     }
+    // Add state and city from query parameters
+    if (queryFilters.state && !active.state) {
+      active.state = queryFilters.state;
+    }
+    if (queryFilters.city && !active.city) {
+      active.city = queryFilters.city;
+    }
+    if (queryFilters.course && !active.course) {
+      active.course = queryFilters.course;
+    }
     
     return active;
   }, [pageInfo, queryFilters]);
