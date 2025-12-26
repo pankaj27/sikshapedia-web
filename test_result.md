@@ -82,3 +82,41 @@
 
 ## Overall Assessment: ✅ PASSED
 The Write Review feature is working correctly with all major functionality implemented and tested successfully. The minor authentication issue with the button click does not prevent users from accessing the feature via direct URL navigation.
+
+---
+
+## Code Audit and Fix - December 26, 2025
+
+### Critical Bug Found and Fixed:
+**Issue:** Review and Question submission APIs were only checking the `colleges` collection for institute verification. This caused "College not found" errors when trying to review schools or universities.
+
+**Fix Applied in `/app/backend/routes/reviews_questions.py`:**
+1. **Line ~269 (create_review endpoint):** Now checks `colleges`, `schools`, and `universities` collections
+2. **Line ~459 (create_question endpoint):** Now checks `colleges`, `schools`, and `universities` collections
+
+### Code Changes Summary:
+```python
+# Before (only checked colleges):
+college = await db.colleges.find_one({"id": review_data.college_id})
+if not college:
+    raise HTTPException(status_code=404, detail="College not found")
+
+# After (checks all institution types):
+college = await db.colleges.find_one({"id": review_data.college_id})
+if not college:
+    college = await db.schools.find_one({"id": review_data.college_id})
+if not college:
+    college = await db.universities.find_one({"id": review_data.college_id})
+if not college:
+    raise HTTPException(status_code=404, detail="Institute not found")
+```
+
+### Files Modified:
+- `/app/backend/routes/reviews_questions.py`
+
+### Testing Status:
+- Backend server restarted successfully ✅
+- Frontend Write Review page loads correctly ✅
+- Institute search form working ✅
+- Full E2E test pending
+
