@@ -191,7 +191,23 @@ def test_user_dashboard():
             else:
                 print(f"❌ POST /reviews (University) failed: {status} - {response}")
     
-    # Test 7: GET /api/write-review-settings
+    # Test 8: Check if reviews now have required fields
+    success, response, status = make_request("GET", "/user/reviews", token=user_token)
+    if success and isinstance(response, list):
+        print(f"✅ GET /user/reviews after submission: {len(response)} reviews")
+        if response:
+            for i, review in enumerate(response):
+                required_fields = ["institution_type", "serial_number", "college_name"]
+                missing = [f for f in required_fields if f not in review]
+                if not missing:
+                    print(f"   ✅ Review {i+1} has all required fields: {required_fields}")
+                else:
+                    print(f"   ❌ Review {i+1} missing fields: {missing}")
+                    print(f"       Available fields: {list(review.keys())}")
+    else:
+        print(f"❌ GET /user/reviews after submission failed: {status} - {response}")
+    
+    # Test 9: GET /api/write-review-settings
     success, response, status = make_request("GET", "/write-review-settings")
     if success and isinstance(response, dict):
         min_chars = response.get("min_review_characters")
