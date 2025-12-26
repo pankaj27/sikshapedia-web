@@ -2157,7 +2157,7 @@ const DynamicListingPage = () => {
             {loading ? (
               <div className="bg-white rounded-xl shadow-lg p-12 text-center">
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600 font-medium">Finding the best colleges for you...</p>
+                <p className="text-gray-600 font-medium">Finding the best {pageInfo.isSchools ? 'schools' : pageInfo.isUniversity ? 'universities' : 'colleges'} for you...</p>
               </div>
             ) : institutions.length === 0 ? (
               <div className="bg-white rounded-xl shadow-lg p-12 text-center">
