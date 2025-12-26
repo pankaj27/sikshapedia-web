@@ -2467,7 +2467,7 @@ const DynamicListingPage = () => {
               {loadingMore && (
                 <div className="flex justify-center items-center gap-3">
                   <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-200 border-t-blue-600"></div>
-                  <span className="text-gray-600 font-medium">Loading more colleges...</span>
+                  <span className="text-gray-600 font-medium">Loading more {pageInfo.isSchools ? 'schools' : pageInfo.isUniversity ? 'universities' : 'colleges'}...</span>
                 </div>
               )}
               
