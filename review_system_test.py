@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Focused Review System Testing for Educational Portal
-Tests the specific requirements from the review request
+Review System Testing - Institute Verification Fix
+Tests the specific fix for review and question submission APIs to check all three collections: colleges, schools, and universities
 """
 
 import requests
@@ -15,7 +15,13 @@ BASE_URL = "https://edureview-fixes.preview.emergentagent.com/api"
 # Test credentials
 ADMIN_CREDENTIALS = {
     "email": "admin@admissionbuddy.co",
-    "password": "admin123"
+    "password": "Admin@123"
+}
+
+USER_CREDENTIALS = {
+    "email": "reviewtester@example.com",
+    "password": "testpass123",
+    "name": "Review Tester"
 }
 
 class ReviewSystemTester:
@@ -24,6 +30,7 @@ class ReviewSystemTester:
         self.admin_token = None
         self.user_token = None
         self.test_results = []
+        self.test_review_ids = []
         
     def log_test(self, test_name: str, success: bool, details: str = "", response_data: Any = None):
         """Log test result"""
@@ -87,307 +94,343 @@ class ReviewSystemTester:
         """Setup admin and user authentication"""
         print("🔐 Setting up Authentication...")
         
-        # Admin login
+        # Test 1: Admin login
         success, response, status = self.make_request("POST", "/auth/login", ADMIN_CREDENTIALS)
         if success and "access_token" in response:
             self.admin_token = response["access_token"]
-            self.log_test("Admin Authentication", True, f"Admin logged in: {response.get('user', {}).get('name')}")
+            user_info = response.get('user', {})
+            self.log_test("Admin Login", True, 
+                         f"Admin logged in: {user_info.get('name', 'N/A')}")
         else:
-            self.log_test("Admin Authentication", False, f"Status: {status}", response)
-            return False
+            self.log_test("Admin Login", False, f"Status: {status}", response)
         
-        # Create/login test user
-        test_user_data = {
-            "email": "reviewsystemtest@example.com",
-            "password": "testpass123",
-            "name": "Review System Tester"
-        }
-        
-        success, response, status = self.make_request("POST", "/auth/register", test_user_data)
+        # Test 2: Create/Login test user
+        success, response, status = self.make_request("POST", "/auth/register", USER_CREDENTIALS)
         if success and "access_token" in response:
             self.user_token = response["access_token"]
-            self.user_id = response.get("user", {}).get("id")
-            self.log_test("Test User Creation", True, f"User created: {response.get('user', {}).get('name')}")
+            user_info = response.get('user', {})
+            self.log_test("User Registration", True, 
+                         f"User created: {user_info.get('name', 'N/A')}")
         else:
             # Try to login if user already exists
             success, response, status = self.make_request("POST", "/auth/login", {
-                "email": test_user_data["email"],
-                "password": test_user_data["password"]
+                "email": USER_CREDENTIALS["email"],
+                "password": USER_CREDENTIALS["password"]
             })
             if success and "access_token" in response:
                 self.user_token = response["access_token"]
-                self.user_id = response.get("user", {}).get("id")
-                self.log_test("Test User Login", True, f"User logged in: {response.get('user', {}).get('name')}")
+                user_info = response.get('user', {})
+                self.log_test("User Login", True, 
+                             f"User logged in: {user_info.get('name', 'N/A')}")
             else:
-                self.log_test("Test User Authentication", False, f"Status: {status}", response)
-                return False
-        
-        return True
+                self.log_test("User Authentication", False, f"Status: {status}", response)
 
-    def get_test_college(self):
-        """Get a college for testing"""
-        success, response, status = self.make_request("GET", "/colleges?limit=5")
-        if success and isinstance(response, list) and len(response) > 0:
-            # Find a college that doesn't have a review from our test user
-            for college in response:
-                college_id = college.get("id")
-                college_name = college.get("name", "Test College")
-                
-                # Check existing reviews
-                success_check, reviews, _ = self.make_request("GET", f"/reviews?limit=100")
-                if success_check and isinstance(reviews, list):
-                    user_has_review = any(
-                        review.get("college_id") == college_id and 
-                        review.get("user_id") == self.user_id 
-                        for review in reviews
-                    )
-                    
-                    if not user_has_review:
-                        return college_id, college_name
+    def test_review_college_verification(self):
+        """Test reviewing a COLLEGE - should work"""
+        print("🏫 Testing College Review Submission...")
+        
+        # Get colleges
+        success, colleges_response, status = self.make_request("GET", "/colleges?institution_type=College&limit=5")
+        if success and isinstance(colleges_response, list) and len(colleges_response) > 0:
+            college = colleges_response[0]
+            college_id = college.get("id")
+            college_name = college.get("name", "Test College")
             
-            # If all colleges have reviews, use the first one anyway
-            return response[0].get("id"), response[0].get("name", "Test College")
-        
-        return None, None
+            college_review_data = {
+                "college_id": college_id,
+                "rating": 4,
+                "review_title": "Great college experience",
+                "review_text": "This is a detailed review of the college. The faculty is excellent and the infrastructure is modern. The placement opportunities are good and the campus life is vibrant. Overall, I would recommend this college to prospective students.",
+                "course": "Computer Science Engineering",
+                "graduation_year": "2024",
+                "pros": "Good faculty, modern infrastructure, excellent placements",
+                "cons": "High fees, limited parking",
+                "placements_rating": 4,
+                "infrastructure_rating": 5,
+                "faculty_rating": 4
+            }
+            
+            success, response, status = self.make_request("POST", "/reviews", college_review_data, token=self.user_token)
+            if success and "id" in response:
+                review_id = response.get("id")
+                self.test_review_ids.append(review_id)
+                self.log_test("POST /reviews (College Review)", True, 
+                             f"College review submitted successfully for: {college_name}")
+            elif status == 400 and "already reviewed" in str(response):
+                self.log_test("POST /reviews (College Review)", True, 
+                             f"User already reviewed this college: {college_name} (expected behavior)")
+            else:
+                self.log_test("POST /reviews (College Review)", False, f"Status: {status}", response)
+        else:
+            self.log_test("POST /reviews (College Review)", False, "No colleges available for testing")
 
-    def test_review_submission_no_points(self):
-        """Test 1: Review submission should NOT award points immediately"""
-        print("📝 Testing Review Submission (No Immediate Points)...")
+    def test_review_school_verification(self):
+        """Test reviewing a SCHOOL - should work with the fix"""
+        print("🏫 Testing School Review Submission...")
         
-        college_id, college_name = self.get_test_college()
-        if not college_id:
-            self.log_test("Get Test College", False, "No colleges available")
-            return None
+        # Get schools
+        success, schools_response, status = self.make_request("GET", "/schools?limit=5")
+        if success and isinstance(schools_response, list) and len(schools_response) > 0:
+            school = schools_response[0]
+            school_id = school.get("id")
+            school_name = school.get("name", "Test School")
+            
+            school_review_data = {
+                "college_id": school_id,  # API uses college_id for all institution types
+                "rating": 5,
+                "review_title": "Excellent school for children",
+                "review_text": "This school provides excellent education with dedicated teachers. The infrastructure is modern and the extracurricular activities are well-organized. My child has shown great improvement in academics and overall personality development.",
+                "course": "Science Stream",
+                "graduation_year": "2024",
+                "pros": "Excellent teachers, modern facilities, good extracurricular activities",
+                "cons": "Can improve parking facilities",
+                "placements_rating": 4,
+                "infrastructure_rating": 5,
+                "faculty_rating": 5
+            }
+            
+            success, response, status = self.make_request("POST", "/reviews", school_review_data, token=self.user_token)
+            if success and "id" in response:
+                review_id = response.get("id")
+                self.test_review_ids.append(review_id)
+                self.log_test("POST /reviews (School Review)", True, 
+                             f"School review submitted successfully for: {school_name}")
+            elif status == 400 and "already reviewed" in str(response):
+                self.log_test("POST /reviews (School Review)", True, 
+                             f"User already reviewed this school: {school_name} (expected behavior)")
+            else:
+                self.log_test("POST /reviews (School Review)", False, f"Status: {status}", response)
+        else:
+            self.log_test("POST /reviews (School Review)", False, "No schools available for testing")
+
+    def test_review_university_verification(self):
+        """Test reviewing a UNIVERSITY - should work with the fix"""
+        print("🏛️ Testing University Review Submission...")
         
-        self.log_test("Get Test College", True, f"Using: {college_name}")
+        # Get universities
+        success, universities_response, status = self.make_request("GET", "/universities?limit=5")
+        if success and isinstance(universities_response, list) and len(universities_response) > 0:
+            university = universities_response[0]
+            university_id = university.get("id")
+            university_name = university.get("name", "Test University")
+            
+            university_review_data = {
+                "college_id": university_id,  # API uses college_id for all institution types
+                "rating": 4,
+                "review_title": "Good university with research opportunities",
+                "review_text": "This university offers excellent research opportunities and has a diverse student body. The faculty is knowledgeable and the campus facilities are well-maintained. The library resources are extensive and helpful for academic work.",
+                "course": "Master of Business Administration",
+                "graduation_year": "2024",
+                "pros": "Research opportunities, diverse student body, excellent library",
+                "cons": "High fees, competitive environment",
+                "placements_rating": 4,
+                "infrastructure_rating": 4,
+                "faculty_rating": 5
+            }
+            
+            success, response, status = self.make_request("POST", "/reviews", university_review_data, token=self.user_token)
+            if success and "id" in response:
+                review_id = response.get("id")
+                self.test_review_ids.append(review_id)
+                self.log_test("POST /reviews (University Review)", True, 
+                             f"University review submitted successfully for: {university_name}")
+            elif status == 400 and "already reviewed" in str(response):
+                self.log_test("POST /reviews (University Review)", True, 
+                             f"User already reviewed this university: {university_name} (expected behavior)")
+            else:
+                self.log_test("POST /reviews (University Review)", False, f"Status: {status}", response)
+        else:
+            self.log_test("POST /reviews (University Review)", False, "No universities available for testing")
+
+    def test_invalid_institute_verification(self):
+        """Test with invalid institute ID - should fail with 404"""
+        print("❌ Testing Invalid Institute ID...")
         
-        # Get user's initial state
-        success, user_before, status = self.make_request("GET", "/auth/me", token=self.user_token)
-        if not success:
-            self.log_test("Get User Initial State", False, f"Status: {status}")
-            return None
-        
-        initial_earnings = user_before.get("total_earnings", 0)
-        
-        # Submit review
-        review_data = {
-            "college_id": college_id,
-            "rating": 4,
-            "review_title": "Test Review for Points System",
-            "review_text": "This is a comprehensive test review to verify that points are not awarded immediately upon submission. The review system should only award points after admin approval. This ensures quality control and prevents spam reviews.",
-            "course": "Computer Science",
-            "year_of_study": "Final Year",
-            "pros": "Good testing environment",
-            "cons": "None for testing",
-            "placements_rating": 4,
-            "infrastructure_rating": 4,
-            "faculty_rating": 4
+        invalid_review_data = {
+            "college_id": "invalid-institute-id-12345",
+            "rating": 3,
+            "review_title": "This should fail",
+            "review_text": "This review should fail because the institute ID doesn't exist in any collection.",
+            "course": "Test Course",
+            "graduation_year": "2024"
         }
         
-        success, response, status = self.make_request("POST", "/reviews", review_data, token=self.user_token)
-        if success and "id" in response:
-            review_id = response.get("id")
-            review_status = response.get("status")
-            
-            if review_status == "pending":
-                self.log_test("Review Submission Status", True, f"Status: {review_status} (correct)")
-            else:
-                self.log_test("Review Submission Status", False, f"Expected 'pending', got: {review_status}")
-            
-            # Verify no points awarded immediately
-            success, user_after, status = self.make_request("GET", "/auth/me", token=self.user_token)
-            if success:
-                after_earnings = user_after.get("total_earnings", 0)
-                if after_earnings == initial_earnings:
-                    self.log_test("No Immediate Points Award", True, f"Earnings unchanged: {initial_earnings}")
-                else:
-                    self.log_test("No Immediate Points Award", False, f"Earnings changed: {initial_earnings} → {after_earnings}")
-            
-            return review_id, college_name
-            
-        elif status == 400 and "already reviewed" in str(response):
-            # Find existing review
-            success, reviews, _ = self.make_request("GET", "/reviews?limit=100")
-            if success:
-                for review in reviews:
-                    if (review.get("college_id") == college_id and 
-                        review.get("user_id") == self.user_id):
-                        self.log_test("Review Submission", True, f"Using existing review (user already reviewed this college)")
-                        return review.get("id"), college_name
-            
-            self.log_test("Review Submission", False, "User already reviewed but couldn't find existing review")
-            return None, None
+        success, response, status = self.make_request("POST", "/reviews", invalid_review_data, token=self.user_token)
+        if not success and status == 404 and "Institute not found" in str(response):
+            self.log_test("POST /reviews (Invalid Institute ID)", True, 
+                         "Correctly rejected review for non-existent institute")
         else:
-            self.log_test("Review Submission", False, f"Status: {status}", response)
-            return None, None
+            self.log_test("POST /reviews (Invalid Institute ID)", False, 
+                         f"Should have returned 404 'Institute not found' but got status {status}", response)
 
-    def test_review_approval_awards_points(self, review_id: str, college_name: str):
-        """Test 2: Review approval should award points"""
-        print("✅ Testing Review Approval (Awards Points)...")
+    def test_question_college_verification(self):
+        """Test asking a question about a COLLEGE - should work"""
+        print("❓ Testing College Question Submission...")
         
-        if not review_id:
-            self.log_test("Review Approval Test", False, "No review ID available")
-            return
-        
-        # Get user's state before approval
-        success, user_before, status = self.make_request("GET", "/auth/me", token=self.user_token)
-        if not success:
-            self.log_test("Get User State Before Approval", False, f"Status: {status}")
-            return
-        
-        before_earnings = user_before.get("total_earnings", 0)
-        
-        # Approve the review
-        success, response, status = self.make_request("PATCH", f"/reviews/{review_id}/approve", token=self.admin_token)
-        if success and response.get("status") == "approved":
-            points_awarded = response.get("points_awarded", 0)
-            self.log_test("Review Approval", True, f"Review approved, points awarded: {points_awarded}")
+        # Get colleges
+        success, colleges_response, status = self.make_request("GET", "/colleges?institution_type=College&limit=5")
+        if success and isinstance(colleges_response, list) and len(colleges_response) > 0:
+            college = colleges_response[0]
+            college_id = college.get("id")
+            college_name = college.get("name", "Test College")
             
-            # Verify points were awarded
-            success, user_after, status = self.make_request("GET", "/auth/me", token=self.user_token)
-            if success:
-                after_earnings = user_after.get("total_earnings", 0)
-                earnings_increase = after_earnings - before_earnings
-                
-                if earnings_increase > 0:
-                    self.log_test("Points Awarded After Approval", True, f"Earnings increased by: {earnings_increase}")
-                else:
-                    self.log_test("Points Awarded After Approval", False, f"No earnings increase: {before_earnings} → {after_earnings}")
+            question_data = {
+                "college_id": college_id,
+                "question": "What are the admission requirements for Computer Science Engineering?"
+            }
+            
+            success, response, status = self.make_request("POST", "/questions", question_data, token=self.user_token)
+            if success and "id" in response:
+                self.log_test("POST /questions (College Question)", True, 
+                             f"College question submitted successfully for: {college_name}")
             else:
-                self.log_test("Points Awarded After Approval", False, "Could not verify user state after approval")
+                self.log_test("POST /questions (College Question)", False, f"Status: {status}", response)
         else:
-            self.log_test("Review Approval", False, f"Status: {status}", response)
+            self.log_test("POST /questions (College Question)", False, "No colleges available for testing")
 
-    def test_review_rejection_with_reason(self):
-        """Test 3: Review rejection with reason"""
-        print("❌ Testing Review Rejection (With Reason)...")
+    def test_question_school_verification(self):
+        """Test asking a question about a SCHOOL - should work with the fix"""
+        print("❓ Testing School Question Submission...")
         
-        college_id, college_name = self.get_test_college()
-        if not college_id:
-            self.log_test("Get College for Rejection Test", False, "No colleges available")
-            return
+        # Get schools
+        success, schools_response, status = self.make_request("GET", "/schools?limit=5")
+        if success and isinstance(schools_response, list) and len(schools_response) > 0:
+            school = schools_response[0]
+            school_id = school.get("id")
+            school_name = school.get("name", "Test School")
+            
+            question_data = {
+                "college_id": school_id,  # API uses college_id for all institution types
+                "question": "What are the admission requirements for Class 11 Science stream?"
+            }
+            
+            success, response, status = self.make_request("POST", "/questions", question_data, token=self.user_token)
+            if success and "id" in response:
+                self.log_test("POST /questions (School Question)", True, 
+                             f"School question submitted successfully for: {school_name}")
+            else:
+                self.log_test("POST /questions (School Question)", False, f"Status: {status}", response)
+        else:
+            self.log_test("POST /questions (School Question)", False, "No schools available for testing")
+
+    def test_question_university_verification(self):
+        """Test asking a question about a UNIVERSITY - should work with the fix"""
+        print("❓ Testing University Question Submission...")
         
-        # Create a new user for rejection test to avoid "already reviewed" error
-        reject_user_data = {
-            "email": "rejecttest@example.com",
-            "password": "testpass123",
-            "name": "Reject Test User"
+        # Get universities
+        success, universities_response, status = self.make_request("GET", "/universities?limit=5")
+        if success and isinstance(universities_response, list) and len(universities_response) > 0:
+            university = universities_response[0]
+            university_id = university.get("id")
+            university_name = university.get("name", "Test University")
+            
+            question_data = {
+                "college_id": university_id,  # API uses college_id for all institution types
+                "question": "What are the research opportunities available for MBA students?"
+            }
+            
+            success, response, status = self.make_request("POST", "/questions", question_data, token=self.user_token)
+            if success and "id" in response:
+                self.log_test("POST /questions (University Question)", True, 
+                             f"University question submitted successfully for: {university_name}")
+            else:
+                self.log_test("POST /questions (University Question)", False, f"Status: {status}", response)
+        else:
+            self.log_test("POST /questions (University Question)", False, "No universities available for testing")
+
+    def test_question_invalid_institute(self):
+        """Test asking a question with invalid institute ID - should fail with 404"""
+        print("❌ Testing Invalid Institute ID for Questions...")
+        
+        invalid_question_data = {
+            "college_id": "invalid-institute-id-12345",
+            "question": "This question should fail because the institute ID doesn't exist."
         }
         
-        success, response, status = self.make_request("POST", "/auth/register", reject_user_data)
-        if success and "access_token" in response:
-            reject_user_token = response["access_token"]
-            reject_user_id = response.get("user", {}).get("id")
+        success, response, status = self.make_request("POST", "/questions", invalid_question_data, token=self.user_token)
+        if not success and status == 404 and "Institute not found" in str(response):
+            self.log_test("POST /questions (Invalid Institute ID)", True, 
+                         "Correctly rejected question for non-existent institute")
         else:
-            # Try login if user exists
-            success, response, status = self.make_request("POST", "/auth/login", {
-                "email": reject_user_data["email"],
-                "password": reject_user_data["password"]
-            })
-            if success and "access_token" in response:
-                reject_user_token = response["access_token"]
-                reject_user_id = response.get("user", {}).get("id")
-            else:
-                self.log_test("Create Reject Test User", False, f"Status: {status}")
-                return
-        
-        # Submit a review to reject
-        review_data = {
-            "college_id": college_id,
-            "rating": 1,
-            "review_title": "Poor review for testing rejection",
-            "review_text": "This is a test review that will be rejected.",
-            "course": "Test Course"
-        }
-        
-        success, response, status = self.make_request("POST", "/reviews", review_data, token=reject_user_token)
-        if success and "id" in response:
-            reject_review_id = response.get("id")
-            
-            # Reject with reason
-            reject_data = {"reason": "Review does not meet quality standards for testing purposes"}
-            success, response, status = self.make_request("PATCH", f"/reviews/{reject_review_id}/reject", 
-                                                        reject_data, token=self.admin_token)
-            if success and response.get("status") == "rejected":
-                self.log_test("Review Rejection", True, "Review rejected successfully")
-                
-                # Verify rejection reason is saved
-                success, reviews, status = self.make_request("GET", "/reviews?limit=100")
-                if success and isinstance(reviews, list):
-                    rejected_review = next((r for r in reviews if r.get("id") == reject_review_id), None)
-                    
-                    if rejected_review and rejected_review.get("rejection_reason"):
-                        self.log_test("Rejection Reason Saved", True, 
-                                     f"Reason: {rejected_review.get('rejection_reason')}")
-                    else:
-                        self.log_test("Rejection Reason Saved", False, "Rejection reason not found")
-                else:
-                    self.log_test("Rejection Reason Saved", False, "Could not fetch reviews")
-            else:
-                self.log_test("Review Rejection", False, f"Status: {status}", response)
-        elif status == 400 and "already reviewed" in str(response):
-            self.log_test("Review Rejection Test", True, "User already has review - rejection test skipped")
-        else:
-            self.log_test("Review Rejection Test", False, f"Could not create review for rejection: {status}")
+            self.log_test("POST /questions (Invalid Institute ID)", False, 
+                         f"Should have returned 404 'Institute not found' but got status {status}", response)
 
-    def test_get_all_reviews_admin(self):
-        """Test 4: Get all reviews endpoint for admin"""
-        print("📋 Testing Get All Reviews (Admin Endpoint)...")
+    def test_review_apis(self):
+        """Test review retrieval APIs"""
+        print("📋 Testing Review Retrieval APIs...")
         
-        success, response, status = self.make_request("GET", "/reviews?limit=100")
+        # Test 1: Get all reviews
+        success, response, status = self.make_request("GET", "/reviews")
         if success and isinstance(response, list):
-            review_count = len(response)
-            self.log_test("Get All Reviews", True, f"Retrieved {review_count} reviews")
-            
-            # Check if reviews have required fields
-            if review_count > 0:
-                sample_review = response[0]
-                required_fields = ["college_name", "status", "points_earned"]
-                missing_fields = [field for field in required_fields if field not in sample_review]
-                
-                if not missing_fields:
-                    self.log_test("Review Fields Validation", True, 
-                                 f"All required fields present: {required_fields}")
-                else:
-                    self.log_test("Review Fields Validation", False, 
-                                 f"Missing fields: {missing_fields}")
-                
-                # Check status distribution
-                status_counts = {}
-                for review in response:
-                    status = review.get("status", "unknown")
-                    status_counts[status] = status_counts.get(status, 0) + 1
-                
-                self.log_test("Review Status Distribution", True, 
-                             f"Status counts: {status_counts}")
-            else:
-                self.log_test("Review Fields Validation", True, "No reviews to validate")
+            self.log_test("GET /reviews", True, f"Retrieved {len(response)} reviews")
         else:
-            self.log_test("Get All Reviews", False, f"Status: {status}", response)
+            self.log_test("GET /reviews", False, f"Status: {status}", response)
+        
+        # Test 2: Get reviews for specific college (if we have test reviews)
+        if self.test_review_ids:
+            # Get the college ID from one of our test reviews
+            success, all_reviews, status = self.make_request("GET", "/reviews?limit=100")
+            if success and isinstance(all_reviews, list):
+                for review in all_reviews:
+                    if review.get("id") in self.test_review_ids:
+                        college_id = review.get("college_id")
+                        college_name = review.get("college_name", "Unknown")
+                        
+                        success, college_reviews, status = self.make_request("GET", f"/reviews/college/{college_id}")
+                        if success and isinstance(college_reviews, list):
+                            self.log_test(f"GET /reviews/college/{college_id}", True, 
+                                         f"Retrieved {len(college_reviews)} reviews for {college_name}")
+                        else:
+                            self.log_test(f"GET /reviews/college/{college_id}", False, 
+                                         f"Status: {status}", college_reviews)
+                        break
+
+    def test_admin_approval(self):
+        """Test admin approval functionality"""
+        print("👑 Testing Admin Approval...")
+        
+        if self.admin_token and self.test_review_ids:
+            review_id = self.test_review_ids[0]
+            success, response, status = self.make_request("PATCH", f"/reviews/{review_id}/approve", 
+                                                        token=self.admin_token)
+            if success and response.get("status") == "approved":
+                self.log_test("PATCH /reviews/{id}/approve", True, 
+                             f"Review approved successfully")
+            else:
+                self.log_test("PATCH /reviews/{id}/approve", False, f"Status: {status}", response)
+        else:
+            self.log_test("PATCH /reviews/{id}/approve", False, "Admin token or review ID not available")
 
     def run_all_tests(self):
         """Run all review system tests"""
-        print("⭐ REVIEW SYSTEM TESTING")
-        print("Testing the review system enhancements for admissionbuddy.co")
+        print("🚀 REVIEW SYSTEM TESTING - Institute Verification Fix")
+        print("🌐 Base URL:", BASE_URL)
         print("=" * 80)
         
         # Setup
-        if not self.setup_authentication():
-            print("❌ Authentication setup failed - aborting tests")
+        self.setup_authentication()
+        
+        if not self.user_token:
+            print("❌ Cannot proceed without user authentication")
             return
         
-        # Test 1: Review submission (no immediate points)
-        review_id, college_name = self.test_review_submission_no_points()
+        # Test review submission for all institution types
+        self.test_review_college_verification()
+        self.test_review_school_verification()
+        self.test_review_university_verification()
+        self.test_invalid_institute_verification()
         
-        # Test 2: Review approval (awards points)
-        if review_id:
-            self.test_review_approval_awards_points(review_id, college_name)
+        # Test question submission for all institution types
+        self.test_question_college_verification()
+        self.test_question_school_verification()
+        self.test_question_university_verification()
+        self.test_question_invalid_institute()
         
-        # Test 3: Review rejection with reason
-        self.test_review_rejection_with_reason()
+        # Test review APIs
+        self.test_review_apis()
         
-        # Test 4: Get all reviews (admin endpoint)
-        self.test_get_all_reviews_admin()
+        # Test admin functionality
+        self.test_admin_approval()
         
         # Summary
         print("=" * 80)
@@ -397,18 +440,24 @@ class ReviewSystemTester:
         total_tests = len(self.test_results)
         passed_tests = sum(1 for result in self.test_results if result["success"])
         failed_tests = total_tests - passed_tests
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
         
         print(f"Total Tests: {total_tests}")
         print(f"✅ Passed: {passed_tests}")
         print(f"❌ Failed: {failed_tests}")
-        print(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+        print(f"Success Rate: {success_rate:.1f}%")
         
         if failed_tests > 0:
             print("\n❌ FAILED TESTS:")
             for result in self.test_results:
                 if not result["success"]:
                     print(f"  - {result['test']}: {result['details']}")
+        
+        print("=" * 80)
+        
+        return failed_tests == 0
 
 if __name__ == "__main__":
     tester = ReviewSystemTester()
-    tester.run_all_tests()
+    success = tester.run_all_tests()
+    sys.exit(0 if success else 1)
