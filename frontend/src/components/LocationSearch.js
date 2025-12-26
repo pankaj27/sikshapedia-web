@@ -137,12 +137,13 @@ const LocationSearch = () => {
   ];
 
   const handleLocationClick = (type, value) => {
+    // Use window.location.href for full page reload to ensure proper navigation
     if (type === 'state') {
-      navigate(`/colleges?state=${encodeURIComponent(value)}`);
+      window.location.href = `/colleges?state=${encodeURIComponent(value)}`;
     } else if (type === 'city') {
-      navigate(`/colleges?city=${encodeURIComponent(value)}`);
+      window.location.href = `/colleges?city=${encodeURIComponent(value)}`;
     } else if (type === 'country') {
-      navigate(`/study-abroad?country=${encodeURIComponent(value)}`);
+      window.location.href = `/study-abroad?country=${encodeURIComponent(value)}`;
     }
   };
 
