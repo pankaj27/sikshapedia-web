@@ -1213,7 +1213,107 @@ class APITester:
                 self.test_user_token = None
                 return
         
-        # Test 2: Get a college ID for testing
+        # Test 2: Get institutions for testing (schools and universities)
+        success, response, status = self.make_request("GET", "/colleges?limit=10")
+        if success and isinstance(response, list) and len(response) > 0:
+            # Look for schools and universities
+            self.test_school_id = None
+            self.test_university_id = None
+            self.test_college_id = None
+            
+            for institution in response:
+                inst_type = institution.get("institution_type", "").lower()
+                if inst_type == "school" and not self.test_school_id:
+                    self.test_school_id = institution.get("id")
+                    self.test_school_name = institution.get("name", "Test School")
+                elif inst_type == "university" and not self.test_university_id:
+                    self.test_university_id = institution.get("id")
+                    self.test_university_name = institution.get("name", "Test University")
+                elif inst_type == "college" and not self.test_college_id:
+                    self.test_college_id = institution.get("id")
+                    self.test_college_name = institution.get("name", "Test College")
+            
+            found_institutions = []
+            if self.test_school_id:
+                found_institutions.append(f"School: {self.test_school_name}")
+            if self.test_university_id:
+                found_institutions.append(f"University: {self.test_university_name}")
+            if self.test_college_id:
+                found_institutions.append(f"College: {self.test_college_name}")
+            
+            if found_institutions:
+                self.log_test("Get Test Institutions for Review", True, f"Found: {', '.join(found_institutions)}")
+            else:
+                self.log_test("Get Test Institutions for Review", False, "No schools, universities, or colleges found")
+                return
+        else:
+            self.log_test("Get Test Institutions for Review", False, "No institutions available for testing")
+            return
+        
+        # Test 3: Submit review for a school (should NOT get "College not found" error)
+        if self.test_school_id and self.test_user_token:
+            school_review_data = {
+                "college_id": self.test_school_id,
+                "rating": 4,
+                "review_title": "Great school experience",
+                "review_text": "This is a detailed review of the school. The teachers are excellent and the infrastructure is modern. The academic programs are well-structured and the extracurricular activities are diverse. Overall, I would recommend this school to parents looking for quality education.",
+                "course": "Class 10",
+                "year_of_study": "Final Year",
+                "pros": "Good teachers, modern infrastructure, excellent academics",
+                "cons": "High fees, limited sports facilities"
+            }
+            
+            success, response, status = self.make_request("POST", "/reviews", school_review_data, token=self.test_user_token)
+            if success and "id" in response:
+                self.log_test("POST /reviews (School submission)", True, 
+                             f"School review submitted successfully, ID: {response.get('id')}")
+            elif status == 400 and "already reviewed" in str(response):
+                self.log_test("POST /reviews (School submission)", True, 
+                             "User already has review for this school (expected)")
+            elif "College not found" in str(response) or "Institute not found" in str(response):
+                self.log_test("POST /reviews (School submission)", False, 
+                             "Got 'College/Institute not found' error for school - this should be fixed")
+            else:
+                self.log_test("POST /reviews (School submission)", False, f"Status: {status}", response)
+        
+        # Test 4: Submit review for a university (should NOT get "College not found" error)
+        if self.test_university_id and self.test_user_token:
+            university_review_data = {
+                "college_id": self.test_university_id,
+                "rating": 5,
+                "review_title": "Excellent university experience",
+                "review_text": "This is a detailed review of the university. The faculty is world-class and the research opportunities are abundant. The campus facilities are state-of-the-art and the placement support is excellent. The university provides a holistic educational experience.",
+                "course": "Computer Science",
+                "year_of_study": "Final Year",
+                "pros": "World-class faculty, excellent research opportunities, great placements",
+                "cons": "Very competitive environment, high academic pressure"
+            }
+            
+            success, response, status = self.make_request("POST", "/reviews", university_review_data, token=self.test_user_token)
+            if success and "id" in response:
+                self.log_test("POST /reviews (University submission)", True, 
+                             f"University review submitted successfully, ID: {response.get('id')}")
+            elif status == 400 and "already reviewed" in str(response):
+                self.log_test("POST /reviews (University submission)", True, 
+                             "User already has review for this university (expected)")
+            elif "College not found" in str(response) or "Institute not found" in str(response):
+                self.log_test("POST /reviews (University submission)", False, 
+                             "Got 'College/Institute not found' error for university - this should be fixed")
+            else:
+                self.log_test("POST /reviews (University submission)", False, f"Status: {status}", response)
+        
+        # Test 5: Test GET /api/write-review-settings
+        success, response, status = self.make_request("GET", "/write-review-settings")
+        if success and isinstance(response, dict):
+            min_review_chars = response.get("min_review_characters")
+            if min_review_chars is not None:
+                self.log_test("GET /write-review-settings", True, 
+                             f"Settings retrieved, min_review_characters: {min_review_chars}")
+            else:
+                self.log_test("GET /write-review-settings", True, 
+                             f"Settings retrieved but no min_review_characters field")
+        else:
+            self.log_test("GET /write-review-settings", False, f"Status: {status}", response)
         success, response, status = self.make_request("GET", "/colleges?limit=5")
         if success and isinstance(response, list) and len(response) > 0:
             # Try to find a college that the user hasn't reviewed yet
