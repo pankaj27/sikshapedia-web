@@ -2482,7 +2482,7 @@ const HomepageSettings = () => {
                   {settings.cities?.map((city, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex gap-2 items-center mb-2">
-                        {city.image && (
+                        {city.image ? (
                           <div className="relative">
                             <img 
                               src={city.image} 
@@ -2492,7 +2492,20 @@ const HomepageSettings = () => {
                                 width: `${city.iconSize || 40}px`, 
                                 height: `${city.iconSize || 40}px` 
                               }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling && (e.target.nextSibling.style.display = 'flex');
+                              }}
                             />
+                            <div className="hidden items-center justify-center rounded border bg-gray-100 text-gray-400 text-xs"
+                              style={{ width: `${city.iconSize || 40}px`, height: `${city.iconSize || 40}px` }}>
+                              ?
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center rounded border bg-gray-100 text-gray-400 text-xs"
+                            style={{ width: '40px', height: '40px' }}>
+                            No Icon
                           </div>
                         )}
                         <input
