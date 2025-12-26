@@ -286,7 +286,7 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
       {/* Redeem Modal */}
       {showRedeemModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">💸 Redeem Points</h2>
             
             <div className="bg-green-50 p-4 rounded-lg mb-4">
@@ -301,6 +301,7 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
             </div>
 
             <div className="space-y-4">
+              {/* Points Input */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Points to Redeem *
@@ -321,33 +322,103 @@ const EarningsTab = ({ dashboard, earnings, onRefresh }) => {
                 )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  UPI ID *
-                </label>
-                <input
-                  type="text"
-                  value={upiId}
-                  onChange={(e) => setUpiId(e.target.value)}
-                  placeholder="yourname@upi"
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">Enter your UPI ID (e.g., name@paytm, phone@ybl)</p>
-              </div>
+              {/* Payment Method Selection */}
+              {redeemPoints && parseInt(redeemPoints) >= 200 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Select Payment Method *
+                  </label>
+                  <div className="space-y-2">
+                    {/* UPI Option */}
+                    <label className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition ${
+                      paymentMethod === 'upi' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
+                    } ${!hasUpi ? 'opacity-50' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="upi"
+                        checked={paymentMethod === 'upi'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        disabled={!hasUpi}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">UPI</span>
+                          {!hasUpi && <span className="text-xs text-red-500">(Not saved)</span>}
+                        </div>
+                        {hasUpi ? (
+                          <p className="text-sm text-gray-600 mt-1">
+                            UPI ID: <span className="font-medium">{paymentDetails.upi_id}</span>
+                          </p>
+                        ) : (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Add UPI ID in your profile to use this option
+                          </p>
+                        )}
+                      </div>
+                    </label>
+
+                    {/* Bank Option */}
+                    <label className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition ${
+                      paymentMethod === 'bank' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
+                    } ${!hasBank ? 'opacity-50' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="bank"
+                        checked={paymentMethod === 'bank'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        disabled={!hasBank}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">Bank Transfer</span>
+                          {!hasBank && <span className="text-xs text-red-500">(Not saved)</span>}
+                        </div>
+                        {hasBank ? (
+                          <div className="text-sm text-gray-600 mt-1 space-y-0.5">
+                            <p>Bank: <span className="font-medium">{paymentDetails.bank_name}</span></p>
+                            <p>A/C: <span className="font-medium">****{paymentDetails.account_number?.slice(-4)}</span></p>
+                            <p>IFSC: <span className="font-medium">{paymentDetails.ifsc_code}</span></p>
+                          </div>
+                        ) : (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Add bank details in your profile to use this option
+                          </p>
+                        )}
+                      </div>
+                    </label>
+                  </div>
+
+                  {/* Link to update profile */}
+                  {(!hasUpi || !hasBank) && (
+                    <p className="text-xs text-blue-600 mt-2">
+                      <Link to="/profile/edit" className="hover:underline">
+                        → Update payment details in Profile
+                      </Link>
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3 mt-6">
               <Button
                 variant="outline"
                 className="flex-1"
-                onClick={() => setShowRedeemModal(false)}
+                onClick={() => {
+                  setShowRedeemModal(false);
+                  setPaymentMethod('');
+                }}
               >
                 Cancel
               </Button>
               <Button
                 className="flex-1 bg-green-600 hover:bg-green-700"
                 onClick={handleRedeem}
-                disabled={processing || !redeemPoints || !upiId}
+                disabled={processing || !redeemPoints || parseInt(redeemPoints) < 200 || !paymentMethod}
               >
                 {processing ? 'Processing...' : 'Confirm Redemption'}
               </Button>
