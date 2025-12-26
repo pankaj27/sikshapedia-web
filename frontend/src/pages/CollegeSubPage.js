@@ -292,9 +292,12 @@ const CollegeSubPage = () => {
             <div className="flex items-center gap-4">
               {college.logo_url && (
                 <img 
-                  src={college.logo_url.startsWith('/api') ? college.logo_url : `/api${college.logo_url}`}
+                  src={college.logo_url.startsWith('http') ? college.logo_url : 
+                       college.logo_url.startsWith('/') ? `${process.env.REACT_APP_BACKEND_URL}${college.logo_url}` : 
+                       college.logo_url}
                   alt={college.name}
                   className="w-16 h-16 rounded-lg bg-white p-1 object-contain"
+                  onError={(e) => { e.target.style.display = 'none'; }}
                 />
               )}
               <div>
