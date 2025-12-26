@@ -295,17 +295,18 @@ async def get_user_reviews(request: Request, db=Depends(get_db)):
         {"_id": 0}
     ).sort("created_at", -1).to_list(100)
     
-    # Enrich reviews with college details if missing
+    # ALWAYS enrich reviews with college details for proper URL generation
     for review in reviews:
         college_id = review.get("college_id")
-        if college_id and not review.get("college_name"):
-            # Fetch college name and type from database
+        if college_id:
+            # Fetch college details from database
             college = await db.colleges.find_one(
                 {"id": college_id},
                 {"_id": 0, "name": 1, "slug": 1, "institution_type": 1, "serial_number": 1}
             )
             if college:
-                review["college_name"] = college.get("name", "Institute")
+                # Always update these fields for consistent URL generation
+                review["college_name"] = college.get("name", review.get("college_name", "Institute"))
                 review["college_slug"] = college.get("slug")
                 review["institution_type"] = college.get("institution_type", "college")
                 review["serial_number"] = college.get("serial_number")
