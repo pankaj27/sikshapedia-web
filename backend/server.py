@@ -1474,13 +1474,13 @@ class University(BaseModel):
 
 # News Models
 class News(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
-    slug: str
-    category: str  # Admission, Exams, Results, Events, Policy
-    summary: str
-    content: str
+    slug: Optional[str] = None
+    category: Optional[str] = None  # Admission, Exams, Results, Events, Policy
+    summary: Optional[str] = None
+    content: Optional[str] = None
     
     # Media
     featured_image: Optional[str] = None
