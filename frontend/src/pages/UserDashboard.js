@@ -865,7 +865,7 @@ const UserDashboard = () => {
                             
                             {/* Review Title */}
                             {review.review_title && (
-                              <h4 className="font-semibold text-gray-800 mb-2">"{review.review_title}"</h4>
+                              <h4 className="font-semibold text-gray-800 mb-2">&quot;{review.review_title}&quot;</h4>
                             )}
                             
                             {/* Pros & Cons */}
