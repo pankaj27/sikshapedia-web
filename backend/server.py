@@ -156,8 +156,8 @@ class Cutoff(BaseModel):
 class Course(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    degree_type: str
-    duration: str
+    degree_type: Optional[str] = "UG"  # Made optional with default
+    duration: str = ""  # Made optional with default
     description: Optional[str] = None
     stream: Optional[str] = None  # Engineering, Medical, Arts, etc.
     full_name: Optional[str] = None
