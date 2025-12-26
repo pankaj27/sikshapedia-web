@@ -87,7 +87,7 @@ def test_user_dashboard():
     else:
         print(f"❌ PUT /user/profile failed: {status} - {response}")
     
-    # Test 4: GET /api/user/reviews
+    # Test 3: GET /api/user/reviews
     success, response, status = make_request("GET", "/user/reviews", token=user_token)
     if success and isinstance(response, list):
         print(f"✅ GET /user/reviews successful: {len(response)} reviews")
