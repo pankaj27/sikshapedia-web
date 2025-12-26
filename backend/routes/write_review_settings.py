@@ -116,6 +116,14 @@ async def get_write_review_settings():
     if not settings:
         # Return defaults
         return WriteReviewSettings().model_dump()
+    
+    # Ensure min_review_characters defaults to 50 (fix for live site having 200)
+    if settings.get("points_config"):
+        if settings["points_config"].get("min_review_characters") is None or settings["points_config"].get("min_review_characters") == 200:
+            settings["points_config"]["min_review_characters"] = 50
+    else:
+        settings["points_config"] = PointsConfig().model_dump()
+    
     return settings
 
 @write_review_settings_router.get("/admin")
