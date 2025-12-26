@@ -455,10 +455,14 @@ async def create_question(question_data: QuestionCreate, authorization: str = He
     if not user:
         raise HTTPException(status_code=401, detail="Please login to ask a question")
     
-    # Verify college exists
+    # Verify college/institute exists - check all institution types
     college = await db.colleges.find_one({"id": question_data.college_id})
     if not college:
-        raise HTTPException(status_code=404, detail="College not found")
+        college = await db.schools.find_one({"id": question_data.college_id})
+    if not college:
+        college = await db.universities.find_one({"id": question_data.college_id})
+    if not college:
+        raise HTTPException(status_code=404, detail="Institute not found")
     
     question = Question(
         college_id=question_data.college_id,
