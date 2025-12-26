@@ -476,19 +476,19 @@ class ExamDetailed(BaseModel):
 
 # Course Models (Enhanced)
 class CourseDetail(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
-    slug: str
-    full_name: str
-    description: str
-    degree_type: str  # UG, PG, Diploma, Certificate
-    stream: str  # Engineering, Medical, Management, etc.
+    slug: Optional[str] = None
+    full_name: Optional[str] = None
+    description: Optional[str] = None
+    degree_type: Optional[str] = None  # UG, PG, Diploma, Certificate
+    stream: Optional[str] = None  # Engineering, Medical, Management, etc.
     sub_stream: Optional[str] = None
     
     # Duration & Fees
-    duration: str
-    average_fees: float
+    duration: Optional[str] = None
+    average_fees: Optional[float] = 0
     fee_range: Optional[Dict] = None  # min, max
     
     # Eligibility
@@ -533,17 +533,19 @@ class CourseDetail(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CourseDetailCreate(BaseModel):
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     name: str
-    slug: str
-    full_name: str
-    description: str
-    degree_type: str
-    stream: str
-    duration: str
-    average_fees: float
-    eligibility: str
-    entrance_exams: List[str]
-    career_options: List[str]
+    slug: Optional[str] = None
+    full_name: Optional[str] = None
+    description: Optional[str] = None
+    degree_type: Optional[str] = None
+    stream: Optional[str] = None
+    duration: Optional[str] = None
+    average_fees: Optional[float] = 0
+    eligibility: Optional[str] = None
+    entrance_exams: List[str] = []
+    career_options: List[str] = []
+    status: str = "draft"
 
 # Application/Inquiry Models (Enhanced)
 class Application(BaseModel):
