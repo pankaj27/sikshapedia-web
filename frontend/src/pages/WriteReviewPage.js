@@ -143,7 +143,7 @@ const WriteReviewPage = () => {
         instituteId: '' // Will be fetched via API
       }));
       setPrefilledFromUrl(true);
-      setIsFromQR(true); // Lock the institute selection
+      setIsFromInstitutePage(true); // Mark as coming from institute page
       
       // Fetch instituteId using serial number
       const fetchInstituteId = async () => {
