@@ -69,7 +69,7 @@ def test_user_dashboard():
             print(f"❌ User login/registration failed: {status} - {response}")
             return
     
-    # Test 3: PUT /api/user/profile - Update profile with UPI/Bank details
+    # Test 2: PUT /api/user/profile - Update profile with UPI/Bank details
     profile_update_data = {
         "payment_details": {
             "upi_id": "test@paytm",
