@@ -1042,11 +1042,10 @@ class APITester:
         self.test_review_id = None
         self.test_user_id = None
         
-        # Test 1: Create a test user first
+        # Test 1: Login with the correct user credentials from test_result.md
         test_user_data = {
             "email": "mail.nirmalsarkar@gmail.com",
-            "password": "testpass123",
-            "name": "Nirmalendu Sarkar"
+            "password": "Admin@123"  # Using the password from test credentials
         }
         
         # Try to login with existing user credentials
