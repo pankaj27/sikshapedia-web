@@ -145,6 +145,41 @@ async def get_user_profile(request: Request, db=Depends(get_db)):
     user = await get_current_user(request, db)
     return user
 
+@router.put("/profile")
+async def update_user_profile(request: Request, db=Depends(get_db)):
+    """Update user profile including payment details (UPI, bank info)"""
+    user = await get_current_user(request, db)
+    
+    # Get the update data from request body
+    try:
+        profile_data = await request.json()
+    except:
+        raise HTTPException(status_code=400, detail="Invalid request body")
+    
+    # Build update dict - handle payment_details specially
+    update_data = {}
+    
+    for key, value in profile_data.items():
+        if key == "payment_details" and value:
+            # Merge with existing payment details instead of replacing
+            existing_payment = user.get("payment_details", {}) or {}
+            payment_update = {k: v for k, v in value.items() if v is not None}
+            update_data["payment_details"] = {**existing_payment, **payment_update}
+        elif key not in ["id", "_id", "email", "password", "created_at"] and value is not None:
+            update_data[key] = value
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    # Update user
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": update_data}
+    )
+    
+    # Return updated user
+    updated_user = await db.users.find_one({"id": user["id"]}, {"_id": 0})
+    return updated_user
+
 # ============ DASHBOARD OVERVIEW ============
 
 @router.get("/dashboard")
