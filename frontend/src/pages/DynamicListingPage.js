@@ -2143,7 +2143,7 @@ const DynamicListingPage = () => {
                     <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
                       {compareList.length}
                     </div>
-                    <span className="font-semibold text-gray-900">colleges selected for comparison</span>
+                    <span className="font-semibold text-gray-900">{pageInfo.isSchools ? 'schools' : pageInfo.isUniversity ? 'universities' : 'colleges'} selected for comparison</span>
                     <Button size="sm" onClick={() => window.open(`/compare?ids=${compareList.join(',')}`, '_blank')} className="bg-blue-600 hover:bg-blue-700 text-white">
                       Compare Now →
                     </Button>
