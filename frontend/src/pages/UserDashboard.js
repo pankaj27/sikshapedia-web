@@ -861,7 +861,9 @@ const UserDashboard = () => {
                             )}
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold">{fav.college_name}</h3>
+                            <Link to={instituteLink} className="font-semibold text-gray-900 hover:text-blue-600 hover:underline">
+                              {fav.college_name}
+                            </Link>
                             <p className="text-sm text-gray-600">{fav.college?.location?.city}</p>
                           </div>
                           <Link to={instituteLink}>
