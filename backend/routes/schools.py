@@ -16,15 +16,15 @@ def set_database(database):
 
 # School Model
 class School(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     slug: str
-    board: str  # CBSE, ICSE, State Board, IB, IGCSE
-    school_type: str  # Government, Private, International
-    medium: str  # English, Hindi, Regional Language
-    city: str
-    state: str
+    board: Optional[str] = None  # CBSE, ICSE, State Board, IB, IGCSE
+    school_type: Optional[str] = None  # Government, Private, International
+    medium: Optional[str] = None  # English, Hindi, Regional Language
+    city: Optional[str] = None
+    state: Optional[str] = None
     address: Optional[str] = None
     pincode: Optional[str] = None
     established_year: Optional[int] = None
@@ -46,7 +46,7 @@ class School(BaseModel):
     total_area: Optional[str] = None
     total_students: Optional[int] = None
     student_teacher_ratio: Optional[str] = None
-    facilities: List[str] = []
+    facilities: List = []  # Accept any format
     
     # Fees
     admission_fee: Optional[float] = None
@@ -63,6 +63,14 @@ class School(BaseModel):
     phone: Optional[str] = None
     email: Optional[str] = None
     website: Optional[str] = None
+    
+    # Additional fields for consistency with College model
+    admission_process: Optional[str] = None
+    admission_dates: Optional[List] = None
+    cutoff_data: List = []
+    placement: Optional[Dict] = None
+    courses: List = []
+    status: str = "draft"
     
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
