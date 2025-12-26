@@ -165,7 +165,7 @@ const DynamicListingPage = () => {
   // Parse URL using new URL structure
   const urlInfo = useMemo(() => parseInstitutionUrl(location.pathname), [location.pathname]);
   
-  // Parse query parameters for secondary filters (type, accreditation, degree, exam, affiliation, recognition)
+  // Parse query parameters for secondary filters (type, accreditation, degree, exam, affiliation, recognition, state, city)
   const queryFilters = useMemo(() => {
     const params = new URLSearchParams(location.search);
     return {
@@ -175,6 +175,9 @@ const DynamicListingPage = () => {
       examAccepted: params.get('exam') || null,
       affiliation: params.get('affiliation') || null,
       recognition: params.get('recognition') || null,
+      state: params.get('state') || null,
+      city: params.get('city') || null,
+      course: params.get('course') || null,
     };
   }, [location.search]);
   
