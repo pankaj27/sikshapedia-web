@@ -86,6 +86,7 @@ const WriteReviewPage = () => {
   const [pageSettings, setPageSettings] = useState(defaultSettings);
   const [prefilledFromUrl, setPrefilledFromUrl] = useState(false);
   const [isFromQR, setIsFromQR] = useState(false);
+  const [isFromInstitutePage, setIsFromInstitutePage] = useState(false);
   const [qrLinkCode, setQrLinkCode] = useState('');
   
   // Helper to change step and scroll to top
