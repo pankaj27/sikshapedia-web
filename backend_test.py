@@ -6457,6 +6457,9 @@ class APITester:
         # **Review System Testing (Points Allocation Fix):**
         self.test_review_system()
         
+        # **User Dashboard APIs Testing (Session Changes):**
+        self.test_user_dashboard_apis()
+        
         # Legacy User and Institute Dashboard API Tests
         self.test_user_authentication_otp_flow()
         self.test_user_dashboard_apis_unauthorized()
