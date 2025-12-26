@@ -1027,17 +1027,36 @@ const UserDashboard = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {liked.map((item) => (
-                      <div key={item.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
-                        <div className="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center">
-                          <FiHeart className="text-red-500 text-2xl" />
+                    {liked.map((item) => {
+                      // Generate institute link using the helper
+                      const instType = (item.college?.institution_type || 'college').toLowerCase();
+                      const instituteLink = getInstitutionDetailUrl(
+                        instType,
+                        item.entity_id,
+                        item.college?.name || 'Institute',
+                        item.college?.location?.city,
+                        item.college?.serial_number
+                      );
+                      
+                      return (
+                        <div key={item.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
+                          <div className="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center">
+                            <FiHeart className="text-red-500 text-2xl" />
+                          </div>
+                          <div className="flex-1">
+                            <Link to={instituteLink} className="font-semibold text-gray-900 hover:text-blue-600 hover:underline">
+                              {item.college?.name || 'College'}
+                            </Link>
+                            <p className="text-sm text-gray-600">{item.college?.location?.city}</p>
+                          </div>
+                          <Link to={instituteLink}>
+                            <Button variant="ghost" size="sm">
+                              <FiExternalLink />
+                            </Button>
+                          </Link>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{item.college?.name || 'College'}</h3>
-                          <p className="text-sm text-gray-600">{item.college?.location?.city}</p>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
