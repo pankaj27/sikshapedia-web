@@ -320,6 +320,255 @@ const SEOSettings = () => {
           </div>
         ) : (
           <>
+            {/* Tracking & Tags Tab */}
+            {activeTab === 'tracking' && (
+              <div className="space-y-6">
+                <div className="grid lg:grid-cols-2 gap-6">
+                  {/* Google Services */}
+                  <div className="bg-white rounded-lg border p-6">
+                    <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
+                      Google Services
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Google Analytics 4 (GA4) Measurement ID
+                        </label>
+                        <input
+                          type="text"
+                          value={trackingSettings.google_analytics_id}
+                          onChange={(e) => setTrackingSettings({...trackingSettings, google_analytics_id: e.target.value})}
+                          className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                          placeholder="G-XXXXXXXXXX"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Find it in GA4 → Admin → Data Streams → Web Stream</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Google Search Console Verification
+                        </label>
+                        <input
+                          type="text"
+                          value={trackingSettings.google_search_console_verification}
+                          onChange={(e) => setTrackingSettings({...trackingSettings, google_search_console_verification: e.target.value})}
+                          className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                          placeholder="google-site-verification content value"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">The content value from the meta tag, not the full tag</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Google Tag Manager ID
+                        </label>
+                        <input
+                          type="text"
+                          value={trackingSettings.google_tag_manager_id}
+                          onChange={(e) => setTrackingSettings({...trackingSettings, google_tag_manager_id: e.target.value})}
+                          className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                          placeholder="GTM-XXXXXXX"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Other Tracking Pixels */}
+                  <div className="bg-white rounded-lg border p-6">
+                    <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      📊 Other Tracking Services
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Facebook Pixel ID
+                        </label>
+                        <input
+                          type="text"
+                          value={trackingSettings.facebook_pixel_id}
+                          onChange={(e) => setTrackingSettings({...trackingSettings, facebook_pixel_id: e.target.value})}
+                          className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                          placeholder="XXXXXXXXXXXXXXXX"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Microsoft Clarity ID
+                        </label>
+                        <input
+                          type="text"
+                          value={trackingSettings.microsoft_clarity_id}
+                          onChange={(e) => setTrackingSettings({...trackingSettings, microsoft_clarity_id: e.target.value})}
+                          className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                          placeholder="xxxxxxxxxx"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Default Meta Tags */}
+                <div className="bg-white rounded-lg border p-6">
+                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    🏷️ Default Meta Tags (Site-wide)
+                  </h3>
+                  
+                  <div className="grid lg:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Default Title</label>
+                      <input
+                        type="text"
+                        value={trackingSettings.meta_tags?.default_title || ''}
+                        onChange={(e) => setTrackingSettings({
+                          ...trackingSettings, 
+                          meta_tags: {...trackingSettings.meta_tags, default_title: e.target.value}
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        placeholder="Your Website Name - Tagline"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Default Keywords</label>
+                      <input
+                        type="text"
+                        value={trackingSettings.meta_tags?.default_keywords || ''}
+                        onChange={(e) => setTrackingSettings({
+                          ...trackingSettings, 
+                          meta_tags: {...trackingSettings.meta_tags, default_keywords: e.target.value}
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        placeholder="keyword1, keyword2, keyword3"
+                      />
+                    </div>
+                    
+                    <div className="lg:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Default Description</label>
+                      <textarea
+                        value={trackingSettings.meta_tags?.default_description || ''}
+                        onChange={(e) => setTrackingSettings({
+                          ...trackingSettings, 
+                          meta_tags: {...trackingSettings.meta_tags, default_description: e.target.value}
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        rows={2}
+                        placeholder="Brief description of your website (150-160 characters recommended)"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Default OG Image URL</label>
+                      <input
+                        type="url"
+                        value={trackingSettings.meta_tags?.og_image || ''}
+                        onChange={(e) => setTrackingSettings({
+                          ...trackingSettings, 
+                          meta_tags: {...trackingSettings.meta_tags, og_image: e.target.value}
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        placeholder="https://example.com/og-image.jpg"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Twitter @Handle</label>
+                      <input
+                        type="text"
+                        value={trackingSettings.meta_tags?.twitter_site || ''}
+                        onChange={(e) => setTrackingSettings({
+                          ...trackingSettings, 
+                          meta_tags: {...trackingSettings.meta_tags, twitter_site: e.target.value}
+                        })}
+                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                        placeholder="@yourhandle"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Custom Scripts */}
+                <div className="grid lg:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-lg border p-6">
+                    <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                      <FiCode size={18} />
+                      Custom Head Scripts
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-3">Scripts/tags to inject in &lt;head&gt; section</p>
+                    <textarea
+                      value={trackingSettings.custom_head_scripts}
+                      onChange={(e) => setTrackingSettings({...trackingSettings, custom_head_scripts: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                      rows={8}
+                      placeholder="<!-- Custom meta tags, verification codes, etc. -->
+<meta name='custom-tag' content='value' />
+<script>// Custom head script</script>"
+                    />
+                  </div>
+                  
+                  <div className="bg-white rounded-lg border p-6">
+                    <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                      <FiCode size={18} />
+                      Custom Body Scripts
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-3">Scripts to inject before &lt;/body&gt; tag</p>
+                    <textarea
+                      value={trackingSettings.custom_body_scripts}
+                      onChange={(e) => setTrackingSettings({...trackingSettings, custom_body_scripts: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
+                      rows={8}
+                      placeholder="<!-- Chat widgets, analytics scripts, etc. -->
+<script>// Custom body script</script>"
+                    />
+                  </div>
+                </div>
+
+                {/* Preview */}
+                <div className="bg-gray-50 rounded-lg border p-6">
+                  <h3 className="font-semibold text-gray-900 mb-4">📋 Generated Tags Preview</h3>
+                  <pre className="bg-white p-4 rounded-lg text-xs overflow-auto max-h-64 border">
+{`<!-- Google Analytics (GA4) -->
+${trackingSettings.google_analytics_id ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${trackingSettings.google_analytics_id}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${trackingSettings.google_analytics_id}');
+</script>` : '<!-- Not configured -->'}
+
+<!-- Google Search Console Verification -->
+${trackingSettings.google_search_console_verification ? `<meta name="google-site-verification" content="${trackingSettings.google_search_console_verification}" />` : '<!-- Not configured -->'}
+
+<!-- Google Tag Manager -->
+${trackingSettings.google_tag_manager_id ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${trackingSettings.google_tag_manager_id}');</script>` : '<!-- Not configured -->'}
+
+<!-- Facebook Pixel -->
+${trackingSettings.facebook_pixel_id ? `<script>!function(f,b,e,v,n,t,s)...</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${trackingSettings.facebook_pixel_id}&ev=PageView&noscript=1"/></noscript>` : '<!-- Not configured -->'}
+
+<!-- Default Meta Tags -->
+<title>${trackingSettings.meta_tags?.default_title || 'Your Site Title'}</title>
+<meta name="description" content="${trackingSettings.meta_tags?.default_description || ''}" />
+<meta name="keywords" content="${trackingSettings.meta_tags?.default_keywords || ''}" />
+<meta property="og:image" content="${trackingSettings.meta_tags?.og_image || ''}" />
+<meta name="twitter:site" content="${trackingSettings.meta_tags?.twitter_site || ''}" />`}
+                  </pre>
+                </div>
+
+                <Button onClick={saveTrackingSettings} disabled={saving} className="bg-orange-500 hover:bg-orange-600">
+                  <FiSave className="mr-2" size={16} />
+                  {saving ? 'Saving...' : 'Save Tracking & Tags Settings'}
+                </Button>
+              </div>
+            )}
+
             {/* Sitemap Tab */}
             {activeTab === 'sitemap' && (
               <div className="space-y-6">
