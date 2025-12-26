@@ -841,12 +841,15 @@ const UserDashboard = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {favorites.map((fav) => {
-                      // Determine correct route based on institution type
+                      // Use the standard URL helper for consistent link generation
                       const instType = (fav.college?.institution_type || 'college').toLowerCase();
-                      const routePrefix = instType === 'school' ? '/schools' : instType === 'university' ? '/universities' : '/colleges';
-                      const instituteLink = fav.college?.slug 
-                        ? `${routePrefix}/${fav.college.serial_number}/${fav.college.slug}`
-                        : `${routePrefix}/${fav.college_id}`;
+                      const instituteLink = getInstitutionDetailUrl(
+                        instType,
+                        fav.college_id,
+                        fav.college_name || fav.college?.name || 'Institute',
+                        fav.college?.location?.city,
+                        fav.college?.serial_number
+                      );
                       
                       return (
                         <div key={fav.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
