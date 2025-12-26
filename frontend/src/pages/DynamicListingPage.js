@@ -2164,7 +2164,7 @@ const DynamicListingPage = () => {
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FiSearch className="text-gray-400" size={32} />
                 </div>
-                <p className="text-gray-900 text-xl font-bold mb-2">No colleges found</p>
+                <p className="text-gray-900 text-xl font-bold mb-2">No {isSchools ? 'schools' : isUniversity ? 'universities' : 'colleges'} found</p>
                 <p className="text-gray-500 text-sm mb-6">Try adjusting your filters or search criteria</p>
                 <Button onClick={clearFilters} className="bg-blue-600 hover:bg-blue-700 text-white">Clear All Filters</Button>
               </div>
