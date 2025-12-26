@@ -953,17 +953,17 @@ class College(BaseModel):
     updated_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class CollegeCreate(BaseModel):
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="allow")  # Allow extra fields to pass through
     name: str
     slug: str
-    location: Dict
-    established_year: int
-    type: str
+    location: Dict = {}
+    established_year: Optional[int] = None
+    type: Optional[str] = None
     affiliation: Optional[str] = None
     nirf_ranking: Optional[int] = None
-    average_fees: float = 0
-    courses: List = []  # Accept any format (List[Course] or List[Dict])
-    facilities: List = []  # Accept both List[str] and List[Dict]
+    average_fees: Optional[float] = 0
+    courses: List = []
+    facilities: List = []
     contact_info: Dict = {}
     logo_url: Optional[str] = None
     logo_title: Optional[str] = None
@@ -971,11 +971,28 @@ class CollegeCreate(BaseModel):
     banner_url: Optional[str] = None
     banner_title: Optional[str] = None
     banner_alt: Optional[str] = None
-    images: List[str] = []
+    images: List = []
     description: str = ""
-    highlights: List[str] = []
-    accreditations: List[str] = []
+    highlights: List = []
+    accreditations: List = []
     placement_stats: List = []
+    # Admission fields
+    admission_process: Optional[str] = None
+    admission_dates: Optional[Any] = None
+    admission_deadline: Optional[str] = None
+    admission_fees: Optional[Dict] = None
+    is_admission_partner: bool = False
+    is_admission_open: bool = False
+    # Cutoff & Placement
+    cutoff_data: List = []
+    placement: Optional[Dict] = None
+    placements: Optional[Dict] = None
+    # Menu & Content
+    menu_config: Optional[Dict] = None
+    sidebar_widgets: Optional[Dict] = None
+    # Status
+    status: str = "draft"
+    institution_type: Optional[str] = None
 
 # Review Models
 class Review(BaseModel):
