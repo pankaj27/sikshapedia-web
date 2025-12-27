@@ -288,89 +288,92 @@ const CourseDetailPage = () => {
                 />
               </div>
               <div className="prose prose-gray max-w-none">
-                <p className="text-gray-700 leading-relaxed mb-4">{description}</p>
-                <p className="text-gray-700 leading-relaxed">
-                  This program is designed to equip students with both theoretical knowledge and practical skills required in the industry. 
-                  Graduates are well-prepared for diverse career opportunities in various sectors.
-                </p>
+                {description && <p className="text-gray-700 leading-relaxed mb-4">{description}</p>}
+                {course.overview && <p className="text-gray-700 leading-relaxed">{course.overview}</p>}
               </div>
 
-              {/* Highlights/Badges - Dynamic */}
-              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                {highlights.slice(0, 4).map((highlight, idx) => {
-                  const colors = [
-                    'text-green-600 bg-green-50',
-                    'text-blue-600 bg-blue-50',
-                    'text-purple-600 bg-purple-50',
-                    'text-orange-600 bg-orange-50',
-                  ];
-                  const icons = [FiAward, FiUsers, FiBriefcase, HiOutlineLightBulb];
-                  const IconComponent = icons[idx % icons.length];
-                  const colorClass = colors[idx % colors.length];
-                  return (
-                    <div key={idx} className={`flex items-center gap-2 p-3 rounded-xl ${colorClass.split(' ')[1]}`}>
-                      <IconComponent className={colorClass.split(' ')[0]} size={20} />
-                      <span className="text-sm font-medium text-gray-700">{highlight}</span>
-                    </div>
-                  );
-                })}
-              </div>
+              {/* Highlights/Badges - Only show if data exists */}
+              {highlights.length > 0 && (
+                <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {highlights.slice(0, 4).map((highlight, idx) => {
+                    const colors = [
+                      'text-green-600 bg-green-50',
+                      'text-blue-600 bg-blue-50',
+                      'text-purple-600 bg-purple-50',
+                      'text-orange-600 bg-orange-50',
+                    ];
+                    const icons = [FiAward, FiUsers, FiBriefcase, HiOutlineLightBulb];
+                    const IconComponent = icons[idx % icons.length];
+                    const colorClass = colors[idx % colors.length];
+                    return (
+                      <div key={idx} className={`flex items-center gap-2 p-3 rounded-xl ${colorClass.split(' ')[1]}`}>
+                        <IconComponent className={colorClass.split(' ')[0]} size={20} />
+                        <span className="text-sm font-medium text-gray-700">{highlight}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </section>
 
-            {/* Eligibility Section */}
-            <section id="eligibility" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                  <FiCheckCircle className="text-green-600" size={20} />
-                </span>
-                Eligibility Criteria
-              </h2>
-              <div className="space-y-4">
-                {[
-                  { title: 'Educational Qualification', desc: eligibility },
-                  { title: 'Entrance Exam', desc: course.entrance_exams?.join(', ') || '' },
-                  { title: 'Age Limit', desc: ageLimit },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
-                    <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm">
-                      {idx + 1}
+            {/* Eligibility Section - Only show if data exists */}
+            {(eligibility || ageLimit || (course.entrance_exams && course.entrance_exams.length > 0)) && (
+              <section id="eligibility" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                    <FiCheckCircle className="text-green-600" size={20} />
+                  </span>
+                  Eligibility Criteria
+                </h2>
+                <div className="space-y-4">
+                  {[
+                    { title: 'Educational Qualification', desc: eligibility },
+                    { title: 'Entrance Exam', desc: course.entrance_exams?.join(', ') || '' },
+                    { title: 'Age Limit', desc: ageLimit },
+                  ].filter(item => item.desc).map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl">
+                      <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm">
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                        <p className="text-gray-600 text-sm">{item.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">{item.title}</h4>
-                      <p className="text-gray-600 text-sm">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
-            {/* Syllabus Section */}
-            <section id="syllabus" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                  <HiOutlineDocumentText className="text-purple-600" size={20} />
-                </span>
-                Course Syllabus
-              </h2>
-              <div className="space-y-4">
-                {syllabusData.map((sem, idx) => (
-                  <div key={idx} className="border border-gray-200 rounded-xl overflow-hidden">
-                    <div className="bg-gray-50 px-4 py-3 font-semibold text-gray-900 flex items-center justify-between">
-                      <span>{sem.semester}</span>
-                      <span className="text-sm text-gray-500">{sem.subjects.length} Subjects</span>
+            {/* Syllabus Section - Only show if data exists */}
+            {syllabusData.length > 0 && (
+              <section id="syllabus" className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <HiOutlineDocumentText className="text-purple-600" size={20} />
+                  </span>
+                  Course Syllabus
+                </h2>
+                <div className="space-y-4">
+                  {syllabusData.map((sem, idx) => (
+                    <div key={idx} className="border border-gray-200 rounded-xl overflow-hidden">
+                      <div className="bg-gray-50 px-4 py-3 font-semibold text-gray-900 flex items-center justify-between">
+                        <span>{sem.semester}</span>
+                        <span className="text-sm text-gray-500">{sem.subjects?.length || 0} Subjects</span>
+                      </div>
+                      <div className="p-4 grid grid-cols-2 gap-2">
+                        {(sem.subjects || []).map((subject, sidx) => (
+                          <div key={sidx} className="flex items-center gap-2 text-sm text-gray-700">
+                            <FiCheckCircle className="text-green-500" size={14} />
+                            {subject}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="p-4 grid grid-cols-2 gap-2">
-                      {sem.subjects.map((subject, sidx) => (
-                        <div key={sidx} className="flex items-center gap-2 text-sm text-gray-700">
-                          <FiCheckCircle className="text-green-500" size={14} />
-                          {subject}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Top Colleges Section - Only show if data exists */}
             {topColleges.length > 0 && (
