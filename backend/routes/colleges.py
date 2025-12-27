@@ -92,6 +92,7 @@ async def get_colleges(
     min_fees: Optional[float] = None,
     max_fees: Optional[float] = None,
     course: Optional[str] = None,
+    exclude_schools: Optional[bool] = Query(None),  # Exclude schools from results
     sort_by: Optional[str] = Query("nirf_ranking", regex="^(name|nirf_ranking|average_fees|rating)$"),
     include_drafts: Optional[str] = Query(None),
     is_featured: Optional[bool] = None,
@@ -104,6 +105,14 @@ async def get_colleges(
     show_drafts = include_drafts and include_drafts.lower() == "true"
     if not show_drafts:
         query["status"] = "published"
+    
+    # If course filter is applied, automatically exclude schools (unless explicitly set)
+    # Schools have different course structure (Science Stream, Commerce Stream etc.)
+    if course and exclude_schools is None:
+        exclude_schools = True
+    
+    if exclude_schools:
+        query["institution_type"] = {"$nin": ["School", "school"]}
     
     if search:
         query["$or"] = [
