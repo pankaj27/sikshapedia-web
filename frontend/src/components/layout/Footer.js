@@ -746,15 +746,15 @@ const Footer = () => {
       </div>
 
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+      <div className="container mx-auto px-4 py-8 sm:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 md:gap-8">
           {/* Top Exams */}
           <div>
-            <h4 className="text-white font-bold mb-4 text-sm">TOP EXAMS</h4>
-            <ul className="space-y-2">
-              {topExams.map((exam, idx) => (
+            <h4 className="text-white font-bold mb-2 sm:mb-4 text-xs sm:text-sm">TOP EXAMS</h4>
+            <ul className="space-y-1 sm:space-y-2">
+              {topExams.slice(0, 4).map((exam, idx) => (
                 <li key={idx}>
-                  <NavLink to={exam.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={exam.link} className="text-xs sm:text-sm hover:text-orange-500 transition-colors">
                     {exam.name}
                   </NavLink>
                 </li>
@@ -764,11 +764,11 @@ const Footer = () => {
 
           {/* Top Colleges */}
           <div>
-            <h4 className="text-white font-bold mb-4 text-sm">TOP COLLEGES</h4>
-            <ul className="space-y-2">
+            <h4 className="text-white font-bold mb-2 sm:mb-4 text-xs sm:text-sm">TOP COLLEGES</h4>
+            <ul className="space-y-1 sm:space-y-2">
               {topColleges.map((college, idx) => (
                 <li key={idx}>
-                  <NavLink to={college.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={college.link} className="text-xs sm:text-sm hover:text-orange-500 transition-colors">
                     {college.name}
                   </NavLink>
                 </li>
@@ -778,11 +778,11 @@ const Footer = () => {
 
           {/* Top Courses */}
           <div>
-            <h4 className="text-white font-bold mb-4 text-sm">TOP COURSES</h4>
-            <ul className="space-y-2">
-              {topCourses.map((course, idx) => (
+            <h4 className="text-white font-bold mb-2 sm:mb-4 text-xs sm:text-sm">TOP COURSES</h4>
+            <ul className="space-y-1 sm:space-y-2">
+              {topCourses.slice(0, 4).map((course, idx) => (
                 <li key={idx}>
-                  <NavLink to={course.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={course.link} className="text-xs sm:text-sm hover:text-orange-500 transition-colors">
                     {course.name}
                   </NavLink>
                 </li>
@@ -790,13 +790,13 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Study Abroad */}
-          <div>
-            <h4 className="text-white font-bold mb-4 text-sm">STUDY ABROAD</h4>
-            <ul className="space-y-2">
+          {/* Study Abroad - Hidden on mobile */}
+          <div className="hidden sm:block">
+            <h4 className="text-white font-bold mb-2 sm:mb-4 text-xs sm:text-sm">STUDY ABROAD</h4>
+            <ul className="space-y-1 sm:space-y-2">
               {studyAbroad.map((country, idx) => (
                 <li key={idx}>
-                  <NavLink to={country.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={country.link} className="text-xs sm:text-sm hover:text-orange-500 transition-colors">
                     {country.name}
                   </NavLink>
                 </li>
@@ -806,11 +806,11 @@ const Footer = () => {
 
           {/* Resources */}
           <div>
-            <h4 className="text-white font-bold mb-4 text-sm">RESOURCES</h4>
-            <ul className="space-y-2">
-              {resources.map((resource, idx) => (
+            <h4 className="text-white font-bold mb-2 sm:mb-4 text-xs sm:text-sm">RESOURCES</h4>
+            <ul className="space-y-1 sm:space-y-2">
+              {resources.slice(0, 4).map((resource, idx) => (
                 <li key={idx}>
-                  <NavLink to={resource.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={resource.link} className="text-xs sm:text-sm hover:text-orange-500 transition-colors">
                     {resource.name}
                   </NavLink>
                 </li>
@@ -820,30 +820,22 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-4 text-sm">QUICK LINKS</h4>
-            <ul className="space-y-2">
-              {quickLinks.map((link, idx) => (
+            <h4 className="text-white font-bold mb-2 sm:mb-4 text-xs sm:text-sm">QUICK LINKS</h4>
+            <ul className="space-y-1 sm:space-y-2">
+              {quickLinks.slice(0, 3).map((link, idx) => (
                 <li key={idx}>
-                  <NavLink to={link.link} className="text-sm hover:text-orange-500 transition-colors">
+                  <NavLink to={link.link} className="text-xs sm:text-sm hover:text-orange-500 transition-colors">
                     {link.name}
                   </NavLink>
                 </li>
               ))}
-              {/* Modal trigger links */}
-              <li>
+              {/* Modal trigger links - hidden on very small screens */}
+              <li className="hidden sm:block">
                 <button 
                   onClick={() => setShowRegisterModal(true)}
-                  className="text-sm hover:text-orange-500 transition-colors text-left"
+                  className="text-xs sm:text-sm hover:text-orange-500 transition-colors text-left"
                 >
-                  Register My Institute
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setShowAdvertiseModal(true)}
-                  className="text-sm hover:text-orange-500 transition-colors text-left"
-                >
-                  Advertise With Us
+                  Register Institute
                 </button>
               </li>
             </ul>
