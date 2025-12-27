@@ -1407,31 +1407,31 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* PLACEMENT - Menu Tab Content */}
               {college?.placement && (
                 <section id="placement" className="scroll-mt-40">
-                  <h2 className="text-2xl font-bold mb-3">{college.name} Placement {new Date().getFullYear()}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Placement {new Date().getFullYear()}</h2>
                   <p className="text-gray-700 text-sm mb-4">Placement statistics and top recruiters:</p>
                   <GuestGate title="Placement Data">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
                       {college.placement.highest > 0 && (
-                        <div className="bg-green-50 rounded-lg p-4 text-center border border-green-200">
-                          <div className="text-2xl font-bold text-green-700">₹{(college.placement.highest / 100000).toFixed(1)}L</div>
+                        <div className="bg-green-50 rounded-lg p-3 sm:p-4 text-center border border-green-200">
+                          <div className="text-xl sm:text-2xl font-bold text-green-700">₹{(college.placement.highest / 100000).toFixed(1)}L</div>
                           <div className="text-sm text-gray-600">Highest Package</div>
                         </div>
                       )}
                       {college.placement.average > 0 && (
-                        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200">
-                          <div className="text-2xl font-bold text-blue-700">₹{(college.placement.average / 100000).toFixed(1)}L</div>
+                        <div className="bg-blue-50 rounded-lg p-3 sm:p-4 text-center border border-blue-200">
+                          <div className="text-xl sm:text-2xl font-bold text-blue-700">₹{(college.placement.average / 100000).toFixed(1)}L</div>
                           <div className="text-sm text-gray-600">Average Package</div>
                         </div>
                       )}
                       {college.placement.percentage > 0 && (
-                        <div className="bg-orange-50 rounded-lg p-4 text-center border border-orange-200">
-                          <div className="text-2xl font-bold text-orange-700">{college.placement.percentage}%</div>
+                        <div className="bg-orange-50 rounded-lg p-3 sm:p-4 text-center border border-orange-200">
+                          <div className="text-xl sm:text-2xl font-bold text-orange-700">{college.placement.percentage}%</div>
                           <div className="text-sm text-gray-600">Placement Rate</div>
                         </div>
                       )}
                       {college.placement.students_participated > 0 && (
-                        <div className="bg-purple-50 rounded-lg p-4 text-center border border-purple-200">
-                          <div className="text-2xl font-bold text-purple-700">{college.placement.students_participated}+</div>
+                        <div className="bg-purple-50 rounded-lg p-3 sm:p-4 text-center border border-purple-200">
+                          <div className="text-xl sm:text-2xl font-bold text-purple-700">{college.placement.students_participated}+</div>
                           <div className="text-sm text-gray-600">Students Placed</div>
                         </div>
                       )}
