@@ -1064,7 +1064,7 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
                   {/* SEO IMAGES - Only show if exists */}
                   {college.seo_images?.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {college.seo_images.map((img, idx) => (
                         <div key={idx} className="rounded-lg overflow-hidden border">
                           <img loading="lazy" src={typeof img === 'string' ? img : img.url} alt={typeof img === 'object' ? img.alt : `${college.name} Image ${idx + 1}`} className="w-full h-48 object-cover" />
