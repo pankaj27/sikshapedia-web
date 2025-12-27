@@ -2,13 +2,42 @@
 Homepage Settings Routes
 Manages all homepage configuration and section visibility
 """
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
+import jwt
+import os
 
 # Create router
 homepage_settings_router = APIRouter(prefix="/api", tags=["Homepage Settings"])
+
+# Security
+security = HTTPBearer()
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key-change-in-production")
+ALGORITHM = "HS256"
+
+def verify_admin_token(token: str):
+    """Verify JWT token and check admin role"""
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("role") != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.exceptions.DecodeError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+async def get_current_admin(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Dependency to get current admin user"""
+    token = credentials.credentials
+    return verify_admin_token(token)
 
 # Database will be injected from main app
 db = None
