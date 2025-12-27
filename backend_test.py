@@ -853,6 +853,249 @@ class APITester:
             else:
                 self.log_test("Verify Custom URLs Storage", False, f"Status: {status}", response)
 
+    def test_homepage_settings_api(self):
+        """Test Homepage Settings API for Top Study Destinations (cities) section"""
+        print("🏠 Testing Homepage Settings API - Top Study Destinations...")
+        
+        # Test 1: GET /api/homepage-settings - Verify it returns cities array with correct data
+        success, response, status = self.make_request("GET", "/homepage-settings")
+        if success and isinstance(response, dict):
+            self.log_test("GET /homepage-settings", True, "Homepage settings retrieved successfully")
+            
+            # Check if cities array exists
+            cities = response.get("cities", [])
+            if isinstance(cities, list):
+                self.log_test("Cities Array Structure", True, f"Found {len(cities)} cities")
+                
+                # Expected cities from the review request
+                expected_cities = ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Pune", "Kolkata", "Bhopal"]
+                
+                # Check if we have 8 cities
+                if len(cities) == 8:
+                    self.log_test("Cities Count", True, "Found exactly 8 cities as expected")
+                else:
+                    self.log_test("Cities Count", False, f"Expected 8 cities, found {len(cities)}")
+                
+                # Check each city has required fields: name, image, link
+                valid_cities = 0
+                city_names = []
+                delhi_image_correct = False
+                
+                for city in cities:
+                    if isinstance(city, dict):
+                        name = city.get("name", "")
+                        image = city.get("image", "")
+                        link = city.get("link", "")
+                        
+                        city_names.append(name)
+                        
+                        # Check if city has all required fields
+                        if name and image:
+                            valid_cities += 1
+                            
+                            # Special check for Delhi image path
+                            if name == "Delhi" and image == "/assets/cities/Delhi.svg":
+                                delhi_image_correct = True
+                            elif name == "Delhi" and image == "/assets/cities/New Delhi.svg":
+                                self.log_test("Delhi Image Path Issue", False, 
+                                             f"Delhi has incorrect image path: {image} (should be /assets/cities/Delhi.svg)")
+                
+                if valid_cities == len(cities):
+                    self.log_test("Cities Structure Validation", True, 
+                                 f"All {valid_cities} cities have name and image fields")
+                else:
+                    self.log_test("Cities Structure Validation", False, 
+                                 f"Only {valid_cities}/{len(cities)} cities have required fields")
+                
+                # Check if all expected cities are present
+                missing_cities = [city for city in expected_cities if city not in city_names]
+                extra_cities = [city for city in city_names if city not in expected_cities]
+                
+                if not missing_cities and not extra_cities:
+                    self.log_test("Expected Cities Present", True, 
+                                 f"All expected cities found: {', '.join(city_names)}")
+                else:
+                    issues = []
+                    if missing_cities:
+                        issues.append(f"Missing: {', '.join(missing_cities)}")
+                    if extra_cities:
+                        issues.append(f"Extra: {', '.join(extra_cities)}")
+                    self.log_test("Expected Cities Present", False, "; ".join(issues))
+                
+                # Check Delhi image path specifically
+                if delhi_image_correct:
+                    self.log_test("Delhi Image Path Correct", True, "Delhi has correct image path: /assets/cities/Delhi.svg")
+                else:
+                    # Find Delhi city and check its image
+                    delhi_city = next((city for city in cities if city.get("name") == "Delhi"), None)
+                    if delhi_city:
+                        actual_image = delhi_city.get("image", "")
+                        self.log_test("Delhi Image Path Correct", False, 
+                                     f"Delhi image path is '{actual_image}', should be '/assets/cities/Delhi.svg'")
+                    else:
+                        self.log_test("Delhi Image Path Correct", False, "Delhi city not found in cities array")
+                        
+            else:
+                self.log_test("Cities Array Structure", False, "Cities field is not an array")
+        else:
+            self.log_test("GET /homepage-settings", False, f"Status: {status}", response)
+            return
+        
+        # Test 2: PUT /api/homepage-settings without authentication (should fail)
+        test_update = {
+            "cities": [
+                {"name": "Delhi", "image": "/assets/cities/Delhi.svg", "link": "/delhi-colleges"},
+                {"name": "Mumbai", "image": "/assets/cities/Mumbai.svg", "link": "/mumbai-colleges"}
+            ]
+        }
+        
+        success, response, status = self.make_request("PUT", "/homepage-settings", test_update)
+        if not success and status in [401, 403]:
+            self.log_test("PUT /homepage-settings (no auth - should fail)", True, 
+                         f"Correctly rejected with status {status}")
+        else:
+            self.log_test("PUT /homepage-settings (no auth - should fail)", False, 
+                         f"Should have been rejected but got status {status}", response)
+        
+        # Test 3: PUT /api/homepage-settings with admin authentication - Update a city's image URL
+        if self.admin_token:
+            # First get current settings
+            success, current_settings, status = self.make_request("GET", "/homepage-settings")
+            if success and isinstance(current_settings, dict):
+                # Update Delhi's image to the correct path and add a test city update
+                updated_cities = current_settings.get("cities", [])
+                
+                # Ensure Delhi has the correct image path
+                for city in updated_cities:
+                    if city.get("name") == "Delhi":
+                        city["image"] = "/assets/cities/Delhi.svg"
+                        city["link"] = "/delhi-colleges"  # Add link for testing
+                        break
+                
+                # Update Mumbai's image URL for testing persistence
+                for city in updated_cities:
+                    if city.get("name") == "Mumbai":
+                        city["image"] = "/assets/cities/Mumbai-updated.svg"  # Test change
+                        city["link"] = "/mumbai-colleges"
+                        break
+                
+                update_data = {
+                    "cities": updated_cities,
+                    "cities_title": "Top Study Destinations - Updated"  # Also test title update
+                }
+                
+                success, response, status = self.make_request("PUT", "/homepage-settings", 
+                                                            update_data, token=self.admin_token)
+                if success and isinstance(response, dict):
+                    self.log_test("PUT /homepage-settings (with admin auth)", True, 
+                                 "Settings updated successfully")
+                    
+                    # Test 4: Verify the change persists after GET
+                    success, get_response, get_status = self.make_request("GET", "/homepage-settings")
+                    if success and isinstance(get_response, dict):
+                        updated_cities_response = get_response.get("cities", [])
+                        
+                        # Check if Mumbai's image was updated
+                        mumbai_updated = False
+                        delhi_correct = False
+                        
+                        for city in updated_cities_response:
+                            if city.get("name") == "Mumbai" and city.get("image") == "/assets/cities/Mumbai-updated.svg":
+                                mumbai_updated = True
+                            if city.get("name") == "Delhi" and city.get("image") == "/assets/cities/Delhi.svg":
+                                delhi_correct = True
+                        
+                        if mumbai_updated:
+                            self.log_test("City Image Update Persistence", True, 
+                                         "Mumbai image update persisted correctly")
+                        else:
+                            self.log_test("City Image Update Persistence", False, 
+                                         "Mumbai image update did not persist")
+                        
+                        if delhi_correct:
+                            self.log_test("Delhi Image Path Fixed", True, 
+                                         "Delhi now has correct image path: /assets/cities/Delhi.svg")
+                        else:
+                            self.log_test("Delhi Image Path Fixed", False, 
+                                         "Delhi image path was not corrected")
+                        
+                        # Check title update
+                        if get_response.get("cities_title") == "Top Study Destinations - Updated":
+                            self.log_test("Cities Title Update", True, 
+                                         "Cities title updated successfully")
+                        else:
+                            self.log_test("Cities Title Update", False, 
+                                         f"Cities title not updated. Got: {get_response.get('cities_title')}")
+                    else:
+                        self.log_test("Verify Update Persistence", False, 
+                                     f"GET request failed with status: {get_status}")
+                else:
+                    self.log_test("PUT /homepage-settings (with admin auth)", False, 
+                                 f"Status: {status}", response)
+            else:
+                self.log_test("PUT /homepage-settings (with admin auth)", False, 
+                             "Could not retrieve current settings for update")
+        else:
+            self.log_test("PUT /homepage-settings (with admin auth)", False, 
+                         "Admin token not available")
+
+    def test_city_icon_files_exist(self):
+        """Test that all city icon files exist in the public assets folder"""
+        print("📁 Testing City Icon Files Existence...")
+        
+        expected_cities = ["Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Pune", "Kolkata", "Bhopal"]
+        
+        import os
+        assets_path = "/app/frontend/public/assets/cities"
+        
+        if os.path.exists(assets_path):
+            self.log_test("Cities Assets Folder Exists", True, f"Found assets folder: {assets_path}")
+            
+            existing_files = os.listdir(assets_path)
+            svg_files = [f for f in existing_files if f.endswith('.svg')]
+            
+            self.log_test("SVG Files in Cities Folder", True, 
+                         f"Found {len(svg_files)} SVG files: {', '.join(svg_files)}")
+            
+            # Check each expected city
+            missing_files = []
+            present_files = []
+            
+            for city in expected_cities:
+                expected_file = f"{city}.svg"
+                file_path = os.path.join(assets_path, expected_file)
+                
+                if os.path.exists(file_path):
+                    present_files.append(expected_file)
+                    self.log_test(f"City Icon: {city}", True, f"File exists: {expected_file}")
+                else:
+                    missing_files.append(expected_file)
+                    self.log_test(f"City Icon: {city}", False, f"File missing: {expected_file}")
+            
+            # Summary
+            if not missing_files:
+                self.log_test("All City Icons Present", True, 
+                             f"All {len(present_files)} expected city icons found")
+            else:
+                self.log_test("All City Icons Present", False, 
+                             f"Missing {len(missing_files)} files: {', '.join(missing_files)}")
+            
+            # Check for extra files that might be incorrectly named
+            extra_files = []
+            for svg_file in svg_files:
+                city_name = svg_file.replace('.svg', '')
+                if city_name not in expected_cities:
+                    extra_files.append(svg_file)
+            
+            if extra_files:
+                self.log_test("Extra City Icon Files", True, 
+                             f"Found {len(extra_files)} extra files: {', '.join(extra_files)}")
+            else:
+                self.log_test("No Extra City Icon Files", True, "No unexpected city icon files found")
+                
+        else:
+            self.log_test("Cities Assets Folder Exists", False, f"Assets folder not found: {assets_path}")
+
     def test_course_listing_settings(self):
         """Test Course Listing Settings feature"""
         print("📚 Testing Course Listing Settings Feature...")
