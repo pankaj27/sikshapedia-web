@@ -1345,9 +1345,9 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Admission {new Date().getFullYear() + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">Admission process and eligibility criteria:</p>
                   {college?.admission_process ? (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-5">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-5 overflow-hidden">
                       <h3 className="font-bold mb-2">Admission Criteria</h3>
-                      <p className="text-sm text-gray-700 break-words overflow-wrap-anywhere">{college.admission_process}</p>
+                      <p className="text-sm text-gray-700 break-all whitespace-pre-wrap" style={{wordBreak: 'break-all', overflowWrap: 'anywhere'}}>{college.admission_process}</p>
                     </div>
                   ) : college?.courses?.some(c => typeof c === 'object' && c.eligibility && c.selection_criteria) ? (
                     <div className="overflow-x-auto -mx-4 px-4">
