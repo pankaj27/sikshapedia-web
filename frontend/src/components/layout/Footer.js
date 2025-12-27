@@ -717,14 +717,14 @@ const Footer = () => {
   return (
     <footer className="bg-black text-gray-300">
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-orange-600 to-orange-500 py-8">
+      <div className="bg-gradient-to-r from-orange-600 to-orange-500 py-4 sm:py-8">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
             <div className="text-center md:text-left">
-              <h3 className="text-xl font-bold text-white mb-1">
-                Subscribe to our Newsletter
+              <h3 className="text-base sm:text-xl font-bold text-white mb-0.5 sm:mb-1">
+                Subscribe to Newsletter
               </h3>
-              <p className="text-orange-100 text-sm">
+              <p className="text-orange-100 text-xs sm:text-sm hidden sm:block">
                 Get College Notifications, Exam Notifications and News Updates
               </p>
             </div>
@@ -735,9 +735,9 @@ const Footer = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="px-4 py-2.5 rounded-lg w-full md:w-80 focus:outline-none focus:ring-2 focus:ring-white h-11 text-sm"
+                className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg w-full md:w-80 focus:outline-none focus:ring-2 focus:ring-white h-9 sm:h-11 text-xs sm:text-sm"
               />
-              <Button type="submit" className="bg-white text-orange-600 hover:bg-gray-100 whitespace-nowrap h-11 px-6 text-sm">
+              <Button type="submit" className="bg-white text-orange-600 hover:bg-gray-100 whitespace-nowrap h-9 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm">
                 Subscribe
               </Button>
             </form>
