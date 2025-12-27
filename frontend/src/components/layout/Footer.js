@@ -843,14 +843,14 @@ const Footer = () => {
         </div>
         
         {/* For Institutions Banner */}
-        <div className="mt-8 pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-900 rounded-xl p-6">
-            <div>
-              <h4 className="text-white font-bold text-lg mb-1">Are you an Institution?</h4>
-              <p className="text-gray-400 text-sm">Manage your leads, applications and analytics from your dashboard</p>
+        <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-800">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 bg-gray-900 rounded-lg sm:rounded-xl p-4 sm:p-6">
+            <div className="text-center sm:text-left">
+              <h4 className="text-white font-bold text-sm sm:text-lg mb-0.5 sm:mb-1">Are you an Institution?</h4>
+              <p className="text-gray-400 text-xs sm:text-sm">Manage leads, applications & analytics</p>
             </div>
             <NavLink to="/institute/login">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap text-xs sm:text-sm px-4 sm:px-6 py-2">
                 Institute Login →
               </Button>
             </NavLink>
