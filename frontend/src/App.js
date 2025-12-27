@@ -162,6 +162,7 @@ const LeadFormsManagement = lazy(() => import('./pages/admin/LeadFormsManagement
 const CounsellingRequestsManagement = lazy(() => import('./pages/admin/CounsellingRequestsManagement'));
 const DataMigration = lazy(() => import('./pages/admin/DataMigration'));
 import FloatingApplyButton from './components/FloatingApplyButton';
+import BackToTop from './components/BackToTop';
 // Admission Partner Pages
 const AdmissionPartnersPage = lazy(() => import('./pages/AdmissionPartnersPage'));
 // Review Link Page
