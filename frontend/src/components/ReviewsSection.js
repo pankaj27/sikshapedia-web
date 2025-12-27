@@ -91,66 +91,68 @@ const ReviewCard = ({ review, onLikeUpdate }) => {
 
   return (
     <>
-      <div className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-              <FiUser className="text-orange-600" />
+      <div className="bg-white border rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-shadow">
+        <div className="flex items-start justify-between mb-3 gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <FiUser className="text-orange-600" size={16} />
             </div>
-            <div>
-              <p className="font-semibold text-gray-800">{review.user_name}</p>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <FiCalendar size={12} />
+            <div className="min-w-0">
+              <p className="font-semibold text-gray-800 text-sm sm:text-base truncate">{review.user_name}</p>
+              <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-500">
+                <FiCalendar size={10} />
                 <span>{formatDate(review.created_at)}</span>
               </div>
             </div>
           </div>
-          <StarRating rating={review.rating} />
+          <div className="flex-shrink-0">
+            <StarRating rating={review.rating} size={14} />
+          </div>
         </div>
         
         {review.review_text && (
-          <p className="text-gray-700 mb-3">{review.review_text}</p>
+          <p className="text-gray-700 mb-3 text-sm sm:text-base break-words overflow-hidden">{review.review_text}</p>
         )}
         
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
           {review.pros && (
             <div className="flex items-start gap-2">
-              <FiThumbsUp className="text-green-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="font-medium text-green-700">Pros</p>
-                <p className="text-gray-600">{review.pros}</p>
+              <FiThumbsUp className="text-green-500 mt-1 flex-shrink-0" size={14} />
+              <div className="min-w-0">
+                <p className="font-medium text-green-700 text-xs sm:text-sm">Pros</p>
+                <p className="text-gray-600 text-xs sm:text-sm break-words">{review.pros}</p>
               </div>
             </div>
           )}
           {review.cons && (
             <div className="flex items-start gap-2">
-              <FiThumbsDown className="text-red-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="font-medium text-red-700">Cons</p>
-                <p className="text-gray-600">{review.cons}</p>
+              <FiThumbsDown className="text-red-500 mt-1 flex-shrink-0" size={14} />
+              <div className="min-w-0">
+                <p className="font-medium text-red-700 text-xs sm:text-sm">Cons</p>
+                <p className="text-gray-600 text-xs sm:text-sm break-words">{review.cons}</p>
               </div>
             </div>
           )}
         </div>
         
         {(review.placements_rating || review.infrastructure_rating || review.faculty_rating) && (
-          <div className="mt-3 pt-3 border-t flex flex-wrap gap-4 text-sm">
+          <div className="mt-3 pt-3 border-t flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm">
             {review.placements_rating && (
               <div className="flex items-center gap-1">
                 <span className="text-gray-600">Placements:</span>
-                <StarRating rating={review.placements_rating} size={12} />
+                <StarRating rating={review.placements_rating} size={10} />
               </div>
             )}
             {review.infrastructure_rating && (
               <div className="flex items-center gap-1">
-                <span className="text-gray-600">Infrastructure:</span>
-                <StarRating rating={review.infrastructure_rating} size={12} />
+                <span className="text-gray-600">Infra:</span>
+                <StarRating rating={review.infrastructure_rating} size={10} />
               </div>
             )}
             {review.faculty_rating && (
               <div className="flex items-center gap-1">
                 <span className="text-gray-600">Faculty:</span>
-                <StarRating rating={review.faculty_rating} size={12} />
+                <StarRating rating={review.faculty_rating} size={10} />
               </div>
             )}
           </div>
