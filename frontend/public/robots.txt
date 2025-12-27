@@ -12,4 +12,4 @@ Allow: /study-abroad
 Allow: /scholarships
 Allow: /blog
 
-Sitemap: https://datafix-deploy.preview.emergentagent.com/sitemap.xml
+Sitemap: https://edusite-repair.preview.emergentagent.com/sitemap.xml

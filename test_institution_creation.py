@@ -8,7 +8,7 @@ import json
 import sys
 
 # Backend URL from frontend .env
-BASE_URL = "https://datafix-deploy.preview.emergentagent.com/api"
+BASE_URL = "https://edusite-repair.preview.emergentagent.com/api"
 
 # Test credentials
 ADMIN_CREDENTIALS = {
