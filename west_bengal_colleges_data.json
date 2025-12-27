@@ -1,0 +1,842 @@
+{
+  "colleges": [
+    {
+      "name": "Jadavpur University",
+      "slug": "jadavpur-university",
+      "type": "Government",
+      "institution_type": "University",
+      "established_year": 1955,
+      "affiliation": "UGC",
+      "location": {
+        "state": "West Bengal",
+        "city": "Kolkata",
+        "address": "188, Raja S.C. Mallick Rd, Kolkata, West Bengal 700032",
+        "pin_code": "700032",
+        "latitude": "22.4970",
+        "longitude": "88.3714",
+        "how_to_reach": {
+          "by_air": "Netaji Subhas Chandra Bose International Airport (CCU) is located approximately 18 km from the university. Regular taxi and cab services are available from the airport.",
+          "by_train": "Jadavpur Railway Station is the nearest station, located about 1 km from the campus. Howrah Junction and Sealdah Station are major railway stations, approximately 10-12 km away.",
+          "by_road": "The university is well-connected by road. Regular bus services and auto-rickshaws are available. The campus is located on Raja S.C. Mallick Road, easily accessible from all parts of Kolkata.",
+          "public_transport": "Metro: Jadavpur Metro Station is about 2 km away. Buses: Regular WBTC and private buses available. Auto-rickshaws and app-based cabs easily available."
+        }
+      },
+      "campus_size": "67 acres",
+      "total_students": 4655,
+      "recognized_by": ["UGC", "NAAC", "AICTE"],
+      "nirf_ranking": 18,
+      "rankings": [
+        {"agency": "NIRF", "year": 2025, "rank": 18, "category": "Overall"},
+        {"agency": "NIRF", "year": 2025, "rank": 18, "category": "Engineering"},
+        {"agency": "NIRF", "year": 2025, "rank": 23, "category": "Research"},
+        {"agency": "Collegedunia", "year": 2025, "rank": 45, "category": "Engineering"}
+      ],
+      "accreditations": [
+        {"name": "NAAC", "grade": "A+", "cgpa": "3.46"}
+      ],
+      "description": "Jadavpur University is a prestigious public research university established in 1955, located in Kolkata, West Bengal. It is recognized by UGC and accredited with Grade A+ by NAAC. The university offers undergraduate, postgraduate, and doctoral programs across disciplines including Engineering, Science, Arts, Architecture, Pharmacy, and Education. It is consistently ranked among the top universities in India with strong placement records and affordable fees.",
+      "highlights": [
+        "NIRF Ranking 2025: 18th Overall, 18th Engineering",
+        "NAAC Accreditation: A+ with CGPA 3.46",
+        "194+ courses offered across multiple disciplines",
+        "4655+ students enrolled",
+        "Strong placement record with Microsoft, Amazon, Google, TCS",
+        "Affordable tuition fees for government institution",
+        "67 acres green campus with modern facilities",
+        "Rich academic heritage spanning over 65 years"
+      ],
+      "streams": ["Engineering", "Science", "Arts", "Architecture", "Pharmacy", "Education", "Law"],
+      "courses": [
+        {
+          "name": "B.E. Computer Science & Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "116000",
+          "fees_display": "₹1.16 Lakhs (Total)",
+          "eligibility": "10+2 with 45% marks in PCM + WBJEE",
+          "seats": 82,
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.E. Mechanical Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "116000",
+          "fees_display": "₹1.16 Lakhs (Total)",
+          "eligibility": "10+2 with 45% marks in PCM + WBJEE",
+          "seats": 90,
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.E. Electrical Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "116000",
+          "fees_display": "₹1.16 Lakhs (Total)",
+          "eligibility": "10+2 with 45% marks in PCM + WBJEE",
+          "seats": 86,
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.E. Electronics & Telecom Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "116000",
+          "fees_display": "₹1.16 Lakhs (Total)",
+          "eligibility": "10+2 with 45% marks in PCM + WBJEE",
+          "seats": 78,
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.E. Information Technology",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "116000",
+          "fees_display": "₹1.16 Lakhs (Total)",
+          "eligibility": "10+2 with 45% marks in PCM + WBJEE",
+          "seats": 68,
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.E. Civil Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "116000",
+          "fees_display": "₹1.16 Lakhs (Total)",
+          "eligibility": "10+2 with 45% marks in PCM + WBJEE",
+          "seats": 70,
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "M.Tech",
+          "stream": "Engineering",
+          "level": "PG",
+          "duration": "2 Years",
+          "fees": "224000",
+          "fees_display": "₹2.24 Lakhs (Total)",
+          "eligibility": "B.Tech/B.E. with valid GATE score",
+          "entrance_exam": "GATE"
+        },
+        {
+          "name": "B.Sc Physics",
+          "stream": "Science",
+          "level": "UG",
+          "duration": "3 Years",
+          "fees": "21600",
+          "fees_display": "₹21,600 (Total)",
+          "eligibility": "10+2 with 50% marks in Science",
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.Sc Chemistry",
+          "stream": "Science",
+          "level": "UG",
+          "duration": "3 Years",
+          "fees": "21600",
+          "fees_display": "₹21,600 (Total)",
+          "eligibility": "10+2 with 50% marks in Science",
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "B.Sc Mathematics",
+          "stream": "Science",
+          "level": "UG",
+          "duration": "3 Years",
+          "fees": "21600",
+          "fees_display": "₹21,600 (Total)",
+          "eligibility": "10+2 with 50% marks in Science",
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "BA English",
+          "stream": "Arts",
+          "level": "UG",
+          "duration": "3 Years",
+          "fees": "14400",
+          "fees_display": "₹14,400 (Total)",
+          "eligibility": "10+2 from recognized board",
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "MA English",
+          "stream": "Arts",
+          "level": "PG",
+          "duration": "2 Years",
+          "fees": "1800",
+          "fees_display": "₹1,800 (Total)",
+          "eligibility": "Graduation with 50% marks",
+          "entrance_exam": "Entrance Test"
+        },
+        {
+          "name": "B.Arch",
+          "stream": "Architecture",
+          "level": "UG",
+          "duration": "5 Years",
+          "fees": "26050",
+          "fees_display": "₹26,050 (Total)",
+          "eligibility": "10+2 with Mathematics + NATA/JEE Main Paper 2",
+          "entrance_exam": "NATA/JEE Main"
+        },
+        {
+          "name": "B.Pharm",
+          "stream": "Pharmacy",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "20840",
+          "fees_display": "₹20,840 (Total)",
+          "eligibility": "10+2 with PCB/PCM + WBJEE",
+          "entrance_exam": "WBJEE"
+        },
+        {
+          "name": "MCA",
+          "stream": "Engineering",
+          "level": "PG",
+          "duration": "3 Years",
+          "fees": "15320",
+          "fees_display": "₹15,320 (Total)",
+          "eligibility": "Graduation with Mathematics + WB JECA",
+          "entrance_exam": "WB JECA"
+        },
+        {
+          "name": "B.Ed",
+          "stream": "Education",
+          "level": "UG",
+          "duration": "2 Years",
+          "fees": "12520",
+          "fees_display": "₹12,520 (Total)",
+          "eligibility": "Graduation with 50% marks",
+          "entrance_exam": "WBJEE B.Ed"
+        },
+        {
+          "name": "Ph.D",
+          "stream": "Research",
+          "level": "Doctorate",
+          "duration": "3-5 Years",
+          "fees": "473000",
+          "fees_display": "₹4.73 Lakhs (Total)",
+          "eligibility": "Post Graduation with UGC NET/GATE",
+          "entrance_exam": "UGC NET/GATE"
+        }
+      ],
+      "placement": {
+        "highest_package": "1.40 Cr",
+        "average_package": "11 LPA",
+        "median_package": "10 LPA",
+        "placement_percentage": "85%",
+        "students_placed": 1733,
+        "total_students": 4156,
+        "top_recruiters": [
+          "Microsoft",
+          "Amazon",
+          "Google",
+          "TCS",
+          "Wipro",
+          "Accenture",
+          "Samsung",
+          "IBM",
+          "Infosys",
+          "De Shaw",
+          "Adobe",
+          "Goldman Sachs"
+        ]
+      },
+      "facilities": [
+        {"name": "Library", "icon": "library", "description": "Central library with 633+ print journals and 2794+ online journals"},
+        {"name": "Hostel", "icon": "hostel", "description": "13 hostels (4 for girls, 9 for boys) accommodating 1600+ students"},
+        {"name": "Sports", "icon": "sports", "description": "Sports facilities for 30+ indoor and outdoor games"},
+        {"name": "Cafeteria", "icon": "cafeteria", "description": "Multiple canteens across campus"},
+        {"name": "Medical", "icon": "medical", "description": "Health center with full-time medical staff and specialists"},
+        {"name": "WiFi", "icon": "wifi", "description": "Campus-wide WiFi connectivity"},
+        {"name": "Labs", "icon": "lab", "description": "Well-equipped laboratories for all departments"},
+        {"name": "Auditorium", "icon": "auditorium", "description": "Multiple auditoriums for events and seminars"},
+        {"name": "Guest House", "icon": "guesthouse", "description": "90 double bedrooms and 3 deluxe AC rooms"},
+        {"name": "Day Care", "icon": "daycare", "description": "Day care center for staff and students' children"},
+        {"name": "CAD Lab", "icon": "computer", "description": "Computer-Aided Design center for research and training"},
+        {"name": "Radio Station", "icon": "radio", "description": "RadioJU - First community radio in Eastern India"}
+      ],
+      "contact": {
+        "phone": "+91-33-24146666",
+        "email": "registrar@jadavpuruniversity.in",
+        "website": "https://jadavpuruniversity.in",
+        "admission_helpline": "+91-33-24146666"
+      },
+      "faqs": [
+        {
+          "question": "What is the admission process for Jadavpur University?",
+          "answer": "Admission to UG courses is through WBJEE entrance exam. For PG courses, admission is based on GATE/CUET PG/WB JECA scores. Candidates must register on the JU admission portal and fill the online application form."
+        },
+        {
+          "question": "What is the fee structure for B.E. courses?",
+          "answer": "The total fees for B.E. courses at Jadavpur University is approximately ₹1.16 Lakhs for the complete 4-year program, making it one of the most affordable engineering institutions in India."
+        },
+        {
+          "question": "What is the placement record of Jadavpur University?",
+          "answer": "Jadavpur University has excellent placement records with the highest package of ₹1.40 CPA and average package of ₹11 LPA. Top recruiters include Microsoft, Amazon, Google, TCS, and more."
+        },
+        {
+          "question": "Does Jadavpur University provide hostel facilities?",
+          "answer": "Yes, JU has 13 hostels (4 for girls and 9 for boys) accommodating over 1600 students. Hostel fees are very nominal - around ₹15/month for seat rent and ₹10/month for electricity."
+        },
+        {
+          "question": "What is the NIRF ranking of Jadavpur University?",
+          "answer": "As per NIRF 2025, Jadavpur University is ranked 18th in Overall category, 18th in Engineering, and 23rd in Research category among Indian institutions."
+        },
+        {
+          "question": "What entrance exams are accepted for admission?",
+          "answer": "JU accepts WBJEE for UG courses, GATE for M.Tech, WB JECA for MCA, CUET PG for other PG courses, and UGC NET for PhD programs."
+        },
+        {
+          "question": "Is there any scholarship available at Jadavpur University?",
+          "answer": "Yes, JU offers various scholarships including Free Studentship, Endowment Scholarships, Need-based Support through Students' Aid Fund, and government-sponsored stipends for SC/ST/Physically Handicapped students."
+        },
+        {
+          "question": "How is the campus life at Jadavpur University?",
+          "answer": "JU has a vibrant campus life with active student clubs, cultural festivals (Sanskriti is one of East Asia's largest fests), sports activities, and research opportunities. The 67-acre green campus provides a great learning environment."
+        }
+      ],
+      "admission_process": "1. Register on JU Admission Portal (jadavpuruniversity.in)\n2. Fill online application form with personal & academic details\n3. Upload required documents (photo, signature, marksheets)\n4. Pay application fee online\n5. Appear for entrance exam (WBJEE/GATE/etc.)\n6. Check merit list and attend counselling\n7. Document verification at university\n8. Pay admission fees and complete enrollment",
+      "eligibility_criteria": "For UG: 10+2 with minimum 45% marks from recognized board. For PG: Bachelor's degree with minimum 50% marks from recognized university.",
+      "status": "published",
+      "is_verified": true,
+      "is_featured": true,
+      "is_admission_open": true
+    },
+    {
+      "name": "IIT Kharagpur",
+      "slug": "iit-kharagpur",
+      "type": "Government",
+      "institution_type": "University",
+      "established_year": 1951,
+      "affiliation": "MHRD",
+      "location": {
+        "state": "West Bengal",
+        "city": "Kharagpur",
+        "address": "IIT Kharagpur, Kharagpur, West Bengal 721302",
+        "pin_code": "721302",
+        "latitude": "22.3149",
+        "longitude": "87.3105"
+      },
+      "campus_size": "2100 acres",
+      "total_students": 12000,
+      "recognized_by": ["UGC", "AICTE", "NAAC"],
+      "nirf_ranking": 5,
+      "rankings": [
+        {"agency": "NIRF", "year": 2025, "rank": 5, "category": "Engineering"},
+        {"agency": "NIRF", "year": 2025, "rank": 4, "category": "Overall"},
+        {"agency": "Collegedunia", "year": 2025, "rank": 5, "category": "Engineering"}
+      ],
+      "accreditations": [
+        {"name": "NAAC", "grade": "A", "cgpa": "3.5"}
+      ],
+      "description": "Indian Institute of Technology Kharagpur (IIT Kharagpur) is the first IIT established in India in 1951. It is one of the most prestigious engineering institutions in the country, known for its excellent academic programs, world-class research facilities, and outstanding placement records.",
+      "highlights": [
+        "NIRF Ranking 2025: 5th in Engineering, 4th Overall",
+        "First IIT established in India (1951)",
+        "2100 acres - largest campus among all IITs",
+        "Highest package: ₹2.14 CPA",
+        "Average package: ₹19.76 LPA",
+        "Top recruiters: Google, Microsoft, Amazon, Goldman Sachs"
+      ],
+      "streams": ["Engineering", "Science", "Management", "Architecture", "Law"],
+      "courses": [
+        {
+          "name": "B.Tech Computer Science & Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "897000",
+          "fees_display": "₹8.97 Lakhs (Total)",
+          "eligibility": "10+2 with 75% marks + JEE Advanced",
+          "entrance_exam": "JEE Advanced"
+        },
+        {
+          "name": "B.Tech Mechanical Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "897000",
+          "fees_display": "₹8.97 Lakhs (Total)",
+          "eligibility": "10+2 with 75% marks + JEE Advanced",
+          "entrance_exam": "JEE Advanced"
+        },
+        {
+          "name": "B.Tech Electrical Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "897000",
+          "fees_display": "₹8.97 Lakhs (Total)",
+          "eligibility": "10+2 with 75% marks + JEE Advanced",
+          "entrance_exam": "JEE Advanced"
+        }
+      ],
+      "placement": {
+        "highest_package": "2.14 Cr",
+        "average_package": "19.76 LPA",
+        "median_package": "18 LPA",
+        "placement_percentage": "90%",
+        "top_recruiters": ["Google", "Microsoft", "Amazon", "Goldman Sachs", "Morgan Stanley", "Capgemini", "Accenture", "EY", "PWC"]
+      },
+      "facilities": ["Library", "Hostel", "Sports", "Cafeteria", "Medical", "WiFi", "Labs", "Auditorium", "Swimming Pool", "Gym"],
+      "contact": {
+        "phone": "+91-3222-255221",
+        "email": "webmaster@iitkgp.ac.in",
+        "website": "https://www.iitkgp.ac.in"
+      },
+      "faqs": [
+        {
+          "question": "How to get admission in IIT Kharagpur?",
+          "answer": "Admission to B.Tech programs is through JEE Advanced. Candidates must first qualify JEE Main and then JEE Advanced to be eligible for IIT admission."
+        },
+        {
+          "question": "What is the highest package at IIT Kharagpur?",
+          "answer": "The highest package at IIT Kharagpur is ₹2.14 CPA (Crore Per Annum), with an average package of ₹19.76 LPA."
+        },
+        {
+          "question": "What is the fee structure at IIT Kharagpur?",
+          "answer": "The total fees for B.Tech at IIT Kharagpur is approximately ₹8.97 Lakhs for the complete 4-year program."
+        }
+      ],
+      "status": "published",
+      "is_verified": true,
+      "is_featured": true
+    },
+    {
+      "name": "NIT Durgapur",
+      "slug": "nit-durgapur",
+      "type": "Government",
+      "institution_type": "University",
+      "established_year": 1960,
+      "affiliation": "MHRD",
+      "location": {
+        "state": "West Bengal",
+        "city": "Durgapur",
+        "address": "Mahatma Gandhi Avenue, Durgapur, West Bengal 713209",
+        "pin_code": "713209",
+        "latitude": "23.5472",
+        "longitude": "87.2958"
+      },
+      "campus_size": "212 acres",
+      "total_students": 5500,
+      "recognized_by": ["UGC", "AICTE", "NBA"],
+      "nirf_ranking": 49,
+      "rankings": [
+        {"agency": "NIRF", "year": 2025, "rank": 49, "category": "Engineering"},
+        {"agency": "Collegedunia", "year": 2025, "rank": 44, "category": "Engineering"}
+      ],
+      "accreditations": [
+        {"name": "NAAC", "grade": "A++", "cgpa": "3.68"}
+      ],
+      "description": "National Institute of Technology Durgapur (NIT Durgapur) is one of the premier technical institutions in India established in 1960. It offers excellent engineering and science programs with strong industry connections and placement records.",
+      "highlights": [
+        "NIRF Ranking 2025: 49th in Engineering",
+        "NAAC Accreditation: A++ with CGPA 3.68",
+        "Highest package: ₹51 LPA",
+        "Average package: ₹12.16 LPA",
+        "Top recruiters: Google, Intel, Qualcomm, Samsung"
+      ],
+      "streams": ["Engineering", "Science", "Management"],
+      "courses": [
+        {
+          "name": "B.Tech Computer Science & Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "648000",
+          "fees_display": "₹6.48 Lakhs (Total)",
+          "eligibility": "10+2 with 75% marks + JEE Main",
+          "entrance_exam": "JEE Main"
+        },
+        {
+          "name": "B.Tech Electronics & Communication",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "648000",
+          "fees_display": "₹6.48 Lakhs (Total)",
+          "eligibility": "10+2 with 75% marks + JEE Main",
+          "entrance_exam": "JEE Main"
+        }
+      ],
+      "placement": {
+        "highest_package": "51 LPA",
+        "average_package": "12.16 LPA",
+        "median_package": "11.24 LPA",
+        "placement_percentage": "85%",
+        "top_recruiters": ["Google", "Intel", "Qualcomm", "Samsung", "IBM", "Cadence", "Synopsys", "MediaTek", "AMD", "NVIDIA"]
+      },
+      "facilities": ["Library", "Hostel", "Sports", "Cafeteria", "Medical", "WiFi", "Labs"],
+      "contact": {
+        "phone": "+91-343-2547375",
+        "email": "registrar@nitdgp.ac.in",
+        "website": "https://nitdgp.ac.in"
+      },
+      "faqs": [
+        {
+          "question": "What is the admission process for NIT Durgapur?",
+          "answer": "Admission to B.Tech programs is through JEE Main. Candidates must qualify JEE Main and participate in JoSAA counselling for seat allotment."
+        },
+        {
+          "question": "What is the placement record of NIT Durgapur?",
+          "answer": "NIT Durgapur has excellent placement records with the highest package of ₹51 LPA and average package of ₹12.16 LPA. Top recruiters include Google, Intel, Qualcomm, Samsung."
+        }
+      ],
+      "status": "published",
+      "is_verified": true,
+      "is_featured": true
+    },
+    {
+      "name": "IIEST Shibpur",
+      "slug": "iiest-shibpur",
+      "type": "Government",
+      "institution_type": "University",
+      "established_year": 1856,
+      "affiliation": "MHRD",
+      "location": {
+        "state": "West Bengal",
+        "city": "Howrah",
+        "address": "Botanic Garden, Shibpur, Howrah, West Bengal 711103",
+        "pin_code": "711103"
+      },
+      "campus_size": "86 acres",
+      "recognized_by": ["UGC", "AICTE", "NAAC"],
+      "nirf_ranking": 54,
+      "accreditations": [{"name": "NAAC", "grade": "A"}],
+      "description": "Indian Institute of Engineering Science and Technology (IIEST) Shibpur, formerly Bengal Engineering and Science University, is one of the oldest technical institutions in Asia, established in 1856.",
+      "highlights": [
+        "NIRF Ranking 2025: 54th in Engineering",
+        "One of the oldest technical institutions in Asia (1856)",
+        "Highest package: ₹38.53 LPA",
+        "Average package: ₹8.50 LPA"
+      ],
+      "streams": ["Engineering", "Science", "Architecture"],
+      "courses": [
+        {
+          "name": "B.Tech Computer Science & Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "568000",
+          "fees_display": "₹5.68 Lakhs (Total)",
+          "eligibility": "10+2 with 75% + JEE Main",
+          "entrance_exam": "JEE Main"
+        }
+      ],
+      "placement": {
+        "highest_package": "38.53 LPA",
+        "average_package": "8.50 LPA",
+        "top_recruiters": ["PWC", "Reliance Industries", "IndianOil", "Mu Sigma", "GE Digital", "IBM"]
+      },
+      "contact": {
+        "website": "https://www.iiests.ac.in"
+      },
+      "status": "published",
+      "is_verified": true
+    },
+    {
+      "name": "University of Calcutta",
+      "slug": "university-of-calcutta",
+      "type": "Government",
+      "institution_type": "University",
+      "established_year": 1857,
+      "affiliation": "UGC",
+      "location": {
+        "state": "West Bengal",
+        "city": "Kolkata",
+        "address": "87/1, College Street, Kolkata, West Bengal 700073",
+        "pin_code": "700073"
+      },
+      "recognized_by": ["UGC", "NAAC"],
+      "nirf_ranking": 47,
+      "accreditations": [{"name": "NAAC", "grade": "A"}],
+      "description": "University of Calcutta is one of the oldest and most prestigious universities in India, established in 1857. It offers excellent programs in science, arts, commerce, and engineering with very affordable fees.",
+      "highlights": [
+        "First modern university in South Asia (1857)",
+        "NIRF Ranking: 47th Overall",
+        "Best ROI: 3246.75%",
+        "Average package: ₹10 LPA",
+        "Total fees for B.Tech: Only ₹30,800"
+      ],
+      "streams": ["Engineering", "Science", "Arts", "Commerce"],
+      "courses": [
+        {
+          "name": "B.Tech",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "30800",
+          "fees_display": "₹30,800 (Total)",
+          "eligibility": "10+2 with 60% + WBJEE",
+          "entrance_exam": "WBJEE"
+        }
+      ],
+      "placement": {
+        "highest_package": "12 LPA",
+        "average_package": "10 LPA",
+        "top_recruiters": ["CESC", "TCS", "Cognizant", "Linde India", "L&T Infotech"]
+      },
+      "contact": {
+        "website": "https://www.caluniv.ac.in"
+      },
+      "status": "published",
+      "is_verified": true
+    },
+    {
+      "name": "Institute of Engineering and Management (IEM)",
+      "slug": "iem-kolkata",
+      "type": "Private",
+      "institution_type": "College",
+      "established_year": 1989,
+      "affiliation": "MAKAUT",
+      "location": {
+        "state": "West Bengal",
+        "city": "Kolkata",
+        "address": "Management House, GN Block, Salt Lake, Kolkata 700091",
+        "pin_code": "700091"
+      },
+      "recognized_by": ["AICTE", "NBA", "NAAC"],
+      "rankings": [
+        {"agency": "NIRF", "year": 2024, "rank": "151-200", "category": "Engineering"},
+        {"agency": "Collegedunia", "year": 2025, "rank": 215, "category": "Engineering"}
+      ],
+      "accreditations": [{"name": "NAAC", "grade": "A"}],
+      "description": "Institute of Engineering and Management (IEM) is one of the top private engineering colleges in West Bengal, known for excellent placements and industry connections.",
+      "highlights": [
+        "Top Private Engineering College in Kolkata",
+        "NAAC Accreditation: A",
+        "Highest package: ₹32 LPA",
+        "Median package: ₹6 LPA",
+        "2070 seats available"
+      ],
+      "streams": ["Engineering", "Management"],
+      "courses": [
+        {
+          "name": "B.Tech Computer Science & Engineering",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "867000",
+          "fees_display": "₹8.67 Lakhs (Total)",
+          "eligibility": "10+2 with PCM + WBJEE/JEE Main",
+          "entrance_exam": "WBJEE/JEE Main"
+        }
+      ],
+      "placement": {
+        "highest_package": "32 LPA",
+        "median_package": "6 LPA",
+        "top_recruiters": ["Amazon", "TCS", "GreyB Analytics"]
+      },
+      "contact": {
+        "website": "https://iem.edu.in"
+      },
+      "status": "published",
+      "is_verified": true
+    },
+    {
+      "name": "Heritage Institute of Technology (HIT)",
+      "slug": "hit-kolkata",
+      "type": "Private",
+      "institution_type": "College",
+      "established_year": 2001,
+      "affiliation": "MAKAUT",
+      "location": {
+        "state": "West Bengal",
+        "city": "Kolkata",
+        "address": "Chowbaga Road, Anandapur, Kolkata 700107",
+        "pin_code": "700107"
+      },
+      "recognized_by": ["AICTE", "NBA", "NAAC"],
+      "accreditations": [{"name": "NAAC", "grade": "A"}],
+      "description": "Heritage Institute of Technology (HIT) Kolkata is a premier private engineering college in West Bengal with excellent infrastructure and placement records.",
+      "highlights": [
+        "NAAC Accreditation: A",
+        "Highest package: ₹1.13 Cr",
+        "Average package: ₹4.62 LPA",
+        "86% placement rate",
+        "1020 seats"
+      ],
+      "streams": ["Engineering"],
+      "courses": [
+        {
+          "name": "B.Tech",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "596000",
+          "fees_display": "₹5.96 Lakhs (Total)",
+          "eligibility": "10+2 with PCM + WBJEE/JEE Main",
+          "entrance_exam": "WBJEE/JEE Main"
+        }
+      ],
+      "placement": {
+        "highest_package": "1.13 Cr",
+        "average_package": "4.62 LPA",
+        "placement_percentage": "86%",
+        "top_recruiters": ["TCS", "Wipro", "Cognizant", "Infosys", "Microsoft", "IBM"]
+      },
+      "status": "published",
+      "is_verified": true
+    },
+    {
+      "name": "Kalyani Government Engineering College (KGEC)",
+      "slug": "kgec-nadia",
+      "type": "Government",
+      "institution_type": "College",
+      "established_year": 1995,
+      "affiliation": "MAKAUT",
+      "location": {
+        "state": "West Bengal",
+        "city": "Nadia",
+        "address": "Kalyani, Nadia, West Bengal 741235",
+        "pin_code": "741235"
+      },
+      "recognized_by": ["AICTE"],
+      "rankings": [
+        {"agency": "Collegedunia", "year": 2025, "rank": 182, "category": "Engineering"}
+      ],
+      "description": "Kalyani Government Engineering College is a well-known government engineering college in West Bengal with affordable fees and good placement records.",
+      "highlights": [
+        "Government College with low fees",
+        "Highest package: ₹86 LPA",
+        "Average package: ₹5.75 LPA",
+        "316 seats",
+        "Total fees: ₹28,200 - ₹1.02 Lakhs"
+      ],
+      "streams": ["Engineering"],
+      "courses": [
+        {
+          "name": "B.Tech",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "102000",
+          "fees_display": "₹28.2K - ₹1.02 Lakhs",
+          "eligibility": "10+2 with PCM + WBJEE",
+          "entrance_exam": "WBJEE"
+        }
+      ],
+      "placement": {
+        "highest_package": "86 LPA",
+        "average_package": "5.75 LPA",
+        "placement_percentage": "78%",
+        "top_recruiters": ["Infosys", "Hitachi", "EPAM", "Cognizant", "TCS Ninja", "TCS Digital"]
+      },
+      "status": "published",
+      "is_verified": true
+    },
+    {
+      "name": "Techno Main Salt Lake",
+      "slug": "techno-main-salt-lake",
+      "type": "Private",
+      "institution_type": "College",
+      "established_year": 2001,
+      "affiliation": "MAKAUT",
+      "location": {
+        "state": "West Bengal",
+        "city": "Kolkata",
+        "address": "EM-4/1, Sector V, Salt Lake, Kolkata 700091",
+        "pin_code": "700091"
+      },
+      "recognized_by": ["AICTE", "COA", "PCI"],
+      "description": "Techno Main Salt Lake is a leading private engineering college in Kolkata, part of the Techno India Group, known for excellent placements and modern infrastructure.",
+      "highlights": [
+        "Highest package: ₹29 LPA",
+        "Average package: ₹7.50 LPA",
+        "96% placement rate",
+        "1080 seats"
+      ],
+      "streams": ["Engineering", "Architecture", "Pharmacy"],
+      "courses": [
+        {
+          "name": "B.Tech",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "401000",
+          "fees_display": "₹4.01 Lakhs (Total)",
+          "eligibility": "10+2 with PCM + WBJEE/JEE Main",
+          "entrance_exam": "WBJEE/JEE Main"
+        }
+      ],
+      "placement": {
+        "highest_package": "29 LPA",
+        "average_package": "7.50 LPA",
+        "placement_percentage": "96%",
+        "top_recruiters": ["Deloitte", "Bosch", "TCS", "Microsoft", "Capgemini", "Amazon", "IBM", "Google", "L&T", "Accenture"]
+      },
+      "status": "published",
+      "is_verified": true
+    },
+    {
+      "name": "Haldia Institute of Technology (HIT Haldia)",
+      "slug": "hit-haldia",
+      "type": "Private",
+      "institution_type": "College",
+      "established_year": 1996,
+      "affiliation": "MAKAUT",
+      "location": {
+        "state": "West Bengal",
+        "city": "Haldia",
+        "address": "ICARE Complex, Haldia, Purba Medinipur, West Bengal 721657",
+        "pin_code": "721657"
+      },
+      "recognized_by": ["AICTE", "UGC", "NBA", "NAAC"],
+      "accreditations": [{"name": "NAAC", "grade": "A"}],
+      "description": "Haldia Institute of Technology is a premier private engineering college in West Bengal with excellent placement records and modern facilities.",
+      "highlights": [
+        "NAAC Accreditation: A",
+        "Highest package: ₹45 LPA",
+        "Average package: ₹5 LPA",
+        "89% placement rate",
+        "1560 seats"
+      ],
+      "streams": ["Engineering", "Management"],
+      "courses": [
+        {
+          "name": "B.Tech",
+          "stream": "Engineering",
+          "level": "UG",
+          "duration": "4 Years",
+          "fees": "583000",
+          "fees_display": "₹5.83 Lakhs (Total)",
+          "eligibility": "10+2 with PCM + WBJEE/JEE Main",
+          "entrance_exam": "WBJEE/JEE Main"
+        }
+      ],
+      "placement": {
+        "highest_package": "45 LPA",
+        "average_package": "5 LPA",
+        "placement_percentage": "89%",
+        "top_recruiters": ["Johnson Controls", "ITC Limited", "PWC", "EY", "Atomberg", "MThree", "Capgemini"]
+      },
+      "status": "published",
+      "is_verified": true
+    }
+  ],
+  "import_instructions": {
+    "mongodb_compass": [
+      "1. Download MongoDB Compass from https://www.mongodb.com/products/compass",
+      "2. Connect to your MongoDB database using connection string",
+      "3. Navigate to your database and select 'colleges' collection",
+      "4. Click 'Add Data' > 'Insert Document'",
+      "5. Copy each college object from 'colleges' array and paste",
+      "6. Click 'Insert' to save"
+    ],
+    "mongodb_shell": [
+      "1. Connect to MongoDB: mongosh 'your-connection-string'",
+      "2. Select database: use your_database_name",
+      "3. Insert: db.colleges.insertMany([...colleges array...])"
+    ],
+    "api_method": [
+      "1. Login to admin panel and get access token",
+      "2. Use POST /api/colleges endpoint",
+      "3. Send each college object as JSON body with Authorization header"
+    ]
+  }
+}
