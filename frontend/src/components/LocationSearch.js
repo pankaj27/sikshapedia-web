@@ -85,12 +85,13 @@ const LocationSearch = () => {
           .map(c => ({ name: c.name, state: c.state || '' }));
         setCities(configuredCities);
       } else {
-        // Fallback to API data or defaults
+        // Fallback to API data, but use defaults if too few results
         const [citiesWithCollegesRes] = await Promise.all([
           api.get('/locations/cities').catch(() => ({ data: [] }))
         ]);
         
-        if (Array.isArray(citiesWithCollegesRes.data) && citiesWithCollegesRes.data.length > 0) {
+        if (Array.isArray(citiesWithCollegesRes.data) && citiesWithCollegesRes.data.length >= 4) {
+          // Enough data from API
           const citiesData = citiesWithCollegesRes.data
             .map(c => ({ 
               name: c.city || c.name, 
@@ -99,8 +100,9 @@ const LocationSearch = () => {
             }))
             .sort((a, b) => b.count - a.count)
             .slice(0, 16);
-          setCities(citiesData.length > 0 ? citiesData : defaultCities);
+          setCities(citiesData);
         } else {
+          // Too few results, use default cities
           setCities(defaultCities);
         }
       }
