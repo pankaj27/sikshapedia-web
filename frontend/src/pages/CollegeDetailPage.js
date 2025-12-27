@@ -838,8 +838,8 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
       {((college?.updates && college.updates.length > 0) || (college?.announcements && college.announcements.length > 0)) && (
         <div className="bg-gray-50 border-b">
           <div className="max-w-7xl mx-auto px-4 py-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">{college.name} Latest Updates and News</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {(college.updates?.length > 0 ? college.updates : college.announcements).slice(0, 2).map((item, idx) => (
                 <div key={idx} className={`${idx === 0 ? 'bg-blue-50 border-l-4 border-blue-600' : 'bg-green-50 border-l-4 border-green-600'} p-3 rounded`}>
                   <div className="flex items-start gap-2">
