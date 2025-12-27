@@ -236,9 +236,7 @@ const LocationSearch = () => {
         {/* States Content */}
         {activeTab === 'state' && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {states
-              .filter(state => (state.count || state.college_count || 0) > 0)
-              .map((state, idx) => (
+            {states.map((state, idx) => (
               <button
                 key={idx}
                 onClick={() => handleLocationClick('state', state.name || state.state)}
