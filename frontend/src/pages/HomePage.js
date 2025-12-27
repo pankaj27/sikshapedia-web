@@ -596,11 +596,9 @@ const CollegeDuniaHome = () => {
             >
               {studyGoals.map((goal, idx) => {
                 const IconComponent = getIconComponent(goal.icon);
-                // Use custom link if provided, otherwise default to courses page with stream filter
-                const goalLink = goal.link || `/courses?stream=${encodeURIComponent(goal.name)}`;
                 return (
                   <SwiperSlide key={idx}>
-                    <Link to={goalLink} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
+                    <Link to={`/colleges?course=${encodeURIComponent(goal.name)}`} className="block bg-white rounded-lg p-4 text-center hover:shadow-lg transition border group">
                       <div className="flex justify-center mb-2">
                         <IconComponent className={`text-4xl ${goal.color} group-hover:scale-110 transition-transform`} />
                       </div>
