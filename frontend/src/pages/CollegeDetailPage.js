@@ -1277,14 +1277,14 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                   <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Courses & Fees {new Date().getFullYear() + 1}</h2>
                   <p className="text-gray-700 text-sm mb-4">Fee structure for various courses:</p>
                   <GuestGate title="Fee Details">
-                    <div className="overflow-x-auto mb-6">
-                      <table className="w-full border-collapse border">
+                    <div className="overflow-x-auto -mx-4 px-4 mb-6">
+                      <table className="w-full border-collapse border min-w-[400px]">
                         <thead>
                           <tr className="bg-orange-50">
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Course</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Duration</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">1st Year Fee</th>
-                            <th className="border px-4 py-3 text-left text-sm font-bold">Total Fee</th>
+                            <th className="border px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-bold">Course</th>
+                            <th className="border px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-bold">Duration</th>
+                            <th className="border px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-bold">1st Year</th>
+                            <th className="border px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-bold">Total</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1295,10 +1295,10 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                             const totalFee = typeof course === 'object' ? (course.total_fee || firstYearFee * 4) : college.average_fees * 4;
                             return (
                               <tr key={idx} className="hover:bg-gray-50">
-                                <td className="border px-4 py-3"><span className="text-blue-600 font-medium">{courseName}</span></td>
-                                <td className="border px-4 py-3 text-sm">{duration || '-'}</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(2)} Lakhs</td>
-                                <td className="border px-4 py-3 text-sm font-semibold">₹{(totalFee / 100000).toFixed(2)} Lakhs</td>
+                                <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm"><span className="text-blue-600 font-medium break-words">{courseName}</span></td>
+                                <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{duration || '-'}</td>
+                                <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold">₹{(firstYearFee / 100000).toFixed(1)}L</td>
+                                <td className="border px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold">₹{(totalFee / 100000).toFixed(1)}L</td>
                               </tr>
                             );
                           })}
@@ -1314,8 +1314,8 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                 <section id="ranking" className="scroll-mt-40">
                   <h2 className="text-xl sm:text-2xl font-bold mb-3">{college.name} Ranking</h2>
                   <p className="text-gray-700 text-sm mb-4">{college.name} has been ranked by various agencies:</p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border">
+                  <div className="overflow-x-auto -mx-4 px-4">
+                    <table className="w-full border-collapse border min-w-[350px]">
                       <thead>
                         <tr className="bg-gray-50">
                           <th className="border px-4 py-3 text-left text-sm font-bold">Agency</th>
