@@ -1135,11 +1135,11 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
               {/* DESCRIPTION & HIGHLIGHTS - Main Content Area (AFTER Read More) */}
               {(college.description || (college.highlights && college.highlights.length > 0)) && (
                 <section id="about-description" className="scroll-mt-40">
-                  <h2 className="text-xl sm:text-2xl font-bold mb-4">About {college.name}</h2>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 break-words">About {college.name}</h2>
                   
                   {/* Description */}
                   {college.description && (
-                    <div className="text-gray-800 leading-relaxed prose max-w-none mb-4" 
+                    <div className="text-gray-800 leading-relaxed prose max-w-none mb-4 break-words" 
                       dangerouslySetInnerHTML={{ 
                         __html: college.description
                           .replace(/&lt;/g, '<')
