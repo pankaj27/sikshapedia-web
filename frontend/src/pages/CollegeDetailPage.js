@@ -1529,13 +1529,13 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
 
               {/* CUSTOM MENU INFO BOX - Show when use_custom_menu is enabled (content is on separate pages) */}
               {college?.menu_config?.use_custom_menu && college?.menu_config?.items?.length > 0 && (
-                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-xl p-6 mb-8">
-                  <h3 className="text-xl font-bold text-orange-800 mb-3 flex items-center gap-2">
+                <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-xl p-4 sm:p-6 mb-8">
+                  <h3 className="text-lg sm:text-xl font-bold text-orange-800 mb-3 flex items-center gap-2">
                     <FiLayers className="text-orange-600" size={22} />
                     Explore More About {college.name}
                   </h3>
-                  <p className="text-gray-600 mb-4">Click on the sections below to learn more:</p>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">Click on the sections below to learn more:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                     {college.menu_config.items
                       .filter(item => item.enabled)
                       .sort((a, b) => a.order - b.order)
@@ -1543,10 +1543,10 @@ const CollegeDetailPage = ({ overrideId, institutionType = 'College' }) => {
                       <Link
                         key={index}
                         to={getSectionUrl(menuItem.id)}
-                        className="flex items-center gap-3 bg-white border-2 border-orange-200 rounded-lg px-4 py-3 hover:bg-orange-100 hover:border-orange-400 transition-all group"
+                        className="flex items-center gap-3 bg-white border-2 border-orange-200 rounded-lg px-3 sm:px-4 py-3 hover:bg-orange-100 hover:border-orange-400 transition-all group"
                       >
                         <span className="text-orange-500 group-hover:text-orange-600">{getMenuIcon(menuItem.id)}</span>
-                        <span className="font-medium text-gray-800">{menuItem.label}</span>
+                        <span className="font-medium text-gray-800 text-sm sm:text-base">{menuItem.label}</span>
                       </Link>
                     ))}
                   </div>
