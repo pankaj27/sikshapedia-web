@@ -398,8 +398,8 @@ async def get_homepage_settings():
     return settings
 
 @homepage_settings_router.put("/homepage-settings")
-async def update_homepage_settings(settings: HomepageSettings):
-    """Update homepage settings"""
+async def update_homepage_settings(settings: HomepageSettings, admin = Depends(get_current_admin)):
+    """Update homepage settings (Admin only)"""
     settings_dict = settings.model_dump()
     settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
     await db.homepage_settings.update_one(
