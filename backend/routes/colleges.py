@@ -147,7 +147,35 @@ async def get_colleges(
             query["average_fees"]["$lte"] = max_fees
     
     if course:
-        query["courses.name"] = {"$regex": course, "$options": "i"}
+        # Course can be a stream name (Engineering, Management, etc.) or a specific course
+        # Map stream names to their common courses
+        stream_course_mapping = {
+            "engineering": ["b.tech", "m.tech", "be", "b.e", "me", "m.e", "btech", "mtech", "engineering"],
+            "management": ["mba", "bba", "pgdm", "mms", "management", "business"],
+            "medical": ["mbbs", "bds", "md", "ms", "bams", "bhms", "bsc nursing", "medical"],
+            "commerce": ["b.com", "m.com", "bcom", "mcom", "bba", "commerce", "accounting"],
+            "arts": ["ba", "ma", "b.a", "m.a", "arts", "humanities"],
+            "science": ["b.sc", "m.sc", "bsc", "msc", "science", "physics", "chemistry", "biology"],
+            "law": ["llb", "llm", "ba llb", "bba llb", "law", "legal"],
+            "design": ["b.des", "m.des", "bdes", "mdes", "design", "fashion", "interior"]
+        }
+        
+        course_lower = course.lower()
+        search_terms = stream_course_mapping.get(course_lower, [course_lower])
+        
+        # Build regex pattern for all search terms
+        course_conditions = []
+        for term in search_terms:
+            course_conditions.append({"courses.name": {"$regex": term, "$options": "i"}})
+            course_conditions.append({"courses": {"$regex": term, "$options": "i"}})  # For legacy string array
+            course_conditions.append({"description": {"$regex": term, "$options": "i"}})
+        
+        if "$or" in query:
+            # Combine with existing $or conditions
+            existing_or = query.pop("$or")
+            query["$and"] = [{"$or": existing_or}, {"$or": course_conditions}]
+        else:
+            query["$or"] = course_conditions
     
     if is_featured is not None:
         query["is_featured"] = is_featured
