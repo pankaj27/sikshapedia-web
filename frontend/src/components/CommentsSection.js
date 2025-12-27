@@ -53,42 +53,42 @@ const CommentCard = ({ comment, onReply, onDelete, currentUserId, isLoggedIn, on
   };
 
   return (
-    <div className="border-b last:border-b-0 py-4">
-      <div className="flex items-start gap-3">
-        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <FiUser className="text-purple-600" />
+    <div className="border-b last:border-b-0 py-3 sm:py-4">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <FiUser className="text-purple-600" size={14} />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-gray-800">{comment.user_name}</span>
-              <span className="text-sm text-gray-500">{formatDate(comment.created_at)}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2 min-w-0">
+              <span className="font-semibold text-gray-800 text-sm sm:text-base truncate">{comment.user_name}</span>
+              <span className="text-xs sm:text-sm text-gray-500">{formatDate(comment.created_at)}</span>
             </div>
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button onClick={() => setShowMenu(!showMenu)} className="p-1 hover:bg-gray-100 rounded">
-                <FiMoreVertical size={16} className="text-gray-500" />
+                <FiMoreVertical size={14} className="text-gray-500" />
               </button>
               {showMenu && (
-                <div className="absolute right-0 top-8 bg-white border rounded-lg shadow-lg py-1 z-10 min-w-[120px]">
+                <div className="absolute right-0 top-8 bg-white border rounded-lg shadow-lg py-1 z-10 min-w-[100px] sm:min-w-[120px]">
                   {currentUserId === comment.user_id && (
                     <button
                       onClick={() => { onDelete(comment.id); setShowMenu(false); }}
-                      className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-2"
+                      className="w-full px-3 sm:px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-2 text-sm"
                     >
-                      <FiTrash2 size={14} /> Delete
+                      <FiTrash2 size={12} /> Delete
                     </button>
                   )}
                   <button
                     onClick={() => { alert('Comment reported'); setShowMenu(false); }}
-                    className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                    className="w-full px-3 sm:px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2 text-sm"
                   >
-                    <FiFlag size={14} /> Report
+                    <FiFlag size={12} /> Report
                   </button>
                 </div>
               )}
             </div>
           </div>
-          <p className="text-gray-700 mt-1">{comment.text}</p>
+          <p className="text-gray-700 mt-1 text-sm sm:text-base break-words">{comment.text}</p>
           
           <div className="mt-2 flex items-center gap-4">
             <button
