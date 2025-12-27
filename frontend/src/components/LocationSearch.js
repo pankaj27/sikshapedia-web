@@ -57,22 +57,23 @@ const LocationSearch = () => {
           .map(s => ({ name: s.name, count: 0 }));
         setStates(configuredStates);
       } else {
-        // Fallback to API data
+        // Fallback to API data, but use defaults if too few results
         const [statesWithCollegesRes] = await Promise.all([
           api.get('/locations/states').catch(() => ({ data: [] }))
         ]);
         
-        if (Array.isArray(statesWithCollegesRes.data) && statesWithCollegesRes.data.length > 0) {
+        if (Array.isArray(statesWithCollegesRes.data) && statesWithCollegesRes.data.length >= 4) {
+          // Enough data from API
           const statesData = statesWithCollegesRes.data
-            .filter(s => (s.college_count || s.count || 0) > 0)
             .map(s => ({ 
               name: s.state || s.name, 
               count: s.college_count || s.count || 0 
             }))
             .sort((a, b) => b.count - a.count)
             .slice(0, 12);
-          setStates(statesData.length > 0 ? statesData : defaultStates);
+          setStates(statesData);
         } else {
+          // Too few results, use default states
           setStates(defaultStates);
         }
       }
