@@ -751,7 +751,10 @@ const DynamicListingPage = () => {
           queryParams.append('fields', 'minimal');
         }
         
-        if (institutionType && isCollegesEndpoint) {
+        // Only add institution_type filter if course filter is not present
+        // When filtering by course/stream, we want to show all institution types
+        const hasCourseFilter = queryFilters.course || pageInfo.filters?.course || pageInfo.course;
+        if (institutionType && isCollegesEndpoint && !hasCourseFilter) {
           queryParams.append('institution_type', institutionType);
         }
         
