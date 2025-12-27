@@ -87,52 +87,45 @@ const CourseDetailPage = () => {
 
   const courseName = course.name || 'Course';
   const fullName = course.full_name || courseName;
-  const duration = course.duration || '4 Years';
-  const degreeType = course.degree_type || 'UG';
+  const duration = course.duration || '';
+  const degreeType = course.degree_type || '';
   const avgFees = course.average_fees || course.avg_fees || 0;
-  const totalColleges = course.total_colleges || 500;
-  const eligibility = course.eligibility || '10+2 with minimum 50% marks';
-  const description = course.description || `${fullName} is a comprehensive program designed to provide students with in-depth knowledge and practical skills in their chosen field.`;
+  const totalColleges = course.total_colleges_offering || course.total_colleges || 0;
+  const eligibility = course.eligibility || '';
+  const description = course.description || '';
 
-  // Navigation tabs
+  // Dynamic navigation tabs - only show tabs that have data
   const navTabs = [
-    { id: 'overview', label: 'Overview', icon: FiBook },
-    { id: 'eligibility', label: 'Eligibility', icon: FiCheckCircle },
-    { id: 'syllabus', label: 'Syllabus', icon: HiOutlineDocumentText },
-    { id: 'colleges', label: 'Top Colleges', icon: HiOutlineOfficeBuilding },
-    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase },
-    { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb },
-  ];
+    { id: 'overview', label: 'Overview', icon: FiBook, show: true },
+    { id: 'eligibility', label: 'Eligibility', icon: FiCheckCircle, show: !!eligibility },
+    { id: 'syllabus', label: 'Syllabus', icon: HiOutlineDocumentText, show: course.syllabus && course.syllabus.length > 0 },
+    { id: 'colleges', label: 'Top Colleges', icon: HiOutlineOfficeBuilding, show: course.top_colleges && course.top_colleges.length > 0 },
+    { id: 'career', label: 'Career & Jobs', icon: FiBriefcase, show: (course.job_opportunities && course.job_opportunities.length > 0) || course.career_prospects },
+    { id: 'faqs', label: 'FAQs', icon: HiOutlineLightBulb, show: course.faqs && course.faqs.length > 0 },
+  ].filter(tab => tab.show);
 
-  // Syllabus data - from API or default
-  const defaultSyllabus = [
-    { semester: 'Semester 1', subjects: ['Foundation Course I', 'Core Subject I', 'Practical Lab I', 'Communication Skills'] },
-    { semester: 'Semester 2', subjects: ['Foundation Course II', 'Core Subject II', 'Practical Lab II', 'Soft Skills'] },
-    { semester: 'Semester 3', subjects: ['Advanced Core I', 'Elective I', 'Project Work I', 'Industry Training'] },
-    { semester: 'Semester 4', subjects: ['Advanced Core II', 'Elective II', 'Project Work II', 'Internship'] },
-  ];
-  const syllabusData = course.syllabus && course.syllabus.length > 0 ? course.syllabus : defaultSyllabus;
+  // Syllabus data - only from database, no fallback
+  const syllabusData = course.syllabus && course.syllabus.length > 0 ? course.syllabus : [];
 
-  // Highlights/Badges - from API or default
-  const defaultHighlights = ['AICTE Approved', 'Industry Connect', 'Placement Support', 'Skill Development'];
-  const highlights = course.highlights && course.highlights.length > 0 ? course.highlights : defaultHighlights;
+  // Highlights/Badges - only from database, no fallback
+  const highlights = course.highlights && course.highlights.length > 0 ? course.highlights : [];
 
-  // Related Courses - from API or default based on stream
-  const defaultRelatedCourses = ['M.Tech', 'MBA', 'BCA', 'MCA'];
+  // Related Courses - only from database, no fallback
   const relatedCourses = course.related_courses && course.related_courses.length > 0 
     ? course.related_courses 
-    : defaultRelatedCourses;
+    : [];
 
-  // Top Colleges - only from API, no fallback
+  // Top Colleges - only from database
   const topColleges = course.top_colleges || [];
 
-  // Age Limit - from API or default
-  const ageLimit = course.age_limit || 'No upper age limit for most institutions';
+  // Age Limit - only from database
+  const ageLimit = course.age_limit || '';
 
-  // Career options - only from API, no fallback
-  const careerOptions = course.career_options || [];
+  // Job Opportunities & Career - only from database
+  const jobOpportunities = course.job_opportunities || [];
+  const careerProspects = course.career_prospects || '';
 
-  // FAQs - only use if course has FAQs from database
+  // FAQs - only from database
   const faqs = course.faqs || [];
 
   return (
