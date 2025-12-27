@@ -474,7 +474,7 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden py-4 border-t px-4 bg-white">
+        <div className="lg:hidden py-4 border-t px-4 bg-white max-h-[80vh] overflow-y-auto">
           {/* Mobile Search with Autocomplete */}
           <div className="mb-4">
             <SearchAutocomplete 
@@ -484,7 +484,48 @@ const Header = () => {
           </div>
 
           <nav className="flex flex-col gap-2">
+            {/* Quick Links - Categories */}
             <div className="mb-3">
+              <p className="text-xs font-semibold text-gray-500 mb-2">BROWSE</p>
+              <div className="grid grid-cols-2 gap-2">
+                <NavLink to="/colleges" className="py-2 px-3 text-sm text-gray-700 hover:text-orange-600 bg-gray-50 rounded-lg text-center">
+                  Top Colleges
+                </NavLink>
+                <NavLink to="/schools" className="py-2 px-3 text-sm text-gray-700 hover:text-orange-600 bg-gray-50 rounded-lg text-center">
+                  Top Schools
+                </NavLink>
+                <NavLink to="/university" className="py-2 px-3 text-sm text-gray-700 hover:text-orange-600 bg-gray-50 rounded-lg text-center">
+                  Universities
+                </NavLink>
+                <NavLink to="/courses" className="py-2 px-3 text-sm text-gray-700 hover:text-orange-600 bg-gray-50 rounded-lg text-center">
+                  Courses
+                </NavLink>
+                <NavLink to="/exams" className="py-2 px-3 text-sm text-gray-700 hover:text-orange-600 bg-gray-50 rounded-lg text-center">
+                  Exams
+                </NavLink>
+                <NavLink to="/write-review" className="py-2 px-3 text-sm text-orange-600 hover:text-orange-700 bg-orange-50 rounded-lg text-center font-medium">
+                  Write Review
+                </NavLink>
+              </div>
+            </div>
+
+            {/* Popular Courses */}
+            <div className="border-t pt-3 mb-3">
+              <p className="text-xs font-semibold text-gray-500 mb-2">POPULAR COURSES</p>
+              <div className="flex flex-wrap gap-2">
+                <NavLink to="/colleges/btech" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">B.Tech</NavLink>
+                <NavLink to="/colleges/mba" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">MBA</NavLink>
+                <NavLink to="/colleges/mbbs" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">MBBS</NavLink>
+                <NavLink to="/colleges/bcom" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">B.Com</NavLink>
+                <NavLink to="/colleges/bsc" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">B.Sc</NavLink>
+                <NavLink to="/colleges/ba" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">BA</NavLink>
+                <NavLink to="/colleges/bca" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">BCA</NavLink>
+                <NavLink to="/colleges/bba" className="py-1 px-2 text-xs text-gray-600 bg-gray-100 rounded hover:bg-orange-100 hover:text-orange-600">BBA</NavLink>
+              </div>
+            </div>
+
+            {/* Admission Goals */}
+            <div className="border-t pt-3 mb-3">
               <p className="text-xs font-semibold text-gray-500 mb-2">ADMISSION GOALS</p>
               {admissionGoals.map((goal, idx) => (
                 <NavLink
@@ -497,7 +538,7 @@ const Header = () => {
               ))}
             </div>
 
-            <div className="border-t pt-2 mt-2">
+            <div className="border-t pt-3">
               <p className="text-xs font-semibold text-gray-500 mb-2">EXPLORE MORE</p>
               {exploreMenuItems.map((item, idx) => {
                 const iconComponents = { FiGlobe, FiAward, FiDollarSign, FiBarChart2, FiTarget, FiFileText, FiInfo, FiPhone };
@@ -508,7 +549,7 @@ const Header = () => {
                     to={item.link}
                     className="flex items-center gap-2 py-2 text-sm text-gray-700 hover:text-orange-600"
                   >
-                    <IconComponent />
+                    <IconComponent size={16} />
                     <span>{item.title}</span>
                   </NavLink>
                 );
