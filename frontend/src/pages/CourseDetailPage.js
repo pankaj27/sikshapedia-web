@@ -148,40 +148,50 @@ const CourseDetailPage = () => {
             {/* Left Content */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-yellow-500 text-yellow-900 rounded-full text-xs font-bold uppercase">{degreeType}</span>
-                <span className="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">{duration}</span>
+                {degreeType && <span className="px-3 py-1 bg-yellow-500 text-yellow-900 rounded-full text-xs font-bold uppercase">{degreeType}</span>}
+                {duration && <span className="px-3 py-1 bg-white/20 rounded-full text-xs font-medium">{duration}</span>}
               </div>
               
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
                 {fullName}
               </h1>
               
-              <p className="text-blue-100 text-lg mb-6 max-w-2xl">
-                {description.substring(0, 200)}...
-              </p>
+              {description && (
+                <p className="text-blue-100 text-lg mb-6 max-w-2xl">
+                  {description.substring(0, 200)}{description.length > 200 ? '...' : ''}
+                </p>
+              )}
 
-              {/* Quick Stats */}
+              {/* Quick Stats - Only show stats that have data */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                  <FiClock className="text-yellow-400 mb-2" size={24} />
-                  <p className="text-2xl font-bold">{duration}</p>
-                  <p className="text-blue-200 text-sm">Duration</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                  <FiDollarSign className="text-green-400 mb-2" size={24} />
-                  <p className="text-2xl font-bold">₹{avgFees > 0 ? (avgFees/100000).toFixed(1) + 'L' : 'Varies'}</p>
-                  <p className="text-blue-200 text-sm">Avg. Fees/Year</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                  <HiOutlineOfficeBuilding className="text-purple-400 mb-2" size={24} />
-                  <p className="text-2xl font-bold">{totalColleges}+</p>
-                  <p className="text-blue-200 text-sm">Colleges</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                  <FiTrendingUp className="text-orange-400 mb-2" size={24} />
-                  <p className="text-2xl font-bold">High</p>
-                  <p className="text-blue-200 text-sm">Job Demand</p>
-                </div>
+                {duration && (
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <FiClock className="text-yellow-400 mb-2" size={24} />
+                    <p className="text-2xl font-bold">{duration}</p>
+                    <p className="text-blue-200 text-sm">Duration</p>
+                  </div>
+                )}
+                {avgFees > 0 && (
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <FiDollarSign className="text-green-400 mb-2" size={24} />
+                    <p className="text-2xl font-bold">₹{(avgFees/100000).toFixed(1)}L</p>
+                    <p className="text-blue-200 text-sm">Avg. Fees/Year</p>
+                  </div>
+                )}
+                {totalColleges > 0 && (
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <HiOutlineOfficeBuilding className="text-purple-400 mb-2" size={24} />
+                    <p className="text-2xl font-bold">{totalColleges}+</p>
+                    <p className="text-blue-200 text-sm">Colleges</p>
+                  </div>
+                )}
+                {(course.salary_range?.min > 0 || course.salary_range?.max > 0) && (
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <FiTrendingUp className="text-orange-400 mb-2" size={24} />
+                    <p className="text-2xl font-bold">₹{course.salary_range?.min ? (course.salary_range.min/100000).toFixed(1) : '0'}-{course.salary_range?.max ? (course.salary_range.max/100000).toFixed(1) : '0'}L</p>
+                    <p className="text-blue-200 text-sm">Salary Range</p>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons */}
